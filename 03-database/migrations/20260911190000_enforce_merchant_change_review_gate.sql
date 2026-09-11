@@ -26,6 +26,10 @@ create index if not exists business_change_requests_submitted_by_idx on public.b
 
 alter table public.business_change_requests enable row level security;
 
+revoke all on table public.business_change_requests from anon, authenticated;
+grant select, insert on table public.business_change_requests to authenticated;
+revoke truncate, trigger, references on table public.business_change_requests, public.businesses, public.business_media, public.business_contact_methods, public.offers from anon, authenticated;
+
 drop policy if exists business_change_requests_admin_all on public.business_change_requests;
 drop policy if exists business_change_requests_submitter_select on public.business_change_requests;
 drop policy if exists business_change_requests_submitter_insert on public.business_change_requests;
