@@ -1,5 +1,6 @@
 import './globals.css'
 import '../components/eah-studio-pro.css'
+import '../components/eah-admin.css'
 import '@puckeditor/core/puck.css'
 import type { Metadata } from 'next'
 import { Cairo } from 'next/font/google'
