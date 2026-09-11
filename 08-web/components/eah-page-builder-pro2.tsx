@@ -197,7 +197,7 @@ export const defaultEahPageData: EahPageData = {
     { type: 'BusinessSection', props: { id: 'pharmacy', title: 'ناقصك إيه من الصيدلية ؟', subtitle: 'اختيارات قريبة وسريعة وقت ما تحتاج', variant: 'pharmacy', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('soft') } },
     { type: 'BusinessSection', props: { id: 'groceries', title: 'البيت محتاج إيه ؟', subtitle: 'مقاضيك من غير لف كتير', variant: 'groceries', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('soft') } },
     { type: 'BusinessSection', props: { id: 'delivery', title: 'الطلب هيطير إزاي ؟', subtitle: 'مكاتب توصيل حسب نطاق التغطية', variant: 'delivery', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('soft') } },
-    { type: 'StickerCloud', props: { id: 'stickers', density: 'calm', opacity: 0.14, speed: 'slow', icons: stickerNames, spread: 100 } },
+    { type: 'StickerCloud', props: { id: 'stickers', density: 'calm', opacity: 0.14, speed: 'slow', icons: stickerNames.map(name => ({ name })), spread: 100 } },
   ],
 }
 
@@ -290,8 +290,8 @@ function FrameBlock({ props }: { props: any }) {
 }
 
 function StickerCloudBlock({ props }: { props: any }) {
-  const items = (props.icons || stickerNames).slice(0, 18)
-  return <section className={`eah-sticker-cloud eah-sticker-cloud--${props.density} eah-sticker-cloud--${props.speed}`} style={{ opacity: props.opacity }} aria-hidden>{items.map((name: string, i: number) => <span key={`${name}-${i}`} style={{ left: `${8 + ((i * 17) % Math.max(20, Number(props.spread || 100)))}%`, top: `${8 + ((i * 29) % 78)}%`, animationDelay: `${i * -0.8}s` }}><StickerIcon name={name} /></span>)}</section>
+  const items = (props.icons || stickerNames).map((item: any) => typeof item === 'string' ? item : item?.name).filter(Boolean).slice(0, 18)
+  return <section className={`eah-sticker-cloud eah-sticker-cloud--${props.density} eah-sticker-cloud--${props.speed}`} style={{ opacity: props.opacity }} aria-hidden>{items.map((name: string, i: number) => <span key={`${name}-${i}`} style={{ left: `${8 + ((i * 17) % Math.max(20, Number(props.spread || 100)))}%`, top: `${8 + ((i * 29) % 78)}%`, animationDelay: `${i * -0.8}s`, width: 26, height: 26 }}><StickerIcon name={name} /></span>)}</section>
 }
 
 function DividerBlock({ props }: { props: any }) { return <div className="eah-divider" style={{ width: `${Math.max(10, Math.min(100, props.width))}%`, opacity: props.opacity, background: props.accent ? 'linear-gradient(90deg,transparent,var(--accent-strong),transparent)' : 'rgba(255,255,255,.08)' }} /> }
