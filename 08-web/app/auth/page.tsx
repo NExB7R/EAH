@@ -4,40 +4,23 @@ import { FormEvent, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 
 export default function AuthPage() {
-  const [phone, setPhone] = useState('')
-  const [codeSent, setCodeSent] = useState(false)
-  const [otp, setOtp] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
 
-  async function requestOtp(e: FormEvent) {
+  async function signIn(e: FormEvent) {
     e.preventDefault()
     setLoading(true)
     setMessage('')
-    try {
-      const supabase = createClient()
-      const { error } = await supabase.auth.signInWithOtp({ phone })
-      if (error) throw error
-      setCodeSent(true)
-      setMessage('اتبعث لك الكود. دخل الـ6 أرقام هنا.')
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'حصل خطأ في إرسال الكود.')
-    } finally {
-      setLoading(false)
-    }
-  }
 
-  async function verifyOtp(e: FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setMessage('')
     try {
       const supabase = createClient()
-      const { error } = await supabase.auth.verifyOtp({ phone, token: otp, type: 'sms' })
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) throw error
-      window.location.href = '/'
+      window.location.href = '/admin'
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'الكود غير صحيح.')
+      setMessage(error instanceof Error ? error.message : 'البريد الإلكتروني أو كلمة المرور غير صحيحة.')
     } finally {
       setLoading(false)
     }
@@ -46,24 +29,42 @@ export default function AuthPage() {
   return (
     <main className="container" style={{ paddingTop: 56, maxWidth: 560 }}>
       <div className="eyebrow">EAH</div>
-      <h1 style={{ fontSize: 'clamp(2rem, 7vw, 3rem)' }}>دخول سريع</h1>
-      <p style={{ color: 'var(--muted)', lineHeight: 1.8 }}>سجّل برقم موبايلك. خطوة الـSMS هتشتغل أول ما نربط مزود الرسائل.</p>
+      <h1 style={{ fontSize: 'clamp(2rem, 7vw, 3rem)' }}>تسجيل الدخول</h1>
+      <p style={{ color: 'var(--muted)', lineHeight: 1.8 }}>
+        ادخل بحسابك للوصول إلى لوحة B7R Control.
+      </p>
 
-      {!codeSent ? (
-        <form onSubmit={requestOtp} className="card" style={{ padding: 18, marginTop: 20 }}>
-          <label htmlFor="phone" className="meta">رقم الموبايل</label>
-          <input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+20..." required inputMode="tel" style={{ width: '100%', margin: '8px 0 12px', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)', padding: 14, borderRadius: 14 }} />
-          <button className="primary" disabled={loading}>{loading ? 'جاري الإرسال…' : 'ابعتلي الكود'}</button>
-        </form>
-      ) : (
-        <form onSubmit={verifyOtp} className="card" style={{ padding: 18, marginTop: 20 }}>
-          <label htmlFor="otp" className="meta">الكود</label>
-          <input id="otp" value={otp} onChange={(e) => setOtp(e.target.value)} placeholder="123456" required inputMode="numeric" maxLength={6} style={{ width: '100%', margin: '8px 0 12px', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)', padding: 14, borderRadius: 14, letterSpacing: '.35em', textAlign: 'center' }} />
-          <button className="primary" disabled={loading}>{loading ? 'جاري التحقق…' : 'تحقق ودخلني'}</button>
-        </form>
-      )}
+      <form onSubmit={signIn} className="card" style={{ padding: 18, marginTop: 20 }}>
+        <label htmlFor="email" className="meta">البريد الإلكتروني</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="name@example.com"
+          required
+          autoComplete="email"
+          style={{ width: '100%', margin: '8px 0 12px', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)', padding: 14, borderRadius: 14 }}
+        />
 
-      {message && <p role="status" style={{ marginTop: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{message}</p>}
+        <label htmlFor="password" className="meta">كلمة المرور</label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="••••••••"
+          required
+          autoComplete="current-password"
+          style={{ width: '100%', margin: '8px 0 12px', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)', padding: 14, borderRadius: 14 }}
+        />
+
+        <button className="primary" disabled={loading}>
+          {loading ? 'جاري تسجيل الدخول…' : 'دخول'}
+        </button>
+      </form>
+
+      {message && <p role="alert" style={{ marginTop: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{message}</p>}
     </main>
   )
 }
