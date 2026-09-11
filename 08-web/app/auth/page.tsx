@@ -150,6 +150,12 @@ export default function AuthPage() {
             <button className="primary" disabled={loading} style={{ marginTop: 4, minHeight: 50 }}>{loading ? 'جاري التنفيذ…' : mode === 'login' ? 'دخول ⚡' : 'سجّل بسرعة ⚡'}</button>
           </form>
 
+          {mode === 'login' && (
+            <div style={{ textAlign: 'center', marginTop: 12 }}>
+              <a href="/auth/recover" style={{ color: '#c4b5fd', fontWeight: 700 }}>نسيت كلمة المرور؟</a>
+            </div>
+          )}
+
           {message && <p role="alert" style={{ marginTop: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{message}</p>}
         </section>
       </div>
