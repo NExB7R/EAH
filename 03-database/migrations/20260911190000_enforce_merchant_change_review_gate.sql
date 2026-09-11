@@ -174,6 +174,9 @@ returns uuid language sql security definer set search_path = public, private, pg
 create or replace function public.admin_review_business_change_request(p_request_id uuid,p_decision text,p_admin_note text default null)
 returns public.business_change_requests language sql security definer set search_path = public, private, pg_temp as $$ select private.apply_business_change_request($1,$2,$3); $$;
 
+revoke all on function private.submit_business_change_request(uuid,text,text,uuid,jsonb) from public, anon, authenticated;
+revoke all on function private.apply_business_change_request(uuid,text,text) from public, anon, authenticated;
+revoke all on function private.notify_business_change_request() from public, anon, authenticated;
 revoke all on function public.submit_business_change_request(uuid,text,text,uuid,jsonb) from public;
 grant execute on function public.submit_business_change_request(uuid,text,text,uuid,jsonb) to authenticated;
 revoke all on function public.admin_review_business_change_request(uuid,text,text) from public;
