@@ -16,10 +16,13 @@ type DbBusiness = {
 
 type DbOffer = { business_id: string; title: string; teaser_image_path: string | null; starts_at: string | null; ends_at: string | null; is_published: boolean }
 
-function toDemoShape(b: DbBusiness, offer?: DbOffer | null): DemoBusiness {
+type BusinessViewModel = DemoBusiness & { businessId?: string }
+
+function toDemoShape(b: DbBusiness, offer?: DbOffer | null): BusinessViewModel {
   const type = b.business_type as DemoBusiness['type']
   const vibe = b.is_featured ? ['مميز'] : ['مناسب ليك']
   return {
+    businessId: b.id,
     slug: b.slug,
     name: b.name,
     type: ['restaurant','pharmacy','supermarket','delivery_office'].includes(type) ? type as DemoBusiness['type'] : 'restaurant',
