@@ -47,8 +47,8 @@ export default async function AdminHomePage() {
           ['المستخدمين', users, '/admin/users'],
           ['تعديلات تنتظر الموافقة', pendingChanges, '/admin/change-requests'],
           ['زوار الآن', n(liveSummary.live_visitors), '/admin/analytics'],
-          ['زيارات اليوم', n(liveSummary.views_today), '/admin/analytics'],
-          ['زوار فريدون اليوم', n(liveSummary.unique_visitors_today), '/admin/analytics'],
+          ['زيارات الموقع اليوم', n(liveSummary.site_views_today), '/admin/analytics'],
+          ['زوار الموقع الفريدون اليوم', n(liveSummary.site_unique_visitors_today), '/admin/analytics'],
         ].map(([label, value, href]) => (
           <Link href={href as string} key={label as string} className="eah-admin-stat-card">
             <span>{label}</span>
@@ -74,7 +74,7 @@ export default async function AdminHomePage() {
         <Link href="/admin/change-requests" className="eah-admin-command-card"><strong>🛡️ بوابة النشر</strong><span>كل تعديل من صاحب النشاط يقف هنا قبل وصوله للصفحة العامة.</span></Link>
         <Link href="/admin/businesses" className="eah-admin-command-card"><strong>⚡ إدارة الأنشطة</strong><span>البيانات، أصحاب الأنشطة، الصلاحيات، وصفحات الأنشطة.</span></Link>
         <Link href="/admin/users" className="eah-admin-command-card"><strong>👤 المستخدمون والأرقام</strong><span>إدارة العملاء وأصحاب الأنشطة وربط الملكية.</span></Link>
-        <Link href="/admin/analytics" className="eah-admin-command-card"><strong>📈 التحليلات</strong><span>Live، يومي، أسبوعي، شهري، وترتيب كل نشاط وكل صفحة.</span></Link>
+        <Link href="/admin/analytics" className="eah-admin-command-card"><strong>📈 التحليلات</strong><span>Live، يومي، أسبوعي، وترتيب كل نشاط وكل صفحة.</span></Link>
         <Link href="/admin/studio" className="eah-admin-command-card"><strong>🎨 استوديو التصميم</strong><span>تحكم بصري في المنصة وصفحات الأنشطة.</span></Link>
         <Link href="/admin/audit" className="eah-admin-command-card"><strong>🧾 سجل العمليات</strong><span>تتبع من نفّذ كل عملية ومتى.</span></Link>
       </div>
