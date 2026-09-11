@@ -3,18 +3,9 @@
 import { useEffect } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 
-function getOrCreateId(key: string) {
-  const existing = window.localStorage.getItem(key)
-  if (existing) return existing
-  const id = crypto.randomUUID()
-  window.localStorage.setItem(key, id)
-  return id
-}
-
 export default function PageViewTracker({ businessId }: { businessId?: string }) {
   useEffect(() => {
     let cancelled = false
-    const visitorId = getOrCreateId('eah_visitor_id')
     const sessionKey = 'eah_session_id'
     let sessionId = sessionStorage.getItem(sessionKey)
     if (!sessionId) {
@@ -29,7 +20,7 @@ export default function PageViewTracker({ businessId }: { businessId?: string })
 
     void supabase.rpc('record_page_view', {
       p_path: path,
-      p_visitor_id: visitorId,
+      p_visitor_id: null,
       p_session_id: sessionId,
       p_business_id: businessId ?? null,
       p_referrer: referrer,
