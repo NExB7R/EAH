@@ -1,7 +1,19 @@
+import { promises as fs } from 'node:fs'
+import path from 'node:path'
 import EahStudioPro from '@/components/eah-studio-pro'
+import { defaultEahPageData, type EahPageData } from '@/components/eah-page-builder-pro2'
 import { getPublishedBusinesses } from '@/lib/data'
 
+async function loadDesign(): Promise<EahPageData> {
+  try {
+    const raw = await fs.readFile(path.join(process.cwd(), '.eah', 'studio.json'), 'utf8')
+    return JSON.parse(raw) as EahPageData
+  } catch {
+    return defaultEahPageData
+  }
+}
+
 export default async function StudioPage() {
-  const businesses = await getPublishedBusinesses(8)
-  return <EahStudioPro businesses={businesses} />
+  const [businesses, data] = await Promise.all([getPublishedBusinesses(8), loadDesign()])
+  return <EahStudioPro businesses={businesses} initialData={data} />
 }
