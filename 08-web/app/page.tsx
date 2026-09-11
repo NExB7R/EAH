@@ -1,7 +1,8 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import EahHomeClient from '@/components/eah-home-client'
-import { defaultEahPageData, type EahPageData } from '@/components/eah-page-builder-pro2'
+import { defaultEahPageData } from '@/components/eah-default-design'
+import type { EahPageData } from '@/components/eah-page-builder-pro2'
 import { getPublishedBusinesses } from '@/lib/data'
 
 async function loadDesign(): Promise<EahPageData> {
