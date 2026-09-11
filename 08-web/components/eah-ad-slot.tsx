@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 
-function idFor(key: string) {
-  const existing = window.localStorage.getItem(key)
+function getSessionId() {
+  const key = 'eah_session_id'
+  const existing = window.sessionStorage.getItem(key)
   if (existing) return existing
   const value = crypto.randomUUID()
-  window.localStorage.setItem(key, value)
+  window.sessionStorage.setItem(key, value)
   return value
 }
 
@@ -16,15 +17,13 @@ export default function EahAdSlot({ slotKey }: { slotKey: string }) {
 
   useEffect(() => {
     const supabase = createClient()
-    const visitorId = idFor('eah_visitor_id')
-    const sessionId = sessionStorage.getItem('eah_session_id') || crypto.randomUUID()
-    sessionStorage.setItem('eah_session_id', sessionId)
+    const sessionId = getSessionId()
     const path = window.location.pathname
 
     void supabase.rpc('get_active_ad', {
       p_slot_key: slotKey,
       p_path: path,
-      p_visitor_id: visitorId,
+      p_visitor_id: null,
       p_session_id: sessionId,
     }).then(({ data }) => {
       const creative = data?.[0]
@@ -33,7 +32,7 @@ export default function EahAdSlot({ slotKey }: { slotKey: string }) {
       void supabase.rpc('record_ad_event', {
         p_creative_id: creative.creative_id,
         p_event_type: 'impression',
-        p_visitor_id: visitorId,
+        p_visitor_id: null,
         p_session_id: sessionId,
         p_path: path,
       })
@@ -44,12 +43,11 @@ export default function EahAdSlot({ slotKey }: { slotKey: string }) {
 
   async function trackAndGo() {
     const supabase = createClient()
-    const visitorId = window.localStorage.getItem('eah_visitor_id')
-    const sessionId = sessionStorage.getItem('eah_session_id')
+    const sessionId = window.sessionStorage.getItem('eah_session_id')
     await supabase.rpc('record_ad_event', {
       p_creative_id: ad.creative_id,
       p_event_type: 'click',
-      p_visitor_id: visitorId,
+      p_visitor_id: null,
       p_session_id: sessionId,
       p_path: window.location.pathname,
     })
