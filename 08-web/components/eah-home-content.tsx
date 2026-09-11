@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { defaultEahPageData, EahPageRenderer, type EahBusiness, type EahPageData } from '@/components/eah-page-builder'
 import EahAdSlot from '@/components/eah-ad-slot'
@@ -27,7 +26,6 @@ export default function EahHomeContent({ businesses }: { businesses: EahBusiness
       <EahAdSlot slotKey="home_top" />
       <EahPageRenderer data={data} businesses={businesses} />
       <EahAdSlot slotKey="home_mid" />
-      <div className="studio-shortcut"><Link href="/studio">⚙️ استوديو التصميم</Link></div>
     </>
   )
 }
