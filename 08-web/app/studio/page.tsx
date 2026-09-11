@@ -1,8 +1,7 @@
-import EahStudio from '@/components/eah-studio'
+import EahStudioPro from '@/components/eah-studio-pro'
 import { getPublishedBusinesses } from '@/lib/data'
 
 export default async function StudioPage() {
   const businesses = await getPublishedBusinesses(8)
-
-  return <EahStudio businesses={businesses} />
+  return <EahStudioPro businesses={businesses} />
 }
