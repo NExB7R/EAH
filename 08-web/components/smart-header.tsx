@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import AccountControls from '@/components/account-controls'
 
 export default function SmartHeader() {
   const [hidden, setHidden] = useState(false)
@@ -41,6 +42,9 @@ export default function SmartHeader() {
           <a href="#terms">الشروط</a>
           <a href="#privacy">الخصوصية</a>
         </nav>
+        <div style={{ marginInlineStart: 'auto' }}>
+          <AccountControls />
+        </div>
       </div>
     </header>
   )
