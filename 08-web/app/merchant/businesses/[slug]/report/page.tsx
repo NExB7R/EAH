@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
+import PrintReportButton from '@/components/print-report-button'
 
 function n(v: unknown) { return typeof v === 'number' ? v : Number(v ?? 0) }
-
 type Report = { business: any; period_days: number; views: number; unique_visitors: number; live_now: number; daily: any[]; referrers: any[]; devices: any[]; ads: any }
 
 export default async function MerchantBusinessReport({ params }: { params: Promise<{ slug: string }> }) {
@@ -18,12 +18,8 @@ export default async function MerchantBusinessReport({ params }: { params: Promi
   const r = report as Report
   return (
     <main className="container page-pad merchant-report">
-      <div className="report-toolbar no-print"><Link className="pill" href="/merchant">← لوحة النشاط</Link><button className="pill" onClick={() => undefined}>🖨️ اطبع التقرير من المتصفح</button></div>
-      <header style={{ marginBottom: 24 }}>
-        <div className="eyebrow">EAH • BUSINESS REPORT</div>
-        <h1 className="page-title">تقرير {business.name}</h1>
-        <p className="lead">تقرير أسبوعي مختصر قابل للطباعة — زيارات، زوار، مصادر، أجهزة، وإعلانات.</p>
-      </header>
+      <div className="report-toolbar no-print"><Link className="pill" href="/merchant">← لوحة النشاط</Link><PrintReportButton /></div>
+      <header style={{ marginBottom: 24 }}><div className="eyebrow">EAH • BUSINESS REPORT</div><h1 className="page-title">تقرير {business.name}</h1><p className="lead">تقرير أسبوعي قابل للطباعة — زيارات، زوار، مصادر، أجهزة، وإعلانات.</p></header>
       <section className="eah-admin-stat-grid">
         <div className="eah-admin-stat-card"><span>زيارات آخر 7 أيام</span><strong>{n(r.views)}</strong><small>Page views</small></div>
         <div className="eah-admin-stat-card"><span>زوار فريدون</span><strong>{n(r.unique_visitors)}</strong><small>Unique visitors</small></div>
