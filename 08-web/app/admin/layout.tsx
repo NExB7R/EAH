@@ -21,6 +21,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   const links = [
     ['/admin', 'نظرة عامة'],
+    ['/admin/analytics', '📊 الإحصائيات والتحليلات'],
     ['/admin/change-requests', `مراجعة تعديلات${pendingChanges ? ` (${pendingChanges})` : ''}`],
     ['/admin/businesses', 'الأنشطة'],
     ['/admin/merchants', 'طلبات أصحاب الأنشطة'],
@@ -37,7 +38,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <aside className="eah-admin-sidebar">
         <Link href="/admin" className="eah-admin-brand">EAH <span>B7R CONTROL</span></Link>
         <nav aria-label="إدارة EAH">{links.map(([href, label]) => <Link key={href} href={href} className="eah-admin-nav-link">{label}</Link>)}</nav>
-        <div className="eah-admin-side-bottom"><Link href="/" className="eah-admin-nav-link">← الموقع</Link><span className="eah-admin-role">B7R • Super Admin</span></div>
+        <div className="eah-admin-side-bottom"><Link href="/" className="eah-admin-nav-link">← الموقع</Link><span className="eah-admin-role">EAH • Super Admin</span></div>
       </aside>
       <main className="eah-admin-main">{children}</main>
     </div>
