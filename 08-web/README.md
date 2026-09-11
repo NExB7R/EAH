@@ -35,19 +35,11 @@ http://localhost:3000/studio
 08-web/.eah/studio.json
 ```
 
-الصفحة الرئيسية تقرأ نفس التصميم المحفوظ، والاستوديو نفسه يدير نفس مكونات EAH. هذا يجعل التصميم هو مصدر الحقيقة البصري للمشروع بدل ما تكون التعديلات مجرد preview منفصل.
+والصفحة الرئيسية تقرأ نفس التصميم المحفوظ. أي تعديل تحفظه من الاستوديو يصبح هو الشكل المستخدم في الموقع المحلي.
 
-### التحكم
+التحكم يشمل Drag & Drop، إعادة ترتيب، Duplicate، Delete، إضافة مكونات، Root Theme، Logo، Hero، Search، Intent Chips، الترند، العروض، الجديد، الصيدليات، المقاضي، التوصيل، CTA، Container، Grid، Text، Button، Image، Spacer، Divider، Navigation، Footer، وخلفية Stickers SVG.
 
-- Drag & Drop، إعادة ترتيب، Duplicate، Delete وإدخال مكونات جديدة.
-- Root Theme: الخلفية، الأسطح، البنفسجي، النصوص، العرض العام، المسافات، الاستدارة والـstickers.
-- EAH Logo، Hero، Search، Intent Chips.
-- أقسام الترند والعروض والجديد والصيدليات والمقاضي والتوصيل وCTA.
-- Container وGrid وText وButton وImage وSpacer وDivider وNavigation وFooter.
-- لكل عنصر بصري رئيسي: Width، Max Width، Min Height، Padding، Margin، Gap، Background، Background Image، Borders، Radius، Shadow، Opacity، Blur وOverflow.
-- Responsive controls للموبايل والتابلت والشاشة.
-- خلفية Stickers مرسومة كـSVG خفيفة وقابلة للتحكم في الكثافة والشفافية والسرعة والانتشار والأشكال.
-- معاينات Mobile / Tablet / Desktop / Wide.
+كل عنصر بصري رئيسي لديه تحكم في العرض، الارتفاع الأدنى، الـpadding، الـmargin، الـgap، الخلفية، صورة الخلفية، الحدود، الـradius، الـshadow، الشفافية، الـblur، والـoverflow، مع Responsive values للموبايل والتابلت والشاشة في المكونات التي تحتاجها.
 
 ## تشغيل الاستوديو بضغطة
 
