@@ -13,6 +13,10 @@ function normalizeEgyptPhone(value: string) {
   return null
 }
 
+function phoneAuthEmail(phone: string) {
+  return `phone_${phone.replace(/\D/g, '')}@auth.eah.app`
+}
+
 function friendlyError(error: unknown) {
   return error instanceof Error ? error.message : 'حصلت مشكلة. جرّب تاني.'
 }
@@ -58,20 +62,26 @@ export default function AuthPage() {
 
     try {
       const supabase = createClient()
+      const authEmail = phoneAuthEmail(normalized)
 
       if (mode === 'signup') {
         const { data, error } = await supabase.auth.signUp({
-          phone: normalized,
+          email: authEmail,
           password,
-          options: { data: { display_name: name.trim() } },
+          options: {
+            data: {
+              display_name: name.trim(),
+              phone_e164: normalized,
+            },
+          },
         })
         if (error) throw error
         if (!data.session) {
-          throw new Error('التسجيل يحتاج تأكيد الهاتف. اقفل Confirm phone في إعدادات Supabase لأن EAH يستخدم رقم + كلمة مرور بدون OTP.')
+          throw new Error('التسجيل يحتاج تأكيد البريد الإلكتروني. اقفل Confirm email في Supabase لأن EAH يستخدم رقم + كلمة مرور بدون OTP.')
         }
       } else {
         const { error } = await supabase.auth.signInWithPassword({
-          phone: normalized,
+          email: authEmail,
           password,
         })
         if (error) throw error
