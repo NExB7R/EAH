@@ -15,8 +15,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const role = roleRow?.role
   if (role !== 'admin' && role !== 'super_admin') redirect('/?admin=denied')
 
+  const { count: pendingChanges } = await supabase
+    .from('business_change_requests')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'pending')
+
   const links = [
     ['/admin', 'نظرة عامة'],
+    ['/admin/change-requests', `مراجعة تعديلات${pendingChanges ? ` (${pendingChanges})` : ''}`],
     ['/admin/businesses', 'الأنشطة'],
     ['/admin/merchants', 'طلبات أصحاب الأنشطة'],
     ['/admin/users', 'المستخدمين والأرقام'],
