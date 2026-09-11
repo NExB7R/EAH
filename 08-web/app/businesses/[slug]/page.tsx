@@ -19,7 +19,7 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
     </article>
     <EahAdSlot slotKey="business_inline" />
     <section className="section"><div className="section-head"><div><h2>ليه ظهر لك؟</h2><span>الشفافية جزء من التوصية</span></div></div><div className="why-panel"><strong>✨ السبب:</strong> {business.reason}. <strong>+ القرب والمزاج:</strong> إشارات متوافقة مع نوع النشاط.</div></section>
-    {business.menu && <section className="section"><div className="section-head"><div><h2>المنيو</h2><span>صور المنيو هتظهر هنا</span></div></div><div className="menu-placeholder">{business.menu.map(x => <div className="menu-line" key={x}>{x}<span>→</span></div>)}</section>}
+    {business.menu && <section className="section"><div className="section-head"><div><h2>المنيو</h2><span>صور المنيو هتظهر هنا</span></div></div><div className="menu-placeholder">{business.menu.map(x => <div className="menu-line" key={x}>{x}<span>→</span></div>)}</div></section>}
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ '@context': 'https://schema.org', '@type': schemaType, name: business.name, address: { '@type':'PostalAddress', addressLocality:'شبين القناطر', addressCountry:'EG' }, url: `${siteUrl}/businesses/${business.slug}` }) }} />
   </main>
 }
