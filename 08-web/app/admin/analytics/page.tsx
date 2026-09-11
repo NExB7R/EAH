@@ -25,7 +25,7 @@ export default async function AdminAnalyticsPage() {
         <div>
           <span className="eah-admin-kicker">ANALYTICS • LIVE</span>
           <h1>الإحصائيات والتحليلات</h1>
-          <p>أرقام الزيارات، الزوار الفريدين، النشاط الحالي، وأداء كل نشاط وصفحة.</p>
+          <p>أرقام الموقع والأنشطة منفصلة، مع الزوار الفريدين والزوار الموجودين Live.</p>
         </div>
         <span className="eah-admin-badge live">Live الآن</span>
       </header>
@@ -34,12 +34,12 @@ export default async function AdminAnalyticsPage() {
         {[
           ['زوار الآن', num(safeSummary.live_visitors), 'كل الموقع خلال آخر دقيقتين'],
           ['على صفحات الأنشطة الآن', num(safeSummary.live_business_visitors), 'زوار حاليون لصفحات الأنشطة'],
-          ['زيارات اليوم', num(safeSummary.views_today), 'Page views'],
-          ['زوار فريدون اليوم', num(safeSummary.unique_visitors_today), 'Unique visitors'],
-          ['زيارات آخر 7 أيام', num(safeSummary.views_7d), 'كل الموقع'],
-          ['زوار فريدون آخر 7 أيام', num(safeSummary.unique_visitors_7d), 'كل الموقع'],
-          ['زيارات آخر 30 يوم', num(safeSummary.views_30d), 'كل الموقع'],
-          ['زوار فريدون آخر 30 يوم', num(safeSummary.unique_visitors_30d), 'كل الموقع'],
+          ['زيارات الموقع اليوم', num(safeSummary.site_views_today), 'بدون مضاعفة زيارات المطاعم'],
+          ['زوار الموقع الفريدون اليوم', num(safeSummary.site_unique_visitors_today), 'Unique visitors'],
+          ['زيارات صفحات الأنشطة اليوم', num(safeSummary.business_views_today), 'Business page views'],
+          ['زيارات الموقع آخر 7 أيام', num(safeSummary.site_views_7d), 'Site views'],
+          ['زوار الموقع الفريدون آخر 7 أيام', num(safeSummary.site_unique_visitors_7d), 'Site unique visitors'],
+          ['زيارات صفحات الأنشطة آخر 7 أيام', num(safeSummary.business_views_7d), 'Business views'],
         ].map(([label, value, hint]) => (
           <div className="eah-admin-stat-card" key={label as string}>
             <span>{label}</span>
@@ -51,7 +51,7 @@ export default async function AdminAnalyticsPage() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: 16, marginTop: 18 }}>
         <div className="card" style={{ padding: 22 }}>
-          <div className="section-head"><div><h2>الزيارات اليومية</h2><span>آخر 7 أيام</span></div></div>
+          <div className="section-head"><div><h2>زيارات الموقع اليومية</h2><span>آخر 7 أيام</span></div></div>
           <div style={{ display: 'grid', gap: 12, marginTop: 18 }}>
             {dailyRows.map((row: any) => {
               const views = num(row.views)
@@ -101,7 +101,7 @@ export default async function AdminAnalyticsPage() {
         </div>
 
         <div className="card" style={{ padding: 22 }}>
-          <div className="section-head"><div><h2>أكثر الصفحات زيارة</h2><span>آخر 7 أيام</span></div></div>
+          <div className="section-head"><div><h2>أكثر صفحات الموقع زيارة</h2><span>آخر 7 أيام</span></div></div>
           <div style={{ display: 'grid', gap: 10, marginTop: 16 }}>
             {pageRows.slice(0, 10).map((row: any) => (
               <div key={row.path} style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 10 }}>
@@ -115,7 +115,7 @@ export default async function AdminAnalyticsPage() {
       </div>
 
       <div className="card" style={{ padding: 18, marginTop: 16 }}>
-        <strong>مهم للتقارير التجارية:</strong> أرقام التاجر هتتحسب من نفس المصدر المركزي، مع فصل &quot;الزيارات&quot; عن &quot;الزوار الفريدين&quot; وعن &quot;الزوار الحاليين Live&quot;، عشان التقرير الأسبوعي يبقى قابل للفهم والمقارنة.
+        <strong>التقرير التجاري:</strong> بنفصل بين زيارات الموقع العامة، زيارات صفحات المطاعم، الزوار الفريدين، والزوار الموجودين Live؛ وده يمنع مضاعفة الأرقام لما حد يفتح صفحة مطعم.
       </div>
     </section>
   )
