@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
+import AccountControls from '@/components/account-controls'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
@@ -25,5 +26,18 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     ['/admin/audit', 'سجل العمليات'],
     ['/admin/security', 'الأمان والتشفير'],
   ] as const
-  return <div className="eah-admin-shell"><aside className="eah-admin-sidebar"><Link href="/admin" className="eah-admin-brand">EAH <span>B7R CONTROL</span></Link><nav aria-label="إدارة EAH">{links.map(([href, label]) => <Link key={href} href={href} className="eah-admin-nav-link">{label}</Link>)}</nav><div className="eah-admin-side-bottom"><Link href="/" className="eah-admin-nav-link">← الموقع</Link><span className="eah-admin-role">EAH • Super Admin</span></div></aside><main className="eah-admin-main">{children}</main></div>
+  return (
+    <div className="eah-admin-shell">
+      <aside className="eah-admin-sidebar">
+        <Link href="/admin" className="eah-admin-brand">EAH <span>B7R CONTROL</span></Link>
+        <nav aria-label="إدارة EAH">{links.map(([href, label]) => <Link key={href} href={href} className="eah-admin-nav-link">{label}</Link>)}</nav>
+        <div className="eah-admin-side-bottom" style={{ display: 'grid', gap: 10 }}>
+          <Link href="/" className="eah-admin-nav-link">← الموقع</Link>
+          <span className="eah-admin-role">EAH • Super Admin</span>
+          <AccountControls />
+        </div>
+      </aside>
+      <main className="eah-admin-main">{children}</main>
+    </div>
+  )
 }
