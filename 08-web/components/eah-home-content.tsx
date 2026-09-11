@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { defaultEahPageData, EahPageRenderer, type EahBusiness, type EahPageData } from '@/components/eah-page-builder'
+import EahAdSlot from '@/components/eah-ad-slot'
 
 const STORAGE_KEY = 'eah:page-design:v1'
 
@@ -14,11 +15,8 @@ export default function EahHomeContent({ businesses }: { businesses: EahBusiness
       try {
         const stored = localStorage.getItem(STORAGE_KEY)
         if (stored) setData(JSON.parse(stored) as EahPageData)
-      } catch {
-        setData(defaultEahPageData)
-      }
+      } catch { setData(defaultEahPageData) }
     }
-
     load()
     window.addEventListener('eah:design-published', load)
     return () => window.removeEventListener('eah:design-published', load)
@@ -26,10 +24,10 @@ export default function EahHomeContent({ businesses }: { businesses: EahBusiness
 
   return (
     <>
+      <EahAdSlot slotKey="home_top" />
       <EahPageRenderer data={data} businesses={businesses} />
-      <div className="studio-shortcut">
-        <Link href="/studio">⚙️ استوديو التصميم</Link>
-      </div>
+      <EahAdSlot slotKey="home_mid" />
+      <div className="studio-shortcut"><Link href="/studio">⚙️ استوديو التصميم</Link></div>
     </>
   )
 }
