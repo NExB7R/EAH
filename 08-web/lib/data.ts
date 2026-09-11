@@ -22,7 +22,7 @@ function toDemoShape(b: DbBusiness, offer?: DbOffer | null): DemoBusiness {
   return {
     slug: b.slug,
     name: b.name,
-    type: ['restaurant','pharmacy','supermarket','delivery_office'].includes(type) ? type as DemoBusiness['type'] : 'other',
+    type: ['restaurant','pharmacy','supermarket','delivery_office'].includes(type) ? type as DemoBusiness['type'] : 'restaurant',
     area: b.area ?? b.city ?? 'شبين القناطر',
     open: b.is_open,
     badge: b.is_featured ? 'مميز' : offer ? 'عرض' : undefined,
