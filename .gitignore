@@ -1,0 +1,30 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Node / Next.js
+08-web/node_modules/
+08-web/.next/
+08-web/out/
+08-web/.turbo/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+08-web/.env
+08-web/.env.*
+!08-web/.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local Supabase
+.supabase/
