@@ -83,7 +83,7 @@ export default function AuthPage() {
       if (roleError) throw new Error(`تعذر قراءة صلاحية الحساب: ${roleError.message}`)
 
       const role = roleRow?.role ?? 'customer'
-      window.location.href = role === 'admin' || role === 'super_admin' ? '/admin' : role === 'merchant' ? '/merchant' : '/'
+      window.location.href = role === 'super_admin' ? '/admin' : role === 'merchant' ? '/merchant' : '/'
     } catch (error) {
       setMessage(friendlyError(error))
     } finally {
