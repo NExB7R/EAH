@@ -9,6 +9,7 @@ const STORAGE_KEY = 'eah:studio:design:v2'
 export default function EahStudioPro({ businesses }: { businesses: EahBusiness[] }) {
   const [data, setData] = useState<EahPageData>(defaultEahPageData)
   const config = useMemo(() => createEahPuckConfig(businesses), [businesses])
+  const theme = { ...(defaultEahPageData.root?.props || {}), ...(data.root?.props || {}) } as Record<string, string | number | boolean>
 
   useEffect(() => {
     let active = true
@@ -24,7 +25,17 @@ export default function EahStudioPro({ businesses }: { businesses: EahBusiness[]
     return () => { active = false }
   }, [])
 
-  return <div className="eah-studio-pro" dir="rtl">
+  return <div className="eah-studio-pro" dir="rtl" style={{
+    ['--eah-bg' as string]: theme.background,
+    ['--eah-surface' as string]: theme.surface,
+    ['--accent' as string]: theme.accent,
+    ['--accent-strong' as string]: theme.accentStrong,
+    ['--text' as string]: theme.text,
+    ['--muted' as string]: theme.muted,
+    ['--eah-max' as string]: `${theme.maxWidth}px`,
+    ['--eah-gap' as string]: `${theme.sectionGap}px`,
+    ['--radius' as string]: `${theme.radius}px`,
+  } as React.CSSProperties}>
     <Puck
       config={config}
       data={data as any}
@@ -47,6 +58,7 @@ export default function EahStudioPro({ businesses }: { businesses: EahBusiness[]
         const payload = next as EahPageData
         setData(payload)
         localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+        window.dispatchEvent(new CustomEvent('eah:design-published'))
         await fetch('/api/studio/design', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) })
       }}
     />
