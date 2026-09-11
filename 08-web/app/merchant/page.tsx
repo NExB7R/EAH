@@ -9,7 +9,7 @@ export default async function MerchantDashboard({ searchParams }: { searchParams
   if (!user) redirect('/auth')
 
   const { data: roleRow } = await supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle()
-  if (roleRow?.role !== 'merchant' && roleRow?.role !== 'admin' && roleRow?.role !== 'super_admin') redirect('/?merchant=denied')
+  if (roleRow?.role !== 'merchant' && roleRow?.role !== 'super_admin') redirect('/?merchant=denied')
 
   const { data: businesses } = await supabase
     .from('businesses')
@@ -35,7 +35,7 @@ export default async function MerchantDashboard({ searchParams }: { searchParams
       {params.submitted === '1' && <div className="card" style={{ padding: 16, marginBottom: 16 }}>✅ اتبعت التعديلات للمراجعة. الصفحة العامة لسه زي ما هي لحد الاعتماد.</div>}
 
       {(businesses ?? []).length === 0 ? (
-        <div className="card" style={{ padding: 20 }}><h2>لسه مفيش نشاط مربوط بالحساب</h2><p className="lead">الأدمن يقدر يربط رقمك بأي مطعم من لوحة التحكم.</p></div>
+        <div className="card" style={{ padding: 20 }}><h2>لسه مفيش نشاط مربوط بالحساب</h2><p className="lead">السوبر أدمين يقدر يربط رقمك بأي مطعم من لوحة التحكم.</p></div>
       ) : (
         <div className="eah-admin-business-list">
           {businesses?.map((business) => (
