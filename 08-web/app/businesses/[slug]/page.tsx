@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getBusinessBySlug } from '@/lib/data'
+import PageViewTracker from '@/components/page-view-tracker'
 
 export default async function BusinessPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
@@ -8,6 +9,7 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
   const schemaType = business.type === 'restaurant' ? 'Restaurant' : business.type === 'pharmacy' ? 'Pharmacy' : 'Store'
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   return <main className="container page-pad">
+    <PageViewTracker businessId={business.businessId} />
     <Link className="pill" href="/">← الرئيسية</Link>
     <article className="detail-card">
       <div className="detail-cover">{business.type === 'restaurant' ? '🍽️' : business.type === 'pharmacy' ? '💊' : business.type === 'supermarket' ? '🛒' : '📦'}</div>
