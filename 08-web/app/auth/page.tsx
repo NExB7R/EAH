@@ -1,6 +1,6 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import EahAdSlot from '@/components/eah-ad-slot'
 
@@ -28,6 +28,27 @@ export default function AuthPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const supabase = createClient()
+    let active = true
+
+    void supabase.auth.getUser().then(async ({ data }) => {
+      if (!active || !data.user) return
+      const { data: roleRow } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', data.user.id)
+        .maybeSingle()
+      if (!active) return
+      const role = roleRow?.role ?? 'customer'
+      window.location.replace(role === 'super_admin' ? '/admin' : role === 'merchant' ? '/merchant' : '/')
+    })
+
+    return () => {
+      active = false
+    }
+  }, [])
 
   async function submit(e: FormEvent) {
     e.preventDefault()
@@ -116,8 +137,8 @@ export default function AuthPage() {
               : 'اسمك + رقم موبايلك + كلمة مرور. من غير OTP ومن غير رسائل SMS.'}
           </p>
           <div className="card" style={{ marginTop: 22, padding: 18, background: 'linear-gradient(135deg, rgba(168,85,247,.10), rgba(124,58,237,.04))' }}>
-            <strong>كل اللي محتاجه مكان واحد.</strong>
-            <div style={{ marginTop: 6, opacity: .72, lineHeight: 1.7 }}>اكتشف الأماكن والعروض القريبة منك وخلي EAH يوصلك للأفضل.</div>
+            <strong>الجلسة بتفضل شغالة.</strong>
+            <div style={{ marginTop: 6, opacity: .72, lineHeight: 1.7 }}>لما تدخل مرة، EAH بيحافظ على جلستك ويجددها تلقائيًا طالما الحساب صالح. استخدم تسجيل الخروج لو الجهاز مش معاك.</div>
           </div>
           <div style={{ marginTop: 18, fontSize: 13, opacity: .56 }}>تسجيل الحساب بيتم برقم الموبايل الظاهر لك، بينما نظام المصادقة الداخلي يستخدم هوية آمنة خاصة بـ EAH.</div>
         </section>
