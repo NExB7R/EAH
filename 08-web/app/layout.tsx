@@ -1,4 +1,5 @@
 import './globals.css'
+import '@puckeditor/core/puck.css'
 import type { Metadata } from 'next'
 import { Cairo } from 'next/font/google'
 import RegisterSW from '@/components/register-sw'
