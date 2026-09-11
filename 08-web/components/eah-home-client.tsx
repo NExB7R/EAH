@@ -46,7 +46,7 @@ export default function EahHomeClient({ businesses, data }: { businesses: EahBus
               background: '#8B5CF6',
             }}
           >
-            دخول
+            دخول سريع
           </Link>
         </nav>
       </header>
