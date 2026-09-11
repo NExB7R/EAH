@@ -1,4 +1,4 @@
-const CACHE = 'eah-shell-v1'
+const CACHE = 'eah-shell-v2'
 const SHELL = ['/', '/manifest.webmanifest', '/icon.svg']
 
 self.addEventListener('install', (event) => {
