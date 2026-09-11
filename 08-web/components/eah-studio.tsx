@@ -1,7 +1,6 @@
 'use client'
 
 import { Puck } from '@puckeditor/core'
-import '@puckeditor/core/puck.css'
 import { useEffect, useMemo, useState } from 'react'
 import { createEahPuckConfig, defaultEahPageData, type EahBusiness, type EahPageData } from '@/components/eah-page-builder'
 
