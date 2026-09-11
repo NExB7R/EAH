@@ -29,6 +29,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     ['/admin/offers', 'العروض'],
     ['/admin/studio', 'استوديو التصميم'],
     ['/admin/audit', 'سجل العمليات'],
+    ['/admin/security', 'الأمان والتشفير'],
   ] as const
 
   return (
