@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
+import EahAdSlot from '@/components/eah-ad-slot'
 
 function normalizeEgyptPhone(value: string) {
   const raw = value.trim().replace(/[\s()-]/g, '')
@@ -122,6 +123,8 @@ export default function AuthPage() {
         </section>
 
         <section>
+          <EahAdSlot slotKey="auth_top" />
+
           <div className="choice-row" role="tablist" aria-label="نوع الحساب">
             <button type="button" className={`choice ${mode === 'login' ? 'selected' : ''}`} onClick={() => { setMode('login'); setMessage('') }}>دخول</button>
             <button type="button" className={`choice ${mode === 'signup' ? 'selected' : ''}`} onClick={() => { setMode('signup'); setMessage('') }}>تسجيل جديد</button>
@@ -146,11 +149,6 @@ export default function AuthPage() {
             )}
             <button className="primary" disabled={loading} style={{ marginTop: 4, minHeight: 50 }}>{loading ? 'جاري التنفيذ…' : mode === 'login' ? 'دخول ⚡' : 'سجّل بسرعة ⚡'}</button>
           </form>
-
-          <div className="card" style={{ marginTop: 14, padding: 14, minHeight: 108 }}>
-            <div className="meta" style={{ marginBottom: 6 }}>مساحة العرض</div>
-            <div style={{ opacity: .66, lineHeight: 1.7, fontSize: 13 }}>هنا نعرض لاحقًا عروض EAH أو إعلانًا مناسبًا بدون إزعاج المستخدم.</div>
-          </div>
 
           {message && <p role="alert" style={{ marginTop: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{message}</p>}
         </section>
