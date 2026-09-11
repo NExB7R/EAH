@@ -16,36 +16,8 @@ export type EahBusiness = {
   reason: string
 }
 
-type StyleProps = {
-  width: string
-  maxWidth: string
-  minHeight: number
-  padding: number
-  paddingInline: number
-  paddingBlock: number
-  marginTop: number
-  marginBottom: number
-  gap: number
-  background: string
-  backgroundImage: string
-  borderColor: string
-  borderWidth: number
-  borderRadius: number
-  shadow: string
-  opacity: number
-  blur: number
-  overflow: 'visible' | 'hidden' | 'auto'
-}
-
-type ResponsiveProps = {
-  mobileFontSize: number
-  tabletFontSize: number
-  desktopFontSize: number
-  mobilePadding: number
-  tabletPadding: number
-  desktopPadding: number
-}
-
+type StyleProps = { width: string; maxWidth: string; minHeight: number; padding: number; paddingInline: number; paddingBlock: number; marginTop: number; marginBottom: number; gap: number; background: string; backgroundImage: string; borderColor: string; borderWidth: number; borderRadius: number; shadow: string; opacity: number; blur: number; overflow: 'visible' | 'hidden' | 'auto' }
+type ResponsiveProps = { mobileFontSize: number; tabletFontSize: number; desktopFontSize: number; mobilePadding: number; tabletPadding: number; desktopPadding: number }
 type Block = { type: string; props: Record<string, any> }
 export type EahPageData = { content: Block[]; root?: { props?: Partial<StyleProps> } }
 
@@ -57,54 +29,31 @@ const baseStyleFields = { width: { type: 'text', label: 'العرض' }, maxWidth
 const responsiveFields = { mobileFontSize: { type: 'number', label: 'موبايل: حجم الخط', min: 8, max: 120 }, tabletFontSize: { type: 'number', label: 'تابلت: حجم الخط', min: 8, max: 140 }, desktopFontSize: { type: 'number', label: 'شاشة: حجم الخط', min: 8, max: 180 }, mobilePadding: { type: 'number', label: 'موبايل: Padding', min: 0, max: 120 }, tabletPadding: { type: 'number', label: 'تابلت: Padding', min: 0, max: 160 }, desktopPadding: { type: 'number', label: 'شاشة: Padding', min: 0, max: 200 } }
 const styleFields = { style: { type: 'object', label: '🎨 الشكل والمسافات', objectFields: baseStyleFields }, responsive: { type: 'object', label: '📱 Responsive', objectFields: responsiveFields } }
 
-function cssFromStyle(style: Partial<StyleProps>, responsive: Partial<ResponsiveProps> = {}): CSSProperties {
-  const s = { ...defaultStyle, ...style }; const r = { ...defaultResponsive, ...responsive }; const backgroundImage = s.backgroundImage ? `url(${s.backgroundImage})` : undefined
-  return { width: s.width, maxWidth: s.maxWidth, minHeight: s.minHeight || undefined, padding: s.padding || undefined, paddingInline: s.paddingInline || undefined, paddingBlock: s.paddingBlock || undefined, marginTop: s.marginTop || undefined, marginBottom: s.marginBottom || undefined, gap: s.gap, background: s.background, backgroundImage, backgroundSize: backgroundImage ? 'cover' : undefined, backgroundPosition: backgroundImage ? 'center' : undefined, border: s.borderWidth ? `${s.borderWidth}px solid ${s.borderColor}` : undefined, borderRadius: s.borderRadius, boxShadow: s.shadow, opacity: s.opacity, backdropFilter: s.blur ? `blur(${s.blur}px)` : undefined, overflow: s.overflow, ['--eah-font-mobile' as string]: `${r.mobileFontSize}px`, ['--eah-font-tablet' as string]: `${r.tabletFontSize}px`, ['--eah-font-desktop' as string]: `${r.desktopFontSize}px`, ['--eah-pad-mobile' as string]: `${r.mobilePadding}px`, ['--eah-pad-tablet' as string]: `${r.tabletPadding}px`, ['--eah-pad-desktop' as string]: `${r.desktopPadding}px` }
-}
-
+function cssFromStyle(style: Partial<StyleProps>, responsive: Partial<ResponsiveProps> = {}): CSSProperties { const s = { ...defaultStyle, ...style }; const r = { ...defaultResponsive, ...responsive }; const backgroundImage = s.backgroundImage ? `url(${s.backgroundImage})` : undefined; return { width: s.width, maxWidth: s.maxWidth, minHeight: s.minHeight || undefined, padding: s.padding || undefined, paddingInline: s.paddingInline || undefined, paddingBlock: s.paddingBlock || undefined, marginTop: s.marginTop || undefined, marginBottom: s.marginBottom || undefined, gap: s.gap, background: s.background, backgroundImage, backgroundSize: backgroundImage ? 'cover' : undefined, backgroundPosition: backgroundImage ? 'center' : undefined, border: s.borderWidth ? `${s.borderWidth}px solid ${s.borderColor}` : undefined, borderRadius: s.borderRadius, boxShadow: s.shadow, opacity: s.opacity, backdropFilter: s.blur ? `blur(${s.blur}px)` : undefined, overflow: s.overflow, ['--eah-font-mobile' as string]: `${r.mobileFontSize}px`, ['--eah-font-tablet' as string]: `${r.tabletFontSize}px`, ['--eah-font-desktop' as string]: `${r.desktopFontSize}px`, ['--eah-pad-mobile' as string]: `${r.mobilePadding}px`, ['--eah-pad-tablet' as string]: `${r.tabletPadding}px`, ['--eah-pad-desktop' as string]: `${r.desktopPadding}px` } }
 function ResponsiveText({ className = '', style, responsive, children }: { className?: string; style?: Partial<StyleProps>; responsive?: Partial<ResponsiveProps>; children: React.ReactNode }) { return <div className={`eah-responsive ${className}`} style={cssFromStyle(style, responsive)}>{children}</div> }
-
-function StickerIcon({ name }: { name: string }) {
-  const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
-  if (name === 'cart') return <svg viewBox="0 0 24 24" aria-hidden {...common}><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.2 10.5a2 2 0 0 0 2 1.6h8.3a2 2 0 0 0 2-1.6L21 8H6"/></svg>
-  if (name === 'pill') return <svg viewBox="0 0 24 24" aria-hidden {...common}><path d="M7.5 16.5a5 5 0 0 1 0-7l2-2a5 5 0 0 1 7 7l-2 2a5 5 0 0 1-7 0Z"/><path d="m8.5 8.5 7 7"/></svg>
-  if (name === 'box') return <svg viewBox="0 0 24 24" aria-hidden {...common}><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg>
-  if (name === 'store') return <svg viewBox="0 0 24 24" aria-hidden {...common}><path d="M4 10h16l-1-5H5l-1 5Z"/><path d="M5 10v9h14v-9"/><path d="M8 19v-5h8v5"/></svg>
-  if (name === 'star') return <svg viewBox="0 0 24 24" aria-hidden {...common}><path d="m12 3 2.8 5.8 6.2.9-4.5 4.4 1.1 6.2L12 18.4 6.4 21.3l1.1-6.2L3 9.7l6.2-.9L12 3Z"/></svg>
-  if (name === 'spark') return <svg viewBox="0 0 24 24" aria-hidden {...common}><path d="M12 2v5M12 17v5M2 12h5M17 12h5M4.9 4.9l3.5 3.5M15.6 15.6l3.5 3.5M19.1 4.9l-3.5 3.5M8.4 15.6l-3.5 3.5"/></svg>
-  return <svg viewBox="0 0 24 24" aria-hidden {...common}><circle cx="12" cy="12" r="8"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/><path d="M8 14c1.2 1.5 2.8 2.2 4 2.2s2.8-.7 4-2.2"/></svg>
-}
+function StickerIcon({ name }: { name: string }) { const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }; if (name === 'cart') return <svg viewBox="0 0 24 24" aria-hidden {...common}><circle cx="9" cy="20" r="1"/><circle cx="19" cy="20" r="1"/><path d="M3 4h2l2.2 10.5a2 2 0 0 0 2 1.6h8.3a2 2 0 0 0 2-1.6L21 8H6"/></svg>; if (name === 'pill') return <svg viewBox="0 0 24 24" aria-hidden {...common}><path d="M7.5 16.5a5 5 0 0 1 0-7l2-2a5 5 0 0 1 7 7l-2 2a5 5 0 0 1-7 0Z"/><path d="m8.5 8.5 7 7"/></svg>; if (name === 'box') return <svg viewBox="0 0 24 24" aria-hidden {...common}><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="M4 7v10l8 4 8-4V7"/><path d="M12 11v10"/></svg>; if (name === 'store') return <svg viewBox="0 0 24 24" aria-hidden {...common}><path d="M4 10h16l-1-5H5l-1 5Z"/><path d="M5 10v9h14v-9"/><path d="M8 19v-5h8v5"/></svg>; if (name === 'star') return <svg viewBox="0 0 24 24" aria-hidden {...common}><path d="m12 3 2.8 5.8 6.2.9-4.5 4.4 1.1 6.2L12 18.4 6.4 21.3l1.1-6.2L3 9.7l6.2-.9L12 3Z"/></svg>; if (name === 'spark') return <svg viewBox="0 0 24 24" aria-hidden {...common}><path d="M12 2v5M12 17v5M2 12h5M17 12h5M4.9 4.9l3.5 3.5M15.6 15.6l3.5 3.5M19.1 4.9l-3.5 3.5M8.4 15.6l-3.5 3.5"/></svg>; return <svg viewBox="0 0 24 24" aria-hidden {...common}><circle cx="12" cy="12" r="8"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/><path d="M8 14c1.2 1.5 2.8 2.2 4 2.2s2.8-.7 4-2.2"/></svg> }
 
 const stickerNames = ['star', 'cart', 'pill', 'box', 'store', 'spark', 'smile']
 const normalizeStickerNames = (items: any[]) => items.map(item => typeof item === 'string' ? item : item?.name).filter(Boolean).slice(0, 18)
 
-export const defaultEahPageData: EahPageData = {
-  root: { props: defaultTheme },
-  content: [
-    { type: 'Logo', props: { id: 'logo', tagline: 'اللي نفسك فيه ؟', size: 112, glow: 1, align: 'center' } },
-    { type: 'Hero', props: { id: 'hero', eyebrow: 'شبين القناطر وما حواليها', title: 'اللي نفسك فيه ؟', description: 'اكتشف اللي مناسب ليك. وكل ما تستخدم EAH، الترشيحات تظبط أكتر على ذوقك.', searchPlaceholder: 'دور على مطعم، صيدلية، سوبر ماركت...', align: 'center', size: 'large', ...styleDefaultProps() } },
-    { type: 'BusinessSection', props: { id: 'trend', title: 'الترند في المطاعم بيقول إيه !', subtitle: 'حاجات الناس بتتفاعل معاها دلوقتي', variant: 'trend', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('spotlight') } },
-    { type: 'CTA', props: { id: 'recommend', eyebrow: 'مش عارف تختار؟', title: 'رشّحلي على زوقي', description: 'قولّي ميزانيتك ومزاجك وأنا أطلعلك كام اختيار مناسب.', href: '/recommend', tone: 'purple', ...styleDefaultProps() } },
-    { type: 'BusinessSection', props: { id: 'offers', title: 'العروض ع إيه !', subtitle: 'عروض متجددة من الأماكن اللي تهمك', variant: 'offers', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('accent') } },
-    { type: 'BusinessSection', props: { id: 'new', title: 'جرب الجديد', subtitle: 'مشاريع وأماكن لسه طالعة للنور', variant: 'new', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('default') } },
-    { type: 'BusinessSection', props: { id: 'pharmacy', title: 'ناقصك إيه من الصيدلية ؟', subtitle: 'اختيارات قريبة وسريعة وقت ما تحتاج', variant: 'pharmacy', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('soft') } },
-    { type: 'BusinessSection', props: { id: 'groceries', title: 'البيت محتاج إيه ؟', subtitle: 'مقاضيك من غير لف كتير', variant: 'groceries', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('soft') } },
-    { type: 'BusinessSection', props: { id: 'delivery', title: 'الطلب هيطير إزاي ؟', subtitle: 'مكاتب توصيل حسب نطاق التغطية', variant: 'delivery', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('soft') } },
-    { type: 'StickerCloud', props: { id: 'stickers', density: 'calm', opacity: 0.14, speed: 'slow', icons: stickerNames.map(name => ({ name })), spread: 100 } },
-  ],
-}
-
+export const defaultEahPageData: EahPageData = { root: { props: defaultTheme }, content: [
+  { type: 'Logo', props: { id: 'logo', tagline: 'اللي نفسك فيه ؟', size: 112, glow: 1, align: 'center' } },
+  { type: 'Hero', props: { id: 'hero', eyebrow: 'شبين القناطر وما حواليها', title: 'اللي نفسك فيه ؟', description: 'اكتشف اللي مناسب ليك. وكل ما تستخدم EAH، الترشيحات تظبط أكتر على ذوقك.', searchPlaceholder: 'دور على مطعم، صيدلية، سوبر ماركت...', align: 'center', size: 'large', ...styleDefaultProps() } },
+  { type: 'BusinessSection', props: { id: 'trend', title: 'الترند في المطاعم بيقول إيه !', subtitle: 'حاجات الناس بتتفاعل معاها دلوقتي', variant: 'trend', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('spotlight') } },
+  { type: 'CTA', props: { id: 'recommend', eyebrow: 'مش عارف تختار؟', title: 'رشّحلي على زوقي', description: 'قولّي ميزانيتك ومزاجك وأنا أطلعلك كام اختيار مناسب.', href: '/recommend', tone: 'purple', ...styleDefaultProps() } },
+  { type: 'BusinessSection', props: { id: 'offers', title: 'العروض ع إيه !', subtitle: 'عروض متجددة من الأماكن اللي تهمك', variant: 'offers', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('accent') } },
+  { type: 'BusinessSection', props: { id: 'new', title: 'جرب الجديد', subtitle: 'مشاريع وأماكن لسه طالعة للنور', variant: 'new', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('default') } },
+  { type: 'BusinessSection', props: { id: 'pharmacy', title: 'ناقصك إيه من الصيدلية ؟', subtitle: 'اختيارات قريبة وسريعة وقت ما تحتاج', variant: 'pharmacy', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('soft') } },
+  { type: 'BusinessSection', props: { id: 'groceries', title: 'البيت محتاج إيه ؟', subtitle: 'مقاضيك من غير لف كتير', variant: 'groceries', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('soft') } },
+  { type: 'BusinessSection', props: { id: 'delivery', title: 'الطلب هيطير إزاي ؟', subtitle: 'مكاتب توصيل حسب نطاق التغطية', variant: 'delivery', limit: 4, showLink: true, layout: 'grid', ...sectionDefaults('soft') } },
+  { type: 'StickerCloud', props: { id: 'stickers', density: 'calm', opacity: 0.14, speed: 'slow', icons: stickerNames.map(name => ({ name })), spread: 100 } },
+] }
 function styleDefaultProps() { return { style: defaultStyle, responsive: defaultResponsive } }
 function sectionDefaults(tone: string) { return { tone, style: { ...defaultStyle, background: 'transparent', paddingBlock: 12 }, responsive: defaultResponsive } }
-
-function RootFrame({ children, theme }: { children: React.ReactNode; theme: typeof defaultTheme }) {
-  const style = { minHeight: '100dvh', background: theme.background, color: theme.text, width: '100%', position: 'relative' as const, ['--eah-surface' as string]: theme.surface, ['--accent' as string]: theme.accent, ['--accent-strong' as string]: theme.accentStrong, ['--muted' as string]: theme.muted, ['--eah-max' as string]: `${theme.maxWidth}px`, ['--eah-gap' as string]: `${theme.sectionGap}px`, ['--radius' as string]: `${theme.radius}px` }
-  return <div className="eah-design-root" style={style}>{theme.showStickers && <StickerLayer opacity={theme.stickerOpacity} />}{children}</div>
-}
-
+function RootFrame({ children, theme }: { children: React.ReactNode; theme: typeof defaultTheme }) { const style = { minHeight: '100dvh', background: theme.background, color: theme.text, width: '100%', position: 'relative' as const, ['--eah-surface' as string]: theme.surface, ['--accent' as string]: theme.accent, ['--accent-strong' as string]: theme.accentStrong, ['--muted' as string]: theme.muted, ['--eah-max' as string]: `${theme.maxWidth}px`, ['--eah-gap' as string]: `${theme.sectionGap}px`, ['--radius' as string]: `${theme.radius}px` }; return <div className="eah-design-root" style={style}>{theme.showStickers && <StickerLayer opacity={theme.stickerOpacity} />}{children}</div> }
 function StickerLayer({ opacity = 0.13 }: { opacity?: number }) { const positions = [[5, 12, 18], [18, 28, 12], [84, 10, 16], [92, 26, 20], [8, 62, 14], [24, 78, 12], [80, 64, 16], [91, 82, 12], [48, 7, 10], [58, 88, 14]]; return <div className="eah-sticker-layer" style={{ opacity }} aria-hidden>{positions.map(([left, top, size], i) => <span key={i} style={{ left: `${left}%`, top: `${top}%`, width: size, height: size, animationDelay: `${i * -0.9}s` }}><StickerIcon name={stickerNames[i % stickerNames.length]} /></span>)}</div> }
 function LogoBlock({ props }: { props: any }) { return <section className="eah-logo-block" style={{ textAlign: props.align as any }}><img src="/eah-logo.svg" alt="EAH" style={{ width: props.size, maxWidth: '80%', filter: `drop-shadow(0 0 ${12 * Number(props.glow)}px rgba(168,85,247,.35))` }} /><div className="eah-logo-tagline">{props.tagline}</div></section> }
-function HeroBlock({ props }: { props: any }) { const responsive: ResponsiveProps = props.responsive || defaultResponsive; return <section className={`eah-hero eah-hero--${props.size}`} style={cssFromStyle(props.style, responsive)}><div className={`eah-hero-inner eah-align-${props.align}`}><div className="eah-eyebrow">{props.eyebrow}</div><h1>{props.title}</h1><p>{props.description}</p><SearchBlock props={{ placeholder: props.searchPlaceholder, ...styleDefaultProps() }} /><IntentBlock props={{ style: defaultStyle }} /></div></section> }
+function HeroBlock({ props }: { props: any }) { const responsive: ResponsiveProps = props.responsive || defaultResponsive; return <section className={`eah-hero eah-hero--${props.size}`} style={cssFromStyle(props.style, responsive)}><div className={`eah-hero-inner eah-align-${props.align}`}><div className="eah-eyebrow">{props.eyebrow}</div><h1>{props.title}</h1><p>{props.description}</p><SearchBlock props={{ placeholder: props.searchPlaceholder, buttonLabel: 'ابحث', ...styleDefaultProps() }} /><IntentBlock props={{ style: defaultStyle }} /></div></section> }
 function SearchBlock({ props }: { props: any }) { return <div className="eah-search" style={cssFromStyle(props.style, props.responsive)}><input placeholder={props.placeholder} aria-label="البحث" /><button className="eah-primary-button" type="button">{props.buttonLabel || 'ابحث'}</button></div> }
 function IntentBlock({ props }: { props: any }) { const items = ['أكل', 'صيدلية', 'مقاضي', 'توصيل']; return <div className="eah-intents" style={cssFromStyle(props.style)}>{items.map((item, i) => <span key={item} className={`eah-chip ${i === 0 ? 'is-active' : ''}`}>{['🍔','💊','🛒','📦'][i]} {item}</span>)}</div> }
 function BusinessSectionBlock({ props, businesses }: { props: any; businesses: EahBusiness[] }) { const selected = businesses.slice(0, Math.max(1, Math.min(Number(props.limit || 4), 8))); return <section className={`eah-section tone-${props.tone}`} style={cssFromStyle(props.style, props.responsive)}><div className="eah-section-head"><div><h2>{props.title}</h2><span>{props.subtitle}</span></div>{props.showLink && <Link href="/explore">شوف الكل ←</Link>}</div><div className={props.layout === 'carousel' ? 'eah-business-row is-carousel' : 'eah-business-row'}>{props.variant === 'trend' ? <TrendCards limit={Number(props.limit || 4)} /> : selected.map(business => <BusinessCard business={business} key={business.slug} />)}</div></section> }
@@ -123,15 +72,7 @@ function FooterBlock({ props }: { props: any }) { return <footer className="eah-
 const commonStyle = { ...styleFields }
 function textFields() { return { text: { type: 'textarea', label: 'النص' }, fontSize: { type: 'number', label: 'حجم الخط', min: 8, max: 180 }, fontWeight: { type: 'select', label: 'وزن الخط', options: ['400', '500', '700', '900'].map(value => ({ label: value, value })) }, lineHeight: { type: 'number', label: 'ارتفاع السطر', min: 0.8, max: 3, step: 0.05 }, color: { type: 'text', label: 'اللون' }, align: { type: 'select', label: 'المحاذاة', options: ['right', 'center', 'left'].map(value => ({ label: value, value })) }, ...commonStyle } }
 
-export function createEahPuckConfig(businesses: EahBusiness[]): Config {
-  return {
-    categories: { 'EAH — الأساس': { title: 'الأساس', components: ['Frame', 'Grid', 'Text', 'Button', 'Image', 'Spacer', 'Divider'] }, 'EAH — الهوية': { title: 'الهوية', components: ['Logo', 'Hero', 'StickerCloud'] }, 'EAH — الاكتشاف': { title: 'الاكتشاف', components: ['Search', 'IntentChips', 'BusinessSection', 'CTA'] }, 'EAH — التنقل': { title: 'التنقل', components: ['Navigation', 'Footer'] } },
-    root: {
-      fields: { background: { type: 'text', label: 'لون خلفية المشروع' }, surface: { type: 'text', label: 'لون سطح الكروت' }, accent: { type: 'text', label: 'البنفسجي الأساسي' }, accentStrong: { type: 'text', label: 'البنفسجي الساطع' }, text: { type: 'text', label: 'لون النص' }, muted: { type: 'text', label: 'لون النص الهادئ' }, maxWidth: { type: 'number', label: 'أقصى عرض', min: 720, max: 1600 }, sectionGap: { type: 'number', label: 'المسافة بين الأقسام', min: 8, max: 120 }, radius: { type: 'number', label: 'استدارة عامة', min: 0, max: 80 }, stickerOpacity: { type: 'number', label: 'شفافية الخلفية', min: 0, max: 1, step: 0.01 }, showStickers: { type: 'radio', label: 'خلفية الـ Stickers', options: [{ label: 'تشغيل', value: true }, { label: 'إيقاف', value: false }] } },
-      defaultProps: defaultTheme,
-      render: ({ children, ...theme }) => <RootFrame theme={{ ...defaultTheme, ...theme } as typeof defaultTheme}>{children}</RootFrame>,
-    },
-    components: {
+export function createEahPuckConfig(businesses: EahBusiness[]): Config { return { categories: { 'EAH — الأساس': { title: 'الأساس', components: ['Frame', 'Grid', 'Text', 'Button', 'Image', 'Spacer', 'Divider'] }, 'EAH — الهوية': { title: 'الهوية', components: ['Logo', 'Hero', 'StickerCloud'] }, 'EAH — الاكتشاف': { title: 'الاكتشاف', components: ['Search', 'IntentChips', 'BusinessSection', 'CTA'] }, 'EAH — التنقل': { title: 'التنقل', components: ['Navigation', 'Footer'] } }, root: { fields: { background: { type: 'text', label: 'لون خلفية المشروع' }, surface: { type: 'text', label: 'لون سطح الكروت' }, accent: { type: 'text', label: 'البنفسجي الأساسي' }, accentStrong: { type: 'text', label: 'البنفسجي الساطع' }, text: { type: 'text', label: 'لون النص' }, muted: { type: 'text', label: 'لون النص الهادئ' }, maxWidth: { type: 'number', label: 'أقصى عرض', min: 720, max: 1600 }, sectionGap: { type: 'number', label: 'المسافة بين الأقسام', min: 8, max: 120 }, radius: { type: 'number', label: 'استدارة عامة', min: 0, max: 80 }, stickerOpacity: { type: 'number', label: 'شفافية الخلفية', min: 0, max: 1, step: 0.01 }, showStickers: { type: 'radio', label: 'خلفية الـ Stickers', options: [{ label: 'تشغيل', value: true }, { label: 'إيقاف', value: false }] } }, defaultProps: defaultTheme, render: ({ children, ...theme }) => <RootFrame theme={{ ...defaultTheme, ...theme } as typeof defaultTheme}>{children}</RootFrame> }, components: {
       Frame: { label: 'حاوية / Container', fields: { content: { type: 'slot' }, layout: { type: 'select', label: 'Layout', options: ['block', 'stack', 'center'].map(value => ({ label: value, value })) }, ...commonStyle, responsive: styleFields.responsive }, defaultProps: { layout: 'stack', style: defaultStyle, responsive: defaultResponsive }, render: ({ content, ...props }) => <FrameBlock props={{ content, ...props }} /> },
       Grid: { label: 'Grid / صفوف', fields: { content: { type: 'slot' }, columns: { type: 'number', label: 'عدد الأعمدة', min: 1, max: 6 }, gap: { type: 'number', label: 'المسافة', min: 0, max: 80 }, ...commonStyle, responsive: styleFields.responsive }, defaultProps: { columns: 4, gap: 16, style: defaultStyle, responsive: defaultResponsive }, render: ({ content, ...props }) => <GridBlock props={{ content, ...props }} /> },
       Logo: { label: 'EAH Logo', fields: { tagline: { type: 'text', label: 'Tagline' }, size: { type: 'number', label: 'الحجم', min: 40, max: 320 }, glow: { type: 'number', label: 'قوة اللمعة', min: 0, max: 2, step: 0.1 }, align: { type: 'select', label: 'المحاذاة', options: ['right', 'center', 'left'].map(value => ({ label: value, value })) }, ...commonStyle }, defaultProps: { tagline: 'اللي نفسك فيه ؟', size: 112, glow: 1, align: 'center', style: defaultStyle }, render: props => <LogoBlock props={props} /> },
@@ -149,7 +90,6 @@ export function createEahPuckConfig(businesses: EahBusiness[]): Config {
       Navigation: { label: 'الهيدر / Navigation', fields: { items: { type: 'array', label: 'الروابط', arrayFields: { label: { type: 'text', label: 'النص' }, href: { type: 'text', label: 'الرابط' } } }, ...commonStyle, responsive: styleFields.responsive }, defaultProps: { items: [{ label: 'الرئيسية', href: '/' }, { label: 'المطاعم', href: '/explore?intent=food' }, { label: 'الصيدليات', href: '/explore?intent=pharmacy' }, { label: 'المقاضي', href: '/explore?intent=groceries' }, { label: 'التوصيل', href: '/explore?intent=delivery' }], style: defaultStyle, responsive: defaultResponsive }, render: props => <NavBlock props={props} /> },
       Footer: { label: 'Footer', fields: { title: { type: 'text', label: 'العنوان' }, text: { type: 'textarea', label: 'النص' }, links: { type: 'array', label: 'الروابط', arrayFields: { label: { type: 'text', label: 'النص' }, href: { type: 'text', label: 'الرابط' } } }, ...commonStyle, responsive: styleFields.responsive }, defaultProps: { title: 'EAH', text: 'كل اللي نفسك فيه في مكان واحد.', links: [{ label: 'عن EAH', href: '#about' }, { label: 'الخصوصية', href: '#privacy' }, { label: 'الشروط', href: '#terms' }], style: defaultStyle, responsive: defaultResponsive }, render: props => <FooterBlock props={props} /> },
     },
-  } as any
-}
+  } as any }
 
 export function EahRender({ data, businesses }: { data: EahPageData; businesses: EahBusiness[] }) { return <Render config={createEahPuckConfig(businesses)} data={data as any} /> }
