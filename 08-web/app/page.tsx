@@ -1,5 +1,7 @@
-import HomeShell from '@/components/home-shell'
+import EahHomeClient from '@/components/eah-home-client'
+import { getPublishedBusinesses } from '@/lib/data'
 
-export default function Page() {
-  return <HomeShell />
+export default async function Page() {
+  const businesses = await getPublishedBusinesses(8)
+  return <EahHomeClient businesses={businesses} />
 }
