@@ -5,6 +5,7 @@ import '@puckeditor/core/puck.css'
 import type { Metadata } from 'next'
 import { Cairo } from 'next/font/google'
 import RegisterSW from '@/components/register-sw'
+import PageViewTracker from '@/components/page-view-tracker'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
@@ -19,5 +20,5 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="ar" dir="rtl" className={cairo.variable}><body>{children}<RegisterSW /></body></html>
+  return <html lang="ar" dir="rtl" className={cairo.variable}><body><PageViewTracker />{children}<RegisterSW /></body></html>
 }
