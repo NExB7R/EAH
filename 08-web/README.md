@@ -11,7 +11,6 @@
 - Supabase JS 2.116.0
 - TypeScript
 - Mobile-first / Dark-first
-- Web App Manifest + Service Worker shell
 
 ## تشغيل الموقع
 
@@ -36,11 +35,19 @@ http://localhost:3000/studio
 08-web/.eah/studio.json
 ```
 
-وعند الضغط على **حفظ التغييرات** يتم تخزين بيانات التصميم في هذا الملف عبر `/api/studio/design`. الصفحة الرئيسية تقرأ نفس البيانات، لذلك ما يتعمل في الاستوديو هو مصدر شكل الصفحة.
+الصفحة الرئيسية تقرأ نفس التصميم المحفوظ، والاستوديو نفسه يدير نفس مكونات EAH. هذا يجعل التصميم هو مصدر الحقيقة البصري للمشروع بدل ما تكون التعديلات مجرد preview منفصل.
 
-التحكم يشمل سحب وإفلات وإعادة ترتيب وإضافة وحذف وتكرار المكونات، Root Theme، الشعار، Hero، البحث، الفئات، الترند، العروض، الجديد، الصيدليات، المقاضي، التوصيل، CTA، Container، Grid، Text، Button، Image، Spacer، Divider، Navigation، Footer، وخلفية Stickers SVG.
+### التحكم
 
-كل عنصر بصري رئيسي لديه مجموعات للتحكم في العرض والارتفاع الأدنى، الـpadding والـmargin والـgap، الخلفية وصورة الخلفية، الحدود والـradius، الـshadow، الشفافية والـblur، إضافة إلى Responsive values للموبايل والتابلت والشاشة حيث يلزم.
+- Drag & Drop، إعادة ترتيب، Duplicate، Delete وإدخال مكونات جديدة.
+- Root Theme: الخلفية، الأسطح، البنفسجي، النصوص، العرض العام، المسافات، الاستدارة والـstickers.
+- EAH Logo، Hero، Search، Intent Chips.
+- أقسام الترند والعروض والجديد والصيدليات والمقاضي والتوصيل وCTA.
+- Container وGrid وText وButton وImage وSpacer وDivider وNavigation وFooter.
+- لكل عنصر بصري رئيسي: Width، Max Width، Min Height، Padding، Margin، Gap، Background، Background Image، Borders، Radius، Shadow، Opacity، Blur وOverflow.
+- Responsive controls للموبايل والتابلت والشاشة.
+- خلفية Stickers مرسومة كـSVG خفيفة وقابلة للتحكم في الكثافة والشفافية والسرعة والانتشار والأشكال.
+- معاينات Mobile / Tablet / Desktop / Wide.
 
 ## تشغيل الاستوديو بضغطة
 
