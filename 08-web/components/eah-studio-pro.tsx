@@ -3,12 +3,12 @@
 import { Puck } from '@puckeditor/core'
 import type { CSSProperties } from 'react'
 import { useMemo, useState } from 'react'
-import { createEahPuckConfig, defaultEahPageData, type EahBusiness, type EahPageData } from '@/components/eah-page-builder-pro2'
+import { createEahPuckConfig, type EahBusiness, type EahPageData } from '@/components/eah-page-builder-pro2'
 
-export default function EahStudioPro({ businesses, initialData }: { businesses: EahBusiness[]; initialData?: EahPageData }) {
-  const [data, setData] = useState<EahPageData>(initialData || defaultEahPageData)
+export default function EahStudioPro({ businesses, initialData }: { businesses: EahBusiness[]; initialData: EahPageData }) {
+  const [data, setData] = useState<EahPageData>(initialData)
   const config = useMemo(() => createEahPuckConfig(businesses), [businesses])
-  const theme = { ...(defaultEahPageData.root?.props || {}), ...(data.root?.props || {}) } as Record<string, string | number | boolean>
+  const theme = { ...(initialData.root?.props || {}), ...(data.root?.props || {}) } as Record<string, string | number | boolean>
 
   return <div className="eah-studio-pro" dir="rtl" style={{
     ['--eah-bg' as string]: theme.background,
