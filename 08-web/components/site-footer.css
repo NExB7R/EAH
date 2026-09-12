@@ -12,7 +12,6 @@
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), transparent);
 }
-
 .site-footer__inner {
   max-width: 1200px;
   margin: 0 auto;
@@ -22,6 +21,62 @@
   align-items: center;
 }
 
+/* ===== كيف نخدمك ===== */
+.site-footer__serve {
+  width: 100%;
+  max-width: 1000px;
+  padding: 24px 28px;
+  border-radius: 24px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(139, 92, 246, 0.04);
+}
+.site-footer__serve-title {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #E8C79A;
+  margin: 0 0 18px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.site-footer__serve-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+.site-footer__serve-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(139, 92, 246, 0.06);
+  border: 1px solid rgba(139, 92, 246, 0.12);
+  transition: all 240ms ease;
+}
+.site-footer__serve-item:hover {
+  border-color: rgba(168, 85, 247, 0.4);
+  background: rgba(139, 92, 246, 0.12);
+  transform: translateY(-2px);
+}
+.site-footer__serve-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.site-footer__serve-item p {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #C9C2DB;
+  margin: 0;
+}
+.site-footer__serve-item p strong {
+  color: #F4F2FA;
+  font-weight: 900;
+}
+
+/* ===== nav ===== */
 .site-footer__nav {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -76,6 +131,7 @@
   transform: translateY(-2px);
 }
 
+/* ===== فلسطين ===== */
 .site-footer__palestine {
   display: flex;
   flex-direction: column;
@@ -102,17 +158,35 @@
   color: #A29DB5;
   margin: 0;
 }
+
+/* القلب: فارغ في الأول، يمتلى عند hover/touch */
 .site-footer__heart {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px;
+  padding: 10px;
   transition: transform 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  display: inline-flex;
 }
-.site-footer__heart:hover { transform: scale(1.12); }
-.site-footer__heart.is-active { transform: scale(1.2); }
-.site-footer__heart.is-active .heart-fill { opacity: 1; }
-.site-footer__heart.is-active > path:last-child { stroke: transparent; }
+.site-footer__heart .heart-fill {
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.site-footer__heart:hover .heart-fill,
+.site-footer__heart:active .heart-fill,
+.site-footer__heart:focus-visible .heart-fill {
+  opacity: 1;
+}
+.site-footer__heart:hover,
+.site-footer__heart:active,
+.site-footer__heart:focus-visible {
+  transform: scale(1.18);
+  outline: none;
+}
+.site-footer__heart:hover > path,
+.site-footer__heart:active > path {
+  stroke: transparent;
+}
 
 .site-footer__bottom {
   display: flex;
@@ -134,6 +208,8 @@
 
 @media (max-width: 720px) {
   .site-footer { padding: 36px 16px 20px; margin-top: 40px; }
+  .site-footer__serve-grid { grid-template-columns: 1fr; }
+  .site-footer__serve { padding: 18px 16px; }
   .site-footer__nav { grid-template-columns: repeat(2, 1fr); gap: 20px; }
 }
 @media (max-width: 400px) {

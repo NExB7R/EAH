@@ -14,6 +14,29 @@ export default function SiteFooter() {
           <EahLogo size="md" variant="full" />
         </div>
 
+        {/* ===== كيف نخدمك ===== */}
+        <div className="site-footer__serve">
+          <h3 className="site-footer__serve-title">كيف نخدمك؟</h3>
+          <div className="site-footer__serve-grid">
+            <div className="site-footer__serve-item">
+              <span className="site-footer__serve-icon">🎯</span>
+              <p><strong>نوصّلك الصح</strong> — بنفهم مزاجك ونرشحلك الأماكن اللي تناسبك</p>
+            </div>
+            <div className="site-footer__serve-item">
+              <span className="site-footer__serve-icon">💜</span>
+              <p><strong>بنسمعك</strong> — كل اقتراح وتعليق بيوصلنا، وبتبني عليه المنصة</p>
+            </div>
+            <div className="site-footer__serve-item">
+              <span className="site-footer__serve-icon">⚡</span>
+              <p><strong>تجربة سريعة</strong> — من غير تعقيد، من غير تسجيل طويل</p>
+            </div>
+            <div className="site-footer__serve-item">
+              <span className="site-footer__serve-icon">🤝</span>
+              <p><strong>دعم للأماكن المحلية</strong> — بنخلي البزنس الصغير يكبر معاك</p>
+            </div>
+          </div>
+        </div>
+
         <nav className="site-footer__nav" aria-label="روابط الموقع">
           <div className="site-footer__col">
             <h4>EAH</h4>
@@ -48,6 +71,7 @@ export default function SiteFooter() {
           </div>
         </nav>
 
+        {/* ===== فلسطين ===== */}
         <div className="site-footer__palestine">
           <p className="site-footer__palestine-text">فلسطين في قلبنا</p>
           <p className="site-footer__palestine-sub">الحرية قادمة .. بإذن الله</p>
@@ -55,15 +79,14 @@ export default function SiteFooter() {
             type="button"
             className="site-footer__heart"
             aria-label="فلسطين"
-            onClick={(e) => e.currentTarget.classList.toggle('is-active')}
           >
-            <svg viewBox="0 0 32 28" width="44" height="38" aria-hidden>
+            <svg viewBox="0 0 32 28" width="52" height="45" aria-hidden>
               <defs>
                 <clipPath id="heart-clip">
                   <path d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z" />
                 </clipPath>
               </defs>
-              <g clipPath="url(#heart-clip)" className="heart-fill" opacity="0">
+              <g clipPath="url(#heart-clip)" className="heart-fill">
                 <rect x="0" y="0" width="32" height="9" fill="#000000" />
                 <rect x="0" y="9" width="32" height="9" fill="#FFFFFF" />
                 <rect x="0" y="18" width="32" height="10" fill="#149954" />
