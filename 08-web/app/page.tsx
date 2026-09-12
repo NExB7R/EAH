@@ -12,21 +12,12 @@ export default function Page() {
   const markets = demoBusinesses.filter((b) => b.type === 'supermarket')
   const delivery = demoBusinesses.filter((b) => b.type === 'delivery_office')
 
-  // نكرر الديمو مؤقتاً لحد ما نجيب بيانات حقيقية
-  const repeat = <T,>(arr: T[], times: number): T[] =>
-    Array.from({ length: times }).flatMap(() => arr)
-
-  const featured = repeat(restaurants, 2)
-  const trending = repeat([...restaurants, ...pharmacies], 2)
-  const offers = repeat([...restaurants, ...markets], 2)
-  const fresh = repeat([...pharmacies, ...delivery, ...markets], 2)
-
   return (
     <>
       <FloatingCapsuleHeader />
       <SidePanel />
 
-      <main style={{ paddingTop: '160px', paddingBottom: '0' }}>
+      <main style={{ paddingTop: '120px' }}>
         <HomeHero />
 
         <SectionSlider
@@ -36,8 +27,8 @@ export default function Page() {
           seeAllHref="/explore?type=restaurant"
           accent="purple"
         >
-          {featured.map((b, i) => (
-            <BusinessCardV2 key={`r-${i}`} business={b} />
+          {[...restaurants, ...restaurants].map((b, i) => (
+            <BusinessCardV2 key={`r-${i}-${b.slug}`} business={b} />
           ))}
         </SectionSlider>
 
@@ -48,8 +39,8 @@ export default function Page() {
           seeAllHref="/offers"
           accent="gold"
         >
-          {offers.map((b, i) => (
-            <BusinessCardV2 key={`o-${i}`} business={b} />
+          {[...restaurants, ...markets, ...restaurants].map((b, i) => (
+            <BusinessCardV2 key={`o-${i}-${b.slug}`} business={b} />
           ))}
         </SectionSlider>
 
@@ -60,20 +51,32 @@ export default function Page() {
           seeAllHref="/explore?type=pharmacy"
           accent="purple"
         >
-          {fresh.map((b, i) => (
-            <BusinessCardV2 key={`p-${i}`} business={b} />
+          {[...pharmacies, ...pharmacies, ...pharmacies].map((b, i) => (
+            <BusinessCardV2 key={`p-${i}-${b.slug}`} business={b} />
           ))}
         </SectionSlider>
 
         <SectionSlider
-          id="markets"
+          id="delivery"
           title="الطيران بأيه؟ 🛵"
           subtitle="مكاتب توصيل بتغطي منطقتك"
           seeAllHref="/explore?type=delivery_office"
           accent="purple"
         >
-          {repeat(delivery, 3).map((b, i) => (
-            <BusinessCardV2 key={`d-${i}`} business={b} />
+          {[...delivery, ...delivery, ...delivery].map((b, i) => (
+            <BusinessCardV2 key={`d-${i}-${b.slug}`} business={b} />
+          ))}
+        </SectionSlider>
+
+        <SectionSlider
+          id="markets"
+          title="السوبر ماركت عندنا"
+          subtitle="مقاضي سريعة وقريبة منك"
+          seeAllHref="/explore?type=supermarket"
+          accent="purple"
+        >
+          {[...markets, ...markets, ...markets].map((b, i) => (
+            <BusinessCardV2 key={`m-${i}-${b.slug}`} business={b} />
           ))}
         </SectionSlider>
 
@@ -84,8 +87,8 @@ export default function Page() {
           seeAllHref="/trends"
           accent="gold"
         >
-          {trending.map((b, i) => (
-            <BusinessCardV2 key={`t-${i}`} business={b} />
+          {[...restaurants, ...pharmacies].map((b, i) => (
+            <BusinessCardV2 key={`t-${i}-${b.slug}`} business={b} />
           ))}
         </SectionSlider>
       </main>

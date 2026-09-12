@@ -1,5 +1,4 @@
 'use client'
-import { useState, useEffect } from 'react'
 import './side-panel.css'
 
 type SideItem = {
@@ -33,35 +32,8 @@ export default function SidePanel({
   featured = MOCK_FEATURED,
   trending = MOCK_TRENDING,
 }: SidePanelProps) {
-  const [closed, setClosed] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-    const wasClosed = sessionStorage.getItem('eah-side-closed') === '1'
-    if (wasClosed) setClosed(true)
-  }, [])
-
-  const handleClose = () => {
-    setClosed(true)
-    sessionStorage.setItem('eah-side-closed', '1')
-  }
-
-  if (!mounted || closed) return null
-
   return (
     <>
-      {/* زر الإغلاق الموحد — في النص فوق */}
-      <button
-        type="button"
-        className="side-panel__close-btn"
-        onClick={handleClose}
-        aria-label="إغلاق القوائم الجانبية"
-      >
-        × إغلاق
-      </button>
-
-      {/* ===== يمين: الرائج ===== */}
       <aside className="side-panel side-panel--right" aria-label="الرائج">
         <h3 className="side-panel__head">
           <span className="side-panel__head-icon">🔥</span>
@@ -81,7 +53,6 @@ export default function SidePanel({
         </div>
       </aside>
 
-      {/* ===== شمال: المميز ===== */}
       <aside className="side-panel side-panel--left" aria-label="المميز">
         <h3 className="side-panel__head">
           <span className="side-panel__head-icon">⭐</span>
@@ -96,7 +67,6 @@ export default function SidePanel({
                 <span className="side-panel__title">{item.title}</span>
                 {item.subtitle && <span className="side-panel__subtitle">{item.subtitle}</span>}
               </span>
-              {item.badge && <span className="side-panel__badge">{item.badge}</span>}
             </a>
           ))}
         </div>
