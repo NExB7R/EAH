@@ -45,13 +45,6 @@ export default function SiteFooter() {
             <a href="/merchant/apply">سجّل متجرك</a>
           </div>
           <div className="site-footer__col">
-            <h4>اكتشف</h4>
-            <a href="/explore">اكتشف</a>
-            <a href="/recommend">نفسك في ايه؟</a>
-            <a href="/offers">العروض</a>
-            <a href="/trends">الترندات</a>
-          </div>
-          <div className="site-footer__col">
             <h4>قانوني</h4>
             <a href="/terms">الشروط والأحكام</a>
             <a href="/privacy">سياسة الخصوصية</a>
@@ -73,33 +66,29 @@ export default function SiteFooter() {
         <div className="site-footer__palestine">
           <p className="site-footer__palestine-text">فلسطين في قلبنا</p>
           <p className="site-footer__palestine-sub">الحرية قادمة .. بإذن الله</p>
-          <button type="button" className="site-footer__heart" aria-label="فلسطين">
-            <svg viewBox="0 0 32 28" width="52" height="45" aria-hidden>
-              <defs>
-                <clipPath id="heart-clip">
-                  <path d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z" />
-                </clipPath>
-              </defs>
-              <g clipPath="url(#heart-clip)" className="heart-fill">
-                <rect x="0" y="0" width="32" height="9" fill="#000000" />
-                <rect x="0" y="9" width="32" height="9" fill="#FFFFFF" />
-                <rect x="0" y="18" width="32" height="10" fill="#149954" />
-                <polygon points="0,0 10,14 0,28" fill="#E4312B" />
-              </g>
-              <path
-                d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z"
-                fill="none"
-                stroke="#A855F7"
-                strokeWidth="1.6"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
         </div>
 
         <div className="site-footer__bottom">
           <p className="site-footer__bottom-brand">EAH</p>
-          <p>© {year} — صُنع بكل حب</p>
+          <p className="site-footer__bottom-made">
+            صُنع بكل حب
+            <svg className="site-footer__neon-heart" viewBox="0 0 32 28" width="20" height="18" aria-hidden>
+              <defs>
+                <linearGradient id="neon-heart-grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#A855F7" />
+                  <stop offset="100%" stopColor="#6B21FF" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z"
+                fill="url(#neon-heart-grad)"
+                stroke="rgba(168,85,247,0.8)"
+                strokeWidth="1.4"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </p>
+          <p className="site-footer__bottom-copy">© {year} — جميع الحقوق محفوظة</p>
         </div>
 
       </div>

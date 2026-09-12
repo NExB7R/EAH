@@ -8,8 +8,7 @@
 .site-footer::before {
   content: '';
   position: absolute;
-  top: -1px; left: 0; right: 0;
-  height: 1px;
+  top: -1px; left: 0; right: 0; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), transparent);
 }
 .site-footer__inner {
@@ -21,7 +20,7 @@
   align-items: center;
 }
 
-/* ===== كيف نخدمك ===== */
+/* كيف نخدمك */
 .site-footer__serve {
   width: 100%;
   max-width: 1000px;
@@ -59,11 +58,7 @@
   background: rgba(139, 92, 246, 0.12);
   transform: translateY(-2px);
 }
-.site-footer__serve-icon {
-  font-size: 1.4rem;
-  line-height: 1;
-  flex-shrink: 0;
-}
+.site-footer__serve-icon { font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
 .site-footer__serve-item p {
   font-family: var(--font-cairo, system-ui);
   font-size: 0.8rem;
@@ -71,18 +66,15 @@
   color: #C9C2DB;
   margin: 0;
 }
-.site-footer__serve-item p strong {
-  color: #F4F2FA;
-  font-weight: 900;
-}
+.site-footer__serve-item p strong { color: #F4F2FA; font-weight: 900; }
 
-/* ===== nav ===== */
+/* nav */
 .site-footer__nav {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
   width: 100%;
-  max-width: 900px;
+  max-width: 720px;
   text-align: center;
 }
 .site-footer__col {
@@ -131,98 +123,84 @@
   transform: translateY(-2px);
 }
 
-/* ===== فلسطين ===== */
+/* فلسطين */
 .site-footer__palestine {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 20px 28px;
-  border-radius: 22px;
-  border: 1px solid rgba(139, 92, 246, 0.22);
-  background: rgba(139, 92, 246, 0.05);
-  max-width: 420px;
+  gap: 4px;
+  padding: 16px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.04);
+  max-width: 400px;
   width: 100%;
   text-align: center;
 }
 .site-footer__palestine-text {
   font-family: var(--font-cairo, system-ui);
   font-weight: 900;
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: #F4F2FA;
   margin: 0;
 }
 .site-footer__palestine-sub {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.78rem;
-  color: #A29DB5;
-  margin: 0;
-}
-
-/* القلب: فارغ في الأول، يمتلى عند hover/touch */
-.site-footer__heart {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  transition: transform 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
-  display: inline-flex;
-}
-.site-footer__heart .heart-fill {
-  opacity: 0;
-  transition: opacity 300ms ease;
-}
-.site-footer__heart:hover .heart-fill,
-.site-footer__heart:active .heart-fill,
-.site-footer__heart:focus-visible .heart-fill {
-  opacity: 1;
-}
-.site-footer__heart:hover,
-.site-footer__heart:active,
-.site-footer__heart:focus-visible {
-  transform: scale(1.18);
-  outline: none;
-}
-.site-footer__heart:hover > path,
-.site-footer__heart:active > path {
-  stroke: transparent;
-}
-
-.site-footer__bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-items: center;
-  text-align: center;
-  padding-top: 18px;
-  border-top: 1px solid rgba(139, 92, 246, 0.12);
-  width: 100%;
-}
-.site-footer__bottom p {
-  font-family: var(--font-cairo, system-ui);
   font-size: 0.75rem;
   color: #A29DB5;
   margin: 0;
 }
-.site-footer__made { color: #E8C79A !important; }
+
+/* bottom */
+.site-footer__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(139, 92, 246, 0.12);
+  width: 100%;
+}
+.site-footer__bottom-brand {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #E8C79A;
+  letter-spacing: 0.3em;
+  margin: 0 0 4px;
+  text-shadow: 0 0 14px rgba(232, 199, 154, 0.4);
+}
+.site-footer__bottom-made {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.82rem;
+  color: #A29DB5;
+  margin: 0;
+}
+.site-footer__neon-heart {
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.9));
+  animation: heart-glow 2.4s ease-in-out infinite;
+}
+@keyframes heart-glow {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.8)); transform: scale(1); }
+  50%      { filter: drop-shadow(0 0 12px rgba(168, 85, 247, 1)); transform: scale(1.08); }
+}
+.site-footer__bottom-copy {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.7rem;
+  color: #6B6580;
+  margin: 0;
+}
 
 @media (max-width: 720px) {
   .site-footer { padding: 36px 16px 20px; margin-top: 40px; }
   .site-footer__serve-grid { grid-template-columns: 1fr; }
   .site-footer__serve { padding: 18px 16px; }
-  .site-footer__nav { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .site-footer__nav { grid-template-columns: 1fr 1fr; gap: 20px; }
 }
 @media (max-width: 400px) {
   .site-footer__nav { grid-template-columns: 1fr; gap: 16px; }
-}
-
-/* Bottom brand */
-.site-footer__bottom-brand {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui)) !important;
-  font-size: 1.1rem !important;
-  font-weight: 900 !important;
-  color: #E8C79A !important;
-  letter-spacing: 0.2em;
-  margin-bottom: 2px !important;
-  text-shadow: 0 0 12px rgba(232, 199, 154, 0.35);
 }

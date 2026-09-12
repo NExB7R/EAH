@@ -6,90 +6,111 @@ import ShareButton from './share-button'
 import UserAvatar from './user-avatar'
 import {
   IconKey, IconFacebook, IconWhatsapp,
-  IconMenu, IconInstall, IconStore,
+  IconMenu, IconInstall, IconStore, IconBolt,
 } from './neon-icons'
 import './floating-capsule.css'
 
 const MOCK_LOGGED_IN = false
-const MOCK_USER = {
-  name: 'بندق',
-  points: 1450,
-  unreadNotifications: 3,
-  banUntil: null as string | null,
-}
+
+const MENU_LINKS = [
+  { href: '/explore', label: 'اكتشف' },
+  { href: '/offers', label: 'العروض' },
+  { href: '/recommend', label: 'نفسك في ايه؟' },
+  { href: '/trends', label: 'الترندات' },
+  { href: '/merchant/apply', label: 'سجّل متجرك' },
+  { href: '/about', label: 'نبذة عننا' },
+  { href: '/contact', label: 'تواصل معنا' },
+  { href: '/advertise', label: 'أعلن معنا' },
+  { href: '/terms', label: 'الشروط والأحكام' },
+  { href: '/privacy', label: 'سياسة الخصوصية' },
+]
 
 export default function FloatingCapsuleHeader() {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [crownActive, setCrownActive] = useState(false)
-  const [loggedIn] = useState(MOCK_LOGGED_IN)
+  const [scrolled, setScrolled] = useState(false)
+  const [direction, setDirection] = useState<'up' | 'down'>('up')
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     let lastY = window.scrollY
-    let timer: ReturnType<typeof setTimeout> | null = null
-
     const onScroll = () => {
       const y = window.scrollY
-      setIsScrolled(y > 30)
-      if (y > lastY + 5) {
-        setCrownActive(true)
-        if (timer) clearTimeout(timer)
-        timer = setTimeout(() => setCrownActive(false), 1400)
-      }
+      setScrolled(y > 40)
+      setDirection(y > lastY ? 'down' : 'up')
       lastY = y
     }
-
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      if (timer) clearTimeout(timer)
-    }
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const handleLogoClick = () => {
-    setCrownActive(true)
-    setTimeout(() => setCrownActive(false), 1400)
-  }
-
   return (
-    <header className={`floating-capsule ${isScrolled ? 'is-scrolled' : ''}`}>
-      <div className="floating-capsule__inner">
-
-        {/* RTL start (يمين): القائمة، ثبّت، سجل، دخول */}
-        <div className="floating-capsule__side floating-capsule__side--start">
-          <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" />
-          <NeonIconButton icon={<IconInstall />} label="ثبّت" ariaLabel="تثبيت المنصة" />
-          <NeonIconButton icon={<IconStore />} label="سجل" ariaLabel="تسجيل حساب" />
-          {!loggedIn && (
+    <>
+      <header
+        className={`floating-capsule ${scrolled ? 'is-scrolled' : ''} ${
+          direction === 'up' ? 'is-up' : 'is-down'
+        }`}
+      >
+        <div className="floating-capsule__inner">
+          {/* يمين */}
+          <div className="floating-capsule__side floating-capsule__side--start">
             <NeonIconButton
-              icon={<IconKey />}
-              label="دخول"
-              ariaLabel="تسجيل الدخول"
+              icon={<IconMenu />}
+              label="القائمة"
+              ariaLabel="القائمة"
+              onClick={() => setMenuOpen(true)}
+            />
+            <NeonIconButton icon={<IconInstall />} label="ثبّت" ariaLabel="تثبيت" />
+            <NeonIconButton
+              icon={<IconBolt />}
+              label="سجل بسرعة"
+              ariaLabel="سجل بسرعة"
+              variant="accent"
               href="/auth"
             />
-          )}
-        </div>
+            <NeonIconButton icon={<IconKey />} label="دخول" ariaLabel="دخول" href="/auth" />
+          </div>
 
-        {/* Center: اللوجو */}
-        <div className="floating-capsule__center" onClick={handleLogoClick}>
-          <EahLogo size="md" variant="compact" active={crownActive} />
-        </div>
+          {/* المنتصف — يظهر بس مع السكرول */}
+          <div className="floating-capsule__center">
+            {scrolled && <EahLogo size="sm" variant="mark" />}
+          </div>
 
-        {/* RTL end (شمال): مشاركة، فيسبوك، واتساب */}
-        <div className="floating-capsule__side floating-capsule__side--end">
-          <ShareButton />
-          <NeonIconButton icon={<IconFacebook />} label="فيسبوك" href="#" ariaLabel="فيسبوك" />
-          <NeonIconButton icon={<IconWhatsapp />} label="واتساب" href="#" ariaLabel="واتساب" />
-          {loggedIn && (
-            <UserAvatar
-              name={MOCK_USER.name}
-              points={MOCK_USER.points}
-              unreadNotifications={MOCK_USER.unreadNotifications}
-              banUntil={MOCK_USER.banUntil}
-            />
-          )}
+          {/* شمال */}
+          <div className="floating-capsule__side floating-capsule__side--end">
+            <ShareButton />
+            <NeonIconButton icon={<IconFacebook />} label="فيسبوك" href="#" ariaLabel="فيسبوك" />
+            <NeonIconButton icon={<IconWhatsapp />} label="واتساب" href="#" ariaLabel="واتساب" />
+            {MOCK_LOGGED_IN && <UserAvatar name="بندق" points={1450} unreadNotifications={3} />}
+          </div>
         </div>
+      </header>
 
+      {/* القائمة المنسدلة */}
+      <div
+        className={`nav-drawer ${menuOpen ? 'is-open' : ''}`}
+        onClick={() => setMenuOpen(false)}
+        aria-hidden={!menuOpen}
+      >
+        <div className="nav-drawer__panel" onClick={(e) => e.stopPropagation()}>
+          <div className="nav-drawer__head">
+            <EahLogo size="sm" variant="mark" />
+            <button
+              type="button"
+              className="nav-drawer__close"
+              onClick={() => setMenuOpen(false)}
+              aria-label="إغلاق"
+            >
+              ×
+            </button>
+          </div>
+          <nav className="nav-drawer__nav" aria-label="صفحات الموقع">
+            {MENU_LINKS.map((link) => (
+              <a key={link.href} href={link.href} className="nav-drawer__link">
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        </div>
       </div>
-    </header>
+    </>
   )
 }
