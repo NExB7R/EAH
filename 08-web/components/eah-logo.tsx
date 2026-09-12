@@ -2,7 +2,7 @@
 
 import './eah-logo.css'
 
-type Variant = 'full' | 'tagline' | 'mark' | 'crown'
+type Variant = 'full' | 'mark' | 'crown'
 type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 type EahLogoProps = {
@@ -11,6 +11,7 @@ type EahLogoProps = {
   className?: string
   animated?: boolean
   href?: string
+  active?: boolean
 }
 
 export default function EahLogo({
@@ -19,10 +20,11 @@ export default function EahLogo({
   className = '',
   animated = true,
   href,
+  active = false,
 }: EahLogoProps) {
   const showWord = variant !== 'crown'
-  const showCrown = variant !== 'word' as any
-  const showTagline = variant === 'full' || variant === 'tagline'
+  const showCrown = variant !== 'mark' || true
+  const showSlogan = variant === 'full'
 
   const inner = (
     <>
@@ -51,8 +53,8 @@ export default function EahLogo({
         />
       )}
 
-      {showTagline && (
-        <span className="eah-logo__slogan">
+      {showSlogan && (
+        <span className="eah-logo__slogan" aria-hidden>
           <span>اللى نفسك فيه</span>
           <span className="eah-logo__punct">؟</span>
         </span>
@@ -60,7 +62,7 @@ export default function EahLogo({
     </>
   )
 
-  const cls = `eah-logo eah-logo--${size} eah-logo--${variant} ${className}`.trim()
+  const cls = `eah-logo eah-logo--${size} eah-logo--${variant} ${active ? 'crown-active' : ''} ${className}`.trim()
 
   if (href) {
     return <a href={href} className={cls} aria-label="EAH — اللى نفسك فيه ؟">{inner}</a>

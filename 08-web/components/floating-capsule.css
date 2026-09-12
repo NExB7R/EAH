@@ -5,10 +5,8 @@
   transform: translateX(-50%) translateZ(0);
   z-index: 100;
   width: calc(100% - 24px);
-  max-width: 900px;
+  max-width: 860px;
   transition: top 400ms cubic-bezier(0.34, 1.2, 0.64, 1);
-  /* ← خلي التاج يخرج برا الحدود */
-  overflow: visible;
   pointer-events: none;
 }
 
@@ -19,7 +17,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 8px 14px;
+  padding: 8px 12px;
   border-radius: 999px;
   background: rgba(8, 6, 16, 0.94);
   border: 1px solid rgba(139, 92, 246, 0.28);
@@ -28,13 +26,14 @@
     0 8px 32px rgba(0, 0, 0, 0.6),
     0 0 60px rgba(107, 33, 255, 0.18);
   transition: padding 400ms ease, box-shadow 400ms ease;
-  /* الكبسولة نفسها مقصوصة بس التاج بيطلع برا */
-  overflow: visible;
   pointer-events: auto;
+  /* ← ارتفاع ثابت عشان اللوجو يتناسب */
+  min-height: 62px;
 }
 
 .floating-capsule.is-scrolled .floating-capsule__inner {
-  padding: 6px 12px;
+  padding: 6px 10px;
+  min-height: 56px;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.03),
     0 10px 42px rgba(0, 0, 0, 0.75),
@@ -52,38 +51,37 @@
 
 .floating-capsule__center {
   flex-shrink: 0;
-  padding: 0 6px;
+  padding: 0 10px;
   cursor: pointer;
-  /* ← عشان التاج يخرج من فوق */
-  overflow: visible;
   position: relative;
   z-index: 2;
+  /* اللوجو متوسّط عموديًا */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
-/* التاج النشط: يجي في النص ويرتفع فوق */
-.floating-capsule__center.crown-active .eah-logo__crown,
-.floating-capsule__center:hover .eah-logo__crown {
-  left: 50%;
-  top: -55%;
-  transform: translate(-50%, 0) rotate(0deg) scale(1.15);
-}
-
+/* موبايل */
 @media (max-width: 900px) {
-  .floating-capsule__center :global(.eah-logo__slogan) { font-size: 0.62rem; }
+  .floating-capsule__inner { padding: 6px 10px; gap: 8px; }
+  .floating-capsule__side { gap: 5px; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 720px) {
   .floating-capsule { top: 8px; width: calc(100% - 16px); }
-  .floating-capsule__inner { padding: 6px 8px; gap: 6px; }
+  .floating-capsule__inner { min-height: 54px; padding: 6px 8px; gap: 6px; }
   .floating-capsule__side { gap: 4px; }
+  .floating-capsule__center { padding: 0 6px; }
 }
 
-@media (max-width: 640px) {
-  .floating-capsule__center :global(.eah-logo__slogan) { display: none; }
+@media (max-width: 560px) {
+  /* أخفي "ثبت" و "فيسبوك" على الشاشات الصغيرة */
+  .floating-capsule__side .neon-icon-btn:nth-child(2),
+  .floating-capsule__side--end .neon-icon-btn:nth-child(2) { display: none; }
 }
 
-@media (max-width: 480px) {
-  /* أخفي الأزرار الأقل أهمية */
-  .floating-capsule__side .neon-icon-btn:nth-child(1),
-  .floating-capsule__side--end .neon-icon-btn:nth-child(1) { display: none; }
+@media (max-width: 420px) {
+  /* أخفي كمان زر القائمة */
+  .floating-capsule__side .neon-icon-btn:nth-child(1) { display: none; }
 }
