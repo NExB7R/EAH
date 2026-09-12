@@ -1,0 +1,121 @@
+/* ===== Smart Header ===== */
+.smart-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  transition: background-color 400ms ease, backdrop-filter 400ms ease;
+  background-color: transparent;
+  padding: 12px 0;
+}
+
+.smart-header.is-scrolled {
+  background-color: rgba(7, 6, 11, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 8px 0;
+}
+
+.smart-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== Sides ===== */
+.smart-header__side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.smart-header__side--end {
+  justify-content: flex-end;
+}
+
+.smart-header__center {
+  flex-shrink: 0;
+}
+
+/* ===== Neon Pill Button (القاعدة الأساسية) ===== */
+.neo-pill {
+  --pill-bg: transparent;
+  --pill-border: rgba(139, 92, 246, 0.35);
+  --pill-glow: rgba(139, 92, 246, 0.25);
+  --pill-text: #E8E4F0;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 999px; /* Pill shape */
+  background: var(--pill-bg);
+  border: 1px solid var(--pill-border);
+  color: var(--pill-text);
+  font-family: var(--font-cairo, 'Cairo', system-ui, sans-serif);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 0 rgba(139, 92, 246, 0);
+}
+
+.neo-pill:hover {
+  transform: translateY(-2px);
+  border-color: rgba(139, 92, 246, 0.8);
+  box-shadow: 0 0 16px var(--pill-glow), 0 0 32px rgba(139, 92, 246, 0.15);
+}
+
+.neo-pill:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ===== Variants ===== */
+.neo-pill--ghost {
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.neo-pill--accent {
+  --pill-bg: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(168, 85, 247, 0.15));
+  --pill-border: rgba(168, 85, 247, 0.6);
+  --pill-glow: rgba(168, 85, 247, 0.5);
+  --pill-text: #F4F2FA;
+}
+
+.neo-pill--icon {
+  padding: 10px;
+  border-radius: 999px;
+}
+
+/* إخفاء النص، وإظهاره عند التاتش/الهوفر (Micro-interaction) */
+.neo-pill__label {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  white-space: nowrap;
+  transition: max-width 350ms ease, opacity 250ms ease;
+}
+
+.neo-pill:hover .neo-pill__label,
+.neo-pill:active .neo-pill__label {
+  max-width: 120px;
+  opacity: 1;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .smart-header__side--start .neo-pill:not(.neo-pill--accent) .neo-pill__label {
+    display: none; /* نخفي النص، نترك الأيقونة فقط */
+  }
+  .smart-header__inner {
+    padding: 0 16px;
+  }
+}

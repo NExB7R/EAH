@@ -1,0 +1,66 @@
+/* ===== Animated Background with Scroll Parallax ===== */
+.animated-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.animated-bg__layer {
+  position: absolute;
+  inset: -20%;
+  background-repeat: repeat;
+  will-change: transform;
+}
+
+/* طبقة النجوم البعيدة */
+.animated-bg__layer--far {
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4) 0%, transparent 50%),
+    radial-gradient(1px 1px at 30% 70%, rgba(200,180,255,0.3) 0%, transparent 50%),
+    radial-gradient(1px 1px at 80% 30%, rgba(255,255,255,0.35) 0%, transparent 50%),
+    radial-gradient(1px 1px at 60% 90%, rgba(180,160,255,0.25) 0%, transparent 50%);
+  background-size: 400px 400px;
+  animation: bg-drift 120s linear infinite;
+  opacity: 0.6;
+}
+
+/* طبقة الشبكة القريبة (Grid) */
+.animated-bg__layer--near {
+  background-image:
+    linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: bg-drift 60s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes bg-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-400px, -400px, 0); }
+}
+
+/* الحركة مع السكرول (Parallax) */
+@supports (animation-timeline: scroll()) {
+  .animated-bg__layer--far {
+    animation: bg-drift linear infinite, bg-parallax-far linear both;
+    animation-timeline: auto, scroll();
+    animation-range: normal, 0% 100%;
+  }
+  .animated-bg__layer--near {
+    animation: bg-drift linear infinite, bg-parallax-near linear both;
+    animation-timeline: auto, scroll();
+    animation-range: normal, 0% 100%;
+  }
+}
+
+@keyframes bg-parallax-far {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, 15vh, 0); }
+}
+
+@keyframes bg-parallax-near {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, 30vh, 0); }
+}
