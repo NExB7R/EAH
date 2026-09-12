@@ -2,15 +2,28 @@
 import { useState, useEffect } from 'react'
 import EahLogo from './eah-logo'
 import NeonIconButton from './neon-icon-button'
+import ThemeToggle from './theme-toggle'
+import ShareButton from './share-button'
+import UserAvatar from './user-avatar'
 import {
-  IconSearch, IconKey, IconBolt, IconFacebook, IconWhatsapp,
+  IconSearch, IconKey, IconFacebook, IconWhatsapp,
   IconMenu, IconInstall, IconStore,
 } from './neon-icons'
 import './floating-capsule.css'
 
+// مؤقتًا: نبدّل يدويًا هنا لما نبني auth
+const MOCK_LOGGED_IN = false
+const MOCK_USER = {
+  name: 'بندق',
+  points: 1450,
+  unreadNotifications: 3,
+  banUntil: null as string | null,
+}
+
 export default function FloatingCapsuleHeader() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [crownActive, setCrownActive] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(MOCK_LOGGED_IN)
 
   useEffect(() => {
     let lastY = window.scrollY
@@ -43,24 +56,43 @@ export default function FloatingCapsuleHeader() {
     <header className={`floating-capsule ${isScrolled ? 'is-scrolled' : ''}`}>
       <div className="floating-capsule__inner">
 
-        {/* ===== يمين (start in RTL): قائمة + ثبّت + سجل + دخول ===== */}
+        {/* ===== يمين (start RTL) ===== */}
         <div className="floating-capsule__side">
           <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" />
-          <NeonIconButton icon={<IconInstall />} label="ثبّت المنصة" ariaLabel="تثبيت المنصة" />
-          <NeonIconButton icon={<IconStore />} label="سجل" ariaLabel="تسجيل حساب جديد" />
-          <NeonIconButton icon={<IconKey />} label="دخول" ariaLabel="تسجيل الدخول" />
+          <ThemeToggle />
+          <NeonIconButton icon={<IconInstall />} label="ثبّت" ariaLabel="تثبيت المنصة" />
+          <NeonIconButton icon={<IconStore />} label="سجل" ariaLabel="تسجيل حساب" />
+
+          {!loggedIn && (
+            <NeonIconButton
+              icon={<IconKey />}
+              label="دخول"
+              ariaLabel="تسجيل الدخول"
+              href="/auth"
+            />
+          )}
         </div>
 
-        {/* ===== المنتصف: اللوجو ===== */}
+        {/* ===== المنتصف ===== */}
         <div className="floating-capsule__center" onClick={handleLogoClick}>
           <EahLogo size="sm" variant="full" active={crownActive} />
         </div>
 
-        {/* ===== شمال (end in RTL): بحث + فيسبوك + واتساب ===== */}
+        {/* ===== شمال (end RTL) ===== */}
         <div className="floating-capsule__side floating-capsule__side--end">
           <NeonIconButton icon={<IconSearch />} label="ابحث" ariaLabel="بحث" />
+          <ShareButton />
           <NeonIconButton icon={<IconFacebook />} label="فيسبوك" href="#" ariaLabel="فيسبوك" />
           <NeonIconButton icon={<IconWhatsapp />} label="واتساب" href="#" ariaLabel="واتساب" />
+
+          {loggedIn && (
+            <UserAvatar
+              name={MOCK_USER.name}
+              points={MOCK_USER.points}
+              unreadNotifications={MOCK_USER.unreadNotifications}
+              banUntil={MOCK_USER.banUntil}
+            />
+          )}
         </div>
 
       </div>

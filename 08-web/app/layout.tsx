@@ -1,4 +1,5 @@
 import './globals.css'
+import './theme.css'
 import '../components/eah-studio-pro.css'
 import '../components/eah-admin.css'
 import '@puckeditor/core/puck.css'
@@ -43,7 +44,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="ar"
       dir="rtl"
+      data-theme="dark"
       className={`${cairo.variable} ${cairoPlay.variable}`}
+      suppressHydrationWarning
     >
       <body>
         <ScrollIconsBackground />
