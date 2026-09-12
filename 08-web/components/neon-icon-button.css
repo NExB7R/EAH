@@ -90,6 +90,7 @@
   opacity: 1;
 }
 
+/* ===== Responsive: smaller on mobile ===== */
 @media (max-width: 640px) {
   .neon-icon-btn {
     height: 38px;

@@ -1,3 +1,4 @@
+/* ===== Floating Capsule Header ===== */
 .floating-capsule {
   position: fixed;
   top: 16px;
@@ -20,7 +21,7 @@
   gap: 12px;
   padding: 10px 14px;
   border-radius: 999px;
-  background: rgba(10, 8, 18, 0.85);
+  background: rgba(10, 8, 18, 0.88);
   border: 1px solid rgba(139, 92, 246, 0.22);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.02),
@@ -53,8 +54,23 @@
   flex-shrink: 0;
 }
 
+/* ===== Responsive ===== */
 @media (max-width: 640px) {
-  .floating-capsule { top: 8px; }
-  .floating-capsule__inner { padding: 8px 10px; gap: 8px; }
-  .floating-capsule__side { gap: 4px; }
+  .floating-capsule {
+    top: 8px;
+  }
+  .floating-capsule__inner {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .floating-capsule__side {
+    gap: 4px;
+  }
+}
+
+/* ===== Extra small: hide some buttons ===== */
+@media (max-width: 380px) {
+  .floating-capsule__side .neon-icon-btn:not(.neon-icon-btn--accent):not(:last-child) {
+    display: none;
+  }
 }
