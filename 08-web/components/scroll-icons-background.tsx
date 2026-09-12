@@ -2,7 +2,6 @@
 
 import './scroll-icons-background.css'
 
-// أيقونات SVG بسيطة (بدون صور خارجية)
 const ICONS = {
   restaurant: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -66,61 +65,72 @@ const ICONS = {
   ),
 }
 
-// توزيع عشوائي للأيقونات
-const ICONS_ARRAY = Object.values(ICONS)
+type IconKind = keyof typeof ICONS
 
-type IconPos = {
-  id: number
-  icon: React.ReactNode
-  layer: number
-  top: string
-  left: string
+// إحداثيات ثابتة (نفسها على السيرفر والمتصفح)
+const ICONS_LAYOUT: Array<{
+  kind: IconKind
+  top: number
+  left: number
   size: number
   rotation: number
   delay: number
-}
+}> = [
+  // Layer 0 — بطيء
+  { kind: 'restaurant',  top: 8,  left: 12, size: 42, rotation: -12, delay: 0.0 },
+  { kind: 'pharmacy',    top: 22, left: 78, size: 36, rotation: 18,  delay: 0.4 },
+  { kind: 'star',        top: 45, left: 5,  size: 28, rotation: -22, delay: 0.8 },
+  { kind: 'offer',       top: 62, left: 88, size: 44, rotation: 10,  delay: 1.2 },
+  { kind: 'location',    top: 78, left: 30, size: 34, rotation: -8,  delay: 1.6 },
+  { kind: 'heart',       top: 90, left: 65, size: 30, rotation: 15,  delay: 0.6 },
+  { kind: 'tag',         top: 15, left: 55, size: 38, rotation: -18, delay: 1.4 },
+  { kind: 'clock',       top: 55, left: 42, size: 26, rotation: 6,   delay: 0.2 },
 
-function generateIcons(count: number): IconPos[] {
-  return Array.from({ length: count }).map((_, i) => {
-    const layer = Math.floor(Math.random() * 3) // 3 طبقات
-    return {
-      id: i,
-      icon: ICONS_ARRAY[i % ICONS_ARRAY.length],
-      layer,
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      size: 20 + Math.random() * 40, // 20-60px
-      rotation: -30 + Math.random() * 60, // -30 to 30 degrees
-      delay: Math.random() * 2,
-    }
-  })
-}
+  // Layer 1 — متوسط
+  { kind: 'delivery',    top: 12, left: 35, size: 50, rotation: -6,  delay: 0.3 },
+  { kind: 'supermarket', top: 30, left: 8,  size: 46, rotation: 22,  delay: 0.9 },
+  { kind: 'restaurant',  top: 48, left: 70, size: 40, rotation: -14, delay: 1.5 },
+  { kind: 'pharmacy',    top: 68, left: 15, size: 38, rotation: 8,   delay: 0.1 },
+  { kind: 'star',        top: 82, left: 82, size: 32, rotation: -20, delay: 1.1 },
+  { kind: 'offer',       top: 5,  left: 92, size: 42, rotation: 12,  delay: 1.7 },
+  { kind: 'location',    top: 40, left: 92, size: 28, rotation: -4,  delay: 0.7 },
+  { kind: 'heart',       top: 72, left: 50, size: 36, rotation: 16,  delay: 1.3 },
 
-const ICONS_CONFIG = generateIcons(24) // 24 أيقونة
+  // Layer 2 — سريع
+  { kind: 'supermarket', top: 18, left: 68, size: 54, rotation: -10, delay: 0.5 },
+  { kind: 'delivery',    top: 38, left: 25, size: 48, rotation: 20,  delay: 1.0 },
+  { kind: 'tag',         top: 58, left: 8,  size: 40, rotation: -16, delay: 1.5 },
+  { kind: 'clock',       top: 75, left: 72, size: 34, rotation: 4,   delay: 0.2 },
+  { kind: 'restaurant',  top: 92, left: 45, size: 44, rotation: -24, delay: 0.9 },
+  { kind: 'pharmacy',    top: 3,  left: 22, size: 30, rotation: 14,  delay: 1.6 },
+  { kind: 'star',        top: 88, left: 8,  size: 26, rotation: -8,  delay: 0.4 },
+  { kind: 'offer',       top: 52, left: 95, size: 36, rotation: 18,  delay: 1.2 },
+]
 
 export default function ScrollIconsBackground() {
   return (
     <div className="scroll-icons-bg" aria-hidden>
-      {/* طبقة ضبابية بنفسجية خفيفة جدًا */}
       <div className="scroll-icons-bg__ambient" />
-      
-      {/* الأيقونات موزعة على 3 طبقات */}
+
       {[0, 1, 2].map((layer) => (
-        <div key={layer} className={`scroll-icons-bg__layer scroll-icons-bg__layer--${layer}`}>
-          {ICONS_CONFIG.filter((icon) => icon.layer === layer).map((icon) => (
+        <div
+          key={layer}
+          className={`scroll-icons-bg__layer scroll-icons-bg__layer--${layer}`}
+        >
+          {ICONS_LAYOUT.filter((_, i) => i % 3 === layer).map((item, idx) => (
             <div
-              key={icon.id}
+              key={`${layer}-${idx}`}
               className="scroll-icons-bg__icon"
               style={{
-                top: icon.top,
-                left: icon.left,
-                width: icon.size,
-                height: icon.size,
-                transform: `rotate(${icon.rotation}deg)`,
-                animationDelay: `${icon.delay}s`,
+                top: `${item.top}%`,
+                left: `${item.left}%`,
+                width: item.size,
+                height: item.size,
+                transform: `rotate(${item.rotation}deg)`,
+                animationDelay: `${item.delay}s`,
               }}
             >
-              {icon.icon}
+              {ICONS[item.kind]}
             </div>
           ))}
         </div>

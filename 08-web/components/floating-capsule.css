@@ -20,7 +20,6 @@
   gap: 12px;
   padding: 10px 14px;
   border-radius: 999px;
-  /* خلفية داكنة شبه شفافة - بدون blur */
   background: rgba(10, 8, 18, 0.85);
   border: 1px solid rgba(139, 92, 246, 0.22);
   box-shadow:
@@ -52,11 +51,6 @@
 
 .floating-capsule__center {
   flex-shrink: 0;
-}
-
-/* تحسين أداء الأزرار */
-.neon-icon-btn {
-  /* ... (هنخليها زي ما هي دلوقتي، بس من غير أي فلاتر متحركة) */
 }
 
 @media (max-width: 640px) {
