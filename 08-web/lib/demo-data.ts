@@ -1,4 +1,5 @@
 export type DemoBusiness = {
+  businessId?: string
   name: string
   slug: string
   type: 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'

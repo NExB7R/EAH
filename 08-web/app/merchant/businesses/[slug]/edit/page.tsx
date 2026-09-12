@@ -17,6 +17,8 @@ export default async function MerchantBusinessEditPage({ params }: { params: Pro
     .maybeSingle()
 
   if (!business) redirect('/merchant')
+  const businessId = business.id
+  const businessSlug = business.slug
 
   async function submitChange(formData: FormData) {
     'use server'
@@ -37,18 +39,18 @@ export default async function MerchantBusinessEditPage({ params }: { params: Pro
     if (!payload.name) throw new Error('اسم النشاط مطلوب.')
 
     const { error } = await client.rpc('submit_business_change_request', {
-      p_business_id: business.id,
+      p_business_id: businessId,
       p_entity_type: 'business',
       p_operation: 'update',
-      p_target_id: business.id,
+      p_target_id: businessId,
       p_payload: payload,
     })
 
     if (error) throw new Error(error.message)
 
-    revalidatePath(`/merchant/businesses/${business.slug}/edit`)
+    revalidatePath(`/merchant/businesses/${businessSlug}/edit`)
     revalidatePath('/merchant')
-    redirect(`/merchant?submitted=1&business=${encodeURIComponent(business.slug)}`)
+    redirect(`/merchant?submitted=1&business=${encodeURIComponent(businessSlug)}`)
   }
 
   return (
