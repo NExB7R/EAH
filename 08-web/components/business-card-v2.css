@@ -1,4 +1,3 @@
-/* ===== Modern Bento-style Card ===== */
 .xcard {
   position: relative;
   display: flex;
@@ -9,59 +8,39 @@
   overflow: hidden;
   text-decoration: none;
   color: #F4F2FA;
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.18);
   background: #0A0812;
-  transition:
-    transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1),
-    border-color 300ms ease,
-    box-shadow 300ms ease;
+  transition: transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1), border-color 300ms ease;
   will-change: transform;
   isolation: isolate;
 }
-
 .xcard:hover {
   transform: translateY(-6px);
-  border-color: rgba(168, 85, 247, 0.85);
-  box-shadow:
-    0 0 0 1px rgba(168, 85, 247, 0.3),
-    0 20px 50px rgba(0, 0, 0, 0.6),
-    0 0 40px rgba(107, 33, 255, 0.35);
+  border-color: rgba(168, 85, 247, 0.75);
 }
 
-/* ===== Cover ===== */
 .xcard__cover {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 50% 40%, rgba(107, 33, 255, 0.55) 0%, transparent 60%),
-    linear-gradient(140deg, rgba(107, 33, 255, 0.3), rgba(168, 85, 247, 0.15) 50%, rgba(20, 15, 30, 0.9) 100%);
+    radial-gradient(circle at 50% 40%, rgba(107, 33, 255, 0.5) 0%, transparent 60%),
+    linear-gradient(140deg, rgba(107, 33, 255, 0.25), rgba(168, 85, 247, 0.1) 50%, rgba(20, 15, 30, 0.9) 100%);
   z-index: 0;
 }
 
 .xcard__emoji-wrap {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 120px; height: 120px;
+  display: flex; align-items: center; justify-content: center;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
   transition: transform 500ms cubic-bezier(0.34, 1.4, 0.64, 1);
 }
-.xcard:hover .xcard__emoji-wrap {
-  transform: translate(-50%, -60%) scale(1.05);
-}
+.xcard:hover .xcard__emoji-wrap { transform: translate(-50%, -60%) scale(1.05); }
+.xcard__emoji { font-size: 4rem; line-height: 1; }
 
-.xcard__emoji {
-  font-size: 4rem;
-  line-height: 1;
-}
-
-/* Fade at bottom for text readability */
 .xcard__fade {
   position: absolute;
   inset: auto 0 0 0;
@@ -70,173 +49,97 @@
   pointer-events: none;
 }
 
-/* ===== Top bar (type + live status) ===== */
 .xcard__top {
   position: absolute;
-  top: 12px;
-  inset-inline: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  top: 12px; inset-inline: 12px;
+  display: flex; align-items: center; justify-content: space-between;
   z-index: 2;
 }
 .xcard__type {
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(139, 92, 246, 0.3);
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.65rem;
-  font-weight: 700;
+  font-size: 0.65rem; font-weight: 700;
   color: #C4B5FD;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
-
 .xcard__live {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 9px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.55);
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 9px; border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.62rem;
-  font-weight: 700;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  font-size: 0.62rem; font-weight: 700;
 }
-.xcard__live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  box-shadow: 0 0 6px currentColor;
-}
+.xcard__live-dot { width: 6px; height: 6px; border-radius: 999px; box-shadow: 0 0 6px currentColor; }
 .xcard__live.is-on { color: #4ADE80; }
 .xcard__live.is-on .xcard__live-dot { background: #4ADE80; animation: pulse-green 2s ease-in-out infinite; }
 .xcard__live.is-off { color: #F87171; }
 .xcard__live.is-off .xcard__live-dot { background: #F87171; }
-
 @keyframes pulse-green {
-  0%, 100% { opacity: 1; box-shadow: 0 0 6px #4ADE80; }
-  50%      { opacity: 0.6; box-shadow: 0 0 12px #4ADE80; }
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
 }
 
-/* ===== Badge ===== */
 .xcard__badge {
   position: absolute;
-  top: 52px;
-  inset-inline-end: 12px;
-  padding: 4px 10px;
-  border-radius: 999px;
+  top: 52px; inset-inline-end: 12px;
+  padding: 4px 10px; border-radius: 999px;
   background: linear-gradient(135deg, #F5DEB3, #A67C52);
   color: #1A0F0A;
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.62rem;
-  font-weight: 900;
-  letter-spacing: 0.02em;
+  font-size: 0.62rem; font-weight: 900;
   z-index: 2;
   transform: rotate(-4deg);
-  box-shadow: 0 4px 12px rgba(232, 199, 154, 0.4);
 }
 
-/* ===== Body ===== */
 .xcard__body {
   position: relative;
   z-index: 2;
   margin-top: auto;
   padding: 16px 16px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: flex; flex-direction: column; gap: 6px;
 }
-
 .xcard__name {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-weight: 900;
-  font-size: 1.15rem;
-  color: #F4F2FA;
-  margin: 0;
-  line-height: 1.2;
+  font-weight: 900; font-size: 1.15rem;
+  color: #F4F2FA; margin: 0; line-height: 1.2;
   letter-spacing: -0.01em;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
-
 .xcard__meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  display: flex; align-items: center; gap: 6px;
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.72rem;
-  color: #A29DB5;
+  font-size: 0.72rem; color: #A29DB5;
 }
 .xcard__area {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 3px; flex: 1;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .xcard__area svg { flex-shrink: 0; opacity: 0.8; }
+.xcard__star { color: #E8C79A; font-size: 0.85rem; line-height: 1; }
+.xcard__rating { color: #E8C79A; font-weight: 900; font-size: 0.75rem; }
 
-.xcard__star {
-  color: #E8C79A;
-  font-size: 0.85rem;
-  line-height: 1;
-}
-.xcard__rating {
-  color: #E8C79A;
-  font-weight: 900;
-  font-size: 0.75rem;
-}
-
-/* ===== Reveal on hover ===== */
 .xcard__reveal {
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition:
-    max-height 400ms cubic-bezier(0.34, 1.4, 0.64, 1),
-    opacity 300ms ease 100ms,
-    margin-top 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 400ms cubic-bezier(0.34, 1.4, 0.64, 1), opacity 300ms ease 100ms, margin-top 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
 }
-.xcard:hover .xcard__reveal {
-  max-height: 100px;
-  opacity: 1;
-  margin-top: 4px;
-}
-
+.xcard:hover .xcard__reveal { max-height: 100px; opacity: 1; margin-top: 4px; }
 .xcard__reason {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.72rem;
-  line-height: 1.5;
-  color: #C9C2DB;
+  font-size: 0.72rem; line-height: 1.5; color: #C9C2DB;
   margin: 0 0 6px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
-
-.xcard__vibes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
+.xcard__vibes { display: flex; flex-wrap: wrap; gap: 4px; }
 .xcard__vibe {
-  padding: 2px 8px;
-  border-radius: 999px;
+  padding: 2px 8px; border-radius: 999px;
   background: rgba(139, 92, 246, 0.18);
   border: 1px solid rgba(139, 92, 246, 0.25);
   color: #C4B5FD;
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.6rem;
-  font-weight: 700;
+  font-size: 0.6rem; font-weight: 700;
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 900px) {
   .xcard { width: 230px; height: 300px; }
   .xcard__emoji { font-size: 3.4rem; }
@@ -246,10 +149,5 @@
   .xcard__emoji { font-size: 3rem; }
   .xcard__name { font-size: 1rem; }
   .xcard__body { padding: 14px 14px 16px; }
-  /* على الموبايل: التفاصيل ظاهرة دايماً */
-  .xcard__reveal {
-    max-height: 100px;
-    opacity: 1;
-    margin-top: 4px;
-  }
+  .xcard__reveal { max-height: 100px; opacity: 1; margin-top: 4px; }
 }

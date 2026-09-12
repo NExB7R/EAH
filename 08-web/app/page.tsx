@@ -4,6 +4,7 @@ import BusinessCardV2 from '@/components/business-card-v2'
 import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SidePanel from '@/components/side-panel'
+import BackToTop from '@/components/back-to-top'
 import { demoBusinesses } from '@/lib/demo-data'
 
 export default function Page() {
@@ -16,14 +17,15 @@ export default function Page() {
     <>
       <FloatingCapsuleHeader />
       <SidePanel />
+      <BackToTop />
 
       <main style={{ paddingTop: '120px' }}>
         <HomeHero />
 
         <SectionSlider
           id="restaurants"
-          title="المطاعم بتقول إيه؟"
-          subtitle="أقرب الأكلات اللي على مزاجك"
+          title="نفسك في إيه؟ 🔥"
+          subtitle="أقرب حاجة على مزاجك دلوقتي"
           seeAllHref="/explore?type=restaurant"
           accent="purple"
         >
@@ -34,8 +36,8 @@ export default function Page() {
 
         <SectionSlider
           id="offers"
-          title="عروض بتطير! 🔥"
-          subtitle="وفّر أكتر مع العروض الحالية"
+          title="عروض نار 🔥"
+          subtitle="وفّر أكتر مع العروض اللي شغالة"
           seeAllHref="/offers"
           accent="gold"
         >
@@ -46,7 +48,7 @@ export default function Page() {
 
         <SectionSlider
           id="pharmacies"
-          title="ناقصك من الصيدلية ايه؟"
+          title="صحتك أولاً 💊"
           subtitle="صيدليات قريبة منك ومفتوحة"
           seeAllHref="/explore?type=pharmacy"
           accent="purple"
@@ -58,7 +60,7 @@ export default function Page() {
 
         <SectionSlider
           id="delivery"
-          title="الطيران بأيه؟ 🛵"
+          title="على السريع 🛵"
           subtitle="مكاتب توصيل بتغطي منطقتك"
           seeAllHref="/explore?type=delivery_office"
           accent="purple"
@@ -70,7 +72,7 @@ export default function Page() {
 
         <SectionSlider
           id="markets"
-          title="السوبر ماركت عندنا"
+          title="طلباتك عندنا 🛒"
           subtitle="مقاضي سريعة وقريبة منك"
           seeAllHref="/explore?type=supermarket"
           accent="purple"
@@ -81,14 +83,14 @@ export default function Page() {
         </SectionSlider>
 
         <SectionSlider
-          id="trending"
-          title="الترند دلوقتي 🔥"
-          subtitle="الأماكن اللي الكل بيسأل عليها"
-          seeAllHref="/trends"
+          id="new-businesses"
+          title="مشاريع صغيرة، فرص كبيرة 🌱"
+          subtitle="ادعم متاجر جيرانك الجديدة"
+          seeAllHref="/new"
           accent="gold"
         >
           {[...restaurants, ...pharmacies].map((b, i) => (
-            <BusinessCardV2 key={`t-${i}-${b.slug}`} business={b} />
+            <BusinessCardV2 key={`n-${i}-${b.slug}`} business={b} />
           ))}
         </SectionSlider>
       </main>

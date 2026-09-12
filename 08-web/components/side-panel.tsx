@@ -17,34 +17,30 @@ const FEATURED: SideItem[] = [
   { id: 'f4', title: 'مشويات الشرق', subtitle: 'شبين القناطر', emoji: '🥙', href: '#' },
   { id: 'f5', title: 'كافيه النجوم', subtitle: 'المنايل', emoji: '☕', href: '#' },
   { id: 'f6', title: 'بيتزا الطليان', subtitle: 'شبين القناطر', emoji: '🍕', href: '#' },
+  { id: 'f7', title: 'شاورما الشام', subtitle: 'شبين القناطر', emoji: '🌯', href: '#' },
+  { id: 'f8', title: 'عصائر فريش', subtitle: 'المنايل', emoji: '🥤', href: '#' },
+  { id: 'f9', title: 'حلواني الأصيل', subtitle: 'شبين القناطر', emoji: '🍰', href: '#' },
+  { id: 'f10', title: 'مخبز الفجر', subtitle: 'شبين القناطر', emoji: '🥖', href: '#' },
 ]
 
-const TRENDING: SideItem[] = [
-  { id: 't1', title: 'برجر هاوس', subtitle: 'الأكثر زيارة', emoji: '🍔', href: '#' },
-  { id: 't2', title: 'كشري التحرير', subtitle: 'ترند النهاردة', emoji: '🍲', href: '#' },
-  { id: 't3', title: 'سوبر ماركت النور', subtitle: 'الأكثر طلباً', emoji: '🛒', href: '#' },
-  { id: 't4', title: 'مشويات الشرق', subtitle: 'ترند الأسبوع', emoji: '🥙', href: '#' },
-  { id: 't5', title: 'كافيه النجوم', subtitle: 'الأعلى تقييماً', emoji: '☕', href: '#' },
-  { id: 't6', title: 'بيتزا الطليان', subtitle: 'ترند الشهر', emoji: '🍕', href: '#' },
+const SUPPORT: SideItem[] = [
+  { id: 's1', title: 'شاورما أحمد', subtitle: 'جديد', emoji: '🌯', href: '#' },
+  { id: 's2', title: 'قهوة الشروق', subtitle: 'جديد', emoji: '☕', href: '#' },
+  { id: 's3', title: 'حلويات نور', subtitle: 'جديد', emoji: '🍰', href: '#' },
+  { id: 's4', title: 'عطارة الهنا', subtitle: 'جديد', emoji: '🌿', href: '#' },
+  { id: 's5', title: 'سمكة ورق', subtitle: 'جديد', emoji: '🐟', href: '#' },
+  { id: 's6', title: 'شيبسي سنتر', subtitle: 'جديد', emoji: '🥤', href: '#' },
 ]
 
-function AutoSlider({
-  items,
-  showRank,
-  featured,
-}: {
-  items: SideItem[]
-  showRank?: boolean
-  featured?: boolean
-}) {
+function AutoSlider({ items, featured }: { items: SideItem[]; featured?: boolean }) {
   const trackRef = useRef<HTMLDivElement>(null)
   const [paused, setPaused] = useState(false)
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
-    if (paused || items.length <= 5) return
+    if (paused || items.length <= 3) return
     const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % (items.length - 4))
+      setIndex((i) => (i + 1) % (items.length - 2))
     }, 3500)
     return () => clearInterval(timer)
   }, [paused, items.length])
@@ -65,13 +61,12 @@ function AutoSlider({
       onTouchStart={() => setPaused(true)}
       onTouchEnd={() => setTimeout(() => setPaused(false), 2500)}
     >
-      {items.map((item, idx) => (
+      {items.map((item) => (
         <a
           key={item.id}
           href={item.href}
           className={`side-panel__card ${featured ? 'side-panel__card--featured' : ''}`}
         >
-          {showRank && <span className="side-panel__rank">{idx + 1}</span>}
           <span className="side-panel__emoji">{item.emoji}</span>
           <span className="side-panel__text">
             <span className="side-panel__title">{item.title}</span>
@@ -84,24 +79,53 @@ function AutoSlider({
 }
 
 export default function SidePanel() {
-  return (
-    <>
-      <aside className="side-panel side-panel--right" aria-label="الرائج">
-        <h3 className="side-panel__head">
-          <span className="side-panel__head-icon">🔥</span>
-          <span>الرائج</span>
-        </h3>
-        <AutoSlider items={TRENDING} showRank />
-      </aside>
+  const [closed, setClosed] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
-      <aside className="side-panel side-panel--left" aria-label="المميز">
+  useEffect(() => {
+    setMounted(true)
+    if (sessionStorage.getItem('eah-side-closed') === '1') setClosed(true)
+  }, [])
+
+  const handleClose = () => {
+    setClosed(true)
+    sessionStorage.setItem('eah-side-closed', '1')
+  }
+
+  if (!mounted || closed) return null
+
+  return (
+    <aside className="side-panel" aria-label="القائمة الجانبية">
+      <button
+        type="button"
+        className="side-panel__close"
+        onClick={handleClose}
+        aria-label="إغلاق القائمة"
+      >
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div className="side-panel__section">
         <h3 className="side-panel__head">
           <span className="side-panel__head-icon">⭐</span>
           <span>المميز</span>
-          <span className="side-panel__head-badge">مدفوع</span>
+          <a href="/featured" className="side-panel__see-all">الكل ←</a>
         </h3>
         <AutoSlider items={FEATURED} featured />
-      </aside>
-    </>
+      </div>
+
+      <div className="side-panel__divider" />
+
+      <div className="side-panel__section">
+        <h3 className="side-panel__head">
+          <span className="side-panel__head-icon">🌱</span>
+          <span>مشاريع جديدة</span>
+          <a href="/new" className="side-panel__see-all">الكل ←</a>
+        </h3>
+        <AutoSlider items={SUPPORT} />
+      </div>
+    </aside>
   )
 }

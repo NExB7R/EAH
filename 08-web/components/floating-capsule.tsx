@@ -4,6 +4,7 @@ import EahLogo from './eah-logo'
 import NeonIconButton from './neon-icon-button'
 import ShareButton from './share-button'
 import UserAvatar from './user-avatar'
+import OverlayBlur from './overlay-blur'
 import {
   IconKey, IconFacebook, IconWhatsapp,
   IconMenu, IconInstall, IconStore, IconBolt,
@@ -44,37 +45,15 @@ export default function FloatingCapsuleHeader() {
 
   return (
     <>
-      <header
-        className={`floating-capsule ${scrolled ? 'is-scrolled' : ''} ${
-          direction === 'up' ? 'is-up' : 'is-down'
-        }`}
-      >
+      <header className={`floating-capsule ${scrolled ? 'is-scrolled' : ''} ${direction === 'up' ? 'is-up' : 'is-down'}`}>
         <div className="floating-capsule__inner">
-          {/* يمين */}
           <div className="floating-capsule__side floating-capsule__side--start">
-            <NeonIconButton
-              icon={<IconMenu />}
-              label="القائمة"
-              ariaLabel="القائمة"
-              onClick={() => setMenuOpen(true)}
-            />
+            <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" onClick={() => setMenuOpen(true)} />
             <NeonIconButton icon={<IconInstall />} label="ثبّت" ariaLabel="تثبيت" />
-            <NeonIconButton
-              icon={<IconBolt />}
-              label="سجل بسرعة"
-              ariaLabel="سجل بسرعة"
-              variant="accent"
-              href="/auth"
-            />
+            <NeonIconButton icon={<IconBolt />} label="سجل بسرعة" ariaLabel="سجل بسرعة" variant="accent" href="/auth" />
             <NeonIconButton icon={<IconKey />} label="دخول" ariaLabel="دخول" href="/auth" />
           </div>
-
-          {/* المنتصف — يظهر بس مع السكرول */}
-          <div className="floating-capsule__center">
-            {scrolled && <EahLogo size="sm" variant="mark" />}
-          </div>
-
-          {/* شمال */}
+          <div className="floating-capsule__center">{scrolled && <EahLogo size="sm" variant="mark" />}</div>
           <div className="floating-capsule__side floating-capsule__side--end">
             <ShareButton />
             <NeonIconButton icon={<IconFacebook />} label="فيسبوك" href="#" ariaLabel="فيسبوك" />
@@ -84,29 +63,17 @@ export default function FloatingCapsuleHeader() {
         </div>
       </header>
 
-      {/* القائمة المنسدلة */}
-      <div
-        className={`nav-drawer ${menuOpen ? 'is-open' : ''}`}
-        onClick={() => setMenuOpen(false)}
-        aria-hidden={!menuOpen}
-      >
+      <OverlayBlur open={menuOpen} />
+
+      <div className={`nav-drawer ${menuOpen ? 'is-open' : ''}`} onClick={() => setMenuOpen(false)} aria-hidden={!menuOpen}>
         <div className="nav-drawer__panel" onClick={(e) => e.stopPropagation()}>
           <div className="nav-drawer__head">
             <EahLogo size="sm" variant="mark" />
-            <button
-              type="button"
-              className="nav-drawer__close"
-              onClick={() => setMenuOpen(false)}
-              aria-label="إغلاق"
-            >
-              ×
-            </button>
+            <button type="button" className="nav-drawer__close" onClick={() => setMenuOpen(false)} aria-label="إغلاق">×</button>
           </div>
-          <nav className="nav-drawer__nav" aria-label="صفحات الموقع">
+          <nav className="nav-drawer__nav">
             {MENU_LINKS.map((link) => (
-              <a key={link.href} href={link.href} className="nav-drawer__link">
-                {link.label}
-              </a>
+              <a key={link.href} href={link.href} className="nav-drawer__link">{link.label}</a>
             ))}
           </nav>
         </div>
