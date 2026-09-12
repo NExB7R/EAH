@@ -38,3 +38,20 @@ export const IconMenu = () => (
     <line x1="3" y1="18" x2="21" y2="18" />
   </svg>
 )
+
+export const IconInstall = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" y1="15" x2="12" y2="3" />
+  </svg>
+)
+
+export const IconStore = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m2 7 2-4h16l2 4" />
+    <path d="M2 7h20v3a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-2-3z" />
+    <path d="M4 12v9h16v-9" />
+    <path d="M9 21v-6h6v6" />
+  </svg>
+)

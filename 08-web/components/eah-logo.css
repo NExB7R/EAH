@@ -1,11 +1,9 @@
 .eah-logo {
-  --logo-w: 180px;
+  --logo-w: 190px;
   --crown-w: 22%;
   --slogan-fs: 0.72rem;
   --crown-base-top: -18%;
-  --crown-hover-top: -28%;
   --crown-base-left: 22%;
-  --slogan-base-bottom: -10%;
 
   position: relative;
   display: inline-flex;
@@ -19,18 +17,19 @@
   color: inherit;
   font-family: var(--font-cairo, 'Cairo', system-ui, sans-serif);
   -webkit-tap-highlight-color: transparent;
+  /* ← مهم: خلي التاج يخرج برا */
+  overflow: visible;
 }
 
-/* Sizes */
-.eah-logo--xs { --logo-w: 110px; --slogan-fs: 0.5rem; --crown-w: 20%; }
-.eah-logo--sm { --logo-w: 150px; --slogan-fs: 0.62rem; --crown-w: 21%; }
-.eah-logo--md { --logo-w: 190px; --slogan-fs: 0.78rem; --crown-w: 22%; }
+.eah-logo--xs { --logo-w: 120px; --slogan-fs: 0.5rem; --crown-w: 20%; }
+.eah-logo--sm { --logo-w: 150px; --slogan-fs: 0.6rem; --crown-w: 21%; }
+.eah-logo--md { --logo-w: 200px; --slogan-fs: 0.8rem; --crown-w: 22%; }
 .eah-logo--lg { --logo-w: 320px; --slogan-fs: 1.1rem; --crown-w: 24%; }
 .eah-logo--xl { --logo-w: 480px; --slogan-fs: 1.5rem; --crown-w: 26%; }
 
 .eah-logo__glow {
   position: absolute;
-  inset: -20% -20% -20% -20%;
+  inset: -30%;
   z-index: 0;
   pointer-events: none;
   background: radial-gradient(ellipse 50% 55% at 50% 55%, rgba(107, 33, 255, 0.28) 0%, transparent 65%);
@@ -57,13 +56,16 @@
   height: auto;
   transform: translate(-50%, 0) rotate(-14deg);
   transform-origin: 50% 100%;
-  transition: left 600ms cubic-bezier(0.34, 1.2, 0.64, 1), top 600ms cubic-bezier(0.34, 1.2, 0.64, 1), transform 600ms cubic-bezier(0.34, 1.2, 0.64, 1);
+  transition:
+    left 700ms cubic-bezier(0.34, 1.2, 0.64, 1),
+    top 700ms cubic-bezier(0.34, 1.2, 0.64, 1),
+    transform 700ms cubic-bezier(0.34, 1.2, 0.64, 1);
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
   will-change: left, top, transform;
   filter:
-    drop-shadow(0 0 3px rgba(232, 199, 154, 0.4))
-    drop-shadow(0 0 8px rgba(232, 199, 154, 0.18));
+    drop-shadow(0 0 3px rgba(232, 199, 154, 0.45))
+    drop-shadow(0 0 10px rgba(232, 199, 154, 0.22));
 }
 
 .eah-logo__slogan {
@@ -98,15 +100,21 @@
 }
 
 .eah-logo--mark .eah-logo__slogan { display: none; }
-.eah-logo--tagline .eah-logo__crown,
-.eah-logo--full .eah-logo__crown { display: block; }
 
+/* Hover على الأجهزة المكتبية */
 @media (hover: hover) and (pointer: fine) {
   .eah-logo:hover .eah-logo__crown {
     left: 50%;
-    top: var(--crown-hover-top);
-    transform: translate(-50%, 0) rotate(0deg);
+    top: -55%;
+    transform: translate(-50%, 0) rotate(0deg) scale(1.15);
   }
+}
+
+/* Active على الموبايل (لمسة) */
+.eah-logo:active .eah-logo__crown {
+  left: 50%;
+  top: -55%;
+  transform: translate(-50%, 0) rotate(0deg) scale(1.15);
 }
 
 @media (prefers-reduced-motion: reduce) {
