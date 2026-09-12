@@ -1,5 +1,4 @@
 'use client'
-
 import './scroll-icons-background.css'
 
 const ICONS = {

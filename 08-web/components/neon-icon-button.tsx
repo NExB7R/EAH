@@ -8,6 +8,7 @@ type NeonIconButtonProps = {
   href?: string
   variant?: 'default' | 'accent'
   ariaLabel?: string
+  onClick?: () => void
 }
 
 export default function NeonIconButton({
@@ -16,6 +17,7 @@ export default function NeonIconButton({
   href,
   variant = 'default',
   ariaLabel,
+  onClick,
 }: NeonIconButtonProps) {
   const cls = `neon-icon-btn neon-icon-btn--${variant}`
   const content = (
@@ -32,7 +34,7 @@ export default function NeonIconButton({
     )
   }
   return (
-    <button className={cls} aria-label={ariaLabel || label} type="button">
+    <button className={cls} aria-label={ariaLabel || label} type="button" onClick={onClick}>
       {content}
     </button>
   )
