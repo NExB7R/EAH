@@ -1,0 +1,88 @@
+/* ===== Scroll Icons Background ===== */
+.scroll-icons-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: #050308;
+}
+
+/* ===== Ambient Glow (بدون blur) ===== */
+.scroll-icons-bg__ambient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      ellipse 60% 40% at 20% 10%,
+      rgba(107, 33, 255, 0.15) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 80% 90%,
+      rgba(168, 85, 247, 0.1) 0%,
+      transparent 60%
+    );
+}
+
+/* ===== Layers ===== */
+.scroll-icons-bg__layer {
+  position: absolute;
+  inset: -10%;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* ===== Icons ===== */
+.scroll-icons-bg__icon {
+  position: absolute;
+  color: rgba(168, 85, 247, 0.25); /* بنفسجي خفيف */
+  transition: color 0.3s ease;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  /* إضافة توهج خفيف جدًا */
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.15));
+}
+
+/* ===== Scroll-Driven Parallax ===== */
+@supports (animation-timeline: scroll()) {
+  .scroll-icons-bg__layer--0 {
+    animation: scroll-parallax-slow linear;
+    animation-timeline: scroll();
+    animation-range: 0% 100%;
+  }
+
+  .scroll-icons-bg__layer--1 {
+    animation: scroll-parallax-medium linear;
+    animation-timeline: scroll();
+    animation-range: 0% 100%;
+  }
+
+  .scroll-icons-bg__layer--2 {
+    animation: scroll-parallax-fast linear;
+    animation-timeline: scroll();
+    animation-range: 0% 100%;
+  }
+}
+
+/* ===== Keyframes ===== */
+@keyframes scroll-parallax-slow {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, 10vh, 0); }
+}
+
+@keyframes scroll-parallax-medium {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, 25vh, 0); }
+}
+
+@keyframes scroll-parallax-fast {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, 45vh, 0); }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-icons-bg__layer {
+    animation: none !important;
+  }
+}

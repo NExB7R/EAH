@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 import { Cairo, Cairo_Play } from 'next/font/google'
 import RegisterSW from '@/components/register-sw'
 import PageViewTracker from '@/components/page-view-tracker'
-import AnimatedBackgroundV2 from '@/components/animated-background-v2'
+import ScrollIconsBackground from '@/components/scroll-icons-background'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${cairo.variable} ${cairoPlay.variable}`}
     >
       <body>
-        <AnimatedBackgroundV2 />
+        <ScrollIconsBackground />
         <PageViewTracker />
         {children}
         <RegisterSW />
