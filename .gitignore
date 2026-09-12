@@ -29,3 +29,8 @@ pnpm-debug.log*
 # Local Supabase
 .supabase/
 08-web/next-env.d.ts
+.baseline.env
+*.private.md
+.private/
+*.private.md
+.private/
