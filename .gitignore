@@ -10,6 +10,7 @@ Thumbs.db
 08-web/.next/
 08-web/out/
 08-web/.turbo/
+08-web/next-env.d.ts
 
 # Environment / secrets
 .env
@@ -18,6 +19,11 @@ Thumbs.db
 08-web/.env
 08-web/.env.*
 !08-web/.env.example
+.baseline.env
+
+# Private notes
+.private/
+*.private.md
 
 # Logs
 *.log
@@ -28,9 +34,3 @@ pnpm-debug.log*
 
 # Local Supabase
 .supabase/
-08-web/next-env.d.ts
-.baseline.env
-*.private.md
-.private/
-*.private.md
-.private/
