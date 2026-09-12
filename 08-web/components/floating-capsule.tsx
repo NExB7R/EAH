@@ -2,6 +2,14 @@
 import { useState, useEffect } from 'react'
 import EahLogo from './eah-logo'
 import NeonIconButton from './neon-icon-button'
+import {
+  IconSearch,
+  IconKey,
+  IconBolt,
+  IconFacebook,
+  IconWhatsapp,
+  IconMenu,
+} from './neon-icons'
 import './floating-capsule.css'
 
 export default function FloatingCapsuleHeader() {
@@ -16,23 +24,28 @@ export default function FloatingCapsuleHeader() {
   return (
     <header className={`floating-capsule ${isScrolled ? 'is-scrolled' : ''}`}>
       <div className="floating-capsule__inner">
-        {/* جهة اليمين (RTL): التواصل و القائمة */}
+        {/* RTL: بداية (يمين) — سوشيال + قائمة */}
         <div className="floating-capsule__side">
-          <NeonIconButton icon="📘" label="فيسبوك" href="#" />
-          <NeonIconButton icon="💬" label="واتساب" href="#" />
-          <NeonIconButton icon="☰" label="القائمة" />
+          <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" />
+          <NeonIconButton icon={<IconWhatsapp />} label="واتساب" href="#" ariaLabel="واتساب" />
+          <NeonIconButton icon={<IconFacebook />} label="فيسبوك" href="#" ariaLabel="فيسبوك" />
         </div>
 
-        {/* المنتصف: اللوجو */}
+        {/* المنتصف — اللوجو مع السلوجان */}
         <div className="floating-capsule__center">
-          <EahLogo size="sm" variant="mark" />
+          <EahLogo size="md" variant="tagline" />
         </div>
 
-        {/* جهة اليسار (RTL): التسجيل و البحث */}
+        {/* RTL: نهاية (شمال) — تسجيل + دخول + بحث */}
         <div className="floating-capsule__side floating-capsule__side--end">
-          <NeonIconButton icon="🔍" label="بحث" />
-          <NeonIconButton icon="🔑" label="دخول" />
-          <NeonIconButton icon="⚡" label="سجل بسرعة" variant="accent" />
+          <NeonIconButton icon={<IconSearch />} label="بحث" ariaLabel="بحث" />
+          <NeonIconButton icon={<IconKey />} label="دخول" ariaLabel="دخول" />
+          <NeonIconButton
+            icon={<IconBolt />}
+            label="سجل بسرعة"
+            variant="accent"
+            ariaLabel="سجل بسرعة"
+          />
         </div>
       </div>
     </header>

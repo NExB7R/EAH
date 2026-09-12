@@ -2,27 +2,33 @@
 
 import './eah-logo.css'
 
-type Size = 'sm' | 'md' | 'lg' | 'xl'
-type Variant = 'full' | 'mark' | 'crown'
+type Variant = 'full' | 'tagline' | 'mark' | 'crown'
+type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 type EahLogoProps = {
-  size?: Size
   variant?: Variant
+  size?: Size
   className?: string
+  animated?: boolean
   href?: string
 }
 
 export default function EahLogo({
-  size = 'md',
   variant = 'full',
+  size = 'md',
   className = '',
+  animated = true,
   href,
 }: EahLogoProps) {
+  const showWord = variant !== 'crown'
+  const showCrown = variant !== 'word' as any
+  const showTagline = variant === 'full' || variant === 'tagline'
+
   const inner = (
     <>
-      {variant !== 'crown' && <span className="eah-logo__glow" aria-hidden />}
+      {showWord && <span className="eah-logo__glow" aria-hidden />}
 
-      {variant !== 'crown' && (
+      {showWord && (
         <img
           className="eah-logo__word"
           src="/eah-word.webp"
@@ -33,18 +39,20 @@ export default function EahLogo({
         />
       )}
 
-      <img
-        className="eah-logo__crown"
-        src="/eah-crown.webp"
-        alt=""
-        aria-hidden
-        width={1440}
-        height={720}
-        decoding="async"
-      />
+      {showCrown && (
+        <img
+          className="eah-logo__crown"
+          src="/eah-crown.webp"
+          alt=""
+          aria-hidden
+          width={1440}
+          height={720}
+          decoding="async"
+        />
+      )}
 
-      {variant === 'full' && (
-        <span className="eah-logo__slogan" aria-hidden>
+      {showTagline && (
+        <span className="eah-logo__slogan">
           <span>اللى نفسك فيه</span>
           <span className="eah-logo__punct">؟</span>
         </span>
@@ -55,15 +63,7 @@ export default function EahLogo({
   const cls = `eah-logo eah-logo--${size} eah-logo--${variant} ${className}`.trim()
 
   if (href) {
-    return (
-      <a href={href} className={cls} aria-label="EAH — اللى نفسك فيه ؟">
-        {inner}
-      </a>
-    )
+    return <a href={href} className={cls} aria-label="EAH — اللى نفسك فيه ؟">{inner}</a>
   }
-  return (
-    <span className={cls} aria-label="EAH — اللى نفسك فيه ؟">
-      {inner}
-    </span>
-  )
+  return <span className={cls} aria-label="EAH — اللى نفسك فيه ؟">{inner}</span>
 }

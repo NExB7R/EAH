@@ -1,42 +1,38 @@
-/* ===== Floating Capsule Header ===== */
 .floating-capsule {
   position: fixed;
-  top: 16px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%) translateZ(0);
   z-index: 100;
-  width: calc(100% - 32px);
-  max-width: 780px;
+  width: calc(100% - 24px);
+  max-width: 820px;
   transition: top 400ms cubic-bezier(0.34, 1.2, 0.64, 1);
 }
 
-.floating-capsule.is-scrolled {
-  top: 8px;
-}
+.floating-capsule.is-scrolled { top: 8px; }
 
 .floating-capsule__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 10px 14px;
+  gap: 10px;
+  padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(10, 8, 18, 0.88);
-  border: 1px solid rgba(139, 92, 246, 0.22);
+  background: rgba(8, 6, 16, 0.92);
+  border: 1px solid rgba(139, 92, 246, 0.25);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.02),
-    0 10px 40px rgba(0, 0, 0, 0.5),
-    0 0 60px rgba(107, 33, 255, 0.12);
-  transition: box-shadow 400ms ease, padding 400ms ease, background 400ms ease;
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 0 50px rgba(107, 33, 255, 0.15);
+  transition: padding 400ms ease, box-shadow 400ms ease;
 }
 
 .floating-capsule.is-scrolled .floating-capsule__inner {
-  padding: 8px 12px;
-  background: rgba(10, 8, 18, 0.95);
+  padding: 6px 10px;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.02),
-    0 12px 50px rgba(0, 0, 0, 0.65),
-    0 0 80px rgba(107, 33, 255, 0.2);
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 10px 40px rgba(0, 0, 0, 0.7),
+    0 0 70px rgba(107, 33, 255, 0.22);
 }
 
 .floating-capsule__side {
@@ -46,31 +42,15 @@
   flex: 1;
 }
 
-.floating-capsule__side--end {
-  justify-content: flex-end;
+.floating-capsule__side--end { justify-content: flex-end; }
+.floating-capsule__center { flex-shrink: 0; padding: 0 6px; }
+
+@media (max-width: 768px) {
+  .floating-capsule { top: 8px; width: calc(100% - 16px); }
+  .floating-capsule__inner { padding: 6px 8px; gap: 6px; }
+  .floating-capsule__side { gap: 4px; }
 }
 
-.floating-capsule__center {
-  flex-shrink: 0;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 640px) {
-  .floating-capsule {
-    top: 8px;
-  }
-  .floating-capsule__inner {
-    padding: 8px 10px;
-    gap: 8px;
-  }
-  .floating-capsule__side {
-    gap: 4px;
-  }
-}
-
-/* ===== Extra small: hide some buttons ===== */
-@media (max-width: 380px) {
-  .floating-capsule__side .neon-icon-btn:not(.neon-icon-btn--accent):not(:last-child) {
-    display: none;
-  }
+@media (max-width: 480px) {
+  .floating-capsule__center :global(.eah-logo__tagline) { display: none; }
 }
