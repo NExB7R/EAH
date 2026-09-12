@@ -1,0 +1,118 @@
+/* ===== Neon Icon Button ===== */
+.neon-icon-btn {
+  --btn-text: #E8E4F0;
+  --btn-border: rgba(139, 92, 246, 0.3);
+  --btn-bg: rgba(139, 92, 246, 0.06);
+  --btn-glow: rgba(139, 92, 246, 0.35);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-family: var(--font-cairo, 'Cairo', system-ui, sans-serif);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    padding 350ms cubic-bezier(0.34, 1.4, 0.64, 1),
+    border-color 250ms ease,
+    background 250ms ease,
+    box-shadow 250ms ease;
+  overflow: hidden;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.neon-icon-btn:hover,
+.neon-icon-btn:focus-visible {
+  border-color: rgba(168, 85, 247, 0.75);
+  background: rgba(139, 92, 246, 0.14);
+  box-shadow:
+    0 0 12px var(--btn-glow),
+    0 0 30px rgba(139, 92, 246, 0.15),
+    inset 0 0 12px rgba(139, 92, 246, 0.08);
+  outline: none;
+}
+
+.neon-icon-btn:active {
+  transform: scale(0.96);
+}
+
+.neon-icon-btn--accent {
+  --btn-border: rgba(232, 199, 154, 0.5);
+  --btn-bg: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(232, 199, 154, 0.15));
+  --btn-glow: rgba(232, 199, 154, 0.4);
+  --btn-text: #F4E4B8;
+}
+
+.neon-icon-btn--accent:hover {
+  border-color: rgba(232, 199, 154, 0.85);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(232, 199, 154, 0.25));
+  box-shadow:
+    0 0 14px var(--btn-glow),
+    0 0 36px rgba(232, 199, 154, 0.2);
+}
+
+.neon-icon-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.5));
+  transition: transform 250ms ease;
+}
+
+.neon-icon-btn:hover .neon-icon-btn__icon {
+  transform: scale(1.1);
+}
+
+.neon-icon-btn__label {
+  display: inline-block;
+  max-width: 0;
+  margin-inline-start: 0;
+  opacity: 0;
+  font-weight: 700;
+  transition:
+    max-width 400ms cubic-bezier(0.34, 1.4, 0.64, 1),
+    margin-inline-start 400ms cubic-bezier(0.34, 1.4, 0.64, 1),
+    opacity 250ms ease 100ms;
+}
+
+.neon-icon-btn:hover .neon-icon-btn__label,
+.neon-icon-btn:focus-visible .neon-icon-btn__label {
+  max-width: 120px;
+  margin-inline-start: 8px;
+  opacity: 1;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 640px) {
+  .neon-icon-btn {
+    height: 38px;
+    padding: 0 10px;
+  }
+  .neon-icon-btn__icon {
+    font-size: 0.95rem;
+  }
+  /* على الموبايل: النص مش بيظهر */
+  .neon-icon-btn:hover .neon-icon-btn__label,
+  .neon-icon-btn:focus-visible .neon-icon-btn__label {
+    max-width: 0;
+    margin-inline-start: 0;
+    opacity: 0;
+  }
+  .neon-icon-btn:active .neon-icon-btn__label {
+    max-width: 100px;
+    margin-inline-start: 6px;
+    opacity: 1;
+  }
+}
