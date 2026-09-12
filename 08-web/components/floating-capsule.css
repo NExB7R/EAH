@@ -5,7 +5,7 @@
   transform: translateX(-50%) translateZ(0);
   z-index: 100;
   width: calc(100% - 24px);
-  max-width: 860px;
+  max-width: 880px;
   transition: top 400ms cubic-bezier(0.34, 1.2, 0.64, 1);
   pointer-events: none;
 }
@@ -16,24 +16,23 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(8, 6, 16, 0.94);
-  border: 1px solid rgba(139, 92, 246, 0.28);
+  background: var(--surface, rgba(8, 6, 16, 0.94));
+  border: 1px solid var(--border, rgba(139, 92, 246, 0.28));
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.02),
     0 8px 32px rgba(0, 0, 0, 0.6),
     0 0 60px rgba(107, 33, 255, 0.18);
-  transition: padding 400ms ease, box-shadow 400ms ease;
+  transition: padding 400ms ease, box-shadow 400ms ease, background 400ms ease;
   pointer-events: auto;
-  /* ← ارتفاع ثابت عشان اللوجو يتناسب */
-  min-height: 62px;
+  min-height: 60px;
 }
 
 .floating-capsule.is-scrolled .floating-capsule__inner {
   padding: 6px 10px;
-  min-height: 56px;
+  min-height: 54px;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.03),
     0 10px 42px rgba(0, 0, 0, 0.75),
@@ -43,7 +42,7 @@
 .floating-capsule__side {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   flex: 1;
 }
 
@@ -51,37 +50,35 @@
 
 .floating-capsule__center {
   flex-shrink: 0;
-  padding: 0 10px;
+  padding: 0 12px;
   cursor: pointer;
   position: relative;
   z-index: 2;
-  /* اللوجو متوسّط عموديًا */
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
 }
 
 /* موبايل */
 @media (max-width: 900px) {
-  .floating-capsule__inner { padding: 6px 10px; gap: 8px; }
-  .floating-capsule__side { gap: 5px; }
+  .floating-capsule__inner { padding: 6px 10px; gap: 6px; }
+  .floating-capsule__side { gap: 4px; }
+  .floating-capsule__center { padding: 0 8px; }
 }
 
 @media (max-width: 720px) {
   .floating-capsule { top: 8px; width: calc(100% - 16px); }
-  .floating-capsule__inner { min-height: 54px; padding: 6px 8px; gap: 6px; }
-  .floating-capsule__side { gap: 4px; }
-  .floating-capsule__center { padding: 0 6px; }
+  .floating-capsule__inner { min-height: 52px; padding: 6px 8px; gap: 4px; }
 }
 
-@media (max-width: 560px) {
-  /* أخفي "ثبت" و "فيسبوك" على الشاشات الصغيرة */
-  .floating-capsule__side .neon-icon-btn:nth-child(2),
+@media (max-width: 600px) {
+  /* أخفي زر ثبّت وفيسبوك على الشاشات الصغيرة */
+  .floating-capsule__side .neon-icon-btn:nth-child(3),
+  .floating-capsule__side--end .neon-icon-btn:nth-child(3) { display: none; }
+}
+
+@media (max-width: 480px) {
+  /* أخفي كمان زر المشاركة والقائمة */
+  .floating-capsule__side .neon-icon-btn:nth-child(1),
   .floating-capsule__side--end .neon-icon-btn:nth-child(2) { display: none; }
-}
-
-@media (max-width: 420px) {
-  /* أخفي كمان زر القائمة */
-  .floating-capsule__side .neon-icon-btn:nth-child(1) { display: none; }
 }
