@@ -71,7 +71,7 @@ export default function FloatingCapsuleHeader() {
 
         {/* Center: اللوجو */}
         <div className="floating-capsule__center" onClick={handleLogoClick}>
-          <EahLogo size="sm" variant="full" active={crownActive} />
+          <EahLogo size="md" variant="compact" active={crownActive} />
         </div>
 
         {/* RTL end (شمال): مشاركة، فيسبوك، واتساب */}

@@ -5,38 +5,41 @@
   transform: translateX(-50%) translateZ(0);
   z-index: 100;
   width: calc(100% - 24px);
-  max-width: 820px;
+  max-width: 900px;
   transition: top 400ms cubic-bezier(0.34, 1.2, 0.64, 1);
   pointer-events: none;
 }
-
 .floating-capsule.is-scrolled { top: 8px; }
 
 .floating-capsule__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: 10px;
+  padding: 10px 16px;
   border-radius: 999px;
-  background: var(--surface, rgba(8, 6, 16, 0.94));
-  border: 1px solid var(--border, rgba(139, 92, 246, 0.28));
+  /* ✅ شفاف أكتر + بلور عشان الخلفية تبان */
+  background: rgba(8, 6, 16, 0.55);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(139, 92, 246, 0.28);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.02),
-    0 8px 32px rgba(0, 0, 0, 0.6),
-    0 0 60px rgba(107, 33, 255, 0.18);
-  transition: padding 400ms ease, box-shadow 400ms ease, background 400ms ease;
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(107, 33, 255, 0.15);
+  transition: padding 400ms ease, background 400ms ease, box-shadow 400ms ease;
   pointer-events: auto;
-  min-height: 60px;
+  min-height: 70px;
 }
 
 .floating-capsule.is-scrolled .floating-capsule__inner {
-  padding: 6px 10px;
-  min-height: 54px;
+  padding: 8px 14px;
+  min-height: 62px;
+  background: rgba(8, 6, 16, 0.72);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 10px 42px rgba(0, 0, 0, 0.75),
-    0 0 80px rgba(107, 33, 255, 0.25);
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 10px 42px rgba(0, 0, 0, 0.7),
+    0 0 80px rgba(107, 33, 255, 0.22);
 }
 
 .floating-capsule__side {
@@ -45,7 +48,6 @@
   gap: 5px;
   flex: 1;
 }
-
 .floating-capsule__side--end { justify-content: flex-end; }
 
 .floating-capsule__center {
@@ -59,26 +61,20 @@
   justify-content: center;
 }
 
-/* موبايل */
 @media (max-width: 900px) {
-  .floating-capsule__inner { padding: 6px 10px; gap: 6px; }
+  .floating-capsule { max-width: calc(100% - 20px); }
+  .floating-capsule__inner { padding: 8px 12px; gap: 6px; min-height: 64px; }
   .floating-capsule__side { gap: 4px; }
   .floating-capsule__center { padding: 0 8px; }
 }
-
 @media (max-width: 720px) {
-  .floating-capsule { top: 8px; width: calc(100% - 16px); }
-  .floating-capsule__inner { min-height: 52px; padding: 6px 8px; gap: 4px; }
+  .floating-capsule { top: 8px; width: calc(100% - 12px); }
+  .floating-capsule__inner { min-height: 58px; padding: 6px 10px; }
 }
-
-@media (max-width: 600px) {
-  /* أخفي زر ثبّت وفيسبوك على الشاشات الصغيرة */
-  .floating-capsule__side .neon-icon-btn:nth-child(3),
-  .floating-capsule__side--end .neon-icon-btn:nth-child(3) { display: none; }
-}
-
-@media (max-width: 480px) {
-  /* أخفي كمان زر المشاركة والقائمة */
-  .floating-capsule__side .neon-icon-btn:nth-child(1),
+@media (max-width: 560px) {
+  .floating-capsule__side .neon-icon-btn:nth-child(2),
   .floating-capsule__side--end .neon-icon-btn:nth-child(2) { display: none; }
+}
+@media (max-width: 420px) {
+  .floating-capsule__side .neon-icon-btn:nth-child(1) { display: none; }
 }

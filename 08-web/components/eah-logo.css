@@ -134,3 +134,27 @@
 [data-theme="light"] .eah-logo__punct {
   color: #A855F7;
 }
+
+/* ===== Compact variant (for header) ===== */
+.eah-logo--compact {
+  --logo-w: 100px;
+  --crown-w: 22%;
+  --crown-base-top: -26%;
+  --crown-base-left: 22%;
+}
+.eah-logo--compact .eah-logo__city-compact {
+  margin-top: 2px;
+  font-family: var(--font-cairo, system-ui);
+  font-weight: 700;
+  font-size: 0.55rem;
+  color: #A29DB5;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  line-height: 1;
+}
+.eah-logo--compact.eah-logo--xs { --logo-w: 90px; }
+.eah-logo--compact.eah-logo--xs .eah-logo__city-compact { font-size: 0.48rem; }
+.eah-logo--compact.eah-logo--sm { --logo-w: 105px; }
+.eah-logo--compact.eah-logo--sm .eah-logo__city-compact { font-size: 0.55rem; }
+.eah-logo--compact.eah-logo--md { --logo-w: 130px; }
+.eah-logo--compact.eah-logo--md .eah-logo__city-compact { font-size: 0.65rem; }
