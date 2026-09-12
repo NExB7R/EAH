@@ -1,4 +1,5 @@
-:root, [data-theme="dark"] {
+/* ===== EAH Theme — Dark Only ===== */
+:root {
   --bg: #050308;
   --surface: rgba(8, 6, 16, 0.94);
   --surface-solid: #0A0812;
@@ -12,78 +13,12 @@
   color-scheme: dark;
 }
 
-[data-theme="light"] {
-  --bg: #F6F4FB;
-  --surface: rgba(255, 255, 255, 0.94);
-  --surface-solid: #FFFFFF;
-  --text: #1A0F2E;
-  --text-muted: #5A4D75;
-  --border: rgba(107, 33, 255, 0.25);
-  --accent: #6B21FF;
-  --accent-soft: #8B5CF6;
-  --gold: #A67C52;
-  --gold-deep: #7A5838;
-  color-scheme: light;
-}
-
 html, body {
   background: var(--bg);
   color: var(--text);
-  transition: background 400ms ease, color 400ms ease;
 }
 
-/* خلفية الأيقونات — Light Mode */
-[data-theme="light"] .scroll-icons-bg {
+/* Scroll icons background */
+.scroll-icons-bg {
   background: var(--bg);
-}
-[data-theme="light"] .scroll-icons-bg__ambient {
-  background:
-    radial-gradient(ellipse 60% 50% at 20% 15%, rgba(107, 33, 255, 0.12) 0%, transparent 65%),
-    radial-gradient(ellipse 55% 45% at 80% 85%, rgba(168, 85, 247, 0.08) 0%, transparent 65%);
-}
-[data-theme="light"] .scroll-icons-bg__icon {
-  color: rgba(107, 33, 255, 0.25);
-  filter:
-    drop-shadow(0 0 4px rgba(107, 33, 255, 0.25))
-    drop-shadow(0 0 8px rgba(107, 33, 255, 0.12));
-}
-
-/* الكبسولة — Light */
-[data-theme="light"] .floating-capsule__inner {
-  background: rgba(255, 255, 255, 0.92);
-  border-color: rgba(107, 33, 255, 0.25);
-  box-shadow:
-    0 0 0 1px rgba(107, 33, 255, 0.05),
-    0 8px 32px rgba(107, 33, 255, 0.12),
-    0 0 60px rgba(107, 33, 255, 0.08);
-}
-[data-theme="light"] .floating-capsule.is-scrolled .floating-capsule__inner {
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow:
-    0 0 0 1px rgba(107, 33, 255, 0.08),
-    0 10px 42px rgba(107, 33, 255, 0.15),
-    0 0 80px rgba(107, 33, 255, 0.1);
-}
-
-/* الأزرار — Light */
-[data-theme="light"] .neon-icon-btn {
-  color: #1A0F2E;
-  border-color: rgba(107, 33, 255, 0.3);
-  background: rgba(107, 33, 255, 0.06);
-}
-[data-theme="light"] .neon-icon-btn:hover,
-[data-theme="light"] .neon-icon-btn:focus-visible {
-  border-color: rgba(107, 33, 255, 0.75);
-  background: rgba(107, 33, 255, 0.12);
-  box-shadow:
-    0 0 12px rgba(107, 33, 255, 0.3),
-    0 0 26px rgba(107, 33, 255, 0.12);
-}
-[data-theme="light"] .neon-icon-btn--accent {
-  border-color: rgba(166, 124, 82, 0.55);
-  background: linear-gradient(135deg, rgba(107, 33, 255, 0.14), rgba(232, 199, 154, 0.4));
-  color: #6B21FF;
-}
-[data-theme="light"] .neon-icon-btn__icon {
-  filter: drop-shadow(0 0 4px rgba(107, 33, 255, 0.35));
 }

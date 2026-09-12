@@ -2,11 +2,10 @@
 import { useState, useEffect } from 'react'
 import EahLogo from './eah-logo'
 import NeonIconButton from './neon-icon-button'
-import ThemeToggle from './theme-toggle'
 import ShareButton from './share-button'
 import UserAvatar from './user-avatar'
 import {
-  IconSearch, IconKey, IconFacebook, IconWhatsapp,
+  IconKey, IconFacebook, IconWhatsapp,
   IconMenu, IconInstall, IconStore,
 } from './neon-icons'
 import './floating-capsule.css'
@@ -55,10 +54,9 @@ export default function FloatingCapsuleHeader() {
     <header className={`floating-capsule ${isScrolled ? 'is-scrolled' : ''}`}>
       <div className="floating-capsule__inner">
 
-        {/* RTL start (يمين): القائمة والمظهر والتنصيب والتسجيل والدخول */}
+        {/* RTL start (يمين): القائمة، ثبّت، سجل، دخول */}
         <div className="floating-capsule__side floating-capsule__side--start">
           <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" />
-          <ThemeToggle />
           <NeonIconButton icon={<IconInstall />} label="ثبّت" ariaLabel="تثبيت المنصة" />
           <NeonIconButton icon={<IconStore />} label="سجل" ariaLabel="تسجيل حساب" />
           {!loggedIn && (
@@ -71,14 +69,13 @@ export default function FloatingCapsuleHeader() {
           )}
         </div>
 
-        {/* Center */}
+        {/* Center: اللوجو */}
         <div className="floating-capsule__center" onClick={handleLogoClick}>
           <EahLogo size="sm" variant="full" active={crownActive} />
         </div>
 
-        {/* RTL end (شمال): البحث والمشاركة والسوشيال */}
+        {/* RTL end (شمال): مشاركة، فيسبوك، واتساب */}
         <div className="floating-capsule__side floating-capsule__side--end">
-          <NeonIconButton icon={<IconSearch />} label="ابحث" ariaLabel="بحث" />
           <ShareButton />
           <NeonIconButton icon={<IconFacebook />} label="فيسبوك" href="#" ariaLabel="فيسبوك" />
           <NeonIconButton icon={<IconWhatsapp />} label="واتساب" href="#" ariaLabel="واتساب" />

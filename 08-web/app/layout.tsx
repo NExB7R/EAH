@@ -44,7 +44,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="ar"
       dir="rtl"
-      data-theme="dark"
       className={`${cairo.variable} ${cairoPlay.variable}`}
       suppressHydrationWarning
     >
