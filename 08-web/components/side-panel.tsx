@@ -1,4 +1,5 @@
 'use client'
+import { useRef, useEffect, useState } from 'react'
 import './side-panel.css'
 
 type SideItem = {
@@ -7,31 +8,82 @@ type SideItem = {
   subtitle?: string
   emoji?: string
   href: string
-  badge?: string
 }
 
-const MOCK_FEATURED: SideItem[] = [
-  { id: 'f1', title: 'مطبخ البلد', subtitle: 'شبين القناطر', emoji: '🍽️', href: '#', badge: 'مميز' },
-  { id: 'f2', title: 'صيدلية الأمان', subtitle: 'طوارئ 24س', emoji: '💊', href: '#', badge: 'مميز' },
-  { id: 'f3', title: 'برجر هاوس', subtitle: 'المنايل', emoji: '🍔', href: '#', badge: 'مميز' },
+const FEATURED: SideItem[] = [
+  { id: 'f1', title: 'مطبخ البلد', subtitle: 'شبين القناطر', emoji: '🍽️', href: '#' },
+  { id: 'f2', title: 'صيدلية الأمان', subtitle: 'طوارئ 24س', emoji: '💊', href: '#' },
+  { id: 'f3', title: 'برجر هاوس', subtitle: 'المنايل', emoji: '🍔', href: '#' },
+  { id: 'f4', title: 'مشويات الشرق', subtitle: 'شبين القناطر', emoji: '🥙', href: '#' },
+  { id: 'f5', title: 'كافيه النجوم', subtitle: 'المنايل', emoji: '☕', href: '#' },
+  { id: 'f6', title: 'بيتزا الطليان', subtitle: 'شبين القناطر', emoji: '🍕', href: '#' },
 ]
 
-const MOCK_TRENDING: SideItem[] = [
+const TRENDING: SideItem[] = [
   { id: 't1', title: 'برجر هاوس', subtitle: 'الأكثر زيارة', emoji: '🍔', href: '#' },
   { id: 't2', title: 'كشري التحرير', subtitle: 'ترند النهاردة', emoji: '🍲', href: '#' },
   { id: 't3', title: 'سوبر ماركت النور', subtitle: 'الأكثر طلباً', emoji: '🛒', href: '#' },
   { id: 't4', title: 'مشويات الشرق', subtitle: 'ترند الأسبوع', emoji: '🥙', href: '#' },
+  { id: 't5', title: 'كافيه النجوم', subtitle: 'الأعلى تقييماً', emoji: '☕', href: '#' },
+  { id: 't6', title: 'بيتزا الطليان', subtitle: 'ترند الشهر', emoji: '🍕', href: '#' },
 ]
 
-type SidePanelProps = {
-  featured?: SideItem[]
-  trending?: SideItem[]
+function AutoSlider({
+  items,
+  showRank,
+  featured,
+}: {
+  items: SideItem[]
+  showRank?: boolean
+  featured?: boolean
+}) {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [paused, setPaused] = useState(false)
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    if (paused || items.length <= 5) return
+    const timer = setInterval(() => {
+      setIndex((i) => (i + 1) % (items.length - 4))
+    }, 3500)
+    return () => clearInterval(timer)
+  }, [paused, items.length])
+
+  useEffect(() => {
+    const el = trackRef.current
+    if (!el) return
+    const step = 52
+    el.scrollTo({ top: index * step, behavior: 'smooth' })
+  }, [index])
+
+  return (
+    <div
+      ref={trackRef}
+      className="side-panel__track"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setTimeout(() => setPaused(false), 2500)}
+    >
+      {items.map((item, idx) => (
+        <a
+          key={item.id}
+          href={item.href}
+          className={`side-panel__card ${featured ? 'side-panel__card--featured' : ''}`}
+        >
+          {showRank && <span className="side-panel__rank">{idx + 1}</span>}
+          <span className="side-panel__emoji">{item.emoji}</span>
+          <span className="side-panel__text">
+            <span className="side-panel__title">{item.title}</span>
+            {item.subtitle && <span className="side-panel__subtitle">{item.subtitle}</span>}
+          </span>
+        </a>
+      ))}
+    </div>
+  )
 }
 
-export default function SidePanel({
-  featured = MOCK_FEATURED,
-  trending = MOCK_TRENDING,
-}: SidePanelProps) {
+export default function SidePanel() {
   return (
     <>
       <aside className="side-panel side-panel--right" aria-label="الرائج">
@@ -39,18 +91,7 @@ export default function SidePanel({
           <span className="side-panel__head-icon">🔥</span>
           <span>الرائج</span>
         </h3>
-        <div className="side-panel__list">
-          {trending.map((item, idx) => (
-            <a key={item.id} href={item.href} className="side-panel__card">
-              <span className="side-panel__rank">{idx + 1}</span>
-              <span className="side-panel__emoji">{item.emoji}</span>
-              <span className="side-panel__text">
-                <span className="side-panel__title">{item.title}</span>
-                {item.subtitle && <span className="side-panel__subtitle">{item.subtitle}</span>}
-              </span>
-            </a>
-          ))}
-        </div>
+        <AutoSlider items={TRENDING} showRank />
       </aside>
 
       <aside className="side-panel side-panel--left" aria-label="المميز">
@@ -59,17 +100,7 @@ export default function SidePanel({
           <span>المميز</span>
           <span className="side-panel__head-badge">مدفوع</span>
         </h3>
-        <div className="side-panel__list">
-          {featured.map((item) => (
-            <a key={item.id} href={item.href} className="side-panel__card side-panel__card--featured">
-              <span className="side-panel__emoji">{item.emoji}</span>
-              <span className="side-panel__text">
-                <span className="side-panel__title">{item.title}</span>
-                {item.subtitle && <span className="side-panel__subtitle">{item.subtitle}</span>}
-              </span>
-            </a>
-          ))}
-        </div>
+        <AutoSlider items={FEATURED} featured />
       </aside>
     </>
   )

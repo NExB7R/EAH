@@ -14,7 +14,6 @@ export default function SiteFooter() {
           <EahLogo size="md" variant="full" />
         </div>
 
-        {/* ===== كيف نخدمك ===== */}
         <div className="site-footer__serve">
           <h3 className="site-footer__serve-title">كيف نخدمك؟</h3>
           <div className="site-footer__serve-grid">
@@ -46,7 +45,7 @@ export default function SiteFooter() {
             <a href="/merchant/apply">سجّل متجرك</a>
           </div>
           <div className="site-footer__col">
-            <h4>المنصة</h4>
+            <h4>اكتشف</h4>
             <a href="/explore">اكتشف</a>
             <a href="/recommend">نفسك في ايه؟</a>
             <a href="/offers">العروض</a>
@@ -71,15 +70,10 @@ export default function SiteFooter() {
           </div>
         </nav>
 
-        {/* ===== فلسطين ===== */}
         <div className="site-footer__palestine">
           <p className="site-footer__palestine-text">فلسطين في قلبنا</p>
           <p className="site-footer__palestine-sub">الحرية قادمة .. بإذن الله</p>
-          <button
-            type="button"
-            className="site-footer__heart"
-            aria-label="فلسطين"
-          >
+          <button type="button" className="site-footer__heart" aria-label="فلسطين">
             <svg viewBox="0 0 32 28" width="52" height="45" aria-hidden>
               <defs>
                 <clipPath id="heart-clip">
@@ -104,8 +98,8 @@ export default function SiteFooter() {
         </div>
 
         <div className="site-footer__bottom">
-          <p>© {year} EAH — اللي نفسك فيه ؟</p>
-          <p className="site-footer__made">صُنع بحب في شبين القناطر 💜</p>
+          <p className="site-footer__bottom-brand">EAH</p>
+          <p>© {year} — صُنع بكل حب</p>
         </div>
 
       </div>

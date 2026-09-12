@@ -215,3 +215,14 @@
 @media (max-width: 400px) {
   .site-footer__nav { grid-template-columns: 1fr; gap: 16px; }
 }
+
+/* Bottom brand */
+.site-footer__bottom-brand {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui)) !important;
+  font-size: 1.1rem !important;
+  font-weight: 900 !important;
+  color: #E8C79A !important;
+  letter-spacing: 0.2em;
+  margin-bottom: 2px !important;
+  text-shadow: 0 0 12px rgba(232, 199, 154, 0.35);
+}
