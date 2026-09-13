@@ -52,7 +52,7 @@ export default function FloatingCapsuleHeader() {
           </div>
 
           <div className="floating-capsule__center">
-            <EahLogo size="sm" variant="compact" />
+            <EahLogo size="sm" variant="plain" />
           </div>
 
           <div className="floating-capsule__side floating-capsule__side--end">
@@ -69,7 +69,7 @@ export default function FloatingCapsuleHeader() {
       <div className={`nav-drawer ${menuOpen ? 'is-open' : ''}`} onClick={() => setMenuOpen(false)} aria-hidden={!menuOpen}>
         <div className="nav-drawer__panel" onClick={(e) => e.stopPropagation()}>
           <div className="nav-drawer__head">
-            <EahLogo size="sm" variant="compact" />
+            <EahLogo size="sm" variant="plain" />
             <button type="button" className="nav-drawer__close" onClick={() => setMenuOpen(false)} aria-label="إغلاق">×</button>
           </div>
           <nav className="nav-drawer__nav">

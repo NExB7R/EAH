@@ -29,16 +29,15 @@ const TYPE_LABEL: Record<BusinessType, string> = {
   delivery_office: 'توصيل',
 }
 
-const TYPE_GRADIENT: Record<CardVariant, { from: string; to: string; accent: string }> = {
-  restaurant: { from: 'rgba(220, 90, 40, 0.55)', to: 'rgba(139, 92, 246, 0.15)', accent: '#DC5A28' },
-  offer: { from: 'rgba(232, 199, 154, 0.5)', to: 'rgba(168, 85, 247, 0.2)', accent: '#E8C79A' },
-  pharmacy: { from: 'rgba(74, 222, 128, 0.4)', to: 'rgba(20, 100, 80, 0.2)', accent: '#4ADE80' },
-  delivery: { from: 'rgba(251, 146, 60, 0.5)', to: 'rgba(168, 85, 247, 0.15)', accent: '#FB923C' },
-  market: { from: 'rgba(139, 92, 246, 0.4)', to: 'rgba(107, 33, 255, 0.15)', accent: '#A855F7' },
-  new: { from: 'rgba(168, 85, 247, 0.45)', to: 'rgba(232, 199, 154, 0.15)', accent: '#C084FC' },
+const VARIANT_ACCENT: Record<CardVariant, string> = {
+  restaurant: '#FF7A3D',
+  offer:      '#E8C79A',
+  pharmacy:   '#4ADE80',
+  delivery:   '#FB923C',
+  market:     '#A855F7',
+  new:        '#C084FC',
 }
 
-/** هوكات جاهزة حسب السبب */
 const REASON_HOOKS: Record<string, string[]> = {
   'مميز': ['مختار بعناية', 'اللي الكل بيتكلم عنه', 'من الأفضل عندنا'],
   'جديد': ['جديد علينا', 'لسه فتح', 'تجربة جديدة'],
@@ -50,7 +49,6 @@ const REASON_HOOKS: Record<string, string[]> = {
 
 function getHook(reason: string, slug: string): string {
   const list = REASON_HOOKS[reason] ?? REASON_HOOKS['مختار لك']
-  // نستخدم الـ slug عشان نختار نفس الهوك دايماً لنفس المكان
   const hash = slug.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0)
   return list[hash % list.length]
 }
@@ -64,76 +62,65 @@ export default function BusinessCardV3({
   variant?: CardVariant
   hook?: string
 }) {
-  const { slug, name, type, area, badge, vibe, reason, open } = business
-  const grad = TYPE_GRADIENT[variant]
+  const { slug, name, type, area, vibe, reason, open } = business
+  const accent = VARIANT_ACCENT[variant]
   const displayHook = hook ?? getHook(reason, slug)
+  const initial = name.charAt(0)
 
   return (
     <a
       href={`/businesses/${slug}`}
-      className={`v3card v3card--${variant}`}
+      className={`ecard ecard--${variant}`}
       aria-label={name}
-      style={
-        {
-          '--grad-from': grad.from,
-          '--grad-to': grad.to,
-          '--accent': grad.accent,
-        } as React.CSSProperties
-      }
+      style={{ '--accent': accent } as React.CSSProperties}
     >
-      <div className="v3card__cover">
-        <div className="v3card__pattern" aria-hidden />
-        <div className="v3card__emoji-wrap">
-          <span className="v3card__emoji">{TYPE_EMOJI[type]}</span>
-        </div>
+      {/* الشريط الملون على الجنب */}
+      <span className="ecard__accent" aria-hidden />
 
-        <div className="v3card__top">
-          <span className="v3card__type">{TYPE_LABEL[type]}</span>
-          <span className={`v3card__live ${open ? 'is-on' : 'is-off'}`}>
-            <span className="v3card__live-dot" />
+      {/* ===== المحتوى ===== */}
+      <div className="ecard__body">
+        {/* صف 1: نوع + حالة */}
+        <div className="ecard__top">
+          <span className="ecard__type">{TYPE_LABEL[type]}</span>
+          <span className={`ecard__status ${open ? 'is-on' : 'is-off'}`}>
+            <span className="ecard__dot" />
             {open ? 'مفتوح' : 'مغلق'}
           </span>
         </div>
 
-        {badge && <span className="v3card__badge">{badge}</span>}
-
-        <div className="v3card__info">
-          <h3 className="v3card__name">{name}</h3>
-          <div className="v3card__meta-row">
-            <span className="v3card__meta-item">
-              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.4">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              {area}
-            </span>
+        {/* صف 2: الأفاتار + الاسم */}
+        <div className="ecard__main">
+          <div className="ecard__avatar">
+            <span className="ecard__avatar-emoji">{TYPE_EMOJI[type]}</span>
+          </div>
+          <div className="ecard__title-wrap">
+            <h3 className="ecard__name">{name}</h3>
+            <span className="ecard__area">{area}</span>
           </div>
         </div>
-      </div>
 
-      {/* ===== Footer: hook بدل rating ===== */}
-      <div className="v3card__footer">
-        <span className="v3card__hook">
-          <span className="v3card__hook-dot" aria-hidden />
-          {displayHook}
-        </span>
-
-        <div className="v3card__vibes">
-          {vibe.slice(0, 1).map((v) => (
-            <span key={v} className="v3card__vibe">{v}</span>
-          ))}
+        {/* صف 3: الهوك */}
+        <div className="ecard__hook">
+          <span className="ecard__hook-dot" aria-hidden />
+          <span className="ecard__hook-text">{displayHook}</span>
         </div>
 
-        <div className="v3card__arrow" aria-hidden>
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-        </div>
+        {/* صف 4: الفايبس */}
+        {vibe.length > 0 && (
+          <div className="ecard__vibes">
+            {vibe.slice(0, 2).map((v) => (
+              <span key={v} className="ecard__vibe">#{v}</span>
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="v3card__reveal">
-        <p>{reason}</p>
-      </div>
+      {/* السهم */}
+      <span className="ecard__arrow" aria-hidden>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+      </span>
     </a>
   )
 }

@@ -1,446 +1,320 @@
-/* ===== Card V3 — cleaner + lighter ===== */
-.v3card {
+/* ===== EAH Identity Card 2026 ===== */
+.ecard {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 240px;
-  height: 300px;
+  width: 280px;
+  height: 180px;
   border-radius: 20px;
   overflow: hidden;
   text-decoration: none;
   color: #F4F2FA;
-  background: #0A0812;
-  border: 1px solid rgba(139, 92, 246, 0.15);
+  background: linear-gradient(150deg, #15101f 0%, #0A0812 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   transition:
-    transform 350ms cubic-bezier(0.34, 1.4, 0.64, 1),
-    border-color 250ms ease,
-    box-shadow 350ms ease;
+    transform 380ms cubic-bezier(0.34, 1.4, 0.64, 1),
+    border-color 300ms ease,
+    box-shadow 380ms ease;
   will-change: transform;
   isolation: isolate;
 }
 
-.v3card:hover {
+.ecard:hover {
   transform: translateY(-5px);
   border-color: var(--accent, #A855F7);
   box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.4),
-    0 0 30px rgba(107, 33, 255, 0.25);
+    0 14px 32px rgba(0, 0, 0, 0.4),
+    0 0 40px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 
-/* ===== Cover ===== */
-.v3card__cover {
+/* شريط ملون على اليسار (RTL: يمين) */
+.ecard__accent {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-end: 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--accent) 0%, transparent 100%);
+  opacity: 0.9;
+}
+
+/* ===== Body ===== */
+.ecard__body {
   position: relative;
-  flex: 1;
-  background: linear-gradient(160deg, var(--grad-from), var(--grad-to) 60%, #0A0812 100%);
-  overflow: hidden;
-}
-
-/* نمط هندسي خفيف */
-.v3card__pattern {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.04) 0%, transparent 40%);
-  pointer-events: none;
-}
-
-.v3card__emoji-wrap {
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
+  z-index: 2;
+  padding: 14px 16px;
+  padding-inline-end: 22px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
-  transition: transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
-}
-.v3card:hover .v3card__emoji-wrap {
-  transform: translate(-50%, -60%) scale(1.08);
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
 }
 
-.v3card__emoji {
-  font-size: 3.2rem;
-  line-height: 1;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
-}
-
-/* ===== Top bar ===== */
-.v3card__top {
-  position: absolute;
-  top: 10px;
-  inset-inline: 10px;
+/* Top row */
+.ecard__top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 2;
+  gap: 6px;
 }
 
-.v3card__type {
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.ecard__type {
   font-family: var(--font-cairo, system-ui);
   font-size: 0.6rem;
   font-weight: 700;
-  color: #E8E4F0;
+  color: #A29DB5;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
-.v3card__live {
+.ecard__status {
   display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.58rem;
-  font-weight: 700;
-}
-.v3card__live-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 999px;
-  box-shadow: 0 0 6px currentColor;
-}
-.v3card__live.is-on { color: #4ADE80; }
-.v3card__live.is-on .v3card__live-dot {
-  background: #4ADE80;
-  animation: v3-pulse 2s ease-in-out infinite;
-}
-.v3card__live.is-off { color: #F87171; }
-.v3card__live.is-off .v3card__live-dot { background: #F87171; }
-
-@keyframes v3-pulse {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.5; }
-}
-
-/* ===== Badge ===== */
-.v3card__badge {
-  position: absolute;
-  top: 48px;
-  inset-inline-end: 10px;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #F5DEB3, #A67C52);
-  color: #1A0F0A;
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.58rem;
-  font-weight: 900;
-  z-index: 2;
-  transform: rotate(-3deg);
-  box-shadow: 0 4px 12px rgba(232, 199, 154, 0.3);
-}
-
-/* ===== Info (bottom of cover) ===== */
-.v3card__info {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  padding: 30px 14px 12px;
-  background: linear-gradient(to top, rgba(10, 8, 18, 0.95) 30%, transparent 100%);
-  z-index: 2;
-}
-
-.v3card__name {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-weight: 900;
-  font-size: 1.05rem;
-  color: #F4F2FA;
-  margin: 0 0 4px;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
-}
-
-.v3card__meta-row {
-  display: flex;
   align-items: center;
   gap: 5px;
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
+  font-weight: 700;
   color: #A29DB5;
 }
-.v3card__meta-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-}
-.v3card__meta-item svg { flex-shrink: 0; opacity: 0.7; }
-.v3card__meta-sep { opacity: 0.4; }
 
-/* ===== Footer ===== */
-.v3card__footer {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  background: #0A0812;
-  border-top: 1px solid rgba(139, 92, 246, 0.12);
-}
-
-.v3card__rating {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 3px 8px;
+.ecard__dot {
+  width: 6px;
+  height: 6px;
   border-radius: 999px;
-  background: rgba(232, 199, 154, 0.12);
-  border: 1px solid rgba(232, 199, 154, 0.2);
-  color: #E8C79A;
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.68rem;
-  font-weight: 900;
-  flex-shrink: 0;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
 }
-.v3card__star {
-  font-size: 0.75rem;
-  line-height: 1;
-}
-.v3card__rating strong { font-weight: 900; }
 
-.v3card__vibes {
+.ecard__status.is-on { color: #4ADE80; }
+.ecard__status.is-on .ecard__dot {
+  animation: ecard-pulse 2.4s ease-in-out infinite;
+}
+.ecard__status.is-off { color: #F87171; }
+
+@keyframes ecard-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* Main: avatar + name */
+.ecard__main {
   display: flex;
-  gap: 3px;
+  align-items: center;
+  gap: 12px;
   flex: 1;
-  overflow: hidden;
 }
-.v3card__vibe {
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: rgba(139, 92, 246, 0.12);
-  color: #C4B5FD;
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.55rem;
-  font-weight: 700;
+
+.ecard__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 22%, transparent), transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  transition: transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.ecard:hover .ecard__avatar {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.ecard__avatar-emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5));
+}
+
+.ecard__title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.ecard__name {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.v3card__arrow {
+.ecard__area {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.68rem;
+  color: #A29DB5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Hook */
+.ecard__hook {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: var(--accent, #A855F7);
-  transition: transform 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  align-self: flex-start;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.ecard__hook-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
   flex-shrink: 0;
-}
-.v3card:hover .v3card__arrow {
-  transform: translateX(-3px);
+  animation: ecard-pulse 2s ease-in-out infinite;
 }
 
-/* ===== Reveal on hover ===== */
-.v3card__reveal {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(10, 8, 18, 0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 300ms ease;
-  z-index: 5;
-}
-.v3card__reveal p {
+.ecard__hook-text {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.82rem;
-  line-height: 1.7;
-  color: #F4F2FA;
-  text-align: center;
-  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--accent) 90%, white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.v3card:hover .v3card__reveal {
+
+/* Vibes */
+.ecard__vibes {
+  display: flex;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.ecard__vibe {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.6rem;
+  color: #6B6580;
+  white-space: nowrap;
+}
+
+/* Arrow */
+.ecard__arrow {
+  position: absolute;
+  bottom: 14px;
+  inset-inline-start: 16px;
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 300ms ease, transform 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  z-index: 3;
+}
+
+.ecard:hover .ecard__arrow {
   opacity: 1;
+  transform: translateX(0);
 }
 
-/* ===== Variants — variations بسيطة ===== */
-.v3card--offer { width: 220px; height: 280px; }
-.v3card--offer .v3card__emoji { font-size: 2.8rem; }
+/* ===== Sizes per variant ===== */
+.ecard--offer    { width: 260px; height: 170px; }
+.ecard--pharmacy { width: 260px; height: 180px; }
+.ecard--delivery { width: 280px; height: 170px; }
+.ecard--market   { width: 240px; height: 170px; }
+.ecard--new      { width: 280px; height: 190px; }
 
-.v3card--pharmacy { width: 230px; height: 290px; }
-.v3card--delivery { width: 240px; height: 280px; }
-.v3card--delivery .v3card__emoji { font-size: 3.4rem; }
-.v3card--market { width: 200px; height: 260px; }
-.v3card--market .v3card__emoji { font-size: 2.6rem; }
-.v3card--new { width: 250px; height: 310px; }
-
-/* ===== Card "See All" (كارد دعوة) ===== */
-.v3seeall {
+/* ===== See-all card ===== */
+.ecard-seeall {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  width: 240px;
-  height: 300px;
+  gap: 10px;
+  width: 220px;
+  height: 180px;
   border-radius: 20px;
-  border: 1.5px dashed rgba(168, 85, 247, 0.4);
-  background:
-    radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 60%),
-    rgba(10, 8, 18, 0.6);
+  border: 1.5px dashed rgba(168, 85, 247, 0.35);
+  background: rgba(15, 11, 26, 0.5);
   text-decoration: none;
   color: #F4F2FA;
-  transition: all 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  transition: all 320ms cubic-bezier(0.34, 1.4, 0.64, 1);
   flex-shrink: 0;
   text-align: center;
-  padding: 24px;
+  padding: 20px;
 }
-.v3seeall:hover {
+
+.ecard-seeall:hover {
   border-color: #E8C79A;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(232, 199, 154, 0.18) 0%, transparent 60%),
-    rgba(10, 8, 18, 0.8);
+  background: rgba(30, 20, 45, 0.7);
   transform: translateY(-5px);
   box-shadow: 0 12px 30px rgba(232, 199, 154, 0.15);
 }
 
-.v3seeall__icon {
-  width: 56px;
-  height: 56px;
+.ecard-seeall__icon {
+  width: 46px;
+  height: 46px;
   border-radius: 999px;
   background: linear-gradient(135deg, #6B21FF, #A855F7);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(107, 33, 255, 0.4);
-  transition: transform 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  box-shadow: 0 6px 18px rgba(107, 33, 255, 0.4);
+  transition: transform 320ms cubic-bezier(0.34, 1.4, 0.64, 1);
 }
-.v3seeall__icon svg {
-  width: 24px;
-  height: 24px;
+
+.ecard-seeall__icon svg {
+  width: 20px;
+  height: 20px;
   color: #fff;
 }
-.v3seeall:hover .v3seeall__icon {
+
+.ecard-seeall:hover .ecard-seeall__icon {
   transform: scale(1.1) rotate(-8deg);
 }
 
-.v3seeall__title {
+.ecard-seeall__title {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 900;
   color: #F4F2FA;
   margin: 0;
-  letter-spacing: -0.01em;
 }
-.v3seeall__subtitle {
+
+.ecard-seeall__subtitle {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: #A29DB5;
   margin: 0;
-  line-height: 1.5;
 }
 
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
-  .v3card { width: 220px; height: 280px; }
-  .v3card--offer { width: 200px; height: 260px; }
-  .v3card--market { width: 190px; height: 250px; }
-  .v3card--new { width: 230px; height: 290px; }
-  .v3seeall { width: 220px; height: 280px; }
+  .ecard          { width: 250px; height: 170px; }
+  .ecard--offer   { width: 240px; height: 160px; }
+  .ecard--market  { width: 220px; height: 160px; }
+  .ecard-seeall   { width: 200px; height: 170px; }
 }
 
 @media (max-width: 640px) {
-  .v3card,
-  .v3card--restaurant,
-  .v3card--pharmacy,
-  .v3card--delivery,
-  .v3card--new {
-    width: 200px;
-    height: 260px;
-  }
-  .v3card--offer,
-  .v3card--market {
-    width: 180px;
-    height: 240px;
-  }
-  .v3card__emoji { font-size: 2.6rem; }
-  .v3card__name { font-size: 0.95rem; }
-  .v3seeall { width: 200px; height: 260px; }
-  /* على الموبايل: الـ reveal يبقى ظاهر */
-  .v3card__reveal { display: none; }
-  .v3card:hover .v3card__reveal { display: none; }
+  .ecard,
+  .ecard--restaurant,
+  .ecard--pharmacy,
+  .ecard--delivery,
+  .ecard--new     { width: 230px; height: 160px; }
+  .ecard--offer,
+  .ecard--market  { width: 210px; height: 155px; }
+  .ecard__name    { font-size: 0.9rem; }
+  .ecard__avatar  { width: 42px; height: 42px; border-radius: 12px; }
+  .ecard__avatar-emoji { font-size: 1.4rem; }
+  .ecard-seeall   { width: 180px; height: 160px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .v3card, .v3card__emoji-wrap, .v3card__arrow, .v3seeall { transition: none; }
-}
-
-/* ===== Hook (بدل rating) ===== */
-.v3card__hook {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: rgba(168, 85, 247, 0.1);
-  border: 1px solid rgba(168, 85, 247, 0.2);
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.62rem;
-  font-weight: 700;
-  color: #C4B5FD;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.v3card__hook-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--accent, #A855F7);
-  box-shadow: 0 0 6px var(--accent, #A855F7);
-  animation: v3-hook-pulse 2.4s ease-in-out infinite;
-}
-
-@keyframes v3-hook-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.6; transform: scale(0.85); }
-}
-
-.v3card--offer .v3card__hook {
-  background: rgba(232, 199, 154, 0.12);
-  border-color: rgba(232, 199, 154, 0.25);
-  color: #E8C79A;
-}
-.v3card--offer .v3card__hook-dot {
-  background: #E8C79A;
-  box-shadow: 0 0 6px #E8C79A;
-}
-
-.v3card--pharmacy .v3card__hook {
-  background: rgba(74, 222, 128, 0.1);
-  border-color: rgba(74, 222, 128, 0.22);
-  color: #86EFAC;
-}
-.v3card--pharmacy .v3card__hook-dot {
-  background: #4ADE80;
-  box-shadow: 0 0 6px #4ADE80;
-}
-
-.v3card--delivery .v3card__hook {
-  background: rgba(251, 146, 60, 0.1);
-  border-color: rgba(251, 146, 60, 0.22);
-  color: #FDBA74;
-}
-.v3card--delivery .v3card__hook-dot {
-  background: #FB923C;
-  box-shadow: 0 0 6px #FB923C;
-}
-
-@media (max-width: 640px) {
-  .v3card__hook {
-    font-size: 0.58rem;
-    padding: 2px 7px;
-  }
+  .ecard, .ecard__avatar, .ecard__arrow, .ecard__hook-dot, .ecard-seeall { transition: none; animation: none; }
 }

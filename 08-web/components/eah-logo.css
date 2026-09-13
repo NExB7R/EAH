@@ -142,3 +142,17 @@
   .eah-logo--compact { --logo-w: 95px; }
   .eah-logo__slogan { display: none; }
 }
+
+/* ===== Plain variant — word only, no crown ===== */
+.eah-logo--plain {
+  --logo-w: 100px;
+  padding: 0;
+}
+.eah-logo--plain .eah-logo__crown {
+  display: none !important;
+}
+.eah-logo--plain .eah-logo__slogan {
+  display: none !important;
+}
+.eah-logo--plain.eah-logo--sm { --logo-w: 105px; }
+.eah-logo--plain.eah-logo--md { --logo-w: 130px; }

@@ -168,14 +168,14 @@ export default function SectionSlider({
         >
           {visible}
 
-          <a href={seeAllHref} className="bseeall" aria-label={`شوف كل ${title}`}>
-            <div className="bseeall__icon" aria-hidden>
+          <a href={seeAllHref} className="ecard-seeall" aria-label={`شوف كل ${title}`}>
+            <div className="ecard-seeall__icon" aria-hidden>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
             </div>
-            <h3 className="bseeall__title">شوف الكل</h3>
-            <p className="bseeall__subtitle">
+            <h3 className="ecard-seeall__title">شوف الكل</h3>
+            <p className="ecard-seeall__subtitle">
               {remaining > 0 ? `و ${remaining}+ مكان تاني` : 'استكشف كل الأماكن'}
             </p>
           </a>
