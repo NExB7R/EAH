@@ -170,3 +170,41 @@
 @media (prefers-reduced-motion: reduce) {
   .onb__card, .onb__glow { animation: none; }
 }
+
+/* ═══ Budgets step ═══ */
+.onb__budgets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+.onb__budget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(168, 85, 247, 0.18);
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-family: inherit;
+}
+.onb__budget:hover {
+  border-color: rgba(168, 85, 247, 0.45);
+  background: rgba(168, 85, 247, 0.08);
+}
+.onb__budget.is-selected {
+  border-color: #A855F7;
+  background: rgba(168, 85, 247, 0.16);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+.onb__budget-emoji { font-size: 20px; line-height: 1; }
+.onb__budget strong { font-size: 14px; font-weight: 700; }
+.onb__budget small { font-size: 11px; opacity: 0.65; }
+
+@media (max-width: 420px) {
+  .onb__budgets { grid-template-columns: 1fr; }
+}

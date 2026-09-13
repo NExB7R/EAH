@@ -4,21 +4,42 @@ import { createClient } from '@/lib/supabase-browser'
 import EahLogo from './eah-logo'
 import './onboarding-overlay.css'
 
-type Step = 0 | 1 | 2
+type Step = 0 | 1 | 2 | 3
 
 const INTERESTS = [
   { key: 'restaurant', emoji: '🍽️', label: 'مطاعم' },
   { key: 'pharmacy', emoji: '💊', label: 'صيدليات' },
   { key: 'delivery', emoji: '🛵', label: 'توصيل' },
+  { key: 'supermarket', emoji: '🛒', label: 'ماركت' },
   { key: 'offers', emoji: '🔥', label: 'عروض' },
   { key: 'new', emoji: '🌱', label: 'جديد' },
   { key: 'trends', emoji: '📈', label: 'ترند' },
+  { key: 'coffee', emoji: '☕', label: 'كافيهات' },
+]
+
+const AREAS = [
+  { key: 'shibin', label: 'شبين القناطر' },
+  { key: 'qalag', label: 'القلج' },
+  { key: 'jabal_asfar', label: 'الجبل الأصفر' },
+  { key: 'kafr_bata', label: 'كفر بطا' },
+  { key: 'nawa', label: 'نوى' },
+  { key: 'taha', label: 'طحا' },
+  { key: 'manshaat_karam', label: 'منشأة الكرام' },
+  { key: 'abu_zaabal', label: 'أبو زعبل' },
+]
+
+const BUDGETS = [
+  { key: 'low', emoji: '💰', label: 'اقتصادي', hint: 'أقل من 50ج' },
+  { key: 'mid', emoji: '💰💰', label: 'متوسط', hint: '50 - 150ج' },
+  { key: 'high', emoji: '💎', label: 'مميز', hint: 'أكتر من 150ج' },
 ]
 
 export default function OnboardingOverlay() {
   const [step, setStep] = useState<Step>(0)
   const [show, setShow] = useState(false)
   const [selected, setSelected] = useState<string[]>([])
+  const [area, setArea] = useState<string | null>(null)
+  const [budget, setBudget] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [name, setName] = useState('')
 
@@ -48,9 +69,14 @@ export default function OnboardingOverlay() {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
+      const tags = [
+        ...selected,
+        ...(area ? [`area:${area}`] : []),
+        ...(budget ? [`budget:${budget}`] : []),
+      ]
       await supabase.from('profiles').update({
         onboarding_done: true,
-        interests: selected,
+        interests: tags,
       }).eq('id', user.id)
     }
     setSaving(false)
@@ -59,18 +85,18 @@ export default function OnboardingOverlay() {
 
   if (!show) return null
 
+  const progress = [0, 1, 2, 3]
+  const canProceedStep2 = area !== null && budget !== null
+
   return (
     <div className="onb">
       <div className="onb__backdrop" onClick={() => {}} />
-
-      {/* Glow effects */}
       <div className="onb__glow onb__glow--1" aria-hidden />
       <div className="onb__glow onb__glow--2" aria-hidden />
 
       <div className="onb__card">
-        {/* Progress */}
         <div className="onb__progress">
-          {[0, 1, 2].map(i => (
+          {progress.map(i => (
             <div key={i} className={`onb__dot ${i <= step ? 'is-active' : ''}`} />
           ))}
         </div>
@@ -135,6 +161,53 @@ export default function OnboardingOverlay() {
 
         {step === 2 && (
           <>
+            <span className="onb__step-emoji">📍</span>
+            <h2 className="onb__title">أنت منين؟</h2>
+            <p className="onb__text">نرشّحلك الأقرب ليك</p>
+            <div className="onb__interests">
+              {AREAS.map(a => (
+                <button
+                  key={a.key}
+                  type="button"
+                  className={`onb__interest ${area === a.key ? 'is-selected' : ''}`}
+                  onClick={() => setArea(a.key)}
+                >
+                  <span>{a.label}</span>
+                </button>
+              ))}
+            </div>
+
+            <h2 className="onb__title" style={{ marginTop: 24 }}>ميزانيتك؟</h2>
+            <div className="onb__budgets">
+              {BUDGETS.map(b => (
+                <button
+                  key={b.key}
+                  type="button"
+                  className={`onb__budget ${budget === b.key ? 'is-selected' : ''}`}
+                  onClick={() => setBudget(b.key)}
+                >
+                  <span className="onb__budget-emoji">{b.emoji}</span>
+                  <strong>{b.label}</strong>
+                  <small>{b.hint}</small>
+                </button>
+              ))}
+            </div>
+
+            <div className="onb__actions">
+              <button className="onb__btn onb__btn--ghost" onClick={() => setStep(1)}>← رجوع</button>
+              <button
+                className="onb__btn onb__btn--primary"
+                onClick={() => setStep(3)}
+                disabled={!canProceedStep2}
+              >
+                كمّل ←
+              </button>
+            </div>
+          </>
+        )}
+
+        {step === 3 && (
+          <>
             <span className="onb__step-emoji">🎁</span>
             <h2 className="onb__title">هدية الترحيب</h2>
             <p className="onb__text">
@@ -165,13 +238,16 @@ export default function OnboardingOverlay() {
                 </div>
               </div>
             </div>
-            <button
-              className="onb__btn onb__btn--primary"
-              onClick={finish}
-              disabled={saving}
-            >
-              {saving ? '...' : 'ابدأ الرحلة ⚡'}
-            </button>
+            <div className="onb__actions">
+              <button className="onb__btn onb__btn--ghost" onClick={() => setStep(2)}>← رجوع</button>
+              <button
+                className="onb__btn onb__btn--primary"
+                onClick={finish}
+                disabled={saving}
+              >
+                {saving ? '...' : 'ابدأ الرحلة ⚡'}
+              </button>
+            </div>
           </>
         )}
       </div>
