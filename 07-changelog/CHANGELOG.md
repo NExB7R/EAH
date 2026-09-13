@@ -1,52 +1,41 @@
 # Changelog
 
-## v0.1.0-planning — Initial project foundation
-- Captured product vision and MVP scope
-- Captured privacy and trust principles
-- Defined initial recommendation model
-- Defined category-aware location logic
-- Defined future ordering architecture direction
-- Defined project documentation as source of truth
+All notable changes to EAH are documented here.
 
-## v0.1.0-foundation — 2026-09-11
-- Brand working name selected: EAH
-- Added EAH brand brief and provisional dark-first design tokens.
-- Recorded EAH as the working product name while keeping availability verification as a gate.
+## [v0.2.0] — 2026-09-13
 
-## Updated: Schema/RLS
-- Added v0.1.0 Supabase schema and RLS matrix.
+### Added — Discovery + Personalization + PWA
+- **SEO**: Dynamic OG image (`app/opengraph-image.tsx`) + `h1` on home + twitter large card + `og:site_name` + `og:url`
+- **Auth**: `proxy.ts` (Next.js 16) — session refresh + route protection (`/admin`, `/merchant`) + auto-redirect signed-in users from `/auth`
+- **Onboarding**: 4-step overlay (welcome → interests → area + budget → rewards) + jsonb tag storage in `profiles.interests`
+- **Personalization**: `lib/personalization.ts` layer on top of `ranking.ts` — category/area/offers/new/trends boosts. Wired into home + recommend.
+- **PWA**: Generated `icon-192.png`, `icon-512.png`, `apple-touch-icon.png` from `icon.svg`. Consolidated 2 SW registers → 1, 3 install prompts → 2. Removed dead code.
+- **Real Trends**: RPC `get_business_view_stats(text[], int)` + `lib/real-stats.ts` loader. Home + recommend now use real view counts (with mock fallback).
+- **Push Notifications**: `push_subscriptions` table + `EnablePushButton` in `/account` + service-role client. Full pipeline: subscribe → DB → send.
 
+### Changed
+- `mock-stats.ts`: accepts `override.recentViews` for real view counts
+- `home-dynamic.tsx` + `recommend/page.tsx`: use `personalized` order, feed real view stats
 
-## 2026-09-11 — v0.1.0
-- Standardized the product name from `EAH!` to **EAH** across project documentation.
-- Added ADR-008 for punctuation-free brand naming.
+### Fixed
+- Offers page: title duplication (`العروض | EAH` instead of `العروض | EAH | EAH`)
+- Push send: RLS bug — service client bypasses RLS for cross-user reads
 
+### Database migrations
+- `20260913215640_add_profiles_onboarding_interests.sql`
+- `20260913220005_add_get_business_view_stats_rpc.sql`
+- `20260913220506_add_push_subscriptions.sql`
 
-### v0.1.0-foundation — 2026-09-11
-- Added first executable Supabase/Postgres migration.
-- Added RLS, PostGIS location support, auth bootstrap, and public directory views.
+### Known issues
+- Rate limit in-memory (not distributed)
+- Git auto-deploy intermittent (GitHub permissions)
+- Secret key rotation pending (exposed in session)
 
-## 2026-09-10 — Database/Auth foundation hardening
-- Added `businesses.owner_profile_id` for future merchant ownership.
-- Removed public `businesses.phone` and `businesses.whatsapp` fields.
-- Added `business_contact_methods` with RLS gating to verified-phone users.
-- Added trigger to sync `auth.users.phone_confirmed_at` into `profiles.phone_verified_at`.
-- Added `business-media` public-read storage bucket with owner-scoped upload/update/delete policies.
-- Revoked public execute access to Supabase's `public.rls_auto_enable()` helper; security advisor now returns no findings.
+## [v0.1.0] — 2026-09-11
 
-## 2026-09-11 — v0.2.0-web-foundation
-- Added `08-web/` Next.js App Router foundation for EAH.
-- Added dark-first mobile-first home shell with discovery CTA and category-aware copy.
-- Added Supabase browser/server clients and Next.js proxy session refresh pattern.
-- Added phone OTP authentication UI; SMS provider remains an external deployment gate.
-- Added PWA manifest, service worker shell, theme metadata, RTL Arabic document setup.
-- Added initial SEO/Open Graph metadata and canonical root.
-- Pinned framework dependencies for reproducible installs.
+### Added
+- Foundation: 23 tables, 34 functions, 46 RLS policies
+- Roles & audit foundation (`app_role`, `user_roles`, `audit_logs`)
+- Anti-manipulation v1 (server-side hash + rate limit)
+- Public pages + auth + admin + merchant + account
 
-## v0.2.2 — Supabase Discovery Foundation
-
-- Connected the web data layer to published Supabase businesses and active offers.
-- Added intent-aware business filtering.
-- Added safe Demo fallback when Supabase environment variables are absent.
-- Added environment-driven site URL for canonical/SEO configuration.
-- Established Git-based source-of-truth workflow, CI baseline, and release process.

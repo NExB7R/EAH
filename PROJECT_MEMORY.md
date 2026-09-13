@@ -85,3 +85,36 @@
 - تنظيف دوري لـ `page_view_events` (cron أو RPC)
 - عرض `views` الحقيقي في صفحة business
 
+
+---
+
+## 2026-09-13 — Session continued: Push Notifications + Release v0.2.0
+
+### ✅ Push Notifications (كامل)
+- `push_subscriptions` table (public schema, unique endpoint, RLS: self ALL + admin read)
+- `createServiceClient()` في `lib/supabase-server.ts` (server-only, يتخطى RLS)
+- `lib/push/send.ts` → `sendPushToUser` بيستخدم service client (fix للـ RLS bug)
+- `EnablePushButton` مضاف في `/account` (كان بس في `/merchant/settings`)
+- `/api/push/subscribe` + `/api/push/notify` (rate-limited + zod validated)
+
+### 🔑 env vars (`.env.local` + Vercel)
+- `VAPID_PUBLIC_KEY` ✅
+- `VAPID_PRIVATE_KEY` ✅
+- `NEXT_PUBLIC_VAPID_PUBLIC_KEY` ✅
+- `VAPID_SUBJECT` ✅
+- `SUPABASE_SERVICE_ROLE_KEY` ✅ (الـ Secret key من Supabase API Keys)
+
+### ⚠️ أمان
+- الـ secret key **اتكشف في محادثة** → محتاج **Rotate** ASAP
+- القاعدة: secrets في `.env.local` فقط، ممنوع في chat/screenshot/commit
+
+### 🎯 commits الجلسة (تابع)
+- `5a023aa` — push + service role + migration sync
+- `<قادم>` — CSS + release
+
+### 🏁 Release v0.2.0 checklist
+- VERSION → 0.2.0
+- CHANGELOG محدّث
+- Git tag `v0.2.0`
+- Push tags
+
