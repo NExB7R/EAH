@@ -31,10 +31,10 @@ const TYPE_LABEL: Record<BusinessType, string> = {
 }
 
 const TYPE_HUE: Record<BusinessType, { hue: string; soft: string; glow: string }> = {
-  restaurant: { hue: '#FF7A3D', soft: 'rgba(255, 122, 61, 0.18)', glow: 'rgba(255, 122, 61, 0.4)' },
-  pharmacy: { hue: '#4ADE80', soft: 'rgba(74, 222, 128, 0.18)', glow: 'rgba(74, 222, 128, 0.4)' },
-  supermarket: { hue: '#A855F7', soft: 'rgba(168, 85, 247, 0.18)', glow: 'rgba(168, 85, 247, 0.4)' },
-  delivery_office: { hue: '#E8C79A', soft: 'rgba(232, 199, 154, 0.18)', glow: 'rgba(232, 199, 154, 0.4)' },
+  restaurant: { hue: '#FF7A3D', soft: 'rgba(255, 122, 61, 0.22)', glow: 'rgba(255, 122, 61, 0.5)' },
+  pharmacy: { hue: '#4ADE80', soft: 'rgba(74, 222, 128, 0.22)', glow: 'rgba(74, 222, 128, 0.5)' },
+  supermarket: { hue: '#A855F7', soft: 'rgba(168, 85, 247, 0.22)', glow: 'rgba(168, 85, 247, 0.5)' },
+  delivery_office: { hue: '#E8C79A', soft: 'rgba(232, 199, 154, 0.22)', glow: 'rgba(232, 199, 154, 0.5)' },
 }
 
 export default function ExploreCard({
@@ -72,6 +72,11 @@ export default function ExploreCard({
 
       {/* الأيقونة الكبيرة */}
       <div className="ecard__visual">
+        <div className="ecard__orbit" aria-hidden>
+          <span className="ecard__orbit-dot ecard__orbit-dot--1" />
+          <span className="ecard__orbit-dot ecard__orbit-dot--2" />
+          <span className="ecard__orbit-dot ecard__orbit-dot--3" />
+        </div>
         <span className="ecard__emoji">{TYPE_EMOJI[business.type]}</span>
       </div>
 
@@ -95,7 +100,6 @@ export default function ExploreCard({
           )}
         </div>
 
-        {/* Vibes — تظهر فقط في الأحجام الكبيرة */}
         {business.vibe.length > 0 && size !== 'sm' && (
           <div className="ecard__vibes">
             {business.vibe.slice(0, 2).map((v) => (

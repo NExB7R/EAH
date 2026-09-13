@@ -17,6 +17,7 @@ const TYPE_MAP: Record<string, string> = {
   restaurant: 'restaurant',
   supermarket: 'supermarket',
   delivery_office: 'delivery_office',
+  new: undefined,
 }
 
 export const metadata = {

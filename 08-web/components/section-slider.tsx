@@ -65,64 +65,56 @@ export default function SectionSlider({
           <h2 className="ss__title">{title}</h2>
           {subtitle && <p className="ss__subtitle">{subtitle}</p>}
         </div>
-        <Link href={seeAllHref} className="ss__see-all">
-          اكتشف الكل
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-        </Link>
       </div>
 
       <div className="ss__wrapper">
         <div ref={scrollRef} className="ss__track">
           {items}
-
-          <Link href={seeAllHref} className="ss__seeall-card">
-            <span className="ss__seeall-icon" aria-hidden>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-              </svg>
-            </span>
-            <span className="ss__seeall-title">شوف الكل</span>
-            <span className="ss__seeall-sub">
-              {remaining > 0 ? `و ${remaining}+ تاني` : 'المزيد'}
-            </span>
-          </Link>
         </div>
       </div>
 
-      {/* ===== شريط التحكم السفلي (الأسهم + شريط تقدم) ===== */}
+      {/* ===== Bottom bar: [اكتشف الكل] [◀] [progress] [▶] ===== */}
       <div className="ss__bottom">
-        <button
-          type="button"
-          className="ss__arrow ss__arrow--prev"
-          onClick={() => scrollBy(-1)}
-          disabled={!canPrev}
-          aria-label="السابق"
-        >
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M15 18l-6-6 6-6" />
+        <Link href={seeAllHref} className="ss__discover-all">
+          اكتشف الكل
+          {remaining > 0 && <span className="ss__discover-count">{remaining}+</span>}
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
-        </button>
+        </Link>
 
-        <div className="ss__bar" aria-hidden>
-          <div
-            className="ss__bar-fill"
-            style={{ transform: `scaleX(${Math.max(0.05, progress)})` }}
-          />
+        <div className="ss__arrows">
+          <button
+            type="button"
+            className="ss__arrow ss__arrow--prev"
+            onClick={() => scrollBy(-1)}
+            disabled={!canPrev}
+            aria-label="السابق"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+
+          <div className="ss__bar" aria-hidden>
+            <div
+              className="ss__bar-fill"
+              style={{ transform: `scaleX(${Math.max(0.05, progress)})` }}
+            />
+          </div>
+
+          <button
+            type="button"
+            className="ss__arrow ss__arrow--next"
+            onClick={() => scrollBy(1)}
+            disabled={!canNext}
+            aria-label="التالي"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M9 6l6 6-6 6" />
+            </svg>
+          </button>
         </div>
-
-        <button
-          type="button"
-          className="ss__arrow ss__arrow--next"
-          onClick={() => scrollBy(1)}
-          disabled={!canNext}
-          aria-label="التالي"
-        >
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M9 6l6 6-6 6" />
-          </svg>
-        </button>
       </div>
     </section>
   )

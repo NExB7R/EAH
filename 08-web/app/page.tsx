@@ -41,11 +41,9 @@ export default async function Page() {
 
       <main style={{ paddingTop: '90px' }}>
         <HomeHero />
-
-        {/* Mobile trending (يظهر فقط على الشاشات الصغيرة) */}
         <MobileTrending />
 
-        {/* مطاعم — نمط "بطل ثم عادي" */}
+        {/* مطاعم — نمط "بطل أولاً" */}
         <SectionSlider
           id="restaurants"
           title="نفسك في إيه؟ 🔥"
@@ -56,34 +54,26 @@ export default async function Page() {
           totalItems={restaurants.length}
         >
           {restaurants.slice(0, 12).map((b, i) => (
-            <ExploreCard
-              key={b.slug}
-              business={b}
-              size={i === 0 || i === 5 ? 'hero' : 'md'}
-            />
+            <ExploreCard key={b.slug} business={b} size={i === 0 ? 'hero' : 'md'} />
           ))}
         </SectionSlider>
 
-        {/* عروض — نمط "أبطال متتابعين" */}
+        {/* عروض — نمط "كلها أبطال صغيرة" */}
         <SectionSlider
           id="offers"
           title="عروض نار 🔥"
-          subtitle={`${offers.length} عرض`}
+          subtitle={`${offers.length} عرض شغال`}
           seeAllHref="/offers"
           variant="offer"
           maxItems={12}
           totalItems={offers.length}
         >
           {offers.slice(0, 12).map((b, i) => (
-            <ExploreCard
-              key={b.slug}
-              business={b}
-              size={i % 3 === 0 ? 'hero' : i % 3 === 1 ? 'md' : 'sm'}
-            />
+            <ExploreCard key={b.slug} business={b} size={i === 0 ? 'hero' : 'lg'} />
           ))}
         </SectionSlider>
 
-        {/* صيدليات — نمط "موحد" */}
+        {/* صيدليات */}
         <SectionSlider
           id="pharmacies"
           title="صحتك أولاً 💊"
@@ -98,7 +88,7 @@ export default async function Page() {
           ))}
         </SectionSlider>
 
-        {/* توصيل — نمط "سريع، صغير" */}
+        {/* توصيل */}
         <SectionSlider
           id="delivery"
           title="على السريع 🛵"
