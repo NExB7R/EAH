@@ -1,39 +1,37 @@
 .bcontact {
   max-width: 1000px;
-  margin: 32px auto 0;
-  padding: 24px 24px;
-  border-radius: 24px;
-  background: rgba(10, 8, 18, 0.6);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  margin: var(--eah-space-lg) auto 0;
+  padding: var(--eah-space-md);
+  border-radius: var(--eah-radius-lg);
+  background: var(--eah-surface);
+  border: 1px solid var(--eah-border);
 }
 .bcontact__title {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 1.15rem;
+  font-family: var(--eah-font-display);
+  font-size: var(--eah-fs-lg);
   font-weight: 900;
-  color: #F4F2FA;
+  color: var(--eah-text);
   margin: 0 0 8px;
 }
-.bcontact__title-icon { font-size: 1.05rem; }
 .bcontact__hint {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.8rem;
-  color: #A29DB5;
-  margin: 0 0 20px;
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs-sm);
+  color: var(--eah-text-3);
+  margin: 0 0 var(--eah-space-md);
   padding: 10px 14px;
-  border-radius: 12px;
-  background: rgba(139, 92, 246, 0.06);
-  border: 1px dashed rgba(139, 92, 246, 0.25);
+  border-radius: var(--eah-radius-sm);
+  background: var(--eah-surface-2);
+  border: 1px dashed var(--eah-border-2);
 }
 .bcontact__empty-msg {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.85rem;
-  color: #A29DB5;
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs);
+  color: var(--eah-text-3);
   margin: 0;
 }
-
 .bcontact__list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -44,79 +42,70 @@
   flex-direction: column;
   gap: 10px;
   padding: 14px 16px;
-  border-radius: 16px;
-  background: rgba(139, 92, 246, 0.06);
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  transition: all 260ms ease;
+  border-radius: var(--eah-radius);
+  background: var(--eah-surface-2);
+  border: 1px solid var(--eah-border);
+  transition: all var(--eah-t) var(--eah-ease);
 }
 .bcontact__item.is-revealed {
   border-color: rgba(74, 222, 128, 0.4);
   background: rgba(74, 222, 128, 0.06);
 }
-.bcontact__item.is-primary {
-  border-color: rgba(232, 199, 154, 0.4);
-}
-.bcontact__item-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.bcontact__emoji { font-size: 1.15rem; line-height: 1; }
+.bcontact__item.is-primary { border-color: var(--eah-border-gold); }
+.bcontact__item-head { display: flex; align-items: center; gap: 8px; }
+.bcontact__emoji { font-size: var(--eah-fs-lg); line-height: 1; }
 .bcontact__label {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.85rem;
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs);
   font-weight: 700;
-  color: #F4F2FA;
+  color: var(--eah-text);
   flex: 1;
 }
 .bcontact__primary {
   padding: 2px 8px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #E8C79A, #A67C52);
-  color: #1A0F0A;
-  font-family: var(--font-cairo, system-ui);
+  border-radius: var(--eah-radius-pill);
+  background: var(--eah-gradient-gold);
+  color: var(--eah-black-2);
+  font-family: var(--eah-font-body);
   font-size: 0.55rem;
   font-weight: 900;
 }
-
 .bcontact__value {
-  font-family: var(--font-cairo, system-ui);
+  font-family: var(--eah-font-body);
   font-size: 0.95rem;
   font-weight: 900;
-  color: #4ADE80;
+  color: var(--eah-green);
   text-decoration: none;
   text-align: start;
   direction: ltr;
-  letter-spacing: 0.03em;
-  transition: color 200ms ease;
+  transition: color var(--eah-t-fast) ease;
 }
 .bcontact__value:hover { color: #86EFAC; }
-
 .bcontact__reveal {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
   padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px dashed rgba(139, 92, 246, 0.4);
-  background: rgba(139, 92, 246, 0.08);
+  border-radius: var(--eah-radius-sm);
+  border: 1px dashed var(--eah-border-3);
+  background: var(--eah-purple-soft);
   cursor: pointer;
-  transition: all 260ms cubic-bezier(0.34, 1.4, 0.64, 1);
-  font-family: var(--font-cairo, system-ui);
+  transition: all var(--eah-t) var(--eah-ease);
+  font-family: var(--eah-font-body);
 }
 .bcontact__reveal:hover {
-  border-color: #A855F7;
-  background: rgba(139, 92, 246, 0.16);
+  border-color: var(--eah-purple-2);
+  background: rgba(139, 92, 246, 0.2);
   transform: translateY(-1px);
 }
 .bcontact__hidden {
-  color: #6B6580;
+  color: var(--eah-text-4);
   letter-spacing: 0.15em;
-  font-size: 0.9rem;
+  font-size: var(--eah-fs);
 }
 .bcontact__reveal-text {
-  font-size: 0.72rem;
+  font-size: var(--eah-fs-xs);
   font-weight: 900;
-  color: #A855F7;
+  color: var(--eah-purple-2);
 }

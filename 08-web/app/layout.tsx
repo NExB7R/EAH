@@ -1,5 +1,6 @@
 import './globals.css'
 import './theme.css'
+import './design-system.css'
 import '../components/eah-studio-pro.css'
 import '../components/eah-admin.css'
 import '@puckeditor/core/puck.css'
