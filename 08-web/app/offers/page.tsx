@@ -2,13 +2,12 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 import './offers.css'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic'
 export const metadata = {
   title: 'العروض | EAH',
-  description: 'كل العروض النشطة على منصة EAH',
+  description: 'أحلى العروض في شبين القناطر — خصومات وعروض من مطاعم وصيدليات ومكاتب توصيل',
 }
 
 const TYPE_EMOJI: Record<string, string> = {
@@ -17,75 +16,84 @@ const TYPE_EMOJI: Record<string, string> = {
   delivery_office: '🛵',
 }
 
-type Offer = {
-  id: string
-  title: string
-  description: string | null
-  price: number | null
-  image_url: string | null
-  teaser_image_path: string | null
-  ends_at: string | null
-  businesses: { name: string; slug: string; business_type: string; area: string | null } | null
+const TYPE_LABEL: Record<string, string> = {
+  restaurant: 'مطعم',
+  pharmacy: 'صيدلية',
+  delivery_office: 'توصيل',
 }
 
 export default async function OffersPage() {
   const supabase = await createClient()
-  const now = new Date().toISOString()
+
   const { data } = await supabase
     .from('offers')
-    .select('id,title,description,price,image_url,teaser_image_path,ends_at,businesses(name,slug,business_type,area)')
-    .eq('is_published', true)
-    .or(`ends_at.is.null,ends_at.gte.${now}`)
+    .select(`
+      id, title, description, teaser_image_url, created_at,
+      business:businesses!inner (id, slug, name, business_type, area, is_published)
+    `)
+    .eq('is_active', true)
     .order('created_at', { ascending: false })
-    .limit(60)
+    .limit(40)
 
-  const offers = (data ?? []) as unknown as Offer[]
+  const offers = (data ?? []).filter((o: any) => o.business?.is_published)
 
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
-      <main className="offers-page">
-        <div className="offers-page__head">
-          <span className="offers-page__kicker">العروض</span>
-          <h1 className="offers-page__title">🔥 كل العروض النشطة</h1>
-          <p className="offers-page__sub">{offers.length} عرض من مطاعم وصيدليات ومحلات قريبة</p>
-        </div>
+      <main className="off">
+        <section className="off-hero">
+          <div className="off-hero__glow" aria-hidden />
+          <span className="off-hero__kicker">EAH OFFERS</span>
+          <h1 className="off-hero__title">
+            🔥 <span className="off-hero__accent">عروض</span> على الآخر
+          </h1>
+          <p className="off-hero__lead">
+            خصومات حقيقية من مطاعم وصيدليات ومكاتب توصيل في شبين القناطر.
+          </p>
+        </section>
 
         {offers.length === 0 ? (
-          <div className="offers-page__empty">
-            <span>🎁</span>
-            <p>لسه مفيش عروض — ارجع تاني قريب</p>
+          <div className="off-empty">
+            <span className="off-empty__emoji">📭</span>
+            <h2 className="off-empty__title">لسه مفيش عروض</h2>
+            <p className="off-empty__text">قريب جدًا هنضيف عروض جديدة.</p>
+            <Link href="/explore" className="off-empty__cta">اكتشف الأماكن ←</Link>
           </div>
         ) : (
-          <div className="offers-page__grid">
-            {offers.map((o) => {
-              const img = o.image_url || o.teaser_image_path
-              const daysLeft = o.ends_at
-                ? Math.max(0, Math.ceil((new Date(o.ends_at).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
-                : null
+          <section className="off-grid">
+            {offers.map((o: any) => {
+              const b = o.business
+              const emoji = TYPE_EMOJI[b.business_type] ?? '📍'
+              const label = TYPE_LABEL[b.business_type] ?? b.business_type
 
               return (
-                <Link key={o.id} href={o.businesses ? `/businesses/${o.businesses.slug}` : '#'} className="off-card">
-                  <div className="off-card__image" style={img ? { backgroundImage: `url(${img})` } : undefined}>
-                    {!img && <span className="off-card__img-placeholder">🎁</span>}
-                    {o.price !== null && <span className="off-card__price">{o.price} ج.م</span>}
-                    {daysLeft !== null && daysLeft <= 3 && (
-                      <span className="off-card__urgent">⏱ باقي {daysLeft} يوم</span>
-                    )}
+                <article key={o.id} className="off-card">
+                  <div
+                    className="off-card__media"
+                    style={
+                      o.teaser_image_url
+                        ? { backgroundImage: `url(${o.teaser_image_url})` }
+                        : undefined
+                    }
+                  >
+                    {!o.teaser_image_url && <span className="off-card__emoji">{emoji}</span>}
+                    <span className="off-card__badge">🔥 عرض</span>
                   </div>
                   <div className="off-card__body">
-                    <div className="off-card__biz">
-                      <span>{TYPE_EMOJI[o.businesses?.business_type ?? 'restaurant']}</span>
-                      <span className="off-card__biz-name">{o.businesses?.name}</span>
+                    <div className="off-card__meta">
+                      <span className="off-card__type">{emoji} {label}</span>
+                      {b.area && <span className="off-card__area">📍 {b.area}</span>}
                     </div>
                     <h3 className="off-card__title">{o.title}</h3>
                     {o.description && <p className="off-card__desc">{o.description}</p>}
+                    <Link href={`/businesses/${b.slug}`} className="off-card__cta">
+                      شوف العرض ←
+                    </Link>
                   </div>
-                </Link>
+                </article>
               )
             })}
-          </div>
+          </section>
         )}
       </main>
       <SiteFooter />

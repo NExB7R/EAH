@@ -1,40 +1,206 @@
+import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
+import FloatingCapsuleHeader from '@/components/floating-capsule'
+import SiteFooter from '@/components/site-footer'
+import './apply.css'
 
 async function submitApplication(formData: FormData) {
   'use server'
   const businessName = String(formData.get('business_name') || '').trim()
   const category = String(formData.get('category') || '').trim()
   const description = String(formData.get('description') || '').trim()
-  if (businessName.length < 2 || category.length < 2) throw new Error('اكتب اسم النشاط ونوعه.')
+  if (businessName.length < 2 || category.length < 2) {
+    throw new Error('اكتب اسم النشاط ونوعه.')
+  }
 
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()
   if (!userData.user) redirect('/auth')
 
-  const { error } = await supabase.from('merchant_applications').insert({ user_id: userData.user.id, business_name: businessName, category, description: description || null })
+  const { error } = await supabase.from('merchant_applications').insert({
+    user_id: userData.user.id,
+    business_name: businessName,
+    category,
+    description: description || null,
+  })
   if (error) throw new Error(error.message)
   revalidatePath('/admin/merchants')
   redirect('/merchant/apply?sent=1')
 }
 
-export default async function MerchantApplyPage({ searchParams }: { searchParams: Promise<{ sent?: string }> }) {
+const STEPS = [
+  { n: 1, emoji: '📝', title: 'قدم الطلب',   desc: 'اسم النشاط + نوعه + نبذة' },
+  { n: 2, emoji: '🔍', title: 'مراجعة',       desc: 'فريق EAH بيراجع الطلب' },
+  { n: 3, emoji: '🏪', title: 'لوحة النشاط', desc: 'تتحول لـ Merchant وتدير مكانك' },
+]
+
+const CATEGORIES = [
+  { value: 'restaurant', label: '🍽️ مطعم' },
+  { value: 'pharmacy', label: '💊 صيدلية' },
+  { value: 'delivery_office', label: '🛵 مكتب توصيل' },
+]
+
+export default async function MerchantApplyPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ sent?: string }>
+}) {
   const { sent } = await searchParams
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()
   if (!userData.user) redirect('/auth')
-  const { data: applications } = await supabase.from('merchant_applications').select('id,business_name,category,status,admin_note,created_at').eq('user_id', userData.user.id).order('created_at', { ascending: false })
 
-  return <main className="container" style={{ paddingTop: 44, maxWidth: 760 }}>
-    <header className="eah-admin-header"><div><span className="eah-admin-kicker">EAH MERCHANT</span><h1>سجّل نشاطك على EAH</h1><p>قدّم بيانات المطعم أو النشاط مرة واحدة، وبعد موافقة الإدارة يتحول حسابك إلى Merchant.</p></div></header>
-    {sent === '1' && <div className="card" style={{ padding: 16, marginBottom: 16 }}><strong>تم إرسال الطلب ✅</strong><p className="meta">الإدارة ستراجعه من لوحة التحكم.</p></div>}
-    <form action={submitApplication} className="card" style={{ padding: 20, display: 'grid', gap: 12 }}>
-      <label className="meta" htmlFor="business_name">اسم النشاط</label><input id="business_name" name="business_name" required placeholder="مثال: مطعم كذا" style={{ padding: 14, borderRadius: 14 }} />
-      <label className="meta" htmlFor="category">نوع النشاط</label><input id="category" name="category" required placeholder="مطعم / كافيه / صيدلية" style={{ padding: 14, borderRadius: 14 }} />
-      <label className="meta" htmlFor="description">وصف مختصر</label><textarea id="description" name="description" rows={5} placeholder="اكتب نبذة بسيطة عن النشاط" style={{ padding: 14, borderRadius: 14 }} />
-      <button className="primary" type="submit">إرسال طلب صاحب نشاط ⚡</button>
-    </form>
-    {!!applications?.length && <div style={{ marginTop: 24 }}><h2>طلباتي</h2><div className="eah-admin-business-list">{applications.map((application) => <article key={application.id} className="eah-admin-business-card"><div><strong>{application.business_name}</strong><div className="eah-admin-business-sub">{application.category} • {application.status}</div></div>{application.admin_note && <span className="eah-admin-badge">{application.admin_note}</span>}</article>)}</div></div>}
-  </main>
+  const { data: applications } = await supabase
+    .from('merchant_applications')
+    .select('id,business_name,category,status,admin_note,created_at')
+    .eq('user_id', userData.user.id)
+    .order('created_at', { ascending: false })
+
+  const hasPending = (applications ?? []).some((a) => a.status === 'pending')
+
+  return (
+    <>
+      <FloatingCapsuleHeader />
+      <main className="ap">
+        <section className="ap-hero">
+          <div className="ap-hero__glow" aria-hidden />
+          <span className="ap-hero__kicker">EAH MERCHANT</span>
+          <h1 className="ap-hero__title">
+            سجّل <span className="ap-hero__accent">نشاطك</span> على EAH
+          </h1>
+          <p className="ap-hero__lead">
+            قدم بيانات نشاطك مرة واحدة، وبعد موافقة الإدارة يتحول حسابك لـ Merchant.
+          </p>
+        </section>
+
+        <section className="ap-steps">
+          {STEPS.map((s) => (
+            <div key={s.n} className="ap-step">
+              <span className="ap-step__n">{s.n}</span>
+              <span className="ap-step__emoji">{s.emoji}</span>
+              <span className="ap-step__title">{s.title}</span>
+              <span className="ap-step__desc">{s.desc}</span>
+            </div>
+          ))}
+        </section>
+
+        {sent === '1' && (
+          <div className="ap-alert ap-alert--success">
+            <span className="ap-alert__emoji">✅</span>
+            <div>
+              <strong className="ap-alert__title">تم إرسال طلبك</strong>
+              <p className="ap-alert__text">فريق EAH هيراجعه وهيرد عليك قريب.</p>
+            </div>
+          </div>
+        )}
+
+        {hasPending ? (
+          <div className="ap-alert ap-alert--info">
+            <span className="ap-alert__emoji">⏳</span>
+            <div>
+              <strong className="ap-alert__title">عندك طلب قيد المراجعة</strong>
+              <p className="ap-alert__text">هنتواصل معاك على رقم موبايلك بعد المراجعة.</p>
+            </div>
+          </div>
+        ) : (
+          <section className="ap-card">
+            <header className="ap-card__head">
+              <h2 className="ap-card__title">📋 بيانات النشاط</h2>
+              <p className="ap-card__sub">كل البيانات سرية — مش هتظهر لأي حد غير فريق EAH.</p>
+            </header>
+
+            <form action={submitApplication} className="ap-form">
+              <div className="ap-field">
+                <label htmlFor="business_name" className="ap-label">اسم النشاط *</label>
+                <input
+                  id="business_name"
+                  name="business_name"
+                  placeholder="مثلاً: مطعم البلد"
+                  required
+                  minLength={2}
+                  maxLength={80}
+                  className="ap-input"
+                />
+              </div>
+
+              <div className="ap-field">
+                <label className="ap-label">نوع النشاط *</label>
+                <div className="ap-categories">
+                  {CATEGORIES.map((c) => (
+                    <label key={c.value} className="ap-cat">
+                      <input
+                        type="radio"
+                        name="category"
+                        value={c.value}
+                        required
+                      />
+                      <span className="ap-cat__inner">{c.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="ap-field">
+                <label htmlFor="description" className="ap-label">نبذة عن النشاط</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  placeholder="اكتب نبذة بسيطة عن نشاطك، موقعه، وليه الناس تحبه"
+                  rows={4}
+                  maxLength={300}
+                  className="ap-textarea"
+                />
+              </div>
+
+              <button type="submit" className="ap-submit">
+                ⚡ إرسال طلب صاحب النشاط
+              </button>
+            </form>
+          </section>
+        )}
+
+        {(applications ?? []).length > 0 && (
+          <section className="ap-history">
+            <h2 className="ap-history__title">📜 طلباتك السابقة</h2>
+            <div className="ap-history__list">
+              {(applications ?? []).map((a) => (
+                <div key={a.id} className="ap-history__item">
+                  <div className="ap-history__info">
+                    <strong className="ap-history__name">{a.business_name}</strong>
+                    <span className="ap-history__date">
+                      {new Date(a.created_at).toLocaleDateString('ar-EG')}
+                    </span>
+                  </div>
+                  <span
+                    className={`ap-status ap-status--${a.status}`}
+                  >
+                    {a.status === 'pending' && '⏳ قيد المراجعة'}
+                    {a.status === 'approved' && '✅ تمت الموافقة'}
+                    {a.status === 'rejected' && '❌ مرفوض'}
+                    {!['pending', 'approved', 'rejected'].includes(a.status) && a.status}
+                  </span>
+                  {a.admin_note && (
+                    <p className="ap-history__note">💬 {a.admin_note}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section className="ap-help">
+          <span className="ap-help__emoji">💡</span>
+          <div>
+            <strong className="ap-help__title">محتاج مساعدة؟</strong>
+            <p className="ap-help__text">
+              كلمنا على <Link href="/contact" className="ap-help__link">صفحة التواصل</Link> لو عندك أي سؤال.
+            </p>
+          </div>
+        </section>
+      </main>
+      <SiteFooter />
+    </>
+  )
 }
