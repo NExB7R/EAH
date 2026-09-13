@@ -1,5 +1,4 @@
 import HomeHero from '@/components/home-hero'
-import CircleSlider from '@/components/circle-slider'
 import SectionSlider from '@/components/section-slider'
 import BusinessCardV4 from '@/components/business-card-v4'
 import SiteFooter from '@/components/site-footer'
@@ -48,22 +47,26 @@ export default async function Page() {
       <main style={{ paddingTop: '100px' }}>
         <HomeHero />
 
-        {/* ===== مطاعم — شكل بيتزا ===== */}
-        <CircleSlider
+        {/* ===== مطاعم — أبطال + كروت أصغر ===== */}
+        <SectionSlider
           id="restaurants"
           title="نفسك في إيه؟ 🔥"
           subtitle={`${restaurants.length} مطعم مستنيينك`}
           seeAllHref="/explore?type=restaurant"
-          shape="pizza"
-          accent="#FB923C"
-          maxVisible={8}
+          variant="restaurant"
+          maxItems={9}
+          totalItems={restaurants.length}
         >
-          {restaurants.slice(0, 8).map((b) => (
-            <BusinessCardV4 key={b.slug} business={b} variant="restaurant" />
+          {restaurants.slice(0, 9).map((b, i) => (
+            <BusinessCardV4
+              key={b.slug}
+              business={b}
+              size={i === 0 ? 'hero' : i < 3 ? 'lg' : 'md'}
+            />
           ))}
-        </CircleSlider>
+        </SectionSlider>
 
-        {/* ===== عروض — أفقي عادي ===== */}
+        {/* ===== عروض ===== */}
         <SectionSlider
           id="offers"
           title="عروض نار 🔥"
@@ -73,56 +76,72 @@ export default async function Page() {
           maxItems={10}
           totalItems={offers.length}
         >
-          {offers.slice(0, 10).map((b) => (
-            <BusinessCardV4 key={b.slug} business={b} variant="offer" />
+          {offers.slice(0, 10).map((b, i) => (
+            <BusinessCardV4
+              key={b.slug}
+              business={b}
+              size={i === 0 ? 'hero' : i < 3 ? 'lg' : 'md'}
+            />
           ))}
         </SectionSlider>
 
-        {/* ===== صيدليات — شكل كبسولة ===== */}
-        <CircleSlider
+        {/* ===== صيدليات ===== */}
+        <SectionSlider
           id="pharmacies"
           title="صحتك أولاً 💊"
           subtitle={`${pharmacies.length} صيدلية قريبة`}
           seeAllHref="/explore?type=pharmacy"
-          shape="capsule"
-          accent="#4ADE80"
-          maxVisible={6}
+          variant="pharmacy"
+          maxItems={9}
+          totalItems={pharmacies.length}
         >
-          {pharmacies.slice(0, 6).map((b) => (
-            <BusinessCardV4 key={b.slug} business={b} variant="pharmacy" />
+          {pharmacies.slice(0, 9).map((b, i) => (
+            <BusinessCardV4
+              key={b.slug}
+              business={b}
+              size={i === 0 ? 'hero' : i < 3 ? 'lg' : 'md'}
+            />
           ))}
-        </CircleSlider>
+        </SectionSlider>
 
-        {/* ===== توصيل — شكل صاعقة ===== */}
-        <CircleSlider
+        {/* ===== توصيل ===== */}
+        <SectionSlider
           id="delivery"
           title="على السريع 🛵"
           subtitle={`${delivery.length} مكتب توصيل`}
           seeAllHref="/explore?type=delivery_office"
-          shape="lightning"
-          accent="#FB923C"
-          maxVisible={5}
+          variant="delivery"
+          maxItems={9}
+          totalItems={delivery.length}
         >
-          {delivery.slice(0, 5).map((b) => (
-            <BusinessCardV4 key={b.slug} business={b} variant="delivery" />
+          {delivery.slice(0, 9).map((b, i) => (
+            <BusinessCardV4
+              key={b.slug}
+              business={b}
+              size={i === 0 ? 'hero' : i < 3 ? 'lg' : 'md'}
+            />
           ))}
-        </CircleSlider>
+        </SectionSlider>
 
-        {/* ===== جديد — شكل شتلة ===== */}
+        {/* ===== جديد ===== */}
         {newBiz.length > 0 && (
-          <CircleSlider
+          <SectionSlider
             id="new-businesses"
             title="مشاريع صغيرة، فرص كبيرة 🌱"
             subtitle={`${newBiz.length} مكان جديد`}
             seeAllHref="/explore?type=new"
-            shape="seedling"
-            accent="#C084FC"
-            maxVisible={6}
+            variant="new"
+            maxItems={9}
+            totalItems={newBiz.length}
           >
-            {newBiz.slice(0, 6).map((b) => (
-              <BusinessCardV4 key={b.slug} business={b} variant="new" />
+            {newBiz.slice(0, 9).map((b, i) => (
+              <BusinessCardV4
+                key={b.slug}
+                business={b}
+                size={i === 0 ? 'hero' : i < 3 ? 'lg' : 'md'}
+              />
             ))}
-          </CircleSlider>
+          </SectionSlider>
         )}
       </main>
 

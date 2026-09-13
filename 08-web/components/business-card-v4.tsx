@@ -2,7 +2,7 @@
 import './business-card-v4.css'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
-type CardVariant = 'restaurant' | 'offer' | 'pharmacy' | 'delivery' | 'market' | 'new'
+type CardSize = 'hero' | 'lg' | 'md' | 'sm'
 
 type Business = {
   slug: string
@@ -16,12 +16,24 @@ type Business = {
 }
 
 const TYPE_EMOJI: Record<BusinessType, string> = {
-  restaurant: '🍽️', pharmacy: '💊', supermarket: '🛒', delivery_office: '🛵',
+  restaurant: '🍽️',
+  pharmacy: '💊',
+  supermarket: '🛒',
+  delivery_office: '🛵',
 }
 
-const VARIANT_ACCENT: Record<CardVariant, string> = {
-  restaurant: '#FF7A3D', offer: '#E8C79A', pharmacy: '#4ADE80',
-  delivery: '#FB923C', market: '#A855F7', new: '#C084FC',
+const TYPE_LABEL: Record<BusinessType, string> = {
+  restaurant: 'مطعم',
+  pharmacy: 'صيدلية',
+  supermarket: 'سوبر ماركت',
+  delivery_office: 'توصيل',
+}
+
+const TYPE_THEME: Record<BusinessType, { from: string; to: string; accent: string }> = {
+  restaurant: { from: '#2a1610', to: '#1a0d08', accent: '#FF7A3D' },
+  pharmacy:   { from: '#0d2419', to: '#08160f', accent: '#4ADE80' },
+  supermarket:{ from: '#1a1030', to: '#0d0820', accent: '#A855F7' },
+  delivery_office: { from: '#2a1a0d', to: '#1a1008', accent: '#FB923C' },
 }
 
 const REASON_HOOKS: Record<string, string[]> = {
@@ -41,56 +53,59 @@ function getHook(reason: string, slug: string): string {
 
 export default function BusinessCardV4({
   business,
-  variant = 'restaurant',
+  size = 'md',
   hook,
 }: {
   business: Business
-  variant?: CardVariant
+  size?: CardSize
   hook?: string
 }) {
   const { slug, name, type, area, vibe, reason, open } = business
-  const accent = VARIANT_ACCENT[variant]
+  const theme = TYPE_THEME[type]
   const displayHook = hook ?? getHook(reason, slug)
 
   return (
     <a
       href={`/businesses/${slug}`}
-      className={`fcard fcard--${variant}`}
+      className={`v4card v4card--${size}`}
       aria-label={name}
-      style={{ '--accent': accent } as React.CSSProperties}
+      style={{
+        '--theme-from': theme.from,
+        '--theme-to': theme.to,
+        '--theme-accent': theme.accent,
+      } as React.CSSProperties}
     >
-      {/* ===== الصورة/الخلفية الكبيرة ===== */}
-      <div className="fcard__image">
-        <span className="fcard__emoji">{TYPE_EMOJI[type]}</span>
-      </div>
+      <div className="v4card__bg" aria-hidden />
 
-      {/* ===== طبقة زجاجية علوية (شريط الحالة) ===== */}
-      <div className="fcard__top-glass">
-        <span className={`fcard__status ${open ? 'is-on' : 'is-off'}`}>
-          <span className="fcard__dot" />
-          {open ? 'مفتوح' : 'مغلق'}
+      <div className="v4card__top">
+        <span className="v4card__type">
+          {TYPE_EMOJI[type]} {TYPE_LABEL[type]}
+        </span>
+        <span className={`v4card__live ${open ? 'is-on' : 'is-off'}`}>
+          <span className="v4card__dot" />
         </span>
       </div>
 
-      {/* ===== المحتوى السفلي (زجاج سائل) ===== */}
-      <div className="fcard__content">
-        <div className="fcard__header">
-          <h3 className="fcard__name">{name}</h3>
-          <span className="fcard__area">{area}</span>
-        </div>
-        
-        <div className="fcard__footer">
-          <div className="fcard__hook">
-            <span className="fcard__hook-dot" />
-            <span>{displayHook}</span>
-          </div>
-          <div className="fcard__arrow">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-          </div>
+      <div className="v4card__visual">
+        <span className="v4card__emoji">{TYPE_EMOJI[type]}</span>
+      </div>
+
+      <div className="v4card__body">
+        <h3 className="v4card__name">{name}</h3>
+        <span className="v4card__area">{area}</span>
+
+        <div className="v4card__hook">
+          <span className="v4card__hook-dot" />
+          <span>{displayHook}</span>
         </div>
       </div>
+
+      {badge_placeholder(business.badge)}
     </a>
   )
+}
+
+function badge_placeholder(badge: string | undefined) {
+  if (!badge) return null
+  return <span className="v4card__badge">{badge}</span>
 }

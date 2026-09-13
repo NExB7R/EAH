@@ -1,6 +1,7 @@
 'use client'
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, Children } from 'react'
 import type { ReactNode } from 'react'
+import Link from 'next/link'
 import './section-slider.css'
 
 type SliderVariant = 'restaurant' | 'offer' | 'pharmacy' | 'delivery' | 'market' | 'new'
@@ -27,110 +28,36 @@ export default function SectionSlider({
   children,
 }: SectionSliderProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
-  const currentIndexRef = useRef(0)
   const [paused, setPaused] = useState(false)
   const [progress, setProgress] = useState(0)
   const [canPrev, setCanPrev] = useState(false)
   const [canNext, setCanNext] = useState(true)
 
-  // ===== تتبع الـ scroll الأفقي =====
+  const items = Children.toArray(children).slice(0, maxItems)
+  const remaining = (totalItems ?? items.length) - maxItems
+
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
-
     const onScroll = () => {
       const max = el.scrollWidth - el.clientWidth
       if (max <= 0) return
-      const p = Math.abs(el.scrollLeft) / max
-      setProgress(p)
+      setProgress(Math.abs(el.scrollLeft) / max)
       setCanPrev(Math.abs(el.scrollLeft) > 10)
       setCanNext(Math.abs(el.scrollLeft) < max - 10)
-
-      // أقرب بطاقة في المنتصف
-      const cards = Array.from(el.children) as HTMLElement[]
-      if (cards.length === 0) return
-      const containerRect = el.getBoundingClientRect()
-      const centerX = containerRect.left + containerRect.width / 2
-
-      let closestIdx = 0
-      let closestDist = Infinity
-      cards.forEach((card, i) => {
-        const r = card.getBoundingClientRect()
-        const cardCenter = r.left + r.width / 2
-        const dist = Math.abs(cardCenter - centerX)
-        if (dist < closestDist) {
-          closestDist = dist
-          closestIdx = i
-        }
-      })
-      currentIndexRef.current = closestIdx
     }
-
     onScroll()
     el.addEventListener('scroll', onScroll, { passive: true })
     return () => el.removeEventListener('scroll', onScroll)
   }, [])
 
-  // ===== Helper: scroll أفقي فقط (بدون أي حركة رأسية) =====
-  const scrollToIndex = (idx: number) => {
+  const scrollBy = (dir: 1 | -1) => {
     const el = scrollRef.current
     if (!el) return
-    const cards = Array.from(el.children) as HTMLElement[]
-    const card = cards[idx] as HTMLElement | undefined
-    if (!card) return
-
-    // ⚠️ المهم: نستخدم scrollTo على الـ container نفسه فقط
-    // offsetLeft مش بيتأثر بحركة الصفحة الرأسية
-    const targetLeft = card.offsetLeft - el.offsetLeft
-    el.scrollTo({
-      left: targetLeft,
-      top: 0, // ← صفر: نمنع أي scroll رأسي
-      behavior: 'smooth',
-    })
+    const amount = el.clientWidth * 0.7
+    const isRTL = getComputedStyle(el).direction === 'rtl'
+    el.scrollBy({ left: dir * amount * (isRTL ? -1 : 1), behavior: 'smooth' })
   }
-
-  // ===== Auto-play =====
-  useEffect(() => {
-    if (paused) return
-    const el = scrollRef.current
-    if (!el) return
-
-    // ⚠️ ما نعملش auto-play لو مفيش overflow أفقي
-    const hasOverflow = el.scrollWidth > el.clientWidth + 4
-    if (!hasOverflow) return
-
-    const timer = setInterval(() => {
-      const cards = Array.from(el.children) as HTMLElement[]
-      if (cards.length === 0) return
-
-      let nextIndex = currentIndexRef.current + 1
-      if (nextIndex >= cards.length) nextIndex = 0
-
-      scrollToIndex(nextIndex)
-      currentIndexRef.current = nextIndex
-    }, 5000)
-
-    return () => clearInterval(timer)
-  }, [paused])
-
-  // ===== أزرار الأسهم =====
-  const scrollByCard = (dir: 1 | -1) => {
-    const el = scrollRef.current
-    if (!el) return
-    const cards = Array.from(el.children) as HTMLElement[]
-    if (cards.length === 0) return
-
-    let nextIndex = currentIndexRef.current + dir
-    if (nextIndex < 0) nextIndex = 0
-    if (nextIndex >= cards.length) nextIndex = cards.length - 1
-
-    scrollToIndex(nextIndex)
-    currentIndexRef.current = nextIndex
-  }
-
-  const items = Array.isArray(children) ? children : [children]
-  const visible = items.slice(0, maxItems)
-  const remaining = (totalItems ?? items.length) - maxItems
 
   return (
     <section id={id} className={`ss ss--${variant}`}>
@@ -140,25 +67,15 @@ export default function SectionSlider({
           {subtitle && <p className="ss__subtitle">{subtitle}</p>}
         </div>
         <div className="ss__controls">
+          <Link href={seeAllHref} className="ss__see-all">
+            اكتشف الكل
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+          </Link>
           <div className="ss__nav-group">
-            <button
-              type="button"
-              className="ss__nav"
-              onClick={() => scrollByCard(-1)}
-              disabled={!canPrev}
-              aria-label="السابق"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              className="ss__nav"
-              onClick={() => scrollByCard(1)}
-              disabled={!canNext}
-              aria-label="التالي"
-            >
-              ›
-            </button>
+            <button type="button" className="ss__nav" onClick={() => scrollBy(-1)} disabled={!canPrev} aria-label="السابق">‹</button>
+            <button type="button" className="ss__nav" onClick={() => scrollBy(1)} disabled={!canNext} aria-label="التالي">›</button>
           </div>
         </div>
       </div>
@@ -170,57 +87,26 @@ export default function SectionSlider({
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onTouchStart={() => setPaused(true)}
-          onTouchEnd={() => setTimeout(() => setPaused(false), 3000)}
+          onTouchEnd={() => setTimeout(() => setPaused(false), 2000)}
         >
-          {visible}
+          {items}
 
-          <a
-            href={seeAllHref || `/explore?type=${variant}`}
-            className="fcard fcard--seeall"
-            aria-label={`استكشف كل ${title}`}
-          >
-            <div className="fcard__image">
-              <span className="fcard__emoji fcard__emoji--seeall">···</span>
-            </div>
-
-            <div className="fcard__top-glass">
-              <span className="fcard__status fcard__status--neutral">
-                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-                اكتشف
-              </span>
-            </div>
-
-            <div className="fcard__content">
-              <div className="fcard__header">
-                <h3 className="fcard__name">شوف الكل</h3>
-                <span className="fcard__area">
-                  {remaining > 0 ? `و ${remaining}+ مكان تاني` : 'اكتشف كل الأماكن'}
-                </span>
-              </div>
-
-              <div className="fcard__footer">
-                <div className="fcard__hook">
-                  <span className="fcard__hook-dot" />
-                  <span>في صفحة الاكتشاف</span>
-                </div>
-                <div className="fcard__arrow">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                    <path d="M19 12H5M12 19l-7-7 7-7" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </a>
+          <Link href={seeAllHref} className="ss__seeall-card">
+            <span className="ss__seeall-icon" aria-hidden>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+            </span>
+            <span className="ss__seeall-title">شوف الكل</span>
+            <span className="ss__seeall-sub">
+              {remaining > 0 ? `و ${remaining}+ مكان تاني` : 'اكتشف المزيد'}
+            </span>
+          </Link>
         </div>
       </div>
 
       <div className="ss__progress" aria-hidden>
-        <div
-          className="ss__progress-bar"
-          style={{ transform: `scaleX(${Math.max(0.08, progress)})` }}
-        />
+        <div className="ss__progress-bar" style={{ transform: `scaleX(${Math.max(0.08, progress)})` }} />
       </div>
     </section>
   )
