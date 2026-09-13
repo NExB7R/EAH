@@ -610,3 +610,11 @@
     transition: none;
   }
 }
+
+/* ===== Business Form Extras ===== */
+.form-hint {
+  font-family: var(--eah-font-body);
+  font-size: 0.68rem;
+  color: var(--eah-text-4);
+  margin: 0;
+}

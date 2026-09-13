@@ -1,12 +1,16 @@
 'use client'
 import { useActionState, useState } from 'react'
 import Link from 'next/link'
+import ImageUploader from './image-uploader'
+import ContactsEditor, { type Contact } from './contacts-editor'
+import WorkingHoursEditor, { type WorkingHours } from './working-hours-editor'
 
 type ActionState = { ok: boolean; message?: string; errors?: Record<string, string[]> }
 
 type Props = {
   mode: 'create' | 'edit'
   action: (prev: ActionState, formData: FormData) => Promise<ActionState>
+  businessId?: string
   initial?: {
     name?: string
     slug?: string
@@ -16,11 +20,16 @@ type Props = {
     description?: string | null
     hook?: string | null
     address_text?: string | null
+    cover_image_url?: string | null
+    latitude?: number | null
+    longitude?: number | null
+    working_hours?: WorkingHours
+    contacts?: Contact[]
+    gallery?: string[]
+    menu?: string[]
     is_open?: boolean
     is_featured?: boolean
     is_published?: boolean
-    phone?: string
-    whatsapp?: string
   }
 }
 
@@ -32,8 +41,7 @@ const TYPES = [
 ]
 
 function slugify(name: string): string {
-  return name
-    .toLowerCase()
+  return name.toLowerCase().trim()
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9-]/g, '')
     .replace(/-+/g, '-')
@@ -41,9 +49,8 @@ function slugify(name: string): string {
     .slice(0, 60)
 }
 
-export default function BusinessForm({ mode, action, initial }: Props) {
+export default function BusinessForm({ mode, action, initial, businessId }: Props) {
   const [state, formAction, pending] = useActionState(action, { ok: false })
-
   const [name, setName] = useState(initial?.name ?? '')
   const [slug, setSlug] = useState(initial?.slug ?? '')
   const [slugTouched, setSlugTouched] = useState(mode === 'edit')
@@ -54,6 +61,7 @@ export default function BusinessForm({ mode, action, initial }: Props) {
   }
 
   const err = (f: string) => state.errors?.[f]?.[0]
+  const folder = businessId ? `biz-${businessId}` : `new-${Date.now()}`
 
   return (
     <form action={formAction} className="admin-form">
@@ -62,12 +70,12 @@ export default function BusinessForm({ mode, action, initial }: Props) {
         <div className="admin-form__grid">
           <div className="admin-field">
             <label className="admin-field__label" htmlFor="name">اسم المكان *</label>
-            <input id="name" name="name" className="admin-input" value={name} onChange={(e) => handleNameChange(e.target.value)} placeholder="مثلاً: مطبخ البلد" required />
+            <input id="name" name="name" className="admin-input" value={name} onChange={(e) => handleNameChange(e.target.value)} placeholder="مطبخ البلد" required />
             {err('name') && <span className="admin-field__hint" style={{ color: 'var(--eah-red)' }}>{err('name')}</span>}
           </div>
 
           <div className="admin-field">
-            <label className="admin-field__label" htmlFor="slug">الـ slug (الرابط) *</label>
+            <label className="admin-field__label" htmlFor="slug">الـ slug *</label>
             <input id="slug" name="slug" className="admin-input" dir="ltr" value={slug} onChange={(e) => { setSlugTouched(true); setSlug(e.target.value) }} placeholder="matbakh-elbalad" required />
             <span className="admin-field__hint">/businesses/{slug || '...'}</span>
             {err('slug') && <span className="admin-field__hint" style={{ color: 'var(--eah-red)' }}>{err('slug')}</span>}
@@ -83,7 +91,6 @@ export default function BusinessForm({ mode, action, initial }: Props) {
           <div className="admin-field">
             <label className="admin-field__label" htmlFor="area">المنطقة *</label>
             <input id="area" name="area" className="admin-input" defaultValue={initial?.area ?? ''} placeholder="شبين القناطر" required />
-            {err('area') && <span className="admin-field__hint" style={{ color: 'var(--eah-red)' }}>{err('area')}</span>}
           </div>
 
           <div className="admin-field">
@@ -102,28 +109,61 @@ export default function BusinessForm({ mode, action, initial }: Props) {
         <h2 className="admin-form__section-title">الوصف والهوك</h2>
         <div className="admin-form__grid">
           <div className="admin-field admin-field--full">
-            <label className="admin-field__label" htmlFor="hook">الهوك (جملة قصيرة للسلايدر) ⭐</label>
+            <label className="admin-field__label" htmlFor="hook">الهوك ⭐</label>
             <input id="hook" name="hook" className="admin-input" defaultValue={initial?.hook ?? ''} placeholder="أكل بيتي زي ما ماما بتعملو" maxLength={80} />
-            <span className="admin-field__hint">جملة واحدة قوية تظهر عند hover على الكارد. حتى 80 حرف.</span>
+            <span className="admin-field__hint">جملة قصيرة تظهر عند hover. حتى 80 حرف.</span>
           </div>
 
           <div className="admin-field admin-field--full">
             <label className="admin-field__label" htmlFor="description">الوصف</label>
-            <textarea id="description" name="description" className="admin-textarea" defaultValue={initial?.description ?? ''} placeholder="وصف تفصيلي — يظهر في صفحة المكان" maxLength={500} />
+            <textarea id="description" name="description" className="admin-textarea" defaultValue={initial?.description ?? ''} placeholder="وصف تفصيلي" maxLength={500} />
           </div>
         </div>
       </section>
 
       <section className="admin-form__section">
+        <h2 className="admin-form__section-title">صور المكان</h2>
+        <ImageUploader
+          bucket="business-media"
+          folder={`${folder}/gallery`}
+          multiple
+          initial={initial?.gallery ?? []}
+          name="gallery_json"
+          label="معرض الصور (الغلاف أول صورة)"
+          hint="JPG/PNG/WebP · حتى 5MB"
+        />
+        <ImageUploader
+          bucket="business-menu"
+          folder={`${folder}/menu`}
+          multiple
+          initial={initial?.menu ?? []}
+          name="menu_json"
+          label="صور المنيو"
+          hint="صفحات المنيو"
+        />
+        <input type="hidden" name="cover_image_url" value={initial?.cover_image_url ?? ''} />
+      </section>
+
+      <section className="admin-form__section">
         <h2 className="admin-form__section-title">التواصل</h2>
+        <ContactsEditor initial={initial?.contacts ?? []} />
+      </section>
+
+      <section className="admin-form__section">
+        <h2 className="admin-form__section-title">أوقات العمل</h2>
+        <WorkingHoursEditor initial={initial?.working_hours ?? {}} />
+      </section>
+
+      <section className="admin-form__section">
+        <h2 className="admin-form__section-title">الموقع الجغرافي (اختياري)</h2>
         <div className="admin-form__grid">
           <div className="admin-field">
-            <label className="admin-field__label" htmlFor="phone">رقم الفون</label>
-            <input id="phone" name="phone" className="admin-input" dir="ltr" defaultValue={initial?.phone ?? ''} placeholder="01012345678" />
+            <label className="admin-field__label" htmlFor="latitude">Latitude</label>
+            <input id="latitude" name="latitude" className="admin-input" dir="ltr" defaultValue={initial?.latitude ?? ''} placeholder="30.1234" />
           </div>
           <div className="admin-field">
-            <label className="admin-field__label" htmlFor="whatsapp">رقم واتساب</label>
-            <input id="whatsapp" name="whatsapp" className="admin-input" dir="ltr" defaultValue={initial?.whatsapp ?? ''} placeholder="201012345678" />
+            <label className="admin-field__label" htmlFor="longitude">Longitude</label>
+            <input id="longitude" name="longitude" className="admin-input" dir="ltr" defaultValue={initial?.longitude ?? ''} placeholder="31.2345" />
           </div>
         </div>
       </section>

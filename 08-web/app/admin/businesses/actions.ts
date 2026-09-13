@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
-import { businessSchema } from '@/lib/admin/business-schema'
+import { businessSchema, parseJson, type Contact, type WorkingHours } from '@/lib/admin/business-schema'
 import { auditLog } from '@/lib/admin/audit'
 
 type ActionState = { ok: boolean; message?: string; errors?: Record<string, string[]> }
@@ -13,7 +13,10 @@ async function assertAdmin() {
   const { data: userData } = await supabase.auth.getUser()
   if (!userData.user) redirect('/admin/login')
   const { data: roleRow } = await supabase
-    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userData.user.id)
+    .maybeSingle()
   if (roleRow?.role !== 'super_admin') throw new Error('Unauthorized')
   return { supabase, user: userData.user }
 }
@@ -28,14 +31,22 @@ function formToObj(formData: FormData) {
     description: String(formData.get('description') ?? ''),
     hook: String(formData.get('hook') ?? ''),
     address_text: String(formData.get('address_text') ?? ''),
-    phone: String(formData.get('phone') ?? ''),
-    whatsapp: String(formData.get('whatsapp') ?? ''),
+    cover_image_url: String(formData.get('cover_image_url') ?? ''),
+    gallery_json: String(formData.get('gallery_json') ?? '[]'),
+    menu_json: String(formData.get('menu_json') ?? '[]'),
+    working_hours_json: String(formData.get('working_hours_json') ?? '{}'),
+    contacts_json: String(formData.get('contacts_json') ?? '[]'),
+    latitude: String(formData.get('latitude') ?? ''),
+    longitude: String(formData.get('longitude') ?? ''),
     is_open: formData.get('is_open') === 'on',
     is_featured: formData.get('is_featured') === 'on',
     is_published: formData.get('is_published') === 'on',
   }
 }
 
+// ============================================================
+// CREATE
+// ============================================================
 export async function createBusiness(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const parsed = businessSchema.safeParse(formToObj(formData))
   if (!parsed.success) {
@@ -46,8 +57,13 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
 
   const { data: existing } = await supabase.from('businesses').select('id').eq('slug', data.slug).maybeSingle()
   if (existing) {
-    return { ok: false, message: 'الـ slug ده مستخدم قبل كده', errors: { slug: ['اختار slug مختلف'] } }
+    return { ok: false, message: 'الـ slug مستخدم', errors: { slug: ['اختار slug مختلف'] } }
   }
+
+  const gallery = parseJson<string[]>(data.gallery_json, [])
+  const menu = parseJson<string[]>(data.menu_json, [])
+  const workingHours = parseJson<WorkingHours>(data.working_hours_json, {})
+  const contacts = parseJson<Contact[]>(data.contacts_json, []).filter((c) => c.value.trim())
 
   const { data: created, error } = await supabase
     .from('businesses')
@@ -60,6 +76,10 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
       description: data.description,
       hook: data.hook,
       address_text: data.address_text,
+      cover_image_url: data.cover_image_url || (gallery[0] ?? null),
+      latitude: data.latitude,
+      longitude: data.longitude,
+      working_hours: workingHours,
       is_open: data.is_open,
       is_featured: data.is_featured,
       is_published: data.is_published,
@@ -69,17 +89,39 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
 
   if (error || !created) return { ok: false, message: error?.message ?? 'فشل الحفظ' }
 
-  const contacts: Array<{ method_type: string; value: string }> = []
-  if (data.phone) contacts.push({ method_type: 'phone', value: data.phone })
-  if (data.whatsapp) contacts.push({ method_type: 'whatsapp', value: data.whatsapp })
   if (contacts.length > 0) {
     await supabase.from('business_contact_methods').insert(
-      contacts.map((c, i) => ({
+      contacts.map((c) => ({
         business_id: created.id,
         method_type: c.method_type,
         value: c.value,
-        is_primary: i === 0,
+        is_primary: c.is_primary,
         is_public: true,
+      }))
+    )
+  }
+
+  if (gallery.length > 0) {
+    await supabase.from('business_media').insert(
+      gallery.map((url, i) => ({
+        business_id: created.id,
+        media_type: 'gallery',
+        storage_path: url,
+        alt_text: `${data.name} - صورة ${i + 1}`,
+        sort_order: i,
+        is_published: true,
+      }))
+    )
+  }
+  if (menu.length > 0) {
+    await supabase.from('business_media').insert(
+      menu.map((url, i) => ({
+        business_id: created.id,
+        media_type: 'menu',
+        storage_path: url,
+        alt_text: `${data.name} - منيو ${i + 1}`,
+        sort_order: i,
+        is_published: true,
       }))
     )
   }
@@ -98,6 +140,9 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
   redirect(`/admin/businesses/${created.slug}/edit?saved=1`)
 }
 
+// ============================================================
+// UPDATE
+// ============================================================
 export async function updateBusiness(id: string, _prev: ActionState, formData: FormData): Promise<ActionState> {
   const parsed = businessSchema.safeParse(formToObj(formData))
   if (!parsed.success) {
@@ -111,8 +156,13 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
 
   if (data.slug !== before.slug) {
     const { data: dup } = await supabase.from('businesses').select('id').eq('slug', data.slug).neq('id', id).maybeSingle()
-    if (dup) return { ok: false, message: 'الـ slug مستخدم قبل كده', errors: { slug: ['اختار slug مختلف'] } }
+    if (dup) return { ok: false, message: 'الـ slug مستخدم', errors: { slug: ['اختار slug مختلف'] } }
   }
+
+  const gallery = parseJson<string[]>(data.gallery_json, [])
+  const menu = parseJson<string[]>(data.menu_json, [])
+  const workingHours = parseJson<WorkingHours>(data.working_hours_json, {})
+  const contacts = parseJson<Contact[]>(data.contacts_json, []).filter((c) => c.value.trim())
 
   const { error } = await supabase.from('businesses').update({
     name: data.name,
@@ -123,6 +173,10 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
     description: data.description,
     hook: data.hook,
     address_text: data.address_text,
+    cover_image_url: data.cover_image_url || (gallery[0] ?? null),
+    latitude: data.latitude,
+    longitude: data.longitude,
+    working_hours: workingHours,
     is_open: data.is_open,
     is_featured: data.is_featured,
     is_published: data.is_published,
@@ -131,17 +185,40 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
   if (error) return { ok: false, message: error.message }
 
   await supabase.from('business_contact_methods').delete().eq('business_id', id)
-  const contacts: Array<{ method_type: string; value: string }> = []
-  if (data.phone) contacts.push({ method_type: 'phone', value: data.phone })
-  if (data.whatsapp) contacts.push({ method_type: 'whatsapp', value: data.whatsapp })
   if (contacts.length > 0) {
     await supabase.from('business_contact_methods').insert(
-      contacts.map((c, i) => ({
+      contacts.map((c) => ({
         business_id: id,
         method_type: c.method_type,
         value: c.value,
-        is_primary: i === 0,
+        is_primary: c.is_primary,
         is_public: true,
+      }))
+    )
+  }
+
+  await supabase.from('business_media').delete().eq('business_id', id).in('media_type', ['gallery', 'menu'])
+  if (gallery.length > 0) {
+    await supabase.from('business_media').insert(
+      gallery.map((url, i) => ({
+        business_id: id,
+        media_type: 'gallery',
+        storage_path: url,
+        alt_text: `${data.name} - صورة ${i + 1}`,
+        sort_order: i,
+        is_published: true,
+      }))
+    )
+  }
+  if (menu.length > 0) {
+    await supabase.from('business_media').insert(
+      menu.map((url, i) => ({
+        business_id: id,
+        media_type: 'menu',
+        storage_path: url,
+        alt_text: `${data.name} - منيو ${i + 1}`,
+        sort_order: i,
+        is_published: true,
       }))
     )
   }
@@ -151,7 +228,7 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
     entityType: 'business',
     entityId: id,
     before,
-    after: data,
+    after: { ...data, gallery_count: gallery.length, menu_count: menu.length, contacts_count: contacts.length },
     metadata: { actor_email: user.email ?? null },
   })
 
@@ -162,6 +239,9 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
   return { ok: true, message: 'تم الحفظ ✅' }
 }
 
+// ============================================================
+// DELETE
+// ============================================================
 export async function deleteBusiness(id: string): Promise<ActionState> {
   const { supabase, user } = await assertAdmin()
   const { data: before } = await supabase.from('businesses').select('*').eq('id', id).maybeSingle()
@@ -181,6 +261,9 @@ export async function deleteBusiness(id: string): Promise<ActionState> {
   return { ok: true, message: 'تم الحذف' }
 }
 
+// ============================================================
+// TOGGLE
+// ============================================================
 export async function toggleBusinessFlag(id: string, flag: 'is_featured' | 'is_published' | 'is_open'): Promise<ActionState> {
   const { supabase, user } = await assertAdmin()
   const { data: current } = await supabase.from('businesses').select(flag).eq('id', id).maybeSingle()
