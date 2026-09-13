@@ -109,3 +109,20 @@
 }
 .nt-item:hover .nt-item__delete { opacity: 1; }
 .nt-item__delete:hover { background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.4); color: #FCA5A5; }
+
+/* ═══ Empty State ═══ */
+.nt-empty__logo {
+  display: flex; justify-content: center;
+  margin-bottom: 20px;
+  opacity: .9;
+}
+.nt-empty__logo .eah-logo {
+  animation: ntFloat 3s ease-in-out infinite;
+}
+@keyframes ntFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nt-empty__logo .eah-logo { animation: none; }
+}

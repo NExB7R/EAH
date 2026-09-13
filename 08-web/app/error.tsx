@@ -1,15 +1,23 @@
 'use client'
 import { useEffect } from 'react'
+import Link from 'next/link'
+import EahLogo from '@/components/eah-logo'
+import './error.css'
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => { console.error(error) }, [error])
   return (
-    <main style={{minHeight:'60vh',display:'flex',alignItems:'center',justifyContent:'center',padding:'80px 20px',textAlign:'center'}}>
-      <div>
-        <div style={{fontSize:'5rem',marginBottom:'16px'}}>⚠️</div>
-        <h1 style={{fontSize:'1.8rem',fontWeight:900,color:'#F5F3FF',margin:'0 0 12px'}}>حصل خطأ</h1>
-        <p style={{color:'#A5A3B8',marginBottom:'24px'}}>حاول تاني، ولو المشكلة مستمرة كلمنا.</p>
-        <button onClick={reset} style={{padding:'12px 24px',borderRadius:'14px',background:'linear-gradient(135deg,#8B5CF6,#A855F7)',color:'#fff',fontWeight:800,border:'none',cursor:'pointer',fontSize:'0.95rem',fontFamily:'inherit'}}>حاول تاني</button>
+    <main className="er">
+      <div className="er__glow" aria-hidden />
+      <div className="er__logo">
+        <EahLogo size="md" variant="full" href="/" />
+      </div>
+      <span className="er__emoji">⚠️</span>
+      <h1 className="er__title">حصل خطأ</h1>
+      <p className="er__text">حاول تاني، ولو المشكلة مستمرة كلمنا.</p>
+      <div className="er__actions">
+        <button onClick={reset} className="er__btn er__btn--primary">حاول تاني</button>
+        <Link href="/" className="er__btn">الرئيسية</Link>
       </div>
     </main>
   )

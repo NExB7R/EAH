@@ -66,8 +66,10 @@ export default async function NotificationsPage() {
 
         {list.length === 0 ? (
           <div className="nt-empty">
-            <span className="nt-empty__emoji">📭</span>
-            <h2 className="nt-empty__title">مفيش إشعارات لسه</h2>
+            <div className="nt-empty__logo">
+              <EahLogo size="md" variant="mark" href="/" />
+            </div>
+            <h2 className="nt-empty__title">مفيش إشعارات لسه 🔔</h2>
             <p className="nt-empty__text">لما يحصلك حاجة على EAH هتلاقيها هنا.</p>
             <Link href="/explore" className="nt-empty__cta">اكتشف الأماكن ←</Link>
           </div>
