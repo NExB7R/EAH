@@ -1,74 +1,110 @@
-.img-uploader {
+/* ============================================================
+   Image Uploader — احترافي 2026
+   ============================================================ */
+
+.iup {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
-.img-uploader__head {
+.iup__head {
   display: flex;
   align-items: baseline;
   gap: 10px;
   flex-wrap: wrap;
 }
-.img-uploader__label {
+.iup__label {
   font-family: var(--eah-font-body);
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--eah-text-2);
 }
-.img-uploader__hint {
+.iup__hint {
   font-family: var(--eah-font-body);
   font-size: 0.68rem;
   color: var(--eah-text-4);
 }
 
-/* Drop zone */
-.img-uploader__drop {
+/* ===== Drop zone ===== */
+.iup__drop {
+  all: unset;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 24px 16px;
+  padding: 32px 20px;
   border-radius: var(--eah-radius-lg);
-  border: 2px dashed var(--eah-border-2);
-  background: rgba(10, 8, 18, 0.4);
+  border: 1.5px dashed rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.03);
   cursor: pointer;
   transition: all 220ms var(--eah-ease);
   text-align: center;
-}
-.img-uploader__drop:hover,
-.img-uploader__drop.is-drag {
-  border-color: var(--eah-purple-2);
-  background: rgba(139, 92, 246, 0.08);
-}
-.img-uploader__drop.is-drag {
-  transform: scale(1.01);
-  border-style: solid;
-}
-.img-uploader__drop.is-uploading {
-  cursor: wait;
-  opacity: 0.7;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.img-uploader__icon {
-  font-size: 1.8rem;
-  line-height: 1;
+.iup__drop:hover,
+.iup__drop:focus-visible {
+  border-color: var(--eah-purple-2);
+  background: rgba(139, 92, 246, 0.08);
+  outline: none;
 }
-.img-uploader__text {
+
+.iup__drop.is-drag {
+  border-color: var(--eah-gold);
+  border-style: solid;
+  background: rgba(232, 199, 154, 0.08);
+  transform: scale(1.005);
+}
+
+.iup__drop.is-uploading {
+  cursor: wait;
+  opacity: 0.75;
+}
+
+.iup__drop-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--eah-gradient-purple);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(107, 33, 255, 0.35);
+  margin-bottom: 4px;
+  transition: transform 240ms var(--eah-ease);
+}
+.iup__drop:hover .iup__drop-icon {
+  transform: scale(1.08);
+}
+.iup__drop.is-uploading .iup__drop-icon {
+  background: rgba(139, 92, 246, 0.2);
+  color: var(--eah-purple-2);
+  box-shadow: none;
+  animation: iup-spin 1s linear infinite;
+}
+
+@keyframes iup-spin {
+  to { transform: rotate(360deg); }
+}
+
+.iup__drop-text {
   font-family: var(--eah-font-body);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: var(--eah-text-2);
+  color: var(--eah-text);
 }
-.img-uploader__meta {
+.iup__drop-sub {
   font-family: var(--eah-font-body);
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   color: var(--eah-text-4);
 }
 
-.img-uploader__error {
-  padding: 8px 12px;
+.iup__error {
+  padding: 8px 14px;
   border-radius: var(--eah-radius-sm);
   background: rgba(248, 113, 113, 0.1);
   border: 1px solid rgba(248, 113, 113, 0.3);
@@ -77,78 +113,101 @@
   font-size: 0.75rem;
 }
 
-/* Grid */
-.img-uploader__grid {
+/* ===== Grid ===== */
+.iup__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
 }
 
-.img-uploader__item {
+.iup__grid--square { }
+.iup__grid--wide { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+
+.iup__item {
   position: relative;
   aspect-ratio: 1;
   border-radius: var(--eah-radius);
   overflow: hidden;
-  background: var(--eah-black-2);
-  border: 1px solid var(--eah-border);
+  background: #0A0812;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  transition: border-color 200ms ease;
+}
+.iup__item:hover {
+  border-color: var(--eah-purple-2);
 }
 
-.img-uploader__item img {
+.iup__grid--wide .iup__item {
+  aspect-ratio: 16 / 10;
+}
+
+.iup__thumb {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 260ms var(--eah-ease);
+}
+.iup__item:hover .iup__thumb {
+  transform: scale(1.04);
 }
 
-.img-uploader__overlay {
+.iup__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(5, 3, 8, 0.7);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   opacity: 0;
-  transition: opacity 220ms ease;
+  transition: opacity 200ms ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 8px;
 }
-.img-uploader__item:hover .img-uploader__overlay {
+.iup__item:hover .iup__overlay {
   opacity: 1;
 }
 
-.img-uploader__btns {
+.iup__actions {
   display: flex;
-  gap: 4px;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.img-uploader__btn {
-  width: 30px;
-  height: 30px;
+.iup__act {
+  all: unset;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #fff;
-  font-size: 0.95rem;
-  font-weight: 900;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
   transition: all 160ms ease;
+  box-sizing: border-box;
 }
-.img-uploader__btn:hover {
+
+.iup__act:hover {
   background: rgba(168, 85, 247, 0.7);
   border-color: #A855F7;
+  transform: scale(1.1);
 }
-.img-uploader__btn--danger:hover {
-  background: rgba(239, 68, 68, 0.7);
+
+.iup__act--danger:hover {
+  background: rgba(239, 68, 68, 0.75);
   border-color: #EF4444;
 }
 
-.img-uploader__cover-badge {
+.iup__cover {
   position: absolute;
   top: 6px;
   inset-inline-start: 6px;
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: 999px;
   background: var(--eah-gradient-gold);
   color: var(--eah-black-2);
@@ -156,4 +215,5 @@
   font-size: 0.55rem;
   font-weight: 900;
   z-index: 2;
+  box-shadow: 0 2px 8px rgba(232, 199, 154, 0.4);
 }

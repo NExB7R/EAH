@@ -618,3 +618,91 @@
   color: var(--eah-text-4);
   margin: 0;
 }
+
+/* ===== Contacts Editor ===== */
+.ced {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ced__empty {
+  font-family: var(--eah-font-body);
+  font-size: 0.78rem;
+  color: var(--eah-text-3);
+  margin: 0;
+}
+.ced__row {
+  display: grid;
+  grid-template-columns: 150px 1fr 38px 38px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border-radius: var(--eah-radius);
+  background: rgba(10, 8, 18, 0.4);
+  border: 1px solid var(--eah-border);
+}
+.ced__type { min-width: 0; }
+.ced__input { padding: 9px 12px; font-size: 0.85rem; }
+
+.ced__primary,
+.ced__remove {
+  all: unset;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--eah-radius-sm);
+  border: 1px solid var(--eah-border);
+  background: rgba(10, 8, 18, 0.6);
+  color: var(--eah-text-3);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 180ms var(--eah-ease);
+  box-sizing: border-box;
+}
+.ced__primary:hover {
+  border-color: var(--eah-gold);
+  color: var(--eah-gold);
+}
+.ced__primary.is-on {
+  background: var(--eah-gradient-gold);
+  border-color: transparent;
+  color: var(--eah-black-2);
+}
+.ced__remove:hover {
+  border-color: var(--eah-red);
+  color: var(--eah-red);
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.ced__add {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--eah-radius-pill);
+  border: 1px dashed var(--eah-border-2);
+  background: transparent;
+  color: var(--eah-text-2);
+  font-family: var(--eah-font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: all 200ms var(--eah-ease);
+  box-sizing: border-box;
+}
+.ced__add:hover {
+  border-color: var(--eah-purple-2);
+  border-style: solid;
+  color: var(--eah-text);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+@media (max-width: 640px) {
+  .ced__row {
+    grid-template-columns: 120px 1fr 34px 34px;
+    gap: 6px;
+  }
+}

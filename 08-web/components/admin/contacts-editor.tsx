@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import PrettySelect from './pretty-select'
 
 export type Contact = {
   method_type: 'phone' | 'whatsapp' | 'facebook' | 'instagram' | 'website' | 'email'
@@ -8,13 +9,13 @@ export type Contact = {
 }
 
 const TYPE_OPTIONS = [
-  { value: 'phone', label: '📞 فون' },
-  { value: 'whatsapp', label: '💬 واتساب' },
-  { value: 'facebook', label: '📘 فيسبوك' },
-  { value: 'instagram', label: '📷 إنستجرام' },
-  { value: 'website', label: '🌐 موقع' },
-  { value: 'email', label: '✉️ إيميل' },
-] as const
+  { value: 'phone', label: 'فون', emoji: '📞' },
+  { value: 'whatsapp', label: 'واتساب', emoji: '💬' },
+  { value: 'facebook', label: 'فيسبوك', emoji: '📘' },
+  { value: 'instagram', label: 'إنستجرام', emoji: '📷' },
+  { value: 'website', label: 'موقع', emoji: '🌐' },
+  { value: 'email', label: 'إيميل', emoji: '✉️' },
+]
 
 const PLACEHOLDERS: Record<string, string> = {
   phone: '01012345678',
@@ -48,41 +49,25 @@ export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+    <div className="ced">
       <input type="hidden" id="contacts-json" name="contacts_json" defaultValue={JSON.stringify(initial)} />
 
       {contacts.length === 0 && (
-        <p style={{ fontSize: '0.78rem', color: 'var(--eah-text-3)', margin: 0 }}>
-          لسه مفيش وسيلة تواصل. اضغط "إضافة" تحت.
-        </p>
+        <p className="ced__empty">لسه مفيش وسيلة تواصل. اضغط "إضافة" تحت.</p>
       )}
 
       {contacts.map((c, i) => (
-        <div
-          key={i}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '130px 1fr auto auto',
-            gap: 8,
-            alignItems: 'center',
-            padding: 10,
-            borderRadius: 'var(--eah-radius)',
-            background: 'rgba(10,8,18,0.4)',
-            border: '1px solid var(--eah-border)',
-          }}
-        >
-          <select
-            className="admin-select"
-            value={c.method_type}
-            onChange={(e) => update(i, { method_type: e.target.value as Contact['method_type'] })}
-          >
-            {TYPE_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
+        <div key={i} className="ced__row">
+          <div className="ced__type">
+            <PrettySelect
+              value={c.method_type}
+              onChange={(v) => update(i, { method_type: v as Contact['method_type'] })}
+              options={TYPE_OPTIONS}
+            />
+          </div>
 
           <input
-            className="admin-input"
+            className="admin-input ced__input"
             dir="ltr"
             placeholder={PLACEHOLDERS[c.method_type]}
             value={c.value}
@@ -91,30 +76,35 @@ export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }
 
           <button
             type="button"
-            className={`admin-btn admin-btn--sm ${c.is_primary ? 'admin-btn--gold' : ''}`}
+            className={`ced__primary ${c.is_primary ? 'is-on' : ''}`}
             onClick={() => setPrimary(i)}
             title="اجعله رئيسي"
+            aria-label="اجعله رئيسي"
           >
-            {c.is_primary ? '⭐' : '☆'}
+            <svg viewBox="0 0 24 24" width="14" height="14" fill={c.is_primary ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
           </button>
 
           <button
             type="button"
-            className="admin-btn admin-btn--sm admin-btn--danger"
+            className="ced__remove"
             onClick={() => remove(i)}
+            aria-label="حذف"
           >
-            ×
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
           </button>
         </div>
       ))}
 
-      <button
-        type="button"
-        className="admin-btn admin-btn--sm"
-        onClick={add}
-        style={{ alignSelf: 'flex-start' }}
-      >
-        ➕ إضافة وسيلة تواصل
+      <button type="button" className="ced__add" onClick={add}>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        إضافة وسيلة تواصل
       </button>
     </div>
   )
