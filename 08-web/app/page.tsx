@@ -39,7 +39,7 @@ export default async function Page() {
       <SidePanel />
       <BackToTop />
 
-      <main style={{ paddingTop: '90px' }}>
+      <main style={{ paddingTop: '80px' }}>
         <HomeHero />
         <MobileTrending />
 
