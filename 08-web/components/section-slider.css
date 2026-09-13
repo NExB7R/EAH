@@ -1,47 +1,39 @@
 .ss {
-  padding: 32px 0 40px;
+  padding: 24px 0 32px;
   max-width: 1320px;
   margin: 0 auto;
   position: relative;
   width: 100%;
-  /* Performance: skip render off-screen */
-  content-visibility: auto;
-  contain-intrinsic-size: auto 400px;
 }
 
-/* ===== Head ===== */
 .ss__head {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 0 24px 16px;
-  flex-wrap: wrap;
+  padding: 0 24px 14px;
 }
 .ss__title {
   font-family: var(--eah-font-display);
   font-weight: 900;
-  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+  font-size: clamp(1.1rem, 2.2vw, 1.4rem);
   color: var(--eah-text);
   margin: 0;
-  letter-spacing: -0.01em;
 }
 .ss__subtitle {
   font-family: var(--eah-font-body);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--eah-text-3);
-  margin: 4px 0 0;
+  margin: 2px 0 0;
 }
-.ss__controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+
+.ss__controls { display: flex; align-items: center; gap: 6px; }
+
 .ss__see-all {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 7px 14px;
+  padding: 6px 12px;
   border-radius: var(--eah-radius-pill);
   border: 1px solid var(--eah-border);
   background: var(--eah-purple-soft);
@@ -49,8 +41,8 @@
   text-decoration: none;
   font-family: var(--eah-font-body);
   font-weight: 700;
-  font-size: 0.75rem;
-  transition: all 220ms var(--eah-ease);
+  font-size: 0.72rem;
+  transition: all 200ms var(--eah-ease);
 }
 .ss__see-all:hover {
   border-color: var(--eah-purple-2);
@@ -58,22 +50,19 @@
 }
 .ss__see-all svg { transform: rotate(180deg); }
 
+/* Arrow buttons — صغيرة، في الهيدر */
 .ss__nav-group {
   display: flex;
-  gap: 3px;
-  background: var(--eah-surface-2);
-  border: 1px solid var(--eah-border);
-  border-radius: var(--eah-radius-pill);
-  padding: 3px;
+  gap: 4px;
 }
 .ss__nav {
   width: 30px;
   height: 30px;
-  border-radius: var(--eah-radius-pill);
-  border: none;
-  background: transparent;
+  border-radius: 50%;
+  border: 1px solid var(--eah-border);
+  background: var(--eah-surface-2);
   color: var(--eah-text);
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 900;
   line-height: 1;
   cursor: pointer;
@@ -81,28 +70,28 @@
   align-items: center;
   justify-content: center;
   padding-bottom: 3px;
-  transition: all 180ms ease;
+  transition: all 150ms ease;
 }
-.ss__nav:hover:not(:disabled) { background: rgba(168, 85, 247, 0.2); color: var(--eah-purple-3); }
+.ss__nav:hover:not(:disabled) {
+  border-color: var(--eah-purple-2);
+  background: rgba(168, 85, 247, 0.15);
+}
 .ss__nav:disabled { opacity: 0.3; cursor: not-allowed; }
 
-/* ===== Wrapper (fade edges via mask) ===== */
+/* Wrapper — بدون mask */
 .ss__wrapper {
   position: relative;
   width: 100%;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent 0, black 32px, black calc(100% - 32px), transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0, black 32px, black calc(100% - 32px), transparent 100%);
 }
 
-/* ===== Track ===== */
 .ss__track {
   display: flex;
   align-items: flex-end;
-  gap: 14px;
+  gap: 10px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 8px 24px 16px;
+  padding: 4px 24px 8px;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -111,18 +100,17 @@
 .ss__track::-webkit-scrollbar { display: none; }
 .ss__track > * {
   scroll-snap-align: start;
-  flex-shrink: 0;
 }
 
-/* ===== "See all" card in track ===== */
+/* See all card — نفس طول الكروت */
 .ss__seeall-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  width: 180px;
-  height: 240px;
+  gap: 8px;
+  width: 140px;
+  height: 280px;
   border-radius: var(--eah-radius-lg);
   border: 1.5px dashed var(--eah-border-2);
   background: var(--eah-surface);
@@ -130,73 +118,41 @@
   text-decoration: none;
   flex-shrink: 0;
   text-align: center;
-  padding: 20px;
-  transition: all 280ms var(--eah-ease);
+  padding: 16px;
+  transition: all 220ms var(--eah-ease);
 }
 .ss__seeall-card:hover {
   border-color: var(--eah-gold);
   background: rgba(232, 199, 154, 0.06);
-  transform: translateY(-4px);
 }
 .ss__seeall-icon {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: var(--eah-gradient-purple);
   color: #fff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 18px rgba(107, 33, 255, 0.4);
-  transition: transform 300ms var(--eah-ease);
-}
-.ss__seeall-card:hover .ss__seeall-icon {
-  transform: scale(1.1) rotate(-8deg);
 }
 .ss__seeall-icon svg { transform: rotate(180deg); }
 .ss__seeall-title {
   font-family: var(--eah-font-display);
-  font-size: 1rem;
+  font-size: 0.88rem;
   font-weight: 900;
   color: var(--eah-text);
 }
 .ss__seeall-sub {
   font-family: var(--eah-font-body);
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   color: var(--eah-text-3);
 }
 
-/* ===== Progress ===== */
-.ss__progress {
-  width: 80px;
-  height: 3px;
-  margin: 6px auto 0;
-  border-radius: var(--eah-radius-pill);
-  background: rgba(139, 92, 246, 0.12);
-  overflow: hidden;
-}
-.ss__progress-bar {
-  width: 100%;
-  height: 100%;
-  border-radius: var(--eah-radius-pill);
-  background: var(--eah-gradient-purple);
-  transform-origin: right center;
-  transition: transform 180ms ease;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 900px) {
-  .ss { padding: 26px 0 32px; }
-  .ss__head { padding: 0 20px 12px; }
-  .ss__track { padding: 6px 20px 12px; gap: 12px; }
-  .ss__seeall-card { width: 160px; height: 220px; }
-}
 @media (max-width: 640px) {
-  .ss { padding: 20px 0 28px; }
+  .ss { padding: 18px 0 24px; }
   .ss__head { padding: 0 16px 10px; }
-  .ss__track { padding: 4px 16px 10px; gap: 10px; }
+  .ss__track { padding: 4px 16px 8px; gap: 8px; }
   .ss__nav-group { display: none; }
-  .ss__see-all { padding: 6px 12px; font-size: 0.7rem; }
-  .ss__progress { width: 60px; }
-  .ss__seeall-card { width: 140px; height: 200px; }
+  .ss__see-all { padding: 5px 10px; font-size: 0.68rem; }
+  .ss__seeall-card { width: 120px; height: 220px; }
 }

@@ -28,17 +28,13 @@ main, section, header, footer, nav, aside {
 
 /* ===== Performance optimizations ===== */
 img {
-  content-visibility: auto;
 }
 
 section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 500px;
 }
 
 /* منع expensive paints */
 .v4card,
 .ss__seeall-card,
 .ecard {
-  contain: layout style paint;
 }

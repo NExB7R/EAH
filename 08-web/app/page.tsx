@@ -1,6 +1,7 @@
 import HomeHero from '@/components/home-hero'
 import SectionSlider from '@/components/section-slider'
-import BusinessCardV4 from '@/components/business-card-v4'
+import ExploreCard from '@/components/explore-card'
+import MobileTrending from '@/components/mobile-trending'
 import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SidePanel from '@/components/side-panel'
@@ -29,14 +30,8 @@ export default async function Page() {
   const restaurants = diversified.filter((b) => b.type === 'restaurant')
   const pharmacies = diversified.filter((b) => b.type === 'pharmacy')
   const delivery = diversified.filter((b) => b.type === 'delivery_office')
-
-  const offers = diversified
-    .filter((b) => b.activeOffers > 0)
-    .sort((a, b) => b.activeOffers - a.activeOffers || b.score - a.score)
-
-  const newBiz = diversified
-    .filter((b) => b.ageInDays < 30)
-    .sort((a, b) => a.ageInDays - b.ageInDays)
+  const offers = diversified.filter((b) => b.activeOffers > 0).sort((a, b) => b.activeOffers - a.activeOffers)
+  const newBiz = diversified.filter((b) => b.ageInDays < 30)
 
   return (
     <>
@@ -44,86 +39,81 @@ export default async function Page() {
       <SidePanel />
       <BackToTop />
 
-      <main style={{ paddingTop: '100px' }}>
+      <main style={{ paddingTop: '90px' }}>
         <HomeHero />
 
-        {/* ===== مطاعم — أبطال + كروت أصغر ===== */}
+        {/* Mobile trending (يظهر فقط على الشاشات الصغيرة) */}
+        <MobileTrending />
+
+        {/* مطاعم — نمط "بطل ثم عادي" */}
         <SectionSlider
           id="restaurants"
           title="نفسك في إيه؟ 🔥"
-          subtitle={`${restaurants.length} مطعم مستنيينك`}
+          subtitle={`${restaurants.length} مطعم`}
           seeAllHref="/explore?type=restaurant"
           variant="restaurant"
-          maxItems={9}
+          maxItems={12}
           totalItems={restaurants.length}
         >
-          {restaurants.slice(0, 9).map((b, i) => (
-            <BusinessCardV4
+          {restaurants.slice(0, 12).map((b, i) => (
+            <ExploreCard
               key={b.slug}
               business={b}
-              size={i === 0 ? 'hero' : i < 3 ? 'lg' : 'md'}
+              size={i === 0 || i === 5 ? 'hero' : 'md'}
             />
           ))}
         </SectionSlider>
 
-        {/* ===== عروض ===== */}
+        {/* عروض — نمط "أبطال متتابعين" */}
         <SectionSlider
           id="offers"
           title="عروض نار 🔥"
-          subtitle={`${offers.length} عرض شغال دلوقتي`}
+          subtitle={`${offers.length} عرض`}
           seeAllHref="/offers"
           variant="offer"
-          maxItems={10}
+          maxItems={12}
           totalItems={offers.length}
         >
-          {offers.slice(0, 10).map((b, i) => (
-            <BusinessCardV4
+          {offers.slice(0, 12).map((b, i) => (
+            <ExploreCard
               key={b.slug}
               business={b}
-              size={i === 0 ? 'hero' : i < 3 ? 'lg' : 'md'}
+              size={i % 3 === 0 ? 'hero' : i % 3 === 1 ? 'md' : 'sm'}
             />
           ))}
         </SectionSlider>
 
-        {/* ===== صيدليات ===== */}
+        {/* صيدليات — نمط "موحد" */}
         <SectionSlider
           id="pharmacies"
           title="صحتك أولاً 💊"
-          subtitle={`${pharmacies.length} صيدلية قريبة`}
+          subtitle={`${pharmacies.length} صيدلية`}
           seeAllHref="/explore?type=pharmacy"
           variant="pharmacy"
-          maxItems={9}
+          maxItems={12}
           totalItems={pharmacies.length}
         >
-          {pharmacies.slice(0, 9).map((b, i) => (
-            <BusinessCardV4
-              key={b.slug}
-              business={b}
-              size={i === 0 ? 'hero' : i < 3 ? 'lg' : 'md'}
-            />
+          {pharmacies.slice(0, 12).map((b, i) => (
+            <ExploreCard key={b.slug} business={b} size={i === 0 ? 'hero' : 'md'} />
           ))}
         </SectionSlider>
 
-        {/* ===== توصيل ===== */}
+        {/* توصيل — نمط "سريع، صغير" */}
         <SectionSlider
           id="delivery"
           title="على السريع 🛵"
           subtitle={`${delivery.length} مكتب توصيل`}
           seeAllHref="/explore?type=delivery_office"
           variant="delivery"
-          maxItems={9}
+          maxItems={12}
           totalItems={delivery.length}
         >
-          {delivery.slice(0, 9).map((b, i) => (
-            <BusinessCardV4
-              key={b.slug}
-              business={b}
-              size={i === 0 ? 'hero' : i < 3 ? 'lg' : 'md'}
-            />
+          {delivery.slice(0, 12).map((b, i) => (
+            <ExploreCard key={b.slug} business={b} size={i === 0 ? 'hero' : 'sm'} />
           ))}
         </SectionSlider>
 
-        {/* ===== جديد ===== */}
+        {/* جديد */}
         {newBiz.length > 0 && (
           <SectionSlider
             id="new-businesses"
@@ -131,15 +121,11 @@ export default async function Page() {
             subtitle={`${newBiz.length} مكان جديد`}
             seeAllHref="/explore?type=new"
             variant="new"
-            maxItems={9}
+            maxItems={12}
             totalItems={newBiz.length}
           >
-            {newBiz.slice(0, 9).map((b, i) => (
-              <BusinessCardV4
-                key={b.slug}
-                business={b}
-                size={i === 0 ? 'hero' : i < 3 ? 'lg' : 'md'}
-              />
+            {newBiz.slice(0, 12).map((b, i) => (
+              <ExploreCard key={b.slug} business={b} size={i === 0 ? 'hero' : 'lg'} />
             ))}
           </SectionSlider>
         )}

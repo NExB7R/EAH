@@ -23,12 +23,11 @@ export default function SectionSlider({
   subtitle,
   seeAllHref,
   variant = 'restaurant',
-  maxItems = 10,
+  maxItems = 9,
   totalItems,
   children,
 }: SectionSliderProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [paused, setPaused] = useState(false)
   const [progress, setProgress] = useState(0)
   const [canPrev, setCanPrev] = useState(false)
   const [canNext, setCanNext] = useState(true)
@@ -81,25 +80,18 @@ export default function SectionSlider({
       </div>
 
       <div className="ss__wrapper">
-        <div
-          ref={scrollRef}
-          className="ss__track"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onTouchStart={() => setPaused(true)}
-          onTouchEnd={() => setTimeout(() => setPaused(false), 2000)}
-        >
+        <div ref={scrollRef} className="ss__track">
           {items}
 
           <Link href={seeAllHref} className="ss__seeall-card">
             <span className="ss__seeall-icon" aria-hidden>
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
             </span>
             <span className="ss__seeall-title">شوف الكل</span>
             <span className="ss__seeall-sub">
-              {remaining > 0 ? `و ${remaining}+ مكان تاني` : 'اكتشف المزيد'}
+              {remaining > 0 ? `و ${remaining}+ تاني` : 'المزيد'}
             </span>
           </Link>
         </div>
