@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import './explore-card.css'
 
-type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
+type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office'
 type CardSize = 'hero' | 'lg' | 'md'
 
 type Business = {
@@ -22,21 +22,18 @@ type Business = {
 const TYPE_EMOJI: Record<BusinessType, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
-  supermarket: '🛒',
   delivery_office: '🛵',
 }
 
 const TYPE_LABEL: Record<BusinessType, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
-  supermarket: 'سوبر ماركت',
   delivery_office: 'توصيل',
 }
 
 const TYPE_HUE: Record<BusinessType, string> = {
   restaurant: '#FF7A3D',
   pharmacy: '#4ADE80',
-  supermarket: '#A855F7',
   delivery_office: '#E8C79A',
 }
 
@@ -44,7 +41,6 @@ const TYPE_HUE: Record<BusinessType, string> = {
 const DEFAULT_HOOKS: Record<BusinessType, string[]> = {
   restaurant: ['أشهى الأطباق على مزاجك', 'أكل بيتي أصيل', 'طعم يفتح النفس'],
   pharmacy: ['دواك موجود عندنا', 'خدمة سريعة ومحترمة', 'مفتوح وقت ما تحتاج'],
-  supermarket: ['كل احتياجات البيت', 'أسعار مناسبة', 'بضاعة طازة يومياً'],
   delivery_office: ['توصيل سريع وآمن', 'تغطية واسعة', 'أمانة في التسليم'],
 }
 

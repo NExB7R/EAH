@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'] as const
+const VALID_TYPES = ['restaurant', 'pharmacy', 'delivery_office'] as const
 
 export const businessSchema = z.object({
   name: z.string().trim().min(2, 'الاسم قصير').max(80),
