@@ -1,12 +1,75 @@
 import Link from 'next/link'
-import BusinessCard from '@/components/business-card'
+import ExploreClient from '@/components/explore-client'
+import SiteFooter from '@/components/site-footer'
+import FloatingCapsuleHeader from '@/components/floating-capsule'
+import BackToTop from '@/components/back-to-top'
 import { getPublishedBusinesses } from '@/lib/data'
+import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
+import { generateMockStats } from '@/lib/mock-stats'
 
-const intentMap: Record<string,string> = { food:'restaurant', pharmacy:'pharmacy', groceries:'supermarket', delivery:'delivery_office' }
+export const revalidate = 300
 
-export default async function ExplorePage({ searchParams }: { searchParams: Promise<{ intent?: string }> }) {
+const TYPE_MAP: Record<string, string> = {
+  food: 'restaurant',
+  pharmacy: 'pharmacy',
+  groceries: 'supermarket',
+  delivery: 'delivery_office',
+  restaurant: 'restaurant',
+  supermarket: 'supermarket',
+  delivery_office: 'delivery_office',
+}
+
+export const metadata = {
+  title: 'اكتشف | EAH',
+  description: 'اكتشف كل الأماكن في شبين القناطر — مطاعم، صيدليات، سوبر ماركت، توصيل',
+}
+
+export default async function ExplorePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ intent?: string }>
+}) {
   const params = await searchParams
-  const intent = params.intent ? intentMap[params.intent] ?? params.intent : undefined
-  const businesses = await getPublishedBusinesses(20, intent)
-  return <main className="container page-pad"><Link className="pill" href="/">← الرئيسية</Link><div className="eyebrow" style={{marginTop:24}}>اكتشف</div><h1 className="page-title">{intent ? 'اختيارات مناسبة لطلبك' : 'كل اللي حواليك'}</h1><p className="lead">الداتا جاية من EAH مباشرة: ترتيب حسب الصلة، التفاعل، التميز، ونوع النشاط.</p>{businesses.length ? <div className="grid">{businesses.map(b => <BusinessCard key={b.slug} business={b}/>)}</div> : <div className="soft-banner"><div><strong>لسه بنبني الدليل هنا 👀</strong><span>أول ما نسجل الأنشطة في EAH هتظهر تلقائيًا هنا.</span></div><Link className="primary" href="/auth">سجّل</Link></div>}</main>
+  const intent = params.intent ? TYPE_MAP[params.intent] ?? params.intent : undefined
+
+  const businesses = await getPublishedBusinesses(50, intent)
+
+  // نحوّل لإحصائيات + نرتب ذكي
+  const withStats = businesses.map((b) => {
+    const stats = generateMockStats({
+      slug: b.slug,
+      name: b.name,
+      featured: b.badge === 'مميز',
+    })
+    return { ...b, ...stats }
+  })
+
+  const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
+  const diversified = diversifyByCategory(ranked, 'type')
+
+  return (
+    <>
+      <FloatingCapsuleHeader />
+      <BackToTop />
+
+      <main style={{ paddingTop: '100px', minHeight: '100vh' }}>
+        <div className="explore-hero">
+          <Link href="/" className="explore-hero__back">
+            ← الرئيسية
+          </Link>
+          <div className="explore-hero__kicker">اكتشف</div>
+          <h1 className="explore-hero__title">
+            {intent ? 'اختيارات مناسبة لطلبك' : 'كل اللي حواليك'}
+          </h1>
+          <p className="explore-hero__subtitle">
+            {diversified.length} مكان في شبين القناطر — مرتبة بذكاء حسب الجودة والنشاط
+          </p>
+        </div>
+
+        <ExploreClient businesses={diversified} />
+      </main>
+
+      <SiteFooter />
+    </>
+  )
 }
