@@ -83,8 +83,8 @@ export default async function AuditPage() {
                   <span className="audit-item__entity">{log.entity_type}</span>
                 </div>
                 <div className="audit-item__meta">
-                  {log.metadata?.actor_email && (
-                    <span>👤 {String(log.metadata.actor_email)}</span>
+                  {typeof log.metadata?.actor_email === 'string' && (
+                    <span>👤 {log.metadata.actor_email}</span>
                   )}
                   <span>🕐 {new Date(log.created_at).toLocaleString('ar-EG')}</span>
                 </div>

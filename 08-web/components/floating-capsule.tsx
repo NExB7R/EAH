@@ -74,7 +74,7 @@ export default function FloatingCapsuleHeader() {
 
           {/* Center */}
           <div className="floating-capsule__center">
-            <EahLogo size="sm" variant="plain" />
+            <EahLogo size="sm" variant="mark" />
           </div>
 
           {/* RTL end (شمال) */}
@@ -99,7 +99,7 @@ export default function FloatingCapsuleHeader() {
       >
         <div className="nav-drawer__panel" onClick={(e) => e.stopPropagation()}>
           <div className="nav-drawer__head">
-            <EahLogo size="sm" variant="plain" />
+            <EahLogo size="sm" variant="mark" />
             <button
               type="button"
               className="nav-drawer__close"
