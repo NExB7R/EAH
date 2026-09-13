@@ -1,0 +1,96 @@
+import Link from 'next/link'
+import { notFound, redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase-server'
+import BusinessForm from '@/components/admin/business-form'
+import { updateBusiness } from '../../actions'
+
+export const metadata = { title: 'تعديل مكان | EAH Admin' }
+
+export default async function EditBusinessPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const supabase = await createClient()
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) redirect('/admin/login')
+
+  const { data: roleRow } = await supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userData.user.id)
+    .maybeSingle()
+  if (roleRow?.role !== 'super_admin') redirect('/')
+
+  const { data: biz } = await supabase
+    .from('businesses')
+    .select('*')
+    .eq('slug', slug)
+    .maybeSingle()
+
+  if (!biz) notFound()
+
+  const { data: contacts } = await supabase
+    .from('business_contact_methods')
+    .select('method_type,value')
+    .eq('business_id', biz.id)
+
+  const phone = contacts?.find((c) => c.method_type === 'phone')?.value ?? ''
+  const whatsapp = contacts?.find((c) => c.method_type === 'whatsapp')?.value ?? ''
+
+  // نمرّر id و slug للـ action
+  const actionWithId = async (
+    prev: { ok: boolean; message?: string; errors?: Record<string, string[]> },
+    formData: FormData
+  ) => {
+    'use server'
+    return updateBusiness(biz.id, prev, formData)
+  }
+
+  return (
+    <>
+      <div className="admin-header">
+        <div className="admin-header__info">
+          <span className="admin-header__kicker">EDIT BUSINESS</span>
+          <h1 className="admin-header__title">✏️ تعديل: {biz.name}</h1>
+          <p className="admin-header__subtitle">
+            الرابط الحالي: /businesses/{biz.slug}
+          </p>
+        </div>
+        <div className="admin-header__actions">
+          <Link href="/admin/businesses" className="admin-btn admin-btn--ghost">
+            ← رجوع
+          </Link>
+          <Link
+            href={`/businesses/${biz.slug}`}
+            target="_blank"
+            className="admin-btn"
+          >
+            👁 مشاهدة ↗
+          </Link>
+        </div>
+      </div>
+
+      <BusinessForm
+        mode="edit"
+        action={actionWithId}
+        initial={{
+          name: biz.name,
+          slug: biz.slug,
+          business_type: biz.business_type,
+          area: biz.area ?? '',
+          city: biz.city ?? 'شبين القناطر',
+          description: biz.description ?? '',
+          hook: biz.hook ?? '',
+          address_text: biz.address_text ?? '',
+          is_open: biz.is_open,
+          is_featured: biz.is_featured,
+          is_published: biz.is_published,
+          phone,
+          whatsapp,
+        }}
+      />
+    </>
+  )
+}

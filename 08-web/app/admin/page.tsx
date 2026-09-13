@@ -1,83 +1,73 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 
-async function countTable(supabase: Awaited<ReturnType<typeof createClient>>, table: string) {
-  const { count } = await supabase.from(table).select('*', { count: 'exact', head: true })
-  return count ?? 0
-}
-
-function n(value: unknown) {
-  return typeof value === 'number' ? value : Number(value ?? 0)
-}
+export const dynamic = 'force-dynamic'
+export const metadata = { title: 'لوحة التحكم | EAH Admin' }
 
 export default async function AdminHomePage() {
   const supabase = await createClient()
-  const [businesses, offers, reviews, users, pendingChanges, analytics, topBusinesses] = await Promise.all([
-    countTable(supabase, 'businesses'),
-    countTable(supabase, 'offers'),
-    countTable(supabase, 'business_reviews'),
-    countTable(supabase, 'profiles'),
-    (async () => {
-      const { count } = await supabase.from('business_change_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending')
-      return count ?? 0
-    })(),
-    supabase.rpc('admin_analytics_summary'),
-    supabase.rpc('admin_top_businesses_analytics', { p_days: 7 }),
+
+  const [
+    { count: totalBiz },
+    { count: publishedBiz },
+    { count: featuredBiz },
+    { count: totalUsers },
+    { count: totalOffers },
+    { count: pendingChanges },
+  ] = await Promise.all([
+    supabase.from('businesses').select('*', { count: 'exact', head: true }),
+    supabase.from('businesses').select('*', { count: 'exact', head: true }).eq('is_published', true),
+    supabase.from('businesses').select('*', { count: 'exact', head: true }).eq('is_featured', true),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    supabase.from('offers').select('*', { count: 'exact', head: true }),
+    supabase.from('business_change_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
   ])
 
-  const liveSummary = analytics.data ?? {}
-  const topRows = (topBusinesses.data ?? []).slice(0, 5)
+  const stats = [
+    { label: 'الأنشطة', value: totalBiz ?? 0, icon: '🏪', href: '/admin/businesses', color: 'var(--eah-purple-2)' },
+    { label: 'منشور', value: publishedBiz ?? 0, icon: '📢', href: '/admin/businesses', color: 'var(--eah-green)' },
+    { label: 'مميز', value: featuredBiz ?? 0, icon: '⭐', href: '/admin/businesses', color: 'var(--eah-gold)' },
+    { label: 'مستخدمين', value: totalUsers ?? 0, icon: '👥', href: '/admin/users', color: 'var(--eah-purple-3)' },
+    { label: 'عروض', value: totalOffers ?? 0, icon: '🔥', href: '/admin/offers', color: '#FB923C' },
+    { label: 'طلبات تعديل', value: pendingChanges ?? 0, icon: '📝', href: '/admin/change-requests', color: 'var(--eah-gold)' },
+  ]
 
   return (
-    <section>
-      <header className="eah-admin-header">
-        <div>
-          <span className="eah-admin-kicker">EAH CONTROL CENTER • SUPER ADMIN</span>
-          <h1>لوحة التحكم</h1>
-          <p>المركز الكامل لإدارة الأنشطة، المستخدمين، المراجعات، النشر، والتحليلات.</p>
+    <>
+      <div className="admin-header">
+        <div className="admin-header__info">
+          <span className="admin-header__kicker">EAH CONTROL CENTER</span>
+          <h1 className="admin-header__title">👑 مرحباً بك في لوحة التحكم</h1>
+          <p className="admin-header__subtitle">
+            كل اللي محتاجه للتحكم في المنصة من مكان واحد
+          </p>
         </div>
-        <div className="eah-admin-actions"><Link href="/admin/analytics" className="eah-admin-primary">📊 كل الإحصائيات</Link><Link href="/admin/change-requests" className="eah-admin-btn">المراجعات ({pendingChanges})</Link></div>
-      </header>
+        <div className="admin-header__actions">
+          <Link href="/admin/businesses/new" className="admin-btn admin-btn--primary">
+            ➕ إضافة مكان
+          </Link>
+        </div>
+      </div>
 
-      <div className="eah-admin-stat-grid">
-        {[
-          ['الأنشطة', businesses, '/admin/businesses'],
-          ['العروض', offers, '/admin/offers'],
-          ['التقييمات', reviews, '/admin/reviews'],
-          ['المستخدمين', users, '/admin/users'],
-          ['تعديلات تنتظر الموافقة', pendingChanges, '/admin/change-requests'],
-          ['زوار الآن', n(liveSummary.live_visitors), '/admin/analytics'],
-          ['زيارات الموقع اليوم', n(liveSummary.site_views_today), '/admin/analytics'],
-          ['زوار الموقع الفريدون اليوم', n(liveSummary.site_unique_visitors_today), '/admin/analytics'],
-        ].map(([label, value, href]) => (
-          <Link href={href as string} key={label as string} className="eah-admin-stat-card">
-            <span>{label}</span>
-            <strong>{value}</strong>
-            <small>فتح القسم ←</small>
+      <div className="admin-grid admin-grid--cards">
+        {stats.map((s) => (
+          <Link key={s.label} href={s.href} className="admin-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: 'var(--eah-surface-2)', border: '1px solid var(--eah-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', flexShrink: 0 }}>
+                {s.icon}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontFamily: 'var(--eah-font-body)', fontSize: '0.72rem', color: 'var(--eah-text-3)', fontWeight: 700 }}>
+                  {s.label}
+                </div>
+                <div style={{ fontFamily: 'var(--eah-font-display)', fontSize: '1.8rem', fontWeight: 900, color: s.color, lineHeight: 1.1 }}>
+                  {s.value}
+                </div>
+              </div>
+            </div>
           </Link>
         ))}
       </div>
-
-      <div className="card" style={{ padding: 22, marginTop: 18 }}>
-        <div className="section-head"><div><h2>أكثر الأنشطة زيارة</h2><span>آخر 7 أيام • الزيارات / الزوار الفريدين / Live الآن</span></div><Link href="/admin/analytics" className="pill">التفاصيل →</Link></div>
-        <div style={{ display: 'grid', gap: 10, marginTop: 16 }}>
-          {topRows.length ? topRows.map((row: any, index: number) => (
-            <div key={row.business_id} className="eah-admin-business-card" style={{ padding: 12 }}>
-              <div><strong>#{index + 1} {row.business_name}</strong><div className="eah-admin-business-sub">{n(row.views)} زيارة • {n(row.unique_visitors)} زائر فريد • {n(row.live_visitors)} الآن</div></div>
-              {n(row.live_visitors) > 0 && <span className="eah-admin-badge live">{n(row.live_visitors)} Live</span>}
-            </div>
-          )) : <div className="eah-admin-business-sub">لسه مفيش بيانات زيارات. أول زيارات للموقع هتبدأ تبني الإحصائيات.</div>}
-        </div>
-      </div>
-
-      <div className="eah-admin-command-grid">
-        <Link href="/admin/change-requests" className="eah-admin-command-card"><strong>🛡️ بوابة النشر</strong><span>كل تعديل من صاحب النشاط يقف هنا قبل وصوله للصفحة العامة.</span></Link>
-        <Link href="/admin/businesses" className="eah-admin-command-card"><strong>⚡ إدارة الأنشطة</strong><span>البيانات، أصحاب الأنشطة، الصلاحيات، وصفحات الأنشطة.</span></Link>
-        <Link href="/admin/users" className="eah-admin-command-card"><strong>👤 المستخدمون والأرقام</strong><span>إدارة العملاء وأصحاب الأنشطة وربط الملكية.</span></Link>
-        <Link href="/admin/analytics" className="eah-admin-command-card"><strong>📈 التحليلات</strong><span>Live، يومي، أسبوعي، وترتيب كل نشاط وكل صفحة.</span></Link>
-        <Link href="/admin/studio" className="eah-admin-command-card"><strong>🎨 استوديو التصميم</strong><span>تحكم بصري في المنصة وصفحات الأنشطة.</span></Link>
-        <Link href="/admin/audit" className="eah-admin-command-card"><strong>🧾 سجل العمليات</strong><span>تتبع من نفّذ كل عملية ومتى.</span></Link>
-      </div>
-    </section>
+    </>
   )
 }
