@@ -3,42 +3,52 @@
 -- Date: 2026-09-13
 -- Purpose: Support onboarding overlay state + personalization tags
 -- Safe to re-run (idempotent) — additive only
+--
+-- NOTE: Live DB uses public.profiles with:
+--   - onboarding_done boolean  default false
+--   - interests       jsonb    default '[]'::jsonb
+-- This migration reflects reality. app.profiles is legacy —
+-- we mirror there only if it exists.
 -- =========================================================
 
--- Ensure columns exist on app.profiles (source of truth)
-alter table if exists app.profiles
+-- === 1. public.profiles (the actual live table) ===
+alter table if exists public.profiles
   add column if not exists onboarding_done boolean not null default false;
 
-alter table if exists app.profiles
-  add column if not exists interests text[] not null default '{}'::text[];
+alter table if exists public.profiles
+  add column if not exists interests jsonb not null default '[]'::jsonb;
 
--- If a public view/table named profiles exists, mirror the columns there
+-- GIN index on jsonb for fast tag lookups
+create index if not exists idx_profiles_interests_gin
+  on public.profiles using gin (interests);
+
+-- Partial index for pending onboarding
+create index if not exists idx_profiles_onboarding_done
+  on public.profiles (onboarding_done) where onboarding_done = false;
+
+-- === 2. app.profiles (legacy schema — mirror if exists) ===
 do $$
 begin
   if exists (
     select 1 from information_schema.tables
-    where table_schema = 'public' and table_name = 'profiles'
+    where table_schema = 'app' and table_name = 'profiles'
       and table_type = 'BASE TABLE'
   ) then
-    alter table public.profiles
-      add column if not exists onboarding_done boolean not null default false;
-    alter table public.profiles
-      add column if not exists interests text[] not null default '{}'::text[];
+    execute 'alter table app.profiles add column if not exists onboarding_done boolean not null default false';
+    execute 'alter table app.profiles add column if not exists interests jsonb not null default ''[]''::jsonb';
+    execute 'create index if not exists idx_app_profiles_interests_gin on app.profiles using gin (interests)';
+    execute 'create index if not exists idx_app_profiles_onboarding_done on app.profiles (onboarding_done) where onboarding_done = false';
+    raise notice 'Mirrored columns onto app.profiles';
+  else
+    raise notice 'app.profiles not found — skipped (expected in live env)';
   end if;
 end $$;
 
--- Index for fast personalization reads (skip if already present)
-create index if not exists idx_profiles_interests_gin
-  on app.profiles using gin (interests);
-
--- Optional: onboarding completion index
-create index if not exists idx_profiles_onboarding_done
-  on app.profiles (onboarding_done) where onboarding_done = false;
-
--- =========================================================
--- Verify (expected: 4 rows, 2 columns on app + 2 on public if exists)
--- =========================================================
--- select table_schema, column_name, data_type
+-- === 3. Verify ===
+-- Expected after run:
+--   public: interests (jsonb, default '[]'::jsonb)
+--   public: onboarding_done (boolean, default false)
+-- select table_schema, column_name, data_type, column_default
 --   from information_schema.columns
 --  where column_name in ('onboarding_done','interests')
 --  order by table_schema, column_name;
