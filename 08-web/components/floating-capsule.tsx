@@ -4,6 +4,8 @@ import EahLogo from './eah-logo'
 import NeonIconButton from './neon-icon-button'
 import UserAvatar from './user-avatar'
 import AdminIconLink from './admin-icon-link'
+import { MI } from './neon-icons-menu'
+import './drawer-icons.css'
 import './admin-icon-link.css'
 import OverlayBlur from './overlay-blur'
 import { createClient } from '@/lib/supabase-browser'
@@ -152,43 +154,43 @@ export default function FloatingCapsuleHeader() {
 
           {loggedIn === true && (isStaff || isMerchant) && (
             <div className="nav-drawer__roles">
-              {isStaff && <a href="/admin" className="nav-drawer__role nav-drawer__role--admin">👑 لوحة التحكم</a>}
-              {isMerchant && <a href="/merchant" className="nav-drawer__role nav-drawer__role--merchant">🏪 متجري</a>}
+              {isStaff && <a href="/admin" className="nav-drawer__role nav-drawer__role--admin"><span className="nav-drawer__link-icon">{MI.shield}</span>لوحة التحكم</a>}
+              {isMerchant && <a href="/merchant" className="nav-drawer__role nav-drawer__role--merchant"><span className="nav-drawer__link-icon">{MI.store}</span>متجري</a>}
             </div>
           )}
 
           <nav className="nav-drawer__group">
-            <a href="/explore" className="nav-drawer__link"><span className="nav-drawer__link-icon">🍽️</span>اكتشف الأماكن</a>
-            <a href="/offers" className="nav-drawer__link"><span className="nav-drawer__link-icon">🔥</span>العروض</a>
-            <a href="/recommend" className="nav-drawer__link"><span className="nav-drawer__link-icon">✨</span>نفسك في ايه؟</a>
-            <a href="/trends" className="nav-drawer__link"><span className="nav-drawer__link-icon">📈</span>الترندات</a>
+            <a href="/explore" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.compass}</span>اكتشف الأماكن</a>
+            <a href="/offers" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.fire}</span>العروض</a>
+            <a href="/recommend" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.sparkles}</span>نفسك في ايه؟</a>
+            <a href="/trends" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.trending}</span>الترندات</a>
           </nav>
           <div className="nav-drawer__spacer" />
           <nav className="nav-drawer__group">
-            <a href="/merchant/apply" className="nav-drawer__link"><span className="nav-drawer__link-icon">🏪</span>سجّل نشاطك</a>
-            <a href="/advertise" className="nav-drawer__link"><span className="nav-drawer__link-icon">📢</span>أعلن معنا</a>
+            <a href="/merchant/apply" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.store}</span>سجّل نشاطك</a>
+            <a href="/advertise" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.megaphone}</span>أعلن معنا</a>
           </nav>
           <div className="nav-drawer__spacer" />
           <nav className="nav-drawer__group">
-            <a href="/about" className="nav-drawer__link"><span className="nav-drawer__link-icon">ℹ️</span>نبذة عننا</a>
-            <a href="/contact" className="nav-drawer__link"><span className="nav-drawer__link-icon">💬</span>تواصل معنا</a>
-            <a href="https://facebook.com/eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">📘</span>فيسبوك</a>
-            <a href="https://wa.me/201012892806" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">💚</span>واتساب</a>
+            <a href="/about" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.info}</span>نبذة عننا</a>
+            <a href="/contact" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.chat}</span>تواصل معنا</a>
+            <a href="https://facebook.com/eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.facebook}</span>فيسبوك</a>
+            <a href="https://wa.me/201012892806" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.whatsapp}</span>واتساب</a>
           </nav>
           <div className="nav-drawer__spacer" />
           <nav className="nav-drawer__group">
-            <a href="/terms" className="nav-drawer__link"><span className="nav-drawer__link-icon">📜</span>الشروط والأحكام</a>
-            <a href="/privacy" className="nav-drawer__link"><span className="nav-drawer__link-icon">🔒</span>سياسة الخصوصية</a>
+            <a href="/terms" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.shield}</span>الشروط والأحكام</a>
+            <a href="/privacy" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.lock}</span>سياسة الخصوصية</a>
           </nav>
           <div className="nav-drawer__spacer" />
           {loggedIn === false && (
             <div className="nav-drawer__auth">
-              <a href="/auth" className="nav-drawer__auth-btn">⚡ دخول / تسجيل</a>
+              <a href="/auth" className="nav-drawer__auth-btn"><span className="nav-drawer__link-icon">{MI.login}</span>دخول / تسجيل</a>
             </div>
           )}
           {loggedIn === true && (
             <form action="/auth/logout" method="post" className="nav-drawer__logout">
-              <button type="submit">🚪 تسجيل خروج</button>
+              <button type="submit"><span className="nav-drawer__link-icon">{MI.logout}</span>تسجيل خروج</button>
             </form>
           )}
         </div>

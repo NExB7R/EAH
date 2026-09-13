@@ -141,6 +141,28 @@ export default function StudioShell({ initial }: { initial: DesignData | null })
     })
   }
 
+  const forceSave = async () => {
+    setSaving(true)
+    try {
+      const res = await fetch('/api/studio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'home', data: design }),
+      })
+      if (res.ok) {
+        setSavedAt(new Date())
+        setDirty(false)
+        setTimeout(() => window.location.reload(), 800)
+      } else {
+        alert('فشل الحفظ — تأكد من تسجيل الدخول كـ super_admin')
+      }
+    } catch {
+      alert('خطأ في الاتصال')
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const resetAll = () => {
     if (!confirm('متأكد إنك عايز ترجع التصميم الافتراضي؟ كل تعديلاتك هتتمسح.')) return
     push(currentHomeDesign)
@@ -203,9 +225,11 @@ export default function StudioShell({ initial }: { initial: DesignData | null })
           <button className="studio__btn" onClick={redo} title="Ctrl+Shift+Z">↷</button>
           <button className="studio__btn" onClick={resetAll} title="إعادة ضبط">🔄</button>
           <button className="studio__btn" onClick={exportJSON} title="تنزيل JSON">⬇</button>
-          <button className="studio__btn studio__btn--primary" onClick={() => setPreview(true)}>
-            👁️ معاينة
+          <button className="studio__btn" onClick={() => window.location.reload()} title="إعادة تحميل">🔄</button>
+          <button className="studio__btn studio__btn--primary" onClick={forceSave} disabled={saving}>
+            {saving ? '💾 جاري الحفظ...' : '💾 احفظ + حدّث الموقع'}
           </button>
+          <button className="studio__btn" onClick={() => setPreview(true)} title="معاينة">👁️</button>
         </div>
       </header>
 
