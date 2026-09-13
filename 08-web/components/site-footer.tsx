@@ -45,6 +45,7 @@ export default function SiteFooter() {
             <a href="/about">نبذة عننا</a>
             <a href="/contact">تواصل معنا</a>
             <a href="/advertise">أعلن معنا</a>
+            <a href="/pricing">الباقات والأسعار</a>
             <a href="/merchant/apply">سجّل متجرك</a>
           </div>
           <div className="site-footer__col">

@@ -173,6 +173,7 @@ export default function FloatingCapsuleHeader() {
           <nav className="nav-drawer__group">
             <a href="/merchant/apply" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.store}</span>سجّل نشاطك</a>
             <a href="/advertise" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.megaphone}</span>أعلن معنا</a>
+            <a href="/pricing" className="nav-drawer__link"><span className="nav-drawer__link-icon">💎</span>الباقات</a>
           </nav>
           <div className="nav-drawer__spacer" />
           <nav className="nav-drawer__group">
