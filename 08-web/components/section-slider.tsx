@@ -23,7 +23,7 @@ export default function SectionSlider({
   subtitle,
   seeAllHref,
   variant = 'restaurant',
-  maxItems = 9,
+  maxItems = 12,
   totalItems,
   children,
 }: SectionSliderProps) {
@@ -65,18 +65,12 @@ export default function SectionSlider({
           <h2 className="ss__title">{title}</h2>
           {subtitle && <p className="ss__subtitle">{subtitle}</p>}
         </div>
-        <div className="ss__controls">
-          <Link href={seeAllHref} className="ss__see-all">
-            اكتشف الكل
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-          </Link>
-          <div className="ss__nav-group">
-            <button type="button" className="ss__nav" onClick={() => scrollBy(-1)} disabled={!canPrev} aria-label="السابق">‹</button>
-            <button type="button" className="ss__nav" onClick={() => scrollBy(1)} disabled={!canNext} aria-label="التالي">›</button>
-          </div>
-        </div>
+        <Link href={seeAllHref} className="ss__see-all">
+          اكتشف الكل
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+        </Link>
       </div>
 
       <div className="ss__wrapper">
@@ -97,8 +91,38 @@ export default function SectionSlider({
         </div>
       </div>
 
-      <div className="ss__progress" aria-hidden>
-        <div className="ss__progress-bar" style={{ transform: `scaleX(${Math.max(0.08, progress)})` }} />
+      {/* ===== شريط التحكم السفلي (الأسهم + شريط تقدم) ===== */}
+      <div className="ss__bottom">
+        <button
+          type="button"
+          className="ss__arrow ss__arrow--prev"
+          onClick={() => scrollBy(-1)}
+          disabled={!canPrev}
+          aria-label="السابق"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+
+        <div className="ss__bar" aria-hidden>
+          <div
+            className="ss__bar-fill"
+            style={{ transform: `scaleX(${Math.max(0.05, progress)})` }}
+          />
+        </div>
+
+        <button
+          type="button"
+          className="ss__arrow ss__arrow--next"
+          onClick={() => scrollBy(1)}
+          disabled={!canNext}
+          aria-label="التالي"
+        >
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </button>
       </div>
     </section>
   )

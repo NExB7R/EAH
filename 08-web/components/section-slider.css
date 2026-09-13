@@ -1,5 +1,5 @@
 .ss {
-  padding: 24px 0 32px;
+  padding: 26px 0 16px;
   max-width: 1320px;
   margin: 0 auto;
   position: relative;
@@ -27,8 +27,6 @@
   margin: 2px 0 0;
 }
 
-.ss__controls { display: flex; align-items: center; gap: 6px; }
-
 .ss__see-all {
   display: inline-flex;
   align-items: center;
@@ -50,35 +48,7 @@
 }
 .ss__see-all svg { transform: rotate(180deg); }
 
-/* Arrow buttons — صغيرة، في الهيدر */
-.ss__nav-group {
-  display: flex;
-  gap: 4px;
-}
-.ss__nav {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid var(--eah-border);
-  background: var(--eah-surface-2);
-  color: var(--eah-text);
-  font-size: 1rem;
-  font-weight: 900;
-  line-height: 1;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 3px;
-  transition: all 150ms ease;
-}
-.ss__nav:hover:not(:disabled) {
-  border-color: var(--eah-purple-2);
-  background: rgba(168, 85, 247, 0.15);
-}
-.ss__nav:disabled { opacity: 0.3; cursor: not-allowed; }
-
-/* Wrapper — بدون mask */
+/* ===== Wrapper ===== */
 .ss__wrapper {
   position: relative;
   width: 100%;
@@ -98,11 +68,9 @@
   scroll-behavior: smooth;
 }
 .ss__track::-webkit-scrollbar { display: none; }
-.ss__track > * {
-  scroll-snap-align: start;
-}
+.ss__track > * { scroll-snap-align: start; }
 
-/* See all card — نفس طول الكروت */
+/* See all card */
 .ss__seeall-card {
   display: flex;
   flex-direction: column;
@@ -126,33 +94,85 @@
   background: rgba(232, 199, 154, 0.06);
 }
 .ss__seeall-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--eah-gradient-purple);
-  color: #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--eah-gradient-purple); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
 }
 .ss__seeall-icon svg { transform: rotate(180deg); }
 .ss__seeall-title {
   font-family: var(--eah-font-display);
-  font-size: 0.88rem;
-  font-weight: 900;
-  color: var(--eah-text);
+  font-size: 0.88rem; font-weight: 900; color: var(--eah-text);
 }
 .ss__seeall-sub {
   font-family: var(--eah-font-body);
-  font-size: 0.62rem;
-  color: var(--eah-text-3);
+  font-size: 0.62rem; color: var(--eah-text-3);
 }
 
+/* ===== Bottom bar (arrows + progress) ===== */
+.ss__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 24px 0;
+}
+
+.ss__arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--eah-border-2);
+  background: var(--eah-surface);
+  color: var(--eah-text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 180ms var(--eah-ease);
+  flex-shrink: 0;
+}
+.ss__arrow:hover:not(:disabled) {
+  border-color: var(--eah-purple-2);
+  background: rgba(168, 85, 247, 0.15);
+  transform: scale(1.08);
+}
+.ss__arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* RTL: قلب اتجاه الأسهم */
+.ss__arrow--prev svg,
+.ss__arrow--next svg {
+  transform: scaleX(-1);
+}
+
+.ss__bar {
+  flex: 1;
+  max-width: 200px;
+  height: 3px;
+  border-radius: var(--eah-radius-pill);
+  background: rgba(139, 92, 246, 0.12);
+  overflow: hidden;
+}
+.ss__bar-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--eah-radius-pill);
+  background: var(--eah-gradient-purple);
+  transform-origin: right center;
+  transition: transform 180ms ease;
+}
+
+/* Responsive */
 @media (max-width: 640px) {
-  .ss { padding: 18px 0 24px; }
+  .ss { padding: 18px 0 12px; }
   .ss__head { padding: 0 16px 10px; }
   .ss__track { padding: 4px 16px 8px; gap: 8px; }
-  .ss__nav-group { display: none; }
   .ss__see-all { padding: 5px 10px; font-size: 0.68rem; }
-  .ss__seeall-card { width: 120px; height: 220px; }
+  .ss__seeall-card { width: 120px; height: 240px; }
+  .ss__bottom { padding: 8px 16px 0; gap: 8px; }
+  .ss__arrow { width: 30px; height: 30px; }
+  .ss__bar { max-width: 120px; }
 }

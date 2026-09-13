@@ -1,9 +1,11 @@
-/* ===== EAH Magazine Card — Fixed Height ===== */
+/* ===== EAH Magazine Card v2 ===== */
 .ecard {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 280px;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
   border-radius: var(--eah-radius-lg);
   overflow: hidden;
   text-decoration: none;
@@ -20,11 +22,13 @@
   border-color: var(--hue);
 }
 
-/* Sizes — نفس الطول، عرض مختلف */
-.ecard--hero { width: 320px; height: 320px; }
-.ecard--lg   { width: 220px; height: 280px; }
-.ecard--md   { width: 180px; height: 280px; }
-.ecard--sm   { width: 150px; height: 240px; }
+/* في السلايدر — الحجم ثابت */
+.ss__track .ecard {
+  width: 200px;
+  height: 280px;
+}
+.ss__track .ecard--hero { width: 260px; height: 320px; }
+.ss__track .ecard--sm { width: 150px; height: 240px; }
 
 /* خلفية */
 .ecard__bg {
@@ -33,68 +37,44 @@
   z-index: 0;
   background:
     radial-gradient(circle at 50% 35%, var(--soft) 0%, transparent 55%),
-    linear-gradient(180deg, transparent 0%, rgba(5, 3, 8, 0.9) 100%);
+    linear-gradient(180deg, transparent 0%, rgba(5, 3, 8, 0.88) 100%);
 }
 
 /* Top bar */
 .ecard__top {
   position: absolute;
-  top: 10px;
-  inset-inline: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  top: 10px; inset-inline: 10px;
+  display: flex; align-items: center; justify-content: space-between;
   z-index: 3;
 }
-
 .ecard__type {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  border-radius: var(--eah-radius-pill);
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 8px; border-radius: var(--eah-radius-pill);
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid var(--eah-border-soft);
-  font-family: var(--eah-font-body);
-  font-size: 0.55rem;
-  font-weight: 700;
-  color: var(--eah-text);
+  font-family: var(--eah-font-body); font-size: 0.55rem;
+  font-weight: 700; color: var(--eah-text);
 }
 .ecard__type-emoji { font-size: 0.7rem; line-height: 1; }
-
 .ecard__live {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 20px; height: 20px; border-radius: 50%;
   background: rgba(0, 0, 0, 0.6);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-flex; align-items: center; justify-content: center;
 }
-.ecard__live-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-}
+.ecard__live-dot { width: 6px; height: 6px; border-radius: 50%; }
 .ecard__live.is-on .ecard__live-dot {
-  background: var(--eah-green);
-  box-shadow: 0 0 6px var(--eah-green);
+  background: var(--eah-green); box-shadow: 0 0 6px var(--eah-green);
 }
 .ecard__live.is-off .ecard__live-dot { background: var(--eah-red); }
 
 /* Visual */
 .ecard__visual {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
 }
-
 .ecard__emoji {
-  font-size: 3.5rem;
-  line-height: 1;
+  font-size: 3.5rem; line-height: 1;
   filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5));
   transition: transform 300ms var(--eah-ease);
 }
@@ -104,86 +84,49 @@
 
 /* Body */
 .ecard__body {
-  position: relative;
-  z-index: 2;
+  position: relative; z-index: 2;
   padding: 10px 12px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  display: flex; flex-direction: column; gap: 5px;
 }
-
 .ecard__name {
   font-family: var(--eah-font-display);
-  font-size: 0.95rem;
-  font-weight: 900;
-  color: var(--eah-text);
-  margin: 0;
+  font-size: 0.95rem; font-weight: 900;
+  color: var(--eah-text); margin: 0;
   line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .ecard--hero .ecard__name { font-size: 1.2rem; }
 .ecard--sm .ecard__name { font-size: 0.82rem; }
 
 .ecard__meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  font-family: var(--eah-font-body);
-  font-size: 0.62rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 6px; font-family: var(--eah-font-body); font-size: 0.62rem;
   color: var(--eah-text-3);
 }
 .ecard__area {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 3px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .ecard__score {
-  padding: 2px 6px;
-  border-radius: var(--eah-radius-pill);
-  background: var(--eah-gold-soft);
-  border: 1px solid var(--eah-border-gold);
-  color: var(--eah-gold);
-  font-weight: 900;
-  font-size: 0.55rem;
+  padding: 2px 6px; border-radius: var(--eah-radius-pill);
+  background: var(--eah-gold-soft); border: 1px solid var(--eah-border-gold);
+  color: var(--eah-gold); font-weight: 900; font-size: 0.55rem;
 }
 
-/* Badge */
 .ecard__badge {
-  position: absolute;
-  top: 38px;
-  inset-inline-end: 10px;
-  padding: 2px 8px;
-  border-radius: var(--eah-radius-pill);
-  background: var(--eah-gradient-gold);
-  color: var(--eah-black-2);
-  font-family: var(--eah-font-body);
-  font-size: 0.52rem;
-  font-weight: 900;
-  z-index: 4;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .ecard--hero { width: 260px; height: 260px; }
-  .ecard--lg   { width: 200px; height: 260px; }
-  .ecard--md   { width: 170px; height: 260px; }
-  .ecard--sm   { width: 140px; height: 220px; }
-  .ecard--hero .ecard__emoji { font-size: 4rem; }
+  position: absolute; top: 38px; inset-inline-end: 10px;
+  padding: 2px 8px; border-radius: var(--eah-radius-pill);
+  background: var(--eah-gradient-gold); color: var(--eah-black-2);
+  font-family: var(--eah-font-body); font-size: 0.52rem;
+  font-weight: 900; z-index: 4;
 }
 
 @media (max-width: 640px) {
-  .ecard--hero { width: 220px; height: 220px; }
-  .ecard--lg   { width: 180px; height: 220px; }
-  .ecard--md   { width: 160px; height: 220px; }
-  .ecard--sm   { width: 130px; height: 200px; }
+  .ss__track .ecard { width: 170px; height: 240px; }
+  .ss__track .ecard--hero { width: 220px; height: 260px; }
+  .ss__track .ecard--sm { width: 140px; height: 200px; }
   .ecard__emoji { font-size: 2.8rem; }
-  .ecard--hero .ecard__emoji { font-size: 3.2rem; }
+  .ecard--hero .ecard__emoji { font-size: 3.4rem; }
   .ecard__name { font-size: 0.88rem; }
   .ecard--hero .ecard__name { font-size: 1rem; }
 }
