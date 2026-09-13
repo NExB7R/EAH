@@ -67,7 +67,7 @@ function AutoSlider({ items, featured }: { items: SideItem[]; featured?: boolean
     const el = trackRef.current
     if (!el) return
     const step = 46
-    el.scrollTo({ top: index * step, behavior: 'smooth' })
+    if (el.scrollHeight > el.clientHeight + 4) { el.scrollTo({ top: index * step, left: 0, behavior: 'smooth' }) }
   }, [index])
 
   return (

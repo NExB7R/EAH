@@ -33,7 +33,7 @@ export default function SectionSlider({
   const [canPrev, setCanPrev] = useState(false)
   const [canNext, setCanNext] = useState(true)
 
-  // تتبع الـ scroll
+  // ===== تتبع الـ scroll الأفقي =====
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
@@ -46,7 +46,7 @@ export default function SectionSlider({
       setCanPrev(Math.abs(el.scrollLeft) > 10)
       setCanNext(Math.abs(el.scrollLeft) < max - 10)
 
-      // تحديث currentIndex بناءً على أقرب بطاقة
+      // أقرب بطاقة في المنتصف
       const cards = Array.from(el.children) as HTMLElement[]
       if (cards.length === 0) return
       const containerRect = el.getBoundingClientRect()
@@ -71,11 +71,33 @@ export default function SectionSlider({
     return () => el.removeEventListener('scroll', onScroll)
   }, [])
 
-  // ===== Auto-play باستخدام scrollIntoView (يعمل في كل المتصفحات) =====
+  // ===== Helper: scroll أفقي فقط (بدون أي حركة رأسية) =====
+  const scrollToIndex = (idx: number) => {
+    const el = scrollRef.current
+    if (!el) return
+    const cards = Array.from(el.children) as HTMLElement[]
+    const card = cards[idx] as HTMLElement | undefined
+    if (!card) return
+
+    // ⚠️ المهم: نستخدم scrollTo على الـ container نفسه فقط
+    // offsetLeft مش بيتأثر بحركة الصفحة الرأسية
+    const targetLeft = card.offsetLeft - el.offsetLeft
+    el.scrollTo({
+      left: targetLeft,
+      top: 0, // ← صفر: نمنع أي scroll رأسي
+      behavior: 'smooth',
+    })
+  }
+
+  // ===== Auto-play =====
   useEffect(() => {
     if (paused) return
     const el = scrollRef.current
     if (!el) return
+
+    // ⚠️ ما نعملش auto-play لو مفيش overflow أفقي
+    const hasOverflow = el.scrollWidth > el.clientWidth + 4
+    if (!hasOverflow) return
 
     const timer = setInterval(() => {
       const cards = Array.from(el.children) as HTMLElement[]
@@ -84,23 +106,15 @@ export default function SectionSlider({
       let nextIndex = currentIndexRef.current + 1
       if (nextIndex >= cards.length) nextIndex = 0
 
-      const targetCard = cards[nextIndex]
-      if (!targetCard) return
-
-      targetCard.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'start',
-        block: 'nearest',
-      })
-
+      scrollToIndex(nextIndex)
       currentIndexRef.current = nextIndex
-    }, 4500)
+    }, 5000)
 
     return () => clearInterval(timer)
   }, [paused])
 
   // ===== أزرار الأسهم =====
-  const scrollToCard = (dir: 1 | -1) => {
+  const scrollByCard = (dir: 1 | -1) => {
     const el = scrollRef.current
     if (!el) return
     const cards = Array.from(el.children) as HTMLElement[]
@@ -110,15 +124,7 @@ export default function SectionSlider({
     if (nextIndex < 0) nextIndex = 0
     if (nextIndex >= cards.length) nextIndex = cards.length - 1
 
-    const targetCard = cards[nextIndex]
-    if (!targetCard) return
-
-    targetCard.scrollIntoView({
-      behavior: 'smooth',
-      inline: 'start',
-      block: 'nearest',
-    })
-
+    scrollToIndex(nextIndex)
     currentIndexRef.current = nextIndex
   }
 
@@ -138,7 +144,7 @@ export default function SectionSlider({
             <button
               type="button"
               className="ss__nav"
-              onClick={() => scrollToCard(-1)}
+              onClick={() => scrollByCard(-1)}
               disabled={!canPrev}
               aria-label="السابق"
             >
@@ -147,7 +153,7 @@ export default function SectionSlider({
             <button
               type="button"
               className="ss__nav"
-              onClick={() => scrollToCard(1)}
+              onClick={() => scrollByCard(1)}
               disabled={!canNext}
               aria-label="التالي"
             >
