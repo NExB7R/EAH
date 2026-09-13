@@ -46,11 +46,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       dir="rtl"
       className={`${cairo.variable} ${cairoPlay.variable}`}
       suppressHydrationWarning
+      style={{ overflowX: 'clip', maxWidth: '100vw' }}
     >
-      <body>
+      <body style={{ overflowX: 'clip', maxWidth: '100vw' }}>
         <ScrollIconsBackground />
         <PageViewTracker />
-        {children}
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '100vw',
+            overflowX: 'clip',
+            position: 'relative',
+          }}
+        >
+          {children}
+        </div>
         <RegisterSW />
       </body>
     </html>
