@@ -148,3 +148,14 @@
   }
   .user-avatar__bell .neon-icon-btn__icon { width: 16px; height: 16px; }
 }
+
+/* Avatar as link */
+a.user-avatar {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+a.user-avatar:hover {
+  transform: translateY(-1px);
+}

@@ -7,7 +7,9 @@ type UserAvatarProps = {
   points?: number
   avatarUrl?: string
   unreadNotifications?: number
-  banUntil?: string | null // ISO date
+  banUntil?: string | null
+  href?: string
+  onClick?: () => void
 }
 
 export default function UserAvatar({
@@ -16,6 +18,8 @@ export default function UserAvatar({
   avatarUrl,
   unreadNotifications = 0,
   banUntil = null,
+  href,
+  onClick,
 }: UserAvatarProps) {
   const isBanned = banUntil && new Date(banUntil).getTime() > Date.now()
   const banDays = isBanned
@@ -24,9 +28,34 @@ export default function UserAvatar({
 
   const initial = name.trim().charAt(0).toUpperCase()
 
+  const inner = (
+    <>
+      <span className="user-avatar__img">
+        {avatarUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={avatarUrl} alt={name} />
+        ) : (
+          <span className="user-avatar__initial">{initial || <IconUser />}</span>
+        )}
+      </span>
+
+      {!isBanned && points > 0 && (
+        <span className="user-avatar__points" aria-label={`${points} نقطة`}>
+          {points >= 1000 ? `${(points / 1000).toFixed(1)}k` : points}
+        </span>
+      )}
+
+      {isBanned && (
+        <span className="user-avatar__ban" aria-label={`محظور لمدة ${banDays} يوم`}>
+          <span className="user-avatar__ban-icon">🚫</span>
+          <span className="user-avatar__ban-days">{banDays}ي</span>
+        </span>
+      )}
+    </>
+  )
+
   return (
     <div className="user-avatar-wrap">
-      {/* الإشعارات */}
       <button
         type="button"
         className="neon-icon-btn user-avatar__bell"
@@ -40,36 +69,20 @@ export default function UserAvatar({
         )}
       </button>
 
-      {/* Avatar */}
-      <button
-        type="button"
-        className="user-avatar"
-        aria-label={`حساب ${name}`}
-      >
-        <span className="user-avatar__img">
-          {avatarUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={avatarUrl} alt={name} />
-          ) : (
-            <span className="user-avatar__initial">{initial || <IconUser />}</span>
-          )}
-        </span>
-
-        {/* عداد النقاط */}
-        {!isBanned && points > 0 && (
-          <span className="user-avatar__points" aria-label={`${points} نقطة`}>
-            {points >= 1000 ? `${(points / 1000).toFixed(1)}k` : points}
-          </span>
-        )}
-
-        {/* لافتة الحظر */}
-        {isBanned && (
-          <span className="user-avatar__ban" aria-label={`محظور لمدة ${banDays} يوم`}>
-            <span className="user-avatar__ban-icon">🚫</span>
-            <span className="user-avatar__ban-days">{banDays}ي</span>
-          </span>
-        )}
-      </button>
+      {href ? (
+        <a href={href} className="user-avatar" aria-label={`حساب ${name}`}>
+          {inner}
+        </a>
+      ) : (
+        <button
+          type="button"
+          className="user-avatar"
+          aria-label={`حساب ${name}`}
+          onClick={onClick}
+        >
+          {inner}
+        </button>
+      )}
     </div>
   )
 }
