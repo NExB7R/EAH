@@ -141,6 +141,7 @@ export default function AuthPage() {
       <div className="auth__wrap">
         {/* Hero — RTL right side */}
         <section className="auth__hero">
+          <div className="auth__logo"><EahLogo size="md" variant="full" href="/" /></div>
           <span className="auth__kicker">EAH • EAT AROUND HERE</span>
           <h1 className="auth__title">
             {mode === 'login' ? (

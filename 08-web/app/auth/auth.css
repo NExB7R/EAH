@@ -343,3 +343,7 @@
   box-shadow: 0 0 0 1px #A855F7, 0 8px 24px rgba(139, 92, 246, 0.3);
 }
 .auth__gender-emoji { font-size: 1.5rem; line-height: 1; }
+
+
+.auth__logo { display: flex; justify-content: center; margin-bottom: 16px; padding-top: 8px; }
+.auth__logo .eah-logo { --logo-w: 180px; }

@@ -1,0 +1,16 @@
+.explore-hero {
+  max-width: 900px; margin: 0 auto; padding: 0 20px 20px;
+  text-align: center; position: relative;
+}
+.explore-hero__search { display: flex; justify-content: center; margin-top: 20px; margin-bottom: 8px; }
+.explore-hero__back {
+  position: absolute; top: 0; right: 20px;
+  padding: 6px 12px; border-radius: 10px;
+  background: rgba(139,92,246,.1);
+  border: 1px solid rgba(139,92,246,.25);
+  color: #C4B5FD; text-decoration: none;
+  font-size: .78rem; font-weight: 700;
+}
+.explore-hero__kicker { display: block; font-size: .72rem; letter-spacing: .2em; color: #A855F7; font-weight: 800; margin-bottom: 8px; }
+.explore-hero__title { font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 900; color: #F5F3FF; margin: 0 0 8px; }
+.explore-hero__subtitle { color: #A5A3B8; font-size: .9rem; margin: 0; }
