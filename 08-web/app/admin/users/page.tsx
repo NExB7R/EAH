@@ -206,8 +206,9 @@ export default async function UsersPage({
                 </div>
 
                 <UserActions
-                  id={p.id}
-                  role={role}
+                  userId={p.id}
+                  isBanned={!!banned}
+                  currentRole={role}
                   bannedUntil={p.banned_until}
                 />
               </article>
