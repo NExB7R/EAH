@@ -41,6 +41,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'invalid_data' }, { status: 400 })
   }
 
+  // منع حفظ تصميم فاضي (يحمي من مشكلة الـ empty sections)
+  const sections = (data as any).sections
+  if (!Array.isArray(sections) || sections.length === 0) {
+    return NextResponse.json({ error: 'empty_sections_blocked' }, { status: 400 })
+  }
+
   const { data: userData } = await auth.supabase.auth.getUser()
 
   const { error } = await auth.supabase
