@@ -1,63 +1,74 @@
 'use client'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import ExploreCard from './explore-card'
+import EahLogo from './eah-logo'
 import './recommend-client.css'
 
 type Business = {
   slug: string
   name: string
-  type: 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
-  area: string
+  type?: string
+  area?: string
   badge?: string
-  vibe: string[]
-  reason: string
-  open: boolean
+  hook?: string
+  reason?: string
+  open?: boolean
   score?: number
   activeOffers?: number
-  hook?: string
+  is_premium?: boolean
 }
 
-type Step = {
-  key: string
+type Question = {
+  id: string
   title: string
-  options: { value: string; label: string; emoji: string }[]
+  subtitle?: string
+  options: { key: string; emoji: string; label: string; hint?: string }[]
+  multi?: boolean
 }
 
-const STEPS: Step[] = [
+const QUESTIONS: Question[] = [
   {
-    key: 'intent',
+    id: 'intent',
     title: 'نفسك في ايه؟',
+    subtitle: 'اختار من اللي تحت، وإحنا نظبطلك',
     options: [
-      { value: 'eat', label: 'آكل حاجة', emoji: '🍽️' },
-      { value: 'drink', label: 'أشرب حاجة', emoji: '☕' },
-      { value: 'medicine', label: 'دوا أو صيدلية', emoji: '💊' },
-            { value: 'deliver', label: 'أوصّل حاجة', emoji: '🛵' },
+      { key: 'food', emoji: '🍽️', label: 'آكل حاجة', hint: 'مطاعم وأكل بيتي' },
+      { key: 'drink', emoji: '☕', label: 'اشرب حاجة', hint: 'كافيهات ومشروبات' },
+      { key: 'shop', emoji: '🛒', label: 'اشترى حاجة من الماركت', hint: 'بقالة ومستلزمات' },
+      { key: 'pharmacy', emoji: '💊', label: 'دو أو صيدلية', hint: 'أدوية ومستلزمات طبية' },
+      { key: 'delivery', emoji: '🛵', label: 'أوصّل حاجة', hint: 'توصيل وطلبات' },
     ],
   },
   {
-    key: 'budget',
+    id: 'budget',
     title: 'الميزانية؟',
+    subtitle: 'قولنا نطاق السعر المناسب',
     options: [
-      { value: 'low', label: 'اقتصادي', emoji: '💰' },
-      { value: 'mid', label: 'متوسط', emoji: '💵' },
-      { value: 'high', label: 'مستعد أصرف', emoji: '💎' },
+      { key: 'low', emoji: '💰', label: 'اقتصادي', hint: 'أقل من 50 ج' },
+      { key: 'mid', emoji: '💰💰', label: 'متوسط', hint: '50 - 150 ج' },
+      { key: 'high', emoji: '💎', label: 'مميز', hint: 'أكتر من 150 ج' },
+      { key: 'any', emoji: '🎯', label: 'مش مهم', hint: 'وريني كل حاجة' },
     ],
   },
   {
-    key: 'time',
+    id: 'mood',
+    title: 'مزاجك إيه؟',
+    subtitle: 'اختار اللي يشبه حالتك',
+    options: [
+      { key: 'new', emoji: '🌱', label: 'حاجة جديدة', hint: 'أماكن لسه مكتشفة' },
+      { key: 'trending', emoji: '🔥', label: 'الترند', hint: 'اللي الناس عليه' },
+      { key: 'offers', emoji: '🎁', label: 'عروض حلوة', hint: 'وفّر وأنا بطلب' },
+      { key: 'nearby', emoji: '📍', label: 'قريب مني', hint: 'مش عايز أتحرك كتير' },
+    ],
+  },
+  {
+    id: 'urgency',
     title: 'مستعجل؟',
+    subtitle: 'آخر سؤال ونبدأ',
     options: [
-      { value: 'fast', label: 'على السريع', emoji: '⚡' },
-      { value: 'chill', label: 'خد وقتك', emoji: '☕' },
-    ],
-  },
-  {
-    key: 'adventure',
-    title: 'نفسك في؟',
-    options: [
-      { value: 'familiar', label: 'حاجة أعرفها', emoji: '❤️' },
-      { value: 'new', label: 'أجرّب جديد', emoji: '✨' },
+      { key: 'now', emoji: '⚡', label: 'على طول', hint: 'لازم دلوقتي' },
+      { key: 'soon', emoji: '🕐', label: 'بعد شوية', hint: 'خلال ساعة' },
+      { key: 'later', emoji: '🌙', label: 'بعدين', hint: 'بسجلها للمستقبل' },
     ],
   },
 ]
@@ -65,98 +76,158 @@ const STEPS: Step[] = [
 export default function RecommendClient({ businesses }: { businesses: Business[] }) {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
+  const [showResults, setShowResults] = useState(false)
 
-  const select = (key: string, value: string) => {
-    const next = { ...answers, [key]: value }
-    setAnswers(next)
-    if (step < STEPS.length - 1) {
-      setTimeout(() => setStep(step + 1), 200)
+  const currentQ = QUESTIONS[step]
+  const progress = showResults ? 100 : ((step) / QUESTIONS.length) * 100
+
+  function pick(key: string) {
+    setAnswers((a) => ({ ...a, [currentQ.id]: key }))
+    if (step === QUESTIONS.length - 1) {
+      setShowResults(true)
     } else {
-      setTimeout(() => setStep(STEPS.length), 200)
+      setStep((s) => s + 1)
     }
   }
 
-  const reset = () => {
-    setAnswers({})
+  function back() {
+    if (showResults) {
+      setShowResults(false)
+      return
+    }
+    setStep((s) => Math.max(0, s - 1))
+  }
+
+  function reset() {
     setStep(0)
+    setAnswers({})
+    setShowResults(false)
   }
 
-  const recommend = () => {
-    let filtered = [...businesses]
+  const results = useMemo(() => {
+    if (!showResults) return []
+    let list = [...businesses]
+
+    // intent filter
     const intent = answers.intent
+    if (intent === 'pharmacy') list = list.filter((b) => b.type === 'pharmacy')
+    else if (intent === 'delivery') list = list.filter((b) => b.type === 'delivery_office')
+    else if (intent === 'shop') list = list.filter((b) => b.type === 'supermarket')
+    else if (intent === 'food' || intent === 'drink') list = list.filter((b) => b.type === 'restaurant')
 
-    if (intent === 'eat' || intent === 'drink') filtered = filtered.filter((b) => b.type === 'restaurant')
-    else if (intent === 'medicine') filtered = filtered.filter((b) => b.type === 'pharmacy')
-    
-    if (answers.time === 'fast') filtered = filtered.filter((b) => b.open)
-    if (answers.adventure === 'new') filtered.sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
-    if (answers.budget === 'low') filtered.sort((a, b) => (a.score ?? 0) - (b.score ?? 0))
+    // mood boosts
+    const mood = answers.mood
+    if (mood === 'offers') list = list.filter((b) => (b.activeOffers ?? 0) > 0)
+    if (mood === 'trending') list = list.filter((b) => (b.score ?? 0) > 0)
 
-    return filtered.slice(0, 6)
-  }
+    // fallback: لو الفلاتر ضيقة، نرجع للكل
+    if (list.length === 0) list = [...businesses]
 
-  const done = step >= STEPS.length
-  const results = done ? recommend() : []
+    // sort by score
+    list.sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+
+    return list.slice(0, 6)
+  }, [showResults, answers, businesses])
 
   return (
-    <div className="rec">
-      {!done ? (
-        <div className="rec__flow">
-          <div className="rec__progress">
-            <div className="rec__progress-bar" style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
-          </div>
+    <div className="rc">
+      {/* Progress bar */}
+      <div className="rc-progress">
+        <div className="rc-progress__bar" style={{ width: `${progress}%` }} />
+      </div>
 
-          <div className="rec__step">
-            <span className="rec__step-num">سؤال {step + 1} من {STEPS.length}</span>
-            <h2 className="rec__step-title">{STEPS[step].title}</h2>
+      <div className="rc-shell">
+        {/* Hero with logo */}
+        <div className="rc-hero">
+          <EahLogo size="lg" variant="full" href="/" />
+          <p className="rc-hero__tagline">
+            {showResults ? 'لقينالك اللي يناسبك ✨' : 'هترشحلك إيه؟'}
+          </p>
+        </div>
 
-            <div className="rec__options">
-              {STEPS[step].options.map((o) => (
+        {!showResults ? (
+          <div className="rc-quiz">
+            <div className="rc-quiz__step">
+              <span className="rc-quiz__num">سؤال {step + 1} من {QUESTIONS.length}</span>
+            </div>
+
+            <h2 className="rc-quiz__title">{currentQ.title}</h2>
+            {currentQ.subtitle && (
+              <p className="rc-quiz__subtitle">{currentQ.subtitle}</p>
+            )}
+
+            <div className="rc-options">
+              {currentQ.options.map((o) => (
                 <button
-                  key={o.value}
+                  key={o.key}
                   type="button"
-                  className={`rec__option ${answers[STEPS[step].key] === o.value ? 'is-picked' : ''}`}
-                  onClick={() => select(STEPS[step].key, o.value)}
+                  className={`rc-option ${answers[currentQ.id] === o.key ? 'is-selected' : ''}`}
+                  onClick={() => pick(o.key)}
                 >
-                  <span className="rec__option-emoji">{o.emoji}</span>
-                  <span className="rec__option-label">{o.label}</span>
+                  <span className="rc-option__emoji">{o.emoji}</span>
+                  <div className="rc-option__text">
+                    <span className="rc-option__label">{o.label}</span>
+                    {o.hint && <span className="rc-option__hint">{o.hint}</span>}
+                  </div>
+                  <span className="rc-option__arrow">←</span>
                 </button>
               ))}
             </div>
 
             {step > 0 && (
-              <button type="button" className="rec__back" onClick={() => setStep(step - 1)}>
-                ← سؤال سابق
+              <button type="button" className="rc-back" onClick={back}>
+                ← رجوع
               </button>
             )}
           </div>
-        </div>
-      ) : (
-        <div className="rec__results">
-          <div className="rec__results-head">
-            <h2 className="rec__results-title">✨ رشحنا لك {results.length} مكان</h2>
-            <button type="button" className="rec__reset" onClick={reset}>
-              🔄 جرّب تاني
-            </button>
-          </div>
+        ) : (
+          <div className="rc-results">
+            <h2 className="rc-results__title">التوصيات ليك</h2>
+            <p className="rc-results__subtitle">
+              {results.length > 0
+                ? `${results.length} مكان مناسب لمزاجك`
+                : 'مفيش نتائج دقيقة — جرّب تغيير إجابة'}
+            </p>
 
-          {results.length > 0 ? (
-            <div className="rec__grid">
-              {results.map((b) => (
-                <ExploreCard key={b.slug} business={b} size="lg" />
-              ))}
-            </div>
-          ) : (
-            <div className="rec__empty">
-              <span style={{ fontSize: '3rem' }}>🤔</span>
-              <p>مفيش نتائج مطابقة — جرّب تغيّر اختياراتك</p>
-              <button type="button" className="admin-btn admin-btn--primary" onClick={reset}>
-                🔄 ابدأ من جديد
+            {results.length === 0 ? (
+              <button type="button" className="rc-reset" onClick={reset}>
+                🔄 جرّب تاني
               </button>
+            ) : (
+              <div className="rc-cards">
+                {results.map((b, i) => (
+                  <Link key={b.slug} href={`/businesses/${b.slug}`} className="rc-card">
+                    <span className="rc-card__rank">#{i + 1}</span>
+                    <div className="rc-card__info">
+                      <h3 className="rc-card__name">{b.name}</h3>
+                      <span className="rc-card__meta">
+                        {b.area ?? ''}
+                        {b.badge && <span className="rc-card__badge">{b.badge}</span>}
+                        {b.is_premium && <span className="rc-card__badge rc-card__badge--gold">⭐ مميز</span>}
+                      </span>
+                      {(b.hook || b.reason) && (
+                        <p className="rc-card__reason">
+                          ✨ {b.hook ?? b.reason}
+                        </p>
+                      )}
+                    </div>
+                    <span className="rc-card__arrow">←</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+
+            <div className="rc-results__actions">
+              <button type="button" className="rc-reset" onClick={reset}>
+                🔄 جرّب من تاني
+              </button>
+              <Link href="/explore" className="rc-explore">
+                اكتشف الكل →
+              </Link>
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
