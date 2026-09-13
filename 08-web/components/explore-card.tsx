@@ -50,7 +50,7 @@ const TYPE_HUE: Record<BusinessType, string> = {
   supermarket: '🛒',
 }
 
-export default function ExploreCard({ business }: { business: Business; size?: string }) {
+export default function ExploreCard({ business, index }: { business: Business; size?: string; index?: number }) {
   const [hovered, setHovered] = useState(false)
   const hook = business.hook?.trim() || business.reason || ''
   const coverImage = business.cover_image_url || business.coverImageUrl
