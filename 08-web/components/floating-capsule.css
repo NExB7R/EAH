@@ -62,11 +62,6 @@
   justify-content: center;
   transition: opacity 300ms ease, transform 300ms ease;
 }
-.floating-capsule:not(.is-scrolled) .floating-capsule__center {
-  opacity: 0;
-  transform: scale(0.8);
-  pointer-events: none;
-}
 
 /* ===== القائمة المنسدلة ===== */
 .nav-drawer {

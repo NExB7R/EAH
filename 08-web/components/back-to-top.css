@@ -1,12 +1,12 @@
 .back-to-top {
   position: fixed;
   bottom: 24px;
-  inset-inline-start: 24px; /* RTL: start = يمين */
+  inset-inline-end: 24px;
   width: 44px;
   height: 44px;
   border-radius: 999px;
   border: 1px solid rgba(139, 92, 246, 0.3);
-  background: rgba(10, 8, 18, 0.7);
+  background: rgba(10, 8, 18, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   color: #F4F2FA;
@@ -28,6 +28,13 @@
   box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
 }
 .back-to-top svg { width: 20px; height: 20px; }
+
+/* على الموبايل: نروح للنص عشان مايتعارضش مع القايمة */
 @media (max-width: 1024px) {
-  .back-to-top { inset-inline-end: 24px; inset-inline-start: auto; }
+  .back-to-top {
+    inset-inline-end: 16px;
+    bottom: 16px;
+    width: 40px;
+    height: 40px;
+  }
 }
