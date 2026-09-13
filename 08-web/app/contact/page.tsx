@@ -62,7 +62,7 @@ export default function ContactPage() {
               rel="noreferrer"
               className={`ct-channel ct-channel--${c.accent}`}
             >
-              <span className="ct-channel__emoji">{c.emoji}</span>
+              <span className="ct-channel__emoji">{c.icon === "whatsapp" ? <IconWhatsapp /> : c.icon === "facebook" ? <IconFacebook /> : c.icon}</span>
               <div className="ct-channel__body">
                 <span className="ct-channel__title">{c.title}</span>
                 <span className="ct-channel__value">{c.value}</span>
