@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import { getPublishedBusinesses } from '@/lib/data'
-import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
+import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
+
 import { generateMockStats } from '@/lib/mock-stats'
 import HomeHero from '@/components/home-hero'
 import SectionSlider from '@/components/section-slider'
@@ -61,6 +62,9 @@ export default async function HomeDynamic() {
     return { ...b, ...stats }
   })
   const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
+  const userTags = await loadUserProfileTags()
+  const userProfile = parseUserTags(userTags)
+  const personalized = applyPersonalization(ranked, userProfile)
   const diversified = diversifyByCategory(ranked, 'type')
 
   const design = await loadDesign()

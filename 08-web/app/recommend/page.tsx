@@ -3,7 +3,8 @@ import SiteFooter from '@/components/site-footer'
 import BackToTop from '@/components/back-to-top'
 import RecommendClient from '@/components/recommend-client'
 import { getPublishedBusinesses } from '@/lib/data'
-import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
+import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
+
 import { generateMockStats } from '@/lib/mock-stats'
 
 export const revalidate = 600
@@ -19,6 +20,9 @@ export default async function RecommendPage() {
     ...generateMockStats({ slug: b.slug, name: b.name, featured: b.badge === 'مميز' }),
   }))
   const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
+  const userTags = await loadUserProfileTags()
+  const userProfile = parseUserTags(userTags)
+  const personalized = applyPersonalization(ranked, userProfile)
   const diversified = diversifyByCategory(ranked, 'type')
 
   return (
