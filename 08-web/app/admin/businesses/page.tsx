@@ -21,14 +21,12 @@ type Business = {
 const TYPE_LABEL: Record<string, string> = {
   restaurant: '🍽️ مطعم',
   pharmacy: '💊 صيدلية',
-  supermarket: '🛒 سوبر ماركت',
   delivery_office: '🛵 توصيل',
 }
 
 const TYPE_EMOJI: Record<string, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
-  supermarket: '🛒',
   delivery_office: '🛵',
 }
 
@@ -73,7 +71,7 @@ export default async function AdminBusinessesPage() {
         <div className="admin-empty">
           <span className="admin-empty__emoji">🏪</span>
           <h2 className="admin-empty__title">لسه مفيش أنشطة</h2>
-          <p className="admin-empty__msg">ابدأ بإضافة أول مطعم أو صيدلية أو ماركت</p>
+          <p className="admin-empty__msg">ابدأ بإضافة أول مطعم أو صيدلية أو </p>
           <Link href="/admin/businesses/new" className="admin-btn admin-btn--primary">
             ➕ إضافة أول مكان
           </Link>

@@ -9,11 +9,11 @@ import { generateMockStats } from '@/lib/mock-stats'
 
 export const revalidate = 300
 
-const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
+const VALID_TYPES = ['restaurant', 'pharmacy', 'delivery_office']
 
 export const metadata = {
   title: 'اكتشف | EAH',
-  description: 'اكتشف كل الأماكن في شبين القناطر — مطاعم، صيدليات، سوبر ماركت، توصيل',
+  description: 'اكتشف كل الأماكن في شبين القناطر — مطاعم، صيدليات، توصيل',
 }
 
 export default async function ExplorePage({
@@ -45,7 +45,7 @@ export default async function ExplorePage({
       : activeType === 'pharmacy'
       ? 'الصيدليات'
       : activeType === 'supermarket'
-      ? 'السوبر ماركت'
+      ? 'ال'
       : 'التوصيل'
     : 'كل اللي حواليك'
 

@@ -36,7 +36,7 @@ const signature = Dancing_Script({
 export const metadata: Metadata = {
   title: { default: 'EAH | اللي نفسك فيه ؟', template: '%s | EAH' },
   description:
-    'EAH منصة اكتشاف محلية تبدأ من شبين القناطر: مطاعم، صيدليات، سوبر ماركت، توصيل وعروض مناسبة ليك.',
+    'EAH منصة اكتشاف محلية تبدأ من شبين القناطر: مطاعم، صيدليات، توصيل وعروض مناسبة ليك.',
   metadataBase: new URL(siteUrl),
   alternates: { canonical: '/' },
   openGraph: {

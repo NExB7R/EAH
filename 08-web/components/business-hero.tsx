@@ -7,14 +7,12 @@ type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office
 const TYPE_EMOJI: Record<BusinessType, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
-  supermarket: '🛒',
   delivery_office: '🛵',
 }
 
 const TYPE_LABEL: Record<BusinessType, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
-  supermarket: 'سوبر ماركت',
   delivery_office: 'توصيل',
 }
 

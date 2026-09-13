@@ -18,7 +18,7 @@ const FEATURED: SideItem[] = [
 const TRENDING: SideItem[] = [
   { id: 't1', title: 'برجر هاوس', subtitle: 'الأكثر زيارة', emoji: '🍔', href: '#' },
   { id: 't2', title: 'كشري التحرير', subtitle: 'ترند النهاردة', emoji: '🍲', href: '#' },
-  { id: 't3', title: 'سوبر ماركت النور', subtitle: 'الأكثر طلباً', emoji: '🛒', href: '#' },
+  { id: 't3', title: ' النور', subtitle: 'الأكثر طلباً', emoji: '🛒', href: '#' },
 ]
 
 const NEW_BIZ: SideItem[] = [

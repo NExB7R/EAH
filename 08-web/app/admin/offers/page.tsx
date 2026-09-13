@@ -23,7 +23,6 @@ type Offer = {
 const TYPE_EMOJI: Record<string, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
-  supermarket: '🛒',
   delivery_office: '🛵',
 }
 

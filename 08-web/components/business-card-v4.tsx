@@ -18,21 +18,18 @@ type Business = {
 const TYPE_EMOJI: Record<BusinessType, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
-  supermarket: '🛒',
   delivery_office: '🛵',
 }
 
 const TYPE_LABEL: Record<BusinessType, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
-  supermarket: 'سوبر ماركت',
   delivery_office: 'توصيل',
 }
 
 const TYPE_THEME: Record<BusinessType, { from: string; to: string; accent: string }> = {
   restaurant: { from: '#2a1610', to: '#1a0d08', accent: '#FF7A3D' },
   pharmacy:   { from: '#0d2419', to: '#08160f', accent: '#4ADE80' },
-  supermarket:{ from: '#1a1030', to: '#0d0820', accent: '#A855F7' },
   delivery_office: { from: '#2a1a0d', to: '#1a1008', accent: '#FB923C' },
 }
 

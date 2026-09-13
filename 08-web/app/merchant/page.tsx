@@ -10,14 +10,12 @@ export const metadata = { title: 'لوحة النشاط | EAH' }
 const TYPE_EMOJI: Record<string, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
-  supermarket: '🛒',
   delivery_office: '🛵',
 }
 
 const TYPE_LABEL: Record<string, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
-  supermarket: 'سوبر ماركت',
   delivery_office: 'توصيل',
 }
 

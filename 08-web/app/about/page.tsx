@@ -18,7 +18,7 @@ export default function AboutPage() {
         <div className="static-page__content">
           <p>
             <strong>EAH</strong> منصة اكتشاف محلية بدأت من <strong>شبين القناطر</strong>، هدفها توصّلك لأقرب
-            مطعم، صيدلية، سوبر ماركت، أو مكتب توصيل يناسبك — بسرعة وبساطة.
+            مطعم، صيدلية، أو مكتب توصيل يناسبك — بسرعة وبساطة.
           </p>
 
           <h2>ليه EAH؟</h2>

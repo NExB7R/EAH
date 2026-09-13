@@ -367,7 +367,7 @@ function SearchBlock({ props }: { props: any }) {
   );
 }
 function IntentBlock({ props }: { props: any }) {
-  const items = ["أكل", "صيدلية", "مقاضي", "توصيل"];
+  const items = ["أكل", "صيدلية", "", "توصيل"];
   return (
     <div className="eah-intents" style={cssFromStyle(props.style)}>
       {items.map((item, i) => (
@@ -829,7 +829,7 @@ export function createEahPuckConfig(businesses: EahBusiness[]): Config {
           title: "اللي نفسك فيه ؟",
           description:
             "اكتشف اللي مناسب ليك. وكل ما تستخدم EAH، الترشيحات تظبط أكتر على ذوقك.",
-          searchPlaceholder: "دور على مطعم، صيدلية، سوبر ماركت...",
+          searchPlaceholder: "دور على مطعم، صيدلية، توصيل...",
           align: "center",
           size: "large",
           style: defaultStyle,
@@ -846,7 +846,7 @@ export function createEahPuckConfig(businesses: EahBusiness[]): Config {
           responsive: styleFields.responsive,
         },
         defaultProps: {
-          placeholder: "دور على مطعم، صيدلية، سوبر ماركت...",
+          placeholder: "دور على مطعم، صيدلية، توصيل...",
           buttonLabel: "ابحث",
           style: defaultStyle,
           responsive: defaultResponsive,
@@ -871,7 +871,7 @@ export function createEahPuckConfig(businesses: EahBusiness[]): Config {
           items: [
             { label: "أكل", icon: "🍔", href: "/explore?intent=food" },
             { label: "صيدلية", icon: "💊", href: "/explore?intent=pharmacy" },
-            { label: "مقاضي", icon: "🛒", href: "/explore?intent=groceries" },
+            { label: "", icon: "🛒", href: "/explore?intent=groceries" },
             { label: "توصيل", icon: "📦", href: "/explore?intent=delivery" },
           ],
           style: defaultStyle,
@@ -1156,7 +1156,7 @@ export function createEahPuckConfig(businesses: EahBusiness[]): Config {
             { label: "الرئيسية", href: "/" },
             { label: "المطاعم", href: "/explore?intent=food" },
             { label: "الصيدليات", href: "/explore?intent=pharmacy" },
-            { label: "المقاضي", href: "/explore?intent=groceries" },
+            { label: "ال", href: "/explore?intent=groceries" },
             { label: "التوصيل", href: "/explore?intent=delivery" },
           ],
           style: defaultStyle,

@@ -32,8 +32,7 @@ const STEPS: Step[] = [
       { value: 'eat', label: 'آكل حاجة', emoji: '🍽️' },
       { value: 'drink', label: 'أشرب حاجة', emoji: '☕' },
       { value: 'medicine', label: 'دوا أو صيدلية', emoji: '💊' },
-      { value: 'groceries', label: 'مقاضي', emoji: '🛒' },
-      { value: 'deliver', label: 'أوصّل حاجة', emoji: '🛵' },
+            { value: 'deliver', label: 'أوصّل حاجة', emoji: '🛵' },
     ],
   },
   {
@@ -88,9 +87,7 @@ export default function RecommendClient({ businesses }: { businesses: Business[]
 
     if (intent === 'eat' || intent === 'drink') filtered = filtered.filter((b) => b.type === 'restaurant')
     else if (intent === 'medicine') filtered = filtered.filter((b) => b.type === 'pharmacy')
-    else if (intent === 'groceries') filtered = filtered.filter((b) => b.type === 'supermarket')
-    else if (intent === 'deliver') filtered = filtered.filter((b) => b.type === 'delivery_office')
-
+    
     if (answers.time === 'fast') filtered = filtered.filter((b) => b.open)
     if (answers.adventure === 'new') filtered.sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
     if (answers.budget === 'low') filtered.sort((a, b) => (a.score ?? 0) - (b.score ?? 0))

@@ -31,7 +31,7 @@ export default async function MerchantApplyPage({ searchParams }: { searchParams
     {sent === '1' && <div className="card" style={{ padding: 16, marginBottom: 16 }}><strong>تم إرسال الطلب ✅</strong><p className="meta">الإدارة ستراجعه من لوحة التحكم.</p></div>}
     <form action={submitApplication} className="card" style={{ padding: 20, display: 'grid', gap: 12 }}>
       <label className="meta" htmlFor="business_name">اسم النشاط</label><input id="business_name" name="business_name" required placeholder="مثال: مطعم كذا" style={{ padding: 14, borderRadius: 14 }} />
-      <label className="meta" htmlFor="category">نوع النشاط</label><input id="category" name="category" required placeholder="مطعم / كافيه / صيدلية / ماركت" style={{ padding: 14, borderRadius: 14 }} />
+      <label className="meta" htmlFor="category">نوع النشاط</label><input id="category" name="category" required placeholder="مطعم / كافيه / صيدلية" style={{ padding: 14, borderRadius: 14 }} />
       <label className="meta" htmlFor="description">وصف مختصر</label><textarea id="description" name="description" rows={5} placeholder="اكتب نبذة بسيطة عن النشاط" style={{ padding: 14, borderRadius: 14 }} />
       <button className="primary" type="submit">إرسال طلب صاحب نشاط ⚡</button>
     </form>
