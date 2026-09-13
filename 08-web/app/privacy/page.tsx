@@ -1,3 +1,4 @@
+import type React from 'react'
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
@@ -95,7 +96,7 @@ const SECTIONS = [
 
 function renderText(text: string) {
   // بسيط: يحول **bold** و [link](url)
-  const parts: (string | JSX.Element)[] = []
+  const parts: (string | React.ReactNode)[] = []
   const regex = /(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g
   let lastIdx = 0
   let match
