@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import PrettySelect from './pretty-select'
+import './contacts-editor.css'
 
 export type Contact = {
   method_type: 'phone' | 'whatsapp' | 'facebook' | 'instagram' | 'website' | 'email'

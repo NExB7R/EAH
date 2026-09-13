@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import './working-hours-editor.css'
 
 export type DayHours = { open: string; close: string; closed: boolean }
 export type WorkingHours = Record<string, DayHours>
