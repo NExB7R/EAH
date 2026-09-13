@@ -9,8 +9,10 @@ type SectionSliderProps = {
   id?: string
   title: string
   subtitle?: string
-  seeAllHref?: string
+  seeAllHref: string
   variant?: SliderVariant
+  maxItems?: number
+  totalItems?: number
   children: ReactNode
 }
 
@@ -20,6 +22,8 @@ export default function SectionSlider({
   subtitle,
   seeAllHref,
   variant = 'restaurant',
+  maxItems = 10,
+  totalItems,
   children,
 }: SectionSliderProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -52,7 +56,7 @@ export default function SectionSlider({
       const max = el.scrollWidth - el.clientWidth
       if (max <= 0) return
       const isRTL = getComputedStyle(el).direction === 'rtl'
-      const step = isRTL ? -240 : 240
+      const step = isRTL ? -280 : 280
       const next = el.scrollLeft + step
       if ((isRTL && next <= -max) || (!isRTL && next >= max)) {
         el.scrollTo({ left: 0, behavior: 'smooth' })
@@ -71,6 +75,10 @@ export default function SectionSlider({
     el.scrollBy({ left: dir * amount * (isRTL ? -1 : 1), behavior: 'smooth' })
   }
 
+  const items = Array.isArray(children) ? children : [children]
+  const visible = items.slice(0, maxItems)
+  const remaining = (totalItems ?? items.length) - maxItems
+
   return (
     <section id={id} className={`ss ss--${variant}`}>
       <div className="ss__head">
@@ -79,14 +87,6 @@ export default function SectionSlider({
           {subtitle && <p className="ss__subtitle">{subtitle}</p>}
         </div>
         <div className="ss__controls">
-          {seeAllHref && (
-            <a href={seeAllHref} className="ss__see-all">
-              شوف الكل
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
-              </svg>
-            </a>
-          )}
           <div className="ss__nav-group">
             <button type="button" className="ss__nav" onClick={() => scrollBy(-1)} disabled={!canPrev} aria-label="السابق">‹</button>
             <button type="button" className="ss__nav" onClick={() => scrollBy(1)} disabled={!canNext} aria-label="التالي">›</button>
@@ -103,7 +103,20 @@ export default function SectionSlider({
           onTouchStart={() => setPaused(true)}
           onTouchEnd={() => setTimeout(() => setPaused(false), 2000)}
         >
-          {children}
+          {visible}
+
+          {/* كارد "شوف الكل" في الآخر */}
+          <a href={seeAllHref} className="v3seeall" aria-label={`شوف كل ${title}`}>
+            <div className="v3seeall__icon" aria-hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+            </div>
+            <h3 className="v3seeall__title">شوف الكل</h3>
+            <p className="v3seeall__subtitle">
+              {remaining > 0 ? `و ${remaining}+ مكان تاني` : 'استكشف كل الأماكن'}
+            </p>
+          </a>
         </div>
       </div>
 
