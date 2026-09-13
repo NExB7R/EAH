@@ -1,3 +1,4 @@
+import { withSentryConfig } from '@sentry/nextjs'
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -84,4 +85,15 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+const sentryOptions = {
+  org: 'cairo-3a',
+  project: 'javascript-nextjs',
+  silent: !process.env.CI,
+  widenClientFileUpload: true,
+  reactComponentAnnotation: { enabled: true },
+  tunnelRoute: '/monitoring',
+  hideSourceMaps: true,
+  disableLogger: true,
+}
+
+export default withSentryConfig(nextConfig, sentryOptions)
