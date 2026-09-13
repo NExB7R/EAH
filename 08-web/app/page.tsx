@@ -5,12 +5,18 @@ import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SidePanel from '@/components/side-panel'
 import BackToTop from '@/components/back-to-top'
-import { demoBusinesses } from '@/lib/demo-data'
+import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { generateMockStats } from '@/lib/mock-stats'
 
-export default function Page() {
-  const withStats = demoBusinesses.map((b) => {
+export const revalidate = 300 // إعادة تحميل كل 5 دقايق
+
+export default async function Page() {
+  // ===== قراءة من Supabase =====
+  const businesses = await getPublishedBusinesses(50)
+
+  // ===== نحوّل لإحصائيات + نرتب =====
+  const withStats = businesses.map((b) => {
     const stats = generateMockStats({
       slug: b.slug,
       name: b.name,
@@ -47,7 +53,7 @@ export default function Page() {
         <SectionSlider
           id="restaurants"
           title="نفسك في إيه؟ 🔥"
-          subtitle="مرتبة حسب الجودة + النشاط"
+          subtitle={`${restaurants.length} مطعم في شبين القناطر`}
           seeAllHref="/explore?type=restaurant"
           variant="restaurant"
           maxItems={10}
@@ -61,7 +67,7 @@ export default function Page() {
         <SectionSlider
           id="offers"
           title="عروض نار 🔥"
-          subtitle="أماكن عندها عروض نشطة دلوقتي"
+          subtitle={`${offers.length} عرض شغال دلوقتي`}
           seeAllHref="/offers"
           variant="offer"
           maxItems={10}
@@ -75,7 +81,7 @@ export default function Page() {
         <SectionSlider
           id="pharmacies"
           title="صحتك أولاً 💊"
-          subtitle="صيدليات قريبة ومفتوحة"
+          subtitle={`${pharmacies.length} صيدلية قريبة منك`}
           seeAllHref="/explore?type=pharmacy"
           variant="pharmacy"
           maxItems={10}
@@ -89,7 +95,7 @@ export default function Page() {
         <SectionSlider
           id="delivery"
           title="على السريع 🛵"
-          subtitle="توصيل يغطي منطقتك"
+          subtitle={`${delivery.length} مكتب توصيل`}
           seeAllHref="/explore?type=delivery_office"
           variant="delivery"
           maxItems={10}
@@ -103,7 +109,7 @@ export default function Page() {
         <SectionSlider
           id="markets"
           title="طلباتك عندنا 🛒"
-          subtitle="مقاضي سريعة وقريبة"
+          subtitle={`${markets.length} سوبر ماركت`}
           seeAllHref="/explore?type=supermarket"
           variant="market"
           maxItems={10}
@@ -114,19 +120,21 @@ export default function Page() {
           ))}
         </SectionSlider>
 
-        <SectionSlider
-          id="new-businesses"
-          title="مشاريع صغيرة، فرص كبيرة 🌱"
-          subtitle="اكتشف الجديد وادعم جيرانك"
-          seeAllHref="/new"
-          variant="new"
-          maxItems={10}
-          totalItems={newBiz.length}
-        >
-          {newBiz.slice(0, 10).map((b) => (
-            <BusinessCardV4 key={b.slug} business={b} variant="new" />
-          ))}
-        </SectionSlider>
+        {newBiz.length > 0 && (
+          <SectionSlider
+            id="new-businesses"
+            title="مشاريع صغيرة، فرص كبيرة 🌱"
+            subtitle={`${newBiz.length} مكان جديد`}
+            seeAllHref="/new"
+            variant="new"
+            maxItems={10}
+            totalItems={newBiz.length}
+          >
+            {newBiz.slice(0, 10).map((b) => (
+              <BusinessCardV4 key={b.slug} business={b} variant="new" />
+            ))}
+          </SectionSlider>
+        )}
       </main>
 
       <SiteFooter />
