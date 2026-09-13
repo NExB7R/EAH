@@ -3,6 +3,7 @@ import ExploreClient from '@/components/explore-client'
 import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import BackToTop from '@/components/back-to-top'
+import SearchBar from '@/components/search-bar'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { generateMockStats } from '@/lib/mock-stats'
@@ -62,6 +63,9 @@ export default async function ExplorePage({
           <p className="explore-hero__subtitle">
             {diversified.length} مكان — مرتبة بذكاء حسب الجودة والنشاط
           </p>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 18 }}>
+            <SearchBar placeholder="ابحث في الأماكن..." />
+          </div>
         </div>
 
         <ExploreClient

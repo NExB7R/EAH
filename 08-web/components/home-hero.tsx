@@ -1,6 +1,6 @@
 'use client'
 import EahLogo from './eah-logo'
-import { IconSearch } from './neon-icons'
+import SearchBar from './search-bar'
 import './home-hero.css'
 
 export default function HomeHero() {
@@ -21,15 +21,7 @@ export default function HomeHero() {
           <span className="home-hero__city-line" aria-hidden />
         </div>
 
-        <div className="home-hero__search">
-          <span className="home-hero__search-icon" aria-hidden><IconSearch /></span>
-          <input
-            type="text"
-            placeholder="ابحث عن مطعم، صيدلية، عرض..."
-            aria-label="ابحث في EAH"
-          />
-          <button type="button" className="home-hero__search-btn">ابحث</button>
-        </div>
+        <SearchBar />
 
         <div className="home-hero__chips">
           <a href="/explore?type=restaurant" className="home-hero__chip">

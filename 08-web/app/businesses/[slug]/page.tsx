@@ -10,6 +10,7 @@ import PageViewTracker from '@/components/page-view-tracker'
 import BusinessHero from '@/components/business-hero'
 import BusinessContact from '@/components/business-contact'
 import BusinessReviews from '@/components/business-reviews'
+import ReportButton from '@/components/report-button'
 import BusinessOffers from '@/components/business-offers'
 import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
@@ -84,6 +85,12 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
         {hasId && <BusinessContact businessId={business.businessId!} contacts={contacts} />}
 
         <BusinessReviews stats={stats} reviews={reviews} />
+
+        {business.businessId && (
+          <div style={{ maxWidth: 900, margin: '24px auto', padding: '0 20px', display: 'flex', justifyContent: 'flex-end' }}>
+            <ReportButton entityType="business" entityId={business.businessId} />
+          </div>
+        )}
       </main>
 
       <SiteFooter />
