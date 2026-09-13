@@ -1,3 +1,4 @@
+/* ===== EAH Logo ===== */
 .eah-logo {
   --logo-w: 170px;
   --crown-w: 20%;
@@ -20,12 +21,14 @@
   overflow: visible;
 }
 
+/* ===== Sizes ===== */
 .eah-logo--xs { --logo-w: 110px; --slogan-fs: 0.48rem; --crown-w: 19%; }
 .eah-logo--sm { --logo-w: 130px; --slogan-fs: 0.52rem; --crown-w: 19%; }
 .eah-logo--md { --logo-w: 180px; --slogan-fs: 0.7rem; --crown-w: 21%; }
 .eah-logo--lg { --logo-w: 300px; --slogan-fs: 1rem; --crown-w: 24%; }
 .eah-logo--xl { --logo-w: 460px; --slogan-fs: 1.4rem; --crown-w: 26%; }
 
+/* ===== Glow ===== */
 .eah-logo__glow {
   position: absolute;
   inset: -30%;
@@ -36,6 +39,7 @@
   border-radius: 50%;
 }
 
+/* ===== Word ===== */
 .eah-logo__word {
   position: relative;
   z-index: 1;
@@ -47,6 +51,7 @@
     drop-shadow(0 0 12px rgba(107, 33, 255, 0.22));
 }
 
+/* ===== Crown ===== */
 .eah-logo__crown {
   position: absolute;
   left: var(--crown-base-left);
@@ -66,7 +71,7 @@
     drop-shadow(0 0 10px rgba(232, 199, 154, 0.22));
 }
 
-/* السلوجان: ظاهر دايماً تحت اللوجو */
+/* ===== Slogan ===== */
 .eah-logo__slogan {
   margin-top: 4px;
   text-align: center;
@@ -82,7 +87,6 @@
   transition: opacity 300ms ease;
   line-height: 1;
 }
-
 .eah-logo__punct {
   display: inline-block;
   color: #A855F7;
@@ -92,6 +96,7 @@
     0 0 14px rgba(168, 85, 247, 0.5);
 }
 
+/* ===== Variants ===== */
 .eah-logo--crown { --logo-w: 90px; }
 .eah-logo--crown .eah-logo__crown {
   position: static;
@@ -107,59 +112,7 @@
   transform: translate(-50%, 0) rotate(0deg);
 }
 
-/* ===== حركة التاج ===== */
-.eah-logo:hover .eah-logo__crown,
-.eah-logo:active .eah-logo__crown,
-.eah-logo.crown-active .eah-logo__crown {
-  left: 50%;
-  transform: translate(-50%, 0) rotate(0deg) scale(1.1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .eah-logo__crown { transition: none; }
-}
-
-@media (max-width: 640px) {
-  .eah-logo--sm { --logo-w: 110px; --slogan-fs: 0.48rem; }
-  .eah-logo__slogan { display: none; }
-}
-
-/* Light mode: نصوص أوضح */
-[data-theme="light"] .eah-logo__slogan {
-  color: #6B21FF;
-  text-shadow:
-    0 0 6px rgba(107, 33, 255, 0.3),
-    0 0 14px rgba(107, 33, 255, 0.15);
-}
-[data-theme="light"] .eah-logo__punct {
-  color: #A855F7;
-}
-
-/* ===== Compact variant (for header) ===== */
-.eah-logo--compact {
-  --logo-w: 100px;
-  --crown-w: 22%;
-  --crown-base-top: -26%;
-  --crown-base-left: 22%;
-}
-.eah-logo--compact .eah-logo__city-compact {
-  margin-top: 2px;
-  font-family: var(--font-cairo, system-ui);
-  font-weight: 700;
-  font-size: 0.55rem;
-  color: #A29DB5;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-  line-height: 1;
-}
-.eah-logo--compact.eah-logo--xs { --logo-w: 90px; }
-.eah-logo--compact.eah-logo--xs .eah-logo__city-compact { font-size: 0.48rem; }
-.eah-logo--compact.eah-logo--sm { --logo-w: 105px; }
-.eah-logo--compact.eah-logo--sm .eah-logo__city-compact { font-size: 0.55rem; }
-.eah-logo--compact.eah-logo--md { --logo-w: 130px; }
-.eah-logo--compact.eah-logo--md .eah-logo__city-compact { font-size: 0.65rem; }
-
-/* ===== Compact variant (header): word + crown ===== */
+/* ===== Compact (header) ===== */
 .eah-logo--compact {
   --logo-w: 100px;
   --crown-w: 22%;
@@ -167,39 +120,25 @@
   --crown-base-left: 22%;
   padding-top: 6px;
 }
+.eah-logo--compact.eah-logo--sm { --logo-w: 105px; }
+.eah-logo--compact.eah-logo--md { --logo-w: 130px; }
 
-.eah-logo--compact .eah-logo__word {
-  width: 100%;
-  height: auto;
-}
-
-/* التاج: خرج من حدود الـ logo + حركة على scroll */
-.eah-logo--compact .eah-logo__crown {
-  position: absolute;
-  left: var(--crown-base-left);
-  top: var(--crown-base-top);
-  width: var(--crown-w);
-  height: auto;
-  transform: translate(-50%, 0) rotate(-14deg);
-  transform-origin: 50% 100%;
-  transition:
-    left 700ms cubic-bezier(0.34, 1.2, 0.64, 1),
-    transform 700ms cubic-bezier(0.34, 1.2, 0.64, 1);
-  pointer-events: none;
-  z-index: 3;
-  will-change: left, transform;
-  filter:
-    drop-shadow(0 0 3px rgba(232, 199, 154, 0.45))
-    drop-shadow(0 0 10px rgba(232, 199, 154, 0.22));
-}
-
-/* لما اللوجو يبقى crown-active — التاج يتحرك للنص */
-.eah-logo--compact.crown-active .eah-logo__crown,
-.eah-logo--compact:hover .eah-logo__crown {
+/* ===== Crown animation (on hover/active) ===== */
+.eah-logo:hover .eah-logo__crown,
+.eah-logo:active .eah-logo__crown,
+.eah-logo.crown-active .eah-logo__crown {
   left: 50%;
   transform: translate(-50%, 0) rotate(0deg) scale(1.1);
 }
 
+/* ===== Reduced motion ===== */
 @media (prefers-reduced-motion: reduce) {
-  .eah-logo--compact .eah-logo__crown { transition: none; }
+  .eah-logo__crown, .eah-logo__slogan { transition: none; }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 640px) {
+  .eah-logo--sm { --logo-w: 110px; --slogan-fs: 0.48rem; }
+  .eah-logo--compact { --logo-w: 95px; }
+  .eah-logo__slogan { display: none; }
 }
