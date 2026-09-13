@@ -40,7 +40,6 @@ const TYPE_LABEL: Record<BusinessType, string> = {
   pharmacy: 'صيدلية',
   delivery_office: 'توصيل',
   supermarket: 'ماركت',
-  supermarket: '🛒',
 }
 
 const TYPE_HUE: Record<BusinessType, string> = {

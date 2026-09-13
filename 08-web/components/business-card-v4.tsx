@@ -27,13 +27,13 @@ const TYPE_LABEL: Record<BusinessType, string> = {
   pharmacy: 'صيدلية',
   delivery_office: 'توصيل',
   supermarket: 'ماركت',
-  supermarket: '🛒',
 }
 
 const TYPE_THEME: Record<BusinessType, { from: string; to: string; accent: string }> = {
   restaurant: { from: '#2a1610', to: '#1a0d08', accent: '#FF7A3D' },
   pharmacy:   { from: '#0d2419', to: '#08160f', accent: '#4ADE80' },
   delivery_office: { from: '#2a1a0d', to: '#1a1008', accent: '#FB923C' },
+  supermarket: { from: '#F59E0B', to: '#DC2626', accent: '#FBBF24' },
 }
 
 const REASON_HOOKS: Record<string, string[]> = {
