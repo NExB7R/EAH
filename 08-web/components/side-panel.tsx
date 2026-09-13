@@ -17,6 +17,10 @@ const FEATURED: SideItem[] = [
   { id: 'f4', title: 'مشويات الشرق', subtitle: 'شبين القناطر', emoji: '🥙', href: '#' },
   { id: 'f5', title: 'كافيه النجوم', subtitle: 'المنايل', emoji: '☕', href: '#' },
   { id: 'f6', title: 'بيتزا الطليان', subtitle: 'شبين القناطر', emoji: '🍕', href: '#' },
+  { id: 'f7', title: 'شاورما الشام', subtitle: 'شبين القناطر', emoji: '🌯', href: '#' },
+  { id: 'f8', title: 'عصائر فريش', subtitle: 'المنايل', emoji: '🥤', href: '#' },
+  { id: 'f9', title: 'حلواني الأصيل', subtitle: 'شبين القناطر', emoji: '🍰', href: '#' },
+  { id: 'f10', title: 'مخبز الفجر', subtitle: 'شبين القناطر', emoji: '🥖', href: '#' },
 ]
 
 const TRENDING: SideItem[] = [
@@ -25,6 +29,11 @@ const TRENDING: SideItem[] = [
   { id: 't3', title: 'سوبر ماركت النور', subtitle: 'الأكثر طلباً', emoji: '🛒', href: '#' },
   { id: 't4', title: 'مشويات الشرق', subtitle: 'ترند الأسبوع', emoji: '🥙', href: '#' },
   { id: 't5', title: 'كافيه النجوم', subtitle: 'الأعلى تقييماً', emoji: '☕', href: '#' },
+  { id: 't6', title: 'بيتزا الطليان', subtitle: 'ترند الشهر', emoji: '🍕', href: '#' },
+  { id: 't7', title: 'شاورما الشام', subtitle: 'الأكثر تفاعلاً', emoji: '🌯', href: '#' },
+  { id: 't8', title: 'عصائر فريش', subtitle: 'ترند الصيف', emoji: '🥤', href: '#' },
+  { id: 't9', title: 'حلواني الأصيل', subtitle: 'الأعلى تقييماً', emoji: '🍰', href: '#' },
+  { id: 't10', title: 'مخبز الفجر', subtitle: 'ترند الصباح', emoji: '🥖', href: '#' },
 ]
 
 const NEW_BIZ: SideItem[] = [
@@ -32,6 +41,12 @@ const NEW_BIZ: SideItem[] = [
   { id: 'n2', title: 'قهوة الشروق', subtitle: 'جديد', emoji: '☕', href: '#' },
   { id: 'n3', title: 'حلويات نور', subtitle: 'جديد', emoji: '🍰', href: '#' },
   { id: 'n4', title: 'عطارة الهنا', subtitle: 'جديد', emoji: '🌿', href: '#' },
+  { id: 'n5', title: 'سمكة ورق', subtitle: 'جديد', emoji: '🐟', href: '#' },
+  { id: 'n6', title: 'شيبسي سنتر', subtitle: 'جديد', emoji: '🥤', href: '#' },
+  { id: 'n7', title: 'فول وطعمية', subtitle: 'جديد', emoji: '🥣', href: '#' },
+  { id: 'n8', title: 'كريب ستريت', subtitle: 'جديد', emoji: '🥞', href: '#' },
+  { id: 'n9', title: 'بقالة الخير', subtitle: 'جديد', emoji: '🏪', href: '#' },
+  { id: 'n10', title: 'عصير المانجو', subtitle: 'جديد', emoji: '🥭', href: '#' },
 ]
 
 function AutoSlider({ items, featured }: { items: SideItem[]; featured?: boolean }) {
@@ -39,18 +54,19 @@ function AutoSlider({ items, featured }: { items: SideItem[]; featured?: boolean
   const [paused, setPaused] = useState(false)
   const [index, setIndex] = useState(0)
 
+  // 10 عناصر، 3 ظاهرين، نتحرك لحد 7 ثم نرجع 0
   useEffect(() => {
     if (paused || items.length <= 3) return
     const timer = setInterval(() => {
       setIndex((i) => (i + 1) % (items.length - 2))
-    }, 3500)
+    }, 3000)
     return () => clearInterval(timer)
   }, [paused, items.length])
 
   useEffect(() => {
     const el = trackRef.current
     if (!el) return
-    const step = 50
+    const step = 46
     el.scrollTo({ top: index * step, behavior: 'smooth' })
   }, [index])
 

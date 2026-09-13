@@ -50,8 +50,9 @@ export default function FloatingCapsuleHeader() {
           <div className="floating-capsule__side floating-capsule__side--start">
             <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" onClick={() => setMenuOpen(true)} />
             <NeonIconButton icon={<IconInstall />} label="ثبّت" ariaLabel="تثبيت" />
-            <NeonIconButton icon={<IconBolt />} label="سجل بسرعة" ariaLabel="سجل بسرعة" variant="accent" href="/auth" />
+            {/* الدخول أولاً ثم التسجيل */}
             <NeonIconButton icon={<IconKey />} label="دخول" ariaLabel="دخول" href="/auth" />
+            <NeonIconButton icon={<IconBolt />} label="سجل بسرعة" ariaLabel="سجل بسرعة" variant="accent" href="/auth?tab=register" />
           </div>
           <div className="floating-capsule__center">{scrolled && <EahLogo size="sm" variant="mark" />}</div>
           <div className="floating-capsule__side floating-capsule__side--end">
