@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { getVisitorHash } from '@/lib/admin/visitor-hash'
+import { getClientToken } from '@/lib/admin/visitor-hash'
 import './business-contact.css'
 
 type ContactMethod = {
@@ -41,14 +41,14 @@ export default function BusinessContact({
     setLoading((p) => ({ ...p, [method.method_type]: true }))
 
     try {
-      const visitorHash = getVisitorHash()
+      const client_token = getClientToken()
       await fetch('/api/reveal-contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           business_id: businessId,
           method_type: method.method_type,
-          visitor_hash: visitorHash,
+          client_token,
         }),
       })
     } catch {

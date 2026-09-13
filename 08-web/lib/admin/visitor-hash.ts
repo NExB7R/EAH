@@ -1,6 +1,11 @@
-export function getVisitorHash(): string {
+/**
+ * Client-side helper: يولّد token ثابت لكل جهاز.
+ * ⚠️ ده مش hash نهائي — السيرفر بيعيد خلطه مع IP+UA.
+ */
+
+export function getClientToken(): string {
   if (typeof window === 'undefined') return ''
-  const KEY = 'eah-visitor-id'
+  const KEY = 'eah-client-token'
   let id = localStorage.getItem(KEY)
   if (!id) {
     id = crypto.randomUUID()
@@ -9,9 +14,9 @@ export function getVisitorHash(): string {
   return id
 }
 
-export function getSessionHash(): string {
+export function getSessionToken(): string {
   if (typeof window === 'undefined') return ''
-  const KEY = 'eah-session-id'
+  const KEY = 'eah-session-token'
   let id = sessionStorage.getItem(KEY)
   if (!id) {
     id = crypto.randomUUID()
