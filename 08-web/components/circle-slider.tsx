@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, type ReactNode } from 'react'
+import { useState, useEffect, Children, type ReactNode } from 'react'
 import Link from 'next/link'
 import ShapePizza from './shapes/shape-pizza'
 import ShapeCapsule from './shapes/shape-capsule'
@@ -17,7 +17,7 @@ type CircleSliderProps = {
   seeAllHref: string
   shape: Shape
   accent?: string
-  items: ReactNode[]
+  children: ReactNode
   maxVisible?: number
   autoRotateMs?: number
 }
@@ -37,10 +37,12 @@ export default function CircleSlider({
   seeAllHref,
   shape,
   accent = '#A855F7',
-  items,
+  children,
   maxVisible = 6,
   autoRotateMs = 5000,
 }: CircleSliderProps) {
+  // نحوّل children لمصفوفة
+  const items = Children.toArray(children)
   const visibleItems = items.slice(0, maxVisible)
   const total = visibleItems.length
   const angleStep = total > 0 ? 360 / total : 0
@@ -84,12 +86,10 @@ export default function CircleSlider({
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        {/* الشكل المركزي */}
         <div className="cslider__shape">
           <ShapeComp />
         </div>
 
-        {/* الحلقة */}
         {total > 0 && (
           <div className="cslider__ring">
             {visibleItems.map((item, i) => {
@@ -107,7 +107,6 @@ export default function CircleSlider({
           </div>
         )}
 
-        {/* أزرار */}
         {total > 1 && (
           <>
             <button
