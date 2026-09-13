@@ -95,3 +95,30 @@
 @media (prefers-reduced-motion: reduce) {
   .ra__crown, .ra__star, .ra--super .ra__circle { animation: none; }
 }
+
+/* ═══ Royal Crown (super_admin) — 2026 fancy ═══ */
+.ra__crown--royal {
+  animation: crownFloat 3s ease-in-out infinite;
+}
+@keyframes crownFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0) rotate(-2deg); }
+  50%      { transform: translateX(-50%) translateY(-2px) rotate(2deg); }
+}
+.ra__crown--royal svg {
+  filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.6))
+          drop-shadow(0 0 12px rgba(168, 85, 247, 0.45));
+}
+.ra__crown-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.7) 50%, transparent 70%);
+  background-size: 250% 100%;
+  animation: crownShine 3.5s ease-in-out infinite;
+  mix-blend-mode: overlay;
+  border-radius: 50%;
+}
+@keyframes crownShine {
+  0%, 100% { background-position: 200% 0; }
+  50%      { background-position: -100% 0; }
+}

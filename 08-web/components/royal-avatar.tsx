@@ -35,27 +35,38 @@ export default function RoyalAvatar({
     <div className={`ra ra--${size} ${isSuperAdmin ? 'ra--super' : ''} ${isAdmin ? 'ra--admin' : ''} ${isMerchant ? 'ra--merchant' : ''}`}>
       {/* Royal crown for SUPER admin only */}
       {isSuperAdmin && (
-        <span className="ra__crown" aria-hidden>
-          <svg viewBox="0 0 40 32" fill="none">
+        <span className="ra__crown ra__crown--royal" aria-hidden>
+          <svg viewBox="0 0 48 36" fill="none">
             <defs>
-              <linearGradient id="crownGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#FEF3C7" />
-                <stop offset="30%" stopColor="#FBBF24" />
-                <stop offset="70%" stopColor="#F59E0B" />
-                <stop offset="100%" stopColor="#B45309" />
+              <linearGradient id="crownRoyal" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#FFFBEB" />
+                <stop offset="25%" stopColor="#FDE68A" />
+                <stop offset="55%" stopColor="#F59E0B" />
+                <stop offset="100%" stopColor="#92400E" />
               </linearGradient>
+              <linearGradient id="crownJewel" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#E879F9" />
+                <stop offset="50%" stopColor="#A855F7" />
+                <stop offset="100%" stopColor="#6B21FF" />
+              </linearGradient>
+              <filter id="crownGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="1.5" result="b" />
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
             </defs>
-            <path
-              d="M4 26 L2 10 L11 16 L20 4 L29 16 L38 10 L36 26 Z"
-              fill="url(#crownGrad)"
-              stroke="#F5F3FF"
-              strokeWidth="0.8"
-              strokeLinejoin="round"
-            />
-            <circle cx="2" cy="10" r="2" fill="#FBBF24" />
-            <circle cx="20" cy="4" r="2.5" fill="#FBBF24" />
-            <circle cx="38" cy="10" r="2" fill="#FBBF24" />
+            <g filter="url(#crownGlow)">
+              <path d="M4 30 L1 10 L11 17 L24 3 L37 17 L47 10 L44 30 Z" fill="url(#crownRoyal)" stroke="#FFFBEB" strokeWidth="0.9" strokeLinejoin="round"/>
+              <path d="M6 28 L4 14 L12 19 L24 7 L36 19 L44 14 L42 28 Z" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="0.5"/>
+              <rect x="9" y="22" width="30" height="7" rx="2.5" fill="url(#crownRoyal)" stroke="#FFFBEB" strokeWidth="0.7"/>
+              <circle cx="1" cy="10" r="2.4" fill="url(#crownJewel)" stroke="#FFFBEB" strokeWidth="0.5"/>
+              <circle cx="24" cy="3" r="3" fill="url(#crownJewel)" stroke="#FFFBEB" strokeWidth="0.6"/>
+              <circle cx="47" cy="10" r="2.4" fill="url(#crownJewel)" stroke="#FFFBEB" strokeWidth="0.5"/>
+              <circle cx="14" cy="25.5" r="1.3" fill="#E879F9"/>
+              <circle cx="24" cy="25.5" r="1.5" fill="#E879F9"/>
+              <circle cx="34" cy="25.5" r="1.3" fill="#E879F9"/>
+            </g>
           </svg>
+          <span className="ra__crown-shine" aria-hidden />
         </span>
       )}
 
