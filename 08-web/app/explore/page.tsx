@@ -11,7 +11,7 @@ import { generateMockStats } from '@/lib/mock-stats'
 
 export const revalidate = 60
 
-const VALID_TYPES = ['restaurant', 'pharmacy', 'delivery_office']
+const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
 
 export const metadata = {
   title: 'اكتشف',
@@ -46,6 +46,8 @@ export default async function ExplorePage({
       ? 'المطاعم'
       : activeType === 'pharmacy'
       ? 'الصيدليات'
+      : activeType === 'supermarket'
+      ? 'الماركت'
       : 'التوصيل'
     : 'كل اللي حواليك'
 
