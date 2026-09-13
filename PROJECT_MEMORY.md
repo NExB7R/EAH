@@ -58,3 +58,30 @@
 3. Migration في الريبو لـ `onboarding_done` + `interests`
 4. اختبار يدوي للـ personalization في المتصفح
 
+
+---
+
+## 2026-09-13 — Session continued: Real Trends
+
+### ✅ Real trends pipeline (كامل)
+- `public.page_view_events` (موجود من `20260911193000_add_business_analytics_and_live_visitors_v2.sql`)
+- RPC `get_business_view_stats(text[], int)` — aggregate آمن، بيرجع `slug, views, unique_visitors`
+- `lib/real-stats.ts` — loader مع fallback صامت
+- `mock-stats.ts` — بياخد `override?.recentViews` من الأرقام الحقيقية
+- مربوط في `home-dynamic.tsx` + `app/recommend/page.tsx`
+
+### 🎓 دروس
+- `page_view_events.visitor_id` نوعه **`uuid`** مش text — انتبه للـ cast
+- **multiline patches** في Python: الـ string literals مع `\n` بتحتاج دقة عالية
+- `noUnusedLocals: false` بيخفي أخطاء imports غير مستخدمة — راقبها يدوياً
+
+### 🎯 commits الجلسة (تابع)
+- `18e82f3` — profiles.onboarding_done + interests (jsonb) migration
+- `bdc30c2` — RPC get_business_view_stats + real-stats.ts
+- `0934e2a` — fix: wire realStats into home-dynamic
+
+### 📋 متبقي في v0.2.0
+- Notifications (Web Push) — المكونات موجودة
+- تنظيف دوري لـ `page_view_events` (cron أو RPC)
+- عرض `views` الحقيقي في صفحة business
+
