@@ -17,19 +17,21 @@ const FEATURED: SideItem[] = [
   { id: 'f4', title: 'مشويات الشرق', subtitle: 'شبين القناطر', emoji: '🥙', href: '#' },
   { id: 'f5', title: 'كافيه النجوم', subtitle: 'المنايل', emoji: '☕', href: '#' },
   { id: 'f6', title: 'بيتزا الطليان', subtitle: 'شبين القناطر', emoji: '🍕', href: '#' },
-  { id: 'f7', title: 'شاورما الشام', subtitle: 'شبين القناطر', emoji: '🌯', href: '#' },
-  { id: 'f8', title: 'عصائر فريش', subtitle: 'المنايل', emoji: '🥤', href: '#' },
-  { id: 'f9', title: 'حلواني الأصيل', subtitle: 'شبين القناطر', emoji: '🍰', href: '#' },
-  { id: 'f10', title: 'مخبز الفجر', subtitle: 'شبين القناطر', emoji: '🥖', href: '#' },
 ]
 
-const SUPPORT: SideItem[] = [
-  { id: 's1', title: 'شاورما أحمد', subtitle: 'جديد', emoji: '🌯', href: '#' },
-  { id: 's2', title: 'قهوة الشروق', subtitle: 'جديد', emoji: '☕', href: '#' },
-  { id: 's3', title: 'حلويات نور', subtitle: 'جديد', emoji: '🍰', href: '#' },
-  { id: 's4', title: 'عطارة الهنا', subtitle: 'جديد', emoji: '🌿', href: '#' },
-  { id: 's5', title: 'سمكة ورق', subtitle: 'جديد', emoji: '🐟', href: '#' },
-  { id: 's6', title: 'شيبسي سنتر', subtitle: 'جديد', emoji: '🥤', href: '#' },
+const TRENDING: SideItem[] = [
+  { id: 't1', title: 'برجر هاوس', subtitle: 'الأكثر زيارة', emoji: '🍔', href: '#' },
+  { id: 't2', title: 'كشري التحرير', subtitle: 'ترند النهاردة', emoji: '🍲', href: '#' },
+  { id: 't3', title: 'سوبر ماركت النور', subtitle: 'الأكثر طلباً', emoji: '🛒', href: '#' },
+  { id: 't4', title: 'مشويات الشرق', subtitle: 'ترند الأسبوع', emoji: '🥙', href: '#' },
+  { id: 't5', title: 'كافيه النجوم', subtitle: 'الأعلى تقييماً', emoji: '☕', href: '#' },
+]
+
+const NEW_BIZ: SideItem[] = [
+  { id: 'n1', title: 'شاورما أحمد', subtitle: 'جديد', emoji: '🌯', href: '#' },
+  { id: 'n2', title: 'قهوة الشروق', subtitle: 'جديد', emoji: '☕', href: '#' },
+  { id: 'n3', title: 'حلويات نور', subtitle: 'جديد', emoji: '🍰', href: '#' },
+  { id: 'n4', title: 'عطارة الهنا', subtitle: 'جديد', emoji: '🌿', href: '#' },
 ]
 
 function AutoSlider({ items, featured }: { items: SideItem[]; featured?: boolean }) {
@@ -48,7 +50,7 @@ function AutoSlider({ items, featured }: { items: SideItem[]; featured?: boolean
   useEffect(() => {
     const el = trackRef.current
     if (!el) return
-    const step = 52
+    const step = 50
     el.scrollTo({ top: index * step, behavior: 'smooth' })
   }, [index])
 
@@ -102,7 +104,7 @@ export default function SidePanel() {
         onClick={handleClose}
         aria-label="إغلاق القائمة"
       >
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
           <path d="M18 6 6 18M6 6l12 12" />
         </svg>
       </button>
@@ -111,7 +113,7 @@ export default function SidePanel() {
         <h3 className="side-panel__head">
           <span className="side-panel__head-icon">⭐</span>
           <span>المميز</span>
-          <a href="/featured" className="side-panel__see-all">الكل ←</a>
+          <a href="/featured" className="side-panel__see-all">الكل</a>
         </h3>
         <AutoSlider items={FEATURED} featured />
       </div>
@@ -120,11 +122,22 @@ export default function SidePanel() {
 
       <div className="side-panel__section">
         <h3 className="side-panel__head">
-          <span className="side-panel__head-icon">🌱</span>
-          <span>مشاريع جديدة</span>
-          <a href="/new" className="side-panel__see-all">الكل ←</a>
+          <span className="side-panel__head-icon">🔥</span>
+          <span>ترند</span>
+          <a href="/trends" className="side-panel__see-all">الكل</a>
         </h3>
-        <AutoSlider items={SUPPORT} />
+        <AutoSlider items={TRENDING} />
+      </div>
+
+      <div className="side-panel__divider" />
+
+      <div className="side-panel__section">
+        <h3 className="side-panel__head">
+          <span className="side-panel__head-icon">🌱</span>
+          <span>جديد</span>
+          <a href="/new" className="side-panel__see-all">الكل</a>
+        </h3>
+        <AutoSlider items={NEW_BIZ} />
       </div>
     </aside>
   )

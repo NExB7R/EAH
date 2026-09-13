@@ -1,29 +1,30 @@
 .side-panel {
   position: fixed;
   top: 100px;
-  inset-inline-end: 16px; /* شمال في RTL */
+  inset-inline-end: 16px;
   width: 210px;
-  height: 480px;
+  height: 540px;
   padding: 14px;
   border-radius: 22px;
   background: rgba(10, 8, 18, 0.5);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid rgba(139, 92, 246, 0.18);
+  border: 1px solid rgba(139, 92, 246, 0.15);
   z-index: 90;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: none;
 }
 .side-panel__close {
   position: absolute;
-  top: 10px;
-  inset-inline-end: 10px;
-  width: 24px;
-  height: 24px;
+  top: 8px;
+  inset-inline-end: 8px;
+  width: 22px;
+  height: 22px;
   border-radius: 999px;
-  border: 1px solid rgba(139, 92, 246, 0.25);
-  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(139, 92, 246, 0.06);
   color: #A29DB5;
   cursor: pointer;
   display: inline-flex;
@@ -39,19 +40,34 @@
   transform: rotate(90deg);
 }
 
-.side-panel__section { display: flex; flex-direction: column; height: 50%; position: relative; }
-.side-panel__divider { height: 1px; background: rgba(139, 92, 246, 0.12); margin: 8px 0; flex-shrink: 0; }
-.side-panel__head {
-  display: flex; align-items: center; gap: 6px;
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 0.82rem; font-weight: 900; color: #F4F2FA;
-  margin: 0 0 10px; padding-inline-end: 28px;
+.side-panel__section {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding-inline-end: 26px;
+}
+.side-panel__divider {
+  height: 1px;
+  background: rgba(139, 92, 246, 0.1);
+  margin: 10px 0;
   flex-shrink: 0;
 }
-.side-panel__head-icon { font-size: 0.9rem; }
+.side-panel__head {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0 0 8px;
+  flex-shrink: 0;
+}
+.side-panel__head-icon { font-size: 0.85rem; }
 .side-panel__see-all {
   margin-inline-start: auto;
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   color: #A855F7;
   text-decoration: none;
   font-weight: 700;
@@ -59,18 +75,26 @@
 }
 .side-panel__see-all:hover { color: #E8C79A; }
 .side-panel__track {
-  display: flex; flex-direction: column; gap: 6px;
-  height: 100%; overflow-y: hidden; scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
   scrollbar-width: none;
+  flex: 1;
 }
 .side-panel__track::-webkit-scrollbar { display: none; }
 .side-panel__card {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 9px; min-height: 46px;
-  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 8px;
+  min-height: 40px;
+  border-radius: 10px;
   background: rgba(139, 92, 246, 0.05);
-  border: 1px solid rgba(139, 92, 246, 0.12);
-  text-decoration: none; color: inherit;
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  text-decoration: none;
+  color: inherit;
   transition: all 200ms ease;
   flex-shrink: 0;
 }
@@ -79,20 +103,27 @@
   background: rgba(139, 92, 246, 0.14);
 }
 .side-panel__card--featured {
-  border-color: rgba(232, 199, 154, 0.28);
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(232, 199, 154, 0.05));
+  border-color: rgba(232, 199, 154, 0.25);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(232, 199, 154, 0.04));
 }
 .side-panel__card--featured:hover { border-color: #E8C79A; }
-.side-panel__emoji { font-size: 1.15rem; flex-shrink: 0; }
-.side-panel__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+.side-panel__emoji { font-size: 1rem; flex-shrink: 0; }
+.side-panel__text { display: flex; flex-direction: column; gap: 0; min-width: 0; flex: 1; }
 .side-panel__title {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.72rem; font-weight: 900; color: #F4F2FA;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .side-panel__subtitle {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.58rem; color: #A29DB5;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 0.54rem;
+  color: #A29DB5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 @media (max-width: 1024px) { .side-panel { display: none; } }

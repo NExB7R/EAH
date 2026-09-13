@@ -9,12 +9,6 @@ export default function HomeHero() {
       <div className="home-hero__inner">
         <div className="home-hero__logo"><EahLogo size="xl" variant="full" /></div>
 
-        <div className="home-hero__search">
-          <span className="home-hero__search-icon" aria-hidden><IconSearch /></span>
-          <input type="text" placeholder="ابحث عن مطعم، صيدلية، سوبر ماركت، توصيل..." aria-label="ابحث في EAH" />
-          <button type="button" className="home-hero__search-btn">ابحث</button>
-        </div>
-
         <div className="home-hero__city">
           <span className="home-hero__city-line" aria-hidden />
           <span className="home-hero__city-icon" aria-hidden>
@@ -24,16 +18,11 @@ export default function HomeHero() {
           <span className="home-hero__city-line" aria-hidden />
         </div>
 
-        {/* مربع "نفسك في ايه" — بارز ومميز */}
-        <a href="/recommend" className="home-hero__mood-box">
-          <span className="home-hero__mood-glow" aria-hidden />
-          <span className="home-hero__mood-emoji">✨</span>
-          <span className="home-hero__mood-text">
-            <strong>نفسك في ايه؟</strong>
-            <small>قولنا وإحنا نرشّحلك</small>
-          </span>
-          <span className="home-hero__mood-arrow" aria-hidden>←</span>
-        </a>
+        <div className="home-hero__search">
+          <span className="home-hero__search-icon" aria-hidden><IconSearch /></span>
+          <input type="text" placeholder="ابحث عن مطعم، صيدلية، سوبر ماركت، توصيل..." aria-label="ابحث في EAH" />
+          <button type="button" className="home-hero__search-btn">ابحث</button>
+        </div>
 
         <div className="home-hero__chips">
           <a href="#restaurants" className="home-hero__chip"><span>🍽️</span><span>مطاعم</span></a>
@@ -41,6 +30,17 @@ export default function HomeHero() {
           <a href="#markets" className="home-hero__chip"><span>🛒</span><span>سوبر ماركت</span></a>
           <a href="#delivery" className="home-hero__chip"><span>🛵</span><span>توصيل</span></a>
         </div>
+
+        {/* مربع "نفسك في ايه" مستطيل عريض تحت القوائم */}
+        <a href="/recommend" className="home-hero__mood-box">
+          <span className="home-hero__mood-glow" aria-hidden />
+          <span className="home-hero__mood-emoji">✨</span>
+          <span className="home-hero__mood-text">
+            <strong>نفسك في ايه؟</strong>
+            <small>قولنا وإحنا نرشّحلك المكان المناسب</small>
+          </span>
+          <span className="home-hero__mood-arrow" aria-hidden>←</span>
+        </a>
       </div>
     </section>
   )
