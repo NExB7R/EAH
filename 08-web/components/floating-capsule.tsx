@@ -12,19 +12,6 @@ import {
 } from './neon-icons'
 import './floating-capsule.css'
 
-const MENU_LINKS = [
-  { href: '/explore', label: 'اكتشف' },
-  { href: '/offers', label: 'العروض' },
-  { href: '/recommend', label: 'نفسك في ايه؟' },
-  { href: '/trends', label: 'الترندات' },
-  { href: '/merchant/apply', label: 'سجّل متجرك' },
-  { href: '/about', label: 'نبذة عننا' },
-  { href: '/contact', label: 'تواصل معنا' },
-  { href: '/advertise', label: 'أعلن معنا' },
-  { href: '/terms', label: 'الشروط والأحكام' },
-  { href: '/privacy', label: 'سياسة الخصوصية' },
-]
-
 type CapsuleUser = {
   name: string
   points: number
@@ -32,8 +19,8 @@ type CapsuleUser = {
   role: string
   banUntil: string | null
   avatarKey: string | null
-  titleKey: string | null
   frameKey: string | null
+  avatarUrl: string | null
 }
 
 export default function FloatingCapsuleHeader() {
@@ -57,31 +44,20 @@ export default function FloatingCapsuleHeader() {
       try {
         const { data: { user: authUser } } = await supabase.auth.getUser()
         if (!active) return
-        if (!authUser) {
-          setLoggedIn(false)
-          return
-        }
+        if (!authUser) { setLoggedIn(false); return }
         setLoggedIn(true)
 
         const [p, r, n] = await Promise.all([
-          supabase
-            .from('profiles')
-            .select('display_name,trust_score,banned_until,avatar_key,title_key,frame_key')
-            .eq('id', authUser.id)
-            .maybeSingle(),
-          supabase
-            .from('user_roles')
-            .select('role')
-            .eq('user_id', authUser.id)
-            .maybeSingle(),
-          supabase
-            .from('notifications')
+          supabase.from('profiles')
+            .select('display_name,trust_score,banned_until,avatar_key,frame_key,avatar_url')
+            .eq('id', authUser.id).maybeSingle(),
+          supabase.from('user_roles')
+            .select('role').eq('user_id', authUser.id).maybeSingle(),
+          supabase.from('notifications')
             .select('*', { count: 'exact', head: true })
-            .eq('user_id', authUser.id)
-            .is('read_at', null),
+            .eq('user_id', authUser.id).is('read_at', null),
         ])
         if (!active) return
-
         setUser({
           name: p.data?.display_name ?? 'مستخدم',
           points: p.data?.trust_score ?? 0,
@@ -89,27 +65,26 @@ export default function FloatingCapsuleHeader() {
           role: r.data?.role ?? 'customer',
           notifications: n.count ?? 0,
           avatarKey: p.data?.avatar_key ?? null,
-          titleKey: p.data?.title_key ?? null,
           frameKey: p.data?.frame_key ?? null,
+          avatarUrl: p.data?.avatar_url ?? null,
         })
       } catch {
         if (active) setLoggedIn(false)
       }
     })()
 
-    return () => {
-      active = false
-    }
+    return () => { active = false }
   }, [])
 
   const isStaff = user && (user.role === 'admin' || user.role === 'super_admin')
-  const isMerchant = user && user.role === 'merchant'
+  const isMerchant = user?.role === 'merchant'
 
   return (
     <>
       <header className={`floating-capsule ${scrolled ? 'is-scrolled' : ''}`}>
         <div className="floating-capsule__inner">
 
+          {/* RIGHT (RTL start) — Menu + Search */}
           <div className="floating-capsule__side floating-capsule__side--start">
             <NeonIconButton
               icon={<IconMenu />}
@@ -123,49 +98,22 @@ export default function FloatingCapsuleHeader() {
               ariaLabel="اكتشف"
               href="/explore"
             />
-            <NeonIconButton icon={<IconInstall />} label="ثبّت" ariaLabel="تثبيت" />
-            {loggedIn === false && (
-              <>
-                <NeonIconButton
-                  icon={<IconKey />}
-                  label="دخول"
-                  ariaLabel="دخول"
-                  href="/auth"
-                />
-                <NeonIconButton
-                  icon={<IconBolt />}
-                  label="سجل بسرعة"
-                  ariaLabel="سجل بسرعة"
-                  variant="accent"
-                  href="/auth?tab=register"
-                />
-              </>
-            )}
           </div>
 
+          {/* CENTER — Logo */}
           <div className="floating-capsule__center">
             <EahLogo size="sm" variant="mark" href="/" />
           </div>
 
+          {/* LEFT (RTL end) — Login OR Avatar */}
           <div className="floating-capsule__side floating-capsule__side--end">
-            <ShareButton />
-            <NeonIconButton icon={<IconFacebook />} label="فيسبوك" href="#" ariaLabel="فيسبوك" />
-            <NeonIconButton icon={<IconWhatsapp />} label="واتساب" href="#" ariaLabel="واتساب" />
-            {loggedIn === true && isStaff && (
+            {loggedIn === false && (
               <NeonIconButton
-                icon={<span style={{ fontSize: '1rem' }}>👑</span>}
-                label="لوحة التحكم"
-                ariaLabel="لوحة التحكم"
-                href="/admin"
+                icon={<IconBolt />}
+                label="سجّل بسرعة"
+                ariaLabel="سجّل بسرعة"
                 variant="accent"
-              />
-            )}
-            {loggedIn === true && isMerchant && (
-              <NeonIconButton
-                icon={<span style={{ fontSize: '1rem' }}>🏪</span>}
-                label="متجري"
-                ariaLabel="متجري"
-                href="/merchant"
+                href="/auth"
               />
             )}
             {loggedIn === true && (
@@ -176,6 +124,7 @@ export default function FloatingCapsuleHeader() {
                 banUntil={user?.banUntil ?? null}
                 avatarKey={user?.avatarKey ?? null}
                 frameKey={user?.frameKey ?? null}
+                avatarUrl={user?.avatarUrl ?? null}
                 href="/account"
               />
             )}
@@ -199,17 +148,83 @@ export default function FloatingCapsuleHeader() {
               className="nav-drawer__close"
               onClick={() => setMenuOpen(false)}
               aria-label="إغلاق"
-            >
-              ×
-            </button>
+            >×</button>
           </div>
+
+          {/* User section */}
+          {loggedIn === true && user && (
+            <a href="/account" className="nav-drawer__user">
+              <span className="nav-drawer__user-avatar">
+                {user.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={user.avatarUrl} alt={user.name} />
+                ) : (
+                  user.name.charAt(0).toUpperCase()
+                )}
+              </span>
+              <div className="nav-drawer__user-info">
+                <span className="nav-drawer__user-name">{user.name}</span>
+                <span className="nav-drawer__user-points">⭐ {user.points}</span>
+              </div>
+            </a>
+          )}
+
+          {/* Role links */}
+          {loggedIn === true && (isStaff || isMerchant) && (
+            <div className="nav-drawer__roles">
+              {isStaff && (
+                <a href="/admin" className="nav-drawer__role nav-drawer__role--admin">
+                  👑 لوحة التحكم
+                </a>
+              )}
+              {isMerchant && (
+                <a href="/merchant" className="nav-drawer__role nav-drawer__role--merchant">
+                  🏪 متجري
+                </a>
+              )}
+            </div>
+          )}
+
+          {/* Main nav */}
           <nav className="nav-drawer__nav">
-            {MENU_LINKS.map((link) => (
-              <a key={link.href} href={link.href} className="nav-drawer__link">
-                {link.label}
-              </a>
-            ))}
+            <a href="/explore" className="nav-drawer__link">🔍 اكتشف</a>
+            <a href="/offers" className="nav-drawer__link">🔥 العروض</a>
+            <a href="/recommend" className="nav-drawer__link">✨ نفسك في ايه؟</a>
+            <a href="/trends" className="nav-drawer__link">📈 الترندات</a>
+            <a href="/merchant/apply" className="nav-drawer__link">🏪 سجّل متجرك</a>
+            <a href="/advertise" className="nav-drawer__link">📢 أعلن معنا</a>
           </nav>
+
+          <div className="nav-drawer__divider" />
+
+          <nav className="nav-drawer__nav nav-drawer__nav--secondary">
+            <a href="/about" className="nav-drawer__link">ℹ️ نبذة عننا</a>
+            <a href="/contact" className="nav-drawer__link">💬 تواصل معنا</a>
+            <a href="/terms" className="nav-drawer__link">📜 الشروط والأحكام</a>
+            <a href="/privacy" className="nav-drawer__link">🔒 سياسة الخصوصية</a>
+          </nav>
+
+          {/* Social + utilities */}
+          <div className="nav-drawer__social">
+            <a href="https://facebook.com/eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__social-btn">
+              <IconFacebook /> فيسبوك
+            </a>
+            <a href="https://wa.me/201012892806" target="_blank" rel="noreferrer" className="nav-drawer__social-btn">
+              <IconWhatsapp /> واتساب
+            </a>
+          </div>
+
+          {loggedIn === false && (
+            <div className="nav-drawer__auth">
+              <a href="/auth" className="nav-drawer__auth-btn">⚡ دخول / تسجيل</a>
+            </div>
+          )}
+
+          {loggedIn === true && (
+            <form action="/auth/logout" method="post" className="nav-drawer__logout">
+              <button type="submit">🚪 تسجيل خروج</button>
+            </form>
+          )}
         </div>
       </div>
     </>

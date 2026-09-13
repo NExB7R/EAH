@@ -69,8 +69,8 @@ export default function UserAvatar({
 
   return (
     <div className="user-avatar-wrap">
-      <button
-        type="button"
+      <a
+        href="/notifications"
         className="neon-icon-btn user-avatar__bell"
         aria-label="الإشعارات"
       >
@@ -80,7 +80,7 @@ export default function UserAvatar({
             {unreadNotifications > 9 ? '9+' : unreadNotifications}
           </span>
         )}
-      </button>
+      </a>
 
       {href ? (
         <a href={href} className="user-avatar" aria-label={`حساب ${name}`} style={frameStyle}>
