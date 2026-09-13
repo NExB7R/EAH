@@ -90,7 +90,7 @@ export async function getPublishedBusinesses(
       .order('created_at', { ascending: false })
       .limit(limit)
 
-    if (intent && ['restaurant', 'pharmacy', 'delivery_office'].includes(intent)) {
+    if (intent && ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'].includes(intent)) {
       query = query.eq('business_type', intent)
     }
 

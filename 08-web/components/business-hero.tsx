@@ -2,18 +2,21 @@
 import Link from 'next/link'
 import './business-hero.css'
 
-type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office'
+type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 
 const TYPE_EMOJI: Record<BusinessType, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
   delivery_office: '🛵',
+  supermarket: '🛒',
 }
 
 const TYPE_LABEL: Record<BusinessType, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
   delivery_office: 'توصيل',
+  supermarket: 'ماركت',
+  supermarket: '🛒',
 }
 
 type Stats = {

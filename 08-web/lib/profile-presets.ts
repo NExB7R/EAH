@@ -3,7 +3,7 @@ export type Category = 'customer' | 'merchant' | 'admin'
 export type Gender = 'male' | 'female'
 
 export type PresetAvatar = { key: string; from: string; to: string }
-export type BusinessKind = 'restaurant' | 'pharmacy' | 'delivery_office' | 'any'
+export type BusinessKind = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'any'
 export type PresetTitle = { key: string; label: string; emoji: string; hint: string; gender: Gender | 'both'; category: Category; businessKind?: BusinessKind }
 export type PresetFrame = { key: string; label: string; border: string; glow: string; category: Category; decoration?: 'crown' | 'store' | 'shield' }
 

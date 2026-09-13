@@ -7,7 +7,7 @@ import './recommend-client.css'
 type Business = {
   slug: string
   name: string
-  type: 'restaurant' | 'pharmacy' | 'delivery_office'
+  type: 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
   area: string
   badge?: string
   vibe: string[]

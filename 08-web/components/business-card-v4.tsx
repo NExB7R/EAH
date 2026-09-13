@@ -1,7 +1,7 @@
 'use client'
 import './business-card-v4.css'
 
-type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office'
+type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 type CardSize = 'hero' | 'lg' | 'md' | 'sm'
 
 type Business = {
@@ -19,12 +19,15 @@ const TYPE_EMOJI: Record<BusinessType, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
   delivery_office: '🛵',
+  supermarket: '🛒',
 }
 
 const TYPE_LABEL: Record<BusinessType, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
   delivery_office: 'توصيل',
+  supermarket: 'ماركت',
+  supermarket: '🛒',
 }
 
 const TYPE_THEME: Record<BusinessType, { from: string; to: string; accent: string }> = {

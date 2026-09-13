@@ -7,7 +7,7 @@ import './favorite-button.css'
 import './open-now-badge.css'
 import Image from 'next/image'
 
-type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office'
+type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 
 type Business = {
   businessId?: string
@@ -32,18 +32,22 @@ const TYPE_EMOJI: Record<BusinessType, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
   delivery_office: '🛵',
+  supermarket: '🛒',
 }
 
 const TYPE_LABEL: Record<BusinessType, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
   delivery_office: 'توصيل',
+  supermarket: 'ماركت',
+  supermarket: '🛒',
 }
 
 const TYPE_HUE: Record<BusinessType, string> = {
   restaurant: '#FF7A3D',
   pharmacy: '#4ADE80',
   delivery_office: '#E8C79A',
+  supermarket: '🛒',
 }
 
 export default function ExploreCard({ business }: { business: Business; size?: string }) {
