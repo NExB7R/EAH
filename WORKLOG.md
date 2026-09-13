@@ -45,3 +45,35 @@
 - Git is now the project source of truth.
 - Added `.gitattributes`, root `.gitignore`, `VERSION`, release process, and GitHub Actions CI.
 - Set web package version to `0.2.2`.
+
+---
+
+## 2026-09-13 — Security Hardening + Vercel Deploy
+
+### ✅ اتعمل
+- إصلاح `reveal_contact`: validation + advisory lock + constraints
+- Migration `20260913000000_harden_reveal_contact.sql` (87 سطر)
+- Server-side visitor hash (SHA-256 من IP + UA + client_token + salt)
+- Rate limiting: 20/min per IP
+- API validation: UUID + method_type whitelist
+- إصلاح TypeScript errors في `floating-capsule.tsx` + `audit/page.tsx`
+- Deploy ناجح على `eah-sq.vercel.app`
+- إنشاء `PROJECT_MEMORY.md` للتواصل بين الشاتات
+
+### 📚 اتعلمنا
+- `date_trunc('day', ...)` مش IMMUTABLE في Postgres
+- advisory lock أفضل من unique index للـ 24h dedup
+- Vercel CLI بيعرض `UNKNOWN` أحيانًا بس الـ deploy ناجح
+- GitHub بيقع → محتاجين مسار بديل للـ deploy
+
+### 🎯 الجاي
+1. `middleware.ts` لـ session refresh
+2. Onboarding flow كامل
+3. PWA install prompt
+4. Git auto-deploy (لما GitHub يرجع)
+
+### ⚠️ مشاكل معروفة
+- مفيش `middleware.ts` → sessions مش بتتجدد
+- Git auto-deploy مش شغال (GitHub permissions)
+- Rate limit in-memory (مش موزّع)
+

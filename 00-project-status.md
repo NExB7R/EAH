@@ -1,55 +1,43 @@
-# Project Status — v0.1.0
+# Project Status — v0.2.0
 
 ## Mission
-Build a local discovery platform that starts in Shibin El-Qanater and nearby villages/centers, then expands to other cities and service categories.
+Build a local discovery platform that starts in Shibin El-Qanater and nearby villages/centers, then expands.
 
-## Current business model
-- Free core discovery experience for users.
-- Restaurants can pay for featured placement.
-- Future paid capabilities may include customer search/CRM and order-bot tooling.
-- No commission-based ordering in the MVP.
+## Current version
+**v0.2.0** — Discovery + UX + PWA (in progress)
 
-## MVP pillars
-1. Restaurants, delivery offices, supermarkets, pharmacies and other local listings.
-2. Restaurant menus as uploaded images.
-3. Written offers with a teaser image.
-4. User account: verified phone + name + password.
-5. Ratings/comments, contact details and payment methods become visible after registration.
-6. Favorites, exclusions, notifications and personalized home feed.
-7. "Suggest food" guided recommendation flow.
-8. Offer reactions and trend signals.
-9. Customer Trust Score exists from the beginning but has no financial/reward value in MVP.
-10. SEO/local discovery + Facebook/shareability from day one.
-11. PWA + dark mode as default + install/add-to-home UX.
+## Business model
+- Free core discovery experience
+- Restaurants can pay for featured placement
+- Future: customer CRM + order-bot tooling
+- No commission-based ordering in MVP
 
-## Product rules
-- Search/recommendation logic varies by category.
-- Paid featured placement must have a bounded boost; relevance cannot be destroyed by payment.
-- Private customer data is not exposed to merchants unless strictly necessary for a future transaction.
-- WhatsApp, later, will be a communication channel; the platform remains the system of record for orders.
-- Project knowledge must live in versioned project files, not only chat memory.
+## Live URLs
+- **Production:** https://eah-sq.vercel.app
+- **GitHub:** https://github.com/NExB7R/EAH (branch: `ui-onlook`)
+- **Supabase:** npmpiivmdksdirrumbmt (Frankfurt, eu-central-1)
 
-## Current phase
-Foundation -> Naming/Brand -> Architecture -> Database/Auth -> UX/UI -> Implementation.
+## What's working
+- DB: 23 tables, 34 functions, 46 RLS policies
+- Storage: 3 buckets (business-media, business-menu, business-offers)
+- Anti-manipulation v1: server-side hash + rate limit
+- Public pages: `/`, `/explore`, `/recommend`, `/offers`, `/businesses/[slug]`, `/about`, `/contact`, `/terms`, `/privacy`
+- Auth pages: `/auth`, `/auth/change-password`, `/auth/recover`
+- Admin: `/admin` (full)
+- Merchant: `/merchant` (full)
+- Customer: `/account`
 
-## Naming status
-EAH selected by founder as the working/public product name. Legal, domain and social availability remain separate verification gates before paid registration or public scale.
+## What's next (priority order)
+1. `middleware.ts` for session refresh
+2. Onboarding flow (after signup)
+3. PWA install prompt
+4. Real trends from page_view_events
+5. Notifications
 
-## Next build gate
-1. Finish Auth/phone verification flow.
-2. Finish Storage buckets and image policies.
-3. Reconcile the live database with a clean versioned baseline migration.
-4. Build the first mobile-first dark-mode shell.
+## Known issues
+- No `middleware.ts` → sessions don't auto-refresh
+- Git auto-deploy not connected (GitHub permissions issue)
+- Rate limit is in-memory (not distributed)
 
-
-## Database implementation
-- Supabase project exists and is ACTIVE_HEALTHY in eu-central-1 (Frankfurt).
-- Live foundation: 10 public tables with RLS enabled.
-- Security hardening migration `20260910232459_foundation_security_hardening.sql` is applied.
-- Contact methods are separated from public business data and gated by verified phone status.
-- Businesses now support `owner_profile_id` for future merchant ownership.
-- Migration history still needs a clean baseline capture because the original foundation was bootstrapped before versioned migrations were enabled.
-
-## Workflow status — 2026-09-11
-
-The project is now managed as a single repository. Git history is authoritative; compressed archives are release snapshots only.
+## Golden rules
+See `PROJECT_MEMORY.md` section 3.
