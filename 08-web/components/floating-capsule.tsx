@@ -6,7 +6,6 @@ import ShareButton from './share-button'
 import UserAvatar from './user-avatar'
 import OverlayBlur from './overlay-blur'
 import { createClient } from '@/lib/supabase-browser'
-import { getDashboardPath } from '@/lib/routing'
 import {
   IconKey, IconFacebook, IconWhatsapp,
   IconMenu, IconInstall, IconBolt, IconSearch,
@@ -103,7 +102,8 @@ export default function FloatingCapsuleHeader() {
     }
   }, [])
 
-  const dashboardPath = user ? getDashboardPath(user.role) : '/account'
+  const isStaff = user && (user.role === 'admin' || user.role === 'super_admin')
+  const isMerchant = user && user.role === 'merchant'
 
   return (
     <>
@@ -151,6 +151,23 @@ export default function FloatingCapsuleHeader() {
             <ShareButton />
             <NeonIconButton icon={<IconFacebook />} label="فيسبوك" href="#" ariaLabel="فيسبوك" />
             <NeonIconButton icon={<IconWhatsapp />} label="واتساب" href="#" ariaLabel="واتساب" />
+            {loggedIn === true && isStaff && (
+              <NeonIconButton
+                icon={<span style={{ fontSize: '1rem' }}>👑</span>}
+                label="لوحة التحكم"
+                ariaLabel="لوحة التحكم"
+                href="/admin"
+                variant="accent"
+              />
+            )}
+            {loggedIn === true && isMerchant && (
+              <NeonIconButton
+                icon={<span style={{ fontSize: '1rem' }}>🏪</span>}
+                label="متجري"
+                ariaLabel="متجري"
+                href="/merchant"
+              />
+            )}
             {loggedIn === true && (
               <UserAvatar
                 name={user?.name ?? 'مستخدم'}
@@ -159,7 +176,7 @@ export default function FloatingCapsuleHeader() {
                 banUntil={user?.banUntil ?? null}
                 avatarKey={user?.avatarKey ?? null}
                 frameKey={user?.frameKey ?? null}
-                href={dashboardPath}
+                href="/account"
               />
             )}
           </div>
