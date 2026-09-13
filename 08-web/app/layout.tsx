@@ -4,11 +4,9 @@ import './design-system.css'
 import '../components/eah-admin.css'
 import type { Metadata } from 'next'
 import { Cairo, Cairo_Play, Dancing_Script } from 'next/font/google'
-import RegisterSW from '@/components/register-sw'
 import PageViewTracker from '@/components/page-view-tracker'
 import ScrollIconsBackground from '@/components/scroll-icons-background'
 import OnboardingOverlay from '@/components/onboarding-overlay'
-import PWAInstallPrompt from '@/components/pwa-install-prompt'
 import StreakBadge from '@/components/streak-badge'
 import StreakMount from '@/components/streak-mount'
 import ServiceWorkerRegister from '@/components/sw-register'
@@ -75,13 +73,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ScrollIconsBackground />
         <PageViewTracker />
         {children}
-        <RegisterSW />
-            <OnboardingOverlay />
-        <PWAInstallPrompt />
+        <OnboardingOverlay />
         <StreakBadge />
-            <StreakMount />
-            <ServiceWorkerRegister />
-            <InstallBanner />
+        <StreakMount />
+        <ServiceWorkerRegister />
+        <InstallBanner />
       </body>
     </html>
   )
