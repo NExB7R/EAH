@@ -42,7 +42,9 @@ export default function AuthPage() {
         .maybeSingle()
       if (!active) return
       const role = roleRow?.role ?? 'customer'
-      window.location.replace(role === 'super_admin' ? '/admin' : role === 'merchant' ? '/merchant' : '/')
+      const next = new URLSearchParams(window.location.search).get('next')
+      const fallback = role === 'super_admin' ? '/admin' : role === 'merchant' ? '/merchant' : '/'
+      window.location.replace(next || fallback)
     })
 
     return () => {
@@ -115,7 +117,9 @@ export default function AuthPage() {
       if (roleError) throw new Error(`تعذر قراءة صلاحية الحساب: ${roleError.message}`)
 
       const role = roleRow?.role ?? 'customer'
-      window.location.href = role === 'super_admin' ? '/admin' : role === 'merchant' ? '/merchant' : '/'
+      const next = new URLSearchParams(window.location.search).get('next')
+      const fallback = role === 'super_admin' ? '/admin' : role === 'merchant' ? '/merchant' : '/'
+      window.location.href = next || fallback
     } catch (error) {
       setMessage(friendlyError(error))
     } finally {
