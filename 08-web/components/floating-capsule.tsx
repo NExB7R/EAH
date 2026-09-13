@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import EahLogo from './eah-logo'
 import NeonIconButton from './neon-icon-button'
 import UserAvatar from './user-avatar'
+import InstallPWAButton from './install-pwa-button'
+import ShareButton from './share-button'
 import AdminIconLink from './admin-icon-link'
 import { MI } from './neon-icons-menu'
 import './drawer-icons.css'
@@ -111,6 +113,8 @@ export default function FloatingCapsuleHeader() {
             {loggedIn === false && (
               <NeonIconButton icon={<IconBolt />} label="سجّل" ariaLabel="سجّل" variant="accent" href="/auth" />
             )}
+            <InstallPWAButton variant="compact" />
+            <ShareButton />
             {loggedIn === true && isStaff && <AdminIconLink />}
             {loggedIn === true && (
               <UserAvatar

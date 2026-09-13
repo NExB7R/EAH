@@ -23,17 +23,18 @@ export default function RoyalAvatar({
   const avatar = getAvatar(avatarKey)
   const frame = getFrame(frameKey)
   const initial = name.trim().charAt(0).toUpperCase()
-  const isAdmin = role === 'admin' || role === 'super_admin'
+  const isSuperAdmin = role === 'super_admin'
+  const isAdmin = role === 'admin'
   const isMerchant = role === 'merchant'
 
-  const frameStyle = frameKey && frameKey !== 'none' && !isAdmin
+  const frameStyle = frameKey && frameKey !== 'none' && !isSuperAdmin && !isAdmin && !isMerchant
     ? { border: `3px solid ${frame.border}`, boxShadow: `0 0 24px ${frame.glow}` }
     : undefined
 
   return (
-    <div className={`ra ra--${size} ${isAdmin ? 'ra--admin' : ''} ${isMerchant ? 'ra--merchant' : ''}`}>
-      {/* Royal crown for admin */}
-      {isAdmin && (
+    <div className={`ra ra--${size} ${isSuperAdmin ? 'ra--super' : ''} ${isAdmin ? 'ra--admin' : ''} ${isMerchant ? 'ra--merchant' : ''}`}>
+      {/* Royal crown for SUPER admin only */}
+      {isSuperAdmin && (
         <span className="ra__crown" aria-hidden>
           <svg viewBox="0 0 40 32" fill="none">
             <defs>
@@ -58,8 +59,8 @@ export default function RoyalAvatar({
         </span>
       )}
 
-      {/* Decorative stars for admin */}
-      {isAdmin && (
+      {/* Decorative stars for super admin */}
+      {isSuperAdmin && (
         <>
           <span className="ra__star ra__star--1">✦</span>
           <span className="ra__star ra__star--2">✦</span>
@@ -72,7 +73,7 @@ export default function RoyalAvatar({
           background: avatarUrl
             ? undefined
             : isAdmin
-            ? 'linear-gradient(135deg, #FBBF24, #DC2626)'
+            ? 'linear-gradient(135deg, #8B5CF6, #EC4899)'
             : isMerchant
             ? 'linear-gradient(135deg, #10B981, #F59E0B)'
             : `linear-gradient(135deg, ${avatar.from}, ${avatar.to})`,
