@@ -174,16 +174,40 @@ export default function SectionSlider({
         >
           {visible}
 
-          <a href={seeAllHref} className="ecard-seeall" aria-label={`شوف كل ${title}`}>
-            <div className="ecard-seeall__icon" aria-hidden>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-              </svg>
+          <a href={seeAllHref} className="fcard fcard--seeall" aria-label={`شوف كل ${title}`}>
+            <div className="fcard__image">
+              <span className="fcard__emoji fcard__emoji--seeall">···</span>
             </div>
-            <h3 className="ecard-seeall__title">شوف الكل</h3>
-            <p className="ecard-seeall__subtitle">
-              {remaining > 0 ? `و ${remaining}+ مكان تاني` : 'استكشف كل الأماكن'}
-            </p>
+
+            <div className="fcard__top-glass">
+              <span className="fcard__status fcard__status--neutral">
+                <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+                الكل
+              </span>
+            </div>
+
+            <div className="fcard__content">
+              <div className="fcard__header">
+                <h3 className="fcard__name">شوف الكل</h3>
+                <span className="fcard__area">
+                  {remaining > 0 ? `و ${remaining}+ مكان تاني` : 'اكتشف كل الأماكن'}
+                </span>
+              </div>
+
+              <div className="fcard__footer">
+                <div className="fcard__hook">
+                  <span className="fcard__hook-dot" />
+                  <span>اكتشف المزيد</span>
+                </div>
+                <div className="fcard__arrow">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
           </a>
         </div>
       </div>

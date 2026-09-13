@@ -188,3 +188,51 @@
   .fcard__name { font-size: 1.1rem; }
   .fcard__content { padding: 16px; }
 }
+
+/* ===== See-all card — same as fcard ===== */
+.fcard--seeall {
+  /* نستخدم نفس الأبعاد */
+  background: #0A0812;
+}
+
+.fcard--seeall .fcard__image {
+  background:
+    radial-gradient(circle at 50% 45%, rgba(168, 85, 247, 0.35) 0%, transparent 60%),
+    linear-gradient(160deg, rgba(107, 33, 255, 0.25), #0A0812 90%);
+  border: 1px dashed rgba(168, 85, 247, 0.3);
+  border-radius: inherit;
+}
+
+.fcard--seeall:hover .fcard__image {
+  background:
+    radial-gradient(circle at 50% 45%, rgba(232, 199, 154, 0.4) 0%, transparent 60%),
+    linear-gradient(160deg, rgba(168, 85, 247, 0.3), #0A0812 90%);
+}
+
+.fcard--seeall:hover {
+  border-color: #E8C79A;
+}
+
+.fcard__emoji--seeall {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #A855F7;
+  letter-spacing: 0.15em;
+  line-height: 0.6;
+  filter: drop-shadow(0 4px 16px rgba(168, 85, 247, 0.5));
+  animation: seeall-dots 2.4s ease-in-out infinite;
+  padding-bottom: 1rem;
+}
+
+@keyframes seeall-dots {
+  0%, 100% { opacity: 0.7; transform: translateY(0); }
+  50%      { opacity: 1;   transform: translateY(-4px); }
+}
+
+.fcard__status--neutral {
+  color: #C4B5FD;
+}
+
+.fcard__status--neutral svg {
+  color: #A855F7;
+}
