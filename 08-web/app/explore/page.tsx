@@ -44,7 +44,7 @@ export default async function ExplorePage({
       ? 'المطاعم'
       : activeType === 'pharmacy'
       ? 'الصيدليات'
-      : activeType === 'supermarket'
+      : activeType === 
       ? 'ال'
       : 'التوصيل'
     : 'كل اللي حواليك'
