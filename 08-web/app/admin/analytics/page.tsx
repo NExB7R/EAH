@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
-import dynamic from 'next/dynamic'
-const LineChart = dynamic(() => import('@/components/charts/line-chart'))
-const BarChart = dynamic(() => import('@/components/charts/bar-chart'))
+import nextDynamic from 'next/dynamic'
+const LineChart = nextDynamic(() => import('@/components/charts/line-chart'))
+const BarChart = nextDynamic(() => import('@/components/charts/bar-chart'))
 import '@/components/charts/charts.css'
 import './analytics.css'
 
