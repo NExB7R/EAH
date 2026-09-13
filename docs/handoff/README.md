@@ -162,3 +162,30 @@
 ---
 
 **القاعدة الأخيرة:** لو شكيت — **اسأل قبل التنفيذ**. الجودة أهم من السرعة.
+
+---
+
+## Connection Status (2026-09-14)
+
+| النظام | الحالة | ملاحظات |
+|--------|--------|---------|
+| Git | OK | ui-onlook synced |
+| Vercel | تحذير | كل deploys Preview — يحتاج Production Branch |
+| Supabase | OK | npmpiivmdksdirrumbmt |
+| Push VAPID | تحذير | يحتاج Vercel env |
+| Cron | تحذير | يحتاج CRON_SECRET |
+| Service Role | خطر | rotate فوراً |
+
+## خطوات حرجة
+
+1. Rotate SUPABASE_SERVICE_ROLE_KEY
+2. Vercel Production Branch = ui-onlook
+3. Vercel Env Vars: SERVICE_ROLE + CRON_SECRET + VAPID keys
+4. Deploy Hooks → Redeploy
+5. ابدأ FEATURES_TODO من #1
+
+## Contact
+
+- WhatsApp: يستكمل
+- Facebook: يستكمل
+- Email: ممنوع
