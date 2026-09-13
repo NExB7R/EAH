@@ -17,12 +17,12 @@ const ICONS_LAYOUT: Array<{ kind: IconKind; top: number; left: number; size: num
   { kind: 'pharmacy',    top: 30, left: 8,  size: 32, rotation: 18 },
   { kind: 'star',        top: 50, left: 2,  size: 26, rotation: -20 },
   { kind: 'heart',       top: 70, left: 6,  size: 28, rotation: 15 },
-  { kind: top: 88, left: 10, size: 34, rotation: 10 },
+
   { kind: 'delivery',    top: 22, left: 11, size: 30, rotation: -6 },
   { kind: 'heart',       top: 60, left: 9,  size: 24, rotation: 20 },
   // شمال (88-100%)
   { kind: 'delivery',    top: 15, left: 92, size: 40, rotation: -6 },
-  { kind: top: 35, left: 88, size: 34, rotation: 22 },
+
   { kind: 'restaurant',  top: 55, left: 94, size: 38, rotation: -14 },
   { kind: 'pharmacy',    top: 72, left: 90, size: 32, rotation: 8 },
   { kind: 'star',        top: 88, left: 92, size: 28, rotation: -18 },
