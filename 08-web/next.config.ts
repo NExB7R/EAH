@@ -1,4 +1,4 @@
-import { withSentryConfig } from '@sentry/nextjs'
+import { withSentryConfig } from '@sentry/nextjs/config'
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -20,6 +20,8 @@ const nextConfig: NextConfig = {
     ],
     minimumCacheTTL: 2592000,
   },
+
+  serverExternalPackages: ['@sentry/nextjs'],
 
   experimental: {
     optimizePackageImports: ['@supabase/ssr', '@supabase/supabase-js'],
@@ -77,10 +79,13 @@ const nextConfig: NextConfig = {
           { key: 'Service-Worker-Allowed', value: '/' },
         ],
       },
-      {
-        source: '/_next/static/(.*)',
-        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
-      },
+      // في production فقط — في dev بيكسر Next.js
+      ...(process.env.NODE_ENV === 'production'
+        ? [{
+            source: '/_next/static/(.*)',
+            headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+          }]
+        : []),
     ]
   },
 }
@@ -90,10 +95,8 @@ const sentryOptions = {
   project: 'javascript-nextjs',
   silent: !process.env.CI,
   widenClientFileUpload: true,
-  reactComponentAnnotation: { enabled: true },
   tunnelRoute: '/monitoring',
   hideSourceMaps: true,
-  disableLogger: true,
 }
 
 export default withSentryConfig(nextConfig, sentryOptions)
