@@ -12,6 +12,7 @@ import ScrollIconsBackground from '@/components/scroll-icons-background'
 import OnboardingOverlay from '@/components/onboarding-overlay'
 import PWAInstallPrompt from '@/components/pwa-install-prompt'
 import StreakBadge from '@/components/streak-badge'
+import StreakMount from '@/components/streak-mount'
 import '@/components/streak-onboarding.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <OnboardingOverlay />
         <PWAInstallPrompt />
         <StreakBadge />
+            <StreakMount />
       </body>
     </html>
   )
