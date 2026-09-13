@@ -4,15 +4,30 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
+import ApplyCategoryPicker from './ApplyCategoryPicker'
 import './apply.css'
 
 async function submitApplication(formData: FormData) {
   'use server'
   const businessName = String(formData.get('business_name') || '').trim()
-  const category = String(formData.get('category') || '').trim()
+  const rawCategory = String(formData.get('category') || '').trim()
+  const customCategory = String(formData.get('custom_category') || '').trim()
+  const customEmoji = String(formData.get('custom_emoji') || '🏪').trim()
   const description = String(formData.get('description') || '').trim()
-  if (businessName.length < 2 || category.length < 2) {
-    throw new Error('اكتب اسم النشاط ونوعه.')
+
+  if (businessName.length < 2) {
+    throw new Error('اكتب اسم النشاط.')
+  }
+
+  // ✅ لو اختار "أخرى" → نجمع الأيقونة + الاسم
+  let category = rawCategory
+  if (rawCategory === 'other') {
+    if (customCategory.length < 2) {
+      throw new Error('اكتب اسم المجال المخصص.')
+    }
+    category = `${customEmoji} ${customCategory}`
+  } else if (category.length < 2) {
+    throw new Error('اختار نوع النشاط.')
   }
 
   const supabase = await createClient()
@@ -34,12 +49,6 @@ const STEPS = [
   { n: 1, emoji: '📝', title: 'قدم الطلب',   desc: 'اسم النشاط + نوعه + نبذة' },
   { n: 2, emoji: '🔍', title: 'مراجعة',       desc: 'فريق EAH بيراجع الطلب' },
   { n: 3, emoji: '🏪', title: 'لوحة النشاط', desc: 'تتحول لـ Merchant وتدير مكانك' },
-]
-
-const CATEGORIES = [
-  { value: 'restaurant', label: '🍽️ مطعم' },
-  { value: 'pharmacy', label: '💊 صيدلية' },
-  { value: 'delivery_office', label: '🛵 مكتب توصيل' },
 ]
 
 export default async function MerchantApplyPage({
@@ -125,22 +134,7 @@ export default async function MerchantApplyPage({
                 />
               </div>
 
-              <div className="ap-field">
-                <label className="ap-label">نوع النشاط *</label>
-                <div className="ap-categories">
-                  {CATEGORIES.map((c) => (
-                    <label key={c.value} className="ap-cat">
-                      <input
-                        type="radio"
-                        name="category"
-                        value={c.value}
-                        required
-                      />
-                      <span className="ap-cat__inner">{c.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+              <ApplyCategoryPicker />
 
               <div className="ap-field">
                 <label htmlFor="description" className="ap-label">نبذة عن النشاط</label>
