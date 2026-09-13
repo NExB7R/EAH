@@ -29,7 +29,7 @@ export default function EahLogo({
       {showWord && <span className="eah-logo__glow" aria-hidden />}
 
       {showCrown && (
-        <img
+        {variant !== 'mark' && <img
           className="eah-logo__crown"
           src="/eah-crown.webp"
           alt=""
@@ -37,7 +37,7 @@ export default function EahLogo({
           width={1440}
           height={720}
           decoding="async"
-        />
+        />}
       )}
 
       {showWord && (
