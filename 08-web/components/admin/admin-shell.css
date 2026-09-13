@@ -706,3 +706,5 @@
     gap: 6px;
   }
 }
+
+@import './contacts-editor.css';
