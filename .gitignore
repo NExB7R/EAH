@@ -1,18 +1,21 @@
-# OS / editor
+# ═══ OS / Editors ═══
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 *.swp
+*.swo
 
-# Node / Next.js
-08-web/node_modules/
-08-web/.next/
-08-web/out/
-08-web/.turbo/
-08-web/next-env.d.ts
+# ═══ Node / Next.js ═══
+node_modules/
+.next/
+out/
+.turbo/
+next-env.d.ts
+tsconfig.tsbuildinfo
+*.tsbuildinfo
 
-# Environment / secrets
+# ═══ Environment / Secrets ═══
 .env
 .env.*
 !.env.example
@@ -21,19 +24,27 @@ Thumbs.db
 !08-web/.env.example
 .baseline.env
 
-# Private notes
+# ═══ Vercel ═══
+.vercel
+
+# ═══ Private notes ═══
 .private/
 *.private.md
+*.private
+.eah/
 
-# Logs
+# ═══ Logs ═══
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Local Supabase
+# ═══ Local Supabase ═══
 .supabase/
-*.tsbuildinfo
-.vercel
-.env*
+
+# ═══ OS-level cache ═══
+.cache/
+*.pid
+*.seed
+*.pid.lock
