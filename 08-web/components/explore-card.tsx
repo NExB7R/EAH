@@ -63,7 +63,10 @@ export default function ExploreCard({ business, index }: { business: Business; s
       aria-label={business.name}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{ '--hue': TYPE_HUE[business.type] } as React.CSSProperties}
+      style={{
+        '--hue': TYPE_HUE[business.type],
+        '--d': `${(index ?? 0) * 45}ms`,
+      } as React.CSSProperties}
     >
       {/* صورة الغلاف أو تدرج */}
       <div className="ecard__cover">
