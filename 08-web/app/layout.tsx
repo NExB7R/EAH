@@ -50,9 +50,16 @@ export const metadata: Metadata = {
   alternates: { canonical: '/' },
   openGraph: {
     title: 'EAH | اللي نفسك فيه ؟',
-    description: 'اكتشف اللي مناسب ليك حوالينك.',
+    description: 'اكتشف اللي مناسب ليك حوالينك — مطاعم، صيدليات، ماركت، توصيل.',
     type: 'website',
     locale: 'ar_EG',
+    siteName: 'EAH',
+    url: siteUrl,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'EAH | اللي نفسك فيه ؟',
+    description: 'اكتشف اللي مناسب ليك حوالينك.',
   },
 }
 

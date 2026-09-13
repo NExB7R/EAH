@@ -6,7 +6,7 @@ import './offers.css'
 
 export const dynamic = 'force-dynamic'
 export const metadata = {
-  title: 'العروض | EAH',
+  title: 'العروض',
   description: 'أحلى العروض في شبين القناطر — خصومات وعروض من مطاعم وصيدليات ومكاتب توصيل',
 }
 

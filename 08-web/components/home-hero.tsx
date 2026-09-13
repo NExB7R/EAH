@@ -7,7 +7,10 @@ export default function HomeHero() {
   return (
     <section className="home-hero">
       <div className="home-hero__inner">
-        <div className="home-hero__logo"><EahLogo size="xl" variant="full" href="/" /></div>
+        <h1 className="home-hero__logo">
+          <EahLogo size="xl" variant="full" href="/" />
+          <span className="sr-only">EAH — اللي نفسك فيه ؟ دليل شبين القناطر</span>
+        </h1>
 
         <div className="home-hero__city">
           <span className="home-hero__city-line" aria-hidden />
