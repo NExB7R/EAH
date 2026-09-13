@@ -1,0 +1,14 @@
+.ft { max-width: 1200px; margin: 0 auto; padding: 100px 20px 60px; }
+.ft__hero { position: relative; text-align: center; margin-bottom: 40px; padding: 30px 20px; }
+.ft__back { position: absolute; top: 16px; right: 16px; padding: 6px 12px; border-radius: 10px; background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.25); color: #C4B5FD; text-decoration: none; font-size: .78rem; font-weight: 700; }
+.ft__glow { position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 500px; height: 400px; background: radial-gradient(circle, rgba(251,191,36,.22), transparent 65%); filter: blur(80px); pointer-events: none; }
+.ft__kicker { position: relative; font-size: .72rem; letter-spacing: .2em; color: #FBBF24; font-weight: 800; }
+.ft__title { position: relative; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; color: #F5F3FF; margin: 12px 0 16px; }
+.ft__accent { background: linear-gradient(135deg, #FBBF24, #F59E0B); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.ft__lead { position: relative; color: #A5A3B8; font-size: 1rem; line-height: 1.7; max-width: 500px; margin: 0 auto 20px; }
+.ft__cta { position: relative; display: inline-block; padding: 12px 24px; border-radius: 14px; background: linear-gradient(135deg, #FBBF24, #F59E0B); color: #1A0F0A; font-weight: 800; font-size: .9rem; text-decoration: none; box-shadow: 0 8px 24px rgba(251,191,36,.4); }
+.ft__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
+.ft__empty { padding: 60px 20px; text-align: center; border-radius: 24px; background: rgba(20,18,28,.5); border: 1px solid rgba(139,92,246,.15); }
+.ft__empty-emoji { font-size: 3rem; display: block; margin-bottom: 12px; }
+.ft__empty-title { color: #F5F3FF; font-size: 1.2rem; margin: 0 0 8px; }
+.ft__empty-text { color: #A5A3B8; margin: 0; }

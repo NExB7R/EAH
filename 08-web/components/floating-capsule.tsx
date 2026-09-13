@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import EahLogo from './eah-logo'
 import NeonIconButton from './neon-icon-button'
 import UserAvatar from './user-avatar'
+import AdminIconLink from './admin-icon-link'
+import './admin-icon-link.css'
 import OverlayBlur from './overlay-blur'
 import { createClient } from '@/lib/supabase-browser'
 import { useUnreadCount } from '@/lib/hooks/use-unread-count'
@@ -107,6 +109,7 @@ export default function FloatingCapsuleHeader() {
             {loggedIn === false && (
               <NeonIconButton icon={<IconBolt />} label="سجّل" ariaLabel="سجّل" variant="accent" href="/auth" />
             )}
+            {loggedIn === true && isStaff && <AdminIconLink />}
             {loggedIn === true && (
               <UserAvatar
                 name={user?.name ?? 'مستخدم'}

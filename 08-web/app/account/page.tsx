@@ -4,6 +4,9 @@ import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { getAvatar, getTitle, getFrame } from '@/lib/profile-presets'
+import RoyalAvatar from '@/components/royal-avatar'
+import '@/components/royal-avatar.css'
+import '@/components/verified-badge.css'
 import './account.css'
 
 export const dynamic = 'force-dynamic'
@@ -32,7 +35,7 @@ export default async function AccountPage() {
   ] = await Promise.all([
     supabase
       .from('profiles')
-      .select('display_name,phone,phone_verified_at,trust_score,created_at,banned_until,ban_reason,avatar_key,title_key,frame_key,bio,gender,verified_at')
+      .select('display_name,phone,phone_verified_at,trust_score,created_at,banned_until,ban_reason,avatar_key,title_key,frame_key,bio,gender,verified_at,avatar_url')
       .eq('id', user.id)
       .maybeSingle(),
     supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle(),
@@ -70,17 +73,15 @@ export default async function AccountPage() {
 
           {/* Avatar + Frame */}
           <div className="acc-hero__avatar-wrap">
-            <div
-              className={`acc-hero__avatar ${isBanned ? 'acc-hero__avatar--banned' : ''}`}
-              style={{
-                background: isBanned
-                  ? 'linear-gradient(135deg, #EF4444, #991B1B)'
-                  : `linear-gradient(135deg, ${avatar.from}, ${avatar.to})`,
-                ...(frameStyle ?? {}),
-              }}
-            >
-              {initial}
-            </div>
+            <RoyalAvatar
+              name={name}
+              avatarKey={profile?.avatar_key}
+              frameKey={profile?.frame_key}
+              avatarUrl={profile?.avatar_url}
+              role={role}
+              verified={isVerified}
+              size="lg"
+            />
           </div>
 
           <div className="acc-hero__body">
