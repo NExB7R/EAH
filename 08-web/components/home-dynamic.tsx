@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import { getPublishedBusinesses } from '@/lib/data'
-import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
+import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
+import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
 
 import { generateMockStats } from '@/lib/mock-stats'
 import HomeHero from '@/components/home-hero'
@@ -65,7 +66,7 @@ export default async function HomeDynamic() {
   const userTags = await loadUserProfileTags()
   const userProfile = parseUserTags(userTags)
   const personalized = applyPersonalization(ranked, userProfile)
-  const diversified = diversifyByCategory(ranked, 'type')
+  const diversified = diversifyByCategory(personalized, 'type')
 
   const design = await loadDesign()
   const sections: Section[] = design?.sections?.filter((s) => s.visible !== false) ?? []

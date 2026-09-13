@@ -3,7 +3,8 @@ import SiteFooter from '@/components/site-footer'
 import BackToTop from '@/components/back-to-top'
 import RecommendClient from '@/components/recommend-client'
 import { getPublishedBusinesses } from '@/lib/data'
-import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
+import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
+import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
 
 import { generateMockStats } from '@/lib/mock-stats'
 
@@ -23,7 +24,7 @@ export default async function RecommendPage() {
   const userTags = await loadUserProfileTags()
   const userProfile = parseUserTags(userTags)
   const personalized = applyPersonalization(ranked, userProfile)
-  const diversified = diversifyByCategory(ranked, 'type')
+  const diversified = diversifyByCategory(personalized, 'type')
 
   return (
     <>
