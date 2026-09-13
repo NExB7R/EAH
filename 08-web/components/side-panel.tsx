@@ -97,17 +97,23 @@ function AutoSlider({ items, featured }: { items: SideItem[]; featured?: boolean
 }
 
 export default function SidePanel() {
-  const [closed, setClosed] = useState(false)
+  const [closed, setClosed] = useState(true)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    
+    const wasOpen = localStorage.getItem('eah-sidepanel-open') === '1'
+    if (wasOpen) setClosed(false)
   }, [])
 
   const handleClose = () => {
     setClosed(true)
-    
+    localStorage.setItem('eah-sidepanel-open', '0')
+  }
+
+  const handleOpen = () => {
+    setClosed(false)
+    localStorage.setItem('eah-sidepanel-open', '1')
   }
 
   if (!mounted || closed) return null

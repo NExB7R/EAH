@@ -22,8 +22,22 @@ export default function InstallBanner() {
     }
     window.addEventListener('beforeinstallprompt', handler)
 
-    const timer = setTimeout(() => setShow(true), 15000)
-    return () => { clearTimeout(timer); window.removeEventListener('beforeinstallprompt', handler) }
+    // عرض البانر بعد تفاعل المستخدم (scroll) أو 60 ثانية
+    let triggered = false
+    const tryShow = () => {
+      if (triggered) return
+      triggered = true
+      setTimeout(() => setShow(true), 1500)
+    }
+    const onScroll = () => {
+      if (window.scrollY > 400) {
+        tryShow()
+        window.removeEventListener('scroll', onScroll)
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    const timer = setTimeout(() => setShow(true), 60000)
+    return () => { clearTimeout(timer); window.removeEventListener('beforeinstallprompt', handler); window.removeEventListener('scroll', onScroll) }
   }, [])
 
   async function install() {

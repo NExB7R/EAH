@@ -1,6 +1,6 @@
 .site-footer {
-  margin-top: 60px;
-  padding: 50px 20px 24px;
+  margin-top: 40px;
+  padding: 36px 20px 20px;
   border-top: 1px solid rgba(139, 92, 246, 0.2);
   background: linear-gradient(180deg, transparent 0%, rgba(107, 33, 255, 0.04) 100%);
   position: relative;
@@ -16,7 +16,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 20px;
   align-items: center;
 }
 
@@ -46,7 +46,7 @@
 .site-footer__serve {
   width: 100%;
   max-width: 1000px;
-  padding: 24px 28px;
+  padding: 18px 22px;
   border-radius: 24px;
   border: 1px solid rgba(139, 92, 246, 0.2);
   background: rgba(139, 92, 246, 0.04);
@@ -56,7 +56,7 @@
   font-size: 1.05rem;
   font-weight: 900;
   color: #E8C79A;
-  margin: 0 0 18px;
+  margin: 0 0 14px;
   text-align: center;
   letter-spacing: 0.02em;
 }
@@ -94,7 +94,7 @@
 .site-footer__nav {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 32px;
+  gap: 24px;
   width: 100%;
   max-width: 720px;
   text-align: center;
