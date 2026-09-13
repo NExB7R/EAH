@@ -98,6 +98,26 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
             <ReportButton entityType="business" entityId={business.businessId} />
           </div>
         )}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'LocalBusiness',
+            name: business.name,
+            description: business.reason,
+            url: `https://eah-sq.vercel.app/businesses/${business.slug}`,
+            areaServed: business.area,
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: business.area,
+              addressRegion: 'Qalyubia',
+              addressCountry: 'EG',
+            },
+          }),
+        }}
+      />
       </main>
 
       <SiteFooter />
