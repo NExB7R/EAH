@@ -118,3 +118,28 @@
 - Git tag `v0.2.0`
 - Push tags
 
+
+---
+
+## 2026-09-14 — Subscription System
+
+### ✅ نظام الاشتراكات
+- DB: subscription_plans + business_subscriptions + subscription_events
+- RLS: owner read own + admin full + merchant request pending
+- RPCs: get_business_subscription + expire_old_subscriptions
+- Flow: merchant يطلب → admin يوافق (30 يوم trial) → إشعارات يومية آخر 7 أيام → expire تلقائي
+- Seed: featured_monthly / featured_quarterly / featured_yearly (بدون سعر = تواصل)
+
+### 📁 ملفات
+- lib/subscription/{types,index,admin}.ts
+- components/subscription/{subscription-badge,trial-countdown,upgrade-cta}
+- app/admin/subscriptions/{page,actions,plans,events}
+- app/merchant/subscription/page.tsx
+- app/api/merchant/subscription/request + app/api/cron/subscription-check
+
+### 🔑 ENV مطلوب
+- CRON_SECRET (في .env.local + Vercel)
+
+### 🎯 commits
+- 58e7327 — subscription migration
+- ebdfc91 — subscription lib + pages
