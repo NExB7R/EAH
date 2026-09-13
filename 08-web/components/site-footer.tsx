@@ -25,7 +25,6 @@ export default function SiteFooter() {
         </nav>
         <div className="site-footer__palestine">
           <p className="site-footer__palestine-text">فلسطين في قلبنا</p>
-          <p className="site-footer__palestine-sub">الحرية قادمة .. بإذن الله</p>
           <div className="site-footer__palestine-heart" aria-label="فلسطين">
             <svg viewBox="0 0 32 28" width="40" height="35" aria-hidden>
               <defs><clipPath id="ps-heart-clip"><path d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z" /></clipPath></defs>

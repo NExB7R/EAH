@@ -144,12 +144,6 @@
   color: #F4F2FA;
   margin: 0;
 }
-.site-footer__palestine-sub {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.75rem;
-  color: #A29DB5;
-  margin: 0;
-}
 
 /* bottom */
 .site-footer__bottom {
