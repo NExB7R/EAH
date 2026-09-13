@@ -9,7 +9,6 @@ export default function HomeHero() {
       <div className="home-hero__inner">
         <h1 className="home-hero__logo">
           <EahLogo size="xl" variant="full" href="/" />
-          <span className="sr-only">EAH — اللي نفسك فيه ؟ دليل شبين القناطر</span>
         </h1>
 
         <div className="home-hero__city">
