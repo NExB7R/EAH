@@ -41,7 +41,7 @@ const TYPE_GRADIENT: Record<CardVariant, { from: string; to: string; accent: str
 export default function BusinessCardV3({
   business,
   variant = 'restaurant',
-  rating = 4.7,
+  rating,
   deliveryTime = '20-30 د',
 }: {
   business: Business

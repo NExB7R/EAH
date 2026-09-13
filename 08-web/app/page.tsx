@@ -6,22 +6,41 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SidePanel from '@/components/side-panel'
 import BackToTop from '@/components/back-to-top'
 import { demoBusinesses } from '@/lib/demo-data'
-import { fairOrder, getDailySeed } from '@/lib/fair-shuffle'
+import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
+import { generateMockStats } from '@/lib/mock-stats'
 
 export default function Page() {
-  const seed = getDailySeed()
+  // نحوّل كل business لإحصائيات + نرتبه
+  const withStats = demoBusinesses.map((b) => {
+    const stats = generateMockStats({
+      slug: b.slug,
+      name: b.name,
+      featured: b.badge === 'مميز',
+    })
+    return { ...b, ...stats }
+  })
 
-  const restaurants = demoBusinesses.filter((b) => b.type === 'restaurant')
-  const pharmacies = demoBusinesses.filter((b) => b.type === 'pharmacy')
-  const markets = demoBusinesses.filter((b) => b.type === 'supermarket')
-  const delivery = demoBusinesses.filter((b) => b.type === 'delivery_office')
+  // ترتيب ذكي
+  const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
 
-  const restaurantsOrdered = fairOrder([...restaurants, ...restaurants, ...restaurants], seed + 1)
-  const offersOrdered = fairOrder([...restaurants, ...markets, ...restaurants], seed + 2)
-  const pharmaciesOrdered = fairOrder([...pharmacies, ...pharmacies, ...pharmacies], seed + 3)
-  const deliveryOrdered = fairOrder([...delivery, ...delivery, ...delivery], seed + 4)
-  const marketsOrdered = fairOrder([...markets, ...markets, ...markets], seed + 5)
-  const newOrdered = fairOrder([...restaurants, ...pharmacies], seed + 6)
+  // تنويع حسب الفئة (يمنع تكرار نفس الفئة ورا بعض)
+  const diversified = diversifyByCategory(ranked, 'type')
+
+  // تقسيم لكل قسم
+  const restaurants = diversified.filter((b) => b.type === 'restaurant')
+  const pharmacies = diversified.filter((b) => b.type === 'pharmacy')
+  const markets = diversified.filter((b) => b.type === 'supermarket')
+  const delivery = diversified.filter((b) => b.type === 'delivery_office')
+
+  // العروض: الأماكن اللي عندها عروض نشطة، مرتبة بالـ score
+  const offers = diversified
+    .filter((b) => b.activeOffers > 0)
+    .sort((a, b) => b.activeOffers - a.activeOffers || b.score - a.score)
+
+  // جديد: الأماكن اللي عمرها < 30 يوم
+  const newBiz = diversified
+    .filter((b) => b.ageInDays < 30)
+    .sort((a, b) => a.ageInDays - b.ageInDays)
 
   return (
     <>
@@ -35,84 +54,114 @@ export default function Page() {
         <SectionSlider
           id="restaurants"
           title="نفسك في إيه؟ 🔥"
-          subtitle="أقرب حاجة على مزاجك دلوقتي"
+          subtitle="مرتبة حسب الجودة + النشاط"
           seeAllHref="/explore?type=restaurant"
           variant="restaurant"
           maxItems={10}
-          totalItems={restaurantsOrdered.length}
+          totalItems={restaurants.length}
         >
-          {restaurantsOrdered.slice(0, 10).map((b, i) => (
-            <BusinessCardV3 key={`r-${i}-${b.slug}`} business={b} variant="restaurant" />
+          {restaurants.slice(0, 10).map((b) => (
+            <BusinessCardV3
+              key={b.slug}
+              business={b}
+              variant="restaurant"
+              rating={b.rating}
+            />
           ))}
         </SectionSlider>
 
         <SectionSlider
           id="offers"
           title="عروض نار 🔥"
-          subtitle="وفّر أكتر مع العروض اللي شغالة"
+          subtitle="أماكن عندها عروض نشطة دلوقتي"
           seeAllHref="/offers"
           variant="offer"
           maxItems={10}
-          totalItems={offersOrdered.length}
+          totalItems={offers.length}
         >
-          {offersOrdered.slice(0, 10).map((b, i) => (
-            <BusinessCardV3 key={`o-${i}-${b.slug}`} business={b} variant="offer" />
+          {offers.slice(0, 10).map((b) => (
+            <BusinessCardV3
+              key={b.slug}
+              business={b}
+              variant="offer"
+              rating={b.rating}
+            />
           ))}
         </SectionSlider>
 
         <SectionSlider
           id="pharmacies"
           title="صحتك أولاً 💊"
-          subtitle="صيدليات قريبة منك ومفتوحة"
+          subtitle="صيدليات قريبة ومفتوحة"
           seeAllHref="/explore?type=pharmacy"
           variant="pharmacy"
           maxItems={10}
-          totalItems={pharmaciesOrdered.length}
+          totalItems={pharmacies.length}
         >
-          {pharmaciesOrdered.slice(0, 10).map((b, i) => (
-            <BusinessCardV3 key={`p-${i}-${b.slug}`} business={b} variant="pharmacy" />
+          {pharmacies.slice(0, 10).map((b) => (
+            <BusinessCardV3
+              key={b.slug}
+              business={b}
+              variant="pharmacy"
+              rating={b.rating}
+            />
           ))}
         </SectionSlider>
 
         <SectionSlider
           id="delivery"
           title="على السريع 🛵"
-          subtitle="مكاتب توصيل بتغطي منطقتك"
+          subtitle="توصيل يغطي منطقتك"
           seeAllHref="/explore?type=delivery_office"
           variant="delivery"
           maxItems={10}
-          totalItems={deliveryOrdered.length}
+          totalItems={delivery.length}
         >
-          {deliveryOrdered.slice(0, 10).map((b, i) => (
-            <BusinessCardV3 key={`d-${i}-${b.slug}`} business={b} variant="delivery" />
+          {delivery.slice(0, 10).map((b) => (
+            <BusinessCardV3
+              key={b.slug}
+              business={b}
+              variant="delivery"
+              rating={b.rating}
+            />
           ))}
         </SectionSlider>
 
         <SectionSlider
           id="markets"
           title="طلباتك عندنا 🛒"
-          subtitle="مقاضي سريعة وقريبة منك"
+          subtitle="مقاضي سريعة وقريبة"
           seeAllHref="/explore?type=supermarket"
           variant="market"
           maxItems={10}
-          totalItems={marketsOrdered.length}
+          totalItems={markets.length}
         >
-          {marketsOrdered.slice(0, 10).map((b, i) => (
-            <BusinessCardV3 key={`m-${i}-${b.slug}`} business={b} variant="market" />
+          {markets.slice(0, 10).map((b) => (
+            <BusinessCardV3
+              key={b.slug}
+              business={b}
+              variant="market"
+              rating={b.rating}
+            />
           ))}
         </SectionSlider>
 
         <SectionSlider
           id="new-businesses"
           title="مشاريع صغيرة، فرص كبيرة 🌱"
-          subtitle="ادعم متاجر جيرانك الجديدة"
+          subtitle="اكتشف الجديد وادعم جيرانك"
           seeAllHref="/new"
           variant="new"
           maxItems={10}
-          totalItems={newOrdered.length}
+          totalItems={newBiz.length}
         >
-          {newOrdered.slice(0, 10).map((b, i) => (
-            <BusinessCardV3 key={`n-${i}-${b.slug}`} business={b} variant="new" />
+          {newBiz.slice(0, 10).map((b) => (
+            <BusinessCardV3
+              key={b.slug}
+              business={b}
+              variant="new"
+              rating={b.rating}
+            />
           ))}
         </SectionSlider>
       </main>
