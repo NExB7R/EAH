@@ -5,6 +5,7 @@ import RecommendClient from '@/components/recommend-client'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
+import { getViewStats } from '@/lib/real-stats'
 
 import { generateMockStats } from '@/lib/mock-stats'
 
@@ -16,10 +17,17 @@ export const metadata = {
 
 export default async function RecommendPage() {
   const businesses = await getPublishedBusinesses(50)
-  const withStats = businesses.map((b) => ({
-    ...b,
-    ...generateMockStats({ slug: b.slug, name: b.name, featured: b.badge === 'مميز' }),
-  }))
+  const realStats = await getViewStats(businesses.map((b) => b.slug), 7)
+  const withStats = businesses.map((b) => {
+    const real = realStats.get(b.slug)
+    return {
+      ...b,
+      ...generateMockStats(
+        { slug: b.slug, name: b.name, featured: b.badge === 'مميز' },
+        real ? { recentViews: real.views } : undefined
+      ),
+    }
+  })
   const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
   const userTags = await loadUserProfileTags()
   const userProfile = parseUserTags(userTags)

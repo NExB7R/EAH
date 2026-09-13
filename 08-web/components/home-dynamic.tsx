@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase-server'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
+import { getViewStats } from '@/lib/real-stats'
 
 import { generateMockStats } from '@/lib/mock-stats'
 import HomeHero from '@/components/home-hero'

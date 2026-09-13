@@ -15,11 +15,10 @@ function hash(s: string): number {
   return Math.abs(h)
 }
 
-export function generateMockStats(business: {
-  slug: string
-  name: string
-  featured?: boolean
-}): RankingStats {
+export function generateMockStats(
+  business: { slug: string; name: string; featured?: boolean },
+  override?: { recentViews?: number },
+): RankingStats {
   const h = hash(business.slug)
 
   // توزيع واقعي: بعض الأماكن قوية، بعضها متوسط، بعضها جديد
@@ -64,6 +63,10 @@ export function generateMockStats(business: {
     recentComments = 1 + (h % 8)
     activeOffers = 0
     ageInDays = 60 + (h % 400)
+  }
+
+  if (override?.recentViews !== undefined) {
+    recentViews = Math.max(0, Math.floor(override.recentViews))
   }
 
   return {
