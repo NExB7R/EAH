@@ -2,6 +2,7 @@
   position: fixed;
   top: 100px;
   inset-inline-end: 16px;
+  max-width: calc(100vw - 32px);
   width: 210px;
   height: 600px;
   padding: 14px;

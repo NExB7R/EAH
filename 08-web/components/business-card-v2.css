@@ -151,3 +151,8 @@
   .xcard__body { padding: 14px 14px 16px; }
   .xcard__reveal { max-height: 100px; opacity: 1; margin-top: 4px; }
 }
+
+/* منع أي overflow */
+.xcard, .xcard * {
+  max-width: 100%;
+}

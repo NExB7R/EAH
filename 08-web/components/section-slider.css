@@ -3,9 +3,10 @@
   max-width: 1320px;
   margin: 0 auto;
   position: relative;
+  width: 100%;
+  overflow: hidden;
 }
 
-/* ===== Head ===== */
 .ss__head {
   display: flex;
   align-items: flex-end;
@@ -108,7 +109,11 @@
 .ss__see-all svg { transform: rotate(180deg); }
 
 /* ===== Wrapper + fades ===== */
-.ss__wrapper { position: relative; }
+.ss__wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
 
 .ss__fade {
   position: absolute;
@@ -119,11 +124,11 @@
 }
 .ss__fade--start {
   inset-inline-start: 0;
-  background: linear-gradient(to left, transparent, var(--bg, #050308));
+  background: linear-gradient(to left, transparent, #050308);
 }
 .ss__fade--end {
   inset-inline-end: 0;
-  background: linear-gradient(to right, transparent, var(--bg, #050308));
+  background: linear-gradient(to right, transparent, #050308);
 }
 
 /* ===== Track ===== */
@@ -137,6 +142,8 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
 }
 .ss__track::-webkit-scrollbar { display: none; }
 .ss__track > * {
@@ -162,7 +169,6 @@
   transition: transform 200ms ease;
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 900px) {
   .ss { padding: 32px 0 40px; }
   .ss__head { padding: 0 20px 16px; }
