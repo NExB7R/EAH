@@ -1,0 +1,6 @@
+.chart { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.chart__label { font-size: .85rem; font-weight: 800; color: #C4B5FD; }
+.chart__svg { width: 100%; height: auto; display: block; }
+.chart__labels { display: flex; justify-content: space-between; padding: 0 40px 0 40px; font-size: .65rem; color: #6B6880; }
+.chart__xlabel { flex: 1; text-align: center; }
+.chart-empty { padding: 40px; text-align: center; color: #6B6880; font-size: .85rem; border-radius: 14px; background: rgba(10,8,16,.4); }

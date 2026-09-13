@@ -178,6 +178,7 @@ export default async function AccountPage() {
               <span className="acc-action__emoji">✏️</span>
               تعديل البروفايل
             </Link>
+            <Link href="/account/referral" className="acc-action acc-action--primary"><span className="acc-action__emoji">🎁</span>ادعي صحابك</Link>
             {!profile?.verified_at && (
               <Link href="/account/verify" className="acc-action acc-action--primary">
                 <span className="acc-action__emoji">✓</span>

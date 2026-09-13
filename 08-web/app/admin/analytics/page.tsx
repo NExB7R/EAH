@@ -1,118 +1,126 @@
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
+import LineChart from '@/components/charts/line-chart'
+import BarChart from '@/components/charts/bar-chart'
+import '@/components/charts/charts.css'
+import './analytics.css'
 
-function num(value: unknown) {
-  return typeof value === 'number' ? value : Number(value ?? 0)
-}
+export const dynamic = 'force-dynamic'
+export const metadata = { title: 'التحليلات | EAH Admin' }
 
-export default async function AdminAnalyticsPage() {
+export default async function AnalyticsPage() {
   const supabase = await createClient()
-  const [{ data: summary }, { data: businesses }, { data: pages }, { data: daily }] = await Promise.all([
-    supabase.rpc('admin_analytics_summary'),
-    supabase.rpc('admin_top_businesses_analytics', { p_days: 7 }),
-    supabase.rpc('admin_top_pages_analytics', { p_days: 7 }),
-    supabase.rpc('admin_daily_analytics', { p_days: 7 }),
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData.user) redirect('/admin/login')
+
+  const { data: roleRow } = await supabase
+    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
+  if (roleRow?.role !== 'super_admin') redirect('/')
+
+  // ─── آخر 14 يوم زيارات ───
+  const since = new Date(Date.now() - 13 * 86400000).toISOString().slice(0, 10)
+  const { data: visits } = await supabase
+    .from('daily_visits')
+    .select('visit_date')
+    .gte('visit_date', since)
+
+  const visitMap = new Map<string, number>()
+  ;(visits ?? []).forEach(v => {
+    visitMap.set(v.visit_date, (visitMap.get(v.visit_date) ?? 0) + 1)
+  })
+  const visitsData = Array.from({ length: 14 }, (_, i) => {
+    const d = new Date(Date.now() - (13 - i) * 86400000)
+    const key = d.toISOString().slice(0, 10)
+    const label = d.toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' })
+    return { label, value: visitMap.get(key) ?? 0 }
+  })
+
+  // ─── كشوف الأرقام آخر 14 يوم ───
+  const { data: reveals } = await supabase
+    .from('contact_reveals')
+    .select('method_type, created_at')
+    .gte('created_at', new Date(Date.now() - 13 * 86400000).toISOString())
+
+  const revealMap = new Map<string, number>()
+  ;(reveals ?? []).forEach(r => {
+    const day = r.created_at.slice(0, 10)
+    revealMap.set(day, (revealMap.get(day) ?? 0) + 1)
+  })
+  const revealsData = Array.from({ length: 14 }, (_, i) => {
+    const d = new Date(Date.now() - (13 - i) * 86400000)
+    const key = d.toISOString().slice(0, 10)
+    const label = d.toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' })
+    return { label, value: revealMap.get(key) ?? 0 }
+  })
+
+  // ─── توزيع حسب النوع ───
+  const { data: bizTypes } = await supabase
+    .from('businesses')
+    .select('business_type')
+    .eq('is_published', true)
+
+  const typeMap: Record<string, number> = {}
+  ;(bizTypes ?? []).forEach(b => {
+    typeMap[b.business_type] = (typeMap[b.business_type] ?? 0) + 1
+  })
+  const typeLabels: Record<string, string> = {
+    restaurant: 'مطاعم', pharmacy: 'صيدليات', delivery_office: 'توصيل',
+  }
+  const typeColors: Record<string, string> = {
+    restaurant: '#F97316', pharmacy: '#4ADE80', delivery_office: '#A855F7',
+  }
+  const typeData = Object.entries(typeMap).map(([k, v]) => ({
+    label: typeLabels[k] ?? k,
+    value: v,
+    color: typeColors[k] ?? '#A855F7',
+  }))
+
+  // ─── إحصائيات عامة ───
+  const [{ count: totalUsers }, { count: totalBiz }, { count: totalReviews }, { count: totalReferrals }] = await Promise.all([
+    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    supabase.from('businesses').select('*', { count: 'exact', head: true }),
+    supabase.from('business_reviews').select('*', { count: 'exact', head: true }),
+    supabase.from('referrals').select('*', { count: 'exact', head: true }),
   ])
 
-  const safeSummary = summary ?? {}
-  const businessRows = businesses ?? []
-  const pageRows = pages ?? []
-  const dailyRows = daily ?? []
-  const maxDaily = Math.max(1, ...dailyRows.map((row: any) => num(row.views)))
-
   return (
-    <section>
-      <header className="eah-admin-header">
-        <div>
-          <span className="eah-admin-kicker">ANALYTICS • LIVE</span>
-          <h1>الإحصائيات والتحليلات</h1>
-          <p>زيارات الموقع وصفحات الأنشطة منفصلة، مع النشاط الموجود Live.</p>
-        </div>
-        <span className="eah-admin-badge live">Live الآن</span>
+    <section className="an">
+      <header className="an__hero">
+        <span className="an__kicker">ANALYTICS</span>
+        <h1 className="an__title">📊 التحليلات</h1>
+        <p className="an__sub">نظرة شاملة على أداء المنصة</p>
       </header>
 
-      <div className="eah-admin-stat-grid">
-        {[
-          ['زوار الآن', num(safeSummary.live_visitors), 'كل الموقع خلال آخر دقيقتين'],
-          ['على صفحات الأنشطة الآن', num(safeSummary.live_business_visitors), 'زوار حاليون لصفحات الأنشطة'],
-          ['زيارات الموقع اليوم', num(safeSummary.site_views_today), 'بدون مضاعفة زيارات المطاعم'],
-          ['زيارات صفحات الأنشطة اليوم', num(safeSummary.business_views_today), 'Business page views'],
-          ['زيارات الموقع آخر 7 أيام', num(safeSummary.site_views_7d), 'Site views'],
-          ['زيارات صفحات الأنشطة آخر 7 أيام', num(safeSummary.business_views_7d), 'Business views'],
-        ].map(([label, value, hint]) => (
-          <div className="eah-admin-stat-card" key={label as string}>
-            <span>{label}</span>
-            <strong>{value}</strong>
-            <small>{hint}</small>
-          </div>
-        ))}
+      <div className="an__kpis">
+        <div className="an__kpi"><span className="an__kpi-emoji">👥</span><span className="an__kpi-val">{totalUsers ?? 0}</span><span className="an__kpi-label">مستخدم</span></div>
+        <div className="an__kpi"><span className="an__kpi-emoji">🏪</span><span className="an__kpi-val">{totalBiz ?? 0}</span><span className="an__kpi-label">نشاط</span></div>
+        <div className="an__kpi"><span className="an__kpi-emoji">✍️</span><span className="an__kpi-val">{totalReviews ?? 0}</span><span className="an__kpi-label">تقييم</span></div>
+        <div className="an__kpi"><span className="an__kpi-emoji">🎁</span><span className="an__kpi-val">{totalReferrals ?? 0}</span><span className="an__kpi-label">إحالة</span></div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: 16, marginTop: 18 }}>
-        <div className="card" style={{ padding: 22 }}>
-          <div className="section-head"><div><h2>زيارات الموقع اليومية</h2><span>آخر 7 أيام</span></div></div>
-          <div style={{ display: 'grid', gap: 12, marginTop: 18 }}>
-            {dailyRows.map((row: any) => {
-              const views = num(row.views)
-              return (
-                <div key={String(row.day)}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginBottom: 6 }}>
-                    <span>{new Date(String(row.day)).toLocaleDateString('ar-EG', { weekday: 'short', day: 'numeric', month: 'numeric' })}</span>
-                    <span style={{ opacity: .75 }}>{views} زيارة</span>
-                  </div>
-                  <div style={{ height: 8, borderRadius: 999, background: 'rgba(255,255,255,.08)', overflow: 'hidden' }}>
-                    <div style={{ width: `${Math.max(3, Math.round((views / maxDaily) * 100))}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg,#a855f7,#7c3aed)' }} />
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+      <div className="an__charts">
+        <div className="an__card">
+          <LineChart data={visitsData} color="#A855F7" label="👥 الزيارات اليومية (14 يوم)" />
         </div>
-
-        <div className="card" style={{ padding: 22 }}>
-          <div className="section-head"><div><h2>الأكثر زيارة الآن</h2><span>نشاط حالي خلال آخر دقيقتين</span></div></div>
-          <div style={{ display: 'grid', gap: 10, marginTop: 18 }}>
-            {businessRows.slice().sort((a: any, b: any) => num(b.live_visitors) - num(a.live_visitors)).slice(0, 8).map((row: any, index: number) => (
-              <div key={row.business_id} className="eah-admin-business-card" style={{ padding: 12 }}>
-                <div><strong>#{index + 1} {row.business_name}</strong><div className="eah-admin-business-sub">{num(row.live_visitors)} الآن • {num(row.views)} زيارة / 7 أيام</div></div>
-                <span className="eah-admin-badge live">{num(row.live_visitors)} Live</span>
-              </div>
-            ))}
-            {!businessRows.length && <div className="eah-admin-business-sub">لسه مفيش زيارات مسجلة.</div>}
-          </div>
+        <div className="an__card">
+          <LineChart data={revealsData} color="#4ADE80" label="📞 كشوف الأرقام (14 يوم)" />
+        </div>
+        <div className="an__card">
+          <BarChart data={typeData} label="🏪 الأنشطة حسب النوع" />
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 16, marginTop: 16 }}>
-        <div className="card" style={{ padding: 22 }}>
-          <div className="section-head"><div><h2>ترتيب الأنشطة</h2><span>آخر 7 أيام</span></div></div>
-          <div style={{ display: 'grid', gap: 10, marginTop: 16 }}>
-            {businessRows.slice(0, 10).map((row: any, index: number) => (
-              <div key={row.business_id} style={{ display: 'grid', gridTemplateColumns: '34px 1fr auto', alignItems: 'center', gap: 10 }}>
-                <strong>{index + 1}</strong>
-                <div><div>{row.business_name}</div><div className="eah-admin-business-sub">صفحات النشاط</div></div>
-                <strong>{num(row.views)}</strong>
-              </div>
-            ))}
-            {!businessRows.length && <div className="eah-admin-business-sub">لسه مفيش بيانات.</div>}
-          </div>
+      <div className="an__export">
+        <h3 className="an__export-title">📥 تصدير البيانات</h3>
+        <p className="an__export-sub">حمّل البيانات كـ CSV لتحليلها في Excel</p>
+        <div className="an__export-buttons">
+          <a href="/api/admin/export?type=businesses" className="an__export-btn">🏪 الأنشطة</a>
+          <a href="/api/admin/export?type=reviews" className="an__export-btn">✍️ التقييمات</a>
+          <a href="/api/admin/export?type=reveals" className="an__export-btn">📞 كشوف الأرقام</a>
+          <a href="/api/admin/export?type=users" className="an__export-btn">👥 المستخدمون</a>
+          <a href="/api/admin/export?type=visits" className="an__export-btn">📅 الزيارات</a>
+          <a href="/api/admin/export?type=referrals" className="an__export-btn">🎁 الإحالات</a>
         </div>
-
-        <div className="card" style={{ padding: 22 }}>
-          <div className="section-head"><div><h2>أكثر صفحات الموقع زيارة</h2><span>آخر 7 أيام</span></div></div>
-          <div style={{ display: 'grid', gap: 10, marginTop: 16 }}>
-            {pageRows.slice(0, 10).map((row: any) => (
-              <div key={row.path} style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 10 }}>
-                <div><div style={{ direction: 'ltr', textAlign: 'left' }}>{row.path}</div><div className="eah-admin-business-sub">{num(row.live_visitors)} الآن</div></div>
-                <strong>{num(row.views)}</strong>
-              </div>
-            ))}
-            {!pageRows.length && <div className="eah-admin-business-sub">لسه مفيش بيانات.</div>}
-          </div>
-        </div>
-      </div>
-
-      <div className="card" style={{ padding: 18, marginTop: 16 }}>
-        <strong>التقرير التجاري:</strong> بنفصل بين زيارات الموقع العامة وزيارات صفحات المطاعم والنشاط الموجود Live؛ وده يمنع مضاعفة الأرقام لما حد يفتح صفحة مطعم.
       </div>
     </section>
   )
