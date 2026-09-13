@@ -31,7 +31,7 @@
 /* ===== Glow ===== */
 .eah-logo__glow {
   position: absolute;
-  inset: -30%;
+  inset: -12%;
   z-index: 0;
   pointer-events: none;
   background: radial-gradient(ellipse 50% 55% at 50% 55%, rgba(107, 33, 255, 0.25) 0%, transparent 65%);

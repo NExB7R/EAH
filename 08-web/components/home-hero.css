@@ -1,8 +1,9 @@
-/* ═══ EAH Home Hero — clean rebuild ═══ */
+/* ═══ EAH Home Hero — clean + fixed logo ═══ */
 
 .home-hero {
   position: relative;
   padding: 20px 0 50px;
+  overflow: hidden; /* ⚠️ مهم: يمنع التوهج من الخروج */
 }
 
 .home-hero__inner {
@@ -16,77 +17,85 @@
   text-align: center;
 }
 
-/* ═══ Logo container — يستوعب الكراون ═══ */
+/* ═══ Logo container ═══ */
 .home-hero__logo {
   width: 100%;
+  max-width: 340px;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* مساحة فوق اللوجو عشان الكراون ميتقطعش */
-  padding-top: 56px;
-  margin-top: -20px;
+  padding-top: 40px;
+  position: relative;
+  overflow: visible;
 }
 
+/* ⚠️ مهم جدًا: نحدّد حجم اللوجو بصرامة */
+.home-hero__logo img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.home-hero__logo .eah-logo,
 .home-hero__logo .eah-logo--xl {
   --logo-w: 320px;
   --slogan-fs: 1rem;
   --crown-w: 22%;
+  width: 320px;
+  max-width: 100%;
+}
+
+/* ⚠️ منع الـ glow من التمدد */
+.home-hero__logo .eah-logo__glow {
+  inset: -10%;
+  filter: blur(14px);
+  opacity: 0.6;
 }
 
 @media (max-width: 768px) {
-  .home-hero__logo { padding-top: 44px; }
+  .home-hero__logo { max-width: 280px; padding-top: 34px; }
+  .home-hero__logo .eah-logo,
   .home-hero__logo .eah-logo--xl {
     --logo-w: 260px;
-    --slogan-fs: 0.9rem;
+    width: 260px;
   }
 }
-
 @media (max-width: 480px) {
-  .home-hero__logo { padding-top: 36px; }
+  .home-hero__logo { max-width: 240px; padding-top: 28px; }
+  .home-hero__logo .eah-logo,
   .home-hero__logo .eah-logo--xl {
     --logo-w: 220px;
-    --slogan-fs: 0.8rem;
+    width: 220px;
   }
 }
 
 /* ═══ City bar ═══ */
 .home-hero__city { display: flex; align-items: center; gap: 14px; }
 .home-hero__city-line {
-  width: 44px;
-  height: 1px;
+  width: 44px; height: 1px;
   background: linear-gradient(90deg, transparent, rgba(232, 199, 154, 0.6), transparent);
 }
 .home-hero__city-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-flex; align-items: center; justify-content: center;
   color: #E8C79A;
   filter: drop-shadow(0 0 6px rgba(232, 199, 154, 0.6));
 }
 .home-hero__city-text {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: #E8C79A;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
+  font-size: 0.92rem; font-weight: 700;
+  color: #E8C79A; letter-spacing: 0.02em; white-space: nowrap;
 }
 
 /* ═══ Search ═══ */
 .home-hero__search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  max-width: 600px;
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; max-width: 600px;
   padding: 6px 6px 6px 16px;
   border-radius: 999px;
   border: 1px solid rgba(139, 92, 246, 0.35);
   background: rgba(10, 8, 18, 0.85);
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 0 30px rgba(107, 33, 255, 0.15);
-  transition: box-shadow 300ms ease, border-color 300ms ease;
 }
 .home-hero__search:focus-within {
   border-color: #A855F7;
@@ -98,55 +107,31 @@
 }
 .home-hero__search-icon svg { width: 100%; height: 100%; }
 .home-hero__search input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: #F4F2FA;
-  font-family: var(--font-cairo, 'Cairo', system-ui, sans-serif);
-  font-size: 0.92rem;
-  padding: 11px 0;
+  flex: 1; border: none; outline: none; background: transparent;
+  color: #F4F2FA; font-family: var(--font-cairo, system-ui);
+  font-size: 0.92rem; padding: 11px 0;
 }
 .home-hero__search input::placeholder { color: #A29DB5; opacity: 0.7; }
 .home-hero__search-btn {
-  border: none;
-  padding: 9px 20px;
-  border-radius: 999px;
+  border: none; padding: 9px 20px; border-radius: 999px;
   background: linear-gradient(135deg, #6B21FF, #A855F7);
-  color: #fff;
-  font-family: var(--font-cairo, 'Cairo', system-ui, sans-serif);
-  font-weight: 900;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: transform 200ms ease, box-shadow 300ms ease;
+  color: #fff; font-weight: 900; font-size: 0.85rem;
+  cursor: pointer; font-family: inherit;
   box-shadow: 0 0 16px rgba(107, 33, 255, 0.5);
+  transition: all 200ms ease;
 }
-.home-hero__search-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 24px rgba(107, 33, 255, 0.7);
-}
+.home-hero__search-btn:hover { transform: translateY(-1px); }
 
 /* ═══ Chips ═══ */
-.home-hero__chips {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 4px;
-}
+.home-hero__chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 4px; }
 .home-hero__chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 18px;
-  border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 18px; border-radius: 999px;
   border: 1px solid rgba(139, 92, 246, 0.3);
   background: rgba(139, 92, 246, 0.06);
-  color: #F4F2FA;
-  text-decoration: none;
+  color: #F4F2FA; text-decoration: none;
   font-family: var(--font-cairo, system-ui);
-  font-weight: 700;
-  font-size: 0.85rem;
+  font-weight: 700; font-size: 0.85rem;
   transition: all 260ms cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 .home-hero__chip:hover {
@@ -157,22 +142,15 @@
 
 /* ═══ Mood box ═══ */
 .home-hero__mood-box {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-  max-width: 600px;
-  padding: 16px 22px;
-  border-radius: 22px;
+  position: relative; display: flex; align-items: center; gap: 16px;
+  width: 100%; max-width: 600px;
+  padding: 16px 22px; border-radius: 22px;
   background: linear-gradient(135deg, rgba(107, 33, 255, 0.22), rgba(232, 199, 154, 0.1));
   border: 1px solid rgba(232, 199, 154, 0.45);
-  text-decoration: none;
-  color: #F4F2FA;
-  overflow: hidden;
+  text-decoration: none; color: #F4F2FA;
+  overflow: hidden; margin-top: 8px;
   transition: all 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
   box-shadow: 0 0 20px rgba(232, 199, 154, 0.15);
-  margin-top: 8px;
 }
 .home-hero__mood-box:hover {
   transform: translateY(-3px);
@@ -187,36 +165,23 @@
 }
 @keyframes mood-pulse {
   0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.12); }
+  50% { transform: scale(1.12); }
 }
-.home-hero__mood-text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  text-align: start;
-  flex: 1;
-}
+.home-hero__mood-text { display: flex; flex-direction: column; gap: 3px; text-align: start; flex: 1; }
 .home-hero__mood-text strong {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 1.1rem;
-  font-weight: 900;
-  color: #E8C79A;
-  letter-spacing: 0.02em;
+  font-size: 1.1rem; font-weight: 900;
+  color: #E8C79A; letter-spacing: 0.02em;
 }
 .home-hero__mood-text small {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.75rem;
-  color: #C9C2DB;
+  font-size: 0.75rem; color: #C9C2DB;
 }
 .home-hero__mood-arrow {
-  font-size: 1.4rem;
-  color: #E8C79A;
-  transition: transform 300ms ease;
-  flex-shrink: 0;
+  font-size: 1.4rem; color: #E8C79A;
+  transition: transform 300ms ease; flex-shrink: 0;
 }
-.home-hero__mood-box:hover .home-hero__mood-arrow {
-  transform: translateX(-4px);
-}
+.home-hero__mood-box:hover .home-hero__mood-arrow { transform: translateX(-4px); }
 
 @media (max-width: 640px) {
   .home-hero { padding: 12px 0 34px; }
@@ -230,19 +195,4 @@
   .home-hero__mood-text strong { font-size: 1rem; }
   .home-hero__mood-text small { font-size: 0.7rem; }
   .home-hero__mood-emoji { font-size: 1.5rem; }
-}
-
-/* ═══ Logo wrapper — مساحة آمنة للكراون ═══ */
-.home-hero__logo {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 70px;
-}
-@media (max-width: 768px) {
-  .home-hero__logo { padding-top: 58px; }
-}
-@media (max-width: 640px) {
-  .home-hero__logo { padding-top: 48px; }
 }
