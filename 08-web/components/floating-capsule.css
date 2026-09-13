@@ -164,3 +164,13 @@
   .floating-capsule__side .neon-icon-btn:nth-child(2),
   .floating-capsule__side--end .neon-icon-btn:nth-child(2) { display: none; }
 }
+
+/* مساحة للتاج فوق اللوجو */
+.floating-capsule__center {
+  padding-top: 4px;
+}
+@media (max-width: 640px) {
+  .floating-capsule__center {
+    padding-top: 2px;
+  }
+}

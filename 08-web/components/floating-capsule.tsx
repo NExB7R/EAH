@@ -7,7 +7,7 @@ import UserAvatar from './user-avatar'
 import OverlayBlur from './overlay-blur'
 import {
   IconKey, IconFacebook, IconWhatsapp,
-  IconMenu, IconInstall, IconStore, IconBolt,
+  IconMenu, IconInstall, IconBolt,
 } from './neon-icons'
 import './floating-capsule.css'
 
@@ -30,18 +30,37 @@ export default function FloatingCapsuleHeader() {
   const [scrolled, setScrolled] = useState(false)
   const [direction, setDirection] = useState<'up' | 'down'>('up')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [crownActive, setCrownActive] = useState(false)
 
   useEffect(() => {
     let lastY = window.scrollY
+    let crownTimer: ReturnType<typeof setTimeout> | null = null
+
     const onScroll = () => {
       const y = window.scrollY
       setScrolled(y > 40)
       setDirection(y > lastY ? 'down' : 'up')
+
+      // لما المستخدم ينزل، شغّل حركة التاج
+      if (y > lastY + 5) {
+        setCrownActive(true)
+        if (crownTimer) clearTimeout(crownTimer)
+        crownTimer = setTimeout(() => setCrownActive(false), 1400)
+      }
       lastY = y
     }
+
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (crownTimer) clearTimeout(crownTimer)
+    }
   }, [])
+
+  const handleLogoClick = () => {
+    setCrownActive(true)
+    setTimeout(() => setCrownActive(false), 1400)
+  }
 
   return (
     <>
@@ -50,11 +69,15 @@ export default function FloatingCapsuleHeader() {
           <div className="floating-capsule__side floating-capsule__side--start">
             <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" onClick={() => setMenuOpen(true)} />
             <NeonIconButton icon={<IconInstall />} label="ثبّت" ariaLabel="تثبيت" />
-            {/* الدخول أولاً ثم التسجيل */}
             <NeonIconButton icon={<IconKey />} label="دخول" ariaLabel="دخول" href="/auth" />
             <NeonIconButton icon={<IconBolt />} label="سجل بسرعة" ariaLabel="سجل بسرعة" variant="accent" href="/auth?tab=register" />
           </div>
-          <div className="floating-capsule__center">{scrolled && <EahLogo size="sm" variant="mark" />}</div>
+
+          {/* اللوجو دايماً ظاهر — بـ compact (word + crown متحرك) */}
+          <div className="floating-capsule__center" onClick={handleLogoClick}>
+            <EahLogo size="sm" variant="compact" active={crownActive} />
+          </div>
+
           <div className="floating-capsule__side floating-capsule__side--end">
             <ShareButton />
             <NeonIconButton icon={<IconFacebook />} label="فيسبوك" href="#" ariaLabel="فيسبوك" />
@@ -69,7 +92,7 @@ export default function FloatingCapsuleHeader() {
       <div className={`nav-drawer ${menuOpen ? 'is-open' : ''}`} onClick={() => setMenuOpen(false)} aria-hidden={!menuOpen}>
         <div className="nav-drawer__panel" onClick={(e) => e.stopPropagation()}>
           <div className="nav-drawer__head">
-            <EahLogo size="sm" variant="mark" />
+            <EahLogo size="sm" variant="compact" />
             <button type="button" className="nav-drawer__close" onClick={() => setMenuOpen(false)} aria-label="إغلاق">×</button>
           </div>
           <nav className="nav-drawer__nav">

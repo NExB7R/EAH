@@ -158,3 +158,48 @@
 .eah-logo--compact.eah-logo--sm .eah-logo__city-compact { font-size: 0.55rem; }
 .eah-logo--compact.eah-logo--md { --logo-w: 130px; }
 .eah-logo--compact.eah-logo--md .eah-logo__city-compact { font-size: 0.65rem; }
+
+/* ===== Compact variant (header): word + crown ===== */
+.eah-logo--compact {
+  --logo-w: 100px;
+  --crown-w: 22%;
+  --crown-base-top: -26%;
+  --crown-base-left: 22%;
+  padding-top: 6px;
+}
+
+.eah-logo--compact .eah-logo__word {
+  width: 100%;
+  height: auto;
+}
+
+/* التاج: خرج من حدود الـ logo + حركة على scroll */
+.eah-logo--compact .eah-logo__crown {
+  position: absolute;
+  left: var(--crown-base-left);
+  top: var(--crown-base-top);
+  width: var(--crown-w);
+  height: auto;
+  transform: translate(-50%, 0) rotate(-14deg);
+  transform-origin: 50% 100%;
+  transition:
+    left 700ms cubic-bezier(0.34, 1.2, 0.64, 1),
+    transform 700ms cubic-bezier(0.34, 1.2, 0.64, 1);
+  pointer-events: none;
+  z-index: 3;
+  will-change: left, transform;
+  filter:
+    drop-shadow(0 0 3px rgba(232, 199, 154, 0.45))
+    drop-shadow(0 0 10px rgba(232, 199, 154, 0.22));
+}
+
+/* لما اللوجو يبقى crown-active — التاج يتحرك للنص */
+.eah-logo--compact.crown-active .eah-logo__crown,
+.eah-logo--compact:hover .eah-logo__crown {
+  left: 50%;
+  transform: translate(-50%, 0) rotate(0deg) scale(1.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eah-logo--compact .eah-logo__crown { transition: none; }
+}

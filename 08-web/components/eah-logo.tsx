@@ -21,24 +21,12 @@ export default function EahLogo({
   href,
 }: EahLogoProps) {
   const showWord = variant !== 'crown'
-  const showCrown = variant !== 'mark'
+  const showCrown = variant === 'full' || variant === 'compact' || variant === 'crown'
   const showSlogan = variant === 'full'
-  const showCity = variant === 'compact' || variant === 'full'
 
   const inner = (
     <>
       {showWord && <span className="eah-logo__glow" aria-hidden />}
-
-      {showWord && (
-        <img
-          className="eah-logo__word"
-          src="/eah-word.webp"
-          alt="EAH"
-          width={1440}
-          height={720}
-          decoding="async"
-        />
-      )}
 
       {showCrown && (
         <img
@@ -52,15 +40,22 @@ export default function EahLogo({
         />
       )}
 
+      {showWord && (
+        <img
+          className="eah-logo__word"
+          src="/eah-word.webp"
+          alt="EAH"
+          width={1440}
+          height={720}
+          decoding="async"
+        />
+      )}
+
       {showSlogan && (
         <span className="eah-logo__slogan" aria-hidden>
           <span>اللى نفسك فيه</span>
           <span className="eah-logo__punct">؟</span>
         </span>
-      )}
-
-      {showCity && variant === 'compact' && (
-        <span className="eah-logo__city-compact">شبين القناطر تتحدث...</span>
       )}
     </>
   )
