@@ -1,64 +1,45 @@
-/* ===== Global Reset ===== */
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
   margin: 0;
   padding: 0;
   width: 100%;
-  max-width: 100%;
-  overflow-x: clip;
-  overscroll-behavior-x: none;
+  overflow: hidden; /* ← جذري */
 }
 
 body {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
   background: #050308;
   color: #F4F2FA;
   width: 100%;
-  max-width: 100vw;
-  overflow-x: clip;
-  overscroll-behavior-x: none;
-  position: relative;
+  height: 100vh;
+  overflow: hidden; /* ← الجذري */
   font-family: var(--font-cairo, 'Cairo', system-ui, sans-serif);
 }
 
-/* ===== كل الـ containers محمية ===== */
-main,
-section,
-header,
-footer,
-nav,
-aside {
-  max-width: 100vw;
-  overflow-x: clip;
+/* Wrapper: السكرول الداخلي */
+#eah-scroll-root {
+  position: fixed;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+#eah-scroll-root::-webkit-scrollbar { width: 8px; }
+#eah-scroll-root::-webkit-scrollbar-track { background: transparent; }
+#eah-scroll-root::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
 }
 
-/* الـ sections اللي فيها sliders */
-.ss,
-.ss__wrapper,
-.ss__track,
-.section-slider,
-.section-slider__wrapper,
-.section-slider__track {
-  overflow-x: clip !important;
-  max-width: 100% !important;
-  width: 100% !important;
+/* كل المحتوى داخل الـ wrapper */
+#eah-scroll-root > * {
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-/* القائمة الجانبية - ما تخرجش */
-.side-panel,
-.nav-drawer,
-.floating-capsule,
-.back-to-top,
-.overlay-blur {
-  max-width: calc(100vw - 24px);
-}
-
-/* البطاقات: ممنوع تخرج */
-.xcard,
-.bcard,
-.business-card-v2 {
+main, section, header, footer, nav, aside {
   max-width: 100%;
 }

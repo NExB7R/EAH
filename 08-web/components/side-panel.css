@@ -128,3 +128,10 @@
   white-space: nowrap;
 }
 @media (max-width: 1024px) { .side-panel { display: none; } }
+
+/* ضمان عدم الخروج */
+@media (min-width: 1025px) {
+  .side-panel {
+    max-width: calc(100vw - 32px);
+  }
+}

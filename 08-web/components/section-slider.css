@@ -205,3 +205,12 @@
     scroll-padding-inline-end: 16px;
   }
 }
+
+/* الـ track نفسه هو اللي بيتحرك أفقيًا، مش الصفحة */
+.ss__wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+.ss__track {
+  max-width: 100%;
+}
