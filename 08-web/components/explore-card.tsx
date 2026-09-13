@@ -5,6 +5,7 @@ import FavoriteButton from './favorite-button'
 import OpenNowBadge from './open-now-badge'
 import './favorite-button.css'
 import './open-now-badge.css'
+import Image from 'next/image'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office'
 
@@ -63,8 +64,13 @@ export default function ExploreCard({ business }: { business: Business; size?: s
       {/* صورة الغلاف أو تدرج */}
       <div className="ecard__cover">
         {coverImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={coverImage} alt={business.name} loading="lazy" />
+          <Image
+            src={coverImage}
+            alt={business.name}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="ecard__img"
+          />
         ) : (
           <div className="ecard__cover-fallback">
             <span className="ecard__cover-emoji">{TYPE_EMOJI[business.type]}</span>

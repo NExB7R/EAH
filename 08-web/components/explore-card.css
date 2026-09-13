@@ -134,3 +134,10 @@
   .ecard__body { padding: 10px 12px 12px; }
   .ecard__name { font-size: .88rem; }
 }
+
+/* ═══ Next Image ═══ */
+.ecard__img {
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+.ecard:hover .ecard__img { transform: scale(1.08); }

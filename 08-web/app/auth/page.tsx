@@ -194,19 +194,43 @@ export default function AuthPage() {
 
           <form onSubmit={submit} className="auth__form">
             {mode === 'signup' && (
-              <div className="auth__field">
-                <label htmlFor="name" className="auth__label">الاسم</label>
-                <div className="auth__input-wrap">
-                  <input
-                    id="name"
-                    className="auth__input"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="مثلاً: نور الدين"
-                    required
-                  />
+              <>
+                <div className="auth__field">
+                  <label htmlFor="name" className="auth__label">الاسم</label>
+                  <div className="auth__input-wrap">
+                    <input
+                      id="name"
+                      className="auth__input"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="مثلاً: نور الدين"
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
+
+                <div className="auth__field">
+                  <label className="auth__label">أنت مين؟</label>
+                  <div className="auth__gender">
+                    <button
+                      type="button"
+                      className={`auth__gender-btn ${gender === 'male' ? 'is-active' : ''}`}
+                      onClick={() => setGender('male')}
+                    >
+                      <span className="auth__gender-emoji">👨</span>
+                      <span>ذكر</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={`auth__gender-btn ${gender === 'female' ? 'is-active' : ''}`}
+                      onClick={() => setGender('female')}
+                    >
+                      <span className="auth__gender-emoji">👩</span>
+                      <span>أنثى</span>
+                    </button>
+                  </div>
+                </div>
+              </>
             )}
 
             <div className="auth__field">

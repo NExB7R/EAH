@@ -9,7 +9,7 @@ import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { generateMockStats } from '@/lib/mock-stats'
 
-export const revalidate = 300
+export const revalidate = 60
 
 const VALID_TYPES = ['restaurant', 'pharmacy', 'delivery_office']
 
