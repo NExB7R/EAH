@@ -21,6 +21,8 @@ export default function StreakBadge({ inline = false }: { inline?: boolean }) {
   }, [])
 
   if (!data) return null
+  // إخفاء الشارة في اليوم الأول (مزعجة)
+  if ((data.streak ?? 0) <= 1) return null
 
   return (
     <>
