@@ -4,12 +4,19 @@ import nextDynamic from 'next/dynamic'
 const LineChart = nextDynamic(() => import('@/components/charts/line-chart'))
 const BarChart = nextDynamic(() => import('@/components/charts/bar-chart'))
 import '@/components/charts/charts.css'
+import AnalyticsFilters from './AnalyticsFilters'
 import './analytics.css'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'التحليلات' }
 
-export default async function AnalyticsPage() {
+export default async function AnalyticsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ range?: string }>
+}) {
+  const sp = await searchParams
+  const rangeDays = Math.min(90, Math.max(7, parseInt(sp.range ?? '14', 10) || 14))
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()
   if (!userData.user) redirect('/admin/login')
@@ -19,7 +26,7 @@ export default async function AnalyticsPage() {
   if (roleRow?.role !== 'super_admin') redirect('/')
 
   // ─── آخر 14 يوم زيارات ───
-  const since = new Date(Date.now() - 13 * 86400000).toISOString().slice(0, 10)
+  const since = new Date(Date.now() - (rangeDays - 1) * 86400000).toISOString().slice(0, 10)
   const { data: visits } = await supabase
     .from('daily_visits')
     .select('visit_date')
@@ -29,8 +36,8 @@ export default async function AnalyticsPage() {
   ;(visits ?? []).forEach(v => {
     visitMap.set(v.visit_date, (visitMap.get(v.visit_date) ?? 0) + 1)
   })
-  const visitsData = Array.from({ length: 14 }, (_, i) => {
-    const d = new Date(Date.now() - (13 - i) * 86400000)
+  const visitsData = Array.from({ length: rangeDays }, (_, i) => {
+    const d = new Date(Date.now() - (rangeDays - 1 - i) * 86400000)
     const key = d.toISOString().slice(0, 10)
     const label = d.toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' })
     return { label, value: visitMap.get(key) ?? 0 }
@@ -40,15 +47,15 @@ export default async function AnalyticsPage() {
   const { data: reveals } = await supabase
     .from('contact_reveals')
     .select('method_type, created_at')
-    .gte('created_at', new Date(Date.now() - 13 * 86400000).toISOString())
+    .gte('created_at', new Date(Date.now() - (rangeDays - 1) * 86400000).toISOString())
 
   const revealMap = new Map<string, number>()
   ;(reveals ?? []).forEach(r => {
     const day = r.created_at.slice(0, 10)
     revealMap.set(day, (revealMap.get(day) ?? 0) + 1)
   })
-  const revealsData = Array.from({ length: 14 }, (_, i) => {
-    const d = new Date(Date.now() - (13 - i) * 86400000)
+  const revealsData = Array.from({ length: rangeDays }, (_, i) => {
+    const d = new Date(Date.now() - (rangeDays - 1 - i) * 86400000)
     const key = d.toISOString().slice(0, 10)
     const label = d.toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' })
     return { label, value: revealMap.get(key) ?? 0 }
