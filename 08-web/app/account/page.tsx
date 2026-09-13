@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
+import { getAvatar, getTitle, getFrame } from '@/lib/profile-presets'
 import './account.css'
 
 export const dynamic = 'force-dynamic'
@@ -31,7 +32,7 @@ export default async function AccountPage() {
   ] = await Promise.all([
     supabase
       .from('profiles')
-      .select('display_name,phone,phone_verified_at,trust_score,created_at,banned_until,ban_reason')
+      .select('display_name,phone,phone_verified_at,trust_score,created_at,banned_until,ban_reason,avatar_key,title_key,frame_key,bio,gender')
       .eq('id', user.id)
       .maybeSingle(),
     supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle(),
@@ -52,24 +53,59 @@ export default async function AccountPage() {
     ? new Date(profile.created_at).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long' })
     : '—'
 
+  const avatar = getAvatar(profile?.avatar_key)
+  const title = getTitle(profile?.title_key)
+  const frame = getFrame(profile?.frame_key)
+  const hasFrame = profile?.frame_key && profile.frame_key !== 'none'
+  const frameStyle = hasFrame
+    ? { border: `3px solid ${frame.border}`, boxShadow: `0 0 24px ${frame.glow}` }
+    : undefined
+
   return (
     <>
       <FloatingCapsuleHeader />
       <main className="acc">
         <section className="acc-hero">
           <div className="acc-hero__glow" aria-hidden />
-          <div className={`acc-hero__avatar ${isBanned ? 'acc-hero__avatar--banned' : ''}`}>
-            {initial}
+
+          {/* Avatar + Frame */}
+          <div className="acc-hero__avatar-wrap">
+            <div
+              className={`acc-hero__avatar ${isBanned ? 'acc-hero__avatar--banned' : ''}`}
+              style={{
+                background: isBanned
+                  ? 'linear-gradient(135deg, #EF4444, #991B1B)'
+                  : `linear-gradient(135deg, ${avatar.from}, ${avatar.to})`,
+                ...(frameStyle ?? {}),
+              }}
+            >
+              {initial}
+            </div>
           </div>
+
           <div className="acc-hero__body">
             <span className="acc-hero__kicker">MY ACCOUNT</span>
             <h1 className="acc-hero__title">{name}</h1>
+
+            {/* Title chip */}
             <div className="acc-hero__meta">
+              <span className="acc-chip acc-chip--title">
+                {title.emoji} {title.label}
+              </span>
               <span className="acc-chip acc-chip--role">🎭 {roleLabel}</span>
               {isVerified && <span className="acc-chip acc-chip--verified">✓ موثّق</span>}
               {isBanned && <span className="acc-chip acc-chip--banned">🚫 محظور</span>}
             </div>
+
+            {/* Bio */}
+            {profile?.bio && (
+              <p className="acc-hero__bio">{profile.bio}</p>
+            )}
           </div>
+
+          <Link href="/account/edit" className="acc-hero__edit">
+            ✏️ تعديل
+          </Link>
         </section>
 
         {isBanned && (
@@ -181,6 +217,10 @@ export default async function AccountPage() {
             <div className="acc-info__row">
               <span className="acc-info__label">نوع الحساب</span>
               <span className="acc-info__value">{roleLabel}</span>
+            </div>
+            <div className="acc-info__row">
+              <span className="acc-info__label">لقبك</span>
+              <span className="acc-info__value">{title.emoji} {title.label}</span>
             </div>
           </div>
         </section>

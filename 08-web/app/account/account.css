@@ -365,3 +365,64 @@
   .acc-card, .acc-action, .acc-logout__btn { transition: none; }
   .acc-hero__glow { animation: none; }
 }
+
+
+/* ─── Avatar wrap (with frame) ─── */
+.acc-hero__avatar-wrap {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+/* ─── Title chip ─── */
+.acc-chip--title {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.08));
+  border-color: rgba(251, 191, 36, 0.35);
+  color: #FBBF24;
+  font-weight: 800;
+}
+
+/* ─── Bio ─── */
+.acc-hero__bio {
+  margin: 12px 0 0;
+  color: #A5A3B8;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+/* ─── Edit button ─── */
+.acc-hero__edit {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 14px;
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #C4B5FD;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.85rem;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+.acc-hero__edit:hover {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: rgba(168, 85, 247, 0.6);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .acc-hero__edit {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+  }
+}
