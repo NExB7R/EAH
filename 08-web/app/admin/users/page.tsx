@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase-server'
 import UserActions from '@/components/admin/user-actions'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'المستخدمين | EAH Admin' }
+export const metadata = { title: 'المستخدمين' }
 
 type Profile = {
   id: string

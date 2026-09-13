@@ -7,7 +7,7 @@ import ExploreCard from '@/components/explore-card'
 import './search.css'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'البحث | EAH' }
+export const metadata = { title: 'البحث' }
 
 export default async function SearchPage({
   searchParams,

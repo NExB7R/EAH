@@ -7,7 +7,7 @@ import ClaimForm from './claim-form'
 import './referral.css'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'ادعي صحابك | EAH' }
+export const metadata = { title: 'ادعي صحابك' }
 
 export default async function ReferralPage() {
   const supabase = await createClient()

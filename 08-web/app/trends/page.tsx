@@ -6,7 +6,7 @@ import './trends.css'
 
 export const dynamic = 'force-dynamic'
 export const metadata = {
-  title: 'الترندات | EAH',
+  title: 'الترندات',
   description: 'الأماكن الأكثر رواجًا في شبين القناطر دلوقتي',
 }
 

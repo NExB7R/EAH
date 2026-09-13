@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import BusinessForm from '@/components/admin/business-form'
 import { updateBusiness } from '../../actions'
 
-export const metadata = { title: 'تعديل مكان | EAH Admin' }
+export const metadata = { title: 'تعديل مكان' }
 
 export default async function EditBusinessPage({
   params,

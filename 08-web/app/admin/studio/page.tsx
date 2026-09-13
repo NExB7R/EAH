@@ -5,7 +5,7 @@ import { currentHomeDesign } from '@/components/studio/current-design'
 import type { DesignData } from '@/components/studio/types'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'استوديو التصميم | EAH Admin' }
+export const metadata = { title: 'استوديو التصميم' }
 
 export default async function AdminStudioPage() {
   const supabase = await createClient()

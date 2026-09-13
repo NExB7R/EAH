@@ -7,7 +7,7 @@ import { submitVerification } from './actions'
 import './verify.css'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'توثيق الحساب | EAH' }
+export const metadata = { title: 'توثيق الحساب' }
 
 const CHECK_LABELS: Record<string, string> = {
   phone_verified: 'رقم موبايل موثق',

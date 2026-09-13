@@ -5,7 +5,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import BusinessForm from '@/components/admin/business-form'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'تعديل بيانات النشاط | EAH' }
+export const metadata = { title: 'تعديل بيانات النشاط' }
 
 export default async function MerchantEditBusinessPage({
   params,

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'لوحة التحكم | EAH Admin' }
+export const metadata = { title: 'لوحة التحكم' }
 
 export default async function AdminHomePage() {
   const supabase = await createClient()

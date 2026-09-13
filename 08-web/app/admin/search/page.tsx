@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'بحث سريع | EAH Admin' }
+export const metadata = { title: 'بحث سريع' }
 
 export default async function AdminSearchPage({
   searchParams,

@@ -11,7 +11,7 @@ import { generateMockStats } from '@/lib/mock-stats'
 
 export const revalidate = 600
 export const metadata = {
-  title: 'نفسك في ايه؟ | EAH',
+  title: 'نفسك في ايه؟',
   description: 'قولنا نفسك في ايه واحنا نرشحلك المكان المناسب',
 }
 

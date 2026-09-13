@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import OfferForm from '@/components/admin/offer-form'
 import { createOffer } from '../../../offer-actions'
 
-export const metadata = { title: 'عرض جديد | EAH Admin' }
+export const metadata = { title: 'عرض جديد' }
 
 export default async function NewOfferPage({
   params,

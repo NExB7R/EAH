@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import { createReward, toggleReward, deleteReward } from './actions'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'إدارة المكافآت | EAH Admin' }
+export const metadata = { title: 'إدارة المكافآت' }
 
 const CATS = [
   { v: 'voucher', l: '🎟️ قسيمة' },

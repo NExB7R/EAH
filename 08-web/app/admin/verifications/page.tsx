@@ -5,7 +5,7 @@ import VerificationCard from './verification-card'
 import './verifications.css'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'طلبات التوثيق | EAH Admin' }
+export const metadata = { title: 'طلبات التوثيق' }
 
 export default async function AdminVerificationsPage() {
   const supabase = await createClient()

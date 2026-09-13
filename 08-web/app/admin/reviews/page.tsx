@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import ReviewActions from '@/components/admin/review-actions'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'التقييمات | EAH Admin' }
+export const metadata = { title: 'التقييمات' }
 
 type Review = {
   id: string

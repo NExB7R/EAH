@@ -11,7 +11,7 @@ import '@/components/verified-badge.css'
 import './account.css'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'حسابي | EAH' }
+export const metadata = { title: 'حسابي' }
 
 const ROLE_LABEL: Record<string, string> = {
   customer: 'عضو',

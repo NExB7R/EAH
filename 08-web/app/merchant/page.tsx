@@ -5,7 +5,7 @@ import './merchant.css'
 import SiteFooter from '@/components/site-footer'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'لوحة النشاط | EAH' }
+export const metadata = { title: 'لوحة النشاط' }
 
 const TYPE_EMOJI: Record<string, string> = {
   restaurant: '🍽️',

@@ -8,7 +8,7 @@ import './featured.css'
 
 export const dynamic = 'force-dynamic'
 export const metadata = {
-  title: 'المميزون | EAH',
+  title: 'المميزون',
   description: 'أفضل الأماكن في شبين القناطر — مختارة بعناية',
 }
 

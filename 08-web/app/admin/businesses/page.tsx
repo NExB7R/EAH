@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase-server'
 import BusinessActions from '@/components/admin/business-actions'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'الأنشطة | EAH Admin' }
+export const metadata = { title: 'الأنشطة' }
 
 type Business = {
   id: string

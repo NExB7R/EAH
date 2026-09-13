@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import NotificationsPanel from '@/components/notifications-panel'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'إدارة الإشعارات | EAH Admin' }
+export const metadata = { title: 'إدارة الإشعارات' }
 
 const SCOPES = [
   { key: 'customer', label: '👤 العملاء', color: '#A855F7' },

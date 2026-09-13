@@ -3,7 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'العروض | EAH Admin' }
+export const metadata = { title: 'العروض' }
 
 export default async function OffersPage({
   params,

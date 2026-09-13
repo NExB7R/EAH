@@ -9,7 +9,7 @@ import { getMerchantContext } from '@/lib/admin/merchant-guard'
 import './settings.css'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'إعدادات المتجر | EAH' }
+export const metadata = { title: 'إعدادات المتجر' }
 
 export default async function MerchantSettingsPage() {
   const supabase = await createClient()

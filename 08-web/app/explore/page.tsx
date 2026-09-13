@@ -14,7 +14,7 @@ export const revalidate = 60
 const VALID_TYPES = ['restaurant', 'pharmacy', 'delivery_office']
 
 export const metadata = {
-  title: 'اكتشف | EAH',
+  title: 'اكتشف',
   description: 'اكتشف كل الأماكن في شبين القناطر — مطاعم، صيدليات، توصيل',
 }
 

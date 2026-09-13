@@ -8,7 +8,7 @@ import QRCode from 'qrcode'
 import './qr.css'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'QR Code | EAH' }
+export const metadata = { title: 'QR Code' }
 
 export default async function MerchantQRPage() {
   const ctx = await getMerchantContext()

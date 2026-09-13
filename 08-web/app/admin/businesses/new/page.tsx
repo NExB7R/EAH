@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import BusinessForm from '@/components/admin/business-form'
 import { createBusiness } from '../actions'
 
-export const metadata = { title: 'إضافة مكان | EAH Admin' }
+export const metadata = { title: 'إضافة مكان' }
 
 export default async function NewBusinessPage() {
   const supabase = await createClient()

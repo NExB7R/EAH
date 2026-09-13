@@ -12,7 +12,7 @@ export default function StreakBadge({ inline = false }: { inline?: boolean }) {
       .then(d => {
         if (!d?.ok) return
         setData(d)
-        if (!d.already_visited && d.points_earned > 0) {
+        if (!d.already_visited && d.points_earned > 0 && d.streak > 1) {
           setShowCelebration(true)
           setTimeout(() => setShowCelebration(false), 4500)
         }
@@ -37,7 +37,7 @@ export default function StreakBadge({ inline = false }: { inline?: boolean }) {
           <div className="streak-celebration__card">
             <span className="streak-celebration__emoji">🎉</span>
             <h3 className="streak-celebration__title">
-              {data.streak === 1 ? 'أهلاً بيك!' : `يوم ${data.streak} على التوالي!`}
+              {`يوم ${data.streak} على التوالي!`}
             </h3>
             <p className="streak-celebration__msg">
               كسبت <strong>+{data.points_earned}</strong> نقطة

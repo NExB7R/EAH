@@ -4,7 +4,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import { getBusinessStats, getBusinessReviews } from '@/lib/reviews'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'إحصائيات النشاط | EAH' }
+export const metadata = { title: 'إحصائيات النشاط' }
 
 export default async function MerchantReportPage({
   params,

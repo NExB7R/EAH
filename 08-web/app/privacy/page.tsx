@@ -3,7 +3,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import BackToTop from '@/components/back-to-top'
 
-export const metadata = { title: 'سياسة الخصوصية | EAH' }
+export const metadata = { title: 'سياسة الخصوصية' }
 
 export default function PrivacyPage() {
   return (

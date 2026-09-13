@@ -4,7 +4,7 @@ import SiteFooter from '@/components/site-footer'
 import './advertise.css'
 
 export const metadata = {
-  title: 'أعلن معنا | EAH',
+  title: 'أعلن معنا',
   description: 'خلّي مكانك يظهر الأول على EAH — مئات الزوار يوميًا من شبين القناطر',
 }
 

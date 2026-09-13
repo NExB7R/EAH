@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'الإحالات | EAH Admin' }
+export const metadata = { title: 'الإحالات' }
 
 export default async function AdminReferralsPage() {
   const supabase = await createClient()

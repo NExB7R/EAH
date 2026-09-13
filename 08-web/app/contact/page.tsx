@@ -4,7 +4,7 @@ import SiteFooter from '@/components/site-footer'
 import './contact.css'
 
 export const metadata = {
-  title: 'تواصل معنا | EAH',
+  title: 'تواصل معنا',
   description: 'تواصل مع فريق EAH — للاستفسارات، الإعلانات، أو الإبلاغ عن مشكلة',
 }
 

@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'سجل العمليات | EAH Admin' }
+export const metadata = { title: 'سجل العمليات' }
 
 type Log = {
   id: string

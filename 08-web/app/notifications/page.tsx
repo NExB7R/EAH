@@ -8,7 +8,7 @@ import './notifications.css'
 import EahLogo from '@/components/eah-logo'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'الإشعارات | EAH' }
+export const metadata = { title: 'الإشعارات' }
 
 type Notif = {
   id: string

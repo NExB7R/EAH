@@ -8,7 +8,7 @@ import './new.css'
 
 export const dynamic = 'force-dynamic'
 export const metadata = {
-  title: 'مشاريع محتاجة فرصة | EAH',
+  title: 'مشاريع محتاجة فرصة',
   description: 'مشاريع صغيرة تستحق تشوفوها — ادعموهم في البداية',
 }
 

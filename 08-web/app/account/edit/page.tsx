@@ -9,7 +9,7 @@ import AvatarUploader from '@/components/avatar-uploader'
 import './edit.css'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'تعديل البروفايل | EAH' }
+export const metadata = { title: 'تعديل البروفايل' }
 
 export default async function EditProfilePage() {
   const supabase = await createClient()

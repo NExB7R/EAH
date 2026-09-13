@@ -7,7 +7,7 @@ import '@/components/charts/charts.css'
 import './analytics.css'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'التحليلات | EAH Admin' }
+export const metadata = { title: 'التحليلات' }
 
 export default async function AnalyticsPage() {
   const supabase = await createClient()

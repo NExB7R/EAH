@@ -6,7 +6,7 @@ import SiteFooter from '@/components/site-footer'
 import NotificationsPanel from '@/components/notifications-panel'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'إعدادات الإشعارات | EAH' }
+export const metadata = { title: 'إعدادات الإشعارات' }
 
 export default async function CustomerNotificationsPage() {
   const supabase = await createClient()

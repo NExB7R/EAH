@@ -4,7 +4,7 @@ import SiteFooter from '@/components/site-footer'
 import BackToTop from '@/components/back-to-top'
 import PointsExplainer from '@/components/points-explainer'
 
-export const metadata = { title: 'نبذة عننا | EAH' }
+export const metadata = { title: 'نبذة عننا' }
 
 export default function AboutPage() {
   return (

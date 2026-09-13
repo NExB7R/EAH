@@ -7,7 +7,7 @@ import RewardCard from './reward-card'
 import './points.css'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'نقاطي | EAH' }
+export const metadata = { title: 'نقاطي' }
 
 export default async function PointsPage() {
   const supabase = await createClient()
