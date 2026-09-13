@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase-server'
+import { createServiceClient } from '@/lib/supabase-server'
 import { getWebPush } from './vapid'
 
 export type PushPayload = {
@@ -9,7 +9,7 @@ export type PushPayload = {
 
 export async function sendPushToUser(userId: string, payload: PushPayload) {
   try {
-    const supabase = await createClient()
+    const supabase = createServiceClient()
     const { data: subs } = await supabase
       .from('push_subscriptions')
       .select('id,endpoint,p256dh,auth')

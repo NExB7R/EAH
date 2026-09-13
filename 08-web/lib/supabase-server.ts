@@ -27,3 +27,23 @@ export async function createClient() {
     },
   })
 }
+
+// =========================================================
+// Service-role client (server-only, bypasses RLS)
+// Used for cross-user operations: push notify, admin ops
+// Requires SUPABASE_SERVICE_ROLE_KEY in .env.local
+// =========================================================
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+
+export function createServiceClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) {
+    throw new Error(
+      'SUPABASE_SERVICE_ROLE_KEY missing — add it to .env.local (Supabase Dashboard → Settings → API)'
+    )
+  }
+  return createSupabaseClient(url, key, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+}

@@ -5,6 +5,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { getAvatar, getTitle, getFrame } from '@/lib/profile-presets'
 import RoyalAvatar from '@/components/royal-avatar'
+import EnablePushButton from '@/components/enable-push-button'
 import '@/components/royal-avatar.css'
 import '@/components/verified-badge.css'
 import './account.css'
@@ -233,6 +234,14 @@ export default async function AccountPage() {
               <span className="acc-info__value">{title.emoji} {title.label}</span>
             </div>
           </div>
+        </section>
+
+        <section className="acc-push">
+          <div className="acc-push__text">
+            <span className="acc-push__title">🔔 الإشعارات</span>
+            <span className="acc-push__hint">فعّل الإشعارات عشان توصلك العروض والتقييمات</span>
+          </div>
+          <EnablePushButton />
         </section>
 
         <section className="acc-logout">
