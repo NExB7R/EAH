@@ -14,7 +14,9 @@ import PWAInstallPrompt from '@/components/pwa-install-prompt'
 import StreakBadge from '@/components/streak-badge'
 import StreakMount from '@/components/streak-mount'
 import ServiceWorkerRegister from '@/components/sw-register'
+import InstallBanner from '@/components/install-banner'
 import '@/components/install-pwa-button.css'
+import '@/components/install-app-button.css'
 import '@/components/share-button.css'
 import '@/components/verified-badge.css'
 import '@/components/streak-onboarding.css'
@@ -74,6 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StreakBadge />
             <StreakMount />
             <ServiceWorkerRegister />
+            <InstallBanner />
       </body>
     </html>
   )
