@@ -55,12 +55,17 @@ function renderSlider(
 
 export default async function HomeDynamic() {
   const businesses = await getPublishedBusinesses(50)
+  const realStats = await getViewStats(businesses.map((b) => b.slug), 7)
   const withStats = businesses.map((b) => {
-    const stats = generateMockStats({
-      slug: b.slug,
-      name: b.name,
-      featured: b.badge === 'مميز',
-    })
+    const real = realStats.get(b.slug)
+    const stats = generateMockStats(
+      {
+        slug: b.slug,
+        name: b.name,
+        featured: b.badge === 'مميز',
+      },
+      real ? { recentViews: real.views } : undefined
+    )
     return { ...b, ...stats }
   })
   const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
