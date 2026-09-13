@@ -9,16 +9,7 @@ import { generateMockStats } from '@/lib/mock-stats'
 
 export const revalidate = 300
 
-const TYPE_MAP: Record<string, string> = {
-  food: 'restaurant',
-  pharmacy: 'pharmacy',
-  groceries: 'supermarket',
-  delivery: 'delivery_office',
-  restaurant: 'restaurant',
-  supermarket: 'supermarket',
-  delivery_office: 'delivery_office',
-  new: undefined,
-}
+const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
 
 export const metadata = {
   title: 'اكتشف | EAH',
@@ -28,14 +19,14 @@ export const metadata = {
 export default async function ExplorePage({
   searchParams,
 }: {
-  searchParams: Promise<{ intent?: string }>
+  searchParams: Promise<{ type?: string; intent?: string }>
 }) {
   const params = await searchParams
-  const intent = params.intent ? TYPE_MAP[params.intent] ?? params.intent : undefined
+  const rawFilter = params.type ?? params.intent
+  const activeType = rawFilter && VALID_TYPES.includes(rawFilter) ? rawFilter : undefined
 
-  const businesses = await getPublishedBusinesses(50, intent)
+  const businesses = await getPublishedBusinesses(50, activeType)
 
-  // نحوّل لإحصائيات + نرتب ذكي
   const withStats = businesses.map((b) => {
     const stats = generateMockStats({
       slug: b.slug,
@@ -48,6 +39,16 @@ export default async function ExplorePage({
   const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
   const diversified = diversifyByCategory(ranked, 'type')
 
+  const headline = activeType
+    ? activeType === 'restaurant'
+      ? 'المطاعم'
+      : activeType === 'pharmacy'
+      ? 'الصيدليات'
+      : activeType === 'supermarket'
+      ? 'السوبر ماركت'
+      : 'التوصيل'
+    : 'كل اللي حواليك'
+
   return (
     <>
       <FloatingCapsuleHeader />
@@ -59,15 +60,16 @@ export default async function ExplorePage({
             ← الرئيسية
           </Link>
           <div className="explore-hero__kicker">اكتشف</div>
-          <h1 className="explore-hero__title">
-            {intent ? 'اختيارات مناسبة لطلبك' : 'كل اللي حواليك'}
-          </h1>
+          <h1 className="explore-hero__title">{headline}</h1>
           <p className="explore-hero__subtitle">
-            {diversified.length} مكان في شبين القناطر — مرتبة بذكاء حسب الجودة والنشاط
+            {diversified.length} مكان — مرتبة بذكاء حسب الجودة والنشاط
           </p>
         </div>
 
-        <ExploreClient businesses={diversified} />
+        <ExploreClient
+          businesses={diversified}
+          initialType={activeType}
+        />
       </main>
 
       <SiteFooter />

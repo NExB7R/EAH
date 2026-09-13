@@ -42,9 +42,9 @@ const SORT_LABELS: Record<SortKey, string> = {
   new: 'الأحدث',
 }
 
-export default function ExploreClient({ businesses }: { businesses: Business[] }) {
+export default function ExploreClient({ businesses, initialType }: { businesses: Business[]; initialType?: string }) {
   const [search, setSearch] = useState('')
-  const [typeFilter, setTypeFilter] = useState<BusinessType | 'all'>('all')
+  const [typeFilter, setTypeFilter] = useState<BusinessType | 'all'>((initialType as BusinessType) ?? 'all')
   const [areaFilter, setAreaFilter] = useState<string>('all')
   const [openOnly, setOpenOnly] = useState(false)
   const [sort, setSort] = useState<SortKey>('relevance')
