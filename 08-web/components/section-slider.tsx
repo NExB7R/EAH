@@ -174,7 +174,11 @@ export default function SectionSlider({
         >
           {visible}
 
-          <a href={seeAllHref} className="fcard fcard--seeall" aria-label={`شوف كل ${title}`}>
+          <a
+            href={seeAllHref || `/explore?type=${variant}`}
+            className="fcard fcard--seeall"
+            aria-label={`استكشف كل ${title}`}
+          >
             <div className="fcard__image">
               <span className="fcard__emoji fcard__emoji--seeall">···</span>
             </div>
@@ -184,7 +188,7 @@ export default function SectionSlider({
                 <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round">
                   <path d="M12 5v14M5 12h14" />
                 </svg>
-                الكل
+                اكتشف
               </span>
             </div>
 
@@ -199,7 +203,7 @@ export default function SectionSlider({
               <div className="fcard__footer">
                 <div className="fcard__hook">
                   <span className="fcard__hook-dot" />
-                  <span>اكتشف المزيد</span>
+                  <span>في صفحة الاكتشاف</span>
                 </div>
                 <div className="fcard__arrow">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">

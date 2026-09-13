@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo, useEffect } from 'react'
-import BusinessCardV4 from './business-card-v4'
+import ExploreCard from "./explore-card"
 import { IconSearch } from './neon-icons'
 import './explore-client.css'
 
@@ -205,7 +205,7 @@ export default function ExploreClient({ businesses }: { businesses: Business[] }
       {filtered.length > 0 ? (
         <div className="explore__grid">
           {filtered.map((b) => (
-            <BusinessCardV4 key={b.slug} business={b} variant={b.type} />
+            <ExploreCard key={b.slug} business={b} />
           ))}
         </div>
       ) : (
