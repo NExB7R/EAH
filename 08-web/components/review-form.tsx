@@ -49,6 +49,18 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
 
       if (error) { setMsg(error.message); return }
 
+      // ابعت push للمالك
+      fetch('/api/push/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'review',
+          businessId: businessId,
+          title: '⭐ تقييم جديد',
+          body: `حد قيّم نشاطك (${avg} نجوم)`,
+        }),
+      }).catch(() => {})
+
       setMsg('✅ تم الإرسال، شكرًا! هيتنشر بعد المراجعة')
       setTimeout(() => {
         setOpen(false)

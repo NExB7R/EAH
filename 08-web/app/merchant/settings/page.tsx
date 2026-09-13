@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import NotificationPreferences from '@/components/notification-preferences'
+import EnablePushButton from '@/components/enable-push-button'
 import { getMerchantContext } from '@/lib/admin/merchant-guard'
 import './settings.css'
 
@@ -40,6 +41,7 @@ export default async function MerchantSettingsPage() {
           <p className="mset__sub">تحكم كامل في تجربتك على EAH</p>
         </header>
 
+        <EnablePushButton />
         <NotificationPreferences initial={prefs} />
 
         <section className="mset__section">
