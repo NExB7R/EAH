@@ -24,8 +24,18 @@ type DbOffer = {
   is_published: boolean
 }
 
-type BusinessViewModel = BusinessViewModel & {
+type BusinessViewModel = {
   businessId?: string
+  name: string
+  slug: string
+  type: 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
+  area: string
+  badge?: string
+  vibe: string[]
+  reason: string
+  open: boolean
+  featured?: boolean
+  menu?: string[]
   hook?: string
   activeOffers?: number
   workingHours?: any
@@ -33,8 +43,8 @@ type BusinessViewModel = BusinessViewModel & {
 
 function toDemoShape(b: DbBusiness, offers?: DbOffer[]): BusinessViewModel {
   const type = b.business_type as BusinessViewModel['type']
-  const validType = ['restaurant', 'pharmacy', 'delivery_office'].includes(type)
-    ? (type as BusinessViewModel['type'])
+  const validType = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'].includes(type)
+    ? (type as 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office')
     : 'restaurant'
 
   const now = Date.now()
