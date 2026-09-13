@@ -24,7 +24,7 @@ type DbOffer = {
   is_published: boolean
 }
 
-type BusinessViewModel = DemoBusiness & {
+type BusinessViewModel = BusinessViewModel & {
   businessId?: string
   hook?: string
   activeOffers?: number
@@ -32,9 +32,9 @@ type BusinessViewModel = DemoBusiness & {
 }
 
 function toDemoShape(b: DbBusiness, offers?: DbOffer[]): BusinessViewModel {
-  const type = b.business_type as DemoBusiness['type']
+  const type = b.business_type as BusinessViewModel['type']
   const validType = ['restaurant', 'pharmacy', 'delivery_office'].includes(type)
-    ? (type as DemoBusiness['type'])
+    ? (type as BusinessViewModel['type'])
     : 'restaurant'
 
   const now = Date.now()
