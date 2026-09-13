@@ -231,3 +231,18 @@
   .home-hero__mood-text small { font-size: 0.7rem; }
   .home-hero__mood-emoji { font-size: 1.5rem; }
 }
+
+/* ═══ Logo wrapper — مساحة آمنة للكراون ═══ */
+.home-hero__logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 70px;
+}
+@media (max-width: 768px) {
+  .home-hero__logo { padding-top: 58px; }
+}
+@media (max-width: 640px) {
+  .home-hero__logo { padding-top: 48px; }
+}

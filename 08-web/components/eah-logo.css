@@ -26,7 +26,7 @@
 .eah-logo--sm { --logo-w: 130px; --slogan-fs: 0.52rem; --crown-w: 19%; }
 .eah-logo--md { --logo-w: 180px; --slogan-fs: 0.7rem; --crown-w: 21%; }
 .eah-logo--lg { --logo-w: 300px; --slogan-fs: 1rem; --crown-w: 24%; }
-.eah-logo--xl { --logo-w: 460px; --slogan-fs: 1.4rem; --crown-w: 26%; }
+.eah-logo--xl { --logo-w: 320px; --slogan-fs: 1.1rem; --crown-w: 24%; }
 
 /* ===== Glow ===== */
 .eah-logo__glow {
@@ -137,9 +137,13 @@
 }
 
 /* ===== Mobile ===== */
+@media (max-width: 768px) {
+  .eah-logo--xl { --logo-w: 280px; --slogan-fs: 1rem; }
+}
 @media (max-width: 640px) {
   .eah-logo--sm { --logo-w: 110px; --slogan-fs: 0.48rem; }
   .eah-logo--compact { --logo-w: 95px; }
+  .eah-logo--xl { --logo-w: 240px; --slogan-fs: 0.9rem; }
   .eah-logo__slogan { display: none; }
 }
 
