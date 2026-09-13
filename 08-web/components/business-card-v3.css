@@ -376,3 +376,71 @@
 @media (prefers-reduced-motion: reduce) {
   .v3card, .v3card__emoji-wrap, .v3card__arrow, .v3seeall { transition: none; }
 }
+
+/* ===== Hook (بدل rating) ===== */
+.v3card__hook {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #C4B5FD;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.v3card__hook-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--accent, #A855F7);
+  box-shadow: 0 0 6px var(--accent, #A855F7);
+  animation: v3-hook-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes v3-hook-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.6; transform: scale(0.85); }
+}
+
+.v3card--offer .v3card__hook {
+  background: rgba(232, 199, 154, 0.12);
+  border-color: rgba(232, 199, 154, 0.25);
+  color: #E8C79A;
+}
+.v3card--offer .v3card__hook-dot {
+  background: #E8C79A;
+  box-shadow: 0 0 6px #E8C79A;
+}
+
+.v3card--pharmacy .v3card__hook {
+  background: rgba(74, 222, 128, 0.1);
+  border-color: rgba(74, 222, 128, 0.22);
+  color: #86EFAC;
+}
+.v3card--pharmacy .v3card__hook-dot {
+  background: #4ADE80;
+  box-shadow: 0 0 6px #4ADE80;
+}
+
+.v3card--delivery .v3card__hook {
+  background: rgba(251, 146, 60, 0.1);
+  border-color: rgba(251, 146, 60, 0.22);
+  color: #FDBA74;
+}
+.v3card--delivery .v3card__hook-dot {
+  background: #FB923C;
+  box-shadow: 0 0 6px #FB923C;
+}
+
+@media (max-width: 640px) {
+  .v3card__hook {
+    font-size: 0.58rem;
+    padding: 2px 7px;
+  }
+}

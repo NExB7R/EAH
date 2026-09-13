@@ -30,41 +30,38 @@ export default function FloatingCapsuleHeader() {
   const [scrolled, setScrolled] = useState(false)
   const [direction, setDirection] = useState<'up' | 'down'>('up')
   const [menuOpen, setMenuOpen] = useState(false)
-  const [crownActive, setCrownActive] = useState(false)
+  const [logoVisible, setLogoVisible] = useState(false)
 
   useEffect(() => {
     let lastY = window.scrollY
-    let crownTimer: ReturnType<typeof setTimeout> | null = null
 
     const onScroll = () => {
       const y = window.scrollY
+      const isAtTop = y < 60
+
       setScrolled(y > 40)
       setDirection(y > lastY ? 'down' : 'up')
 
-      // لما المستخدم ينزل، شغّل حركة التاج
-      if (y > lastY + 5) {
-        setCrownActive(true)
-        if (crownTimer) clearTimeout(crownTimer)
-        crownTimer = setTimeout(() => setCrownActive(false), 1400)
-      }
+      // اللوجو:
+      // - في أول الصفحة: مخفي
+      // - بعد ما تسكرول (فوق أو تحت): ظاهر
+      // - لما ترجع لأول الصفحة: مخفي تاني
+      setLogoVisible(!isAtTop)
+
       lastY = y
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      if (crownTimer) clearTimeout(crownTimer)
-    }
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  const handleLogoClick = () => {
-    setCrownActive(true)
-    setTimeout(() => setCrownActive(false), 1400)
-  }
 
   return (
     <>
-      <header className={`floating-capsule ${scrolled ? 'is-scrolled' : ''} ${direction === 'up' ? 'is-up' : 'is-down'}`}>
+      <header
+        className={`floating-capsule ${scrolled ? 'is-scrolled' : ''} ${
+          direction === 'up' ? 'is-up' : 'is-down'
+        } ${logoVisible ? 'logo-visible' : 'logo-hidden'}`}
+      >
         <div className="floating-capsule__inner">
           <div className="floating-capsule__side floating-capsule__side--start">
             <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" onClick={() => setMenuOpen(true)} />
@@ -73,9 +70,8 @@ export default function FloatingCapsuleHeader() {
             <NeonIconButton icon={<IconBolt />} label="سجل بسرعة" ariaLabel="سجل بسرعة" variant="accent" href="/auth?tab=register" />
           </div>
 
-          {/* اللوجو دايماً ظاهر — بـ compact (word + crown متحرك) */}
-          <div className="floating-capsule__center" onClick={handleLogoClick}>
-            <EahLogo size="sm" variant="compact" active={crownActive} />
+          <div className="floating-capsule__center">
+            <EahLogo size="sm" variant="compact" />
           </div>
 
           <div className="floating-capsule__side floating-capsule__side--end">

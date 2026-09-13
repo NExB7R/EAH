@@ -38,19 +38,35 @@ const TYPE_GRADIENT: Record<CardVariant, { from: string; to: string; accent: str
   new: { from: 'rgba(168, 85, 247, 0.45)', to: 'rgba(232, 199, 154, 0.15)', accent: '#C084FC' },
 }
 
+/** هوكات جاهزة حسب السبب */
+const REASON_HOOKS: Record<string, string[]> = {
+  'مميز': ['مختار بعناية', 'اللي الكل بيتكلم عنه', 'من الأفضل عندنا'],
+  'جديد': ['جديد علينا', 'لسه فتح', 'تجربة جديدة'],
+  'عروض نشطة': ['عنده عرض دلوقتي', 'وفّر معاهم', 'عرض محدود'],
+  'ترند': ['رائج دلوقتي', 'الكل بيسأل عنه', 'الأكثر زيارة'],
+  'الأعلى تقييماً': ['الأعلى تقييماً', 'الناس بتحبه', 'من الأحسن'],
+  'مختار لك': ['على مزاجك', 'مناسب ليك', 'اختيار موفق'],
+}
+
+function getHook(reason: string, slug: string): string {
+  const list = REASON_HOOKS[reason] ?? REASON_HOOKS['مختار لك']
+  // نستخدم الـ slug عشان نختار نفس الهوك دايماً لنفس المكان
+  const hash = slug.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0)
+  return list[hash % list.length]
+}
+
 export default function BusinessCardV3({
   business,
   variant = 'restaurant',
-  rating,
-  deliveryTime = '20-30 د',
+  hook,
 }: {
   business: Business
   variant?: CardVariant
-  rating?: number
-  deliveryTime?: string
+  hook?: string
 }) {
   const { slug, name, type, area, badge, vibe, reason, open } = business
   const grad = TYPE_GRADIENT[variant]
+  const displayHook = hook ?? getHook(reason, slug)
 
   return (
     <a
@@ -65,14 +81,12 @@ export default function BusinessCardV3({
         } as React.CSSProperties
       }
     >
-      {/* ===== Cover ===== */}
       <div className="v3card__cover">
         <div className="v3card__pattern" aria-hidden />
         <div className="v3card__emoji-wrap">
           <span className="v3card__emoji">{TYPE_EMOJI[type]}</span>
         </div>
 
-        {/* شريط علوي: نوع + حالة */}
         <div className="v3card__top">
           <span className="v3card__type">{TYPE_LABEL[type]}</span>
           <span className={`v3card__live ${open ? 'is-on' : 'is-off'}`}>
@@ -81,10 +95,8 @@ export default function BusinessCardV3({
           </span>
         </div>
 
-        {/* لافتة مميز */}
         {badge && <span className="v3card__badge">{badge}</span>}
 
-        {/* معلومات أسفل الكوفر مباشرة */}
         <div className="v3card__info">
           <h3 className="v3card__name">{name}</h3>
           <div className="v3card__meta-row">
@@ -95,27 +107,19 @@ export default function BusinessCardV3({
               </svg>
               {area}
             </span>
-            <span className="v3card__meta-sep">•</span>
-            <span className="v3card__meta-item">
-              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="2.4">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 6v6l4 2" />
-              </svg>
-              {deliveryTime}
-            </span>
           </div>
         </div>
       </div>
 
-      {/* ===== Footer ===== */}
+      {/* ===== Footer: hook بدل rating ===== */}
       <div className="v3card__footer">
-        <div className="v3card__rating">
-          <span className="v3card__star">★</span>
-          <strong>{rating.toFixed(1)}</strong>
-        </div>
+        <span className="v3card__hook">
+          <span className="v3card__hook-dot" aria-hidden />
+          {displayHook}
+        </span>
 
         <div className="v3card__vibes">
-          {vibe.slice(0, 2).map((v) => (
+          {vibe.slice(0, 1).map((v) => (
             <span key={v} className="v3card__vibe">{v}</span>
           ))}
         </div>
@@ -127,7 +131,6 @@ export default function BusinessCardV3({
         </div>
       </div>
 
-      {/* ===== Hover reveal ===== */}
       <div className="v3card__reveal">
         <p>{reason}</p>
       </div>
