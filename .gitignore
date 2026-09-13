@@ -35,3 +35,5 @@ pnpm-debug.log*
 # Local Supabase
 .supabase/
 *.tsbuildinfo
+.vercel
+.env*
