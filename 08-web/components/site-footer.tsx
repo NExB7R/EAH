@@ -63,7 +63,6 @@ export default function SiteFooter() {
         </nav>
 
         <div className="site-footer__bottom">
-          <p className="site-footer__bottom-brand">EAH</p>
           <p className="site-footer__bottom-made">
             صُنع بكل حب
             <svg className="site-footer__neon-heart" viewBox="0 0 32 28" width="20" height="18" aria-hidden>

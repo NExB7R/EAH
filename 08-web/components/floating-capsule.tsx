@@ -5,7 +5,6 @@ import NeonIconButton from './neon-icon-button'
 import UserAvatar from './user-avatar'
 import InstallPWAButton from './install-pwa-button'
 import ShareButton from './share-button'
-import AdminIconLink from './admin-icon-link'
 import InstallAppButton from './install-app-button'
 import { MI } from './neon-icons-menu'
 import './drawer-icons.css'
@@ -116,7 +115,6 @@ export default function FloatingCapsuleHeader() {
             )}
             <InstallPWAButton variant="compact" />
             <ShareButton />
-            {loggedIn === true && isStaff && <AdminIconLink />}
             {loggedIn === true && (
               <UserAvatar
                 name={user?.name ?? 'مستخدم'}
@@ -159,7 +157,7 @@ export default function FloatingCapsuleHeader() {
 
           {loggedIn === true && (isStaff || isMerchant) && (
             <div className="nav-drawer__roles">
-              {isStaff && <a href="/admin" className="nav-drawer__role nav-drawer__role--admin"><span className="nav-drawer__link-icon">{MI.shield}</span>لوحة التحكم</a>}
+              {isStaff && <a href="/admin" className="nav-drawer__role nav-drawer__role--admin"><span className="nav-drawer__link-icon">{MI.shield}</span>غرفة التحكم</a>}
               {isMerchant && <a href="/merchant" className="nav-drawer__role nav-drawer__role--merchant"><span className="nav-drawer__link-icon">{MI.store}</span>متجري</a>}
             </div>
           )}
