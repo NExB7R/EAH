@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
+import { isFrameAllowed, isTitleAllowed, type Role, type Gender } from '@/lib/profile-presets'
 
 export async function updateProfile(formData: FormData) {
   const supabase = await createClient()
@@ -23,6 +24,22 @@ export async function updateProfile(formData: FormData) {
   }
   if (bio && bio.length > 200) {
     throw new Error('البايو طويل جدًا (200 حرف كحد أقصى)')
+  }
+
+  // فلترة أمنية: نتأكد إن الإطار واللقب مسموحين للدور
+  const { data: roleRow } = await supabase
+    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
+  const role = (roleRow?.role ?? 'customer') as Role
+
+  const { data: prof } = await supabase
+    .from('profiles').select('gender').eq('id', userData.user.id).maybeSingle()
+  const gender = (prof?.gender ?? null) as Gender | null
+
+  if (frame_key && !isFrameAllowed(frame_key, role)) {
+    throw new Error('الإطار ده مش متاح لحسابك')
+  }
+  if (title_key && !isTitleAllowed(title_key, role, gender)) {
+    throw new Error('اللقب ده مش متاح لحسابك')
   }
 
   const { error } = await supabase

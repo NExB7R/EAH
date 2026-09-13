@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { updateProfile } from './actions'
-import { AVATARS, FRAMES, titlesForGender, getTitle } from '@/lib/profile-presets'
+import { AVATARS, framesForRole, titlesForRole, type Role } from '@/lib/profile-presets'
 import './edit.css'
 
 export const dynamic = 'force-dynamic'
@@ -24,8 +24,12 @@ export default async function EditProfilePage() {
   const name = profile?.display_name ?? 'مستخدم'
   const initial = name.charAt(0).toUpperCase()
   const currentAvatar = profile?.avatar_key ?? AVATARS[0].key
+  const { data: roleRow } = await supabase
+    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
+  const role = (roleRow?.role ?? 'customer') as Role
   const gender = (profile?.gender as 'male' | 'female' | undefined) ?? null
-  const availableTitles = titlesForGender(gender)
+  const availableTitles = titlesForRole(role, gender)
+  const availableFrames = framesForRole(role)
   const currentTitle = profile?.title_key ?? availableTitles[0]?.key ?? 'elgoker'
   const currentFrame = profile?.frame_key ?? FRAMES[0].key
 
@@ -110,7 +114,7 @@ export default async function EditProfilePage() {
             <h2 className="edit__section-title">✨ إطار صورتك</h2>
             <p className="edit__section-sub">الإطار يظهر حوالين صورتك في كل مكان على EAH.</p>
             <div className="edit__frames">
-              {FRAMES.map((f) => {
+              {availableFrames.map((f) => {
                 const isGradient = f.border.startsWith('conic')
                 const style = isGradient
                   ? { backgroundImage: f.border, border: 'none', boxShadow: `0 0 16px ${f.glow}` }

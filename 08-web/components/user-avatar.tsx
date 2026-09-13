@@ -67,8 +67,11 @@ export default function UserAvatar({
     </>
   )
 
+  const deco = frame.decoration
+
   return (
     <div className="user-avatar-wrap">
+      {deco === 'crown' && <span className="user-avatar__crown" aria-hidden>👑</span>}
       <a
         href="/notifications"
         className="neon-icon-btn user-avatar__bell"
@@ -97,6 +100,7 @@ export default function UserAvatar({
           {inner}
         </button>
       )}
+      {deco === 'store' && <span className="user-avatar__store" aria-hidden>🏪</span>}
     </div>
   )
 }
