@@ -1,0 +1,16 @@
+.fav-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(10,8,16,.7);
+  border: 1px solid rgba(139,92,246,.2);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all .2s ease;
+  padding: 0;
+  line-height: 1;
+  backdrop-filter: blur(8px);
+}
+.fav-btn--md { width: 36px; height: 36px; font-size: 1.1rem; }
+.fav-btn--sm { width: 28px; height: 28px; font-size: .9rem; }
+.fav-btn:hover:not(:disabled) { transform: scale(1.1); border-color: rgba(236,72,153,.6); }
+.fav-btn.is-active { background: rgba(236,72,153,.15); border-color: rgba(236,72,153,.5); }
+.fav-btn:disabled { opacity: .5; cursor: wait; }

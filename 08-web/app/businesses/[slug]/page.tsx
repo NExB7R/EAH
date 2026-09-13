@@ -11,6 +11,7 @@ import BusinessHero from '@/components/business-hero'
 import BusinessContact from '@/components/business-contact'
 import BusinessReviews from '@/components/business-reviews'
 import ReportButton from '@/components/report-button'
+import ReviewForm from '@/components/review-form'
 import BusinessOffers from '@/components/business-offers'
 import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
@@ -83,6 +84,12 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
         <BusinessOffers offers={offers} />
 
         {hasId && <BusinessContact businessId={business.businessId!} contacts={contacts} />}
+
+        {business.businessId && (
+          <div style={{ maxWidth: 900, margin: '24px auto', padding: '0 20px' }}>
+            <ReviewForm businessId={business.businessId} />
+          </div>
+        )}
 
         <BusinessReviews stats={stats} reviews={reviews} />
 

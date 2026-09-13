@@ -1,0 +1,36 @@
+.mrf-trigger {
+  padding: 8px 14px; border-radius: 10px;
+  background: rgba(139,92,246,.08); border: 1px solid rgba(139,92,246,.25);
+  color: #C4B5FD; font-weight: 700; font-size: .8rem;
+  cursor: pointer; font-family: inherit;
+  transition: all .2s;
+}
+.mrf-trigger:hover { background: rgba(139,92,246,.15); border-color: #A855F7; color: #fff; }
+
+.mrf { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.mrf__input {
+  width: 100%; padding: 11px 14px; border-radius: 12px;
+  background: rgba(10,8,16,.7); border: 1px solid rgba(139,92,246,.2);
+  color: #F5F3FF; font-family: inherit; font-size: .85rem;
+  outline: none; resize: vertical; min-height: 60px;
+}
+.mrf__input:focus { border-color: rgba(168,85,247,.6); }
+.mrf__msg { margin: 0; font-size: .78rem; color: #FCA5A5; font-weight: 700; }
+.mrf__actions { display: flex; gap: 6px; justify-content: flex-end; }
+.mrf__btn {
+  padding: 8px 16px; border-radius: 10px; font-size: .8rem; font-weight: 800;
+  font-family: inherit; cursor: pointer;
+  border: 1px solid rgba(139,92,246,.25);
+  background: transparent; color: #A5A3B8; transition: all .2s;
+}
+.mrf__btn--primary { background: linear-gradient(135deg,#8B5CF6,#A855F7); border-color: transparent; color: #fff; }
+.mrf__btn:disabled { opacity: .5; cursor: wait; }
+
+.mrf-existing {
+  margin-top: 10px; padding: 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(139,92,246,.08), rgba(168,85,247,.03));
+  border-right: 3px solid #A855F7;
+}
+.mrf-existing__label { font-size: .75rem; font-weight: 800; color: #A855F7; display: block; margin-bottom: 4px; }
+.mrf-existing__text { color: #E5E3F0; font-size: .85rem; line-height: 1.6; margin: 0; }

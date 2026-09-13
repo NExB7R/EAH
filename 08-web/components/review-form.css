@@ -1,0 +1,49 @@
+.rvf-trigger {
+  padding: 12px 24px; border-radius: 14px;
+  background: linear-gradient(135deg, #8B5CF6, #A855F7);
+  border: none; color: #fff; font-weight: 800; font-size: .9rem;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 8px 24px rgba(139,92,246,.35);
+  transition: all .2s ease;
+}
+.rvf-trigger:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(139,92,246,.5); }
+
+.rvf {
+  padding: 22px; border-radius: 20px;
+  background: rgba(20,18,28,.6);
+  border: 1px solid rgba(139,92,246,.2);
+}
+.rvf__title { font-size: 1.05rem; font-weight: 900; color: #F5F3FF; margin: 0 0 16px; }
+.rvf__ratings { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+.rvf__rating { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.rvf__rating-label { font-size: .85rem; font-weight: 700; color: #C4B5FD; }
+.rvf__stars { display: flex; gap: 2px; }
+.rvf__star {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: transparent; border: none;
+  font-size: 1.3rem; color: #4A4358;
+  cursor: pointer; transition: all .15s ease;
+  padding: 0; line-height: 1;
+}
+.rvf__star:hover, .rvf__star.is-on { color: #FBBF24; transform: scale(1.1); }
+.rvf__textarea {
+  width: 100%; padding: 12px 14px; border-radius: 12px;
+  background: rgba(10,8,16,.7); border: 1px solid rgba(139,92,246,.2);
+  color: #F5F3FF; font-family: inherit; font-size: .88rem;
+  outline: none; resize: vertical; min-height: 80px; margin-bottom: 10px;
+}
+.rvf__textarea:focus { border-color: rgba(168,85,247,.6); }
+.rvf__msg { margin: 0 0 10px; font-size: .82rem; color: #FCA5A5; font-weight: 700; }
+.rvf__msg.is-ok { color: #4ADE80; }
+.rvf__actions { display: flex; gap: 8px; justify-content: flex-end; }
+.rvf__btn {
+  padding: 11px 20px; border-radius: 12px;
+  font-weight: 800; font-size: .88rem; font-family: inherit;
+  cursor: pointer; border: 1px solid rgba(139,92,246,.25);
+  background: transparent; color: #A5A3B8; transition: all .2s;
+}
+.rvf__btn--primary {
+  background: linear-gradient(135deg,#8B5CF6,#A855F7);
+  border-color: transparent; color: #fff;
+}
+.rvf__btn:disabled { opacity: .5; cursor: wait; }

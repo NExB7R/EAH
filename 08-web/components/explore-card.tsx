@@ -1,6 +1,10 @@
 'use client'
 import { useState } from 'react'
 import './explore-card.css'
+import FavoriteButton from './favorite-button'
+import OpenNowBadge from './open-now-badge'
+import './favorite-button.css'
+import './open-now-badge.css'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office'
 type CardSize = 'hero' | 'lg' | 'md'
