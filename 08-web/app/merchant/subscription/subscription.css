@@ -1,0 +1,68 @@
+.msub { padding: 90px 20px 60px; max-width: 800px; margin: 0 auto; }
+.msub__head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.msub__kicker { font-size: 11px; letter-spacing: 0.2em; opacity: 0.5; }
+.msub__head h1 { margin: 4px 0; font-size: 26px; }
+.msub__sub { margin: 0; opacity: 0.7; font-size: 14px; }
+.msub__back {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.08);
+  color: #C4B5FD;
+  text-decoration: none;
+  font-size: 13px;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+.msub__hero { margin-bottom: 20px; }
+.msub__info {
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  margin-bottom: 20px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.msub__row { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; }
+.msub__row > span:first-child { opacity: 0.7; }
+.msub__status { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.msub__features { display: flex; gap: 6px; flex-wrap: wrap; }
+.msub__feat {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #6EE7B7;
+}
+.msub__pending,
+.msub__empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: 18px;
+  background: rgba(168, 85, 247, 0.05);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  margin-bottom: 20px;
+}
+.msub__pending-emoji,
+.msub__empty-emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+.msub__pending h2,
+.msub__empty-state h2 { margin: 0 0 8px; }
+.msub__pending p,
+.msub__empty-state p { margin: 0 0 16px; opacity: 0.75; font-size: 14px; }
+.msub__btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #A855F7, #7C3AED);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+.msub--empty {
+  text-align: center;
+  padding: 120px 20px;
+}
+.msub--empty h1 { margin-bottom: 20px; }
+@media (max-width: 520px) {
+  .msub__head { flex-direction: column; gap: 12px; }
+  .plan-form__row, .plan-form__row--3 { grid-template-columns: 1fr; }
+}
