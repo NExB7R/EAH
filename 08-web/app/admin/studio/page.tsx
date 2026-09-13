@@ -1,9 +1,8 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
-import StudioEditor from '@/components/studio/editor'
+import StudioEditorWrapper from '@/components/studio/editor-wrapper'
 import { currentHomeDesign } from '@/components/studio/current-design'
 import type { DesignData } from '@/components/studio/types'
-import '@/components/studio/editor.css'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'استوديو التصميم | EAH Admin' }
@@ -32,5 +31,5 @@ export default async function AdminStudioPage() {
       ? (raw as DesignData)
       : currentHomeDesign
 
-  return <StudioEditor initial={initial} />
+  return <StudioEditorWrapper initial={initial} />
 }
