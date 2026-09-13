@@ -27,41 +27,38 @@ const MENU_LINKS = [
 ]
 
 export default function FloatingCapsuleHeader() {
-  const [scrolled, setScrolled] = useState(false)
-  const [direction, setDirection] = useState<'up' | 'down'>('up')
+  const [direction, setDirection] = useState<'up' | 'down' | 'idle'>('idle')
   const [menuOpen, setMenuOpen] = useState(false)
-  const [logoVisible, setLogoVisible] = useState(false)
 
   useEffect(() => {
     let lastY = window.scrollY
+    let idleTimer: ReturnType<typeof setTimeout> | null = null
 
     const onScroll = () => {
       const y = window.scrollY
-      const isAtTop = y < 60
+      const diff = y - lastY
 
-      setScrolled(y > 40)
-      setDirection(y > lastY ? 'down' : 'up')
+      if (Math.abs(diff) > 4) {
+        setDirection(diff > 0 ? 'down' : 'up')
+      }
 
-      // اللوجو:
-      // - في أول الصفحة: مخفي
-      // - بعد ما تسكرول (فوق أو تحت): ظاهر
-      // - لما ترجع لأول الصفحة: مخفي تاني
-      setLogoVisible(!isAtTop)
+      // بعد 500ms من آخر سكرول → idle (يظهر كل حاجة)
+      if (idleTimer) clearTimeout(idleTimer)
+      idleTimer = setTimeout(() => setDirection('idle'), 500)
 
       lastY = y
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (idleTimer) clearTimeout(idleTimer)
+    }
   }, [])
 
   return (
     <>
-      <header
-        className={`floating-capsule ${scrolled ? 'is-scrolled' : ''} ${
-          direction === 'up' ? 'is-up' : 'is-down'
-        } ${logoVisible ? 'logo-visible' : 'logo-hidden'}`}
-      >
+      <header className={`floating-capsule is-${direction}`}>
         <div className="floating-capsule__inner">
           <div className="floating-capsule__side floating-capsule__side--start">
             <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" onClick={() => setMenuOpen(true)} />
