@@ -949,3 +949,245 @@
     grid-template-columns: 1fr;
   }
 }
+
+.admin-map-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  color: var(--eah-green);
+  font-family: var(--eah-font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: 6px;
+  transition: all 200ms var(--eah-ease);
+}
+.admin-map-preview:hover {
+  background: rgba(74, 222, 128, 0.2);
+  transform: translateX(-2px);
+}
+
+/* ===== Offers Grid ===== */
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.offer-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--eah-radius-lg);
+  background: var(--eah-surface);
+  border: 1px solid var(--eah-border);
+  overflow: hidden;
+  transition: all 260ms var(--eah-ease);
+}
+.offer-card:hover {
+  border-color: var(--eah-purple-2);
+  transform: translateY(-2px);
+}
+
+.offer-card__image {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: linear-gradient(135deg, rgba(107, 33, 255, 0.25), rgba(168, 85, 247, 0.1));
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.offer-card__image-placeholder {
+  font-size: 3rem;
+  opacity: 0.6;
+}
+
+.offer-card__badges {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  display: flex;
+  gap: 6px;
+}
+.offer-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-family: var(--eah-font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fff;
+}
+.offer-card__badge--active {
+  color: var(--eah-green);
+}
+.offer-card__badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+  animation: offer-pulse 2s ease-in-out infinite;
+}
+@keyframes offer-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+.offer-card__badge--pending { color: var(--eah-gold); }
+.offer-card__badge--off { color: #A29DB5; }
+
+.offer-card__price {
+  position: absolute;
+  bottom: 10px;
+  inset-inline-start: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--eah-gradient-gold);
+  color: var(--eah-black-2);
+  font-family: var(--eah-font-body);
+  font-size: 0.82rem;
+  font-weight: 900;
+  box-shadow: 0 4px 12px rgba(232, 199, 154, 0.4);
+}
+
+.offer-card__body {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+/* اسم المطعم — بارز */
+.offer-card__biz {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  text-decoration: none;
+  color: var(--eah-text);
+  align-self: flex-start;
+  transition: all 200ms var(--eah-ease);
+  max-width: 100%;
+}
+.offer-card__biz:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: var(--eah-purple-2);
+  transform: translateX(-2px);
+}
+.offer-card__biz-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.offer-card__biz-name {
+  font-family: var(--eah-font-body);
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: var(--eah-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.offer-card__biz-arrow {
+  color: var(--eah-purple-2);
+  flex-shrink: 0;
+  transform: rotate(180deg);
+}
+
+.offer-card__title {
+  font-family: var(--eah-font-display);
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--eah-text);
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.offer-card__desc {
+  font-family: var(--eah-font-body);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--eah-text-3);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.offer-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+.offer-card__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--eah-font-body);
+  font-size: 0.7rem;
+  color: var(--eah-text-4);
+}
+
+.offer-card__actions {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--eah-border);
+  background: rgba(10, 8, 18, 0.3);
+}
+
+.offer-card__btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--eah-border-2);
+  background: var(--eah-surface-2);
+  color: var(--eah-text-2);
+  text-decoration: none;
+  font-family: var(--eah-font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 200ms var(--eah-ease);
+}
+.offer-card__btn:hover {
+  border-color: var(--eah-purple-2);
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--eah-text);
+}
+.offer-card__btn--primary {
+  background: var(--eah-gradient-purple);
+  border-color: transparent;
+  color: #fff;
+}
+.offer-card__btn--primary:hover {
+  box-shadow: 0 4px 16px rgba(107, 33, 255, 0.4);
+}
+
+@media (max-width: 640px) {
+  .offers-grid {
+    grid-template-columns: 1fr;
+  }
+}
