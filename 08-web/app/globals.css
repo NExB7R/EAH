@@ -150,3 +150,61 @@ button, a {
   scrollbar-width: thin;
   scrollbar-color: #8B5CF6 rgba(7, 6, 11, 0.5);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   EAH Animations — 2026 (slow, organic, non-repeating)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Cards entry — staggered with random-feeling timing */
+@keyframes eahCardIn {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.985); }
+  60%  { opacity: 1; transform: translateY(-2px) scale(1.002); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Sliders/cards idle float (subtle) */
+@keyframes eahFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+/* Shimmer for premium edges */
+@keyframes eahShimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Glow pulse for featured */
+@keyframes eahGlowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4), 0 8px 24px rgba(168, 85, 247, 0.15); }
+  50%      { box-shadow: 0 0 0 8px rgba(168, 85, 247, 0), 0 12px 32px rgba(168, 85, 247, 0.25); }
+}
+
+/* When .eah-anim-ready is set (JS adds it), animate entry */
+.eah-anim-ready .ecard,
+.eah-anim-ready .v4card,
+.eah-anim-ready .rc-card {
+  animation: eahCardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Stagger via CSS var --d set inline */
+.eah-anim-ready .ecard,
+.eah-anim-ready .v4card,
+.eah-anim-ready .rc-card {
+  animation-delay: var(--d, 0ms);
+}
+
+/* Hover — pause float, lift + border accent */
+.eah-anim-ready .ecard:hover,
+.eah-anim-ready .v4card:hover {
+  animation-play-state: paused;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .eah-anim-ready .ecard,
+  .eah-anim-ready .v4card,
+  .eah-anim-ready .rc-card {
+    animation: none !important;
+  }
+}

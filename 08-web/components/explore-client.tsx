@@ -279,8 +279,8 @@ export default function ExploreClient({
         </div>
       ) : (
         <div className={view === 'grid' ? 'ecard-grid' : 'ecard-list'}>
-          {filtered.map((b) => (
-            <ExploreCard key={b.slug} business={b} />
+          {filtered.map((b, i) => (
+            <ExploreCard key={b.slug} business={b} index={i} />
           ))}
         </div>
       )}

@@ -142,3 +142,49 @@
   .ss__arrows { max-width: 220px; padding: 2px 16px 0; }
   .ss__arrow { width: 26px; height: 26px; }
 }
+
+/* ═══ EAH Slider — 2026 smooth motion ═══ */
+.slider-track,
+.section-slider__track {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.slider-track:hover,
+.section-slider__track:hover,
+.slider-track:active,
+.section-slider__track:active {
+  scroll-behavior: auto;
+}
+
+/* Card children get stagger via inline --d */
+.section-slider .ecard,
+.section-slider .v4card {
+  --d: 0ms;
+}
+
+/* Slider edge fade for premium feel */
+.section-slider {
+  position: relative;
+}
+.section-slider::before,
+.section-slider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  pointer-events: none;
+  z-index: 2;
+}
+.section-slider::before {
+  right: 0;
+  background: linear-gradient(270deg, rgba(7, 6, 11, 0.85), transparent);
+}
+.section-slider::after {
+  left: 0;
+  background: linear-gradient(90deg, rgba(7, 6, 11, 0.85), transparent);
+}
+@media (max-width: 640px) {
+  .section-slider::before,
+  .section-slider::after { width: 16px; }
+}
