@@ -14,6 +14,7 @@ export default async function AdminHomePage() {
     { count: totalUsers },
     { count: totalOffers },
     { count: pendingChanges },
+    { count: pendingVerif },
   ] = await Promise.all([
     supabase.from('businesses').select('*', { count: 'exact', head: true }),
     supabase.from('businesses').select('*', { count: 'exact', head: true }).eq('is_published', true),
@@ -21,6 +22,8 @@ export default async function AdminHomePage() {
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase.from('offers').select('*', { count: 'exact', head: true }),
     supabase.from('business_change_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('verification_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('verification_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
   ])
 
   const stats = [
@@ -30,6 +33,7 @@ export default async function AdminHomePage() {
     { label: 'مستخدمين', value: totalUsers ?? 0, icon: '👥', href: '/admin/users', color: 'var(--eah-purple-3)' },
     { label: 'عروض', value: totalOffers ?? 0, icon: '🔥', href: '/admin/offers', color: '#FB923C' },
     { label: 'طلبات تعديل', value: pendingChanges ?? 0, icon: '📝', href: '/admin/change-requests', color: 'var(--eah-gold)' },
+    { label: 'طلبات توثيق', value: pendingVerif ?? 0, icon: '✓', href: '/admin/verifications', color: 'var(--eah-green)' },
   ]
 
   return (
