@@ -1,6 +1,8 @@
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import UserActions from '@/components/admin/user-actions'
+import './users.css'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'المستخدمين' }
@@ -23,6 +25,20 @@ function getRole(p: Profile): string {
   return p.user_roles.role ?? 'customer'
 }
 
+const ROLE_LABEL: Record<string, string> = {
+  customer: 'عميل',
+  merchant: 'تاجر',
+  admin: 'أدمن',
+  super_admin: 'سوبر أدمن',
+}
+
+const ROLE_EMOJI: Record<string, string> = {
+  customer: '👤',
+  merchant: '🏪',
+  admin: '🛡️',
+  super_admin: '👑',
+}
+
 export default async function UsersPage({
   searchParams,
 }: {
@@ -33,8 +49,11 @@ export default async function UsersPage({
   if (!userData.user) redirect('/admin/login')
 
   const { data: roleRow } = await supabase
-    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
-  if (roleRow?.role !== 'super_admin') redirect('/')
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userData.user.id)
+    .maybeSingle()
+  if (roleRow?.role !== 'super_admin' && roleRow?.role !== 'admin') redirect('/')
 
   const params = await searchParams
   const roleFilter = params.role
@@ -47,9 +66,7 @@ export default async function UsersPage({
     .order('created_at', { ascending: false })
     .limit(300)
 
-  if (bannedFilter) {
-    query = query.not('banned_until', 'is', null)
-  }
+  if (bannedFilter) query = query.not('banned_until', 'is', null)
   if (search) {
     query = query.or(`display_name.ilike.%${search}%,phone.ilike.%${search}%`)
   }
@@ -66,17 +83,26 @@ export default async function UsersPage({
   }
 
   let rows = (data ?? []) as unknown as Profile[]
-  if (roleFilter) {
-    rows = rows.filter((r) => getRole(r) === roleFilter)
-  }
+  if (roleFilter) rows = rows.filter((r) => getRole(r) === roleFilter)
 
+  const now = new Date()
   const counts = {
     total: rows.length,
     customers: rows.filter((r) => getRole(r) === 'customer').length,
     merchants: rows.filter((r) => getRole(r) === 'merchant').length,
     admins: rows.filter((r) => ['admin', 'super_admin'].includes(getRole(r))).length,
-    banned: rows.filter((r) => r.banned_until && new Date(r.banned_until) > new Date()).length,
+    banned: rows.filter((r) => r.banned_until && new Date(r.banned_until) > now).length,
   }
+
+  const tabs = [
+    { key: 'all', label: 'الكل', count: counts.total, href: '/admin/users' },
+    { key: 'customer', label: 'عملاء', count: counts.customers, href: '/admin/users?role=customer' },
+    { key: 'merchant', label: 'تجار', count: counts.merchants, href: '/admin/users?role=merchant' },
+    { key: 'admin', label: 'أدمن', count: counts.admins, href: '/admin/users?role=admin' },
+    { key: 'banned', label: 'محظورين', count: counts.banned, href: '/admin/users?banned=1' },
+  ]
+
+  const currentTab = bannedFilter ? 'banned' : roleFilter ?? 'all'
 
   return (
     <>
@@ -85,78 +111,104 @@ export default async function UsersPage({
           <span className="admin-header__kicker">USERS</span>
           <h1 className="admin-header__title">👥 المستخدمين</h1>
           <p className="admin-header__subtitle">
-            {counts.total} مستخدم — {counts.customers} عميل، {counts.merchants} تاجر، {counts.admins} أدمن، {counts.banned} محظور
+            {counts.total} مستخدم — {counts.customers} عميل، {counts.merchants} تاجر، {counts.admins} أدمن
+            {counts.banned > 0 && ` • ${counts.banned} محظور`}
           </p>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="admin-toolbar" style={{ marginBottom: 16 }}>
-        <a href="/admin/users" className={`admin-btn admin-btn--sm ${!roleFilter && !bannedFilter ? 'admin-btn--primary' : ''}`}>
-          الكل
-        </a>
-        <a href="/admin/users?role=customer" className={`admin-btn admin-btn--sm ${roleFilter === 'customer' ? 'admin-btn--primary' : ''}`}>
-          عملاء ({counts.customers})
-        </a>
-        <a href="/admin/users?role=merchant" className={`admin-btn admin-btn--sm ${roleFilter === 'merchant' ? 'admin-btn--primary' : ''}`}>
-          تجار ({counts.merchants})
-        </a>
-        <a href="/admin/users?role=admin" className={`admin-btn admin-btn--sm ${roleFilter === 'admin' ? 'admin-btn--primary' : ''}`}>
-          أدمن ({counts.admins})
-        </a>
-        <a href="/admin/users?banned=1" className={`admin-btn admin-btn--sm ${bannedFilter ? 'admin-btn--danger' : ''}`}>
-          🚫 محظورين ({counts.banned})
-        </a>
+      <div className="usrs-stats">
+        <div className="usrs-stat usrs-stat--total">
+          <span className="usrs-stat__num">{counts.total}</span>
+          <span className="usrs-stat__label">إجمالي</span>
+        </div>
+        <div className="usrs-stat usrs-stat--customer">
+          <span className="usrs-stat__num">{counts.customers}</span>
+          <span className="usrs-stat__label">عملاء</span>
+        </div>
+        <div className="usrs-stat usrs-stat--merchant">
+          <span className="usrs-stat__num">{counts.merchants}</span>
+          <span className="usrs-stat__label">تجار</span>
+        </div>
+        <div className="usrs-stat usrs-stat--admin">
+          <span className="usrs-stat__num">{counts.admins}</span>
+          <span className="usrs-stat__label">أدمن</span>
+        </div>
       </div>
+
+      <div className="usrs-tabs">
+        {tabs.map((t) => (
+          <Link
+            key={t.key}
+            href={t.href}
+            className={`usrs-tab ${currentTab === t.key ? 'is-active' : ''}`}
+          >
+            {t.label}
+            <span className="usrs-tab__badge">{t.count}</span>
+          </Link>
+        ))}
+      </div>
+
+      <form className="usrs-search" action="/admin/users" method="get">
+        {roleFilter && <input type="hidden" name="role" value={roleFilter} />}
+        {bannedFilter && <input type="hidden" name="banned" value="1" />}
+        <input
+          type="text"
+          name="q"
+          placeholder="🔎 ابحث بالاسم أو رقم الهاتف..."
+          defaultValue={search}
+        />
+      </form>
 
       {rows.length === 0 ? (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">👥</span>
-          <h2 className="admin-empty__title">مفيش مستخدمين</h2>
-          <p className="admin-empty__msg">لسه محدش سجل في المنصة</p>
+          <span className="admin-empty__emoji">👤</span>
+          <h2 className="admin-empty__title">مفيش مستخدمين هنا</h2>
+          <p className="admin-empty__msg">
+            {search ? 'مفيش نتائج للبحث ده' : 'جرّب فلتر تاني'}
+          </p>
         </div>
       ) : (
-        <div className="admin-grid admin-grid--cards">
-          {rows.map((u) => {
-            const role = getRole(u)
-            const isBanned = !!(u.banned_until && new Date(u.banned_until) > new Date())
-            const initial = (u.display_name ?? 'ز').charAt(0).toUpperCase()
+        <div className="usrs-list">
+          {rows.map((p) => {
+            const role = getRole(p)
+            const trust = p.trust_score ?? 50
+            const trustClass = trust >= 70 ? 'high' : trust >= 40 ? 'mid' : 'low'
+            const banned = p.banned_until && new Date(p.banned_until) > now
+            const initial = (p.display_name ?? '?').trim().charAt(0).toUpperCase()
 
             return (
-              <article key={u.id} className="user-card">
-                <div className="user-card__head">
-                  <div className={`user-card__avatar ${isBanned ? 'is-banned' : ''}`}>
-                    {initial}
-                  </div>
-                  <div className="user-card__info">
-                    <h3 className="user-card__name">{u.display_name ?? 'بدون اسم'}</h3>
-                    <div className="user-card__phone">{u.phone ?? '—'}</div>
-                    <div className="user-card__badges">
-                      <span className={`user-card__badge user-card__badge--${role}`}>{role}</span>
-                      {u.phone_verified_at && (
-                        <span className="user-card__badge user-card__badge--verified">✓ موثّق</span>
-                      )}
-                      {isBanned && (
-                        <span className="user-card__badge user-card__badge--banned">🚫 محظور</span>
-                      )}
-                      {u.trust_score !== null && u.trust_score !== undefined && (
-                        <span className="user-card__badge">⭐ {u.trust_score}</span>
-                      )}
-                    </div>
+              <article key={p.id} className={`usrs-card ${banned ? 'is-banned' : ''}`}>
+                <div className={`usrs-avatar usrs-avatar--${role}`}>{initial}</div>
+
+                <div className="usrs-info">
+                  <span className="usrs-name">{p.display_name ?? 'مستخدم'}</span>
+                  {p.phone && <span className="usrs-phone">{p.phone}</span>}
+                  <div className="usrs-meta">
+                    <span className={`usrs-chip usrs-chip--role-${role}`}>
+                      {ROLE_EMOJI[role]} {ROLE_LABEL[role] ?? role}
+                    </span>
+                    {p.phone_verified_at && (
+                      <span className="usrs-chip usrs-chip--verified">✓ موثّق</span>
+                    )}
+                    {banned && (
+                      <span className="usrs-chip usrs-chip--banned">🚫 محظور</span>
+                    )}
+                    <span className="usrs-chip">
+                      📅 {new Date(p.created_at).toLocaleDateString('ar-EG')}
+                    </span>
                   </div>
                 </div>
 
-                {isBanned && u.ban_reason && (
-                  <div style={{ fontSize: '0.72rem', color: 'var(--eah-red)', padding: '6px 10px', background: 'rgba(248,113,113,0.08)', borderRadius: 10, border: '1px solid rgba(248,113,113,0.2)' }}>
-                    سبب الحظر: {u.ban_reason}
-                  </div>
-                )}
+                <div className={`usrs-trust usrs-trust--${trustClass}`}>
+                  <span className="usrs-trust__num">{trust}</span>
+                  <span className="usrs-trust__label">TRUST</span>
+                </div>
 
                 <UserActions
-                  userId={u.id}
-                  isBanned={isBanned}
-                  currentRole={role}
-                  bannedUntil={u.banned_until}
+                  id={p.id}
+                  role={role}
+                  bannedUntil={p.banned_until}
                 />
               </article>
             )
