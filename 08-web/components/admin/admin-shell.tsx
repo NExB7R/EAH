@@ -50,6 +50,13 @@ export default function AdminShell({
       ],
     },
     {
+      title: 'الاشتراكات',
+      items: [
+        { href: '/admin/subscriptions', label: 'الاشتراكات', icon: '💎' },
+        { href: '/admin/subscriptions/plans', label: 'الباقات', icon: '⚙️' },
+      ],
+    },
+    {
       title: 'المستخدمين',
       items: [
         { href: '/admin/users', label: 'المستخدمين', icon: '👥' },

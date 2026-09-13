@@ -159,6 +159,7 @@ export default function FloatingCapsuleHeader() {
             <div className="nav-drawer__roles">
               {isStaff && <a href="/admin" className="nav-drawer__role nav-drawer__role--admin"><span className="nav-drawer__link-icon">{MI.shield}</span>غرفة التحكم</a>}
               {isMerchant && <a href="/merchant" className="nav-drawer__role nav-drawer__role--merchant"><span className="nav-drawer__link-icon">{MI.store}</span>متجري</a>}
+              {isMerchant && <a href="/merchant/subscription" className="nav-drawer__role nav-drawer__role--merchant"><span className="nav-drawer__link-icon">💎</span>اشتراكي</a>}
             </div>
           )}
 
