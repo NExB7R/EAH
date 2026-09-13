@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import type { DemoBusiness } from '@/lib/demo-data'
+type BusinessCardInput = { name: string; slug: string; type?: string; area?: string; badge?: string; hook?: string }
 
-export default function BusinessCard({ business }: { business: DemoBusiness }) {
+export default function BusinessCard({ business }: { business: BusinessCardInput }) {
   return <article className="card business-card">
     <Link href={`/businesses/${business.slug}`} aria-label={`فتح ${business.name}`}>
     </Link>

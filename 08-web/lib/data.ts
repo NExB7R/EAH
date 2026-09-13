@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase-server'
-import { demoBusinesses, type DemoBusiness } from '@/lib/demo-data'
 
 type DbBusiness = {
   id: string
@@ -65,10 +64,7 @@ function toDemoShape(b: DbBusiness, offers?: DbOffer[]): BusinessViewModel {
   }
 }
 
-const FALLBACK = (limit: number, intent?: string) =>
-  demoBusinesses
-    .filter((b) => !intent || b.type === intent)
-    .slice(0, limit)
+const FALLBACK = (_limit: number, _intent?: string): BusinessViewModel[] => []
 
 export async function getPublishedBusinesses(
   limit = 40,
@@ -135,7 +131,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
   } catch {
     /* silent */
   }
-  return demoBusinesses.find((b) => b.slug === slug) ?? null
+  return null
 }
 
 export async function getBusinessesWithStats(): Promise<BusinessViewModel[]> {
