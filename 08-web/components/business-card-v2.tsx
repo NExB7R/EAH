@@ -1,10 +1,13 @@
 'use client'
 import './business-card-v2.css'
 
+type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
+type CardVariant = 'restaurant' | 'offer' | 'pharmacy' | 'delivery' | 'market' | 'new'
+
 type Business = {
   slug: string
   name: string
-  type: 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
+  type: BusinessType
   area: string
   badge?: string
   vibe: string[]
@@ -12,32 +15,40 @@ type Business = {
   open: boolean
 }
 
-const TYPE_EMOJI: Record<Business['type'], string> = {
+const TYPE_EMOJI: Record<BusinessType, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
   supermarket: '🛒',
   delivery_office: '🛵',
 }
 
-const TYPE_LABEL: Record<Business['type'], string> = {
+const TYPE_LABEL: Record<BusinessType, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
   supermarket: 'سوبر ماركت',
   delivery_office: 'توصيل',
 }
 
-export default function BusinessCardV2({ business }: { business: Business }) {
+export default function BusinessCardV2({
+  business,
+  variant = 'restaurant',
+}: {
+  business: Business
+  variant?: CardVariant
+}) {
   const { slug, name, type, area, badge, vibe, reason, open } = business
 
   return (
-    <a href={`/businesses/${slug}`} className="xcard" aria-label={name}>
-      {/* الغلاف */}
+    <a
+      href={`/businesses/${slug}`}
+      className={`xcard xcard--${variant}`}
+      aria-label={name}
+    >
       <div className="xcard__cover">
         <div className="xcard__emoji-wrap">
           <span className="xcard__emoji">{TYPE_EMOJI[type]}</span>
         </div>
 
-        {/* شريط علوي: نوع + حالة */}
         <div className="xcard__top">
           <span className="xcard__type">{TYPE_LABEL[type]}</span>
           <span className={`xcard__live ${open ? 'is-on' : 'is-off'}`}>
@@ -46,14 +57,11 @@ export default function BusinessCardV2({ business }: { business: Business }) {
           </span>
         </div>
 
-        {/* لافتة المميز */}
         {badge && <span className="xcard__badge">{badge}</span>}
 
-        {/* تدرج سفلي */}
         <div className="xcard__fade" />
       </div>
 
-      {/* المحتوى فوق التدرج */}
       <div className="xcard__body">
         <h3 className="xcard__name">{name}</h3>
         <div className="xcard__meta">
@@ -68,7 +76,6 @@ export default function BusinessCardV2({ business }: { business: Business }) {
           <span className="xcard__rating">4.7</span>
         </div>
 
-        {/* تفاصيل تظهر عند hover */}
         <div className="xcard__reveal">
           <p className="xcard__reason">{reason}</p>
           <div className="xcard__vibes">

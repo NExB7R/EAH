@@ -27,10 +27,10 @@ export default function Page() {
           title="نفسك في إيه؟ 🔥"
           subtitle="أقرب حاجة على مزاجك دلوقتي"
           seeAllHref="/explore?type=restaurant"
-          accent="purple"
+          variant="restaurant"
         >
           {[...restaurants, ...restaurants].map((b, i) => (
-            <BusinessCardV2 key={`r-${i}-${b.slug}`} business={b} />
+            <BusinessCardV2 key={`r-${i}-${b.slug}`} business={b} variant="restaurant" />
           ))}
         </SectionSlider>
 
@@ -39,10 +39,10 @@ export default function Page() {
           title="عروض نار 🔥"
           subtitle="وفّر أكتر مع العروض اللي شغالة"
           seeAllHref="/offers"
-          accent="gold"
+          variant="offer"
         >
           {[...restaurants, ...markets, ...restaurants].map((b, i) => (
-            <BusinessCardV2 key={`o-${i}-${b.slug}`} business={b} />
+            <BusinessCardV2 key={`o-${i}-${b.slug}`} business={b} variant="offer" />
           ))}
         </SectionSlider>
 
@@ -51,10 +51,10 @@ export default function Page() {
           title="صحتك أولاً 💊"
           subtitle="صيدليات قريبة منك ومفتوحة"
           seeAllHref="/explore?type=pharmacy"
-          accent="purple"
+          variant="pharmacy"
         >
           {[...pharmacies, ...pharmacies, ...pharmacies].map((b, i) => (
-            <BusinessCardV2 key={`p-${i}-${b.slug}`} business={b} />
+            <BusinessCardV2 key={`p-${i}-${b.slug}`} business={b} variant="pharmacy" />
           ))}
         </SectionSlider>
 
@@ -63,10 +63,10 @@ export default function Page() {
           title="على السريع 🛵"
           subtitle="مكاتب توصيل بتغطي منطقتك"
           seeAllHref="/explore?type=delivery_office"
-          accent="purple"
+          variant="delivery"
         >
           {[...delivery, ...delivery, ...delivery].map((b, i) => (
-            <BusinessCardV2 key={`d-${i}-${b.slug}`} business={b} />
+            <BusinessCardV2 key={`d-${i}-${b.slug}`} business={b} variant="delivery" />
           ))}
         </SectionSlider>
 
@@ -75,10 +75,10 @@ export default function Page() {
           title="طلباتك عندنا 🛒"
           subtitle="مقاضي سريعة وقريبة منك"
           seeAllHref="/explore?type=supermarket"
-          accent="purple"
+          variant="market"
         >
           {[...markets, ...markets, ...markets].map((b, i) => (
-            <BusinessCardV2 key={`m-${i}-${b.slug}`} business={b} />
+            <BusinessCardV2 key={`m-${i}-${b.slug}`} business={b} variant="market" />
           ))}
         </SectionSlider>
 
@@ -87,10 +87,10 @@ export default function Page() {
           title="مشاريع صغيرة، فرص كبيرة 🌱"
           subtitle="ادعم متاجر جيرانك الجديدة"
           seeAllHref="/new"
-          accent="gold"
+          variant="new"
         >
           {[...restaurants, ...pharmacies].map((b, i) => (
-            <BusinessCardV2 key={`n-${i}-${b.slug}`} business={b} />
+            <BusinessCardV2 key={`n-${i}-${b.slug}`} business={b} variant="new" />
           ))}
         </SectionSlider>
       </main>

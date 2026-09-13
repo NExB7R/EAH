@@ -3,12 +3,14 @@ import { useRef, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import './section-slider.css'
 
+type SliderVariant = 'restaurant' | 'offer' | 'pharmacy' | 'delivery' | 'market' | 'new'
+
 type SectionSliderProps = {
   id?: string
   title: string
   subtitle?: string
   seeAllHref?: string
-  accent?: 'purple' | 'gold' | 'soft'
+  variant?: SliderVariant
   children: ReactNode
 }
 
@@ -17,7 +19,7 @@ export default function SectionSlider({
   title,
   subtitle,
   seeAllHref,
-  accent = 'purple',
+  variant = 'restaurant',
   children,
 }: SectionSliderProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -70,7 +72,7 @@ export default function SectionSlider({
   }
 
   return (
-    <section id={id} className={`ss section-slider--${accent}`}>
+    <section id={id} className={`ss ss--${variant}`}>
       <div className="ss__head">
         <div className="ss__titles">
           <h2 className="ss__title">{title}</h2>
@@ -86,24 +88,8 @@ export default function SectionSlider({
             </a>
           )}
           <div className="ss__nav-group">
-            <button
-              type="button"
-              className="ss__nav"
-              onClick={() => scrollBy(-1)}
-              disabled={!canPrev}
-              aria-label="السابق"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              className="ss__nav"
-              onClick={() => scrollBy(1)}
-              disabled={!canNext}
-              aria-label="التالي"
-            >
-              ›
-            </button>
+            <button type="button" className="ss__nav" onClick={() => scrollBy(-1)} disabled={!canPrev} aria-label="السابق">‹</button>
+            <button type="button" className="ss__nav" onClick={() => scrollBy(1)} disabled={!canNext} aria-label="التالي">›</button>
           </div>
         </div>
       </div>
@@ -122,10 +108,7 @@ export default function SectionSlider({
       </div>
 
       <div className="ss__progress" aria-hidden>
-        <div
-          className="ss__progress-bar"
-          style={{ transform: `scaleX(${Math.max(0.08, progress)})` }}
-        />
+        <div className="ss__progress-bar" style={{ transform: `scaleX(${Math.max(0.08, progress)})` }} />
       </div>
     </section>
   )

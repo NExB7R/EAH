@@ -1,3 +1,4 @@
+/* ===== Base Card ===== */
 .xcard {
   position: relative;
   display: flex;
@@ -8,17 +9,45 @@
   overflow: hidden;
   text-decoration: none;
   color: #F4F2FA;
-  border: 1px solid rgba(139, 92, 246, 0.18);
   background: #0A0812;
-  transition: transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1), border-color 300ms ease;
+  transition:
+    transform 500ms cubic-bezier(0.34, 1.4, 0.64, 1),
+    border-color 300ms ease,
+    box-shadow 400ms ease;
   will-change: transform;
   isolation: isolate;
-}
-.xcard:hover {
-  transform: translateY(-6px);
-  border-color: rgba(168, 85, 247, 0.75);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  transform-style: preserve-3d;
 }
 
+/* hover: tilt + spotlight */
+.xcard:hover {
+  transform: translateY(-6px) rotateX(2deg) rotateY(-2deg) scale(1.02);
+  border-color: rgba(168, 85, 247, 0.75);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(107, 33, 255, 0.35);
+}
+
+/* spotlight يتبع الماوس */
+.xcard::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(168, 85, 247, 0.15),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+  z-index: 10;
+}
+.xcard:hover::before { opacity: 1; }
+
+/* ===== Cover ===== */
 .xcard__cover {
   position: absolute;
   inset: 0;
@@ -26,6 +55,7 @@
     radial-gradient(circle at 50% 40%, rgba(107, 33, 255, 0.5) 0%, transparent 60%),
     linear-gradient(140deg, rgba(107, 33, 255, 0.25), rgba(168, 85, 247, 0.1) 50%, rgba(20, 15, 30, 0.9) 100%);
   z-index: 0;
+  transition: transform 500ms cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
 .xcard__emoji-wrap {
@@ -38,7 +68,6 @@
   background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
   transition: transform 500ms cubic-bezier(0.34, 1.4, 0.64, 1);
 }
-.xcard:hover .xcard__emoji-wrap { transform: translate(-50%, -60%) scale(1.05); }
 .xcard__emoji { font-size: 4rem; line-height: 1; }
 
 .xcard__fade {
@@ -49,6 +78,7 @@
   pointer-events: none;
 }
 
+/* ===== Top bar ===== */
 .xcard__top {
   position: absolute;
   top: 12px; inset-inline: 12px;
@@ -58,18 +88,18 @@
 .xcard__type {
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.55);
   border: 1px solid rgba(139, 92, 246, 0.3);
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.65rem; font-weight: 700;
+  font-size: 0.62rem; font-weight: 700;
   color: #C4B5FD;
 }
 .xcard__live {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 4px 9px; border-radius: 999px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.55);
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.62rem; font-weight: 700;
+  font-size: 0.6rem; font-weight: 700;
 }
 .xcard__live-dot { width: 6px; height: 6px; border-radius: 999px; box-shadow: 0 0 6px currentColor; }
 .xcard__live.is-on { color: #4ADE80; }
@@ -81,6 +111,7 @@
   50%      { opacity: 0.6; }
 }
 
+/* ===== Badge ===== */
 .xcard__badge {
   position: absolute;
   top: 52px; inset-inline-end: 12px;
@@ -88,17 +119,18 @@
   background: linear-gradient(135deg, #F5DEB3, #A67C52);
   color: #1A0F0A;
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.62rem; font-weight: 900;
+  font-size: 0.6rem; font-weight: 900;
   z-index: 2;
   transform: rotate(-4deg);
 }
 
+/* ===== Body ===== */
 .xcard__body {
   position: relative;
   z-index: 2;
   margin-top: auto;
   padding: 16px 16px 18px;
-  display: flex; flex-direction: column; gap: 6px;
+  display: flex; flex-direction: column; gap: 5px;
 }
 .xcard__name {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
@@ -109,7 +141,7 @@
 .xcard__meta {
   display: flex; align-items: center; gap: 6px;
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.72rem; color: #A29DB5;
+  font-size: 0.7rem; color: #A29DB5;
 }
 .xcard__area {
   display: inline-flex; align-items: center; gap: 3px; flex: 1;
@@ -117,16 +149,19 @@
 }
 .xcard__area svg { flex-shrink: 0; opacity: 0.8; }
 .xcard__star { color: #E8C79A; font-size: 0.85rem; line-height: 1; }
-.xcard__rating { color: #E8C79A; font-weight: 900; font-size: 0.75rem; }
+.xcard__rating { color: #E8C79A; font-weight: 900; font-size: 0.72rem; }
 
 .xcard__reveal {
   max-height: 0; overflow: hidden; opacity: 0;
-  transition: max-height 400ms cubic-bezier(0.34, 1.4, 0.64, 1), opacity 300ms ease 100ms, margin-top 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  transition:
+    max-height 400ms cubic-bezier(0.34, 1.4, 0.64, 1),
+    opacity 300ms ease 100ms,
+    margin-top 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 .xcard:hover .xcard__reveal { max-height: 100px; opacity: 1; margin-top: 4px; }
 .xcard__reason {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.72rem; line-height: 1.5; color: #C9C2DB;
+  font-size: 0.7rem; line-height: 1.5; color: #C9C2DB;
   margin: 0 0 6px;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
@@ -137,22 +172,170 @@
   border: 1px solid rgba(139, 92, 246, 0.25);
   color: #C4B5FD;
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.6rem; font-weight: 700;
+  font-size: 0.58rem; font-weight: 700;
 }
 
-@media (max-width: 900px) {
-  .xcard { width: 230px; height: 300px; }
-  .xcard__emoji { font-size: 3.4rem; }
+/* ============================================================
+   VARIANTS — كل سلايدر بروح مختلفة
+   ============================================================ */
+
+/* ----- 1. Restaurant: Bento كبير ودافي ----- */
+.xcard--restaurant {
+  width: 280px;
+  height: 340px;
+  border-radius: 26px;
 }
+.xcard--restaurant .xcard__cover {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(220, 90, 40, 0.5) 0%, transparent 60%),
+    linear-gradient(140deg, rgba(220, 90, 40, 0.35), rgba(139, 92, 246, 0.15) 50%, rgba(20, 15, 30, 0.9) 100%);
+}
+.xcard--restaurant .xcard__emoji { font-size: 4.4rem; }
+.xcard--restaurant .xcard__name { font-size: 1.25rem; }
+
+/* ----- 2. Offer: مضغوط وقوي ----- */
+.xcard--offer {
+  width: 220px;
+  height: 280px;
+  border: 1.5px solid rgba(232, 199, 154, 0.5);
+  background: linear-gradient(160deg, #1a0f0a 0%, #0A0812 100%);
+}
+.xcard--offer .xcard__cover {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(232, 199, 154, 0.4) 0%, transparent 65%),
+    linear-gradient(140deg, rgba(168, 85, 247, 0.2), rgba(232, 199, 154, 0.15) 60%, rgba(20, 15, 30, 0.9) 100%);
+}
+.xcard--offer .xcard__emoji { font-size: 3.4rem; }
+.xcard--offer .xcard__badge {
+  background: linear-gradient(135deg, #EF4444, #B91C1C);
+  color: #fff;
+  font-size: 0.65rem;
+  top: 46px;
+  transform: rotate(-6deg) scale(1.1);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+}
+.xcard--offer:hover {
+  border-color: #E8C79A;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(232, 199, 154, 0.4);
+}
+
+/* ----- 3. Pharmacy: نضيف وطبي ----- */
+.xcard--pharmacy {
+  width: 240px;
+  height: 300px;
+  border-radius: 20px;
+  border-color: rgba(74, 222, 128, 0.15);
+}
+.xcard--pharmacy .xcard__cover {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(74, 222, 128, 0.25) 0%, transparent 60%),
+    linear-gradient(140deg, rgba(20, 100, 80, 0.35), rgba(107, 33, 255, 0.15) 60%, rgba(20, 15, 30, 0.9) 100%);
+}
+.xcard--pharmacy .xcard__emoji { font-size: 3.6rem; }
+.xcard--pharmacy:hover {
+  border-color: rgba(74, 222, 128, 0.7);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(74, 222, 128, 0.3);
+}
+.xcard--pharmacy .xcard__live.is-on { color: #4ADE80; }
+.xcard--pharmacy .xcard__star,
+.xcard--pharmacy .xcard__rating { color: #86EFAC; }
+
+/* ----- 4. Delivery: ديناميكي وسريع ----- */
+.xcard--delivery {
+  width: 260px;
+  height: 280px;
+  border-radius: 22px;
+  border-color: rgba(251, 146, 60, 0.25);
+}
+.xcard--delivery .xcard__cover {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(251, 146, 60, 0.35) 0%, transparent 60%),
+    linear-gradient(140deg, rgba(251, 146, 60, 0.25), rgba(168, 85, 247, 0.1) 60%, rgba(20, 15, 30, 0.9) 100%);
+}
+.xcard--delivery .xcard__emoji {
+  font-size: 4.5rem;
+  animation: delivery-bounce 2.5s ease-in-out infinite;
+}
+@keyframes delivery-bounce {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50%      { transform: translateY(-8px) rotate(4deg); }
+}
+.xcard--delivery:hover {
+  border-color: rgba(251, 146, 60, 0.7);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(251, 146, 60, 0.35);
+}
+
+/* ----- 5. Market: عملي ومرتب ----- */
+.xcard--market {
+  width: 200px;
+  height: 260px;
+  border-radius: 18px;
+  border-color: rgba(139, 92, 246, 0.15);
+}
+.xcard--market .xcard__cover {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(139, 92, 246, 0.35) 0%, transparent 60%),
+    linear-gradient(140deg, rgba(107, 33, 255, 0.2), rgba(168, 85, 247, 0.08) 60%, rgba(20, 15, 30, 0.9) 100%);
+}
+.xcard--market .xcard__emoji { font-size: 3rem; }
+.xcard--market .xcard__name { font-size: 1rem; }
+.xcard--market .xcard__body { padding: 14px 14px 16px; }
+
+/* ----- 6. New Business: دافي وداعم ----- */
+.xcard--new {
+  width: 250px;
+  height: 320px;
+  border-radius: 24px;
+  border-color: rgba(139, 92, 246, 0.25);
+}
+.xcard--new .xcard__cover {
+  background:
+    radial-gradient(circle at 50% 40%, rgba(139, 92, 246, 0.35) 0%, transparent 60%),
+    linear-gradient(140deg, rgba(107, 33, 255, 0.3), rgba(232, 199, 154, 0.12) 60%, rgba(20, 15, 30, 0.9) 100%);
+}
+.xcard--new .xcard__badge {
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  font-size: 0.62rem;
+  transform: rotate(-3deg);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 900px) {
+  .xcard--restaurant { width: 240px; height: 310px; }
+  .xcard--offer { width: 200px; height: 260px; }
+  .xcard--pharmacy { width: 220px; height: 280px; }
+  .xcard--delivery { width: 230px; height: 260px; }
+  .xcard--market { width: 180px; height: 240px; }
+  .xcard--new { width: 220px; height: 300px; }
+}
+
 @media (max-width: 640px) {
-  .xcard { width: 200px; height: 280px; border-radius: 20px; }
-  .xcard__emoji { font-size: 3rem; }
-  .xcard__name { font-size: 1rem; }
-  .xcard__body { padding: 14px 14px 16px; }
+  .xcard,
+  .xcard--restaurant,
+  .xcard--offer,
+  .xcard--pharmacy,
+  .xcard--delivery,
+  .xcard--market,
+  .xcard--new {
+    width: 200px;
+    height: 280px;
+    border-radius: 20px;
+  }
+  .xcard--offer { width: 180px; height: 240px; }
+  .xcard--market { width: 170px; height: 230px; }
   .xcard__reveal { max-height: 100px; opacity: 1; margin-top: 4px; }
 }
 
-/* منع أي overflow */
-.xcard, .xcard * {
-  max-width: 100%;
+@media (prefers-reduced-motion: reduce) {
+  .xcard, .xcard__emoji-wrap, .xcard__reveal { transition: none; }
+  .xcard--delivery .xcard__emoji { animation: none; }
 }

@@ -38,11 +38,6 @@
   background: linear-gradient(90deg, #6B21FF, #A855F7);
   box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
 }
-.section-slider--gold .ss__title::after {
-  background: linear-gradient(90deg, #E8C79A, #A67C52);
-  box-shadow: 0 0 12px rgba(232, 199, 154, 0.6);
-}
-
 .ss__subtitle {
   font-family: var(--font-cairo, system-ui);
   font-size: 0.82rem;
@@ -108,42 +103,15 @@
 }
 .ss__see-all svg { transform: rotate(180deg); }
 
-/* ===== Wrapper — fade عن طريق mask، مش pseudo-element ===== */
 .ss__wrapper {
   position: relative;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
-  /* fade ناعم على الأطراف — بدون pseudo-elements */
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black 40px,
-    black calc(100% - 40px),
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black 40px,
-    black calc(100% - 40px),
-    transparent 100%
-  );
-  -webkit-mask-size: 100% 100%;
-  mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 40px, black calc(100% - 40px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, black 40px, black calc(100% - 40px), transparent 100%);
 }
 
-/* إلغاء أي pseudo-elements قديمة */
-.ss__wrapper::before,
-.ss__wrapper::after {
-  display: none !important;
-  content: none !important;
-}
-.ss__fade { display: none !important; }
-
-/* ===== Track ===== */
 .ss__track {
   display: flex;
   gap: 16px;
@@ -163,7 +131,6 @@
   flex-shrink: 0;
 }
 
-/* ===== Progress bar ===== */
 .ss__progress {
   width: 80px;
   height: 3px;
@@ -179,6 +146,65 @@
   background: linear-gradient(90deg, #6B21FF, #A855F7, #E8C79A);
   transform-origin: right center;
   transition: transform 200ms ease;
+}
+
+/* ============================================================
+   SLIDER VARIANTS — كل قسم بروح
+   ============================================================ */
+
+/* 1. Restaurant — دافي */
+.ss--restaurant .ss__title::after {
+  background: linear-gradient(90deg, #DC5A28, #F59E0B);
+  box-shadow: 0 0 12px rgba(220, 90, 40, 0.6);
+}
+
+/* 2. Offer — ذهبي وملفت */
+.ss--offer .ss__title {
+  color: #E8C79A;
+  text-shadow: 0 0 16px rgba(232, 199, 154, 0.35);
+}
+.ss--offer .ss__title::after {
+  background: linear-gradient(90deg, #E8C79A, #A67C52);
+  box-shadow: 0 0 14px rgba(232, 199, 154, 0.7);
+}
+.ss--offer .ss__see-all {
+  border-color: rgba(232, 199, 154, 0.4);
+  color: #E8C79A;
+}
+.ss--offer .ss__progress-bar {
+  background: linear-gradient(90deg, #E8C79A, #A67C52);
+}
+
+/* 3. Pharmacy — أخضر طبي */
+.ss--pharmacy .ss__title::after {
+  background: linear-gradient(90deg, #4ADE80, #10B981);
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.6);
+}
+.ss--pharmacy .ss__progress-bar {
+  background: linear-gradient(90deg, #4ADE80, #10B981);
+}
+
+/* 4. Delivery — برتقالي سريع */
+.ss--delivery .ss__title::after {
+  background: linear-gradient(90deg, #FB923C, #EA580C);
+  box-shadow: 0 0 12px rgba(251, 146, 60, 0.6);
+}
+.ss--delivery .ss__progress-bar {
+  background: linear-gradient(90deg, #FB923C, #EA580C);
+}
+
+/* 5. Market — بنفسجي هادئ */
+.ss--market .ss__title::after {
+  width: 32px;
+}
+
+/* 6. New — بنفسجي داعم */
+.ss--new .ss__title {
+  color: #E8C79A;
+}
+.ss--new .ss__title::after {
+  background: linear-gradient(90deg, #A855F7, #E8C79A);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.6);
 }
 
 @media (max-width: 900px) {
