@@ -1,7 +1,8 @@
 .back-to-top {
   position: fixed;
   bottom: 24px;
-  inset-inline-end: 24px;
+  right: 24px;             /* ← صريح: يمين */
+  left: auto;              /* ← إلغاء أي left */
   width: 44px;
   height: 44px;
   border-radius: 999px;
@@ -19,20 +20,25 @@
   pointer-events: none;
   transition: all 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
   z-index: 150;
+  padding: 0;
 }
-.back-to-top.is-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.back-to-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
 .back-to-top:hover {
   border-color: #A855F7;
-  background: rgba(139, 92, 246, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  background: rgba(139, 92, 246, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 0 22px rgba(168, 85, 247, 0.5);
 }
 .back-to-top svg { width: 20px; height: 20px; }
 
-/* على الموبايل: نروح للنص عشان مايتعارضش مع القايمة */
-@media (max-width: 1024px) {
+@media (max-width: 640px) {
   .back-to-top {
-    inset-inline-end: 16px;
+    right: 16px;
+    left: auto;
     bottom: 16px;
     width: 40px;
     height: 40px;
