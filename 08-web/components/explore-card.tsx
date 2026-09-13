@@ -10,6 +10,7 @@ type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office'
 type CardSize = 'hero' | 'lg' | 'md'
 
 type Business = {
+  businessId?: string
   id?: string
   slug: string
   name: string
@@ -85,16 +86,16 @@ export default function ExploreCard({
           <span className="ecard__type">
             {TYPE_EMOJI[business.type]} {TYPE_LABEL[business.type]}
           </span>
-          {business.id && (
+          {(business.businessId || business.id) && (
             <OpenNowBadge workingHours={business.workingHours} />
           )}
         </div>
 
         <div className="ecard__visual">
           <span className="ecard__emoji">{TYPE_EMOJI[business.type]}</span>
-          {business.id && (
+          {(business.businessId || business.id) && (
             <div className="ecard__fav">
-              <FavoriteButton businessId={business.id} size="sm" />
+              <FavoriteButton businessId={(business.businessId || business.id)!} size="sm" />
             </div>
           )}
         </div>

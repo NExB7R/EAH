@@ -13,6 +13,7 @@ type DbBusiness = {
   is_featured: boolean
   is_published: boolean
   hook?: string | null
+  working_hours?: any
 }
 
 type DbOffer = {
@@ -28,6 +29,7 @@ type BusinessViewModel = DemoBusiness & {
   businessId?: string
   hook?: string
   activeOffers?: number
+  workingHours?: any
 }
 
 function toDemoShape(b: DbBusiness, offers?: DbOffer[]): BusinessViewModel {
@@ -59,6 +61,7 @@ function toDemoShape(b: DbBusiness, offers?: DbOffer[]): BusinessViewModel {
     menu: validType === 'restaurant' ? [] : undefined,
     hook: b.hook ?? undefined,
     activeOffers: activeOffers.length,
+    workingHours: b.working_hours ?? undefined,
   }
 }
 
@@ -75,7 +78,7 @@ export async function getPublishedBusinesses(
     const supabase = await createClient()
     let query = supabase
       .from('businesses')
-      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook')
+      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours')
       .eq('is_published', true)
       .order('is_featured', { ascending: false })
       .order('created_at', { ascending: false })
@@ -115,7 +118,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
     const supabase = await createClient()
     const { data, error } = await supabase
       .from('businesses')
-      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook')
+      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours')
       .eq('slug', slug)
       .eq('is_published', true)
       .maybeSingle()
