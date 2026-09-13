@@ -21,6 +21,7 @@ type CapsuleUser = {
   avatarKey: string | null
   frameKey: string | null
   avatarUrl: string | null | undefined
+| undefined
 }
 
 export default function FloatingCapsuleHeader() {
@@ -124,7 +125,7 @@ export default function FloatingCapsuleHeader() {
                 banUntil={user?.banUntil ?? null}
                 avatarKey={user?.avatarKey ?? null}
                 frameKey={user?.frameKey ?? null}
-                avatarUrl={user?.avatarUrl ?? null}
+                avatarUrl={user?.avatarUrl ?? undefined}
                 href="/account"
               />
             )}
