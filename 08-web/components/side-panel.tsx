@@ -104,16 +104,27 @@ export default function SidePanel() {
     setMounted(true)
     const wasOpen = localStorage.getItem('eah-sidepanel-open') === '1'
     if (wasOpen) setClosed(false)
+
+    const onToggle = () => setClosed((c) => {
+      const next = !c
+      localStorage.setItem('eah-sidepanel-open', next ? '0' : '1')
+      return next
+    })
+    const onOpen = () => {
+      setClosed(false)
+      localStorage.setItem('eah-sidepanel-open', '1')
+    }
+    window.addEventListener('eah:toggle-sidepanel', onToggle)
+    window.addEventListener('eah:open-sidepanel', onOpen)
+    return () => {
+      window.removeEventListener('eah:toggle-sidepanel', onToggle)
+      window.removeEventListener('eah:open-sidepanel', onOpen)
+    }
   }, [])
 
   const handleClose = () => {
     setClosed(true)
     localStorage.setItem('eah-sidepanel-open', '0')
-  }
-
-  const handleOpen = () => {
-    setClosed(false)
-    localStorage.setItem('eah-sidepanel-open', '1')
   }
 
   if (!mounted || closed) return null
