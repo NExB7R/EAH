@@ -50,9 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ScrollIconsBackground />
         <PageViewTracker />
-        <div id="eah-scroll-root">
-          {children}
-        </div>
+        {children}
         <RegisterSW />
       </body>
     </html>
