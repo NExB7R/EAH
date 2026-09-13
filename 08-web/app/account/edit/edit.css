@@ -143,3 +143,22 @@
 @media (prefers-reduced-motion: reduce) {
   .edit__avatar-circle, .edit__title-card, .edit__frame-circle { transition: none; }
 }
+
+
+/* Gender */
+.edit__gender { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.edit__gender-btn {
+  display:flex; align-items:center; justify-content:center;
+  padding:14px; border-radius:14px;
+  background:rgba(10,8,16,.7);
+  border:1.5px solid rgba(139,92,246,.18);
+  color:#A5A3B8; font-weight:800; font-size:.9rem;
+  cursor:pointer; transition:all .2s;
+}
+.edit__gender-btn input { display:none; }
+.edit__gender-btn:hover { border-color:rgba(168,85,247,.5); color:#F5F3FF; }
+.edit__gender-btn.is-active {
+  background:linear-gradient(135deg,rgba(139,92,246,.25),rgba(168,85,247,.1));
+  border-color:#A855F7; color:#F5F3FF;
+  box-shadow:0 0 0 1px #A855F7, 0 8px 24px rgba(139,92,246,.3);
+}

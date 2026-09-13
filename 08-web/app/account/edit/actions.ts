@@ -14,6 +14,8 @@ export async function updateProfile(formData: FormData) {
   const avatar_key = String(formData.get('avatar_key') ?? '').trim() || null
   const title_key = String(formData.get('title_key') ?? '').trim() || null
   const frame_key = String(formData.get('frame_key') ?? '').trim() || null
+  const avatar_url = String(formData.get('avatar_url') ?? '').trim() || null
+  const gender = String(formData.get('gender') ?? '').trim() || null
   const bio = String(formData.get('bio') ?? '').trim() || null
 
   if (display_name.length < 2) {
@@ -44,7 +46,7 @@ export async function updateProfile(formData: FormData) {
 
   const { error } = await supabase
     .from('profiles')
-    .update({ display_name, avatar_key, title_key, frame_key, bio })
+    .update({ display_name, avatar_key, title_key, frame_key, bio, avatar_url, gender })
     .eq('id', userData.user.id)
 
   if (error) throw new Error(error.message)

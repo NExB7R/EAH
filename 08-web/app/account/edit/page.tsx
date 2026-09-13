@@ -17,7 +17,7 @@ export default async function EditProfilePage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('display_name,avatar_key,title_key,frame_key,bio,phone,trust_score,gender')
+    .select('display_name,avatar_key,title_key,frame_key,bio,phone,trust_score,gender,avatar_url')
     .eq('id', userData.user.id)
     .maybeSingle()
 
@@ -62,27 +62,30 @@ export default async function EditProfilePage() {
             <span className="edit__hint">ده اللي هيظهر لكل الناس على EAH.</span>
           </section>
 
-          {/* الأفاتار */}
+          {/* الأفاتار + الرفع */}
           <section className="edit__section">
-            <h2 className="edit__section-title">🎨 صورتك الرمزية</h2>
-            <p className="edit__section-sub">اختار لون يناسب شخصيتك — كل لون له روح مختلفة.</p>
-            <div className="edit__avatars">
-              {AVATARS.map((av) => (
-                <label key={av.key} className="edit__avatar-option">
-                  <input
-                    type="radio"
-                    name="avatar_key"
-                    value={av.key}
-                    defaultChecked={av.key === currentAvatar}
-                  />
-                  <span
-                    className="edit__avatar-circle"
-                    style={{ background: `linear-gradient(135deg, ${av.from}, ${av.to})` }}
-                  >
-                    {initial}
-                  </span>
-                </label>
-              ))}
+            <h2 className="edit__section-title">🎨 صورتك</h2>
+            <p className="edit__section-sub">اختار لون، ارفع صورة من جهازك، أو حط لينك.</p>
+            <AvatarUploader
+              userId={userData.user.id}
+              initialUrl={profile?.avatar_url ?? null}
+              initialKey={profile?.avatar_key ?? null}
+            />
+          </section>
+
+          {/* الجنس */}
+          <section className="edit__section">
+            <h2 className="edit__section-title">👤 النوع</h2>
+            <p className="edit__section-sub">بيأثر على الألقاب المتاحة ليك.</p>
+            <div className="edit__gender">
+              <label className={`edit__gender-btn ${(profile?.gender ?? '') === 'male' ? 'is-active' : ''}`}>
+                <input type="radio" name="gender" value="male" defaultChecked={profile?.gender === 'male'} />
+                <span>👨 ذكر</span>
+              </label>
+              <label className={`edit__gender-btn ${(profile?.gender ?? '') === 'female' ? 'is-active' : ''}`}>
+                <input type="radio" name="gender" value="female" defaultChecked={profile?.gender === 'female'} />
+                <span>👩 أنثى</span>
+              </label>
             </div>
           </section>
 
