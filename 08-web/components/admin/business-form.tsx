@@ -77,7 +77,7 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
           <div className="admin-field">
             <label className="admin-field__label" htmlFor="slug">الـ slug *</label>
             <input id="slug" name="slug" className="admin-input" dir="ltr" value={slug} onChange={(e) => { setSlugTouched(true); setSlug(e.target.value) }} placeholder="matbakh-elbalad" required />
-            <span className="admin-field__hint">/businesses/{slug || '...'}</span>
+            <span className="admin-field__hint">/businesses/{slug | '...'}</span>
             {err('slug') && <span className="admin-field__hint" style={{ color: 'var(--eah-red)' }}>{err('slug')}</span>}
           </div>
 
