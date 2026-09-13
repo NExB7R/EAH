@@ -1,25 +1,77 @@
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { getBusinessBySlug } from '@/lib/data'
+import {
+  getBusinessStats,
+  getBusinessReviews,
+  getBusinessOffers,
+  getBusinessContacts,
+} from '@/lib/reviews'
 import PageViewTracker from '@/components/page-view-tracker'
-import EahAdSlot from '@/components/eah-ad-slot'
+import BusinessHero from '@/components/business-hero'
+import BusinessContact from '@/components/business-contact'
+import BusinessReviews from '@/components/business-reviews'
+import BusinessOffers from '@/components/business-offers'
+import SiteFooter from '@/components/site-footer'
+import FloatingCapsuleHeader from '@/components/floating-capsule'
+import BackToTop from '@/components/back-to-top'
+
+export const revalidate = 120
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const business = await getBusinessBySlug(slug)
+  if (!business) return { title: 'النشاط مش موجود' }
+  return {
+    title: `${business.name} | EAH`,
+    description: business.reason,
+  }
+}
 
 export default async function BusinessPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const business = await getBusinessBySlug(slug)
-  if (!business) return <main className="container page-pad"><h1 className="page-title">النشاط مش موجود</h1><Link className="pill" href="/explore">← رجوع للاكتشاف</Link></main>
-  const schemaType = business.type === 'restaurant' ? 'Restaurant' : business.type === 'pharmacy' ? 'Pharmacy' : 'Store'
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  return <main className="container page-pad">
-    <PageViewTracker businessId={business.businessId} />
-    <Link className="pill" href="/">← الرئيسية</Link>
-    <EahAdSlot slotKey="business_top" />
-    <article className="detail-card">
-      <div className="detail-cover">{business.type === 'restaurant' ? '🍽️' : business.type === 'pharmacy' ? '💊' : business.type === 'supermarket' ? '🛒' : '📦'}</div>
-      <div className="detail-body"><div className="eyebrow">{business.area}</div><h1 className="page-title">{business.name}</h1><div className="vibes">{business.vibe.map(v => <span className="vibe" key={v}>{v}</span>)}</div><p className="lead">{business.reason}</p><div className="detail-actions"><button className="primary">♡ ضيفها لمفضلاتك</button><button className="ghost-btn">شارك</button></div></div>
-    </article>
-    <EahAdSlot slotKey="business_inline" />
-    <section className="section"><div className="section-head"><div><h2>ليه ظهر لك؟</h2><span>الشفافية جزء من التوصية</span></div></div><div className="why-panel"><strong>✨ السبب:</strong> {business.reason}. <strong>+ القرب والمزاج:</strong> إشارات متوافقة مع نوع النشاط.</div></section>
-    {business.menu && <section className="section"><div className="section-head"><div><h2>المنيو</h2><span>صور المنيو هتظهر هنا</span></div></div><div className="menu-placeholder">{business.menu.map(x => <div className="menu-line" key={x}>{x}<span>→</span></div>)}</div></section>}
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ '@context': 'https://schema.org', '@type': schemaType, name: business.name, address: { '@type':'PostalAddress', addressLocality:'شبين القناطر', addressCountry:'EG' }, url: `${siteUrl}/businesses/${business.slug}` }) }} />
-  </main>
+  if (!business || !business.businessId) notFound()
+
+  const [stats, reviews, offers, contacts] = await Promise.all([
+    getBusinessStats(business.businessId),
+    getBusinessReviews(business.businessId, 6),
+    getBusinessOffers(business.businessId),
+    getBusinessContacts(business.businessId),
+  ])
+
+  return (
+    <>
+      <FloatingCapsuleHeader />
+      <BackToTop />
+      <PageViewTracker businessId={business.businessId} />
+
+      <main>
+        <BusinessHero
+          business={{
+            name: business.name,
+            slug: business.slug,
+            type: business.type,
+            area: business.area,
+            reason: business.reason,
+            open: business.open,
+            vibe: business.vibe,
+          }}
+          stats={{
+            avg_rating: stats.avg_rating,
+            review_count: stats.review_count,
+            active_offers: stats.active_offers,
+          }}
+        />
+
+        <BusinessOffers offers={offers} />
+
+        <BusinessContact businessId={business.businessId} contacts={contacts} />
+
+        <BusinessReviews stats={stats} reviews={reviews} />
+      </main>
+
+      <SiteFooter />
+    </>
+  )
 }

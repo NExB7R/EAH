@@ -1,0 +1,176 @@
+.bhero {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 100px 24px 20px;
+}
+.bhero__back { margin-bottom: 16px; }
+.bhero__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  background: rgba(139, 92, 246, 0.06);
+  color: #F4F2FA;
+  text-decoration: none;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: all 220ms ease;
+}
+.bhero__back-btn:hover {
+  border-color: #A855F7;
+  background: rgba(139, 92, 246, 0.15);
+  transform: translateX(3px);
+}
+.bhero__back-btn svg { transform: rotate(180deg); }
+
+.bhero__inner {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 28px;
+  align-items: center;
+  padding: 28px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(107, 33, 255, 0.08), rgba(10, 8, 18, 0.6));
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.bhero__cover {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(168, 85, 247, 0.4) 0%, transparent 65%),
+    linear-gradient(160deg, rgba(107, 33, 255, 0.3), rgba(10, 8, 18, 0.9));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  overflow: hidden;
+}
+.bhero__cover-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
+  animation: bhero-pulse 4s ease-in-out infinite;
+}
+@keyframes bhero-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+.bhero__emoji {
+  font-size: 6rem;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.6));
+}
+
+.bhero__badges {
+  position: absolute;
+  top: 14px;
+  inset-inline: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  z-index: 2;
+}
+.bhero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #E8E4F0;
+}
+.bhero__badge--live.is-on { color: #4ADE80; }
+.bhero__badge--live.is-off { color: #F87171; }
+.bhero__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+}
+.bhero__badge--live.is-on .bhero__dot { animation: bhero-pulse 2s infinite; }
+
+.bhero__info { display: flex; flex-direction: column; gap: 12px; }
+.bhero__name {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.bhero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.85rem;
+  color: #A29DB5;
+}
+.bhero__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.bhero__meta-item--offer {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.12);
+  border: 1px solid rgba(232, 199, 154, 0.3);
+  color: #E8C79A;
+  font-weight: 700;
+  font-size: 0.78rem;
+}
+.bhero__star { color: #E8C79A; font-size: 1rem; line-height: 1; }
+.bhero__meta-item strong { color: #E8C79A; font-weight: 900; }
+.bhero__count { color: #6B6580; font-size: 0.75rem; }
+
+.bhero__reason {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #C9C2DB;
+  margin: 0;
+  max-width: 500px;
+}
+
+.bhero__vibes { display: flex; flex-wrap: wrap; gap: 6px; }
+.bhero__vibe {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  color: #C4B5FD;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .bhero { padding: 80px 16px 12px; }
+  .bhero__inner {
+    grid-template-columns: 1fr;
+    padding: 18px;
+    gap: 18px;
+  }
+  .bhero__cover { max-width: 180px; margin: 0 auto; }
+  .bhero__emoji { font-size: 4rem; }
+  .bhero__name { font-size: 1.6rem; }
+}

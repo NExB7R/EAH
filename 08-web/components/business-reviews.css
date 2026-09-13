@@ -1,0 +1,173 @@
+.brev {
+  max-width: 1000px;
+  margin: 32px auto 0;
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(10, 8, 18, 0.6);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+.brev--empty { text-align: center; }
+.brev__empty-msg {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.88rem;
+  color: #A29DB5;
+  margin: 8px 0 0;
+}
+
+.brev__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.brev__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0;
+}
+.brev__count {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #C4B5FD;
+}
+
+.brev__summary {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 24px;
+  align-items: center;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(139, 92, 246, 0.05);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  margin-bottom: 24px;
+}
+
+.brev__score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.brev__score-num {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, #E8C79A, #A855F7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.brev__score-label {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.7rem;
+  color: #A29DB5;
+}
+
+.brev__stars {
+  display: inline-flex;
+  gap: 2px;
+  font-size: 1.05rem;
+  line-height: 1;
+}
+.brev__star { color: #3a2e58; }
+.brev__star.is-on { color: #E8C79A; filter: drop-shadow(0 0 4px rgba(232, 199, 154, 0.5)); }
+
+.brev__bars { display: flex; flex-direction: column; gap: 12px; }
+.brev__bar { display: flex; flex-direction: column; gap: 6px; }
+.brev__bar-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+}
+.brev__bar-icon { font-size: 0.9rem; }
+.brev__bar-label { color: #C9C2DB; flex: 1; }
+.brev__bar-value { color: #E8C79A; font-weight: 900; }
+.brev__bar-track {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.1);
+  overflow: hidden;
+}
+.brev__bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #6B21FF, #A855F7, #E8C79A);
+  transition: width 800ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.brev__list { display: flex; flex-direction: column; gap: 12px; }
+.brev__list-title {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0 0 4px;
+}
+.brev__item {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(139, 92, 246, 0.05);
+  border: 1px solid rgba(139, 92, 246, 0.12);
+}
+.brev__item-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.brev__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6B21FF, #A855F7);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-cairo, system-ui);
+  font-weight: 900;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+.brev__item-info { display: flex; flex-direction: column; gap: 2px; }
+.brev__item-name {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #F4F2FA;
+}
+.brev__item-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.7rem;
+}
+.brev__item-date { color: #6B6580; }
+.brev__item-comment {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #C9C2DB;
+  margin: 0;
+}
+
+@media (max-width: 720px) {
+  .brev { padding: 18px; }
+  .brev__summary { grid-template-columns: 1fr; gap: 16px; }
+  .brev__score-num { font-size: 2.4rem; }
+}
