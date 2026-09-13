@@ -5,6 +5,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { MarkAllReadButton, DeleteNotifButton } from './notif-actions'
 import './notifications.css'
+import EahLogo from '@/components/eah-logo'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الإشعارات | EAH' }
