@@ -98,7 +98,7 @@ export default function AboutPage() {
           <header className="about__section-head">
             <span className="about__section-kicker">قصتنا</span>
             <h2 className="about__section-title">بدأنا من فكرة صغيرة</h2>
-          </p>
+          </header>
           <div className="about__story">
             <p>
               في شبين القناطر والقرى حواليها، الوصول لمطعم قريب أو صيدلية مفتوحة أو ماركت
