@@ -27,14 +27,17 @@ export default function SectionSlider({
   children,
 }: SectionSliderProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const currentIndexRef = useRef(0)
   const [paused, setPaused] = useState(false)
   const [progress, setProgress] = useState(0)
   const [canPrev, setCanPrev] = useState(false)
   const [canNext, setCanNext] = useState(true)
 
+  // تتبع الـ scroll
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
+
     const onScroll = () => {
       const max = el.scrollWidth - el.clientWidth
       if (max <= 0) return
@@ -42,37 +45,81 @@ export default function SectionSlider({
       setProgress(p)
       setCanPrev(Math.abs(el.scrollLeft) > 10)
       setCanNext(Math.abs(el.scrollLeft) < max - 10)
+
+      // تحديث currentIndex بناءً على أقرب بطاقة
+      const cards = Array.from(el.children) as HTMLElement[]
+      if (cards.length === 0) return
+      const containerRect = el.getBoundingClientRect()
+      const centerX = containerRect.left + containerRect.width / 2
+
+      let closestIdx = 0
+      let closestDist = Infinity
+      cards.forEach((card, i) => {
+        const r = card.getBoundingClientRect()
+        const cardCenter = r.left + r.width / 2
+        const dist = Math.abs(cardCenter - centerX)
+        if (dist < closestDist) {
+          closestDist = dist
+          closestIdx = i
+        }
+      })
+      currentIndexRef.current = closestIdx
     }
+
     onScroll()
     el.addEventListener('scroll', onScroll, { passive: true })
     return () => el.removeEventListener('scroll', onScroll)
   }, [])
 
+  // ===== Auto-play باستخدام scrollIntoView (يعمل في كل المتصفحات) =====
   useEffect(() => {
     if (paused) return
     const el = scrollRef.current
     if (!el) return
+
     const timer = setInterval(() => {
-      const max = el.scrollWidth - el.clientWidth
-      if (max <= 0) return
-      const isRTL = getComputedStyle(el).direction === 'rtl'
-      const step = isRTL ? -280 : 280
-      const next = el.scrollLeft + step
-      if ((isRTL && next <= -max) || (!isRTL && next >= max)) {
-        el.scrollTo({ left: 0, behavior: 'smooth' })
-      } else {
-        el.scrollBy({ left: step, behavior: 'smooth' })
-      }
-    }, 5000)
+      const cards = Array.from(el.children) as HTMLElement[]
+      if (cards.length === 0) return
+
+      let nextIndex = currentIndexRef.current + 1
+      if (nextIndex >= cards.length) nextIndex = 0
+
+      const targetCard = cards[nextIndex]
+      if (!targetCard) return
+
+      targetCard.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'start',
+        block: 'nearest',
+      })
+
+      currentIndexRef.current = nextIndex
+    }, 4500)
+
     return () => clearInterval(timer)
   }, [paused])
 
-  const scrollBy = (dir: 1 | -1) => {
+  // ===== أزرار الأسهم =====
+  const scrollToCard = (dir: 1 | -1) => {
     const el = scrollRef.current
     if (!el) return
-    const amount = el.clientWidth * 0.75
-    const isRTL = getComputedStyle(el).direction === 'rtl'
-    el.scrollBy({ left: dir * amount * (isRTL ? -1 : 1), behavior: 'smooth' })
+    const cards = Array.from(el.children) as HTMLElement[]
+    if (cards.length === 0) return
+
+    let nextIndex = currentIndexRef.current + dir
+    if (nextIndex < 0) nextIndex = 0
+    if (nextIndex >= cards.length) nextIndex = cards.length - 1
+
+    const targetCard = cards[nextIndex]
+    if (!targetCard) return
+
+    targetCard.scrollIntoView({
+      behavior: 'smooth',
+      inline: 'start',
+      block: 'nearest',
+    })
+
+    currentIndexRef.current = nextIndex
   }
 
   const items = Array.isArray(children) ? children : [children]
@@ -88,8 +135,24 @@ export default function SectionSlider({
         </div>
         <div className="ss__controls">
           <div className="ss__nav-group">
-            <button type="button" className="ss__nav" onClick={() => scrollBy(-1)} disabled={!canPrev} aria-label="السابق">‹</button>
-            <button type="button" className="ss__nav" onClick={() => scrollBy(1)} disabled={!canNext} aria-label="التالي">›</button>
+            <button
+              type="button"
+              className="ss__nav"
+              onClick={() => scrollToCard(-1)}
+              disabled={!canPrev}
+              aria-label="السابق"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              className="ss__nav"
+              onClick={() => scrollToCard(1)}
+              disabled={!canNext}
+              aria-label="التالي"
+            >
+              ›
+            </button>
           </div>
         </div>
       </div>
@@ -101,19 +164,18 @@ export default function SectionSlider({
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onTouchStart={() => setPaused(true)}
-          onTouchEnd={() => setTimeout(() => setPaused(false), 2000)}
+          onTouchEnd={() => setTimeout(() => setPaused(false), 3000)}
         >
           {visible}
 
-          {/* كارد "شوف الكل" في الآخر */}
-          <a href={seeAllHref} className="v3seeall" aria-label={`شوف كل ${title}`}>
-            <div className="v3seeall__icon" aria-hidden>
+          <a href={seeAllHref} className="bseeall" aria-label={`شوف كل ${title}`}>
+            <div className="bseeall__icon" aria-hidden>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
             </div>
-            <h3 className="v3seeall__title">شوف الكل</h3>
-            <p className="v3seeall__subtitle">
+            <h3 className="bseeall__title">شوف الكل</h3>
+            <p className="bseeall__subtitle">
               {remaining > 0 ? `و ${remaining}+ مكان تاني` : 'استكشف كل الأماكن'}
             </p>
           </a>
@@ -121,7 +183,10 @@ export default function SectionSlider({
       </div>
 
       <div className="ss__progress" aria-hidden>
-        <div className="ss__progress-bar" style={{ transform: `scaleX(${Math.max(0.08, progress)})` }} />
+        <div
+          className="ss__progress-bar"
+          style={{ transform: `scaleX(${Math.max(0.08, progress)})` }}
+        />
       </div>
     </section>
   )
