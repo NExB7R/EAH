@@ -37,7 +37,7 @@ type Block = { type: string; props: Record<string, any> };
 export type EahBusiness = {
   slug: string;
   name: string;
-  type: "restaurant" | "pharmacy" | "supermarket" | "delivery_office";
+  type: 'restaurant' | 'pharmacy' | 'delivery_office';
   area: string;
   open: boolean;
   badge?: string;

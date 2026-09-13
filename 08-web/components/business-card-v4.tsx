@@ -1,7 +1,7 @@
 'use client'
 import './business-card-v4.css'
 
-type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
+type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office'
 type CardSize = 'hero' | 'lg' | 'md' | 'sm'
 
 type Business = {

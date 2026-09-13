@@ -4,7 +4,7 @@ import ExploreCard from "./explore-card"
 import { IconSearch } from './neon-icons'
 import './explore-client.css'
 
-type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
+type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office'
 
 type Business = {
   slug: string
