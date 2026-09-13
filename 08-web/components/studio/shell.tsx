@@ -5,13 +5,14 @@ import {
   type DesignData, type Section, type SectionType,
   SECTION_LABELS, makeId, defaultProps, defaultDesign,
 } from './types'
+import { currentHomeDesign } from './current-design'
 
 type Viewport = 'mobile' | 'tablet' | 'desktop'
 
 const HISTORY_MAX = 30
 
 export default function StudioShell({ initial }: { initial: DesignData | null }) {
-  const [design, setDesign] = useState<DesignData>(initial ?? defaultDesign())
+  const [design, setDesign] = useState<DesignData>(initial ?? currentHomeDesign)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [viewport, setViewport] = useState<Viewport>('desktop')
   const [saving, setSaving] = useState(false)
@@ -142,7 +143,7 @@ export default function StudioShell({ initial }: { initial: DesignData | null })
 
   const resetAll = () => {
     if (!confirm('متأكد إنك عايز ترجع التصميم الافتراضي؟ كل تعديلاتك هتتمسح.')) return
-    push(defaultDesign())
+    push(currentHomeDesign)
     setSelectedId(null)
   }
 
