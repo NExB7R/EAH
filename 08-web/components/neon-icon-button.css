@@ -1,5 +1,8 @@
-/* ═══ EAH Neon Icon Button — 2026 ═══ */
-.nib {
+/* ═══════════════════════════════════════════════
+   EAH Header Icons — 2026 (clean, minimal)
+   ═══════════════════════════════════════════════ */
+
+.neon-icon-btn {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -15,15 +18,28 @@
   text-decoration: none;
   font-family: inherit;
   flex-shrink: 0;
+  padding: 0;
 }
 
-.nib svg {
+.neon-icon-btn__icon {
+  display: grid;
+  place-items: center;
   width: 18px;
   height: 18px;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.nib:hover {
+.neon-icon-btn__icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* إخفاء الـ labels نهائياً */
+.neon-icon-btn__label {
+  display: none !important;
+}
+
+.neon-icon-btn:hover {
   background: rgba(168, 85, 247, 0.18);
   border-color: rgba(168, 85, 247, 0.55);
   color: #fff;
@@ -32,69 +48,50 @@
     0 0 0 4px rgba(168, 85, 247, 0.08),
     0 8px 24px rgba(168, 85, 247, 0.35);
 }
-.nib:hover svg {
-  transform: scale(1.12);
-}
 
-.nib:active {
+.neon-icon-btn:active {
   transform: translateY(0) scale(1);
 }
 
-/* Accent variant (e.g., login/register) */
-.nib--accent {
+.neon-icon-btn--accent {
   background: linear-gradient(135deg, #A855F7, #7C3AED);
   border-color: transparent;
   color: #fff;
   box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
 }
-.nib--accent:hover {
+
+.neon-icon-btn--accent:hover {
   background: linear-gradient(135deg, #B975F8, #8B4DEE);
   box-shadow:
     0 0 0 4px rgba(168, 85, 247, 0.15),
     0 8px 28px rgba(168, 85, 247, 0.55);
 }
 
-/* Compact mode when scrolled */
-.floating-capsule.is-scrolled .nib {
+/* Compact mode عند scroll */
+.floating-capsule.is-scrolled .neon-icon-btn {
   width: 34px;
   height: 34px;
 }
-.floating-capsule.is-scrolled .nib svg {
+.floating-capsule.is-scrolled .neon-icon-btn__icon,
+.floating-capsule.is-scrolled .neon-icon-btn__icon svg {
   width: 16px;
   height: 16px;
 }
 
-/* Mobile friendly */
 @media (max-width: 480px) {
-  .nib {
+  .neon-icon-btn {
     width: 34px;
     height: 34px;
   }
-  .nib svg {
+  .neon-icon-btn__icon,
+  .neon-icon-btn__icon svg {
     width: 16px;
     height: 16px;
   }
 }
 
-/* Tooltip label (optional, on hover) */
-.nib__label {
-  position: absolute;
-  bottom: -28px;
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  padding: 4px 10px;
-  border-radius: 8px;
-  background: rgba(20, 16, 32, 0.95);
-  border: 1px solid rgba(168, 85, 247, 0.25);
-  color: #E8E4F5;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.2s ease;
-}
-.nib:hover .nib__label {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+@media (prefers-reduced-motion: reduce) {
+  .neon-icon-btn {
+    transition: none;
+  }
 }
