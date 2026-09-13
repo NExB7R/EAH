@@ -267,3 +267,12 @@
   transition: all 0.2s ease;
 }
 .nav-drawer__logout button:hover { background: rgba(239, 68, 68, 0.2); color: #fff; }
+
+.fc-desktop-only { display: inline-flex; align-items: center; gap: 4px; }
+@media (max-width: 768px) { .fc-desktop-only { display: none; } }
+
+.nav-drawer__group { display: flex; flex-direction: column; gap: 4px; padding: 0 12px; }
+.nav-drawer__spacer { height: 1px; margin: 14px 24px; background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.15), transparent); }
+.nav-drawer__link { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; color: #E5E3F0; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: all 0.2s ease; }
+.nav-drawer__link:hover { background: rgba(139, 92, 246, 0.1); color: #F5F3FF; transform: translateX(-3px); }
+.nav-drawer__link-icon { font-size: 1.1rem; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; background: rgba(139, 92, 246, 0.08); border-radius: 8px; flex-shrink: 0; }
