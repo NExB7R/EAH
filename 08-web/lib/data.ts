@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase-server'
+import { getSubscribedBusinessIds } from './subscription'
 
 type DbBusiness = {
   id: string
@@ -39,9 +40,10 @@ type BusinessViewModel = {
   hook?: string
   activeOffers?: number
   workingHours?: any
+  is_premium?: boolean
 }
 
-function toDemoShape(b: DbBusiness, offers?: DbOffer[]): BusinessViewModel {
+function toDemoShape(b: DbBusiness, offers?: DbOffer[], isPremium = false): BusinessViewModel {
   const type = b.business_type as BusinessViewModel['type']
   const validType = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'].includes(type)
     ? (type as 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office')
@@ -70,6 +72,7 @@ function toDemoShape(b: DbBusiness, offers?: DbOffer[]): BusinessViewModel {
     menu: validType === 'restaurant' ? [] : undefined,
     hook: b.hook ?? undefined,
     activeOffers: activeOffers.length,
+    is_premium: isPremium,
     workingHours: b.working_hours ?? undefined,
   }
 }
@@ -113,7 +116,11 @@ export async function getPublishedBusinesses(
       offersByBiz.set(o.business_id, list)
     })
 
-    return data.map((b) => toDemoShape(b, offersByBiz.get(b.id) ?? []))
+    const premiumIds = await getSubscribedBusinessIds(ids)
+
+    return data.map((b) =>
+      toDemoShape(b, offersByBiz.get(b.id) ?? [], premiumIds.has(b.id))
+    )
   } catch {
     return FALLBACK(limit, intent)
   }
@@ -136,7 +143,8 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
         .eq('business_id', data.id)
         .eq('is_published', true)
 
-      return toDemoShape(data, offers ?? [])
+      const premiumIds = await getSubscribedBusinessIds([data.id])
+      return toDemoShape(data, offers ?? [], premiumIds.has(data.id))
     }
   } catch {
     /* silent */

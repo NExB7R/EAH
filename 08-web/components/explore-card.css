@@ -141,3 +141,15 @@
   transition: transform .5s ease;
 }
 .ecard:hover .ecard__img { transform: scale(1.08); }
+
+/* ═══ Premium badge gold + crown ═══ */
+.ecard__badge--gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: linear-gradient(135deg, #FBBF24, #F59E0B) !important;
+  color: #1a1204 !important;
+  font-weight: 800;
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.45);
+}
+.ecard__badge--gold svg { flex-shrink: 0; }

@@ -10,6 +10,7 @@ type Business = {
   type: BusinessType
   area: string
   badge?: string
+  is_premium?: boolean
   vibe: string[]
   reason: string
   open: boolean
@@ -100,12 +101,22 @@ export default function BusinessCardV4({
         </div>
       </div>
 
-      {badge_placeholder(business.badge)}
+      {badge_placeholder(business.badge, business.is_premium)}
     </a>
   )
 }
 
-function badge_placeholder(badge: string | undefined) {
-  if (!badge) return null
-  return <span className="v4card__badge">{badge}</span>
+function badge_placeholder(badge: string | undefined, isPremium?: boolean) {
+  if (!badge && !isPremium) return null
+  const label = isPremium ? 'مميز' : badge
+  return (
+    <span className={`v4card__badge ${isPremium || badge === 'مميز' ? 'v4card__badge--premium' : ''}`}>
+      {(isPremium || badge === 'مميز') && (
+        <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden>
+          <path d="M12 2l2.39 7.36H22l-6.2 4.5 2.39 7.36L12 16.72 5.81 21.22 8.2 13.86 2 9.36h7.61L12 2z" />
+        </svg>
+      )}
+      <span>{label}</span>
+    </span>
+  )
 }

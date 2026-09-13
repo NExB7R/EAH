@@ -17,6 +17,7 @@ type Business = {
   type: BusinessType
   area: string
   badge?: string
+  is_premium?: boolean
   vibe: string[]
   reason: string
   open: boolean
@@ -82,9 +83,14 @@ export default function ExploreCard({ business }: { business: Business; size?: s
         <div className="ecard__cover-overlay" />
 
         {/* Badge */}
-        {business.badge && (
-          <span className={`ecard__badge ${business.badge === 'مميز' ? 'ecard__badge--gold' : ''}`}>
-            {business.badge}
+        {(business.badge || business.is_premium) && (
+          <span className={`ecard__badge ${business.is_premium || business.badge === 'مميز' ? 'ecard__badge--gold' : ''}`}>
+            {(business.is_premium || business.badge === 'مميز') && (
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden>
+                <path d="M12 2l2.39 7.36H22l-6.2 4.5 2.39 7.36L12 16.72 5.81 21.22 8.2 13.86 2 9.36h7.61L12 2z" />
+              </svg>
+            )}
+            {business.is_premium ? 'مميز' : business.badge}
           </span>
         )}
 

@@ -198,3 +198,20 @@
   .v4card, .v4card__emoji { transition: none; }
   .v4card__live .v4card__dot { animation: none; }
 }
+
+/* ═══ Premium badge — 2026 ═══ */
+.v4card__badge--premium {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #FBBF24, #F59E0B) !important;
+  color: #1a1204 !important;
+  font-weight: 800;
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.5), 0 0 4px rgba(251, 191, 36, 0.7) inset;
+  animation: premShimmer 3s ease-in-out infinite;
+}
+@keyframes premShimmer {
+  0%, 100% { box-shadow: 0 0 14px rgba(251, 191, 36, 0.5); }
+  50%      { box-shadow: 0 0 22px rgba(251, 191, 36, 0.75); }
+}
+.v4card__badge--premium svg { flex-shrink: 0; }

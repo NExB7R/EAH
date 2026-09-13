@@ -172,3 +172,24 @@ export async function requestSubscription(
     return { ok: false, error: String(e) }
   }
 }
+
+
+/* ═══ Bulk: جلب business IDs المشتركة ═══ */
+export async function getSubscribedBusinessIds(
+  businessIds: string[]
+): Promise<Set<string>> {
+  if (businessIds.length === 0) return new Set()
+  try {
+    const supabase = await createClient()
+    const nowIso = new Date().toISOString()
+    const { data } = await supabase
+      .from('business_subscriptions')
+      .select('business_id')
+      .in('business_id', businessIds)
+      .in('status', ['trial', 'active'])
+      .gte('expires_at', nowIso)
+    return new Set((data ?? []).map((r: { business_id: string }) => r.business_id))
+  } catch {
+    return new Set()
+  }
+}
