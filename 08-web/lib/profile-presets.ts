@@ -3,7 +3,8 @@ export type Category = 'customer' | 'merchant' | 'admin'
 export type Gender = 'male' | 'female'
 
 export type PresetAvatar = { key: string; from: string; to: string }
-export type PresetTitle = { key: string; label: string; emoji: string; hint: string; gender: Gender | 'both'; category: Category }
+export type BusinessKind = 'restaurant' | 'pharmacy' | 'delivery_office' | 'any'
+export type PresetTitle = { key: string; label: string; emoji: string; hint: string; gender: Gender | 'both'; category: Category; businessKind?: BusinessKind }
 export type PresetFrame = { key: string; label: string; border: string; glow: string; category: Category; decoration?: 'crown' | 'store' | 'shield' }
 
 export const AVATARS: PresetAvatar[] = [
@@ -64,7 +65,32 @@ export const TITLES: PresetTitle[] = [
   { key: 'ellabwa',      label: 'اللبؤة',         emoji: '🦁', hint: 'للقائدات',     gender: 'female', category: 'customer' },
   { key: 'elmalika',     label: 'الملكة',         emoji: '👸', hint: 'للملكات',      gender: 'female', category: 'customer' },
 
-  // ═══ MERCHANT exclusive ═══
+  // ═══ MERCHANT — مطاعم ═══
+  { key: 'chef_kbir',       label: 'الشيف الكبير',    emoji: '👨‍🍳', hint: 'للمطاعم',     gender: 'both',   category: 'merchant', businessKind: 'restaurant' },
+  { key: 'saheb_matbakh',   label: 'صاحب المطبخ',      emoji: '🍳',  hint: 'للمطاعم',     gender: 'both',   category: 'merchant', businessKind: 'restaurant' },
+  { key: 'sultan_elakl',    label: 'سلطان الأكل',      emoji: '👑',  hint: 'للمطاعم',     gender: 'both',   category: 'merchant', businessKind: 'restaurant' },
+  { key: 'ostaz_elfteer',   label: 'أستاذ الفتير',     emoji: '🥙',  hint: 'للفتير',       gender: 'both',   category: 'merchant', businessKind: 'restaurant' },
+  { key: 'malik_elmashawy', label: 'ملك المشاوي',      emoji: '🍖',  hint: 'للمشاوي',     gender: 'both',   category: 'merchant', businessKind: 'restaurant' },
+  { key: 'shanawi',         label: 'الشناوي',          emoji: '🥩',  hint: 'للمطاعم',     gender: 'male',   category: 'merchant', businessKind: 'restaurant' },
+  { key: 'shanawiya',       label: 'الشناوية',         emoji: '🥩',  hint: 'للمطاعم',     gender: 'female', category: 'merchant', businessKind: 'restaurant' },
+
+  // ═══ MERCHANT — صيدليات ═══
+  { key: 'doctor_saheb',    label: 'الدكتور',          emoji: '🩺',  hint: 'للصيدليات',   gender: 'male',   category: 'merchant', businessKind: 'pharmacy' },
+  { key: 'doctora',         label: 'الدكتورة',         emoji: '🩺',  hint: 'للصيدليات',   gender: 'female', category: 'merchant', businessKind: 'pharmacy' },
+  { key: 'saheb_saidaliya', label: 'صاحب الصيدلية',    emoji: '💊',  hint: 'للصيدليات',   gender: 'both',   category: 'merchant', businessKind: 'pharmacy' },
+  { key: 'elattar',         label: 'العطار',           emoji: '🌿',  hint: 'للصيدليات',   gender: 'male',   category: 'merchant', businessKind: 'pharmacy' },
+  { key: 'elattara',        label: 'العطارة',          emoji: '🌿',  hint: 'للصيدليات',   gender: 'female', category: 'merchant', businessKind: 'pharmacy' },
+  { key: 'hakim_elbalad',   label: 'حكيم البلد',       emoji: '⚕️',  hint: 'للصيدليات',   gender: 'both',   category: 'merchant', businessKind: 'pharmacy' },
+  { key: 'dawa_w_shifa',    label: 'دوا وشفا',         emoji: '💚',  hint: 'للصيدليات',   gender: 'both',   category: 'merchant', businessKind: 'pharmacy' },
+
+  // ═══ MERCHANT — توصيل ═══
+  { key: 'captain_eltawsil', label: 'كابتن التوصيل',   emoji: '🛵',  hint: 'للتوصيل',     gender: 'male',   category: 'merchant', businessKind: 'delivery_office' },
+  { key: 'captainA',         label: 'الكابتن',          emoji: '🛵',  hint: 'للتوصيل',     gender: 'both',   category: 'merchant', businessKind: 'delivery_office' },
+  { key: 'saheb_elmaktab',   label: 'صاحب المكتب',     emoji: '📦',  hint: 'للتوصيل',     gender: 'both',   category: 'merchant', businessKind: 'delivery_office' },
+  { key: 'saree3',           label: 'السريع',          emoji: '⚡',  hint: 'للتوصيل',     gender: 'both',   category: 'merchant', businessKind: 'delivery_office' },
+  { key: 'tayer_eltayer',    label: 'الطاير',          emoji: '🦅',  hint: 'للتوصيل',     gender: 'both',   category: 'merchant', businessKind: 'delivery_office' },
+
+  // ═══ MERCHANT — عام ═══
   { key: 'sheikh_toggar', label: 'شيخ التجار',    emoji: '🎩', hint: 'للتجار',        gender: 'both', category: 'merchant' },
   { key: 'saheb_makan',   label: 'صاحب المكان',   emoji: '🏪', hint: 'للمالكين',      gender: 'both', category: 'merchant' },
   { key: 'elassta_kbir',  label: 'الأسطى الكبير', emoji: '🛠️', hint: 'للمحترفين',    gender: 'both', category: 'merchant' },
@@ -122,14 +148,23 @@ export function getAvatar(k: string | null | undefined) { return AVATARS.find(a 
 export function getTitle(k: string | null | undefined)  { return TITLES.find(t => t.key === k) ?? TITLES[0] }
 export function getFrame(k: string | null | undefined)  { return FRAMES.find(f => f.key === k) ?? FRAMES[0] }
 
-export function titlesForRole(role: Role | null | undefined, gender: Gender | null | undefined): PresetTitle[] {
+export function titlesForRole(
+  role: Role | null | undefined,
+  gender: Gender | null | undefined,
+  businessTypes: string[] = []
+): PresetTitle[] {
   const r = (role ?? 'customer') as Role
   const g = (gender ?? 'male') as Gender
   return TITLES.filter(t => {
     if (t.gender !== 'both' && t.gender !== g) return false
     if (t.category === 'customer') return true
-    if (t.category === 'merchant') return canMerchant(r)
     if (t.category === 'admin') return isOwner(r)
+    if (t.category === 'merchant') {
+      if (!canMerchant(r)) return false
+      // لو الصيدلي/التاجر عنده نشاط معين، نظهر الألقاب المناسبة + العامة
+      if (!t.businessKind || t.businessKind === 'any') return true
+      return businessTypes.includes(t.businessKind)
+    }
     return false
   })
 }

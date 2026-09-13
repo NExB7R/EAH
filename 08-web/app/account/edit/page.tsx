@@ -5,6 +5,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { updateProfile } from './actions'
 import { AVATARS, framesForRole, titlesForRole, type Role } from '@/lib/profile-presets'
+import AvatarUploader from '@/components/avatar-uploader'
 import './edit.css'
 
 export const dynamic = 'force-dynamic'
@@ -26,12 +27,15 @@ export default async function EditProfilePage() {
   const currentAvatar = profile?.avatar_key ?? AVATARS[0].key
   const { data: roleRow } = await supabase
     .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
+  const { data: myBusinesses } = await supabase
+    .from('businesses').select('business_type').eq('owner_profile_id', userData.user.id)
+  const businessTypes: string[] = (myBusinesses ?? []).map((b: any) => b.business_type)
   const role = (roleRow?.role ?? 'customer') as Role
   const gender = (profile?.gender as 'male' | 'female' | undefined) ?? null
-  const availableTitles = titlesForRole(role, gender)
+  const availableTitles = titlesForRole(role, gender, businessTypes)
   const availableFrames = framesForRole(role)
   const currentTitle = profile?.title_key ?? availableTitles[0]?.key ?? 'elgoker'
-  const currentFrame = profile?.frame_key ?? FRAMES[0].key
+  const currentFrame = profile?.frame_key ?? availableFrames[0]?.key ?? 'none'
 
   return (
     <>

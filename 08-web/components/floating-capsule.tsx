@@ -20,7 +20,7 @@ type CapsuleUser = {
   banUntil: string | null
   avatarKey: string | null
   frameKey: string | null
-  avatarUrl: string | null
+  avatarUrl: string | null | undefined
 }
 
 export default function FloatingCapsuleHeader() {
@@ -66,7 +66,7 @@ export default function FloatingCapsuleHeader() {
           notifications: n.count ?? 0,
           avatarKey: p.data?.avatar_key ?? null,
           frameKey: p.data?.frame_key ?? null,
-          avatarUrl: p.data?.avatar_url ?? null,
+          avatarUrl: p.data?.avatar_url ?? undefined,
         })
       } catch {
         if (active) setLoggedIn(false)
