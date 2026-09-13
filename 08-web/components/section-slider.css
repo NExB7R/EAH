@@ -4,7 +4,6 @@
   margin: 0 auto;
   position: relative;
   width: 100%;
-  /* ← المهم: منع أي overflow */
   overflow: hidden;
 }
 
@@ -109,36 +108,39 @@
 }
 .ss__see-all svg { transform: rotate(180deg); }
 
-/* ===== Wrapper + fades ===== */
+/* ===== Wrapper — fade عن طريق mask، مش pseudo-element ===== */
 .ss__wrapper {
   position: relative;
   width: 100%;
-  /* ← المهم */
+  max-width: 100%;
   overflow: hidden;
-  isolation: isolate;
+  /* fade ناعم على الأطراف — بدون pseudo-elements */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black 40px,
+    black calc(100% - 40px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    black 40px,
+    black calc(100% - 40px),
+    transparent 100%
+  );
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
-/* شريط التلاشي: نستخدم ::before/::after بدل عنصر منفصل */
+/* إلغاء أي pseudo-elements قديمة */
 .ss__wrapper::before,
 .ss__wrapper::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50px;
-  pointer-events: none;
-  z-index: 5;
+  display: none !important;
+  content: none !important;
 }
-.ss__wrapper::before {
-  inset-inline-start: 0;
-  background: linear-gradient(to left, transparent, #050308);
-}
-.ss__wrapper::after {
-  inset-inline-end: 0;
-  background: linear-gradient(to right, transparent, #050308);
-}
-
-/* شيل أي عناصر .ss__fade من الـ HTML لو موجودة */
 .ss__fade { display: none !important; }
 
 /* ===== Track ===== */
@@ -183,18 +185,22 @@
   .ss { padding: 32px 0 40px; }
   .ss__head { padding: 0 20px 16px; }
   .ss__track { padding: 6px 20px 16px; gap: 12px; }
-  .ss__wrapper::before,
-  .ss__wrapper::after { width: 30px; }
   .ss__progress { width: 60px; }
+  .ss__wrapper {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
+  }
 }
 
 @media (max-width: 640px) {
   .ss { padding: 26px 0 34px; }
   .ss__head { padding: 0 16px 12px; }
   .ss__track { padding: 4px 16px 12px; gap: 10px; }
-  .ss__wrapper::before,
-  .ss__wrapper::after { width: 20px; }
   .ss__nav-group { display: none; }
   .ss__see-all { padding: 6px 12px; font-size: 0.72rem; }
   .ss__progress { width: 48px; }
+  .ss__wrapper {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
+  }
 }
