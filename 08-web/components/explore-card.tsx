@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react'
 import './explore-card.css'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
@@ -14,6 +15,7 @@ type Business = {
   reason: string
   open: boolean
   score?: number
+  activeOffers?: number
 }
 
 const TYPE_EMOJI: Record<BusinessType, string> = {
@@ -37,6 +39,40 @@ const TYPE_HUE: Record<BusinessType, string> = {
   delivery_office: '#E8C79A',
 }
 
+// نبذات قصيرة — بتظهر عند الهوفر
+const TYPE_HOOKS: Record<BusinessType, string[]> = {
+  restaurant: [
+    'أشهى الأطباق على مزاجك',
+    'أكل بيتي أصيل',
+    'طعم يفتح النفس',
+    'مكونات طازة يومياً',
+  ],
+  pharmacy: [
+    'دواك موجود عندنا',
+    'خدمة سريعة ومحترمة',
+    'أدوية ومستحضرات طبية',
+    'مفتوح وقت ما تحتاج',
+  ],
+  supermarket: [
+    'كل احتياجات البيت',
+    'أسعار مناسبة',
+    'بضاعة طازة يومياً',
+    'توفير وخدمة',
+  ],
+  delivery_office: [
+    'توصيل سريع وآمن',
+    'تغطية واسعة',
+    'أمانة في التسليم',
+    'أسعار تنافسية',
+  ],
+}
+
+function getHook(type: BusinessType, slug: string): string {
+  const list = TYPE_HOOKS[type]
+  const hash = slug.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0)
+  return list[hash % list.length]
+}
+
 export default function ExploreCard({
   business,
   size = 'md',
@@ -44,18 +80,25 @@ export default function ExploreCard({
   business: Business
   size?: CardSize
 }) {
+  const [hovered, setHovered] = useState(false)
+  const hook = getHook(business.type, business.slug)
+
   return (
     <a
       href={`/businesses/${business.slug}`}
-      className={`ecard ecard--${size}`}
+      className={`ecard ecard--${size} ${hovered ? 'is-hovered' : ''}`}
       aria-label={business.name}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onTouchStart={() => setHovered(true)}
+      onTouchEnd={() => setTimeout(() => setHovered(false), 1500)}
       style={{ '--hue': TYPE_HUE[business.type] } as React.CSSProperties}
     >
-      {/* شريط أكسنت علوي */}
+      {/* شريط أكسنت */}
       <span className="ecard__accent" aria-hidden />
 
       <div className="ecard__inner">
-        {/* Top row */}
+        {/* Top */}
         <div className="ecard__top">
           <span className="ecard__type">
             {TYPE_EMOJI[business.type]} {TYPE_LABEL[business.type]}
@@ -79,6 +122,27 @@ export default function ExploreCard({
               <span className="ecard__score">★ {(business.score * 5).toFixed(1)}</span>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* ===== Reveal Panel — يظهر عند hover ===== */}
+      <div className="ecard__reveal" aria-hidden>
+        <div className="ecard__reveal-inner">
+          <span className="ecard__reveal-emoji">{TYPE_EMOJI[business.type]}</span>
+          <p className="ecard__reveal-hook">{hook}</p>
+          {business.vibe.length > 0 && (
+            <div className="ecard__reveal-vibes">
+              {business.vibe.slice(0, 3).map((v) => (
+                <span key={v} className="ecard__reveal-vibe">#{v}</span>
+              ))}
+            </div>
+          )}
+          {business.activeOffers && business.activeOffers > 0 && (
+            <span className="ecard__reveal-offer">
+              🔥 {business.activeOffers} عرض نشط
+            </span>
+          )}
+          <span className="ecard__reveal-cta">اكتشف المكان ←</span>
         </div>
       </div>
 

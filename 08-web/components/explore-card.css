@@ -1,6 +1,6 @@
 /* ============================================================
-   EAH Card — Clean Accent (Final)
-   بسيط، نظيف، سريع
+   EAH Card — Clean Accent + Hover Reveal
+   تصميم 2027 — بسيط + Reveal خفيف
    ============================================================ */
 
 .ecard {
@@ -18,19 +18,10 @@
   will-change: transform;
 }
 
-.ecard:hover {
+.ecard:hover,
+.ecard.is-hovered {
   transform: translateY(-4px);
   border-color: var(--hue);
-}
-
-/* شريط أكسنت علوي */
-.ecard__accent {
-  position: absolute;
-  top: 0;
-  inset-inline: 0;
-  height: 3px;
-  background: linear-gradient(90deg, transparent, var(--hue), transparent);
-  z-index: 2;
 }
 
 /* ===== Sizes ===== */
@@ -38,11 +29,21 @@
 .ecard--lg   { width: 220px; height: 300px; }
 .ecard--md   { width: 200px; height: 280px; }
 
-/* في الـ grid، الكارد بتاخد حجم الخلية */
+/* في الـ grid، ملء الخلية */
 .explore__grid .ecard {
   width: 100% !important;
   height: 100% !important;
   min-height: 200px;
+}
+
+/* ===== Accent bar ===== */
+.ecard__accent {
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--hue), transparent);
+  z-index: 4;
 }
 
 /* ===== Inner ===== */
@@ -51,6 +52,14 @@
   flex-direction: column;
   height: 100%;
   padding: 12px;
+  position: relative;
+  z-index: 2;
+  transition: opacity 300ms ease;
+}
+
+.ecard:hover .ecard__inner,
+.ecard.is-hovered .ecard__inner {
+  opacity: 0.15;
 }
 
 /* Top */
@@ -103,7 +112,6 @@
   justify-content: center;
   margin: 4px 0;
 }
-
 .ecard__emoji {
   font-size: 3.2rem;
   line-height: 1;
@@ -119,7 +127,6 @@
   flex-direction: column;
   gap: 3px;
 }
-
 .ecard__name {
   font-family: var(--eah-font-display);
   font-size: 0.95rem;
@@ -153,7 +160,99 @@
   flex-shrink: 0;
 }
 
-/* Badge */
+/* ============================================================
+   Reveal Panel — يظهر عند hover/touch
+   ============================================================ */
+.ecard__reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(15, 11, 26, 0.55);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.ecard:hover .ecard__reveal,
+.ecard.is-hovered .ecard__reveal {
+  opacity: 1;
+}
+
+.ecard__reveal-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  transform: translateY(8px);
+  transition: transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  max-width: 100%;
+}
+
+.ecard:hover .ecard__reveal-inner,
+.ecard.is-hovered .ecard__reveal-inner {
+  transform: translateY(0);
+}
+
+.ecard__reveal-emoji {
+  font-size: 2.4rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 16px var(--hue));
+}
+
+.ecard__reveal-hook {
+  font-family: var(--eah-font-display);
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+  line-height: 1.4;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+.ecard--hero .ecard__reveal-hook { font-size: 1.05rem; }
+
+.ecard__reveal-vibes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+.ecard__reveal-vibe {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--hue) 20%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hue) 40%, transparent);
+  color: var(--hue);
+  font-family: var(--eah-font-body);
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
+.ecard__reveal-offer {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--eah-gradient-gold);
+  color: var(--eah-black-2);
+  font-family: var(--eah-font-body);
+  font-size: 0.62rem;
+  font-weight: 900;
+}
+
+.ecard__reveal-cta {
+  font-family: var(--eah-font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--hue);
+  margin-top: 2px;
+}
+
+/* ===== Badge ===== */
 .ecard__badge {
   position: absolute;
   top: 42px;
@@ -165,10 +264,15 @@
   font-family: var(--eah-font-body);
   font-size: 0.52rem;
   font-weight: 900;
-  z-index: 3;
+  z-index: 5;
+  transition: opacity 300ms ease;
+}
+.ecard:hover .ecard__badge,
+.ecard.is-hovered .ecard__badge {
+  opacity: 0;
 }
 
-/* Responsive */
+/* ===== Responsive ===== */
 @media (max-width: 900px) {
   .ecard--hero { width: 230px; height: 290px; }
   .ecard--lg   { width: 200px; height: 270px; }
@@ -180,8 +284,18 @@
   .ecard--md   { width: 165px; height: 230px; }
   .ecard__emoji { font-size: 2.8rem; }
   .ecard--hero .ecard__emoji { font-size: 3.4rem; }
+  .ecard__reveal-hook { font-size: 0.85rem; }
+}
+
+/* Touch: تأثير خفيف بدل hover */
+@media (hover: none) {
+  .ecard__reveal {
+    background: rgba(15, 11, 26, 0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ecard, .ecard__emoji { transition: none; }
+  .ecard, .ecard__emoji, .ecard__reveal, .ecard__reveal-inner { transition: none; }
 }
