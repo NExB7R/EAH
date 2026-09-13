@@ -8,7 +8,7 @@ export default function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
-        <div className="site-footer__brand"><EahLogo size="md" variant="full" /></div>
+        <div className="site-footer__brand"><EahLogo size="md" variant="full" href="/" /></div>
 
         {/* فلسطين */}
         <div className="site-footer__palestine">

@@ -18,7 +18,7 @@ export default function EahLogo({
   size = 'md',
   className = '',
   active = false,
-  href,
+  href = '/',
 }: EahLogoProps) {
   const showWord = variant !== 'crown'
   const showCrown = variant === 'full' || variant === 'compact' || variant === 'crown'

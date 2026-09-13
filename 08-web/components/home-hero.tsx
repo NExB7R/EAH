@@ -7,7 +7,7 @@ export default function HomeHero() {
   return (
     <section className="home-hero">
       <div className="home-hero__inner">
-        <div className="home-hero__logo"><EahLogo size="xl" variant="full" /></div>
+        <div className="home-hero__logo"><EahLogo size="xl" variant="full" href="/" /></div>
 
         <div className="home-hero__city">
           <span className="home-hero__city-line" aria-hidden />
