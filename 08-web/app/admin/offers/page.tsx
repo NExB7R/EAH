@@ -20,16 +20,20 @@ type Offer = {
   businesses: { name: string; slug: string; business_type: string } | null
 }
 
+const TYPE_EMOJI: Record<string, string> = {
+  restaurant: '🍽️',
+  pharmacy: '💊',
+  supermarket: '🛒',
+  delivery_office: '🛵',
+}
+
 export default async function AllOffersPage() {
   const supabase = await createClient()
   const { data: userData } = await supabase.auth.getUser()
   if (!userData.user) redirect('/admin/login')
 
   const { data: roleRow } = await supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', userData.user.id)
-    .maybeSingle()
+    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
   if (roleRow?.role !== 'super_admin') redirect('/')
 
   const { data, error } = await supabase
@@ -56,9 +60,7 @@ export default async function AllOffersPage() {
         <div className="admin-header__info">
           <span className="admin-header__kicker">ALL OFFERS</span>
           <h1 className="admin-header__title">🔥 كل العروض</h1>
-          <p className="admin-header__subtitle">
-            {rows.length} عرض في كل الأنشطة
-          </p>
+          <p className="admin-header__subtitle">{rows.length} عرض في كل الأنشطة</p>
         </div>
       </div>
 
@@ -67,12 +69,10 @@ export default async function AllOffersPage() {
           <span className="admin-empty__emoji">🔥</span>
           <h2 className="admin-empty__title">لسه مفيش عروض</h2>
           <p className="admin-empty__msg">اذهب لأي مكان وأضف أول عرض</p>
-          <Link href="/admin/businesses" className="admin-btn admin-btn--primary">
-            🏪 الأنشطة
-          </Link>
+          <Link href="/admin/businesses" className="admin-btn admin-btn--primary">🏪 الأنشطة</Link>
         </div>
       ) : (
-        <div className="admin-grid admin-grid--cards">
+        <div className="offers-grid">
           {rows.map((o) => {
             const img = o.image_url || o.teaser_image_path
             const isActive =
@@ -81,66 +81,84 @@ export default async function AllOffersPage() {
               (!o.ends_at || new Date(o.ends_at) >= new Date())
 
             return (
-              <article key={o.id} className="admin-biz">
-                <div className="admin-biz__head">
-                  <div
-                    className="admin-biz__thumb"
-                    style={{
-                      backgroundImage: img ? `url(${img})` : undefined,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      fontSize: img ? 0 : undefined,
-                    }}
-                  >
-                    {!img && '🎁'}
-                  </div>
-                  <div className="admin-biz__meta">
-                    <h3 className="admin-biz__name">{o.title}</h3>
-                    {o.businesses && (
-                      <span className="admin-biz__slug">
-                        🏪 {o.businesses.name}
+              <article key={o.id} className="offer-card">
+                {/* صورة العرض */}
+                <div
+                  className="offer-card__image"
+                  style={img ? { backgroundImage: `url(${img})` } : undefined}
+                >
+                  {!img && <span className="offer-card__image-placeholder">🎁</span>}
+
+                  {/* شارات */}
+                  <div className="offer-card__badges">
+                    {isActive ? (
+                      <span className="offer-card__badge offer-card__badge--active">
+                        <span className="offer-card__badge-dot" />
+                        نشط
                       </span>
+                    ) : o.is_published ? (
+                      <span className="offer-card__badge offer-card__badge--pending">⏰ مش نشط</span>
+                    ) : (
+                      <span className="offer-card__badge offer-card__badge--off">🚫 غير منشور</span>
                     )}
-                    {o.price !== null && (
-                      <span style={{ fontSize: '0.85rem', color: 'var(--eah-gold)', fontWeight: 900 }}>
-                        {o.price} ج.م
-                      </span>
-                    )}
-                    <div className="admin-biz__badges">
-                      {isActive ? (
-                        <span className="admin-biz__badge admin-biz__badge--open">✅ نشط</span>
-                      ) : o.is_published ? (
-                        <span className="admin-biz__badge">⏰ مش نشط</span>
-                      ) : (
-                        <span className="admin-biz__badge">🚫 غير منشور</span>
-                      )}
-                      {o.ends_at && (
-                        <span className="admin-biz__badge">
-                          ينتهي: {new Date(o.ends_at).toLocaleDateString('ar-EG')}
-                        </span>
-                      )}
-                    </div>
                   </div>
+
+                  {/* السعر */}
+                  {o.price !== null && (
+                    <span className="offer-card__price">{o.price} ج.م</span>
+                  )}
                 </div>
 
+                {/* المحتوى */}
+                <div className="offer-card__body">
+                  {/* اسم المطعم — بارز */}
+                  {o.businesses && (
+                    <Link
+                      href={`/admin/businesses/${o.businesses.slug}/edit`}
+                      className="offer-card__biz"
+                    >
+                      <span className="offer-card__biz-icon">
+                        {TYPE_EMOJI[o.businesses.business_type] ?? '🏪'}
+                      </span>
+                      <span className="offer-card__biz-name">{o.businesses.name}</span>
+                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="offer-card__biz-arrow">
+                        <path d="M9 6l6 6-6 6" />
+                      </svg>
+                    </Link>
+                  )}
+
+                  {/* عنوان العرض */}
+                  <h3 className="offer-card__title">{o.title}</h3>
+
+                  {o.description && (
+                    <p className="offer-card__desc">{o.description}</p>
+                  )}
+
+                  {o.ends_at && (
+                    <div className="offer-card__meta">
+                      <span className="offer-card__meta-item">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M12 6v6l4 2" />
+                        </svg>
+                        ينتهي {new Date(o.ends_at).toLocaleDateString('ar-EG')}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* الأفعال */}
                 {o.businesses && (
-                  <div className="admin-biz__actions">
+                  <div className="offer-card__actions">
                     <Link
                       href={`/admin/businesses/${o.businesses.slug}/offers/${o.id}/edit`}
-                      className="admin-btn admin-btn--sm admin-btn--primary"
+                      className="offer-card__btn offer-card__btn--primary"
                     >
                       ✏️ تعديل
                     </Link>
                     <Link
-                      href={`/businesses/${o.businesses.slug}`}
-                      target="_blank"
-                      className="admin-btn admin-btn--sm"
-                    >
-                      👁 مشاهدة
-                    </Link>
-                    <Link
                       href={`/admin/businesses/${o.businesses.slug}/offers`}
-                      className="admin-btn admin-btn--sm"
+                      className="offer-card__btn"
                     >
                       🔥 عروض المكان
                     </Link>

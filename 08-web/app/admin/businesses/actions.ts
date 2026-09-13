@@ -13,10 +13,7 @@ async function assertAdmin() {
   const { data: userData } = await supabase.auth.getUser()
   if (!userData.user) redirect('/admin/login')
   const { data: roleRow } = await supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', userData.user.id)
-    .maybeSingle()
+    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
   if (roleRow?.role !== 'super_admin') throw new Error('Unauthorized')
   return { supabase, user: userData.user }
 }
@@ -31,22 +28,18 @@ function formToObj(formData: FormData) {
     description: String(formData.get('description') ?? ''),
     hook: String(formData.get('hook') ?? ''),
     address_text: String(formData.get('address_text') ?? ''),
+    map_url: String(formData.get('map_url') ?? ''),
     cover_image_url: String(formData.get('cover_image_url') ?? ''),
     gallery_json: String(formData.get('gallery_json') ?? '[]'),
     menu_json: String(formData.get('menu_json') ?? '[]'),
     working_hours_json: String(formData.get('working_hours_json') ?? '{}'),
     contacts_json: String(formData.get('contacts_json') ?? '[]'),
-    latitude: String(formData.get('latitude') ?? ''),
-    longitude: String(formData.get('longitude') ?? ''),
     is_open: formData.get('is_open') === 'on',
     is_featured: formData.get('is_featured') === 'on',
     is_published: formData.get('is_published') === 'on',
   }
 }
 
-// ============================================================
-// CREATE
-// ============================================================
 export async function createBusiness(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const parsed = businessSchema.safeParse(formToObj(formData))
   if (!parsed.success) {
@@ -76,9 +69,8 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
       description: data.description,
       hook: data.hook,
       address_text: data.address_text,
+      map_url: data.map_url,
       cover_image_url: data.cover_image_url || (gallery[0] ?? null),
-      latitude: data.latitude,
-      longitude: data.longitude,
       working_hours: workingHours,
       is_open: data.is_open,
       is_featured: data.is_featured,
@@ -140,9 +132,6 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
   redirect(`/admin/businesses/${created.slug}/edit?saved=1`)
 }
 
-// ============================================================
-// UPDATE
-// ============================================================
 export async function updateBusiness(id: string, _prev: ActionState, formData: FormData): Promise<ActionState> {
   const parsed = businessSchema.safeParse(formToObj(formData))
   if (!parsed.success) {
@@ -173,9 +162,8 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
     description: data.description,
     hook: data.hook,
     address_text: data.address_text,
+    map_url: data.map_url,
     cover_image_url: data.cover_image_url || (gallery[0] ?? null),
-    latitude: data.latitude,
-    longitude: data.longitude,
     working_hours: workingHours,
     is_open: data.is_open,
     is_featured: data.is_featured,
@@ -239,9 +227,6 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
   return { ok: true, message: 'تم الحفظ ✅' }
 }
 
-// ============================================================
-// DELETE
-// ============================================================
 export async function deleteBusiness(id: string): Promise<ActionState> {
   const { supabase, user } = await assertAdmin()
   const { data: before } = await supabase.from('businesses').select('*').eq('id', id).maybeSingle()
@@ -261,9 +246,6 @@ export async function deleteBusiness(id: string): Promise<ActionState> {
   return { ok: true, message: 'تم الحذف' }
 }
 
-// ============================================================
-// TOGGLE
-// ============================================================
 export async function toggleBusinessFlag(id: string, flag: 'is_featured' | 'is_published' | 'is_open'): Promise<ActionState> {
   const { supabase, user } = await assertAdmin()
   const { data: current } = await supabase.from('businesses').select(flag).eq('id', id).maybeSingle()

@@ -20,9 +20,8 @@ type Props = {
     description?: string | null
     hook?: string | null
     address_text?: string | null
+    map_url?: string | null
     cover_image_url?: string | null
-    latitude?: number | null
-    longitude?: number | null
     working_hours?: WorkingHours
     contacts?: Contact[]
     gallery?: string[]
@@ -54,6 +53,7 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
   const [name, setName] = useState(initial?.name ?? '')
   const [slug, setSlug] = useState(initial?.slug ?? '')
   const [slugTouched, setSlugTouched] = useState(mode === 'edit')
+  const [mapUrl, setMapUrl] = useState(initial?.map_url ?? '')
 
   const handleNameChange = (v: string) => {
     setName(v)
@@ -101,6 +101,41 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
           <div className="admin-field admin-field--full">
             <label className="admin-field__label" htmlFor="address_text">العنوان التفصيلي</label>
             <input id="address_text" name="address_text" className="admin-input" defaultValue={initial?.address_text ?? ''} placeholder="شارع الجمهورية، أمام البنك" />
+          </div>
+
+          {/* Map URL */}
+          <div className="admin-field admin-field--full">
+            <label className="admin-field__label" htmlFor="map_url">
+              📍 رابط الموقع على الخريطة
+            </label>
+            <input
+              id="map_url"
+              name="map_url"
+              type="url"
+              className="admin-input"
+              dir="ltr"
+              value={mapUrl}
+              onChange={(e) => setMapUrl(e.target.value)}
+              placeholder="https://maps.app.goo.gl/xxxxx"
+            />
+            <span className="admin-field__hint">
+              افتح Google Maps → اختار المكان → Share → Copy link → الصق الرابط هنا
+            </span>
+            {mapUrl && (
+              <a
+                href={mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="admin-map-preview"
+              >
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                فتح الموقع على الخريطة ↗
+              </a>
+            )}
+            {err('map_url') && <span className="admin-field__hint" style={{ color: 'var(--eah-red)' }}>{err('map_url')}</span>}
           </div>
         </div>
       </section>
@@ -152,20 +187,6 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
       <section className="admin-form__section">
         <h2 className="admin-form__section-title">أوقات العمل</h2>
         <WorkingHoursEditor initial={initial?.working_hours ?? {}} />
-      </section>
-
-      <section className="admin-form__section">
-        <h2 className="admin-form__section-title">الموقع الجغرافي (اختياري)</h2>
-        <div className="admin-form__grid">
-          <div className="admin-field">
-            <label className="admin-field__label" htmlFor="latitude">Latitude</label>
-            <input id="latitude" name="latitude" className="admin-input" dir="ltr" defaultValue={initial?.latitude ?? ''} placeholder="30.1234" />
-          </div>
-          <div className="admin-field">
-            <label className="admin-field__label" htmlFor="longitude">Longitude</label>
-            <input id="longitude" name="longitude" className="admin-input" dir="ltr" defaultValue={initial?.longitude ?? ''} placeholder="31.2345" />
-          </div>
-        </div>
       </section>
 
       <section className="admin-form__section">
