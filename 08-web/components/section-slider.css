@@ -4,6 +4,7 @@
   margin: 0 auto;
   position: relative;
   width: 100%;
+  /* ← المهم: منع أي overflow */
   overflow: hidden;
 }
 
@@ -112,24 +113,33 @@
 .ss__wrapper {
   position: relative;
   width: 100%;
+  /* ← المهم */
   overflow: hidden;
+  isolation: isolate;
 }
 
-.ss__fade {
+/* شريط التلاشي: نستخدم ::before/::after بدل عنصر منفصل */
+.ss__wrapper::before,
+.ss__wrapper::after {
+  content: '';
   position: absolute;
-  top: 0; bottom: 0;
-  width: 60px;
-  z-index: 5;
+  top: 0;
+  bottom: 0;
+  width: 50px;
   pointer-events: none;
+  z-index: 5;
 }
-.ss__fade--start {
+.ss__wrapper::before {
   inset-inline-start: 0;
   background: linear-gradient(to left, transparent, #050308);
 }
-.ss__fade--end {
+.ss__wrapper::after {
   inset-inline-end: 0;
   background: linear-gradient(to right, transparent, #050308);
 }
+
+/* شيل أي عناصر .ss__fade من الـ HTML لو موجودة */
+.ss__fade { display: none !important; }
 
 /* ===== Track ===== */
 .ss__track {
@@ -173,7 +183,8 @@
   .ss { padding: 32px 0 40px; }
   .ss__head { padding: 0 20px 16px; }
   .ss__track { padding: 6px 20px 16px; gap: 12px; }
-  .ss__fade { width: 40px; }
+  .ss__wrapper::before,
+  .ss__wrapper::after { width: 30px; }
   .ss__progress { width: 60px; }
 }
 
@@ -181,36 +192,9 @@
   .ss { padding: 26px 0 34px; }
   .ss__head { padding: 0 16px 12px; }
   .ss__track { padding: 4px 16px 12px; gap: 10px; }
-  .ss__fade { width: 24px; }
+  .ss__wrapper::before,
+  .ss__wrapper::after { width: 20px; }
   .ss__nav-group { display: none; }
   .ss__see-all { padding: 6px 12px; font-size: 0.72rem; }
   .ss__progress { width: 48px; }
-}
-
-/* ===== Fix RTL scroll-snap bleed ===== */
-.ss__track {
-  overscroll-behavior-x: contain;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* على RTL، نضيف scroll-padding عشان أول بطاقة تبان كاملة */
-.ss__track {
-  scroll-padding-inline-start: 24px;
-  scroll-padding-inline-end: 24px;
-}
-
-@media (max-width: 640px) {
-  .ss__track {
-    scroll-padding-inline-start: 16px;
-    scroll-padding-inline-end: 16px;
-  }
-}
-
-/* الـ track نفسه هو اللي بيتحرك أفقيًا، مش الصفحة */
-.ss__wrapper {
-  width: 100%;
-  overflow: hidden;
-}
-.ss__track {
-  max-width: 100%;
 }

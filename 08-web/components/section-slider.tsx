@@ -26,7 +26,6 @@ export default function SectionSlider({
   const [canPrev, setCanPrev] = useState(false)
   const [canNext, setCanNext] = useState(true)
 
-  // تحديث الـ progress
   useEffect(() => {
     const el = scrollRef.current
     if (!el) return
@@ -43,7 +42,6 @@ export default function SectionSlider({
     return () => el.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Auto-scroll (يتوقف عند hover/touch)
   useEffect(() => {
     if (paused) return
     const el = scrollRef.current
@@ -111,9 +109,6 @@ export default function SectionSlider({
       </div>
 
       <div className="ss__wrapper">
-        <div className="ss__fade ss__fade--start" aria-hidden />
-        <div className="ss__fade ss__fade--end" aria-hidden />
-
         <div
           ref={scrollRef}
           className="ss__track"
@@ -126,7 +121,6 @@ export default function SectionSlider({
         </div>
       </div>
 
-      {/* Progress bar */}
       <div className="ss__progress" aria-hidden>
         <div
           className="ss__progress-bar"
