@@ -2,6 +2,7 @@ import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import BackToTop from '@/components/back-to-top'
+import PointsExplainer from '@/components/points-explainer'
 
 export const metadata = { title: 'نبذة عننا | EAH' }
 
@@ -42,6 +43,7 @@ export default function AboutPage() {
           </p>
         </div>
       </main>
+      <PointsExplainer />
       <SiteFooter />
     </>
   )
