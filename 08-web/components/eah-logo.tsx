@@ -21,7 +21,7 @@ export default function EahLogo({
   href = '/',
 }: EahLogoProps) {
   const showWord = variant !== 'crown'
-  const showCrown = (variant === 'full' || variant === 'compact' || variant === 'crown') && variant !== 'mark'
+  const showCrown = variant === 'full' || variant === 'compact' || variant === 'crown'
   const showSlogan = variant === 'full'
 
   const inner = (
