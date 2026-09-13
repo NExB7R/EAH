@@ -5,5 +5,5 @@ Sentry.init({
   environment: process.env.NODE_ENV,
   tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
   debug: false,
-  enabled: process.env.NODE_ENV === 'production',
+  enabled: true,
 })
