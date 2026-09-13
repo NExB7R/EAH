@@ -5,6 +5,7 @@ import NeonIconButton from './neon-icon-button'
 import UserAvatar from './user-avatar'
 import OverlayBlur from './overlay-blur'
 import { createClient } from '@/lib/supabase-browser'
+import { useUnreadCount } from '@/lib/hooks/use-unread-count'
 import { IconFacebook, IconWhatsapp, IconMenu, IconBolt, IconSearch } from './neon-icons'
 import './floating-capsule.css'
 
@@ -41,6 +42,7 @@ export default function FloatingCapsuleHeader() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [user, setUser] = useState<CapsuleUser | null>(null)
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
+  const { count: liveUnread } = useUnreadCount()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -109,7 +111,7 @@ export default function FloatingCapsuleHeader() {
               <UserAvatar
                 name={user?.name ?? 'مستخدم'}
                 points={user?.points ?? 0}
-                unreadNotifications={user?.notifications ?? 0}
+                unreadNotifications={liveUnread || (user?.notifications ?? 0)}
                 banUntil={user?.banUntil ?? null}
                 avatarKey={user?.avatarKey ?? null}
                 frameKey={user?.frameKey ?? null}

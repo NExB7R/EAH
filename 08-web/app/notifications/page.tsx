@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
+import { MarkAllReadButton, DeleteNotifButton } from './notif-actions'
 import './notifications.css'
 
 export const dynamic = 'force-dynamic'
@@ -18,14 +19,16 @@ type Notif = {
   created_at: string
 }
 
-const TYPE_META: Record<string, { emoji: string; label: string }> = {
-  review:      { emoji: '✍️', label: 'تقييم' },
-  reply:       { emoji: '💬', label: 'رد' },
-  offer:       { emoji: '🔥', label: 'عرض' },
-  system:      { emoji: '⚙️', label: 'نظام' },
-  ban:         { emoji: '🚫', label: 'حظر' },
-  points:      { emoji: '⭐', label: 'نقاط' },
-  welcome:     { emoji: '🎉', label: 'ترحيب' },
+const TYPE_META: Record<string, { emoji: string; label: string; color: string }> = {
+  review:       { emoji: '⭐', label: 'تقييم',   color: '#FBBF24' },
+  reply:        { emoji: '💬', label: 'رد',      color: '#A855F7' },
+  offer:        { emoji: '🔥', label: 'عرض',     color: '#F97316' },
+  system:       { emoji: '⚙️', label: 'نظام',   color: '#6B6880' },
+  ban:          { emoji: '🚫', label: 'حظر',     color: '#EF4444' },
+  points:       { emoji: '⭐', label: 'نقاط',   color: '#FBBF24' },
+  welcome:      { emoji: '🎉', label: 'ترحيب',  color: '#4ADE80' },
+  reveal:       { emoji: '📞', label: 'كشف رقم', color: '#22C55E' },
+  verification: { emoji: '✓',  label: 'توثيق',  color: '#10B981' },
 }
 
 export default async function NotificationsPage() {
@@ -52,10 +55,13 @@ export default async function NotificationsPage() {
           <span className="nt-hero__kicker">EAH NOTIFICATIONS</span>
           <h1 className="nt-hero__title">🔔 الإشعارات</h1>
           <p className="nt-hero__lead">
-            {unreadCount > 0
-              ? `عندك ${unreadCount} إشعار جديد`
-              : 'مفيش إشعارات جديدة'}
+            {unreadCount > 0 ? `عندك ${unreadCount} إشعار جديد` : 'مفيش إشعارات جديدة'}
           </p>
+          {unreadCount > 0 && (
+            <div className="nt-hero__actions">
+              <MarkAllReadButton />
+            </div>
+          )}
         </header>
 
         {list.length === 0 ? (
@@ -68,20 +74,16 @@ export default async function NotificationsPage() {
         ) : (
           <section className="nt-list">
             {list.map(n => {
-              const meta = TYPE_META[n.type] ?? { emoji: '📬', label: n.type }
+              const meta = TYPE_META[n.type] ?? { emoji: '📬', label: n.type, color: '#A855F7' }
               const unread = !n.read_at
-              const Wrapper = (n.link ? Link : 'div') as any
-              const wrapperProps = n.link ? { href: n.link } : {}
-              return (
-                <Wrapper
-                  key={n.id}
-                  {...wrapperProps}
-                  className={`nt-item ${unread ? 'nt-item--unread' : ''}`}
-                >
-                  <span className="nt-item__emoji">{meta.emoji}</span>
+              const content = (
+                <>
+                  <span className="nt-item__emoji" style={{ borderColor: `${meta.color}44`, background: `${meta.color}15` }}>
+                    {meta.emoji}
+                  </span>
                   <div className="nt-item__body">
                     <div className="nt-item__head">
-                      <span className="nt-item__type">{meta.label}</span>
+                      <span className="nt-item__type" style={{ color: meta.color }}>{meta.label}</span>
                       {unread && <span className="nt-item__dot" />}
                     </div>
                     {n.title && <span className="nt-item__title">{n.title}</span>}
@@ -93,7 +95,17 @@ export default async function NotificationsPage() {
                       })}
                     </span>
                   </div>
-                </Wrapper>
+                  <DeleteNotifButton id={n.id} />
+                </>
+              )
+              return n.link ? (
+                <Link key={n.id} href={n.link} className={`nt-item ${unread ? 'nt-item--unread' : ''}`}>
+                  {content}
+                </Link>
+              ) : (
+                <div key={n.id} className={`nt-item ${unread ? 'nt-item--unread' : ''}`}>
+                  {content}
+                </div>
               )
             })}
           </section>
