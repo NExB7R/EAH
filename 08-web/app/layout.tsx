@@ -4,7 +4,7 @@ import '../components/eah-studio-pro.css'
 import '../components/eah-admin.css'
 import '@puckeditor/core/puck.css'
 import type { Metadata } from 'next'
-import { Cairo, Cairo_Play } from 'next/font/google'
+import { Cairo, Cairo_Play, Dancing_Script } from 'next/font/google'
 import RegisterSW from '@/components/register-sw'
 import PageViewTracker from '@/components/page-view-tracker'
 import ScrollIconsBackground from '@/components/scroll-icons-background'
@@ -23,6 +23,13 @@ const cairoPlay = Cairo_Play({
   weight: ['400', '700', '900'],
   display: 'swap',
   variable: '--font-cairo-play',
+})
+
+const signature = Dancing_Script({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
+  variable: '--font-signature',
 })
 
 export const metadata: Metadata = {
@@ -44,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="ar"
       dir="rtl"
-      className={`${cairo.variable} ${cairoPlay.variable}`}
+      className={`${cairo.variable} ${cairoPlay.variable} ${signature.variable}`}
       suppressHydrationWarning
     >
       <body>

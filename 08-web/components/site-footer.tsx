@@ -72,6 +72,9 @@ export default function SiteFooter() {
             </svg>
           </p>
           <p className="site-footer__bottom-copy">© {year} — جميع الحقوق محفوظة</p>
+          <p className="site-footer__signature" aria-label="توقيع المطور">
+            <span className="site-footer__signature-text">NourEldin B7R</span>
+          </p>
         </div>
       </div>
     </footer>

@@ -339,3 +339,17 @@
   .xcard, .xcard__emoji-wrap, .xcard__reveal { transition: none; }
   .xcard--delivery .xcard__emoji { animation: none; }
 }
+
+/* ===== إلغاء الـ 3D tilt الثقيل + spotlight ===== */
+.xcard:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+.xcard::before {
+  display: none;
+}
+.xcard {
+  transition:
+    transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1),
+    border-color 250ms ease,
+    box-shadow 350ms ease;
+}

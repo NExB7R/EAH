@@ -59,7 +59,7 @@ export default function SectionSlider({
       } else {
         el.scrollBy({ left: step, behavior: 'smooth' })
       }
-    }, 4500)
+    }, 5000)
     return () => clearInterval(timer)
   }, [paused])
 
