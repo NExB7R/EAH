@@ -10,6 +10,8 @@ export type DemoBusiness = {
   open: boolean
   featured?: boolean
   menu?: string[]
+  hook?: string
+  activeOffers?: number
 }
 
 export const demoBusinesses: DemoBusiness[] = [

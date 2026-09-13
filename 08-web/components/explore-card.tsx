@@ -16,6 +16,7 @@ type Business = {
   open: boolean
   score?: number
   activeOffers?: number
+  hook?: string
 }
 
 const TYPE_EMOJI: Record<BusinessType, string> = {
@@ -39,36 +40,16 @@ const TYPE_HUE: Record<BusinessType, string> = {
   delivery_office: '#E8C79A',
 }
 
-// نبذات قصيرة — بتظهر عند الهوفر
-const TYPE_HOOKS: Record<BusinessType, string[]> = {
-  restaurant: [
-    'أشهى الأطباق على مزاجك',
-    'أكل بيتي أصيل',
-    'طعم يفتح النفس',
-    'مكونات طازة يومياً',
-  ],
-  pharmacy: [
-    'دواك موجود عندنا',
-    'خدمة سريعة ومحترمة',
-    'أدوية ومستحضرات طبية',
-    'مفتوح وقت ما تحتاج',
-  ],
-  supermarket: [
-    'كل احتياجات البيت',
-    'أسعار مناسبة',
-    'بضاعة طازة يومياً',
-    'توفير وخدمة',
-  ],
-  delivery_office: [
-    'توصيل سريع وآمن',
-    'تغطية واسعة',
-    'أمانة في التسليم',
-    'أسعار تنافسية',
-  ],
+// هوكات افتراضية — تُستخدم لو مفيش hook مخصص
+const DEFAULT_HOOKS: Record<BusinessType, string[]> = {
+  restaurant: ['أشهى الأطباق على مزاجك', 'أكل بيتي أصيل', 'طعم يفتح النفس'],
+  pharmacy: ['دواك موجود عندنا', 'خدمة سريعة ومحترمة', 'مفتوح وقت ما تحتاج'],
+  supermarket: ['كل احتياجات البيت', 'أسعار مناسبة', 'بضاعة طازة يومياً'],
+  delivery_office: ['توصيل سريع وآمن', 'تغطية واسعة', 'أمانة في التسليم'],
 }
 
-function getHook(type: BusinessType, slug: string): string {
-  const list = TYPE_HOOKS[type]
+function fallbackHook(type: BusinessType, slug: string): string {
+  const list = DEFAULT_HOOKS[type]
   const hash = slug.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0)
   return list[hash % list.length]
 }
@@ -81,7 +62,8 @@ export default function ExploreCard({
   size?: CardSize
 }) {
   const [hovered, setHovered] = useState(false)
-  const hook = getHook(business.type, business.slug)
+  // الهوك: من DB أولاً، وإلا fallback
+  const hook = business.hook?.trim() || fallbackHook(business.type, business.slug)
 
   return (
     <a
@@ -94,11 +76,9 @@ export default function ExploreCard({
       onTouchEnd={() => setTimeout(() => setHovered(false), 1500)}
       style={{ '--hue': TYPE_HUE[business.type] } as React.CSSProperties}
     >
-      {/* شريط أكسنت */}
       <span className="ecard__accent" aria-hidden />
 
       <div className="ecard__inner">
-        {/* Top */}
         <div className="ecard__top">
           <span className="ecard__type">
             {TYPE_EMOJI[business.type]} {TYPE_LABEL[business.type]}
@@ -108,12 +88,10 @@ export default function ExploreCard({
           </span>
         </div>
 
-        {/* Emoji */}
         <div className="ecard__visual">
           <span className="ecard__emoji">{TYPE_EMOJI[business.type]}</span>
         </div>
 
-        {/* Info */}
         <div className="ecard__body">
           <h3 className="ecard__name">{business.name}</h3>
           <div className="ecard__meta">
@@ -125,7 +103,7 @@ export default function ExploreCard({
         </div>
       </div>
 
-      {/* ===== Reveal Panel — يظهر عند hover ===== */}
+      {/* Reveal Panel */}
       <div className="ecard__reveal" aria-hidden>
         <div className="ecard__reveal-inner">
           <span className="ecard__reveal-emoji">{TYPE_EMOJI[business.type]}</span>
