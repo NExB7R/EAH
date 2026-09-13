@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { getVisitorHash } from '@/lib/admin/visitor-hash'
 import './business-contact.css'
 
 type ContactMethod = {
@@ -34,31 +35,39 @@ export default function BusinessContact({
   contacts: ContactMethod[]
 }) {
   const [revealed, setRevealed] = useState<Record<string, boolean>>({})
+  const [loading, setLoading] = useState<Record<string, boolean>>({})
 
   const reveal = async (method: ContactMethod) => {
-    setRevealed((prev) => ({ ...prev, [method.method_type]: true }))
+    setLoading((p) => ({ ...p, [method.method_type]: true }))
 
-    // نُسجّل الزيارة الفريدة
     try {
-      await fetch('/api/track-reveal', {
+      const visitorHash = getVisitorHash()
+      await fetch('/api/reveal-contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           business_id: businessId,
           method_type: method.method_type,
+          visitor_hash: visitorHash,
         }),
       })
     } catch {
-      /* صامت */
+      /* silent */
     }
+
+    setRevealed((prev) => ({ ...prev, [method.method_type]: true }))
+    setLoading((p) => ({ ...p, [method.method_type]: false }))
   }
 
   if (contacts.length === 0) {
     return (
       <section className="bcontact bcontact--empty">
-        <h2 className="bcontact__title">التواصل</h2>
+        <h2 className="bcontact__title">
+          <span className="bcontact__title-icon">📞</span>
+          التواصل
+        </h2>
         <p className="bcontact__empty-msg">
-          أرقام التواصل هتظهر قريب. في الوقت الحالي، استخدم زرار الحفظ لمتابعة المكان.
+          أرقام التواصل هتظهر قريب.
         </p>
       </section>
     )
@@ -77,6 +86,7 @@ export default function BusinessContact({
       <div className="bcontact__list">
         {contacts.map((c) => {
           const isRevealed = revealed[c.method_type]
+          const isLoading = loading[c.method_type]
           const label = METHOD_LABEL[c.method_type] ?? c.method_type
           const emoji = METHOD_EMOJI[c.method_type] ?? '📌'
 
@@ -111,9 +121,12 @@ export default function BusinessContact({
                   type="button"
                   className="bcontact__reveal"
                   onClick={() => reveal(c)}
+                  disabled={isLoading}
                 >
                   <span className="bcontact__hidden">•••••••••••</span>
-                  <span className="bcontact__reveal-text">اكشف الرقم</span>
+                  <span className="bcontact__reveal-text">
+                    {isLoading ? '...' : 'اكشف الرقم'}
+                  </span>
                 </button>
               )}
             </div>
