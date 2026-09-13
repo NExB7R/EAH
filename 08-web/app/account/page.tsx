@@ -32,7 +32,7 @@ export default async function AccountPage() {
   ] = await Promise.all([
     supabase
       .from('profiles')
-      .select('display_name,phone,phone_verified_at,trust_score,created_at,banned_until,ban_reason,avatar_key,title_key,frame_key,bio,gender')
+      .select('display_name,phone,phone_verified_at,trust_score,created_at,banned_until,ban_reason,avatar_key,title_key,frame_key,bio,gender,verified_at')
       .eq('id', user.id)
       .maybeSingle(),
     supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle(),
@@ -44,7 +44,7 @@ export default async function AccountPage() {
   const role = roleRow?.role ?? 'customer'
   const roleLabel = ROLE_LABEL[role] ?? role
   const isBanned = !!(profile?.banned_until && new Date(profile.banned_until) > new Date())
-  const isVerified = !!profile?.phone_verified_at
+  const isVerified = !!profile?.verified_at
   const name = profile?.display_name ?? 'مستخدم'
   const initial = name.charAt(0).toUpperCase()
   const trustScore = profile?.trust_score ?? 0
@@ -178,6 +178,12 @@ export default async function AccountPage() {
               <span className="acc-action__emoji">✏️</span>
               تعديل البروفايل
             </Link>
+            {!profile?.verified_at && (
+              <Link href="/account/verify" className="acc-action acc-action--primary">
+                <span className="acc-action__emoji">✓</span>
+                وثّق حسابك
+              </Link>
+            )}
             <Link href="/auth/change-password" className="acc-action">
               <span className="acc-action__emoji">🔒</span>
               تغيير كلمة السر

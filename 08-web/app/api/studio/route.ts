@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase-server'
 
 async function requireAdmin() {
@@ -55,5 +56,10 @@ export async function POST(request: Request) {
     )
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
+  // Live sync: الصفحات الرئيسية هتعيد البناء فورًا
+  revalidatePath('/')
+  revalidatePath('/api/site-design')
+
   return NextResponse.json({ ok: true, savedAt: new Date().toISOString() })
 }
