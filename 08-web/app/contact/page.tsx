@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
+import { IconWhatsapp, IconFacebook } from '@/components/neon-icons'
 import './contact.css'
 
 export const metadata = {
@@ -11,7 +12,7 @@ export const metadata = {
 const CHANNELS = [
   {
     key: 'whatsapp',
-    emoji: '💬',
+    icon: 'whatsapp',
     title: 'واتساب',
     value: 'للرد السريع',
     href: 'https://wa.me/201012892806',
@@ -20,7 +21,7 @@ const CHANNELS = [
   },
   {
     key: 'facebook',
-    emoji: '📘',
+    icon: 'facebook',
     title: 'فيسبوك',
     value: 'EAH Official',
     href: 'https://facebook.com/eah.eg',

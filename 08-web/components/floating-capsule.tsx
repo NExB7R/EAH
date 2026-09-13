@@ -119,6 +119,7 @@ export default function FloatingCapsuleHeader() {
               <UserAvatar
                 name={user?.name ?? 'مستخدم'}
                 points={user?.points ?? 0}
+                role={user?.role}
                 unreadNotifications={liveUnread || (user?.notifications ?? 0)}
                 banUntil={user?.banUntil ?? null}
                 avatarKey={user?.avatarKey ?? null}
@@ -150,7 +151,9 @@ export default function FloatingCapsuleHeader() {
               </span>
               <div className="nav-drawer__user-info">
                 <span className="nav-drawer__user-name">{user.name}</span>
-                <span className="nav-drawer__user-points">⭐ {user.points}</span>
+                {user.role !== 'super_admin' && (
+                  <span className="nav-drawer__user-points">⭐ {user.points}</span>
+                )}
               </div>
             </a>
           )}

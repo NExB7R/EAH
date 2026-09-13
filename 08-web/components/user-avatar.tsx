@@ -6,6 +6,7 @@ import './user-avatar.css'
 type UserAvatarProps = {
   name?: string
   points?: number
+  role?: string
   avatarUrl?: string
   unreadNotifications?: number
   banUntil?: string | null
@@ -18,6 +19,7 @@ type UserAvatarProps = {
 export default function UserAvatar({
   name = 'مستخدم',
   points = 0,
+  role,
   avatarUrl,
   unreadNotifications = 0,
   banUntil = null,
@@ -52,7 +54,7 @@ export default function UserAvatar({
         )}
       </span>
 
-      {!isBanned && points > 0 && (
+      {!isBanned && role !== 'super_admin' && points > 0 && (
         <span className="user-avatar__points" aria-label={`${points} نقطة`}>
           {points >= 1000 ? `${(points / 1000).toFixed(1)}k` : points}
         </span>
