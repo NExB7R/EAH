@@ -32,13 +32,16 @@ type CapsuleUser = {
   notifications: number
   role: string
   banUntil: string | null
+  avatarKey: string | null
+  titleKey: string | null
+  frameKey: string | null
 }
 
 export default function FloatingCapsuleHeader() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [user, setUser] = useState<CapsuleUser | null>(null)
-  const [loaded, setLoaded] = useState(false)
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -52,40 +55,47 @@ export default function FloatingCapsuleHeader() {
     let active = true
 
     void (async () => {
-      const { data: { user: authUser } } = await supabase.auth.getUser()
-      if (!active) return
-      if (!authUser) {
-        setLoaded(true)
-        return
+      try {
+        const { data: { user: authUser } } = await supabase.auth.getUser()
+        if (!active) return
+        if (!authUser) {
+          setLoggedIn(false)
+          return
+        }
+        setLoggedIn(true)
+
+        const [p, r, n] = await Promise.all([
+          supabase
+            .from('profiles')
+            .select('display_name,trust_score,banned_until,avatar_key,title_key,frame_key')
+            .eq('id', authUser.id)
+            .maybeSingle(),
+          supabase
+            .from('user_roles')
+            .select('role')
+            .eq('user_id', authUser.id)
+            .maybeSingle(),
+          supabase
+            .from('notifications')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', authUser.id)
+            .is('read_at', null),
+        ])
+        if (!active) return
+
+        setUser({
+          name: p.data?.display_name ?? 'مستخدم',
+          points: p.data?.trust_score ?? 0,
+          banUntil: p.data?.banned_until ?? null,
+          role: r.data?.role ?? 'customer',
+          notifications: n.count ?? 0,
+          avatarKey: p.data?.avatar_key ?? null,
+          titleKey: p.data?.title_key ?? null,
+          frameKey: p.data?.frame_key ?? null,
+        })
+      } catch {
+        if (active) setLoggedIn(false)
       }
-
-      const [p, r, n] = await Promise.all([
-        supabase
-          .from('profiles')
-          .select('display_name,trust_score,banned_until')
-          .eq('id', authUser.id)
-          .maybeSingle(),
-        supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', authUser.id)
-          .maybeSingle(),
-        supabase
-          .from('notifications')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', authUser.id)
-          .is('read_at', null),
-      ])
-      if (!active) return
-
-      setUser({
-        name: p.data?.display_name ?? 'مستخدم',
-        points: p.data?.trust_score ?? 0,
-        banUntil: p.data?.banned_until ?? null,
-        role: r.data?.role ?? 'customer',
-        notifications: n.count ?? 0,
-      })
-      setLoaded(true)
     })()
 
     return () => {
@@ -114,19 +124,23 @@ export default function FloatingCapsuleHeader() {
               href="/explore"
             />
             <NeonIconButton icon={<IconInstall />} label="ثبّت" ariaLabel="تثبيت" />
-            <NeonIconButton
-              icon={<IconKey />}
-              label="دخول"
-              ariaLabel="دخول"
-              href="/auth"
-            />
-            <NeonIconButton
-              icon={<IconBolt />}
-              label="سجل بسرعة"
-              ariaLabel="سجل بسرعة"
-              variant="accent"
-              href="/auth?tab=register"
-            />
+            {loggedIn === false && (
+              <>
+                <NeonIconButton
+                  icon={<IconKey />}
+                  label="دخول"
+                  ariaLabel="دخول"
+                  href="/auth"
+                />
+                <NeonIconButton
+                  icon={<IconBolt />}
+                  label="سجل بسرعة"
+                  ariaLabel="سجل بسرعة"
+                  variant="accent"
+                  href="/auth?tab=register"
+                />
+              </>
+            )}
           </div>
 
           <div className="floating-capsule__center">
@@ -137,12 +151,14 @@ export default function FloatingCapsuleHeader() {
             <ShareButton />
             <NeonIconButton icon={<IconFacebook />} label="فيسبوك" href="#" ariaLabel="فيسبوك" />
             <NeonIconButton icon={<IconWhatsapp />} label="واتساب" href="#" ariaLabel="واتساب" />
-            {loaded && user && (
+            {loggedIn === true && (
               <UserAvatar
-                name={user.name}
-                points={user.points}
-                unreadNotifications={user.notifications}
-                banUntil={user.banUntil}
+                name={user?.name ?? 'مستخدم'}
+                points={user?.points ?? 0}
+                unreadNotifications={user?.notifications ?? 0}
+                banUntil={user?.banUntil ?? null}
+                avatarKey={user?.avatarKey ?? null}
+                frameKey={user?.frameKey ?? null}
                 href={dashboardPath}
               />
             )}

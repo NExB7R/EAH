@@ -1,5 +1,6 @@
 'use client'
 import { IconUser, IconBell } from './neon-icons'
+import { getAvatar, getFrame } from '@/lib/profile-presets'
 import './user-avatar.css'
 
 type UserAvatarProps = {
@@ -8,6 +9,8 @@ type UserAvatarProps = {
   avatarUrl?: string
   unreadNotifications?: number
   banUntil?: string | null
+  avatarKey?: string | null
+  frameKey?: string | null
   href?: string
   onClick?: () => void
 }
@@ -18,6 +21,8 @@ export default function UserAvatar({
   avatarUrl,
   unreadNotifications = 0,
   banUntil = null,
+  avatarKey = null,
+  frameKey = null,
   href,
   onClick,
 }: UserAvatarProps) {
@@ -27,10 +32,18 @@ export default function UserAvatar({
     : 0
 
   const initial = name.trim().charAt(0).toUpperCase()
+  const avatar = getAvatar(avatarKey)
+  const frame = getFrame(frameKey)
+  const frameStyle = frameKey && frameKey !== 'none'
+    ? { border: `2px solid ${frame.border}`, boxShadow: `0 0 12px ${frame.glow}` }
+    : undefined
 
   const inner = (
     <>
-      <span className="user-avatar__img">
+      <span
+        className="user-avatar__img"
+        style={!avatarUrl ? { background: `linear-gradient(135deg, ${avatar.from}, ${avatar.to})` } : undefined}
+      >
         {avatarUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={avatarUrl} alt={name} />
@@ -70,7 +83,7 @@ export default function UserAvatar({
       </button>
 
       {href ? (
-        <a href={href} className="user-avatar" aria-label={`حساب ${name}`}>
+        <a href={href} className="user-avatar" aria-label={`حساب ${name}`} style={frameStyle}>
           {inner}
         </a>
       ) : (
@@ -79,6 +92,7 @@ export default function UserAvatar({
           className="user-avatar"
           aria-label={`حساب ${name}`}
           onClick={onClick}
+          style={frameStyle}
         >
           {inner}
         </button>

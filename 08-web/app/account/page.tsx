@@ -138,6 +138,10 @@ export default async function AccountPage() {
               <span className="acc-action__emoji">🔥</span>
               العروض
             </Link>
+            <Link href="/account/edit" className="acc-action acc-action--primary">
+              <span className="acc-action__emoji">✏️</span>
+              تعديل البروفايل
+            </Link>
             <Link href="/auth/change-password" className="acc-action">
               <span className="acc-action__emoji">🔒</span>
               تغيير كلمة السر
