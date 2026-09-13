@@ -116,7 +116,8 @@ export default function FloatingCapsuleHeader() {
             <InstallPWAButton variant="compact" />
             <ShareButton />
             {loggedIn === true && (
-              <UserAvatar
+              <span className="fc-admin-cluster">
+                <UserAvatar
                 name={user?.name ?? 'مستخدم'}
                 points={user?.points ?? 0}
                 role={user?.role}
@@ -127,6 +128,28 @@ export default function FloatingCapsuleHeader() {
                 avatarUrl={user?.avatarUrl ?? undefined}
                 href="/account"
               />
+                {(user?.role === 'super_admin' || user?.role === 'admin') && (
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 20,
+                      height: 20,
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg,#10B981,#059669)',
+                      color: '#fff',
+                      fontSize: 11,
+                      fontWeight: 900,
+                      marginInlineStart: 2,
+                      boxShadow: '0 0 8px rgba(16,185,129,0.5)',
+                    }}
+                    aria-label="موثّق"
+                  >
+                    ✓
+                  </span>
+                )}
+              </span>
             )}
           </div>
         </div>
