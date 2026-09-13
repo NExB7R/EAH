@@ -102,12 +102,12 @@ export default function SidePanel() {
 
   useEffect(() => {
     setMounted(true)
-    if (sessionStorage.getItem('eah-side-closed') === '1') setClosed(true)
+    
   }, [])
 
   const handleClose = () => {
     setClosed(true)
-    sessionStorage.setItem('eah-side-closed', '1')
+    
   }
 
   if (!mounted || closed) return null
