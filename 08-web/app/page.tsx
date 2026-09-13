@@ -10,7 +10,7 @@ import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { generateMockStats } from '@/lib/mock-stats'
 
-export const revalidate = 300
+export const revalidate = 600
 
 export default async function Page() {
   const businesses = await getPublishedBusinesses(50)
@@ -43,67 +43,62 @@ export default async function Page() {
         <HomeHero />
         <MobileTrending />
 
-        {/* مطاعم — نمط "بطل أولاً" */}
         <SectionSlider
           id="restaurants"
           title="نفسك في إيه؟ 🔥"
           subtitle={`${restaurants.length} مطعم`}
           seeAllHref="/explore?type=restaurant"
           variant="restaurant"
-          maxItems={12}
+          maxItems={8}
           totalItems={restaurants.length}
         >
-          {restaurants.slice(0, 12).map((b, i) => (
-            <ExploreCard key={b.slug} business={b} size={i === 0 ? 'hero' : 'md'} />
+          {restaurants.slice(0, 8).map((b) => (
+            <ExploreCard key={b.slug} business={b} size="lg" />
           ))}
         </SectionSlider>
 
-        {/* عروض — نمط "كلها أبطال صغيرة" */}
         <SectionSlider
           id="offers"
           title="عروض نار 🔥"
-          subtitle={`${offers.length} عرض شغال`}
+          subtitle={`${offers.length} عرض`}
           seeAllHref="/offers"
           variant="offer"
-          maxItems={12}
+          maxItems={8}
           totalItems={offers.length}
         >
-          {offers.slice(0, 12).map((b, i) => (
-            <ExploreCard key={b.slug} business={b} size={i === 0 ? 'hero' : 'lg'} />
+          {offers.slice(0, 8).map((b) => (
+            <ExploreCard key={b.slug} business={b} size="lg" />
           ))}
         </SectionSlider>
 
-        {/* صيدليات */}
         <SectionSlider
           id="pharmacies"
           title="صحتك أولاً 💊"
           subtitle={`${pharmacies.length} صيدلية`}
           seeAllHref="/explore?type=pharmacy"
           variant="pharmacy"
-          maxItems={12}
+          maxItems={8}
           totalItems={pharmacies.length}
         >
-          {pharmacies.slice(0, 12).map((b, i) => (
-            <ExploreCard key={b.slug} business={b} size={i === 0 ? 'hero' : 'md'} />
+          {pharmacies.slice(0, 8).map((b) => (
+            <ExploreCard key={b.slug} business={b} size="lg" />
           ))}
         </SectionSlider>
 
-        {/* توصيل */}
         <SectionSlider
           id="delivery"
           title="على السريع 🛵"
-          subtitle={`${delivery.length} مكتب توصيل`}
+          subtitle={`${delivery.length} مكتب`}
           seeAllHref="/explore?type=delivery_office"
           variant="delivery"
-          maxItems={12}
+          maxItems={8}
           totalItems={delivery.length}
         >
-          {delivery.slice(0, 12).map((b, i) => (
-            <ExploreCard key={b.slug} business={b} size={i === 0 ? 'hero' : 'sm'} />
+          {delivery.slice(0, 8).map((b) => (
+            <ExploreCard key={b.slug} business={b} size="lg" />
           ))}
         </SectionSlider>
 
-        {/* جديد */}
         {newBiz.length > 0 && (
           <SectionSlider
             id="new-businesses"
@@ -111,11 +106,11 @@ export default async function Page() {
             subtitle={`${newBiz.length} مكان جديد`}
             seeAllHref="/explore?type=new"
             variant="new"
-            maxItems={12}
+            maxItems={8}
             totalItems={newBiz.length}
           >
-            {newBiz.slice(0, 12).map((b, i) => (
-              <ExploreCard key={b.slug} business={b} size={i === 0 ? 'hero' : 'lg'} />
+            {newBiz.slice(0, 8).map((b) => (
+              <ExploreCard key={b.slug} business={b} size="lg" />
             ))}
           </SectionSlider>
         )}

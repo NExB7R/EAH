@@ -1,9 +1,8 @@
 'use client'
-import { useRef, type MouseEvent } from 'react'
 import './explore-card.css'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
-type CardSize = 'hero' | 'lg' | 'md' | 'sm'
+type CardSize = 'hero' | 'lg' | 'md'
 
 type Business = {
   slug: string
@@ -31,11 +30,11 @@ const TYPE_LABEL: Record<BusinessType, string> = {
   delivery_office: 'توصيل',
 }
 
-const TYPE_THEME: Record<BusinessType, { hue: string; hue2: string }> = {
-  restaurant: { hue: '#FF7A3D', hue2: '#E8C79A' },
-  pharmacy: { hue: '#4ADE80', hue2: '#A855F7' },
-  supermarket: { hue: '#A855F7', hue2: '#C4B5FD' },
-  delivery_office: { hue: '#E8C79A', hue2: '#FF7A3D' },
+const TYPE_HUE: Record<BusinessType, string> = {
+  restaurant: '#FF7A3D',
+  pharmacy: '#4ADE80',
+  supermarket: '#A855F7',
+  delivery_office: '#E8C79A',
 }
 
 export default function ExploreCard({
@@ -45,70 +44,37 @@ export default function ExploreCard({
   business: Business
   size?: CardSize
 }) {
-  const cardRef = useRef<HTMLAnchorElement>(null)
-  const theme = TYPE_THEME[business.type]
-
-  // Spotlight يتبع الماوس
-  const handleMove = (e: MouseEvent<HTMLAnchorElement>) => {
-    const el = cardRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width) * 100
-    const y = ((e.clientY - rect.top) / rect.height) * 100
-    el.style.setProperty('--mx', `${x}%`)
-    el.style.setProperty('--my', `${y}%`)
-  }
-
   return (
     <a
-      ref={cardRef}
       href={`/businesses/${business.slug}`}
       className={`ecard ecard--${size}`}
       aria-label={business.name}
-      onMouseMove={handleMove}
-      style={{
-        '--hue': theme.hue,
-        '--hue-2': theme.hue2,
-      } as React.CSSProperties}
+      style={{ '--hue': TYPE_HUE[business.type] } as React.CSSProperties}
     >
-      {/* Aurora gradient background */}
-      <div className="ecard__aurora" aria-hidden />
+      {/* شريط أكسنت علوي */}
+      <span className="ecard__accent" aria-hidden />
 
-      {/* Spotlight — يتبع الماوس */}
-      <div className="ecard__spotlight" aria-hidden />
-
-      {/* Gradient border */}
-      <div className="ecard__border" aria-hidden />
-
-      {/* ===== Content ===== */}
       <div className="ecard__inner">
-        {/* Top */}
+        {/* Top row */}
         <div className="ecard__top">
           <span className="ecard__type">
-            <span className="ecard__type-emoji">{TYPE_EMOJI[business.type]}</span>
-            {TYPE_LABEL[business.type]}
+            {TYPE_EMOJI[business.type]} {TYPE_LABEL[business.type]}
           </span>
           <span className={`ecard__live ${business.open ? 'is-on' : 'is-off'}`}>
             <span className="ecard__live-dot" />
           </span>
         </div>
 
-        {/* Visual */}
+        {/* Emoji */}
         <div className="ecard__visual">
           <span className="ecard__emoji">{TYPE_EMOJI[business.type]}</span>
         </div>
 
-        {/* Body */}
+        {/* Info */}
         <div className="ecard__body">
           <h3 className="ecard__name">{business.name}</h3>
           <div className="ecard__meta">
-            <span className="ecard__area">
-              <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.4">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              {business.area}
-            </span>
+            <span className="ecard__area">{business.area}</span>
             {business.score !== undefined && (
               <span className="ecard__score">★ {(business.score * 5).toFixed(1)}</span>
             )}

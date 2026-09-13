@@ -38,3 +38,15 @@ section {
 .ss__seeall-card,
 .ecard {
 }
+
+/* ===== Performance 2026 ===== */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+button, a {
+  touch-action: manipulation;
+}
+.scroll-icons-bg,
+#eah-scroll-root {
+  contain: strict;
+}

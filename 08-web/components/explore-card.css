@@ -1,101 +1,52 @@
 /* ============================================================
-   EAH Card — Aurora Glass 2026
-   تأثيرات: Aurora gradient + Spotlight + Gradient border
+   EAH Card — Clean Accent (Final)
+   بسيط، نظيف، سريع
    ============================================================ */
 
 .ecard {
   position: relative;
   display: block;
-  border-radius: 20px;
+  border-radius: 18px;
   overflow: hidden;
   text-decoration: none;
   color: var(--eah-text);
-  background: #0A0812;
+  background: #0F0B1A;
   isolation: isolate;
-  transition: transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1);
   flex-shrink: 0;
-  --mx: 50%;
-  --my: 50%;
+  transition: transform 250ms ease, border-color 250ms ease;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  will-change: transform;
 }
 
 .ecard:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
+  border-color: var(--hue);
 }
 
-/* ===== Sizes — قريبة من بعض + متنوعة ===== */
+/* شريط أكسنت علوي */
+.ecard__accent {
+  position: absolute;
+  top: 0;
+  inset-inline: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--hue), transparent);
+  z-index: 2;
+}
+
+/* ===== Sizes ===== */
 .ecard--hero { width: 260px; height: 320px; }
-.ecard--lg   { width: 230px; height: 310px; }
-.ecard--md   { width: 210px; height: 290px; }
-.ecard--sm   { width: 180px; height: 260px; }
+.ecard--lg   { width: 220px; height: 300px; }
+.ecard--md   { width: 200px; height: 280px; }
 
-/* ===== Aurora gradient (يتحرك ببطء) ===== */
-.ecard__aurora {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background:
-    radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--hue) 45%, transparent) 0%, transparent 45%),
-    radial-gradient(circle at 80% 30%, color-mix(in srgb, var(--hue-2) 35%, transparent) 0%, transparent 45%),
-    radial-gradient(circle at 50% 90%, color-mix(in srgb, var(--hue) 30%, transparent) 0%, transparent 50%),
-    linear-gradient(160deg, #1a1327 0%, #0A0812 100%);
-  animation: aurora-shift 8s ease-in-out infinite;
-  opacity: 0.9;
+/* في الـ grid، الكارد بتاخد حجم الخلية */
+.explore__grid .ecard {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 200px;
 }
 
-@keyframes aurora-shift {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  50%      { transform: scale(1.15) rotate(3deg); }
-}
-
-/* ===== Spotlight — يتبع الماوس ===== */
-.ecard__spotlight {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: radial-gradient(
-    500px circle at var(--mx) var(--my),
-    color-mix(in srgb, var(--hue) 25%, transparent) 0%,
-    transparent 40%
-  );
-  opacity: 0;
-  transition: opacity 300ms ease;
-  pointer-events: none;
-}
-.ecard:hover .ecard__spotlight {
-  opacity: 1;
-}
-
-/* ===== Gradient border (يلمع عند hover) ===== */
-.ecard__border {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  border-radius: 20px;
-  padding: 1.5px;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--hue) 50%, transparent),
-    transparent 40%,
-    transparent 60%,
-    color-mix(in srgb, var(--hue-2) 50%, transparent)
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  opacity: 0.5;
-  transition: opacity 400ms ease;
-}
-.ecard:hover .ecard__border {
-  opacity: 1;
-}
-
-/* ===== Inner content ===== */
+/* ===== Inner ===== */
 .ecard__inner {
-  position: relative;
-  z-index: 3;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -115,79 +66,63 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 9px;
+  padding: 3px 9px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: color-mix(in srgb, var(--hue) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--hue) 30%, transparent);
   font-family: var(--eah-font-body);
   font-size: 0.58rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--hue);
+  white-space: nowrap;
 }
-.ecard__type-emoji { font-size: 0.72rem; line-height: 1; }
 
 .ecard__live {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px;
   flex-shrink: 0;
 }
 .ecard__live-dot {
+  display: block;
   width: 100%;
   height: 100%;
   border-radius: 50%;
 }
 .ecard__live.is-on .ecard__live-dot {
   background: var(--eah-green);
-  box-shadow: 0 0 8px var(--eah-green);
-  animation: live-pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 6px var(--eah-green);
 }
 .ecard__live.is-off .ecard__live-dot { background: var(--eah-red); }
 
-@keyframes live-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.5; transform: scale(0.85); }
-}
-
-/* Visual — emoji كبير */
+/* Visual */
 .ecard__visual {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
   margin: 4px 0;
 }
 
 .ecard__emoji {
-  font-size: 3.5rem;
+  font-size: 3.2rem;
   line-height: 1;
-  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.6));
-  transition: transform 500ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  transition: transform 300ms ease;
 }
-.ecard--hero .ecard__emoji { font-size: 4.5rem; }
-.ecard--sm .ecard__emoji { font-size: 3rem; }
-.ecard:hover .ecard__emoji {
-  transform: scale(1.12) translateY(-4px);
-}
+.ecard--hero .ecard__emoji { font-size: 4rem; }
+.ecard:hover .ecard__emoji { transform: scale(1.08); }
 
 /* Body */
 .ecard__body {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .ecard__name {
   font-family: var(--eah-font-display);
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 900;
   color: var(--eah-text);
   margin: 0;
@@ -195,10 +130,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
-.ecard--hero .ecard__name { font-size: 1.2rem; }
-.ecard--sm .ecard__name { font-size: 0.88rem; }
+.ecard--hero .ecard__name { font-size: 1.15rem; }
 
 .ecard__meta {
   display: flex;
@@ -206,13 +139,10 @@
   justify-content: space-between;
   gap: 6px;
   font-family: var(--eah-font-body);
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.68rem;
+  color: var(--eah-text-3);
 }
 .ecard__area {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -220,48 +150,38 @@
 .ecard__score {
   color: var(--eah-gold);
   font-weight: 900;
-  font-size: 0.68rem;
   flex-shrink: 0;
-  text-shadow: 0 0 8px rgba(232, 199, 154, 0.4);
 }
 
 /* Badge */
 .ecard__badge {
   position: absolute;
-  top: 44px;
-  inset-inline-end: 12px;
-  padding: 3px 9px;
+  top: 42px;
+  inset-inline-end: 10px;
+  padding: 2px 8px;
   border-radius: 999px;
   background: var(--eah-gradient-gold);
   color: var(--eah-black-2);
   font-family: var(--eah-font-body);
-  font-size: 0.55rem;
+  font-size: 0.52rem;
   font-weight: 900;
-  z-index: 6;
-  transform: rotate(-4deg);
-  box-shadow: 0 4px 12px rgba(232, 199, 154, 0.4);
+  z-index: 3;
 }
 
-/* ===== Responsive ===== */
+/* Responsive */
 @media (max-width: 900px) {
-  .ecard--hero { width: 240px; height: 300px; }
-  .ecard--lg   { width: 215px; height: 290px; }
-  .ecard--md   { width: 195px; height: 275px; }
-  .ecard--sm   { width: 170px; height: 245px; }
+  .ecard--hero { width: 230px; height: 290px; }
+  .ecard--lg   { width: 200px; height: 270px; }
+  .ecard--md   { width: 180px; height: 250px; }
 }
-
 @media (max-width: 640px) {
-  .ecard--hero { width: 210px; height: 280px; }
-  .ecard--lg   { width: 190px; height: 265px; }
-  .ecard--md   { width: 175px; height: 250px; }
-  .ecard--sm   { width: 155px; height: 230px; }
-  .ecard--hero .ecard__emoji { font-size: 3.8rem; }
-  .ecard__emoji { font-size: 3rem; }
-  .ecard__name { font-size: 0.9rem; }
-  .ecard--hero .ecard__name { font-size: 1rem; }
+  .ecard--hero { width: 210px; height: 270px; }
+  .ecard--lg   { width: 185px; height: 250px; }
+  .ecard--md   { width: 165px; height: 230px; }
+  .ecard__emoji { font-size: 2.8rem; }
+  .ecard--hero .ecard__emoji { font-size: 3.4rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ecard, .ecard__emoji, .ecard__aurora { transition: none; animation: none; }
-  .ecard__aurora { animation: none; }
+  .ecard, .ecard__emoji { transition: none; }
 }
