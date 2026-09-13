@@ -6,6 +6,18 @@ type AuditAction =
   | 'business.delete'
   | 'business.toggle_featured'
   | 'business.toggle_published'
+  | 'offer.create'
+  | 'offer.update'
+  | 'offer.delete'
+  | 'review.approve'
+  | 'review.reject'
+  | 'review.hide'
+  | 'review.delete'
+  | 'user.ban'
+  | 'user.unban'
+  | 'user.role_change'
+  | 'merchant.approve'
+  | 'merchant.reject'
 
 export async function auditLog({
   action,
@@ -26,7 +38,8 @@ export async function auditLog({
     const supabase = await createClient()
     const { data: userData } = await supabase.auth.getUser()
     if (!userData.user) return
-    await supabase.from('audit_logs').insert({
+
+    const { error } = await supabase.from('audit_logs').insert({
       actor_user_id: userData.user.id,
       action,
       entity_type: entityType,
@@ -35,7 +48,11 @@ export async function auditLog({
       after_data: after ?? null,
       metadata: metadata ?? {},
     })
-  } catch {
-    /* silent */
+
+    if (error) {
+      console.error('[auditLog] insert failed:', error.message, { action, entityId })
+    }
+  } catch (err) {
+    console.error('[auditLog] unexpected:', err)
   }
 }
