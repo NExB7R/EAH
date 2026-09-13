@@ -1,0 +1,133 @@
+/* ═══ Streak Badge ═══ */
+.streak-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 999px;
+  background: linear-gradient(135deg, rgba(251,191,36,.15), rgba(249,115,22,.08));
+  border: 1px solid rgba(251,191,36,.35);
+}
+.streak-badge--inline { padding: 6px 12px; }
+.streak-badge__emoji { font-size: 1.2rem; }
+.streak-badge__text { display: flex; flex-direction: column; line-height: 1.1; }
+.streak-badge__count { font-size: .85rem; font-weight: 900; color: #FBBF24; }
+.streak-badge__label { font-size: .65rem; color: #A5A3B8; font-weight: 700; }
+
+/* ═══ Celebration ═══ */
+.streak-celebration {
+  position: fixed; top: 100px; left: 50%; transform: translateX(-50%);
+  z-index: 9999; pointer-events: none;
+  animation: celebrationIn 0.5s cubic-bezier(0.34,1.4,0.64,1);
+}
+@keyframes celebrationIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-30px) scale(0.8); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+.streak-celebration__card {
+  padding: 20px 28px; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(139,92,246,.95), rgba(168,85,247,.9));
+  box-shadow: 0 20px 60px rgba(139,92,246,.5), 0 0 0 2px rgba(255,255,255,.15) inset;
+  text-align: center; color: #fff; backdrop-filter: blur(20px);
+}
+.streak-celebration__emoji { font-size: 2.5rem; display: block; margin-bottom: 8px; }
+.streak-celebration__title { font-size: 1.15rem; font-weight: 900; margin: 0 0 8px; }
+.streak-celebration__msg { font-size: .9rem; margin: 0; opacity: .95; }
+.streak-celebration__msg strong { color: #FBBF24; font-weight: 900; }
+.streak-celebration__sub { font-size: .75rem; margin: 8px 0 0; opacity: .7; }
+
+/* ═══ Onboarding ═══ */
+.onb { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.onb__backdrop { position: absolute; inset: 0; background: rgba(7,6,11,.92); backdrop-filter: blur(20px); }
+.onb__card {
+  position: relative; z-index: 1;
+  max-width: 480px; width: 100%; padding: 36px 28px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(20,18,28,.95), rgba(30,25,45,.95));
+  border: 1px solid rgba(139,92,246,.35);
+  box-shadow: 0 30px 80px rgba(139,92,246,.3);
+  text-align: center;
+}
+.onb__emoji { font-size: 3.5rem; display: block; margin-bottom: 16px; }
+.onb__title { font-size: 1.6rem; font-weight: 900; color: #F5F3FF; margin: 0 0 14px; }
+.onb__text { font-size: .95rem; color: #A5A3B8; line-height: 1.7; margin: 0 0 22px; }
+.onb__text strong { color: #FBBF24; }
+.onb__interests { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 22px; }
+.onb__interest {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 14px 8px; border-radius: 14px;
+  background: rgba(10,8,16,.6); border: 1.5px solid rgba(139,92,246,.18);
+  color: #A5A3B8; font-weight: 700; font-size: .8rem;
+  cursor: pointer; font-family: inherit; transition: all .2s ease;
+}
+.onb__interest:hover { border-color: rgba(168,85,247,.5); color: #F5F3FF; }
+.onb__interest.is-selected {
+  background: linear-gradient(135deg, rgba(139,92,246,.25), rgba(168,85,247,.1));
+  border-color: #A855F7; color: #F5F3FF;
+  box-shadow: 0 0 0 1px #A855F7, 0 8px 24px rgba(139,92,246,.3);
+}
+.onb__interest-emoji { font-size: 1.6rem; }
+.onb__rewards { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+.onb__reward {
+  padding: 12px 16px; border-radius: 12px;
+  background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.2);
+  color: #FBBF24; font-size: .85rem; font-weight: 700;
+  display: flex; align-items: center; gap: 10px; justify-content: center;
+}
+.onb__actions { display: flex; gap: 10px; }
+.onb__btn {
+  flex: 1; padding: 14px; border-radius: 14px;
+  font-weight: 900; font-size: .95rem; font-family: inherit;
+  cursor: pointer; border: none; transition: all .25s ease;
+}
+.onb__btn--primary {
+  background: linear-gradient(135deg, #8B5CF6, #A855F7);
+  color: #fff; box-shadow: 0 8px 24px rgba(139,92,246,.4);
+}
+.onb__btn--primary:hover:not(:disabled) { transform: translateY(-2px); }
+.onb__btn--primary:disabled { opacity: .5; cursor: wait; }
+.onb__btn--ghost {
+  background: transparent; border: 1px solid rgba(139,92,246,.25);
+  color: #A5A3B8; flex: 0 0 100px;
+}
+
+/* ═══ PWA Prompt ═══ */
+.pwa-prompt {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  max-width: 420px; width: calc(100% - 40px);
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(20,18,28,.98), rgba(30,25,45,.95));
+  border: 1px solid rgba(139,92,246,.4);
+  box-shadow: 0 20px 60px rgba(139,92,246,.3);
+  z-index: 9998;
+  animation: pwaIn 0.5s cubic-bezier(0.34,1.4,0.64,1);
+  backdrop-filter: blur(20px);
+}
+@keyframes pwaIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(30px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.pwa-prompt__emoji { font-size: 1.8rem; }
+.pwa-prompt__body { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.pwa-prompt__title { font-size: .9rem; font-weight: 900; color: #F5F3FF; }
+.pwa-prompt__text { font-size: .75rem; color: #A5A3B8; }
+.pwa-prompt__actions { display: flex; gap: 6px; }
+.pwa-prompt__btn {
+  padding: 9px 16px; border-radius: 10px;
+  font-weight: 800; font-size: .8rem; font-family: inherit;
+  cursor: pointer; border: 1px solid rgba(139,92,246,.25);
+  background: transparent; color: #A5A3B8;
+  transition: all .2s ease;
+}
+.pwa-prompt__btn--primary {
+  background: linear-gradient(135deg, #8B5CF6, #A855F7);
+  border-color: transparent; color: #fff;
+}
+.pwa-prompt__btn:hover { transform: translateY(-1px); }
+
+@media (max-width: 640px) {
+  .streak-celebration { top: 80px; }
+  .streak-celebration__card { padding: 16px 22px; }
+  .onb__card { padding: 28px 20px; }
+  .onb__interests { grid-template-columns: repeat(2, 1fr); }
+  .pwa-prompt { padding: 12px 14px; gap: 10px; }
+  .pwa-prompt__emoji { font-size: 1.5rem; }
+}

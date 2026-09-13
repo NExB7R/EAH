@@ -9,6 +9,10 @@ import { Cairo, Cairo_Play, Dancing_Script } from 'next/font/google'
 import RegisterSW from '@/components/register-sw'
 import PageViewTracker from '@/components/page-view-tracker'
 import ScrollIconsBackground from '@/components/scroll-icons-background'
+import OnboardingOverlay from '@/components/onboarding-overlay'
+import PWAInstallPrompt from '@/components/pwa-install-prompt'
+import StreakBadge from '@/components/streak-badge'
+import '@/components/streak-onboarding.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
@@ -60,6 +64,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PageViewTracker />
         {children}
         <RegisterSW />
+            <OnboardingOverlay />
+        <PWAInstallPrompt />
+        <StreakBadge />
       </body>
     </html>
   )
