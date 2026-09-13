@@ -8,5 +8,8 @@
     "deploymentEnabled": {
       "ui-onlook": true
     }
+  },
+  "github": {
+    "silent": true
   }
 }
