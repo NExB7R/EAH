@@ -1,39 +1,177 @@
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase-server'
-import PrintReportButton from '@/components/print-report-button'
+import { requireMerchantForBusiness } from '@/lib/admin/merchant-guard'
+import FloatingCapsuleHeader from '@/components/floating-capsule'
+import { getBusinessStats, getBusinessReviews } from '@/lib/reviews'
 
-function n(v: unknown) { return typeof v === 'number' ? v : Number(v ?? 0) }
-type Report = { business: any; period_days: number; views: number; live_now: number; daily: any[]; referrers: any[]; devices: any[]; ads: any }
+export const dynamic = 'force-dynamic'
+export const metadata = { title: 'إحصائيات النشاط | EAH' }
 
-export default async function MerchantBusinessReport({ params }: { params: Promise<{ slug: string }> }) {
+export default async function MerchantReportPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
   const { slug } = await params
-  const supabase = await createClient()
-  const { data: userData } = await supabase.auth.getUser()
-  if (!userData.user) redirect('/auth')
-  const { data: business } = await supabase.from('businesses').select('id,name,slug,owner_profile_id,city,area').eq('slug', slug).eq('owner_profile_id', userData.user.id).maybeSingle()
-  if (!business) redirect('/merchant')
-  const { data: report, error } = await supabase.rpc('merchant_business_report', { p_business_id: business.id, p_days: 7 })
-  if (error) throw new Error(error.message)
-  const r = report as Report
+  const { business, supabase } = await requireMerchantForBusiness(slug)
+
+  const [stats, reviews] = await Promise.all([
+    getBusinessStats(business.id),
+    getBusinessReviews(business.id, 10),
+  ])
+
+  // نظرة سريعة على الزيارات
+  const { count: viewsCount } = await supabase
+    .from('page_view_events')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_id', business.id)
+
+  const metrics = [
+    { label: 'زيارات', value: viewsCount ?? 0, emoji: '👁', color: 'var(--eah-purple-2)' },
+    { label: 'تقييمات', value: stats.review_count, emoji: '⭐', color: 'var(--eah-gold)' },
+    { label: 'متوسط التقييم', value: stats.avg_rating.toFixed(1), emoji: '📊', color: 'var(--eah-green)' },
+    { label: 'عروض نشطة', value: stats.active_offers, emoji: '🔥', color: '#FB923C' },
+  ]
+
   return (
-    <main className="container page-pad merchant-report">
-      <div className="report-toolbar no-print"><Link className="pill" href="/merchant">← لوحة النشاط</Link><PrintReportButton /></div>
-      <header style={{ marginBottom: 24 }}><div className="eyebrow">EAH • BUSINESS REPORT</div><h1 className="page-title">تقرير {business.name}</h1><p className="lead">تقرير أسبوعي قابل للطباعة — زيارات، مصادر، أجهزة، وإعلانات.</p></header>
-      <section className="eah-admin-stat-grid">
-        <div className="eah-admin-stat-card"><span>زيارات آخر 7 أيام</span><strong>{n(r.views)}</strong><small>Page views</small></div>
-        <div className="eah-admin-stat-card"><span>Live الآن</span><strong>{n(r.live_now)}</strong><small>آخر دقيقتين</small></div>
-        <div className="eah-admin-stat-card"><span>CTR الإعلانات</span><strong>{n(r.ads?.ctr)}%</strong><small>{n(r.ads?.clicks)} نقرة / {n(r.ads?.impressions)} ظهور</small></div>
-      </section>
-      <section style={{ display: 'grid', gap: 16, marginTop: 18 }}>
-        <div className="card" style={{ padding: 20 }}><h2>اليوم بيوم</h2><div style={{ display: 'grid', gap: 8, marginTop: 12 }}>{(r.daily ?? []).map((x: any) => <div key={String(x.day_key)} className="eah-admin-business-card"><span>{new Date(String(x.day_key)).toLocaleDateString('ar-EG')}</span><strong>{n(x.views)} زيارة</strong></div>)}</div></div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-          <div className="card" style={{ padding: 20 }}><h2>مصادر الزيارة</h2>{(r.referrers ?? []).map((x: any) => <div key={x.referrer} style={{ display:'flex',justifyContent:'space-between',padding:'9px 0',borderBottom:'1px solid var(--border)' }}><span>{x.referrer}</span><strong>{n(x.views)}</strong></div>)}</div>
-          <div className="card" style={{ padding: 20 }}><h2>الأجهزة</h2>{(r.devices ?? []).map((x: any) => <div key={x.device} style={{ display:'flex',justifyContent:'space-between',padding:'9px 0',borderBottom:'1px solid var(--border)' }}><span>{x.device}</span><strong>{n(x.views)}</strong></div>)}</div>
+    <>
+      <FloatingCapsuleHeader />
+      <main className="mpage">
+        <div className="mpage__head">
+          <div>
+            <span className="mpage__kicker">ANALYTICS</span>
+            <h1 className="mpage__title">📊 إحصائيات: {business.name}</h1>
+            <p className="mpage__sub">نظرة سريعة على أداء النشاط على المنصة</p>
+          </div>
+          <Link href={`/merchant/businesses/${business.slug}/edit`} className="admin-btn admin-btn--primary">
+            ✏️ تعديل البيانات
+          </Link>
         </div>
-      </section>
-      <div className="card" style={{ marginTop: 18, padding: 18 }}><strong>قراءة تجارية:</strong><div style={{ opacity:.8, marginTop:6 }}>الزيارات وبيانات الإعلانات منفصلة عشان نقدر نحسب قيمة الحملة لاحقًا بدون خلط بين زيارات النشاط ومرات ظهور الإعلان.</div></div>
-      <style>{`@media print{.no-print{display:none!important}.merchant-report{padding:20px!important;color:#111;background:#fff}.merchant-report .card,.merchant-report .eah-admin-stat-card{box-shadow:none;border:1px solid #ddd;background:#fff}.merchant-report .page-title{color:#111}.merchant-report .lead,.merchant-report .eyebrow,.merchant-report .eah-admin-stat-card span,.merchant-report .eah-admin-stat-card small,.merchant-report .eah-admin-business-sub{color:#555}body{background:#fff!important}}`}</style>
-    </main>
+
+        <div className="mstats">
+          {metrics.map((m) => (
+            <div key={m.label} className="mstat">
+              <span className="mstat__emoji">{m.emoji}</span>
+              <span className="mstat__value" style={{ color: m.color }}>{m.value}</span>
+              <span className="mstat__label">{m.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {stats.review_count > 0 && (
+          <section className="mreport-section">
+            <h2 className="mreport-section__title">التقييمات بالتفصيل</h2>
+            <div className="mratings">
+              <RatingBar label="😋 الطعم" value={stats.avg_taste} />
+              <RatingBar label="💰 القيمة" value={stats.avg_value} />
+              <RatingBar label="⚡ السرعة" value={stats.avg_speed} />
+              <RatingBar label="✨ التجربة" value={stats.avg_experience} />
+            </div>
+          </section>
+        )}
+
+        {reviews.length > 0 && (
+          <section className="mreport-section">
+            <h2 className="mreport-section__title">آخر التقييمات</h2>
+            <div className="mreviews">
+              {reviews.map((r) => (
+                <div key={r.id} className="mreview">
+                  <div className="mreview__head">
+                    <strong>{r.user_name ?? 'زائر'}</strong>
+                    <span>{new Date(r.created_at).toLocaleDateString('ar-EG')}</span>
+                  </div>
+                  {r.comment && <p className="mreview__comment">{r.comment}</p>}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
+
+      <style>{`
+        .mstats {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+          gap: 12px;
+          margin-bottom: 24px;
+        }
+        .mstat {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          padding: 20px 16px;
+          border-radius: 20px;
+          background: var(--eah-surface);
+          border: 1px solid var(--eah-border);
+        }
+        .mstat__emoji { font-size: 1.5rem; }
+        .mstat__value {
+          font-family: var(--eah-font-display);
+          font-size: 1.8rem;
+          font-weight: 900;
+          line-height: 1;
+        }
+        .mstat__label {
+          font-family: var(--eah-font-body);
+          font-size: 0.72rem;
+          color: var(--eah-text-3);
+          font-weight: 700;
+        }
+        .mreport-section {
+          padding: 20px;
+          border-radius: 20px;
+          background: var(--eah-surface);
+          border: 1px solid var(--eah-border);
+          margin-bottom: 16px;
+        }
+        .mreport-section__title {
+          font-family: var(--eah-font-display);
+          font-size: 1.1rem;
+          font-weight: 900;
+          color: var(--eah-text);
+          margin: 0 0 16px;
+        }
+        .mratings { display: flex; flex-direction: column; gap: 12px; }
+        .mreviews { display: flex; flex-direction: column; gap: 10px; }
+        .mreview {
+          padding: 12px 14px;
+          border-radius: 14px;
+          background: rgba(139, 92, 246, 0.05);
+          border: 1px solid var(--eah-border);
+        }
+        .mreview__head {
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+          font-family: var(--eah-font-body);
+          font-size: 0.75rem;
+          color: var(--eah-text-4);
+          margin-bottom: 6px;
+        }
+        .mreview__head strong { color: var(--eah-text); font-weight: 900; }
+        .mreview__comment {
+          font-family: var(--eah-font-body);
+          font-size: 0.85rem;
+          line-height: 1.6;
+          color: var(--eah-text-2);
+          margin: 0;
+        }
+      `}</style>
+    </>
+  )
+}
+
+function RatingBar({ label, value }: { label: string; value: number }) {
+  const pct = (value / 5) * 100
+  return (
+    <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, fontFamily: 'var(--eah-font-body)', fontSize: '0.78rem' }}>
+        <span style={{ color: 'var(--eah-text-3)' }}>{label}</span>
+        <strong style={{ color: 'var(--eah-gold)' }}>{value.toFixed(1)}</strong>
+      </div>
+      <div style={{ height: 6, borderRadius: 999, background: 'rgba(139, 92, 246, 0.12)', overflow: 'hidden' }}>
+        <div style={{ width: `${pct}%`, height: '100%', background: 'linear-gradient(90deg, #6B21FF, #A855F7, #E8C79A)', borderRadius: 999 }} />
+      </div>
+    </div>
   )
 }
