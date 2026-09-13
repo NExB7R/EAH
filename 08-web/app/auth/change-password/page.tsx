@@ -1,85 +1,131 @@
 'use client'
-
-import { FormEvent, useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState, useMemo } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-browser'
+import './change-password.css'
+
+function getStrength(pw: string) {
+  let s = 0
+  if (pw.length >= 8) s++
+  if (pw.length >= 12) s++
+  if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) s++
+  if (/\d/.test(pw)) s++
+  if (/[^A-Za-z0-9]/.test(pw)) s++
+  if (s <= 1) return { score: 1, label: 'ضعيفة', color: '#EF4444' }
+  if (s === 2) return { score: 2, label: 'مقبولة', color: '#F97316' }
+  if (s === 3) return { score: 3, label: 'جيدة', color: '#FBBF24' }
+  if (s === 4) return { score: 4, label: 'قوية', color: '#22C55E' }
+  return { score: 5, label: 'قوية جدًا', color: '#10B981' }
+}
 
 export default function ChangePasswordPage() {
   const router = useRouter()
-  const [currentPassword, setCurrentPassword] = useState('')
-  const [password, setPassword] = useState('')
+  const [current, setCurrent] = useState('')
+  const [next, setNext] = useState('')
   const [confirm, setConfirm] = useState('')
-  const [message, setMessage] = useState('')
+  const [showCur, setShowCur] = useState(false)
+  const [showNew, setShowNew] = useState(false)
+  const [showConf, setShowConf] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
+
+  const strength = useMemo(() => getStrength(next), [next])
+  const mismatch = confirm.length > 0 && next !== confirm
+  const canSubmit = current.length > 0 && next.length >= 8 && next !== current && next === confirm && !loading
 
   useEffect(() => {
     const supabase = createClient()
     void supabase.auth.getUser().then(({ data }) => {
-      if (!data.user) router.replace('/auth')
+      if (!data.user) router.replace('/auth?next=/auth/change-password')
     })
   }, [router])
 
-  async function submit(event: FormEvent) {
-    event.preventDefault()
-    setMessage('')
-
-    if (currentPassword.length < 1) return setMessage('اكتب كلمة المرور الحالية الأول.')
-    if (password.length < 8) return setMessage('كلمة المرور الجديدة لازم تكون 8 أحرف/أرقام على الأقل.')
-    if (password === currentPassword) return setMessage('اختار كلمة مرور جديدة مختلفة عن الحالية.')
-    if (password !== confirm) return setMessage('تأكيد كلمة المرور غير مطابق.')
-
+  async function submit(e: FormEvent) {
+    e.preventDefault()
+    if (!canSubmit) return
+    setError('')
     setLoading(true)
     const supabase = createClient()
-
-    const { error } = await supabase.auth.updateUser({
-      password,
-      current_password: currentPassword,
-    })
-
-    if (error) {
-      setLoading(false)
-      setMessage(error.message || 'تعذر تغيير كلمة المرور. تأكد من كلمة المرور الحالية.')
-      return
-    }
-
-    // Revoke all other sessions while keeping this current session active.
-    const { error: signOutOthersError } = await supabase.auth.signOut({ scope: 'others' })
+    const { error: upErr } = await supabase.auth.updateUser({ password: next, current_password: current })
+    if (upErr) { setLoading(false); setError(upErr.message || 'تعذر تغيير كلمة المرور. تأكد من كلمة المرور الحالية.'); return }
+    const { error: soErr } = await supabase.auth.signOut({ scope: 'others' })
     setLoading(false)
-
-    if (signOutOthersError) {
-      setMessage('تم تغيير كلمة المرور، لكن تعذر تسجيل خروج الأجهزة الأخرى. غيّر كلمة المرور مرة أخرى لاحقًا إذا لزم الأمر.')
-      return
-    }
-
-    setMessage('تم تغيير كلمة المرور وتأمين الحساب ✅ تم تسجيل خروج باقي الأجهزة.')
-    setCurrentPassword('')
-    setPassword('')
-    setConfirm('')
-    setTimeout(() => router.push('/'), 1200)
+    if (soErr) { setError('تم التغيير، لكن تعذر تسجيل خروج الأجهزة الأخرى.'); return }
+    setSuccess(true); setCurrent(''); setNext(''); setConfirm('')
   }
 
+  if (success) return (
+    <main className="cpw"><div className="cpw__wrap"><section className="cpw__hero">
+      <span className="cpw__kicker">EAH • SECURITY</span>
+      <h1 className="cpw__title">✅ تم التغيير</h1>
+      <p className="cpw__lead">كلمة مرورك اتغيرت، وكل الأجهزة التانية اتطردت تلقائيًا.</p>
+      <div className="cpw__success-actions">
+        <Link href="/account" className="cpw__btn cpw__btn--primary">← رجوع للحساب</Link>
+        <Link href="/" className="cpw__btn">الصفحة الرئيسية</Link>
+      </div>
+    </section></div></main>
+  )
+
   return (
-    <main className="container" style={{ maxWidth: 560, paddingTop: 64 }}>
-      <div className="eyebrow">EAH • SECURITY</div>
-      <h1 style={{ marginTop: 10 }}>تغيير كلمة المرور</h1>
-      <p className="lead">مش هنسمح بتغيير كلمة المرور من غير معرفة كلمة المرور الحالية.</p>
+    <main className="cpw"><div className="cpw__wrap">
+      <section className="cpw__hero">
+        <span className="cpw__kicker">EAH • SECURITY</span>
+        <h1 className="cpw__title">🔒 تغيير كلمة المرور</h1>
+        <p className="cpw__lead">للأمان، محتاج تدخل كلمة المرور الحالية الأول. بعد التغيير، كل الأجهزة التانية هتتطرد تلقائيًا.</p>
+        <div className="cpw__info">
+          <span className="cpw__info-emoji">💡</span>
+          <div>
+            <strong className="cpw__info-title">نصائح لكلمة مرور قوية</strong>
+            <ul className="cpw__info-list">
+              <li>12 حرف على الأقل</li>
+              <li>حروف كبيرة وصغيرة + أرقام + رموز</li>
+              <li>متحطهاش حاجة شخصية</li>
+              <li>مستخدمهاش في مواقع تانية</li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
-      <form onSubmit={submit} className="card" style={{ marginTop: 20, padding: 22, display: 'grid', gap: 12 }}>
-        <label className="meta" htmlFor="current-password">كلمة المرور الحالية</label>
-        <input id="current-password" type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} autoComplete="current-password" placeholder="اكتب كلمة المرور الحالية" required style={{ width: '100%', padding: 14, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)' }} />
+      <section className="cpw__card">
+        <form onSubmit={submit} className="cpw__form">
+          <div className="cpw__field">
+            <label htmlFor="current" className="cpw__label">كلمة المرور الحالية</label>
+            <div className="cpw__input-wrap">
+              <input id="current" type={showCur?'text':'password'} value={current} onChange={e=>setCurrent(e.target.value)} autoComplete="current-password" placeholder="••••••••" className="cpw__input cpw__input--with-btn" required />
+              <button type="button" className="cpw__toggle" onClick={()=>setShowCur(v=>!v)} tabIndex={-1}>{showCur?'🙈':'👁️'}</button>
+            </div>
+          </div>
 
-        <label className="meta" htmlFor="new-password">كلمة المرور الجديدة</label>
-        <input id="new-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" placeholder="8 أحرف أو أكثر" required style={{ width: '100%', padding: 14, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)' }} />
+          <div className="cpw__field">
+            <label htmlFor="next" className="cpw__label">كلمة المرور الجديدة</label>
+            <div className="cpw__input-wrap">
+              <input id="next" type={showNew?'text':'password'} value={next} onChange={e=>setNext(e.target.value)} autoComplete="new-password" placeholder="8 أحرف على الأقل" className="cpw__input cpw__input--with-btn" required minLength={8} />
+              <button type="button" className="cpw__toggle" onClick={()=>setShowNew(v=>!v)} tabIndex={-1}>{showNew?'🙈':'👁️'}</button>
+            </div>
+            {next.length > 0 && (
+              <div className="cpw__strength">
+                <div className="cpw__strength-bar"><div className="cpw__strength-fill" style={{width:`${strength.score*20}%`,background:strength.color}} /></div>
+                <span className="cpw__strength-label" style={{color:strength.color}}>{strength.label}</span>
+              </div>
+            )}
+          </div>
 
-        <label className="meta" htmlFor="confirm-password">تأكيد كلمة المرور الجديدة</label>
-        <input id="confirm-password" type="password" value={confirm} onChange={(e) => setConfirm(e.target.value)} autoComplete="new-password" placeholder="كرر كلمة المرور الجديدة" required style={{ width: '100%', padding: 14, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)' }} />
+          <div className="cpw__field">
+            <label htmlFor="confirm" className="cpw__label">تأكيد كلمة المرور</label>
+            <div className="cpw__input-wrap">
+              <input id="confirm" type={showConf?'text':'password'} value={confirm} onChange={e=>setConfirm(e.target.value)} autoComplete="new-password" placeholder="كرر كلمة المرور" className={`cpw__input cpw__input--with-btn ${mismatch?'cpw__input--error':''}`} required />
+              <button type="button" className="cpw__toggle" onClick={()=>setShowConf(v=>!v)} tabIndex={-1}>{showConf?'🙈':'👁️'}</button>
+            </div>
+            {mismatch && <span className="cpw__error">كلمتا المرور مش متطابقتين</span>}
+          </div>
 
-        <button className="primary" disabled={loading} style={{ minHeight: 50 }}>
-          {loading ? 'جاري التأمين…' : 'تغيير كلمة المرور 🔒'}
-        </button>
-      </form>
-
-      {message && <p role="alert" style={{ marginTop: 12, lineHeight: 1.7, color: 'var(--muted)' }}>{message}</p>}
-    </main>
+          {error && <div className="cpw__alert">{error}</div>}
+          <button type="submit" className="cpw__submit" disabled={!canSubmit}>{loading?'جاري التغيير…':'🔒 غيّر كلمة المرور'}</button>
+          <Link href="/account" className="cpw__back">← رجوع للحساب</Link>
+        </form>
+      </section>
+    </div></main>
   )
 }
