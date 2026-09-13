@@ -1,4 +1,10 @@
-.home-hero { padding: 20px 0 50px; position: relative; }
+/* ═══ EAH Home Hero — clean rebuild ═══ */
+
+.home-hero {
+  position: relative;
+  padding: 20px 0 50px;
+}
+
 .home-hero__inner {
   max-width: 880px;
   margin: 0 auto;
@@ -9,9 +15,41 @@
   gap: 22px;
   text-align: center;
 }
-.home-hero__logo { margin-bottom: -10px; }
 
-/* شريط المدينة */
+/* ═══ Logo container — يستوعب الكراون ═══ */
+.home-hero__logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* مساحة فوق اللوجو عشان الكراون ميتقطعش */
+  padding-top: 56px;
+  margin-top: -20px;
+}
+
+.home-hero__logo .eah-logo--xl {
+  --logo-w: 320px;
+  --slogan-fs: 1rem;
+  --crown-w: 22%;
+}
+
+@media (max-width: 768px) {
+  .home-hero__logo { padding-top: 44px; }
+  .home-hero__logo .eah-logo--xl {
+    --logo-w: 260px;
+    --slogan-fs: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-hero__logo { padding-top: 36px; }
+  .home-hero__logo .eah-logo--xl {
+    --logo-w: 220px;
+    --slogan-fs: 0.8rem;
+  }
+}
+
+/* ═══ City bar ═══ */
 .home-hero__city { display: flex; align-items: center; gap: 14px; }
 .home-hero__city-line {
   width: 44px;
@@ -34,7 +72,7 @@
   white-space: nowrap;
 }
 
-/* شريط البحث */
+/* ═══ Search ═══ */
 .home-hero__search {
   display: flex;
   align-items: center;
@@ -88,7 +126,7 @@
   box-shadow: 0 0 24px rgba(107, 33, 255, 0.7);
 }
 
-/* القوائم */
+/* ═══ Chips ═══ */
 .home-hero__chips {
   display: flex;
   flex-wrap: wrap;
@@ -117,7 +155,7 @@
   transform: translateY(-2px);
 }
 
-/* مربع "نفسك في ايه" — مستطيل عريض */
+/* ═══ Mood box ═══ */
 .home-hero__mood-box {
   position: relative;
   display: flex;
@@ -141,15 +179,6 @@
   border-color: #E8C79A;
   box-shadow: 0 0 32px rgba(232, 199, 154, 0.4);
 }
-.home-hero__mood-glow {
-  position: absolute;
-  inset: -50%;
-  background: radial-gradient(circle, rgba(232, 199, 154, 0.2) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 400ms ease;
-  pointer-events: none;
-}
-.home-hero__mood-box:hover .home-hero__mood-glow { opacity: 1; }
 .home-hero__mood-emoji {
   font-size: 1.7rem;
   filter: drop-shadow(0 0 8px rgba(232, 199, 154, 0.6));
@@ -201,40 +230,4 @@
   .home-hero__mood-text strong { font-size: 1rem; }
   .home-hero__mood-text small { font-size: 0.7rem; }
   .home-hero__mood-emoji { font-size: 1.5rem; }
-}
-
-/* Logo wrapper — مفيش خروج برا الشاشة */
-.home-hero__logo {
-  width: 100%;
-  max-width: 100%;
-  display: flex;
-  justify-content: center;
-  overflow: hidden;
-}
-.home-hero__logo .eah-logo {
-  max-width: min(90%, 460px);
-}
-@media (max-width: 640px) {
-  .home-hero__logo .eah-logo { max-width: 85%; }
-}
-
-/* ═══ Hero logo size override ═══ */
-.home-hero__logo .eah-logo--xl {
-  --logo-w: 320px;
-  --slogan-fs: 1rem;
-  --crown-w: 22%;
-}
-
-@media (max-width: 768px) {
-  .home-hero__logo .eah-logo--xl {
-    --logo-w: 260px;
-    --slogan-fs: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .home-hero__logo .eah-logo--xl {
-    --logo-w: 220px;
-    --slogan-fs: 0.8rem;
-  }
 }
