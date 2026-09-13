@@ -10,7 +10,6 @@
   pointer-events: none;
 }
 
-/* ===== Inner capsule ===== */
 .floating-capsule__inner {
   display: flex;
   align-items: center;
@@ -19,49 +18,31 @@
   padding: 10px 16px;
   border-radius: 999px;
   min-height: 64px;
-  background: rgba(8, 6, 16, 0.5);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  background: transparent;
   border: 1px solid transparent;
   box-shadow: none;
   transition:
-    background 350ms ease,
-    border-color 350ms ease,
-    box-shadow 350ms ease,
-    padding 350ms ease,
-    min-height 350ms ease;
+    background 400ms ease,
+    border-color 400ms ease,
+    box-shadow 400ms ease,
+    padding 400ms ease,
+    min-height 400ms ease;
   pointer-events: auto;
-  overflow: visible;
 }
 
-/* ===== SCROLL DOWN → الحدود والخلفية تظهر ===== */
-.floating-capsule.is-down .floating-capsule__inner {
+/* ===== عند النزول: الحدود + الخلفية تظهر ===== */
+.floating-capsule.is-scrolled .floating-capsule__inner {
   background: rgba(8, 6, 16, 0.75);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
   border-color: rgba(139, 92, 246, 0.3);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.03),
     0 8px 30px rgba(0, 0, 0, 0.5),
     0 0 60px rgba(107, 33, 255, 0.15);
-  min-height: 68px;
 }
 
-/* ===== SCROLL UP → الحدود والخلفية تختفي ===== */
-.floating-capsule.is-up .floating-capsule__inner {
-  background: rgba(8, 6, 16, 0.15);
-  border-color: transparent;
-  box-shadow: none;
-  min-height: 60px;
-}
-
-/* ===== IDLE (مفيش سكرول) → نفس النزول ===== */
-.floating-capsule.is-idle .floating-capsule__inner {
-  background: rgba(8, 6, 16, 0.6);
-  border-color: rgba(139, 92, 246, 0.2);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  min-height: 64px;
-}
-
-/* ===== اللوجو: يظهر مع النزول، يختفي مع الطلوع ===== */
+/* ===== اللوجو: مخفي في الأول، يظهر عند النزول ===== */
 .floating-capsule__center {
   flex-shrink: 0;
   padding: 0 12px;
@@ -70,38 +51,26 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition:
-    opacity 350ms cubic-bezier(0.34, 1.2, 0.64, 1),
-    transform 350ms cubic-bezier(0.34, 1.2, 0.64, 1),
-    max-width 350ms cubic-bezier(0.34, 1.2, 0.64, 1),
-    padding 350ms cubic-bezier(0.34, 1.2, 0.64, 1);
-  will-change: opacity, transform;
-  opacity: 1;
-  transform: scale(1);
-  max-width: 200px;
-}
-
-/* scroll down → اللوجو ظاهر */
-.floating-capsule.is-down .floating-capsule__center {
-  opacity: 1;
-  transform: scale(1);
-  max-width: 200px;
-}
-
-/* scroll up → اللوجو يختفي */
-.floating-capsule.is-up .floating-capsule__center {
   opacity: 0;
-  transform: scale(0.85);
+  transform: scale(0.8) translateY(-6px);
   max-width: 0;
-  padding: 0;
+  overflow: hidden;
+  transition:
+    opacity 400ms cubic-bezier(0.34, 1.2, 0.64, 1),
+    transform 400ms cubic-bezier(0.34, 1.2, 0.64, 1),
+    max-width 400ms cubic-bezier(0.34, 1.2, 0.64, 1),
+    padding 400ms cubic-bezier(0.34, 1.2, 0.64, 1);
+  will-change: opacity, transform;
   pointer-events: none;
 }
 
-/* idle → اللوجو ظاهر */
-.floating-capsule.is-idle .floating-capsule__center {
+.floating-capsule.is-scrolled .floating-capsule__center {
   opacity: 1;
-  transform: scale(1);
+  transform: scale(1) translateY(0);
   max-width: 200px;
+  padding: 0 12px;
+  padding-top: 4px;
+  pointer-events: auto;
 }
 
 /* ===== Sides ===== */
@@ -202,6 +171,10 @@
   .floating-capsule__inner { padding: 8px 10px; gap: 6px; min-height: 56px; }
   .floating-capsule__side { gap: 4px; }
   .floating-capsule__center { padding: 0 8px; padding-top: 2px; }
+  .floating-capsule.is-scrolled .floating-capsule__center {
+    padding: 0 8px;
+    padding-top: 2px;
+  }
   .nav-drawer__nav { grid-template-columns: 1fr; }
 }
 

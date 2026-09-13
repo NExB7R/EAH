@@ -27,38 +27,22 @@ const MENU_LINKS = [
 ]
 
 export default function FloatingCapsuleHeader() {
-  const [direction, setDirection] = useState<'up' | 'down' | 'idle'>('idle')
+  const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    let lastY = window.scrollY
-    let idleTimer: ReturnType<typeof setTimeout> | null = null
-
     const onScroll = () => {
-      const y = window.scrollY
-      const diff = y - lastY
-
-      if (Math.abs(diff) > 4) {
-        setDirection(diff > 0 ? 'down' : 'up')
-      }
-
-      // بعد 500ms من آخر سكرول → idle (يظهر كل حاجة)
-      if (idleTimer) clearTimeout(idleTimer)
-      idleTimer = setTimeout(() => setDirection('idle'), 500)
-
-      lastY = y
+      // simple: فوق → hidden, نازل → visible
+      setScrolled(window.scrollY > 60)
     }
-
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      if (idleTimer) clearTimeout(idleTimer)
-    }
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
     <>
-      <header className={`floating-capsule is-${direction}`}>
+      <header className={`floating-capsule ${scrolled ? 'is-scrolled' : ''}`}>
         <div className="floating-capsule__inner">
           <div className="floating-capsule__side floating-capsule__side--start">
             <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" onClick={() => setMenuOpen(true)} />
