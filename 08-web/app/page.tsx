@@ -1,6 +1,6 @@
 import HomeHero from '@/components/home-hero'
 import SectionSlider from '@/components/section-slider'
-import BusinessCardV3 from '@/components/business-card-v3'
+import BusinessCardV4 from '@/components/business-card-v4'
 import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SidePanel from '@/components/side-panel'
@@ -54,7 +54,7 @@ export default function Page() {
           totalItems={restaurants.length}
         >
           {restaurants.slice(0, 10).map((b) => (
-            <BusinessCardV3 key={b.slug} business={b} variant="restaurant" />
+            <BusinessCardV4 key={b.slug} business={b} variant="restaurant" />
           ))}
         </SectionSlider>
 
@@ -68,7 +68,7 @@ export default function Page() {
           totalItems={offers.length}
         >
           {offers.slice(0, 10).map((b) => (
-            <BusinessCardV3 key={b.slug} business={b} variant="offer" />
+            <BusinessCardV4 key={b.slug} business={b} variant="offer" />
           ))}
         </SectionSlider>
 
@@ -82,7 +82,7 @@ export default function Page() {
           totalItems={pharmacies.length}
         >
           {pharmacies.slice(0, 10).map((b) => (
-            <BusinessCardV3 key={b.slug} business={b} variant="pharmacy" />
+            <BusinessCardV4 key={b.slug} business={b} variant="pharmacy" />
           ))}
         </SectionSlider>
 
@@ -96,7 +96,7 @@ export default function Page() {
           totalItems={delivery.length}
         >
           {delivery.slice(0, 10).map((b) => (
-            <BusinessCardV3 key={b.slug} business={b} variant="delivery" />
+            <BusinessCardV4 key={b.slug} business={b} variant="delivery" />
           ))}
         </SectionSlider>
 
@@ -110,7 +110,7 @@ export default function Page() {
           totalItems={markets.length}
         >
           {markets.slice(0, 10).map((b) => (
-            <BusinessCardV3 key={b.slug} business={b} variant="market" />
+            <BusinessCardV4 key={b.slug} business={b} variant="market" />
           ))}
         </SectionSlider>
 
@@ -124,7 +124,7 @@ export default function Page() {
           totalItems={newBiz.length}
         >
           {newBiz.slice(0, 10).map((b) => (
-            <BusinessCardV3 key={b.slug} business={b} variant="new" />
+            <BusinessCardV4 key={b.slug} business={b} variant="new" />
           ))}
         </SectionSlider>
       </main>

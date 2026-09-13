@@ -1,0 +1,190 @@
+/* ===== EAH Image-First Card 2026 (Liquid Glass) ===== */
+.fcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* المحتوى في الأسفل */
+  width: 260px;
+  height: 340px;
+  border-radius: 24px;
+  overflow: hidden;
+  text-decoration: none;
+  color: #F4F2FA;
+  background: #0A0812;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition:
+    transform 400ms cubic-bezier(0.34, 1.4, 0.64, 1),
+    border-color 300ms ease,
+    box-shadow 400ms ease;
+  will-change: transform;
+  isolation: isolate;
+}
+
+.fcard:hover {
+  transform: translateY(-6px) scale(1.02);
+  border-color: var(--accent, #A855F7);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 0 50px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ===== الصورة/الخلفية ===== */
+.fcard__image {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 40%, transparent), #0A0812 90%);
+  z-index: 0;
+  transition: transform 600ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.fcard:hover .fcard__image {
+  transform: scale(1.05); /* تأثير تكبير خفيف عند الهوفر */
+}
+
+.fcard__emoji {
+  font-size: 6rem;
+  line-height: 1;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.6));
+  transition: transform 500ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.fcard:hover .fcard__emoji {
+  transform: scale(1.1) translateY(-10px);
+}
+
+/* ===== شريط الحالة العلوي (زجاجي) ===== */
+.fcard__top-glass {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+}
+
+.fcard__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(10, 8, 18, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.fcard__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.fcard__status.is-on { color: #4ADE80; }
+.fcard__status.is-on .fcard__dot { animation: fcard-pulse 2s infinite; }
+.fcard__status.is-off { color: #F87171; }
+
+@keyframes fcard-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* ===== المحتوى السفلي (الزجاج السائل) ===== */
+.fcard__content {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(10, 8, 18, 0.95) 0%, rgba(10, 8, 18, 0.7) 60%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fcard__header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fcard__name {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.fcard__area {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.75rem;
+  color: #A29DB5;
+}
+
+/* ===== الفوتر (الهوك + السهم) ===== */
+.fcard__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fcard__hook {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent, #A855F7);
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.fcard__hook-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+  animation: fcard-pulse 2s infinite;
+}
+
+.fcard__arrow {
+  color: #F4F2FA;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: all 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.fcard:hover .fcard__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .fcard { width: 220px; height: 300px; }
+  .fcard__emoji { font-size: 5rem; }
+}
+
+@media (max-width: 640px) {
+  .fcard { width: 180px; height: 260px; }
+  .fcard__emoji { font-size: 4rem; }
+  .fcard__name { font-size: 1.1rem; }
+  .fcard__content { padding: 16px; }
+}
