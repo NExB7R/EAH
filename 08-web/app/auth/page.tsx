@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
-import EahAdSlot from '@/components/eah-ad-slot'
+import './auth.css'
 
 function normalizeEgyptPhone(value: string) {
   const raw = value.trim().replace(/[\s()-]/g, '')
@@ -26,6 +26,8 @@ export default function AuthPage() {
   const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -128,60 +130,160 @@ export default function AuthPage() {
   }
 
   return (
-    <main className="container" style={{ paddingTop: 42, maxWidth: 980 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(320px, 460px)', gap: 28, alignItems: 'start' }}>
-        <section style={{ paddingTop: 12 }}>
-          <div className="eyebrow">EAH • EAT AROUND HERE</div>
-          <h1 style={{ fontSize: 'clamp(2.4rem, 7vw, 4.5rem)', lineHeight: 1.05, margin: '14px 0' }}>
-            {mode === 'login' ? 'سجّل بسرعة ⚡' : 'اعمل حسابك على EAH ⚡'}
+    <main className="auth">
+      <div className="auth__wrap">
+        {/* Hero — RTL right side */}
+        <section className="auth__hero">
+          <span className="auth__kicker">EAH • EAT AROUND HERE</span>
+          <h1 className="auth__title">
+            {mode === 'login' ? (
+              <>سجّل بسرعة <span className="auth__title-accent">⚡</span></>
+            ) : (
+              <>اعمل حسابك <span className="auth__title-accent">⚡</span></>
+            )}
           </h1>
-          <p className="lead" style={{ maxWidth: 620 }}>
+          <p className="auth__lead">
             {mode === 'login'
               ? 'ادخل برقم الموبايل وكلمة المرور واستكمل رحلتك على EAH.'
               : 'اسمك + رقم موبايلك + كلمة مرور. من غير OTP ومن غير رسائل SMS.'}
           </p>
-          <div className="card" style={{ marginTop: 22, padding: 18, background: 'linear-gradient(135deg, rgba(168,85,247,.10), rgba(124,58,237,.04))' }}>
-            <strong>الجلسة بتفضل شغالة.</strong>
-            <div style={{ marginTop: 6, opacity: .72, lineHeight: 1.7 }}>لما تدخل مرة، EAH بيحافظ على جلستك ويجددها تلقائيًا طالما الحساب صالح. استخدم تسجيل الخروج لو الجهاز مش معاك.</div>
+
+          <div className="auth__note">
+            <strong className="auth__note-title">🔒 الجلسة بتفضل شغالة</strong>
+            <p className="auth__note-text">
+              لما تدخل مرة، EAH بيحافظ على جلستك ويجددها تلقائيًا طالما الحساب صالح. استخدم تسجيل الخروج لو الجهاز مش معاك.
+            </p>
           </div>
-          <div style={{ marginTop: 18, fontSize: 13, opacity: .56 }}>تسجيل الحساب بيتم برقم الموبايل الظاهر لك، بينما نظام المصادقة الداخلي يستخدم هوية آمنة خاصة بـ EAH.</div>
+
+          <p className="auth__fineprint">
+            تسجيل الحساب بيتم برقم الموبايل الظاهر لك، بينما نظام المصادقة الداخلي يستخدم هوية آمنة خاصة بـ EAH.
+          </p>
         </section>
 
-        <section>
-          <EahAdSlot slotKey="auth_top" />
-
-          <div className="choice-row" role="tablist" aria-label="نوع الحساب">
-            <button type="button" className={`choice ${mode === 'login' ? 'selected' : ''}`} onClick={() => { setMode('login'); setMessage('') }}>دخول</button>
-            <button type="button" className={`choice ${mode === 'signup' ? 'selected' : ''}`} onClick={() => { setMode('signup'); setMessage('') }}>تسجيل جديد</button>
+        {/* Card — form */}
+        <section className="auth__card">
+          <div className="auth__tabs" role="tablist" aria-label="نوع الحساب">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'login'}
+              className={`auth__tab ${mode === 'login' ? 'auth__tab--active' : ''}`}
+              onClick={() => { setMode('login'); setMessage('') }}
+            >
+              دخول
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === 'signup'}
+              className={`auth__tab ${mode === 'signup' ? 'auth__tab--active' : ''}`}
+              onClick={() => { setMode('signup'); setMessage('') }}
+            >
+              تسجيل جديد
+            </button>
           </div>
 
-          <form onSubmit={submit} className="card" style={{ padding: 22, marginTop: 14, display: 'grid', gap: 12 }}>
+          <form onSubmit={submit} className="auth__form">
             {mode === 'signup' && (
-              <>
-                <label htmlFor="name" className="meta">الاسم</label>
-                <input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="مثلاً: نور الدين" required style={{ width: '100%', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)', padding: 14, borderRadius: 14 }} />
-              </>
+              <div className="auth__field">
+                <label htmlFor="name" className="auth__label">الاسم</label>
+                <div className="auth__input-wrap">
+                  <input
+                    id="name"
+                    className="auth__input"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="مثلاً: نور الدين"
+                    required
+                  />
+                </div>
+              </div>
             )}
-            <label htmlFor="phone" className="meta">رقم الموبايل</label>
-            <input id="phone" type="tel" dir="ltr" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="01012345678" required autoComplete="tel" style={{ width: '100%', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)', padding: 14, borderRadius: 14 }} />
-            <label htmlFor="password" className="meta">كلمة المرور</label>
-            <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="8 أحرف أو أكثر" required autoComplete={mode === 'login' ? 'current-password' : 'new-password'} style={{ width: '100%', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)', padding: 14, borderRadius: 14 }} />
+
+            <div className="auth__field">
+              <label htmlFor="phone" className="auth__label">رقم الموبايل</label>
+              <div className="auth__input-wrap">
+                <input
+                  id="phone"
+                  className="auth__input"
+                  type="tel"
+                  dir="ltr"
+                  inputMode="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="01012345678"
+                  required
+                  autoComplete="tel"
+                />
+              </div>
+            </div>
+
+            <div className="auth__field">
+              <label htmlFor="password" className="auth__label">كلمة المرور</label>
+              <div className="auth__input-wrap">
+                <input
+                  id="password"
+                  className="auth__input auth__input--with-btn"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="8 أحرف أو أكثر"
+                  required
+                  autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                />
+                <button
+                  type="button"
+                  className="auth__input-btn"
+                  onClick={() => setShowPassword(v => !v)}
+                  aria-label={showPassword ? 'إخفاء' : 'إظهار'}
+                  tabIndex={-1}
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
+            </div>
+
             {mode === 'signup' && (
-              <>
-                <label htmlFor="confirm-password" className="meta">تأكيد كلمة المرور</label>
-                <input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="كرر كلمة المرور" required autoComplete="new-password" style={{ width: '100%', border: '1px solid var(--border)', background: 'var(--surface-2)', color: 'var(--text)', padding: 14, borderRadius: 14 }} />
-              </>
+              <div className="auth__field">
+                <label htmlFor="confirm-password" className="auth__label">تأكيد كلمة المرور</label>
+                <div className="auth__input-wrap">
+                  <input
+                    id="confirm-password"
+                    className="auth__input auth__input--with-btn"
+                    type={showConfirm ? 'text' : 'password'}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="كرر كلمة المرور"
+                    required
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    className="auth__input-btn"
+                    onClick={() => setShowConfirm(v => !v)}
+                    aria-label={showConfirm ? 'إخفاء' : 'إظهار'}
+                    tabIndex={-1}
+                  >
+                    {showConfirm ? '🙈' : '👁️'}
+                  </button>
+                </div>
+              </div>
             )}
-            <button className="primary" disabled={loading} style={{ marginTop: 4, minHeight: 50 }}>{loading ? 'جاري التنفيذ…' : mode === 'login' ? 'دخول ⚡' : 'سجّل بسرعة ⚡'}</button>
+
+            <button className="auth__submit" disabled={loading}>
+              {loading ? 'جاري التنفيذ…' : mode === 'login' ? 'دخول ⚡' : 'سجّل بسرعة ⚡'}
+            </button>
           </form>
 
           {mode === 'login' && (
-            <div style={{ textAlign: 'center', marginTop: 12 }}>
-              <a href="/auth/recover" style={{ color: '#c4b5fd', fontWeight: 700 }}>نسيت كلمة المرور؟</a>
+            <div className="auth__recover">
+              <a href="/auth/recover" className="auth__recover-link">
+                نسيت كلمة المرور؟
+              </a>
             </div>
           )}
 
-          {message && <p role="alert" style={{ marginTop: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{message}</p>}
+          {message && <div className="auth__alert" role="alert">{message}</div>}
         </section>
       </div>
     </main>
