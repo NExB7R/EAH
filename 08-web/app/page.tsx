@@ -1,4 +1,5 @@
 import HomeHero from '@/components/home-hero'
+import CircleSlider from '@/components/circle-slider'
 import SectionSlider from '@/components/section-slider'
 import BusinessCardV4 from '@/components/business-card-v4'
 import SiteFooter from '@/components/site-footer'
@@ -9,13 +10,11 @@ import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { generateMockStats } from '@/lib/mock-stats'
 
-export const revalidate = 300 // إعادة تحميل كل 5 دقايق
+export const revalidate = 300
 
 export default async function Page() {
-  // ===== قراءة من Supabase =====
   const businesses = await getPublishedBusinesses(50)
 
-  // ===== نحوّل لإحصائيات + نرتب =====
   const withStats = businesses.map((b) => {
     const stats = generateMockStats({
       slug: b.slug,
@@ -30,7 +29,6 @@ export default async function Page() {
 
   const restaurants = diversified.filter((b) => b.type === 'restaurant')
   const pharmacies = diversified.filter((b) => b.type === 'pharmacy')
-  const markets = diversified.filter((b) => b.type === 'supermarket')
   const delivery = diversified.filter((b) => b.type === 'delivery_office')
 
   const offers = diversified
@@ -47,23 +45,25 @@ export default async function Page() {
       <SidePanel />
       <BackToTop />
 
-      <main style={{ paddingTop: '120px' }}>
+      <main style={{ paddingTop: '100px' }}>
         <HomeHero />
 
-        <SectionSlider
+        {/* ===== مطاعم — شكل بيتزا ===== */}
+        <CircleSlider
           id="restaurants"
           title="نفسك في إيه؟ 🔥"
-          subtitle={`${restaurants.length} مطعم في شبين القناطر`}
+          subtitle={`${restaurants.length} مطعم مستنيينك`}
           seeAllHref="/explore?type=restaurant"
-          variant="restaurant"
-          maxItems={10}
-          totalItems={restaurants.length}
+          shape="pizza"
+          accent="#FB923C"
+          maxVisible={8}
         >
-          {restaurants.slice(0, 10).map((b) => (
+          {restaurants.slice(0, 8).map((b) => (
             <BusinessCardV4 key={b.slug} business={b} variant="restaurant" />
           ))}
-        </SectionSlider>
+        </CircleSlider>
 
+        {/* ===== عروض — أفقي عادي ===== */}
         <SectionSlider
           id="offers"
           title="عروض نار 🔥"
@@ -78,62 +78,51 @@ export default async function Page() {
           ))}
         </SectionSlider>
 
-        <SectionSlider
+        {/* ===== صيدليات — شكل كبسولة ===== */}
+        <CircleSlider
           id="pharmacies"
           title="صحتك أولاً 💊"
-          subtitle={`${pharmacies.length} صيدلية قريبة منك`}
+          subtitle={`${pharmacies.length} صيدلية قريبة`}
           seeAllHref="/explore?type=pharmacy"
-          variant="pharmacy"
-          maxItems={10}
-          totalItems={pharmacies.length}
+          shape="capsule"
+          accent="#4ADE80"
+          maxVisible={6}
         >
-          {pharmacies.slice(0, 10).map((b) => (
+          {pharmacies.slice(0, 6).map((b) => (
             <BusinessCardV4 key={b.slug} business={b} variant="pharmacy" />
           ))}
-        </SectionSlider>
+        </CircleSlider>
 
-        <SectionSlider
+        {/* ===== توصيل — شكل صاعقة ===== */}
+        <CircleSlider
           id="delivery"
           title="على السريع 🛵"
           subtitle={`${delivery.length} مكتب توصيل`}
           seeAllHref="/explore?type=delivery_office"
-          variant="delivery"
-          maxItems={10}
-          totalItems={delivery.length}
+          shape="lightning"
+          accent="#FB923C"
+          maxVisible={5}
         >
-          {delivery.slice(0, 10).map((b) => (
+          {delivery.slice(0, 5).map((b) => (
             <BusinessCardV4 key={b.slug} business={b} variant="delivery" />
           ))}
-        </SectionSlider>
+        </CircleSlider>
 
-        <SectionSlider
-          id="markets"
-          title="طلباتك عندنا 🛒"
-          subtitle={`${markets.length} سوبر ماركت`}
-          seeAllHref="/explore?type=supermarket"
-          variant="market"
-          maxItems={10}
-          totalItems={markets.length}
-        >
-          {markets.slice(0, 10).map((b) => (
-            <BusinessCardV4 key={b.slug} business={b} variant="market" />
-          ))}
-        </SectionSlider>
-
+        {/* ===== جديد — شكل شتلة ===== */}
         {newBiz.length > 0 && (
-          <SectionSlider
+          <CircleSlider
             id="new-businesses"
             title="مشاريع صغيرة، فرص كبيرة 🌱"
             subtitle={`${newBiz.length} مكان جديد`}
-            seeAllHref="/new"
-            variant="new"
-            maxItems={10}
-            totalItems={newBiz.length}
+            seeAllHref="/explore?type=new"
+            shape="seedling"
+            accent="#C084FC"
+            maxVisible={6}
           >
-            {newBiz.slice(0, 10).map((b) => (
+            {newBiz.slice(0, 6).map((b) => (
               <BusinessCardV4 key={b.slug} business={b} variant="new" />
             ))}
-          </SectionSlider>
+          </CircleSlider>
         )}
       </main>
 

@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getBusinessBySlug } from '@/lib/data'
 import {
@@ -28,23 +27,39 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
+const EMPTY_STATS = {
+  business_id: '',
+  avg_taste: 0,
+  avg_value: 0,
+  avg_speed: 0,
+  avg_experience: 0,
+  avg_rating: 0,
+  total_reviews: 0,
+  review_count: 0,
+  active_offers: 0,
+  recent_views: 0,
+}
+
 export default async function BusinessPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const business = await getBusinessBySlug(slug)
-  if (!business || !business.businessId) notFound()
+  if (!business) notFound()
+
+  // businessId ممكن يكون undefined لو رجعنا من demo fallback
+  const hasId = !!business.businessId
 
   const [stats, reviews, offers, contacts] = await Promise.all([
-    getBusinessStats(business.businessId),
-    getBusinessReviews(business.businessId, 6),
-    getBusinessOffers(business.businessId),
-    getBusinessContacts(business.businessId),
+    hasId ? getBusinessStats(business.businessId!) : Promise.resolve(EMPTY_STATS),
+    hasId ? getBusinessReviews(business.businessId!, 6) : Promise.resolve([]),
+    hasId ? getBusinessOffers(business.businessId!) : Promise.resolve([]),
+    hasId ? getBusinessContacts(business.businessId!) : Promise.resolve([]),
   ])
 
   return (
     <>
       <FloatingCapsuleHeader />
       <BackToTop />
-      <PageViewTracker businessId={business.businessId} />
+      {hasId && <PageViewTracker businessId={business.businessId!} />}
 
       <main>
         <BusinessHero
@@ -66,7 +81,7 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
 
         <BusinessOffers offers={offers} />
 
-        <BusinessContact businessId={business.businessId} contacts={contacts} />
+        {hasId && <BusinessContact businessId={business.businessId!} contacts={contacts} />}
 
         <BusinessReviews stats={stats} reviews={reviews} />
       </main>

@@ -1,6 +1,11 @@
 'use client'
-import { useState, useEffect, useRef, type ReactNode } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
 import Link from 'next/link'
+import ShapePizza from './shapes/shape-pizza'
+import ShapeCapsule from './shapes/shape-capsule'
+import ShapeLightning from './shapes/shape-lightning'
+import ShapeCrown from './shapes/shape-crown'
+import ShapeSeedling from './shapes/shape-seedling'
 import './circle-slider.css'
 
 type Shape = 'pizza' | 'capsule' | 'lightning' | 'crown' | 'seedling'
@@ -13,10 +18,16 @@ type CircleSliderProps = {
   shape: Shape
   accent?: string
   items: ReactNode[]
-  /** أقصى عدد كروت في الدايرة */
   maxVisible?: number
-  /** مدة الدوران التلقائي (ms) */
   autoRotateMs?: number
+}
+
+const SHAPES: Record<Shape, React.ComponentType> = {
+  pizza: ShapePizza,
+  capsule: ShapeCapsule,
+  lightning: ShapeLightning,
+  crown: ShapeCrown,
+  seedling: ShapeSeedling,
 }
 
 export default function CircleSlider({
@@ -27,7 +38,7 @@ export default function CircleSlider({
   shape,
   accent = '#A855F7',
   items,
-  maxVisible = 8,
+  maxVisible = 6,
   autoRotateMs = 5000,
 }: CircleSliderProps) {
   const visibleItems = items.slice(0, maxVisible)
@@ -36,48 +47,25 @@ export default function CircleSlider({
 
   const [rotation, setRotation] = useState(0)
   const [paused, setPaused] = useState(false)
-  const [isDesktop, setIsDesktop] = useState(false)
-  const rotationRef = useRef(0)
 
-  // نتحقق من حجم الشاشة (الدائرة صعبة على الموبايل)
   useEffect(() => {
-    const check = () => setIsDesktop(window.innerWidth >= 900)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
-  // Auto-rotate
-  useEffect(() => {
-    if (!isDesktop || paused || total <= 1) return
+    if (paused || total <= 1) return
     const timer = setInterval(() => {
       setRotation((r) => r + angleStep)
     }, autoRotateMs)
     return () => clearInterval(timer)
-  }, [isDesktop, paused, total, angleStep, autoRotateMs])
+  }, [paused, total, angleStep, autoRotateMs])
 
-  useEffect(() => {
-    rotationRef.current = rotation
-  }, [rotation])
+  const rotate = (dir: 1 | -1) => setRotation((r) => r + dir * angleStep)
 
-  const rotate = (dir: 1 | -1) => {
-    setRotation((r) => r + dir * angleStep)
-  }
-
-  // ===== Render =====
-  const shapeComponent = (() => {
-    switch (shape) {
-      case 'pizza': return <ShapeWrapper name="pizza" />
-      case 'capsule': return <ShapeWrapper name="capsule" />
-      case 'lightning': return <ShapeWrapper name="lightning" />
-      case 'crown': return <ShapeWrapper name="crown" />
-      case 'seedling': return <ShapeWrapper name="seedling" />
-    }
-  })()
+  const ShapeComp = SHAPES[shape]
 
   return (
-    <section id={id} className={`cslider cslider--${shape}`} style={{ '--accent': accent } as React.CSSProperties}>
-      {/* Head */}
+    <section
+      id={id}
+      className={`cslider cslider--${shape}`}
+      style={{ '--accent': accent } as React.CSSProperties}
+    >
       <div className="cslider__head">
         <div className="cslider__titles">
           <h2 className="cslider__title">{title}</h2>
@@ -91,32 +79,26 @@ export default function CircleSlider({
         </Link>
       </div>
 
-      {/* Stage */}
       <div
         className="cslider__stage"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        {/* Center shape */}
+        {/* الشكل المركزي */}
         <div className="cslider__shape">
-          {shapeComponent}
+          <ShapeComp />
         </div>
 
-        {/* Cards ring */}
+        {/* الحلقة */}
         {total > 0 && (
-          <div
-            className="cslider__ring"
-            style={{ transform: `rotate(${rotation}deg)` }}
-          >
+          <div className="cslider__ring">
             {visibleItems.map((item, i) => {
-              const angle = angleStep * i
+              const angle = angleStep * i + rotation
               return (
                 <div
                   key={i}
                   className="cslider__slot"
-                  style={{
-                    transform: `rotate(${angle}deg) translateY(var(--cslider-radius)) rotate(${-angle}deg)`,
-                  }}
+                  style={{ '--angle': `${angle}deg` } as React.CSSProperties}
                 >
                   {item}
                 </div>
@@ -125,7 +107,7 @@ export default function CircleSlider({
           </div>
         )}
 
-        {/* Nav buttons */}
+        {/* أزرار */}
         {total > 1 && (
           <>
             <button
@@ -149,22 +131,4 @@ export default function CircleSlider({
       </div>
     </section>
   )
-}
-
-// ===== Shape wrapper (lazy import) =====
-function ShapeWrapper({ name }: { name: Shape }) {
-  const [Comp, setComp] = useState<React.ComponentType | null>(null)
-
-  useEffect(() => {
-    const load = async () => {
-      const mod = await import(
-        `./shapes/shape-${name}`
-      )
-      setComp(() => mod.default)
-    }
-    load()
-  }, [name])
-
-  if (!Comp) return null
-  return <Comp />
 }
