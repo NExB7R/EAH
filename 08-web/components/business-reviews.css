@@ -145,3 +145,24 @@
   .brev__summary { grid-template-columns: 1fr; gap: var(--eah-space); }
   .brev__score-num { font-size: 2.4rem; }
 }
+
+.brev__merchant-reply {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(139,92,246,.08), rgba(168,85,247,.03));
+  border-right: 3px solid #A855F7;
+}
+.brev__merchant-reply-label {
+  display: block;
+  font-size: .75rem;
+  font-weight: 800;
+  color: #A855F7;
+  margin-bottom: 4px;
+}
+.brev__merchant-reply-text {
+  color: #E5E3F0;
+  font-size: .85rem;
+  line-height: 1.6;
+  margin: 0;
+}

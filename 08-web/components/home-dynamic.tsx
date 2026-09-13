@@ -6,6 +6,7 @@ import { generateMockStats } from '@/lib/mock-stats'
 import HomeHero from '@/components/home-hero'
 import SectionSlider from '@/components/section-slider'
 import ExploreCard from '@/components/explore-card'
+import TrustSection from '@/components/trust-section'
 
 type Section = { id: string; type: string; visible: boolean; props: any }
 type DesignData = { theme?: { primaryColor?: string; bgColor?: string }; sections?: Section[] }
@@ -84,6 +85,7 @@ export default async function HomeDynamic() {
         {renderSlider('ph', 'الصيدليات', 'قريبة منك', '/explore?type=pharmacy', 'pharmacy', pharmacies)}
         {renderSlider('d', '🛵 على السريع', 'توصيل', '/explore?type=delivery_office', 'delivery', delivery)}
         {renderSlider('n', '🌱 مشاريع محتاجة فرصة', 'جديد في الحتة', '/explore', 'new', newBiz)}
+        <TrustSection />
       </>
     )
   }
@@ -92,6 +94,7 @@ export default async function HomeDynamic() {
   return (
     <div style={theme?.bgColor ? { background: theme.bgColor } : undefined}>
       {sections.map((section) => renderSection(section, diversified))}
+      <TrustSection />
     </div>
   )
 }

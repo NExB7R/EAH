@@ -299,3 +299,17 @@
 @media (prefers-reduced-motion: reduce) {
   .ecard, .ecard__emoji, .ecard__reveal, .ecard__reveal-inner { transition: none; }
 }
+
+/* زرار المفضلة على الكارت */
+.ecard__fav {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+}
+
+/* OpenNow badge على الكارت */
+.ecard .onb {
+  font-size: .62rem;
+  padding: 2px 8px;
+}

@@ -1,4 +1,6 @@
 'use client'
+import MerchantReplyForm from './merchant-reply-form'
+import './merchant-reply-form.css'
 import './business-reviews.css'
 
 type Stats = {
@@ -19,6 +21,9 @@ type Review = {
   comment: string | null
   created_at: string
   user_name: string | null
+  merchant_reply?: string | null
+  merchant_reply_at?: string | null
+  business_id?: string
 }
 
 function Stars({ value }: { value: number }) {
@@ -116,6 +121,13 @@ export default function BusinessReviews({
                 {r.comment && (
                   <p className="brev__item-comment">{r.comment}</p>
                 )}
+                {r.merchant_reply ? (
+                  <div className="brev__merchant-reply">
+                    <span className="brev__merchant-reply-label">💬 ردّ التاجر:</span>
+                    <p className="brev__merchant-reply-text">{r.merchant_reply}</p>
+                  </div>
+                ) : null}
+                {r.id && <MerchantReplyForm reviewId={r.id} existingReply={r.merchant_reply} />}
               </div>
             )
           })}
