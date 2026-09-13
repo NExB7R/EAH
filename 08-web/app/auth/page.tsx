@@ -26,6 +26,7 @@ export default function AuthPage() {
   const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [gender, setGender] = useState<'male' | 'female' | ''>('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [message, setMessage] = useState('')
@@ -77,6 +78,11 @@ export default function AuthPage() {
         setLoading(false)
         return
       }
+      if (!gender) {
+        setMessage('اختار ذكر ولا أنثى.')
+        setLoading(false)
+        return
+      }
       if (password !== confirmPassword) {
         setMessage('تأكيد كلمة المرور غير مطابق.')
         setLoading(false)
@@ -96,6 +102,7 @@ export default function AuthPage() {
             data: {
               display_name: name.trim(),
               phone_e164: normalized,
+              gender,
             },
           },
         })

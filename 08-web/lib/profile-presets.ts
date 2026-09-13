@@ -1,5 +1,11 @@
 export type PresetAvatar = { key: string; from: string; to: string }
-export type PresetTitle = { key: string; label: string; emoji: string; hint: string }
+export type PresetTitle = {
+  key: string
+  label: string
+  emoji: string
+  hint: string
+  gender: 'male' | 'female' | 'both'
+}
 export type PresetFrame = { key: string; label: string; border: string; glow: string }
 
 export const AVATARS: PresetAvatar[] = [
@@ -18,21 +24,37 @@ export const AVATARS: PresetAvatar[] = [
 ]
 
 export const TITLES: PresetTitle[] = [
-  { key: 'ibn_elbalad',   label: 'ابن البلد',       emoji: '🌾', hint: 'الافتراضي' },
-  { key: 'elgada',        label: 'الجدع',           emoji: '🔥', hint: 'للنشيطين' },
-  { key: 'elassta',       label: 'الأسطى',          emoji: '🛠️', hint: 'للمحترفين' },
-  { key: 'omdat_elheta',  label: 'عمدة الحتة',      emoji: '👑', hint: 'للزعماء' },
-  { key: 'elraye2',       label: 'الرايق',          emoji: '😎', hint: 'للهادي' },
-  { key: 'elharraf',      label: 'الحراف',          emoji: '🏃', hint: 'للسريعين' },
-  { key: 'elfaylasoof',   label: 'الفيلسوف',        emoji: '🤔', hint: 'للمفكرين' },
-  { key: 'elgoker',       label: 'الجوكر',          emoji: '🎭', hint: 'للمزح' },
-  { key: 'beloved_food',  label: 'اللي بيحب ياكل',  emoji: '🍽️', hint: 'لعشاق الأكل' },
-  { key: 'elshbah',       label: 'الشبح الطاير',    emoji: '👻', hint: 'للغامضين' },
-  { key: 'elmo3allem',    label: 'المعلم',          emoji: '👨‍🏫', hint: 'للخبراء' },
-  { key: 'elsaheb',       label: 'الصاحب',          emoji: '✅', hint: 'للأصدقاء' },
-  { key: 'ged3an',        label: 'جدع جدعان',       emoji: '💪', hint: 'للأقوياء' },
-  { key: 'nagm_elheta',   label: 'نجم الحتة',       emoji: '⭐', hint: 'للمشاهير' },
-  { key: 'elzareef',      label: 'الظريف',          emoji: '😄', hint: 'للودودين' },
+  // ─── مشترك (both) ───
+  { key: 'elgoker',      label: 'الجوكر',        emoji: '🎭', hint: 'للمزح',        gender: 'both' },
+  { key: 'elshbah',      label: 'الشبح الطاير',  emoji: '👻', hint: 'للغامضين',     gender: 'both' },
+  { key: 'beloved_food', label: 'اللي بيحب ياكل', emoji: '🍽️', hint: 'لعشاق الأكل', gender: 'both' },
+  { key: 'elsaheb',      label: 'الصاحب',        emoji: '✅', hint: 'للأصدقاء',     gender: 'both' },
+
+  // ─── ذكور (male) ───
+  { key: 'ibn_elbalad',  label: 'ابن البلد',     emoji: '🌾', hint: 'الافتراضي',    gender: 'male' },
+  { key: 'elgada',       label: 'الجدع',          emoji: '🔥', hint: 'للنشيطين',     gender: 'male' },
+  { key: 'elassta',      label: 'الأسطى',         emoji: '🛠️', hint: 'للمحترفين',    gender: 'male' },
+  { key: 'omdat_elheta', label: 'عمدة الحتة',    emoji: '👑', hint: 'للزعماء',      gender: 'male' },
+  { key: 'elraye2',      label: 'الرايق',        emoji: '😎', hint: 'للهادي',       gender: 'male' },
+  { key: 'elharraf',     label: 'الحراف',         emoji: '🏃', hint: 'للسريعين',     gender: 'male' },
+  { key: 'elfaylasoof',  label: 'الفيلسوف',      emoji: '🤔', hint: 'للمفكرين',     gender: 'male' },
+  { key: 'elmo3allem',   label: 'المعلم',        emoji: '👨‍🏫', hint: 'للخبراء',      gender: 'male' },
+  { key: 'ged3an',       label: 'جدع جدعان',     emoji: '💪', hint: 'للأقوياء',     gender: 'male' },
+  { key: 'nagm_elheta',  label: 'نجم الحتة',     emoji: '⭐', hint: 'للمشاهير',     gender: 'male' },
+  { key: 'elzareef',     label: 'الظريف',        emoji: '😄', hint: 'للودودين',     gender: 'male' },
+
+  // ─── إناث (female) ───
+  { key: 'bent_elbalad', label: 'بنت البلد',     emoji: '🌾', hint: 'الافتراضي',    gender: 'female' },
+  { key: 'elgad3a',      label: 'الجدعة',        emoji: '🔥', hint: 'للنشيطات',     gender: 'female' },
+  { key: 'elastaa',      label: 'الأسطى',        emoji: '🛠️', hint: 'للمحترفات',    gender: 'female' },
+  { key: 'set_elheta',   label: 'ست الحتة',      emoji: '👑', hint: 'للملكات',      gender: 'female' },
+  { key: 'elray2a',      label: 'الرايقة',       emoji: '😎', hint: 'للهاديات',     gender: 'female' },
+  { key: 'elharrafa',    label: 'الحرافة',       emoji: '🏃', hint: 'للسريعات',     gender: 'female' },
+  { key: 'elfaylasoofa', label: 'الفيلسوفة',     emoji: '🤔', hint: 'للمفكرات',     gender: 'female' },
+  { key: 'elmo3allema',  label: 'المعلمة',       emoji: '👩‍🏫', hint: 'للخبيرات',    gender: 'female' },
+  { key: 'gad3a_gad3an', label: 'جدعة جدعان',    emoji: '💪', hint: 'للقويات',      gender: 'female' },
+  { key: 'nagmet_elheta',label: 'نجمة الحتة',    emoji: '⭐', hint: 'للمشاهيرات',   gender: 'female' },
+  { key: 'elzareefa',    label: 'الظريفة',       emoji: '😄', hint: 'للودودات',     gender: 'female' },
 ]
 
 export const FRAMES: PresetFrame[] = [
@@ -58,4 +80,9 @@ export function getTitle(key: string | null | undefined) {
 }
 export function getFrame(key: string | null | undefined) {
   return FRAMES.find(f => f.key === key) ?? FRAMES[0]
+}
+export function titlesForGender(gender: string | null | undefined) {
+  const g = gender === 'female' ? 'female' : gender === 'male' ? 'male' : null
+  if (!g) return TITLES
+  return TITLES.filter(t => t.gender === g || t.gender === 'both')
 }

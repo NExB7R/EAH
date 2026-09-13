@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { updateProfile } from './actions'
-import { AVATARS, TITLES, FRAMES } from '@/lib/profile-presets'
+import { AVATARS, FRAMES, titlesForGender, getTitle } from '@/lib/profile-presets'
 import './edit.css'
 
 export const dynamic = 'force-dynamic'
@@ -17,14 +17,16 @@ export default async function EditProfilePage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('display_name,avatar_key,title_key,frame_key,bio,phone,trust_score')
+    .select('display_name,avatar_key,title_key,frame_key,bio,phone,trust_score,gender')
     .eq('id', userData.user.id)
     .maybeSingle()
 
   const name = profile?.display_name ?? 'مستخدم'
   const initial = name.charAt(0).toUpperCase()
   const currentAvatar = profile?.avatar_key ?? AVATARS[0].key
-  const currentTitle = profile?.title_key ?? TITLES[0].key
+  const gender = (profile?.gender as 'male' | 'female' | undefined) ?? null
+  const availableTitles = titlesForGender(gender)
+  const currentTitle = profile?.title_key ?? availableTitles[0]?.key ?? 'elgoker'
   const currentFrame = profile?.frame_key ?? FRAMES[0].key
 
   return (
@@ -85,7 +87,7 @@ export default async function EditProfilePage() {
             <h2 className="edit__section-title">🏷️ لقبك</h2>
             <p className="edit__section-sub">اختار اللقب اللي يعبّر عنك — كل لقب له حكاية.</p>
             <div className="edit__titles">
-              {TITLES.map((t) => (
+              {availableTitles.map((t) => (
                 <label key={t.key} className="edit__title-option">
                   <input
                     type="radio"
