@@ -28,11 +28,11 @@ export default function UserAvatar({
   href,
   onClick,
 }: UserAvatarProps) {
-  const isBanned = banUntil && new Date(banUntil).getTime() > Date.now()
+  const isBanned = !!banUntil && new Date(banUntil).getTime() > Date.now()
   const isSuperAdmin = role === 'super_admin'
   const isMerchant = role === 'merchant'
   const banDays = isBanned
-    ? Math.ceil((new Date(banUntil).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    ? Math.ceil((new Date(banUntil as string).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
     : 0
 
   const initial = name.trim().charAt(0).toUpperCase()
@@ -71,11 +71,8 @@ export default function UserAvatar({
     </>
   )
 
-  const deco = isSuperAdmin ? 'crown' : isMerchant ? 'store' : null
-
   return (
     <div className="user-avatar-wrap">
-      {deco === 'crown' && <span className="user-avatar__crown" aria-hidden>✦</span>}
       <a
         href="/notifications"
         className="neon-icon-btn user-avatar__bell"
@@ -104,7 +101,7 @@ export default function UserAvatar({
           {inner}
         </button>
       )}
-      {deco === 'store' && <span className="user-avatar__store" aria-hidden>🏪</span>}
+      {isMerchant && <span className="user-avatar__store" aria-hidden>🏪</span>}
     </div>
   )
 }
