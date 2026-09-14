@@ -16,17 +16,12 @@
   min-height: 58px;
   border: 0;
   border-radius: 24px;
-  background:
-    radial-gradient(circle at 50% -80%, rgba(168, 85, 247, 0.2), transparent 42%),
-    linear-gradient(180deg, rgba(18, 14, 30, 0.93), rgba(7, 5, 12, 0.9));
-  box-shadow:
-    0 12px 34px rgba(0, 0, 0, 0.4),
-    0 0 30px rgba(107, 33, 255, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  background: transparent;
+  box-shadow: none;
   overflow: visible;
 }
 
-/* Deliberately broken neon capsule: four separated edge segments, never a full rectangle. */
+/* Broken neon outline only — intentionally never a complete rectangle. */
 .floating-capsule__inner::before {
   content: '';
   position: absolute;
@@ -34,11 +29,9 @@
   border-radius: 24px;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(168, 85, 247, .78) 0 17%, transparent 17% 35%, rgba(232, 199, 154, .48) 35% 43%, transparent 43% 57%, rgba(168, 85, 247, .62) 57% 83%, transparent 83% 100%) top / 100% 1px no-repeat,
-    linear-gradient(90deg, transparent 0 10%, rgba(168, 85, 247, .45) 10% 29%, transparent 29% 48%, rgba(232, 199, 154, .32) 48% 67%, transparent 67% 90%, rgba(168, 85, 247, .58) 90% 100%) bottom / 100% 1px no-repeat;
-  box-shadow:
-    0 -1px 10px rgba(168, 85, 247, 0.18),
-    0 1px 10px rgba(232, 199, 154, 0.07);
+    linear-gradient(90deg, rgba(168,85,247,.78) 0 17%, transparent 17% 35%, rgba(232,199,154,.48) 35% 43%, transparent 43% 57%, rgba(168,85,247,.62) 57% 83%, transparent 83% 100%) top / 100% 1px no-repeat,
+    linear-gradient(90deg, transparent 0 10%, rgba(168,85,247,.45) 10% 29%, transparent 29% 48%, rgba(232,199,154,.32) 48% 67%, transparent 67% 90%, rgba(168,85,247,.58) 90% 100%) bottom / 100% 1px no-repeat;
+  box-shadow: 0 -1px 10px rgba(168,85,247,.18), 0 1px 10px rgba(232,199,154,.07);
 }
 
 .floating-capsule__inner::after {
@@ -47,45 +40,33 @@
   inset: auto 18% -8px;
   height: 16px;
   border-radius: 999px;
-  background: rgba(107, 33, 255, 0.16);
-  filter: blur(22px);
+  background: rgba(107,33,255,.13);
+  filter: blur(20px);
   pointer-events: none;
 }
 
-/* Continuous scroll reveal: zero at the top, gradually visible over the first 180px. */
 .floating-capsule .fc-logo {
   opacity: var(--fc-scroll-progress);
   visibility: visible;
-  transform:
-    translateY(calc(-10px + (10px * var(--fc-scroll-progress))))
-    scale(calc(.92 + (.08 * var(--fc-scroll-progress))));
+  transform: translateY(calc(-10px + (10px * var(--fc-scroll-progress)))) scale(calc(.92 + (.08 * var(--fc-scroll-progress))));
   pointer-events: none;
   transition: opacity 120ms linear, transform 120ms linear;
   will-change: opacity, transform;
 }
 
-.floating-capsule.is-scrolled .fc-logo {
-  pointer-events: auto;
-}
+.floating-capsule.is-scrolled .fc-logo { pointer-events: auto; }
 
-/* Super Admin gets the only privileged identity badge shown in the header. */
 .fc-role-badge--super {
   width: 30px;
   height: 30px;
   border-radius: 11px;
-  border: 1px solid rgba(232, 199, 154, 0.7);
-  background:
-    radial-gradient(circle at 50% 25%, rgba(255,255,255,0.16), transparent 34%),
-    linear-gradient(145deg, rgba(232, 199, 154, 0.24), rgba(168, 85, 247, 0.22) 56%, rgba(107, 33, 255, 0.16));
+  border: 1px solid rgba(232,199,154,.7);
+  background: linear-gradient(145deg, rgba(232,199,154,.24), rgba(168,85,247,.18) 58%, rgba(107,33,255,.12));
   color: #f5d9a7;
-  box-shadow:
-    0 0 10px rgba(232, 199, 154, 0.25),
-    0 0 24px rgba(168, 85, 247, 0.2),
-    inset 0 0 0 1px rgba(255,255,255,0.06);
+  box-shadow: 0 0 10px rgba(232,199,154,.22), 0 0 22px rgba(168,85,247,.16);
 }
 
 .fc-role-badge--admin { display: none !important; }
-
 .fc-user-cluster .user-avatar__crown { display: none !important; }
 
 @media (max-width: 900px) {
@@ -95,23 +76,10 @@
 }
 
 @media (max-width: 640px) {
-  .floating-capsule {
-    top: max(6px, env(safe-area-inset-top));
-    padding-inline: 5px;
-  }
-  .floating-capsule__inner {
-    min-height: 52px;
-    padding: 7px 8px;
-    border-radius: 18px;
-  }
+  .floating-capsule { top: max(6px, env(safe-area-inset-top)); padding-inline: 5px; }
+  .floating-capsule__inner { min-height: 52px; padding: 7px 8px; border-radius: 18px; }
   .floating-capsule__inner::before { border-radius: 18px; }
-  .fc-role-badge--super {
-    width: 26px;
-    height: 26px;
-    border-radius: 10px;
-  }
+  .fc-role-badge--super { width: 26px; height: 26px; border-radius: 10px; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .fc-logo { transition: none; }
-}
+@media (prefers-reduced-motion: reduce) { .fc-logo { transition: none; } }
