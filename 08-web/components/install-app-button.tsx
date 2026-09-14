@@ -2,81 +2,102 @@
 import { useEffect, useState } from 'react'
 import './install-app-button.css'
 
-type Platform = 'android' | 'ios' | 'desktop' | 'installed' | 'unknown'
+type BIPEvent = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }> }
+
+const STORAGE_KEY = 'eah-install-prompt-dismissed-at'
+const DISMISS_TTL_MS = 1000 * 60 * 60 * 24 * 30 // 30 يوم
 
 export default function InstallAppButton() {
-  const [platform, setPlatform] = useState<Platform>('unknown')
-  const [deferred, setDeferred] = useState<any>(null)
-  const [showIOSModal, setShowIOSModal] = useState(false)
-  const [installed, setInstalled] = useState(false)
+  const [deferred, setDeferred] = useState<BIPEvent | null>(null)
+  const [isStandalone, setIsStandalone] = useState(true)
+  const [isIOS, setIsIOS] = useState(false)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setPlatform('installed'); setInstalled(true); return
-    }
+
+    const standalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      // @ts-expect-error iOS Safari
+      window.navigator.standalone === true
+    setIsStandalone(standalone)
+    if (standalone) return
+
+    // آخر مرة رفض؟ نستنى
+    const last = Number(localStorage.getItem(STORAGE_KEY) ?? 0)
+    if (Date.now() - last < DISMISS_TTL_MS) return
+
     const ua = navigator.userAgent.toLowerCase()
-    const isIOS = /iphone|ipad|ipod/.test(ua)
-    const isAndroid = /android/.test(ua)
+    const ios = /iphone|ipad|ipod/.test(ua) && !(window as any).MSStream
+    setIsIOS(ios)
 
-    if (isIOS) { setPlatform('ios'); return }
-
-    const handler = (e: Event) => {
+    const onBIP = (e: Event) => {
       e.preventDefault()
-      setDeferred(e)
-      setPlatform(isAndroid ? 'android' : 'desktop')
+      setDeferred(e as BIPEvent)
+      setVisible(true)
     }
-    window.addEventListener('beforeinstallprompt', handler)
-    setPlatform(isAndroid ? 'android' : 'desktop')
-    return () => window.removeEventListener('beforeinstallprompt', handler)
+    window.addEventListener('beforeinstallprompt', onBIP)
+
+    // على iOS، ما فيش BIP — نعرض الزر بعد 20 ثانية
+    const iosTimer = ios ? setTimeout(() => setVisible(true), 20000) : null
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', onBIP)
+      if (iosTimer) clearTimeout(iosTimer)
+    }
   }, [])
 
   async function install() {
-    if (platform === 'ios') { setShowIOSModal(true); return }
-    if (deferred) {
-      deferred.prompt()
-      const { outcome } = await deferred.userChoice
-      if (outcome === 'accepted') { setInstalled(true); setPlatform('installed') }
-      setDeferred(null)
-    } else {
-      alert('افتح قائمة المتصفح واختر "Install app" أو "Add to Home Screen"')
+    if (isIOS) {
+      // iOS: guided instructions
+      alert(
+        'للتثبيت على iPhone:\n\n' +
+          '1. افتح Safari\n' +
+          '2. اضغط زر المشاركة (⬆️)\n' +
+          '3. اختر "إضافة إلى الشاشة الرئيسية"\n\n' +
+          'التطبيق هيشتغل كأنه أصلي بعد كده 👍'
+      )
+      return
     }
+    if (!deferred) return
+    await deferred.prompt()
+    const { outcome } = await deferred.userChoice
+    if (outcome === 'accepted') setVisible(false)
+    setDeferred(null)
   }
 
-  if (installed || platform === 'installed') return null
+  function dismiss() {
+    localStorage.setItem(STORAGE_KEY, String(Date.now()))
+    setVisible(false)
+  }
+
+  if (isStandalone || !visible) return null
 
   return (
-    <>
-      <button className="iab-btn" onClick={install} aria-label="ثبّت التطبيق" title="ثبّت EAH">
-        <span className="iab-btn__icon">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
+    <div className="iab">
+      <button
+        type="button"
+        className="iab__close"
+        onClick={dismiss}
+        aria-label="لاحقاً"
+        title="لاحقاً"
+      >
+        ×
+      </button>
+      <div className="iab__body">
+        <span className="iab__icon" aria-hidden>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="3" />
+            <path d="M12 18h.01" />
           </svg>
         </span>
-      </button>
-      {showIOSModal && <IOSInstructions onClose={() => setShowIOSModal(false)} />}
-    </>
-  )
-}
-
-function IOSInstructions({ onClose }: { onClose: () => void }) {
-  return (
-    <div className="iab-modal" onClick={onClose}>
-      <div className="iab-modal__card" onClick={e => e.stopPropagation()}>
-        <header className="iab-modal__head">
-          <span className="iab-modal__emoji">📱</span>
-          <h3 className="iab-modal__title">ثبّت EAH على iPhone</h3>
-          <button className="iab-modal__close" onClick={onClose}>×</button>
-        </header>
-        <div className="iab-modal__steps">
-          <div className="iab-modal__step"><span className="iab-modal__num">1</span><div><strong>افتح في Safari</strong><span>لازم Safari — مش Chrome</span></div></div>
-          <div className="iab-modal__step"><span className="iab-modal__num">2</span><div><strong>اضغط زر المشاركة</strong><span>الأيقونة ⎋ تحت في النص</span></div></div>
-          <div className="iab-modal__step"><span className="iab-modal__num">3</span><div><strong>اختر "Add to Home Screen"</strong><span>اتمرر واختار ➕ إضافة للشاشة الرئيسية</span></div></div>
-          <div className="iab-modal__step"><span className="iab-modal__num">4</span><div><strong>اضغط "Add"</strong><span>هتلاقي EAH على شاشتك الرئيسية</span></div></div>
+        <div className="iab__text">
+          <strong className="iab__title">ثبّت EAH</strong>
+          <span className="iab__sub">يشتغل بدون إنترنت • أسرع • إشعارات</span>
         </div>
-        <p className="iab-modal__note">💡 ملاحظة: iOS مبيسمحش بزر تلقائي للتثبيت، لازم يدويًا</p>
+        <button type="button" className="iab__btn" onClick={install}>
+          تثبيت
+        </button>
       </div>
     </div>
   )

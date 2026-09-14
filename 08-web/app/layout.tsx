@@ -1,5 +1,4 @@
 import './globals.css'
-import './loading.css'
 import './theme.css'
 import './design-system.css'
 import '../components/eah-admin.css'
@@ -8,10 +7,10 @@ import { Cairo, Cairo_Play, Dancing_Script } from 'next/font/google'
 import PageViewTracker from '@/components/page-view-tracker'
 import ScrollIconsBackground from '@/components/scroll-icons-background'
 import AnimReady from '@/components/anim-ready'
-import SidePanelToggle from '@/components/side-panel-toggle'
 import OnboardingOverlay from '@/components/onboarding-overlay'
 import ServiceWorkerRegister from '@/components/sw-register'
-import InstallBanner from '@/components/install-banner'
+import InstallAppButton from '@/components/install-app-button'
+import NetworkStatus from '@/components/network-status'
 import '@/components/install-pwa-button.css'
 import '@/components/install-app-button.css'
 import '@/components/share-button.css'
@@ -91,11 +90,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ScrollIconsBackground />
         <PageViewTracker />
         <AnimReady />
-        <SidePanelToggle />
         {children}
         <OnboardingOverlay />
         <ServiceWorkerRegister />
-        <InstallBanner />
+        <InstallAppButton />
+        <NetworkStatus />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

@@ -36,7 +36,47 @@
 
 /* إخفاء الـ labels نهائياً */
 .neon-icon-btn__label {
-  display: none !important;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(10, 7, 18, 0.96);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.5),
+    0 0 12px rgba(168, 85, 247, 0.2);
+  font-family: var(--font-cairo, system-ui);
+  font-size: 11px;
+  font-weight: 700;
+  color: #c4b5fd;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+  z-index: 100;
+}
+
+.neon-icon-btn__label::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-bottom-color: rgba(10, 7, 18, 0.96);
+}
+
+.neon-icon-btn:hover .neon-icon-btn__label,
+.neon-icon-btn:focus-visible .neon-icon-btn__label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* على الموبايل — مفيش hover */
+@media (hover: none) {
+  .neon-icon-btn__label { display: none !important; }
 }
 
 .neon-icon-btn:hover {

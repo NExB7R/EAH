@@ -7,9 +7,7 @@ type SideItem = {
   id: string
   name: string
   slug: string
-  subtitle?: string
-  emoji?: string
-  badge?: 'new' | 'featured' | 'trending'
+  type?: string
 }
 
 type PanelData = {
@@ -18,7 +16,7 @@ type PanelData = {
   newest: SideItem[]
 }
 
-const CATEGORY_EMOJI: Record<string, string> = {
+const EMOJI: Record<string, string> = {
   restaurant: '🍽️',
   pharmacy: '💊',
   supermarket: '🛒',
@@ -26,150 +24,119 @@ const CATEGORY_EMOJI: Record<string, string> = {
 }
 
 export default function SidePanel() {
-  const [closed, setClosed] = useState(true)
+  const [closed, setClosed] = useState(false) // مفتوح افتراضياً
   const [mounted, setMounted] = useState(false)
   const [data, setData] = useState<PanelData | null>(null)
-  const [loading, setLoading] = useState(true)
 
-  // ─── Toggle visibility ───
   useEffect(() => {
     setMounted(true)
-    const wasOpen = localStorage.getItem('eah-sidepanel-open') === '1'
-    if (wasOpen) setClosed(false)
 
-    const onToggle = () =>
-      setClosed((c) => {
-        const next = !c
-        localStorage.setItem('eah-sidepanel-open', next ? '0' : '1')
-        return next
-      })
+    // لو المستخدم قفلها قبل كده → نتذكر
+    const wasClosed = localStorage.getItem('eah-sidepanel-closed') === '1'
+    if (wasClosed) {
+      setClosed(true)
+      return
+    }
+
+    // اسمع لأي dispatcher
     const onOpen = () => {
       setClosed(false)
-      localStorage.setItem('eah-sidepanel-open', '1')
+      localStorage.setItem('eah-sidepanel-closed', '0')
     }
-    window.addEventListener('eah:toggle-sidepanel', onToggle)
     window.addEventListener('eah:open-sidepanel', onOpen)
-    return () => {
-      window.removeEventListener('eah:toggle-sidepanel', onToggle)
-      window.removeEventListener('eah:open-sidepanel', onOpen)
-    }
+    return () => window.removeEventListener('eah:open-sidepanel', onOpen)
   }, [])
 
-  // ─── Fetch real data ───
+  // حمّل البيانات
   useEffect(() => {
-    let active = true
+    let alive = true
     void (async () => {
       try {
         const supabase = createClient()
-        const [feat, trend, fresh] = await Promise.all([
+        const [f, t, n] = await Promise.all([
           supabase
             .from('businesses')
-            .select('id, name, slug, type')
+            .select('id,name,slug,type')
             .eq('is_published', true)
             .eq('is_featured', true)
-            .limit(5),
+            .limit(4),
           supabase
             .from('businesses')
-            .select('id, name, slug, type, view_count')
+            .select('id,name,slug,type,view_count')
             .eq('is_published', true)
             .order('view_count', { ascending: false, nullsFirst: false })
-            .limit(5),
+            .limit(4),
           supabase
             .from('businesses')
-            .select('id, name, slug, type, created_at')
+            .select('id,name,slug,type,created_at')
             .eq('is_published', true)
             .order('created_at', { ascending: false })
-            .limit(5),
+            .limit(4),
         ])
-
-        if (!active) return
-
-        const map = (rows: any[], badge?: SideItem['badge']): SideItem[] =>
-          (rows ?? []).map((r) => ({
-            id: r.id,
-            name: r.name,
-            slug: r.slug,
-            emoji: CATEGORY_EMOJI[r.type] ?? '📍',
-            badge,
-          }))
-
-        const next: PanelData = {
-          featured: map(feat.data ?? [], 'featured'),
-          trending: map(trend.data ?? [], 'trending'),
-          newest: map(fresh.data ?? [], 'new'),
-        }
-
-        // لو مفيش أي بيانات حقيقية → ما نعرضش البانل
-        const empty =
-          next.featured.length + next.trending.length + next.newest.length === 0
-        setData(empty ? null : next)
+        if (!alive) return
+        setData({
+          featured: (f.data ?? []) as SideItem[],
+          trending: (t.data ?? []) as SideItem[],
+          newest: (n.data ?? []) as SideItem[],
+        })
       } catch {
-        if (active) setData(null)
-      } finally {
-        if (active) setLoading(false)
+        /* silent */
       }
     })()
     return () => {
-      active = false
+      alive = false
     }
   }, [])
 
   const handleClose = () => {
     setClosed(true)
-    localStorage.setItem('eah-sidepanel-open', '0')
+    localStorage.setItem('eah-sidepanel-closed', '1')
   }
 
-  // ما نعرضش أي حاجة لحد ما نعرف النتيجة
-  if (!mounted || closed || loading || !data) return null
+  if (!mounted || closed || !data) return null
+
+  const total =
+    data.featured.length + data.trending.length + data.newest.length
+  if (total === 0) return null
 
   const Section = ({
     title,
     icon,
-    seeAllHref,
     items,
-    badge,
+    seeAll,
   }: {
     title: string
     icon: string
-    seeAllHref: string
     items: SideItem[]
-    badge?: 'featured' | 'trending' | 'new'
+    seeAll: string
   }) => {
     if (items.length === 0) return null
     return (
-      <div className="side-panel__section">
-        <h3 className="side-panel__head">
+      <section className="side-panel__section">
+        <header className="side-panel__head">
           <span className="side-panel__head-icon">{icon}</span>
-          <span>{title}</span>
-          <a href={seeAllHref} className="side-panel__see-all">
+          <span className="side-panel__head-title">{title}</span>
+          <a href={seeAll} className="side-panel__see-all">
             الكل
           </a>
-        </h3>
-        <div className="side-panel__track">
-          {items.slice(0, 3).map((item) => (
+        </header>
+        <div className="side-panel__list">
+          {items.map((it) => (
             <a
-              key={item.id}
-              href={`/businesses/${item.slug}`}
-              className={`side-panel__card ${badge === 'featured' ? 'side-panel__card--featured' : ''}`}
+              key={it.id}
+              href={`/businesses/${it.slug}`}
+              className="side-panel__card"
             >
-              <span className="side-panel__emoji">{item.emoji}</span>
-              <span className="side-panel__text">
-                <span className="side-panel__title">{item.name}</span>
-                {item.subtitle && (
-                  <span className="side-panel__subtitle">{item.subtitle}</span>
-                )}
+              <span className="side-panel__emoji">
+                {EMOJI[it.type ?? ''] ?? '📍'}
               </span>
+              <span className="side-panel__name">{it.name}</span>
             </a>
           ))}
         </div>
-      </div>
+      </section>
     )
   }
-
-  const sections = [data.featured, data.trending, data.newest].filter(
-    (s) => s.length > 0
-  )
-  if (sections.length === 0) return null
 
   return (
     <aside className="side-panel" aria-label="اكتشف">
@@ -177,7 +144,7 @@ export default function SidePanel() {
         type="button"
         className="side-panel__close"
         onClick={handleClose}
-        aria-label="إغلاق القائمة"
+        aria-label="إغلاق"
       >
         <svg
           viewBox="0 0 24 24"
@@ -195,29 +162,27 @@ export default function SidePanel() {
       <Section
         title="المميز"
         icon="⭐"
-        seeAllHref="/featured"
         items={data.featured}
-        badge="featured"
+        seeAll="/featured"
       />
-      {data.featured.length > 0 && data.trending.length > 0 && (
-        <div className="side-panel__divider" />
-      )}
       <Section
-        title="ترند"
+        title="الترند"
         icon="🔥"
-        seeAllHref="/trends"
         items={data.trending}
-        badge="trending"
+        seeAll="/trends"
       />
-      {(data.featured.length > 0 || data.trending.length > 0) &&
-        data.newest.length > 0 && <div className="side-panel__divider" />}
       <Section
         title="جديد"
         icon="🌱"
-        seeAllHref="/new"
         items={data.newest}
-        badge="new"
+        seeAll="/new"
       />
+
+      <div className="side-panel__cta">
+        <a href="/pricing" className="side-panel__cta-btn">
+          ✨ اعرض نشاطك هنا
+        </a>
+      </div>
     </aside>
   )
 }

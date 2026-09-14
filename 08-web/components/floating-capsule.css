@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════════════
-   EAH Floating Capsule — shared layout + drawer
+   EAH Floating Capsule — Layout (2026)
    Visual surface lives in floating-capsule-v2.css.
+   Drawer surface lives in floating-capsule-drawer.css.
    ═══════════════════════════════════════════════ */
 
 .floating-capsule {
@@ -37,7 +38,7 @@
 }
 
 .floating-capsule__side--start { justify-content: flex-start; }
-.floating-capsule__side--end { justify-content: flex-end; }
+.floating-capsule__side--end   { justify-content: flex-end; }
 
 .floating-capsule__center {
   display: flex;
@@ -66,6 +67,7 @@
   padding-inline-start: 3px;
 }
 
+/* ═══ Responsive ═══ */
 @media (max-width: 900px) {
   .fc-desktop-only { display: none; }
   .floating-capsule { width: min(960px, calc(100% - 18px)); }
@@ -85,16 +87,16 @@
   .floating-capsule__center { padding: 0 5px; }
   .floating-capsule__side { gap: 4px; }
   .fc-user-cluster { gap: 4px; }
-  
 }
 
 @media (max-width: 380px) {
   .floating-capsule__inner { padding-inline: 6px; }
   .floating-capsule__center { padding-inline: 2px; }
-  .fc-logo--mobile .eah-logo--sm { --logo-w: 96px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .floating-capsule__inner,
-  
+  .floating-capsule,
+  .floating-capsule__inner {
+    transition: none;
+  }
 }
