@@ -29,6 +29,8 @@ export default function UserAvatar({
   onClick,
 }: UserAvatarProps) {
   const isBanned = banUntil && new Date(banUntil).getTime() > Date.now()
+  const isSuperAdmin = role === 'super_admin'
+  const isMerchant = role === 'merchant'
   const banDays = isBanned
     ? Math.ceil((new Date(banUntil).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
     : 0
@@ -54,7 +56,7 @@ export default function UserAvatar({
         )}
       </span>
 
-      {!isBanned && role !== 'super_admin' && points > 0 && (
+      {!isBanned && !isSuperAdmin && points > 0 && (
         <span className="user-avatar__points" aria-label={`${points} نقطة`}>
           {points >= 1000 ? `${(points / 1000).toFixed(1)}k` : points}
         </span>
@@ -69,11 +71,11 @@ export default function UserAvatar({
     </>
   )
 
-  const deco = frame.decoration
+  const deco = isSuperAdmin ? 'crown' : isMerchant ? 'store' : null
 
   return (
     <div className="user-avatar-wrap">
-      {deco === 'crown' && <span className="user-avatar__crown" aria-hidden>👑</span>}
+      {deco === 'crown' && <span className="user-avatar__crown" aria-hidden>✦</span>}
       <a
         href="/notifications"
         className="neon-icon-btn user-avatar__bell"
