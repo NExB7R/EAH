@@ -5,7 +5,6 @@ import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
 import { getViewStats } from '@/lib/real-stats'
 
-import { generateMockStats } from '@/lib/mock-stats'
 import HomeHero from '@/components/home-hero'
 import SectionSlider from '@/components/section-slider'
 import ExploreCard from '@/components/explore-card'
@@ -58,15 +57,19 @@ export default async function HomeDynamic() {
   const realStats = await getViewStats(businesses.map((b) => b.slug), 7)
   const withStats = businesses.map((b) => {
     const real = realStats.get(b.slug)
-    const stats = generateMockStats(
-      {
-        slug: b.slug,
-        name: b.name,
-        featured: b.badge === 'مميز',
-      },
-      real ? { recentViews: real.views } : undefined
-    )
-    return { ...b, ...stats }
+    return {
+      ...b,
+      id: b.businessId ?? b.slug,
+      rating: b.rating ?? 0,
+      reviewCount: b.reviewCount ?? 0,
+      recentViews: real?.views ?? 0,
+      recentComments: b.recentComments ?? 0,
+      activeOffers: b.activeOffers ?? 0,
+      ageInDays: b.ageInDays ?? 0,
+      isFeatured: b.featured ?? false,
+      lastShownAt: undefined,
+      totalImpressions: 0,
+    }
   })
   const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
   const userTags = await loadUserProfileTags()
