@@ -13,6 +13,7 @@ import { createClient } from '@/lib/supabase-browser'
 import { useUnreadCount } from '@/lib/hooks/use-unread-count'
 import { IconFacebook, IconWhatsapp, IconMenu, IconBolt, IconSearch } from './neon-icons'
 import './floating-capsule.css'
+import './floating-capsule-v2.css'
 
 type CapsuleUser = {
   name: string
