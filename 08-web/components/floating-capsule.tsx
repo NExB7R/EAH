@@ -43,15 +43,6 @@ function IconChat() {
   )
 }
 
-function SuperAdminBadge() {
-  return (
-    <span className="fc-super-badge" title="Super Admin موثّق" aria-label="Super Admin موثّق">
-      <span className="fc-super-badge__spark" aria-hidden>✦</span>
-      <span className="fc-super-badge__check" aria-hidden>✓</span>
-    </span>
-  )
-}
-
 export default function FloatingCapsuleHeader() {
   const [scrollProgress, setScrollProgress] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -113,7 +104,6 @@ export default function FloatingCapsuleHeader() {
 
   const isStaff = user && (user.role === 'admin' || user.role === 'super_admin')
   const isMerchant = user?.role === 'merchant'
-  const isSuperAdmin = user?.role === 'super_admin'
   const unread = liveUnread || (user?.notifications ?? 0)
 
   return (
@@ -149,7 +139,7 @@ export default function FloatingCapsuleHeader() {
             <ShareButton />
 
             {loggedIn === true && user && (
-              <span className={`fc-user-cluster ${isSuperAdmin ? 'is-super' : ''}`}>
+              <span className="fc-user-cluster">
                 <UserAvatar
                   name={user.name}
                   points={user.points}
@@ -161,7 +151,6 @@ export default function FloatingCapsuleHeader() {
                   avatarUrl={user.avatarUrl ?? undefined}
                   href="/account"
                 />
-                {isSuperAdmin && <SuperAdminBadge />}
               </span>
             )}
           </div>
