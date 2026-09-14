@@ -1,0 +1,26 @@
+.admin-sidebar__link-icon {
+  width: 22px;
+  height: 22px;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 22px;
+  color: #a855f7;
+}
+
+.admin-sidebar__link-icon svg {
+  width: 19px;
+  height: 19px;
+  display: block;
+}
+
+.admin-sidebar__link[data-active="true"] .admin-sidebar__link-icon {
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .admin-sidebar__link-icon {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+  }
+}
