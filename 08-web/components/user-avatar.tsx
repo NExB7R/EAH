@@ -44,7 +44,31 @@ export default function UserAvatar({
 
   const inner = (
     <>
-      {isSuperAdmin && <span className="user-avatar__super-spark" aria-hidden>✦</span>}
+      {isSuperAdmin && (
+        <span className="user-avatar__crown" aria-hidden>
+          <svg viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="ua-crown-g" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#FFFBEB" />
+                <stop offset="45%" stopColor="#FDE68A" />
+                <stop offset="100%" stopColor="#D97706" />
+              </linearGradient>
+              <linearGradient id="ua-crown-j" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#E879F9" />
+                <stop offset="100%" stopColor="#A855F7" />
+              </linearGradient>
+            </defs>
+            <path d="M1.5 14 L0.5 4.5 L5 8 L12 1 L19 8 L23.5 4.5 L22.5 14 Z"
+                  fill="url(#ua-crown-g)" stroke="#FFFBEB" strokeWidth="0.5" strokeLinejoin="round" />
+            <rect x="3.5" y="10.5" width="17" height="3" rx="1"
+                  fill="url(#ua-crown-g)" stroke="#FFFBEB" strokeWidth="0.35" />
+            <circle cx="12" cy="1.5" r="1.4" fill="url(#ua-crown-j)" />
+            <circle cx="0.5" cy="4.5" r="1.1" fill="url(#ua-crown-j)" />
+            <circle cx="23.5" cy="4.5" r="1.1" fill="url(#ua-crown-j)" />
+            <circle cx="12" cy="12" r="0.9" fill="url(#ua-crown-j)" />
+          </svg>
+        </span>
+      )}
       <span
         className="user-avatar__img"
         style={!avatarUrl ? { background: `linear-gradient(135deg, ${avatar.from}, ${avatar.to})` } : undefined}

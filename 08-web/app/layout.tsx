@@ -9,14 +9,12 @@ import ScrollIconsBackground from '@/components/scroll-icons-background'
 import AnimReady from '@/components/anim-ready'
 import SidePanelToggle from '@/components/side-panel-toggle'
 import OnboardingOverlay from '@/components/onboarding-overlay'
-import StreakMount from '@/components/streak-mount'
 import ServiceWorkerRegister from '@/components/sw-register'
 import InstallBanner from '@/components/install-banner'
 import '@/components/install-pwa-button.css'
 import '@/components/install-app-button.css'
 import '@/components/share-button.css'
 import '@/components/verified-badge.css'
-import '@/components/streak-onboarding.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
@@ -95,7 +93,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SidePanelToggle />
         {children}
         <OnboardingOverlay />
-        <StreakMount />
         <ServiceWorkerRegister />
         <InstallBanner />
         <script

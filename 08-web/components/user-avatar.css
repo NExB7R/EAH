@@ -81,21 +81,32 @@
   outline-offset: -2px;
 }
 
-.user-avatar__super-spark {
+/* Royal crown — تاج مزخرف للـ super_admin */
+.user-avatar__crown {
   position: absolute;
-  top: -7px;
+  top: -10px;
   inset-inline-start: 50%;
   transform: translateX(-50%);
-  z-index: 5;
-  width: 18px;
-  height: 18px;
-  display: grid;
-  place-items: center;
-  color: #f5d9a7;
-  font-size: 11px;
-  line-height: 1;
-  text-shadow: 0 0 8px rgba(232,199,154,.75);
+  z-index: 7;
+  width: 22px;
+  height: 15px;
   pointer-events: none;
+  filter:
+    drop-shadow(0 1px 3px rgba(251, 191, 36, 0.85))
+    drop-shadow(0 0 5px rgba(232, 199, 154, 0.55));
+  animation: ua-crown-float 3s ease-in-out infinite;
+}
+.user-avatar__crown svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+@keyframes ua-crown-float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(-1.5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .user-avatar__crown { animation: none; }
 }
 
 .user-avatar__super-check {
@@ -179,6 +190,6 @@ a.user-avatar:hover { transform: translateY(-1px); }
   .user-avatar { width: 32px; height: 32px; }
   .user-avatar__bell { height: 34px; padding: 0 9px; }
   .user-avatar__bell .neon-icon-btn__icon { width: 16px; height: 16px; }
-  .user-avatar__super-spark { top: -6px; }
+  .user-avatar__crown { top: -8px; width: 19px; height: 13px; }
   .user-avatar__super-check { width: 12px; height: 12px; font-size: 6px; inset-inline-end: -3px; bottom: -3px; }
 }

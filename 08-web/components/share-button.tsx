@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './share-button.css'
 
 // ═══ SVG Icons (موحدة مع الهيدر) ═══
@@ -19,13 +19,13 @@ const IconX = () => (
   </svg>
 )
 const IconCopy = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
     <rect x="9" y="9" width="13" height="13" rx="2"/>
     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
   </svg>
 )
 const IconCheck = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="20 6 9 17 4 12"/>
   </svg>
 )
@@ -42,69 +42,129 @@ const IconShare = () => (
 export default function ShareButton({ url, title }: { url?: string; title?: string }) {
   const [showMenu, setShowMenu] = useState(false)
   const [copied, setCopied] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
 
   const shareUrl = url ?? (typeof window !== 'undefined' ? window.location.href : '')
   const shareTitle = title ?? 'EAH — اللى نفسك فيه ؟'
 
-  async function nativeShare() {
+  // إغلاق بـ Esc أو click بره
+  useEffect(() => {
+    if (!showMenu) return
+    const onClick = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
+        setShowMenu(false)
+      }
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowMenu(false)
+    }
+    document.addEventListener('mousedown', onClick)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onClick)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [showMenu])
+
+  async function handleClick() {
+    // على الموبايل: native share إذا متوفر
     if (typeof navigator !== 'undefined' && 'share' in navigator) {
       try {
         await (navigator as any).share({ title: shareTitle, url: shareUrl })
         return
       } catch {}
     }
-    setShowMenu(true)
+    // وإلا: افتح المنيو
+    setShowMenu(v => !v)
   }
 
-  function copyLink() {
-    navigator.clipboard.writeText(shareUrl)
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+    } catch {
+      const ta = document.createElement('textarea')
+      ta.value = shareUrl
+      document.body.appendChild(ta)
+      ta.select()
+      document.execCommand('copy')
+      document.body.removeChild(ta)
+    }
     setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
+    setTimeout(() => setCopied(false), 1800)
   }
+
+  const options = [
+    {
+      key: 'whatsapp',
+      label: 'واتساب',
+      href: `https://wa.me/?text=${encodeURIComponent(shareTitle + '\n' + shareUrl)}`,
+      icon: <IconWhatsApp />,
+      color: 'wa',
+    },
+    {
+      key: 'facebook',
+      label: 'فيسبوك',
+      href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+      icon: <IconFacebook />,
+      color: 'fb',
+    },
+    {
+      key: 'x',
+      label: 'X',
+      href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(shareUrl)}`,
+      icon: <IconX />,
+      color: 'x',
+    },
+  ]
 
   return (
-    <div className="shb-wrap">
-      <button className="shb-btn" onClick={nativeShare} aria-label="شارك EAH" title="شارك">
-        <IconShare />
+    <div className="shb-wrap" ref={wrapRef}>
+      <button
+        type="button"
+        className={`shb-btn ${showMenu ? 'is-open' : ''}`}
+        onClick={handleClick}
+        aria-label="شارك"
+        aria-expanded={showMenu}
+      >
+        <span className="shb-btn__glow" aria-hidden />
+        <span className="shb-btn__icon"><IconShare /></span>
       </button>
 
       {showMenu && (
-        <>
-          <div className="shb-overlay" onClick={() => setShowMenu(false)} />
-          <div className="shb-menu">
-            <a
-              href={`https://wa.me/?text=${encodeURIComponent(shareTitle + '\n' + shareUrl)}`}
-              target="_blank"
-              rel="noreferrer"
-              className="shb-item shb-item--wa"
-            >
-              <IconWhatsApp />
-              <span>واتساب</span>
-            </a>
-            <a
-              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-              target="_blank"
-              rel="noreferrer"
-              className="shb-item shb-item--fb"
-            >
-              <IconFacebook />
-              <span>فيسبوك</span>
-            </a>
-            <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(shareUrl)}`}
-              target="_blank"
-              rel="noreferrer"
-              className="shb-item shb-item--tw"
-            >
-              <IconX />
-              <span>X</span>
-            </a>
-            <button className="shb-item shb-item--copy" onClick={copyLink}>
-              {copied ? <IconCheck /> : <IconCopy />}
-              <span>{copied ? 'اتنسخ!' : 'نسخ الرابط'}</span>
-            </button>
+        <div className="shb-panel" role="menu">
+          <div className="shb-panel__header">
+            <span className="shb-panel__title">شارك EAH</span>
           </div>
-        </>
+
+          <div className="shb-panel__grid">
+            {options.map((opt, i) => (
+              <a
+                key={opt.key}
+                href={opt.href}
+                target="_blank"
+                rel="noreferrer"
+                className={`shb-card shb-card--${opt.color}`}
+                style={{ animationDelay: `${i * 40}ms` }}
+              >
+                <span className="shb-card__icon">{opt.icon}</span>
+                <span className="shb-card__label">{opt.label}</span>
+              </a>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className={`shb-copy ${copied ? 'is-copied' : ''}`}
+            onClick={copyLink}
+          >
+            <span className="shb-copy__icon">
+              {copied ? <IconCheck /> : <IconCopy />}
+            </span>
+            <span className="shb-copy__text">
+              {copied ? 'تم النسخ!' : 'نسخ الرابط'}
+            </span>
+          </button>
+        </div>
       )}
     </div>
   )
