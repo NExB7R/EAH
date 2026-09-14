@@ -1,4 +1,4 @@
-/* EAH Header polish layer — preserves existing controls, drawer and behavior. */
+/* EAH Header polish layer — transparent, single-outline, identity-safe. */
 
 .floating-capsule {
   top: max(8px, env(safe-area-inset-top));
@@ -17,11 +17,13 @@
   border: 0;
   border-radius: 24px;
   background: transparent !important;
-  box-shadow: none;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   overflow: visible;
 }
 
-/* Broken neon outline only — intentionally never a complete rectangle. */
+/* One intentional broken neon line system. */
 .floating-capsule__inner::before {
   content: '';
   position: absolute;
@@ -31,10 +33,9 @@
   background:
     linear-gradient(90deg, rgba(168,85,247,.78) 0 17%, transparent 17% 35%, rgba(232,199,154,.48) 35% 43%, transparent 43% 57%, rgba(168,85,247,.62) 57% 83%, transparent 83% 100%) top / 100% 1px no-repeat,
     linear-gradient(90deg, transparent 0 10%, rgba(168,85,247,.45) 10% 29%, transparent 29% 48%, rgba(232,199,154,.32) 48% 67%, transparent 67% 90%, rgba(168,85,247,.58) 90% 100%) bottom / 100% 1px no-repeat;
-  box-shadow: 0 -1px 10px rgba(168,85,247,.18), 0 1px 10px rgba(232,199,154,.07);
+  box-shadow: 0 -1px 10px rgba(168,85,247,.16), 0 1px 10px rgba(232,199,154,.06);
 }
 
-/* No blurred panel/glow behind the capsule: keep the page visible through it. */
 .floating-capsule__inner::after { display: none !important; }
 
 .floating-capsule .fc-logo {
@@ -48,30 +49,74 @@
 
 .floating-capsule.is-scrolled .fc-logo { pointer-events: auto; }
 
-.fc-role-badge--super {
-  width: 30px;
-  height: 30px;
-  border-radius: 11px;
-  border: 1px solid rgba(232,199,154,.7);
-  background: linear-gradient(145deg, rgba(232,199,154,.24), rgba(168,85,247,.18) 58%, rgba(107,33,255,.12));
-  color: #f5d9a7;
-  box-shadow: 0 0 10px rgba(232,199,154,.22), 0 0 22px rgba(168,85,247,.16);
+/* Super Admin badge visually belongs to the avatar cluster, not to the page header. */
+.fc-user-cluster {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  padding-inline-start: 3px;
 }
 
-.fc-role-badge--admin { display: none !important; }
+.fc-super-badge {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  margin-inline-start: -2px;
+  border-radius: 11px;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid rgba(232,199,154,.72);
+  background: linear-gradient(145deg, rgba(232,199,154,.22), rgba(168,85,247,.16) 58%, rgba(107,33,255,.10));
+  color: #f5d9a7;
+  box-shadow: 0 0 10px rgba(232,199,154,.18), 0 0 20px rgba(168,85,247,.15);
+  overflow: visible;
+}
+
+.fc-super-badge__spark {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.fc-super-badge__check {
+  position: absolute;
+  inset-inline-end: -4px;
+  bottom: -4px;
+  width: 12px;
+  height: 12px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(5,8,12,.95);
+  background: #10b981;
+  color: #fff;
+  font-size: 7px;
+  font-weight: 900;
+  line-height: 1;
+  box-shadow: 0 0 8px rgba(16,185,129,.45);
+}
+
+.fc-role-badge,
+.fc-role-badge--admin,
+.fc-role-badge--super,
 .fc-user-cluster .user-avatar__crown { display: none !important; }
 
 @media (max-width: 900px) {
   .floating-capsule { padding-inline: 6px; }
   .floating-capsule__inner { min-height: 54px; border-radius: 20px; }
   .floating-capsule__inner::before { border-radius: 20px; }
+  .fc-super-badge { width: 30px; height: 30px; border-radius: 10px; }
+  .fc-super-badge__spark { font-size: 14px; }
 }
 
 @media (max-width: 640px) {
   .floating-capsule { top: max(6px, env(safe-area-inset-top)); padding-inline: 5px; }
   .floating-capsule__inner { min-height: 52px; padding: 7px 8px; border-radius: 18px; }
   .floating-capsule__inner::before { border-radius: 18px; }
-  .fc-role-badge--super { width: 26px; height: 26px; border-radius: 10px; }
+  .fc-super-badge { width: 27px; height: 27px; border-radius: 9px; }
+  .fc-super-badge__spark { font-size: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) { .fc-logo { transition: none; } }
