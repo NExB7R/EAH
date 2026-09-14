@@ -14,6 +14,7 @@ import { useUnreadCount } from '@/lib/hooks/use-unread-count'
 import { IconFacebook, IconWhatsapp, IconMenu, IconBolt, IconSearch } from './neon-icons'
 import './floating-capsule.css'
 import './floating-capsule-v2.css'
+import './floating-capsule-drawer.css'
 
 type CapsuleUser = {
   name: string
@@ -53,7 +54,7 @@ export default function FloatingCapsuleHeader() {
   useEffect(() => {
     let frame = 0
     const update = () => {
-      const revealDistance = 180
+      const revealDistance = 550  // hero section height — full header by end of hero
       const progress = Math.min(1, Math.max(0, window.scrollY / revealDistance))
       setScrollProgress(progress)
       frame = 0

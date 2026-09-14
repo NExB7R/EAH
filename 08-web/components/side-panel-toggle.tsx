@@ -4,9 +4,20 @@ import './side-panel-toggle.css'
 
 export default function SidePanelToggle() {
   const [visible, setVisible] = useState(false)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     setVisible(true)
+    const sync = () => {
+      setOpen(localStorage.getItem('eah-sidepanel-open') === '1')
+    }
+    sync()
+    window.addEventListener('eah:toggle-sidepanel', sync)
+    window.addEventListener('eah:open-sidepanel', sync)
+    return () => {
+      window.removeEventListener('eah:toggle-sidepanel', sync)
+      window.removeEventListener('eah:open-sidepanel', sync)
+    }
   }, [])
 
   const toggle = () => {
@@ -18,17 +29,41 @@ export default function SidePanelToggle() {
   return (
     <button
       type="button"
-      className="spt"
+      className={`spt ${open ? 'is-open' : ''}`}
       onClick={toggle}
-      aria-label="الأكثر رواجاً"
-      title="الأكثر رواجاً"
+      aria-label="اكتشف الترند والمميز"
+      aria-pressed={open}
     >
       <span className="spt__icon" aria-hidden>
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 2 L14.5 9 L22 9.5 L16 14 L18 21.5 L12 17 L6 21.5 L8 14 L2 9.5 L9.5 9 Z" />
+        <svg
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.9"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {/* Trending icon — flame + arrow, not a star */}
+          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
         </svg>
       </span>
-      <span className="spt__pulse" aria-hidden />
+      <span className="spt__label">اكتشف</span>
+      <span className="spt__chevron" aria-hidden>
+        <svg
+          viewBox="0 0 24 24"
+          width="12"
+          height="12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </span>
     </button>
   )
 }

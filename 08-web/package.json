@@ -3,10 +3,11 @@
   "version": "0.3.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "typecheck": "tsc --noEmit",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "dev:turbo": "next dev"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.74.0",

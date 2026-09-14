@@ -1,115 +1,48 @@
 'use client'
-import { useRef, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase-browser'
 import './side-panel.css'
 
 type SideItem = {
   id: string
-  title: string
+  name: string
+  slug: string
   subtitle?: string
   emoji?: string
-  href: string
+  badge?: 'new' | 'featured' | 'trending'
 }
 
-const FEATURED: SideItem[] = [
-  { id: 'f1', title: 'مطبخ البلد', subtitle: 'شبين القناطر', emoji: '🍽️', href: '#' },
-  { id: 'f2', title: 'صيدلية الأمان', subtitle: 'طوارئ 24س', emoji: '💊', href: '#' },
-  { id: 'f3', title: 'برجر هاوس', subtitle: 'المنايل', emoji: '🍔', href: '#' },
-  { id: 'f4', title: 'مشويات الشرق', subtitle: 'شبين القناطر', emoji: '🥙', href: '#' },
-  { id: 'f5', title: 'كافيه النجوم', subtitle: 'المنايل', emoji: '☕', href: '#' },
-  { id: 'f6', title: 'بيتزا الطليان', subtitle: 'شبين القناطر', emoji: '🍕', href: '#' },
-  { id: 'f7', title: 'شاورما الشام', subtitle: 'شبين القناطر', emoji: '🌯', href: '#' },
-  { id: 'f8', title: 'عصائر فريش', subtitle: 'المنايل', emoji: '🥤', href: '#' },
-  { id: 'f9', title: 'حلواني الأصيل', subtitle: 'شبين القناطر', emoji: '🍰', href: '#' },
-  { id: 'f10', title: 'مخبز الفجر', subtitle: 'شبين القناطر', emoji: '🥖', href: '#' },
-]
+type PanelData = {
+  featured: SideItem[]
+  trending: SideItem[]
+  newest: SideItem[]
+}
 
-const TRENDING: SideItem[] = [
-  { id: 't1', title: 'برجر هاوس', subtitle: 'الأكثر زيارة', emoji: '🍔', href: '#' },
-  { id: 't2', title: 'كشري التحرير', subtitle: 'ترند النهاردة', emoji: '🍲', href: '#' },
-  { id: 't3', title: ' النور', subtitle: 'الأكثر طلباً', emoji: '🛒', href: '#' },
-  { id: 't4', title: 'مشويات الشرق', subtitle: 'ترند الأسبوع', emoji: '🥙', href: '#' },
-  { id: 't5', title: 'كافيه النجوم', subtitle: 'الأعلى تقييماً', emoji: '☕', href: '#' },
-  { id: 't6', title: 'بيتزا الطليان', subtitle: 'ترند الشهر', emoji: '🍕', href: '#' },
-  { id: 't7', title: 'شاورما الشام', subtitle: 'الأكثر تفاعلاً', emoji: '🌯', href: '#' },
-  { id: 't8', title: 'عصائر فريش', subtitle: 'ترند الصيف', emoji: '🥤', href: '#' },
-  { id: 't9', title: 'حلواني الأصيل', subtitle: 'الأعلى تقييماً', emoji: '🍰', href: '#' },
-  { id: 't10', title: 'مخبز الفجر', subtitle: 'ترند الصباح', emoji: '🥖', href: '#' },
-]
-
-const NEW_BIZ: SideItem[] = [
-  { id: 'n1', title: 'شاورما أحمد', subtitle: 'جديد', emoji: '🌯', href: '#' },
-  { id: 'n2', title: 'قهوة الشروق', subtitle: 'جديد', emoji: '☕', href: '#' },
-  { id: 'n3', title: 'حلويات نور', subtitle: 'جديد', emoji: '🍰', href: '#' },
-  { id: 'n4', title: 'عطارة الهنا', subtitle: 'جديد', emoji: '🌿', href: '#' },
-  { id: 'n5', title: 'سمكة ورق', subtitle: 'جديد', emoji: '🐟', href: '#' },
-  { id: 'n6', title: 'شيبسي سنتر', subtitle: 'جديد', emoji: '🥤', href: '#' },
-  { id: 'n7', title: 'فول وطعمية', subtitle: 'جديد', emoji: '🥣', href: '#' },
-  { id: 'n8', title: 'كريب ستريت', subtitle: 'جديد', emoji: '🥞', href: '#' },
-  { id: 'n9', title: 'بقالة الخير', subtitle: 'جديد', emoji: '🏪', href: '#' },
-  { id: 'n10', title: 'عصير المانجو', subtitle: 'جديد', emoji: '🥭', href: '#' },
-]
-
-function AutoSlider({ items, featured }: { items: SideItem[]; featured?: boolean }) {
-  const trackRef = useRef<HTMLDivElement>(null)
-  const [paused, setPaused] = useState(false)
-  const [index, setIndex] = useState(0)
-
-  // 10 عناصر، 3 ظاهرين، نتحرك لحد 7 ثم نرجع 0
-  useEffect(() => {
-    if (paused || items.length <= 3) return
-    const timer = setInterval(() => {
-      setIndex((i) => (i + 1) % (items.length - 2))
-    }, 3000)
-    return () => clearInterval(timer)
-  }, [paused, items.length])
-
-  useEffect(() => {
-    const el = trackRef.current
-    if (!el) return
-    const step = 46
-    if (el.scrollHeight > el.clientHeight + 4) { el.scrollTo({ top: index * step, left: 0, behavior: 'smooth' }) }
-  }, [index])
-
-  return (
-    <div
-      ref={trackRef}
-      className="side-panel__track"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setTimeout(() => setPaused(false), 2500)}
-    >
-      {items.map((item) => (
-        <a
-          key={item.id}
-          href={item.href}
-          className={`side-panel__card ${featured ? 'side-panel__card--featured' : ''}`}
-        >
-          <span className="side-panel__emoji">{item.emoji}</span>
-          <span className="side-panel__text">
-            <span className="side-panel__title">{item.title}</span>
-            {item.subtitle && <span className="side-panel__subtitle">{item.subtitle}</span>}
-          </span>
-        </a>
-      ))}
-    </div>
-  )
+const CATEGORY_EMOJI: Record<string, string> = {
+  restaurant: '🍽️',
+  pharmacy: '💊',
+  supermarket: '🛒',
+  delivery_office: '🛵',
 }
 
 export default function SidePanel() {
   const [closed, setClosed] = useState(true)
   const [mounted, setMounted] = useState(false)
+  const [data, setData] = useState<PanelData | null>(null)
+  const [loading, setLoading] = useState(true)
 
+  // ─── Toggle visibility ───
   useEffect(() => {
     setMounted(true)
     const wasOpen = localStorage.getItem('eah-sidepanel-open') === '1'
     if (wasOpen) setClosed(false)
 
-    const onToggle = () => setClosed((c) => {
-      const next = !c
-      localStorage.setItem('eah-sidepanel-open', next ? '0' : '1')
-      return next
-    })
+    const onToggle = () =>
+      setClosed((c) => {
+        const next = !c
+        localStorage.setItem('eah-sidepanel-open', next ? '0' : '1')
+        return next
+      })
     const onOpen = () => {
       setClosed(false)
       localStorage.setItem('eah-sidepanel-open', '1')
@@ -122,56 +55,169 @@ export default function SidePanel() {
     }
   }, [])
 
+  // ─── Fetch real data ───
+  useEffect(() => {
+    let active = true
+    void (async () => {
+      try {
+        const supabase = createClient()
+        const [feat, trend, fresh] = await Promise.all([
+          supabase
+            .from('businesses')
+            .select('id, name, slug, type')
+            .eq('is_published', true)
+            .eq('is_featured', true)
+            .limit(5),
+          supabase
+            .from('businesses')
+            .select('id, name, slug, type, view_count')
+            .eq('is_published', true)
+            .order('view_count', { ascending: false, nullsFirst: false })
+            .limit(5),
+          supabase
+            .from('businesses')
+            .select('id, name, slug, type, created_at')
+            .eq('is_published', true)
+            .order('created_at', { ascending: false })
+            .limit(5),
+        ])
+
+        if (!active) return
+
+        const map = (rows: any[], badge?: SideItem['badge']): SideItem[] =>
+          (rows ?? []).map((r) => ({
+            id: r.id,
+            name: r.name,
+            slug: r.slug,
+            emoji: CATEGORY_EMOJI[r.type] ?? '📍',
+            badge,
+          }))
+
+        const next: PanelData = {
+          featured: map(feat.data ?? [], 'featured'),
+          trending: map(trend.data ?? [], 'trending'),
+          newest: map(fresh.data ?? [], 'new'),
+        }
+
+        // لو مفيش أي بيانات حقيقية → ما نعرضش البانل
+        const empty =
+          next.featured.length + next.trending.length + next.newest.length === 0
+        setData(empty ? null : next)
+      } catch {
+        if (active) setData(null)
+      } finally {
+        if (active) setLoading(false)
+      }
+    })()
+    return () => {
+      active = false
+    }
+  }, [])
+
   const handleClose = () => {
     setClosed(true)
     localStorage.setItem('eah-sidepanel-open', '0')
   }
 
-  if (!mounted || closed) return null
+  // ما نعرضش أي حاجة لحد ما نعرف النتيجة
+  if (!mounted || closed || loading || !data) return null
+
+  const Section = ({
+    title,
+    icon,
+    seeAllHref,
+    items,
+    badge,
+  }: {
+    title: string
+    icon: string
+    seeAllHref: string
+    items: SideItem[]
+    badge?: 'featured' | 'trending' | 'new'
+  }) => {
+    if (items.length === 0) return null
+    return (
+      <div className="side-panel__section">
+        <h3 className="side-panel__head">
+          <span className="side-panel__head-icon">{icon}</span>
+          <span>{title}</span>
+          <a href={seeAllHref} className="side-panel__see-all">
+            الكل
+          </a>
+        </h3>
+        <div className="side-panel__track">
+          {items.slice(0, 3).map((item) => (
+            <a
+              key={item.id}
+              href={`/businesses/${item.slug}`}
+              className={`side-panel__card ${badge === 'featured' ? 'side-panel__card--featured' : ''}`}
+            >
+              <span className="side-panel__emoji">{item.emoji}</span>
+              <span className="side-panel__text">
+                <span className="side-panel__title">{item.name}</span>
+                {item.subtitle && (
+                  <span className="side-panel__subtitle">{item.subtitle}</span>
+                )}
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  const sections = [data.featured, data.trending, data.newest].filter(
+    (s) => s.length > 0
+  )
+  if (sections.length === 0) return null
 
   return (
-    <aside className="side-panel" aria-label="القائمة الجانبية">
+    <aside className="side-panel" aria-label="اكتشف">
       <button
         type="button"
         className="side-panel__close"
         onClick={handleClose}
         aria-label="إغلاق القائمة"
       >
-        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+        <svg
+          viewBox="0 0 24 24"
+          width="12"
+          height="12"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        >
           <path d="M18 6 6 18M6 6l12 12" />
         </svg>
       </button>
 
-      <div className="side-panel__section">
-        <h3 className="side-panel__head">
-          <span className="side-panel__head-icon">⭐</span>
-          <span>المميز</span>
-          <a href="/featured" className="side-panel__see-all">الكل</a>
-        </h3>
-        <AutoSlider items={FEATURED} featured />
-      </div>
-
-      <div className="side-panel__divider" />
-
-      <div className="side-panel__section">
-        <h3 className="side-panel__head">
-          <span className="side-panel__head-icon">🔥</span>
-          <span>ترند</span>
-          <a href="/trends" className="side-panel__see-all">الكل</a>
-        </h3>
-        <AutoSlider items={TRENDING} />
-      </div>
-
-      <div className="side-panel__divider" />
-
-      <div className="side-panel__section">
-        <h3 className="side-panel__head">
-          <span className="side-panel__head-icon">🌱</span>
-          <span>جديد</span>
-          <a href="/new" className="side-panel__see-all">الكل</a>
-        </h3>
-        <AutoSlider items={NEW_BIZ} />
-      </div>
+      <Section
+        title="المميز"
+        icon="⭐"
+        seeAllHref="/featured"
+        items={data.featured}
+        badge="featured"
+      />
+      {data.featured.length > 0 && data.trending.length > 0 && (
+        <div className="side-panel__divider" />
+      )}
+      <Section
+        title="ترند"
+        icon="🔥"
+        seeAllHref="/trends"
+        items={data.trending}
+        badge="trending"
+      />
+      {(data.featured.length > 0 || data.trending.length > 0) &&
+        data.newest.length > 0 && <div className="side-panel__divider" />}
+      <Section
+        title="جديد"
+        icon="🌱"
+        seeAllHref="/new"
+        items={data.newest}
+        badge="new"
+      />
     </aside>
   )
 }

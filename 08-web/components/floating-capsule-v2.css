@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════
-   EAH Floating Capsule — Polish Layer (2026)
-   Single glass capsule + one accent line at bottom.
-   No broken segments. No scroll-fade logo. Clean.
+   EAH Floating Capsule — Polish Layer (2026 v2)
+   Top state: invisible shell (hero logo shines alone)
+   Scroll state: full glass capsule fades in progressively
    ═══════════════════════════════════════════════════ */
 
 .floating-capsule {
@@ -13,50 +13,59 @@
   max-width: none;
   padding-inline: 10px;
   box-sizing: border-box;
-  --fc-scroll-progress: 1;
+  --fc-scroll-progress: 0;
+
+  /* Progressively applied via inline style in TSX */
+  --fc-p: var(--fc-scroll-progress);
 }
 
-/* Solid glass capsule — replaces the empty broken-line surface. */
+/* ═══ Glass shell — fades with scroll progress ═══ */
 .floating-capsule__inner {
   width: 100%;
   max-width: 1220px;
   margin: 0 auto;
-  min-height: 56px;
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  min-height: 58px;
   border-radius: 22px;
-  background:
-    linear-gradient(180deg, rgba(20, 14, 32, 0.72), rgba(10, 7, 16, 0.65));
+  position: relative;
+
+  /* At p=0: transparent, no border, no shadow */
+  border: 1px solid rgba(168, 85, 247, 0);
+  background: linear-gradient(
+    180deg,
+    rgba(20, 14, 32, 0),
+    rgba(10, 7, 16, 0)
+  );
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  overflow: visible;
+
+  transition:
+    border-color 180ms linear,
+    background 180ms linear,
+    box-shadow 180ms linear,
+    backdrop-filter 180ms linear;
+}
+
+/* Scrolled: full glass */
+.floating-capsule.is-scrolled .floating-capsule__inner {
+  border-color: rgba(168, 85, 247, 0.28);
+  background: linear-gradient(
+    180deg,
+    rgba(20, 14, 32, 0.78),
+    rgba(10, 7, 16, 0.72)
+  );
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    inset 0 0 0 1px rgba(168, 85, 247, 0.05);
+    0 8px 24px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(1.5);
   -webkit-backdrop-filter: blur(20px) saturate(1.5);
-  overflow: visible;
-  transition:
-    background 260ms ease,
-    border-color 260ms ease,
-    box-shadow 260ms ease;
 }
 
-/* Scrolled: deeper glass + neon halo */
-.floating-capsule.is-scrolled .floating-capsule__inner {
-  background:
-    linear-gradient(180deg, rgba(20, 14, 32, 0.9), rgba(10, 7, 16, 0.86));
-  border-color: rgba(168, 85, 247, 0.4);
-  box-shadow:
-    0 14px 36px rgba(0, 0, 0, 0.58),
-    0 0 26px rgba(168, 85, 247, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    inset 0 0 0 1px rgba(168, 85, 247, 0.1);
-}
+/* Kill old broken-line pseudo */
+.floating-capsule__inner::before { display: none !important; }
 
-/* Kill old broken-line pseudo element */
-.floating-capsule__inner::before {
-  display: none !important;
-}
-
-/* Single accent line — one gradient, never fragmented */
+/* Accent line — only appears when scrolled */
 .floating-capsule__inner::after {
   content: '';
   position: absolute;
@@ -74,7 +83,7 @@
     transparent 100%
   );
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0;
   transition: opacity 260ms ease, left 260ms ease, right 260ms ease;
 }
 
@@ -84,12 +93,26 @@
   opacity: 1;
 }
 
-/* Logo is ALWAYS visible — no scroll fade, no forced opacity */
+/* ═══ Logo — hidden at top, fades in with progress ═══ */
 .floating-capsule .fc-logo {
-  opacity: 1 !important;
-  transform: none !important;
-  pointer-events: auto !important;
-  visibility: visible;
+  opacity: var(--fc-scroll-progress, 0);
+  transform:
+    translateY(calc(-6px + 6px * var(--fc-scroll-progress, 0)))
+    scale(calc(0.88 + 0.12 * var(--fc-scroll-progress, 0)));
+  pointer-events: none;
+  transition: opacity 60ms linear, transform 60ms linear;
+  will-change: opacity, transform;
+}
+
+.floating-capsule.is-scrolled .fc-logo {
+  pointer-events: auto;
+}
+
+/* ═══ Side icons — always visible (they're the navigation) ═══ */
+.floating-capsule__side,
+.fc-desktop-only,
+.fc-user-cluster {
+  opacity: 1;
   transition: none;
 }
 
@@ -103,7 +126,7 @@
   padding-inline-start: 3px;
 }
 
-/* Responsive */
+/* ═══ Responsive ═══ */
 @media (max-width: 900px) {
   .floating-capsule { padding-inline: 8px; }
   .floating-capsule__inner { min-height: 54px; border-radius: 20px; }
@@ -123,6 +146,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .floating-capsule__inner,
-  .floating-capsule__inner::after { transition: none; }
+  .floating-capsule__inner::after,
   .fc-logo { transition: none; }
 }

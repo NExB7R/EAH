@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════
-   EAH Splash Screen (2026)
-   Crown pulse ring — no loading dots.
+   EAH Splash Screen (2026 v3)
+   Minimal: crown + word, perfectly centered.
    ═══════════════════════════════════════════════════ */
 
 .splash {
@@ -10,9 +10,10 @@
   display: grid;
   place-items: center;
   background:
-    radial-gradient(circle at 50% 40%, rgba(168, 85, 247, 0.14), transparent 55%),
+    radial-gradient(circle at 50% 45%, rgba(168, 85, 247, 0.12), transparent 55%),
     linear-gradient(180deg, #0a0714 0%, #050308 100%);
-  animation: splash-fade 420ms ease-out both;
+  animation: splash-fade 380ms ease-out both;
+  pointer-events: none;
 }
 
 @keyframes splash-fade {
@@ -24,88 +25,69 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 420px;
-  height: 420px;
+  width: 360px;
+  height: 360px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.22) 0%, transparent 65%);
-  filter: blur(40px);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, transparent 65%);
+  filter: blur(36px);
   pointer-events: none;
   animation: splash-glow 3.6s ease-in-out infinite;
 }
 
 @keyframes splash-glow {
-  0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
-  50%      { opacity: 1;   transform: translate(-50%, -50%) scale(1.08); }
+  0%, 100% { opacity: 0.65; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 1;    transform: translate(-50%, -50%) scale(1.06); }
 }
 
+/* ─── Center stack ─── */
 .splash__logo-wrap {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  justify-content: center;
+  gap: 8px;
   z-index: 1;
-  animation: splash-rise 620ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  animation: splash-rise 560ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
 }
 
 @keyframes splash-rise {
-  from { opacity: 0; transform: translateY(14px) scale(0.94); }
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
   to   { opacity: 1; transform: translateY(0)    scale(1); }
 }
 
-.splash__crown-wrap {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 120px;
-  height: 120px;
-}
-
+/* ─── Crown ─── */
 .splash__crown {
-  position: relative;
-  width: 88px;
-  height: auto;
-  z-index: 2;
+  display: block;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
   filter:
-    drop-shadow(0 6px 16px rgba(168, 85, 247, 0.55))
-    drop-shadow(0 0 24px rgba(232, 199, 154, 0.3));
-  animation: crown-breathe 3.2s ease-in-out infinite;
+    drop-shadow(0 4px 12px rgba(168, 85, 247, 0.5))
+    drop-shadow(0 0 18px rgba(232, 199, 154, 0.28));
+  animation: crown-breathe 3s ease-in-out infinite;
 }
 
 @keyframes crown-breathe {
   0%, 100% { transform: translateY(0) scale(1); }
-  50%      { transform: translateY(-3px) scale(1.04); }
+  50%      { transform: translateY(-2px) scale(1.03); }
 }
 
-/* Two concentric pulse rings — replaces the 3 loading dots */
-.splash__pulse-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 1.5px solid rgba(168, 85, 247, 0.55);
-  opacity: 0;
-  animation: pulse-ring 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
-  pointer-events: none;
-}
-
-.splash__pulse-ring--delay {
-  border-color: rgba(232, 199, 154, 0.45);
-  animation-delay: 1.2s;
-}
-
-@keyframes pulse-ring {
-  0%   { transform: scale(0.7); opacity: 0.9; }
-  100% { transform: scale(1.35); opacity: 0; }
-}
-
+/* ─── Word ─── */
 .splash__word {
-  width: 120px;
+  display: block;
+  width: 160px;
   height: auto;
-  filter: drop-shadow(0 0 14px rgba(232, 199, 154, 0.35));
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(232, 199, 154, 0.3));
 }
 
+/* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
-  .splash__crown,
+  .splash,
   .splash__glow,
-  .splash__pulse-ring { animation: none; }
+  .splash__crown,
+  .splash__logo-wrap {
+    animation: none;
+  }
 }

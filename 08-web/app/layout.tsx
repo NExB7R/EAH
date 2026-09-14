@@ -1,4 +1,5 @@
 import './globals.css'
+import './loading.css'
 import './theme.css'
 import './design-system.css'
 import '../components/eah-admin.css'
