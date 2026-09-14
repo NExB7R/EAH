@@ -2,12 +2,13 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { MI } from '@/components/neon-icons-menu'
 import './admin-shell.css'
 
 type NavItem = {
   href: string
   label: string
-  icon: string
+  icon: React.ReactNode
   badge?: number
 }
 
@@ -30,21 +31,21 @@ export default function AdminShell({
     {
       title: 'الرئيسية',
       items: [
-        { href: '/admin', label: 'نظرة عامة', icon: '📊' },
-        { href: '/admin/analytics', label: 'الإحصائيات', icon: '📈' },
+        { href: '/admin', label: 'نظرة عامة', icon: MI.trending },
+        { href: '/admin/analytics', label: 'الإحصائيات', icon: MI.trending },
       ],
     },
     {
       title: 'المحتوى',
       items: [
-        { href: '/admin/businesses', label: 'الأنشطة', icon: '🏪' },
-        { href: '/admin/offers', label: 'العروض', icon: '🔥' },
-        { href: '/admin/ads', label: 'الإعلانات', icon: '📣' },
-        { href: '/admin/reviews', label: 'التقييمات', icon: '⭐' },
+        { href: '/admin/businesses', label: 'الأنشطة', icon: MI.store },
+        { href: '/admin/offers', label: 'العروض', icon: MI.fire },
+        { href: '/admin/ads', label: 'الإعلانات', icon: MI.megaphone },
+        { href: '/admin/reviews', label: 'التقييمات', icon: MI.sparkles },
         {
           href: '/admin/change-requests',
           label: 'طلبات التعديل',
-          icon: '📝',
+          icon: MI.info,
           badge: pendingChanges,
         },
       ],
@@ -52,23 +53,23 @@ export default function AdminShell({
     {
       title: 'الاشتراكات',
       items: [
-        { href: '/admin/subscriptions', label: 'الاشتراكات', icon: '💎' },
-        { href: '/admin/subscriptions/plans', label: 'الباقات', icon: '⚙️' },
+        { href: '/admin/subscriptions', label: 'الاشتراكات', icon: MI.sparkles },
+        { href: '/admin/subscriptions/plans', label: 'الباقات', icon: MI.lock },
       ],
     },
     {
       title: 'المستخدمين',
       items: [
-        { href: '/admin/users', label: 'المستخدمين', icon: '👥' },
-        { href: '/admin/merchants', label: 'طلبات التجار', icon: '🧾' },
+        { href: '/admin/users', label: 'المستخدمين', icon: MI.info },
+        { href: '/admin/merchants', label: 'طلبات التجار', icon: MI.store },
       ],
     },
     {
       title: 'النظام',
       items: [
-        { href: '/admin/studio', label: 'الاستوديو', icon: '🎨' },
-        { href: '/admin/security', label: 'الأمان', icon: '🛡️' },
-        { href: '/admin/audit', label: 'سجل العمليات', icon: '📜' },
+        { href: '/admin/studio', label: 'الاستوديو', icon: MI.sparkles },
+        { href: '/admin/security', label: 'الأمان', icon: MI.shield },
+        { href: '/admin/audit', label: 'سجل العمليات', icon: MI.lock },
       ],
     },
   ]
@@ -80,14 +81,12 @@ export default function AdminShell({
 
   return (
     <div className="admin-shell" data-mobile-open={mobileOpen}>
-      {/* Overlay for mobile */}
       <div
         className="admin-overlay"
         onClick={() => setMobileOpen(false)}
         aria-hidden
       />
 
-      {/* Sidebar */}
       <aside className="admin-sidebar">
         <Link
           href="/admin"
@@ -110,7 +109,7 @@ export default function AdminShell({
                   data-active={isActive(item.href)}
                   onClick={() => setMobileOpen(false)}
                 >
-                  <span aria-hidden>{item.icon}</span>
+                  <span className="admin-sidebar__link-icon" aria-hidden>{item.icon}</span>
                   <span>{item.label}</span>
                   {item.badge !== undefined && item.badge > 0 && (
                     <span className="admin-sidebar__link-badge">{item.badge}</span>
@@ -123,21 +122,19 @@ export default function AdminShell({
 
         <div className="admin-sidebar__bottom">
           <Link href="/" className="admin-sidebar__link">
-            <span aria-hidden>🏠</span>
+            <span className="admin-sidebar__link-icon" aria-hidden>{MI.compass}</span>
             <span>الموقع</span>
           </Link>
           <form action="/admin/logout" method="post">
             <button type="submit" className="admin-sidebar__link" style={{ width: '100%', cursor: 'pointer', background: 'transparent', border: 'none' }}>
-              <span aria-hidden>🚪</span>
+              <span className="admin-sidebar__link-icon" aria-hidden>{MI.logout}</span>
               <span>خروج</span>
             </button>
           </form>
         </div>
       </aside>
 
-      {/* Main */}
       <main className="admin-main">
-        {/* Mobile trigger */}
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <button
             type="button"
