@@ -5,6 +5,11 @@ import { createClient } from '@/lib/supabase-browser'
 import './auth.css'
 import EahLogo from '@/components/eah-logo'
 
+export const metadata = {
+  title: 'تسجيل الدخول',
+  robots: { index: false, follow: false },
+}
+
 function normalizeEgyptPhone(value: string) {
   const raw = value.trim().replace(/[\s()-]/g, '')
   if (raw.startsWith('+20')) return `+20${raw.slice(3).replace(/\D/g, '')}`

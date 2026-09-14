@@ -1,6 +1,10 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase-server'
 
+export const metadata = {
+  title: 'الإعلانات',
+}
+
 function n(v: unknown) { return typeof v === 'number' ? v : Number(v ?? 0) }
 
 export default async function AdminAdsPage() {

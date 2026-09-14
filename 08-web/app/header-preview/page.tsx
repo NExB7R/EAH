@@ -1,5 +1,10 @@
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 
+export const metadata = {
+  title: 'معاينة الهيدر',
+  robots: { index: false, follow: false },
+}
+
 export default function HeaderPreview() {
   return (
     <div style={{ minHeight: '220vh', paddingTop: '180px', paddingBottom: '120px' }}>

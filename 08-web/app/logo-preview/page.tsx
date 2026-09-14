@@ -1,5 +1,10 @@
 import EahLogo from '@/components/eah-logo'
 
+export const metadata = {
+  title: 'معاينة اللوجو',
+  robots: { index: false, follow: false },
+}
+
 export default function LogoPreview() {
   return (
     <main

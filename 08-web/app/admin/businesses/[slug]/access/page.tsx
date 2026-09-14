@@ -1,6 +1,10 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase-server'
 
+export const metadata = {
+  title: 'صلاحيات النشاط',
+}
+
 const permissions = [['business.view','مشاهدة بيانات النشاط'],['business.edit','تعديل بيانات النشاط'],['business.publish','النشر/إخفاء الصفحة'],['media.manage','إدارة الصور والوسائط'],['offers.manage','إدارة العروض'],['reviews.manage','إدارة التقييمات'],['contacts.manage','إدارة أرقام ووسائل التواصل'],['page.manage','إدارة تصميم الصفحة']] as const
 
 async function savePermissions(formData: FormData) {

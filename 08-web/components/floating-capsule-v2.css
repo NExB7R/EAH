@@ -1,55 +1,99 @@
-/* EAH Header polish layer — transparent, single-outline, identity-safe. */
+/* ═══════════════════════════════════════════════════
+   EAH Floating Capsule — Polish Layer (2026)
+   Single glass capsule + one accent line at bottom.
+   No broken segments. No scroll-fade logo. Clean.
+   ═══════════════════════════════════════════════════ */
 
 .floating-capsule {
-  top: max(8px, env(safe-area-inset-top));
+  top: max(10px, env(safe-area-inset-top));
   left: 0;
+  right: 0;
   transform: none;
   width: 100%;
-  padding-inline: 8px;
+  max-width: none;
+  padding-inline: 10px;
   box-sizing: border-box;
-  --fc-scroll-progress: 0;
+  --fc-scroll-progress: 1;
 }
 
+/* Solid glass capsule — replaces the empty broken-line surface. */
 .floating-capsule__inner {
   width: 100%;
-  max-width: none;
-  min-height: 58px;
-  border: 0;
-  border-radius: 24px;
-  background: transparent !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  max-width: 1220px;
+  margin: 0 auto;
+  min-height: 56px;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(20, 14, 32, 0.72), rgba(10, 7, 16, 0.65));
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px rgba(168, 85, 247, 0.05);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
   overflow: visible;
+  transition:
+    background 260ms ease,
+    border-color 260ms ease,
+    box-shadow 260ms ease;
 }
 
-/* One intentional broken neon line system. */
+/* Scrolled: deeper glass + neon halo */
+.floating-capsule.is-scrolled .floating-capsule__inner {
+  background:
+    linear-gradient(180deg, rgba(20, 14, 32, 0.9), rgba(10, 7, 16, 0.86));
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.58),
+    0 0 26px rgba(168, 85, 247, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(168, 85, 247, 0.1);
+}
+
+/* Kill old broken-line pseudo element */
 .floating-capsule__inner::before {
+  display: none !important;
+}
+
+/* Single accent line — one gradient, never fragmented */
+.floating-capsule__inner::after {
   content: '';
   position: absolute;
-  inset: 0;
-  border-radius: 24px;
+  bottom: -1px;
+  left: 18%;
+  right: 18%;
+  height: 1px;
+  border-radius: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(168, 85, 247, 0.65) 22%,
+    rgba(232, 199, 154, 0.55) 50%,
+    rgba(168, 85, 247, 0.65) 78%,
+    transparent 100%
+  );
   pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(168,85,247,.78) 0 17%, transparent 17% 35%, rgba(232,199,154,.48) 35% 43%, transparent 43% 57%, rgba(168,85,247,.62) 57% 83%, transparent 83% 100%) top / 100% 1px no-repeat,
-    linear-gradient(90deg, transparent 0 10%, rgba(168,85,247,.45) 10% 29%, transparent 29% 48%, rgba(232,199,154,.32) 48% 67%, transparent 67% 90%, rgba(168,85,247,.58) 90% 100%) bottom / 100% 1px no-repeat;
-  box-shadow: 0 -1px 10px rgba(168,85,247,.16), 0 1px 10px rgba(232,199,154,.06);
+  opacity: 0.5;
+  transition: opacity 260ms ease, left 260ms ease, right 260ms ease;
 }
 
-.floating-capsule__inner::after { display: none !important; }
+.floating-capsule.is-scrolled .floating-capsule__inner::after {
+  left: 8%;
+  right: 8%;
+  opacity: 1;
+}
 
+/* Logo is ALWAYS visible — no scroll fade, no forced opacity */
 .floating-capsule .fc-logo {
-  opacity: var(--fc-scroll-progress);
+  opacity: 1 !important;
+  transform: none !important;
+  pointer-events: auto !important;
   visibility: visible;
-  transform: translateY(calc(-10px + (10px * var(--fc-scroll-progress)))) scale(calc(.92 + (.08 * var(--fc-scroll-progress))));
-  pointer-events: none;
-  transition: opacity 120ms linear, transform 120ms linear;
-  will-change: opacity, transform;
+  transition: none;
 }
 
-.floating-capsule.is-scrolled .fc-logo { pointer-events: auto; }
-
-/* Avatar cluster stays a single identity control; Super Admin decoration lives inside UserAvatar. */
+/* Identity cluster */
 .fc-user-cluster {
   position: relative;
   display: inline-flex;
@@ -59,16 +103,26 @@
   padding-inline-start: 3px;
 }
 
+/* Responsive */
 @media (max-width: 900px) {
-  .floating-capsule { padding-inline: 6px; }
+  .floating-capsule { padding-inline: 8px; }
   .floating-capsule__inner { min-height: 54px; border-radius: 20px; }
-  .floating-capsule__inner::before { border-radius: 20px; }
 }
 
 @media (max-width: 640px) {
-  .floating-capsule { top: max(6px, env(safe-area-inset-top)); padding-inline: 5px; }
-  .floating-capsule__inner { min-height: 52px; padding: 7px 8px; border-radius: 18px; }
-  .floating-capsule__inner::before { border-radius: 18px; }
+  .floating-capsule {
+    top: max(8px, env(safe-area-inset-top));
+    padding-inline: 6px;
+  }
+  .floating-capsule__inner {
+    min-height: 52px;
+    padding: 7px 10px;
+    border-radius: 18px;
+  }
 }
 
-@media (prefers-reduced-motion: reduce) { .fc-logo { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .floating-capsule__inner,
+  .floating-capsule__inner::after { transition: none; }
+  .fc-logo { transition: none; }
+}

@@ -5,6 +5,11 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-browser'
 import './change-password.css'
 
+export const metadata = {
+  title: 'تغيير كلمة السر',
+  robots: { index: false, follow: false },
+}
+
 function getStrength(pw: string) {
   let s = 0
   if (pw.length >= 8) s++

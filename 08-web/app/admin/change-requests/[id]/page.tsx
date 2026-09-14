@@ -2,6 +2,10 @@ import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase-server'
 
+export const metadata = {
+  title: 'مراجعة طلب',
+}
+
 export default async function AdminChangeRequestDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = await createClient()

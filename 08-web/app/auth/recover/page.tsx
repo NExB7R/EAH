@@ -4,6 +4,11 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase-browser'
 import './recover.css'
 
+export const metadata = {
+  title: 'استعادة الحساب',
+  robots: { index: false, follow: false },
+}
+
 function normalizeEgyptPhone(value: string) {
   const raw = value.trim().replace(/[\s()-]/g, '')
   if (raw.startsWith('+20')) return `+20${raw.slice(3).replace(/\D/g, '')}`
