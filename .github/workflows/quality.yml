@@ -7,7 +7,7 @@ on:
     branches: [ui-onlook]
 
 jobs:
-  typecheck:
+  typecheck-and-build:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -21,3 +21,4 @@ jobs:
           cache-dependency-path: 08-web/package-lock.json
       - run: npm ci
       - run: npm run typecheck
+      - run: npm run build
