@@ -1,8 +1,8 @@
 /**
  * EAH Real Stats Loader
  * ---------------------
- * يقرا view stats حقيقية من Supabase RPC get_business_view_stats
- * لو فشل → بيرجع Map فاضية → mock-stats بياخد الـ default
+ * يقرا view stats حقيقية من Supabase RPC get_business_view_stats.
+ * لو فشل → بيرجع Map فاضية بدون اختلاق أرقام.
  */
 
 import { createClient } from './supabase-server'
@@ -39,7 +39,7 @@ export async function getViewStats(
       })
     }
   } catch {
-    // silent fallback — mock stats will be used
+    return map
   }
   return map
 }
