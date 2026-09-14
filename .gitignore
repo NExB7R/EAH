@@ -48,3 +48,11 @@ pnpm-debug.log*
 *.pid
 *.seed
 *.pid.lock
+.env*
+
+# ═══ EAH session/diagnostic artifacts ═══
+_snapshot.txt
+_diag.txt
+_fix_report.txt
+*.snap.txt
+*.snapshot.md

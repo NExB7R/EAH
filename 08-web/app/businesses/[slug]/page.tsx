@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const business = await getBusinessBySlug(slug)
   if (!business) return { title: 'النشاط مش موجود' }
   return {
-    title: `${business.name} | EAH`,
+    title: `${business.name}`,
     description: business.reason,
   }
 }

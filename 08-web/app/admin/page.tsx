@@ -23,7 +23,6 @@ export default async function AdminHomePage() {
     supabase.from('offers').select('*', { count: 'exact', head: true }),
     supabase.from('business_change_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
     supabase.from('verification_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
-    supabase.from('verification_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
   ])
 
   const stats = [

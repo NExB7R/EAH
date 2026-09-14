@@ -106,8 +106,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               '@type': 'Organization',
               name: 'EAH',
               alternateName: 'اللي نفسك فيه',
-              url: 'https://eah-sq.vercel.app',
-              logo: 'https://eah-sq.vercel.app/icon-512.png',
+              url: siteUrl,
+              logo: `${siteUrl}/icon-512.png`,
               areaServed: {
                 '@type': 'City',
                 name: 'Shibin El-Qanater',

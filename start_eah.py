@@ -12,7 +12,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 WEB = ROOT / "08-web"
-URL = "http://localhost:3000/studio"
+# Default opens homepage. Override via env: EAH_START_URL
+# Examples: EAH_START_URL=http://localhost:3000/studio python start_eah.py
+URL = os.environ.get("EAH_START_URL", "http://localhost:3000/")
 
 
 def find(command: str) -> str | None:
@@ -40,8 +42,8 @@ def main() -> int:
     env = os.environ.copy()
     env.setdefault("NEXT_TELEMETRY_DISABLED", "1")
 
-    print("EAH Design Studio")
-    print("تشغيل Next.js من 08-web ...")
+    print("EAH Development Server")
+    print("Starting Next.js from 08-web ...")
     process = subprocess.Popen(
         [npm, "run", "dev"],
         cwd=WEB,
