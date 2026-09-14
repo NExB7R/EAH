@@ -92,8 +92,12 @@
     inset 0 0 0 1px rgba(255,255,255,0.06);
 }
 
-.fc-role-badge--super > span:first-child,
-.fc-role-badge--admin > span:first-child {
+/* Admins do not get a royal badge; Super Admin is the only privileged identity shown here. */
+.fc-role-badge--admin {
+  display: none !important;
+}
+
+.fc-role-badge--super > span:first-child {
   font-size: 0;
 }
 
@@ -103,13 +107,6 @@
   line-height: 1;
   color: #f7ddb0;
   text-shadow: 0 0 8px rgba(232, 199, 154, 0.7), 0 0 16px rgba(168, 85, 247, 0.45);
-}
-
-.fc-role-badge--admin > span:first-child::before {
-  content: '◈';
-  font-size: 13px;
-  line-height: 1;
-  color: #c4b5fd;
 }
 
 /* The account avatar itself no longer carries the old crown in the header. */
