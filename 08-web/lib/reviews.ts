@@ -26,11 +26,11 @@ export type ReviewItem = {
 
 const FALLBACK_STATS = (businessId: string): BusinessStats => ({
   business_id: businessId,
-  avg_taste: 4.2,
-  avg_value: 4.0,
-  avg_speed: 4.3,
-  avg_experience: 4.5,
-  avg_rating: 4.25,
+  avg_taste: 0,
+  avg_value: 0,
+  avg_speed: 0,
+  avg_experience: 0,
+  avg_rating: 0,
   total_reviews: 0,
   review_count: 0,
   active_offers: 0,
