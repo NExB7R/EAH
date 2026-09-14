@@ -1,14 +1,13 @@
 'use client'
+
 import { useState, useEffect } from 'react'
 import EahLogo from './eah-logo'
 import NeonIconButton from './neon-icon-button'
 import UserAvatar from './user-avatar'
 import InstallPWAButton from './install-pwa-button'
 import ShareButton from './share-button'
-import InstallAppButton from './install-app-button'
 import { MI } from './neon-icons-menu'
 import './drawer-icons.css'
-import './admin-icon-link.css'
 import OverlayBlur from './overlay-blur'
 import { createClient } from '@/lib/supabase-browser'
 import { useUnreadCount } from '@/lib/hooks/use-unread-count'
@@ -43,6 +42,20 @@ function IconChat() {
   )
 }
 
+function StaffBadge({ role }: { role: string }) {
+  if (role !== 'super_admin' && role !== 'admin') return null
+  return (
+    <span
+      className={`fc-role-badge ${role === 'super_admin' ? 'fc-role-badge--super' : 'fc-role-badge--admin'}`}
+      title={role === 'super_admin' ? 'Super Admin موثّق' : 'Admin موثّق'}
+      aria-label={role === 'super_admin' ? 'Super Admin موثّق' : 'Admin موثّق'}
+    >
+      <span aria-hidden>♛</span>
+      <span className="fc-role-badge__check" aria-hidden>✓</span>
+    </span>
+  )
+}
+
 export default function FloatingCapsuleHeader() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -51,7 +64,7 @@ export default function FloatingCapsuleHeader() {
   const { count: liveUnread } = useUnreadCount()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60)
+    const onScroll = () => setScrolled(window.scrollY > 50)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -91,6 +104,7 @@ export default function FloatingCapsuleHeader() {
 
   const isStaff = user && (user.role === 'admin' || user.role === 'super_admin')
   const isMerchant = user?.role === 'merchant'
+  const unread = liveUnread || (user?.notifications ?? 0)
 
   return (
     <>
@@ -100,9 +114,12 @@ export default function FloatingCapsuleHeader() {
             <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" onClick={() => setMenuOpen(true)} />
             <NeonIconButton icon={<IconSearch />} label="اكتشف" ariaLabel="اكتشف" href="/explore" />
           </div>
+
           <div className="floating-capsule__center">
-            <EahLogo size="sm" variant="mark" href="/" />
+            <span className="fc-logo fc-logo--desktop"><EahLogo size="sm" variant="compact" href="/" /></span>
+            <span className="fc-logo fc-logo--mobile"><EahLogo size="sm" variant="mark" href="/" /></span>
           </div>
+
           <div className="floating-capsule__side floating-capsule__side--end">
             <span className="fc-desktop-only">
               <NeonIconButton icon={<IconChat />} label="تواصل" ariaLabel="تواصل" href="/contact" />
@@ -110,45 +127,28 @@ export default function FloatingCapsuleHeader() {
               <NeonIconButton icon={<IconFacebook />} label="فيسبوك" ariaLabel="فيسبوك" href="https://facebook.com/eah.eg" />
               <NeonIconButton icon={<IconWhatsapp />} label="واتساب" ariaLabel="واتساب" href="https://wa.me/201012892806" />
             </span>
+
             {loggedIn === false && (
               <NeonIconButton icon={<IconBolt />} label="سجّل" ariaLabel="سجّل" variant="accent" href="/auth" />
             )}
+
             <InstallPWAButton variant="compact" />
             <ShareButton />
-            {loggedIn === true && (
-              <span className="fc-admin-cluster">
+
+            {loggedIn === true && user && (
+              <span className="fc-user-cluster">
                 <UserAvatar
-                name={user?.name ?? 'مستخدم'}
-                points={user?.points ?? 0}
-                role={user?.role}
-                unreadNotifications={liveUnread || (user?.notifications ?? 0)}
-                banUntil={user?.banUntil ?? null}
-                avatarKey={user?.avatarKey ?? null}
-                frameKey={user?.frameKey ?? null}
-                avatarUrl={user?.avatarUrl ?? undefined}
-                href="/account"
-              />
-                {(user?.role === 'super_admin' || user?.role === 'admin') && (
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 20,
-                      height: 20,
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg,#10B981,#059669)',
-                      color: '#fff',
-                      fontSize: 11,
-                      fontWeight: 900,
-                      marginInlineStart: 2,
-                      boxShadow: '0 0 8px rgba(16,185,129,0.5)',
-                    }}
-                    aria-label="موثّق"
-                  >
-                    ✓
-                  </span>
-                )}
+                  name={user.name}
+                  points={user.points}
+                  role={user.role}
+                  unreadNotifications={unread}
+                  banUntil={user.banUntil}
+                  avatarKey={user.avatarKey}
+                  frameKey={user.frameKey}
+                  avatarUrl={user.avatarUrl ?? undefined}
+                  href="/account"
+                />
+                <StaffBadge role={user.role} />
               </span>
             )}
           </div>
@@ -160,7 +160,7 @@ export default function FloatingCapsuleHeader() {
       <div className={`nav-drawer ${menuOpen ? 'is-open' : ''}`} onClick={() => setMenuOpen(false)} aria-hidden={!menuOpen}>
         <div className="nav-drawer__panel" onClick={(e) => e.stopPropagation()}>
           <div className="nav-drawer__head">
-            <EahLogo size="sm" variant="mark" href="/" />
+            <EahLogo size="sm" variant="compact" href="/" />
             <button type="button" className="nav-drawer__close" onClick={() => setMenuOpen(false)} aria-label="إغلاق">×</button>
           </div>
 
