@@ -5,10 +5,7 @@
   position: relative;
 }
 
-/* زر الإشعارات */
-.user-avatar__bell {
-  position: relative;
-}
+.user-avatar__bell { position: relative; }
 
 .user-avatar__badge {
   position: absolute;
@@ -30,7 +27,6 @@
   line-height: 1;
 }
 
-/* Avatar */
 .user-avatar {
   position: relative;
   width: 36px;
@@ -51,9 +47,7 @@
 .user-avatar:hover,
 .user-avatar:focus-visible {
   border-color: rgba(168, 85, 247, 0.85);
-  box-shadow:
-    0 0 12px rgba(139, 92, 246, 0.55),
-    0 0 26px rgba(139, 92, 246, 0.25);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.55), 0 0 26px rgba(139, 92, 246, 0.25);
   outline: none;
   transform: translateY(-1px);
 }
@@ -80,13 +74,8 @@
   display: block;
 }
 
-.user-avatar__img svg {
-  width: 18px;
-  height: 18px;
-  opacity: 0.8;
-}
+.user-avatar__img svg { width: 18px; height: 18px; opacity: 0.8; }
 
-/* النقاط */
 .user-avatar__points {
   position: absolute;
   bottom: -5px;
@@ -108,7 +97,6 @@
   white-space: nowrap;
 }
 
-/* لافتة الحظر */
 .user-avatar__ban {
   position: absolute;
   inset: 0;
@@ -128,57 +116,12 @@
   line-height: 1;
 }
 
-.user-avatar__ban-icon {
-  font-size: 0.7rem;
-  line-height: 1;
-}
+.user-avatar__ban-icon { font-size: 0.7rem; line-height: 1; }
+.user-avatar__ban-days { font-size: 0.55rem; }
 
-.user-avatar__ban-days {
-  font-size: 0.55rem;
-}
+a.user-avatar { text-decoration: none; color: inherit; cursor: pointer; }
+a.user-avatar:hover { transform: translateY(-1px); }
 
-@media (max-width: 640px) {
-  .user-avatar {
-    width: 32px;
-    height: 32px;
-  }
-  .user-avatar__bell {
-    height: 34px;
-    padding: 0 9px;
-  }
-  .user-avatar__bell .neon-icon-btn__icon { width: 16px; height: 16px; }
-}
-
-/* Avatar as link */
-a.user-avatar {
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-}
-
-a.user-avatar:hover {
-  transform: translateY(-1px);
-}
-
-
-/* ═══ Royal crown (admin only) ═══ */
-.user-avatar__crown {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.95rem;
-  z-index: 4;
-  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.9)) drop-shadow(0 0 16px rgba(251, 191, 36, 0.5));
-  pointer-events: none;
-  animation: crownFloat 3s ease-in-out infinite;
-}
-@keyframes crownFloat {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-2px); }
-}
-
-/* ═══ Merchant store badge ═══ */
 .user-avatar__store {
   position: absolute;
   bottom: -8px;
@@ -190,6 +133,8 @@ a.user-avatar:hover {
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .user-avatar__crown { animation: none; }
+@media (max-width: 640px) {
+  .user-avatar { width: 32px; height: 32px; }
+  .user-avatar__bell { height: 34px; padding: 0 9px; }
+  .user-avatar__bell .neon-icon-btn__icon { width: 16px; height: 16px; }
 }
