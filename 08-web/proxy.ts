@@ -44,9 +44,11 @@ export async function proxy(request: NextRequest) {
   }
 
   if (isAuthPage && user) {
+    const next = request.nextUrl.searchParams.get('next')
+    const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : null
     const redirect = request.nextUrl.clone()
-    redirect.pathname = '/account'
-    redirect.searchParams.delete('next')
+    redirect.pathname = safeNext ?? '/account'
+    redirect.search = ''
     return NextResponse.redirect(redirect)
   }
 
