@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { MI } from '@/components/neon-icons-menu'
 import './admin-shell.css'
+import './admin-shell-polish.css'
 
 type NavItem = {
   href: string
