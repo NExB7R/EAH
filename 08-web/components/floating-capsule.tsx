@@ -43,16 +43,11 @@ function IconChat() {
   )
 }
 
-function StaffBadge({ role }: { role: string }) {
-  if (role !== 'super_admin') return null
+function SuperAdminBadge() {
   return (
-    <span
-      className="fc-role-badge fc-role-badge--super"
-      title="Super Admin موثّق"
-      aria-label="Super Admin موثّق"
-    >
-      <span aria-hidden>✦</span>
-      <span className="fc-role-badge__check" aria-hidden>✓</span>
+    <span className="fc-super-badge" title="Super Admin موثّق" aria-label="Super Admin موثّق">
+      <span className="fc-super-badge__spark" aria-hidden>✦</span>
+      <span className="fc-super-badge__check" aria-hidden>✓</span>
     </span>
   )
 }
@@ -66,19 +61,16 @@ export default function FloatingCapsuleHeader() {
 
   useEffect(() => {
     let frame = 0
-
     const update = () => {
       const revealDistance = 180
       const progress = Math.min(1, Math.max(0, window.scrollY / revealDistance))
       setScrollProgress(progress)
       frame = 0
     }
-
     const onScroll = () => {
       if (frame) return
       frame = window.requestAnimationFrame(update)
     }
-
     update()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
@@ -121,6 +113,7 @@ export default function FloatingCapsuleHeader() {
 
   const isStaff = user && (user.role === 'admin' || user.role === 'super_admin')
   const isMerchant = user?.role === 'merchant'
+  const isSuperAdmin = user?.role === 'super_admin'
   const unread = liveUnread || (user?.notifications ?? 0)
 
   return (
@@ -156,7 +149,7 @@ export default function FloatingCapsuleHeader() {
             <ShareButton />
 
             {loggedIn === true && user && (
-              <span className="fc-user-cluster">
+              <span className={`fc-user-cluster ${isSuperAdmin ? 'is-super' : ''}`}>
                 <UserAvatar
                   name={user.name}
                   points={user.points}
@@ -168,7 +161,7 @@ export default function FloatingCapsuleHeader() {
                   avatarUrl={user.avatarUrl ?? undefined}
                   href="/account"
                 />
-                <StaffBadge role={user.role} />
+                {isSuperAdmin && <SuperAdminBadge />}
               </span>
             )}
           </div>
@@ -176,7 +169,6 @@ export default function FloatingCapsuleHeader() {
       </header>
 
       <OverlayBlur open={menuOpen} />
-
       <div className={`nav-drawer ${menuOpen ? 'is-open' : ''}`} onClick={() => setMenuOpen(false)} aria-hidden={!menuOpen}>
         <div className="nav-drawer__panel" onClick={(e) => e.stopPropagation()}>
           <div className="nav-drawer__head">
@@ -194,9 +186,7 @@ export default function FloatingCapsuleHeader() {
               </span>
               <div className="nav-drawer__user-info">
                 <span className="nav-drawer__user-name">{user.name}</span>
-                {user.role !== 'super_admin' && (
-                  <span className="nav-drawer__user-points">⭐ {user.points}</span>
-                )}
+                {user.role !== 'super_admin' && <span className="nav-drawer__user-points">⭐ {user.points}</span>}
               </div>
             </a>
           )}
