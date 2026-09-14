@@ -49,7 +49,7 @@
 
 .floating-capsule.is-scrolled .fc-logo { pointer-events: auto; }
 
-/* Super Admin badge visually belongs to the avatar cluster, not to the page header. */
+/* Avatar cluster stays a single identity control; Super Admin decoration lives inside UserAvatar. */
 .fc-user-cluster {
   position: relative;
   display: inline-flex;
@@ -59,64 +59,16 @@
   padding-inline-start: 3px;
 }
 
-.fc-super-badge {
-  position: relative;
-  width: 34px;
-  height: 34px;
-  margin-inline-start: -2px;
-  border-radius: 11px;
-  display: inline-grid;
-  place-items: center;
-  flex: 0 0 auto;
-  border: 1px solid rgba(232,199,154,.72);
-  background: linear-gradient(145deg, rgba(232,199,154,.22), rgba(168,85,247,.16) 58%, rgba(107,33,255,.10));
-  color: #f5d9a7;
-  box-shadow: 0 0 10px rgba(232,199,154,.18), 0 0 20px rgba(168,85,247,.15);
-  overflow: visible;
-}
-
-.fc-super-badge__spark {
-  font-size: 16px;
-  line-height: 1;
-}
-
-.fc-super-badge__check {
-  position: absolute;
-  inset-inline-end: -4px;
-  bottom: -4px;
-  width: 12px;
-  height: 12px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  border: 1px solid rgba(5,8,12,.95);
-  background: #10b981;
-  color: #fff;
-  font-size: 7px;
-  font-weight: 900;
-  line-height: 1;
-  box-shadow: 0 0 8px rgba(16,185,129,.45);
-}
-
-.fc-role-badge,
-.fc-role-badge--admin,
-.fc-role-badge--super,
-.fc-user-cluster .user-avatar__crown { display: none !important; }
-
 @media (max-width: 900px) {
   .floating-capsule { padding-inline: 6px; }
   .floating-capsule__inner { min-height: 54px; border-radius: 20px; }
   .floating-capsule__inner::before { border-radius: 20px; }
-  .fc-super-badge { width: 30px; height: 30px; border-radius: 10px; }
-  .fc-super-badge__spark { font-size: 14px; }
 }
 
 @media (max-width: 640px) {
   .floating-capsule { top: max(6px, env(safe-area-inset-top)); padding-inline: 5px; }
   .floating-capsule__inner { min-height: 52px; padding: 7px 8px; border-radius: 18px; }
   .floating-capsule__inner::before { border-radius: 18px; }
-  .fc-super-badge { width: 27px; height: 27px; border-radius: 9px; }
-  .fc-super-badge__spark { font-size: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) { .fc-logo { transition: none; } }
