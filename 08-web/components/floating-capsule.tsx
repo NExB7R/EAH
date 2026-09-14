@@ -44,31 +44,47 @@ function IconChat() {
 }
 
 function StaffBadge({ role }: { role: string }) {
-  if (role !== 'super_admin' && role !== 'admin') return null
+  if (role !== 'super_admin') return null
   return (
     <span
-      className={`fc-role-badge ${role === 'super_admin' ? 'fc-role-badge--super' : 'fc-role-badge--admin'}`}
-      title={role === 'super_admin' ? 'Super Admin موثّق' : 'Admin موثّق'}
-      aria-label={role === 'super_admin' ? 'Super Admin موثّق' : 'Admin موثّق'}
+      className="fc-role-badge fc-role-badge--super"
+      title="Super Admin موثّق"
+      aria-label="Super Admin موثّق"
     >
-      <span aria-hidden>♛</span>
+      <span aria-hidden>✦</span>
       <span className="fc-role-badge__check" aria-hidden>✓</span>
     </span>
   )
 }
 
 export default function FloatingCapsuleHeader() {
-  const [scrolled, setScrolled] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
   const [user, setUser] = useState<CapsuleUser | null>(null)
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
   const { count: liveUnread } = useUnreadCount()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50)
-    onScroll()
+    let frame = 0
+
+    const update = () => {
+      const revealDistance = 180
+      const progress = Math.min(1, Math.max(0, window.scrollY / revealDistance))
+      setScrollProgress(progress)
+      frame = 0
+    }
+
+    const onScroll = () => {
+      if (frame) return
+      frame = window.requestAnimationFrame(update)
+    }
+
+    update()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (frame) window.cancelAnimationFrame(frame)
+    }
   }, [])
 
   useEffect(() => {
@@ -109,7 +125,10 @@ export default function FloatingCapsuleHeader() {
 
   return (
     <>
-      <header className={`floating-capsule ${scrolled ? 'is-scrolled' : ''}`}>
+      <header
+        className={`floating-capsule ${scrollProgress > 0 ? 'is-scrolled' : ''}`}
+        style={{ '--fc-scroll-progress': scrollProgress } as React.CSSProperties}
+      >
         <div className="floating-capsule__inner">
           <div className="floating-capsule__side floating-capsule__side--start">
             <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" onClick={() => setMenuOpen(true)} />
