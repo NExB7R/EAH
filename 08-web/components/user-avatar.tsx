@@ -44,6 +44,7 @@ export default function UserAvatar({
 
   const inner = (
     <>
+      {isSuperAdmin && <span className="user-avatar__super-spark" aria-hidden>✦</span>}
       <span
         className="user-avatar__img"
         style={!avatarUrl ? { background: `linear-gradient(135deg, ${avatar.from}, ${avatar.to})` } : undefined}
@@ -55,6 +56,8 @@ export default function UserAvatar({
           <span className="user-avatar__initial">{initial || <IconUser />}</span>
         )}
       </span>
+
+      {isSuperAdmin && <span className="user-avatar__super-check" aria-hidden>✓</span>}
 
       {!isBanned && !isSuperAdmin && points > 0 && (
         <span className="user-avatar__points" aria-label={`${points} نقطة`}>
@@ -70,6 +73,8 @@ export default function UserAvatar({
       )}
     </>
   )
+
+  const avatarClass = `user-avatar${isSuperAdmin ? ' user-avatar--super' : ''}`
 
   return (
     <div className="user-avatar-wrap">
@@ -87,13 +92,13 @@ export default function UserAvatar({
       </a>
 
       {href ? (
-        <a href={href} className="user-avatar" aria-label={`حساب ${name}`} style={frameStyle}>
+        <a href={href} className={avatarClass} aria-label={`حساب ${name}`} style={frameStyle}>
           {inner}
         </a>
       ) : (
         <button
           type="button"
-          className="user-avatar"
+          className={avatarClass}
           aria-label={`حساب ${name}`}
           onClick={onClick}
           style={frameStyle}
