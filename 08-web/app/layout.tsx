@@ -9,7 +9,6 @@ import ScrollIconsBackground from '@/components/scroll-icons-background'
 import AnimReady from '@/components/anim-ready'
 import SidePanelToggle from '@/components/side-panel-toggle'
 import OnboardingOverlay from '@/components/onboarding-overlay'
-import StreakBadge from '@/components/streak-badge'
 import StreakMount from '@/components/streak-mount'
 import ServiceWorkerRegister from '@/components/sw-register'
 import InstallBanner from '@/components/install-banner'
@@ -96,7 +95,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SidePanelToggle />
         {children}
         <OnboardingOverlay />
-        <StreakBadge />
         <StreakMount />
         <ServiceWorkerRegister />
         <InstallBanner />
