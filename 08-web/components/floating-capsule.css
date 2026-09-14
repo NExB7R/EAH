@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════
-   EAH Floating Capsule — 2026 Premium
+   EAH Floating Capsule — shared layout + drawer
+   Visual surface lives in floating-capsule-v2.css.
    ═══════════════════════════════════════════════ */
 
 .floating-capsule {
@@ -20,58 +21,12 @@
   min-height: 58px;
   gap: 10px;
   padding: 8px 12px;
-  border-radius: 22px;
-  background:
-    radial-gradient(circle at 50% -40%, rgba(168, 85, 247, 0.18), transparent 48%),
-    linear-gradient(180deg, rgba(22, 17, 35, 0.94) 0%, rgba(8, 6, 14, 0.9) 100%);
-  border: 1px solid rgba(168, 85, 247, 0.24);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.07) inset,
-    0 18px 50px rgba(0, 0, 0, 0.52),
-    0 0 0 1px rgba(168, 85, 247, 0.04),
-    0 0 32px rgba(107, 33, 255, 0.09);
-  backdrop-filter: blur(22px) saturate(165%);
-  -webkit-backdrop-filter: blur(22px) saturate(165%);
   position: relative;
   overflow: visible;
-  transition: padding .3s ease, border-radius .3s ease, box-shadow .3s ease, background .3s ease;
-}
-
-.floating-capsule__inner::before {
-  content: '';
-  position: absolute;
-  inset-inline: 18%;
-  top: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(232, 199, 154, 0.6), rgba(168, 85, 247, 0.7), transparent);
-  pointer-events: none;
-}
-
-.floating-capsule__inner::after {
-  content: '';
-  position: absolute;
-  inset: auto 22% -10px;
-  height: 18px;
-  border-radius: 50%;
-  background: rgba(107, 33, 255, 0.18);
-  filter: blur(20px);
-  pointer-events: none;
 }
 
 .floating-capsule.is-scrolled {
   top: max(7px, env(safe-area-inset-top));
-}
-
-.floating-capsule.is-scrolled .floating-capsule__inner {
-  min-height: 52px;
-  padding-block: 6px;
-  border-radius: 18px;
-  background:
-    linear-gradient(180deg, rgba(14, 10, 24, 0.96) 0%, rgba(6, 5, 10, 0.93) 100%);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.05) inset,
-    0 16px 46px rgba(0, 0, 0, 0.64),
-    0 0 0 1px rgba(168, 85, 247, 0.08);
 }
 
 .floating-capsule__side {
@@ -111,52 +66,11 @@
   padding-inline-start: 3px;
 }
 
-.fc-role-badge {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 25px;
-  height: 25px;
-  border-radius: 9px;
-  font-size: 13px;
-  font-weight: 900;
-  line-height: 1;
-  border: 1px solid rgba(232, 199, 154, 0.35);
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.16), rgba(168, 85, 247, 0.12));
-  color: #f2d9ad;
-  box-shadow: 0 0 12px rgba(232, 199, 154, 0.12);
-}
-
-.fc-role-badge--admin {
-  border-color: rgba(168, 85, 247, 0.35);
-  color: #c4b5fd;
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(107, 33, 255, 0.1));
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.13);
-}
-
-.fc-role-badge__check {
-  position: absolute;
-  inset-inline-end: -4px;
-  bottom: -4px;
-  width: 11px;
-  height: 11px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  border: 1px solid rgba(5, 8, 12, 0.95);
-  background: #10b981;
-  color: #fff;
-  font-size: 7px;
-  line-height: 1;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.45);
-}
-
 /* Nav drawer */
 .nav-drawer {
   position: fixed;
   inset: 0;
-  z-index: 90;
+  z-index: 180;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
@@ -315,8 +229,6 @@
   .floating-capsule__center { padding: 0 5px; }
   .floating-capsule__side { gap: 4px; }
   .fc-user-cluster { gap: 4px; }
-  .fc-role-badge { width: 22px; height: 22px; border-radius: 8px; font-size: 11px; }
-  .fc-role-badge__check { width: 10px; height: 10px; font-size: 6px; inset-inline-end: -3px; bottom: -3px; }
   .nav-drawer__panel { width: min(92vw, 360px); padding-inline: 16px; }
 }
 
