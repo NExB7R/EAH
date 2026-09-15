@@ -2,6 +2,7 @@ import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { IconWhatsapp, IconFacebook } from '@/components/neon-icons'
+import { CONTACT_CHANNELS, waLink } from './contact-channels'
 import './contact.css'
 
 export const metadata = {
@@ -15,8 +16,17 @@ const CHANNELS = [
     icon: 'whatsapp',
     title: 'واتساب',
     value: 'للرد السريع',
-    href: 'https://wa.me/201012892806',
+    href: waLink('السلام عليكم، عندي استفسار عن EAH'),
     desc: 'أسرع طريقة للوصول — رد خلال دقائق',
+    accent: 'green',
+  },
+  {
+    key: 'whatsapp-channel',
+    icon: 'whatsapp',
+    title: 'قناة واتساب',
+    value: 'EAH Channel',
+    href: CONTACT_CHANNELS.whatsapp.channel,
+    desc: 'تابع كل جديد أول بأول',
     accent: 'green',
   },
   {
@@ -24,7 +34,7 @@ const CHANNELS = [
     icon: 'facebook',
     title: 'فيسبوك',
     value: 'EAH Official',
-    href: 'https://facebook.com/eah.eg',
+    href: CONTACT_CHANNELS.facebook.page,
     desc: 'تابع آخر الأخبار والعروض',
     accent: 'blue',
   },
