@@ -141,7 +141,7 @@ export default async function MerchantOrdersPage({
             {orders.map((o: any) => {
               const biz = businessMap.get(o.business_id)
               return (
-                <article key={o.id} className={`mo__order mo__order--${STATUS_COLOR[o.status]}`}>
+                <Link key={o.id} href={`/merchant/orders/${o.id}`} className={`mo__order mo__order--${STATUS_COLOR[o.status]}`}>
                   <header className="mo__order-head">
                     <div>
                       <strong className="mo__customer">{o.customer_name}</strong>
@@ -204,7 +204,7 @@ export default async function MerchantOrdersPage({
                       📞 اتصل
                     </a>
                   </div>
-                </article>
+                </Link>
               )
             })}
           </div>
