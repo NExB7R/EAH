@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import EahLogo from '@/components/eah-logo'
 import SiteFooter from '@/components/site-footer'
 import SearchBar from '@/components/search-bar'
 import ExploreCard from '@/components/explore-card'
