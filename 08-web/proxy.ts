@@ -33,7 +33,14 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const path = request.nextUrl.pathname
-  const isProtected = path.startsWith('/admin') || path.startsWith('/merchant')
+
+  // Protected areas — exact prefix matching
+  // Note: /merchant-info is a PUBLIC info page, not /merchant
+  const isProtected =
+    path === '/admin' ||
+    path.startsWith('/admin/') ||
+    path === '/merchant' ||
+    path.startsWith('/merchant/')
 
   // استثنِ /auth/logout و /auth/callback من أي redirect
   // (logout محتاج يوصل للـ route حتى لو المستخدم لسه logged in)
