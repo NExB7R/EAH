@@ -65,6 +65,24 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
       {hasId && <PageViewTracker businessId={business.businessId!} />}
 
       <main>
+        <nav className="bc" aria-label="breadcrumbs">
+          <a href="/" className="bc__link">الرئيسية</a>
+          <span className="bc__sep">/</span>
+          <a href="/explore" className="bc__link">اكتشف</a>
+          <span className="bc__sep">/</span>
+          <a
+            href={`/explore?type=${business.type}`}
+            className="bc__link"
+          >
+            {business.type === 'restaurant' ? 'مطاعم'
+              : business.type === 'pharmacy' ? 'صيدليات'
+              : business.type === 'supermarket' ? 'ماركت'
+              : 'توصيل'}
+          </a>
+          <span className="bc__sep">/</span>
+          <span className="bc__current">{business.name}</span>
+        </nav>
+
         <BusinessHero
           business={{
             name: business.name,
@@ -106,16 +124,42 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'LocalBusiness',
+            '@id': `https://eah-sq.vercel.app/businesses/${business.slug}#business`,
             name: business.name,
             description: business.reason,
             url: `https://eah-sq.vercel.app/businesses/${business.slug}`,
-            areaServed: business.area,
+            image: `https://eah-sq.vercel.app/api/og?slug=${business.slug}`,
+            areaServed: {
+              '@type': 'City',
+              name: business.area,
+            },
             address: {
               '@type': 'PostalAddress',
               addressLocality: business.area,
               addressRegion: 'Qalyubia',
               addressCountry: 'EG',
             },
+            ...(stats.review_count > 0 && stats.avg_rating > 0
+              ? {
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: stats.avg_rating.toFixed(1),
+                    reviewCount: stats.review_count,
+                    bestRating: 5,
+                    worstRating: 1,
+                  },
+                }
+              : {}),
+            ...(contacts.length > 0
+              ? {
+                  contactPoint: contacts.slice(0, 3).map((c) => ({
+                    '@type': 'ContactPoint',
+                    contactType: c.method_type === 'phone' ? 'customer service' : c.method_type,
+                    telephone: c.method_type === 'phone' ? c.value : undefined,
+                    url: c.method_type !== 'phone' && c.method_type !== 'whatsapp' ? c.value : undefined,
+                  })),
+                }
+              : {}),
           }),
         }}
       />
