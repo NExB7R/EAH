@@ -15,6 +15,7 @@ import ReviewForm from '@/components/review-form'
 import BusinessOffers from '@/components/business-offers'
 import SiteFooter from '@/components/site-footer'
 import BusinessClaimCTA from '@/components/business-claim-cta'
+import OrderRequest from '@/components/order-request'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import BackToTop from '@/components/back-to-top'
 
@@ -101,6 +102,18 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
         />
 
         <BusinessOffers offers={offers} />
+
+        {hasId && (
+          <OrderRequest
+            businessId={business.businessId!}
+            businessName={business.name}
+            merchantPhone={
+              contacts.find((c) => c.method_type === 'whatsapp')?.value ??
+              contacts.find((c) => c.method_type === 'phone')?.value ??
+              null
+            }
+          />
+        )}
 
         {hasId && <BusinessContact businessId={business.businessId!} contacts={contacts} />}
 
