@@ -1,0 +1,89 @@
+.ck {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0) + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  width: min(640px, calc(100vw - 24px));
+  animation: ck-in 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes ck-in {
+  from { opacity: 0; transform: translate(-50%, 20px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+.ck__inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(20, 14, 34, 0.97), rgba(10, 7, 20, 0.98));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.55), 0 0 40px rgba(168, 85, 247, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.ck__emoji {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+.ck__body { flex: 1; min-width: 0; }
+.ck__title {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  margin-bottom: 2px;
+}
+.ck__text {
+  font-size: 0.75rem;
+  color: #A29DB5;
+  line-height: 1.6;
+  margin: 0;
+}
+.ck__link {
+  color: #A855F7;
+  text-decoration: underline;
+  font-weight: 800;
+}
+.ck__actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.ck__btn {
+  padding: 9px 16px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.ck__btn--primary {
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4);
+}
+.ck__btn--primary:hover { transform: translateY(-1px); }
+.ck__btn--ghost {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(168, 85, 247, 0.3);
+  color: #C4B5FD;
+}
+.ck__btn--ghost:hover { background: rgba(168, 85, 247, 0.12); }
+@media (max-width: 620px) {
+  .ck__inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+    padding: 16px;
+  }
+  .ck__actions { width: 100%; }
+  .ck__btn { flex: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ck { animation: none; }
+}

@@ -13,6 +13,7 @@ import NetworkStatus from '@/components/network-status'
 import OfflineQueueMount from '@/components/offline-queue-mount'
 import InstallAppButton from '@/components/install-app-button'
 import SmartBot from '@/components/smart-bot'
+import CookieConsent from '@/components/cookie-consent'
 import '@/components/install-pwa-button.css'
 import '@/components/install-app-button.css'
 import '@/components/share-button.css'
@@ -123,6 +124,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <OfflineQueueMount />
         <InstallAppButton />
         <SmartBot />
+        <CookieConsent />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

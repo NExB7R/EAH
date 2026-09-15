@@ -1,60 +1,69 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
+import BackToTop from '@/components/back-to-top'
+import EahLogo from '@/components/eah-logo'
 import ExploreCard from '@/components/explore-card'
+import { getPublishedBusinesses } from '@/lib/data'
+import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { generateMockStats } from '@/lib/mock-stats'
 import './featured.css'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 120
+
 export const metadata = {
   title: 'المميزون',
-  description: 'أفضل الأماكن في شبين القناطر — مختارة بعناية',
+  description: 'أماكن مميزة على EAH — اختيارات مختارة بعناية.',
 }
 
 export default async function FeaturedPage() {
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('businesses')
-    .select('id,slug,name,business_type,area,hook,cover_image_url,is_open')
-    .eq('is_published', true)
-    .eq('is_featured', true)
-    .order('created_at', { ascending: false })
+  const businesses = await getPublishedBusinesses(80)
+  const withStats = businesses.map((b) => ({
+    ...b,
+    ...generateMockStats({
+      slug: b.slug,
+      name: b.name,
+      featured: b.badge === 'مميز',
+    }),
+  }))
 
-  const businesses = (data ?? []).map((b: any) => {
-    const stats = generateMockStats({ slug: b.slug, name: b.name, featured: true })
-    return {
-      ...stats,
-      slug: b.slug, name: b.name, type: b.business_type, area: b.area,
-      badge: '⭐ مميز', vibe: [], reason: b.hook ?? '', open: b.is_open,
-    }
-  })
+  const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
+  const diversified = diversifyByCategory(ranked, 'type')
+  const featured = diversified.filter((b) => b.badge === 'مميز')
+  const premium = diversified.filter((b) => (b as any).is_premium)
+
+  const list = featured.length > 0 ? featured : premium.length > 0 ? premium : diversified.slice(0, 12)
 
   return (
     <>
       <FloatingCapsuleHeader />
-      <main className="ft">
-        <header className="ft__hero">
-          <Link href="/" className="ft__back">← الرئيسية</Link>
-          <div className="ft__glow" aria-hidden />
-          <span className="ft__kicker">FEATURED</span>
-          <h1 className="ft__title">⭐ <span className="ft__accent">المميزون</span></h1>
-          <p className="ft__lead">
-            أماكن اختارتها EAH بعناية — جودة عالية وخدمة مميزة
+      <BackToTop />
+      <main className="feat">
+        <section className="feat__hero">
+          <div className="feat__hero-glow" aria-hidden />
+          <div className="feat__logo">
+            <EahLogo size="md" variant="full" href="/" />
+          </div>
+          <span className="feat__kicker">FEATURED</span>
+          <h1 className="feat__title">⭐ المميزون</h1>
+          <p className="feat__sub">
+            {list.length} مكان مميز على EAH — اختيارات مختارة بعناية
           </p>
-          <Link href="/advertise" className="ft__cta">📢 عايز مكانك هنا؟</Link>
-        </header>
+        </section>
 
-        {businesses.length === 0 ? (
-          <div className="ft__empty">
-            <span className="ft__empty-emoji">✨</span>
-            <h2 className="ft__empty-title">لسه مفيش أماكن مميزة</h2>
-            <p className="ft__empty-text">قريب هنضيف أحسن الأماكن</p>
+        {list.length === 0 ? (
+          <div className="feat__empty">
+            <span>⭐</span>
+            <h3>مفيش أماكن مميزة دلوقتي</h3>
+            <p>الأماكن المميزة بتتجدد باستمرار — ارجع قريب.</p>
+            <Link href="/explore" className="feat__empty-btn">اكتشف الأماكن</Link>
           </div>
         ) : (
-          <section className="ft__grid">
-            {businesses.map((b: any) => <ExploreCard key={b.slug} business={b} />)}
-          </section>
+          <div className="feat__grid">
+            {list.map((b) => (
+              <ExploreCard key={b.slug} business={b} />
+            ))}
+          </div>
         )}
       </main>
       <SiteFooter />

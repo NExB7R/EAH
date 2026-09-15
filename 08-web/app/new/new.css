@@ -1,30 +1,93 @@
-.nw { max-width: 1200px; margin: 0 auto; padding: 100px 20px 60px; }
-.nw__hero { position: relative; text-align: center; margin-bottom: 32px; padding: 30px 20px; }
-.nw__back { position: absolute; top: 16px; right: 16px; padding: 6px 12px; border-radius: 10px; background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.25); color: #C4B5FD; text-decoration: none; font-size: .78rem; font-weight: 700; }
-.nw__glow { position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 500px; height: 400px; background: radial-gradient(circle, rgba(74,222,128,.22), transparent 65%); filter: blur(80px); pointer-events: none; }
-.nw__kicker { position: relative; font-size: .72rem; letter-spacing: .2em; color: #4ADE80; font-weight: 800; }
-.nw__title { position: relative; font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900; color: #F5F3FF; margin: 12px 0 16px; }
-.nw__accent { background: linear-gradient(135deg, #4ADE80, #22C55E); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.nw__lead { position: relative; color: #A5A3B8; font-size: 1rem; line-height: 1.7; max-width: 500px; margin: 0 auto; }
-.nw__banner {
-  display: flex; align-items: center; gap: 16px;
-  padding: 20px 24px; border-radius: 20px;
-  background: linear-gradient(135deg, rgba(74,222,128,.12), rgba(34,197,94,.05));
-  border: 1px solid rgba(74,222,128,.3);
-  margin-bottom: 32px; flex-wrap: wrap;
+.nw {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px 60px;
 }
-.nw__banner-emoji { font-size: 2rem; }
-.nw__banner-body { flex: 1; min-width: 200px; }
-.nw__banner-title { color: #F5F3FF; font-size: 1rem; font-weight: 900; display: block; margin-bottom: 4px; }
-.nw__banner-text { color: #A5A3B8; font-size: .85rem; margin: 0; }
-.nw__banner-cta {
-  padding: 12px 22px; border-radius: 14px;
-  background: linear-gradient(135deg, #4ADE80, #22C55E);
-  color: #052e16; font-weight: 900; font-size: .88rem;
-  text-decoration: none; box-shadow: 0 8px 24px rgba(74,222,128,.4);
+.nw__hero {
+  position: relative;
+  text-align: center;
+  padding: 30px 20px 40px;
 }
-.nw__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
-.nw__empty { padding: 60px 20px; text-align: center; border-radius: 24px; background: rgba(20,18,28,.5); border: 1px solid rgba(139,92,246,.15); }
-.nw__empty-emoji { font-size: 3rem; display: block; margin-bottom: 12px; }
-.nw__empty-title { color: #F5F3FF; font-size: 1.2rem; margin: 0 0 8px; }
-.nw__empty-text { color: #A5A3B8; margin: 0; }
+.nw__hero-glow {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 250px;
+  background: radial-gradient(ellipse at center, rgba(74, 222, 128, 0.14), transparent 60%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+.nw__logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 22px;
+  filter: drop-shadow(0 0 22px rgba(74, 222, 128, 0.25));
+}
+.nw__kicker {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: #4ADE80;
+  letter-spacing: 0.22em;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  margin-bottom: 14px;
+}
+.nw__title {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0 0 10px;
+}
+.nw__sub {
+  color: #A29DB5;
+  font-size: 0.95rem;
+  margin: 0;
+}
+.nw__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 30px;
+}
+.nw__empty {
+  text-align: center;
+  padding: 80px 20px;
+  border-radius: 24px;
+  background: rgba(74, 222, 128, 0.03);
+  border: 1px dashed rgba(74, 222, 128, 0.3);
+}
+.nw__empty span {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 14px;
+}
+.nw__empty h3 {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0 0 8px;
+}
+.nw__empty p {
+  color: #A29DB5;
+  margin: 0 0 20px;
+}
+.nw__empty-btn {
+  display: inline-block;
+  padding: 12px 26px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4ADE80, #10B981);
+  color: #0A0712;
+  font-weight: 900;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+@media (max-width: 640px) {
+  .nw { padding: 90px 16px 40px; }
+  .nw__grid { grid-template-columns: 1fr; }
+}
