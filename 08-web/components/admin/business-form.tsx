@@ -1,5 +1,5 @@
 'use client'
-import { useActionState, useState } from 'react'
+import { useActionState, useState, useMemo } from 'react'
 import Link from 'next/link'
 import ImageUploader from './image-uploader'
 import ContactsEditor, { type Contact } from './contacts-editor'
@@ -61,7 +61,11 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
   }
 
   const err = (f: string) => state.errors?.[f]?.[0]
-  const folder = businessId ? `biz-${businessId}` : `new-${Date.now()}`
+  // ✅ folder ثابت خلال عمر الفورم
+  const folder = useMemo(
+    () => (businessId ? `biz-${businessId}` : `new-${Date.now()}`),
+    [businessId]
+  )
 
   return (
     <form action={formAction} className="admin-form">

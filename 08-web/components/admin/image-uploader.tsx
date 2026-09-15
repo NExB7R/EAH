@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import './image-uploader.css'
 
 type UploadedImage = {
@@ -29,13 +29,18 @@ export default function ImageUploader({
   hint,
   aspect = 'square',
 }: Props) {
-  const [images, setImages] = useState<UploadedImage[]>(
+  const [images, setImages] = useState<UploadedImage[]>(() =>
     initial.map((url) => ({ url, path: '', bucket }))
   )
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [dragOver, setDragOver] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // ✅ Sync مع initial لما يتغير من الـ server
+  useEffect(() => {
+    setImages(initial.map((url) => ({ url, path: '', bucket })))
+  }, [initial.join('|')])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const uploadFiles = useCallback(
     async (files: File[]) => {
@@ -93,11 +98,12 @@ export default function ImageUploader({
     })
   }
 
+  // ✅ Controlled hidden input — value من state
   const hiddenValue = JSON.stringify(images.map((i) => i.url))
 
   return (
     <div className="iup">
-      <input type="hidden" name={name} value={hiddenValue} />
+      <input type="hidden" name={name} value={hiddenValue} readOnly />
 
       {label && (
         <div className="iup__head">
@@ -106,7 +112,6 @@ export default function ImageUploader({
         </div>
       )}
 
-      {/* Drop zone */}
       <button
         type="button"
         className={`iup__drop ${dragOver ? 'is-drag' : ''} ${uploading ? 'is-uploading' : ''}`}
@@ -147,7 +152,6 @@ export default function ImageUploader({
 
       {error && <div className="iup__error">{error}</div>}
 
-      {/* Previews */}
       {images.length > 0 && (
         <div className={`iup__grid iup__grid--${aspect}`}>
           {images.map((img, i) => (
@@ -161,44 +165,21 @@ export default function ImageUploader({
               <div className="iup__overlay">
                 <div className="iup__actions">
                   {multiple && i > 0 && (
-                    <button
-                      type="button"
-                      className="iup__act"
-                      onClick={() => moveImage(i, -1)}
-                      aria-label="يمين"
-                    >
-                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                        <path d="M9 6l6 6-6 6" />
-                      </svg>
+                    <button type="button" className="iup__act" onClick={() => moveImage(i, -1)} aria-label="يمين">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M9 6l6 6-6 6" /></svg>
                     </button>
                   )}
                   {multiple && i < images.length - 1 && (
-                    <button
-                      type="button"
-                      className="iup__act"
-                      onClick={() => moveImage(i, 1)}
-                      aria-label="شمال"
-                    >
-                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                        <path d="M15 18l-6-6 6-6" />
-                      </svg>
+                    <button type="button" className="iup__act" onClick={() => moveImage(i, 1)} aria-label="شمال">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M15 18l-6-6 6-6" /></svg>
                     </button>
                   )}
-                  <button
-                    type="button"
-                    className="iup__act iup__act--danger"
-                    onClick={() => removeImage(i)}
-                    aria-label="حذف"
-                  >
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                      <path d="M18 6 6 18M6 6l12 12" />
-                    </svg>
+                  <button type="button" className="iup__act iup__act--danger" onClick={() => removeImage(i)} aria-label="حذف">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
                   </button>
                 </div>
               </div>
-              {multiple && i === 0 && (
-                <span className="iup__cover">الغلاف</span>
-              )}
+              {multiple && i === 0 && <span className="iup__cover">الغلاف</span>}
             </div>
           ))}
         </div>

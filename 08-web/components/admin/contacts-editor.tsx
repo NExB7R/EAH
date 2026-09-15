@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import PrettySelect from './pretty-select'
 import './contacts-editor.css'
 
@@ -30,10 +30,8 @@ const PLACEHOLDERS: Record<string, string> = {
 export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }) {
   const [contacts, setContacts] = useState<Contact[]>(initial)
 
-  useEffect(() => {
-    const hidden = document.getElementById('contacts-json') as HTMLInputElement | null
-    if (hidden) hidden.value = JSON.stringify(contacts)
-  }, [contacts])
+  // ✅ Controlled value — مفيش DOM hacks
+  const serialized = JSON.stringify(contacts)
 
   const add = (type: Contact['method_type'] = 'phone') => {
     setContacts((prev) => [
@@ -54,9 +52,9 @@ export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }
 
   return (
     <div className="ced">
-      <input type="hidden" id="contacts-json" name="contacts_json" defaultValue={JSON.stringify(initial)} />
+      {/* ✅ Controlled input */}
+      <input type="hidden" name="contacts_json" value={serialized} readOnly />
 
-      {/* قايمة */}
       {contacts.length > 0 && (
         <div className="ced__list">
           {contacts.map((c, i) => (
@@ -104,7 +102,6 @@ export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }
         </div>
       )}
 
-      {/* حالة فاضية */}
       {contacts.length === 0 && (
         <div className="ced__empty">
           <div className="ced__empty-icon" aria-hidden>
@@ -119,28 +116,15 @@ export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }
         </div>
       )}
 
-      {/* أزرار سريعة */}
       <div className="ced__quick">
         <span className="ced__quick-label">إضافة سريعة:</span>
         <div className="ced__quick-btns">
-          <button type="button" className="ced__quick-btn" onClick={() => add('phone')}>
-            📞 فون
-          </button>
-          <button type="button" className="ced__quick-btn" onClick={() => add('whatsapp')}>
-            💬 واتساب
-          </button>
-          <button type="button" className="ced__quick-btn" onClick={() => add('facebook')}>
-            📘 فيسبوك
-          </button>
-          <button type="button" className="ced__quick-btn" onClick={() => add('instagram')}>
-            📷 إنستجرام
-          </button>
-          <button type="button" className="ced__quick-btn" onClick={() => add('website')}>
-            🌐 موقع
-          </button>
-          <button type="button" className="ced__quick-btn" onClick={() => add('email')}>
-            ✉️ إيميل
-          </button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('phone')}>📞 فون</button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('whatsapp')}>💬 واتساب</button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('facebook')}>📘 فيسبوك</button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('instagram')}>📷 إنستجرام</button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('website')}>🌐 موقع</button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('email')}>✉️ إيميل</button>
         </div>
       </div>
     </div>

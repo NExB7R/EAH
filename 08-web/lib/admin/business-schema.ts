@@ -2,6 +2,16 @@ import { z } from 'zod'
 
 const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'] as const
 
+// قبول رابط صحيح أو فراغ — بدون ما نكسر الحفظ
+const urlOrEmpty = z
+  .string()
+  .trim()
+  .refine(
+    (v) => v === '' || /^https?:\/\/.+/.test(v),
+    'رابط غير صحيح (لازم يبدأ بـ http:// أو https://)'
+  )
+  .transform((v) => v || null)
+
 export const businessSchema = z.object({
   name: z.string().trim().min(2, 'الاسم قصير').max(80),
   slug: z.string().trim().min(2).max(60).regex(/^[a-z0-9-]+$/, 'حروف إنجليزية صغيرة وأرقام وشرطات فقط'),
@@ -11,7 +21,7 @@ export const businessSchema = z.object({
   description: z.string().trim().max(500).optional().or(z.literal('')).transform((v) => v || null),
   hook: z.string().trim().max(80).optional().or(z.literal('')).transform((v) => v || null),
   address_text: z.string().trim().max(200).optional().or(z.literal('')).transform((v) => v || null),
-  map_url: z.string().trim().url('رابط غير صحيح').optional().or(z.literal('')).transform((v) => v || null),
+  map_url: urlOrEmpty.optional().transform((v) => v ?? null),
   cover_image_url: z.string().trim().optional().or(z.literal('')).transform((v) => v || null),
   gallery_json: z.string().optional().default('[]'),
   menu_json: z.string().optional().default('[]'),

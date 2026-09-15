@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import './working-hours-editor.css'
 
 export type DayHours = { open: string; close: string; closed: boolean }
@@ -26,10 +26,8 @@ export default function WorkingHoursEditor({ initial = {} }: { initial?: Working
     return out
   })
 
-  useEffect(() => {
-    const hidden = document.getElementById('working-hours-json') as HTMLInputElement | null
-    if (hidden) hidden.value = JSON.stringify(hours)
-  }, [hours])
+  // ✅ Controlled value — مفيش DOM hacks
+  const serialized = JSON.stringify(hours)
 
   const update = (day: string, patch: Partial<DayHours>) => {
     setHours((prev) => ({ ...prev, [day]: { ...prev[day], ...patch } }))
@@ -62,7 +60,8 @@ export default function WorkingHoursEditor({ initial = {} }: { initial?: Working
 
   return (
     <div className="wh-editor">
-      <input type="hidden" id="working-hours-json" name="working_hours_json" defaultValue={JSON.stringify(initial)} />
+      {/* ✅ Controlled input — value يتحدث مع state */}
+      <input type="hidden" name="working_hours_json" value={serialized} readOnly />
 
       <div className="wh-editor__toolbar">
         <button type="button" className="admin-btn admin-btn--sm" onClick={setAllOpen}>

@@ -82,7 +82,7 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
   if (error || !created) return { ok: false, message: error?.message ?? 'فشل الحفظ' }
 
   if (contacts.length > 0) {
-    await supabase.from('business_contact_methods').insert(
+    const { error: cErr } = await supabase.from('business_contact_methods').insert(
       contacts.map((c) => ({
         business_id: created.id,
         method_type: c.method_type,
@@ -91,10 +91,11 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
         is_public: true,
       }))
     )
+    if (cErr) console.error('[createBusiness] contacts insert:', cErr)
   }
 
   if (gallery.length > 0) {
-    await supabase.from('business_media').insert(
+    const { error: gErr } = await supabase.from('business_media').insert(
       gallery.map((url, i) => ({
         business_id: created.id,
         media_type: 'gallery',
@@ -104,9 +105,10 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
         is_published: true,
       }))
     )
+    if (gErr) console.error('[createBusiness] gallery insert:', gErr)
   }
   if (menu.length > 0) {
-    await supabase.from('business_media').insert(
+    const { error: mErr } = await supabase.from('business_media').insert(
       menu.map((url, i) => ({
         business_id: created.id,
         media_type: 'menu',
@@ -116,6 +118,7 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
         is_published: true,
       }))
     )
+    if (mErr) console.error('[createBusiness] menu insert:', mErr)
   }
 
   await auditLog({
@@ -174,7 +177,7 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
 
   await supabase.from('business_contact_methods').delete().eq('business_id', id)
   if (contacts.length > 0) {
-    await supabase.from('business_contact_methods').insert(
+    const { error: cErr } = await supabase.from('business_contact_methods').insert(
       contacts.map((c) => ({
         business_id: id,
         method_type: c.method_type,
@@ -183,11 +186,12 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
         is_public: true,
       }))
     )
+    if (cErr) console.error('[updateBusiness] contacts insert:', cErr)
   }
 
   await supabase.from('business_media').delete().eq('business_id', id).in('media_type', ['gallery', 'menu'])
   if (gallery.length > 0) {
-    await supabase.from('business_media').insert(
+    const { error: gErr } = await supabase.from('business_media').insert(
       gallery.map((url, i) => ({
         business_id: id,
         media_type: 'gallery',
@@ -197,9 +201,10 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
         is_published: true,
       }))
     )
+    if (gErr) console.error('[updateBusiness] gallery insert:', gErr)
   }
   if (menu.length > 0) {
-    await supabase.from('business_media').insert(
+    const { error: mErr } = await supabase.from('business_media').insert(
       menu.map((url, i) => ({
         business_id: id,
         media_type: 'menu',
@@ -209,6 +214,7 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
         is_published: true,
       }))
     )
+    if (mErr) console.error('[updateBusiness] menu insert:', mErr)
   }
 
   await auditLog({
