@@ -1,5 +1,0 @@
-.vbadge { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.vbadge--sm svg { width: 14px; height: 14px; }
-.vbadge--md svg { width: 18px; height: 18px; }
-.vbadge--lg svg { width: 22px; height: 22px; }
-.vbadge svg { filter: drop-shadow(0 0 4px rgba(34,197,94,.6)); }
