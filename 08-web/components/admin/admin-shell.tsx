@@ -69,6 +69,7 @@ export default function AdminShell({
       title: 'النظام',
       items: [
         { href: '/admin/studio', label: 'الاستوديو', icon: MI.sparkles },
+        { href: '/admin/settings/notifications', label: 'الإشعارات', icon: MI.chat },
         { href: '/admin/security', label: 'الأمان', icon: MI.shield },
         { href: '/admin/audit', label: 'سجل العمليات', icon: MI.lock },
       ],
