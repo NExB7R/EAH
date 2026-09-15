@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import EahLogo from '@/components/eah-logo'
 import SiteFooter from '@/components/site-footer'
+import BackToTop from '@/components/back-to-top'
 import SearchBar from '@/components/search-bar'
 import ExploreCard from '@/components/explore-card'
 import './search.css'
@@ -44,38 +45,53 @@ export default async function SearchPage({
   return (
     <>
       <FloatingCapsuleHeader />
+      <BackToTop />
       <main className="sr">
         <header className="sr__hero">
           <Link href="/" className="sr__back">← الرئيسية</Link>
+          <div className="sr__logo">
+            <EahLogo size="md" variant="full" href="/" />
+          </div>
           <span className="sr__kicker">SEARCH</span>
           <h1 className="sr__title">🔍 البحث</h1>
+          <p className="sr__sub">دوّر على أي مكان في شبين القناطر</p>
+          <div className="sr__search-wrap">
+            <SearchBar placeholder="اسم المكان، النوع، أو المنطقة..." />
+          </div>
         </header>
 
-        <div className="sr__bar">
-          <SearchBar initialQuery={q} autoFocus size="lg" />
-        </div>
-
         {q && (
-          <p className="sr__count">
-            {businesses.length > 0
-              ? `${businesses.length} نتيجة لـ "${q}"`
-              : `مفيش نتايج لـ "${q}"`}
-          </p>
+          <div className="sr__results-head">
+            <strong>{businesses.length}</strong> نتيجة لـ
+            <span className="sr__query">&quot;{q}&quot;</span>
+          </div>
         )}
 
-        {businesses.length === 0 ? (
+        {businesses.length === 0 && q ? (
           <div className="sr__empty">
-            <span className="sr__empty-emoji">{q ? '🔍' : '✨'}</span>
-            <h2 className="sr__empty-title">{q ? 'مفيش نتايج' : 'ابدأ البحث'}</h2>
+            <span className="sr__empty-emoji">🔍</span>
+            <h2 className="sr__empty-title">مفيش نتائج</h2>
             <p className="sr__empty-text">
-              {q ? 'جرّب كلمة تانية أو اتصفح كل الأماكن' : 'اكتب اسم مطعم، صيدلية، أو منطقة'}
+              جرّب كلمة تانية، أو اكتشف الأماكن مباشرة
             </p>
-            <Link href="/explore" className="sr__empty-cta">اكتشف كل الأماكن ←</Link>
+            <Link href="/explore" className="sr__empty-btn">
+              اكتشف كل الأماكن
+            </Link>
+          </div>
+        ) : !q ? (
+          <div className="sr__hint">
+            <span className="sr__hint-emoji">✨</span>
+            <h2 className="sr__hint-title">اكتب أي حاجة</h2>
+            <p className="sr__hint-text">
+              اسم مطعم، نوع نشاط، أو منطقة معينة
+            </p>
           </div>
         ) : (
-          <section className="sr__grid">
-            {businesses.map((b: any) => <ExploreCard key={b.slug} business={b} />)}
-          </section>
+          <div className="sr__grid">
+            {businesses.map((b: any) => (
+              <ExploreCard key={b.slug} business={b} />
+            ))}
+          </div>
         )}
       </main>
       <SiteFooter />

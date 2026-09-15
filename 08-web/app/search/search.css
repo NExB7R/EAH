@@ -1,14 +1,134 @@
-.sr { max-width: 1100px; margin: 0 auto; padding: 100px 20px 60px; }
-.sr__hero { position: relative; text-align: center; margin-bottom: 24px; padding: 16px; }
-.sr__back { position: absolute; top: 16px; right: 16px; padding: 6px 12px; border-radius: 10px; background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.25); color: #C4B5FD; text-decoration: none; font-size: .78rem; font-weight: 700; }
-.sr__kicker { font-size: .7rem; letter-spacing: .2em; color: #A855F7; font-weight: 800; }
-.sr__title { font-size: 1.8rem; font-weight: 900; color: #F5F3FF; margin: 8px 0 0; }
-.sr__bar { display: flex; justify-content: center; margin-bottom: 20px; }
-.sr__count { text-align: center; color: #A5A3B8; font-size: .85rem; margin: 0 0 20px; }
-.sr__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-.sr__empty { padding: 60px 20px; text-align: center; border-radius: 24px; background: rgba(20,18,28,.5); border: 1px solid rgba(139,92,246,.15); }
-.sr__empty-emoji { font-size: 3rem; display: block; margin-bottom: 12px; }
-.sr__empty-title { color: #F5F3FF; font-size: 1.2rem; margin: 0 0 8px; }
-.sr__empty-text { color: #A5A3B8; margin: 0 0 20px; }
-.sr__empty-cta { display: inline-block; padding: 12px 24px; border-radius: 12px; background: linear-gradient(135deg,#8B5CF6,#A855F7); color: #fff; text-decoration: none; font-weight: 800; box-shadow: 0 8px 24px rgba(139,92,246,.4); }
-@media (max-width: 640px) { .sr { padding: 90px 14px 40px; } }
+/* Search Page */
+.sr {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 90px 20px 60px;
+  min-height: 100vh;
+}
+.sr__hero {
+  position: relative;
+  text-align: center;
+  padding: 30px 20px 30px;
+}
+.sr__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: absolute;
+  top: 12px;
+  inset-inline-end: 20px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  color: #C4B5FD;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 800;
+  transition: all 0.2s;
+}
+.sr__back:hover {
+  background: rgba(168, 85, 247, 0.18);
+  border-color: rgba(168, 85, 247, 0.5);
+  color: #fff;
+}
+.sr__logo {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 20px;
+  filter: drop-shadow(0 0 24px rgba(168, 85, 247, 0.3));
+}
+.sr__kicker {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: #E8C79A;
+  letter-spacing: 0.22em;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.08);
+  border: 1px solid rgba(232, 199, 154, 0.28);
+  margin-bottom: 12px;
+}
+.sr__title {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0 0 10px;
+}
+.sr__sub {
+  color: #A29DB5;
+  font-size: 0.95rem;
+  margin: 0 0 22px;
+}
+.sr__search-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+}
+.sr__results-head {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #A29DB5;
+  margin: 20px 0;
+}
+.sr__results-head strong {
+  color: #A855F7;
+  font-weight: 900;
+  margin-inline-end: 4px;
+}
+.sr__query {
+  margin-inline-start: 6px;
+  color: #F4F2FA;
+  font-weight: 800;
+}
+.sr__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.sr__empty,
+.sr__hint {
+  text-align: center;
+  padding: 60px 20px;
+  border-radius: 24px;
+  background: rgba(168, 85, 247, 0.03);
+  border: 1px dashed rgba(168, 85, 247, 0.25);
+  max-width: 520px;
+  margin: 40px auto;
+}
+.sr__empty-emoji,
+.sr__hint-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 14px;
+}
+.sr__empty-title,
+.sr__hint-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0 0 8px;
+}
+.sr__empty-text,
+.sr__hint-text {
+  color: #A29DB5;
+  margin: 0 0 20px;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+.sr__empty-btn {
+  display: inline-block;
+  padding: 12px 26px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  font-weight: 900;
+  text-decoration: none;
+  font-size: 0.85rem;
+  box-shadow: 0 8px 22px rgba(168, 85, 247, 0.35);
+}
+@media (max-width: 640px) {
+  .sr { padding: 80px 16px 40px; }
+  .sr__back { top: 8px; inset-inline-end: 12px; }
+}

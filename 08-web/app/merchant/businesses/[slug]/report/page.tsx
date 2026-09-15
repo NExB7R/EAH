@@ -23,7 +23,7 @@ export default async function MerchantReportPage({
     getBusinessReviews(business.id, 10),
   ])
 
-  // نظرة سريعة على الزيارات — حسب الفترة
+  // نظرة سريعة على الزيارات — حسب الفترة (scoped queries for perf)
   const since = new Date(Date.now() - rangeDays * 86400000).toISOString()
   const { count: viewsCount } = await supabase
     .from('page_view_events')
