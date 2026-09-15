@@ -1,0 +1,42 @@
+{
+  "_instructions": {
+    "step1": "افتح Google Maps وابحث عن الأنشطة في المنطقة المطلوبة",
+    "step2": "لكل نشاط فيه خدمة توصيل، انسخ البيانات في القالب تحت",
+    "step3": "تأكد إن رقم الواتساب شغال قبل ما تحطه",
+    "step4": "المناطق المستهدفة: شبين القناطر، القلج، الجبل الأصفر، كفر بطا، نوى، طحا، منشأة الكرام، أبو زعبل",
+    "type_values": [
+      "restaurant",
+      "pharmacy",
+      "supermarket",
+      "delivery_office"
+    ]
+  },
+  "businesses": [
+    {
+      "name": "اسم المطعم",
+      "slug": "restaurant-slug-english",
+      "type": "restaurant",
+      "area": "شبين القناطر",
+      "city": "شبين القناطر",
+      "hook": "جملة قصيرة",
+      "description": "وصف تفصيلي",
+      "address_text": "الشارع - علامة مميزة",
+      "map_url": "https://maps.app.goo.gl/xxxxx",
+      "has_delivery": true,
+      "contacts": [
+        {
+          "method_type": "phone",
+          "value": "01012345678",
+          "is_primary": true
+        },
+        {
+          "method_type": "whatsapp",
+          "value": "201012345678",
+          "is_primary": false
+        }
+      ],
+      "gallery": [],
+      "menu": []
+    }
+  ]
+}
