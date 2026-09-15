@@ -1,240 +1,194 @@
-.site-footer {
-  margin-top: 40px;
-  padding: 36px 20px 20px;
-  border-top: 1px solid rgba(139, 92, 246, 0.2);
-  background: linear-gradient(180deg, transparent 0%, rgba(107, 33, 255, 0.04) 100%);
+/* ═══════════════════════════════════════════════════
+   EAH Site Footer — 2026 Redesigned
+   ═══════════════════════════════════════════════════ */
+
+.sf {
+  margin-top: 60px;
+  padding: 40px 20px 24px;
+  border-top: 1px solid rgba(168, 85, 247, 0.15);
+  background: linear-gradient(180deg, transparent 0%, rgba(107, 33, 255, 0.03) 100%);
   position: relative;
 }
-.site-footer::before {
+
+.sf::before {
   content: '';
   position: absolute;
-  top: -1px; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), transparent);
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.4), transparent);
 }
-.site-footer__inner {
-  max-width: 1200px;
+
+.sf__inner {
+  max-width: 1100px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ═══ Brand row ═══ */
+.sf__brand-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.sf__tagline {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.85rem;
+  color: #A29DB5;
+  margin: 0;
+}
+
+/* ═══ Nav grid ═══ */
+.sf__nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  text-align: center;
+}
+
+.sf__col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.sf__col-title {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #E8C79A;
+  margin: 0 0 4px;
+  letter-spacing: 0.02em;
+}
+
+.sf__link {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  color: #A29DB5;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+.sf__link:hover { color: #A855F7; }
+
+/* Social */
+.sf__social {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+.sf__social-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  background: rgba(168, 85, 247, 0.06);
+  color: #F4F2FA;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sf__social-btn svg { width: 16px; height: 16px; }
+.sf__social-btn:hover {
+  transform: translateY(-2px);
+  border-color: #A855F7;
+  background: rgba(168, 85, 247, 0.16);
+}
+.sf__social-btn--wa:hover { background: rgba(37, 211, 102, 0.18); border-color: #25D366; }
+.sf__social-btn--fb:hover { background: rgba(24, 119, 242, 0.18); border-color: #1877F2; }
+
+.sf__channel-link {
+  font-size: 0.72rem;
+  color: #86EFAC;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(37, 211, 102, 0.08);
+  border: 1px solid rgba(37, 211, 102, 0.22);
+  margin-top: 6px;
+  transition: all 0.2s;
+}
+.sf__channel-link:hover {
+  background: rgba(37, 211, 102, 0.18);
+  border-color: rgba(37, 211, 102, 0.5);
+}
+
+/* ═══ Bottom ═══ */
+.sf__bottom {
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
+  padding-top: 24px;
+  border-top: 1px solid rgba(168, 85, 247, 0.1);
 }
 
-/* فلسطين */
-.site-footer__palestine {
-  display: flex;
-  flex-direction: column;
+.sf__palestine {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 16px 24px;
-  border-radius: 18px;
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  background: rgba(139, 92, 246, 0.04);
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
-}
-.site-footer__palestine-text {
-  font-family: var(--font-cairo, system-ui);
-  font-weight: 900;
-  font-size: 1rem;
-  color: #F4F2FA;
-  margin: 0;
-}
-
-/* كيف نخدمك */
-.site-footer__serve {
-  width: 100%;
-  max-width: 1000px;
-  padding: 18px 22px;
-  border-radius: 24px;
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  background: rgba(139, 92, 246, 0.04);
-}
-.site-footer__serve-title {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 1.05rem;
-  font-weight: 900;
-  color: #E8C79A;
-  margin: 0 0 14px;
-  text-align: center;
-  letter-spacing: 0.02em;
-}
-.site-footer__serve-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-.site-footer__serve-item {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  padding: 12px 14px;
-  border-radius: 14px;
-  background: rgba(139, 92, 246, 0.06);
-  border: 1px solid rgba(139, 92, 246, 0.12);
-  transition: all 240ms ease;
-}
-.site-footer__serve-item:hover {
-  border-color: rgba(168, 85, 247, 0.4);
-  background: rgba(139, 92, 246, 0.12);
-  transform: translateY(-2px);
-}
-.site-footer__serve-icon { font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
-.site-footer__serve-item p {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.8rem;
-  line-height: 1.6;
-  color: #C9C2DB;
-  margin: 0;
-}
-.site-footer__serve-item p strong { color: #F4F2FA; font-weight: 900; }
-
-/* nav */
-.site-footer__nav {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  width: 100%;
-  max-width: 720px;
-  text-align: center;
-  padding-top: 12px;
-  border-top: 1px solid rgba(139, 92, 246, 0.1);
-}
-.site-footer__col {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
-.site-footer__col h4 {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 0.9rem;
-  font-weight: 900;
-  color: #E8C79A;
-  margin: 0 0 4px;
-}
-.site-footer__col a {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.8rem;
-  color: #A29DB5;
-  text-decoration: none;
-  transition: color 180ms ease;
-}
-.site-footer__col a:hover { color: #A855F7; }
-
-.site-footer__social {
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-}
-.site-footer__social-btn {
-  width: 36px;
-  height: 36px;
+  gap: 10px;
+  padding: 8px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  background: rgba(139, 92, 246, 0.06);
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  text-decoration: none;
+  transition: all 0.22s ease;
+}
+.sf__palestine:hover {
+  background: rgba(168, 85, 247, 0.14);
+  border-color: rgba(168, 85, 247, 0.5);
+  transform: translateY(-1px);
+}
+.sf__palestine-label {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  font-weight: 800;
   color: #F4F2FA;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 220ms ease;
 }
-.site-footer__social-btn svg { width: 16px; height: 16px; }
-.site-footer__social-btn:hover {
-  border-color: #A855F7;
-  background: rgba(139, 92, 246, 0.15);
-  transform: translateY(-2px);
+.sf__palestine-heart {
+  display: inline-flex;
+  animation: sf-heart-beat 2.8s ease-in-out infinite;
+}
+@keyframes sf-heart-beat {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.12); }
 }
 
-/* Palestine heart */
-.site-footer__palestine-heart {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
-}
-.site-footer__palestine-heart:hover { transform: scale(1.15); }
-.site-footer__palestine-heart .ps-fill { opacity: 0; transition: opacity 300ms ease; }
-.site-footer__palestine-heart:hover .ps-fill { opacity: 1; }
-.site-footer__palestine-heart:hover > path { stroke: transparent; }
-
-/* bottom */
-.site-footer__bottom {
+.sf__legal {
   display: flex;
   flex-direction: column;
   gap: 6px;
   align-items: center;
   text-align: center;
-  padding-top: 20px;
-  border-top: 1px solid rgba(139, 92, 246, 0.12);
-  width: 100%;
 }
-.site-footer__bottom-brand {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 1.3rem;
-  font-weight: 900;
-  color: #E8C79A;
-  letter-spacing: 0.3em;
-  margin: 0 0 4px;
-  text-shadow: 0 0 14px rgba(232, 199, 154, 0.4);
-}
-.site-footer__bottom-made {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.sf__copy {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.82rem;
-  color: #A29DB5;
-  margin: 0;
-}
-.site-footer__neon-heart {
-  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.9));
-  animation: heart-glow 2.4s ease-in-out infinite;
-}
-@keyframes heart-glow {
-  0%, 100% { filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.8)); transform: scale(1); }
-  50%      { filter: drop-shadow(0 0 12px rgba(168, 85, 247, 1)); transform: scale(1.08); }
-}
-.site-footer__bottom-copy {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: #6B6580;
   margin: 0;
 }
-
-@media (max-width: 720px) {
-  .site-footer { padding: 36px 16px 20px; margin-top: 40px; }
-  .site-footer__serve-grid { grid-template-columns: 1fr; }
-  .site-footer__serve { padding: 18px 16px; }
-  .site-footer__nav { grid-template-columns: 1fr 1fr; gap: 20px; }
-}
-@media (max-width: 400px) {
-  .site-footer__nav { grid-template-columns: 1fr; gap: 16px; }
-}
-
-/* ===== الامضاء ===== */
-.site-footer__signature {
-  margin: 12px 0 0;
+.sf__signature {
+  margin: 4px 0 0;
   text-align: center;
   position: relative;
 }
-
-.site-footer__signature-text {
+.sf__signature-text {
   font-family: var(--font-signature, 'Dancing Script', cursive);
-  font-size: 1.15rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
+  font-size: 1rem;
   color: #A29DB5;
   display: inline-block;
   padding: 0 12px;
   position: relative;
-  transition: color 350ms ease, text-shadow 350ms ease;
+  transition: color 0.35s ease;
 }
-
-/* خيط نيون رفيع تحت الامضاء */
-.site-footer__signature-text::after {
+.sf__signature-text::after {
   content: '';
   position: absolute;
   bottom: -4px;
@@ -251,53 +205,28 @@
   );
   transform: scaleX(0.3);
   transform-origin: center;
-  transition: transform 500ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
-
-.site-footer__signature:hover .site-footer__signature-text {
+.sf__signature:hover .sf__signature-text {
   color: #E8C79A;
-  text-shadow: 0 0 14px rgba(232, 199, 154, 0.4);
 }
-.site-footer__signature:hover .site-footer__signature-text::after {
+.sf__signature:hover .sf__signature-text::after {
   transform: scaleX(1);
 }
 
-@media (max-width: 640px) {
-  .site-footer__signature-text { font-size: 1rem; }
+/* ═══ Responsive ═══ */
+@media (max-width: 720px) {
+  .sf { padding: 32px 16px 20px; margin-top: 40px; }
+  .sf__nav { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .sf__inner { gap: 24px; }
+}
+@media (max-width: 420px) {
+  .sf__nav { grid-template-columns: 1fr; gap: 18px; }
+  .sf__brand-row { flex-direction: column; }
 }
 
-
-/* Palestine compact */
-.site-footer__palestine-compact {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: rgba(168, 85, 247, 0.06);
-  border: 1px solid rgba(168, 85, 247, 0.22);
-  text-decoration: none;
-  transition: all 0.22s ease;
-}
-.site-footer__palestine-compact:hover {
-  background: rgba(168, 85, 247, 0.14);
-  border-color: rgba(168, 85, 247, 0.5);
-  transform: translateY(-1px);
-}
-.site-footer__palestine-label {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: #F4F2FA;
-}
-.site-footer__palestine-heart {
-  display: inline-flex;
-  animation: ps-heart-beat 2.8s ease-in-out infinite;
-}
-@keyframes ps-heart-beat {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.12); }
-}
 @media (prefers-reduced-motion: reduce) {
-  .site-footer__palestine-heart { animation: none; }
+  .sf__palestine-heart { animation: none; }
+  .sf__signature-text::after { transition: none; }
+  .sf__social-btn, .sf__palestine { transition: none; }
 }
