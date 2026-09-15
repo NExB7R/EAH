@@ -3,7 +3,8 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
-import { isFrameAllowed, isTitleAllowed, type Role, type Gender } from '@/lib/profile-presets'
+
+const AVATAR_KEYS = ['av1','av2','av3','av4','av5','av6','av7','av8','av9','av10','av11','av12']
 
 export async function updateProfile(formData: FormData) {
   const supabase = await createClient()
@@ -12,42 +13,33 @@ export async function updateProfile(formData: FormData) {
 
   const display_name = String(formData.get('display_name') ?? '').trim()
   const avatar_key = String(formData.get('avatar_key') ?? '').trim() || null
-  const title_key = String(formData.get('title_key') ?? '').trim() || null
-  const frame_key = String(formData.get('frame_key') ?? '').trim() || null
   const avatar_url = String(formData.get('avatar_url') ?? '').trim() || null
   const genderInput = String(formData.get('gender') ?? '').trim()
-  const genderValue: 'male' | 'female' | null = genderInput === 'male' || genderInput === 'female' ? genderInput : null
+  const gender = genderInput === 'male' || genderInput === 'female' ? genderInput : null
   const bio = String(formData.get('bio') ?? '').trim() || null
 
-  if (display_name.length < 2) {
-    throw new Error('الاسم لازم يكون حرفين على الأقل')
-  }
-  if (display_name.length > 40) {
-    throw new Error('الاسم طويل جدًا')
-  }
-  if (bio && bio.length > 200) {
-    throw new Error('البايو طويل جدًا (200 حرف كحد أقصى)')
-  }
+  if (display_name.length < 2) throw new Error('الاسم لازم يكون حرفين على الأقل')
+  if (display_name.length > 40) throw new Error('الاسم طويل جدًا')
+  if (bio && bio.length > 200) throw new Error('البايو طويل جدًا')
 
-  // فلترة أمنية: نتأكد إن الإطار واللقب مسموحين للدور
-  const { data: roleRow } = await supabase
-    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
-  const role = (roleRow?.role ?? 'customer') as Role
+  // فلترة أمنية
+  const safeAvatarKey = avatar_key && AVATAR_KEYS.includes(avatar_key) ? avatar_key : null
+  const safeAvatarUrl = avatar_url && /^https?:\/\//.test(avatar_url) ? avatar_url : null
 
-  const { data: prof } = await supabase
-    .from('profiles').select('gender').eq('id', userData.user.id).maybeSingle()
-  const existingGender = (prof?.gender ?? null) as Gender | null
-
-  if (frame_key && !isFrameAllowed(frame_key, role)) {
-    throw new Error('الإطار ده مش متاح لحسابك')
+  // نجمع التحديثات — ما نحطش avatar_url إلا لو موجود فعلاً
+  const updates: Record<string, unknown> = {
+    display_name,
+    avatar_key: safeAvatarKey,
+    bio,
+    gender,
   }
-  if (title_key && !isTitleAllowed(title_key, role, genderValue)) {
-    throw new Error('اللقب ده مش متاح لحسابك')
+  if (safeAvatarUrl) {
+    updates.avatar_url = safeAvatarUrl
   }
 
   const { error } = await supabase
     .from('profiles')
-    .update({ display_name, avatar_key, title_key, frame_key, bio, avatar_url, gender: genderValue })
+    .update(updates)
     .eq('id', userData.user.id)
 
   if (error) throw new Error(error.message)

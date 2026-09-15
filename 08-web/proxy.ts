@@ -34,7 +34,14 @@ export async function proxy(request: NextRequest) {
 
   const path = request.nextUrl.pathname
   const isProtected = path.startsWith('/admin') || path.startsWith('/merchant')
-  const isAuthPage = path.startsWith('/auth')
+
+  // استثنِ /auth/logout و /auth/callback من أي redirect
+  // (logout محتاج يوصل للـ route حتى لو المستخدم لسه logged in)
+  const isAuthFlowExempt =
+    path === '/auth/logout' ||
+    path.startsWith('/auth/callback')
+
+  const isAuthPage = path.startsWith('/auth') && !isAuthFlowExempt
 
   if (isProtected && !user) {
     const redirect = request.nextUrl.clone()

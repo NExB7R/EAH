@@ -9,8 +9,8 @@ import ScrollIconsBackground from '@/components/scroll-icons-background'
 import AnimReady from '@/components/anim-ready'
 import OnboardingOverlay from '@/components/onboarding-overlay'
 import ServiceWorkerRegister from '@/components/sw-register'
-import InstallAppButton from '@/components/install-app-button'
 import NetworkStatus from '@/components/network-status'
+import InstallAppButton from '@/components/install-app-button'
 import '@/components/install-pwa-button.css'
 import '@/components/install-app-button.css'
 import '@/components/share-button.css'
@@ -40,28 +40,22 @@ const signature = Dancing_Script({
 })
 
 export const metadata: Metadata = {
-  title: { default: 'EAH | اللي نفسك فيه ؟', template: '%s | EAH' },
+  title: {
+    default: 'EAH — اللي نفسك فيه ؟',
+    template: '%s | EAH',
+  },
   description:
-    'EAH منصة اكتشاف محلية تبدأ من شبين القناطر: مطاعم، صيدليات، توصيل وعروض مناسبة ليك.',
+    'EAH منصة اكتشاف محلية تبدأ من شبين القناطر: مطاعم، صيدليات، سوبرماركت، توصيل — اختيارات مظبوطة على مزاجك.',
   metadataBase: new URL(siteUrl),
+  applicationName: 'EAH',
+  generator: 'Next.js',
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },
       { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
       { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    shortcut: '/icon.svg',
-  },
-  manifest: '/manifest.webmanifest',
-      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
     shortcut: '/icon.svg',
   },
   manifest: '/manifest.webmanifest',
@@ -85,17 +79,26 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'EAH | اللي نفسك فيه ؟',
+    title: 'EAH — اللي نفسك فيه ؟',
     description: 'اكتشف اللي مناسب ليك حوالينك — مطاعم، صيدليات، ماركت، توصيل.',
     type: 'website',
     locale: 'ar_EG',
     siteName: 'EAH',
     url: siteUrl,
+    images: [
+      {
+        url: '/icon-512.png',
+        width: 512,
+        height: 512,
+        alt: 'EAH',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'EAH | اللي نفسك فيه ؟',
+    title: 'EAH — اللي نفسك فيه ؟',
     description: 'اكتشف اللي مناسب ليك حوالينك.',
+    images: ['/icon-512.png'],
   },
 }
 
@@ -114,8 +117,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <OnboardingOverlay />
         <ServiceWorkerRegister />
-        <InstallAppButton />
         <NetworkStatus />
+        <InstallAppButton />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

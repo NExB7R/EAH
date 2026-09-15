@@ -4,7 +4,6 @@ import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { updateProfile } from './actions'
-import { AVATARS, framesForRole, titlesForRole, type Role } from '@/lib/profile-presets'
 import AvatarUploader from '@/components/avatar-uploader'
 import './edit.css'
 
@@ -18,24 +17,11 @@ export default async function EditProfilePage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('display_name,avatar_key,title_key,frame_key,bio,phone,trust_score,gender,avatar_url')
+    .select('display_name,avatar_key,bio,phone,gender,avatar_url')
     .eq('id', userData.user.id)
     .maybeSingle()
 
   const name = profile?.display_name ?? 'مستخدم'
-  const initial = name.charAt(0).toUpperCase()
-  const currentAvatar = profile?.avatar_key ?? AVATARS[0].key
-  const { data: roleRow } = await supabase
-    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
-  const { data: myBusinesses } = await supabase
-    .from('businesses').select('business_type').eq('owner_profile_id', userData.user.id)
-  const businessTypes: string[] = (myBusinesses ?? []).map((b: any) => b.business_type)
-  const role = (roleRow?.role ?? 'customer') as Role
-  const gender = (profile?.gender as 'male' | 'female' | undefined) ?? null
-  const availableTitles = titlesForRole(role, gender, businessTypes)
-  const availableFrames = framesForRole(role)
-  const currentTitle = profile?.title_key ?? availableTitles[0]?.key ?? 'elgoker'
-  const currentFrame = profile?.frame_key ?? availableFrames[0]?.key ?? 'none'
 
   return (
     <>
@@ -46,7 +32,7 @@ export default async function EditProfilePage() {
           <div>
             <span className="edit__kicker">EDIT PROFILE</span>
             <h1 className="edit__title">✏️ عدّل بروفايلك</h1>
-            <p className="edit__sub">خلّي حسابك يعبّر عنك — اسم، صورة، لقب، وإطار.</p>
+            <p className="edit__sub">اسمك، صورتك، ونبذة قصيرة عنك.</p>
           </div>
         </header>
 
@@ -66,10 +52,10 @@ export default async function EditProfilePage() {
             <span className="edit__hint">ده اللي هيظهر لكل الناس على EAH.</span>
           </section>
 
-          {/* الأفاتار + الرفع */}
+          {/* الأفاتار */}
           <section className="edit__section">
             <h2 className="edit__section-title">🎨 صورتك</h2>
-            <p className="edit__section-sub">اختار لون، ارفع صورة من جهازك، أو حط لينك.</p>
+            <p className="edit__section-sub">ارفع صورة من جهازك، أو اختار لون افتراضي.</p>
             <AvatarUploader
               userId={userData.user.id}
               initialUrl={profile?.avatar_url ?? null}
@@ -80,67 +66,15 @@ export default async function EditProfilePage() {
           {/* الجنس */}
           <section className="edit__section">
             <h2 className="edit__section-title">👤 النوع</h2>
-            <p className="edit__section-sub">بيأثر على الألقاب المتاحة ليك.</p>
             <div className="edit__gender">
-              <label className={`edit__gender-btn ${(profile?.gender ?? '') === 'male' ? 'is-active' : ''}`}>
+              <label className={`edit__gender-btn ${profile?.gender === 'male' ? 'is-active' : ''}`}>
                 <input type="radio" name="gender" value="male" defaultChecked={profile?.gender === 'male'} />
                 <span>👨 ذكر</span>
               </label>
-              <label className={`edit__gender-btn ${(profile?.gender ?? '') === 'female' ? 'is-active' : ''}`}>
+              <label className={`edit__gender-btn ${profile?.gender === 'female' ? 'is-active' : ''}`}>
                 <input type="radio" name="gender" value="female" defaultChecked={profile?.gender === 'female'} />
                 <span>👩 أنثى</span>
               </label>
-            </div>
-          </section>
-
-          {/* اللقب */}
-          <section className="edit__section">
-            <h2 className="edit__section-title">🏷️ لقبك</h2>
-            <p className="edit__section-sub">اختار اللقب اللي يعبّر عنك — كل لقب له حكاية.</p>
-            <div className="edit__titles">
-              {availableTitles.map((t) => (
-                <label key={t.key} className="edit__title-option">
-                  <input
-                    type="radio"
-                    name="title_key"
-                    value={t.key}
-                    defaultChecked={t.key === currentTitle}
-                  />
-                  <span className="edit__title-card">
-                    <span className="edit__title-emoji">{t.emoji}</span>
-                    <span className="edit__title-label">{t.label}</span>
-                    <span className="edit__title-hint">{t.hint}</span>
-                  </span>
-                </label>
-              ))}
-            </div>
-          </section>
-
-          {/* الإطار */}
-          <section className="edit__section">
-            <h2 className="edit__section-title">✨ إطار صورتك</h2>
-            <p className="edit__section-sub">الإطار يظهر حوالين صورتك في كل مكان على EAH.</p>
-            <div className="edit__frames">
-              {availableFrames.map((f) => {
-                const isGradient = f.border.startsWith('conic')
-                const style = isGradient
-                  ? { backgroundImage: f.border, border: 'none', boxShadow: `0 0 16px ${f.glow}` }
-                  : { border: `3px solid ${f.border}`, boxShadow: `0 0 16px ${f.glow}` }
-                return (
-                  <label key={f.key} className="edit__frame-option">
-                    <input
-                      type="radio"
-                      name="frame_key"
-                      value={f.key}
-                      defaultChecked={f.key === currentFrame}
-                    />
-                    <span className="edit__frame-circle" style={style}>
-                      <span className="edit__frame-inner">{initial}</span>
-                    </span>
-                    <span className="edit__frame-label">{f.label}</span>
-                  </label>
-                )
-              })}
             </div>
           </section>
 

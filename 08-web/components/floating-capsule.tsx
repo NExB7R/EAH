@@ -23,8 +23,9 @@ type CapsuleUser = {
   role: string
   banUntil: string | null
   avatarKey: string | null
-  frameKey: string | null
   avatarUrl: string | null | undefined
+  isPremium: boolean
+  verified: boolean
 }
 
 function IconInfo() {
@@ -80,10 +81,11 @@ export default function FloatingCapsuleHeader() {
         if (!active) return
         if (!authUser) { setLoggedIn(false); return }
         setLoggedIn(true)
-        const [p, r, n] = await Promise.all([
-          supabase.from('profiles').select('display_name,trust_score,banned_until,avatar_key,frame_key,avatar_url').eq('id', authUser.id).maybeSingle(),
+        const [p, r, n, sub] = await Promise.all([
+          supabase.from('profiles').select('display_name,trust_score,banned_until,avatar_key,avatar_url,verified_at').eq('id', authUser.id).maybeSingle(),
           supabase.from('user_roles').select('role').eq('user_id', authUser.id).maybeSingle(),
           supabase.from('notifications').select('*', { count: 'exact', head: true }).eq('user_id', authUser.id).is('read_at', null),
+          supabase.from('business_subscriptions').select('status,expires_at').eq('owner_id', authUser.id).eq('status','active').gt('expires_at', new Date().toISOString()).limit(1).maybeSingle(),
         ])
         if (!active) return
         setUser({
@@ -93,8 +95,9 @@ export default function FloatingCapsuleHeader() {
           role: r.data?.role ?? 'customer',
           notifications: n.count ?? 0,
           avatarKey: p.data?.avatar_key ?? null,
-          frameKey: p.data?.frame_key ?? null,
           avatarUrl: p.data?.avatar_url ?? undefined,
+          isPremium: !!sub.data,
+          verified: !!p.data?.verified_at,
         })
       } catch {
         if (active) setLoggedIn(false)
@@ -148,8 +151,9 @@ export default function FloatingCapsuleHeader() {
                   unreadNotifications={unread}
                   banUntil={user.banUntil}
                   avatarKey={user.avatarKey}
-                  frameKey={user.frameKey}
                   avatarUrl={user.avatarUrl ?? undefined}
+                  isPremium={user.isPremium}
+                  verified={user.verified}
                   href="/account"
                 />
               </span>
@@ -220,8 +224,16 @@ export default function FloatingCapsuleHeader() {
             </div>
           )}
           {loggedIn === true && (
-            <form action="/auth/logout" method="post" className="nav-drawer__logout">
-              <button type="submit"><span className="nav-drawer__link-icon">{MI.logout}</span>تسجيل خروج</button>
+            <form
+              action="/auth/logout"
+              method="post"
+              className="nav-drawer__logout"
+              style={{ margin: 0 }}
+            >
+              <button type="submit">
+                <span className="nav-drawer__link-icon">{MI.logout}</span>
+                تسجيل خروج
+              </button>
             </form>
           )}
         </div>

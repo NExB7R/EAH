@@ -1,6 +1,6 @@
 'use client'
 import { IconUser, IconBell } from './neon-icons'
-import { getAvatar, getFrame } from '@/lib/profile-presets'
+import { getAvatar, roleBadge } from '@/lib/profile-presets'
 import './user-avatar.css'
 
 type UserAvatarProps = {
@@ -11,7 +11,8 @@ type UserAvatarProps = {
   unreadNotifications?: number
   banUntil?: string | null
   avatarKey?: string | null
-  frameKey?: string | null
+  isPremium?: boolean
+  verified?: boolean
   href?: string
   onClick?: () => void
 }
@@ -24,51 +25,40 @@ export default function UserAvatar({
   unreadNotifications = 0,
   banUntil = null,
   avatarKey = null,
-  frameKey = null,
+  isPremium = false,
+  verified = false,
   href,
   onClick,
 }: UserAvatarProps) {
   const isBanned = !!banUntil && new Date(banUntil).getTime() > Date.now()
-  const isSuperAdmin = role === 'super_admin'
-  const isMerchant = role === 'merchant'
   const banDays = isBanned
-    ? Math.ceil((new Date(banUntil as string).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+    ? Math.ceil((new Date(banUntil as string).getTime() - Date.now()) / 86400000)
     : 0
 
+  const badge = roleBadge(role, isPremium, verified)
   const initial = name.trim().charAt(0).toUpperCase()
   const avatar = getAvatar(avatarKey)
-  const frame = getFrame(frameKey)
-  const frameStyle = frameKey && frameKey !== 'none'
-    ? { border: `2px solid ${frame.border}`, boxShadow: `0 0 12px ${frame.glow}` }
-    : undefined
 
   const inner = (
     <>
-      {isSuperAdmin && (
+      {badge === 'crown' && (
         <span className="user-avatar__crown" aria-hidden>
-          <svg viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 24 16" fill="none">
             <defs>
-              <linearGradient id="ua-crown-g" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="ua-c-g" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#FFFBEB" />
-                <stop offset="45%" stopColor="#FDE68A" />
-                <stop offset="100%" stopColor="#D97706" />
-              </linearGradient>
-              <linearGradient id="ua-crown-j" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#E879F9" />
-                <stop offset="100%" stopColor="#A855F7" />
+                <stop offset="55%" stopColor="#FBBF24" />
+                <stop offset="100%" stopColor="#92400E" />
               </linearGradient>
             </defs>
             <path d="M1.5 14 L0.5 4.5 L5 8 L12 1 L19 8 L23.5 4.5 L22.5 14 Z"
-                  fill="url(#ua-crown-g)" stroke="#FFFBEB" strokeWidth="0.5" strokeLinejoin="round" />
+                  fill="url(#ua-c-g)" stroke="#FFFBEB" strokeWidth="0.5" strokeLinejoin="round" />
             <rect x="3.5" y="10.5" width="17" height="3" rx="1"
-                  fill="url(#ua-crown-g)" stroke="#FFFBEB" strokeWidth="0.35" />
-            <circle cx="12" cy="1.5" r="1.4" fill="url(#ua-crown-j)" />
-            <circle cx="0.5" cy="4.5" r="1.1" fill="url(#ua-crown-j)" />
-            <circle cx="23.5" cy="4.5" r="1.1" fill="url(#ua-crown-j)" />
-            <circle cx="12" cy="12" r="0.9" fill="url(#ua-crown-j)" />
+                  fill="url(#ua-c-g)" stroke="#FFFBEB" strokeWidth="0.35" />
           </svg>
         </span>
       )}
+
       <span
         className="user-avatar__img"
         style={!avatarUrl ? { background: `linear-gradient(135deg, ${avatar.from}, ${avatar.to})` } : undefined}
@@ -81,9 +71,31 @@ export default function UserAvatar({
         )}
       </span>
 
-      {isSuperAdmin && <span className="user-avatar__super-check" aria-hidden>✓</span>}
+      {badge === 'premium' && (
+        <span className="user-avatar__premium" aria-label="حساب مميز">
+          <svg viewBox="0 0 24 24" width="11" height="11" fill="none">
+            <path d="M6 3 L12 9 L18 3 L20 20 L4 20 Z"
+                  fill="url(#ua-d-g)" stroke="#E9D5FF" strokeWidth="0.8" strokeLinejoin="round" />
+            <defs>
+              <linearGradient id="ua-d-g" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#E9D5FF" />
+                <stop offset="100%" stopColor="#A855F7" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+      )}
 
-      {!isBanned && !isSuperAdmin && points > 0 && (
+      {badge === 'verified' && (
+        <span className="user-avatar__verified" aria-label="حساب موثق">
+          <svg viewBox="0 0 24 24" width="11" height="11">
+            <circle cx="12" cy="12" r="11" fill="#10B981" />
+            <path d="M7 12 L11 16 L17 9" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+          </svg>
+        </span>
+      )}
+
+      {!isBanned && points > 0 && (
         <span className="user-avatar__points" aria-label={`${points} نقطة`}>
           {points >= 1000 ? `${(points / 1000).toFixed(1)}k` : points}
         </span>
@@ -98,7 +110,7 @@ export default function UserAvatar({
     </>
   )
 
-  const avatarClass = `user-avatar${isSuperAdmin ? ' user-avatar--super' : ''}`
+  const avatarClass = `user-avatar${badge === 'crown' ? ' user-avatar--crown' : ''}${badge === 'premium' ? ' user-avatar--premium' : ''}`
 
   return (
     <div className="user-avatar-wrap">
@@ -116,21 +128,14 @@ export default function UserAvatar({
       </a>
 
       {href ? (
-        <a href={href} className={avatarClass} aria-label={`حساب ${name}`} style={frameStyle}>
+        <a href={href} className={avatarClass} aria-label={`حساب ${name}`}>
           {inner}
         </a>
       ) : (
-        <button
-          type="button"
-          className={avatarClass}
-          aria-label={`حساب ${name}`}
-          onClick={onClick}
-          style={frameStyle}
-        >
+        <button type="button" className={avatarClass} aria-label={`حساب ${name}`} onClick={onClick}>
           {inner}
         </button>
       )}
-      {isMerchant && <span className="user-avatar__store" aria-hidden>🏪</span>}
     </div>
   )
 }
