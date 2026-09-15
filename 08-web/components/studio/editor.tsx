@@ -19,6 +19,9 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
   const [viewport, setViewport] = useState<Viewport>('desktop')
   const [showCmd, setShowCmd] = useState(false)
   const [inspectorTab, setInspectorTab] = useState<'content' | 'style'>('content')
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const [history, setHistory] = useState<DesignData[]>([initial ?? currentHomeDesign])
+  const [historyIndex, setHistoryIndex] = useState(0)
 
   const selected = design.sections.find(s => s.id === selectedId) ?? null
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
@@ -26,7 +29,31 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
   const update = useCallback((next: DesignData) => {
     setDesign(next)
     setSaved(false)
-  }, [])
+    setHistory((prev) => {
+      const trimmed = prev.slice(0, historyIndex + 1)
+      const nextHistory = [...trimmed, next].slice(-50)
+      setHistoryIndex(nextHistory.length - 1)
+      return nextHistory
+    })
+  }, [historyIndex])
+
+  const undo = useCallback(() => {
+    if (historyIndex > 0) {
+      const prevIdx = historyIndex - 1
+      setHistoryIndex(prevIdx)
+      setDesign(history[prevIdx])
+      setSaved(false)
+    }
+  }, [historyIndex, history])
+
+  const redo = useCallback(() => {
+    if (historyIndex < history.length - 1) {
+      const nextIdx = historyIndex + 1
+      setHistoryIndex(nextIdx)
+      setDesign(history[nextIdx])
+      setSaved(false)
+    }
+  }, [historyIndex, history])
 
   const save = useCallback(async (data: DesignData) => {
     setSaving(true)
@@ -45,6 +72,44 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
       setSaving(false)
     }
   }, [])
+
+  // ═══ Live preview: postMessage to iframe ═══
+  useEffect(() => {
+    const onMsg = (e: MessageEvent) => {
+      if (e.data?.type === 'EAH_PREVIEW_READY') {
+        iframeRef.current?.contentWindow?.postMessage(
+          { type: 'EAH_DESIGN_UPDATE', design },
+          '*'
+        )
+      }
+    }
+    window.addEventListener('message', onMsg)
+    return () => window.removeEventListener('message', onMsg)
+  }, [design])
+
+  useEffect(() => {
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: 'EAH_DESIGN_UPDATE', design },
+      '*'
+    )
+  }, [design])
+
+  // ═══ Keyboard: undo/redo ═══
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z') {
+        if (e.shiftKey) {
+          e.preventDefault()
+          redo()
+        } else {
+          e.preventDefault()
+          undo()
+        }
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [undo, redo])
 
   // Auto-save
   useEffect(() => {
@@ -162,6 +227,22 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
           </button>
           <button
             className="ed__action-btn"
+            onClick={undo}
+            disabled={historyIndex <= 0}
+            title="تراجع (⌘Z)"
+          >
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+          </button>
+          <button
+            className="ed__action-btn"
+            onClick={redo}
+            disabled={historyIndex >= history.length - 1}
+            title="إعادة (⌘⇧Z)"
+          >
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>
+          </button>
+          <button
+            className="ed__action-btn"
             onClick={() => { if (confirm('إعادة تعيين للافتراضي؟')) update(currentHomeDesign) }}
             title="إعادة تعيين"
           >
@@ -245,7 +326,7 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
               </button>
             </div>
-            <iframe key={previewKey} src="/" className="ed__iframe" title="معاينة" />
+            <iframe ref={iframeRef} key={previewKey} src="/" className="ed__iframe" title="معاينة" />
           </div>
         </main>
 
