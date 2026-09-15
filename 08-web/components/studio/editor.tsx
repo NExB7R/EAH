@@ -5,6 +5,7 @@ import {
   SECTION_LABELS, makeId, defaultProps,
 } from './types'
 import { currentHomeDesign } from './current-design'
+import Inspector from './inspector'
 
 type Viewport = 'desktop' | 'tablet' | 'mobile'
 
@@ -330,67 +331,13 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
           </div>
         </main>
 
-        {/* ═══ INSPECTOR ═══ */}
+        {/* INSPECTOR */}
         {selected && (
-          <aside className="ed__inspector">
-            <header className="ed__insp-header">
-              <div className="ed__insp-title-wrap">
-                <span className="ed__insp-emoji">{SECTION_LABELS[selected.type].emoji}</span>
-                <h3 className="ed__insp-title">{SECTION_LABELS[selected.type].label}</h3>
-              </div>
-              <button className="ed__insp-close" onClick={() => setSelectedId(null)}>×</button>
-            </header>
-
-            <div className="ed__insp-tabs">
-              <button
-                className={`ed__insp-tab ${inspectorTab === 'content' ? 'is-active' : ''}`}
-                onClick={() => setInspectorTab('content')}
-              >📝 المحتوى</button>
-              <button
-                className={`ed__insp-tab ${inspectorTab === 'style' ? 'is-active' : ''}`}
-                onClick={() => setInspectorTab('style')}
-              >🎨 المظهر</button>
-            </div>
-
-            <div className="ed__insp-body">
-              {inspectorTab === 'content' ? (
-                <>
-                  <Field label="العنوان" value={(selected.props as any).title ?? ''} onChange={v => setProp('title', v)} />
-                  {(selected.props as any).subtitle !== undefined && (
-                    <Field label="النص الفرعي" value={(selected.props as any).subtitle ?? ''} onChange={v => setProp('subtitle', v)} multiline />
-                  )}
-                  {(selected.props as any).ctaText !== undefined && (
-                    <Field label="نص الزرار" value={(selected.props as any).ctaText ?? ''} onChange={v => setProp('ctaText', v)} />
-                  )}
-                  {(selected.props as any).ctaHref !== undefined && (
-                    <Field label="رابط الزرار" value={(selected.props as any).ctaHref ?? ''} onChange={v => setProp('ctaHref', v)} />
-                  )}
-                  {(selected.props as any).text !== undefined && (
-                    <Field label="النص" value={(selected.props as any).text ?? ''} onChange={v => setProp('text', v)} />
-                  )}
-                  {(selected.props as any).count !== undefined && (
-                    <div className="ed__field">
-                      <label className="ed__field-label">عدد العناصر</label>
-                      <div className="ed__slider-row">
-                        <input
-                          type="range" min={2} max={12}
-                          value={(selected.props as any).count ?? 6}
-                          onChange={e => setProp('count', Number(e.target.value))}
-                          className="ed__slider"
-                        />
-                        <span className="ed__slider-val">{(selected.props as any).count ?? 6}</span>
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="ed__style-empty">
-                  <span>🎨</span>
-                  <p>المظهر بيتحكم من الثيم العام — قريب</p>
-                </div>
-              )}
-            </div>
-          </aside>
+          <Inspector
+            section={selected}
+            onChange={setProp}
+            onClose={() => setSelectedId(null)}
+          />
         )}
       </div>
 
