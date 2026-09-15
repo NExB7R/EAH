@@ -60,3 +60,7 @@ _fix_report.txt
 # ═══ Backup files ═══
 *.bak
 *.bak.*
+
+# Vercel production env
+.env.production.local
+.env*.local
