@@ -73,7 +73,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
       // Save to DB
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
-      await supabase.from('order_requests').insert({
+      const { data: inserted } = await supabase.from('order_requests').insert({
         business_id: businessId,
         customer_user_id: user?.id ?? null,
         customer_name: name.trim(),
@@ -85,7 +85,16 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
         merchant_phone: phoneNumber,
         whatsapp_url: waUrl,
         status: 'sent',
-      })
+      }).select('id').maybeSingle()
+
+      // Fire push notification (non-blocking)
+      if (inserted?.id) {
+        fetch('/api/orders/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: inserted.id }),
+        }).catch(() => {})
+      }
 
       // Open WhatsApp
       window.open(waUrl, '_blank', 'noreferrer')
