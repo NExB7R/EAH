@@ -5,6 +5,7 @@ const LineChart = nextDynamic(() => import('@/components/charts/line-chart'))
 const BarChart = nextDynamic(() => import('@/components/charts/bar-chart'))
 import '@/components/charts/charts.css'
 import AnalyticsFilters from './AnalyticsFilters'
+import ExportPanel from './ExportPanel'
 import './analytics.css'
 
 export const dynamic = 'force-dynamic'
@@ -148,15 +149,10 @@ export default async function AnalyticsPage({
 
       <div className="an__export">
         <h3 className="an__export-title">📥 تصدير البيانات</h3>
-        <p className="an__export-sub">حمّل البيانات كـ CSV لتحليلها في Excel</p>
-        <div className="an__export-buttons">
-          <a href="/api/admin/export?type=businesses" className="an__export-btn">🏪 الأنشطة</a>
-          <a href="/api/admin/export?type=reviews" className="an__export-btn">✍️ التقييمات</a>
-          <a href="/api/admin/export?type=reveals" className="an__export-btn">📞 كشوف الأرقام</a>
-          <a href="/api/admin/export?type=users" className="an__export-btn">👥 المستخدمون</a>
-          <a href="/api/admin/export?type=visits" className="an__export-btn">📅 الزيارات</a>
-          <a href="/api/admin/export?type=referrals" className="an__export-btn">🎁 الإحالات</a>
-        </div>
+        <p className="an__export-sub">
+          حمّل البيانات كـ CSV — اختار الفترة اللي عايزها
+        </p>
+        <ExportPanel />
       </div>
     </section>
   )

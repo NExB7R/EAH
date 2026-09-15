@@ -66,3 +66,103 @@
   border-color: rgba(251, 191, 36, 0.4);
 }
 .an__kpi--warn .an__kpi-val { color: #FCD34D; }
+
+/* ═══ Export Panel ═══ */
+.exp { display: flex; flex-direction: column; gap: 18px; }
+.exp__range {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.exp__quick { display: flex; gap: 6px; flex-wrap: wrap; }
+.exp__quick-btn {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  color: #C4B5FD;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.exp__quick-btn:hover {
+  background: rgba(168, 85, 247, 0.18);
+  border-color: rgba(168, 85, 247, 0.5);
+  color: #fff;
+}
+.exp__quick-btn--ghost {
+  background: transparent;
+  color: #A29DB5;
+}
+.exp__dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.exp__date {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: #A29DB5;
+  font-weight: 800;
+}
+.exp__date input {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(10, 8, 18, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  color: #F4F2FA;
+  font-family: inherit;
+  font-size: 0.82rem;
+  color-scheme: dark;
+}
+.exp__date input:focus {
+  outline: none;
+  border-color: #A855F7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+.exp__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+}
+.exp__btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  color: #F4F2FA;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.exp__btn:hover {
+  background: rgba(168, 85, 247, 0.14);
+  border-color: rgba(168, 85, 247, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(168, 85, 247, 0.18);
+}
+.exp__arrow {
+  color: #A855F7;
+  font-weight: 900;
+  transition: transform 0.22s;
+}
+.exp__btn:hover .exp__arrow { transform: translateY(2px); }
+
+@media (max-width: 520px) {
+  .exp__dates { grid-template-columns: 1fr; }
+  .exp__grid { grid-template-columns: 1fr; }
+}
