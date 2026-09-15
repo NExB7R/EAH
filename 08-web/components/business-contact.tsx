@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { getClientToken } from '@/lib/admin/visitor-hash'
 import './business-contact.css'
+import RequireAuth from './require-auth'
 
 type ContactMethod = {
   method_type: string

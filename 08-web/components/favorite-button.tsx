@@ -14,6 +14,7 @@ export default function FavoriteButton({
   const [active, setActive] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [needsAuth, setNeedsAuth] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -21,7 +22,11 @@ export default function FavoriteButton({
     let alive = true
     void (async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user || !alive) return
+      if (!alive) return
+      if (!user) {
+        setNeedsAuth(true)
+        return
+      }
       const { data } = await supabase
         .from('favorites')
         .select('id')
@@ -38,12 +43,18 @@ export default function FavoriteButton({
     e.stopPropagation()
     if (busy || !mounted) return
 
+    if (needsAuth) {
+      // نودّي المستخدم للتسجيل
+      const next = typeof window !== 'undefined' ? window.location.pathname : '/'
+      window.location.href = `/auth?next=${encodeURIComponent(next)}`
+      return
+    }
+
     const willBeActive = !active
-    // Optimistic UI
     setActive(willBeActive)
     setBusy(true)
 
-    // Offline — enqueue + return
+    // Offline — enqueue
     if (typeof navigator !== 'undefined' && !navigator.onLine) {
       try {
         await enqueue({
@@ -54,7 +65,6 @@ export default function FavoriteButton({
         })
         window.dispatchEvent(new CustomEvent('eah:queue-updated'))
       } catch {
-        // rollback on failure
         setActive(!willBeActive)
       } finally {
         setBusy(false)
@@ -62,29 +72,27 @@ export default function FavoriteButton({
       return
     }
 
-    // Online — call Supabase directly
+    // Online — direct
     try {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
-        window.location.href = '/auth'
+        setNeedsAuth(true)
+        setActive(!willBeActive)
         return
       }
-
       if (willBeActive) {
         await supabase.from('favorites').insert({ user_id: user.id, business_id: businessId })
       } else {
         await supabase.from('favorites').delete().eq('user_id', user.id).eq('business_id', businessId)
       }
     } catch {
-      // network error mid-flight — enqueue
       await enqueue({
         type: 'favorite',
         endpoint: '/api/favorites',
         method: willBeActive ? 'POST' : 'DELETE',
         payload: { business_id: businessId, action: willBeActive ? 'add' : 'remove' },
       })
-      window.dispatchEvent(new CustomEvent('eah:queue-updated'))
     } finally {
       setBusy(false)
     }
@@ -99,7 +107,7 @@ export default function FavoriteButton({
       onClick={toggle}
       disabled={isDisabled}
       aria-label={active ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}
-      title={active ? 'في المفضلة' : 'أضف للمفضلة'}
+      title={needsAuth ? 'سجّل عشان تضيف للمفضلة' : active ? 'في المفضلة' : 'أضف للمفضلة'}
     >
       {active ? '❤️' : '🤍'}
     </button>

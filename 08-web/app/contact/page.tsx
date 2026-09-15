@@ -31,7 +31,7 @@ const CHANNELS = [
 ]
 
 const TOPICS = [
-  { emoji: '🍽️', title: 'أنا صاحب مطعم',    desc: 'عايز أضيف مطعمي أو أعلن معاكم', href: '/merchant/apply' },
+  { emoji: '🏪', title: 'أنا صاحب نشاط',      desc: 'مطعم، صيدلية، ماركت، توصيل — سجّل نشاطك', href: '/merchant/apply' },
   { emoji: '📢', title: 'إعلانات',            desc: 'عايز أعلن على المنصة',         href: '/advertise' },
   { emoji: '🐛', title: 'مشكلة تقنية',       desc: 'لقيت حاجة مش شغالة',           href: 'https://wa.me/201012892806' },
   { emoji: '💡', title: 'اقتراح أو فكرة',    desc: 'عندك فكرة تحسّن EAH',          href: 'https://wa.me/201012892806' },
