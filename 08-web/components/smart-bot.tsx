@@ -16,12 +16,24 @@ import {
 import './smart-bot.css'
 
 export default function SmartBot() {
+  const [mounted, setMounted] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // فحص المسار — لا يظهر في admin/merchant studio
+  useEffect(() => {
+    setMounted(true)
+    if (typeof window === 'undefined') return
+    const p = window.location.pathname
+    if (p.startsWith('/admin') || p.startsWith('/studio') || p.startsWith('/merchant')) {
+      setHidden(true)
+    }
+  }, [])
 
   // تحميل المحادثة القديمة عند الفتح
   useEffect(() => {
@@ -55,6 +67,22 @@ export default function SmartBot() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }, [messages, typing])
+
+  // 💡 auto-hint: بعد 30 ثانية بدون تفاعل، نظهر فقاعة (مرة واحدة لكل session)
+  const [hint, setHint] = useState(false)
+  useEffect(() => {
+    if (open) { setHint(false); return }
+    if (typeof window === 'undefined') return
+    if (sessionStorage.getItem('eah-bot-hint-shown') === '1') return
+
+    const t = setTimeout(() => {
+      setHint(true)
+      sessionStorage.setItem('eah-bot-hint-shown', '1')
+      setTimeout(() => setHint(false), 8000)
+    }, 30_000)
+
+    return () => clearTimeout(t)
+  }, [open])
 
   function send(text: string) {
     const t = text.trim()
@@ -110,8 +138,27 @@ export default function SmartBot() {
     ])
   }
 
+  if (!mounted || hidden) return null
+
   return (
     <>
+      {/* Auto hint bubble */}
+      {hint && !open && (
+        <button
+          type="button"
+          className="sb-hint"
+          onClick={() => { setOpen(true); setHint(false) }}
+          aria-label="افتح المساعد"
+        >
+          <span className="sb-hint__icon">💬</span>
+          <span className="sb-hint__text">محتاج مساعدة؟</span>
+          <span
+            className="sb-hint__close"
+            onClick={(e) => { e.stopPropagation(); setHint(false) }}
+          >×</span>
+        </button>
+      )}
+
       {/* Floating trigger */}
       <button
         type="button"
