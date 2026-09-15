@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import HomeDynamic from '@/components/home-dynamic'
 import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
@@ -10,7 +11,9 @@ export default async function Page() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <SidePanel />
+      <Suspense fallback={null}>
+        <SidePanel />
+      </Suspense>
       <BackToTop />
       <HomeDynamic />
       <SiteFooter />

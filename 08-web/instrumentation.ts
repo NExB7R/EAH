@@ -1,4 +1,10 @@
 export async function register() {
+  if (typeof process !== 'undefined' && typeof process.setMaxListeners === 'function') {
+    process.setMaxListeners(50)
+  }
+
+  if (process.env.NODE_ENV !== 'production') return
+
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     await import('./sentry.server.config')
   }
@@ -7,11 +13,10 @@ export async function register() {
   }
 }
 
-export const onRequestError = async (
-  err: unknown,
-  request: { path: string; method: string; headers: Record<string, string | undefined> },
-  context: { routerKind: string; routePath: string; routeType: string }
-) => {
+export async function onRequestError(
+  ...args: Parameters<typeof import('@sentry/nextjs').captureRequestError>
+) {
+  if (process.env.NODE_ENV !== 'production') return
   const Sentry = await import('@sentry/nextjs')
-  Sentry.captureRequestError(err, request, context)
+  Sentry.captureRequestError(...args)
 }

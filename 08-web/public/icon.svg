@@ -1,11 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#8B5CF6"/>
-      <stop offset="1" stop-color="#A855F7"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0F0A1E"/>
+      <stop offset="100%" stop-color="#050208"/>
     </linearGradient>
+    <linearGradient id="crown" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFBEB"/>
+      <stop offset="55%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#92400E"/>
+    </linearGradient>
+    <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#C084FC"/>
+      <stop offset="50%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#6B21FF"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
   </defs>
-  <rect width="128" height="128" rx="32" fill="#07060B"/>
-  <rect x="10" y="10" width="108" height="108" rx="26" fill="url(#g)"/>
-  <text x="64" y="86" text-anchor="middle" font-family="Cairo, Arial, Helvetica, sans-serif" font-size="72" font-weight="900" fill="#0A0710">E</text>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <rect x="2" y="2" width="124" height="124" rx="26" fill="none" stroke="#A855F7" stroke-opacity="0.3" stroke-width="1.5"/>
+  <g filter="url(#glow)">
+    <path d="M36 44 L28 26 L46 34 L64 16 L82 34 L100 26 L92 44 L92 54 L36 54 Z" 
+          fill="url(#crown)" stroke="#FFFBEB" stroke-width="1.2" stroke-linejoin="round"/>
+    <circle cx="64" cy="19" r="2.6" fill="#E879F9"/>
+    <circle cx="28.5" cy="27" r="1.9" fill="#E879F9"/>
+    <circle cx="99.5" cy="27" r="1.9" fill="#E879F9"/>
+    <circle cx="51" cy="46" r="1" fill="#E879F9"/>
+    <circle cx="64" cy="46" r="1.2" fill="#E879F9"/>
+    <circle cx="77" cy="46" r="1" fill="#E879F9"/>
+  </g>
+  <text x="64" y="100" text-anchor="middle" 
+        font-family="Cairo, 'Segoe UI', Arial, Helvetica, sans-serif" 
+        font-size="44" font-weight="900" 
+        letter-spacing="1"
+        fill="url(#neon)"
+        stroke="#A855F7" stroke-width="0.4" stroke-opacity="0.5">EAH</text>
 </svg>

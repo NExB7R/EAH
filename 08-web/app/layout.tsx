@@ -44,6 +44,27 @@ export const metadata: Metadata = {
   description:
     'EAH منصة اكتشاف محلية تبدأ من شبين القناطر: مطاعم، صيدليات، توصيل وعروض مناسبة ليك.',
   metadataBase: new URL(siteUrl),
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/icon.svg',
+  },
+  manifest: '/manifest.webmanifest',
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/icon.svg',
+  },
+  manifest: '/manifest.webmanifest',
   alternates: { canonical: '/' },
   formatDetection: { telephone: false, email: false, address: false },
   other: {

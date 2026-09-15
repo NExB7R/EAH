@@ -31,17 +31,21 @@ export default function SidePanel() {
   useEffect(() => {
     setMounted(true)
 
-    // لو المستخدم قفلها قبل كده → نتذكر
-    const wasClosed = localStorage.getItem('eah-sidepanel-closed') === '1'
-    if (wasClosed) {
-      setClosed(true)
-      return
+    // نعرض البانل دايماً — إلا لو المستخدم قفلها آخر ساعة
+    const closedAt = localStorage.getItem('eah-sidepanel-closed-at')
+    if (closedAt) {
+      const elapsed = Date.now() - Number(closedAt)
+      if (elapsed < 1000 * 60 * 60) {  // ساعة
+        setClosed(true)
+      } else {
+        localStorage.removeItem('eah-sidepanel-closed-at')
+      }
     }
 
-    // اسمع لأي dispatcher
+    // اسمع للفتح اليدوي
     const onOpen = () => {
       setClosed(false)
-      localStorage.setItem('eah-sidepanel-closed', '0')
+      localStorage.removeItem('eah-sidepanel-closed-at')
     }
     window.addEventListener('eah:open-sidepanel', onOpen)
     return () => window.removeEventListener('eah:open-sidepanel', onOpen)
@@ -90,7 +94,7 @@ export default function SidePanel() {
 
   const handleClose = () => {
     setClosed(true)
-    localStorage.setItem('eah-sidepanel-closed', '1')
+    localStorage.setItem('eah-sidepanel-closed-at', String(Date.now()))
   }
 
   if (!mounted || closed || !data) return null

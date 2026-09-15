@@ -1,5 +1,6 @@
-import { withSentryConfig } from '@sentry/nextjs/config'
 import type { NextConfig } from 'next'
+
+const isProd = process.env.NODE_ENV === 'production'
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -79,8 +80,7 @@ const nextConfig: NextConfig = {
           { key: 'Service-Worker-Allowed', value: '/' },
         ],
       },
-      // في production فقط — في dev بيكسر Next.js
-      ...(process.env.NODE_ENV === 'production'
+      ...(isProd
         ? [{
             source: '/_next/static/(.*)',
             headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
@@ -90,13 +90,25 @@ const nextConfig: NextConfig = {
   },
 }
 
-const sentryOptions = {
-  org: 'cairo-3a',
-  project: 'javascript-nextjs',
-  silent: !process.env.CI,
-  widenClientFileUpload: true,
-  tunnelRoute: '/monitoring',
-  hideSourceMaps: true,
+// ═══════════════════════════════════════════════════════════
+// Sentry is applied ONLY in production builds.
+// In dev, this avoids:
+//   - webpack Sentry plugin overhead (30s+ startup)
+//   - tunnel /monitoring route noise
+//   - startup warnings
+// ═══════════════════════════════════════════════════════════
+if (!isProd) {
+  module.exports = nextConfig
+} else {
+  const { withSentryConfig } = require('@sentry/nextjs/config')
+  module.exports = withSentryConfig(nextConfig, {
+    org: 'cairo-3a',
+    project: 'javascript-nextjs',
+    silent: true,
+    widenClientFileUpload: true,
+    tunnelRoute: '/monitoring',
+    hideSourceMaps: true,
+  })
 }
 
-export default withSentryConfig(nextConfig, sentryOptions)
+export default nextConfig
