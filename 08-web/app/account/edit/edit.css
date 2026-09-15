@@ -162,3 +162,96 @@
   border-color:#A855F7; color:#F5F3FF;
   box-shadow:0 0 0 1px #A855F7, 0 8px 24px rgba(139,92,246,.3);
 }
+
+
+/* Status cards */
+.edit__status {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.edit__status-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+}
+.edit__status-card.is-verified {
+  background: rgba(74, 222, 128, 0.06);
+  border-color: rgba(74, 222, 128, 0.3);
+}
+.edit__status-card--admin {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.08), rgba(168, 85, 247, 0.05));
+  border-color: rgba(232, 199, 154, 0.35);
+}
+.edit__status-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 1.3rem;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  flex-shrink: 0;
+}
+.edit__status-card.is-verified .edit__status-icon {
+  background: rgba(74, 222, 128, 0.18);
+  border-color: rgba(74, 222, 128, 0.4);
+}
+.edit__status-card--admin .edit__status-icon {
+  background: rgba(232, 199, 154, 0.15);
+  border-color: rgba(232, 199, 154, 0.5);
+}
+.edit__status-card > div { flex: 1; min-width: 0; }
+.edit__status-title {
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  display: block;
+  margin-bottom: 2px;
+}
+.edit__status-sub {
+  font-size: 0.76rem;
+  color: #A29DB5;
+}
+.edit__status-btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.edit__status-btn:hover { transform: translateY(-1px); }
+
+.edit__section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit__footer-note {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.16);
+}
+.edit__footer-note span { font-size: 1.2rem; }
+.edit__footer-note p {
+  font-size: 0.78rem;
+  color: #A29DB5;
+  margin: 0;
+  line-height: 1.6;
+}
