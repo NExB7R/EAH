@@ -35,6 +35,7 @@ export default function NotificationsPanel({
   initialPrefs,
   role,
   isPremium = false,
+  adminMode = false,
 }: Props) {
   const [prefs, setPrefs] = useState<Record<string, boolean>>(initialPrefs)
   const [quiet, setQuiet] = useState<QuietHours>({
@@ -127,7 +128,8 @@ export default function NotificationsPanel({
         })}
       </div>
 
-      {/* Quiet hours */}
+      {/* Quiet hours — مخفية في adminMode */}
+      {!adminMode && (
       <div className="np__section">
         <h3 className="np__section-title">
           <span>🌙</span>
@@ -175,6 +177,7 @@ export default function NotificationsPanel({
           </div>
         )}
       </div>
+      )}
 
       {/* Save */}
       <div className="np__footer">
