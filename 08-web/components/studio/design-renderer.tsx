@@ -54,15 +54,41 @@ export default function DesignRenderer({ initial, businesses = [] }: Props) {
   )
 }
 
+function buildStyle(p: Record<string, unknown>): React.CSSProperties {
+  const style: React.CSSProperties = {}
+  if (typeof p.padding === 'number') {
+    style.paddingTop = p.padding
+    style.paddingBottom = p.padding
+  }
+  if (typeof p.margin === 'number') {
+    style.marginTop = p.margin
+    style.marginBottom = p.margin
+  }
+  if (typeof p.align === 'string' && ['right', 'center', 'left'].includes(p.align)) {
+    style.textAlign = p.align as 'right' | 'center' | 'left'
+  }
+  if (typeof p.font === 'string' && p.font) {
+    style.fontFamily = `var(--font-${p.font.toLowerCase().replace(/ /g, '-')}, ${p.font}, system-ui)`
+  }
+  if (typeof p.accent === 'string' && p.accent) {
+    ;(style as Record<string, string>)['--accent'] = p.accent
+  }
+  if (typeof p.bg === 'string' && p.bg) {
+    style.background = p.bg
+  }
+  return style
+}
+
 function SectionView({ section, businesses }: { section: Section; businesses: Business[] }) {
   const p = section.props as Record<string, unknown>
+  const style = buildStyle(p)
   const count = typeof p.count === 'number' ? p.count : 6
   const slice = businesses.slice(0, count)
 
   switch (section.type) {
     case 'hero':
       return (
-        <section className="dr-hero">
+        <section className="dr-hero" style={style}>
           <h1 className="dr-hero__title">{String(p.title ?? '')}</h1>
           {p.subtitle != null && <p className="dr-hero__sub">{String(p.subtitle)}</p>}
           {p.ctaText != null && (
@@ -77,7 +103,7 @@ function SectionView({ section, businesses }: { section: Section; businesses: Bu
     case 'trending':
     case 'offers':
       return (
-        <section className="dr-section">
+        <section className="dr-section" style={style}>
           <header className="dr-section__head">
             <h2 className="dr-section__title">{String(p.title ?? '')}</h2>
             {p.subtitle != null && (
@@ -101,7 +127,7 @@ function SectionView({ section, businesses }: { section: Section; businesses: Bu
 
     case 'categories':
       return (
-        <section className="dr-section">
+        <section className="dr-section" style={style}>
           <header className="dr-section__head">
             <h2 className="dr-section__title">{String(p.title ?? 'بتدور على إيه؟')}</h2>
           </header>
@@ -118,7 +144,7 @@ function SectionView({ section, businesses }: { section: Section; businesses: Bu
 
     case 'cta':
       return (
-        <section className="dr-cta">
+        <section className="dr-cta" style={style}>
           <h2 className="dr-cta__title">{String(p.title ?? '')}</h2>
           {p.subtitle != null && <p className="dr-cta__sub">{String(p.subtitle)}</p>}
           {p.ctaText != null && (
@@ -133,14 +159,14 @@ function SectionView({ section, businesses }: { section: Section; businesses: Bu
       return (
         <div
           className="dr-banner"
-          style={{ background: String(p.color ?? 'rgba(168,85,247,0.2)') }}
+          style={{ ...style, background: String(p.color ?? 'rgba(168,85,247,0.2)') }}
         >
           {String(p.text ?? '')}
         </div>
       )
 
     case 'footer':
-      return null // SiteFooter handles this
+      return null
 
     default:
       return null
