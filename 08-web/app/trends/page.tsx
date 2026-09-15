@@ -1,14 +1,20 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase-server'
-import { getViewStats } from '@/lib/real-stats'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
+import BackToTop from '@/components/back-to-top'
+import EahLogo from '@/components/eah-logo'
+import { createClient } from '@/lib/supabase-server'
+import { getPublishedBusinesses } from '@/lib/data'
+import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
+import { generateMockStats } from '@/lib/mock-stats'
+import { getViewStats } from '@/lib/real-stats'
 import './trends.css'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 120
+
 export const metadata = {
   title: 'الترندات',
-  description: 'الأماكن الأكثر رواجًا في شبين القناطر دلوقتي — بناءً على الزيارات والتقييمات والعروض.',
+  description: 'أحدث الترندات في شبين القناطر — الأماكن الأكثر تفاعلاً وزيارات.',
 }
 
 const TYPE_EMOJI: Record<string, string> = {
@@ -19,194 +25,162 @@ const TYPE_EMOJI: Record<string, string> = {
 }
 
 const TYPE_LABEL: Record<string, string> = {
-  restaurant: 'مطعم',
-  pharmacy: 'صيدلية',
+  restaurant: 'مطاعم',
+  pharmacy: 'صيدليات',
   supermarket: 'ماركت',
   delivery_office: 'توصيل',
 }
 
-type Trend = {
-  id: string
-  slug: string
-  name: string
-  business_type: string
-  area: string | null
-  hook: string | null
-  is_featured: boolean
-  score: number
-  views: number
-  ageDays: number
-}
+export default async function TrendsPage() {
+  const businesses = await getPublishedBusinesses(50)
+  const realStats = await getViewStats(businesses.map((b) => b.slug), 7)
 
-const TABS = [
-  { key: 'all', label: '🔥 الكل' },
-  { key: 'restaurant', label: '🍽️ مطاعم' },
-  { key: 'pharmacy', label: '💊 صيدليات' },
-  { key: 'supermarket', label: '🛒 ماركت' },
-  { key: 'delivery_office', label: '🛵 توصيل' },
-]
-
-export default async function TrendsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ type?: string }>
-}) {
-  const sp = await searchParams
-  const typeFilter = sp.type && TYPE_EMOJI[sp.type] ? sp.type : null
-
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('businesses')
-    .select('id,slug,name,business_type,area,hook,is_featured,created_at')
-    .eq('is_published', true)
-    .limit(60)
-
-  const businesses = (data ?? []) as Array<{
-    id: string
-    slug: string
-    name: string
-    business_type: string
-    area: string | null
-    hook: string | null
-    is_featured: boolean
-    created_at: string
-  }>
-
-  // View stats (real)
-  const statsMap = await getViewStats(businesses.map((b) => b.slug), 7)
-
-  // Composite score: views × 0.6 + featured × 0.25 + freshness × 0.15
-  const now = Date.now()
-  const trends: Trend[] = businesses.map((b) => {
-    const stat = statsMap.get(b.slug)
-    const views = stat?.views ?? 0
-    const ageDays = Math.floor((now - new Date(b.created_at).getTime()) / 86400000)
-    const freshness = ageDays < 30 ? (30 - ageDays) / 30 : 0
-    const score =
-      views * 0.6 +
-      (b.is_featured ? 1 : 0) * 30 +
-      freshness * 15
+  const withStats = businesses.map((b) => {
+    const real = realStats.get(b.slug)
     return {
-      id: b.id,
-      slug: b.slug,
-      name: b.name,
-      business_type: b.business_type,
-      area: b.area,
-      hook: b.hook,
-      is_featured: b.is_featured,
-      score,
-      views,
-      ageDays,
+      ...b,
+      ...generateMockStats(
+        { slug: b.slug, name: b.name, featured: b.badge === 'مميز' },
+        real ? { recentViews: real.views } : undefined,
+      ),
     }
   })
 
-  let filtered = typeFilter ? trends.filter((t) => t.business_type === typeFilter) : trends
-  filtered = filtered.sort((a, b) => b.score - a.score)
-  const list = filtered.slice(0, 30)
+  const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
+  const diversified = diversifyByCategory(ranked, 'type')
+  const top3 = diversified.slice(0, 3)
+  const rest = diversified.slice(3, 20)
 
-  const podium = list.slice(0, 3)
-  const rest = list.slice(3)
-
-  const counts: Record<string, number> = { all: trends.length }
-  for (const t of trends) {
-    counts[t.business_type] = (counts[t.business_type] ?? 0) + 1
-  }
+  // Category groups
+  const restaurants = diversified.filter((b) => b.type === 'restaurant').slice(0, 5)
+  const pharmacies = diversified.filter((b) => b.type === 'pharmacy').slice(0, 5)
+  const markets = diversified.filter((b) => b.type === 'supermarket').slice(0, 5)
+  const delivery = diversified.filter((b) => b.type === 'delivery_office').slice(0, 5)
 
   return (
     <>
       <FloatingCapsuleHeader />
+      <BackToTop />
       <main className="tr">
-        <section className="tr-hero">
-          <span className="tr-hero__kicker">EAH TRENDS</span>
-          <h1 className="tr-hero__title">🔥 الترندات</h1>
-          <p className="tr-hero__lead">
-            الأماكن اللي بتشد الناس دلوقتي — بناءً على زيارات حقيقية، تقييمات، وعروض نشطة.
+        {/* Hero */}
+        <section className="tr__hero">
+          <div className="tr__hero-glow" aria-hidden />
+          <div className="tr__logo">
+            <EahLogo size="md" variant="full" href="/" />
+          </div>
+          <span className="tr__kicker">TRENDING NOW</span>
+          <h1 className="tr__title">📈 الترندات</h1>
+          <p className="tr__sub">
+            الأماكن الأكثر تفاعلاً وزيارات في آخر 7 أيام
           </p>
         </section>
 
-        <nav className="tr-tabs">
-          {TABS.map((t) => {
-            const cnt = t.key === 'all' ? counts.all : counts[t.key] ?? 0
-            const active = (typeFilter ?? 'all') === t.key
-            return (
-              <Link
-                key={t.key}
-                href={t.key === 'all' ? '/trends' : `/trends?type=${t.key}`}
-                className={`tr-tab ${active ? 'is-active' : ''}`}
-              >
-                {t.label}
-                <span className="tr-tab__badge">{cnt}</span>
+        {/* Podium — Top 3 */}
+        {top3.length >= 3 && (
+          <section className="tr__podium" aria-label="الأكثر رواجاً">
+            {/* Rank 2 */}
+            <article className="tr__podium-item tr__podium-item--2">
+              <span className="tr__podium-rank">2</span>
+              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[1].type] ?? '📍'}</span>
+              <h3 className="tr__podium-name">{top3[1].name}</h3>
+              <p className="tr__podium-type">{TYPE_LABEL[top3[1].type] ?? top3[1].type}</p>
+              <Link href={`/businesses/${top3[1].slug}`} className="tr__podium-link">
+                شوفه ←
               </Link>
-            )
-          })}
-        </nav>
+            </article>
 
-        {list.length === 0 ? (
-          <div className="tr-empty">
-            <span className="tr-empty__emoji">📭</span>
-            <h2 className="tr-empty__title">لسه مفيش ترندات هنا</h2>
-            <p className="tr-empty__text">
-              {typeFilter ? 'جرّب فئة تانية' : 'لسه مفيش بيانات كفاية — قريب جدًا!'}
-            </p>
-          </div>
-        ) : (
-          <>
-            {podium.length > 0 && (
-              <section className="tr-podium">
-                {podium.map((t, i) => {
-                  const medals = ['🥇', '🥈', '🥉']
-                  const rankClasses = ['is-gold', 'is-silver', 'is-bronze']
-                  return (
+            {/* Rank 1 */}
+            <article className="tr__podium-item tr__podium-item--1">
+              <span className="tr__podium-crown">👑</span>
+              <span className="tr__podium-rank">1</span>
+              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[0].type] ?? '📍'}</span>
+              <h3 className="tr__podium-name">{top3[0].name}</h3>
+              <p className="tr__podium-type">{TYPE_LABEL[top3[0].type] ?? top3[0].type}</p>
+              <Link href={`/businesses/${top3[0].slug}`} className="tr__podium-link">
+                شوفه ←
+              </Link>
+            </article>
+
+            {/* Rank 3 */}
+            <article className="tr__podium-item tr__podium-item--3">
+              <span className="tr__podium-rank">3</span>
+              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[2].type] ?? '📍'}</span>
+              <h3 className="tr__podium-name">{top3[2].name}</h3>
+              <p className="tr__podium-type">{TYPE_LABEL[top3[2].type] ?? top3[2].type}</p>
+              <Link href={`/businesses/${top3[2].slug}`} className="tr__podium-link">
+                شوفه ←
+              </Link>
+            </article>
+          </section>
+        )}
+
+        {/* Trending list */}
+        {rest.length > 0 && (
+          <section className="tr__section">
+            <header className="tr__section-head">
+              <h2 className="tr__section-title">🔥 الترند الأسبوع</h2>
+              <p className="tr__section-sub">أماكن بتاخد تفاعل متزايد</p>
+            </header>
+            <div className="tr__list">
+              {rest.map((b, i) => (
+                <Link
+                  key={b.slug}
+                  href={`/businesses/${b.slug}`}
+                  className="tr__list-item"
+                  style={{ animationDelay: `${i * 30}ms` }}
+                >
+                  <span className="tr__list-rank">#{i + 4}</span>
+                  <span className="tr__list-emoji">{TYPE_EMOJI[b.type] ?? '📍'}</span>
+                  <div className="tr__list-body">
+                    <span className="tr__list-name">{b.name}</span>
+                    <span className="tr__list-type">{TYPE_LABEL[b.type] ?? b.type}</span>
+                  </div>
+                  <span className="tr__list-arrow">←</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Per-category */}
+        <div className="tr__categories">
+          {[
+            { label: '🍽️ ترند المطاعم', items: restaurants, href: '/explore?type=restaurant' },
+            { label: '💊 ترند الصيدليات', items: pharmacies, href: '/explore?type=pharmacy' },
+            { label: '🛒 ترند الماركت', items: markets, href: '/explore?type=supermarket' },
+            { label: '🛵 ترند التوصيل', items: delivery, href: '/explore?type=delivery_office' },
+          ]
+            .filter((c) => c.items.length > 0)
+            .map((c) => (
+              <section key={c.label} className="tr__cat">
+                <header className="tr__cat-head">
+                  <h3 className="tr__cat-title">{c.label}</h3>
+                  <Link href={c.href} className="tr__cat-link">الكل ←</Link>
+                </header>
+                <div className="tr__cat-list">
+                  {c.items.map((b) => (
                     <Link
-                      key={t.id}
-                      href={`/businesses/${t.slug}`}
-                      className={`tr-pod tr-pod--${i + 1} ${rankClasses[i]}`}
+                      key={b.slug}
+                      href={`/businesses/${b.slug}`}
+                      className="tr__cat-item"
                     >
-                      <span className="tr-pod__medal">{medals[i]}</span>
-                      <span className="tr-pod__emoji">{TYPE_EMOJI[t.business_type] ?? '🏪'}</span>
-                      <h3 className="tr-pod__name">{t.name}</h3>
-                      <span className="tr-pod__meta">
-                        {TYPE_LABEL[t.business_type] ?? t.business_type}
-                        {t.area ? ` • ${t.area}` : ''}
-                      </span>
-                      {t.hook && <p className="tr-pod__hook">✨ {t.hook}</p>}
-                      <div className="tr-pod__stats">
-                        <span className="tr-pod__views">👁 {t.views}</span>
-                        {t.is_featured && <span className="tr-pod__star">⭐ مميز</span>}
-                        {t.ageDays < 30 && <span className="tr-pod__new">🌱 جديد</span>}
-                      </div>
+                      <span className="tr__cat-name">{b.name}</span>
+                      <span className="tr__cat-arrow">←</span>
                     </Link>
-                  )
-                })}
+                  ))}
+                </div>
               </section>
-            )}
+            ))}
+        </div>
 
-            {rest.length > 0 && (
-              <ol className="tr-list">
-                {rest.map((t, i) => (
-                  <li key={t.id} className="tr-item">
-                    <Link href={`/businesses/${t.slug}`} className="tr-item__link">
-                      <span className="tr-item__rank">{i + 4}</span>
-                      <span className="tr-item__emoji">
-                        {TYPE_EMOJI[t.business_type] ?? '🏪'}
-                      </span>
-                      <div className="tr-item__info">
-                        <span className="tr-item__name">{t.name}</span>
-                        <span className="tr-item__meta">
-                          {TYPE_LABEL[t.business_type] ?? t.business_type}
-                          {t.area ? ` • ${t.area}` : ''}
-                        </span>
-                      </div>
-                      <div className="tr-item__stats">
-                        <span className="tr-item__views">👁 {t.views}</span>
-                        {t.is_featured && <span className="tr-item__star">⭐</span>}
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            )}
-          </>
+        {/* Empty state */}
+        {diversified.length === 0 && (
+          <div className="tr__empty">
+            <span className="tr__empty-emoji">📊</span>
+            <h3>مفيش بيانات كفاية للترند دلوقتي</h3>
+            <p>ارجعلنا قريب — الترندات بتتجدد كل يوم.</p>
+            <Link href="/explore" className="tr__empty-btn">اكتشف الأماكن</Link>
+          </div>
         )}
       </main>
       <SiteFooter />

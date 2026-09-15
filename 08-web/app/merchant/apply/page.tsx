@@ -47,7 +47,7 @@ async function submitApplication(formData: FormData) {
 
 const STEPS = [
   { n: 1, emoji: '📝', title: 'قدم الطلب',   desc: 'اسم النشاط + نوعه + نبذة' },
-  { n: 2, emoji: '🔍', title: 'مراجعة',       desc: 'فريق EAH بيراجع الطلب' },
+  { n: 2, emoji: '🔍', title: 'مراجعة سريعة', desc: 'فريق EAH بيراجع خلال 24 ساعة' },
   { n: 3, emoji: '🏪', title: 'لوحة النشاط', desc: 'تتحول لـ Merchant وتدير مكانك' },
 ]
 
