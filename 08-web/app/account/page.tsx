@@ -7,7 +7,6 @@ import { ROLE_LABEL } from '@/lib/profile-presets'
 import RoyalAvatar from '@/components/royal-avatar'
 import EnablePushButton from '@/components/enable-push-button'
 import '@/components/royal-avatar.css'
-import '@/components/verified-badge.css'
 import './account.css'
 
 export const dynamic = 'force-dynamic'

@@ -16,7 +16,6 @@ import SmartBot from '@/components/smart-bot'
 import '@/components/install-pwa-button.css'
 import '@/components/install-app-button.css'
 import '@/components/share-button.css'
-import '@/components/verified-badge.css'
 import '@/components/offline-queue-mount.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
