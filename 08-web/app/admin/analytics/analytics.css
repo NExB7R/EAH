@@ -54,3 +54,15 @@
   box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35);
 }
 .ana-filter:disabled { opacity: 0.6; cursor: not-allowed; }
+
+
+/* KPI variants */
+.an__kpi--accent {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(107, 33, 255, 0.03));
+  border-color: rgba(168, 85, 247, 0.28);
+}
+.an__kpi--warn {
+  background: rgba(251, 191, 36, 0.05);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+.an__kpi--warn .an__kpi-val { color: #FCD34D; }

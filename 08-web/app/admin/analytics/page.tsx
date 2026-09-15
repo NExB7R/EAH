@@ -84,11 +84,32 @@ export default async function AnalyticsPage({
   }))
 
   // ─── إحصائيات عامة ───
-  const [{ count: totalUsers }, { count: totalBiz }, { count: totalReviews }, { count: totalReferrals }] = await Promise.all([
+  const since7d = new Date(Date.now() - 7 * 86400000).toISOString()
+  const [
+    { count: totalUsers },
+    { count: totalBiz },
+    { count: totalReviews },
+    { count: totalReferrals },
+    { count: activeUsers7d },
+    { count: newUsers7d },
+    { count: pendingReviews },
+  ] = await Promise.all([
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase.from('businesses').select('*', { count: 'exact', head: true }),
     supabase.from('business_reviews').select('*', { count: 'exact', head: true }),
     supabase.from('referrals').select('*', { count: 'exact', head: true }),
+    supabase
+      .from('daily_visits')
+      .select('*', { count: 'exact', head: true })
+      .gte('visit_date', since7d.slice(0, 10)),
+    supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', since7d),
+    supabase
+      .from('business_reviews')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'pending'),
   ])
 
   return (
@@ -101,8 +122,15 @@ export default async function AnalyticsPage({
 
       <div className="an__kpis">
         <div className="an__kpi"><span className="an__kpi-emoji">👥</span><span className="an__kpi-val">{totalUsers ?? 0}</span><span className="an__kpi-label">مستخدم</span></div>
+        <div className="an__kpi an__kpi--accent"><span className="an__kpi-emoji">📈</span><span className="an__kpi-val">{newUsers7d ?? 0}</span><span className="an__kpi-label">جديد 7 أيام</span></div>
+        <div className="an__kpi an__kpi--accent"><span className="an__kpi-emoji">⚡</span><span className="an__kpi-val">{activeUsers7d ?? 0}</span><span className="an__kpi-label">زيارات 7 أيام</span></div>
         <div className="an__kpi"><span className="an__kpi-emoji">🏪</span><span className="an__kpi-val">{totalBiz ?? 0}</span><span className="an__kpi-label">نشاط</span></div>
         <div className="an__kpi"><span className="an__kpi-emoji">✍️</span><span className="an__kpi-val">{totalReviews ?? 0}</span><span className="an__kpi-label">تقييم</span></div>
+        <div className={`an__kpi ${(pendingReviews ?? 0) > 5 ? 'an__kpi--warn' : ''}`}>
+          <span className="an__kpi-emoji">⏳</span>
+          <span className="an__kpi-val">{pendingReviews ?? 0}</span>
+          <span className="an__kpi-label">قيد المراجعة</span>
+        </div>
         <div className="an__kpi"><span className="an__kpi-emoji">🎁</span><span className="an__kpi-val">{totalReferrals ?? 0}</span><span className="an__kpi-label">إحالة</span></div>
       </div>
 
