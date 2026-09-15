@@ -1,197 +1,243 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase-server'
-import { getActivePlans, formatDuration, formatPrice } from '@/lib/subscription'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import './pricing.css'
 
-export const dynamic = 'force-dynamic'
 export const metadata = {
   title: 'الباقات والأسعار',
-  description: 'ارقى لباقة مميزة في EAH — شارة ذهبية، أولوية في البحث، إعلانات، ومعرض عروض. ابدأ بتجربة 30 يوم مجانية.',
+  description:
+    'باقات EAH لأصحاب الأنشطة — مجانية، مميزة، وبوت الأوردرات. بدون عمولة على الطلبات.',
 }
 
-const FEATURE_LABEL: Record<string, string> = {
-  featured_badge: '⭐ شارة مميز ذهبية',
-  priority_ranking: '🚀 أولوية في البحث والترندات',
-  one_ad: '📢 إعلان واحد نشط',
-  three_ads: '📢 3 إعلانات نشطة',
-  unlimited_ads: '📢 إعلانات غير محدودة',
-  offers_gallery: '🎁 معرض عروض احترافي',
-  priority_support: '💎 دعم بأولوية',
+const WA_NUM = '201012892806'
+const WA = `https://wa.me/${WA_NUM}?text=${encodeURIComponent(
+  'مرحباً EAH، عايز أعرف تفاصيل الباقات لأصحاب الأنشطة'
+)}`
+
+type Plan = {
+  key: string
+  emoji: string
+  name: string
+  tagline: string
+  price: string
+  priceHint?: string
+  highlight?: boolean
+  cta: string
+  ctaHref: string
+  ctaStyle: 'primary' | 'ghost' | 'gold'
+  features: { ok: boolean; text: string }[]
 }
 
-const WHATSAPP = 'https://wa.me/201012892806'
+const PLANS: Plan[] = [
+  {
+    key: 'free',
+    emoji: '🎁',
+    name: 'المجانية',
+    tagline: 'لأي نشاط يبدأ معانا',
+    price: '0',
+    priceHint: 'مجاناً للأبد',
+    cta: 'ابدأ مجاناً',
+    ctaHref: '/merchant/apply',
+    ctaStyle: 'ghost',
+    features: [
+      { ok: true, text: 'ظهور كامل على المنصة' },
+      { ok: true, text: 'صور ومنيو' },
+      { ok: true, text: 'أرقام التواصل (واتساب/فون)' },
+      { ok: true, text: 'تقييمات من العملاء' },
+      { ok: true, text: 'رد على التقييمات' },
+      { ok: true, text: 'QR Code للنشاط' },
+      { ok: false, text: 'ظهور أول في البحث' },
+      { ok: false, text: 'بوت الأوردرات' },
+      { ok: false, text: 'إحصائيات متقدمة' },
+    ],
+  },
+  {
+    key: 'featured',
+    emoji: '⭐',
+    name: 'المميزة',
+    tagline: 'لنشاط عايز يكبر',
+    price: 'تواصل',
+    priceHint: 'تجربة 30 يوم مجاناً',
+    highlight: true,
+    cta: '💬 كلّمنا واتساب',
+    ctaHref: WA,
+    ctaStyle: 'primary',
+    features: [
+      { ok: true, text: 'كل مميزات المجانية' },
+      { ok: true, text: 'ظهور أول في البحث' },
+      { ok: true, text: 'شارة ذهبية مميزة' },
+      { ok: true, text: 'معرض عروض في الرئيسية' },
+      { ok: true, text: 'إشعارات فورية' },
+      { ok: true, text: 'إحصائيات متقدمة' },
+      { ok: true, text: 'أولوية في الدعم' },
+      { ok: false, text: 'بوت الأوردرات (منفصل)' },
+    ],
+  },
+  {
+    key: 'bot',
+    emoji: '🤖',
+    name: 'بوت الأوردرات',
+    tagline: 'استقبل الأوردرات على واتساب',
+    price: 'منفصل',
+    priceHint: 'يُضاف لأي باقة',
+    cta: '💬 كلّمنا واتساب',
+    ctaHref: WA,
+    ctaStyle: 'gold',
+    features: [
+      { ok: true, text: 'بوت يعرض الأوردرات' },
+      { ok: true, text: 'العميل يكتب الأوردر' },
+      { ok: true, text: 'إرسال تلقائي للواتساب' },
+      { ok: true, text: 'إشعار فوري لك' },
+      { ok: true, text: 'تتبع حالة الأوردر' },
+      { ok: true, text: 'بدون عمولة على الطلبات' },
+      { ok: true, text: 'يعمل على كل الأنشطة' },
+    ],
+  },
+]
 
-export default async function PricingPage() {
-  const plans = await getActivePlans()
-
+export default function PricingPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <main className="pricing">
-        <header className="pricing__hero">
-          <span className="pricing__kicker">PREMIUM PLANS</span>
-          <h1 className="pricing__title">الباقات والأسعار</h1>
-          <p className="pricing__lead">
-            ارقى بنشاطك لباقة مميزة، وخد شارة ذهبية، أولوية في البحث، وإعلانات ممولة.
-            <br />
-            <strong>ابدأ بتجربة 30 يوم مجانية — من غير أي التزام.</strong>
+      <main className="pr">
+        <section className="pr__hero">
+          <div className="pr__hero-glow" aria-hidden />
+          <span className="pr__kicker">PREMIUM PLANS</span>
+          <h1 className="pr__title">الباقات والأسعار</h1>
+          <p className="pr__lead">
+            اختار اللي يناسب نشاطك. بدون عمولة على الطلبات —{' '}
+            <strong>كل جنيه لنشاطك</strong>.
           </p>
-        </header>
+        </section>
 
-        {/* Trial highlight */}
-        <section className="pricing__trial">
-          <span className="pricing__trial-emoji">🎁</span>
+        <section className="pr__trial">
+          <span className="pr__trial-emoji">🎁</span>
           <div>
-            <h2 className="pricing__trial-title">تجربة 30 يوم مجانية</h2>
-            <p className="pricing__trial-body">
-              كل نشاط جديد يقدر يطلب عضوية مميزة. لو الأدمن وافق، بيبدأ 30 يوم تجريبي
-              بكل المميزات — من غير دفع. لو التجربة عجبتك، بتدفع وبتستمر. لو لأ، بترجع عضوية عادية.
+            <strong className="pr__trial-title">
+              تجربة مجانية 30 يوم على الباقة المميزة
+            </strong>
+            <p className="pr__trial-text">
+              سجّل نشاطك واستفيد من كل المميزات لمدة شهر كامل — بدون التزام،
+              بدون دفع مقدم.
             </p>
           </div>
         </section>
 
-        {/* Plans */}
-        {plans.length === 0 ? (
-          <div className="pricing__empty">
-            <p>لسه مفيش باقات متاحة. تواصل معنا للاستفسار.</p>
-          </div>
-        ) : (
-          <section className="pricing__grid">
-            {plans.map((p, i) => {
-              const highlighted = i === Math.floor(plans.length / 2)
-              return (
-                <article
-                  key={p.id}
-                  className={`pricing__plan ${highlighted ? 'pricing__plan--featured' : ''}`}
-                >
-                  {highlighted && (
-                    <span className="pricing__plan-ribbon">الأكثر اختيارًا</span>
-                  )}
-                  <div className="pricing__plan-head">
-                    <h3 className="pricing__plan-name">{p.name_ar}</h3>
-                    {p.description && (
-                      <p className="pricing__plan-desc">{p.description}</p>
-                    )}
-                  </div>
+        <section className="pr__plans">
+          {PLANS.map((p) => (
+            <article
+              key={p.key}
+              className={`pr__plan ${p.highlight ? 'pr__plan--highlight' : ''}`}
+            >
+              {p.highlight && (
+                <span className="pr__plan-badge">الأكثر طلباً</span>
+              )}
+              <span className="pr__plan-emoji">{p.emoji}</span>
+              <h3 className="pr__plan-name">{p.name}</h3>
+              <p className="pr__plan-tagline">{p.tagline}</p>
 
-                  <div className="pricing__plan-price">
-                    {p.price_egp === null ? (
-                      <span className="pricing__price-custom">تواصل معنا</span>
-                    ) : (
-                      <>
-                        <span className="pricing__price-num">
-                          {p.price_egp.toLocaleString('ar-EG')}
-                        </span>
-                        <span className="pricing__price-unit">ج.م</span>
-                      </>
-                    )}
-                    <span className="pricing__plan-duration">
-                      لمدة {formatDuration(p.duration_days)}
-                    </span>
-                  </div>
+              <div className="pr__price">
+                <span className="pr__price-value">{p.price}</span>
+                {p.priceHint && (
+                  <span className="pr__price-hint">{p.priceHint}</span>
+                )}
+              </div>
 
-                  {p.trial_days > 0 && (
-                    <div className="pricing__plan-trial">
-                      🎁 + {p.trial_days} يوم تجربة مجانية
-                    </div>
-                  )}
-
-                  <ul className="pricing__features">
-                    {p.features?.map((f) => (
-                      <li key={f} className="pricing__feature">
-                        <span className="pricing__feature-check">✓</span>
-                        <span>{FEATURE_LABEL[f] ?? f}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <a
-                    href={WHATSAPP}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={`pricing__btn ${highlighted ? 'pricing__btn--primary' : ''}`}
+              <ul className="pr__features">
+                {p.features.map((f, i) => (
+                  <li
+                    key={i}
+                    className={`pr__feature ${f.ok ? '' : 'pr__feature--off'}`}
                   >
-                    💬 اطلب الباقة
-                  </a>
-                </article>
-              )
-            })}
-          </section>
-        )}
+                    <span className="pr__feature-icon">
+                      {f.ok ? '✓' : '—'}
+                    </span>
+                    <span className="pr__feature-text">{f.text}</span>
+                  </li>
+                ))}
+              </ul>
 
-        {/* Why premium */}
-        <section className="pricing__why">
-          <h2 className="pricing__why-title">ليه تشترك في مميز؟</h2>
-          <div className="pricing__why-grid">
-            <div className="pricing__why-card">
-              <span className="pricing__why-emoji">⭐</span>
-              <h3>تظهر الأول</h3>
-              <p>الأنشطة المميزة بتظهر فوق في الرئيسية، صفحة الاكتشاف، والترندات.</p>
+              <a
+                href={p.ctaHref}
+                target={p.ctaHref.startsWith('http') ? '_blank' : undefined}
+                rel={p.ctaHref.startsWith('http') ? 'noreferrer' : undefined}
+                className={`pr__cta pr__cta--${p.ctaStyle}`}
+              >
+                {p.cta}
+              </a>
+            </article>
+          ))}
+        </section>
+
+        <section className="pr__compare">
+          <h2 className="pr__compare-title">ليه EAH مختلفة؟</h2>
+          <div className="pr__compare-grid">
+            <div className="pr__compare-item">
+              <span className="pr__compare-icon">💰</span>
+              <strong>بدون عمولة</strong>
+              <p>التطبيقات التانية بتاخد 15-25%. EAH بتسيبك بكل الأرباح.</p>
             </div>
-            <div className="pricing__why-card">
-              <span className="pricing__why-emoji">📢</span>
-              <h3>إعلانات فعّالة</h3>
-              <p>توصّل لعملاء أكتر عن طريق إعلانات داخل المنصة بدون أي تعقيد.</p>
+            <div className="pr__compare-item">
+              <span className="pr__compare-icon">🎁</span>
+              <strong>مجاني للعميل</strong>
+              <p>العميل مش بيدفع حاجة — إنت بس بتستفيد.</p>
             </div>
-            <div className="pricing__why-card">
-              <span className="pricing__why-emoji">🎁</span>
-              <h3>معرض عروض</h3>
-              <p>اعرض عروضك بشكل احترافي وواضح — جذاب للعميل ومُربح ليك.</p>
+            <div className="pr__compare-item">
+              <span className="pr__compare-icon">📍</span>
+              <strong>محلي بجد</strong>
+              <p>شبين القناطر + القرى حواليها. مش Cairo وخلاص.</p>
             </div>
-            <div className="pricing__why-card">
-              <span className="pricing__why-emoji">📊</span>
-              <h3>تقارير وإحصائيات</h3>
-              <p>اعرف كل حاجة عن نشاطك: مين زاره، ومين كلّمك، وأي عرض اشتغل أكتر.</p>
+            <div className="pr__compare-item">
+              <span className="pr__compare-icon">🤖</span>
+              <strong>بوت الأوردرات</strong>
+              <p>ميزة مفيش منافس بيقدمها في مصر بنفس السعر.</p>
             </div>
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="pricing__faq">
-          <h2 className="pricing__faq-title">أسئلة متكررة</h2>
-          <div className="pricing__faq-list">
-            <details className="pricing__faq-item">
-              <summary>هل التجربة المجانية بتحتاج دفع؟</summary>
-              <p>لأ. لو الأدمن وافق، بتاخد 30 يوم تجربة كامل بكل المميزات من غير أي دفع. الدفع بيبدأ بعد ما التجربة تخلص وانت توافق.</p>
+        <section className="pr__faq">
+          <h2 className="pr__faq-title">أسئلة شائعة</h2>
+          {[
+            {
+              q: 'هل في عمولة على الطلبات؟',
+              a: 'لا، أبداً. الطلبات توصل لك مباشرة على واتساب. إنت بتحتفظ بكل الأرباح.',
+            },
+            {
+              q: 'التجربة المجانية — هل محتاج بطاقة؟',
+              a: 'لا. التجربة مجانية بالكامل. لو مش عايز تكمل بعد التجربة، خلاص.',
+            },
+            {
+              q: 'ينفع ألغى في أي وقت؟',
+              a: 'أيوة. مفيش أي عقود. كل الاشتراكات شهرية وتقدر تلغي في أي لحظة.',
+            },
+            {
+              q: 'هل بوت الأوردرات منفصل عن الباقات؟',
+              a: 'أيوة، هو إضافة مستقلة تقدر تضيفها لأي باقة. كلّمنا واتساب للتفاصيل.',
+            },
+          ].map((f) => (
+            <details key={f.q} className="pr__faq-item">
+              <summary className="pr__faq-q">{f.q}</summary>
+              <p className="pr__faq-a">{f.a}</p>
             </details>
-            <details className="pricing__faq-item">
-              <summary>ينفع أوقف الاشتراك في أي وقت؟</summary>
-              <p>أيوه. تواصل معانا على واتساب، وبنجمّد الاشتراك في نفس اليوم.</p>
-            </details>
-            <details className="pricing__faq-item">
-              <summary>لو التجربة خلصت ومش عايز أكمل؟</summary>
-              <p>مفيش أي مشكلة. عضوية نشاطك بترجع عادية، وكل بياناتك بتفضل محفوظة.</p>
-            </details>
-            <details className="pricing__faq-item">
-              <summary>الأسعار ليه "تواصل معنا"؟</summary>
-              <p>لأن كل نشاط له احتياجاته. كلّمنا وبنسعّرلك حسب حجم نشاطك واحتياجك. وثابت طول الاشتراك.</p>
-            </details>
-            <details className="pricing__faq-item">
-              <summary>إيه اللي بيحصل لو مش دافعت؟</summary>
-              <p>قبل ما الاشتراك يخلص بـ 7 أيام، هتوصلك تنبيهات يومية. لو الاشتراك خلص، المميزات بتوقف تلقائيًا وبترجع عضوية عادية.</p>
-            </details>
-          </div>
+          ))}
         </section>
 
-        {/* CTA */}
-        <section className="pricing__cta">
-          <h2 className="pricing__cta-title">جاهز تبدأ؟</h2>
-          <p className="pricing__cta-body">
-            سجّل نشاطك الأول، وبعدها اطلب الباقة المميزة من لوحة التاجر.
+        <section className="pr__final">
+          <h2 className="pr__final-title">مش محتاج تدفع دلوقتي</h2>
+          <p className="pr__final-text">
+            ابدأ بالباقة المجانية، وإحنا هنتواصل معاك لما تكون جاهز تتوسع.
           </p>
-          <div className="pricing__cta-actions">
-            <Link href="/merchant/apply" className="pricing__btn pricing__btn--primary">
-              🏪 سجّل نشاطك
+          <div className="pr__final-actions">
+            <Link href="/merchant/apply" className="pr__btn pr__btn--primary">
+              🚀 سجّل نشاطك
             </Link>
             <a
-              href={WHATSAPP}
+              href={WA}
               target="_blank"
               rel="noreferrer"
-              className="pricing__btn"
+              className="pr__btn pr__btn--ghost"
             >
-              💬 كلّمنا على واتساب
+              💬 كلّمنا واتساب
             </a>
           </div>
         </section>
