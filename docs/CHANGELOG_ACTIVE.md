@@ -1,50 +1,53 @@
-# Active Changelog — 2026-09-15 Session
+# Active Changelog — Session 2026-09-15
 
-## Commits (ui-onlook)
+## Commits (ui-onlook) — Batches 1-9
 
-    c2d87a7  feat(studio): live preview + undo/redo + design renderer
-    fb3dfe8  fix(admin): merchant form saves all fields correctly
-    2bc80cf  feat: logout fix + simplified profile + clean badges
-    0a8119c  feat(brand): proper PWA icons + favicon + side panel persistence
-    91fab00  fix: offline page SSR + restore side panel + header tooltips + perf
-    97d406f  fix: real data side-panel + premium toggle + clean splash
-    b785225  feat(ui): clean glass header + royal splash + metadata coverage
-    b57c6ca  feat(ui): Sprint 1 hot fixes — crown + share + cleanup
-    8700381  chore(cleanup): consolidate migrations + remove dead supabase folder
+    828b8ff  feat(seo): sitemap + robots + JSON-LD graph
+    bf1699c  chore: remove dead files (0 refs)
+    b12a573  feat(admin): analytics expanded KPIs
+    e8a090c  feat(account): cleaner edit page + status cards
+    c8352e9  feat(admin): security center functional dashboard
+    f8a2cba  feat(notifications): adminMode + role-aware
+    532cd5e  feat(notifications): adminMode + role-aware
+    68c52eb  feat(notifications): v2 filters + quiet hours
+    617a42b  feat: explore URL-driven + visitor welcome
 
-## What changed this session
+## Features shipped this session
 
-### Bugs fixed
-- Logout broken         → proxy.ts exempts /auth/logout
-- Merchant form         → lost images/hours/contacts → controlled inputs
-- Sentry slow in dev    → disabled unless NODE_ENV=production
-- Header CSS error      → rebuilt from scratch
+### Explore
+- URL-driven state (type/area/sort/q/open/offers/view)
+- Click on categories now works
+- Hero logo added, duplicate search bar removed
 
-### Features added
-- PWA icons             → crown + EAH + neon (favicon + install)
-- SidePanel             → real Supabase data + "اعرض نشاطك" CTA
-- Offline page          → /offline with beautiful fallback
-- Network status        → online/offline indicator
-- Studio 2026           → live preview + undo/redo + design renderer
+### Notifications v2
+- Role-aware filters + quiet hours
+- Premium banner for merchants without sub
+- Respects user prefs + quiet_hours in push
+- Migration: 20260915000000_add_notif_quiet_hours.sql
 
-### Design changes
-- Profile simplified    → badges only (Crown / Premium / Verified)
-- Removed              → titles + frames (~50 titles, ~25 frames)
-- Glass header         → transparent at top, appears on scroll
-- Tooltips restored    → on header icons
+### Admin
+- Security center: real KPIs + env vars + banned + audit
+- Analytics: new users 7d, active 7d, pending reviews
+- Dedicated /admin/logout route
 
-### Deleted
-- supabase/ folder (dead duplicate)
-- seed-demo-data.sql (violated AGENTS.md)
-- profile-presets.ts complexity (replaced)
+### Account
+- Edit page: status cards (verified/admin)
+- Profile badges simplified (crown/premium/verified)
+- Super admin hides trust score
 
-## Known issues
-- Vercel env vars need verification (see VERCEL_SETUP_2026.md)
-- GitHub Actions needs secrets (VERCEL_TOKEN, ORG_ID, PROJECT_ID)
-- Studio Inspector not yet integrated into editor UI
+### SEO
+- robots.ts comprehensive
+- sitemap.ts static + dynamic businesses
+- JSON-LD @graph
 
-## Next steps
-1. Verify Vercel deploy
-2. Add GitHub Actions secrets
-3. Integrate Studio Inspector
-4. Test merchant form (end-to-end)
+### Cleanup
+- Removed 9 dead files
+- Removed stray ui-onlook file
+
+## Pending (next)
+
+- WhatsApp Channel + FB Page links (user)
+- Supabase leaked-password protection
+- Smart Bot (backlog #1)
+- Competitor research (backlog #2)
+- Real businesses data (backlog #3)
