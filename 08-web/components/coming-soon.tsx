@@ -69,6 +69,9 @@ export default function ComingSoon() {
       </div>
 
       <div className="cs__cta-row">
+        <a href="/merchant-info" className="cs__cta cs__cta--owner">
+          🏪 عندك نشاط؟ اعرف أكتر
+        </a>
         <a
           href="/support-palestine"
           className="cs__cta cs__cta--palestine"

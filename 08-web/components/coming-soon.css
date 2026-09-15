@@ -137,3 +137,13 @@
   border-color: rgba(168, 85, 247, 0.6);
   color: #fff;
 }
+
+.cs__cta--owner {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), rgba(168, 85, 247, 0.06));
+  border-color: rgba(232, 199, 154, 0.4);
+  color: #F5D9A7;
+}
+.cs__cta--owner:hover {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.22), rgba(168, 85, 247, 0.12));
+  border-color: rgba(232, 199, 154, 0.7);
+}

@@ -51,3 +51,29 @@
 - Smart Bot (backlog #1)
 - Competitor research (backlog #2)
 - Real businesses data (backlog #3)
+
+## Batches 40-46 — Deploy fixes + polish
+
+### Vercel deploy fixes (critical)
+- next.config.ts: removed mixed CJS/ESM (was breaking build)
+- Removed 4 dynamic OG images (Arabic font shaping unsupported on nodejs runtime)
+- proxy.ts: /merchant-info is now public (was blocked by /merchant prefix)
+- package.json: engines.node pinned to 22.x < 23
+
+### Final polish
+- Cookie consent banner (localStorage persistence)
+- Featured + /new pages rewritten (real data)
+- Trust section (4 features + CTA)
+- Bot: +5 intents (slow, login, cant-find, privacy, terms)
+- Loading skeletons (businesses/[slug], offers)
+- Neon scrollbar + smooth anchors in globals.css
+- Coming-soon: owner CTA added
+
+### Structure (verified)
+- 47 components
+- 25 lib files
+- 67 app pages
+- 15 API routes
+- 26 migrations
+- 100% typecheck pass
+- Production: READY ✅
