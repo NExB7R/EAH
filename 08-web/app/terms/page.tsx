@@ -5,143 +5,212 @@ import './legal.css'
 
 export const metadata = {
   title: 'الشروط والأحكام',
-  description: 'قواعد استخدام منصة EAH — واضحة ومبسّطة.',
+  description: 'شروط استخدام منصة EAH — واضحة ومباشرة.',
 }
 
-const SECTIONS = [
-  {
-    id: 'acceptance',
-    title: '1. القبول',
-    items: [
-      'باستخدامك لـ EAH، إنت موافق على الشروط دي.',
-      'لو مش موافق، من فضلك ما تستخدمش المنصة.',
-    ],
-  },
-  {
-    id: 'account',
-    title: '2. حسابك',
-    items: [
-      '**إنت مسؤول** عن سرية كلمة المرور بتاعتك.',
-      '**ممنوع** تعمل حسابات وهمية أو تستخدم بيانات حد تاني.',
-      '**بنحق** نوقف أي حساب بيخالف القواعد بدون إشعار مسبق.',
-    ],
-  },
-  {
-    id: 'content',
-    title: '3. المحتوى',
-    items: [
-      'المحتوى الموجود على EAH (نصوص، صور، تصميمات) **ملك للمنصة**.',
-      'ممنوع نسخ أو إعادة نشر أي جزء بدون إذن مكتوب.',
-      'التقييمات والتعليقات **مسؤوليتك**، ولازم تكون محترمة وواقعية.',
-    ],
-  },
-  {
-    id: 'merchants',
-    title: '4. أصحاب الأنشطة',
-    items: [
-      'لازم تكون **مالك شرعي** للنشاط اللي بتسجّله.',
-      'كل التعديلات بتخضع لـ **مراجعة الأدمن** قبل النشر.',
-      'الاشتراك المميز **اختياري**، ومفيش استرداد بعد التفعيل.',
-      'بنحق **نوقف أي نشاط** لو خالف الشروط أو وردت شكاوى متكررة.',
-    ],
-  },
-  {
-    id: 'prohibited',
-    title: '5. المحظورات',
-    items: [
-      'التلاعب بالتقييمات أو الزيارات.',
-      'نشر محتوى مسيء، مضلل، أو مخالف للقانون.',
-      'محاولة اختراق المنصة أو جمع بيانات المستخدمين.',
-      'استخدام bots أو scrapers بدون إذن.',
-    ],
-  },
-  {
-    id: 'liability',
-    title: '6. المسؤولية',
-    items: [
-      'EAH **منصة تعريفية**. المسؤولية عن الخدمة الفعلية على النشاط نفسه.',
-      'بنبذل كل جهد للتأكد من دقة المعلومات، لكن **مفيش ضمان 100%**.',
-      'مش مسؤولين عن أي خسائر غير مباشرة ناتجة عن استخدام المنصة.',
-    ],
-  },
-  {
-    id: 'changes',
-    title: '7. تعديل الشروط',
-    items: [
-      'بنحق نحدّث الشروط في أي وقت.',
-      'التعديلات بتصبح سارية فورًا من تاريخ النشر.',
-      'استمرارك في الاستخدام = موافقة على الشروط الجديدة.',
-    ],
-  },
-  {
-    id: 'law',
-    title: '8. القانون الحاكم',
-    items: [
-      'الشروط دي بتخضع للقوانين المصرية.',
-      'أي نزاع بيتحل ودّيًا، أو أمام الجهات القضائية المختصة.',
-    ],
-  },
+const LAST_UPDATE = '2026-09-15'
+const READ_TIME = '5 دقائق'
+
+const TOC = [
+  { id: 'accept', label: 'الموافقة على الشروط' },
+  { id: 'account', label: 'حسابك' },
+  { id: 'use', label: 'الاستخدام المسموح' },
+  { id: 'content', label: 'المحتوى' },
+  { id: 'merchant', label: 'لأصحاب الأنشطة' },
+  { id: 'points', label: 'النقاط والمكافآت' },
+  { id: 'ban', label: 'الحظر' },
+  { id: 'ip', label: 'الملكية الفكرية' },
+  { id: 'disclaimer', label: 'إخلاء مسؤولية' },
+  { id: 'changes', label: 'التعديلات' },
+  { id: 'law', label: 'القانون المطبق' },
+  { id: 'contact', label: 'تواصل معنا' },
 ]
 
 export default function TermsPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <main className="legal">
-        <header className="legal__head">
-          <span className="legal__kicker">TERMS</span>
-          <h1 className="legal__title">الشروط والأحكام</h1>
-          <p className="legal__lead">
-            قواعد واضحة ومبسّطة. عشان تعرف حقوقك وواجباتك بالظبط.
+      <main className="lg">
+        <section className="lg__hero">
+          <span className="lg__kicker">TERMS OF SERVICE</span>
+          <h1 className="lg__title">الشروط والأحكام</h1>
+          <p style={{ margin: 0, fontSize: '.9rem', color: '#A29DB5', lineHeight: 1.7 }}>
+            باستخدامك EAH، أنت موافق على الشروط دي.
           </p>
-          <div className="legal__meta">
-            <span>آخر تحديث: 14 سبتمبر 2026</span>
-            <span>•</span>
-            <span>وقت القراءة: 5 دقائق</span>
+          <div className="lg__meta">
+            <span className="lg__meta-item">📅 آخر تحديث: {LAST_UPDATE}</span>
+            <span className="lg__meta-item">⏱ قراءة: {READ_TIME}</span>
           </div>
-        </header>
+        </section>
 
-        <nav className="legal__toc">
-          <span className="legal__toc-title">المحتوى</span>
-          <ol>
-            {SECTIONS.map((s) => (
-              <li key={s.id}>
-                <a href={`#${s.id}`}>{s.title}</a>
+        <nav className="lg__toc">
+          <h2 className="lg__toc-title">محتويات الصفحة</h2>
+          <ul className="lg__toc-list">
+            {TOC.map((t) => (
+              <li key={t.id}>
+                <a href={`#${t.id}`}>· {t.label}</a>
               </li>
             ))}
-          </ol>
+          </ul>
         </nav>
 
-        <div className="legal__body">
-          {SECTIONS.map((s) => (
-            <section key={s.id} id={s.id} className="legal__section">
-              <h2 className="legal__section-title">{s.title}</h2>
-              <ul className="legal__list">
-                {s.items.map((it, i) => (
-                  <li key={i}>
-                    {it.split(/(\*\*[^*]+\*\*)/).map((p, j) =>
-                      p.startsWith('**') ? (
-                        <strong key={j}>{p.slice(2, -2)}</strong>
-                      ) : (
-                        p
-                      )
-                    )}
-                  </li>
-                ))}
+        <div className="lg__body">
+          <section className="lg__section" id="accept">
+            <h2 className="lg__section-title">الموافقة على الشروط</h2>
+            <div className="lg__section-body">
+              <p>
+                دخولك واستخدامك لـ EAH معناه إنك قرأت الشروط دي ووافقت عليها. لو مش
+                موافق، من فضلك متستخدمش المنصة.
+              </p>
+            </div>
+          </section>
+
+          <section className="lg__section" id="account">
+            <h2 className="lg__section-title">حسابك</h2>
+            <div className="lg__section-body">
+              <ul>
+                <li>لازم تكون فوق 13 سنة لاستخدام المنصة.</li>
+                <li>أنت مسؤول عن سرية كلمة السر الخاصة بك.</li>
+                <li>لازم تبلغنا فوراً لو حسابك اتخترق.</li>
+                <li>مسموح بحساب واحد لكل شخص — مفيش حسابات متعددة.</li>
+                <li>مفيش انتحال شخصية أو بيانات كاذبة.</li>
               </ul>
-            </section>
-          ))}
+            </div>
+          </section>
+
+          <section className="lg__section" id="use">
+            <h2 className="lg__section-title">الاستخدام المسموح</h2>
+            <div className="lg__section-body">
+              <p><strong>مسموح:</strong></p>
+              <ul>
+                <li>استخدام المنصة للاكتشاف والتقييم الشخصي.</li>
+                <li>مشاركة أماكن مع أصحابك.</li>
+                <li>كتابة تقييمات صادقة وموضوعية.</li>
+                <li>للأعمال: تسجيل نشاطك وإدارته.</li>
+              </ul>
+              <p><strong>ممنوع:</strong></p>
+              <ul>
+                <li>محتوى مسيء، عنصري، أو غير قانوني.</li>
+                <li>تقييمات كاذبة أو مدفوعة.</li>
+                <li>spam أو إعلانات غير مصرحة.</li>
+                <li>محاولة اختراق المنصة أو استغلال ثغرة.</li>
+                <li>جمع بيانات المستخدمين بدون إذن.</li>
+                <li>استخدام bots أو automation بدون تصريح.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section className="lg__section" id="content">
+            <h2 className="lg__section-title">المحتوى</h2>
+            <div className="lg__section-body">
+              <p>
+                أي محتوى بتكتبه (تقييمات، صور، نبذة) يبقى ملكك، لكن أنت بتدينا
+                ترخيص لعرضه على المنصة.
+              </p>
+              <p>
+                بنحتفظ بحق حذف أي محتوى يخالف الشروط بدون إشعار مسبق.
+              </p>
+            </div>
+          </section>
+
+          <section className="lg__section" id="merchant">
+            <h2 className="lg__section-title">لأصحاب الأنشطة</h2>
+            <div className="lg__section-body">
+              <ul>
+                <li>أنت مسؤول عن صحة بيانات نشاطك.</li>
+                <li>ممنوع تحريف المعلومات أو الخدمات.</li>
+                <li>أي تعديل على الصفحة يمر بمراجعة الأدمن.</li>
+                <li>مفيش ضمان لعدد زوار محدد أو ترتيب معين.</li>
+                <li>الباقات المدفوعة — الشروط موضحة عند الاشتراك.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section className="lg__section" id="points">
+            <h2 className="lg__section-title">النقاط والمكافآت</h2>
+            <div className="lg__section-body">
+              <ul>
+                <li>النقاط بتُمنح على الأنشطة الحقيقية فقط.</li>
+                <li>أي تلاعب (bots، multiple accounts) = حظر.</li>
+                <li>النقاط مش قابلة للتحويل لبعض المستخدمين.</li>
+                <li>بنحتفظ بحق تعديل نظام النقاط مع إشعار.</li>
+                <li>النقاط المستبدلة بمكافآت مش قابلة للاسترجاع.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section className="lg__section" id="ban">
+            <h2 className="lg__section-title">الحظر</h2>
+            <div className="lg__section-body">
+              <p>بنحتفظ بحق حظر أي حساب:</p>
+              <ul>
+                <li>يخالف الشروط أو السياسة.</li>
+                <li>يحاول التلاعب بالمنصة.</li>
+                <li>يسبب ضرر لمستخدمين آخرين.</li>
+              </ul>
+              <p>
+                الحظر ممكن يكون مؤقت (24 ساعة → 7 أيام) أو دائم حسب الخطورة.
+              </p>
+            </div>
+          </section>
+
+          <section className="lg__section" id="ip">
+            <h2 className="lg__section-title">الملكية الفكرية</h2>
+            <div className="lg__section-body">
+              <p>
+                العلامة التجارية EAH، التصميم، الكود، والشعار — ملكنا الحصري.
+                ممنوع استخدامها بدون إذن مكتوب.
+              </p>
+            </div>
+          </section>
+
+          <section className="lg__section" id="disclaimer">
+            <h2 className="lg__section-title">إخلاء مسؤولية</h2>
+            <div className="lg__section-body">
+              <p>
+                EAH منصة اكتشاف. مش بنselling منتجات، ولا بنشغل المطاعم. أي تعامل بينك
+                وبين نشاط معين يبقى مسؤوليتك.
+              </p>
+              <p>
+                المنصة بتُقدم "كما هي". مش بنضمن إنها هتشتغل بدون انقطاع أو إن كل
+                البيانات دقيقة 100%.
+              </p>
+            </div>
+          </section>
+
+          <section className="lg__section" id="changes">
+            <h2 className="lg__section-title">التعديلات</h2>
+            <div className="lg__section-body">
+              <p>
+                ممكن نحدّث الشروط دي في أي وقت. التغييرات الجوهرية هنعلنها.
+                استمرارك في استخدام المنصة = موافقة على التعديلات.
+              </p>
+            </div>
+          </section>
+
+          <section className="lg__section" id="law">
+            <h2 className="lg__section-title">القانون المطبق</h2>
+            <div className="lg__section-body">
+              <p>
+                الشروط دي محكومة بالقوانين المصرية. أي نزاع بيتم حله عبر المحاكم
+                المصرية المختصة.
+              </p>
+            </div>
+          </section>
+
+          <section className="lg__section" id="contact">
+            <h2 className="lg__section-title">تواصل معنا</h2>
+            <div className="lg__section-body">
+              <div className="lg__note">
+                <strong>لأي سؤال عن الشروط:</strong>
+                <br />
+                <Link href="/contact">صفحة التواصل</Link> — بنرد خلال 24 ساعة.
+              </div>
+            </div>
+          </section>
         </div>
 
-        <footer className="legal__foot">
-          <p>
-            عندك سؤال؟ كلّمنا على{' '}
-            <a href="https://wa.me/201012892806" target="_blank" rel="noreferrer">
-              واتساب
-            </a>
-            .
-          </p>
-        </footer>
+        <Link href="/" className="lg__back">← الرئيسية</Link>
       </main>
       <SiteFooter />
     </>
