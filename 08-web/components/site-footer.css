@@ -265,3 +265,39 @@
 @media (max-width: 640px) {
   .site-footer__signature-text { font-size: 1rem; }
 }
+
+
+/* Palestine compact */
+.site-footer__palestine-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  text-decoration: none;
+  transition: all 0.22s ease;
+}
+.site-footer__palestine-compact:hover {
+  background: rgba(168, 85, 247, 0.14);
+  border-color: rgba(168, 85, 247, 0.5);
+  transform: translateY(-1px);
+}
+.site-footer__palestine-label {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #F4F2FA;
+}
+.site-footer__palestine-heart {
+  display: inline-flex;
+  animation: ps-heart-beat 2.8s ease-in-out infinite;
+}
+@keyframes ps-heart-beat {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.12); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-footer__palestine-heart { animation: none; }
+}

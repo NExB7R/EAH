@@ -10,22 +10,36 @@ export default function SiteFooter() {
       <div className="site-footer__inner">
         <div className="site-footer__brand"><EahLogo size="md" variant="full" href="/" /></div>
 
-        {/* فلسطين */}
-        <div className="site-footer__palestine">
-          <p className="site-footer__palestine-text">فلسطين في قلبنا</p>
-          <div className="site-footer__palestine-heart" aria-label="فلسطين">
-            <svg viewBox="0 0 32 28" width="40" height="35" aria-hidden>
-              <defs><clipPath id="ps-heart-clip"><path d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z" /></clipPath></defs>
-              <g clipPath="url(#ps-heart-clip)" className="ps-fill">
-                <rect x="0" y="0" width="32" height="9" fill="#000000" />
-                <rect x="0" y="9" width="32" height="9" fill="#FFFFFF" />
+        {/* فلسطين — compact */}
+        <a
+          href="/support-palestine"
+          className="site-footer__palestine-compact"
+          aria-label="فلسطين في القلب — اضغط للتفاصيل"
+        >
+          <span className="site-footer__palestine-label">فلسطين في القلب</span>
+          <span className="site-footer__palestine-heart" aria-hidden>
+            <svg viewBox="0 0 32 28" width="22" height="20">
+              <defs>
+                <clipPath id="ps-heart-clip">
+                  <path d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z" />
+                </clipPath>
+              </defs>
+              <g clipPath="url(#ps-heart-clip)">
+                <rect x="0" y="0" width="32" height="9" fill="#000" />
+                <rect x="0" y="9" width="32" height="9" fill="#FFF" />
                 <rect x="0" y="18" width="32" height="10" fill="#149954" />
                 <polygon points="0,0 10,14 0,28" fill="#E4312B" />
               </g>
-              <path d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z" fill="none" stroke="#A855F7" strokeWidth="1.5" strokeLinejoin="round" />
+              <path
+                d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z"
+                fill="none"
+                stroke="#A855F7"
+                strokeWidth="1.4"
+                strokeLinejoin="round"
+              />
             </svg>
-          </div>
-        </div>
+          </span>
+        </a>
 
         {/* كيف نخدمك */}
         <div className="site-footer__serve">
