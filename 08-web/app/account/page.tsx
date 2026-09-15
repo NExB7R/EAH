@@ -108,14 +108,16 @@ export default async function AccountPage() {
         )}
 
         <section className="acc-grid">
-          <div className="acc-card acc-card--third">
-            <span className="acc-card__emoji">⭐</span>
-            <span className="acc-card__value" style={{ color: '#FBBF24' }}>{trustScore}</span>
-            <span className="acc-card__label">نقاط الثقة</span>
-            <div className="acc-trust-bar">
-              <div className="acc-trust-bar__fill" style={{ width: `${trustPct}%` }} />
+          {role !== 'super_admin' && (
+            <div className="acc-card acc-card--third">
+              <span className="acc-card__emoji">⭐</span>
+              <span className="acc-card__value" style={{ color: '#FBBF24' }}>{trustScore}</span>
+              <span className="acc-card__label">نقاط الثقة</span>
+              <div className="acc-trust-bar">
+                <div className="acc-trust-bar__fill" style={{ width: `${trustPct}%` }} />
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="acc-card acc-card--third">
             <span className="acc-card__emoji">❤️</span>
