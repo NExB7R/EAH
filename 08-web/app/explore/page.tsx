@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 import ExploreClient from '@/components/explore-client'
 import SiteFooter from '@/components/site-footer'
@@ -27,7 +28,6 @@ export default async function ExplorePage({
   const rawFilter = params.type ?? params.intent
   const activeType = rawFilter && VALID_TYPES.includes(rawFilter) ? rawFilter : undefined
 
-  // ✅ نجيب كل الأماكن (مش بنفلتر في السيرفر — العميل بيفلتر)
   const businesses = await getPublishedBusinesses(80)
 
   const withStats = businesses.map((b) => {
@@ -65,7 +65,9 @@ export default async function ExplorePage({
             {diversified.length} مكان — مرتبة بذكاء حسب الجودة والنشاط
           </p>
         </div>
-        <ExploreClient businesses={diversified} initialType={activeType} />
+        <Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#A29DB5' }}>جاري التحميل...</div>}>
+          <ExploreClient businesses={diversified} initialType={activeType} />
+        </Suspense>
       </main>
       <SiteFooter />
     </>

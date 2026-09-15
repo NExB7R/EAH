@@ -10,6 +10,7 @@ import SectionSlider from '@/components/section-slider'
 import ExploreCard from '@/components/explore-card'
 import TrustSection from '@/components/trust-section'
 import ComingSoon from '@/components/coming-soon'
+import VisitorWelcome from '@/components/visitor-welcome'
 
 type Section = { id: string; type: string; visible: boolean; props: any }
 type DesignData = { theme?: { primaryColor?: string; bgColor?: string }; sections?: Section[] }
@@ -99,6 +100,7 @@ export default async function HomeDynamic() {
     return (
       <>
         <HomeHero />
+        <VisitorWelcome />
         {renderSlider('r', 'المطاعم', 'اللي نفسك فيه', '/explore?type=restaurant', 'restaurant', restaurants)}
         {renderSlider('o', '🔥 العروض', 'على الآخر', '/offers', 'offer', offers)}
         {renderSlider('ph', 'الصيدليات', 'قريبة منك', '/explore?type=pharmacy', 'pharmacy', pharmacies)}
@@ -113,6 +115,7 @@ export default async function HomeDynamic() {
   // ─── Dynamic render من التصميم ───
   return (
     <div style={theme?.bgColor ? { background: theme.bgColor } : undefined}>
+      <VisitorWelcome />
       {sections.map((section) => renderSection(section, diversified))}
       <ComingSoon />
       <TrustSection />

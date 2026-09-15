@@ -1,5 +1,6 @@
 'use client'
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import ExploreCard from './explore-card'
 import './explore-client.css'
 
@@ -38,6 +39,8 @@ const SORTS = [
   { key: 'new', label: 'الأحدث', emoji: '🌱' },
 ]
 
+const VALID_TYPES: BusinessType[] = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
+
 export default function ExploreClient({
   businesses,
   initialType,
@@ -45,17 +48,36 @@ export default function ExploreClient({
   businesses: Business[]
   initialType?: string
 }) {
-  const [type, setType] = useState<BusinessType | 'all'>(
-    (initialType as BusinessType) ?? 'all'
-  )
-  const [area, setArea] = useState<string>('all')
-  const [sort, setSort] = useState<string>('default')
-  const [openOnly, setOpenOnly] = useState(false)
-  const [offersOnly, setOffersOnly] = useState(false)
-  const [view, setView] = useState<'grid' | 'list'>('grid')
-  const [search, setSearch] = useState('')
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
-  // الأماكن المتاحة (dynamic)
+  // ✅ URL = source of truth
+  const rawType = searchParams.get('type') ?? initialType ?? 'all'
+  const type: BusinessType | 'all' = VALID_TYPES.includes(rawType as BusinessType)
+    ? (rawType as BusinessType)
+    : 'all'
+
+  const area = searchParams.get('area') ?? 'all'
+  const sort = searchParams.get('sort') ?? 'default'
+  const search = searchParams.get('q') ?? ''
+  const openOnly = searchParams.get('open') === '1'
+  const offersOnly = searchParams.get('offers') === '1'
+  const view = (searchParams.get('view') === 'list' ? 'list' : 'grid') as 'grid' | 'list'
+
+  function updateParams(patch: Record<string, string | null>) {
+    const params = new URLSearchParams(searchParams.toString())
+    for (const [k, v] of Object.entries(patch)) {
+      if (v === null || v === '' || v === 'all' || v === 'default' || v === '0') {
+        params.delete(k)
+      } else {
+        params.set(k, v)
+      }
+    }
+    const qs = params.toString()
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
+  }
+
   const areas = useMemo(() => {
     const set = new Set<string>()
     businesses.forEach((b) => b.area && set.add(b.area))
@@ -76,7 +98,7 @@ export default function ExploreClient({
         (b) =>
           b.name.toLowerCase().includes(q) ||
           b.area?.toLowerCase().includes(q) ||
-          b.vibe?.some((v) => v.toLowerCase().includes(q))
+          b.vibe?.some((v) => v.toLowerCase().includes(q)),
       )
     }
 
@@ -92,14 +114,11 @@ export default function ExploreClient({
         arr.sort((a, b) => (b.activeOffers ?? 0) - (a.activeOffers ?? 0))
         break
       case 'new':
-        arr.sort(
-          (a, b) =>
-            new Date(b.created_at ?? 0).getTime() -
-            new Date(a.created_at ?? 0).getTime()
+        arr.sort((a, b) =>
+          new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime(),
         )
         break
       default:
-        // featured + premium first
         arr.sort((a, b) => {
           const pa = (a.is_premium ? 2 : 0) + (a.badge === 'مميز' ? 1 : 0)
           const pb = (b.is_premium ? 2 : 0) + (b.badge === 'مميز' ? 1 : 0)
@@ -117,12 +136,7 @@ export default function ExploreClient({
     (search.trim() ? 1 : 0)
 
   function clearAll() {
-    setType('all')
-    setArea('all')
-    setOpenOnly(false)
-    setOffersOnly(false)
-    setSearch('')
-    setSort('default')
+    router.replace(pathname, { scroll: false })
   }
 
   return (
@@ -134,13 +148,13 @@ export default function ExploreClient({
           type="search"
           placeholder="ابحث باسم المكان، المنطقة، أو النوع..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => updateParams({ q: e.target.value })}
         />
         {search && (
           <button
             type="button"
             className="exc-search__clear"
-            onClick={() => setSearch('')}
+            onClick={() => updateParams({ q: null })}
             aria-label="مسح البحث"
           >
             ×
@@ -160,7 +174,7 @@ export default function ExploreClient({
               key={t.key}
               type="button"
               className={`exc-type ${type === t.key ? 'is-active' : ''}`}
-              onClick={() => setType(t.key)}
+              onClick={() => updateParams({ type: t.key === 'all' ? null : t.key })}
             >
               <span className="exc-type__emoji">{t.emoji}</span>
               <span className="exc-type__label">{t.label}</span>
@@ -177,14 +191,12 @@ export default function ExploreClient({
             <select
               className="exc-select"
               value={area}
-              onChange={(e) => setArea(e.target.value)}
+              onChange={(e) => updateParams({ area: e.target.value === 'all' ? null : e.target.value })}
               aria-label="المنطقة"
             >
               <option value="all">📍 كل المناطق</option>
               {areas.map((a) => (
-                <option key={a} value={a}>
-                  {a}
-                </option>
+                <option key={a} value={a}>{a}</option>
               ))}
             </select>
           )}
@@ -192,7 +204,7 @@ export default function ExploreClient({
           <button
             type="button"
             className={`exc-toggle ${openOnly ? 'is-active' : ''}`}
-            onClick={() => setOpenOnly((v) => !v)}
+            onClick={() => updateParams({ open: openOnly ? null : '1' })}
           >
             ✅ مفتوح دلوقتي
           </button>
@@ -200,46 +212,44 @@ export default function ExploreClient({
           <button
             type="button"
             className={`exc-toggle ${offersOnly ? 'is-active' : ''}`}
-            onClick={() => setOffersOnly((v) => !v)}
+            onClick={() => updateParams({ offers: offersOnly ? null : '1' })}
           >
-            🎁 فيه عروض
+            🔥 فيه عروض
           </button>
 
-          {activeFiltersCount > 0 && (
-            <button type="button" className="exc-clear" onClick={clearAll}>
-              مسح ({activeFiltersCount})
-            </button>
-          )}
-        </div>
-
-        <div className="exc-filters__right">
           <select
             className="exc-select"
             value={sort}
-            onChange={(e) => setSort(e.target.value)}
+            onChange={(e) => updateParams({ sort: e.target.value })}
             aria-label="الترتيب"
           >
             {SORTS.map((s) => (
-              <option key={s.key} value={s.key}>
-                {s.emoji} {s.label}
-              </option>
+              <option key={s.key} value={s.key}>{s.emoji} {s.label}</option>
             ))}
           </select>
+        </div>
+
+        <div className="exc-filters__right">
+          {activeFiltersCount > 0 && (
+            <button type="button" className="exc-clear" onClick={clearAll}>
+              ✕ امسح الفلاتر ({activeFiltersCount})
+            </button>
+          )}
 
           <div className="exc-view">
             <button
               type="button"
               className={`exc-view__btn ${view === 'grid' ? 'is-active' : ''}`}
-              onClick={() => setView('grid')}
-              aria-label="عرض شبكة"
+              onClick={() => updateParams({ view: null })}
+              aria-label="شبكة"
             >
               ▦
             </button>
             <button
               type="button"
               className={`exc-view__btn ${view === 'list' ? 'is-active' : ''}`}
-              onClick={() => setView('list')}
-              aria-label="عرض قائمة"
+              onClick={() => updateParams({ view: 'list' })}
+              aria-label="قائمة"
             >
               ☰
             </button>
@@ -247,42 +257,27 @@ export default function ExploreClient({
         </div>
       </div>
 
-      {/* Results count */}
-      <div className="exc-count">
-        {filtered.length > 0 ? (
-          <>
-            <span className="exc-count__num">{filtered.length}</span> مكان
-            {activeFiltersCount > 0 && (
-              <span className="exc-count__hint"> — بعد التصفية</span>
-            )}
-          </>
-        ) : (
-          'مفيش نتايج'
-        )}
-      </div>
-
-      {/* Empty state */}
+      {/* Results */}
       {filtered.length === 0 ? (
         <div className="exc-empty">
-          <span className="exc-empty__emoji">🔍</span>
-          <h3 className="exc-empty__title">مفيش نتايج</h3>
-          <p className="exc-empty__msg">
-            جرّب تغير فلتر أو امسح البحث
-          </p>
-          <button
-            type="button"
-            className="exc-empty__btn"
-            onClick={clearAll}
-          >
-            🔄 إعادة تعيين الفلاتر
+          <span className="exc-empty__emoji">🔎</span>
+          <h3 className="exc-empty__title">مفيش نتائج</h3>
+          <p className="exc-empty__msg">جرّب فلتر تاني أو امسح البحث</p>
+          <button type="button" className="exc-empty__btn" onClick={clearAll}>
+            امسح كل الفلاتر
           </button>
         </div>
       ) : (
-        <div className={view === 'grid' ? 'ecard-grid' : 'ecard-list'}>
-          {filtered.map((b, i) => (
-            <ExploreCard key={b.slug} business={b} index={i} />
-          ))}
-        </div>
+        <>
+          <p className="exc-count">
+            <strong>{filtered.length}</strong> مكان
+          </p>
+          <div className={`exc-grid ${view === 'list' ? 'exc-grid--list' : ''}`}>
+            {filtered.map((b) => (
+              <ExploreCard key={b.slug} business={b} />
+            ))}
+          </div>
+        </>
       )}
     </section>
   )
