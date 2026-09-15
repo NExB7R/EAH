@@ -1,0 +1,198 @@
+/**
+ * EAH — Smart Extractor
+ * يستخرج معلومات من HTML (og tags + JSON-LD + regex fallback)
+ */
+
+export type ExtractedData = {
+  name: string
+  description: string
+  image: string
+  sourceUrl: string
+  phones: string[]
+  whatsapp: string | null
+  address: string | null
+  hours: string | null
+  type: 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | null
+  hasDelivery: boolean
+  cuisine: string | null
+  score: number
+}
+
+const EG_MOBILE = /(?:\+?20|0)?1[0125]\d{8}/g
+const EG_LANDLINE = /(?:\+?20|0)?(?:13|23|24|25|26|27|28|29)\d{7}/g
+
+function extractMeta(html: string, patterns: RegExp[]): string | null {
+  for (const p of patterns) {
+    const m = html.match(p)
+    if (m?.[1]) return m[1].trim()
+  }
+  return null
+}
+
+function extractOg(html: string, prop: string): string | null {
+  return extractMeta(html, [
+    new RegExp('<meta[^>]+property=["\']og:' + prop + '["\'][^>]+content=["\']([^"\']+)["\']', 'i'),
+    new RegExp('<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:' + prop + '["\']', 'i'),
+  ])
+}
+
+function extractTwitter(html: string, prop: string): string | null {
+  return extractMeta(html, [
+    new RegExp('<meta[^>]+name=["\']twitter:' + prop + '["\'][^>]+content=["\']([^"\']+)["\']', 'i'),
+    new RegExp('<meta[^>]+content=["\']([^"\']+)["\'][^>]+name=["\']twitter:' + prop + '["\']', 'i'),
+  ])
+}
+
+function extractJsonLd(html: string): any[] {
+  const results: any[] = []
+  const re = /<script[^>]+type=["\']application\/ld\+json["\'][^>]*>([\s\S]*?)<\/script>/gi
+  let m
+  while ((m = re.exec(html)) !== null) {
+    try {
+      const parsed = JSON.parse(m[1])
+      if (Array.isArray(parsed)) results.push(...parsed)
+      else results.push(parsed)
+    } catch { /* skip */ }
+  }
+  return results
+}
+
+function detectType(text: string): ExtractedData['type'] {
+  const t = text.toLowerCase()
+  if (/(صيدلية|صيدليات|pharmacy|دواء|أدوية)/i.test(t)) return 'pharmacy'
+  if (/(سوبرماركت|سوبر ماركت|ماركت|بقالة|supermarket|grocery|هايبر)/i.test(t)) return 'supermarket'
+  if (/(توصيل|دليفري|ديليفري|delivery|مكتب توصيل)/i.test(t) && !/(مطعم|صيدلية)/i.test(t)) return 'delivery_office'
+  if (/(مطعم|مطاعم|كافيه|كافي|قهوة|بيتزا|مشويات|شاورما|برجر|فول|طعمية|أكل|طعام|food|restaurant|cafe|حلويات|فطير)/i.test(t)) return 'restaurant'
+  return null
+}
+
+function detectDelivery(text: string): boolean {
+  return /(توصيل|دليفري|ديليفري|delivery|بنوصل|بيوصل|نوصل|توصيل للبيت|بنوصّل)/i.test(text)
+}
+
+function detectCuisine(text: string): string | null {
+  const cuisines = [
+    'مشويات', 'بيتزا', 'شاورما', 'برجر', 'فول وطعمية', 'أسماك', 'سمك',
+    'كافيه', 'قهوة', 'حلويات', 'كشري', 'دجاج', 'فراخ', 'لحوم',
+    'شعبي', 'سوشي', 'مأكولات بحرية', 'شرقي', 'غربي'
+  ]
+  for (const c of cuisines) {
+    if (text.includes(c)) return c
+  }
+  return null
+}
+
+function extractAddress(text: string): string | null {
+  const patterns = [
+    /(شارع\s+[^\n.,،]+)/i,
+    /(ميدان\s+[^\n.,،]+)/i,
+    /(بجوار\s+[^\n.,،]+)/i,
+    /(أمام\s+[^\n.,،]+)/i,
+    /(خلف\s+[^\n.,،]+)/i,
+    /(بعد\s+[^\n.,،]+)/i,
+  ]
+  for (const p of patterns) {
+    const m = text.match(p)
+    if (m?.[1]) return m[1].trim().slice(0, 120)
+  }
+  return null
+}
+
+function extractHours(text: string): string | null {
+  const patterns = [
+    /(يومي[اً]?\s+من\s+[^\n،.]+)/i,
+    /(من\s+\d{1,2}(?::\d{2})?\s+(?:ص|م|صباح[اً]?|مساء[اً]?)\s+[^\n،.]+)/i,
+    /(24\s*ساعة)/i,
+    /(مفتوح\s+[^\n،.]+)/i,
+  ]
+  for (const p of patterns) {
+    const m = text.match(p)
+    if (m?.[1]) return m[1].trim().slice(0, 120)
+  }
+  return null
+}
+
+export function extractFromHtml(html: string, sourceUrl: string): ExtractedData {
+  const ogTitle = extractOg(html, 'title') || extractTwitter(html, 'title')
+  const ogDesc = extractOg(html, 'description') || extractTwitter(html, 'description')
+  const ogImage = extractOg(html, 'image') || extractTwitter(html, 'image')
+  const ogUrl = extractOg(html, 'url')
+
+  const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i)
+  const rawTitle = ogTitle || titleMatch?.[1] || ''
+
+  const name = rawTitle
+    .replace(/\s*[\|\-–—]\s*(?:Facebook|فيسبوك|Instagram|إنستجرام|Meta).*$/i, '')
+    .replace(/\s*[\|\-–—]\s*Log\s*(?:in|into).*$/i, '')
+    .replace(/\s*[\|\-–—]\s*تسجيل\s+الدخول.*$/i, '')
+    .trim()
+    .slice(0, 120)
+
+  const fullText = [name, ogDesc || '', sourceUrl].join('\n')
+
+  const jsonLd = extractJsonLd(html)
+  let ldName = ''
+  let ldAddress = ''
+  let ldPhone = ''
+  let ldCuisine = ''
+
+  for (const item of jsonLd) {
+    if (item['@type'] === 'LocalBusiness' || item['@type'] === 'Restaurant' || item['@type'] === 'FoodEstablishment') {
+      if (item.name) ldName = String(item.name)
+      if (item.address) {
+        ldAddress = typeof item.address === 'string'
+          ? item.address
+          : [item.address.streetAddress, item.address.addressLocality].filter(Boolean).join(', ')
+      }
+      if (item.telephone) ldPhone = String(item.telephone)
+      if (item.servesCuisine) ldCuisine = String(item.servesCuisine)
+    }
+  }
+
+  const mobileMatches = html.match(EG_MOBILE) || []
+  const landlineMatches = html.match(EG_LANDLINE) || []
+  const allPhones = Array.from(new Set([...mobileMatches, ...landlineMatches]))
+    .map((p) => p.replace(/\s/g, ''))
+    .slice(0, 6)
+
+  let whatsapp: string | null = null
+  if (allPhones.length > 0) {
+    const first = allPhones[0].replace(/\D/g, '')
+    if (first.length >= 10 && first.length <= 13) {
+      whatsapp = first.startsWith('0') ? '2' + first : first
+    }
+  }
+
+  const type = detectType(fullText)
+  const address = ldAddress || extractAddress(fullText)
+  const hours = extractHours(fullText)
+  const hasDelivery = detectDelivery(fullText)
+  const cuisine = ldCuisine || detectCuisine(fullText)
+
+  let score = 0
+  if (name && name.length > 2) score += 25
+  if (ogDesc && ogDesc.length > 10) score += 15
+  if (ogImage) score += 15
+  if (allPhones.length > 0) score += 20
+  if (type) score += 10
+  if (hasDelivery) score += 5
+  if (address) score += 5
+  if (hours) score += 5
+  if (cuisine) score += 5
+  score = Math.min(100, score)
+
+  return {
+    name: ldName || name,
+    description: ogDesc?.slice(0, 500) || '',
+    image: ogImage || '',
+    sourceUrl: ogUrl || sourceUrl,
+    phones: allPhones,
+    whatsapp,
+    address,
+    hours,
+    type,
+    hasDelivery,
+    cuisine,
+    score,
+  }
+}

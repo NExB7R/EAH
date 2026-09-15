@@ -1,0 +1,45 @@
+{
+  "_source": "OSM",
+  "_center": {
+    "lat": 30.3144,
+    "lng": 31.3212,
+    "name": "شبين القناطر"
+  },
+  "_radius_m": 15000,
+  "_stats": {
+    "total": 1,
+    "by_type": {
+      "restaurant": 1
+    }
+  },
+  "businesses": [
+    {
+      "name": "القصر الملكي للمأكولات والمشروبات",
+      "slug": "القصر-الملكي-للمأكولات-والمشروبات",
+      "type": "restaurant",
+      "area": "شبين القناطر",
+      "city": "شبين القناطر",
+      "hook": null,
+      "description": null,
+      "address_text": null,
+      "map_url": "https://www.google.com/maps/search/?api=1&query=30.2086063,31.2828203",
+      "has_delivery": false,
+      "_needs_review": {
+        "delivery": true,
+        "phone": true,
+        "hours": true
+      },
+      "_osm": {
+        "opening_hours": null,
+        "cuisine": null,
+        "amenity": "restaurant",
+        "shop": null,
+        "lat": 30.2086063,
+        "lng": 31.2828203
+      },
+      "contacts": [],
+      "gallery": [],
+      "menu": []
+    }
+  ]
+}
