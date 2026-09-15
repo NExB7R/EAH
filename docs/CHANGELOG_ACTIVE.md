@@ -77,3 +77,53 @@
 - 26 migrations
 - 100% typecheck pass
 - Production: READY ✅
+
+
+## Batches 47-60 — Final session (2026-09-15 night)
+
+### Order Bot feature (merchant-paid)
+- Migration: order_requests table + RLS
+- Migration: has_merchant_premium() helper
+- components/order-request.tsx: full form (name/phone/area/address/items/notes)
+- /api/orders/notify: push notification to merchant
+- /merchant/orders: dashboard with status filters
+- Merchant dashboard: orders link + gold button
+
+### Homepage + Pricing
+- home-hero: animated background (blobs + grid), gradient headline, 4 categories
+- /pricing: full rewrite for Egyptian market (3 plans + FAQ + compare)
+
+### Competitors + Data
+- docs/COMPETITORS_ANALYSIS.md: Egypt + global matrix
+- data/BUSINESSES_TEMPLATE.json + README
+- scripts/import-businesses.mjs: idempotent Supabase importer
+
+### Bot + Polish
+- smart-bot: 2026 AI orb icon (animated ring + sparkle)
+- search: full rewrite with EahLogo hero
+- business/[slug]: enhanced JSON-LD + breadcrumbs
+- coming-soon: owner CTA + Palestine + WhatsApp
+
+### Final state
+- Pages: 68 | API: 16 | Components: 48 | Lib: 25 | Migrations: 27
+- 100% typecheck pass
+- All imports resolve
+- Production: https://eah-sq.vercel.app (READY)
+
+## Next session priorities
+
+### Data collection (in progress)
+- Fill data/BUSINESSES.json with real businesses
+- Run: npx tsx scripts/import-businesses.ts data/BUSINESSES.json
+
+### Features backlog
+1. Real-time order tracking UI
+2. Business analytics v2 (charts)
+3. Menu management UI
+4. Reservation system
+5. Multi-merchant order notification
+
+### Docs to read first
+- README_AI.md (5-min onboarding)
+- docs/COMPETITORS_ANALYSIS.md
+- docs/BIG_PROJECTS_BACKLOG.md
