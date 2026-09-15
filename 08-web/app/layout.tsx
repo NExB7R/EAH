@@ -127,17 +127,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'EAH',
-              alternateName: 'اللي نفسك فيه',
-              url: siteUrl,
-              logo: `${siteUrl}/icon-512.png`,
-              areaServed: {
-                '@type': 'City',
-                name: 'Shibin El-Qanater',
-                containedInPlace: { '@type': 'Country', name: 'Egypt' },
-              },
-              sameAs: ['https://facebook.com/eah.eg'],
+              '@graph': [
+                {
+                  '@type': 'Organization',
+                  '@id': `${siteUrl}/#org`,
+                  name: 'EAH',
+                  alternateName: 'اللي نفسك فيه',
+                  url: siteUrl,
+                  logo: `${siteUrl}/icon-512.png`,
+                  areaServed: {
+                    '@type': 'City',
+                    name: 'Shibin El-Qanater',
+                    containedInPlace: { '@type': 'Country', name: 'Egypt' },
+                  },
+                  sameAs: ['https://facebook.com/eah.eg'],
+                },
+                {
+                  '@type': 'WebSite',
+                  '@id': `${siteUrl}/#website`,
+                  url: siteUrl,
+                  name: 'EAH',
+                  inLanguage: 'ar-EG',
+                  publisher: { '@id': `${siteUrl}/#org` },
+                  potentialAction: {
+                    '@type': 'SearchAction',
+                    target: {
+                      '@type': 'EntryPoint',
+                      urlTemplate: `${siteUrl}/search?q={search_term_string}`,
+                    },
+                    'query-input': 'required name=search_term_string',
+                  },
+                },
+              ],
             }),
           }}
         />
