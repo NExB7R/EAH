@@ -90,25 +90,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-// ═══════════════════════════════════════════════════════════
-// Sentry is applied ONLY in production builds.
-// In dev, this avoids:
-//   - webpack Sentry plugin overhead (30s+ startup)
-//   - tunnel /monitoring route noise
-//   - startup warnings
-// ═══════════════════════════════════════════════════════════
-if (!isProd) {
-  module.exports = nextConfig
-} else {
-  const { withSentryConfig } = require('@sentry/nextjs/config')
-  module.exports = withSentryConfig(nextConfig, {
-    org: 'cairo-3a',
-    project: 'javascript-nextjs',
-    silent: true,
-    widenClientFileUpload: true,
-    tunnelRoute: '/monitoring',
-    hideSourceMaps: true,
-  })
-}
-
 export default nextConfig
