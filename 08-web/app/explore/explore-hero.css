@@ -14,3 +14,10 @@
 .explore-hero__kicker { display: block; font-size: .72rem; letter-spacing: .2em; color: #A855F7; font-weight: 800; margin-bottom: 8px; }
 .explore-hero__title { font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 900; color: #F5F3FF; margin: 0 0 8px; }
 .explore-hero__subtitle { color: #A5A3B8; font-size: .9rem; margin: 0; }
+
+
+.explore-hero__logo {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 18px;
+}

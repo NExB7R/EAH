@@ -33,9 +33,8 @@ const QUESTIONS: Question[] = [
     subtitle: 'اختار من اللي تحت، وإحنا نظبطلك',
     options: [
       { key: 'food', emoji: '🍽️', label: 'آكل حاجة', hint: 'مطاعم وأكل بيتي' },
-      { key: 'drink', emoji: '☕', label: 'اشرب حاجة', hint: 'كافيهات ومشروبات' },
-      { key: 'shop', emoji: '🛒', label: 'اشترى حاجة من الماركت', hint: 'بقالة ومستلزمات' },
       { key: 'pharmacy', emoji: '💊', label: 'دو أو صيدلية', hint: 'أدوية ومستلزمات طبية' },
+      { key: 'shop', emoji: '🛒', label: 'اشترى حاجة من الماركت', hint: 'بقالة ومستلزمات' },
       { key: 'delivery', emoji: '🛵', label: 'أوصّل حاجة', hint: 'توصيل وطلبات' },
     ],
   },
@@ -113,7 +112,7 @@ export default function RecommendClient({ businesses }: { businesses: Business[]
     if (intent === 'pharmacy') list = list.filter((b) => b.type === 'pharmacy')
     else if (intent === 'delivery') list = list.filter((b) => b.type === 'delivery_office')
     else if (intent === 'shop') list = list.filter((b) => b.type === 'supermarket')
-    else if (intent === 'food' || intent === 'drink') list = list.filter((b) => b.type === 'restaurant')
+    else if (intent === 'food') list = list.filter((b) => b.type === 'restaurant')
 
     // mood boosts
     const mood = answers.mood

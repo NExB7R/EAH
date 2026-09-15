@@ -78,11 +78,15 @@ export default async function HomeDynamic() {
   const diversified = diversifyByCategory(personalized, 'type')
 
   const design = await loadDesign()
-  const sections: Section[] = design?.sections?.filter((s) => s.visible !== false) ?? []
+  const KNOWN_TYPES = new Set(['hero','featured','trending','offers','categories','cta','banner','footer'])
+  const allSections: Section[] = design?.sections?.filter((s) => s.visible !== false) ?? []
+  // لو التصميم فيه نوع مش معروف، نتجاهله تماماً ونستخدم الافتراضي
+  const unknownFound = allSections.some((s) => !KNOWN_TYPES.has(s.type))
+  const sections: Section[] = unknownFound ? [] : allSections
   const theme = design?.theme
 
-  // لو مفيش تصميم محفوظ — نستخدم الافتراضي
-  if (sections.length === 0) {
+  // لو مفيش تصميم محفوظ أو تصميم غير متوافق — نستخدم الافتراضي (rich)
+  if (sections.length < 3 || unknownFound) {
     const restaurants = diversified.filter((b) => b.type === 'restaurant')
     const pharmacies = diversified.filter((b) => b.type === 'pharmacy')
     const delivery = diversified.filter((b) => b.type === 'delivery_office')

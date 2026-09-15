@@ -38,7 +38,7 @@ export function formatPrice(price: number | null): string {
 
 export function formatDuration(days: number): string {
   if (days === 30) return 'شهر'
-  if (days === 90) return '3 شهور'
+  if (days === 30) return 'شهر'
   if (days === 180) return '6 شهور'
   if (days === 365) return 'سنة'
   return `${days} يوم`

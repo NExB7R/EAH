@@ -95,7 +95,7 @@ export default function UserAvatar({
         </span>
       )}
 
-      {!isBanned && points > 0 && (
+      {!isBanned && role !== 'super_admin' && points > 0 && (
         <span className="user-avatar__points" aria-label={`${points} نقطة`}>
           {points >= 1000 ? `${(points / 1000).toFixed(1)}k` : points}
         </span>

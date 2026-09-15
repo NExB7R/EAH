@@ -30,23 +30,10 @@ export default function SidePanel() {
 
   useEffect(() => {
     setMounted(true)
+    // يظهر دايماً على الديسكتوب — الإغلاق للسشن بس
+    setClosed(false)
 
-    // نعرض البانل دايماً — إلا لو المستخدم قفلها آخر ساعة
-    const closedAt = localStorage.getItem('eah-sidepanel-closed-at')
-    if (closedAt) {
-      const elapsed = Date.now() - Number(closedAt)
-      if (elapsed < 1000 * 60 * 60) {  // ساعة
-        setClosed(true)
-      } else {
-        localStorage.removeItem('eah-sidepanel-closed-at')
-      }
-    }
-
-    // اسمع للفتح اليدوي
-    const onOpen = () => {
-      setClosed(false)
-      localStorage.removeItem('eah-sidepanel-closed-at')
-    }
+    const onOpen = () => setClosed(false)
     window.addEventListener('eah:open-sidepanel', onOpen)
     return () => window.removeEventListener('eah:open-sidepanel', onOpen)
   }, [])
@@ -94,7 +81,6 @@ export default function SidePanel() {
 
   const handleClose = () => {
     setClosed(true)
-    localStorage.setItem('eah-sidepanel-closed-at', String(Date.now()))
   }
 
   if (!mounted || closed || !data) return null

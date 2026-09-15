@@ -41,7 +41,7 @@ export default function SiteFooter() {
         {/* الروابط — تحت "كيف نخدمك" */}
         <nav className="site-footer__nav">
           <div className="site-footer__col">
-            <h4>المنصة</h4>
+            <h4>EAH</h4>
             <a href="/about">نبذة عننا</a>
             <a href="/contact">تواصل معنا</a>
             <a href="/advertise">أعلن معنا</a>
