@@ -97,3 +97,9 @@
   .explore-hero__back { top: 12px; inset-inline-end: 12px; font-size: 0.72rem; padding: 6px 10px; }
   .explore-hero__logo { margin: 4px 0 16px; }
 }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .explore-hero__logo { animation: none; }
+  .explore-hero__back { transition: none; }
+}

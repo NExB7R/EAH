@@ -93,6 +93,28 @@ export const KB: Intent[] = [
     ],
   },
 
+  // ═══ Merchant benefits ═══
+  {
+    id: 'merchant-benefits',
+    keywords: ['مميزات', 'أستفيد', 'ليه أسجل', 'مكسب', 'فايدة'],
+    response:
+      'لو عندك نشاط، EAH بيوفرلك:\n\n' +
+      '🎁 مجاناً:\n' +
+      '• عرض نشاطك\n' +
+      '• تحليلات أساسية\n' +
+      '• رد على التقييمات\n' +
+      '• QR code للمحل\n\n' +
+      '💎 مميز (اختياري):\n' +
+      '• ظهور أول\n' +
+      '• شارة ذهبية\n' +
+      '• معرض عروض\n' +
+      '• إشعارات فورية',
+    quickReplies: [
+      { label: '✨ كل المميزات', action: 'link', value: '/merchant-info' },
+      { label: '🚀 سجّل نشاطك', action: 'link', value: '/merchant/apply' },
+    ],
+  },
+
   // ═══ Pricing ═══
   {
     id: 'pricing',
