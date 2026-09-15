@@ -163,6 +163,9 @@ export default async function AccountPage() {
             <Link href="/account/notifications" className="acc-action">
               <span className="acc-action__emoji">🔔</span> الإشعارات
             </Link>
+            <Link href="/account/orders" className="acc-action">
+              <span className="acc-action__emoji">🛒</span> طلباتي
+            </Link>
             <Link href="/account/points" className="acc-action">
               <span className="acc-action__emoji">💰</span> نقاطي
             </Link>
