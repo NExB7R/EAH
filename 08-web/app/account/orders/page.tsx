@@ -87,7 +87,7 @@ export default async function AccountOrdersPage() {
               const emoji = BUSINESS_EMOJI[biz?.business_type] ?? '🏪'
               const colorClass = STATUS_COLOR[o.status] ?? 'pending'
               return (
-                <article key={o.id} className={`ao__order ao__order--${colorClass}`}>
+                <Link key={o.id} href={`/account/orders/${o.id}`} className={`ao__order ao__order--${colorClass}`}>
                   <header className="ao__order-head">
                     <div className="ao__biz">
                       <span className="ao__biz-emoji">{emoji}</span>
@@ -134,7 +134,7 @@ export default async function AccountOrdersPage() {
                       {o.status === 'sent' && '⏳ في انتظار رد المطعم'}
                     </span>
                   </footer>
-                </article>
+                </Link>
               )
             })}
           </div>

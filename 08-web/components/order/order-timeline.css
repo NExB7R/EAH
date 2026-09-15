@@ -1,0 +1,72 @@
+.otl {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+.otl::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  inset-inline-start: 17px;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(168, 85, 247, 0.4), rgba(232, 199, 154, 0.2));
+  border-radius: 2px;
+}
+.otl__item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  position: relative;
+  z-index: 1;
+}
+.otl__dot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 7, 20, 0.95);
+  border: 2px solid rgba(168, 85, 247, 0.35);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.otl__item--current .otl__dot {
+  border-color: #A855F7;
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+.otl__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 6px;
+}
+.otl__label {
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #F4F2FA;
+}
+.otl__item--current .otl__label { color: #C4B5FD; }
+.otl__time {
+  font-size: 0.68rem;
+  color: #A29DB5;
+}
+.otl__note {
+  font-size: 0.75rem;
+  color: #C9C2DB;
+  margin: 4px 0 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(168, 85, 247, 0.06);
+}
+.otl__empty {
+  padding: 20px;
+  text-align: center;
+  color: #6B6880;
+  font-size: 0.85rem;
+}
