@@ -10,11 +10,13 @@ import AnimReady from '@/components/anim-ready'
 import OnboardingOverlay from '@/components/onboarding-overlay'
 import ServiceWorkerRegister from '@/components/sw-register'
 import NetworkStatus from '@/components/network-status'
+import OfflineQueueMount from '@/components/offline-queue-mount'
 import InstallAppButton from '@/components/install-app-button'
 import '@/components/install-pwa-button.css'
 import '@/components/install-app-button.css'
 import '@/components/share-button.css'
 import '@/components/verified-badge.css'
+import '@/components/offline-queue-mount.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
 
@@ -118,6 +120,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <OnboardingOverlay />
         <ServiceWorkerRegister />
         <NetworkStatus />
+        <OfflineQueueMount />
         <InstallAppButton />
         <script
           type="application/ld+json"
