@@ -7,12 +7,14 @@ const FEATURES = [
     title: 'تتبّع طلبك لحظة بلحظة',
     body: 'اعرف طلبك فين بالظبط — من وقت الطلب لحد ما يوصل بابك.',
     badge: 'قريب',
+    highlight: true,
   },
   {
     emoji: '🤖',
     title: 'بوت ذكي يطلب بدالك',
     body: 'اختار الأكل، البوت يجهزه ويرسله لمكانك بدون أي تعقيد.',
     badge: 'قريب',
+    highlight: true,
   },
   {
     emoji: '💬',
@@ -55,7 +57,7 @@ export default function ComingSoon() {
         {FEATURES.map((f, i) => (
           <article
             key={f.title}
-            className="cs__card"
+            className={`cs__card ${f.highlight ? 'cs__card--highlight' : ''}`}
             style={{ animationDelay: `${i * 60}ms` }}
           >
             <span className="cs__badge">{f.badge}</span>
@@ -66,9 +68,22 @@ export default function ComingSoon() {
         ))}
       </div>
 
-      <p className="cs__foot">
-        تابعنا على واتساب عشان تعرف كل جديد أول بأول.
-      </p>
+      <div className="cs__cta-row">
+        <a
+          href="/support-palestine"
+          className="cs__cta cs__cta--palestine"
+        >
+          🇵🇸 فلسطين في القلب
+        </a>
+        <a
+          href="https://wa.me/201012892806"
+          target="_blank"
+          rel="noreferrer"
+          className="cs__cta"
+        >
+          💬 تابع واتساب
+        </a>
+      </div>
     </section>
   )
 }
