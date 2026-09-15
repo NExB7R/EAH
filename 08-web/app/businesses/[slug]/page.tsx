@@ -14,6 +14,7 @@ import ReportButton from '@/components/report-button'
 import ReviewForm from '@/components/review-form'
 import BusinessOffers from '@/components/business-offers'
 import SiteFooter from '@/components/site-footer'
+import BusinessClaimCTA from '@/components/business-claim-cta'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import BackToTop from '@/components/back-to-top'
 
@@ -120,6 +121,7 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
       />
       </main>
 
+      <BusinessClaimCTA businessName={typeof business?.name === 'string' ? business.name : undefined} />
       <SiteFooter />
     </>
   )
