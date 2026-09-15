@@ -8,3 +8,4 @@ out/
 .eah/
 *.tsbuildinfo
 .vercel
+tsconfig.tsbuildinfo

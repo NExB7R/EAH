@@ -51,6 +51,11 @@ const STEPS = [
   { n: 3, emoji: '🏪', title: 'لوحة النشاط', desc: 'تتحول لـ Merchant وتدير مكانك' },
 ]
 
+export const metadata = {
+  title: 'سجّل نشاطك',
+  description: 'قدّم طلب تسجيل نشاطك على EAH — عرض مجاني لآلاف العملاء.',
+}
+
 export default async function MerchantApplyPage({
   searchParams,
 }: {
