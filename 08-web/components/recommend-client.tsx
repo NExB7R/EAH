@@ -147,7 +147,10 @@ export default function RecommendClient({ businesses }: { businesses: Business[]
         {!showResults ? (
           <div className="rc-quiz">
             <div className="rc-quiz__step">
-              <span className="rc-quiz__num">سؤال {step + 1} من {QUESTIONS.length}</span>
+              <span className="rc-quiz__num">
+                سؤال {step + 1} من {QUESTIONS.length}
+              </span>
+              <span className="rc-quiz__pct">{Math.round(progress)}%</span>
             </div>
 
             <h2 className="rc-quiz__title">{currentQ.title}</h2>

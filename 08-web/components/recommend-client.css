@@ -267,3 +267,20 @@
   .rc-card { grid-template-columns: auto 1fr; }
   .rc-card__arrow { display: none; }
 }
+
+/* Progress percentage */
+.rc-quiz__step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.rc-quiz__pct {
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #A855F7;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
