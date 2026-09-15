@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase-server'
 import { getMerchantContext } from '@/lib/admin/merchant-guard'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import './merchant.css'
@@ -34,9 +36,14 @@ export default async function MerchantDashboard() {
               مرحبًا {user.email?.split('@')[0] ?? 'صاحب النشاط'} — إدارة كل أنشطتك من هنا
             </p>
           </div>
-          <Link href="/merchant/apply" className="admin-btn admin-btn--primary">
-            ➕ أضف نشاط جديد
-          </Link>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <Link href="/merchant/orders" className="admin-btn admin-btn--gold">
+              🛒 الطلبات
+            </Link>
+            <Link href="/merchant/apply" className="admin-btn admin-btn--primary">
+              ➕ أضف نشاط جديد
+            </Link>
+          </div>
         </div>
 
         {businesses.length === 0 ? (
@@ -78,6 +85,9 @@ export default async function MerchantDashboard() {
                   </Link>
                   <Link href={`/merchant/businesses/${b.slug}/report`} className="admin-btn admin-btn--sm">
                     📊 إحصائيات
+                  </Link>
+                  <Link href="/merchant/orders" className="admin-btn admin-btn--sm">
+                    🛒 الطلبات
                   </Link>
                   <Link href={`/businesses/${b.slug}`} target="_blank" className="admin-btn admin-btn--sm">
                     👁 عرض ↗
