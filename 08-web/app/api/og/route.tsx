@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { createClient } from '@/lib/supabase-server'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
