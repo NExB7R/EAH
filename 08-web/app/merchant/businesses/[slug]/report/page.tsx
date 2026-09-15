@@ -8,10 +8,14 @@ export const metadata = { title: 'إحصائيات النشاط' }
 
 export default async function MerchantReportPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ range?: string }>
 }) {
   const { slug } = await params
+  const sp = await searchParams
+  const rangeDays = Math.min(90, Math.max(7, parseInt(sp.range ?? '30', 10) || 30))
   const { business, supabase } = await requireMerchantForBusiness(slug)
 
   const [stats, reviews] = await Promise.all([
@@ -19,15 +23,24 @@ export default async function MerchantReportPage({
     getBusinessReviews(business.id, 10),
   ])
 
-  // نظرة سريعة على الزيارات
+  // نظرة سريعة على الزيارات — حسب الفترة
+  const since = new Date(Date.now() - rangeDays * 86400000).toISOString()
   const { count: viewsCount } = await supabase
     .from('page_view_events')
     .select('*', { count: 'exact', head: true })
     .eq('business_id', business.id)
+    .gte('created_at', since)
+
+  const { count: revealsCount } = await supabase
+    .from('contact_reveals')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_id', business.id)
+    .gte('created_at', since)
 
   const metrics = [
-    { label: 'زيارات', value: viewsCount ?? 0, emoji: '👁', color: 'var(--eah-purple-2)' },
-    { label: 'تقييمات', value: stats.review_count, emoji: '⭐', color: 'var(--eah-gold)' },
+    { label: `زيارات (${rangeDays}ي)`, value: viewsCount ?? 0, emoji: '👁', color: 'var(--eah-purple-2)' },
+    { label: `كشوف (${rangeDays}ي)`, value: revealsCount ?? 0, emoji: '📞', color: '#22C55E' },
+    { label: 'إجمالي التقييمات', value: stats.review_count, emoji: '⭐', color: 'var(--eah-gold)' },
     { label: 'متوسط التقييم', value: stats.avg_rating.toFixed(1), emoji: '📊', color: 'var(--eah-green)' },
     { label: 'عروض نشطة', value: stats.active_offers, emoji: '🔥', color: '#FB923C' },
   ]
@@ -45,6 +58,25 @@ export default async function MerchantReportPage({
           <Link href={`/merchant/businesses/${business.slug}/edit`} className="admin-btn admin-btn--primary">
             ✏️ تعديل البيانات
           </Link>
+        </div>
+
+        <div className="mrange">
+          <span className="mrange__label">الفترة:</span>
+          {[7, 14, 30, 90].map((r) => (
+            <Link
+              key={r}
+              href={`?range=${r}`}
+              className={`mrange__btn ${rangeDays === r ? 'is-active' : ''}`}
+            >
+              {r === 90 ? '3 شهور' : `${r} يوم`}
+            </Link>
+          ))}
+          <a
+            href={`/api/merchant/export?business=${business.id}&range=${rangeDays}`}
+            className="mrange__export"
+          >
+            📥 CSV
+          </a>
         </div>
 
         <div className="mstats">
@@ -155,6 +187,62 @@ export default async function MerchantReportPage({
           line-height: 1.6;
           color: var(--eah-text-2);
           margin: 0;
+        }
+        .mrange {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          flex-wrap: wrap;
+          margin: 0 0 18px;
+          padding: 8px 12px;
+          border-radius: 14px;
+          background: rgba(168, 85, 247, 0.04);
+          border: 1px solid var(--eah-border);
+        }
+        .mrange__label {
+          font-family: var(--eah-font-body);
+          font-size: 0.75rem;
+          color: var(--eah-text-3);
+          font-weight: 800;
+          margin-inline-end: 4px;
+        }
+        .mrange__btn {
+          padding: 6px 12px;
+          border-radius: 8px;
+          background: transparent;
+          border: 1px solid var(--eah-border);
+          color: var(--eah-text-2);
+          font-family: var(--eah-font-body);
+          font-size: 0.72rem;
+          font-weight: 800;
+          text-decoration: none;
+          transition: all 0.2s;
+        }
+        .mrange__btn:hover {
+          border-color: var(--eah-purple-2);
+          color: var(--eah-text);
+        }
+        .mrange__btn.is-active {
+          background: linear-gradient(135deg, #6B21FF, #A855F7);
+          border-color: transparent;
+          color: #fff;
+        }
+        .mrange__export {
+          margin-inline-start: auto;
+          padding: 6px 12px;
+          border-radius: 8px;
+          background: rgba(74, 222, 128, 0.08);
+          border: 1px solid rgba(74, 222, 128, 0.3);
+          color: var(--eah-green);
+          font-family: var(--eah-font-body);
+          font-size: 0.72rem;
+          font-weight: 800;
+          text-decoration: none;
+          transition: all 0.2s;
+        }
+        .mrange__export:hover {
+          background: rgba(74, 222, 128, 0.18);
+          border-color: rgba(74, 222, 128, 0.55);
         }
       `}</style>
     </>
