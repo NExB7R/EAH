@@ -1,125 +1,198 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { createClient } from '@/lib/supabase-browser'
-import './notifications-panel.css'
+import './notification-preferences.css'
 
-type NotifType = {
+type TypeRow = {
   key: string
   label: string
   description: string | null
-  emoji: string
+  emoji: string | null
   role_scope: string
   default_enabled: boolean
+  sort_order: number | null
   is_globally_active: boolean
-  sort_order: number
+  is_premium_only: boolean | null
+}
+
+type Props = {
+  types: TypeRow[]
+  initialPrefs: Record<string, boolean>
+  role: 'customer' | 'merchant' | 'super_admin'
+  isPremium?: boolean
+  /** وضع الأدمن — يخفي ساعات الهدوء ويعرض نطاق كل الأدوار */
+  adminMode?: boolean
+}
+
+type QuietHours = {
+  enabled: boolean
+  from: string
+  to: string
 }
 
 export default function NotificationsPanel({
   types,
   initialPrefs,
   role,
-  adminMode = false,
-}: {
-  types: NotifType[]
-  initialPrefs: Record<string, boolean>
-  role: 'customer' | 'merchant' | 'admin'
-  adminMode?: boolean
-}) {
-  const [prefs, setPrefs] = useState<Record<string, boolean>>(() => {
-    const defaults: Record<string, boolean> = {}
-    types.forEach(t => { defaults[t.key] = initialPrefs[t.key] ?? t.default_enabled })
-    return defaults
+  isPremium = false,
+}: Props) {
+  const [prefs, setPrefs] = useState<Record<string, boolean>>(initialPrefs)
+  const [quiet, setQuiet] = useState<QuietHours>({
+    enabled: false,
+    from: '22:00',
+    to: '08:00',
   })
-  const [saving, setSaving] = useState<string | null>(null)
-  const [savedAt, setSavedAt] = useState<Date | null>(null)
-  const [globalState, setGlobalState] = useState<Record<string, boolean>>(() => {
-    const s: Record<string, boolean> = {}
-    types.forEach(t => { s[t.key] = t.is_globally_active })
-    return s
+  const [pending, start] = useTransition()
+  const [status, setStatus] = useState<'idle' | 'saved' | 'error'>('idle')
+
+  // فلاتر حسب الباقة
+  const visible = types.filter((t) => {
+    if (!t.is_globally_active) return false
+    if (t.is_premium_only && !isPremium) return false
+    return true
   })
 
-  async function toggle(key: string) {
-    const next = !prefs[key]
-    setPrefs(p => ({ ...p, [key]: next }))
-    setSaving(key)
-    const supabase = createClient()
-    await supabase.rpc('toggle_notif_pref', { p_key: key, p_enabled: next })
-    setSaving(null)
-    setSavedAt(new Date())
+  function toggle(key: string) {
+    setPrefs((p) => ({ ...p, [key]: !(p[key] ?? true) }))
   }
 
-  async function toggleGlobal(key: string) {
-    const next = !globalState[key]
-    setGlobalState(g => ({ ...g, [key]: next }))
-    const supabase = createClient()
-    await supabase.from('notification_types').update({ is_globally_active: next }).eq('key', key)
-  }
+  function save() {
+    start(async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        setStatus('error')
+        return
+      }
 
-  const roleLabel = {
-    customer: '🔔 إشعارات العميل',
-    merchant: '🔔 إشعارات التاجر',
-    admin: '🛡️ إشعارات الأدمن',
-  }[role]
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          notif_prefs: prefs,
+          notif_quiet_hours: quiet,
+        })
+        .eq('id', user.id)
+
+      if (error) {
+        setStatus('error')
+      } else {
+        setStatus('saved')
+        setTimeout(() => setStatus('idle'), 2400)
+      }
+    })
+  }
 
   return (
-    <section className="np2">
-      <header className="np2__head">
-        <div>
-          <h2 className="np2__title">{roleLabel}</h2>
-          <p className="np2__sub">
-            {adminMode
-              ? 'تحكم كامل في إشعارات المنصة — من يراها ومتى'
-              : 'اختر ما يهمك — لا إزعاج'}
-          </p>
+    <div className="np">
+      {/* Status banner */}
+      {role === 'merchant' && !isPremium && (
+        <div className="np__banner np__banner--info">
+          <span className="np__banner-emoji">💎</span>
+          <div>
+            <strong>باقة مميزة بتفتح إشعارات إضافية</strong>
+            <p>اشترك للحصول على إشعارات فورية بالتقييمات، العروض الجديدة، وتفاصيل أعمق عن أداء نشاطك.</p>
+          </div>
         </div>
-        {savedAt && (
-          <span className="np2__status">
-            ✓ محفوظ {savedAt.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}
-          </span>
-        )}
-      </header>
+      )}
 
-      <div className="np2__list">
-        {types.map(t => (
-          <div key={t.key} className={`np2__item ${!globalState[t.key] ? 'is-disabled' : ''}`}>
-            <div className="np2__item-body">
-              <span className="np2__item-emoji">{t.emoji}</span>
-              <div className="np2__item-text">
-                <span className="np2__item-label">{t.label}</span>
-                {t.description && <span className="np2__item-desc">{t.description}</span>}
+      {/* Types */}
+      <div className="np__types">
+        {visible.map((t) => {
+          const enabled = prefs[t.key] ?? t.default_enabled
+          return (
+            <label key={t.key} className="np__row">
+              <div className="np__info">
+                <span className="np__emoji">{t.emoji ?? '🔔'}</span>
+                <div className="np__text">
+                  <span className="np__label">{t.label}</span>
+                  {t.description && (
+                    <span className="np__desc">{t.description}</span>
+                  )}
+                  {t.is_premium_only && (
+                    <span className="np__badge">💎 مميز</span>
+                  )}
+                </div>
               </div>
-            </div>
-
-            <div className="np2__item-actions">
-              {adminMode && (
-                <button
-                  type="button"
-                  className={`np2__global ${globalState[t.key] ? 'is-on' : ''}`}
-                  onClick={() => toggleGlobal(t.key)}
-                  title={globalState[t.key] ? 'متاح للمستخدمين' : 'موقوف من الأدمن'}
-                >
-                  {globalState[t.key] ? '🌐 عام' : '🚫 موقوف'}
-                </button>
-              )}
-
               <button
                 type="button"
-                className={`np2__toggle ${prefs[t.key] ? 'is-on' : ''}`}
+                className={`np__switch ${enabled ? 'is-on' : ''}`}
                 onClick={() => toggle(t.key)}
-                disabled={saving === t.key || (adminMode && !globalState[t.key])}
-                role="switch"
-                aria-checked={prefs[t.key]}
+                aria-pressed={enabled}
+                aria-label={t.label}
               >
-                <span className="np2__toggle-thumb" />
+                <span className="np__switch-thumb" />
               </button>
-            </div>
-          </div>
-        ))}
+            </label>
+          )
+        })}
       </div>
 
-      {types.length === 0 && (
-        <div className="np2__empty">مفيش أنواع إشعارات متاحة</div>
-      )}
-    </section>
+      {/* Quiet hours */}
+      <div className="np__section">
+        <h3 className="np__section-title">
+          <span>🌙</span>
+          ساعات الهدوء
+        </h3>
+        <p className="np__section-sub">
+          مش بنبعت إشعارات في الفترة دي — حتى لو مفعّلة.
+        </p>
+
+        <label className="np__row">
+          <div className="np__info">
+            <span className="np__emoji">🌙</span>
+            <span className="np__text">
+              <span className="np__label">تفعيل ساعات الهدوء</span>
+            </span>
+          </div>
+          <button
+            type="button"
+            className={`np__switch ${quiet.enabled ? 'is-on' : ''}`}
+            onClick={() => setQuiet((q) => ({ ...q, enabled: !q.enabled }))}
+            aria-pressed={quiet.enabled}
+          >
+            <span className="np__switch-thumb" />
+          </button>
+        </label>
+
+        {quiet.enabled && (
+          <div className="np__quiet-times">
+            <label className="np__time">
+              <span>من</span>
+              <input
+                type="time"
+                value={quiet.from}
+                onChange={(e) => setQuiet((q) => ({ ...q, from: e.target.value }))}
+              />
+            </label>
+            <label className="np__time">
+              <span>إلى</span>
+              <input
+                type="time"
+                value={quiet.to}
+                onChange={(e) => setQuiet((q) => ({ ...q, to: e.target.value }))}
+              />
+            </label>
+          </div>
+        )}
+      </div>
+
+      {/* Save */}
+      <div className="np__footer">
+        <button
+          type="button"
+          className="np__save"
+          onClick={save}
+          disabled={pending}
+        >
+          {pending ? '...' : 'حفظ التفضيلات'}
+        </button>
+        {status === 'saved' && (
+          <span className="np__status np__status--ok">✓ تم الحفظ</span>
+        )}
+        {status === 'error' && (
+          <span className="np__status np__status--err">⚠ فشل الحفظ</span>
+        )}
+      </div>
+    </div>
   )
 }
