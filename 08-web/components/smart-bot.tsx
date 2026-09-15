@@ -169,12 +169,30 @@ export default function SmartBot() {
       >
         <span className="sb-trigger__icon" aria-hidden>
           {open ? (
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
               <path d="M18 6 6 18M6 6l12 12" />
             </svg>
           ) : (
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+            <svg viewBox="0 0 32 32" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* AI orb icon — 2026 minimalist */}
+              <defs>
+                <radialGradient id="sbOrb" cx="40%" cy="35%" r="65%">
+                  <stop offset="0%" stopColor="#E9D5FF" />
+                  <stop offset="55%" stopColor="#A855F7" />
+                  <stop offset="100%" stopColor="#6B21FF" />
+                </radialGradient>
+              </defs>
+              {/* Outer ring */}
+              <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.5" />
+              {/* Main orb */}
+              <circle cx="16" cy="16" r="9" fill="url(#sbOrb)" />
+              {/* Inner sparkle */}
+              <path d="M16 11 L17 15 L21 16 L17 17 L16 21 L15 17 L11 16 L15 15 Z" fill="#FFFFFF" opacity="0.9" />
+              {/* Small dots around */}
+              <circle cx="16" cy="4" r="1" fill="currentColor" opacity="0.7" />
+              <circle cx="28" cy="16" r="1" fill="currentColor" opacity="0.7" />
+              <circle cx="16" cy="28" r="1" fill="currentColor" opacity="0.7" />
+              <circle cx="4" cy="16" r="1" fill="currentColor" opacity="0.7" />
             </svg>
           )}
         </span>

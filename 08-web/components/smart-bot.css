@@ -414,3 +414,30 @@
 @media (prefers-reduced-motion: reduce) {
   .sb-hint, .sb-hint__icon { animation: none; }
 }
+
+/* Updated trigger — bigger + orb glow */
+.sb-trigger {
+  width: 64px;
+  height: 64px;
+  background: radial-gradient(circle at 30% 30%, rgba(232, 199, 154, 0.15), transparent 40%),
+              linear-gradient(135deg, #6B21FF, #A855F7);
+  box-shadow:
+    0 14px 38px rgba(168, 85, 247, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 0 60px rgba(168, 85, 247, 0.25);
+}
+
+.sb-trigger:hover {
+  transform: translateY(-4px) scale(1.06);
+  box-shadow:
+    0 20px 48px rgba(168, 85, 247, 0.65),
+    0 0 80px rgba(168, 85, 247, 0.35);
+}
+
+.sb-trigger.is-open {
+  background: linear-gradient(135deg, #2A1F44, #1A1128);
+}
+
+@media (max-width: 640px) {
+  .sb-trigger { width: 60px; height: 60px; }
+}
