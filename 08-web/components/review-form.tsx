@@ -1,5 +1,5 @@
 'use client'
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './review-form.css'
 
@@ -16,6 +16,17 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
   const [comment, setComment] = useState('')
   const [msg, setMsg] = useState('')
   const [pending, start] = useTransition()
+  const [needsAuth, setNeedsAuth] = useState(false)
+
+  useEffect(() => {
+    const supabase = createClient()
+    let alive = true
+    void (async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (alive) setNeedsAuth(!user)
+    })()
+    return () => { alive = false }
+  }, [])
 
   function setRating(key: string, val: number) {
     setRatings(r => ({ ...r, [key]: val }))
@@ -29,7 +40,11 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
     start(async () => {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { setMsg('سجل دخول الأول'); return }
+      if (!user) {
+        const next = window.location.pathname
+        window.location.href = `/auth?next=${encodeURIComponent(next)}`
+        return
+      }
 
       const avg = Math.round(
         (ratings.taste + ratings.value + ratings.speed + ratings.experience) / 4
@@ -72,9 +87,23 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
     })
   }
 
+  function handleTrigger() {
+    if (needsAuth) {
+      const next = typeof window !== 'undefined' ? window.location.pathname : '/'
+      window.location.href = `/auth?next=${encodeURIComponent(next)}`
+      return
+    }
+    setOpen(true)
+  }
+
   if (!open) {
     return (
-      <button type="button" className="rvf-trigger" onClick={() => setOpen(true)}>
+      <button
+        type="button"
+        className="rvf-trigger"
+        onClick={handleTrigger}
+        title={needsAuth ? 'سجّل عشان تكتب تقييم' : undefined}
+      >
         ✍️ اكتب تقييم
       </button>
     )

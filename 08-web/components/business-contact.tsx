@@ -1,8 +1,7 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { getClientToken } from '@/lib/admin/visitor-hash'
 import './business-contact.css'
-import RequireAuth from './require-auth'
 
 type ContactMethod = {
   method_type: string
@@ -37,8 +36,49 @@ export default function BusinessContact({
 }) {
   const [revealed, setRevealed] = useState<Record<string, boolean>>({})
   const [loading, setLoading] = useState<Record<string, boolean>>({})
+  const [needsAuth, setNeedsAuth] = useState(false)
+
+  useEffect(() => {
+    const supabaseModule = import('@/lib/supabase-browser')
+    let alive = true
+    void (async () => {
+      try {
+        const { createClient } = await supabaseModule
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+        if (alive) setNeedsAuth(!user)
+      } catch {
+        /* silent */
+      }
+    })()
+    return () => { alive = false }
+  }, [])
+  const [needsAuth, setNeedsAuth] = useState(false)
+
+  useEffect(() => {
+    const supabaseModule = import('@/lib/supabase-browser')
+    let alive = true
+    void (async () => {
+      try {
+        const { createClient } = await supabaseModule
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+        if (alive) setNeedsAuth(!user)
+      } catch {
+        /* silent */
+      }
+    })()
+    return () => { alive = false }
+  }, [])
 
   const reveal = async (method: ContactMethod) => {
+    // AuthGate: لو مش مسجل → ودي للتسجيل
+    if (needsAuth) {
+      const next = typeof window !== 'undefined' ? window.location.pathname : '/'
+      window.location.href = `/auth?next=${encodeURIComponent(next)}`
+      return
+    }
+
     setLoading((p) => ({ ...p, [method.method_type]: true }))
 
     try {
@@ -81,7 +121,7 @@ export default function BusinessContact({
         التواصل
       </h2>
       <p className="bcontact__hint">
-        ✋ دوس على الزرار عشان تظهر البيانات — ده بيتحسب كزيارة فريدة للمكان.
+        ✋ سجّل مرة واحدة وشوف كل الأرقام — من غير أي رسوم أو تعقيد.
       </p>
 
       <div className="bcontact__list">
@@ -123,10 +163,11 @@ export default function BusinessContact({
                   className="bcontact__reveal"
                   onClick={() => reveal(c)}
                   disabled={isLoading}
+                  title={needsAuth ? 'سجّل عشان تكشف الرقم' : undefined}
                 >
                   <span className="bcontact__hidden">•••••••••••</span>
                   <span className="bcontact__reveal-text">
-                    {isLoading ? '...' : 'اكشف الرقم'}
+                    {isLoading ? '...' : needsAuth ? '🔒 سجّل عشان تكشف' : 'اكشف الرقم'}
                   </span>
                 </button>
               )}
