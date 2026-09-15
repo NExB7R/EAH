@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
+import OrderStatusButtons from './_components/OrderStatusButtons'
 import './orders.css'
 
 export const dynamic = 'force-dynamic'
@@ -184,6 +185,8 @@ export default async function MerchantOrdersPage({
                   {o.notes && (
                     <div className="mo__notes">💬 {o.notes}</div>
                   )}
+
+                  <OrderStatusButtons orderId={o.id} currentStatus={o.status as any} />
 
                   <div className="mo__actions">
                     <a

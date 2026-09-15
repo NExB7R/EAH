@@ -260,3 +260,55 @@
   .mo { padding: 90px 16px 40px; }
   .mo__order { padding: 16px; }
 }
+
+/* Order Status Buttons */
+.osb {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(168, 85, 247, 0.1);
+  margin-top: 4px;
+}
+.osb__btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.18s;
+  border: 1px solid;
+}
+.osb__btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.osb__btn--primary {
+  background: rgba(74, 222, 128, 0.12);
+  border-color: rgba(74, 222, 128, 0.4);
+  color: #6EE7B7;
+}
+.osb__btn--primary:hover:not(:disabled) {
+  background: rgba(74, 222, 128, 0.22);
+  border-color: rgba(74, 222, 128, 0.7);
+}
+.osb__btn--ghost {
+  background: rgba(168, 85, 247, 0.08);
+  border-color: rgba(168, 85, 247, 0.3);
+  color: #C4B5FD;
+}
+.osb__btn--ghost:hover:not(:disabled) {
+  background: rgba(168, 85, 247, 0.18);
+}
+.osb__btn--danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #FCA5A5;
+}
+.osb__btn--danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.22);
+}
+.osb__msg {
+  font-size: 0.72rem;
+  color: #6EE7B7;
+  font-weight: 800;
+}
