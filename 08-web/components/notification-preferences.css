@@ -48,3 +48,16 @@
   .np { padding: 18px; }
   .np__item { padding: 10px 12px; }
 }
+
+
+/* Premium banner link */
+.np__banner-link {
+  color: #E8C79A;
+  font-weight: 900;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.np__banner-link:hover {
+  color: #FFFBEB;
+  text-decoration: underline;
+}

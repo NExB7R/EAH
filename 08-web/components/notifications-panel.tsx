@@ -85,13 +85,17 @@ export default function NotificationsPanel({
 
   return (
     <div className="np">
-      {/* Status banner */}
+      {/* Status banner — premium notice for merchants without active subscription */}
       {role === 'merchant' && !isPremium && (
         <div className="np__banner np__banner--info">
           <span className="np__banner-emoji">💎</span>
           <div>
             <strong>باقة مميزة بتفتح إشعارات إضافية</strong>
-            <p>اشترك للحصول على إشعارات فورية بالتقييمات، العروض الجديدة، وتفاصيل أعمق عن أداء نشاطك.</p>
+            <p>
+              اشترك للحصول على إشعارات فورية بالتقييمات، العروض الجديدة، وتفاصيل أعمق.
+              {' '}
+              <a href="/pricing" className="np__banner-link">اعرف أكتر →</a>
+            </p>
           </div>
         </div>
       )}

@@ -19,13 +19,32 @@ export default async function MerchantSettingsPage() {
   const ctx = await getMerchantContext()
   if (!ctx || ctx.businesses.length === 0) redirect('/merchant/apply')
 
-  const [typesRes, profileRes] = await Promise.all([
-    supabase.from('notification_types').select('*').in('role_scope', ['merchant', 'all']).eq('is_globally_active', true).order('sort_order'),
-    supabase.from('profiles').select('notif_prefs').eq('id', userData.user.id).maybeSingle(),
+  const [typesRes, profileRes, subRes] = await Promise.all([
+    supabase
+      .from('notification_types')
+      .select('*')
+      .in('role_scope', ['merchant', 'all'])
+      .eq('is_globally_active', true)
+      .order('sort_order'),
+    supabase
+      .from('profiles')
+      .select('notif_prefs')
+      .eq('id', userData.user.id)
+      .maybeSingle(),
+    // ✅ فحص اشتراك نشط
+    supabase
+      .from('business_subscriptions')
+      .select('status,expires_at')
+      .eq('owner_id', userData.user.id)
+      .eq('status', 'active')
+      .gt('expires_at', new Date().toISOString())
+      .limit(1)
+      .maybeSingle(),
   ])
 
   const types = typesRes.data ?? []
   const prefs = (profileRes.data?.notif_prefs ?? {}) as Record<string, boolean>
+  const isPremium = !!subRes.data
 
   return (
     <>
@@ -40,7 +59,7 @@ export default async function MerchantSettingsPage() {
 
         <EnablePushButton />
 
-        <NotificationsPanel types={types} initialPrefs={prefs} role="merchant" />
+        <NotificationsPanel types={types} initialPrefs={prefs} role="merchant" isPremium={isPremium} />
 
         <section className="mset__section">
           <h2 className="mset__section-title">🚀 إجراءات سريعة</h2>
