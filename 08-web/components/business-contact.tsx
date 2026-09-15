@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { getClientToken } from '@/lib/admin/visitor-hash'
+import { createClient } from '@/lib/supabase-browser'
 import './business-contact.css'
 
 type ContactMethod = {
@@ -39,11 +40,9 @@ export default function BusinessContact({
   const [needsAuth, setNeedsAuth] = useState(false)
 
   useEffect(() => {
-    const supabaseModule = import('@/lib/supabase-browser')
     let alive = true
     void (async () => {
       try {
-        const { createClient } = await supabaseModule
         const supabase = createClient()
         const { data: { user } } = await supabase.auth.getUser()
         if (alive) setNeedsAuth(!user)
@@ -51,28 +50,12 @@ export default function BusinessContact({
         /* silent */
       }
     })()
-    return () => { alive = false }
-  }, [])
-  const [needsAuth, setNeedsAuth] = useState(false)
-
-  useEffect(() => {
-    const supabaseModule = import('@/lib/supabase-browser')
-    let alive = true
-    void (async () => {
-      try {
-        const { createClient } = await supabaseModule
-        const supabase = createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        if (alive) setNeedsAuth(!user)
-      } catch {
-        /* silent */
-      }
-    })()
-    return () => { alive = false }
+    return () => {
+      alive = false
+    }
   }, [])
 
   const reveal = async (method: ContactMethod) => {
-    // AuthGate: لو مش مسجل → ودي للتسجيل
     if (needsAuth) {
       const next = typeof window !== 'undefined' ? window.location.pathname : '/'
       window.location.href = `/auth?next=${encodeURIComponent(next)}`
@@ -107,9 +90,7 @@ export default function BusinessContact({
           <span className="bcontact__title-icon">📞</span>
           التواصل
         </h2>
-        <p className="bcontact__empty-msg">
-          أرقام التواصل هتظهر قريب.
-        </p>
+        <p className="bcontact__empty-msg">أرقام التواصل هتظهر قريب.</p>
       </section>
     )
   }
@@ -121,7 +102,7 @@ export default function BusinessContact({
         التواصل
       </h2>
       <p className="bcontact__hint">
-        ✋ سجّل مرة واحدة وشوف كل الأرقام — من غير أي رسوم أو تعقيد.
+        ✋ سجّل مرة واحدة وشوف كل الأرقام — بدون أي رسوم أو تعقيد.
       </p>
 
       <div className="bcontact__list">
@@ -135,10 +116,10 @@ export default function BusinessContact({
             c.method_type === 'phone'
               ? `tel:${c.value}`
               : c.method_type === 'whatsapp'
-              ? `https://wa.me/${c.value.replace(/\D/g, '')}`
-              : c.method_type === 'email'
-              ? `mailto:${c.value}`
-              : c.value
+                ? `https://wa.me/${c.value.replace(/\D/g, '')}`
+                : c.method_type === 'email'
+                  ? `mailto:${c.value}`
+                  : c.value
 
           return (
             <div
