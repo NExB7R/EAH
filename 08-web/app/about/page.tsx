@@ -5,14 +5,14 @@ import './about.css'
 
 export const metadata = {
   title: 'نبذة عننا',
-  description: 'EAH — منصة اكتشاف محلية بتبدأ من شبين القناطر وتوصل لكل حتة.',
+  description: 'EAH — منصة اكتشاف محلية بتبدأ من شبين القناطر وبتوصل لكل حتة.',
 }
 
 const STATS = [
-  { num: '2026', label: 'سنة التأسيس' },
-  { num: '+10', label: 'أنشطة مسجلة' },
-  { num: '4', label: 'فئات رئيسية' },
-  { num: '100%', label: 'مجاني للعميل' },
+  { num: '2026', label: 'سنة التأسيس', color: '#A855F7' },
+  { num: '8', label: 'مناطق مستهدفة', color: '#E8C79A' },
+  { num: '4', label: 'فئات رئيسية', color: '#4ADE80' },
+  { num: '100%', label: 'مجاني للعميل', color: '#FBBF24' },
 ]
 
 const VALUES = [
@@ -60,46 +60,49 @@ export default function AboutPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <main className="about">
+      <main className="ab">
         {/* Hero */}
-        <section className="about__hero">
-          <div className="about__hero-inner">
-            <span className="about__kicker">ABOUT EAH</span>
-            <h1 className="about__title">
-              نبذة عننا
-            </h1>
-            <p className="about__lead">
-              EAH منصة اكتشاف محلية بدأت من شبين القناطر — هدفنا نوصل كل حد
-              لأقرب مكان محتاجه، بأسهل طريقة، ومن غير أي تعقيد.
-            </p>
-            <div className="about__hero-cta">
-              <Link href="/explore" className="about__btn about__btn--primary">
-                اكتشف الأماكن
-              </Link>
-              <Link href="/merchant/apply" className="about__btn about__btn--ghost">
-                سجّل نشاطك
-              </Link>
-            </div>
+        <section className="ab__hero">
+          <div className="ab__hero-glow" aria-hidden />
+          <span className="ab__kicker">ABOUT EAH</span>
+          <h1 className="ab__title">
+            منصة اكتشاف محلية،
+            <br />
+            <span className="ab__title-accent">بتحب المكان اللي فيه</span>
+          </h1>
+          <p className="ab__lead">
+            EAH بدأت من شبين القناطر — هدفنا نوصل كل حد لأقرب مكان محتاجه،
+            بأسهل طريقة، ومن غير أي تعقيد.
+          </p>
+          <div className="ab__hero-cta">
+            <Link href="/explore" className="ab__btn ab__btn--primary">
+              🔍 اكتشف الأماكن
+            </Link>
+            <Link href="/merchant-info" className="ab__btn ab__btn--ghost">
+              🏪 لأصحاب الأنشطة
+            </Link>
           </div>
         </section>
 
         {/* Stats */}
-        <section className="about__stats">
+        <section className="ab__stats">
           {STATS.map((s) => (
-            <div key={s.label} className="about__stat">
-              <span className="about__stat-num">{s.num}</span>
-              <span className="about__stat-label">{s.label}</span>
+            <div key={s.label} className="ab__stat">
+              <span className="ab__stat-num" style={{ color: s.color }}>
+                {s.num}
+              </span>
+              <span className="ab__stat-label">{s.label}</span>
             </div>
           ))}
         </section>
 
         {/* Story */}
-        <section className="about__section">
-          <header className="about__section-head">
-            <span className="about__section-kicker">قصتنا</span>
-            <h2 className="about__section-title">بدأنا من فكرة صغيرة</h2>
+        <section className="ab__section">
+          <header className="ab__section-head">
+            <span className="ab__section-kicker">قصتنا</span>
+            <h2 className="ab__section-title">بدأنا من فكرة صغيرة</h2>
           </header>
-          <div className="about__story">
+          <div className="ab__story">
             <p>
               في شبين القناطر والقرى حواليها، الوصول لمطعم قريب أو صيدلية مفتوحة أو ماركت
               فيه احتياجاتك — كان محتاج لفات كتير أو سؤال لناس. EAH جت عشان تختصر كل ده.
@@ -116,35 +119,36 @@ export default function AboutPage() {
         </section>
 
         {/* Values */}
-        <section className="about__section">
-          <header className="about__section-head">
-            <span className="about__section-kicker">قيمنا</span>
-            <h2 className="about__section-title">إحنا ماشيين على 4 مبادئ</h2>
+        <section className="ab__section">
+          <header className="ab__section-head">
+            <span className="ab__section-kicker">قيمنا</span>
+            <h2 className="ab__section-title">4 مبادئ بنمشي عليها</h2>
           </header>
-          <div className="about__values">
+          <div className="ab__values">
             {VALUES.map((v) => (
-              <article key={v.title} className="about__value">
-                <span className="about__value-emoji">{v.emoji}</span>
-                <h3 className="about__value-title">{v.title}</h3>
-                <p className="about__value-body">{v.body}</p>
+              <article key={v.title} className="ab__value">
+                <span className="ab__value-emoji">{v.emoji}</span>
+                <h3 className="ab__value-title">{v.title}</h3>
+                <p className="ab__value-body">{v.body}</p>
               </article>
             ))}
           </div>
         </section>
 
         {/* Timeline */}
-        <section className="about__section">
-          <header className="about__section-head">
-            <span className="about__section-kicker">الرحلة</span>
-            <h2 className="about__section-title">فين إحنا وفين رايحين</h2>
+        <section className="ab__section">
+          <header className="ab__section-head">
+            <span className="ab__section-kicker">الرحلة</span>
+            <h2 className="ab__section-title">فين إحنا وفين رايحين</h2>
           </header>
-          <div className="about__timeline">
+          <div className="ab__timeline">
             {TIMELINE.map((t, i) => (
-              <article key={i} className="about__tl-item">
-                <div className="about__tl-year">{t.year}</div>
-                <div className="about__tl-content">
-                  <h3 className="about__tl-title">{t.title}</h3>
-                  <p className="about__tl-body">{t.body}</p>
+              <article key={i} className="ab__tl-item">
+                <div className="ab__tl-dot" aria-hidden />
+                <div className="ab__tl-year">{t.year}</div>
+                <div className="ab__tl-content">
+                  <h3 className="ab__tl-title">{t.title}</h3>
+                  <p className="ab__tl-body">{t.body}</p>
                 </div>
               </article>
             ))}
@@ -152,17 +156,17 @@ export default function AboutPage() {
         </section>
 
         {/* CTA */}
-        <section className="about__cta">
-          <h2 className="about__cta-title">جاهز تبدأ معانا؟</h2>
-          <p className="about__cta-body">
+        <section className="ab__cta">
+          <h2 className="ab__cta-title">جاهز تبدأ معانا؟</h2>
+          <p className="ab__cta-body">
             لو بتدور على مكان، أو عندك نشاط وعايز يوصل لناس أكتر — EAH هي المكان الصح.
           </p>
-          <div className="about__cta-actions">
-            <Link href="/contact" className="about__btn about__btn--primary">
-              تواصل معنا
+          <div className="ab__cta-actions">
+            <Link href="/contact" className="ab__btn ab__btn--primary">
+              💬 تواصل معنا
             </Link>
-            <Link href="/merchant/apply" className="about__btn about__btn--ghost">
-              سجّل نشاطك
+            <Link href="/merchant/apply" className="ab__btn ab__btn--ghost">
+              🏪 سجّل نشاطك
             </Link>
           </div>
         </section>
