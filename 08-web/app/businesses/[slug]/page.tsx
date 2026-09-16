@@ -18,7 +18,8 @@ import BusinessClaimCTA from '@/components/business-claim-cta'
 import OrderRequest from '@/components/order-request'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import BackToTop from '@/components/back-to-top'
-import BusinessMap, { resolveCoords } from '@/components/business-map'
+import BusinessMap from '@/components/business-map'
+import { resolveCoords } from '@/lib/map-coords'
 
 export const revalidate = 120
 
