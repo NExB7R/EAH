@@ -20,23 +20,14 @@
   top: -10%; left: -10%;
   width: 400px; height: 400px;
   background: radial-gradient(circle, rgba(139,92,246,.35), transparent 70%);
-  animation: onbFloat1 8s ease-in-out infinite;
+
 }
 .onb__glow--2 {
   bottom: -10%; right: -10%;
   width: 400px; height: 400px;
   background: radial-gradient(circle, rgba(236,72,153,.25), transparent 70%);
-  animation: onbFloat2 10s ease-in-out infinite;
-}
-@keyframes onbFloat1 {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(30px, 30px); }
-}
-@keyframes onbFloat2 {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-30px, -30px); }
-}
 
+}
 .onb__card {
   position: relative; z-index: 1;
   max-width: 480px; width: 100%;

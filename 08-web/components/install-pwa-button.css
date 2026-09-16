@@ -13,11 +13,7 @@
   position: absolute; inset: 0;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
   transform: translateX(-100%);
-  animation: ipbShine 3s infinite;
-}
-@keyframes ipbShine {
-  0%, 60% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+
 }
 .ipb:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(139,92,246,.7); }
 .ipb__icon { display: inline-flex; }

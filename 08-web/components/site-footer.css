@@ -154,13 +154,8 @@
 }
 .sf__palestine-heart {
   display: inline-flex;
-  animation: sf-heart-beat 2.8s ease-in-out infinite;
-}
-@keyframes sf-heart-beat {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.12); }
-}
 
+}
 .sf__legal {
   display: flex;
   flex-direction: column;

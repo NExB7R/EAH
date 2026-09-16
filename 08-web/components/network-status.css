@@ -38,12 +38,7 @@
   border-radius: 50%;
   background: currentColor;
   box-shadow: 0 0 10px currentColor;
-  animation: nstatus-pulse 1.6s ease-in-out infinite;
-}
 
-@keyframes nstatus-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%      { opacity: 0.5; transform: scale(0.85); }
 }
 
 @keyframes nstatus-in {
