@@ -18,7 +18,7 @@
   color: #C4B5FD;
   text-decoration: none;
   font-weight: 700;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .rew-tab:hover { background: rgba(168, 85, 247, 0.12); }
 .rew-tab.is-active {
@@ -62,7 +62,7 @@
   font-family: inherit;
   font-size: 13px;
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.07s ease;
 }
 .rew-input:focus { border-color: rgba(168, 85, 247, 0.5); }
 .rew-input--full { grid-column: 1 / -1; resize: vertical; }
@@ -76,7 +76,7 @@
   border: 1px solid rgba(168, 85, 247, 0.25);
   background: rgba(168, 85, 247, 0.08);
   color: #C4B5FD;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .rew-btn:hover { background: rgba(168, 85, 247, 0.18); }
 .rew-btn--primary {
@@ -111,7 +111,7 @@
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(168, 85, 247, 0.14);
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .rew-item:hover { border-color: rgba(168, 85, 247, 0.3); }
 .rew-item.is-inactive { opacity: 0.5; }

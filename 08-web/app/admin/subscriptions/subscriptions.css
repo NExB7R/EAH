@@ -17,7 +17,7 @@
   font-size: 13px;
   color: #C4B5FD;
   text-decoration: none;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
   font-weight: 600;
 }
 .sub-tab:hover { background: rgba(168, 85, 247, 0.12); }
@@ -95,7 +95,7 @@
   border: 1px solid rgba(168, 85, 247, 0.25);
   background: rgba(168, 85, 247, 0.06);
   color: #C4B5FD;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .sub-btn:hover:not(:disabled) { background: rgba(168, 85, 247, 0.15); }
 .sub-btn--primary {

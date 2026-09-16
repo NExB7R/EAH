@@ -7,7 +7,7 @@
   padding: 8px 14px; border-radius: 10px;
   background: rgba(139,92,246,.12); border: 1px solid rgba(139,92,246,.3);
   color: #C4B5FD; font-weight: 700; font-size: .75rem;
-  cursor: pointer; font-family: inherit; transition: all .2s;
+  cursor: pointer; font-family: inherit; transition: all 0.10s;
 }
 .np__bulk-btn:hover { background: rgba(139,92,246,.25); color: #fff; }
 .np__bulk-btn--ghost { background: transparent; border-color: rgba(107,104,128,.3); color: #A5A3B8; }
@@ -18,7 +18,7 @@
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; padding: 12px 14px; border-radius: 14px;
   background: rgba(10,8,16,.5); border: 1px solid rgba(139,92,246,.1);
-  transition: all .2s;
+  transition: all 0.10s;
 }
 .np__item:hover { border-color: rgba(139,92,246,.3); }
 .np__item-body { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
@@ -30,12 +30,12 @@
 .np__toggle {
   flex-shrink: 0; width: 44px; height: 24px; border-radius: 999px;
   background: rgba(107,104,128,.25); border: none; position: relative;
-  cursor: pointer; padding: 0; transition: all .25s ease;
+  cursor: pointer; padding: 0; transition: all 0.12s ease;
 }
 .np__toggle-thumb {
   position: absolute; top: 3px; right: 3px;
   width: 18px; height: 18px; border-radius: 50%;
-  background: #A5A3B8; transition: all .25s cubic-bezier(0.34, 1.4, 0.64, 1);
+  background: #A5A3B8; transition: all 0.12s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 .np__toggle.is-on { background: linear-gradient(135deg, #8B5CF6, #A855F7); }
 .np__toggle.is-on .np__toggle-thumb { right: 23px; background: #fff; box-shadow: 0 0 8px rgba(255,255,255,.5); }
@@ -55,7 +55,7 @@
   color: #E8C79A;
   font-weight: 900;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.10s ease;
 }
 .np__banner-link:hover {
   color: #FFFBEB;

@@ -32,7 +32,7 @@
   border: 1px solid rgba(139,92,246,.3);
   color: #C4B5FD;
   cursor: pointer; font-family: inherit;
-  transition: all .25s ease;
+  transition: all 0.12s ease;
 }
 .er__btn:hover { transform: translateY(-2px); background: rgba(139,92,246,.2); }
 .er__btn--primary {

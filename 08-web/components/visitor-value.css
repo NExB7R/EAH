@@ -54,7 +54,7 @@
   overflow: hidden;
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(168, 85, 247, 0.16);
-  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.15s cubic-bezier(0.22, 1, 0.36, 1);
   min-height: auto;
 }
 .vv__card::before {
@@ -123,7 +123,7 @@
   font-size: 0.75rem;
   font-weight: 900;
   text-decoration: none;
-  transition: all 0.22s;
+  transition: all 0.11s;
 }
 .vv__card--gold .vv__cta {
   background: rgba(232, 199, 154, 0.1);

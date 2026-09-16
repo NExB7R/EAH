@@ -16,16 +16,16 @@
   cursor:pointer;
 }
 .avup__tabs { display:flex; gap:4px; padding:4px; background:rgba(10,8,16,.6); border-radius:14px; border:1px solid rgba(139,92,246,.15); }
-.avup__tab { flex:1; padding:9px 12px; border-radius:10px; background:transparent; border:none; color:#A5A3B8; font-weight:700; font-size:.82rem; cursor:pointer; font-family:inherit; transition:all .2s; }
+.avup__tab { flex:1; padding:9px 12px; border-radius:10px; background:transparent; border:none; color:#A5A3B8; font-weight:700; font-size:.82rem; cursor:pointer; font-family:inherit; transition:all 0.10s; }
 .avup__tab:hover:not(.is-active) { color:#F5F3FF; background:rgba(139,92,246,.06); }
 .avup__tab.is-active { background:linear-gradient(135deg,rgba(139,92,246,.25),rgba(168,85,247,.15)); color:#F5F3FF; box-shadow:0 4px 20px rgba(139,92,246,.25); }
 .avup__presets { display:grid; grid-template-columns:repeat(auto-fill, minmax(50px, 1fr)); gap:8px; }
-.avup__preset { width:100%; aspect-ratio:1; border-radius:50%; border:3px solid transparent; cursor:pointer; transition:all .2s; }
+.avup__preset { width:100%; aspect-ratio:1; border-radius:50%; border:3px solid transparent; cursor:pointer; transition:all 0.10s; }
 .avup__preset:hover { transform:translateY(-2px); }
 .avup__preset.is-active { border-color:#A855F7; box-shadow:0 0 0 3px rgba(168,85,247,.3), 0 0 20px rgba(168,85,247,.5); transform:scale(1.05); }
 .avup__upload { display:flex; flex-direction:column; gap:8px; }
 .avup__file { display:none; }
-.avup__file-label { padding:14px; border-radius:14px; background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(168,85,247,.05)); border:1.5px dashed rgba(168,85,247,.4); color:#C4B5FD; text-align:center; font-weight:800; cursor:pointer; transition:all .2s; }
+.avup__file-label { padding:14px; border-radius:14px; background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(168,85,247,.05)); border:1.5px dashed rgba(168,85,247,.4); color:#C4B5FD; text-align:center; font-weight:800; cursor:pointer; transition:all 0.10s; }
 .avup__file-label:hover { border-color:#A855F7; color:#F5F3FF; background:rgba(139,92,246,.2); }
 .avup__link { display:flex; gap:8px; align-items:flex-start; flex-wrap:wrap; }
 .avup__link-input { flex:1; min-width:200px; padding:12px 14px; border-radius:12px; background:rgba(10,8,16,.7); border:1px solid rgba(139,92,246,.18); color:#F5F3FF; font-size:.85rem; font-family:inherit; outline:none; }

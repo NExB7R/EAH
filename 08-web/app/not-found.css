@@ -17,7 +17,7 @@
 .nf__logo {
   position: relative;
   margin-bottom: 20px;
-  animation: nfFloat 3s ease-in-out infinite;
+  
 }
 @keyframes nfFloat {
   0%, 100% { transform: translateY(0); }
@@ -54,7 +54,7 @@
   background: rgba(139,92,246,.1);
   border: 1px solid rgba(139,92,246,.3);
   color: #C4B5FD;
-  transition: all .25s ease;
+  transition: all 0.12s ease;
 }
 .nf__btn:hover { transform: translateY(-2px); background: rgba(139,92,246,.2); }
 .nf__btn--primary {

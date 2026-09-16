@@ -148,7 +148,7 @@
   display: grid;
   place-items: center;
   font-size: 0.9rem;
-  transition: all 0.2s;
+  transition: all 0.10s;
   font-family: inherit;
 }
 .sb-header__reset:hover {
@@ -242,7 +242,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.10s cubic-bezier(0.22, 1, 0.36, 1);
   white-space: nowrap;
 }
 .sb-quick__btn:hover {
@@ -270,7 +270,7 @@
   font-family: var(--font-cairo, system-ui);
   font-size: 0.85rem;
   outline: none;
-  transition: all 0.2s;
+  transition: all 0.10s;
 }
 .sb-input:focus {
   border-color: #A855F7;
@@ -287,7 +287,7 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: all 0.22s cubic-bezier(0.34, 1.4, 0.64, 1);
+  transition: all 0.11s cubic-bezier(0.34, 1.4, 0.64, 1);
   flex-shrink: 0;
   box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4);
 }
@@ -348,7 +348,7 @@
     0 0 24px rgba(168, 85, 247, 0.2);
   animation: sb-hint-in 420ms cubic-bezier(0.34, 1.4, 0.64, 1);
   white-space: nowrap;
-  transition: transform 0.22s ease;
+  transition: transform 0.11s ease;
   font-family: inherit;
 }
 .sb-hint:hover {
@@ -377,7 +377,7 @@
   place-items: center;
   font-size: 0.9rem;
   line-height: 1;
-  transition: all 0.15s;
+  transition: all 0.07s;
   margin-inline-start: 2px;
 }
 .sb-hint__close:hover {
@@ -440,7 +440,7 @@
   cursor: pointer;
   z-index: 9000;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 24px rgba(168, 85, 247, 0.4);
-  transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.25s;
+  transition: transform 0.12s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.12s;
 }
 .sb-trigger:hover {
   transform: scale(1.08);
@@ -453,7 +453,7 @@
   border-radius: 50%;
   background: radial-gradient(circle, rgba(232, 199, 154, 0.35) 0%, transparent 65%);
   pointer-events: none;
-  animation: sbPulse 2.4s ease-in-out infinite;
+  animation: sbPulse 1.20s ease-in-out infinite;
 }
 @keyframes sbPulse {
   0%, 100% { opacity: 0.4; transform: scale(0.9); }
@@ -474,7 +474,7 @@
   cursor: pointer;
   z-index: 8999;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(232, 199, 154, 0.25);
-  animation: sbHintIn 0.4s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  animation: sbHintIn 0.20s cubic-bezier(0.34, 1.4, 0.64, 1) both;
   display: flex;
   align-items: center;
   gap: 8px;

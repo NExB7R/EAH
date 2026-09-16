@@ -92,7 +92,7 @@
   background: rgba(10,8,16,0.7);
   border: 1px solid rgba(139,92,246,0.18);
   color: #F5F3FF; font-size: 0.95rem; font-family: inherit;
-  outline: none; transition: all 0.2s ease;
+  outline: none; transition: all 0.10s ease;
 }
 .vf-input:focus, .vf-textarea:focus {
   border-color: rgba(168,85,247,0.6);
@@ -105,7 +105,7 @@
   border: none; color: #fff; font-weight: 900;
   font-size: 0.98rem; font-family: inherit; cursor: pointer;
   box-shadow: 0 8px 24px rgba(168,85,247,0.4);
-  transition: all 0.25s ease;
+  transition: all 0.12s ease;
 }
 .vf-submit:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(168,85,247,0.6); }
 

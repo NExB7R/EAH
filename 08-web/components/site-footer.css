@@ -72,7 +72,7 @@
   font-size: 0.78rem;
   color: #A29DB5;
   text-decoration: none;
-  transition: color 0.18s ease;
+  transition: color 0.09s ease;
 }
 .sf__link:hover { color: #A855F7; }
 
@@ -92,7 +92,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.11s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .sf__social-btn svg { width: 16px; height: 16px; }
 .sf__social-btn:hover {
@@ -113,7 +113,7 @@
   background: rgba(37, 211, 102, 0.08);
   border: 1px solid rgba(37, 211, 102, 0.22);
   margin-top: 6px;
-  transition: all 0.2s;
+  transition: all 0.10s;
 }
 .sf__channel-link:hover {
   background: rgba(37, 211, 102, 0.18);
@@ -139,7 +139,7 @@
   background: rgba(168, 85, 247, 0.06);
   border: 1px solid rgba(168, 85, 247, 0.22);
   text-decoration: none;
-  transition: all 0.22s ease;
+  transition: all 0.11s ease;
 }
 .sf__palestine:hover {
   background: rgba(168, 85, 247, 0.14);
@@ -181,7 +181,7 @@
   display: inline-block;
   padding: 0 12px;
   position: relative;
-  transition: color 0.35s ease;
+  transition: color 0.17s ease;
 }
 .sf__signature-text::after {
   content: '';
@@ -200,7 +200,7 @@
   );
   transform: scaleX(0.3);
   transform-origin: center;
-  transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+  transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 .sf__signature:hover .sf__signature-text {
   color: #E8C79A;
@@ -245,7 +245,7 @@
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(168, 85, 247, 0.2);
   text-decoration: none;
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.12s cubic-bezier(0.22, 1, 0.36, 1);
   text-align: start;
 }
 .sf__follow-card:hover {

@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  transition: all 0.2s;
+  transition: all 0.10s;
 }
 .sec__kpi:hover { border-color: rgba(168, 85, 247, 0.32); transform: translateY(-2px); }
 .sec__kpi--warn { border-color: rgba(251, 191, 36, 0.4); background: rgba(251, 191, 36, 0.04); }

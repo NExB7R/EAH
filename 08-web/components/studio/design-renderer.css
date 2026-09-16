@@ -34,7 +34,7 @@
   font-weight: 900;
   text-decoration: none;
   box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
-  transition: transform 0.2s ease;
+  transition: transform 0.10s ease;
 }
 .dr-hero__cta:hover { transform: translateY(-2px); }
 
@@ -75,7 +75,7 @@
   border: 1px solid rgba(168, 85, 247, 0.16);
   text-decoration: none;
   color: #F4F2FA;
-  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.11s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .dr-card:hover {
   border-color: #A855F7;
@@ -117,7 +117,7 @@
   border: 1px solid rgba(168, 85, 247, 0.16);
   text-decoration: none;
   color: #F4F2FA;
-  transition: all 0.22s ease;
+  transition: all 0.11s ease;
 }
 .dr-cat:hover {
   border-color: #A855F7;

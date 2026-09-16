@@ -184,7 +184,7 @@ button, a {
 .eah-anim-ready .ecard,
 .eah-anim-ready .v4card,
 .eah-anim-ready .rc-card {
-  animation: eahCardIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: eahCardIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Stagger via CSS var --d set inline */

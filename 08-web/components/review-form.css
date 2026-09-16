@@ -4,7 +4,7 @@
   border: none; color: #fff; font-weight: 800; font-size: .9rem;
   cursor: pointer; font-family: inherit;
   box-shadow: 0 8px 24px rgba(139,92,246,.35);
-  transition: all .2s ease;
+  transition: all 0.10s ease;
 }
 .rvf-trigger:hover { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(139,92,246,.5); }
 
@@ -22,7 +22,7 @@
   width: 32px; height: 32px; border-radius: 8px;
   background: transparent; border: none;
   font-size: 1.3rem; color: #4A4358;
-  cursor: pointer; transition: all .15s ease;
+  cursor: pointer; transition: all 0.07s ease;
   padding: 0; line-height: 1;
 }
 .rvf__star:hover, .rvf__star.is-on { color: #FBBF24; transform: scale(1.1); }
@@ -40,7 +40,7 @@
   padding: 11px 20px; border-radius: 12px;
   font-weight: 800; font-size: .88rem; font-family: inherit;
   cursor: pointer; border: 1px solid rgba(139,92,246,.25);
-  background: transparent; color: #A5A3B8; transition: all .2s;
+  background: transparent; color: #A5A3B8; transition: all 0.10s;
 }
 .rvf__btn--primary {
   background: linear-gradient(135deg,#8B5CF6,#A855F7);

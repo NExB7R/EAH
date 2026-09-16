@@ -30,7 +30,7 @@
   color: inherit;
   font-family: inherit;
   font-size: 14px;
-  transition: all 0.18s ease;
+  transition: all 0.09s ease;
 }
 .exc-search input:focus {
   outline: none;
@@ -53,7 +53,7 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .exc-search__clear:hover { background: rgba(168, 85, 247, 0.3); }
 
@@ -81,7 +81,7 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
   font-family: inherit;
 }
 .exc-type:hover { background: rgba(168, 85, 247, 0.12); }
@@ -128,7 +128,7 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .exc-select:hover { border-color: rgba(168, 85, 247, 0.4); }
 .exc-select:focus { outline: none; border-color: rgba(168, 85, 247, 0.6); }
@@ -143,7 +143,7 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .exc-toggle:hover { background: rgba(168, 85, 247, 0.1); }
 .exc-toggle.is-active {
@@ -163,7 +163,7 @@
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .exc-clear:hover { background: rgba(239, 68, 68, 0.2); }
 
@@ -184,7 +184,7 @@
   cursor: pointer;
   font-size: 14px;
   font-family: inherit;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .exc-view__btn:hover { background: rgba(168, 85, 247, 0.12); }
 .exc-view__btn.is-active {
@@ -254,7 +254,7 @@
   font-weight: 700;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.10s ease;
 }
 .exc-empty__btn:hover {
   transform: translateY(-2px);

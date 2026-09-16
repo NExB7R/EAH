@@ -13,7 +13,7 @@
   justify-content: center;
   margin-bottom: 16px;
   filter: drop-shadow(0 0 24px rgba(168, 85, 247, 0.4));
-  animation: pal-beat 2.8s ease-in-out infinite;
+  
 }
 @keyframes pal-beat {
   0%, 100% { transform: scale(1); }
@@ -54,7 +54,7 @@
   border-radius: 20px;
   background: linear-gradient(180deg, rgba(20, 14, 32, 0.7), rgba(10, 7, 20, 0.6));
   border: 1px solid rgba(168, 85, 247, 0.18);
-  transition: all 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.13s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .pal-way:hover {
   border-color: rgba(168, 85, 247, 0.5);
@@ -105,7 +105,7 @@
   font-weight: 900;
   text-decoration: none;
   box-shadow: 0 10px 30px rgba(37, 211, 102, 0.35);
-  transition: transform 0.22s ease;
+  transition: transform 0.11s ease;
 }
 .pal-cta__btn:hover { transform: translateY(-2px); }
 

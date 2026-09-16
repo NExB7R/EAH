@@ -139,7 +139,7 @@
   height: 100%;
   background: linear-gradient(90deg, #A855F7, #E8C79A);
   border-radius: 999px;
-  transition: width 0.4s ease;
+  transition: width 0.20s ease;
 }
 .col__score-num {
   font-size: 0.85rem;
@@ -309,7 +309,7 @@
   border: 1px solid rgba(168, 85, 247, 0.3);
   background: rgba(168, 85, 247, 0.08);
   color: #C4B5FD;
-  transition: all 0.2s;
+  transition: all 0.10s;
 }
 .col__btn:hover:not(:disabled) {
   background: rgba(168, 85, 247, 0.18);
@@ -361,7 +361,7 @@
   background: rgba(168, 85, 247, 0.04);
   border: 1px solid rgba(168, 85, 247, 0.1);
   text-decoration: none;
-  transition: all 0.15s;
+  transition: all 0.07s;
 }
 .col__recent-item:hover {
   background: rgba(168, 85, 247, 0.12);

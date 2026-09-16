@@ -81,10 +81,10 @@ export default function HomeHero() {
           <span className="hh__tagline-pin" aria-hidden>📍</span>
           <span className="hh__tagline-city">دولة شبين القناطر تتحدّث</span>
         </div>
-        <p className="hh__sub">
-          من مطعم السكة.. للصيدلية اللي جوه الحارة..<br/>
-          كل حاجة محتاجها — على بعد كليك واحدة
-        </p>
+        <h2 className="hh__hook">
+          كل حاجة محتاجها —<br/>
+          <span className="hh__hook-accent">في كليك واحدة</span>
+        </h2>
 
         <div className="hh__search">
           <SearchBar placeholder="مطعم؟ صيدلية؟ ماركت؟ دوّر..." />
@@ -107,12 +107,6 @@ export default function HomeHero() {
           </span>
           <span className="hh__recommend-arrow">←</span>
         </Link>
-
-        <div className="hh__trust">
-          <span className="hh__trust-item">مجاني 100%</span>
-          <span className="hh__trust-item">بدون تسجيل</span>
-          <span className="hh__trust-item">أماكن موثوقة</span>
-        </div>
       </div>
     </section>
   )

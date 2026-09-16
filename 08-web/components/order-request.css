@@ -22,7 +22,7 @@
   color: inherit;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.12s cubic-bezier(0.22, 1, 0.36, 1);
   width: 100%;
   text-align: start;
 }
@@ -53,7 +53,7 @@
   color: #E8C79A;
   font-size: 1.2rem;
   font-weight: 900;
-  transition: transform 0.2s;
+  transition: transform 0.10s;
 }
 .orr__trigger:hover .orr__trigger-arrow { transform: translateX(-4px); }
 
@@ -99,7 +99,7 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: all 0.2s;
+  transition: all 0.10s;
   font-family: inherit;
   padding: 0;
 }
@@ -134,7 +134,7 @@
   font-family: inherit;
   font-size: 0.88rem;
   outline: none;
-  transition: all 0.18s;
+  transition: all 0.09s;
   resize: vertical;
 }
 .orr__field input:focus,
@@ -172,7 +172,7 @@
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
-  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.11s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .orr__submit:hover:not(:disabled) {
   transform: translateY(-2px);
@@ -192,7 +192,7 @@
   font-size: 0.88rem;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.10s;
 }
 .orr__cancel:hover { background: rgba(168, 85, 247, 0.1); }
 .orr__note {

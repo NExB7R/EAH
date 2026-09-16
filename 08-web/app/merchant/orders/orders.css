@@ -19,7 +19,7 @@
   font-weight: 800;
   text-decoration: none;
   margin-bottom: 16px;
-  transition: all 0.2s;
+  transition: all 0.10s;
 }
 .mo__back:hover {
   background: rgba(168, 85, 247, 0.18);
@@ -70,7 +70,7 @@
   color: #C4B5FD;
   text-decoration: none;
   font-weight: 700;
-  transition: all 0.16s;
+  transition: all 0.08s;
 }
 .mo__tab:hover { background: rgba(168, 85, 247, 0.12); }
 .mo__tab.is-active {
@@ -101,7 +101,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: all 0.22s;
+  transition: all 0.11s;
 }
 .mo__order:hover { border-color: rgba(168, 85, 247, 0.4); }
 .mo__order--new { border-inline-start: 3px solid #FBBF24; }
@@ -205,7 +205,7 @@
   font-size: 0.82rem;
   font-weight: 900;
   text-decoration: none;
-  transition: all 0.22s;
+  transition: all 0.11s;
   border: 1px solid transparent;
 }
 .mo__btn--wa {
@@ -278,7 +278,7 @@
   font-size: 0.75rem;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.18s;
+  transition: all 0.09s;
   border: 1px solid;
 }
 .osb__btn:disabled { opacity: 0.5; cursor: not-allowed; }

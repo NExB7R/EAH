@@ -63,7 +63,7 @@
   font-size: 0.95rem;
   cursor: pointer;
   font-family: inherit;
-  transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.12s cubic-bezier(0.22, 1, 0.36, 1);
   text-decoration: none;
   border: 1px solid transparent;
 }

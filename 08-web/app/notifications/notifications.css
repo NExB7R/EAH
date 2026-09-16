@@ -41,7 +41,7 @@
   background: rgba(20, 18, 28, 0.55);
   border: 1px solid rgba(139, 92, 246, 0.12);
   text-decoration: none; color: inherit;
-  transition: all 0.22s ease;
+  transition: all 0.11s ease;
 }
 .nt-item:hover { border-color: rgba(168, 85, 247, 0.4); transform: translateY(-1px); }
 .nt-item--unread {
@@ -84,7 +84,7 @@
   font-weight: 800; font-size: .85rem; font-family: inherit;
   cursor: pointer; border: 1px solid rgba(139,92,246,.25);
   background: transparent; color: #C4B5FD;
-  transition: all .2s ease;
+  transition: all 0.10s ease;
 }
 .nt-btn--primary {
   background: linear-gradient(135deg, #8B5CF6, #A855F7);
@@ -100,7 +100,7 @@
   background: transparent; border: 1px solid rgba(239,68,68,.15);
   color: #A5A3B8; cursor: pointer; font-size: .9rem;
   display: inline-flex; align-items: center; justify-content: center;
-  transition: all .2s ease;
+  transition: all 0.10s ease;
   opacity: .5;
 }
 .nt-item:hover .nt-item__delete { opacity: 1; }
@@ -113,7 +113,7 @@
   opacity: .9;
 }
 .nt-empty__logo .eah-logo {
-  animation: ntFloat 3s ease-in-out infinite;
+  
 }
 @keyframes ntFloat {
   0%, 100% { transform: translateY(0); }

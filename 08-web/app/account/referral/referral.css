@@ -9,7 +9,7 @@
 .rf__card-label { display: block; font-size: .75rem; color: #A5A3B8; font-weight: 700; margin-bottom: 10px; }
 .rf__code { font-size: 2.2rem; font-weight: 900; color: #F5F3FF; letter-spacing: .2em; padding: 14px; background: rgba(10,8,16,.6); border-radius: 14px; border: 1px solid rgba(139,92,246,.3); margin-bottom: 18px; direction: ltr; }
 .rf__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.rf__btn { padding: 12px 16px; border-radius: 12px; font-weight: 800; font-size: .82rem; text-decoration: none; text-align: center; transition: all .2s; }
+.rf__btn { padding: 12px 16px; border-radius: 12px; font-weight: 800; font-size: .82rem; text-decoration: none; text-align: center; transition: all 0.10s; }
 .rf__btn--whatsapp { background: rgba(168,85,247,.15); border: 1px solid rgba(168,85,247,.3); color: #C084FC; }
 .rf__btn--whatsapp:hover { background: rgba(168,85,247,.25); }
 .rf__btn--facebook { background: rgba(59,130,246,.15); border: 1px solid rgba(59,130,246,.3); color: #60A5FA; }

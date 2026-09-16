@@ -6,7 +6,7 @@
   border: 1px solid rgba(139,92,246,.35);
   background: rgba(10,8,18,.85);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-  transition: all .3s ease;
+  transition: all 0.15s ease;
 }
 .sbar:focus-within {
   border-color: #A855F7;
@@ -23,7 +23,7 @@
   border: none; padding: 9px 20px; border-radius: 999px;
   background: linear-gradient(135deg,#6B21FF,#A855F7);
   color: #fff; font-weight: 900; font-size: .85rem;
-  cursor: pointer; transition: all .2s ease;
+  cursor: pointer; transition: all 0.10s ease;
   box-shadow: 0 0 16px rgba(107,33,255,.5);
   font-family: inherit;
 }

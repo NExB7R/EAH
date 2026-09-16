@@ -97,7 +97,7 @@
   font-size: 0.8rem;
   font-weight: 900;
   text-decoration: none;
-  transition: all 0.2s;
+  transition: all 0.10s;
   border: 1px solid transparent;
 }
 .mod__btn--call {

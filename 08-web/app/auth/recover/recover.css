@@ -14,13 +14,13 @@
 .rc__field { display: flex; flex-direction: column; gap: 6px; }
 .rc__label { font-size: .8rem; font-weight: 700; color: #C4B5FD; }
 .rc__input-wrap { position: relative; }
-.rc__input { width: 100%; padding: 14px 16px; border-radius: 14px; background: rgba(10,8,16,.7); border: 1px solid rgba(139,92,246,.18); color: #F5F3FF; font-size: .95rem; font-family: inherit; outline: none; transition: all .2s ease; }
+.rc__input { width: 100%; padding: 14px 16px; border-radius: 14px; background: rgba(10,8,16,.7); border: 1px solid rgba(139,92,246,.18); color: #F5F3FF; font-size: .95rem; font-family: inherit; outline: none; transition: all 0.10s ease; }
 .rc__input:focus { border-color: rgba(168,85,247,.6); box-shadow: 0 0 0 4px rgba(139,92,246,.12); }
 .rc__input--with-btn { padding-left: 48px; }
 .rc__toggle { position: absolute; top: 50%; left: 12px; transform: translateY(-50%); background: transparent; border: none; color: #A5A3B8; cursor: pointer; padding: 6px; border-radius: 8px; font-size: 1rem; }
 .rc__toggle:hover { color: #C4B5FD; background: rgba(139,92,246,.1); }
 .rc__alert { padding: 12px 16px; border-radius: 12px; background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.25); color: #FCA5A5; font-size: .85rem; }
-.rc__submit { margin-top: 6px; padding: 15px 24px; border-radius: 14px; background: linear-gradient(135deg,#8B5CF6,#A855F7); border: none; color: #fff; font-weight: 800; font-size: .98rem; font-family: inherit; cursor: pointer; box-shadow: 0 8px 24px rgba(139,92,246,.35); transition: all .25s ease; min-height: 50px; }
+.rc__submit { margin-top: 6px; padding: 15px 24px; border-radius: 14px; background: linear-gradient(135deg,#8B5CF6,#A855F7); border: none; color: #fff; font-weight: 800; font-size: .98rem; font-family: inherit; cursor: pointer; box-shadow: 0 8px 24px rgba(139,92,246,.35); transition: all 0.12s ease; min-height: 50px; }
 .rc__submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 32px rgba(139,92,246,.5); }
 .rc__submit:disabled { opacity: .5; cursor: not-allowed; }
 .rc__back { text-align: center; color: #C4B5FD; text-decoration: none; font-size: .85rem; font-weight: 700; padding: 8px; }

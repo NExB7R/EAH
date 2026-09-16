@@ -17,7 +17,7 @@
 .an__export-title { font-size: 1rem; font-weight: 900; color: #F5F3FF; margin: 0 0 4px; }
 .an__export-sub { color: #A5A3B8; font-size: .8rem; margin: 0 0 14px; }
 .an__export-buttons { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
-.an__export-btn { display: block; padding: 12px 14px; border-radius: 12px; background: rgba(139,92,246,.08); border: 1px solid rgba(139,92,246,.25); color: #F5F3FF; text-decoration: none; font-weight: 700; font-size: .82rem; transition: all .2s; text-align: center; }
+.an__export-btn { display: block; padding: 12px 14px; border-radius: 12px; background: rgba(139,92,246,.08); border: 1px solid rgba(139,92,246,.25); color: #F5F3FF; text-decoration: none; font-weight: 700; font-size: .82rem; transition: all 0.10s; text-align: center; }
 .an__export-btn:hover { background: rgba(139,92,246,.18); border-color: #A855F7; transform: translateY(-1px); }
 
 @media (max-width: 860px) {
@@ -45,7 +45,7 @@
   border: none;
   cursor: pointer;
   font-family: inherit;
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .ana-filter:hover { background: rgba(168, 85, 247, 0.12); }
 .ana-filter.is-active {
@@ -89,7 +89,7 @@
   font-size: 0.75rem;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.10s;
 }
 .exp__quick-btn:hover {
   background: rgba(168, 85, 247, 0.18);
@@ -147,7 +147,7 @@
   font-size: 0.82rem;
   font-weight: 800;
   text-decoration: none;
-  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.11s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .exp__btn:hover {
   background: rgba(168, 85, 247, 0.14);
@@ -158,7 +158,7 @@
 .exp__arrow {
   color: #A855F7;
   font-weight: 900;
-  transition: transform 0.22s;
+  transition: transform 0.11s;
 }
 .exp__btn:hover .exp__arrow { transform: translateY(2px); }
 

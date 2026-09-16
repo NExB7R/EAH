@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  transition: all 0.2s ease;
+  transition: all 0.10s ease;
 }
 .ref-stat:hover {
   border-color: rgba(168, 85, 247, 0.32);
@@ -73,7 +73,7 @@
   font-family: inherit;
   font-size: 13px;
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.07s ease;
 }
 .ref-form input[type='number']:focus { border-color: rgba(168, 85, 247, 0.55); }
 
@@ -109,7 +109,7 @@
   font-size: 14px;
   font-weight: 800;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.10s ease;
 }
 .ref-save:hover:not(:disabled) {
   transform: translateY(-2px);
@@ -196,7 +196,7 @@
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(168, 85, 247, 0.14);
-  transition: all 0.15s ease;
+  transition: all 0.07s ease;
 }
 .ref-row:hover { border-color: rgba(168, 85, 247, 0.32); }
 .ref-row__arrow { color: #A855F7; font-weight: 900; font-size: 16px; }

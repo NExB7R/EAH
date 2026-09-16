@@ -78,7 +78,7 @@
   font-size: 0.85rem;
   color: #C4B5FD;
   text-decoration: none;
-  transition: color 0.18s;
+  transition: color 0.09s;
 }
 .lg__toc-list a:hover { color: #A855F7; }
 
@@ -166,7 +166,7 @@
   text-decoration: none;
   font-weight: 800;
   font-size: 0.82rem;
-  transition: all 0.2s;
+  transition: all 0.10s;
 }
 .lg__back:hover {
   background: rgba(168, 85, 247, 0.15);

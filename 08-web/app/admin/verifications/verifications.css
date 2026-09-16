@@ -46,7 +46,7 @@
 .vf-card__btn {
   padding: 10px 22px; border-radius: 12px; border: none;
   font-family: inherit; font-weight: 800; font-size: 0.88rem;
-  cursor: pointer; transition: all 0.2s ease;
+  cursor: pointer; transition: all 0.10s ease;
 }
 .vf-card__btn:disabled { opacity: 0.5; cursor: wait; }
 .vf-card__btn--approve {

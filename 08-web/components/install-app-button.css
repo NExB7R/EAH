@@ -39,7 +39,7 @@
   display: grid;
   place-items: center;
   font-family: inherit;
-  transition: all 0.2s ease;
+  transition: all 0.10s ease;
 }
 .iab__close:hover {
   background: rgba(239, 68, 68, 0.9);
@@ -94,7 +94,7 @@
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
-  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.11s cubic-bezier(0.22, 1, 0.36, 1);
   white-space: nowrap;
 }
 .iab__btn:hover {

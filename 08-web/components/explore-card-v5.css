@@ -28,7 +28,7 @@
   overflow: hidden;
   border: 1px solid rgba(168, 85, 247, 0.22);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
-  transition: opacity 0.35s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.17s ease, transform 0.33s cubic-bezier(0.22, 1, 0.36, 1);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
@@ -151,7 +151,7 @@
   background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: opacity 1.6s ease-in-out;
+  transition: opacity 0.80s ease-in-out;
 }
 .ec5__gallery-img.is-active { opacity: 1; }
 .ec5__gallery-empty {

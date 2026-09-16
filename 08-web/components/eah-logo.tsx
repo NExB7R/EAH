@@ -1,5 +1,5 @@
 'use client'
-// v13 — crown stays above word, slides from first letter to center on hover
+// v14 — static crown with slow pulse
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -24,20 +24,20 @@ export default function EahLogo({
   showTagline = true,
 }: Props) {
   const s = SIZE_MAP[size]
-  const [hover, setHover] = useState(false)
+  // crown ثابت
 
   const crownTop = s.crown * s.topRatio
-  const crownLeft = hover ? (s.word - s.crown) / 2 : s.restLeft
-  const crownRotation = hover ? -8 : -22
+  const crownLeft = s.restLeft
+  const crownRotation = -18
 
   const content = (
     <span
       dir="ltr"
-      data-eah-logo="v13"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onTouchStart={() => setHover(true)}
-      onTouchEnd={() => setHover(false)}
+      data-eah-logo="v14"
+      
+      
+      
+      
       style={{
         display: 'inline-flex',
         flexDirection: 'column',
@@ -85,7 +85,7 @@ export default function EahLogo({
             pointerEvents: 'none',
             transformOrigin: '50% 100%',
             transform: `rotate(${crownRotation}deg)`,
-            transition: 'left 0.55s cubic-bezier(0.34, 1.4, 0.64, 1), transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1)',
+            animation: 'crownPulse 4s ease-in-out infinite',
             filter:
               'drop-shadow(0 3px 10px rgba(251,191,36,0.9)) drop-shadow(0 0 22px rgba(232,199,154,0.6))',
           }}

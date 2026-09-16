@@ -6,7 +6,7 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-right: 1px solid rgba(139, 92, 246, 0.15);
-  animation: ins-in 0.22s ease-out;
+  animation: ins-in 0.11s ease-out;
   overflow: hidden;
 }
 
@@ -52,7 +52,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s;
+  transition: all 0.07s;
   font-family: inherit;
   padding: 0;
 }
@@ -80,7 +80,7 @@
   font-weight: 800;
   font-size: 0.72rem;
   cursor: pointer;
-  transition: all 0.16s;
+  transition: all 0.08s;
 }
 .ins__tab:hover:not(.is-active) { color: #F5F3FF; }
 .ins__tab.is-active {
@@ -116,7 +116,7 @@
   font-family: inherit;
   font-size: 0.82rem;
   outline: none;
-  transition: all 0.16s;
+  transition: all 0.08s;
   box-sizing: border-box;
 }
 .ins__input:focus {
@@ -154,7 +154,7 @@
   border: 1px solid rgba(139, 92, 246, 0.2);
   cursor: pointer;
   font-size: 0.9rem;
-  transition: all 0.15s;
+  transition: all 0.07s;
   color: #F5F3FF;
 }
 .ins__align-btn.is-active {

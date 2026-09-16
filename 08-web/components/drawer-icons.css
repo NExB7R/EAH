@@ -3,7 +3,7 @@
   display: inline-flex; align-items: center; justify-content: center;
   color: #A855F7;
   flex-shrink: 0;
-  transition: color .2s ease;
+  transition: color 0.10s ease;
 }
 .nav-drawer__link-icon svg { width: 100%; height: 100%; }
 .nav-drawer__link:hover .nav-drawer__link-icon { color: #C4B5FD; }

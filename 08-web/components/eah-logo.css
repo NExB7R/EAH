@@ -1,1 +1,6 @@
 /* EAH Logo v6 — minimal CSS. Everything else is inline in TSX */
+
+@keyframes crownPulse {
+  0%, 100% { transform: scale(1) rotate(-18deg); }
+  50%      { transform: scale(1.05) rotate(-18deg); }
+}

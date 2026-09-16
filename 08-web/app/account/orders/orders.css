@@ -59,7 +59,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  transition: all 0.2s;
+  transition: all 0.10s;
 }
 .ao__order--pending { border-inline-start: 3px solid #FBBF24; }
 .ao__order--seen { border-inline-start: 3px solid #A855F7; }

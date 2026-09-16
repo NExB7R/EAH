@@ -21,7 +21,7 @@
   border-color: rgba(251, 146, 60, 0.65);
   background: linear-gradient(135deg, rgba(251, 146, 60, 0.14), rgba(239, 68, 68, 0.06));
   box-shadow: 0 0 24px rgba(251, 146, 60, 0.25);
-  animation: trialPulse 2s ease-in-out infinite alternate;
+  
 }
 @keyframes trialPulse {
   from { box-shadow: 0 0 24px rgba(251, 146, 60, 0.25); }
@@ -84,7 +84,7 @@
   font-weight: 900;
   text-decoration: none;
   white-space: nowrap;
-  transition: transform 0.2s;
+  transition: transform 0.10s;
 }
 .trial__cta:hover { transform: translateY(-2px); }
 .trial.is-trial .trial__cta {

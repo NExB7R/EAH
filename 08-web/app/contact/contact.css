@@ -78,7 +78,7 @@
   border: 1px solid rgba(168, 85, 247, 0.16);
   text-decoration: none;
   color: inherit;
-  transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.12s cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -141,7 +141,7 @@
   inset-inline-end: 14px;
   color: #A855F7;
   font-size: 1.1rem;
-  transition: transform 0.22s;
+  transition: transform 0.11s;
   opacity: 0.7;
 }
 .ct-channel:hover .ct-channel__arrow {
@@ -177,7 +177,7 @@
   text-decoration: none;
   color: inherit;
   text-align: center;
-  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.11s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .ct-topic:hover {
   border-color: rgba(168, 85, 247, 0.5);

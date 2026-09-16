@@ -56,7 +56,7 @@
   font-weight: 800;
   text-decoration: none;
   box-shadow: 0 6px 18px rgba(168, 85, 247, 0.4);
-  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: all 0.11s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .bmap__nav:hover {
   transform: translateY(-2px);

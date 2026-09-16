@@ -126,7 +126,7 @@
   border-radius: 14px;
   background: rgba(168, 85, 247, 0.04);
   border: 1px solid rgba(168, 85, 247, 0.14);
-  transition: all 0.2s;
+  transition: all 0.10s;
 }
 .me__item.is-off { opacity: 0.5; }
 .me__item:hover { border-color: rgba(168, 85, 247, 0.35); }
@@ -163,7 +163,7 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: all 0.15s;
+  transition: all 0.07s;
 }
 .me__btn:hover { background: rgba(168, 85, 247, 0.2); }
 .me__btn--danger:hover { background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); }
@@ -178,7 +178,7 @@
   display: grid;
   place-items: center;
   padding: 20px;
-  animation: meFade 0.2s ease;
+  animation: meFade 0.10s ease;
 }
 @keyframes meFade { from { opacity: 0; } to { opacity: 1; } }
 .me__modal {
@@ -192,7 +192,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: mePopup 0.24s cubic-bezier(0.34, 1.4, 0.64, 1);
+  animation: mePopup 0.12s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 @keyframes mePopup {
   from { opacity: 0; transform: scale(0.94) translateY(10px); }
