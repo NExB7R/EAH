@@ -71,9 +71,7 @@ export default function HomeHero() {
       </div>
 
       <div className="hh__inner">
-        <div className="hh__chip-top">
-          
-        </div>
+        
 
         <div className="hh__logo">
           <EahLogo size="xl" variant="full" href="/" />
