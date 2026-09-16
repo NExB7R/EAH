@@ -13,6 +13,14 @@ export default function SiteFooter() {
         <div className="sf__brand-row">
           <EahLogo size="md" variant="full" href="/" />
         </div>
+
+        <div className="sf__follow-row">
+          <a href={CONTACT_CHANNELS.whatsapp.channel} target="_blank" rel="noreferrer" className="sf__follow-card sf__follow-card--wa">
+            <span className="sf__follow-emoji">📣</span>
+            <div className="sf__follow-info">
+              <strong>قناة الواتساب</strong>
+              <small>أول ما ينزل عرض — إنت أول واحد يعرف</small>
+            </div>
           </a>
           <a href={CONTACT_CHANNELS.facebook.page} target="_blank" rel="noreferrer" className="sf__follow-card sf__follow-card--fb">
             <span className="sf__follow-emoji"><IconFacebook /></span>
@@ -50,7 +58,7 @@ export default function SiteFooter() {
 
           <div className="sf__col">
             <h4 className="sf__col-title">عننا</h4>
-            <a href="/about" className="sf__link">نبذة عننا</a>
+            <a href="/about" className="sf__link">الكلام ع إيه</a>
             <a href="/contact" className="sf__link">تواصل معانا</a>
             <a href="/support-palestine" className="sf__link">فلسطين في القلب</a>
           </div>
@@ -62,30 +70,6 @@ export default function SiteFooter() {
             <a href="/cookies" className="sf__link">الكوكيز</a>
           </div>
         </nav>
-
-        <div className="sf__follow-row">
-          <a href={CONTACT_CHANNELS.whatsapp.channel} target="_blank" rel="noreferrer" className="sf__follow-card sf__follow-card--wa">
-            <span className="sf__follow-emoji">📣</span>
-            <div className="sf__follow-info">
-              <strong>قناة الواتساب</strong>
-              <small>أول ما ينزل عرض — إنت أول واحد يعرف</small>
-            </div>
-          </a>
-          <a href={CONTACT_CHANNELS.facebook.page} target="_blank" rel="noreferrer" className="sf__follow-card sf__follow-card--fb">
-            <span className="sf__follow-emoji"><IconFacebook /></span>
-            <div className="sf__follow-info">
-              <strong>صفحة فيسبوك</strong>
-              <small>أخبار EAH وفرص للشركاء</small>
-            </div>
-          </a>
-          <a href={waLink('السلام عليكم، عايز أتواصل مع مسئول EAH')} target="_blank" rel="noreferrer" className="sf__follow-card sf__follow-card--dm">
-            <span className="sf__follow-emoji"><IconWhatsapp /></span>
-            <div className="sf__follow-info">
-              <strong>كلم المسئول</strong>
-              <small>رد خلال دقايق — بدون لف</small>
-            </div>
-          </a>
-        </div>
 
         <div className="sf__bottom">
           <a href="/support-palestine" className="sf__palestine" aria-label="فلسطين في القلب">
@@ -109,7 +93,7 @@ export default function SiteFooter() {
           </a>
 
           <div className="sf__legal">
-            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة <span className="sf__version">v0.4.0</span></p>
+            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة <span className="sf__version">v0.5.5</span></p>
             <p className="sf__signature"><span className="sf__signature-text">NourEldin B7R</span></p>
           </div>
         </div>
