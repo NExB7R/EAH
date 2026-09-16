@@ -1,5 +1,5 @@
 'use client'
-// v9 — crown glued to word (aggressive)
+// v10 — crown glued to word (after image crop)
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -10,12 +10,13 @@ type Props = {
   showTagline?: boolean
 }
 
-// crown top بالبكسل — أقرب للكلمة
+// crown_top نسبة من عرض التاج — سالب يعني فوق الكلمة، موجب يعني جوّه
+// قيمة -0.55 تعني "ارتفاع التاج × 55% فوق الكلمة"
 const SIZE_MAP = {
-  sm: { word: 88,  crown: 34, top: -8,  hoverTop: -4, left: 0 },
-  md: { word: 130, crown: 48, top: -10, hoverTop: -6, left: 2 },
-  lg: { word: 180, crown: 66, top: -12, hoverTop: -8, left: 4 },
-  xl: { word: 240, crown: 88, top: -16, hoverTop: -10, left: 6 },
+  sm: { word: 88,  crown: 30, topRatio: -0.50, left: 0 },
+  md: { word: 130, crown: 42, topRatio: -0.50, left: 2 },
+  lg: { word: 180, crown: 58, topRatio: -0.50, left: 4 },
+  xl: { word: 240, crown: 78, topRatio: -0.50, left: 6 },
 }
 
 export default function EahLogo({
@@ -27,12 +28,16 @@ export default function EahLogo({
   const s = SIZE_MAP[size]
   const [hover, setHover] = useState(false)
 
-  const crownTop = hover ? s.hoverTop : s.top
+  // hover: crown ينزل شوية
+  const topOffset = s.crown * s.topRatio
+  const hoverOffset = s.crown * (s.topRatio + 0.20)
+
+  const crownTop = hover ? hoverOffset : topOffset
 
   const content = (
     <span
       dir="ltr"
-      data-eah-logo="v9"
+      data-eah-logo="v10"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onTouchStart={() => setHover(true)}
