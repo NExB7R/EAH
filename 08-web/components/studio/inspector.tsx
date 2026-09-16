@@ -34,7 +34,7 @@ export default function Inspector({ section, onChange, onClose }: Props) {
     <aside className="ins">
       <header className="ins__head">
         <div>
-          <span className="ins__kicker">EDITING</span>
+          <span className="ins__kicker">تعديل</span>
           <h3 className="ins__title">{LABEL[section.type]}</h3>
         </div>
         <button className="ins__close" onClick={onClose} aria-label="close">x</button>

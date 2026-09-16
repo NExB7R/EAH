@@ -34,7 +34,7 @@ export default async function ReferralPage() {
       <main className="rf">
         <header className="rf__hero">
           <Link href="/account" className="rf__back">← رجوع</Link>
-          <span className="rf__kicker">REFERRAL</span>
+          <span className="rf__kicker">الإحالة</span>
           <h1 className="rf__title">🎁 ادعي صحابك</h1>
           <p className="rf__sub">كل صاحب يشترك = 50 نقطة ليك وليه</p>
         </header>

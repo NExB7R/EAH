@@ -143,7 +143,7 @@ export default function AuthPage() {
         {/* Hero — RTL right side */}
         <section className="auth__hero">
           <div className="auth__logo"><EahLogo size="md" variant="full" href="/" /></div>
-          <span className="auth__kicker">EAH • EAT AROUND HERE</span>
+          <span className="auth__kicker">EAH • اللي نفسك فيه</span>
           <h1 className="auth__title">
             {mode === 'login' ? (
               <>سجّل بسرعة <span className="auth__title-accent">⚡</span></>

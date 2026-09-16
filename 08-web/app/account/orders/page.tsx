@@ -62,7 +62,7 @@ export default async function AccountOrdersPage() {
       <main className="ao">
         <header className="ao__head">
           <Link href="/account" className="ao__back">← حسابي</Link>
-          <span className="ao__kicker">MY ORDERS</span>
+          <span className="ao__kicker">أوردراتي</span>
           <h1 className="ao__title">🛒 طلباتي</h1>
           <p className="ao__sub">
             كل الطلبات اللي عملتها — بدون تسجيل، مباشر من واتساب

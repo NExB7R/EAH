@@ -171,7 +171,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
     <section className="col">
       <header className="col__head">
         <div>
-          <span className="col__kicker">SMART COLLECT</span>
+          <span className="col__kicker">الجمع الذكي</span>
           <h1 className="col__title">➕ جمع أماكن</h1>
           <p className="col__sub">
             الصق رابط Facebook / Instagram / Maps — هيستخرج البيانات تلقائياً

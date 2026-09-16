@@ -102,7 +102,7 @@ export default async function AuditPage({
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">AUDIT LOG</span>
+          <span className="admin-header__kicker">سجل العمليات</span>
           <h1 className="admin-header__title">📜 سجل العمليات</h1>
           <p className="admin-header__subtitle">
             {counts.all} عملية مسجلة — كل الحركات المهمة على المنصة

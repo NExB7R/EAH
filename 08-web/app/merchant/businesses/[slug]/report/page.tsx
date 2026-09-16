@@ -51,7 +51,7 @@ export default async function MerchantReportPage({
       <main className="mpage">
         <div className="mpage__head">
           <div>
-            <span className="mpage__kicker">ANALYTICS</span>
+            <span className="mpage__kicker">التحليلات</span>
             <h1 className="mpage__title">📊 إحصائيات: {business.name}</h1>
             <p className="mpage__sub">نظرة سريعة على أداء النشاط على المنصة</p>
           </div>

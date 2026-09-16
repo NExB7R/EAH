@@ -50,7 +50,7 @@ export default async function EditBusinessPage({
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">EDIT BUSINESS</span>
+          <span className="admin-header__kicker">تعديل النشاط</span>
           <h1 className="admin-header__title">✏️ تعديل: {biz.name}</h1>
           <p className="admin-header__subtitle">/businesses/{biz.slug}</p>
         </div>

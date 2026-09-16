@@ -69,7 +69,7 @@ export default async function AdminRewardsPage({
     <section>
       <header className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">REWARDS</span>
+          <span className="admin-header__kicker">المكافآت</span>
           <h1 className="admin-header__title">🎁 إدارة المكافآت</h1>
           <p className="admin-header__subtitle">
             {rewards?.length ?? 0} مكافأة ({activeCount} نشطة)

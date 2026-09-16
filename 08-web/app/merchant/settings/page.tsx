@@ -52,7 +52,7 @@ export default async function MerchantSettingsPage() {
       <main className="mset">
         <header className="mset__hero">
           <Link href="/merchant" className="mset__back">← لوحة النشاط</Link>
-          <span className="mset__kicker">MERCHANT</span>
+          <span className="mset__kicker">شريكنا</span>
           <h1 className="mset__title">⚙️ إعدادات المتجر</h1>
           <p className="mset__sub">تحكم كامل في تجربتك على EAH</p>
         </header>

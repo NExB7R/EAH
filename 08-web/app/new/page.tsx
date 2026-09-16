@@ -44,7 +44,7 @@ export default async function NewPage() {
           <div className="nw__logo">
             <EahLogo size="md" variant="full" href="/" />
           </div>
-          <span className="nw__kicker">NEW ON EAH</span>
+          <span className="nw__kicker">جديد على EAH</span>
           <h1 className="nw__title">🌱 مشاريع محتاجة فرصة</h1>
           <p className="nw__sub">
             {list.length} مكان جديد — دعمهم يبدأ بزيارة

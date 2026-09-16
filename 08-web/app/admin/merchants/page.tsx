@@ -105,7 +105,7 @@ export default async function AdminMerchantsPage({
     <section>
       <header className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">MERCHANT REVIEW</span>
+          <span className="admin-header__kicker">مراجعة التجار</span>
           <h1 className="admin-header__title">🧾 طلبات التجار</h1>
           <p className="admin-header__subtitle">
             {counts.pending > 0

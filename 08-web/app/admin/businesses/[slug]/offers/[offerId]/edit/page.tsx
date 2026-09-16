@@ -40,7 +40,7 @@ export default async function EditOfferPage({
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">EDIT OFFER</span>
+          <span className="admin-header__kicker">تعديل عرض</span>
           <h1 className="admin-header__title">✏️ تعديل: {offer.title}</h1>
         </div>
         <div className="admin-header__actions">

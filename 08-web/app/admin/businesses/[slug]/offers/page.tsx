@@ -38,7 +38,7 @@ export default async function OffersPage({
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">OFFERS</span>
+          <span className="admin-header__kicker">العروض</span>
           <h1 className="admin-header__title">🎁 عروض: {biz.name}</h1>
           <p className="admin-header__subtitle">
             {rows.length} عرض — تظهر للعملاء في الصفحة الرئيسية وصفحة المكان

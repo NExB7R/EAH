@@ -78,7 +78,7 @@ export default async function AccountPage() {
           </div>
 
           <div className="acc-hero__body">
-            <span className="acc-hero__kicker">MY ACCOUNT</span>
+            <span className="acc-hero__kicker">حسابي</span>
             <h1 className="acc-hero__title">{name}</h1>
 
             <div className="acc-hero__meta">

@@ -69,7 +69,7 @@ export default async function AdminSecurityPage() {
     <section className="sec">
       <header className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">SECURITY CENTER</span>
+          <span className="admin-header__kicker">مركز الأمان</span>
           <h1 className="admin-header__title">🛡️ مركز الأمان</h1>
           <p className="admin-header__subtitle">نظرة حقيقية على أمان المنصة</p>
         </div>

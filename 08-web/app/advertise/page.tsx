@@ -69,7 +69,7 @@ export default function AdvertisePage() {
       <main className="adv">
         <section className="adv-hero">
           <div className="adv-hero__glow" aria-hidden />
-          <span className="adv-hero__kicker">EAH ADVERTISE</span>
+          <span className="adv-hero__kicker">أعلن معانا</span>
           <h1 className="adv-hero__title">
             خلّي مكانك <span className="adv-hero__accent">يظهر الأول</span>
           </h1>

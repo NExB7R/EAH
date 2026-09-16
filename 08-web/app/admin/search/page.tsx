@@ -38,7 +38,7 @@ export default async function AdminSearchPage({
     <section>
       <header className="eah-admin-page-header">
         <div>
-          <span className="eah-admin-kicker">QUICK SEARCH</span>
+          <span className="eah-admin-kicker">بحث سريع</span>
           <h1>🔍 بحث سريع</h1>
           <p>ابحث في الأنشطة والمستخدمين</p>
         </div>

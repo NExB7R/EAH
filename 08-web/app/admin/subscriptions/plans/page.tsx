@@ -13,7 +13,7 @@ export default async function AdminPlansPage() {
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">SUBSCRIPTION PLANS</span>
+          <span className="admin-header__kicker">باقات الاشتراك</span>
           <h1 className="admin-header__title">⚙️ إدارة الباقات</h1>
           <p className="admin-header__subtitle">
             {plans.length} باقة — عدّل الأسعار والمدة والمميزات

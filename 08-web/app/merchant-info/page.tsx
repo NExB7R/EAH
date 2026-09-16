@@ -42,7 +42,7 @@ export default function MerchantInfoPage() {
       <FloatingCapsuleHeader />
       <main className="mi">
         <section className="mi__hero">
-          <span className="mi__kicker">FOR BUSINESS OWNERS</span>
+          <span className="mi__kicker">لأصحاب الأنشطة</span>
           <h1 className="mi__title">ليه تسجل نشاطك على EAH؟</h1>
           <p className="mi__lead">
             عرض مجاني، أدوات احترافية، عملاء حقيقيون — كل ده في مكان واحد.

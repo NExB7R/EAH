@@ -46,7 +46,7 @@ export default async function MenuPage({ params }: { params: Promise<{ slug: str
         <header className="mm__head">
           <Link href="/merchant" className="mm__back">← لوحة النشاط</Link>
           <div>
-            <span className="mm__kicker">MENU MANAGEMENT</span>
+            <span className="mm__kicker">إدارة المنيو</span>
             <h1 className="mm__title">📋 منيو {biz.name}</h1>
             <p className="mm__sub">
               ضيف الأصناف بالفئات والأسعار — تظهر للعملاء في صفحة النشاط

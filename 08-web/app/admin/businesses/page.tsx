@@ -54,7 +54,7 @@ export default async function AdminBusinessesPage() {
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">BUSINESS CONTROL</span>
+          <span className="admin-header__kicker">إدارة الأنشطة</span>
           <h1 className="admin-header__title">🏪 إدارة الأنشطة</h1>
           <p className="admin-header__subtitle">
             {rows.length} نشاط — كل عمليات التحكم في مكان واحد

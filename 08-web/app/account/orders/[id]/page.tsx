@@ -79,7 +79,7 @@ export default async function OrderDetailPage({
         <Link href="/account/orders" className="od__back">← طلباتي</Link>
 
         <header className="od__head">
-          <span className="od__kicker">ORDER DETAIL</span>
+          <span className="od__kicker">تفاصيل الأوردر</span>
           <div className="od__biz">
             <span className="od__biz-emoji">{emoji}</span>
             <div>

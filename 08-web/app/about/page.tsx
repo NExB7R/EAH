@@ -66,7 +66,7 @@ export default function AboutPage() {
         {/* Hero */}
         <section className="ab__hero">
           <div className="ab__hero-glow" aria-hidden />
-          <span className="ab__kicker">ABOUT EAH</span>
+          <span className="ab__kicker">نبذة عننا</span>
           <h1 className="ab__title">
             منصة اكتشاف محلية،
             <br />

@@ -80,7 +80,7 @@ export default async function MerchantApplyPage({
       <main className="ap">
         <section className="ap-hero">
           <div className="ap-hero__glow" aria-hidden />
-          <span className="ap-hero__kicker">EAH MERCHANT</span>
+          <span className="ap-hero__kicker">شريك EAH</span>
           <h1 className="ap-hero__title">
             سجّل <span className="ap-hero__accent">نشاطك</span> على EAH
           </h1>

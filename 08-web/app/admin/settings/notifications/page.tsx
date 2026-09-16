@@ -38,7 +38,7 @@ export default async function AdminNotificationsPage() {
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">NOTIFICATIONS</span>
+          <span className="admin-header__kicker">الإشعارات</span>
           <h1 className="admin-header__title">🔔 إدارة الإشعارات</h1>
           <p className="admin-header__subtitle">
             تفضيلاتك الشخصية + كل الأنواع المتاحة على المنصة

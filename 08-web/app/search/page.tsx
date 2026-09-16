@@ -52,7 +52,7 @@ export default async function SearchPage({
           <div className="sr__logo">
             <EahLogo size="md" variant="full" href="/" />
           </div>
-          <span className="sr__kicker">SEARCH</span>
+          <span className="sr__kicker">بحث</span>
           <h1 className="sr__title">🔍 البحث</h1>
           <p className="sr__sub">دوّر على أي مكان في شبين القناطر</p>
           <div className="sr__search-wrap">

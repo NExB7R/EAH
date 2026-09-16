@@ -34,7 +34,7 @@ export default async function BusinessAccessPage({ params }: { params: Promise<{
   const ownerAccess = new Map((accessRows ?? []).filter((r) => r.user_id === business.owner_profile_id).map((r) => [r.permission, r.granted]))
 
   return <section>
-    <header className="eah-admin-header"><div><span className="eah-admin-kicker">BUSINESS ACCESS</span><h1>{business.name}</h1><p>صلاحيات هذا النشاط مستقلة عن باقي الأنشطة.</p></div><a href={`/businesses/${business.slug}`} className="eah-admin-primary">مشاهدة الصفحة ↗</a></header>
+    <header className="eah-admin-header"><div><span className="eah-admin-kicker">صلاحيات النشاط</span><h1>{business.name}</h1><p>صلاحيات هذا النشاط مستقلة عن باقي الأنشطة.</p></div><a href={`/businesses/${business.slug}`} className="eah-admin-primary">مشاهدة الصفحة ↗</a></header>
     <div className="card" style={{ padding: 18, marginBottom: 20 }}><span className="meta">المالك الحالي</span><h2 style={{ margin: '8px 0 4px' }}>{owner?.display_name || 'غير محدد'}</h2><p className="lead" style={{ margin: 0 }}>{owner?.phone || owner?.phone_e164 || 'لا يوجد رقم'}</p></div>
     {owner ? <form action={savePermissions} className="card" style={{ padding: 18 }}>
       <input type="hidden" name="business_id" value={business.id} /><input type="hidden" name="user_id" value={owner.id} /><input type="hidden" name="slug" value={business.slug} />

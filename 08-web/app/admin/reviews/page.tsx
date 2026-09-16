@@ -82,7 +82,7 @@ export default async function ReviewsPage({
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">REVIEWS</span>
+          <span className="admin-header__kicker">التقييمات</span>
           <h1 className="admin-header__title">⭐ التقييمات</h1>
           <p className="admin-header__subtitle">
             {counts.all} تقييم — {counts.pending} قيد المراجعة، {counts.approved} معتمد

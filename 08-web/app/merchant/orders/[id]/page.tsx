@@ -75,7 +75,7 @@ export default async function MerchantOrderDetailPage({
         <Link href="/merchant/orders" className="mod__back">← الطلبات</Link>
 
         <header className="mod__head">
-          <span className="mod__kicker">ORDER DETAIL</span>
+          <span className="mod__kicker">تفاصيل الأوردر</span>
           <div className="mod__biz">
             <span className="mod__biz-emoji">{emoji}</span>
             <div>

@@ -22,7 +22,7 @@ export default async function NewBusinessPage() {
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">NEW BUSINESS</span>
+          <span className="admin-header__kicker">نشاط جديد</span>
           <h1 className="admin-header__title">➕ إضافة مكان جديد</h1>
           <p className="admin-header__subtitle">
             املأ البيانات الأساسية — تقدر تعدّلها في أي وقت بعد كده

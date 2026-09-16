@@ -33,7 +33,7 @@ export default async function PointsPage() {
         <header className="pt__hero">
           <Link href="/account" className="pt__back">← حسابي</Link>
           <div className="pt__glow" aria-hidden />
-          <span className="pt__kicker">MY POINTS</span>
+          <span className="pt__kicker">نقطي</span>
           <h1 className="pt__title">💰 نقاطي</h1>
         </header>
 

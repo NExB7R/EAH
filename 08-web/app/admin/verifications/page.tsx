@@ -32,7 +32,7 @@ export default async function AdminVerificationsPage() {
     <section>
       <header className="eah-admin-page-header">
         <div>
-          <span className="eah-admin-kicker">VERIFICATIONS</span>
+          <span className="eah-admin-kicker">التوثيق</span>
           <h1>✓ طلبات التوثيق</h1>
           <p>{pending.length} طلب قيد المراجعة</p>
         </div>

@@ -39,7 +39,7 @@ export default async function AdminHomePage() {
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">EAH CONTROL CENTER</span>
+          <span className="admin-header__kicker">غرفة التحكم</span>
           <h1 className="admin-header__title">👑 مرحباً بك في لوحة التحكم</h1>
           <p className="admin-header__subtitle">
             كل اللي محتاجه للتحكم في المنصة من مكان واحد

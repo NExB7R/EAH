@@ -51,7 +51,7 @@ export default async function VerifyPage({
         <header className="vf-hero">
           <div className="vf-hero__glow" aria-hidden />
           <Link href="/account" className="vf-hero__back">← رجوع</Link>
-          <span className="vf-hero__kicker">EAH VERIFICATION</span>
+          <span className="vf-hero__kicker">توثيق EAH</span>
           <h1 className="vf-hero__title">✓ توثيق الحساب</h1>
           <p className="vf-hero__lead">
             التوثيق بيدي حسابك شارة "موثق" تظهر في كل مكان على EAH.

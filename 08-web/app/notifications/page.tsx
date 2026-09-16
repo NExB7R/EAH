@@ -53,7 +53,7 @@ export default async function NotificationsPage() {
       <main className="nt">
         <header className="nt-hero">
           <div className="nt-hero__glow" aria-hidden />
-          <span className="nt-hero__kicker">EAH NOTIFICATIONS</span>
+          <span className="nt-hero__kicker">إشعارات EAH</span>
           <h1 className="nt-hero__title">🔔 الإشعارات</h1>
           <p className="nt-hero__lead">
             {unreadCount > 0 ? `عندك ${unreadCount} إشعار جديد` : 'مفيش إشعارات جديدة'}

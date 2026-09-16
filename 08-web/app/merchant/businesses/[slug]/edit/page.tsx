@@ -71,7 +71,7 @@ export default async function MerchantEditBusinessPage({
       <main className="mpage">
         <div className="mpage__head">
           <div>
-            <span className="mpage__kicker">REVIEW REQUIRED</span>
+            <span className="mpage__kicker">مراجعة مطلوبة</span>
             <h1 className="mpage__title">✏️ تعديل: {business.name}</h1>
             <p className="mpage__sub">
               التعديلات لا تُنشر فورًا — بتروح لمراجعة الأدمن أول

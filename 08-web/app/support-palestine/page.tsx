@@ -71,7 +71,7 @@ export default function PalestinePage() {
               />
             </svg>
           </div>
-          <span className="pal-kicker">PALESTINE IN OUR HEART</span>
+          <span className="pal-kicker">فلسطين في القلب</span>
           <h1 className="pal-title">فلسطين في القلب</h1>
           <p className="pal-lead">
             مش شعار عابر — التزام حقيقي. EAH مش منصة سياسية، لكن إحنا مؤمنين إن كل حد يقدر يدعم القضية بطريقته.

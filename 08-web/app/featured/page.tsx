@@ -44,7 +44,7 @@ export default async function FeaturedPage() {
           <div className="feat__logo">
             <EahLogo size="md" variant="full" href="/" />
           </div>
-          <span className="feat__kicker">FEATURED</span>
+          <span className="feat__kicker">المميزين</span>
           <h1 className="feat__title">⭐ المميزون</h1>
           <p className="feat__sub">
             {list.length} مكان مميز على EAH — اختيارات مختارة بعناية

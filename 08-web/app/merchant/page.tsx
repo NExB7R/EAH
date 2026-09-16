@@ -30,7 +30,7 @@ export default async function MerchantDashboard() {
       <main className="mpage">
         <div className="mpage__head">
           <div>
-            <span className="mpage__kicker">MERCHANT</span>
+            <span className="mpage__kicker">شريكنا</span>
             <h1 className="mpage__title">🏪 لوحة النشاط</h1>
             <p className="mpage__sub">
               مرحبًا {user.email?.split('@')[0] ?? 'صاحب النشاط'} — إدارة كل أنشطتك من هنا

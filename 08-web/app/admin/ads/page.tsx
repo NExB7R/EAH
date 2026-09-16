@@ -57,7 +57,7 @@ export default async function AdminAdsPage() {
   return (
     <section>
       <header className="eah-admin-header">
-        <div><span className="eah-admin-kicker">AD MANAGER</span><h1>إدارة الإعلانات</h1><p>مساحات ثابتة، تكرار محدود، وقياس كامل للظهور والنقر وCTR بدون Pop-ups.</p></div>
+        <div><span className="eah-admin-kicker">إدارة الإعلانات</span><h1>إدارة الإعلانات</h1><p>مساحات ثابتة، تكرار محدود، وقياس كامل للظهور والنقر وCTR بدون Pop-ups.</p></div>
       </header>
 
       <div className="eah-admin-stat-grid">

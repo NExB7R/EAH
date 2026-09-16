@@ -58,7 +58,7 @@ export default function ChangePasswordPage() {
 
   if (success) return (
     <main className="cpw"><div className="cpw__wrap"><section className="cpw__hero">
-      <span className="cpw__kicker">EAH • SECURITY</span>
+      <span className="cpw__kicker">EAH • الأمان</span>
       <h1 className="cpw__title">✅ تم التغيير</h1>
       <p className="cpw__lead">كلمة مرورك اتغيرت، وكل الأجهزة التانية اتطردت تلقائيًا.</p>
       <div className="cpw__success-actions">
@@ -71,7 +71,7 @@ export default function ChangePasswordPage() {
   return (
     <main className="cpw"><div className="cpw__wrap">
       <section className="cpw__hero">
-        <span className="cpw__kicker">EAH • SECURITY</span>
+        <span className="cpw__kicker">EAH • الأمان</span>
         <h1 className="cpw__title">🔒 تغيير كلمة المرور</h1>
         <p className="cpw__lead">للأمان، محتاج تدخل كلمة المرور الحالية الأول. بعد التغيير، كل الأجهزة التانية هتتطرد تلقائيًا.</p>
         <div className="cpw__info">

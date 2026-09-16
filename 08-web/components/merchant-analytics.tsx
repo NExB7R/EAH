@@ -33,7 +33,7 @@ export default function MerchantAnalytics({ businessId, businessName, businessSl
     <div className="ma">
       <header className="ma__head">
         <div>
-          <span className="ma__kicker">ANALYTICS</span>
+          <span className="ma__kicker">التحليلات</span>
           <h2 className="ma__title">📊 تحليلات {businessName}</h2>
           <p className="ma__sub">نظرة تفصيلية على أداء نشاطك</p>
         </div>

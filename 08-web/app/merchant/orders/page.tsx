@@ -105,7 +105,7 @@ export default async function MerchantOrdersPage({
         <header className="mo__head">
           <Link href="/merchant" className="mo__back">← لوحة النشاط</Link>
           <div>
-            <span className="mo__kicker">ORDER MANAGEMENT</span>
+            <span className="mo__kicker">إدارة الأوردرات</span>
             <h1 className="mo__title">🛒 الطلبات</h1>
             <p className="mo__sub">
               {counts.sent > 0

@@ -124,7 +124,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
     <div className="orr">
       <header className="orr__head">
         <div>
-          <span className="orr__kicker">ORDER FORM</span>
+          <span className="orr__kicker">نموذج الطلب</span>
           <h3 className="orr__title">🛒 اطلب من {businessName}</h3>
           <p className="orr__sub">
             اكتب الأوردر، ونحوله لك على واتساب المطعم مباشرة

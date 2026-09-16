@@ -103,7 +103,7 @@ export default async function AdminReferralsPage({
     <section>
       <header className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">REFERRALS</span>
+          <span className="admin-header__kicker">الإحالات</span>
           <h1 className="admin-header__title">🎁 الإحالات</h1>
           <p className="admin-header__subtitle">
             {totalRefs} إحالة · {totalBonus} نقطة موزعة · {uniqueReferrers} داعي

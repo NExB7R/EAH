@@ -38,7 +38,7 @@ export default async function EditProfilePage() {
         <header className="edit__head">
           <Link href="/account" className="edit__back">← رجوع</Link>
           <div>
-            <span className="edit__kicker">EDIT PROFILE</span>
+            <span className="edit__kicker">تعديل بياناتي</span>
             <h1 className="edit__title">✏️ عدّل بروفايلك</h1>
             <p className="edit__sub">اسمك، صورتك، ونبذة قصيرة.</p>
           </div>

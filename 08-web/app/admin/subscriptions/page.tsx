@@ -65,7 +65,7 @@ export default async function AdminSubscriptionsPage({
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">SUBSCRIPTIONS</span>
+          <span className="admin-header__kicker">الاشتراكات</span>
           <h1 className="admin-header__title">💎 الاشتراكات</h1>
           <p className="admin-header__subtitle">
             {counts.pending > 0

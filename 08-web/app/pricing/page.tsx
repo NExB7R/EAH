@@ -102,7 +102,7 @@ export default function PricingPage() {
       <main className="pr">
         <section className="pr__hero">
           <div className="pr__hero-glow" aria-hidden />
-          <span className="pr__kicker">PREMIUM PLANS</span>
+          <span className="pr__kicker">الباقات المميزة</span>
           <h1 className="pr__title">الباقات والأسعار</h1>
           <p className="pr__lead">
             اختار اللي يناسب نشاطك. بدون عمولة على الطلبات —{' '}

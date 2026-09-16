@@ -116,7 +116,7 @@ export default async function AnalyticsPage({
   return (
     <section className="an">
       <header className="an__hero">
-        <span className="an__kicker">ANALYTICS</span>
+        <span className="an__kicker">التحليلات</span>
         <h1 className="an__title">📊 التحليلات</h1>
         <p className="an__sub">نظرة شاملة على أداء المنصة</p>
       </header>

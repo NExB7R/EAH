@@ -46,7 +46,7 @@ export default function ComingSoon() {
   return (
     <section className="cs">
       <header className="cs__head">
-        <span className="cs__kicker">COMING SOON</span>
+        <span className="cs__kicker">قريب أوي</span>
         <h2 className="cs__title">ميزات جاية قريب</h2>
         <p className="cs__sub">
           كل تحديث بيجيب ميزة جديدة — وكلها بدون أي تلاعب بالنقاط أو التجربة.

@@ -57,7 +57,7 @@ export default async function AllOffersPage() {
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">ALL OFFERS</span>
+          <span className="admin-header__kicker">كل العروض</span>
           <h1 className="admin-header__title">🔥 كل العروض</h1>
           <p className="admin-header__subtitle">{rows.length} عرض في كل الأنشطة</p>
         </div>

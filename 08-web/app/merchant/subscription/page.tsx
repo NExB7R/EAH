@@ -42,7 +42,7 @@ export default async function MerchantSubscriptionPage() {
     <main className="msub">
       <header className="msub__head">
         <div>
-          <span className="msub__kicker">SUBSCRIPTION</span>
+          <span className="msub__kicker">الاشتراك</span>
           <h1>اشتراكي 💎</h1>
           <p className="msub__sub">{business.name}</p>
         </div>

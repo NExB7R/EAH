@@ -50,7 +50,7 @@ export default async function AdminChangeRequestDetail({ params }: { params: Pro
     <section>
       <header className="eah-admin-page-header">
         <div>
-          <span className="eah-admin-kicker">REVIEW REQUEST</span>
+          <span className="eah-admin-kicker">طلب مراجعة</span>
           <h1>مراجعة تعديل: {business?.name ?? 'نشاط'}</h1>
           <p>الطلب من {profile?.display_name || profile?.phone || 'صاحب النشاط'} • {request.entity_type} • {request.operation}</p>
         </div>

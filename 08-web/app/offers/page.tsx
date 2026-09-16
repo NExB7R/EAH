@@ -43,7 +43,7 @@ export default async function OffersPage() {
       <main className="off">
         <section className="off-hero">
           <div className="off-hero__glow" aria-hidden />
-          <span className="off-hero__kicker">EAH OFFERS</span>
+          <span className="off-hero__kicker">عروض EAH</span>
           <h1 className="off-hero__title">
             🔥 <span className="off-hero__accent">عروض</span> على الآخر
           </h1>

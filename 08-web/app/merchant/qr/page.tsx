@@ -30,7 +30,7 @@ export default async function MerchantQRPage() {
       <main className="qr">
         <header className="qr__hero">
           <Link href="/merchant" className="qr__back">← لوحة النشاط</Link>
-          <span className="qr__kicker">MERCHANT</span>
+          <span className="qr__kicker">شريكنا</span>
           <h1 className="qr__title">📱 QR Code النشاط</h1>
           <p className="qr__sub">اطبع ده وحطه على واجهة المكان — الزبون يمسح ويوصل لصفحتك</p>
         </header>

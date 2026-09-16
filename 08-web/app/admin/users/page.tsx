@@ -108,7 +108,7 @@ export default async function UsersPage({
     <>
       <div className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">USERS</span>
+          <span className="admin-header__kicker">الأعضاء</span>
           <h1 className="admin-header__title">👥 المستخدمين</h1>
           <p className="admin-header__subtitle">
             {counts.total} مستخدم — {counts.customers} عميل، {counts.merchants} تاجر، {counts.admins} أدمن

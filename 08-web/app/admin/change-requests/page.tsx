@@ -120,7 +120,7 @@ export default async function AdminChangeRequestsPage({
     <section>
       <header className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">CONTENT REVIEW</span>
+          <span className="admin-header__kicker">مراجعة المحتوى</span>
           <h1 className="admin-header__title">📝 مراجعة التعديلات</h1>
           <p className="admin-header__subtitle">
             {counts.pending > 0

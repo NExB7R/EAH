@@ -32,7 +32,7 @@ export default function TermsPage() {
       <FloatingCapsuleHeader />
       <main className="lg">
         <section className="lg__hero">
-          <span className="lg__kicker">TERMS OF SERVICE</span>
+          <span className="lg__kicker">الشروط والأحكام</span>
           <h1 className="lg__title">الشروط والأحكام</h1>
           <p style={{ margin: 0, fontSize: '.9rem', color: '#A29DB5', lineHeight: 1.7 }}>
             باستخدامك EAH، أنت موافق على الشروط دي.
