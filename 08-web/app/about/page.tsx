@@ -6,56 +6,53 @@ import ComingSoon from '@/components/coming-soon'
 import './about.css'
 
 export const metadata = {
-  title: 'نبذة عننا',
-  description: 'EAH — منصة اكتشاف محلية بتبدأ من شبين القناطر وبتوصل لكل حتة.',
+  title: 'من إحنا',
+  description: 'EAH — حكاية منصة اكتشاف محلية بتحب المكان اللي فيه.',
 }
 
-const STATS = [
-  { num: '2026', label: 'سنة التأسيس', color: '#A855F7' },
-  { num: '8', label: 'مناطق مستهدفة', color: '#E8C79A' },
-  { num: '4', label: 'فئات رئيسية', color: '#C084FC' },
-  { num: '100%', label: 'مجاني للعميل', color: '#FBBF24' },
+const HOOKS = [
+  { num: '0%', label: 'عمولة على أي طلب', color: '#E8C79A' },
+  { num: '30 يوم', label: 'تجربة مجانية للشريك', color: '#A855F7' },
+  { num: '100%', label: 'مجاني للعميل — للأبد', color: '#FBBF24' },
+]
+
+const FOR_WHO = [
+  {
+    emoji: '🛍️',
+    title: 'للعميل',
+    desc: 'اكتشف الأماكن اللي حواليك على مزاجك — بدون تسجيل معقّد، بدون رسوم.',
+    cta: { label: 'يلا اكتشف', href: '/explore' },
+  },
+  {
+    emoji: '🏪',
+    title: 'للشريك',
+    desc: 'سجّل نشاطك مجاناً، وابدأ تجربة 30 يوم من كل الميزات المدفوعة.',
+    cta: { label: 'سجّل نشاطك', href: '/merchant-info' },
+  },
+  {
+    emoji: '🇵🇸',
+    title: 'للدعم',
+    desc: 'كل إعلان على EAH بيدعم القضية. إحنا أخوات — والقضية في القلب.',
+    cta: { label: 'فلسطين في القلب', href: '/support-palestine' },
+  },
+]
+
+const WHAT_WE_DO = [
+  { icon: '🍽️', label: 'مطاعم' },
+  { icon: '💊', label: 'صيدليات' },
+  { icon: '🛒', label: 'ماركت' },
+  { icon: '🛵', label: 'توصيل' },
+  { icon: '🎁', label: 'عروض' },
+  { icon: '👑', label: 'مميزين' },
+  { icon: '🔥', label: 'مولعة' },
+  { icon: '🆕', label: 'الجديد' },
 ]
 
 const VALUES = [
-  {
-    emoji: '🎯',
-    title: 'بنوصّلك الصح',
-    body: 'بنفهم مزاجك، موقعك، وميزانيتك. وبنرشحلك الأماكن اللي فعلًا تناسبك — مش الأكثر دفعًا.',
-  },
-  {
-    emoji: '💜',
-    title: 'بنسمعك دايمًا',
-    body: 'كل اقتراح، كل شكوى، وكل فكرة بتوصلنا. وبنبني على أساسها المنصة خطوة بخطوة.',
-  },
-  {
-    emoji: '⚡',
-    title: 'تجربة خفيفة',
-    body: 'من غير تعقيد، ومن غير تسجيل طويل. بتبحث، بتلاقي، وبتواصل — في ثواني.',
-  },
-  {
-    emoji: '🤝',
-    title: 'دعم البيوت المحلية',
-    body: 'بنخلي المطعم الصغير، والصيدلية، والماركت، ومكتب التوصيل — يوصلوا لناس أكتر.',
-  },
-]
-
-const TIMELINE = [
-  {
-    year: '2026',
-    title: 'البداية من شبين القناطر',
-    body: 'الفكرة كانت بسيطة: ناس كتير في المدينة والريف مش لاقيين الأماكن القريبة منها بسهولة. EAH وُلدت عشان تحل ده.',
-  },
-  {
-    year: 'الآن',
-    title: 'بنتوسع منطقة منطقة',
-    body: 'بنضيف مطاعم وصيدليات وماركتات ومكاتب توصيل — كل واحد بيتم اختياره ومناقشته قبل النشر.',
-  },
-  {
-    year: 'قريب',
-    title: 'توسّع أوسع + خدمات أذكى',
-    body: 'بنشتغل على ترشيحات أدق، إشعارات ذكية، وأدوات تساعد التاجر يكبر معانا.',
-  },
+  { emoji: '🎯', title: 'بنوصّلك الصح', body: 'ترشيحات على مزاجك وميزانيتك — مش الأكثر دفعاً.' },
+  { emoji: '💜', title: 'بنسمعك دايمًا', body: 'كل اقتراح وكل شكوى بتوصلنا، وبنبني عليها.' },
+  { emoji: '⚡', title: 'تجربة خفيفة', body: 'من غير تعقيد — بتلاقي وبتتواصل في ثواني.' },
+  { emoji: '🤝', title: 'دعم البيوت المحلية', body: 'بنخلي المشروع الصغير يوصل لناس أكتر.' },
 ]
 
 export default function AboutPage() {
@@ -66,61 +63,80 @@ export default function AboutPage() {
         {/* Hero */}
         <section className="ab__hero">
           <div className="ab__hero-glow" aria-hidden />
-          <span className="ab__kicker">نبذة عننا</span>
+          <span className="ab__kicker">من إحنا</span>
           <h1 className="ab__title">
             منصة اكتشاف محلية،
             <br />
             <span className="ab__title-accent">بتحب المكان اللي فيه</span>
           </h1>
           <p className="ab__lead">
-            EAH بدأت من شبين القناطر — هدفنا نوصل كل حد لأقرب مكان محتاجه،
-            بأسهل طريقة، ومن غير أي تعقيد.
+            من مطعم السكة.. للصيدلية اللي جوه الحارة..<br/>
+            EAH بتجمع كل حاجة حواليك في مكان واحد.
           </p>
           <div className="ab__hero-cta">
-            <Link href="/explore" className="ab__btn ab__btn--primary">
-              🔍 اكتشف الأماكن
-            </Link>
-            <Link href="/merchant-info" className="ab__btn ab__btn--ghost">
-              🏪 لأصحاب الأنشطة
-            </Link>
+            <Link href="/explore" className="ab__btn ab__btn--primary">🔍 اكتشف الأماكن</Link>
+            <Link href="/merchant-info" className="ab__btn ab__btn--ghost">🏪 لأصحاب الأنشطة</Link>
           </div>
         </section>
 
-        {/* Stats */}
-        <section className="ab__stats">
-          {STATS.map((s) => (
-            <div key={s.label} className="ab__stat">
-              <span className="ab__stat-num" style={{ color: s.color }}>
-                {s.num}
-              </span>
-              <span className="ab__stat-label">{s.label}</span>
+        {/* Hooks — لا أرقام عبيطة */}
+        <section className="ab__hooks">
+          {HOOKS.map((h) => (
+            <div key={h.label} className="ab__hook">
+              <span className="ab__hook-num" style={{ color: h.color }}>{h.num}</span>
+              <span className="ab__hook-label">{h.label}</span>
             </div>
           ))}
         </section>
 
-        {/* Story */}
+        {/* Story — قصيرة، هوك مش جرنان */}
         <section className="ab__section">
           <header className="ab__section-head">
-            <span className="ab__section-kicker">قصتنا</span>
-            <h2 className="ab__section-title">بدأنا من فكرة صغيرة</h2>
+            <span className="ab__section-kicker">الحكاية</span>
+            <h2 className="ab__section-title">بدأنا من سؤال بسيط</h2>
           </header>
           <div className="ab__story">
-            <p>
-              في شبين القناطر والقرى حواليها، الوصول لمطعم قريب أو صيدلية مفتوحة أو ماركت
-              فيه احتياجاتك — كان محتاج لفات كتير أو سؤال لناس. EAH جت عشان تختصر كل ده.
-            </p>
-            <p>
-              بنجمع الأماكن المحلية في مكان واحد، بنراجعها بنفسنا، وبنقدمها بشكل مرتب
-              وسهل. والعميل — دايمًا مجانًا.
-            </p>
-            <p>
-              المنصة بتكبر منطقة منطقة، وكل مكان بينضم لـ EAH بيكون مضاف بعناية — مش
-              مجرد رقم في قايمة.
-            </p>
+            <p>إيه أفضل حاجة قريبة مني دلوقتي؟</p>
+            <p>مفيش إجابة سهلة كانت — ولحد دلوقتي.</p>
+            <p>EAH بتجاوب على السؤال ده — بسرعة، وبدون لف ودوران.</p>
           </div>
         </section>
 
-        {/* Values */}
+        {/* لمين */}
+        <section className="ab__section">
+          <header className="ab__section-head">
+            <span className="ab__section-kicker">إحنا لمين</span>
+            <h2 className="ab__section-title">لواحد من التلاتة</h2>
+          </header>
+          <div className="ab__forwho">
+            {FOR_WHO.map((w) => (
+              <article key={w.title} className="ab__forwho-card">
+                <span className="ab__forwho-emoji">{w.emoji}</span>
+                <h3 className="ab__forwho-title">{w.title}</h3>
+                <p className="ab__forwho-desc">{w.desc}</p>
+                <Link href={w.cta.href} className="ab__forwho-cta">{w.cta.label} ←</Link>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* بنعمل إيه */}
+        <section className="ab__section">
+          <header className="ab__section-head">
+            <span className="ab__section-kicker">بنعمل إيه</span>
+            <h2 className="ab__section-title">8 حاجات تلاقيها عندنا</h2>
+          </header>
+          <div className="ab__grid">
+            {WHAT_WE_DO.map((it) => (
+              <div key={it.label} className="ab__grid-item">
+                <span className="ab__grid-icon">{it.icon}</span>
+                <span className="ab__grid-label">{it.label}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* قيمنا */}
         <section className="ab__section">
           <header className="ab__section-head">
             <span className="ab__section-kicker">قيمنا</span>
@@ -137,26 +153,6 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Timeline */}
-        <section className="ab__section">
-          <header className="ab__section-head">
-            <span className="ab__section-kicker">الرحلة</span>
-            <h2 className="ab__section-title">فين إحنا وفين رايحين</h2>
-          </header>
-          <div className="ab__timeline">
-            {TIMELINE.map((t, i) => (
-              <article key={i} className="ab__tl-item">
-                <div className="ab__tl-dot" aria-hidden />
-                <div className="ab__tl-year">{t.year}</div>
-                <div className="ab__tl-content">
-                  <h3 className="ab__tl-title">{t.title}</h3>
-                  <p className="ab__tl-body">{t.body}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
         <TrustSection />
         <ComingSoon />
 
@@ -164,15 +160,12 @@ export default function AboutPage() {
         <section className="ab__cta">
           <h2 className="ab__cta-title">جاهز تبدأ معانا؟</h2>
           <p className="ab__cta-body">
-            لو بتدور على مكان، أو عندك نشاط وعايز يوصل لناس أكتر — EAH هي المكان الصح.
+            بتدور على مكان؟ عندك نشاط وعايز توصل لناس أكتر؟<br/>
+            EAH هي المكان الصح.
           </p>
           <div className="ab__cta-actions">
-            <Link href="/contact" className="ab__btn ab__btn--primary">
-              💬 تواصل معنا
-            </Link>
-            <Link href="/merchant/apply" className="ab__btn ab__btn--ghost">
-              🏪 سجّل نشاطك
-            </Link>
+            <Link href="/contact" className="ab__btn ab__btn--primary">💬 تواصل معانا</Link>
+            <Link href="/merchant/apply" className="ab__btn ab__btn--ghost">🏪 سجّل نشاطك</Link>
           </div>
         </section>
       </main>

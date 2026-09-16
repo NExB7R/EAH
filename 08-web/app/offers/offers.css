@@ -109,3 +109,14 @@
   .off-card { transition: none; }
   .off-card:hover { transform: none; }
 }
+
+/* Fire theme 2026 */
+.off-page { background: radial-gradient(ellipse at top, rgba(251,146,60,.08) 0%, transparent 55%); }
+.off-hero__kicker { color: #FB923C !important; text-shadow: 0 0 14px rgba(251,146,60,.6) !important; }
+.off-hero__title {
+  background: linear-gradient(135deg, #FCD34D, #FB923C, #F97316);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  text-shadow: 0 0 40px rgba(251,146,60,.5) !important;
+}
