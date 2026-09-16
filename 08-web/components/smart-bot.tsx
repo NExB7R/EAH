@@ -1,298 +1,147 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
-import {
-  loadHistory,
-  saveHistory,
-  clearHistory,
-  generateReply,
-  buildContext,
-  type Message,
-} from '@/lib/bot/intent-matcher'
-import {
-  BOT_GREETING,
-  BOT_QUICK_START,
-} from '@/lib/bot/knowledge-base'
+import { useEffect, useState } from 'react'
 import './smart-bot.css'
+import { matchIntent } from '@/lib/bot/intent-matcher'
+
+type Msg = { from: 'bot' | 'user'; text: string; actions?: { label: string; href: string }[] }
+
+const GREETING: Msg = {
+  from: 'bot',
+  text: 'أهلاً! أنا "رفيق" — مساعدك على EAH. قوللي بتدور على إيه وأنا أوصلك أسرع.',
+  actions: [
+    { label: '🔍 اكتشف أماكن', href: '/explore' },
+    { label: '🔥 شوف مولعة', href: '/trends' },
+    { label: '🏪 عندي نشاط', href: '/merchant/apply' },
+  ],
+}
+
+const QUICK = [
+  { label: '🍽️ عايز أكل', q: 'عايز أكل' },
+  { label: '💊 صيدلية قريبة', q: 'صيدلية قريبة' },
+  { label: '🛒 ماركت', q: 'ماركت' },
+  { label: '💬 كلموني', q: 'كلموني' },
+]
 
 export default function SmartBot() {
-  const [mounted, setMounted] = useState(false)
-  const [hidden, setHidden] = useState(false)
   const [open, setOpen] = useState(false)
-  const [messages, setMessages] = useState<Message[]>([])
+  const [hint, setHint] = useState(false)
+  const [msgs, setMsgs] = useState<Msg[]>([GREETING])
   const [input, setInput] = useState('')
-  const [typing, setTyping] = useState(false)
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
 
-  // فحص المسار — لا يظهر في admin/merchant studio
   useEffect(() => {
-    setMounted(true)
-    if (typeof window === 'undefined') return
-    const p = window.location.pathname
-    if (p.startsWith('/admin') || p.startsWith('/studio') || p.startsWith('/merchant')) {
-      setHidden(true)
-    }
+    const t = setTimeout(() => setHint(true), 8000)
+    const t2 = setTimeout(() => setHint(false), 16000)
+    return () => { clearTimeout(t); clearTimeout(t2) }
   }, [])
 
-  // تحميل المحادثة القديمة عند الفتح
-  useEffect(() => {
-    if (!open) return
-    const history = loadHistory()
-    if (history.length > 0) {
-      setMessages(history)
-    } else {
-      setMessages([
-        {
-          id: 'welcome',
-          role: 'bot',
-          text: BOT_GREETING,
-          timestamp: Date.now(),
-          quickReplies: BOT_QUICK_START,
-        },
-      ])
+  function send(q?: string) {
+    const text = (q ?? input).trim()
+    if (!text) return
+    const user: Msg = { from: 'user', text }
+    const res = matchIntent(text)
+    const bot: Msg = {
+      from: 'bot',
+      text: res.reply,
+      actions: res.actions,
     }
-    // focus
-    setTimeout(() => inputRef.current?.focus(), 300)
-  }, [open])
-
-  // حفظ عند كل تغيير
-  useEffect(() => {
-    if (messages.length > 0) saveHistory(messages)
-  }, [messages])
-
-  // scroll تلقائي
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [messages, typing])
-
-  // 💡 auto-hint: بعد 30 ثانية بدون تفاعل، نظهر فقاعة (مرة واحدة لكل session)
-  const [hint, setHint] = useState(false)
-  useEffect(() => {
-    if (open) { setHint(false); return }
-    if (typeof window === 'undefined') return
-    if (sessionStorage.getItem('eah-bot-hint-shown') === '1') return
-
-    const t = setTimeout(() => {
-      setHint(true)
-      sessionStorage.setItem('eah-bot-hint-shown', '1')
-      setTimeout(() => setHint(false), 8000)
-    }, 30_000)
-
-    return () => clearTimeout(t)
-  }, [open])
-
-  function send(text: string) {
-    const t = text.trim()
-    if (!t || typing) return
-
-    const userMsg: Message = {
-      id: `u-${Date.now()}`,
-      role: 'user',
-      text: t,
-      timestamp: Date.now(),
-    }
-    setMessages((m) => [...m, userMsg])
+    setMsgs((p) => [...p, user, bot])
     setInput('')
-
-    // typing effect
-    setTyping(true)
-    setTimeout(() => {
-      const ctx = buildContext()
-      const reply = generateReply(t, ctx)
-      setMessages((m) => [...m, reply])
-      setTyping(false)
-    }, 600 + Math.random() * 500)
+    setHint(false)
   }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    send(input)
-  }
-
-  function handleQuickReply(qr: { label: string; action: 'reply' | 'link'; value: string }) {
-    if (qr.action === 'reply') {
-      send(qr.value)
-    } else if (qr.action === 'link') {
-      if (qr.value.startsWith('/')) {
-        window.location.href = qr.value
-      } else {
-        window.open(qr.value, '_blank', 'noreferrer')
-      }
-    }
-  }
-
-  function handleReset() {
-    if (!confirm('تحب تمسح كل المحادثة؟')) return
-    clearHistory()
-    setMessages([
-      {
-        id: 'welcome-new',
-        role: 'bot',
-        text: BOT_GREETING,
-        timestamp: Date.now(),
-        quickReplies: BOT_QUICK_START,
-      },
-    ])
-  }
-
-  if (!mounted || hidden) return null
 
   return (
     <>
-      {/* Auto hint bubble */}
       {hint && !open && (
-        <button
-          type="button"
-          className="sb-hint"
-          onClick={() => { setOpen(true); setHint(false) }}
-          aria-label="افتح المساعد"
-        >
-          <span className="sb-hint__icon">💬</span>
-          <span className="sb-hint__text">محتاج مساعدة؟</span>
-          <span
-            className="sb-hint__close"
-            onClick={(e) => { e.stopPropagation(); setHint(false) }}
-          >×</span>
-        </button>
+        <div className="sb-hint" onClick={() => setOpen(true)}>
+          <span className="sb-hint__emoji">👋</span>
+          <span>أنا رفيق — أقدر أساعدك؟</span>
+        </div>
       )}
 
-      {/* Floating trigger */}
-      <button
-        type="button"
-        className={`sb-trigger ${open ? 'is-open' : ''}`}
-        onClick={() => setOpen((v) => !v)}
-        aria-label={open ? 'إغلاق المساعد' : 'افتح المساعد الذكي'}
-        title="المساعد الذكي"
-      >
-        <span className="sb-trigger__icon" aria-hidden>
-          {open ? (
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round">
-              <path d="M18 6 6 18M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 32 32" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* AI orb icon — 2026 minimalist */}
-              <defs>
-                <radialGradient id="sbOrb" cx="40%" cy="35%" r="65%">
-                  <stop offset="0%" stopColor="#E9D5FF" />
-                  <stop offset="55%" stopColor="#A855F7" />
-                  <stop offset="100%" stopColor="#6B21FF" />
-                </radialGradient>
-              </defs>
-              {/* Outer ring */}
-              <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="1.2" strokeDasharray="3 3" opacity="0.5" />
-              {/* Main orb */}
-              <circle cx="16" cy="16" r="9" fill="url(#sbOrb)" />
-              {/* Inner sparkle */}
-              <path d="M16 11 L17 15 L21 16 L17 17 L16 21 L15 17 L11 16 L15 15 Z" fill="#FFFFFF" opacity="0.9" />
-              {/* Small dots around */}
-              <circle cx="16" cy="4" r="1" fill="currentColor" opacity="0.7" />
-              <circle cx="28" cy="16" r="1" fill="currentColor" opacity="0.7" />
-              <circle cx="16" cy="28" r="1" fill="currentColor" opacity="0.7" />
-              <circle cx="4" cy="16" r="1" fill="currentColor" opacity="0.7" />
-            </svg>
-          )}
-        </span>
-        {!open && <span className="sb-trigger__pulse" aria-hidden />}
-      </button>
-
-      {/* Panel */}
       {open && (
-        <div className="sb-panel" role="dialog" aria-label="المساعد الذكي">
-          {/* Header */}
+        <div className="sb-panel">
           <header className="sb-header">
-            <div className="sb-header__avatar" aria-hidden>
-              <span>✨</span>
-            </div>
-            <div className="sb-header__info">
-              <span className="sb-header__title">مساعد EAH</span>
-              <span className="sb-header__status">
-                
-                متاح دلوقتي
-              </span>
-            </div>
-            <button
-              type="button"
-              className="sb-header__reset"
-              onClick={handleReset}
-              aria-label="محادثة جديدة"
-              title="محادثة جديدة"
-            >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 5v14M5 12h14" />
+            <span className="sb-avatar" aria-hidden>
+              <svg viewBox="0 0 48 48" width="30" height="30" fill="none">
+                <defs>
+                  <linearGradient id="sbGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#A855F7"/>
+                    <stop offset="100%" stopColor="#E8C79A"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="24" cy="24" r="20" stroke="url(#sbGrad)" strokeWidth="1.5" opacity=".5" fill="none"/>
+                <circle cx="24" cy="20" r="6" fill="url(#sbGrad)"/>
+                <path d="M12 40c2-7 7-10 12-10s10 3 12 10" fill="url(#sbGrad)" opacity=".85"/>
+                <circle cx="24" cy="4" r="1.8" fill="#E8C79A"/>
+                <path d="M24 6 L24 10" stroke="#E8C79A" strokeWidth="1"/>
+                <circle cx="20" cy="8" r="1" fill="#A855F7"/>
+                <circle cx="28" cy="8" r="1" fill="#A855F7"/>
               </svg>
-            </button>
+            </span>
+            <div className="sb-header-text">
+              <strong>رفيق</strong>
+              <small>مساعد EAH الذكي</small>
+            </div>
+            <button type="button" className="sb-close" onClick={() => setOpen(false)} aria-label="إغلاق">×</button>
           </header>
 
-          {/* Messages */}
-          <div className="sb-messages" ref={scrollRef}>
-            {messages.map((m) => (
-              <div key={m.id} className={`sb-msg sb-msg--${m.role}`}>
-                <div className="sb-msg__bubble">
-                  {m.text.split('\n').map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      {i < m.text.split('\n').length - 1 && <br />}
-                    </span>
-                  ))}
-                </div>
-                {m.quickReplies && m.quickReplies.length > 0 && (
-                  <div className="sb-quick">
-                    {m.quickReplies.map((qr, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        className="sb-quick__btn"
-                        onClick={() => handleQuickReply(qr)}
-                      >
-                        {qr.label}
-                      </button>
+          <div className="sb-body">
+            {msgs.map((m, i) => (
+              <div key={i} className={`sb-msg sb-msg--${m.from}`}>
+                {m.text}
+                {m.actions && (
+                  <div className="sb-actions">
+                    {m.actions.map((a) => (
+                      <a key={a.href} href={a.href} className="sb-action">{a.label}</a>
                     ))}
                   </div>
                 )}
               </div>
             ))}
-
-            {typing && (
-              <div className="sb-msg sb-msg--bot">
-                <div className="sb-msg__bubble sb-msg__bubble--typing">
-                  
-                  
-                  
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* Input */}
-          <form className="sb-input-wrap" onSubmit={handleSubmit}>
+          <div className="sb-quick">
+            {QUICK.map((q) => (
+              <button key={q.q} type="button" className="sb-quick__btn" onClick={() => send(q.q)}>
+                {q.label}
+              </button>
+            ))}
+          </div>
+
+          <form className="sb-form" onSubmit={(e) => { e.preventDefault(); send() }}>
             <input
-              ref={inputRef}
-              type="text"
               className="sb-input"
+              placeholder="اكتب سؤالك..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="اكتب سؤالك..."
-              maxLength={200}
-              disabled={typing}
             />
-            <button
-              type="submit"
-              className="sb-send"
-              disabled={!input.trim() || typing}
-              aria-label="إرسال"
-            >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13" />
-                <polygon points="22 2 15 22 11 13 2 9 22 2" />
-              </svg>
-            </button>
+            <button type="submit" className="sb-send" aria-label="إرسال">➤</button>
           </form>
         </div>
       )}
+
+      <button
+        type="button"
+        className={`sb-trigger ${open ? 'is-open' : ''}`}
+        onClick={() => setOpen((p) => !p)}
+        aria-label="مساعد EAH"
+      >
+        <span className="sb-trigger__glow" aria-hidden />
+        <svg viewBox="0 0 48 48" width="32" height="32" fill="none">
+          <defs>
+            <linearGradient id="sbGradF" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="#A855F7"/>
+              <stop offset="100%" stopColor="#E8C79A"/>
+            </linearGradient>
+          </defs>
+          <circle cx="24" cy="20" r="6" fill="url(#sbGradF)"/>
+          <path d="M12 40c2-7 7-10 12-10s10 3 12 10" fill="url(#sbGradF)" opacity=".9"/>
+          <circle cx="24" cy="4" r="2" fill="#E8C79A"/>
+          <path d="M24 6v4" stroke="#E8C79A" strokeWidth="1"/>
+          <circle cx="20" cy="8" r="1.2" fill="#A855F7"/>
+          <circle cx="28" cy="8" r="1.2" fill="#A855F7"/>
+        </svg>
+      </button>
     </>
   )
 }
