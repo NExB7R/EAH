@@ -210,7 +210,7 @@ export default function SmartBot() {
             <div className="sb-header__info">
               <span className="sb-header__title">مساعد EAH</span>
               <span className="sb-header__status">
-                <span className="sb-dot" />
+                
                 متاح دلوقتي
               </span>
             </div>
@@ -259,9 +259,9 @@ export default function SmartBot() {
             {typing && (
               <div className="sb-msg sb-msg--bot">
                 <div className="sb-msg__bubble sb-msg__bubble--typing">
-                  <span className="sb-typing-dot" />
-                  <span className="sb-typing-dot" />
-                  <span className="sb-typing-dot" />
+                  
+                  
+                  
                 </div>
               </div>
             )}

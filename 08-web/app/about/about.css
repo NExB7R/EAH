@@ -236,16 +236,7 @@
   position: relative;
   margin-bottom: 24px;
 }
-.ab__tl-dot {
-  position: absolute;
-  top: 6px;
-  inset-inline-start: -30px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #A855F7, #6B21FF);
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
-}
+
 .ab__tl-year {
   font-size: 0.72rem;
   font-weight: 900;

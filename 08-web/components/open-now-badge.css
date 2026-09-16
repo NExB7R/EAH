@@ -13,10 +13,6 @@
   border: 1px solid rgba(107,104,128,.3);
   color: #A5A3B8;
 }
-.onb__dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 6px currentColor;
-}
+
  }
 @keyframes onbPulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }

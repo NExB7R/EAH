@@ -63,11 +63,7 @@
   font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em;
   color: #A855F7; text-transform: uppercase;
 }
-.nt-item__dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #A855F7;
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
-}
+
 .nt-item__title { color: #F5F3FF; font-weight: 800; font-size: 0.95rem; }
 .nt-item__text { color: #A5A3B8; font-size: 0.85rem; margin: 0; line-height: 1.6; }
 .nt-item__time { color: #6B6880; font-size: 0.72rem; margin-top: 4px; }

@@ -84,14 +84,7 @@
   font-weight: 700;
   animation: hh-fade-up 620ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-.hh__chip-top-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #C084FC;
-  box-shadow: 0 0 8px #C084FC;
-  
-}
+
 
 
 .hh__logo { display: flex; justify-content: center; margin: 10px 0 6px; animation: hh-fade-up 720ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both; }
@@ -207,13 +200,7 @@
   font-weight: 700;
   color: #A29DB5;
 }
-.hh__trust-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #C084FC;
-  box-shadow: 0 0 8px rgba(192, 132, 252, 0.6);
-}
+
 
 @keyframes hh-fade-up {
   from { opacity: 0; transform: translateY(16px); }
@@ -238,5 +225,5 @@
   .hh__cats,
   .hh__recommend,
   .hh__trust,
-  .hh__chip-top-dot { animation: none; }
+
 }

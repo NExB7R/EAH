@@ -121,7 +121,7 @@ export default async function AdminReferralsPage({
           <span className="ref-stat__num">{totalBonus}</span>
           <span className="ref-stat__label">نقاط موزعة</span>
         </div>
-        <div className="ref-stat ref-stat--green">
+        <div className="ref-stat ref-stat--purple">
           <span className="ref-stat__num">{uniqueReferrers}</span>
           <span className="ref-stat__label">دعاة نشطين</span>
         </div>

@@ -92,7 +92,7 @@ export default async function AllOffersPage() {
                   <div className="offer-card__badges">
                     {isActive ? (
                       <span className="offer-card__badge offer-card__badge--active">
-                        <span className="offer-card__badge-dot" />
+                        
                         نشط
                       </span>
                     ) : o.is_published ? (

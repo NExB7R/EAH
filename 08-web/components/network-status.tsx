@@ -35,7 +35,7 @@ export default function NetworkStatus() {
       role="status"
       aria-live="polite"
     >
-      <span className="nstatus__dot" aria-hidden />
+      
       <span className="nstatus__text">
         {online ? 'رجع النت ✅' : 'أنت أوفلاين — وضع محدود'}
       </span>

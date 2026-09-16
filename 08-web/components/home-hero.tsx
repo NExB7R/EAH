@@ -72,7 +72,7 @@ export default function HomeHero() {
 
       <div className="hh__inner">
         <div className="hh__chip-top">
-          <span className="hh__chip-top-dot" />
+          
         </div>
 
         <div className="hh__logo">
@@ -106,9 +106,9 @@ export default function HomeHero() {
         </Link>
 
         <div className="hh__trust">
-          <span className="hh__trust-item"><span className="hh__trust-dot" />مجاني 100%</span>
-          <span className="hh__trust-item"><span className="hh__trust-dot" />بدون تسجيل</span>
-          <span className="hh__trust-item"><span className="hh__trust-dot" />أماكن موثوقة</span>
+          <span className="hh__trust-item">مجاني 100%</span>
+          <span className="hh__trust-item">بدون تسجيل</span>
+          <span className="hh__trust-item">أماكن موثوقة</span>
         </div>
       </div>
     </section>

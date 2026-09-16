@@ -25,7 +25,7 @@ const CARDS = [
     title: 'اطلب من أي مكان',
     body: 'اكتب طلبك — يوصل مباشرة على واتساب المكان. بدون وسيط',
     cta: { label: 'شوف الأماكن', href: '/explore' },
-    accent: 'green',
+    accent: 'purple',
   },
   {
     key: 'partner',

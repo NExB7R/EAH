@@ -24,22 +24,8 @@
   position: relative;
   z-index: 1;
 }
-.otl__dot {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: rgba(10, 7, 20, 0.95);
-  border: 2px solid rgba(168, 85, 247, 0.35);
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-.otl__item--current .otl__dot {
-  border-color: #A855F7;
-  background: linear-gradient(135deg, #A855F7, #6B21FF);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
-}
+
+
 .otl__body {
   display: flex;
   flex-direction: column;

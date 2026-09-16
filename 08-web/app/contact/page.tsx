@@ -18,7 +18,7 @@ const CHANNELS = [
     value: 'للرد السريع',
     href: waLink('السلام عليكم، عندي استفسار عن EAH'),
     desc: 'أسرع طريقة للوصول — رد خلال دقائق',
-    accent: 'green',
+    accent: 'purple',
   },
   {
     key: 'whatsapp-channel',
@@ -27,7 +27,7 @@ const CHANNELS = [
     value: 'EAH Channel',
     href: CONTACT_CHANNELS.whatsapp.channel,
     desc: 'تابع كل جديد أول بأول',
-    accent: 'green',
+    accent: 'purple',
   },
   {
     key: 'facebook',

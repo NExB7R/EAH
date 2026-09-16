@@ -250,14 +250,7 @@
 }
 
 /* ===== النقطة الحية ===== */
-.eah-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: var(--eah-radius-pill);
-  background: currentColor;
-  box-shadow: 0 0 6px currentColor;
-  animation: eah-pulse 2s ease-in-out infinite;
-}
+
 
 @keyframes eah-pulse {
   0%, 100% { opacity: 1;   transform: scale(1);   }

@@ -790,14 +790,7 @@
 .offer-card__badge--active {
   color: var(--eah-purple-soft);
 }
-.offer-card__badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 6px currentColor;
-  animation: offer-pulse 2s ease-in-out infinite;
-}
+
 @keyframes offer-pulse {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.5; }
@@ -1032,14 +1025,7 @@
 .offer-card__badge--active {
   color: var(--eah-purple-soft);
 }
-.offer-card__badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  box-shadow: 0 0 6px currentColor;
-  animation: offer-pulse 2s ease-in-out infinite;
-}
+
 @keyframes offer-pulse {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.5; }

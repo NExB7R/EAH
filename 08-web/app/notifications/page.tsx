@@ -87,7 +87,7 @@ export default async function NotificationsPage() {
                   <div className="nt-item__body">
                     <div className="nt-item__head">
                       <span className="nt-item__type" style={{ color: meta.color }}>{meta.label}</span>
-                      {unread && <span className="nt-item__dot" />}
+                      {unread && }
                     </div>
                     {n.title && <span className="nt-item__title">{n.title}</span>}
                     {n.body && <p className="nt-item__text">{n.body}</p>}

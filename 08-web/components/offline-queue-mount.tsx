@@ -63,7 +63,7 @@ export default function OfflineQueueMount() {
 
   return (
     <div className="oq" role="status" aria-live="polite">
-      <span className="oq__dot" aria-hidden />
+      
       <span className="oq__text">
         {pending} إجراءات في الانتظار
       </span>

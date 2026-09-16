@@ -88,7 +88,7 @@
   border-color: rgba(168, 85, 247, 0.5);
   box-shadow: 0 12px 32px rgba(168, 85, 247, 0.15);
 }
-.ct-channel--green:hover {
+.ct-channel--purple:hover {
   border-color: rgba(37, 211, 102, 0.6);
   box-shadow: 0 12px 32px rgba(37, 211, 102, 0.15);
 }
@@ -108,7 +108,7 @@
   font-size: 1.4rem;
 }
 .ct-channel__emoji svg { width: 22px; height: 22px; }
-.ct-channel--green .ct-channel__emoji {
+.ct-channel--purple .ct-channel__emoji {
   background: rgba(37, 211, 102, 0.12);
   border-color: rgba(37, 211, 102, 0.35);
   color: #86EFAC;

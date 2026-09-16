@@ -50,15 +50,8 @@
   display: flex; justify-content: center; gap: 6px;
   margin-bottom: 20px;
 }
-.onb__dot {
-  width: 32px; height: 4px; border-radius: 999px;
-  background: rgba(139,92,246,.2);
-  transition: all .3s ease;
-}
-.onb__dot.is-active {
-  background: linear-gradient(90deg, #8B5CF6, #A855F7);
-  box-shadow: 0 0 10px rgba(168,85,247,.6);
-}
+
+
 
 .onb__logo {
   display: flex; justify-content: center;

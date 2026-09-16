@@ -196,7 +196,7 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
       {/* ═══ TOP BAR ═══ */}
       <header className="ed__top">
         <div className="ed__brand">
-          <span className="ed__brand-dot" />
+          
           <span className="ed__brand-name">EAH Studio</span>
           <span className="ed__brand-version">2026</span>
         </div>
@@ -312,9 +312,9 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
           </div>
 
           <div className="ed__status-bar">
-            {saving && <><span className="ed__dot ed__dot--saving" /> جاري الحفظ</>}
-            {!saving && !saved && <><span className="ed__dot ed__dot--dirty" /> غير محفوظ</>}
-            {saved && lastSaved && <><span className="ed__dot ed__dot--saved" /> محفوظ {lastSaved.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}</>}
+            {saving && <> جاري الحفظ</>}
+            {!saving && !saved && <> غير محفوظ</>}
+            {saved && lastSaved && <> محفوظ {lastSaved.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' })}</>}
           </div>
         </aside>
 

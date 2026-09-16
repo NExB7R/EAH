@@ -57,7 +57,7 @@ export default function OpenNowBadge({
 
   return (
     <span className={`onb ${isOpen ? 'onb--open' : 'onb--closed'}`}>
-      <span className="onb__dot" />
+      
       {isOpen ? 'مفتوح الآن' : 'مقفول'}
     </span>
   )
