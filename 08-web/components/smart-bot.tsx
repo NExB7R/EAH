@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import './smart-bot.css'
-import { matchIntent } from '@/lib/bot/intent-matcher'
+import { generateReply, buildContext } from '@/lib/bot/intent-matcher'
 
 type Msg = { from: 'bot' | 'user'; text: string; actions?: { label: string; href: string }[] }
 
@@ -38,11 +38,14 @@ export default function SmartBot() {
     const text = (q ?? input).trim()
     if (!text) return
     const user: Msg = { from: 'user', text }
-    const res = matchIntent(text)
+    const ctx = buildContext()
+    const res = generateReply(text, ctx)
     const bot: Msg = {
       from: 'bot',
-      text: res.reply,
-      actions: res.actions,
+      text: res.text,
+      actions: (res.quickReplies ?? [])
+        .filter((r) => r.action === 'link')
+        .map((r) => ({ label: r.label, href: r.value })),
     }
     setMsgs((p) => [...p, user, bot])
     setInput('')
