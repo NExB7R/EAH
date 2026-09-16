@@ -47,3 +47,15 @@
   border-color: transparent; color: #fff;
 }
 .rvf__btn:disabled { opacity: .5; cursor: wait; }
+
+.review-form__note {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  color: #C9C2DB;
+  line-height: 1.7;
+}

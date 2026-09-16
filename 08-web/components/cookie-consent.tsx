@@ -33,19 +33,19 @@ export default function CookieConsent() {
       <div className="ck__inner">
         <span className="ck__emoji" aria-hidden>🍪</span>
         <div className="ck__body">
-          <strong className="ck__title">ببنستخدم ملفات ارتباط</strong>
+          <strong className="ck__title">ببنساعدك بس ملفات ارتباط</strong>
           <p className="ck__text">
-            ببنستخدمها لتشغيل المنصة وحفظ تفضيلاتك.
+            ببنساعدك بسها لتشغيل المنصة وحفظ تفضيلاتك.
             اعرف أكتر في{' '}
             <Link href="/cookies" className="ck__link">سياسة كوكيز</Link>.
           </p>
         </div>
         <div className="ck__actions">
           <button type="button" className="ck__btn ck__btn--primary" onClick={accept}>
-            تمام، يلا
+            يلا، تمام
           </button>
           <button type="button" className="ck__btn ck__btn--ghost" onClick={reject}>
-            الضرورية بس
+            الأساسية بس
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 'use client'
-// v12 — crown slides from E to word-center on hover
+// v13 — crown stays above word, slides from first letter to center on hover
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -11,10 +11,10 @@ type Props = {
 }
 
 const SIZE_MAP = {
-  sm: { word: 88,  crown: 30, topRatio: -0.30, restLeft: 0 },
-  md: { word: 130, crown: 42, topRatio: -0.30, restLeft: 2 },
-  lg: { word: 180, crown: 58, topRatio: -0.30, restLeft: 4 },
-  xl: { word: 240, crown: 78, topRatio: -0.30, restLeft: 6 },
+  sm: { word: 88,  crown: 30, topRatio: -0.22, restLeft: 0 },
+  md: { word: 130, crown: 42, topRatio: -0.22, restLeft: 2 },
+  lg: { word: 180, crown: 58, topRatio: -0.22, restLeft: 4 },
+  xl: { word: 240, crown: 78, topRatio: -0.22, restLeft: 6 },
 }
 
 export default function EahLogo({
@@ -28,12 +28,12 @@ export default function EahLogo({
 
   const crownTop = s.crown * s.topRatio
   const crownLeft = hover ? (s.word - s.crown) / 2 : s.restLeft
-  const crownRotation = hover ? 0 : -24
+  const crownRotation = hover ? -8 : -22
 
   const content = (
     <span
       dir="ltr"
-      data-eah-logo="v12"
+      data-eah-logo="v13"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onTouchStart={() => setHover(true)}
@@ -85,7 +85,7 @@ export default function EahLogo({
             pointerEvents: 'none',
             transformOrigin: '50% 100%',
             transform: `rotate(${crownRotation}deg)`,
-            transition: 'left 0.7s cubic-bezier(0.34, 1.4, 0.64, 1), transform 0.7s cubic-bezier(0.34, 1.4, 0.64, 1)',
+            transition: 'left 0.55s cubic-bezier(0.34, 1.4, 0.64, 1), transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1)',
             filter:
               'drop-shadow(0 3px 10px rgba(251,191,36,0.9)) drop-shadow(0 0 22px rgba(232,199,154,0.6))',
           }}
