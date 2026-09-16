@@ -123,7 +123,7 @@ export default async function AnalyticsPage({
     d.setDate(d.getDate() - i)
     days.push({
       label: dayLabels[d.getDay()] ?? `${d.getDate()}`,
-      value: Math.max(0, Math.round(((kpi.newUsers7d ?? 0) / 7) * (1 + Math.sin(i) * 0.4))),
+      value: Math.max(0, Math.round(((newUsers7d ?? 0) / 7) * (1 + Math.sin(i) * 0.4))),
     })
   }
 
