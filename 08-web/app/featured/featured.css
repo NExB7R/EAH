@@ -24,7 +24,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: 22px;
-  filter: drop-shadow(0 0 22px rgba(232, 199, 154, 0.3));
+  filter: drop-shadow(0 0 8px rgba(232, 199, 154, 0.3));
 }
 .feat__kicker {
   display: inline-block;
@@ -105,7 +105,7 @@
   text-align: center;
   background: linear-gradient(135deg, rgba(232, 199, 154, 0.14), rgba(168, 85, 247, 0.08));
   border: 1px solid rgba(232, 199, 154, 0.4);
-  box-shadow: 0 20px 50px rgba(232, 199, 154, 0.15), inset 0 0 30px rgba(232, 199, 154, 0.05);
+  box-shadow: 0 20px 50px rgba(232, 199, 154, 0.15), inset 0 0 8px rgba(232, 199, 154, 0.05);
   position: relative;
   overflow: hidden;
 }
@@ -120,7 +120,7 @@
   font-size: 2rem;
   display: block;
   margin-bottom: 10px;
-  filter: drop-shadow(0 0 20px rgba(232, 199, 154, 0.7));
+  filter: drop-shadow(0 0 8px rgba(232, 199, 154, 0.7));
 }
 .feat__invite-title {
   margin: 0 0 10px;

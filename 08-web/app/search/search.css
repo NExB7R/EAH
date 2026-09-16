@@ -36,7 +36,7 @@
   display: flex;
   justify-content: center;
   margin: 12px 0 20px;
-  filter: drop-shadow(0 0 24px rgba(168, 85, 247, 0.3));
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.3));
 }
 .sr__kicker {
   display: inline-block;

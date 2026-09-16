@@ -14,7 +14,7 @@
   -webkit-backdrop-filter: blur(18px) saturate(1.4);
   box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.55),
-    0 0 30px rgba(168, 85, 247, 0.2);
+    0 0 8px rgba(168, 85, 247, 0.2);
   animation: iab-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 

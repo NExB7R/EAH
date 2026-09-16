@@ -30,7 +30,7 @@
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid rgba(168, 85, 247, 0.28);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 24px rgba(168, 85, 247, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 8px rgba(168, 85, 247, 0.12);
   background: #0A0714;
 }
 .bmap__foot {

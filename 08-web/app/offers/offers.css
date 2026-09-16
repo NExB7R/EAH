@@ -118,5 +118,5 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent !important;
-  text-shadow: 0 0 40px rgba(251,146,60,.5) !important;
+  text-shadow: 0 0 8px rgba(251,146,60,.5) !important;
 }

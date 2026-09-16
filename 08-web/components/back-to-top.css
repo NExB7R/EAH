@@ -31,7 +31,7 @@
   border-color: #A855F7;
   background: rgba(139, 92, 246, 0.25);
   transform: translateY(-3px);
-  box-shadow: 0 0 22px rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
 }
 .back-to-top svg { width: 20px; height: 20px; }
 

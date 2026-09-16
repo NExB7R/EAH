@@ -3,7 +3,7 @@
 .avup__preview-circle {
   width:110px; height:110px; border-radius:50%; overflow:hidden;
   border:3px solid rgba(139,92,246,.4);
-  box-shadow:0 0 24px rgba(139,92,246,.3);
+  box-shadow:0 0 8px rgba(139,92,246,.3);
   background:rgba(10,8,16,.6);
   display:flex; align-items:center; justify-content:center;
 }
@@ -22,7 +22,7 @@
 .avup__presets { display:grid; grid-template-columns:repeat(auto-fill, minmax(50px, 1fr)); gap:8px; }
 .avup__preset { width:100%; aspect-ratio:1; border-radius:50%; border:3px solid transparent; cursor:pointer; transition:all 0.10s; }
 .avup__preset:hover { transform:translateY(-2px); }
-.avup__preset.is-active { border-color:#A855F7; box-shadow:0 0 0 3px rgba(168,85,247,.3), 0 0 20px rgba(168,85,247,.5); transform:scale(1.05); }
+.avup__preset.is-active { border-color:#A855F7; box-shadow:0 0 0 3px rgba(168,85,247,.3), 0 0 8px rgba(168,85,247,.5); transform:scale(1.05); }
 .avup__upload { display:flex; flex-direction:column; gap:8px; }
 .avup__file { display:none; }
 .avup__file-label { padding:14px; border-radius:14px; background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(168,85,247,.05)); border:1.5px dashed rgba(168,85,247,.4); color:#C4B5FD; text-align:center; font-weight:800; cursor:pointer; transition:all 0.10s; }

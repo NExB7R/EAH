@@ -47,8 +47,8 @@
   --eah-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
   --eah-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
   --eah-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
-  --eah-shadow-purple: 0 0 30px rgba(107, 33, 255, 0.35);
-  --eah-shadow-gold: 0 0 30px rgba(232, 199, 154, 0.3);
+  --eah-shadow-purple: 0 0 8px rgba(107, 33, 255, 0.35);
+  --eah-shadow-gold: 0 0 8px rgba(232, 199, 154, 0.3);
 
   /* ===== الحدود المدورة ===== */
   --eah-radius-xs: 8px;
@@ -168,7 +168,7 @@
   color: #fff;
 }
 .eah-btn--primary:hover {
-  box-shadow: 0 0 24px rgba(107, 33, 255, 0.6);
+  box-shadow: 0 0 8px rgba(107, 33, 255, 0.6);
 }
 
 .eah-btn--gold {

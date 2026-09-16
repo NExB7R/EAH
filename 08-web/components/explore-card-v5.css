@@ -77,7 +77,7 @@
 .ec5__cover-emoji {
   font-size: 3rem;
   z-index: 1;
-  filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.55));
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.55));
 }
 .ec5__badge {
   position: absolute;

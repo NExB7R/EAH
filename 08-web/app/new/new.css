@@ -23,7 +23,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: 22px;
-  filter: drop-shadow(0 0 22px rgba(192, 132, 252, 0.25));
+  filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.25));
 }
 .nw__kicker {
   display: inline-block;

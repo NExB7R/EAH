@@ -55,7 +55,7 @@
 .edit__avatar-option:hover .edit__avatar-circle { transform: translateY(-2px); }
 .edit__avatar-option input:checked + .edit__avatar-circle {
   border-color: #A855F7;
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 20px rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3), 0 0 8px rgba(168, 85, 247, 0.5);
   transform: scale(1.05);
 }
 
@@ -107,7 +107,7 @@
 }
 .edit__frame-option input:checked + .edit__frame-circle {
   transform: scale(1.1);
-  box-shadow: 0 0 0 2px #fff, 0 0 20px rgba(168, 85, 247, 0.6) !important;
+  box-shadow: 0 0 0 2px #fff, 0 0 8px rgba(168, 85, 247, 0.6) !important;
 }
 .edit__frame-label { font-size: 0.7rem; color: #A5A3B8; font-weight: 700; }
 

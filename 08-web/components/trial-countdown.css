@@ -20,12 +20,12 @@
 .trial.is-urgent .trial__inner {
   border-color: rgba(251, 146, 60, 0.65);
   background: linear-gradient(135deg, rgba(251, 146, 60, 0.14), rgba(239, 68, 68, 0.06));
-  box-shadow: 0 0 24px rgba(251, 146, 60, 0.25);
+  box-shadow: 0 0 8px rgba(251, 146, 60, 0.25);
   
 }
 @keyframes trialPulse {
-  from { box-shadow: 0 0 24px rgba(251, 146, 60, 0.25); }
-  to   { box-shadow: 0 0 36px rgba(251, 146, 60, 0.55); }
+  from { box-shadow: 0 0 8px rgba(251, 146, 60, 0.25); }
+  to   { box-shadow: 0 0 8px rgba(251, 146, 60, 0.55); }
 }
 .trial__emoji { font-size: 1.8rem; filter: drop-shadow(0 0 14px rgba(232, 199, 154, 0.6)); }
 .trial__info { flex: 1; min-width: 200px; }
