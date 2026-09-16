@@ -69,6 +69,12 @@ def phone(t):
 def website(t):
     return t.get("website") or t.get("contact:website") or t.get("url")
 
+def facebook(t):
+    fb = t.get("contact:facebook") or t.get("facebook")
+    if not fb: return None
+    if fb.startswith("http"): return fb
+    return "https://facebook.com/" + fb.lstrip("@/")
+
 biz, seen = [], set()
 for el in all_items:
     tags = el.get("tags") or {}
@@ -90,6 +96,9 @@ for el in all_items:
             contacts.append({"method_type":"whatsapp","value":("2"+d if d.startswith("0") else d),"is_primary":False})
     if wb:
         contacts.append({"method_type":"website","value":wb,"is_primary":False})
+    fb = facebook(tags)
+    if fb:
+        contacts.append({"method_type":"facebook","value":fb,"is_primary":False})
     biz.append({
         "name": name, "slug": slug, "type": btype,
         "area": "شبين القناطر", "city": "شبين القناطر",
@@ -97,7 +106,7 @@ for el in all_items:
         "address_text": tags.get("addr:street") or tags.get("addr:full"),
         "map_url": f"https://www.google.com/maps/search/?api=1&query={lat},{lng}" if lat and lng else None,
         "has_delivery": False,
-        "_needs_review": {"delivery": not tags.get("delivery"), "phone": not ph, "hours": not tags.get("opening_hours")},
+        "_needs_review": {"delivery": not tags.get("delivery"), "phone": not ph, "hours": not tags.get("opening_hours"), "facebook": not facebook(tags)},
         "_osm": {"opening_hours": tags.get("opening_hours"), "cuisine": tags.get("cuisine"), "amenity": tags.get("amenity"), "shop": tags.get("shop"), "lat": lat, "lng": lng},
         "contacts": contacts, "gallery": [], "menu": [],
     })

@@ -9,7 +9,8 @@
       "pharmacy",
       "supermarket",
       "delivery_office"
-    ]
+    ],
+    "facebook_hint": "أضف رابط صفحة الفيسبوك تحت contact:facebook — يُضاف تلقائياً في business_contact_methods"
   },
   "businesses": [
     {
@@ -32,6 +33,11 @@
         {
           "method_type": "whatsapp",
           "value": "201012345678",
+          "is_primary": false
+        },
+        {
+          "method_type": "facebook",
+          "value": "https://facebook.com/pagename",
           "is_primary": false
         }
       ],

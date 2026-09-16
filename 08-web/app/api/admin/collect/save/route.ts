@@ -18,6 +18,7 @@ const Schema = z.object({
   area: z.string().trim().min(2).max(80),
   phone: z.string().trim().max(40).optional().or(z.literal('')),
   whatsapp: z.string().trim().max(40).optional().or(z.literal('')),
+  facebook: z.string().trim().max(500).optional().or(z.literal('')),
   sourceUrl: z.string().trim().max(500).optional().or(z.literal('')),
   description: z.string().trim().max(1000).optional().or(z.literal('')),
   imageUrl: z.string().trim().max(500).optional().or(z.literal('')),
@@ -121,7 +122,12 @@ export async function POST(request: Request) {
     const wa = digits.startsWith('0') ? '2' + digits : digits
     contacts.push({ business_id: created.id, method_type: 'whatsapp', value: wa, is_primary: false, is_public: true })
   }
-  if (d.sourceUrl) {
+  if (d.facebook) {
+    const fbUrl = d.facebook.startsWith('http')
+      ? d.facebook
+      : 'https://facebook.com/' + d.facebook.replace(/^[/]+/, '')
+    contacts.push({ business_id: created.id, method_type: 'facebook', value: fbUrl, is_primary: false, is_public: true })
+  } else if (d.sourceUrl) {
     const isFb = d.sourceUrl.includes('facebook.com') || d.sourceUrl.includes('fb.com')
     const isIg = d.sourceUrl.includes('instagram.com')
     if (isFb) contacts.push({ business_id: created.id, method_type: 'facebook', value: d.sourceUrl, is_primary: false, is_public: true })

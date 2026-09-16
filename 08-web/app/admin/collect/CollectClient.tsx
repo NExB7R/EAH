@@ -57,6 +57,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
   const [area, setArea] = useState('شبين القناطر')
   const [phone, setPhone] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
+  const [facebook, setFacebook] = useState('')
   const [description, setDescription] = useState('')
   const [address, setAddress] = useState('')
   const [hours, setHours] = useState('')
@@ -85,6 +86,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
       setHours(d.hours || '')
       if (d.phones && d.phones.length > 0) setPhone(d.phones[0])
       if (d.whatsapp) setWhatsapp(d.whatsapp)
+      if (d.sourceUrl && (d.sourceUrl.includes('facebook.com') || d.sourceUrl.includes('fb.com'))) setFacebook(d.sourceUrl)
       if (d.type) setType(d.type)
     } catch (e: any) {
       setError('خطأ: ' + e.message)
@@ -129,6 +131,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
           area,
           phone: phone.trim(),
           whatsapp: whatsapp.trim(),
+          facebook: facebook.trim(),
           sourceUrl: parsed?.sourceUrl || url.trim(),
           description: description.trim(),
           imageUrl: parsed?.image || '',
@@ -149,6 +152,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
       setName('')
       setPhone('')
       setWhatsapp('')
+      setFacebook('')
       setDescription('')
       setAddress('')
       setHours('')
@@ -258,6 +262,11 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             </label>
 
             <label className="col__field col__field--full">
+              <span>📘 صفحة فيسبوك</span>
+              <input type="url" dir="ltr" value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="https://facebook.com/pagename" />
+            </label>
+
+            <label className="col__field col__field--full">
               <span>📍 العنوان</span>
               <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="شارع..." />
             </label>
@@ -320,7 +329,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             <button
               type="button"
               className="col__btn"
-              onClick={() => { setParsed(null); setUrl(''); setName(''); setPhone(''); setWhatsapp(''); setDescription(''); setAddress(''); setHours(''); setRawReviews('') }}
+              onClick={() => { setParsed(null); setUrl(''); setName(''); setPhone(''); setWhatsapp(''); setFacebook(''); setDescription(''); setAddress(''); setHours(''); setRawReviews('') }}
             >
               إلغاء
             </button>
