@@ -1,49 +1,73 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#161028"/>
-      <stop offset="100%" stop-color="#06040C"/>
-    </linearGradient>
+    <radialGradient id="bg" cx="50%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#1C0F35"/>
+      <stop offset="50%" stop-color="#0E0722"/>
+      <stop offset="100%" stop-color="#050208"/>
+    </radialGradient>
+
     <linearGradient id="crown" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#FFFBEB"/>
-      <stop offset="45%" stop-color="#FCD34D"/>
+      <stop offset="30%" stop-color="#FDE68A"/>
+      <stop offset="60%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#78350F"/>
+    </linearGradient>
+
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FCD34D"/>
       <stop offset="100%" stop-color="#B45309"/>
     </linearGradient>
+
+    <radialGradient id="jewel" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#FDF4FF"/>
+      <stop offset="35%" stop-color="#F0ABFC"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </radialGradient>
+
     <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#E9D5FF"/>
-      <stop offset="50%" stop-color="#C084FC"/>
-      <stop offset="100%" stop-color="#A855F7"/>
+      <stop offset="40%" stop-color="#C084FC"/>
+      <stop offset="80%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
     </linearGradient>
+
     <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="2" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
 
-  <!-- Background -->
-  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
-  <rect x="3" y="3" width="122" height="122" rx="25" fill="none" stroke="#A855F7" stroke-opacity="0.55" stroke-width="2"/>
+  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
+  <ellipse cx="256" cy="180" rx="180" ry="100" fill="#F59E0B" opacity="0.18" filter="url(#glow)"/>
 
-  <!-- Crown -->
+  <rect x="8" y="8" width="496" height="496" rx="107" fill="none" stroke="#A855F7" stroke-opacity="0.4" stroke-width="3"/>
+  <rect x="18" y="18" width="476" height="476" rx="97" fill="none" stroke="#E8C79A" stroke-opacity="0.15" stroke-width="1.5"/>
+
   <g filter="url(#glow)">
-    <path d="M28 52 L20 30 L42 40 L64 18 L86 40 L108 30 L100 52 L100 62 L28 62 Z"
-          fill="url(#crown)" stroke="#FFFBEB" stroke-width="1.5" stroke-linejoin="round"/>
-    <rect x="30" y="60" width="68" height="8" rx="3"
-          fill="url(#crown)" stroke="#FFFBEB" stroke-width="0.8"/>
-    <circle cx="64" cy="20" r="4" fill="#E879F9" stroke="#FFFBEB" stroke-width="1"/>
-    <circle cx="20" cy="32" r="3" fill="#E879F9" stroke="#FFFBEB" stroke-width="0.8"/>
-    <circle cx="108" cy="32" r="3" fill="#E879F9" stroke="#FFFBEB" stroke-width="0.8"/>
+    <path d="M 130 260 L 110 165 L 175 200 L 205 130 L 256 95 L 307 130 L 337 200 L 402 165 L 382 260 Z"
+          fill="url(#crown)" stroke="#FFFBEB" stroke-width="2.5" stroke-linejoin="round"/>
+    <rect x="134" y="248" width="244" height="30" rx="10" fill="url(#rim)" stroke="#FFFBEB" stroke-width="2"/>
+
+    <circle cx="110" cy="165" r="11" fill="url(#jewel)" stroke="#FFFBEB" stroke-width="2"/>
+    <circle cx="205" cy="130" r="13" fill="url(#jewel)" stroke="#FFFBEB" stroke-width="2"/>
+    <circle cx="256" cy="95" r="15" fill="url(#jewel)" stroke="#FFFBEB" stroke-width="2.5"/>
+    <circle cx="307" cy="130" r="13" fill="url(#jewel)" stroke="#FFFBEB" stroke-width="2"/>
+    <circle cx="402" cy="165" r="11" fill="url(#jewel)" stroke="#FFFBEB" stroke-width="2"/>
+
+    <circle cx="180" cy="263" r="4.5" fill="#E879F9"/>
+    <circle cx="256" cy="263" r="5" fill="#E879F9"/>
+    <circle cx="332" cy="263" r="4.5" fill="#E879F9"/>
   </g>
 
-  <!-- EAH wordmark -->
-  <text x="64" y="104"
-        text-anchor="middle"
-        font-family="Cairo, 'Segoe UI', Arial, Helvetica, sans-serif"
-        font-size="42"
-        font-weight="900"
-        letter-spacing="0.5"
-        fill="url(#neon)"
-        stroke="#A855F7"
-        stroke-width="0.8"
-        stroke-opacity="0.7">EAH</text>
+  <g filter="url(#neonGlow)">
+    <text x="256" y="430" text-anchor="middle"
+          font-family="'Cairo Play', Cairo, 'Arial Black', Arial, sans-serif"
+          font-size="150" font-weight="900" letter-spacing="8"
+          fill="url(#neon)">EAH</text>
+  </g>
 </svg>
