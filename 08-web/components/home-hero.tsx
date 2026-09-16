@@ -1,8 +1,7 @@
 'use client'
 import Link from 'next/link'
-import EahLogo from './eah-logo'
+import HeroLogo from './hero-logo'
 import SearchBar from './search-bar'
-import { COPY } from '@/lib/copy'
 import './home-hero.css'
 
 const CATEGORIES = [
@@ -78,10 +77,12 @@ export default function HomeHero() {
         </div>
 
         <div className="hh__logo">
-          <EahLogo size="xl" variant="full" href="/" showTagline />
+          <HeroLogo href="/" />
         </div>
 
-        <p className="hh__sub">اكتشف مطاعم، صيدليات، ماركت، وتوصيل حواليك</p>
+        <p className="hh__sub">
+          اكتشف مطاعم، صيدليات، ماركت، وتوصيل حواليك
+        </p>
 
         <div className="hh__search">
           <SearchBar placeholder="مطعم؟ صيدلية؟ ماركت؟ دوّر..." />

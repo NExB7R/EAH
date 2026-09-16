@@ -1,0 +1,68 @@
+/* Hero Logo — Crown + EAH + Tagline */
+
+.hl__link {
+  text-decoration: none;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.hl {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  direction: ltr;
+  line-height: 1;
+}
+
+.hl__crown {
+  width: 100px;
+  height: 58px;
+  display: inline-flex;
+  filter:
+    drop-shadow(0 4px 14px rgba(251, 191, 36, 0.7))
+    drop-shadow(0 0 30px rgba(251, 191, 36, 0.5));
+  animation: hl-crownFloat 3.5s ease-in-out infinite;
+}
+.hl__crown svg { width: 100%; height: 100%; display: block; }
+@keyframes hl-crownFloat {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50%      { transform: translateY(-3px) rotate(1.5deg); }
+}
+
+.hl__word {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(3rem, 8vw, 4.6rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  direction: ltr;
+  background: linear-gradient(135deg, #E9D5FF 0%, #C084FC 35%, #A855F7 65%, #7C3AED 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter:
+    drop-shadow(0 0 22px rgba(168, 85, 247, 0.7))
+    drop-shadow(0 0 44px rgba(168, 85, 247, 0.35));
+}
+.hl__letter { display: inline-block; }
+
+.hl__tagline {
+  font-family: var(--font-cairo, system-ui);
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 800;
+  color: #E8C79A;
+  letter-spacing: 0.02em;
+  margin-top: 8px;
+  direction: rtl;
+  text-shadow:
+    0 0 14px rgba(232, 199, 154, 0.65),
+    0 0 28px rgba(232, 199, 154, 0.35);
+}
+
+@media (max-width: 640px) {
+  .hl__crown { width: 80px; height: 46px; }
+  .hl__word { gap: 2px; }
+}

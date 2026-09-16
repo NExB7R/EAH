@@ -1,0 +1,146 @@
+/* Visitor Value — What EAH offers */
+
+.vv {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.vv__head {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.vv__kicker {
+  display: inline-block;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 0.68rem;
+  font-weight: 900;
+  color: #E8C79A;
+  letter-spacing: 0.22em;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.08);
+  border: 1px solid rgba(232, 199, 154, 0.28);
+  margin-bottom: 14px;
+}
+.vv__title {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(1.4rem, 3.4vw, 1.9rem);
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+.vv__sub {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.88rem;
+  color: #A29DB5;
+  margin: 0;
+}
+
+.vv__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.vv__card {
+  position: relative;
+  padding: 26px 22px 22px;
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(168, 85, 247, 0.16);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  min-height: 200px;
+}
+.vv__card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  inset-inline-end: -30%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  opacity: 0.15;
+  filter: blur(50px);
+  pointer-events: none;
+}
+.vv__card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(168, 85, 247, 0.4);
+}
+.vv__card:hover::before { opacity: 0.3; }
+
+.vv__card--purple { background: linear-gradient(180deg, rgba(168, 85, 247, 0.08), rgba(10, 7, 20, 0.5)); }
+.vv__card--purple::before { background: radial-gradient(circle, #A855F7, transparent 70%); }
+.vv__card--purple:hover { border-color: rgba(168, 85, 247, 0.6); box-shadow: 0 16px 40px rgba(168, 85, 247, 0.2); }
+
+.vv__card--gold { background: linear-gradient(180deg, rgba(232, 199, 154, 0.08), rgba(10, 7, 20, 0.5)); }
+.vv__card--gold::before { background: radial-gradient(circle, #E8C79A, transparent 70%); }
+.vv__card--gold:hover { border-color: rgba(232, 199, 154, 0.6); box-shadow: 0 16px 40px rgba(232, 199, 154, 0.2); }
+
+.vv__card--green { background: linear-gradient(180deg, rgba(74, 222, 128, 0.08), rgba(10, 7, 20, 0.5)); }
+.vv__card--green::before { background: radial-gradient(circle, #4ADE80, transparent 70%); }
+.vv__card--green:hover { border-color: rgba(74, 222, 128, 0.6); box-shadow: 0 16px 40px rgba(74, 222, 128, 0.2); }
+
+.vv__emoji {
+  font-size: 2.2rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.4));
+}
+.vv__card-title {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0;
+  line-height: 1.3;
+}
+.vv__card-body {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: #C9C2DB;
+  margin: 0;
+  flex: 1;
+}
+.vv__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: #C4B5FD;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-decoration: none;
+  transition: all 0.22s;
+}
+.vv__card--gold .vv__cta {
+  background: rgba(232, 199, 154, 0.1);
+  border-color: rgba(232, 199, 154, 0.35);
+  color: #F5D9A7;
+}
+.vv__card--green .vv__cta {
+  background: rgba(74, 222, 128, 0.1);
+  border-color: rgba(74, 222, 128, 0.3);
+  color: #86EFAC;
+}
+.vv__cta:hover {
+  transform: translateX(-2px);
+  background: rgba(168, 85, 247, 0.22);
+}
+
+@media (max-width: 640px) {
+  .vv { margin: 40px auto; padding: 0 16px; }
+  .vv__card { min-height: auto; padding: 22px 18px; }
+}

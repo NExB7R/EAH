@@ -100,13 +100,7 @@
   50%      { opacity: 0.4; }
 }
 
-.hh__logo {
-  display: flex;
-  justify-content: center;
-  margin: 4px 0;
-  filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.35));
-  animation: hh-fade-up 720ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
-}
+.hh__logo { display: flex; justify-content: center; margin: 10px 0 6px; animation: hh-fade-up 720ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both; }
 
 
 
