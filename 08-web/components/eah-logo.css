@@ -1,4 +1,4 @@
-/* EAH Logo v4 — crown glued to E via inline top/left px */
+/* EAH Logo v5 — CSS variables, guaranteed positioning */
 
 .eah-logo__link { text-decoration: none; display: inline-flex; }
 
@@ -11,11 +11,13 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+  position: relative;
 }
 
 .eah-logo__word-wrap {
   position: relative;
-  display: inline-block;
+  display: block;
+  width: var(--word-w, 130px);
   line-height: 0;
 }
 
@@ -29,12 +31,16 @@
     drop-shadow(0 0 28px rgba(168, 85, 247, 0.3));
 }
 
-/* Crown — position + size come from inline style (top/left/width/height) */
+/* Crown — positioned with CSS variables */
 .eah-logo__crown-wrap {
   position: absolute;
+  top: var(--crown-t, -27px);
+  left: var(--crown-l, -9px);
+  width: var(--crown-s, 44px);
+  height: var(--crown-s, 44px);
   z-index: 3;
   display: inline-flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   pointer-events: none;
   transform-origin: 50% 100%;
@@ -48,11 +54,10 @@
     transform 0.55s cubic-bezier(0.34, 1.4, 0.5, 1);
 }
 
-/* Hover / touch / focus — fly to top-center */
 .eah-logo__link:hover .eah-logo__crown-wrap,
 .eah-logo__link:active .eah-logo__crown-wrap,
 .eah-logo__link:focus-visible .eah-logo__crown-wrap {
-  top: -130% !important;
+  top: calc(var(--crown-t, -27px) * 2.4) !important;
   left: 50% !important;
   transform: translateX(-50%) rotate(0deg) scale(1.2) !important;
 }

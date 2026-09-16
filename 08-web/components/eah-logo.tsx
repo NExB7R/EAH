@@ -10,10 +10,10 @@ type Props = {
 }
 
 const SIZE_MAP = {
-  sm: { word: 88,  crown: 28,  overlap: 6,  left: -6 },
-  md: { word: 130, crown: 42,  overlap: 9,  left: -8 },
-  lg: { word: 180, crown: 58,  overlap: 12, left: -10 },
-  xl: { word: 240, crown: 76,  overlap: 16, left: -12 },
+  sm: { word: 88,  crown: 30,  top: -18, left: -6 },
+  md: { word: 130, crown: 44,  top: -27, left: -9 },
+  lg: { word: 180, crown: 60,  top: -36, left: -12 },
+  xl: { word: 240, crown: 80,  top: -48, left: -16 },
 }
 
 export default function EahLogo({
@@ -23,24 +23,24 @@ export default function EahLogo({
   showTagline = true,
 }: Props) {
   const s = SIZE_MAP[size]
-  const crownTop = -(s.crown - s.overlap)
 
   const content = (
-    <span className={`eah-logo eah-logo--${size}`} dir="ltr">
-      <span className="eah-logo__word-wrap" style={{ width: s.word }}>
+    <span
+      className={`eah-logo eah-logo--${size}`}
+      dir="ltr"
+      style={{
+        '--word-w': `${s.word}px`,
+        '--crown-s': `${s.crown}px`,
+        '--crown-t': `${s.top}px`,
+        '--crown-l': `${s.left}px`,
+      } as React.CSSProperties}
+    >
+      <span className="eah-logo__word-wrap">
         {variant !== 'mark' && (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img src="/eah-word.webp" alt="EAH" className="eah-logo__word" />
         )}
-        <span
-          className="eah-logo__crown-wrap"
-          style={{
-            width: s.crown,
-            height: s.crown,
-            top: crownTop,
-            left: s.left,
-          }}
-        >
+        <span className="eah-logo__crown-wrap">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/eah-crown.webp" alt="" className="eah-logo__crown" aria-hidden />
           <span className="eah-logo__crown-glow" aria-hidden />
