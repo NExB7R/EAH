@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import { getMerchantContext } from '@/lib/admin/merchant-guard'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import TrialCountdown from '@/components/trial-countdown'
 import './merchant.css'
 import SiteFooter from '@/components/site-footer'
 
@@ -23,10 +24,12 @@ const TYPE_LABEL: Record<string, string> = {
 
 export default async function MerchantDashboard() {
   const { user, businesses } = await getMerchantContext()
+  const firstBizId = businesses[0]?.businessId ?? businesses[0]?.id ?? null
 
   return (
     <>
       <FloatingCapsuleHeader />
+      {firstBizId && <TrialCountdown businessId={firstBizId} />}
       <main className="mpage">
         <div className="mpage__head">
           <div>
