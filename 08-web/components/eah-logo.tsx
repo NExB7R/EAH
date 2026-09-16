@@ -1,5 +1,5 @@
 'use client'
-// v8 — crown hover: يتحرك من فوق الكلمة لمكانه الحقيقي على الكلمة
+// v9 — crown glued to word (aggressive)
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -10,12 +10,12 @@ type Props = {
   showTagline?: boolean
 }
 
-// crown position (نسبة من ارتفاع التاج) — سالب يعني فوق الكلمة
+// crown top بالبكسل — أقرب للكلمة
 const SIZE_MAP = {
-  sm: { word: 88,  crown: 34, restTop: -0.62, hoverTop: -0.18, left: 0 },
-  md: { word: 130, crown: 48, restTop: -0.60, hoverTop: -0.16, left: 2 },
-  lg: { word: 180, crown: 66, restTop: -0.58, hoverTop: -0.14, left: 4 },
-  xl: { word: 240, crown: 88, restTop: -0.55, hoverTop: -0.12, left: 6 },
+  sm: { word: 88,  crown: 34, top: -8,  hoverTop: -4, left: 0 },
+  md: { word: 130, crown: 48, top: -10, hoverTop: -6, left: 2 },
+  lg: { word: 180, crown: 66, top: -12, hoverTop: -8, left: 4 },
+  xl: { word: 240, crown: 88, top: -16, hoverTop: -10, left: 6 },
 }
 
 export default function EahLogo({
@@ -27,11 +27,12 @@ export default function EahLogo({
   const s = SIZE_MAP[size]
   const [hover, setHover] = useState(false)
 
-  const crownTop = hover ? s.hoverTop * s.crown : s.restTop * s.crown
+  const crownTop = hover ? s.hoverTop : s.top
 
   const content = (
     <span
       dir="ltr"
+      data-eah-logo="v9"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onTouchStart={() => setHover(true)}
@@ -83,7 +84,7 @@ export default function EahLogo({
             pointerEvents: 'none',
             transformOrigin: '50% 100%',
             transform: 'rotate(-24deg)',
-            transition: 'top 0.7s cubic-bezier(0.34, 1.3, 0.5, 1)',
+            transition: 'top 0.55s cubic-bezier(0.34, 1.4, 0.64, 1)',
             filter:
               'drop-shadow(0 3px 10px rgba(251,191,36,0.9)) drop-shadow(0 0 22px rgba(232,199,154,0.6))',
           }}
