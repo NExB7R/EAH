@@ -108,30 +108,9 @@
   animation: hh-fade-up 720ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
 }
 
-.hh__h1 {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(2.4rem, 6vw, 3.8rem);
-  font-weight: 900;
-  color: #F4F2FA;
-  margin: 0;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #F4F2FA 0%, #E9D5FF 40%, #C084FC 70%, #E8C79A 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 24px rgba(168, 85, 247, 0.25));
-  animation: hh-fade-up 800ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
-}
 
-.hh__sub {
-  font-family: var(--font-cairo, system-ui);
-  font-size: clamp(0.95rem, 2.2vw, 1.1rem);
-  color: #A29DB5;
-  margin: 0;
-  line-height: 1.75;
-  animation: hh-fade-up 880ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
-}
+
+.hh__sub { font-family: var(--font-cairo, system-ui); font-size: clamp(0.95rem, 2.2vw, 1.1rem); color: #A29DB5; margin: 0; line-height: 1.75; animation: hh-fade-up 880ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both; }
 
 .hh__search {
   width: 100%;

@@ -1,4 +1,4 @@
-/* EAH Logo — wordmark + crown */
+/* EAH Logo — wordmark */
 
 .eah-logo__link {
   text-decoration: none;
@@ -10,47 +10,48 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  direction: ltr;
 }
 
 .eah-logo__word {
   display: inline-flex;
   align-items: center;
-  gap: 1px;
+  gap: 2px;
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
   font-weight: 900;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.01em;
   line-height: 1;
-  background: linear-gradient(135deg, #E9D5FF 0%, #C084FC 40%, #A855F7 70%, #7C3AED 100%);
+  background: linear-gradient(135deg, #E9D5FF 0%, #C084FC 35%, #A855F7 70%, #7C3AED 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 14px rgba(168, 85, 247, 0.5));
+  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.55));
+  direction: ltr;
 }
 .eah-logo__letter { display: inline-block; }
 
 .eah-logo__mark {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
   font-weight: 900;
-  font-size: 1.6rem;
-  letter-spacing: 0.02em;
-  background: linear-gradient(135deg, #E9D5FF 0%, #C084FC 40%, #A855F7 70%, #7C3AED 100%);
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, #E9D5FF 0%, #C084FC 35%, #A855F7 70%, #7C3AED 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 14px rgba(168, 85, 247, 0.5));
+  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.55));
+  direction: ltr;
 }
 
-/* Tagline — hidden by default, only if requested */
 .eah-logo__tagline {
-  display: none;
   font-family: var(--font-cairo, system-ui);
   font-size: 0.7rem;
   font-weight: 700;
   color: #E8C79A;
   letter-spacing: 0.02em;
   margin-top: 2px;
+  direction: rtl;
+  text-shadow: 0 0 12px rgba(232, 199, 154, 0.4);
 }
-.eah-logo--full .eah-logo__tagline { display: inline-block; }
 
 /* Sizes */
 .eah-logo--sm .eah-logo__word { font-size: 1.4rem; }
@@ -61,3 +62,4 @@
 .eah-logo--sm .eah-logo__mark { font-size: 1.2rem; }
 .eah-logo--md .eah-logo__mark { font-size: 1.6rem; }
 .eah-logo--lg .eah-logo__mark { font-size: 2.4rem; }
+.eah-logo--xl .eah-logo__mark { font-size: 3.4rem; }

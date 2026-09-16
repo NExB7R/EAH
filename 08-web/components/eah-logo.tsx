@@ -16,7 +16,7 @@ export default function EahLogo({
   showTagline = true,
 }: Props) {
   const content = (
-    <span className={`eah-logo eah-logo--${size} eah-logo--${variant}`}>
+    <span className={`eah-logo eah-logo--${size} eah-logo--${variant}`} dir="ltr">
       {variant !== 'mark' && (
         <span className="eah-logo__word">
           <span className="eah-logo__letter">E</span>
@@ -24,11 +24,9 @@ export default function EahLogo({
           <span className="eah-logo__letter">H</span>
         </span>
       )}
-      {variant === 'mark' && (
-        <span className="eah-logo__mark">EAH</span>
-      )}
+      {variant === 'mark' && <span className="eah-logo__mark">EAH</span>}
       {showTagline && variant === 'full' && (
-        <span className="eah-logo__tagline">اللي نفسك فيه ؟</span>
+        <span className="eah-logo__tagline" dir="rtl">اللي نفسك فيه ؟</span>
       )}
     </span>
   )
