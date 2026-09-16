@@ -57,3 +57,16 @@
   .claim__inner { padding: 16px 18px; gap: 12px; }
   .claim__btn { flex: 1 1 100%; text-align: center; }
 }
+
+.claim__badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #E8C79A, #A67C52);
+  color: #1A0F0A;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.68rem;
+  font-weight: 900;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(232, 199, 154, 0.35);
+}
