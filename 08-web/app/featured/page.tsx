@@ -65,6 +65,24 @@ export default async function FeaturedPage() {
             ))}
           </div>
         )}
+      
+        <section className="feat__invite">
+          <div className="feat__invite-inner">
+            <span className="feat__invite-emoji" aria-hidden>👑</span>
+            <h3 className="feat__invite-title">نشاطك يستاهل يبقى هنا</h3>
+            <p className="feat__invite-body">
+              المميزين على EAH اختارهم الفريق بعناية — وعشان مكانك يبقى واحد منهم، محتاج بس تبدأ.
+            </p>
+            <div className="feat__invite-actions">
+              <a href="/merchant-info" className="feat__invite-btn">
+                اعرف أكتر عن الباقات ←
+              </a>
+              <a href="/merchant/apply" className="feat__invite-btn feat__invite-btn--ghost">
+                سجّل نشاطك
+              </a>
+            </div>
+          </div>
+        </section>
       </main>
       <SiteFooter />
     </>

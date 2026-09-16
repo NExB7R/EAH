@@ -192,7 +192,7 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
       />
       </main>
 
-      <BusinessClaimCTA businessName={typeof business?.name === 'string' ? business.name : undefined} />
+      {!business.hasOwner && <BusinessClaimCTA businessName={typeof business?.name === 'string' ? business.name : undefined} />}
       <SiteFooter />
     </>
   )

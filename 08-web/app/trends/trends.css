@@ -375,3 +375,34 @@
   .tr__podium-item:hover,
   .tr__list-item:hover { transform: none; }
 }
+
+/* Fire theme 2026 */
+.tr {
+  background: radial-gradient(ellipse at top, rgba(251, 146, 60, 0.1) 0%, transparent 60%);
+  position: relative;
+}
+.tr::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #FB923C, #FBBF24, #FB923C, transparent);
+  box-shadow: 0 0 20px rgba(251, 146, 60, 0.6), 0 0 40px rgba(251, 146, 60, 0.3);
+  z-index: 100;
+  animation: trFireLine 2s ease-in-out infinite alternate;
+}
+@keyframes trFireLine {
+  from { opacity: 0.6; }
+  to   { opacity: 1; }
+}
+.tr__kicker {
+  color: #FB923C !important;
+  text-shadow: 0 0 12px rgba(251, 146, 60, 0.6) !important;
+}
+.tr__title {
+  background: linear-gradient(135deg, #FCD34D, #FB923C, #F97316);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  text-shadow: 0 0 40px rgba(251, 146, 60, 0.5);
+}

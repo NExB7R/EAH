@@ -18,6 +18,7 @@ type DbBusiness = {
   latitude?: number | null
   longitude?: number | null
   address_text?: string | null
+  owner_profile_id?: string | null
 }
 
 type DbOffer = {
@@ -62,6 +63,7 @@ type BusinessViewModel = {
   latitude?: number | null
   longitude?: number | null
   address?: string | null
+  hasOwner?: boolean
 }
 
 function toDemoShape(
@@ -111,6 +113,7 @@ function toDemoShape(
     latitude: b.latitude ?? null,
     longitude: b.longitude ?? null,
     address: b.address_text ?? null,
+    hasOwner: !!b.owner_profile_id,
   }
 }
 
@@ -163,7 +166,7 @@ export async function getPublishedBusinesses(
     const supabase = await createClient()
     let query = supabase
       .from('businesses')
-      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text')
+      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id')
       .eq('is_published', true)
       .order('is_featured', { ascending: false })
       .order('created_at', { ascending: false })
