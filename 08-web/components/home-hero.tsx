@@ -73,7 +73,6 @@ export default function HomeHero() {
       <div className="hh__inner">
         <div className="hh__chip-top">
           <span className="hh__chip-top-dot" />
-          <span>أهلاً بيك في EAH — شبين القناطر والقرى حواليها</span>
         </div>
 
         <div className="hh__logo">

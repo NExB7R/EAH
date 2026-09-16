@@ -1,4 +1,4 @@
-/* EAH Logo — original crown + word images */
+/* EAH Logo — crown tilted on the E, flies to center on hover/touch */
 
 .eah-logo__link {
   text-decoration: none;
@@ -9,20 +9,53 @@
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
   direction: ltr;
   line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
-/* Crown */
-.eah-logo__crown-wrap {
+.eah-logo__stage {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  animation: eah-crown-float 3.6s ease-in-out infinite;
 }
+
+/* Crown — resting tilted on the first E */
+.eah-logo__crown-wrap {
+  position: absolute;
+  top: -38%;
+  left: 3%;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transform-origin: 50% 85%;
+  animation: eah-crown-idle 3.2s ease-in-out infinite;
+  filter:
+    drop-shadow(0 3px 10px rgba(251, 191, 36, 0.8))
+    drop-shadow(0 0 22px rgba(232, 199, 154, 0.55));
+  transition:
+    top 0.55s cubic-bezier(0.34, 1.4, 0.5, 1),
+    left 0.55s cubic-bezier(0.34, 1.4, 0.5, 1),
+    transform 0.55s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+/* On hover / touch / focus — fly to top-center */
+.eah-logo__link:hover .eah-logo__crown-wrap,
+.eah-logo__link:active .eah-logo__crown-wrap,
+.eah-logo__link:focus-visible .eah-logo__crown-wrap,
+.eah-logo:hover .eah-logo__crown-wrap,
+.eah-logo:active .eah-logo__crown-wrap {
+  top: -78%;
+  left: 50%;
+  transform: translateX(-50%) rotate(0deg) scale(1.28);
+  animation: eah-crown-pop 0.6s ease-out;
+}
+
 .eah-logo__crown {
   width: 100%;
   height: 100%;
@@ -30,27 +63,34 @@
   display: block;
   position: relative;
   z-index: 2;
-  filter:
-    drop-shadow(0 4px 12px rgba(251, 191, 36, 0.65))
-    drop-shadow(0 0 24px rgba(232, 199, 154, 0.45));
 }
+
 .eah-logo__crown-glow {
   position: absolute;
-  inset: 15%;
+  inset: 0%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(251, 191, 36, 0.55) 0%, transparent 65%);
-  filter: blur(12px);
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, transparent 62%);
+  filter: blur(9px);
   z-index: 1;
-  animation: eah-crown-glow 3s ease-in-out infinite;
   pointer-events: none;
+  opacity: 0.7;
+  transition: opacity 0.3s ease, transform 0.4s ease;
 }
-@keyframes eah-crown-float {
-  0%, 100% { transform: translateY(0) rotate(-1deg); }
-  50%      { transform: translateY(-3px) rotate(1deg); }
+.eah-logo__link:hover .eah-logo__crown-glow,
+.eah-logo__link:active .eah-logo__crown-glow {
+  opacity: 1;
+  transform: scale(1.35);
 }
-@keyframes eah-crown-glow {
-  0%, 100% { opacity: 0.65; transform: scale(0.95); }
-  50%      { opacity: 1;    transform: scale(1.1); }
+
+@keyframes eah-crown-idle {
+  0%   { transform: rotate(-24deg) translateY(0); }
+  50%  { transform: rotate(-21deg) translateY(-2px); }
+  100% { transform: rotate(-24deg) translateY(0); }
+}
+@keyframes eah-crown-pop {
+  0%   { transform: translateX(-50%) rotate(0deg) scale(0.85); }
+  55%  { transform: translateX(-50%) rotate(0deg) scale(1.4); }
+  100% { transform: translateX(-50%) rotate(0deg) scale(1.28); }
 }
 
 /* Word */
@@ -58,7 +98,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: -8%;
+  position: relative;
+  z-index: 2;
 }
 .eah-logo__word {
   width: 100%;
@@ -66,28 +107,25 @@
   object-fit: contain;
   display: block;
   filter:
-    drop-shadow(0 0 14px rgba(168, 85, 247, 0.55))
-    drop-shadow(0 0 28px rgba(168, 85, 247, 0.25));
+    drop-shadow(0 0 14px rgba(168, 85, 247, 0.6))
+    drop-shadow(0 0 28px rgba(168, 85, 247, 0.3));
 }
 
 /* Tagline */
 .eah-logo__tagline {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.72rem;
   font-weight: 800;
   color: #E8C79A;
-  margin-top: 6px;
+  margin-top: 10px;
   direction: rtl;
   letter-spacing: 0.02em;
   text-shadow: 0 0 12px rgba(232, 199, 154, 0.55);
 }
-
 .eah-logo--sm .eah-logo__tagline { font-size: 0.62rem; }
-.eah-logo--md .eah-logo__tagline { font-size: 0.72rem; }
-.eah-logo--lg .eah-logo__tagline { font-size: 0.85rem; }
-.eah-logo--xl .eah-logo__tagline { font-size: 1rem; }
+.eah-logo--md .eah-logo__tagline { font-size: 0.75rem; }
+.eah-logo--lg .eah-logo__tagline { font-size: 0.9rem; }
+.eah-logo--xl .eah-logo__tagline { font-size: 1.05rem; }
 
 @media (prefers-reduced-motion: reduce) {
-  .eah-logo__crown-wrap,
-  .eah-logo__crown-glow { animation: none; }
+  .eah-logo__crown-wrap { animation: none; }
 }

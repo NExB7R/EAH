@@ -47,7 +47,6 @@ export default function TrustSection() {
   return (
     <section className="trust">
       <header className="trust__head">
-        <span className="trust__kicker">WHY EAH</span>
         <h2 className="trust__title">ليه تستخدم <span className="trust__accent">EAH</span>؟</h2>
       </header>
 

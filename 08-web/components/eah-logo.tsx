@@ -10,10 +10,10 @@ type Props = {
 }
 
 const SIZE_MAP = {
-  sm: { crown: 44, word: 80 },
-  md: { crown: 68, word: 120 },
-  lg: { crown: 96, word: 170 },
-  xl: { crown: 120, word: 210 },
+  sm: { word: 88,  crown: 22 },
+  md: { word: 130, crown: 32 },
+  lg: { word: 180, crown: 44 },
+  xl: { word: 240, crown: 58 },
 }
 
 export default function EahLogo({
@@ -25,35 +25,25 @@ export default function EahLogo({
   const s = SIZE_MAP[size]
 
   const content = (
-    <span className="eah-logo" dir="ltr">
-      <span
-        className="eah-logo__crown-wrap"
-        style={{ width: s.crown, height: s.crown }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/eah-crown.webp"
-          alt=""
-          className="eah-logo__crown"
-          aria-hidden
-        />
-        <span className="eah-logo__crown-glow" aria-hidden />
-      </span>
-
-      {variant !== 'mark' && (
+    <span className={`eah-logo eah-logo--${size}`} dir="ltr">
+      <span className="eah-logo__stage">
         <span
-          className="eah-logo__word-wrap"
-          style={{ width: s.word }}
+          className="eah-logo__crown-wrap"
+          style={{ width: s.crown, height: s.crown }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/eah-word.webp" alt="EAH" className="eah-logo__word" />
+          <img src="/eah-crown.webp" alt="" className="eah-logo__crown" aria-hidden />
+          <span className="eah-logo__crown-glow" aria-hidden />
         </span>
-      )}
-
+        {variant !== 'mark' && (
+          <span className="eah-logo__word-wrap" style={{ width: s.word }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/eah-word.webp" alt="EAH" className="eah-logo__word" />
+          </span>
+        )}
+      </span>
       {showTagline && variant === 'full' && (
-        <span className="eah-logo__tagline" dir="rtl">
-          اللي نفسك فيه ؟
-        </span>
+        <span className="eah-logo__tagline" dir="rtl">اللي نفسك فيه ؟</span>
       )}
     </span>
   )
