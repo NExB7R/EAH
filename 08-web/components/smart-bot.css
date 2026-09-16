@@ -317,8 +317,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sb-trigger, .sb-panel, .sb-msg, .sb-quick__btn,
+  .sb-trigger, .sb-panel, .sb-msg, .sb-quick__btn {
 
+    animation: none !important;
+
+  }
 }
 
 /* ═══ Auto-hint Bubble ═══ */
