@@ -44,6 +44,7 @@ const signature = Dancing_Script({
   variable: '--font-signature',
 })
 
+// EAH_BUILD = 1789585536.2520845
 export const metadata: Metadata = {
   title: {
     default: 'EAH — اللي نفسك فيه ؟',
