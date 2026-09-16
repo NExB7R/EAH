@@ -7,6 +7,7 @@ import { Cairo, Cairo_Play, Dancing_Script } from 'next/font/google'
 import PageViewTracker from '@/components/page-view-tracker'
 import ScrollIconsBackground from '@/components/scroll-icons-background'
 import StickersLayer from '@/components/stickers-layer'
+import SplashScreen from '@/components/splash-screen'
 import AnimReady from '@/components/anim-ready'
 import OnboardingOverlay from '@/components/onboarding-overlay'
 import ServiceWorkerRegister from '@/components/sw-register'
@@ -115,6 +116,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body>
+        <SplashScreen />
         <StickersLayer />
         <ScrollIconsBackground />
         <PageViewTracker />

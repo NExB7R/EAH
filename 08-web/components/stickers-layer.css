@@ -1,99 +1,50 @@
-/* EAH Stickers Layer — line + soft + chip variants */
-
+/* EAH Stickers Layer — static, lightweight */
 .stick-layer {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   overflow: hidden;
+  contain: strict;
 }
-
 .stick-layer__item {
   position: absolute;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: #A855F7;
-  animation: stick-float 10s ease-in-out infinite;
-  animation-delay: var(--delay, 0s);
-  will-change: transform;
   transform: rotate(var(--r, 0deg));
 }
 .stick-layer__item svg { width: 100%; height: 100%; display: block; }
 
-/* line — thin neon outline */
-.stick-layer__item--line {
-  filter: blur(0.8px) drop-shadow(0 0 14px rgba(168, 85, 247, 0.7));
-}
-.stick-layer__item--line:nth-child(3n) {
-  color: #E8C79A;
-  filter: blur(0.8px) drop-shadow(0 0 14px rgba(232, 199, 154, 0.6));
-}
+.stick-layer__item--line { opacity: 0.9; }
+.stick-layer__item--line:nth-child(3n) { color: #E8C79A; }
 .stick-layer__item--line:nth-child(5n) { color: #C084FC; }
-.stick-layer__item--line:nth-child(7n) {
-  color: #22D3EE;
-  filter: blur(0.8px) drop-shadow(0 0 14px rgba(34, 211, 238, 0.6));
-}
+.stick-layer__item--line:nth-child(7n) { color: #22D3EE; }
 
-/* soft — big blurry aura */
-.stick-layer__item--soft {
-  filter: blur(2.2px) drop-shadow(0 0 24px rgba(168, 85, 247, 0.75));
-  color: #C084FC;
-}
-.stick-layer__item--soft:nth-child(4n) {
-  color: #FBBF24;
-  filter: blur(2.2px) drop-shadow(0 0 24px rgba(251, 191, 36, 0.7));
-}
-.stick-layer__item--soft:nth-child(6n) {
-  color: #F472B6;
-  filter: blur(2.2px) drop-shadow(0 0 24px rgba(244, 114, 182, 0.65));
-}
+.stick-layer__item--soft { color: #C084FC; filter: blur(1.5px); }
+.stick-layer__item--soft:nth-child(4n) { color: #FBBF24; }
+.stick-layer__item--soft:nth-child(6n) { color: #F472B6; }
 
-/* chip — sharp colored chip with border + glass */
 .stick-layer__item--chip {
   padding: 6px;
   border-radius: 12px;
   border: 1.5px solid rgba(168, 85, 247, 0.6);
   background: linear-gradient(145deg, rgba(168, 85, 247, 0.22), rgba(168, 85, 247, 0.06));
   color: #E9D5FF;
-  filter: drop-shadow(0 4px 12px rgba(168, 85, 247, 0.4));
-  backdrop-filter: blur(4px);
-  animation: stick-chip-float 12s ease-in-out infinite;
-  animation-delay: var(--delay, 0s);
 }
 .stick-layer__item--chip:nth-child(3n) {
   border-color: rgba(232, 199, 154, 0.65);
   background: linear-gradient(145deg, rgba(232, 199, 154, 0.22), rgba(232, 199, 154, 0.06));
   color: #FDE68A;
-  filter: drop-shadow(0 4px 12px rgba(232, 199, 154, 0.45));
 }
 .stick-layer__item--chip:nth-child(5n) {
   border-color: rgba(34, 211, 238, 0.6);
   background: linear-gradient(145deg, rgba(34, 211, 238, 0.2), rgba(34, 211, 238, 0.05));
   color: #A5F3FC;
-  filter: drop-shadow(0 4px 12px rgba(34, 211, 238, 0.4));
 }
 .stick-layer__item--chip:nth-child(7n) {
   border-color: rgba(244, 114, 182, 0.6);
   background: linear-gradient(145deg, rgba(244, 114, 182, 0.2), rgba(244, 114, 182, 0.05));
   color: #FBCFE8;
-  filter: drop-shadow(0 4px 12px rgba(244, 114, 182, 0.4));
-}
-
-@keyframes stick-float {
-  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
-  50%      { transform: translateY(-14px) rotate(calc(var(--r, 0deg) + 3deg)); }
-}
-@keyframes stick-chip-float {
-  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
-  50%      { transform: translateY(-8px) rotate(calc(var(--r, 0deg) - 4deg)); }
-}
-
-@media (max-width: 768px) {
-  .stick-layer__item--soft { filter: blur(1.6px) drop-shadow(0 0 14px rgba(168, 85, 247, 0.55)); }
-  .stick-layer__item--line { filter: blur(0.6px) drop-shadow(0 0 10px rgba(168, 85, 247, 0.55)); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .stick-layer__item { animation: none; }
 }

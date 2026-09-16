@@ -26,15 +26,15 @@
 /* Crown — resting tilted on the first E */
 .eah-logo__crown-wrap {
   position: absolute;
-  top: -38%;
-  left: 3%;
+  top: -30%;
+  left: 2%;
   z-index: 3;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
   transform-origin: 50% 85%;
-  animation: eah-crown-idle 3.2s ease-in-out infinite;
+  
   filter:
     drop-shadow(0 3px 10px rgba(251, 191, 36, 0.8))
     drop-shadow(0 0 22px rgba(232, 199, 154, 0.55));
@@ -50,9 +50,9 @@
 .eah-logo__link:focus-visible .eah-logo__crown-wrap,
 .eah-logo:hover .eah-logo__crown-wrap,
 .eah-logo:active .eah-logo__crown-wrap {
-  top: -78%;
+  top: -58%;
   left: 50%;
-  transform: translateX(-50%) rotate(0deg) scale(1.28);
+  transform: translateX(-50%) rotate(0deg) scale(1.12);
   animation: eah-crown-pop 0.6s ease-out;
 }
 
@@ -82,15 +82,10 @@
   transform: scale(1.35);
 }
 
-@keyframes eah-crown-idle {
-  0%   { transform: rotate(-24deg) translateY(0); }
-  50%  { transform: rotate(-21deg) translateY(-2px); }
-  100% { transform: rotate(-24deg) translateY(0); }
-}
 @keyframes eah-crown-pop {
   0%   { transform: translateX(-50%) rotate(0deg) scale(0.85); }
   55%  { transform: translateX(-50%) rotate(0deg) scale(1.4); }
-  100% { transform: translateX(-50%) rotate(0deg) scale(1.28); }
+  100% { transform: translateX(-50%) rotate(0deg) scale(1.12); }
 }
 
 /* Word */

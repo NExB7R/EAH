@@ -2,7 +2,7 @@
 
 .hh {
   position: relative;
-  padding: 130px 20px 60px;
+  padding: 24px 20px 60px;
   overflow: hidden;
   isolation: isolate;
 }
@@ -227,7 +227,7 @@
 }
 
 @media (max-width: 640px) {
-  .hh { padding: 110px 16px 40px; }
+  .hh { padding: 24px 16px 40px; }
   .hh__cats { grid-template-columns: repeat(2, 1fr); }
   .hh__trust { gap: 12px; }
   .hh__trust-item { font-size: 0.68rem; }

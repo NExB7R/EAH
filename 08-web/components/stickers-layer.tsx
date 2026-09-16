@@ -73,7 +73,7 @@ export default function StickersLayer() {
   const [stickers, setStickers] = useState<Sticker[]>([])
 
   useEffect(() => {
-    const count = window.innerWidth < 768 ? 20 : 34
+    const count = window.innerWidth < 768 ? 10 : 18
     setStickers(buildStickers(Date.now() % 9973, count))
   }, [])
 
