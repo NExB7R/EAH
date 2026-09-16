@@ -7,7 +7,7 @@ type Msg = { from: 'bot' | 'user'; text: string; actions?: { label: string; href
 
 const GREETING: Msg = {
   from: 'bot',
-  text: 'أهلاً! أنا "رفيق" — مساعدك على EAH. قوللي بتدور على إيه وأنا أوصلك أسرع.',
+  text: 'أهلاً! أنا "B7R" — B7R مساعدك الذكي. قوللي بتدور على إيه وأنا أوصلك أسرع.',
   actions: [
     { label: '🔍 اكتشف أماكن', href: '/explore' },
     { label: '🔥 شوف مولعة', href: '/trends' },
@@ -57,7 +57,7 @@ export default function SmartBot() {
       {hint && !open && (
         <div className="sb-hint" onClick={() => setOpen(true)}>
           <span className="sb-hint__emoji">👋</span>
-          <span>أنا رفيق — أقدر أساعدك؟</span>
+          <span>أنا B7R — أقدر أساعدك؟</span>
         </div>
       )}
 
@@ -82,8 +82,8 @@ export default function SmartBot() {
               </svg>
             </span>
             <div className="sb-header-text">
-              <strong>رفيق</strong>
-              <small>مساعد EAH الذكي</small>
+              <strong>B7R</strong>
+              <small>مساعد B7R الذكي</small>
             </div>
             <button type="button" className="sb-close" onClick={() => setOpen(false)} aria-label="إغلاق">×</button>
           </header>
@@ -127,7 +127,7 @@ export default function SmartBot() {
         type="button"
         className={`sb-trigger ${open ? 'is-open' : ''}`}
         onClick={() => setOpen((p) => !p)}
-        aria-label="مساعد EAH"
+        aria-label="مساعد B7R"
       >
         <span className="sb-trigger__glow" aria-hidden />
         <svg viewBox="0 0 48 48" width="32" height="32" fill="none">

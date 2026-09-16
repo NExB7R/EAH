@@ -234,32 +234,38 @@
   opacity: 0.65;
 }
 
-/* Follow cards */
-.sf__col--follow { align-items: stretch !important; }
+
+/* Follow row — centered فوق الفوتر */
+.sf__follow-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 900px;
+  margin: 0 auto;
+}
 .sf__follow-card {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
-  border-radius: 14px;
+  padding: 12px 16px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(168, 85, 247, 0.2);
   text-decoration: none;
-  transition: all 0.12s cubic-bezier(0.22, 1, 0.36, 1);
-  text-align: start;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s;
 }
 .sf__follow-card:hover {
-  transform: translateX(-3px);
+  transform: translateY(-3px);
   border-color: rgba(168, 85, 247, 0.55);
-  background: rgba(168, 85, 247, 0.08);
+  background: rgba(168, 85, 247, 0.06);
 }
-.sf__follow-card--wa:hover { border-color: rgba(37, 211, 102, 0.55); background: rgba(37, 211, 102, 0.08); }
-.sf__follow-card--fb:hover { border-color: rgba(24, 119, 242, 0.55); background: rgba(24, 119, 242, 0.08); }
+.sf__follow-card--wa:hover { border-color: rgba(37, 211, 102, 0.55); }
+.sf__follow-card--fb:hover { border-color: rgba(24, 119, 242, 0.55); }
 .sf__follow-emoji {
   flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
   display: grid;
   place-items: center;
   background: rgba(168, 85, 247, 0.12);
@@ -272,6 +278,7 @@
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  text-align: start;
 }
 .sf__follow-info strong {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
@@ -284,4 +291,7 @@
   font-size: 0.68rem;
   color: #A29DB5;
   line-height: 1.5;
+}
+@media (max-width: 720px) {
+  .sf__follow-row { grid-template-columns: 1fr; }
 }

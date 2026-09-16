@@ -130,7 +130,7 @@ export default function FloatingCapsuleHeader() {
           <div className="floating-capsule__side floating-capsule__side--end">
             <span className="fc-desktop-only">
               <NeonIconButton icon={<IconChat />} label="تواصل" ariaLabel="تواصل" href="/contact" />
-              <NeonIconButton icon={<IconInfo />} label="نبذة" ariaLabel="نبذة" href="/about" />
+              <NeonIconButton icon={<IconInfo />} label="الكلام ع إيه" ariaLabel="نبذة" href="/about" />
               <NeonIconButton icon={<IconFacebook />} label="فيسبوك" ariaLabel="فيسبوك" href="https://facebook.com/eah.eg" />
               <NeonIconButton icon={<IconWhatsapp />} label="واتساب" ariaLabel="واتساب" href="https://wa.me/201012892806" />
             </span>
@@ -207,7 +207,7 @@ export default function FloatingCapsuleHeader() {
           </nav>
           <div className="nav-drawer__spacer" />
           <nav className="nav-drawer__group">
-            <a href="/about" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.info}</span>نبذة عننا</a>
+            <a href="/about" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.info}</span>الكلام ع إيه</a>
             <a href="/contact" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.chat}</span>تواصل معنا</a>
             <a href="https://facebook.com/eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.facebook}</span>فيسبوك</a>
             <a href="https://wa.me/201012892806" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.whatsapp}</span>واتساب</a>
@@ -237,6 +237,17 @@ export default function FloatingCapsuleHeader() {
             </form>
           )}
 
+
+          <div className="nav-drawer__qr">
+            <span className="nav-drawer__qr-title">📱 كيو آر EAH</span>
+            <span className="nav-drawer__qr-sub">امسح الكود — شارك المنصة مع صحابك</span>
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent('https://eah-sq.vercel.app')}&size=140x140&bgcolor=0A0714&color=E8C79A&margin=8`}
+              alt="QR EAH"
+              className="nav-drawer__qr-img"
+              loading="lazy"
+            />
+          </div>
           <div className="nav-drawer__version" aria-hidden>
             EAH v0.3.6
           </div>
