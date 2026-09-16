@@ -13,8 +13,7 @@ export default function SiteFooter() {
         {/* Brand row */}
         <div className="sf__brand-row">
           <EahLogo size="md" variant="full" href="/" />
-          <p className="sf__tagline">اللي نفسك فيه ؟</p>
-        </div>
+          </div>
 
         {/* Nav grid */}
         <nav className="sf__nav">

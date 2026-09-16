@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import HeroLogo from './hero-logo'
+import EahLogo from './eah-logo'
 import SearchBar from './search-bar'
 import './home-hero.css'
 
@@ -77,7 +77,7 @@ export default function HomeHero() {
         </div>
 
         <div className="hh__logo">
-          <HeroLogo href="/" />
+          <EahLogo size="xl" variant="full" href="/" />
         </div>
 
         <p className="hh__sub">

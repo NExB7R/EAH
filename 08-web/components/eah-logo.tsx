@@ -9,24 +9,51 @@ type Props = {
   showTagline?: boolean
 }
 
+const SIZE_MAP = {
+  sm: { crown: 44, word: 80 },
+  md: { crown: 68, word: 120 },
+  lg: { crown: 96, word: 170 },
+  xl: { crown: 120, word: 210 },
+}
+
 export default function EahLogo({
   size = 'md',
   variant = 'full',
   href,
   showTagline = true,
 }: Props) {
+  const s = SIZE_MAP[size]
+
   const content = (
-    <span className={`eah-logo eah-logo--${size} eah-logo--${variant}`} dir="ltr">
+    <span className="eah-logo" dir="ltr">
+      <span
+        className="eah-logo__crown-wrap"
+        style={{ width: s.crown, height: s.crown }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/eah-crown.webp"
+          alt=""
+          className="eah-logo__crown"
+          aria-hidden
+        />
+        <span className="eah-logo__crown-glow" aria-hidden />
+      </span>
+
       {variant !== 'mark' && (
-        <span className="eah-logo__word">
-          <span className="eah-logo__letter">E</span>
-          <span className="eah-logo__letter">A</span>
-          <span className="eah-logo__letter">H</span>
+        <span
+          className="eah-logo__word-wrap"
+          style={{ width: s.word }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/eah-word.webp" alt="EAH" className="eah-logo__word" />
         </span>
       )}
-      {variant === 'mark' && <span className="eah-logo__mark">EAH</span>}
+
       {showTagline && variant === 'full' && (
-        <span className="eah-logo__tagline" dir="rtl">اللي نفسك فيه ؟</span>
+        <span className="eah-logo__tagline" dir="rtl">
+          اللي نفسك فيه ؟
+        </span>
       )}
     </span>
   )

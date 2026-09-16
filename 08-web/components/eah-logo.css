@@ -1,4 +1,4 @@
-/* EAH Logo — wordmark */
+/* EAH Logo — original crown + word images */
 
 .eah-logo__link {
   text-decoration: none;
@@ -9,57 +9,85 @@
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 0;
   direction: ltr;
+  line-height: 1;
 }
 
-.eah-logo__word {
+/* Crown */
+.eah-logo__crown-wrap {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 2px;
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-weight: 900;
-  letter-spacing: 0.01em;
-  line-height: 1;
-  background: linear-gradient(135deg, #E9D5FF 0%, #C084FC 35%, #A855F7 70%, #7C3AED 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.55));
-  direction: ltr;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: eah-crown-float 3.6s ease-in-out infinite;
 }
-.eah-logo__letter { display: inline-block; }
-
-.eah-logo__mark {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  background: linear-gradient(135deg, #E9D5FF 0%, #C084FC 35%, #A855F7 70%, #7C3AED 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.55));
-  direction: ltr;
+.eah-logo__crown {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  position: relative;
+  z-index: 2;
+  filter:
+    drop-shadow(0 4px 12px rgba(251, 191, 36, 0.65))
+    drop-shadow(0 0 24px rgba(232, 199, 154, 0.45));
+}
+.eah-logo__crown-glow {
+  position: absolute;
+  inset: 15%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.55) 0%, transparent 65%);
+  filter: blur(12px);
+  z-index: 1;
+  animation: eah-crown-glow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes eah-crown-float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%      { transform: translateY(-3px) rotate(1deg); }
+}
+@keyframes eah-crown-glow {
+  0%, 100% { opacity: 0.65; transform: scale(0.95); }
+  50%      { opacity: 1;    transform: scale(1.1); }
 }
 
+/* Word */
+.eah-logo__word-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -8%;
+}
+.eah-logo__word {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter:
+    drop-shadow(0 0 14px rgba(168, 85, 247, 0.55))
+    drop-shadow(0 0 28px rgba(168, 85, 247, 0.25));
+}
+
+/* Tagline */
 .eah-logo__tagline {
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-size: 0.72rem;
+  font-weight: 800;
   color: #E8C79A;
-  letter-spacing: 0.02em;
-  margin-top: 2px;
+  margin-top: 6px;
   direction: rtl;
-  text-shadow: 0 0 12px rgba(232, 199, 154, 0.4);
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 12px rgba(232, 199, 154, 0.55);
 }
 
-/* Sizes */
-.eah-logo--sm .eah-logo__word { font-size: 1.4rem; }
-.eah-logo--md .eah-logo__word { font-size: 2rem; }
-.eah-logo--lg .eah-logo__word { font-size: 3rem; }
-.eah-logo--xl .eah-logo__word { font-size: 4.2rem; }
+.eah-logo--sm .eah-logo__tagline { font-size: 0.62rem; }
+.eah-logo--md .eah-logo__tagline { font-size: 0.72rem; }
+.eah-logo--lg .eah-logo__tagline { font-size: 0.85rem; }
+.eah-logo--xl .eah-logo__tagline { font-size: 1rem; }
 
-.eah-logo--sm .eah-logo__mark { font-size: 1.2rem; }
-.eah-logo--md .eah-logo__mark { font-size: 1.6rem; }
-.eah-logo--lg .eah-logo__mark { font-size: 2.4rem; }
-.eah-logo--xl .eah-logo__mark { font-size: 3.4rem; }
+@media (prefers-reduced-motion: reduce) {
+  .eah-logo__crown-wrap,
+  .eah-logo__crown-glow { animation: none; }
+}
