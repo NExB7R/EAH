@@ -76,7 +76,7 @@ export const COPY = {
       empty: 'لسه مفيش حد مميز',
     },
     trending: {
-      title: '🔥 الترند',
+      title: '🔥 مولعة النهاردة',
       subtitle: 'الناس بتدور عليها دلوقتي',
       empty: 'لسه مفيش ترند',
     },
@@ -86,7 +86,7 @@ export const COPY = {
       empty: 'لسه مفيش عروض',
     },
     new: {
-      title: '🌱 أخواتنا اللي بيبدأوا',
+      title: '🌱 دعم للجديد',
       subtitle: 'دعم للجديد — فرصته معاك',
       empty: 'لسه مفيش جديد',
     },

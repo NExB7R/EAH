@@ -16,11 +16,10 @@ export default function manifest(): MetadataRoute.Manifest {
     dir: 'rtl',
     categories: ['food', 'shopping', 'lifestyle', 'local'],
     icons: [
-      { src: '/eah-crown.webp', sizes: 'any', type: 'image/webp', purpose: 'any' },
-      { src: '/eah-crown.webp', sizes: '192x192', type: 'image/webp', purpose: 'any' },
-      { src: '/eah-crown.webp', sizes: '512x512', type: 'image/webp', purpose: 'any' },
-      { src: '/eah-crown.webp', sizes: '512x512', type: 'image/webp', purpose: 'maskable' },
-      { src: '/apple-touch-icon.png', sizes: '180x180', type: 'image/webp' },
+      { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+      { src: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
     shortcuts: [
       {
@@ -28,20 +27,20 @@ export default function manifest(): MetadataRoute.Manifest {
         short_name: 'اكتشف',
         description: 'استكشف الأماكن',
         url: '/explore',
-        icons: [{ src: '/eah-crown.webp', sizes: '192x192' }],
+        icons: [{ src: '/icon-192.png', sizes: '192x192' }],
       },
       {
         name: 'العروض',
         short_name: 'عروض',
         description: 'أحدث العروض',
         url: '/offers',
-        icons: [{ src: '/eah-crown.webp', sizes: '192x192' }],
+        icons: [{ src: '/icon-192.png', sizes: '192x192' }],
       },
       {
         name: 'حسابي',
         short_name: 'حسابي',
         url: '/account',
-        icons: [{ src: '/eah-crown.webp', sizes: '192x192' }],
+        icons: [{ src: '/icon-192.png', sizes: '192x192' }],
       },
     ],
   }

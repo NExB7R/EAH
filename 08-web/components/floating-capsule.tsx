@@ -106,7 +106,7 @@ export default function FloatingCapsuleHeader() {
     return () => { active = false }
   }, [])
 
-  const isStaff = user && (user.role === 'admin' || user.role === 'super_admin')
+  const isStaff = user && user.role === 'super_admin'
   const isMerchant = user?.role === 'merchant'
   const unread = liveUnread || (user?.notifications ?? 0)
 
