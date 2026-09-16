@@ -59,12 +59,12 @@ export const metadata: Metadata = {
   generator: 'Next.js',
   icons: {
     icon: [
-      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
-      { url: '/eah-crown.webp', type: 'image/webp' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/crown-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/crown-512.png', sizes: '512x512', type: 'image/png' },
     ],
-    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
-    shortcut: '/icon-192.png',
+    apple: [{ url: '/crown-180.png', sizes: '180x180', type: 'image/png' }],
+    shortcut: '/favicon.ico',
   },
   manifest: '/manifest.webmanifest',
   alternates: { canonical: '/' },
