@@ -225,3 +225,21 @@ main > section:first-of-type { padding-top: 8px !important; }
 
 /* أي عنصر فيه مسافة داخلية > 40px يتقلل */
 [class*="kicker"], [class*="badge"] { margin-block: 6px !important; }
+
+/* ============ EAH perf: no infinite background animations ============ */
+main > section::before,
+main > section::after,
+[class*="bg-"],
+[class*="background-"],
+[class*="glow"],
+[class*="aura"],
+[class*="orb"] {
+  animation: none !important;
+}
+
+/* خلي كل الحركات تحدث مرة واحدة بس (دخول) */
+[class*="hero"] [class*="float"],
+[class*="hero"] [class*="pulse"],
+[class*="hero"] [class*="spin"] {
+  animation: none !important;
+}
