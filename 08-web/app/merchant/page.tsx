@@ -24,7 +24,7 @@ const TYPE_LABEL: Record<string, string> = {
 
 export default async function MerchantDashboard() {
   const { user, businesses } = await getMerchantContext()
-  const firstBizId = businesses[0]?.businessId ?? businesses[0]?.id ?? null
+  const firstBizId = businesses[0]?.id ?? null
 
   return (
     <>
