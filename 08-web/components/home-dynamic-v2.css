@@ -1,0 +1,12 @@
+.home-merchant-cta__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.home-merchant-cta__btn--ghost {
+  background: rgba(168, 85, 247, 0.1) !important;
+  color: #C4B5FD !important;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: none !important;
+}

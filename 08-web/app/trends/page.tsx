@@ -13,8 +13,8 @@ import './trends.css'
 export const revalidate = 120
 
 export const metadata = {
-  title: 'المولعة النهاردة',
-  description: 'أحدث المولعة النهاردة في شبين القناطر — الأماكن الأكثر تفاعلاً وزيارات.',
+  title: 'الالترند النهاردة',
+  description: 'أحدث الالترند النهاردة في شبين القناطر — الأماكن الأكثر تفاعلاً وزيارات.',
 }
 
 const TYPE_EMOJI: Record<string, string> = {
@@ -68,8 +68,8 @@ export default async function TrendsPage() {
           <div className="tr__logo">
             <EahLogo size="md" variant="full" href="/" />
           </div>
-          <span className="tr__kicker">مولعة النهاردة</span>
-          <h1 className="tr__title">🔥 المولعة النهاردة</h1>
+          <span className="tr__kicker">الترند النهاردة</span>
+          <h1 className="tr__title">🔥 الالترند النهاردة</h1>
           <p className="tr__sub">
             الأماكن الأكثر تفاعلاً وزيارات في آخر 7 أيام
           </p>
@@ -178,7 +178,7 @@ export default async function TrendsPage() {
           <div className="tr__empty">
             <span className="tr__empty-emoji">📊</span>
             <h3>مفيش بيانات كفاية للترند دلوقتي</h3>
-            <p>ارجعلنا قريب — المولعة النهاردة بتتجدد كل يوم.</p>
+            <p>ارجعلنا قريب — الالترند النهاردة بتتجدد كل يوم.</p>
             <Link href="/explore" className="tr__empty-btn">اكتشف الأماكن</Link>
           </div>
         )}

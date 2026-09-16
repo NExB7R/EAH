@@ -10,7 +10,7 @@ const GREETING: Msg = {
   text: 'أهلاً! أنا "B7R" — B7R مساعدك الذكي. قوللي بتدور على إيه وأنا أوصلك أسرع.',
   actions: [
     { label: '🔍 اكتشف أماكن', href: '/explore' },
-    { label: '🔥 شوف مولعة', href: '/trends' },
+    { label: '🔥 شوف الترند', href: '/trends' },
     { label: '🏪 عندي نشاط', href: '/merchant/apply' },
   ],
 }

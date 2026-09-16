@@ -44,7 +44,7 @@ const WHAT_WE_DO = [
   { icon: '🛵', label: 'توصيل' },
   { icon: '🎁', label: 'عروض' },
   { icon: '👑', label: 'مميزين' },
-  { icon: '🔥', label: 'مولعة' },
+  { icon: '🔥', label: 'الترند' },
   { icon: '🆕', label: 'الجديد' },
 ]
 

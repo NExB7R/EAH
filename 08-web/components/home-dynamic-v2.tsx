@@ -104,9 +104,14 @@ export default async function HomeDynamicV2() {
       <section className="home-merchant-cta">
         <h2>🏪 عندك نشاط؟</h2>
         <p>سجّل معانا مجاناً — بدون عمولة على الطلبات</p>
-        <Link href="/merchant/apply" className="home-merchant-cta__btn">
-          🚀 سجّل نشاطك
-        </Link>
+        <div className="home-merchant-cta__actions">
+          <Link href="/merchant/apply" className="home-merchant-cta__btn">
+            🚀 سجّل نشاطك
+          </Link>
+          <Link href="/recommend" className="home-merchant-cta__btn home-merchant-cta__btn--ghost">
+            ✨ مش عارف تختار؟ قول مزاجك
+          </Link>
+        </div>
       </section>
 
       <style>{`

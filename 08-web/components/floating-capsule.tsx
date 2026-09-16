@@ -197,7 +197,7 @@ export default function FloatingCapsuleHeader() {
             <a href="/explore" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.compass}</span>اكتشف الأماكن</a>
             <a href="/offers" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.fire}</span>العروض</a>
             <a href="/recommend" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.sparkles}</span>نفسك في ايه؟</a>
-            <a href="/trends" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.trending}</span>الترندات</a>
+            <a href="/trends" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.trending}</span>الترند</a>
           </nav>
           <div className="nav-drawer__spacer" />
           <nav className="nav-drawer__group">
