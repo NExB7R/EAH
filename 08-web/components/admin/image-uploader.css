@@ -84,7 +84,7 @@
   background: rgba(139, 92, 246, 0.2);
   color: var(--eah-purple-2);
   box-shadow: none;
-  animation: iup-spin 1s linear infinite;
+  animation: iup-spin 0.5s linear infinite;
 }
 
 @keyframes iup-spin {

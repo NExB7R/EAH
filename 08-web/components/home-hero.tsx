@@ -77,8 +77,13 @@ export default function HomeHero() {
           <EahLogo size="xl" variant="full" href="/" />
         </div>
 
+        <div className="hh__tagline">
+          <span className="hh__tagline-pin" aria-hidden>📍</span>
+          <span className="hh__tagline-city">دولة شبين القناطر تتحدّث</span>
+        </div>
         <p className="hh__sub">
-          اكتشف مطاعم، صيدليات، ماركت، وتوصيل حواليك
+          من مطعم السكة.. للصيدلية اللي جوه الحارة..<br/>
+          كل حاجة محتاجها — على بعد كليك واحدة
         </p>
 
         <div className="hh__search">

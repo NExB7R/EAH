@@ -80,7 +80,7 @@
   width: 12px; height: 12px; border-radius: 50%;
   border: 2px solid rgba(255,255,255,.3);
   border-top-color: #fff;
-  animation: edSpin 0.8s linear infinite;
+  animation: edSpin 0.4s linear infinite;
 }
 @keyframes edSpin { to { transform: rotate(360deg); } }
 

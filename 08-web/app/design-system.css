@@ -264,7 +264,7 @@
   border: 2px solid var(--eah-border-2);
   border-top-color: var(--eah-purple-2);
   border-radius: 50%;
-  animation: eah-spin 1s linear infinite;
+  animation: eah-spin 0.5s linear infinite;
 }
 
 @keyframes eah-spin {

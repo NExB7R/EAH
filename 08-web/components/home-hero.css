@@ -220,3 +220,26 @@
   width: 0 !important;
   height: 0 !important;
 }
+
+/* Tagline نيون */
+.hh__tagline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.14), rgba(232, 199, 154, 0.08));
+  border: 1px solid rgba(232, 199, 154, 0.4);
+  box-shadow: 0 0 24px rgba(232, 199, 154, 0.25), inset 0 0 12px rgba(168, 85, 247, 0.1);
+  margin-bottom: 2px;
+  animation: hh-fade-up 500ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+}
+.hh__tagline-pin { font-size: 0.9rem; }
+.hh__tagline-city {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #E8C79A;
+  text-shadow: 0 0 14px rgba(232, 199, 154, 0.7), 0 0 28px rgba(168, 85, 247, 0.4);
+}

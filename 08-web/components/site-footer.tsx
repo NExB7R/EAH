@@ -12,7 +12,6 @@ export default function SiteFooter() {
       <div className="sf__inner">
         <div className="sf__brand-row">
           <EahLogo size="md" variant="full" href="/" />
-          <p className="sf__tagline">منصة اكتشاف محلية — شبين القناطر والقرى حواليها</p>
         </div>
 
         <nav className="sf__nav">
