@@ -46,18 +46,28 @@ export default function SiteFooter() {
             <a href="/cookies" className="sf__link">الكوكيز</a>
           </div>
 
-          <div className="sf__col">
-            <h4 className="sf__col-title">تابعنا</h4>
-            <div className="sf__social">
-              <a href={waLink('السلام عليكم، من EAH')} target="_blank" rel="noreferrer" className="sf__social-btn sf__social-btn--wa" aria-label="واتساب">
-                <IconWhatsapp />
-              </a>
-              <a href={CONTACT_CHANNELS.facebook.page} target="_blank" rel="noreferrer" className="sf__social-btn sf__social-btn--fb" aria-label="فيسبوك">
-                <IconFacebook />
-              </a>
-            </div>
-            <a href={CONTACT_CHANNELS.whatsapp.channel} target="_blank" rel="noreferrer" className="sf__channel-link">
-              📣 قناة واتساب
+          <div className="sf__col sf__col--follow">
+            <h4 className="sf__col-title">خليك في الدايرة</h4>
+            <a href={CONTACT_CHANNELS.whatsapp.channel} target="_blank" rel="noreferrer" className="sf__follow-card sf__follow-card--wa">
+              <span className="sf__follow-emoji">📣</span>
+              <div className="sf__follow-info">
+                <strong>قناة الواتساب</strong>
+                <small>أول ما ينزل عرض أو مكان جديد — إنت أول واحد يعرف</small>
+              </div>
+            </a>
+            <a href={CONTACT_CHANNELS.facebook.page} target="_blank" rel="noreferrer" className="sf__follow-card sf__follow-card--fb">
+              <span className="sf__follow-emoji"><IconFacebook /></span>
+              <div className="sf__follow-info">
+                <strong>صفحة فيسبوك</strong>
+                <small>أخبار EAH، عروض حصرية، وفرص للشركاء</small>
+              </div>
+            </a>
+            <a href={waLink('السلام عليكم، عايز أتواصل مع مسئول EAH')} target="_blank" rel="noreferrer" className="sf__follow-card sf__follow-card--dm">
+              <span className="sf__follow-emoji"><IconWhatsapp /></span>
+              <div className="sf__follow-info">
+                <strong>كلم المسئول مباشرة</strong>
+                <small>رد خلال دقايق — من غير لف ودوران</small>
+              </div>
             </a>
           </div>
         </nav>

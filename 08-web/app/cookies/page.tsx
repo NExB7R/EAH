@@ -37,7 +37,7 @@ export default function CookiesPage() {
       <FloatingCapsuleHeader />
       <main className="lg">
         <section className="lg__hero">
-          <span className="lg__kicker">كوكيز POLICY</span>
+          <span className="lg__kicker">سياسة الكوكيز</span>
           <h1 className="lg__title">ملفات تعريف الارتباط</h1>
           <p style={{ margin: 0, fontSize: '.9rem', color: '#A29DB5', lineHeight: 1.7 }}>
             إزاي بنستخدم الـ كوكيز وإيه حقك في التحكم.

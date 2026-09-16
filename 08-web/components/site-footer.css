@@ -233,3 +233,55 @@
   margin-inline-start: 6px;
   opacity: 0.65;
 }
+
+/* Follow cards */
+.sf__col--follow { align-items: stretch !important; }
+.sf__follow-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  text-align: start;
+}
+.sf__follow-card:hover {
+  transform: translateX(-3px);
+  border-color: rgba(168, 85, 247, 0.55);
+  background: rgba(168, 85, 247, 0.08);
+}
+.sf__follow-card--wa:hover { border-color: rgba(37, 211, 102, 0.55); background: rgba(37, 211, 102, 0.08); }
+.sf__follow-card--fb:hover { border-color: rgba(24, 119, 242, 0.55); background: rgba(24, 119, 242, 0.08); }
+.sf__follow-emoji {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  font-size: 1rem;
+}
+.sf__follow-emoji svg { width: 16px; height: 16px; }
+.sf__follow-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.sf__follow-info strong {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #F4F2FA;
+}
+.sf__follow-info small {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.68rem;
+  color: #A29DB5;
+  line-height: 1.5;
+}
