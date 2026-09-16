@@ -1,5 +1,5 @@
 'use client'
-// v7 — crown sits on word + hover slide to center (realistic)
+// v8 — crown hover: يتحرك من فوق الكلمة لمكانه الحقيقي على الكلمة
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -10,11 +10,12 @@ type Props = {
   showTagline?: boolean
 }
 
+// crown position (نسبة من ارتفاع التاج) — سالب يعني فوق الكلمة
 const SIZE_MAP = {
-  sm: { word: 88,  crown: 34, top: -14, left: 0 },
-  md: { word: 130, crown: 48, top: -20, left: 2 },
-  lg: { word: 180, crown: 66, top: -28, left: 4 },
-  xl: { word: 240, crown: 88, top: -38, left: 6 },
+  sm: { word: 88,  crown: 34, restTop: -0.62, hoverTop: -0.18, left: 0 },
+  md: { word: 130, crown: 48, restTop: -0.60, hoverTop: -0.16, left: 2 },
+  lg: { word: 180, crown: 66, restTop: -0.58, hoverTop: -0.14, left: 4 },
+  xl: { word: 240, crown: 88, restTop: -0.55, hoverTop: -0.12, left: 6 },
 }
 
 export default function EahLogo({
@@ -25,6 +26,8 @@ export default function EahLogo({
 }: Props) {
   const s = SIZE_MAP[size]
   const [hover, setHover] = useState(false)
+
+  const crownTop = hover ? s.hoverTop * s.crown : s.restTop * s.crown
 
   const content = (
     <span
@@ -69,8 +72,8 @@ export default function EahLogo({
         <span
           style={{
             position: 'absolute',
-            top: hover ? '50%' : `${s.top}px`,
-            left: hover ? '50%' : `${s.left}px`,
+            top: `${crownTop}px`,
+            left: `${s.left}px`,
             width: `${s.crown}px`,
             height: `${s.crown}px`,
             zIndex: 3,
@@ -78,12 +81,9 @@ export default function EahLogo({
             alignItems: 'center',
             justifyContent: 'center',
             pointerEvents: 'none',
-            transformOrigin: '50% 50%',
-            transform: hover
-              ? 'translate(-50%, -50%) rotate(-24deg)'
-              : 'rotate(-24deg)',
-            transition:
-              'top 0.55s cubic-bezier(0.34, 1.4, 0.64, 1), left 0.55s cubic-bezier(0.34, 1.4, 0.64, 1), transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1)',
+            transformOrigin: '50% 100%',
+            transform: 'rotate(-24deg)',
+            transition: 'top 0.7s cubic-bezier(0.34, 1.3, 0.5, 1)',
             filter:
               'drop-shadow(0 3px 10px rgba(251,191,36,0.9)) drop-shadow(0 0 22px rgba(232,199,154,0.6))',
           }}
