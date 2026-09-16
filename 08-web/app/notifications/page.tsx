@@ -27,9 +27,9 @@ const TYPE_META: Record<string, { emoji: string; label: string; color: string }>
   system:       { emoji: '⚙️', label: 'نظام',   color: '#6B6880' },
   ban:          { emoji: '🚫', label: 'حظر',     color: '#EF4444' },
   points:       { emoji: '⭐', label: 'نقاط',   color: '#FBBF24' },
-  welcome:      { emoji: '🎉', label: 'ترحيب',  color: '#4ADE80' },
-  reveal:       { emoji: '📞', label: 'كشف رقم', color: '#22C55E' },
-  verification: { emoji: '✓',  label: 'توثيق',  color: '#10B981' },
+  welcome:      { emoji: '🎉', label: 'ترحيب',  color: '#C084FC' },
+  reveal:       { emoji: '📞', label: 'كشف رقم', color: '#A855F7' },
+  verification: { emoji: '✓',  label: 'توثيق',  color: '#A855F7' },
 }
 
 export default async function NotificationsPage() {

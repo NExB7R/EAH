@@ -89,7 +89,7 @@ export default function UserAvatar({
       {badge === 'verified' && (
         <span className="user-avatar__verified" aria-label="حساب موثق">
           <svg viewBox="0 0 24 24" width="11" height="11">
-            <circle cx="12" cy="12" r="11" fill="#10B981" />
+            <circle cx="12" cy="12" r="11" fill="#A855F7" />
             <path d="M7 12 L11 16 L17 9" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
           </svg>
         </span>

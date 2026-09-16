@@ -126,7 +126,7 @@ export default async function AccountPage() {
 
           <div className="acc-card acc-card--third">
             <span className="acc-card__emoji">✍️</span>
-            <span className="acc-card__value" style={{ color: '#4ADE80' }}>{reviewCount ?? 0}</span>
+            <span className="acc-card__value" style={{ color: '#C084FC' }}>{reviewCount ?? 0}</span>
             <span className="acc-card__label">تقييمات</span>
           </div>
 

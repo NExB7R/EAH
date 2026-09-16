@@ -61,7 +61,7 @@
 .adv-card__price-period { font-size: 0.78rem; color: #6B6880; }
 .adv-card__features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .adv-card__features li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.9rem; color: #D5D3E0; line-height: 1.6; }
-.adv-card__check { color: #4ADE80; font-weight: 900; flex-shrink: 0; }
+.adv-card__check { color: #C084FC; font-weight: 900; flex-shrink: 0; }
 .adv-card__cta {
   display: block; text-align: center; padding: 14px;
   border-radius: 14px; background: rgba(139, 92, 246, 0.15);

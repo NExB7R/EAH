@@ -180,7 +180,7 @@
 }
 .ed__dot { width: 6px; height: 6px; border-radius: 50%; }
 .ed__dot--saving { background: #FBBF24; animation: edPulse 1s ease-in-out infinite; }
-.ed__dot--saved { background: #4ADE80; }
+.ed__dot--saved { background: #C084FC; }
 .ed__dot--dirty { background: #F97316; }
 
 /* ═══ CANVAS ═══ */

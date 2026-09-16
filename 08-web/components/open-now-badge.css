@@ -4,9 +4,9 @@
   font-size: .68rem; font-weight: 800;
 }
 .onb--open {
-  background: rgba(34,197,94,.12);
-  border: 1px solid rgba(34,197,94,.35);
-  color: #4ADE80;
+  background: rgba(168,85,247,.12);
+  border: 1px solid rgba(168,85,247,.35);
+  color: #C084FC;
 }
 .onb--closed {
   background: rgba(107,104,128,.15);

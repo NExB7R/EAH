@@ -2,7 +2,7 @@
 .np2__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
 .np2__title { font-size: 1.1rem; font-weight: 900; color: #F5F3FF; margin: 0 0 4px; }
 .np2__sub { font-size: .82rem; color: #A5A3B8; margin: 0; }
-.np2__status { color: #4ADE80; font-size: .72rem; font-weight: 800; }
+.np2__status { color: #C084FC; font-size: .72rem; font-weight: 800; }
 
 .np2__list { display: flex; flex-direction: column; gap: 8px; }
 .np2__item {
@@ -29,7 +29,7 @@
   cursor: pointer; font-family: inherit; transition: all .2s;
 }
 .np2__global.is-on {
-  background: rgba(34,197,94,.1); border-color: rgba(34,197,94,.3); color: #4ADE80;
+  background: rgba(168,85,247,.1); border-color: rgba(168,85,247,.3); color: #C084FC;
 }
 
 .np2__toggle {

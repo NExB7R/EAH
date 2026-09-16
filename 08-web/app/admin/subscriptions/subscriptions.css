@@ -105,8 +105,8 @@
 }
 .sub-btn--primary:hover:not(:disabled) { box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4); }
 .sub-btn--primary-2 {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
   color: #6EE7B7;
 }
 .sub-btn--danger {

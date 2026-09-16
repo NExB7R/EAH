@@ -43,7 +43,7 @@
 }
 .rb-textarea:focus { border-color: rgba(168,85,247,.6); }
 .rb-msg { margin: 0 0 10px; font-size: .82rem; color: #FCA5A5; font-weight: 700; }
-.rb-msg.is-ok { color: #4ADE80; }
+.rb-msg.is-ok { color: #C084FC; }
 .rb-actions { display: flex; gap: 8px; justify-content: flex-end; }
 .rb-btn {
   padding: 11px 20px; border-radius: 12px;

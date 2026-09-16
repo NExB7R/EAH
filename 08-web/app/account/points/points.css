@@ -46,7 +46,7 @@
 .rw-card__btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(139,92,246,.5); }
 .rw-card__btn:disabled { background: rgba(107,104,128,.3); color: #6B6880; cursor: not-allowed; }
 .rw-card__result { padding: 10px 12px; border-radius: 10px; font-size: .78rem; font-weight: 800; text-align: center; }
-.rw-card__result.is-ok { background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3); color: #4ADE80; }
+.rw-card__result.is-ok { background: rgba(168,85,247,.12); border: 1px solid rgba(168,85,247,.3); color: #C084FC; }
 .rw-card__result.is-err { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.3); color: #FCA5A5; }
 
 /* History */
@@ -61,7 +61,7 @@
 .pt__history-status { padding: 3px 10px; border-radius: 999px; font-size: .68rem; font-weight: 800; }
 .pt__history-status--pending { background: rgba(251,191,36,.12); border: 1px solid rgba(251,191,36,.3); color: #FBBF24; }
 .pt__history-status--approved { background: rgba(59,130,246,.12); border: 1px solid rgba(59,130,246,.3); color: #60A5FA; }
-.pt__history-status--used { background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3); color: #4ADE80; }
+.pt__history-status--used { background: rgba(168,85,247,.12); border: 1px solid rgba(168,85,247,.3); color: #C084FC; }
 .pt__history-status--expired { background: rgba(107,104,128,.15); border: 1px solid rgba(107,104,128,.3); color: #A5A3B8; }
 .pt__history-status--rejected { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.3); color: #FCA5A5; }
 .pt__history-date { color: #6B6880; font-size: .72rem; }

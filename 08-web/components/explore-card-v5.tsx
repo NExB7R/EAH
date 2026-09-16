@@ -41,7 +41,7 @@ const TYPE_LABEL: Record<string, string> = {
 
 const TYPE_GRADIENT: Record<string, string> = {
   restaurant: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
-  pharmacy: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+  pharmacy: 'linear-gradient(135deg, #A855F7 0%, #9333EA 100%)',
   supermarket: 'linear-gradient(135deg, #F59E0B 0%, #DC2626 100%)',
   delivery_office: 'linear-gradient(135deg, #A855F7 0%, #6B21FF 100%)',
 }

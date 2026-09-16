@@ -11,7 +11,7 @@ export const metadata = {
 const STATS = [
   { num: '2026', label: 'سنة التأسيس', color: '#A855F7' },
   { num: '8', label: 'مناطق مستهدفة', color: '#E8C79A' },
-  { num: '4', label: 'فئات رئيسية', color: '#4ADE80' },
+  { num: '4', label: 'فئات رئيسية', color: '#C084FC' },
   { num: '100%', label: 'مجاني للعميل', color: '#FBBF24' },
 ]
 

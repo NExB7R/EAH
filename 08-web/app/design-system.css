@@ -21,7 +21,7 @@
   --eah-gold-soft: rgba(232, 199, 154, 0.15);
 
   --eah-orange: #FB923C;
-  --eah-green: #4ADE80;
+  --eah-green-disabled: #C084FC;
   --eah-red: #F87171;
 
   /* ===== النصوص ===== */
@@ -208,7 +208,7 @@
   color: var(--eah-gold);
 }
 .eah-chip--live {
-  color: var(--eah-green);
+  color: var(--eah-green-disabled);
   background: rgba(74, 222, 128, 0.1);
   border-color: rgba(74, 222, 128, 0.3);
 }

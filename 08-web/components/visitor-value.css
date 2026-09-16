@@ -84,7 +84,7 @@
 .vv__card--gold:hover { border-color: rgba(232, 199, 154, 0.6); box-shadow: 0 16px 40px rgba(232, 199, 154, 0.2); }
 
 .vv__card--green { background: linear-gradient(180deg, rgba(74, 222, 128, 0.08), rgba(10, 7, 20, 0.5)); }
-.vv__card--green::before { background: radial-gradient(circle, #4ADE80, transparent 70%); }
+.vv__card--green::before { background: radial-gradient(circle, #C084FC, transparent 70%); }
 .vv__card--green:hover { border-color: rgba(74, 222, 128, 0.6); box-shadow: 0 16px 40px rgba(74, 222, 128, 0.2); }
 
 .vv__emoji {

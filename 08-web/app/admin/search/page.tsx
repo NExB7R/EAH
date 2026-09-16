@@ -67,7 +67,7 @@ export default async function AdminSearchPage({
                       <strong style={{ color: '#F5F3FF', display: 'block', marginBottom: 4 }}>{b.name}</strong>
                       <span style={{ fontSize: '.75rem', color: '#A5A3B8' }}>{b.area} · {b.slug}</span>
                     </div>
-                    <span style={{ fontSize: '.7rem', color: b.is_published ? '#4ADE80' : '#FCA5A5', fontWeight: 800 }}>{b.is_published ? 'منشور' : 'مسودة'}</span>
+                    <span style={{ fontSize: '.7rem', color: b.is_published ? '#C084FC' : '#FCA5A5', fontWeight: 800 }}>{b.is_published ? 'منشور' : 'مسودة'}</span>
                   </Link>
                 ))}
               </div>

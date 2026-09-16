@@ -42,7 +42,7 @@
 
 .np__foot { display: flex; justify-content: flex-end; min-height: 18px; }
 .np__status { color: #A5A3B8; font-size: .75rem; font-weight: 700; }
-.np__status--ok { color: #4ADE80; }
+.np__status--ok { color: #C084FC; }
 
 @media (max-width: 640px) {
   .np { padding: 18px; }

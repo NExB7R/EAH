@@ -45,7 +45,7 @@ const TYPE_LABEL: Record<BusinessType, string> = {
 
 const TYPE_HUE: Record<BusinessType, string> = {
   restaurant: '#FF7A3D',
-  pharmacy: '#4ADE80',
+  pharmacy: '#C084FC',
   delivery_office: '#E8C79A',
   supermarket: '🛒',
 }

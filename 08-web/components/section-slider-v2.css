@@ -125,7 +125,7 @@
 }
 .ss2--featured::before { background: radial-gradient(ellipse, #E8C79A 0%, transparent 65%); opacity: 0.18; }
 .ss2--trending::before { background: radial-gradient(ellipse, #FB923C 0%, transparent 65%); opacity: 0.2; }
-.ss2--new::before { background: radial-gradient(ellipse, #4ADE80 0%, transparent 65%); opacity: 0.15; }
+.ss2--new::before { background: radial-gradient(ellipse, #C084FC 0%, transparent 65%); opacity: 0.15; }
 .ss2--offers::before { background: radial-gradient(ellipse, #FBBF24 0%, transparent 65%); opacity: 0.2; }
 
 /* ═══ Title accents per section ═══ */

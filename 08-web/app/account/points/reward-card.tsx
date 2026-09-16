@@ -19,11 +19,11 @@ const CAT_LABEL: Record<string, { label: string; color: string }> = {
   voucher:  { label: 'قسيمة',        color: '#A855F7' },
   discount: { label: 'خصم',          color: '#F97316' },
   freebie:  { label: 'هدية',         color: '#EC4899' },
-  delivery: { label: 'توصيل',        color: '#4ADE80' },
+  delivery: { label: 'توصيل',        color: '#C084FC' },
   badge:    { label: 'شارة',         color: '#FBBF24' },
   frame:    { label: 'إطار',         color: '#6366F1' },
   feature:  { label: 'ميزة',         color: '#06B6D4' },
-  cash:     { label: 'فلوس',         color: '#10B981' },
+  cash:     { label: 'فلوس',         color: '#A855F7' },
 }
 
 export default function RewardCard({

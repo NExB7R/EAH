@@ -334,12 +334,12 @@
 .admin-biz__badge--published {
   background: rgba(74, 222, 128, 0.15);
   border-color: rgba(74, 222, 128, 0.4);
-  color: var(--eah-green);
+  color: var(--eah-green-disabled);
 }
 .admin-biz__badge--open {
   background: rgba(74, 222, 128, 0.1);
   border-color: rgba(74, 222, 128, 0.3);
-  color: var(--eah-green);
+  color: var(--eah-green-disabled);
 }
 .admin-biz__badge--type {
   background: var(--eah-purple-soft);
@@ -717,7 +717,7 @@
   border-radius: 999px;
   background: rgba(74, 222, 128, 0.1);
   border: 1px solid rgba(74, 222, 128, 0.35);
-  color: var(--eah-green);
+  color: var(--eah-green-disabled);
   font-family: var(--eah-font-body);
   font-size: 0.72rem;
   font-weight: 700;
@@ -788,7 +788,7 @@
   color: #fff;
 }
 .offer-card__badge--active {
-  color: var(--eah-green);
+  color: var(--eah-green-disabled);
 }
 .offer-card__badge-dot {
   width: 6px;
@@ -959,7 +959,7 @@
   border-radius: 999px;
   background: rgba(74, 222, 128, 0.1);
   border: 1px solid rgba(74, 222, 128, 0.35);
-  color: var(--eah-green);
+  color: var(--eah-green-disabled);
   font-family: var(--eah-font-body);
   font-size: 0.72rem;
   font-weight: 700;
@@ -1030,7 +1030,7 @@
   color: #fff;
 }
 .offer-card__badge--active {
-  color: var(--eah-green);
+  color: var(--eah-green-disabled);
 }
 .offer-card__badge-dot {
   width: 6px;
@@ -1310,7 +1310,7 @@
 .user-card__badge--admin { background: var(--eah-gradient-purple); color: #fff; border: none; }
 .user-card__badge--super_admin { background: var(--eah-gradient-gold); color: var(--eah-black-2); border: none; }
 .user-card__badge--banned { background: rgba(248, 113, 113, 0.15); color: var(--eah-red); border-color: rgba(248, 113, 113, 0.35); }
-.user-card__badge--verified { background: rgba(74, 222, 128, 0.15); color: var(--eah-green); border-color: rgba(74, 222, 128, 0.35); }
+.user-card__badge--verified { background: rgba(74, 222, 128, 0.15); color: var(--eah-green-disabled); border-color: rgba(74, 222, 128, 0.35); }
 
 .ract {
   display: flex;

@@ -17,7 +17,7 @@
 }
 .epb__btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(139,92,246,.5); }
 .epb__btn--ghost { background: rgba(107,104,128,.2); border: 1px solid rgba(107,104,128,.3); }
-.epb--on { background: linear-gradient(135deg, rgba(34,197,94,.1), rgba(16,185,129,.03)); border-color: rgba(34,197,94,.3); }
-.epb--on .epb__body strong { color: #4ADE80; }
+.epb--on { background: linear-gradient(135deg, rgba(168,85,247,.1), rgba(168,85,247,.03)); border-color: rgba(168,85,247,.3); }
+.epb--on .epb__body strong { color: #C084FC; }
 .epb--denied { background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.3); color: #FCA5A5; }
 .epb--off { background: rgba(107,104,128,.08); border-color: rgba(107,104,128,.2); color: #A5A3B8; }

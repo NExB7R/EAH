@@ -56,11 +56,8 @@ export default function BusinessHero({
           <span className="bhero__emoji">{TYPE_EMOJI[business.type]}</span>
 
           <div className="bhero__badges">
-            <span className="bhero__badge bhero__badge--type">{TYPE_LABEL[business.type]}</span>
-            <span className={`bhero__badge bhero__badge--simple ${business.open ? 'is-on' : 'is-off'}`}>
-              
-              {business.open ? 'مفتوح دلوقتي' : 'مغلق'}
-            </span>
+            
+            
           </div>
         </div>
 

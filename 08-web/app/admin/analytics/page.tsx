@@ -76,7 +76,7 @@ export default async function AnalyticsPage({
     restaurant: 'مطاعم', pharmacy: 'صيدليات', delivery_office: 'توصيل',
   }
   const typeColors: Record<string, string> = {
-    restaurant: '#F97316', pharmacy: '#4ADE80', delivery_office: '#A855F7',
+    restaurant: '#F97316', pharmacy: '#C084FC', delivery_office: '#A855F7',
   }
   const typeData = Object.entries(typeMap).map(([k, v]) => ({
     label: typeLabels[k] ?? k,
@@ -140,7 +140,7 @@ export default async function AnalyticsPage({
           <LineChart data={visitsData} color="#A855F7" label="👥 الزيارات اليومية (14 يوم)" />
         </div>
         <div className="an__card">
-          <LineChart data={revealsData} color="#4ADE80" label="📞 كشوف الأرقام (14 يوم)" />
+          <LineChart data={revealsData} color="#C084FC" label="📞 كشوف الأرقام (14 يوم)" />
         </div>
         <div className="an__card">
           <BarChart data={typeData} label="🏪 الأنشطة حسب النوع" />

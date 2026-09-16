@@ -28,7 +28,7 @@
 .mrch-stat__label { font-size: 12px; opacity: 0.65; }
 .mrch-stat--all .mrch-stat__num { color: #A855F7; }
 .mrch-stat--pending .mrch-stat__num { color: #FBBF24; }
-.mrch-stat--approved .mrch-stat__num { color: #10B981; }
+.mrch-stat--approved .mrch-stat__num { color: #A855F7; }
 .mrch-stat--rejected .mrch-stat__num { color: #EF4444; }
 
 .mrch-tabs {
@@ -102,7 +102,7 @@
   background: rgba(168, 85, 247, 0.04);
 }
 .mrch-card--pending { border-right: 3px solid #FBBF24; }
-.mrch-card--approved { border-right: 3px solid #10B981; }
+.mrch-card--approved { border-right: 3px solid #A855F7; }
 .mrch-card--rejected { border-right: 3px solid #EF4444; opacity: 0.75; }
 
 .mrch-card__head {
@@ -157,9 +157,9 @@
   border-color: rgba(251, 191, 36, 0.35);
 }
 .mrch-status--approved {
-  background: rgba(16, 185, 129, 0.12);
+  background: rgba(168, 85, 247, 0.12);
   color: #6EE7B7;
-  border-color: rgba(16, 185, 129, 0.35);
+  border-color: rgba(168, 85, 247, 0.35);
 }
 .mrch-status--rejected {
   background: rgba(239, 68, 68, 0.12);
@@ -214,13 +214,13 @@
   border: 1px solid;
 }
 .mrch-btn--approve {
-  background: rgba(16, 185, 129, 0.12);
-  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.35);
   color: #6EE7B7;
 }
 .mrch-btn--approve:hover:not(:disabled) {
-  background: rgba(16, 185, 129, 0.22);
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+  background: rgba(168, 85, 247, 0.22);
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.25);
 }
 .mrch-btn--reject {
   background: rgba(239, 68, 68, 0.1);

@@ -15,8 +15,8 @@ function getStrength(pw: string) {
   if (s <= 1) return { score: 1, label: 'ضعيفة', color: '#EF4444' }
   if (s === 2) return { score: 2, label: 'مقبولة', color: '#F97316' }
   if (s === 3) return { score: 3, label: 'جيدة', color: '#FBBF24' }
-  if (s === 4) return { score: 4, label: 'قوية', color: '#22C55E' }
-  return { score: 5, label: 'قوية جدًا', color: '#10B981' }
+  if (s === 4) return { score: 4, label: 'قوية', color: '#A855F7' }
+  return { score: 5, label: 'قوية جدًا', color: '#A855F7' }
 }
 
 export default function ChangePasswordPage() {

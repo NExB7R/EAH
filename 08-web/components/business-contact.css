@@ -74,7 +74,7 @@
   font-family: var(--eah-font-body);
   font-size: 0.95rem;
   font-weight: 900;
-  color: var(--eah-green);
+  color: var(--eah-green-disabled);
   text-decoration: none;
   text-align: start;
   direction: ltr;
