@@ -18,6 +18,7 @@ import BusinessClaimCTA from '@/components/business-claim-cta'
 import OrderRequest from '@/components/order-request'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import BackToTop from '@/components/back-to-top'
+import BusinessMap, { resolveCoords } from '@/components/business-map'
 
 export const revalidate = 120
 
@@ -123,6 +124,18 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
           </div>
         )}
 
+        {(() => {
+          const coords = resolveCoords(business.latitude, business.longitude, business.area)
+          return coords ? (
+            <BusinessMap
+              lat={coords.lat}
+              lng={coords.lng}
+              name={business.name}
+              area={business.area}
+              address={business.address ?? undefined}
+            />
+          ) : null
+        })()}
         <BusinessReviews stats={stats} reviews={reviews} />
 
         {business.businessId && (
