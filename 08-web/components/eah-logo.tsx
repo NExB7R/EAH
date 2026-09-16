@@ -1,69 +1,44 @@
 'use client'
-
+import Link from 'next/link'
 import './eah-logo.css'
 
-type Variant = 'full' | 'compact' | 'mark' | 'crown'
-type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-
-type EahLogoProps = {
-  variant?: Variant
-  size?: Size
-  className?: string
-  active?: boolean
+type Props = {
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  variant?: 'full' | 'compact' | 'mark'
   href?: string
+  showTagline?: boolean
 }
 
 export default function EahLogo({
-  variant = 'full',
   size = 'md',
-  className = '',
-  active = false,
-  href = '/',
-}: EahLogoProps) {
-  const showWord = variant !== 'crown'
-  const showCrown = variant === 'full' || variant === 'compact' || variant === 'crown'
-  const showSlogan = variant === 'full'
-
-  const inner = (
-    <>
-      {showWord && <span className="eah-logo__glow" aria-hidden />}
-
-      {showCrown && (
-        <img
-          className="eah-logo__crown"
-          src="/eah-crown.webp"
-          alt=""
-          aria-hidden
-          width={1440}
-          height={720}
-          decoding="async"
-        />
-      )}
-
-      {showWord && (
-        <img
-          className="eah-logo__word"
-          src="/eah-word.webp"
-          alt="EAH"
-          width={1440}
-          height={720}
-          decoding="async"
-        />
-      )}
-
-      {showSlogan && (
-        <span className="eah-logo__slogan" aria-hidden>
-          <span>اللى نفسك فيه</span>
-          <span className="eah-logo__punct">؟</span>
+  variant = 'full',
+  href,
+  showTagline = true,
+}: Props) {
+  const content = (
+    <span className={`eah-logo eah-logo--${size} eah-logo--${variant}`}>
+      {variant !== 'mark' && (
+        <span className="eah-logo__word">
+          <span className="eah-logo__letter">E</span>
+          <span className="eah-logo__letter">A</span>
+          <span className="eah-logo__letter">H</span>
         </span>
       )}
-    </>
+      {variant === 'mark' && (
+        <span className="eah-logo__mark">EAH</span>
+      )}
+      {showTagline && variant === 'full' && (
+        <span className="eah-logo__tagline">اللي نفسك فيه ؟</span>
+      )}
+    </span>
   )
 
-  const cls = `eah-logo eah-logo--${size} eah-logo--${variant} ${active ? 'crown-active' : ''} ${className}`.trim()
-
   if (href) {
-    return <a href={href} className={cls} aria-label="EAH">{inner}</a>
+    return (
+      <Link href={href} className="eah-logo__link" aria-label="EAH">
+        {content}
+      </Link>
+    )
   }
-  return <span className={cls} aria-label="EAH">{inner}</span>
+  return content
 }

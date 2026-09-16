@@ -39,6 +39,13 @@ const TYPE_LABEL: Record<string, string> = {
   delivery_office: 'توصيل',
 }
 
+const TYPE_GRADIENT: Record<string, string> = {
+  restaurant: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
+  pharmacy: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+  supermarket: 'linear-gradient(135deg, #F59E0B 0%, #DC2626 100%)',
+  delivery_office: 'linear-gradient(135deg, #A855F7 0%, #6B21FF 100%)',
+}
+
 const HOOK_BY_TYPE: Record<string, string> = {
   restaurant: 'نفسك في إيه؟',
   pharmacy: 'قرب منك وقت الحاجة',
@@ -52,21 +59,18 @@ export default function ExploreCardV5({ business }: { business: Business }) {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const cover = business.cover || business.cover_url || business.cover_image_url || ''
-  const gallery: string[] = business.gallery?.length
-    ? business.gallery
-    : cover
-      ? [cover]
-      : []
+  const gallery: string[] = (business.gallery ?? []).filter(Boolean)
+  const allImages = cover ? [cover, ...gallery] : gallery
 
   useEffect(() => {
-    if (!flipped || gallery.length <= 1) return
+    if (!flipped || allImages.length <= 1) return
     intervalRef.current = setInterval(() => {
-      setGalleryIdx((i) => (i + 1) % gallery.length)
+      setGalleryIdx((i) => (i + 1) % allImages.length)
     }, 2200)
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
-  }, [flipped, gallery.length])
+  }, [flipped, allImages.length])
 
   function enter() {
     setFlipped(true)
@@ -82,6 +86,7 @@ export default function ExploreCardV5({ business }: { business: Business }) {
   const hook = HOOK_BY_TYPE[business.type] ?? 'اكتشف المكان'
   const emoji = TYPE_EMOJI[business.type] ?? '📍'
   const typeLabel = TYPE_LABEL[business.type] ?? 'مكان'
+  const gradient = TYPE_GRADIENT[business.type] ?? TYPE_GRADIENT.restaurant
 
   return (
     <Link
@@ -98,16 +103,14 @@ export default function ExploreCardV5({ business }: { business: Business }) {
           <div
             className="ec5__cover"
             style={{
-              backgroundImage: cover
-                ? `url(${cover})`
-                : 'linear-gradient(135deg, #A855F7 0%, #6B21FF 100%)',
+              backgroundImage: cover ? `url(${cover})` : gradient,
             }}
           >
             {!cover && <span className="ec5__cover-emoji">{emoji}</span>}
           </div>
 
           {business.badge && <span className="ec5__badge">{business.badge}</span>}
-          {offers > 0 && <span className="ec5__offer-badge">🔥 {offers} عرض</span>}
+          {offers > 0 && <span className="ec5__offer-badge">🔥 {offers}</span>}
 
           <div className="ec5__fav">
             <FavoriteButton businessId={business.id ?? business.slug} size="sm" />
@@ -123,22 +126,23 @@ export default function ExploreCardV5({ business }: { business: Business }) {
         </div>
 
         <div className="ec5__back">
-          <div className="ec5__gallery">
-            {gallery.length > 0 ? (
-              gallery.map((url, i) => (
+          {allImages.length > 0 ? (
+            <div className="ec5__gallery">
+              {allImages.map((url, i) => (
                 <div
                   key={i}
                   className={`ec5__gallery-img ${i === galleryIdx ? 'is-active' : ''}`}
                   style={{ backgroundImage: `url(${url})` }}
                 />
-              ))
-            ) : (
-              <div className="ec5__gallery-empty">
-                <span>{emoji}</span>
-              </div>
-            )}
-            <div className="ec5__gallery-overlay" />
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="ec5__gallery-empty" style={{ background: gradient }}>
+              <span>{emoji}</span>
+            </div>
+          )}
+
+          <div className="ec5__gallery-overlay" />
 
           <div className="ec5__back-content">
             <h3 className="ec5__back-name">{business.name}</h3>
