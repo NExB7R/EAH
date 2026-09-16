@@ -8,6 +8,8 @@ import HomeHero from '@/components/home-hero'
 import SectionSliderV2 from '@/components/section-slider-v2'
 import ExploreCardV5 from '@/components/explore-card-v5'
 import VisitorValue from '@/components/visitor-value'
+import AdSlot from '@/components/ads/ad-slot'
+import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
 export default async function HomeDynamicV2() {
   const businesses = await getPublishedBusinesses(50)
@@ -56,9 +58,14 @@ export default async function HomeDynamicV2() {
   const hasTrending = trending.length > 0
   const hasNew = newOnes.length > 0
 
+  const ad = await getActiveAdForSlot('home_banner')
+  const adHref = ad ? getAdHref(ad) : '#'
+
   return (
     <>
       <HomeHero />
+
+      {ad && <AdSlot ad={ad} href={adHref} />}
 
       <VisitorValue />
 

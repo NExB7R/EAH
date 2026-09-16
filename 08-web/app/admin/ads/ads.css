@@ -1,0 +1,39 @@
+.ads { max-width: 1150px; margin: 0 auto; padding: 30px 20px 60px; }
+.ads__hero { margin-bottom: 30px; }
+.ads__back { font-family: var(--font-cairo, system-ui); font-size: .82rem; color: #A29DB5; text-decoration: none; margin-bottom: 12px; display: inline-block; }
+.ads__back:hover { color: #E8C79A; }
+.ads__kicker { display: block; font-family: var(--font-cairo, system-ui); font-size: .74rem; font-weight: 900; letter-spacing: .16em; color: #A855F7; text-transform: uppercase; margin-bottom: 6px; }
+.ads__title { font-family: var(--font-cairo-play, var(--font-cairo, system-ui)); font-size: 1.65rem; font-weight: 900; color: #F4F2FA; margin: 0 0 6px; letter-spacing: -.01em; }
+.ads__sub { font-family: var(--font-cairo, system-ui); font-size: .88rem; color: #A29DB5; margin: 0; }
+.ads__section-title { font-family: var(--font-cairo-play, var(--font-cairo, system-ui)); font-size: 1.15rem; font-weight: 900; color: #F4F2FA; margin: 0 0 16px; }
+.ads__slots, .ads__list { margin: 40px 0; }
+.ads__slots-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.ad-slot { padding: 20px; border-radius: 18px; background: rgba(255,255,255,.02); border: 1px solid rgba(168,85,247,.2); transition: border-color .25s, transform .25s; }
+.ad-slot:hover { transform: translateY(-2px); border-color: rgba(168,85,247,.5); }
+.ad-slot.is-full { border-color: rgba(251,146,60,.4); }
+.ad-slot__code { display: inline-block; padding: 2px 10px; border-radius: 6px; background: rgba(168,85,247,.12); border: 1px solid rgba(168,85,247,.3); font-family: monospace; font-size: .7rem; color: #C4B5FD; margin-bottom: 8px; }
+.ad-slot__name { font-family: var(--font-cairo-play, var(--font-cairo, system-ui)); font-size: 1rem; font-weight: 900; color: #F4F2FA; margin: 0 0 6px; }
+.ad-slot__desc { font-family: var(--font-cairo, system-ui); font-size: .78rem; color: #A29DB5; margin: 0 0 12px; line-height: 1.6; }
+.ad-slot__stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.ad-slot__stat { padding: 4px 10px; border-radius: 999px; background: rgba(232,199,154,.08); font-family: var(--font-cairo, system-ui); font-size: .72rem; color: #E8C79A; font-weight: 800; }
+.ad-slot__stat b { color: #F4F2FA; }
+.ad-slot__cta { font-family: var(--font-cairo, system-ui); font-size: .82rem; font-weight: 900; color: #A855F7; text-decoration: none; }
+.ad-slot__cta:hover { color: #E8C79A; }
+.ads__empty { font-family: var(--font-cairo, system-ui); font-size: .88rem; color: #A29DB5; text-align: center; padding: 40px 0; }
+.ads__table { display: flex; flex-direction: column; gap: 8px; }
+.ads__row { display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: center; padding: 14px 18px; border-radius: 14px; background: rgba(255,255,255,.02); border: 1px solid rgba(168,85,247,.14); text-decoration: none; transition: border-color .2s, background .2s; }
+.ads__row:hover { border-color: rgba(168,85,247,.4); background: rgba(168,85,247,.04); }
+.ads__row-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.ads__row-title { font-family: var(--font-cairo-play, var(--font-cairo, system-ui)); font-size: .92rem; font-weight: 900; color: #F4F2FA; }
+.ads__row-slot { font-family: var(--font-cairo, system-ui); font-size: .72rem; color: #A29DB5; }
+.ads__status { padding: 4px 12px; border-radius: 999px; font-family: var(--font-cairo, system-ui); font-size: .7rem; font-weight: 900; }
+.ads__status.is-pending { background: rgba(251,191,36,.15); color: #FCD34D; }
+.ads__status.is-active { background: rgba(168,85,247,.15); color: #C4B5FD; }
+.ads__status.is-paused { background: rgba(107,104,128,.2); color: #A29DB5; }
+.ads__status.is-expired { background: rgba(107,104,128,.15); color: #6B6580; }
+.ads__status.is-rejected { background: rgba(239,68,68,.15); color: #FCA5A5; }
+.ads__row-stats { display: flex; gap: 10px; font-family: var(--font-cairo, system-ui); font-size: .72rem; color: #A29DB5; }
+@media (max-width: 720px) {
+  .ads__slots-grid { grid-template-columns: 1fr; }
+  .ads__row { grid-template-columns: 1fr; }
+}
