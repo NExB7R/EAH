@@ -225,3 +225,11 @@
   .sf__signature-text::after { transition: none; }
   .sf__social-btn, .sf__palestine { transition: none; }
 }
+
+.sf__version {
+  font-family: monospace;
+  font-size: 0.6rem;
+  color: #6B6580;
+  margin-inline-start: 6px;
+  opacity: 0.65;
+}

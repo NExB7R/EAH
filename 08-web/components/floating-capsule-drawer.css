@@ -303,3 +303,14 @@
   .nav-drawer__user { transition: none; }
   .nav-drawer__role::after { display: none; }
 }
+
+.nav-drawer__version {
+  margin-top: auto;
+  padding: 14px 20px 10px;
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.62rem;
+  color: #6B6580;
+  opacity: 0.55;
+  border-top: 1px solid rgba(168, 85, 247, 0.08);
+}

@@ -103,7 +103,7 @@ export default function SiteFooter() {
           </a>
 
           <div className="sf__legal">
-            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة</p>
+            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة <span className="sf__version">v0.3.6</span></p>
             <p className="sf__signature">
               <span className="sf__signature-text">NourEldin B7R</span>
             </p>

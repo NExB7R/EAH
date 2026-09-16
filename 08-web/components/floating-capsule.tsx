@@ -236,6 +236,10 @@ export default function FloatingCapsuleHeader() {
               </button>
             </form>
           )}
+
+          <div className="nav-drawer__version" aria-hidden>
+            EAH v0.3.6
+          </div>
         </div>
       </div>
     </>
