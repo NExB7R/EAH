@@ -192,3 +192,16 @@
 @media (max-width: 420px) {
   .onb__budgets { grid-template-columns: 1fr; }
 }
+
+.onb__dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.25);
+  margin: 0 3px;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.onb__dot.is-active {
+  background: #A855F7;
+  transform: scale(1.15);
+}
