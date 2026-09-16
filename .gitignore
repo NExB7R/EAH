@@ -64,3 +64,4 @@ _fix_report.txt
 # Vercel production env
 .env.production.local
 .env*.local
+diagnosis.txt
