@@ -208,3 +208,20 @@ button, a {
     animation: none !important;
   }
 }
+
+/* ============ EAH tight-spacing overrides ============ */
+.hh, [class*="home-hero"], [class*="hero-"] {
+  padding-top: 6px !important;
+  margin-top: 0 !important;
+}
+[class*="home-hero"] > *:first-child,
+.hh > *:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+main > section { padding-block: 24px !important; }
+main > section + section { margin-top: 0 !important; }
+main > section:first-of-type { padding-top: 8px !important; }
+
+/* أي عنصر فيه مسافة داخلية > 40px يتقلل */
+[class*="kicker"], [class*="badge"] { margin-block: 6px !important; }

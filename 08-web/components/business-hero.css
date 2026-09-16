@@ -90,18 +90,10 @@
   font-weight: 700;
   color: var(--eah-text);
 }
-.bhero__badge--live.is-on { color: var(--eah-green); }
-.bhero__badge--live.is-off { color: var(--eah-red); }
-.bhero__dot {
-  width: 5px;
-  height: 5px;
-  border-radius: var(--eah-radius-pill);
-  background: currentColor;
-  box-shadow: 0 0 6px currentColor;
-}
-.bhero__badge--live.is-on .bhero__dot { animation: eah-pulse 2s infinite; }
 
-.bhero__info { display: flex; flex-direction: column; gap: 12px; }
+
+
+
 .bhero__name {
   font-family: var(--eah-font-display);
   font-size: clamp(1.6rem, 4vw, 2.4rem);
