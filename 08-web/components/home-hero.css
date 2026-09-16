@@ -2,18 +2,11 @@
 
 .hh {
   position: relative;
-  padding: 14px 20px 24px;
+  padding: 56px 20px 28px;
   overflow: hidden;
   isolation: isolate;
 }
 
-.hh__bg {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  overflow: hidden;
-}
 
 /* Ambient gradient */
 .hh__bg::before {
@@ -39,23 +32,6 @@
 }
 
 /* Vector stickers layer */
-.hh__stickers {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-.hh__sticker {
-  position: absolute;
-  color: #A855F7;
-  opacity: 0.13;
-  filter: blur(1.2px) drop-shadow(0 0 18px rgba(168, 85, 247, 0.5));
-  
-}
-.hh__sticker svg { width: 100%; height: 100%; display: block; }
-.hh__sticker:nth-child(3n) { color: #E8C79A; opacity: 0.11; }
-.hh__sticker:nth-child(5n) { color: #C084FC; opacity: 0.15; }
-
-
 
 /* Content */
 .hh__inner {
@@ -177,23 +153,7 @@
   .hh__cats { grid-template-columns: repeat(2, 1fr); }
   
 @media (prefers-reduced-motion: reduce) {
-  .hh__sticker,
-  .hh__logo,
-  .hh__sub,
-  .hh__search,
-  .hh__cats,
-  .hh__recommend,
   
-.hh__chip-top,
-.hh__chip-top-dot,
-[class*="chip-top-dot"] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-
 /* Tagline نيون */
 .hh__tagline {
   display: inline-flex;
@@ -210,32 +170,28 @@
 .hh__tagline-pin { font-size: 0.9rem; }
 .hh__tagline-city {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   font-weight: 900;
   letter-spacing: 0.04em;
-  color: #E8C79A;
+  background: linear-gradient(135deg, #C084FC, #A855F7, #6B21FF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   
 }
 
 /* Hook جديدة */
 .hh__hook {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(1.1rem, 2.8vw, 1.45rem);
+  font-size: clamp(1rem, 2.6vw, 1.35rem);
   font-weight: 900;
   color: #F4F2FA;
   text-align: center;
-  margin: 4px 0 6px;
-  line-height: 1.5;
+  margin: 4px 0 8px;
+  line-height: 1.6;
   letter-spacing: -0.01em;
-}
-.hh__hook-accent {
-  background: linear-gradient(135deg, #A855F7, #E8C79A);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  font-weight: 900;
+  max-width: 480px;
 }
 
-/* Soft subtle shadows only */
 .hh__cat { box-shadow: 0 2px 8px rgba(0,0,0,.3); }
 .hh__recommend { box-shadow: 0 4px 12px rgba(0,0,0,.25); }
