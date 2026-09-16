@@ -166,7 +166,7 @@
 }
 .cr-status--approved {
   background: rgba(168, 85, 247, 0.12);
-  color: #6EE7B7;
+  color: #C4B5FD;
   border-color: rgba(168, 85, 247, 0.35);
 }
 .cr-status--rejected {
@@ -245,7 +245,7 @@
   flex-wrap: wrap;
 }
 .cr-actions--done {
-  color: #6EE7B7;
+  color: #C4B5FD;
   font-size: 13px;
   font-weight: 700;
 }
@@ -266,7 +266,7 @@
 .cr-btn--approve {
   background: rgba(168, 85, 247, 0.12);
   border-color: rgba(168, 85, 247, 0.35);
-  color: #6EE7B7;
+  color: #C4B5FD;
 }
 .cr-btn--approve:hover:not(:disabled) {
   background: rgba(168, 85, 247, 0.22);

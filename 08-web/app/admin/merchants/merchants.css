@@ -158,7 +158,7 @@
 }
 .mrch-status--approved {
   background: rgba(168, 85, 247, 0.12);
-  color: #6EE7B7;
+  color: #C4B5FD;
   border-color: rgba(168, 85, 247, 0.35);
 }
 .mrch-status--rejected {
@@ -201,7 +201,7 @@
 }
 
 .mrch-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.mrch-actions--done { color: #6EE7B7; font-size: 13px; font-weight: 700; }
+.mrch-actions--done { color: #C4B5FD; font-size: 13px; font-weight: 700; }
 .mrch-actions__msg { font-size: 12px; opacity: 0.8; }
 .mrch-btn {
   padding: 8px 14px;
@@ -216,7 +216,7 @@
 .mrch-btn--approve {
   background: rgba(168, 85, 247, 0.12);
   border-color: rgba(168, 85, 247, 0.35);
-  color: #6EE7B7;
+  color: #C4B5FD;
 }
 .mrch-btn--approve:hover:not(:disabled) {
   background: rgba(168, 85, 247, 0.22);

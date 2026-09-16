@@ -176,7 +176,7 @@
   height: 20px;
   border-radius: 50%;
   background: rgba(192, 132, 252, 0.15);
-  color: #6EE7B7;
+  color: #C4B5FD;
   font-weight: 900;
   font-size: 0.7rem;
   flex-shrink: 0;
@@ -345,7 +345,7 @@
 .pr__btn--ghost {
   background: rgba(37, 211, 102, 0.1);
   border-color: rgba(37, 211, 102, 0.35);
-  color: #86EFAC;
+  color: #D8B4FE;
 }
 .pr__btn--ghost:hover { background: rgba(37, 211, 102, 0.2); }
 

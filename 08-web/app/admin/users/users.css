@@ -132,7 +132,7 @@
   background: rgba(255, 255, 255, 0.05);
   color: #C4B5FD;
 }
-.usrs-chip--verified { background: rgba(168, 85, 247, 0.15); color: #6EE7B7; }
+.usrs-chip--verified { background: rgba(168, 85, 247, 0.15); color: #C4B5FD; }
 .usrs-chip--role-customer { background: rgba(59, 130, 246, 0.15); color: #93C5FD; }
 .usrs-chip--role-merchant { background: rgba(251, 191, 36, 0.15); color: #FCD34D; }
 .usrs-chip--role-admin,
@@ -152,7 +152,7 @@
 }
 .usrs-trust__num { font-size: 18px; font-weight: 900; color: #C4B5FD; }
 .usrs-trust__label { font-size: 9px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.05em; }
-.usrs-trust--high .usrs-trust__num { color: #6EE7B7; }
+.usrs-trust--high .usrs-trust__num { color: #C4B5FD; }
 .usrs-trust--mid .usrs-trust__num { color: #FCD34D; }
 .usrs-trust--low .usrs-trust__num { color: #FCA5A5; }
 

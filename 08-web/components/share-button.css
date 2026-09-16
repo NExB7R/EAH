@@ -192,7 +192,7 @@
 .shb-copy.is-copied {
   background: linear-gradient(135deg, rgba(168,85,247,0.22), rgba(168,85,247,0.14));
   border-color: rgba(168, 85, 247, 0.55);
-  color: #6EE7B7;
+  color: #C4B5FD;
 }
 
 .shb-copy__icon { display: inline-flex; }

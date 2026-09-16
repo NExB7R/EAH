@@ -88,7 +88,7 @@
 .rew-btn--on {
   background: rgba(168, 85, 247, 0.15);
   border-color: rgba(168, 85, 247, 0.35);
-  color: #6EE7B7;
+  color: #C4B5FD;
 }
 .rew-btn--off {
   background: rgba(107, 104, 128, 0.2);
@@ -149,7 +149,7 @@
 }
 .rew-red__status--pending { background: rgba(251, 191, 36, 0.15); color: #FCD34D; }
 .rew-red__status--approved { background: rgba(168, 85, 247, 0.15); color: #D8B4FE; }
-.rew-red__status--delivered { background: rgba(168, 85, 247, 0.15); color: #6EE7B7; }
+.rew-red__status--delivered { background: rgba(168, 85, 247, 0.15); color: #C4B5FD; }
 .rew-red__status--rejected { background: rgba(239, 68, 68, 0.15); color: #FCA5A5; }
 .rew-red__meta { display: flex; gap: 6px; flex-wrap: wrap; }
 .rew-red__chip {
@@ -161,7 +161,7 @@
 }
 .rew-red__chip--voucher {
   background: rgba(168, 85, 247, 0.15);
-  color: #6EE7B7;
+  color: #C4B5FD;
   font-family: monospace;
 }
 .rew-red__note {

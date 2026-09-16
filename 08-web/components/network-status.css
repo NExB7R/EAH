@@ -28,7 +28,7 @@
 .nstatus.is-online {
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(168, 85, 247, 0.14));
   border: 1px solid rgba(168, 85, 247, 0.5);
-  color: #BBF7D0;
+  color: #E9D5FF;
   box-shadow: 0 10px 32px rgba(168, 85, 247, 0.3);
 }
 

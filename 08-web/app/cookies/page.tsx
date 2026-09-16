@@ -85,7 +85,7 @@ export default function CookiesPage() {
                           background: t.required
                             ? 'rgba(239, 68, 68, 0.15)'
                             : 'rgba(192, 132, 252, 0.15)',
-                          color: t.required ? '#FCA5A5' : '#6EE7B7',
+                          color: t.required ? '#FCA5A5' : '#C4B5FD',
                           fontWeight: 800,
                           marginInlineStart: 'auto',
                         }}

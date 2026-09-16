@@ -80,7 +80,7 @@
   direction: ltr;
   transition: color var(--eah-t-fast) ease;
 }
-.bcontact__value:hover { color: #86EFAC; }
+.bcontact__value:hover { color: #D8B4FE; }
 .bcontact__reveal {
   display: flex;
   align-items: center;

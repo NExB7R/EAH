@@ -165,7 +165,7 @@
 .col__chip--ok {
   background: rgba(192, 132, 252, 0.1);
   border-color: rgba(192, 132, 252, 0.35);
-  color: #6EE7B7;
+  color: #C4B5FD;
 }
 
 .col__grid {
@@ -258,7 +258,7 @@
 }
 .col__reviews-preview > span {
   font-weight: 800;
-  color: #6EE7B7;
+  color: #C4B5FD;
 }
 .col__reviews-preview ul {
   list-style: none;
@@ -290,7 +290,7 @@
   border-radius: 12px;
   background: rgba(192, 132, 252, 0.12);
   border: 1px solid rgba(192, 132, 252, 0.35);
-  color: #6EE7B7;
+  color: #C4B5FD;
   font-size: 0.82rem;
 }
 
