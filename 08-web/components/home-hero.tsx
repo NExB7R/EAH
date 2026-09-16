@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import EahLogo from './eah-logo'
 import SearchBar from './search-bar'
+import { COPY, SLOGAN } from '@/lib/copy'
 import './home-hero.css'
 
 const CATEGORIES = [
@@ -21,10 +22,10 @@ export default function HomeHero() {
       </div>
 
       <div className="hh__inner">
-        {/* Top welcome chip */}
+        {/* Welcome chip */}
         <div className="hh__chip-top">
           <span className="hh__chip-top-dot" />
-          <span>أهلاً بيك في EAH — شبين القناطر والقرى حواليها</span>
+          <span>{COPY.hero.kicker} — شبين القناطر والقرى حواليها</span>
         </div>
 
         {/* Logo */}
@@ -34,20 +35,18 @@ export default function HomeHero() {
 
         {/* Headline */}
         <h1 className="hh__h1">
-          كل اللي حواليك
+          {SLOGAN}
           <br />
-          <span className="hh__h1-accent">في مكان واحد</span>
+          <span className="hh__h1-accent">{COPY.hero.titleAccent}</span>
         </h1>
 
         <p className="hh__sub">
-          اكتشف مطاعم، صيدليات، ماركت، وتوصيل
-          <br className="hh__br" />
-          بذكاء يخصّك — من غير أي تعقيد
+          {COPY.hero.subtitle}
         </p>
 
         {/* Search */}
         <div className="hh__search">
-          <SearchBar placeholder="ابحث عن مطعم، صيدلية، أو ماركت..." />
+          <SearchBar placeholder={COPY.search.placeholderFood} />
         </div>
 
         {/* Categories quick access */}
@@ -69,7 +68,7 @@ export default function HomeHero() {
           <span className="hh__recommend-emoji">✨</span>
           <span className="hh__recommend-body">
             <strong>مش عارف تختار؟</strong>
-            <small>خلّي EAH ترشحلك على مزاجك</small>
+            <small>قول مزاجك وإحنا نظبط</small>
           </span>
           <span className="hh__recommend-arrow">←</span>
         </Link>
@@ -78,7 +77,7 @@ export default function HomeHero() {
         <div className="hh__trust">
           <span className="hh__trust-item">
             <span className="hh__trust-dot" />
-            مجاني 100% للعميل
+            مجاني 100% للأخويا
           </span>
           <span className="hh__trust-item">
             <span className="hh__trust-dot" />
