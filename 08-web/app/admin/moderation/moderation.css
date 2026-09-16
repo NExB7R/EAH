@@ -1,0 +1,23 @@
+.mod { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+.mod__hero { margin-bottom: 30px; }
+.mod__back { font-family: var(--font-cairo, system-ui); font-size: .82rem; color: #A29DB5; text-decoration: none; margin-bottom: 12px; display: inline-block; }
+.mod__back:hover { color: #E8C79A; }
+.mod__kicker { display: block; font-family: var(--font-cairo, system-ui); font-size: .74rem; font-weight: 900; letter-spacing: .16em; color: #A855F7; text-transform: uppercase; margin-bottom: 6px; }
+.mod__title { font-family: var(--font-cairo-play, var(--font-cairo, system-ui)); font-size: 1.65rem; font-weight: 900; color: #F4F2FA; margin: 0 0 6px; letter-spacing: -.01em; }
+.mod__sub { font-family: var(--font-cairo, system-ui); font-size: .88rem; color: #A29DB5; margin: 0; }
+.mod__empty { text-align: center; padding: 60px 20px; border-radius: 20px; background: rgba(168,85,247,.04); border: 1px solid rgba(168,85,247,.18); }
+.mod__empty-emoji { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+.mod__empty p { font-family: var(--font-cairo, system-ui); color: #A29DB5; margin: 0; }
+.mod__list { display: flex; flex-direction: column; gap: 14px; }
+.mod__item { padding: 20px; border-radius: 18px; background: rgba(255,255,255,.02); border: 1px solid rgba(251,146,60,.3); }
+.mod__item-head { display: flex; align-items: center; gap: 12px; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; }
+.mod__biz { font-family: var(--font-cairo-play, var(--font-cairo, system-ui)); font-size: .95rem; font-weight: 900; color: #E8C79A; text-decoration: none; }
+.mod__biz:hover { color: #F5D9A7; }
+.mod__flag { padding: 4px 12px; border-radius: 999px; background: rgba(251,146,60,.15); border: 1px solid rgba(251,146,60,.4); color: #FDBA74; font-family: var(--font-cairo, system-ui); font-size: .72rem; font-weight: 800; }
+.mod__comment { font-family: var(--font-cairo, system-ui); font-size: .9rem; color: #E4E0F0; line-height: 1.75; margin: 0 0 14px; padding: 12px 14px; border-radius: 12px; background: rgba(7,6,11,.5); border: 1px solid rgba(168,85,247,.14); }
+.mod__item-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.mod__btn { padding: 10px 20px; border-radius: 12px; font-family: var(--font-cairo, system-ui); font-size: .85rem; font-weight: 900; border: none; cursor: pointer; transition: transform .2s; }
+.mod__btn:hover { transform: translateY(-2px); }
+.mod__btn:disabled { opacity: .5; cursor: not-allowed; }
+.mod__btn--ok { background: linear-gradient(135deg, #10B981, #059669); color: #fff; }
+.mod__btn--no { background: rgba(239,68,68,.15); color: #FCA5A5; border: 1px solid rgba(239,68,68,.4); }
