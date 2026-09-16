@@ -1,6 +1,7 @@
 'use client'
-// v6.1 — cache-busted 1789585536.1980636
+// v7 — crown sits on word + hover slide to center (realistic)
 import Link from 'next/link'
+import { useState } from 'react'
 
 type Props = {
   size?: 'sm' | 'md' | 'lg' | 'xl'
@@ -10,10 +11,10 @@ type Props = {
 }
 
 const SIZE_MAP = {
-  sm: { word: 88,  crown: 30,  top: -18, left: -4 },
-  md: { word: 130, crown: 44,  top: -27, left: -6 },
-  lg: { word: 180, crown: 60,  top: -36, left: -8 },
-  xl: { word: 240, crown: 80,  top: -48, left: -10 },
+  sm: { word: 88,  crown: 34, top: -14, left: 0 },
+  md: { word: 130, crown: 48, top: -20, left: 2 },
+  lg: { word: 180, crown: 66, top: -28, left: 4 },
+  xl: { word: 240, crown: 88, top: -38, left: 6 },
 }
 
 export default function EahLogo({
@@ -23,10 +24,15 @@ export default function EahLogo({
   showTagline = true,
 }: Props) {
   const s = SIZE_MAP[size]
+  const [hover, setHover] = useState(false)
 
   const content = (
     <span
       dir="ltr"
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onTouchStart={() => setHover(true)}
+      onTouchEnd={() => setHover(false)}
       style={{
         display: 'inline-flex',
         flexDirection: 'column',
@@ -63,8 +69,8 @@ export default function EahLogo({
         <span
           style={{
             position: 'absolute',
-            top: `${s.top}px`,
-            left: `${s.left}px`,
+            top: hover ? '50%' : `${s.top}px`,
+            left: hover ? '50%' : `${s.left}px`,
             width: `${s.crown}px`,
             height: `${s.crown}px`,
             zIndex: 3,
@@ -72,8 +78,12 @@ export default function EahLogo({
             alignItems: 'center',
             justifyContent: 'center',
             pointerEvents: 'none',
-            transformOrigin: '50% 100%',
-            transform: 'rotate(-24deg)',
+            transformOrigin: '50% 50%',
+            transform: hover
+              ? 'translate(-50%, -50%) rotate(-24deg)'
+              : 'rotate(-24deg)',
+            transition:
+              'top 0.55s cubic-bezier(0.34, 1.4, 0.64, 1), left 0.55s cubic-bezier(0.34, 1.4, 0.64, 1), transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1)',
             filter:
               'drop-shadow(0 3px 10px rgba(251,191,36,0.9)) drop-shadow(0 0 22px rgba(232,199,154,0.6))',
           }}

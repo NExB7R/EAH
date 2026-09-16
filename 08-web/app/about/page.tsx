@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
+import TrustSection from '@/components/trust-section'
+import ComingSoon from '@/components/coming-soon'
 import './about.css'
 
 export const metadata = {
@@ -154,6 +156,9 @@ export default function AboutPage() {
             ))}
           </div>
         </section>
+
+        <TrustSection />
+        <ComingSoon />
 
         {/* CTA */}
         <section className="ab__cta">

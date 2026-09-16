@@ -1,0 +1,1659 @@
+═══ 1. home-hero.tsx ═══
+'use client'
+import Link from 'next/link'
+import EahLogo from './eah-logo'
+import SearchBar from './search-bar'
+import './home-hero.css'
+
+const CATEGORIES = [
+  { type: 'restaurant', emoji: '🍽️', label: 'مطاعم' },
+  { type: 'pharmacy', emoji: '💊', label: 'صيدليات' },
+  { type: 'supermarket', emoji: '🛒', label: 'ماركت' },
+  { type: 'delivery_office', emoji: '🛵', label: 'توصيل' },
+]
+
+const STICKERS = [
+  { kind: 'fork', top: '8%', left: '6%', size: 44, rot: -18 },
+  { kind: 'pill', top: '22%', left: '14%', size: 36, rot: 22 },
+  { kind: 'cart', top: '62%', left: '5%', size: 40, rot: -12 },
+  { kind: 'moped', top: '78%', left: '12%', size: 38, rot: 16 },
+  { kind: 'star', top: '40%', left: '3%', size: 28, rot: -22 },
+  { kind: 'heart', top: '55%', left: '11%', size: 30, rot: 18 },
+  { kind: 'coffee', top: '85%', left: '4%', size: 34, rot: -10 },
+  { kind: 'fork', top: '12%', right: '5%', size: 42, rot: 14 },
+  { kind: 'pill', top: '30%', right: '12%', size: 32, rot: -20 },
+  { kind: 'cart', top: '55%', right: '6%', size: 44, rot: 12 },
+  { kind: 'moped', top: '75%', right: '13%', size: 36, rot: -14 },
+  { kind: 'star', top: '48%', right: '3%', size: 30, rot: 20 },
+  { kind: 'heart', top: '20%', right: '18%', size: 26, rot: -16 },
+  { kind: 'coffee', top: '68%', right: '8%', size: 32, rot: 22 },
+]
+
+function Sticker({ kind }: { kind: string }) {
+  const c = {
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.6,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+  }
+  if (kind === 'fork') return <svg viewBox="0 0 24 24" {...c}><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" /></svg>
+  if (kind === 'pill') return <svg viewBox="0 0 24 24" {...c}><rect x="3" y="3" width="18" height="18" rx="3" /><path d="M12 8v8M8 12h8" /></svg>
+  if (kind === 'cart') return <svg viewBox="0 0 24 24" {...c}><circle cx="9" cy="20" r="1.5" /><circle cx="18" cy="20" r="1.5" /><path d="M2 3h3l2.5 12.5a2 2 0 0 0 2 1.5h8.5a2 2 0 0 0 2-1.6L22 7H6" /></svg>
+  if (kind === 'moped') return <svg viewBox="0 0 24 24" {...c}><circle cx="5" cy="18" r="2" /><circle cx="17" cy="18" r="2" /><path d="M5 18h10M15 18h2M14 6h4l2 6h-2M4 6h4v4" /></svg>
+  if (kind === 'star') return <svg viewBox="0 0 24 24" {...c}><path d="M12 2l3 6.5 7 1-5 4.8 1.2 7L12 18l-6.2 3.3L7 14.3 2 9.5l7-1z" /></svg>
+  if (kind === 'heart') return <svg viewBox="0 0 24 24" {...c}><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z" /></svg>
+  if (kind === 'coffee') return <svg viewBox="0 0 24 24" {...c}><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z" /><path d="M6 1v3M10 1v3M14 1v3" /></svg>
+  return null
+}
+
+export default function HomeHero() {
+  return (
+    <section className="hh">
+      <div className="hh__bg" aria-hidden>
+        <div className="hh__stickers">
+          {STICKERS.map((s, i) => {
+            const style: React.CSSProperties = {
+              top: s.top,
+              width: s.size,
+              height: s.size,
+              transform: `rotate(${s.rot}deg)`,
+              animationDelay: `${i * 0.5}s`,
+            }
+            if (s.left) style.left = s.left
+            if (s.right) style.right = s.right
+            return (
+              <span key={i} className="hh__sticker" style={style}>
+                <Sticker kind={s.kind} />
+              </span>
+            )
+          })}
+        </div>
+      </div>
+
+      <div className="hh__inner">
+        
+
+        <div className="hh__logo">
+          <EahLogo size="xl" variant="full" href="/" />
+        </div>
+
+        <p className="hh__sub">
+          اكتشف مطاعم، صيدليات، ماركت، وتوصيل حواليك
+        </p>
+
+        <div className="hh__search">
+          <SearchBar placeholder="مطعم؟ صيدلية؟ ماركت؟ دوّر..." />
+        </div>
+
+        <nav className="hh__cats" aria-label="تصفح سريع">
+          {CATEGORIES.map((c) => (
+            <Link key={c.type} href={`/explore?type=${c.type}`} className="hh__cat">
+              <span className="hh__cat-emoji">{c.emoji}</span>
+              <span className="hh__cat-label">{c.label}</span>
+            </Link>
+          ))}
+        </nav>
+
+        <Link href="/recommend" className="hh__recommend">
+          <span className="hh__recommend-emoji">✨</span>
+          <span className="hh__recommend-body">
+            <strong>مش عارف تختار؟</strong>
+            <small>قول مزاجك وإحنا نظبط</small>
+          </span>
+          <span className="hh__recommend-arrow">←</span>
+        </Link>
+
+        <div className="hh__trust">
+          <span className="hh__trust-item">مجاني 100%</span>
+          <span className="hh__trust-item">بدون تسجيل</span>
+          <span className="hh__trust-item">أماكن موثوقة</span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+═══ 2. home-hero.css ═══
+/* EAH Home Hero — 2026 Neon Vector Stickers */
+
+.hh {
+  position: relative;
+  padding: 14px 20px 60px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hh__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Ambient gradient */
+.hh__bg::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse, rgba(168, 85, 247, 0.16) 0%, transparent 65%);
+  filter: blur(60px);
+}
+.hh__bg::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  left: 30%;
+  width: 500px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(232, 199, 154, 0.1) 0%, transparent 65%);
+  filter: blur(60px);
+}
+
+/* Vector stickers layer */
+.hh__stickers {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.hh__sticker {
+  position: absolute;
+  color: #A855F7;
+  opacity: 0.13;
+  filter: blur(1.2px) drop-shadow(0 0 18px rgba(168, 85, 247, 0.5));
+  
+  will-change: transform;
+}
+.hh__sticker svg { width: 100%; height: 100%; display: block; }
+.hh__sticker:nth-child(3n) { color: #E8C79A; opacity: 0.11; }
+.hh__sticker:nth-child(5n) { color: #C084FC; opacity: 0.15; }
+
+
+
+/* Content */
+.hh__inner {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.hh__logo { display: flex; justify-content: center; margin: 10px 0 6px; animation: hh-fade-up 720ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both; }
+
+
+
+.hh__sub { font-family: var(--font-cairo, system-ui); font-size: clamp(0.95rem, 2.2vw, 1.1rem); color: #A29DB5; margin: 0; line-height: 1.75; animation: hh-fade-up 880ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both; }
+
+.hh__search {
+  width: 100%;
+  max-width: 560px;
+  margin-top: 8px;
+  animation: hh-fade-up 960ms cubic-bezier(0.22, 1, 0.36, 1) 240ms both;
+}
+
+.hh__cats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 560px;
+  margin-top: 6px;
+  animation: hh-fade-up 1040ms cubic-bezier(0.22, 1, 0.36, 1) 300ms both;
+}
+.hh__cat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(168, 85, 247, 0.16);
+  text-decoration: none;
+  transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hh__cat:hover {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(168, 85, 247, 0.18);
+}
+.hh__cat-emoji { font-size: 1.6rem; line-height: 1; }
+.hh__cat-label {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #F4F2FA;
+}
+
+.hh__recommend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 560px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(232, 199, 154, 0.05));
+  border: 1px solid rgba(232, 199, 154, 0.3);
+  text-decoration: none;
+  transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+  margin-top: 6px;
+  animation: hh-fade-up 1120ms cubic-bezier(0.22, 1, 0.36, 1) 360ms both;
+}
+.hh__recommend:hover {
+  border-color: rgba(232, 199, 154, 0.65);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(232, 199, 154, 0.1));
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(232, 199, 154, 0.14);
+}
+.hh__recommend-emoji { font-size: 1.5rem; flex-shrink: 0; }
+.hh__recommend-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: start;
+}
+.hh__recommend-body strong {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: #F4F2FA;
+}
+.hh__recommend-body small {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.75rem;
+  color: #A29DB5;
+}
+.hh__recommend-arrow {
+  color: #E8C79A;
+  font-size: 1.1rem;
+  font-weight: 900;
+  transition: transform 0.2s;
+}
+.hh__recommend:hover .hh__recommend-arrow { transform: translateX(-4px); }
+
+.hh__trust {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 12px;
+  animation: hh-fade-up 1200ms cubic-bezier(0.22, 1, 0.36, 1) 420ms both;
+}
+.hh__trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #A29DB5;
+}
+
+
+@keyframes hh-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .hh { padding: 14px 16px 40px; }
+  .hh__cats { grid-template-columns: repeat(2, 1fr); }
+  .hh__trust { gap: 12px; }
+  .hh__trust-item { font-size: 0.68rem; }
+  .hh__sticker { opacity: 0.09; filter: blur(1.5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hh__sticker,
+  .hh__logo,
+  .hh__h1,
+  .hh__sub,
+  .hh__search,
+  .hh__cats,
+  .hh__recommend,
+  .hh__trust,
+
+}
+
+═══ 3. site-footer.tsx ═══
+'use client'
+import EahLogo from './eah-logo'
+import { IconFacebook, IconWhatsapp } from './neon-icons'
+import { CONTACT_CHANNELS, waLink } from '@/app/contact/contact-channels'
+import './site-footer.css'
+
+export default function SiteFooter() {
+  const year = new Date().getFullYear()
+
+  return (
+    <footer className="sf">
+      <div className="sf__inner">
+        {/* Brand row */}
+        <div className="sf__brand-row">
+          <EahLogo size="md" variant="full" href="/" />
+          </div>
+
+        {/* Nav grid */}
+        <nav className="sf__nav">
+          <div className="sf__col">
+            <h4 className="sf__col-title">EAH</h4>
+            <a href="/about" className="sf__link">نبذة عننا</a>
+            <a href="/contact" className="sf__link">تواصل معنا</a>
+            <a href="/advertise" className="sf__link">أعلن معنا</a>
+            <a href="/pricing" className="sf__link">الباقات والأسعار</a>
+          </div>
+
+          <div className="sf__col">
+            <h4 className="sf__col-title">للأعمال</h4>
+            <a href="/merchant-info" className="sf__link">مميزات لأصحاب الأنشطة</a>
+            <a href="/merchant/apply" className="sf__link">سجّل نشاطك</a>
+            <a href="/merchant-info" className="sf__link">الباقات</a>
+            <a href="/advertise" className="sf__link">إعلانات</a>
+          </div>
+
+          <div className="sf__col">
+            <h4 className="sf__col-title">قانوني</h4>
+            <a href="/terms" className="sf__link">الشروط والأحكام</a>
+            <a href="/privacy" className="sf__link">سياسة الخصوصية</a>
+            <a href="/cookies" className="sf__link">ملفات تعريف الارتباط</a>
+          </div>
+
+          <div className="sf__col">
+            <h4 className="sf__col-title">تابعنا</h4>
+            <div className="sf__social">
+              <a
+                href={waLink('السلام عليكم، تابعت EAH وعايز أعرف أكتر')}
+                target="_blank"
+                rel="noreferrer"
+                className="sf__social-btn sf__social-btn--wa"
+                aria-label="واتساب"
+              >
+                <IconWhatsapp />
+              </a>
+              <a
+                href={CONTACT_CHANNELS.facebook.page}
+                target="_blank"
+                rel="noreferrer"
+                className="sf__social-btn sf__social-btn--fb"
+                aria-label="فيسبوك"
+              >
+                <IconFacebook />
+              </a>
+            </div>
+            <a
+              href={CONTACT_CHANNELS.whatsapp.channel}
+              target="_blank"
+              rel="noreferrer"
+              className="sf__channel-link"
+            >
+              📣 قناة واتساب
+            </a>
+          </div>
+        </nav>
+
+        {/* Palestine + bottom row */}
+        <div className="sf__bottom">
+          <a
+            href="/support-palestine"
+            className="sf__palestine"
+            aria-label="فلسطين في القلب"
+          >
+            <span className="sf__palestine-label">فلسطين في القلب</span>
+            <span className="sf__palestine-heart" aria-hidden>
+              <svg viewBox="0 0 32 28" width="20" height="18">
+                <defs>
+                  <clipPath id="sf-ps-clip">
+                    <path d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z" />
+                  </clipPath>
+                </defs>
+                <g clipPath="url(#sf-ps-clip)">
+                  <rect x="0" y="0" width="32" height="9" fill="#000" />
+                  <rect x="0" y="9" width="32" height="9" fill="#FFF" />
+                  <rect x="0" y="18" width="32" height="10" fill="#149954" />
+                  <polygon points="0,0 10,14 0,28" fill="#E4312B" />
+                </g>
+                <path
+                  d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z"
+                  fill="none" stroke="#A855F7" strokeWidth="1.4" strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </a>
+
+          <div className="sf__legal">
+            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة</p>
+            <p className="sf__signature">
+              <span className="sf__signature-text">NourEldin B7R</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+═══ 4. site-footer.css ═══
+/* ═══════════════════════════════════════════════════
+   EAH Site Footer — 2026 Redesigned
+   ═══════════════════════════════════════════════════ */
+
+.sf {
+  margin-top: 10px;
+  padding: 14px 20px 24px;
+  border-top: 1px solid rgba(168, 85, 247, 0.15);
+  background: linear-gradient(180deg, transparent 0%, rgba(107, 33, 255, 0.03) 100%);
+  position: relative;
+}
+
+.sf::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.4), transparent);
+}
+
+.sf__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ═══ Brand row ═══ */
+.sf__brand-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.sf__tagline {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.85rem;
+  color: #A29DB5;
+  margin: 0;
+}
+
+/* ═══ Nav grid ═══ */
+.sf__nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  text-align: center;
+}
+
+.sf__col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.sf__col-title {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #E8C79A;
+  margin: 0 0 4px;
+  letter-spacing: 0.02em;
+}
+
+.sf__link {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  color: #A29DB5;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+.sf__link:hover { color: #A855F7; }
+
+/* Social */
+.sf__social {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+.sf__social-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  background: rgba(168, 85, 247, 0.06);
+  color: #F4F2FA;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sf__social-btn svg { width: 16px; height: 16px; }
+.sf__social-btn:hover {
+  transform: translateY(-2px);
+  border-color: #A855F7;
+  background: rgba(168, 85, 247, 0.16);
+}
+.sf__social-btn--wa:hover { background: rgba(37, 211, 102, 0.18); border-color: #25D366; }
+.sf__social-btn--fb:hover { background: rgba(24, 119, 242, 0.18); border-color: #1877F2; }
+
+.sf__channel-link {
+  font-size: 0.72rem;
+  color: #D8B4FE;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(37, 211, 102, 0.08);
+  border: 1px solid rgba(37, 211, 102, 0.22);
+  margin-top: 6px;
+  transition: all 0.2s;
+}
+.sf__channel-link:hover {
+  background: rgba(37, 211, 102, 0.18);
+  border-color: rgba(37, 211, 102, 0.5);
+}
+
+/* ═══ Bottom ═══ */
+.sf__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid rgba(168, 85, 247, 0.1);
+}
+
+.sf__palestine {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  text-decoration: none;
+  transition: all 0.22s ease;
+}
+.sf__palestine:hover {
+  background: rgba(168, 85, 247, 0.14);
+  border-color: rgba(168, 85, 247, 0.5);
+  transform: translateY(-1px);
+}
+.sf__palestine-label {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #F4F2FA;
+}
+.sf__palestine-heart {
+  display: inline-flex;
+
+}
+.sf__legal {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  text-align: center;
+}
+.sf__copy {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
+  color: #6B6580;
+  margin: 0;
+}
+.sf__signature {
+  margin: 4px 0 0;
+  text-align: center;
+  position: relative;
+}
+.sf__signature-text {
+  font-family: var(--font-signature, 'Dancing Script', cursive);
+  font-size: 1rem;
+  color: #A29DB5;
+  display: inline-block;
+  padding: 0 12px;
+  position: relative;
+  transition: color 0.35s ease;
+}
+.sf__signature-text::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(168, 85, 247, 0.5) 30%,
+    rgba(232, 199, 154, 0.6) 50%,
+    rgba(168, 85, 247, 0.5) 70%,
+    transparent
+  );
+  transform: scaleX(0.3);
+  transform-origin: center;
+  transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.sf__signature:hover .sf__signature-text {
+  color: #E8C79A;
+}
+.sf__signature:hover .sf__signature-text::after {
+  transform: scaleX(1);
+}
+
+/* ═══ Responsive ═══ */
+@media (max-width: 720px) {
+  .sf { padding: 14px 16px 20px; margin-top: 10px; }
+  .sf__nav { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .sf__inner { gap: 24px; }
+}
+@media (max-width: 420px) {
+  .sf__nav { grid-template-columns: 1fr; gap: 18px; }
+  .sf__brand-row { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf__palestine-heart { animation: none; }
+  .sf__signature-text::after { transition: none; }
+  .sf__social-btn, .sf__palestine { transition: none; }
+}
+
+═══ 5. app/about/page.tsx ═══
+import Link from 'next/link'
+import FloatingCapsuleHeader from '@/components/floating-capsule'
+import SiteFooter from '@/components/site-footer'
+import './about.css'
+
+export const metadata = {
+  title: 'نبذة عننا',
+  description: 'EAH — منصة اكتشاف محلية بتبدأ من شبين القناطر وبتوصل لكل حتة.',
+}
+
+const STATS = [
+  { num: '2026', label: 'سنة التأسيس', color: '#A855F7' },
+  { num: '8', label: 'مناطق مستهدفة', color: '#E8C79A' },
+  { num: '4', label: 'فئات رئيسية', color: '#C084FC' },
+  { num: '100%', label: 'مجاني للعميل', color: '#FBBF24' },
+]
+
+const VALUES = [
+  {
+    emoji: '🎯',
+    title: 'بنوصّلك الصح',
+    body: 'بنفهم مزاجك، موقعك، وميزانيتك. وبنرشحلك الأماكن اللي فعلًا تناسبك — مش الأكثر دفعًا.',
+  },
+  {
+    emoji: '💜',
+    title: 'بنسمعك دايمًا',
+    body: 'كل اقتراح، كل شكوى، وكل فكرة بتوصلنا. وبنبني على أساسها المنصة خطوة بخطوة.',
+  },
+  {
+    emoji: '⚡',
+    title: 'تجربة خفيفة',
+    body: 'من غير تعقيد، ومن غير تسجيل طويل. بتبحث، بتلاقي، وبتواصل — في ثواني.',
+  },
+  {
+    emoji: '🤝',
+    title: 'دعم البيوت المحلية',
+    body: 'بنخلي المطعم الصغير، والصيدلية، والماركت، ومكتب التوصيل — يوصلوا لناس أكتر.',
+  },
+]
+
+const TIMELINE = [
+  {
+    year: '2026',
+    title: 'البداية من شبين القناطر',
+    body: 'الفكرة كانت بسيطة: ناس كتير في المدينة والريف مش لاقيين الأماكن القريبة منها بسهولة. EAH وُلدت عشان تحل ده.',
+  },
+  {
+    year: 'الآن',
+    title: 'بنتوسع منطقة منطقة',
+    body: 'بنضيف مطاعم وصيدليات وماركتات ومكاتب توصيل — كل واحد بيتم اختياره ومناقشته قبل النشر.',
+  },
+  {
+    year: 'قريب',
+    title: 'توسّع أوسع + خدمات أذكى',
+    body: 'بنشتغل على ترشيحات أدق، إشعارات ذكية، وأدوات تساعد التاجر يكبر معانا.',
+  },
+]
+
+export default function AboutPage() {
+  return (
+    <>
+      <FloatingCapsuleHeader />
+      <main className="ab">
+        {/* Hero */}
+        <section className="ab__hero">
+          <div className="ab__hero-glow" aria-hidden />
+          <span className="ab__kicker">ABOUT EAH</span>
+          <h1 className="ab__title">
+            منصة اكتشاف محلية،
+            <br />
+            <span className="ab__title-accent">بتحب المكان اللي فيه</span>
+          </h1>
+          <p className="ab__lead">
+            EAH بدأت من شبين القناطر — هدفنا نوصل كل حد لأقرب مكان محتاجه،
+            بأسهل طريقة، ومن غير أي تعقيد.
+          </p>
+          <div className="ab__hero-cta">
+            <Link href="/explore" className="ab__btn ab__btn--primary">
+              🔍 اكتشف الأماكن
+            </Link>
+            <Link href="/merchant-info" className="ab__btn ab__btn--ghost">
+              🏪 لأصحاب الأنشطة
+            </Link>
+          </div>
+        </section>
+
+        {/* Stats */}
+        <section className="ab__stats">
+          {STATS.map((s) => (
+            <div key={s.label} className="ab__stat">
+              <span className="ab__stat-num" style={{ color: s.color }}>
+                {s.num}
+              </span>
+              <span className="ab__stat-label">{s.label}</span>
+            </div>
+          ))}
+        </section>
+
+        {/* Story */}
+        <section className="ab__section">
+          <header className="ab__section-head">
+            <span className="ab__section-kicker">قصتنا</span>
+            <h2 className="ab__section-title">بدأنا من فكرة صغيرة</h2>
+          </header>
+          <div className="ab__story">
+            <p>
+              في شبين القناطر والقرى حواليها، الوصول لمطعم قريب أو صيدلية مفتوحة أو ماركت
+              فيه احتياجاتك — كان محتاج لفات كتير أو سؤال لناس. EAH جت عشان تختصر كل ده.
+            </p>
+            <p>
+              بنجمع الأماكن المحلية في مكان واحد، بنراجعها بنفسنا، وبنقدمها بشكل مرتب
+              وسهل. والعميل — دايمًا مجانًا.
+            </p>
+            <p>
+              المنصة بتكبر منطقة منطقة، وكل مكان بينضم لـ EAH بيكون مضاف بعناية — مش
+              مجرد رقم في قايمة.
+            </p>
+          </div>
+        </section>
+
+        {/* Values */}
+        <section className="ab__section">
+          <header className="ab__section-head">
+            <span className="ab__section-kicker">قيمنا</span>
+            <h2 className="ab__section-title">4 مبادئ بنمشي عليها</h2>
+          </header>
+          <div className="ab__values">
+            {VALUES.map((v) => (
+              <article key={v.title} className="ab__value">
+                <span className="ab__value-emoji">{v.emoji}</span>
+                <h3 className="ab__value-title">{v.title}</h3>
+                <p className="ab__value-body">{v.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* Timeline */}
+        <section className="ab__section">
+          <header className="ab__section-head">
+            <span className="ab__section-kicker">الرحلة</span>
+            <h2 className="ab__section-title">فين إحنا وفين رايحين</h2>
+          </header>
+          <div className="ab__timeline">
+            {TIMELINE.map((t, i) => (
+              <article key={i} className="ab__tl-item">
+                <div className="ab__tl-dot" aria-hidden />
+                <div className="ab__tl-year">{t.year}</div>
+                <div className="ab__tl-content">
+                  <h3 className="ab__tl-title">{t.title}</h3>
+                  <p className="ab__tl-body">{t.body}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="ab__cta">
+          <h2 className="ab__cta-title">جاهز تبدأ معانا؟</h2>
+          <p className="ab__cta-body">
+            لو بتدور على مكان، أو عندك نشاط وعايز يوصل لناس أكتر — EAH هي المكان الصح.
+          </p>
+          <div className="ab__cta-actions">
+            <Link href="/contact" className="ab__btn ab__btn--primary">
+              💬 تواصل معنا
+            </Link>
+            <Link href="/merchant/apply" className="ab__btn ab__btn--ghost">
+              🏪 سجّل نشاطك
+            </Link>
+          </div>
+        </section>
+      </main>
+      <SiteFooter />
+    </>
+  )
+}
+
+═══ 6. section-slider-v2.css (للمسافات) ═══
+/* EAH Section Slider v2 — Auto-advance cinematic strip */
+
+.ss2 {
+  position: relative;
+  max-width: 1280px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.ss2__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.ss2__title {
+  margin: 0;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
+  font-weight: 900;
+  color: #F4F2FA;
+  letter-spacing: -0.01em;
+}
+.ss2__subtitle {
+  margin: 4px 0 0;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.8rem;
+  color: #A29DB5;
+}
+.ss2__see-all {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #A855F7;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  white-space: nowrap;
+}
+.ss2__see-all:hover {
+  background: rgba(168, 85, 247, 0.18);
+  border-color: rgba(168, 85, 247, 0.5);
+  color: #E8C79A;
+  transform: translateX(-3px);
+}
+
+.ss2__wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.ss2__track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  padding: 6px 4px 14px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.ss2__track::-webkit-scrollbar { display: none; }
+.ss2__track > * { scroll-snap-align: start; }
+
+.ss2__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(20, 14, 34, 0.95), rgba(10, 7, 20, 0.95));
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #C4B5FD;
+  font-size: 1.4rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  z-index: 5;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 85, 247, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s, background 0.2s;
+  font-family: inherit;
+  padding: 0;
+}
+.ss2__wrapper:hover .ss2__nav {
+  opacity: 1;
+  pointer-events: auto;
+}
+.ss2__nav:hover {
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  transform: translateY(-50%) scale(1.06);
+}
+.ss2__nav--prev { inset-inline-start: 6px; }
+.ss2__nav--next { inset-inline-end: 6px; }
+
+/* ═══ Per-section glow ═══ */
+.ss2--featured::before,
+.ss2--trending::before,
+.ss2--new::before,
+.ss2--offers::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  z-index: -1;
+  pointer-events: none;
+}
+.ss2--featured::before { background: radial-gradient(ellipse, #E8C79A 0%, transparent 65%); opacity: 0.18; }
+.ss2--trending::before { background: radial-gradient(ellipse, #FB923C 0%, transparent 65%); opacity: 0.2; }
+.ss2--new::before { background: radial-gradient(ellipse, #C084FC 0%, transparent 65%); opacity: 0.15; }
+.ss2--offers::before { background: radial-gradient(ellipse, #FBBF24 0%, transparent 65%); opacity: 0.2; }
+
+/* ═══ Title accents per section ═══ */
+.ss2--featured .ss2__title { color: #F5D9A7; }
+.ss2--trending .ss2__title { color: #FDBA74; }
+.ss2--new .ss2__title { color: #D8B4FE; }
+.ss2--offers .ss2__title { color: #FCD34D; }
+
+/* ═══ Responsive ═══ */
+@media (max-width: 900px) {
+  .ss2 { padding: 0 16px; margin: 32px auto; }
+}
+@media (max-width: 640px) {
+  .ss2 { padding: 0 12px; margin: 26px auto; }
+  .ss2__head { gap: 10px; }
+  .ss2__see-all { font-size: 0.72rem; padding: 5px 10px; }
+  .ss2__nav { width: 38px; height: 38px; font-size: 1.1rem; }
+  .ss2__track { gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ss2__track { scroll-behavior: auto; }
+  .ss2__nav,
+  .ss2__see-all { transition: none; }
+}
+
+═══ 7. explore-card-v5.css ═══
+/* EAH Explore Card v5 — 3D Flip + Gallery */
+
+.ec5 {
+  display: block;
+  flex: 0 0 auto;
+  width: 240px;
+  min-width: 240px;
+  max-width: 240px;
+  height: 320px;
+  text-decoration: none;
+  color: inherit;
+  perspective: 1200px;
+  outline: none;
+  position: relative;
+}
+.ec5__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.ec5__front,
+.ec5__back {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  transition: opacity 0.35s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* FRONT — visible by default */
+.ec5__front {
+  background: linear-gradient(180deg, #140E22 0%, #0A0714 100%);
+  transform: rotateY(0deg);
+  opacity: 1;
+  z-index: 2;
+}
+.ec5.is-flipped .ec5__front {
+  transform: rotateY(180deg);
+  opacity: 0;
+  z-index: 1;
+}
+
+/* BACK — hidden by default */
+.ec5__back {
+  background: #0A0714;
+  transform: rotateY(-180deg);
+  opacity: 0;
+  z-index: 1;
+}
+.ec5.is-flipped .ec5__back {
+  transform: rotateY(0deg);
+  opacity: 1;
+  z-index: 2;
+}
+
+/* ═══ Front content ═══ */
+.ec5__cover {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  place-items: center;
+}
+.ec5__cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7,6,11,0.05) 0%, rgba(7,6,11,0.55) 55%, rgba(7,6,11,0.92) 100%);
+}
+.ec5__cover-emoji {
+  font-size: 3rem;
+  z-index: 1;
+  filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.55));
+}
+.ec5__badge {
+  position: absolute;
+  top: 12px;
+  inset-inline-start: 12px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #E8C79A, #A67C52);
+  color: #1A0F0A;
+  font-size: 0.66rem;
+  font-weight: 900;
+  z-index: 3;
+  box-shadow: 0 4px 14px rgba(232, 199, 154, 0.4);
+}
+.ec5__offer-badge {
+  position: absolute;
+  top: 12px;
+  inset-inline-end: 52px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(251, 146, 60, 0.9);
+  color: #fff;
+  font-size: 0.64rem;
+  font-weight: 900;
+  z-index: 3;
+}
+.ec5__fav {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  z-index: 4;
+}
+.ec5__front-foot {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  padding: 14px 14px 16px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ec5__name {
+  margin: 0;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.ec5__meta {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.7rem;
+  color: #C4B5FD;
+  font-weight: 700;
+}
+
+/* ═══ Back content ═══ */
+.ec5__gallery {
+  position: absolute;
+  inset: 0;
+}
+.ec5__gallery-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.6s ease-in-out;
+}
+.ec5__gallery-img.is-active { opacity: 1; }
+.ec5__gallery-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 3.5rem;
+}
+.ec5__gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7,6,11,0.5) 0%, rgba(7,6,11,0.75) 50%, rgba(7,6,11,0.95) 100%);
+}
+.ec5__back-content {
+  position: relative;
+  height: 100%;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 8px;
+  z-index: 2;
+}
+.ec5__back-name {
+  margin: 0;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  line-height: 1.25;
+}
+.ec5__stats { display: flex; gap: 8px; flex-wrap: wrap; }
+.ec5__stat {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #C4B5FD;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.ec5__stat small { opacity: 0.65; font-size: 0.62rem; }
+.ec5__hook {
+  margin: 4px 0 0;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #E8C79A;
+  line-height: 1.5;
+}
+.ec5__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.45);
+}
+
+/* ═══ Per-section tints ═══ */
+.ss2--featured .ec5__front,
+.ss2--featured .ec5__back { border-color: rgba(232, 199, 154, 0.4); }
+.ss2--trending .ec5__front,
+.ss2--trending .ec5__back { border-color: rgba(251, 146, 60, 0.4); }
+.ss2--new .ec5__front,
+.ss2--new .ec5__back { border-color: rgba(192, 132, 252, 0.35); }
+.ss2--offers .ec5__front,
+.ss2--offers .ec5__back { border-color: rgba(251, 191, 36, 0.45); }
+
+@media (max-width: 768px) {
+  .ec5 { width: 210px; min-width: 210px; max-width: 210px; height: 280px; }
+}
+@media (max-width: 480px) {
+  .ec5 { width: 175px; min-width: 175px; max-width: 175px; height: 235px; }
+  .ec5__cover-emoji { font-size: 2.4rem; }
+  .ec5__name { font-size: 0.9rem; }
+}
+
+═══ 8. VERSION ═══
+0.3.0
+
+═══ 9. coming-soon.tsx ═══
+'use client'
+import './coming-soon.css'
+
+const FEATURES = [
+  {
+    emoji: '🚚',
+    title: 'تتبّع طلبك لحظة بلحظة',
+    body: 'اعرف طلبك فين بالظبط — من وقت الطلب لحد ما يوصل بابك.',
+    badge: 'قريب',
+    highlight: true,
+  },
+  {
+    emoji: '🤖',
+    title: 'بوت ذكي يطلب بدالك',
+    body: 'اختار الأكل، البوت يجهزه ويرسله لمكانك بدون أي تعقيد.',
+    badge: 'قريب',
+    highlight: true,
+  },
+  {
+    emoji: '💬',
+    title: 'شات مباشر مع المكان',
+    body: 'اسأل، اطلب، واتفق — كل ده جوّه EAH.',
+    badge: 'قريب',
+  },
+  {
+    emoji: '🎁',
+    title: 'نظام نقاط أوفر',
+    body: 'نقاط على كل تفاعل — تقييم، دعوة، أو طلب.',
+    badge: 'قريب',
+  },
+  {
+    emoji: '📍',
+    title: 'خرائط تفاعلية',
+    body: 'شوف الأماكن على الخريطة، اعرف المسافة والوقت المتوقع.',
+    badge: 'قريب',
+  },
+  {
+    emoji: '🌍',
+    title: 'توسّع مناطق جديدة',
+    body: 'من شبين القناطر لكل القرى. كل أسبوع مناطق جديدة.',
+    badge: 'قريب',
+  },
+]
+
+export default function ComingSoon() {
+  return (
+    <section className="cs">
+      <header className="cs__head">
+        <span className="cs__kicker">COMING SOON</span>
+        <h2 className="cs__title">ميزات جاية قريب</h2>
+        <p className="cs__sub">
+          كل تحديث بيجيب ميزة جديدة — وكلها بدون أي تلاعب بالنقاط أو التجربة.
+        </p>
+      </header>
+
+      <div className="cs__grid">
+        {FEATURES.map((f, i) => (
+          <article
+            key={f.title}
+            className={`cs__card ${f.highlight ? 'cs__card--highlight' : ''}`}
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <span className="cs__badge">{f.badge}</span>
+            <span className="cs__emoji">{f.emoji}</span>
+            <h3 className="cs__card-title">{f.title}</h3>
+            <p className="cs__card-body">{f.body}</p>
+          </article>
+        ))}
+      </div>
+
+      <div className="cs__cta-row">
+        <a href="/merchant-info" className="cs__cta cs__cta--owner">
+          🏪 عندك نشاط؟ اعرف أكتر
+        </a>
+        <a
+          href="/support-palestine"
+          className="cs__cta cs__cta--palestine"
+        >
+          🇵🇸 فلسطين في القلب
+        </a>
+        <a
+          href="https://wa.me/201012892806"
+          target="_blank"
+          rel="noreferrer"
+          className="cs__cta"
+        >
+          💬 تابع واتساب
+        </a>
+      </div>
+    </section>
+  )
+}
+
+═══ 10. trust-section.tsx ═══
+import Link from 'next/link'
+import './trust-section.css'
+
+const FEATURES = [
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="m9 12 2 2 4-4"/>
+      </svg>
+    ),
+    title: 'أماكن موثوقة',
+    desc: 'كل مكان بيتم التحقق منه قبل النشر',
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </svg>
+    ),
+    title: 'معلومات محدّثة',
+    desc: 'مواعيد، عروض، وأرقام دايماً جديدة',
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+      </svg>
+    ),
+    title: 'تقييمات حقيقية',
+    desc: 'آراء من ناس زيك — مش إعلانات',
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+      </svg>
+    ),
+    title: 'اكتشاف ذكي',
+    desc: 'ترشيحات على مزاجك بالذكاء الاصطناعي',
+  },
+]
+
+export default function TrustSection() {
+  return (
+    <section className="trust">
+      <header className="trust__head">
+        <h2 className="trust__title">ليه تستخدم <span className="trust__accent">EAH</span>؟</h2>
+      </header>
+
+      <div className="trust__grid">
+        {FEATURES.map((f, i) => (
+          <div key={i} className="trust__card">
+            <span className="trust__icon">{f.icon}</span>
+            <strong className="trust__card-title">{f.title}</strong>
+            <p className="trust__card-desc">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="trust__cta">
+        <Link href="/auth" className="trust__cta-btn">ابدأ الآن — سجّل بسرعة</Link>
+        <Link href="/about" className="trust__cta-link">اعرف أكتر عننا ←</Link>
+      </div>
+    </section>
+  )
+}
+
+═══ 11. visitor-welcome.tsx ═══
+'use client'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase-browser'
+import './visitor-welcome.css'
+
+const BENEFITS = [
+  {
+    emoji: '🍽️',
+    title: 'اكتشف أماكن جديدة',
+    body: 'مطاعم، صيدليات، ماركت، توصيل — كله في مكان واحد.',
+  },
+  {
+    emoji: '🔥',
+    title: 'عروض حقيقية',
+    body: 'خصومات يومية من الأماكن اللي بتحبها.',
+  },
+  {
+    emoji: '⭐',
+    title: 'قيّم وشارك',
+    body: 'رأيك يساعد غيرك يلاقي الأفضل.',
+  },
+  {
+    emoji: '💰',
+    title: 'نقاط ومكافآت',
+    body: 'اكسب نقاط على كل تفاعل — واستبدلها بعروض.',
+  },
+]
+
+const MERCHANT_BENEFITS = [
+  {
+    emoji: '🏪',
+    title: 'ظهور مجاني',
+    body: 'سجّل نشاطك واعرضه لآلاف العملاء.',
+  },
+  {
+    emoji: '📊',
+    title: 'تحليلات نشاطك',
+    body: 'اعرف مين بيدور عليك وامتى.',
+  },
+  {
+    emoji: '💬',
+    title: 'رد على التقييمات',
+    body: 'تواصل مباشر مع عملائك.',
+  },
+  {
+    emoji: '🚀',
+    title: 'اشتراك مميز',
+    body: 'ظهور أول + معرض عروض + شارة مميز.',
+  },
+]
+
+export default function VisitorWelcome() {
+  const [show, setShow] = useState(false)
+
+  useEffect(() => {
+    let alive = true
+    const dismissed = localStorage.getItem('eah-visitor-dismissed') === '1'
+    if (dismissed) return
+
+    const supabase = createClient()
+    void (async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (alive && !user) setShow(true)
+    })()
+    return () => { alive = false }
+  }, [])
+
+  function dismiss() {
+    localStorage.setItem('eah-visitor-dismissed', '1')
+    setShow(false)
+  }
+
+  if (!show) return null
+
+  return (
+    <section className="vw">
+      <button
+        type="button"
+        className="vw__close"
+        onClick={dismiss}
+        aria-label="إغلاق"
+      >
+        ×
+      </button>
+
+      <header className="vw__head">
+        <span className="vw__kicker">لأول مرة على EAH؟</span>
+        <h2 className="vw__title">اعرف بتستفيد إيه</h2>
+        <p className="vw__sub">كل حاجة في EAH مجانية للعميل — بدون رسوم، بدون تعقيد.</p>
+      </header>
+
+      <div className="vw__section">
+        <h3 className="vw__section-title">
+          <span className="vw__section-icon">🛍️</span>
+          لو أنت عميل
+        </h3>
+        <div className="vw__grid">
+          {BENEFITS.map((b) => (
+            <div key={b.title} className="vw__card">
+              <span className="vw__emoji">{b.emoji}</span>
+              <h4 className="vw__card-title">{b.title}</h4>
+              <p className="vw__card-body">{b.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="vw__section">
+        <h3 className="vw__section-title">
+          <span className="vw__section-icon">🏪</span>
+          لو عندك نشاط
+        </h3>
+        <div className="vw__grid">
+          {MERCHANT_BENEFITS.map((b) => (
+            <div key={b.title} className="vw__card vw__card--merchant">
+              <span className="vw__emoji">{b.emoji}</span>
+              <h4 className="vw__card-title">{b.title}</h4>
+              <p className="vw__card-body">{b.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="vw__cta">
+        <Link href="/auth" className="vw__btn vw__btn--primary">
+          ابدأ مجاناً
+        </Link>
+        <a
+          href="https://wa.me/201012892806?text=%D8%B9%D8%A7%D9%8A%D8%B2%20%D8%A3%D8%B9%D8%B1%D9%81%20%D8%A3%D9%83%D8%AA%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%A8%D8%A7%D9%82%D8%A7%D8%AA"
+          target="_blank"
+          rel="noreferrer"
+          className="vw__btn vw__btn--ghost"
+        >
+          💬 تواصل واتساب
+        </a>
+      </div>
+    </section>
+  )
+}
+
+═══ 12. visitor-value.tsx ═══
+'use client'
+import Link from 'next/link'
+import './visitor-value.css'
+
+const CARDS = [
+  {
+    key: 'discover',
+    emoji: '🔍',
+    title: 'اكتشف اللي حواليك',
+    body: 'مطاعم، صيدليات، ماركت، وتوصيل — كل ده على بُعد خطوة',
+    cta: { label: 'اكتشف', href: '/explore' },
+    accent: 'purple',
+  },
+  {
+    key: 'recommend',
+    emoji: '✨',
+    title: 'قول مزاجك واحنا نظبط',
+    body: 'ترشيحات ذكية على حسب ميزانيتك ومنطقتك ومزاجك',
+    cta: { label: 'جرّب', href: '/recommend' },
+    accent: 'gold',
+  },
+  {
+    key: 'order',
+    emoji: '🛒',
+    title: 'اطلب من أي مكان',
+    body: 'اكتب طلبك — يوصل مباشرة على واتساب المكان. بدون وسيط',
+    cta: { label: 'شوف الأماكن', href: '/explore' },
+    accent: 'purple',
+  },
+  {
+    key: 'partner',
+    emoji: '🏪',
+    title: 'عندك نشاط؟',
+    body: 'سجّل نشاطك مجاناً — بدون عمولة. اعرض لآلاف العملاء',
+    cta: { label: 'سجّل نشاطك', href: '/merchant/apply' },
+    accent: 'gold',
+  },
+]
+
+export default function VisitorValue() {
+  return (
+    <section className="vv" aria-label="ليه EAH">
+      <header className="vv__head">
+        <h2 className="vv__title">ليه تستخدم EAH؟</h2>
+        <p className="vv__sub">كل حاجة محتاجها — في مكان واحد</p>
+      </header>
+
+      <div className="vv__grid">
+        {CARDS.map((c) => (
+          <article key={c.key} className={`vv__card vv__card--${c.accent}`}>
+            <span className="vv__emoji">{c.emoji}</span>
+            <h3 className="vv__card-title">{c.title}</h3>
+            <p className="vv__card-body">{c.body}</p>
+            <Link href={c.cta.href} className="vv__cta">
+              {c.cta.label} ←
+            </Link>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+═══ 13. ls docs/handoff/ ═══
+README.md
+
+═══ 14. ls docs/ ═══
+AGENT_BRIEF.md
+BIG_PROJECTS_BACKLOG.md
+CHANGELOG_ACTIVE.md
+COMPETITORS_ANALYSIS.md
+FEATURES_TODO.md
+handoff
+HANDOFF_2026_09_15.md
+MASTER_REQUIREMENTS.md
+PROJECT_BIBLE.md
+RELEASE_PROCESS.md
+SECURITY-HARDENING.md
+SESSION_HANDOFF.md
+VOICE_AND_TONE.md
+
+═══ 15. ls 08-web/app/about/ ═══
+about.css
+page.tsx
+
+═══ 16. عدد migrations ═══
+31
+
+═══ 17. git log --oneline -5 ═══
+548dc6b fix(assets+copy): square PNG icons + PWA manifest cleanup + voice alignment
+785fad9 chore(cache): force cache bust for CSS and layout
+905286a fix(logo): v6 — 100% inline styles, zero CSS dependency
+c208b2a fix(logo): v5 — CSS variables for crown positioning (guaranteed)
+1d2854b fix(logo): v4 — crown glued to E via inline px (top/left/width/height)
+
+═══ 18. ls 08-web/components/ | wc -l ═══
+54
+
+═══ 19. ls 08-web/app/ | wc -l ═══
+42
