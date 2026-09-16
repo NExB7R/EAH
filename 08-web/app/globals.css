@@ -55,7 +55,7 @@ button, a {
 .static-page {
   max-width: 720px;
   margin: 0 auto;
-  padding: 24px 24px 60px;
+  padding: 14px 24px 60px;
 }
 .static-page__back {
   display: inline-flex;
@@ -70,7 +70,7 @@ button, a {
   font-family: var(--eah-font-body);
   font-size: 0.82rem;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin-bottom: 10px;
   transition: all 200ms var(--eah-ease);
 }
 .static-page__back:hover {
@@ -219,7 +219,7 @@ button, a {
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
-main > section { padding-block: 24px !important; }
+main > section { padding-block: 14px !important; }
 main > section + section { margin-top: 0 !important; }
 main > section:first-of-type { padding-top: 8px !important; }
 

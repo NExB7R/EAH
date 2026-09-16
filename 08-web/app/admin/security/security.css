@@ -40,7 +40,7 @@
 }
 .sec__section-sub { font-size: 0.8rem; color: #A29DB5; margin: 0; }
 .sec__badge { padding: 2px 8px; border-radius: 999px; font-size: 0.68rem; font-weight: 900; }
-.sec__badge--ok { background: rgba(74, 222, 128, 0.18); color: #6EE7B7; }
+.sec__badge--ok { background: rgba(192, 132, 252, 0.18); color: #6EE7B7; }
 .sec__badge--warn { background: rgba(251, 191, 36, 0.18); color: #FCD34D; }
 .sec__link { color: #A855F7; font-weight: 800; text-decoration: none; }
 
@@ -60,8 +60,8 @@
   border: 1px solid;
 }
 .sec__env-item.is-ok {
-  background: rgba(74, 222, 128, 0.06);
-  border-color: rgba(74, 222, 128, 0.28);
+  background: rgba(192, 132, 252, 0.06);
+  border-color: rgba(192, 132, 252, 0.28);
   color: #6EE7B7;
 }
 .sec__env-item.is-miss {

@@ -27,12 +27,12 @@ export default async function AdminHomePage() {
 
   const stats = [
     { label: 'الأنشطة', value: totalBiz ?? 0, icon: '🏪', href: '/admin/businesses', color: 'var(--eah-purple-2)' },
-    { label: 'منشور', value: publishedBiz ?? 0, icon: '📢', href: '/admin/businesses', color: 'var(--eah-green-disabled)' },
+    { label: 'منشور', value: publishedBiz ?? 0, icon: '📢', href: '/admin/businesses', color: 'var(--eah-purple-soft)' },
     { label: 'مميز', value: featuredBiz ?? 0, icon: '⭐', href: '/admin/businesses', color: 'var(--eah-gold)' },
     { label: 'مستخدمين', value: totalUsers ?? 0, icon: '👥', href: '/admin/users', color: 'var(--eah-purple-3)' },
     { label: 'عروض', value: totalOffers ?? 0, icon: '🔥', href: '/admin/offers', color: '#FB923C' },
     { label: 'طلبات تعديل', value: pendingChanges ?? 0, icon: '📝', href: '/admin/change-requests', color: 'var(--eah-gold)' },
-    { label: 'طلبات توثيق', value: pendingVerif ?? 0, icon: '✓', href: '/admin/verifications', color: 'var(--eah-green-disabled)' },
+    { label: 'طلبات توثيق', value: pendingVerif ?? 0, icon: '✓', href: '/admin/verifications', color: 'var(--eah-purple-soft)' },
   ]
 
   return (

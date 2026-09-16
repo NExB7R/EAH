@@ -2,7 +2,7 @@
 
 .hh {
   position: relative;
-  padding: 24px 20px 60px;
+  padding: 14px 20px 60px;
   overflow: hidden;
   isolation: isolate;
 }
@@ -212,7 +212,7 @@
   height: 6px;
   border-radius: 50%;
   background: #C084FC;
-  box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+  box-shadow: 0 0 8px rgba(192, 132, 252, 0.6);
 }
 
 @keyframes hh-fade-up {
@@ -221,7 +221,7 @@
 }
 
 @media (max-width: 640px) {
-  .hh { padding: 24px 16px 40px; }
+  .hh { padding: 14px 16px 40px; }
   .hh__cats { grid-template-columns: repeat(2, 1fr); }
   .hh__trust { gap: 12px; }
   .hh__trust-item { font-size: 0.68rem; }

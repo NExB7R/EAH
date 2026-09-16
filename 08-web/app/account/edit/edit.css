@@ -181,8 +181,8 @@
   border: 1px solid rgba(168, 85, 247, 0.18);
 }
 .edit__status-card.is-verified {
-  background: rgba(74, 222, 128, 0.06);
-  border-color: rgba(74, 222, 128, 0.3);
+  background: rgba(192, 132, 252, 0.06);
+  border-color: rgba(192, 132, 252, 0.3);
 }
 .edit__status-card--admin {
   background: linear-gradient(135deg, rgba(232, 199, 154, 0.08), rgba(168, 85, 247, 0.05));
@@ -200,8 +200,8 @@
   flex-shrink: 0;
 }
 .edit__status-card.is-verified .edit__status-icon {
-  background: rgba(74, 222, 128, 0.18);
-  border-color: rgba(74, 222, 128, 0.4);
+  background: rgba(192, 132, 252, 0.18);
+  border-color: rgba(192, 132, 252, 0.4);
 }
 .edit__status-card--admin .edit__status-icon {
   background: rgba(232, 199, 154, 0.15);

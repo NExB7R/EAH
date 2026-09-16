@@ -99,7 +99,7 @@ export default function OfferForm({ mode, action, businessSlug, businessId, init
       </div>
 
       {state.message && (
-        <div className="admin-card" style={{ borderColor: state.ok ? 'rgba(74,222,128,0.4)' : 'rgba(248,113,113,0.4)', color: state.ok ? 'var(--eah-green-disabled)' : 'var(--eah-red)' }}>
+        <div className="admin-card" style={{ borderColor: state.ok ? 'rgba(192,132,252,0.4)' : 'rgba(248,113,113,0.4)', color: state.ok ? 'var(--eah-purple-soft)' : 'var(--eah-red)' }}>
           {state.message}
         </div>
       )}

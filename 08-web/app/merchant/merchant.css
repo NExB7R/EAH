@@ -109,8 +109,8 @@
 }
 .mbiz__badge--type { background: var(--eah-purple-soft); color: var(--eah-purple-3); border-color: var(--eah-border-2); }
 .mbiz__badge--featured { background: var(--eah-gradient-gold); color: var(--eah-black-2); border: none; }
-.mbiz__badge--published { background: rgba(74, 222, 128, 0.15); color: var(--eah-green-disabled); border-color: rgba(74, 222, 128, 0.35); }
-.mbiz__badge--open { background: rgba(74, 222, 128, 0.1); color: var(--eah-green-disabled); border-color: rgba(74, 222, 128, 0.25); }
+.mbiz__badge--published { background: rgba(192, 132, 252, 0.15); color: var(--eah-purple-soft); border-color: rgba(192, 132, 252, 0.35); }
+.mbiz__badge--open { background: rgba(192, 132, 252, 0.1); color: var(--eah-purple-soft); border-color: rgba(192, 132, 252, 0.25); }
 .mbiz__actions {
   display: flex;
   gap: 6px;

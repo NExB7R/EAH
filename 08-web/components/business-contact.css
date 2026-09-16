@@ -48,8 +48,8 @@
   transition: all var(--eah-t) var(--eah-ease);
 }
 .bcontact__item.is-revealed {
-  border-color: rgba(74, 222, 128, 0.4);
-  background: rgba(74, 222, 128, 0.06);
+  border-color: rgba(192, 132, 252, 0.4);
+  background: rgba(192, 132, 252, 0.06);
 }
 .bcontact__item.is-primary { border-color: var(--eah-border-gold); }
 .bcontact__item-head { display: flex; align-items: center; gap: 8px; }
@@ -74,7 +74,7 @@
   font-family: var(--eah-font-body);
   font-size: 0.95rem;
   font-weight: 900;
-  color: var(--eah-green-disabled);
+  color: var(--eah-purple-soft);
   text-decoration: none;
   text-align: start;
   direction: ltr;

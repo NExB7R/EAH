@@ -41,7 +41,7 @@ export default async function MerchantReportPage({
     { label: `زيارات (${rangeDays}ي)`, value: viewsCount ?? 0, emoji: '👁', color: 'var(--eah-purple-2)' },
     { label: `كشوف (${rangeDays}ي)`, value: revealsCount ?? 0, emoji: '📞', color: '#A855F7' },
     { label: 'إجمالي التقييمات', value: stats.review_count, emoji: '⭐', color: 'var(--eah-gold)' },
-    { label: 'متوسط التقييم', value: stats.avg_rating.toFixed(1), emoji: '📊', color: 'var(--eah-green-disabled)' },
+    { label: 'متوسط التقييم', value: stats.avg_rating.toFixed(1), emoji: '📊', color: 'var(--eah-purple-soft)' },
     { label: 'عروض نشطة', value: stats.active_offers, emoji: '🔥', color: '#FB923C' },
   ]
 
@@ -231,9 +231,9 @@ export default async function MerchantReportPage({
           margin-inline-start: auto;
           padding: 6px 12px;
           border-radius: 8px;
-          background: rgba(74, 222, 128, 0.08);
-          border: 1px solid rgba(74, 222, 128, 0.3);
-          color: var(--eah-green-disabled);
+          background: rgba(192, 132, 252, 0.08);
+          border: 1px solid rgba(192, 132, 252, 0.3);
+          color: var(--eah-purple-soft);
           font-family: var(--eah-font-body);
           font-size: 0.72rem;
           font-weight: 800;
@@ -241,8 +241,8 @@ export default async function MerchantReportPage({
           transition: all 0.2s;
         }
         .mrange__export:hover {
-          background: rgba(74, 222, 128, 0.18);
-          border-color: rgba(74, 222, 128, 0.55);
+          background: rgba(192, 132, 252, 0.18);
+          border-color: rgba(192, 132, 252, 0.55);
         }
       `}</style>
     </>
