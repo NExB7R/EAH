@@ -5,23 +5,17 @@ import './splash-screen.css'
 export default function SplashScreen() {
   const [gone, setGone] = useState(false)
   const [fading, setFading] = useState(false)
-
   useEffect(() => {
     if (typeof window === 'undefined') return
-    if (sessionStorage.getItem('eah-splash-shown') === '1') {
-      setGone(true)
-      return
-    }
-    const t1 = setTimeout(() => setFading(true), 900)
+    if (sessionStorage.getItem('eah-splash-shown') === '1') { setGone(true); return }
+    const t1 = setTimeout(() => setFading(true), 700)
     const t2 = setTimeout(() => {
       setGone(true)
       sessionStorage.setItem('eah-splash-shown', '1')
-    }, 1300)
+    }, 1000)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
-
   if (gone) return null
-
   return (
     <div className={`splash ${fading ? 'is-fading' : ''}`} aria-hidden>
       <div className="splash__inner">

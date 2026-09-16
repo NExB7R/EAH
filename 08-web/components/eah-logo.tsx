@@ -11,10 +11,10 @@ type Props = {
 }
 
 const SIZE_MAP = {
-  sm: { word: 88,  crown: 30, topRatio: -0.22, restLeft: 0 },
-  md: { word: 130, crown: 42, topRatio: -0.22, restLeft: 2 },
-  lg: { word: 180, crown: 58, topRatio: -0.22, restLeft: 4 },
-  xl: { word: 240, crown: 78, topRatio: -0.22, restLeft: 6 },
+  sm: { word: 88,  crown: 30, topRatio: -0.70, restLeft: 0 },
+  md: { word: 130, crown: 42, topRatio: -0.70, restLeft: 2 },
+  lg: { word: 180, crown: 58, topRatio: -0.70, restLeft: 4 },
+  xl: { word: 240, crown: 78, topRatio: -0.70, restLeft: 6 },
 }
 
 export default function EahLogo({
@@ -33,7 +33,7 @@ export default function EahLogo({
   const content = (
     <span
       dir="ltr"
-      data-eah-logo="v14"
+      data-eah-logo="v15"
       
       
       
@@ -85,7 +85,7 @@ export default function EahLogo({
             pointerEvents: 'none',
             transformOrigin: '50% 100%',
             transform: `rotate(${crownRotation}deg)`,
-            animation: 'crownPulse 4s ease-in-out infinite',
+            animation: 'crownPulse 3s ease-in-out infinite',
             filter:
               'drop-shadow(0 3px 10px rgba(251,191,36,0.9)) drop-shadow(0 0 22px rgba(232,199,154,0.6))',
           }}
