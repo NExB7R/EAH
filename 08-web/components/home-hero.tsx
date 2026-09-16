@@ -11,16 +11,10 @@ const CATEGORIES = [
   { type: 'delivery_office', emoji: '🛵', label: 'توصيل' },
 ]
 
-
-
 export default function HomeHero() {
   return (
     <section className="hh">
-      </div>
-
       <div className="hh__inner">
-        
-
         <div className="hh__logo">
           <EahLogo size="xl" variant="full" href="/" />
         </div>
@@ -29,6 +23,7 @@ export default function HomeHero() {
           <span className="hh__tagline-pin" aria-hidden>📍</span>
           <span className="hh__tagline-city">دولة شبين القناطر تتحدّث</span>
         </div>
+
         <h2 className="hh__hook">EAH بتجمع كل حاجة حواليك في مكان واحد.</h2>
 
         <div className="hh__search">
