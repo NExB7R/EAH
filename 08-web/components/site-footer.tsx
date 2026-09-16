@@ -10,76 +10,61 @@ export default function SiteFooter() {
   return (
     <footer className="sf">
       <div className="sf__inner">
-        {/* Brand row */}
         <div className="sf__brand-row">
           <EahLogo size="md" variant="full" href="/" />
-          </div>
+          <p className="sf__tagline">منصة اكتشاف محلية — شبين القناطر والقرى حواليها</p>
+        </div>
 
-        {/* Nav grid */}
         <nav className="sf__nav">
           <div className="sf__col">
-            <h4 className="sf__col-title">EAH</h4>
-            <a href="/about" className="sf__link">نبذة عننا</a>
-            <a href="/contact" className="sf__link">تواصل معنا</a>
-            <a href="/advertise" className="sf__link">أعلن معنا</a>
-            <a href="/pricing" className="sf__link">الباقات والأسعار</a>
+            <h4 className="sf__col-title">اكتشف</h4>
+            <a href="/explore" className="sf__link">كل الأماكن</a>
+            <a href="/featured" className="sf__link">المميزين</a>
+            <a href="/trends" className="sf__link">مولعة النهاردة</a>
+            <a href="/new" className="sf__link">الجديد</a>
+            <a href="/offers" className="sf__link">العروض</a>
           </div>
 
           <div className="sf__col">
-            <h4 className="sf__col-title">للأعمال</h4>
-            <a href="/merchant-info" className="sf__link">مميزات لأصحاب الأنشطة</a>
+            <h4 className="sf__col-title">لأصحاب الأنشطة</h4>
+            <a href="/merchant-info" className="sf__link">ليه EAH؟</a>
             <a href="/merchant/apply" className="sf__link">سجّل نشاطك</a>
-            <a href="/merchant-info" className="sf__link">الباقات</a>
-            <a href="/advertise" className="sf__link">إعلانات</a>
+            <a href="/pricing" className="sf__link">الباقات</a>
+            <a href="/advertise" className="sf__link">أعلن معانا</a>
+          </div>
+
+          <div className="sf__col">
+            <h4 className="sf__col-title">عننا</h4>
+            <a href="/about" className="sf__link">نبذة عننا</a>
+            <a href="/contact" className="sf__link">تواصل معانا</a>
+            <a href="/support-palestine" className="sf__link">فلسطين في القلب</a>
           </div>
 
           <div className="sf__col">
             <h4 className="sf__col-title">قانوني</h4>
             <a href="/terms" className="sf__link">الشروط والأحكام</a>
             <a href="/privacy" className="sf__link">سياسة الخصوصية</a>
-            <a href="/cookies" className="sf__link">ملفات تعريف الارتباط</a>
+            <a href="/cookies" className="sf__link">الكوكيز</a>
           </div>
 
           <div className="sf__col">
             <h4 className="sf__col-title">تابعنا</h4>
             <div className="sf__social">
-              <a
-                href={waLink('السلام عليكم، تابعت EAH وعايز أعرف أكتر')}
-                target="_blank"
-                rel="noreferrer"
-                className="sf__social-btn sf__social-btn--wa"
-                aria-label="واتساب"
-              >
+              <a href={waLink('السلام عليكم، من EAH')} target="_blank" rel="noreferrer" className="sf__social-btn sf__social-btn--wa" aria-label="واتساب">
                 <IconWhatsapp />
               </a>
-              <a
-                href={CONTACT_CHANNELS.facebook.page}
-                target="_blank"
-                rel="noreferrer"
-                className="sf__social-btn sf__social-btn--fb"
-                aria-label="فيسبوك"
-              >
+              <a href={CONTACT_CHANNELS.facebook.page} target="_blank" rel="noreferrer" className="sf__social-btn sf__social-btn--fb" aria-label="فيسبوك">
                 <IconFacebook />
               </a>
             </div>
-            <a
-              href={CONTACT_CHANNELS.whatsapp.channel}
-              target="_blank"
-              rel="noreferrer"
-              className="sf__channel-link"
-            >
+            <a href={CONTACT_CHANNELS.whatsapp.channel} target="_blank" rel="noreferrer" className="sf__channel-link">
               📣 قناة واتساب
             </a>
           </div>
         </nav>
 
-        {/* Palestine + bottom row */}
         <div className="sf__bottom">
-          <a
-            href="/support-palestine"
-            className="sf__palestine"
-            aria-label="فلسطين في القلب"
-          >
+          <a href="/support-palestine" className="sf__palestine" aria-label="فلسطين في القلب">
             <span className="sf__palestine-label">فلسطين في القلب</span>
             <span className="sf__palestine-heart" aria-hidden>
               <svg viewBox="0 0 32 28" width="20" height="18">
@@ -94,19 +79,14 @@ export default function SiteFooter() {
                   <rect x="0" y="18" width="32" height="10" fill="#149954" />
                   <polygon points="0,0 10,14 0,28" fill="#E4312B" />
                 </g>
-                <path
-                  d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z"
-                  fill="none" stroke="#A855F7" strokeWidth="1.4" strokeLinejoin="round"
-                />
+                <path d="M16 27S2 18 2 10a7 7 0 0 1 14-2 7 7 0 0 1 14 2c0 8-14 17-14 17Z" fill="none" stroke="#A855F7" strokeWidth="1.4" strokeLinejoin="round" />
               </svg>
             </span>
           </a>
 
           <div className="sf__legal">
-            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة <span className="sf__version">v0.3.6</span></p>
-            <p className="sf__signature">
-              <span className="sf__signature-text">NourEldin B7R</span>
-            </p>
+            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة <span className="sf__version">v0.4.0</span></p>
+            <p className="sf__signature"><span className="sf__signature-text">NourEldin B7R</span></p>
           </div>
         </div>
       </div>
