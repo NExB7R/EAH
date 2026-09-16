@@ -1,5 +1,5 @@
 'use client'
-// v11 — crown closer to word (topRatio -0.30)
+// v12 — crown slides from E to word-center on hover
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -10,13 +10,11 @@ type Props = {
   showTagline?: boolean
 }
 
-// crown_top نسبة من عرض التاج — سالب يعني فوق الكلمة، موجب يعني جوّه
-// قيمة -0.55 تعني "ارتفاع التاج × 55% فوق الكلمة"
 const SIZE_MAP = {
-  sm: { word: 88,  crown: 30, topRatio: -0.30, left: 0 },
-  md: { word: 130, crown: 42, topRatio: -0.30, left: 2 },
-  lg: { word: 180, crown: 58, topRatio: -0.30, left: 4 },
-  xl: { word: 240, crown: 78, topRatio: -0.30, left: 6 },
+  sm: { word: 88,  crown: 30, topRatio: -0.30, restLeft: 0 },
+  md: { word: 130, crown: 42, topRatio: -0.30, restLeft: 2 },
+  lg: { word: 180, crown: 58, topRatio: -0.30, restLeft: 4 },
+  xl: { word: 240, crown: 78, topRatio: -0.30, restLeft: 6 },
 }
 
 export default function EahLogo({
@@ -28,16 +26,14 @@ export default function EahLogo({
   const s = SIZE_MAP[size]
   const [hover, setHover] = useState(false)
 
-  // hover: crown ينزل شوية
-  const topOffset = s.crown * s.topRatio
-  const hoverOffset = s.crown * (s.topRatio + 0.15)
-
-  const crownTop = hover ? hoverOffset : topOffset
+  const crownTop = s.crown * s.topRatio
+  const crownLeft = hover ? (s.word - s.crown) / 2 : s.restLeft
+  const crownRotation = hover ? 0 : -24
 
   const content = (
     <span
       dir="ltr"
-      data-eah-logo="v11"
+      data-eah-logo="v12"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onTouchStart={() => setHover(true)}
@@ -79,7 +75,7 @@ export default function EahLogo({
           style={{
             position: 'absolute',
             top: `${crownTop}px`,
-            left: `${s.left}px`,
+            left: `${crownLeft}px`,
             width: `${s.crown}px`,
             height: `${s.crown}px`,
             zIndex: 3,
@@ -88,8 +84,8 @@ export default function EahLogo({
             justifyContent: 'center',
             pointerEvents: 'none',
             transformOrigin: '50% 100%',
-            transform: 'rotate(-24deg)',
-            transition: 'top 0.55s cubic-bezier(0.34, 1.4, 0.64, 1)',
+            transform: `rotate(${crownRotation}deg)`,
+            transition: 'left 0.7s cubic-bezier(0.34, 1.4, 0.64, 1), transform 0.7s cubic-bezier(0.34, 1.4, 0.64, 1)',
             filter:
               'drop-shadow(0 3px 10px rgba(251,191,36,0.9)) drop-shadow(0 0 22px rgba(232,199,154,0.6))',
           }}
