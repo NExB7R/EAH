@@ -5,7 +5,7 @@ import './legal.css'
 
 export const metadata = {
   title: 'ملفات تعريف الارتباط',
-  description: 'إزاي بنستخدم ملفات الارتباط (cookies) في EAH.',
+  description: 'إزاي بنستخدم ملفات الارتباط (كوكيز) في EAH.',
 }
 
 const LAST_UPDATE = '2026-09-15'
@@ -37,10 +37,10 @@ export default function CookiesPage() {
       <FloatingCapsuleHeader />
       <main className="lg">
         <section className="lg__hero">
-          <span className="lg__kicker">COOKIES POLICY</span>
+          <span className="lg__kicker">كوكيز POLICY</span>
           <h1 className="lg__title">ملفات تعريف الارتباط</h1>
           <p style={{ margin: 0, fontSize: '.9rem', color: '#A29DB5', lineHeight: 1.7 }}>
-            إزاي بنستخدم الـ cookies وإيه حقك في التحكم.
+            إزاي بنستخدم الـ كوكيز وإيه حقك في التحكم.
           </p>
           <div className="lg__meta">
             <span className="lg__meta-item">📅 آخر تحديث: {LAST_UPDATE}</span>
@@ -52,7 +52,7 @@ export default function CookiesPage() {
             <h2 className="lg__section-title">إيه هي ملفات الارتباط؟</h2>
             <div className="lg__section-body">
               <p>
-                ملفات ارتباط (cookies) هي ملفات صغيرة بتتحفظ على جهازك لما تزور موقع.
+                ملفات ارتباط (كوكيز) هي ملفات صغيرة بتتحفظ على جهازك لما تزور موقع.
                 بتساعد الموقع يفتكرك ويحسّن تجربتك.
               </p>
             </div>
@@ -107,12 +107,12 @@ export default function CookiesPage() {
             <div className="lg__section-body">
               <p>تقدر تتحكم في ملفات الارتباط بطرق مختلفة:</p>
               <ul>
-                <li><strong>من المتصفح:</strong> كل متصفح عنده إعدادات لـ cookies.</li>
-                <li><strong>وضع التصفح الخاص:</strong> بيمسح كل الـ cookies بعد الجلسة.</li>
+                <li><strong>من المتصفح:</strong> كل متصفح عنده إعدادات لـ كوكيز.</li>
+                <li><strong>وضع التصفح الخاص:</strong> بيمسح كل الـ كوكيز بعد الجلسة.</li>
                 <li><strong>إضافات:</strong> في إضافات بتديك تحكم دقيق.</li>
               </ul>
               <p>
-                لو عطلت الـ cookies الضرورية، ممكن متقدرش تسجّل دخول أو تستخدم بعض
+                لو عطلت الـ كوكيز الضرورية، ممكن متقدرش تسجّل دخول أو تستخدم بعض
                 الميزات.
               </p>
             </div>
@@ -122,8 +122,8 @@ export default function CookiesPage() {
             <h2 className="lg__section-title">مدة الحفظ</h2>
             <div className="lg__section-body">
               <ul>
-                <li><strong>Session cookies:</strong> بتُمسح لما تقفل المتصفح.</li>
-                <li><strong>Persistent cookies:</strong> بتفضل من أيام لشهور (حسب الاستخدام).</li>
+                <li><strong>كوكيز الجلسة:</strong> بتُمسح لما تقفل المتصفح.</li>
+                <li><strong>كوكيز دائمة:</strong> بتفضل من أيام لشهور (حسب الاستخدام).</li>
                 <li><strong>جلسة الدخول:</strong> بتبقى فعّالة لمدة 30 يوم.</li>
               </ul>
             </div>
@@ -133,7 +133,7 @@ export default function CookiesPage() {
             <h2 className="lg__section-title">تواصل معنا</h2>
             <div className="lg__section-body">
               <div className="lg__note">
-                <strong>لأي سؤال عن cookies:</strong>
+                <strong>لأي سؤال عن كوكيز:</strong>
                 <br />
                 <Link href="/contact">صفحة التواصل</Link> — بنرد خلال 24 ساعة.
               </div>

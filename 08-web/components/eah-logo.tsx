@@ -26,7 +26,6 @@ export default function EahLogo({
 
   const content = (
     <span className={`eah-logo eah-logo--${size}`} dir="ltr">
-      <span className="eah-logo__stage">
         <span
           className="eah-logo__crown-wrap"
           style={{ width: s.crown, height: s.crown }}
@@ -41,7 +40,6 @@ export default function EahLogo({
             <img src="/eah-word.webp" alt="EAH" className="eah-logo__word" />
           </span>
         )}
-      </span>
       {showTagline && variant === 'full' && (
         <span className="eah-logo__tagline" dir="rtl">اللي نفسك فيه ؟</span>
       )}

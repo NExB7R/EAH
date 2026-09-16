@@ -185,7 +185,7 @@ export default function PricingPage() {
             <div className="pr__compare-item">
               <span className="pr__compare-icon">📍</span>
               <strong>محلي بجد</strong>
-              <p>شبين القناطر + القرى حواليها. مش Cairo وخلاص.</p>
+              <p>شبين القناطر + القرى حواليها. مش القاهرة وخلاص.</p>
             </div>
             <div className="pr__compare-item">
               <span className="pr__compare-icon">🤖</span>

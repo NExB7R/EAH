@@ -2,13 +2,13 @@
 
 .vv {
   max-width: 1100px;
-  margin: 60px auto;
+  margin: 16px auto;
   padding: 0 20px;
 }
 
 .vv__head {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 .vv__kicker {
   display: inline-block;
@@ -55,7 +55,7 @@
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(168, 85, 247, 0.16);
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  min-height: 200px;
+  min-height: auto;
 }
 .vv__card::before {
   content: '';
@@ -141,6 +141,6 @@
 }
 
 @media (max-width: 640px) {
-  .vv { margin: 40px auto; padding: 0 16px; }
+  .vv { margin: 16px auto; padding: 0 16px; }
   .vv__card { min-height: auto; padding: 22px 18px; }
 }

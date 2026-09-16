@@ -2,13 +2,13 @@
 
 .trust {
   max-width: 1100px;
-  margin: 60px auto;
-  padding: 40px 20px;
+  margin: 16px auto;
+  padding: 16px 20px;
 }
 
 .trust__head {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
 
 .trust__kicker {
@@ -45,7 +45,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
 
 .trust__card {

@@ -19,7 +19,7 @@ const TOC = [
   { id: 'share', label: 'مشاركة البيانات' },
   { id: 'security', label: 'الأمان' },
   { id: 'rights', label: 'حقوقك' },
-  { id: 'cookies', label: 'ملفات الارتباط' },
+  { id: 'كوكيز', label: 'ملفات الارتباط' },
   { id: 'kids', label: 'القُصّر' },
   { id: 'changes', label: 'تحديثات السياسة' },
   { id: 'contact', label: 'تواصل معنا' },
@@ -89,7 +89,7 @@ export default function PrivacyPage() {
               </ul>
               <p><strong>بيانات تقنية:</strong></p>
               <ul>
-                <li>عنوان IP (مشفر — للـ anti-manipulation)</li>
+                <li>عنوان IP (مشفر — للـ مكافحة التلاعب)</li>
                 <li>نوع المتصفح والنظام</li>
                 <li>الموقع الجغرافي التقريبي (لو وافقت)</li>
               </ul>
@@ -135,11 +135,11 @@ export default function PrivacyPage() {
             <h2 className="lg__section-title">الأمان</h2>
             <div className="lg__section-body">
               <ul>
-                <li>كل الاتصالات مشفرة عبر HTTPS/TLS.</li>
+                <li>كل الاتصالات مشفرة عبر بروتوكولات التشفير.</li>
                 <li>كلمات السر متشفرة bcrypt من طرف Supabase.</li>
-                <li>RLS (Row Level Security) على كل جدول في قاعدة البيانات.</li>
-                <li>Rate limiting على كل endpoint حساس.</li>
-                <li>Visitor hashing — IP مشفر قبل التخزين.</li>
+                <li>تأمين صفوف البيانات على كل جدول في قاعدة البيانات.</li>
+                <li>تحديد معدل الطلبات على كل endpoint حساس.</li>
+                <li>تشفير بيانات الزوار — IP مشفر قبل التخزين.</li>
                 <li>مراجعة أمنية دورية للكود والصلاحيات.</li>
               </ul>
               <p>
@@ -165,8 +165,8 @@ export default function PrivacyPage() {
             </div>
           </section>
 
-          <section className="lg__section" id="cookies">
-            <h2 className="lg__section-title">ملفات الارتباط (Cookies)</h2>
+          <section className="lg__section" id="كوكيز">
+            <h2 className="lg__section-title">ملفات الارتباط (كوكيز)</h2>
             <div className="lg__section-body">
               <p>بنستخدم 3 أنواع:</p>
               <ul>
@@ -175,7 +175,7 @@ export default function PrivacyPage() {
                 <li><strong>تحليلية:</strong> لفهم الاستخدام وتحسين المنصة.</li>
               </ul>
               <p>
-                تقدر توقف الـ cookies غير الضرورية من إعدادات المتصفح. لكن ده ممكن
+                تقدر توقف الـ كوكيز غير الضرورية من إعدادات المتصفح. لكن ده ممكن
                 يمنع بعض الميزات.
               </p>
             </div>
