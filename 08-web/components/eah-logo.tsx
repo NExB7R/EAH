@@ -1,5 +1,5 @@
 'use client'
-// v10 — crown glued to word (after image crop)
+// v11 — crown closer to word (topRatio -0.30)
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -13,10 +13,10 @@ type Props = {
 // crown_top نسبة من عرض التاج — سالب يعني فوق الكلمة، موجب يعني جوّه
 // قيمة -0.55 تعني "ارتفاع التاج × 55% فوق الكلمة"
 const SIZE_MAP = {
-  sm: { word: 88,  crown: 30, topRatio: -0.50, left: 0 },
-  md: { word: 130, crown: 42, topRatio: -0.50, left: 2 },
-  lg: { word: 180, crown: 58, topRatio: -0.50, left: 4 },
-  xl: { word: 240, crown: 78, topRatio: -0.50, left: 6 },
+  sm: { word: 88,  crown: 30, topRatio: -0.30, left: 0 },
+  md: { word: 130, crown: 42, topRatio: -0.30, left: 2 },
+  lg: { word: 180, crown: 58, topRatio: -0.30, left: 4 },
+  xl: { word: 240, crown: 78, topRatio: -0.30, left: 6 },
 }
 
 export default function EahLogo({
@@ -30,14 +30,14 @@ export default function EahLogo({
 
   // hover: crown ينزل شوية
   const topOffset = s.crown * s.topRatio
-  const hoverOffset = s.crown * (s.topRatio + 0.20)
+  const hoverOffset = s.crown * (s.topRatio + 0.15)
 
   const crownTop = hover ? hoverOffset : topOffset
 
   const content = (
     <span
       dir="ltr"
-      data-eah-logo="v10"
+      data-eah-logo="v11"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       onTouchStart={() => setHover(true)}

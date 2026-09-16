@@ -119,6 +119,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body>
+        {/* vbadge */}
+        <div
+          data-eah-version="v0.3.5"
+          aria-hidden
+          style={{
+            position: 'fixed',
+            top: 2,
+            right: 4,
+            zIndex: 2147483647,
+            fontSize: 9,
+            fontFamily: 'monospace',
+            fontWeight: 700,
+            color: 'rgba(232,199,154,0.55)',
+            background: 'rgba(7,6,11,0.35)',
+            padding: '1px 5px',
+            borderRadius: 4,
+            pointerEvents: 'none',
+            letterSpacing: '0.02em',
+            lineHeight: 1,
+          }}
+        >
+          v0.3.5
+        </div>
         <SplashScreen />
         <StickersLayer />
         <ScrollIconsBackground />
