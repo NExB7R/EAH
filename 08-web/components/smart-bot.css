@@ -133,8 +133,9 @@
   font-weight: 700;
 }
 
-
-  50%      { opacity: 0.5; }
+@keyframes sbPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 .sb-header__reset {
   width: 32px;
