@@ -1,3 +1,54 @@
+## 2026-09-17 — v0.6.0 — UI/Perf/Security pass
+
+### ✅ اللي خلص
+
+**UI:**
+- hero جديد: tagline نيون + hook واحد
+- اللوجو v15 (تاج ثابت فوق الكلمة + نبض)
+- footer: follow cards وسط + نسخة في القايمة
+- بطاقات التنقل: مولعة → الترند النهاردة / الجديد
+- CSS: شيل كل التوهجات الكبيرة + infinite animations
+
+**Performance:**
+- شال StickersLayer + ScrollIconsBackground (أسباب اللاج الرئيسية)
+- CSS durations 50% أسرع
+- Splash ثابت (بدون أنميشن ثقيل)
+
+**Features:**
+- Trial auto-start trigger (30 يوم) + countdown widget
+- Trial reminder cron (7ص + 7م) آخر 7 أيام
+- advertise rewrite (2026 marketplace)
+- pricing rewrite (مجاني/مميز/بوت)
+- about rewrite (kickers عربية)
+- 66 kicker من إنجليزي لعربي
+- QR API + share modal
+- Bot rename: رفيق → B7R
+- Owner check: claim CTA مخفي لو النشاط ليه owner
+
+**Data:**
+- Migration: business coordinates (lat/lng/address)
+- Migration: auto-trial trigger + get_trial_status RPC
+
+**الأدوات:**
+- pre-push hook لفحص CSS
+
+### 🎯 الجاي (v0.6.x)
+
+1. Security audit كامل (RLS + secrets + deps)
+2. Admin advertise dashboard
+3. Trial UI في صفحة النشاط
+4. Auto-ad generator
+5. Analytics v2 (charts)
+6. Comment moderation backend
+7. Partner management (نقل ملكية)
+
+### ⚠️ مشاكل اتكسرت واتصلحت
+- home-hero.tsx كسر مرتين (regex) → rewrite
+- site-footer.tsx كسر مرتين (regex) → rewrite
+- smart-bot.tsx API mismatch → fix
+- trial countdown: businessId → id
+
+---
 # EAH — Project Memory (Cross-session)
 
 > ملف حي — يتحدّث بعد كل جلسة. للتواصل بين الشاتات.

@@ -1,3 +1,41 @@
+# Active Changelog — v0.6.0 (2026-09-17)
+
+## Session 2026-09-17 — UI/Perf/Security
+
+### Commits (ui-onlook) — 30+ commits من 46a0763
+
+**UI:**
+- v0.3.5 → v0.6.0: hero/footer/labels/crown/splash polish
+- شيل 66 kicker إنجليزي → عربي
+- Footer follow cards + QR share modal
+- Bot B7R (avatar + design)
+
+**Perf:**
+- شيل StickersLayer + ScrollIconsBackground
+- CSS: 50% أسرع + شيل infinite
+- Splash static
+
+**Features:**
+- Trial auto-start (30 يوم) + countdown
+- Trial reminder cron (7ص + 7م)
+- Maps (Leaflet + CartoDB)
+- Advertise marketplace rewrite
+- Pricing free/premium/bot rewrite
+- About full rewrite
+- QR API
+
+**Data:**
+- Coordinates migration
+- Trial trigger + get_trial_status RPC
+
+### ⚠️ Known issues
+- Rate limiting لسه in-memory
+- Supabase leaked-password protection لسه مش مفعل
+- RLS init-plan warnings
+- Missing tests for new features
+
+---
+
 # Active Changelog — Session 2026-09-15
 
 ## Commits (ui-onlook) — Batches 1-9
