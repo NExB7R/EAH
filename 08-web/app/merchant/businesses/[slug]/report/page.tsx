@@ -50,13 +50,13 @@ export default async function MerchantReportPage({
   const { count: confirmedOrders } = await supabase
     .from('order_requests')
     .select('*', { count: 'exact', head: true })
-    .eq('business_id', biz.id)
+    .eq('business_id', business.id)
     .not('confirmed_at', 'is', null)
 
   const { count: totalOrders } = await supabase
     .from('order_requests')
     .select('*', { count: 'exact', head: true })
-    .eq('business_id', biz.id)
+    .eq('business_id', business.id)
 
 return (
     <>
