@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
-import { IcBan, IcCheckCircle, IcEye } from '@/components/eah-icons'
+import { IcBan, IcCheckCircle, IcEye, IcMouse } from '@/components/eah-icons'
 
 type Ad = {
   id: string
@@ -72,7 +72,7 @@ export default function SlotAdminClient({ slot, ads }: { slot: any; ads: Ad[] })
                 <div className="slot-ad__meta">
                   <span className={`slot-ad__status is-${a.status}`}>{STATUS_LABEL[a.status]}</span>
                   <span><IcEye /> {a.impressions}</span>
-                  <span>🖱 {a.clicks}</span>
+                  <span><IcMouse /> {a.clicks}</span>
                 </div>
               </div>
               <div className="slot-ad__actions">

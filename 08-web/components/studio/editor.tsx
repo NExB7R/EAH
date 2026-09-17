@@ -6,7 +6,7 @@ import {
 } from './types'
 import { currentHomeDesign } from './current-design'
 import Inspector from './inspector'
-import { IcBan, IcCheck, IcDown, IcEye, IcList, IcMobile, IcRefresh, IcTrash, IcUp } from '@/components/eah-icons'
+import { IcBan, IcCheck, IcDown, IcEye, IcList, IcMobile, IcRefresh, IcTrash, IcUp, IcUpload } from '@/components/eah-icons'
 
 type Viewport = 'desktop' | 'tablet' | 'mobile'
 
@@ -260,7 +260,7 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
             ) : saved ? (
               <><IcCheck /> منشور</>
             ) : (
-              <>📤 انشر التحديثات</>
+              <><IcUpload /> انشر التحديثات</>
             )}
           </button>
         </div>

@@ -6,7 +6,7 @@ import SiteFooter from '@/components/site-footer'
 import { getMerchantContext } from '@/lib/admin/merchant-guard'
 import QRCode from 'qrcode'
 import './qr.css'
-import { IcEye, IcMobile } from '@/components/eah-icons'
+import { IcBulb, IcEye, IcMobile } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'QR Code' }
@@ -49,7 +49,7 @@ export default async function MerchantQRPage() {
             </Link>
           </div>
           <p className="qr__hint">
-            💡 نصيحة: اطبع الـ QR Code على ورقة A5 وحطه على باب المحل أو الكاشير
+            <IcBulb /> نصيحة: اطبع الـ QR Code على ورقة A5 وحطه على باب المحل أو الكاشير
           </p>
         </section>
       </main>

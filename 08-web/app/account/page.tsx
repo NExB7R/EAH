@@ -8,7 +8,7 @@ import RoyalAvatar from '@/components/royal-avatar'
 import EnablePushButton from '@/components/enable-push-button'
 import '@/components/royal-avatar.css'
 import './account.css'
-import { IcBan, IcCalendar, IcCheck, IcHeart } from '@/components/eah-icons'
+import { IcBan, IcCalendar, IcCheck, IcDoor, IcHeart } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'حسابي' }
@@ -234,7 +234,7 @@ export default async function AccountPage() {
 
         <section className="acc-logout">
           <div className="acc-logout__text">
-            <span className="acc-logout__title">🚪 تسجيل الخروج</span>
+            <span className="acc-logout__title"><IcDoor /> تسجيل الخروج</span>
             <span className="acc-logout__hint">هتخرج من حسابك على الجهاز ده</span>
           </div>
           <form action="/auth/logout" method="post">

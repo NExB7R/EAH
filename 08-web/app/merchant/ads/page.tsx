@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import './ads-list.css'
-import { IcCalendar, IcEye, IcMegaphone } from '@/components/eah-icons'
+import { IcCalendar, IcEye, IcMegaphone, IcMouse } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إعلاناتي' }
@@ -61,7 +61,7 @@ export default async function MyAdsPage() {
                   {a.description && <p className="mad__desc">{a.description}</p>}
                   <div className="mad__stats">
                     <span><IcEye /> {a.impressions}</span>
-                    <span>🖱 {a.clicks}</span>
+                    <span><IcMouse /> {a.clicks}</span>
                     {a.ends_at && <span><IcCalendar /> ينتهي: {new Date(a.ends_at).toLocaleDateString('ar-EG')}</span>}
                   </div>
                 </div>

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import './security.css'
-import { IcBan, IcCheck, IcList, IcUsers } from '@/components/eah-icons'
+import { IcBan, IcCheck, IcKey, IcList, IcUsers } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الأمان' }
@@ -112,7 +112,7 @@ export default async function AdminSecurityPage() {
       <div className="sec__section">
         <header className="sec__section-head">
           <h2 className="sec__section-title">
-            🔐 متغيرات البيئة
+            <IcKey /> متغيرات البيئة
             <span className={`sec__badge ${allEnvOk ? 'sec__badge--ok' : 'sec__badge--warn'}`}>
               {envOk}/{envTotal}
             </span>

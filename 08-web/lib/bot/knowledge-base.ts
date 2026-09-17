@@ -199,11 +199,11 @@ export const KB: Intent[] = [
     id: 'trending',
     keywords: ['ترند', 'رائج', 'الأكثر', 'شعبية', 'popular'],
     response:
-      'شوف الترند على EAH! 📈\n\n' +
+      'شوف الترند على EAH! \n\n' +
       'الترندات بتتحدث باستمرار حسب تفاعل الناس.\n' +
       'خليك على اطلاع بأحدث الأماكن.',
     quickReplies: [
-      { label: '📈 الترندات', action: 'link', value: '/trends' },
+      { label: ' الترندات', action: 'link', value: '/trends' },
     ],
   },
 
@@ -314,7 +314,7 @@ export const KB: Intent[] = [
       '• لو نسيت كلمة السر، استرجعها\n' +
       '• لو حسابك محظور، كلّمنا',
     quickReplies: [
-      { label: '🔐 استرجاع كلمة السر', action: 'link', value: '/auth/recover' },
+      { label: ' استرجاع كلمة السر', action: 'link', value: '/auth/recover' },
       { label: 'واتساب', action: 'link', value: 'https://wa.me/201012892806' },
     ],
   },

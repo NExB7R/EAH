@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
-import { IcCalendar } from '@/components/eah-icons'
+import { IcCalendar, IcLink } from '@/components/eah-icons'
 
 type Slot = { id: string; code: string; name_ar: string; slot_type: string }
 
@@ -64,7 +64,7 @@ export default function CreateAdForm({ slots }: { slots: Slot[] }) {
       </label>
 
       <label className="anew__field">
-        <span>🔗 الرابط (اختياري)</span>
+        <span><IcLink /> الرابط (اختياري)</span>
         <input type="url" dir="ltr" value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} placeholder="https://...  أو  /businesses/..." />
       </label>
 

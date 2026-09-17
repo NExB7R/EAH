@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import './ads.css'
-import { IcEye, IcMegaphone } from '@/components/eah-icons'
+import { IcEye, IcMegaphone, IcMouse } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إدارة الإعلانات' }
@@ -86,7 +86,7 @@ export default async function AdminAdsPage() {
                   <span className={`ads__status ${st.cls}`}>{st.label}</span>
                   <div className="ads__row-stats">
                     <span title="ظهور"><IcEye /> {a.impressions}</span>
-                    <span title="ضغط">🖱 {a.clicks}</span>
+                    <span title="ضغط"><IcMouse /> {a.clicks}</span>
                   </div>
                 </Link>
               )

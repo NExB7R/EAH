@@ -2,7 +2,7 @@
 import { useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './avatar-uploader.css'
-import { IcPalette, IcTrash } from '@/components/eah-icons'
+import { IcLink, IcPalette, IcTrash } from '@/components/eah-icons'
 
 type Props = {
   userId: string
@@ -109,7 +109,7 @@ export default function AvatarUploader({ userId, initialUrl, initialKey }: Props
           onClick={() => setTab('upload')}>📷 رفع</button>
         <button type="button" role="tab" aria-selected={tab==='link'}
           className={`avup__tab ${tab==='link'?'is-active':''}`}
-          onClick={() => setTab('link')}>🔗 لينك</button>
+          onClick={() => setTab('link')}><IcLink /> لينك</button>
       </div>
 
       {/* Presets */}
@@ -140,7 +140,7 @@ export default function AvatarUploader({ userId, initialUrl, initialKey }: Props
             id="avatar-file"
           />
           <label htmlFor="avatar-file" className="avup__file-label">
-            {uploading ? '⏳ جاري الرفع...' : '📤 اختار صورة من جهازك'}
+            {uploading ? '⏳ جاري الرفع...' : ' اختار صورة من جهازك'}
           </label>
           <span className="avup__hint">JPEG / PNG / WebP · 2MB كحد أقصى</span>
         </div>

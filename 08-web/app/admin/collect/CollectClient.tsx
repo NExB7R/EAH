@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import './collect.css'
-import { IcGlobe, IcScroll } from '@/components/eah-icons'
+import { IcGlobe, IcLink, IcScroll } from '@/components/eah-icons'
 
 type Recent = {
   id: string
@@ -195,7 +195,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
 
       {/* URL Input */}
       <div className="col__url-box">
-        <label className="col__label">🔗 الرابط</label>
+        <label className="col__label"><IcLink /> الرابط</label>
         <div className="col__url-row">
           <input
             type="url"

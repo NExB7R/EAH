@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-browser'
 import './change-password.css'
-import { IcBan, IcCheckCircle, IcEye, IcLock } from '@/components/eah-icons'
+import { IcBan, IcBulb, IcCheckCircle, IcEye, IcLock } from '@/components/eah-icons'
 
 function getStrength(pw: string) {
   let s = 0
@@ -76,7 +76,7 @@ export default function ChangePasswordPage() {
         <h1 className="cpw__title"><IcLock /> تغيير كلمة المرور</h1>
         <p className="cpw__lead">للأمان، محتاج تدخل كلمة المرور الحالية الأول. بعد التغيير، كل الأجهزة التانية هتتطرد تلقائيًا.</p>
         <div className="cpw__info">
-          <span className="cpw__info-emoji">💡</span>
+          <span className="cpw__info-emoji"><IcBulb /></span>
           <div>
             <strong className="cpw__info-title">نصائح لكلمة مرور قوية</strong>
             <ul className="cpw__info-list">

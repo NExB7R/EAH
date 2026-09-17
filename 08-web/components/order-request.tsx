@@ -272,7 +272,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
               className="orr__submit"
               disabled={status === 'sending'}
             >
-              {status === 'sending' ? '...' : '📤 إرسال على واتساب'}
+              {status === 'sending' ? '...' : ' إرسال على واتساب'}
             </button>
             <button
               type="button"

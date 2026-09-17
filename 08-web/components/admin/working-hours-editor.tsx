@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import './working-hours-editor.css'
-import { IcCheckCircle } from '@/components/eah-icons'
+import { IcCheckCircle, IcDoor } from '@/components/eah-icons'
 
 export type DayHours = { open: string; close: string; closed: boolean }
 export type WorkingHours = Record<string, DayHours>
@@ -68,7 +68,7 @@ export default function WorkingHoursEditor({ initial = {} }: { initial?: Working
         <button type="button" className="admin-btn admin-btn--sm" onClick={setAllOpen}><IcCheckCircle /> فتح الكل
         </button>
         <button type="button" className="admin-btn admin-btn--sm admin-btn--ghost" onClick={setAllClosed}>
-          🚪 إغلاق الكل
+          <IcDoor /> إغلاق الكل
         </button>
       </div>
 
