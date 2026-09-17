@@ -44,7 +44,7 @@ export default function BusinessMap({ lat, lng, name, area, address }: Props) {
 
       const icon = L.divIcon({
         className: 'bmap-pin',
-        html: '<div class="bmap-pin__inner">👑</div>',
+        html: '<div class="bmap-pin__inner"></div>',
         iconSize: [40, 40],
         iconAnchor: [20, 40],
       })
@@ -68,14 +68,14 @@ export default function BusinessMap({ lat, lng, name, area, address }: Props) {
   return (
     <section className="bmap" aria-label={`موقع ${name} على الخريطة`}>
       <header className="bmap__head">
-        <h2 className="bmap__title">📍 الموقع على الخريطة</h2>
+        <h2 className="bmap__title">الموقع على الخريطة</h2>
         {address && <p className="bmap__addr">{address}{area ? ` — ${area}` : ''}</p>}
       </header>
       <div ref={mapRef} className="bmap__canvas" />
       <div className="bmap__foot">
         <span className="bmap__coords" dir="ltr">{lat.toFixed(5)}, {lng.toFixed(5)}</span>
         <a href={mapsUrl} target="_blank" rel="noreferrer" className="bmap__nav">
-          🧭 افتح في Google Maps
+          افتح في Google Maps
         </a>
       </div>
     </section>

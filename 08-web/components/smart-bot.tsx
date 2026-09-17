@@ -56,7 +56,7 @@ export default function SmartBot() {
     <>
       {hint && !open && (
         <div className="sb-hint" onClick={() => setOpen(true)}>
-          <span className="sb-hint__emoji">👋</span>
+          <span className="sb-hint__emoji"></span>
           <span>أنا B7R — أقدر أساعدك؟</span>
         </div>
       )}

@@ -11,7 +11,7 @@ export default function BusinessClaimCTA({ businessName }: { businessName?: stri
     <section className="claim">
       <div className="claim__inner">
         <span className="claim__icon" aria-hidden>🏪</span>
-        <span className="claim__badge">🎁 تجربة 30 يوم مجاناً</span>
+        <span className="claim__badge">تجربة 30 يوم مجاناً</span>
         <div className="claim__body">
           <h3 className="claim__title">
             {businessName ? `هل "${businessName}" ده نشاطك؟` : 'هل ده نشاطك؟'}

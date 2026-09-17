@@ -19,10 +19,10 @@ export function WhatsAppOrdersToggle({ businessId, initialEnabled }: { businessI
   return (
     <section className="wa-toggle" dir="rtl">
       <div className="wa-toggle__body">
-        <span className="wa-toggle__emoji">💬</span>
+        <span className="wa-toggle__emoji"></span>
         <div className="wa-toggle__info">
           <strong>استقبال أوردرات على واتساب</strong>
-          <small>{enabled ? '✅ شغال — العملاء يقدروا يطلبوا' : '⛔ موقّف — مفيش أوردرات جديدة'}</small>
+          <small>{enabled ? 'شغال — العملاء يقدروا يطلبوا' : 'موقّف — مفيش أوردرات جديدة'}</small>
         </div>
         <button type="button" onClick={toggle} disabled={busy} className={`wa-toggle__btn ${enabled ? 'is-on' : ''}`}>
           {busy ? '...' : enabled ? 'إيقاف' : 'تشغيل'}

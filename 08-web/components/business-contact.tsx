@@ -102,7 +102,7 @@ export default function BusinessContact({
         التواصل
       </h2>
       <p className="bcontact__hint">
-        ✋ سجّل مرة واحدة وشوف كل الأرقام — بدون أي رسوم أو تعقيد.
+        سجّل مرة واحدة وشوف كل الأرقام — بدون أي رسوم أو تعقيد.
       </p>
 
       <div className="bcontact__list">
@@ -148,7 +148,7 @@ export default function BusinessContact({
                 >
                   <span className="bcontact__hidden">•••••••••••</span>
                   <span className="bcontact__reveal-text">
-                    {isLoading ? '...' : needsAuth ? '🔒 سجّل عشان تكشف' : 'اكشف الرقم'}
+                    {isLoading ? '...' : needsAuth ? 'سجّل عشان تكشف' : 'اكشف الرقم'}
                   </span>
                 </button>
               )}
