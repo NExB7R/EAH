@@ -285,3 +285,89 @@ main > section:first-child,
 main > *:first-child {
   margin-top: 0;
 }
+
+
+/* ═══ 2026 Neon Gradient Text — Global ═══ */
+.gradient-heading,
+h1.gradient-heading,
+h2.gradient-heading,
+h3.gradient-heading,
+.ab__title,
+.ab__section-title,
+.pr__title,
+.adv-hero__title,
+.feat__title,
+.tr__title,
+.off-hero__title,
+.nw__title,
+.mi__title,
+.ab__cta-title,
+.pr-cta__title,
+.adv-cta__title,
+.ab__value-title,
+.ab__tl-title,
+.pr-plan__name,
+.pr-faq__title,
+.pr-compare__title,
+.adv-section__title,
+.adv-spot__name,
+.adv-who__title {
+  background: linear-gradient(135deg, #F4F2FA 0%, #E8C79A 30%, #C084FC 60%, #A855F7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+/* Secondary accent — lighter gradient */
+.gradient-sub,
+.ab__section-kicker,
+.pr__kicker,
+.adv-section__kicker,
+.ab__kicker,
+.adv-hero__kicker,
+.feat__kicker,
+.tr__kicker,
+.off-hero__kicker,
+.mi__kicker,
+.ab__section-kicker {
+  background: linear-gradient(135deg, #C084FC 0%, #E8C79A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+
+/* ═══ Font weight boost for all headings ═══ */
+h1, h2 {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+h3, h4 {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-weight: 900;
+}
+
+/* ═══ 2026 Icon Background Layer ═══ */
+.eah-icon-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.35;
+}
+.eah-icon-bg__item {
+  position: absolute;
+  color: #A855F7;
+  filter: drop-shadow(0 0 6px currentColor);
+  animation: eahFloat 20s ease-in-out infinite;
+}
+@keyframes eahFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-12px) rotate(6deg); }
+}
