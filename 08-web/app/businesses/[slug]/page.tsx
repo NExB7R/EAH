@@ -19,6 +19,7 @@ import OrderRequest from '@/components/order-request'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import BackToTop from '@/components/back-to-top'
 import BusinessMap from '@/components/business-map'
+import BusinessShare from '@/components/business-share'
 import BusinessOwnerTrial, { WhatsAppOrdersToggle } from '@/components/business-owner-trial'
 import { resolveCoords } from '@/lib/map-coords'
 
@@ -62,9 +63,24 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
     hasId ? getBusinessContacts(business.businessId!) : Promise.resolve([]),
   ])
 
+  // food categories
+  let foodCats: string[] = []
+  if (hasId) {
+    try {
+      const { createClient } = await import('@/lib/supabase-server')
+      const supabase = await createClient()
+      const { data } = await supabase
+        .from('business_food_categories')
+        .select('category_key')
+        .eq('business_id', business.businessId!)
+      foodCats = (data ?? []).map((r: any) => r.category_key)
+    } catch {}
+  }
+
   return (
     <>
       <FloatingCapsuleHeader />
+      {hasId && <div style={{ maxWidth: 1100, margin: "12px auto 0", padding: "0 20px", display: "flex", justifyContent: "flex-end" }}><BusinessShare slug={business.slug} name={business.name} /></div>}
       {hasId && <BusinessOwnerTrial businessId={business.businessId!} />}
       {hasId && <WhatsAppOrdersToggle businessId={business.businessId!} initialEnabled={business.acceptsWhatsappOrders ?? false} />}
       <BackToTop />

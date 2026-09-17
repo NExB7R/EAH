@@ -1,0 +1,10 @@
+.bshare { position: relative; display: inline-block; }
+.bshare__btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); color: #C4B5FD; font-family: var(--font-cairo, system-ui); font-size: .78rem; font-weight: 800; cursor: pointer; }
+.bshare__btn:hover { background: rgba(168, 85, 247, 0.2); }
+.bshare__panel { position: absolute; top: calc(100% + 8px); inset-inline-end: 0; padding: 10px; border-radius: 14px; background: linear-gradient(180deg, #140E22, #0A0714); border: 1px solid rgba(168, 85, 247, 0.35); box-shadow: 0 12px 32px rgba(0,0,0,.6); z-index: 20; min-width: 260px; }
+.bshare__row { display: flex; gap: 8px; flex-wrap: wrap; }
+.bshare__social { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 12px; border-radius: 12px; text-decoration: none; background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25); color: #E4E0F0; font-family: var(--font-cairo, system-ui); font-size: .68rem; font-weight: 800; cursor: pointer; transition: all .2s; min-width: 56px; }
+.bshare__social span { font-size: 1.2rem; }
+.bshare__social:hover { transform: translateY(-2px); background: rgba(168, 85, 247, 0.18); }
+.bshare__social--wa:hover { border-color: rgba(37, 211, 102, 0.6); }
+.bshare__social--fb:hover { border-color: rgba(24, 119, 242, 0.6); }

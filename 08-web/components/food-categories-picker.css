@@ -1,0 +1,8 @@
+.fcp { display: flex; flex-direction: column; gap: 10px; }
+.fcp__head { display: flex; align-items: baseline; justify-content: space-between; }
+.fcp__head > span { font-family: var(--font-cairo, system-ui); font-size: .82rem; color: #C9C2DB; font-weight: 700; }
+.fcp__head small { font-family: var(--font-cairo, system-ui); font-size: .72rem; color: #6B6580; }
+.fcp__grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.fcp__chip { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,.03); border: 1px solid rgba(168,85,247,.22); color: #E4E0F0; font-family: var(--font-cairo, system-ui); font-size: .76rem; font-weight: 700; cursor: pointer; transition: all .2s; }
+.fcp__chip:hover { border-color: rgba(168,85,247,.55); }
+.fcp__chip.is-on { background: linear-gradient(135deg, rgba(168,85,247,.2), rgba(232,199,154,.1)); border-color: rgba(232,199,154,.55); color: #F4F2FA; font-weight: 900; }
