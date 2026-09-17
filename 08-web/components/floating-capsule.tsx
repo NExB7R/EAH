@@ -12,6 +12,7 @@ import OverlayBlur from './overlay-blur'
 import { createClient } from '@/lib/supabase-browser'
 import { useUnreadCount } from '@/lib/hooks/use-unread-count'
 import { IconFacebook, IconWhatsapp, IconMenu, IconBolt, IconSearch } from './neon-icons'
+import { APP_VERSION_LABEL } from '@/lib/version'
 import './floating-capsule.css'
 import './floating-capsule-v2.css'
 import './floating-capsule-drawer.css'
@@ -249,7 +250,7 @@ export default function FloatingCapsuleHeader() {
             />
           </div>
           <div className="nav-drawer__version" aria-hidden>
-            EAH v0.3.6
+            EAH {APP_VERSION_LABEL}
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 import EahLogo from './eah-logo'
 import { IconFacebook, IconWhatsapp } from './neon-icons'
 import { CONTACT_CHANNELS, waLink } from '@/app/contact/contact-channels'
+import { APP_VERSION_LABEL } from '@/lib/version'
 import './site-footer.css'
 
 export default function SiteFooter() {
@@ -93,7 +94,7 @@ export default function SiteFooter() {
           </a>
 
           <div className="sf__legal">
-            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة <span className="sf__version">v0.5.5</span></p>
+            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة <span className="sf__version">{APP_VERSION_LABEL}</span></p>
             <p className="sf__signature"><span className="sf__signature-text">NourEldin B7R</span></p>
           </div>
         </div>
