@@ -86,7 +86,7 @@ export default async function EditBusinessPage({
           is_published: biz.is_published,
         }}
       />
-        <CommissionControl businessId={bizId} />
+        <CommissionControl businessId={biz.id} />
     </>
   )
 }
