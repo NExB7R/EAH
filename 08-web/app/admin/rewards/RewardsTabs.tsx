@@ -10,7 +10,7 @@ export default function RewardsTabs({
 }) {
   const tabs = [
     { key: 'catalog', label: '📚 الكتالوج', href: '/admin/rewards' },
-    { key: 'redemptions', label: '📦 طلبات الاستبدال', href: '/admin/rewards?tab=redemptions', badge: pendingCount },
+    { key: 'redemptions', label: ' طلبات الاستبدال', href: '/admin/rewards?tab=redemptions', badge: pendingCount },
   ]
   return (
     <div className="rew-tabs">

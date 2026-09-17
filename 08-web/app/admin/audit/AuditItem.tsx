@@ -20,7 +20,7 @@ const ACTION_LABEL: Record<string, string> = {
   'business.delete': 'حذف نشاط',
   'business.toggle_featured': 'تبديل المميز',
   'business.toggle_published': 'تبديل النشر',
-  'subscription.requested': '📩 طلب اشتراك',
+  'subscription.requested': ' طلب اشتراك',
   'subscription.approved': 'اعتماد اشتراك',
   'subscription.rejected': 'رفض اشتراك',
   'subscription.cancelled': '⏸ إلغاء اشتراك',

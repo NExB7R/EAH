@@ -20,7 +20,7 @@ export function buildOrderMessage(o: OrderForTemplate): string {
   const lines: string[] = []
   lines.push(` *EAH* — ${SLOGAN}`)
   lines.push('━━━━━━━━━━━━━━━━━━')
-  lines.push(`📢 *أوردر جديد${o.orderCode ? ' #' + o.orderCode : ''}*`)
+  lines.push(` *أوردر جديد${o.orderCode ? ' #' + o.orderCode : ''}*`)
   lines.push('')
   lines.push(` النشاط: ${o.businessName}`)
   lines.push('')
@@ -37,7 +37,7 @@ export function buildOrderMessage(o: OrderForTemplate): string {
     if (o.customerReviews) lines.push(`• ${o.customerReviews} تقييم`)
   }
   lines.push('')
-  lines.push('📦 *الأوردر*')
+  lines.push(' *الأوردر*')
   if (o.items) {
     for (const it of o.items.split('\n')) {
       if (it.trim()) lines.push(`• ${it.trim()}`)

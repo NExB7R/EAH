@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 export const metadata = { title: 'سجل أحداث الاشتراكات' }
 
 const EVENT_LABEL: Record<string, string> = {
-  requested: '📩 طلب',
+  requested: ' طلب',
   approved: 'موافقة',
   rejected: 'رفض',
   trial_started: 'تجربة بدأت',

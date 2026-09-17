@@ -56,7 +56,7 @@ export async function reviewVerification(
   await supabase.from('notifications').insert({
     user_id: req.user_id,
     type: 'verification',
-    title: action === 'approve' ? ' تم توثيق حسابك' : '❌ تم رفض طلب التوثيق',
+    title: action === 'approve' ? ' تم توثيق حسابك' : ' تم رفض طلب التوثيق',
     body: note || (action === 'approve' ? 'حسابك موثق دلوقتي' : 'للأسف طلبك مرفوض'),
     link: '/account',
   })

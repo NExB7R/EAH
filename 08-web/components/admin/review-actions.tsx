@@ -40,7 +40,7 @@ export default function ReviewActions({
       )}
       {status !== 'rejected' && (
         <button type="button" className="admin-btn admin-btn--sm" onClick={() => set('rejected')} disabled={pending}>
-          ❌ رفض
+           رفض
         </button>
       )}
       <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={remove} disabled={pending}><IcTrash /></button>

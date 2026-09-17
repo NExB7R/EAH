@@ -8,7 +8,7 @@ import '@/components/charts/charts.css'
 import AnalyticsFilters from './AnalyticsFilters'
 import ExportPanel from './ExportPanel'
 import './analytics.css'
-import { IcUsers } from '@/components/eah-icons'
+import { IcUpload, IcUsers } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'التحليلات' }
@@ -163,7 +163,7 @@ return (
       </div>
 
       <div className="an__export">
-        <h3 className="an__export-title">📥 تصدير البيانات</h3>
+        <h3 className="an__export-title"><IcUpload /> تصدير البيانات</h3>
         <p className="an__export-sub">
           حمّل البيانات كـ CSV — اختار الفترة اللي عايزها
         </p>

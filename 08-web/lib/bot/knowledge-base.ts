@@ -120,7 +120,7 @@ export const KB: Intent[] = [
     id: 'pricing',
     keywords: ['بكام', 'سعر', 'أسعار', 'باقات', 'تكلفة', 'فلوس'],
     response:
-      'الخطة الأساسية مجانية تماماً! 🎁\n\n' +
+      'الخطة الأساسية مجانية تماماً! \n\n' +
       '📌 الخطة المجانية:\n' +
       '• ظهور أساسي\n• تحليلات بسيطة\n• تقييمات\n\n' +
       'الخطة المميزة:\n' +
@@ -139,11 +139,11 @@ export const KB: Intent[] = [
     response:
       'تحب تتواصل معانا؟ 📞\n\n' +
       'واتساب: أسرع طريقة — رد فوري\n' +
-      '📘 فيسبوك: EAH Official\n\n' +
+      ' فيسبوك: EAH Official\n\n' +
       'فريق EAH جاهز يساعدك في أي وقت.',
     quickReplies: [
       { label: 'واتساب', action: 'link', value: 'https://wa.me/201012892806' },
-      { label: '📘 فيسبوك', action: 'link', value: 'https://facebook.com/eah.eg' },
+      { label: ' فيسبوك', action: 'link', value: 'https://facebook.com/eah.eg' },
       { label: ' صفحة التواصل', action: 'link', value: '/contact' },
     ],
   },
@@ -237,7 +237,7 @@ export const KB: Intent[] = [
     id: 'advertise',
     keywords: ['إعلان', 'أعلن', 'إعلانات', 'ads', 'reklam'],
     response:
-      'تحب تعلن على EAH؟ 📢\n\n' +
+      'تحب تعلن على EAH؟ \n\n' +
       'عندنا مساحات إعلانية متنوعة:\n' +
       '• بانر رئيسي\n' +
       '• ظهور أول في البحث\n' +
@@ -337,7 +337,7 @@ export const KB: Intent[] = [
     id: 'privacy',
     keywords: ['خصوصية', 'بياناتي', 'privacy', 'معلومات شخصية'],
     response:
-      'بناخد خصوصيتك بجدية 🔒\n\n' +
+      'بناخد خصوصيتك بجدية \n\n' +
       '• بياناتك مشفرة\n' +
       '• مش بنبيعها لأي جهة\n' +
       '• تقدر تحذف حسابك في أي وقت',

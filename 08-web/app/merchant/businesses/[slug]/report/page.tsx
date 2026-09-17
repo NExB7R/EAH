@@ -3,6 +3,7 @@ import { requireMerchantForBusiness } from '@/lib/admin/merchant-guard'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import MerchantInsights from '@/components/merchant-insights'
 import { getBusinessStats, getBusinessReviews } from '@/lib/reviews'
+import { IcUpload } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إحصائيات النشاط' }
@@ -107,7 +108,7 @@ export default async function MerchantReportPage({
             href={`/api/merchant/export?business=${business.id}&range=${rangeDays}`}
             className="mrange__export"
           >
-            📥 CSV
+            <IcUpload /> CSV
           </a>
         </div>
 

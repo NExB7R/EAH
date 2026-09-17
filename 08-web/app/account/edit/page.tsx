@@ -6,6 +6,7 @@ import SiteFooter from '@/components/site-footer'
 import { updateProfile } from './actions'
 import AvatarUploader from '@/components/avatar-uploader'
 import './edit.css'
+import { IcUser } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'تعديل البروفايل' }
@@ -121,7 +122,7 @@ export default async function EditProfilePage() {
                   value="male"
                   defaultChecked={profile?.gender === 'male'}
                 />
-                <span>👨 ذكر</span>
+                <span><IcUser /> ذكر</span>
               </label>
               <label className={`edit__gender-btn ${profile?.gender === 'female' ? 'is-active' : ''}`}>
                 <input
@@ -130,7 +131,7 @@ export default async function EditProfilePage() {
                   value="female"
                   defaultChecked={profile?.gender === 'female'}
                 />
-                <span>👩 أنثى</span>
+                <span><IcUser /> أنثى</span>
               </label>
             </div>
           </section>

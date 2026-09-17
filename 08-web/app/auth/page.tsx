@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './auth.css'
 import EahLogo from '@/components/eah-logo'
-import { IcBan, IcBolt, IcEye, IcLock } from '@/components/eah-icons'
+import { IcBan, IcBolt, IcEye, IcLock, IcUser } from '@/components/eah-icons'
 
 function normalizeEgyptPhone(value: string) {
   const raw = value.trim().replace(/[\s()-]/g, '')
@@ -218,7 +218,7 @@ export default function AuthPage() {
                       className={`auth__gender-btn ${gender === 'male' ? 'is-active' : ''}`}
                       onClick={() => setGender('male')}
                     >
-                      <span className="auth__gender-emoji">👨</span>
+                      <span className="auth__gender-emoji"><IcUser /></span>
                       <span>ذكر</span>
                     </button>
                     <button
@@ -226,7 +226,7 @@ export default function AuthPage() {
                       className={`auth__gender-btn ${gender === 'female' ? 'is-active' : ''}`}
                       onClick={() => setGender('female')}
                     >
-                      <span className="auth__gender-emoji">👩</span>
+                      <span className="auth__gender-emoji"><IcUser /></span>
                       <span>أنثى</span>
                     </button>
                   </div>

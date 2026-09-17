@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import ChangeRequestActions from './ChangeRequestActions'
 import './change-requests.css'
-import { IcCalendar, IcEdit, IcInbox } from '@/components/eah-icons'
+import { IcCalendar, IcCheck, IcEdit, IcInbox } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'مراجعة التعديلات' }
@@ -219,7 +219,7 @@ export default async function AdminChangeRequestsPage({
                   </span>
                   {r.reviewed_at && (
                     <span className="cr-chip cr-chip--muted">
-                      ✔ {new Date(r.reviewed_at).toLocaleDateString('ar-EG')}
+                      <IcCheck /> {new Date(r.reviewed_at).toLocaleDateString('ar-EG')}
                     </span>
                   )}
                 </div>
