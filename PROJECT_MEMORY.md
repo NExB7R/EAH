@@ -1,3 +1,28 @@
+## 2026-09-17 — v1.0.0 — Release: Emoji cleanup + Icons + Gradients
+
+### ✅ اللي خلص
+- **Emoji cleanup**: 71 ملف → 0 (كل الإيموجي اتشالت)
+- **Unified icons**: `components/eah-icons.tsx` (30+ أيقونة نيون SVG)
+- **Food category icons**: 16 أيقونة (pizza, grill, etc)
+- **Global gradient headings**: في `globals.css` (بنفسجي→دهبي)
+- **40-icon neon background**: ambient-bg global
+- **Font weight boost**: 900 على كل h1-h4
+- **Spacing system**: `--space-section` + logical margins
+- **Logo below header**: `--fc-height` CSS var
+- **Install prompt above cookies**: z-index fixed
+- **Insights daily**: real data from page_view_events
+- **Explore filters**: 2026 design
+- **Version auto-update**: `lib/version.ts` reads package.json
+- **Removed TikTok/IG**: focus on FB + WhatsApp only
+
+### 📊 Milestone
+- 79 pages
+- 21 API routes
+- 37 migrations
+- typecheck 100%
+
+---
+
 ## 2026-09-17 — v0.7.6 — WhatsApp Orders + Feature Flags + Facebook Collect
 
 ### ✅ اللي خلص

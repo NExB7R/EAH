@@ -1,10 +1,10 @@
-# Project Status — v0.6.0
+# Project Status — v1.0.0
 
 ## Mission
 Build a local discovery platform that starts in Shibin El-Qanater and nearby villages/centers, then expands.
 
 ## Current version
-**v0.6.0** — Discovery + Personalization + PWA + Subscriptions + Maps + Trial System + Ads
+**v1.0.0** — Full platform: Discovery + Merchant + Ads + Trial + Moderation + Partners + Maps + WhatsApp Orders
 
 ## Business model
 - Free core discovery experience

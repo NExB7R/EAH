@@ -1,3 +1,38 @@
+# CHANGELOG — v1.0.0 (2026-09-17)
+
+## Milestone Release
+
+### From v0.8.5 → v1.0.0
+
+**UI/UX**
+- 71 files emoji cleanup → 0 emojis
+- 30+ neon SVG icons unified
+- 16 food category icons
+- Global gradient headings (purple→gold)
+- 40-icon neon background
+- Font weight 900 boost
+- Spacing system tokens
+- Logo below header fix
+- Install above cookies
+
+**Features**
+- WhatsApp order flow
+- Feature flags admin (per business)
+- Ads lifecycle (slots + merchant create + admin approve)
+- Moderation dashboard
+- Partners transfer ownership
+- Facebook collect expansion
+- Merchant insights (real daily data)
+- Explore filters (2026 design)
+
+**Technical**
+- VERSION auto-update from package.json
+- AmbientBg rewrite (proper types)
+- Emoji cleanup across 71 files
+- 37 migrations
+
+---
+
 # Active Changelog — v0.7.6 (2026-09-17)
 
 ## Session — WhatsApp Orders + Feature Flags + Ads + Partners
