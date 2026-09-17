@@ -126,7 +126,7 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
 
         <BusinessOffers offers={offers} />
 
-        {hasId && (
+        {hasId && business.acceptsWhatsappOrders && (
           <OrderRequest
             businessId={business.businessId!}
             businessName={business.name}
@@ -139,12 +139,6 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
         )}
 
         {hasId && contacts.length > 0 && <BusinessContact businessId={business.businessId!} contacts={contacts} />}
-
-        {business.businessId && (
-          <div style={{ maxWidth: 900, margin: '24px auto', padding: '0 20px' }}>
-            <ReviewForm businessId={business.businessId} />
-          </div>
-        )}
 
         {(() => {
           const coords = resolveCoords(business.latitude, business.longitude, business.area)
@@ -159,6 +153,12 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
           ) : null
         })()}
         <BusinessReviews stats={stats} reviews={reviews} />
+
+        {business.businessId && (
+          <div style={{ maxWidth: 900, margin: '24px auto', padding: '0 20px' }}>
+            <ReviewForm businessId={business.businessId} />
+          </div>
+        )}
 
         {business.businessId && (
           <div style={{ maxWidth: 900, margin: '24px auto', padding: '0 20px', display: 'flex', justifyContent: 'flex-end' }}>

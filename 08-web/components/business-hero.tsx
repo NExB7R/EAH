@@ -99,13 +99,19 @@ export default function BusinessHero({
 
           <p className="bhero__reason">{business.reason}</p>
 
-          {business.vibe.length > 0 && (
-            <div className="bhero__vibes">
-              {business.vibe.map((v) => (
-                <span key={v} className="bhero__vibe">#{v}</span>
-              ))}
-            </div>
-          )}
+          {(() => {
+            const cleaned = business.vibe.filter(
+              (v) => !['مميز', 'الأعلى تقييماً', 'عرض', 'مناسب ليك'].includes(v)
+            )
+            if (cleaned.length === 0) return null
+            return (
+              <div className="bhero__vibes">
+                {cleaned.map((v) => (
+                  <span key={v} className="bhero__vibe">#{v}</span>
+                ))}
+              </div>
+            )
+          })()}
         </div>
       </div>
     </section>
