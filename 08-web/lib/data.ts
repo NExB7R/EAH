@@ -20,6 +20,7 @@ type DbBusiness = {
   address_text?: string | null
   owner_profile_id?: string | null
   accepts_whatsapp_orders?: boolean | null
+  cover_image_url?: string | null
 }
 
 type DbOffer = {
@@ -67,6 +68,7 @@ type BusinessViewModel = {
   hasOwner?: boolean
   acceptsWhatsappOrders?: boolean
   food_categories?: string[]
+  cover_image_url?: string | null
 }
 
 function toDemoShape(
@@ -118,6 +120,7 @@ function toDemoShape(
     address: b.address_text ?? null,
     hasOwner: !!b.owner_profile_id,
     acceptsWhatsappOrders: b.accepts_whatsapp_orders ?? false,
+    cover_image_url: b.cover_image_url ?? null,
   }
 }
 
@@ -170,7 +173,7 @@ export async function getPublishedBusinesses(
     const supabase = await createClient()
     let query = supabase
       .from('businesses')
-      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id')
+      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,cover_image_url')
       .eq('is_published', true)
       .order('is_featured', { ascending: false })
       .order('created_at', { ascending: false })
@@ -230,7 +233,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
     const supabase = await createClient()
     const { data, error } = await supabase
       .from('businesses')
-      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at')
+      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,cover_image_url')
       .eq('slug', slug)
       .eq('is_published', true)
       .maybeSingle()
