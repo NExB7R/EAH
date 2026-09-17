@@ -2,7 +2,7 @@
 
 ## Milestone Release
 
-### From v0.8.5 → v1.0.0
+### From v1.0.0 → v1.0.0
 
 **UI/UX**
 - 71 files emoji cleanup → 0 emojis
@@ -33,7 +33,7 @@
 
 ---
 
-# Active Changelog — v0.7.6 (2026-09-17)
+# Active Changelog — v1.0.0 (2026-09-17)
 
 ## Session — WhatsApp Orders + Feature Flags + Ads + Partners
 
@@ -72,14 +72,14 @@
 
 ---
 
-# Active Changelog — v0.6.0 (2026-09-17)
+# Active Changelog — v1.0.0 (2026-09-17)
 
 ## Session 2026-09-17 — UI/Perf/Security
 
 ### Commits (ui-onlook) — 30+ commits من 46a0763
 
 **UI:**
-- v0.3.5 → v0.6.0: hero/footer/labels/crown/splash polish
+- v1.0.0 → v1.0.0: hero/footer/labels/crown/splash polish
 - شيل 66 kicker إنجليزي → عربي
 - Footer follow cards + QR share modal
 - Bot B7R (avatar + design)

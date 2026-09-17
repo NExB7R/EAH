@@ -23,7 +23,7 @@
 
 ---
 
-## 2026-09-17 — v0.7.6 — WhatsApp Orders + Feature Flags + Facebook Collect
+## 2026-09-17 — v1.0.0 — WhatsApp Orders + Feature Flags + Facebook Collect
 
 ### ✅ اللي خلص
 
@@ -68,7 +68,7 @@
 
 ---
 
-## 2026-09-17 — v0.6.0 — UI/Perf/Security pass
+## 2026-09-17 — v1.0.0 — UI/Perf/Security pass
 
 ### ✅ اللي خلص
 
@@ -173,7 +173,7 @@
 - `888dfcd` — PWA icons (generated)
 - `bbe09d0` — PWA consolidation
 
-### 🎯 متبقي في v0.2.0
+### 🎯 متبقي في v1.0.0
 1. Real trends من `page_view_events`
 2. Notifications
 3. Migration في الريبو لـ `onboarding_done` + `interests`
@@ -201,7 +201,7 @@
 - `bdc30c2` — RPC get_business_view_stats + real-stats.ts
 - `0934e2a` — fix: wire realStats into home-dynamic
 
-### 📋 متبقي في v0.2.0
+### 📋 متبقي في v1.0.0
 - Notifications (Web Push) — المكونات موجودة
 - تنظيف دوري لـ `page_view_events` (cron أو RPC)
 - عرض `views` الحقيقي في صفحة business
@@ -209,7 +209,7 @@
 
 ---
 
-## 2026-09-13 — Session continued: Push Notifications + Release v0.2.0
+## 2026-09-13 — Session continued: Push Notifications + Release v1.0.0
 
 ### ✅ Push Notifications (كامل)
 - `push_subscriptions` table (public schema, unique endpoint, RLS: self ALL + admin read)
@@ -233,10 +233,10 @@
 - `5a023aa` — push + service role + migration sync
 - `<قادم>` — CSS + release
 
-### 🏁 Release v0.2.0 checklist
+### 🏁 Release v1.0.0 checklist
 - VERSION → 0.2.0
 - CHANGELOG محدّث
-- Git tag `v0.2.0`
+- Git tag `v1.0.0`
 - Push tags
 
 

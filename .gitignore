@@ -1,67 +1,19 @@
-# ═══ OS / Editors ═══
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# ═══ Node / Next.js ═══
+# EAH — Gitignore
 node_modules/
 .next/
-out/
-.turbo/
-next-env.d.ts
-tsconfig.tsbuildinfo
-*.tsbuildinfo
-
-# ═══ Environment / Secrets ═══
+.vercel/
 .env
-.env.*
-!.env.example
-08-web/.env
-08-web/.env.*
-!08-web/.env.example
-.baseline.env
-
-# ═══ Vercel ═══
-.vercel
-
-# ═══ Private notes ═══
-.private/
-*.private.md
-*.private
-.eah/
-
-# ═══ Logs ═══
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# ═══ Local Supabase ═══
-.supabase/
-
-# ═══ OS-level cache ═══
-.cache/
-*.pid
-*.seed
-*.pid.lock
-.env*
-
-# ═══ EAH session/diagnostic artifacts ═══
-_snapshot.txt
-_diag.txt
-_fix_report.txt
-*.snap.txt
-*.snapshot.md
-
-# ═══ Backup files ═══
-*.bak
-*.bak.*
-
-# Vercel production env
-.env.production.local
+.env.local
 .env*.local
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
 diagnosis.txt
+.turbo/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
