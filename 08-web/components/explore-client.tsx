@@ -2,6 +2,7 @@
 import { useMemo } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import ExploreCard from './explore-card'
+import { FOOD_CATEGORIES } from '@/lib/food/categories'
 import './explore-client.css'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'

@@ -2,9 +2,9 @@
 .iab {
   position: fixed;
   left: 50%;
-  bottom: calc(env(safe-area-inset-bottom, 0) + 14px);
+  bottom: calc(env(safe-area-inset-bottom, 0) + 110px);
   transform: translateX(-50%);
-  z-index: 190;
+  z-index: 210;
   width: min(440px, calc(100vw - 20px));
   padding: 10px 12px 10px 16px;
   border-radius: 20px;
