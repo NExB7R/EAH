@@ -27,10 +27,10 @@ const STATUS_COLOR: Record<string, string> = {
 }
 
 const BUSINESS_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  supermarket: '🛒',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  supermarket: '',
+  delivery_office: '',
 }
 
 export default async function AccountOrdersPage() {
@@ -63,7 +63,7 @@ export default async function AccountOrdersPage() {
         <header className="ao__head">
           <Link href="/account" className="ao__back">← حسابي</Link>
           <span className="ao__kicker">أوردراتي</span>
-          <h1 className="ao__title">🛒 طلباتي</h1>
+          <h1 className="ao__title">طلباتي</h1>
           <p className="ao__sub">
             كل الطلبات اللي عملتها — بدون تسجيل، مباشر من واتساب
           </p>
@@ -71,20 +71,20 @@ export default async function AccountOrdersPage() {
 
         {(!orders || orders.length === 0) ? (
           <div className="ao__empty">
-            <span className="ao__empty-emoji">🛒</span>
+            <span className="ao__empty-emoji"></span>
             <h2 className="ao__empty-title">مفيش طلبات لسه</h2>
             <p className="ao__empty-text">
               اطلب من أي مطعم أو صيدلية أو ماركت في المنصة — كل طلباتك هتظهر هنا
             </p>
             <Link href="/explore" className="ao__empty-btn">
-              🔍 اكتشف الأماكن
+              اكتشف الأماكن
             </Link>
           </div>
         ) : (
           <div className="ao__list">
             {orders.map((o: any) => {
               const biz = bizMap.get(o.business_id)
-              const emoji = BUSINESS_EMOJI[biz?.business_type] ?? '🏪'
+              const emoji = BUSINESS_EMOJI[biz?.business_type] ?? ''
               const colorClass = STATUS_COLOR[o.status] ?? 'pending'
               return (
                 <Link key={o.id} href={`/account/orders/${o.id}`} className={`ao__order ao__order--${colorClass}`}>
@@ -116,22 +116,22 @@ export default async function AccountOrdersPage() {
 
                   {o.customer_address && (
                     <div className="ao__meta">
-                      📍 {o.customer_area ? o.customer_area + ' - ' : ''}{o.customer_address}
+                      {o.customer_area ? o.customer_area + ' - ' : ''}{o.customer_address}
                     </div>
                   )}
 
                   {o.notes && (
-                    <div className="ao__notes">💬 {o.notes}</div>
+                    <div className="ao__notes">{o.notes}</div>
                   )}
 
                   <footer className="ao__foot">
                     <span className="ao__foot-text">
-                      {o.status === 'delivered' && '✅ تم التسليم'}
-                      {o.status === 'accepted' && '🎉 المطعم قبل طلبك'}
-                      {o.status === 'rejected' && '❌ المطعم رفض — جرّب مكان تاني'}
+                      {o.status === 'delivered' && 'تم التسليم'}
+                      {o.status === 'accepted' && 'المطعم قبل طلبك'}
+                      {o.status === 'rejected' && 'المطعم رفض — جرّب مكان تاني'}
                       {o.status === 'cancelled' && '🚫 ملغي'}
-                      {o.status === 'seen' && '👁 المطعم شاف طلبك'}
-                      {o.status === 'sent' && '⏳ في انتظار رد المطعم'}
+                      {o.status === 'seen' && 'المطعم شاف طلبك'}
+                      {o.status === 'sent' && 'في انتظار رد المطعم'}
                     </span>
                   </footer>
                 </Link>

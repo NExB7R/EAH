@@ -83,7 +83,7 @@ export default async function AccountPage() {
 
             <div className="acc-hero__meta">
               <span className="acc-chip acc-chip--role">{roleLabel}</span>
-              {isPremium && <span className="acc-chip acc-chip--premium">💎 مميز</span>}
+              {isPremium && <span className="acc-chip acc-chip--premium">مميز</span>}
               {isVerified && <span className="acc-chip acc-chip--verified">✓ موثّق</span>}
               {isBanned && <span className="acc-chip acc-chip--banned">🚫 محظور</span>}
             </div>
@@ -109,7 +109,7 @@ export default async function AccountPage() {
         <section className="acc-grid">
           {role !== 'super_admin' && (
             <div className="acc-card acc-card--third">
-              <span className="acc-card__emoji">⭐</span>
+              <span className="acc-card__emoji"></span>
               <span className="acc-card__value" style={{ color: '#FBBF24' }}>{trustScore}</span>
               <span className="acc-card__label">نقاط الثقة</span>
               <div className="acc-trust-bar">
@@ -125,13 +125,13 @@ export default async function AccountPage() {
           </div>
 
           <div className="acc-card acc-card--third">
-            <span className="acc-card__emoji">✍️</span>
+            <span className="acc-card__emoji"></span>
             <span className="acc-card__value" style={{ color: '#C084FC' }}>{reviewCount ?? 0}</span>
             <span className="acc-card__label">تقييمات</span>
           </div>
 
           <div className="acc-card acc-card--half">
-            <span className="acc-card__emoji">🔔</span>
+            <span className="acc-card__emoji"></span>
             <span className="acc-card__value" style={{ color: '#A855F7' }}>{notifCount ?? 0}</span>
             <span className="acc-card__label">إشعارات جديدة</span>
           </div>
@@ -145,32 +145,32 @@ export default async function AccountPage() {
 
         <section className="acc-section">
           <div className="acc-section__head">
-            <h2 className="acc-section__title">⚡ إجراءات سريعة</h2>
+            <h2 className="acc-section__title">إجراءات سريعة</h2>
           </div>
           <div className="acc-actions">
             <Link href="/explore" className="acc-action">
-              <span className="acc-action__emoji">🔍</span> اكتشف الأماكن
+              <span className="acc-action__emoji"></span> اكتشف الأماكن
             </Link>
             <Link href="/recommend" className="acc-action acc-action--primary">
-              <span className="acc-action__emoji">✨</span> نفسك في ايه؟
+              <span className="acc-action__emoji"></span> نفسك في ايه؟
             </Link>
             <Link href="/offers" className="acc-action">
-              <span className="acc-action__emoji">🔥</span> العروض
+              <span className="acc-action__emoji"></span> العروض
             </Link>
             <Link href="/account/edit" className="acc-action acc-action--primary">
               <span className="acc-action__emoji">✏️</span> تعديل البروفايل
             </Link>
             <Link href="/account/notifications" className="acc-action">
-              <span className="acc-action__emoji">🔔</span> الإشعارات
+              <span className="acc-action__emoji"></span> الإشعارات
             </Link>
             <Link href="/account/orders" className="acc-action">
-              <span className="acc-action__emoji">🛒</span> طلباتي
+              <span className="acc-action__emoji"></span> طلباتي
             </Link>
             <Link href="/account/points" className="acc-action">
-              <span className="acc-action__emoji">💰</span> نقاطي
+              <span className="acc-action__emoji"></span> نقاطي
             </Link>
             <Link href="/account/referral" className="acc-action">
-              <span className="acc-action__emoji">🎁</span> ادعي صحابك
+              <span className="acc-action__emoji"></span> ادعي صحابك
             </Link>
             {!isVerified && (
               <Link href="/account/verify" className="acc-action acc-action--primary">
@@ -178,16 +178,16 @@ export default async function AccountPage() {
               </Link>
             )}
             <Link href="/auth/change-password" className="acc-action">
-              <span className="acc-action__emoji">🔒</span> تغيير كلمة السر
+              <span className="acc-action__emoji"></span> تغيير كلمة السر
             </Link>
             {role === 'merchant' && (
               <Link href="/merchant" className="acc-action acc-action--primary">
-                <span className="acc-action__emoji">🏪</span> لوحة النشاط
+                <span className="acc-action__emoji"></span> لوحة النشاط
               </Link>
             )}
             {role === 'super_admin' && (
               <Link href="/admin" className="acc-action acc-action--primary">
-                <span className="acc-action__emoji">👑</span> لوحة التحكم
+                <span className="acc-action__emoji"></span> لوحة التحكم
               </Link>
             )}
           </div>
@@ -195,7 +195,7 @@ export default async function AccountPage() {
 
         <section className="acc-section">
           <div className="acc-section__head">
-            <h2 className="acc-section__title">📋 معلومات الحساب</h2>
+            <h2 className="acc-section__title">معلومات الحساب</h2>
           </div>
           <div className="acc-info">
             <div className="acc-info__row">
@@ -217,7 +217,7 @@ export default async function AccountPage() {
             {isPremium && (
               <div className="acc-info__row">
                 <span className="acc-info__label">الاشتراك</span>
-                <span className="acc-info__value">💎 مميز</span>
+                <span className="acc-info__value">مميز</span>
               </div>
             )}
           </div>
@@ -225,7 +225,7 @@ export default async function AccountPage() {
 
         <section className="acc-push">
           <div className="acc-push__text">
-            <span className="acc-push__title">🔔 الإشعارات</span>
+            <span className="acc-push__title">الإشعارات</span>
             <span className="acc-push__hint">فعّل الإشعارات عشان توصلك العروض والتقييمات</span>
           </div>
           <EnablePushButton />

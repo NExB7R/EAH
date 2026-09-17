@@ -29,10 +29,10 @@ const STATUS_COLOR: Record<string, string> = {
 }
 
 const BIZ_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  supermarket: '🛒',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  supermarket: '',
+  delivery_office: '',
 }
 
 export default async function OrderDetailPage({
@@ -69,7 +69,7 @@ export default async function OrderDetailPage({
 
   const biz = bizRes.data
   const history = (histRes.data ?? []) as any[]
-  const emoji = BIZ_EMOJI[biz?.business_type ?? ''] ?? '🏪'
+  const emoji = BIZ_EMOJI[biz?.business_type ?? ''] ?? ''
   const colorClass = STATUS_COLOR[order.status] ?? 'pending'
 
   return (
@@ -100,15 +100,15 @@ export default async function OrderDetailPage({
         </header>
 
         <section className="od__card">
-          <h2 className="od__section-title">📦 تفاصيل الأوردر</h2>
+          <h2 className="od__section-title">تفاصيل الأوردر</h2>
           <p className="od__items">{order.items_summary}</p>
           {order.notes && (
-            <div className="od__notes">💬 {order.notes}</div>
+            <div className="od__notes">{order.notes}</div>
           )}
         </section>
 
         <section className="od__card">
-          <h2 className="od__section-title">📍 معلومات التوصيل</h2>
+          <h2 className="od__section-title">معلومات التوصيل</h2>
           <div className="od__info">
             <div className="od__info-row">
               <span>الاسم</span>
@@ -134,7 +134,7 @@ export default async function OrderDetailPage({
         </section>
 
         <section className="od__card">
-          <h2 className="od__section-title">📋 سجل الحالة</h2>
+          <h2 className="od__section-title">سجل الحالة</h2>
           <OrderTimeline items={history} />
         </section>
 
@@ -145,7 +145,7 @@ export default async function OrderDetailPage({
             rel="noreferrer"
             className="od__wa"
           >
-            💬 تواصل مع المطعم على واتساب
+            تواصل مع المطعم على واتساب
           </a>
         )}
       </main>

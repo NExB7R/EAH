@@ -46,7 +46,7 @@ export default async function EditProfilePage() {
 
         <div className="edit__status">
           <div className={`edit__status-card ${isVerified ? 'is-verified' : ''}`}>
-            <span className="edit__status-icon">{isVerified ? '✓' : '⏳'}</span>
+            <span className="edit__status-icon">{isVerified ? '✓' : ''}</span>
             <div>
               <strong className="edit__status-title">
                 {isVerified ? 'حسابك موثق' : 'حسابك غير موثق'}
@@ -66,7 +66,7 @@ export default async function EditProfilePage() {
 
           {role === 'super_admin' && (
             <div className="edit__status-card edit__status-card--admin">
-              <span className="edit__status-icon">👑</span>
+              <span className="edit__status-icon"></span>
               <div>
                 <strong className="edit__status-title">حساب المالك</strong>
                 <span className="edit__status-sub">
@@ -80,7 +80,7 @@ export default async function EditProfilePage() {
         <form action={updateProfile} className="edit__form">
           <section className="edit__section">
             <h2 className="edit__section-title">
-              <span>👤</span>
+              <span></span>
               الاسم الظاهر
             </h2>
             <input
@@ -97,7 +97,7 @@ export default async function EditProfilePage() {
 
           <section className="edit__section">
             <h2 className="edit__section-title">
-              <span>🎨</span>
+              <span></span>
               صورتك
             </h2>
             <p className="edit__section-sub">ارفع صورة من جهازك، أو اختار لون افتراضي.</p>
@@ -110,7 +110,7 @@ export default async function EditProfilePage() {
 
           <section className="edit__section">
             <h2 className="edit__section-title">
-              <span>👤</span>
+              <span></span>
               النوع
             </h2>
             <div className="edit__gender">
@@ -137,7 +137,7 @@ export default async function EditProfilePage() {
 
           <section className="edit__section">
             <h2 className="edit__section-title">
-              <span>💬</span>
+              <span></span>
               نبذة عنك
             </h2>
             <textarea
@@ -158,7 +158,7 @@ export default async function EditProfilePage() {
         </form>
 
         <div className="edit__footer-note">
-          <span>🔒</span>
+          <span></span>
           <p>
             بروفايلك محمي. صورة، اسم، ونبذة فقط — بدون أي بيانات إضافية.
           </p>

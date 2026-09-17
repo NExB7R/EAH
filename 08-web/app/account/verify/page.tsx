@@ -60,7 +60,7 @@ export default async function VerifyPage({
 
         {isVerified && (
           <div className="vf-alert vf-alert--success">
-            <span className="vf-alert__emoji">🎉</span>
+            <span className="vf-alert__emoji"></span>
             <div>
               <strong className="vf-alert__title">حسابك موثق بالفعل</strong>
               <p className="vf-alert__text">الشارة ✓ ظاهرة في بروفايلك.</p>
@@ -70,7 +70,7 @@ export default async function VerifyPage({
 
         {sent === '1' && !isVerified && (
           <div className="vf-alert vf-alert--info">
-            <span className="vf-alert__emoji">✅</span>
+            <span className="vf-alert__emoji"></span>
             <div>
               <strong className="vf-alert__title">تم إرسال طلبك</strong>
               <p className="vf-alert__text">فريق EAH هيراجعه وهيرد عليك قريب.</p>
@@ -80,13 +80,13 @@ export default async function VerifyPage({
 
         {!isVerified && !hasPending && (
           <section className="vf-checks">
-            <h2 className="vf-section-title">📋 شروط التوثيق</h2>
+            <h2 className="vf-section-title">شروط التوثيق</h2>
             <div className="vf-checks__list">
               {Object.entries(CHECK_LABELS).map(([key, label]) => {
                 const ok = checks[key] === true
                 return (
                   <div key={key} className={`vf-check ${ok ? 'vf-check--ok' : 'vf-check--missing'}`}>
-                    <span className="vf-check__icon">{ok ? '✅' : '⬜'}</span>
+                    <span className="vf-check__icon">{ok ? '' : '⬜'}</span>
                     <span className="vf-check__label">{label}</span>
                   </div>
                 )
@@ -115,7 +115,7 @@ export default async function VerifyPage({
 
         {!isVerified && hasPending && (
           <div className="vf-alert vf-alert--pending">
-            <span className="vf-alert__emoji">⏳</span>
+            <span className="vf-alert__emoji"></span>
             <div>
               <strong className="vf-alert__title">طلبك قيد المراجعة</strong>
               <p className="vf-alert__text">هنتواصل معاك بعد ما الإدارة تراجع طلبك.</p>
@@ -125,7 +125,7 @@ export default async function VerifyPage({
 
         {!isVerified && !hasPending && canApply && (
           <section className="vf-form">
-            <h2 className="vf-section-title">📝 بيانات التوثيق</h2>
+            <h2 className="vf-section-title">بيانات التوثيق</h2>
             <form action={submitVerification} className="vf-form__inner">
               <label className="vf-field">
                 <span className="vf-field__label">الاسم الكامل (كما في البطاقة) *</span>
@@ -171,7 +171,7 @@ export default async function VerifyPage({
 
         {!isVerified && !hasPending && !canApply && (
           <div className="vf-alert vf-alert--warning">
-            <span className="vf-alert__emoji">⚠️</span>
+            <span className="vf-alert__emoji"></span>
             <div>
               <strong className="vf-alert__title">مش مستوفي الشروط</strong>
               <p className="vf-alert__text">كمّل الشروط الناقصة فوق وحاول تاني.</p>
@@ -188,15 +188,15 @@ export default async function VerifyPage({
                   <div className="vf-history__head">
                     <span className="vf-history__name">{r.real_name}</span>
                     <span className={`vf-status vf-status--${r.status}`}>
-                      {r.status === 'pending' && '⏳ قيد المراجعة'}
-                      {r.status === 'approved' && '✅ مقبول'}
-                      {r.status === 'rejected' && '❌ مرفوض'}
+                      {r.status === 'pending' && 'قيد المراجعة'}
+                      {r.status === 'approved' && 'مقبول'}
+                      {r.status === 'rejected' && 'مرفوض'}
                     </span>
                   </div>
                   <span className="vf-history__date">
                     {new Date(r.created_at).toLocaleDateString('ar-EG')}
                   </span>
-                  {r.admin_note && <p className="vf-history__note">💬 {r.admin_note}</p>}
+                  {r.admin_note && <p className="vf-history__note">{r.admin_note}</p>}
                 </div>
               ))}
             </div>

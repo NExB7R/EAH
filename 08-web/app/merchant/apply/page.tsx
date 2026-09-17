@@ -12,14 +12,14 @@ async function submitApplication(formData: FormData) {
   const businessName = String(formData.get('business_name') || '').trim()
   const rawCategory = String(formData.get('category') || '').trim()
   const customCategory = String(formData.get('custom_category') || '').trim()
-  const customEmoji = String(formData.get('custom_emoji') || '🏪').trim()
+  const customEmoji = String(formData.get('custom_emoji') || '').trim()
   const description = String(formData.get('description') || '').trim()
 
   if (businessName.length < 2) {
     throw new Error('اكتب اسم النشاط.')
   }
 
-  // ✅ لو اختار "أخرى" → نجمع الأيقونة + الاسم
+  // لو اختار "أخرى" → نجمع الأيقونة + الاسم
   let category = rawCategory
   if (rawCategory === 'other') {
     if (customCategory.length < 2) {
@@ -46,9 +46,9 @@ async function submitApplication(formData: FormData) {
 }
 
 const STEPS = [
-  { n: 1, emoji: '📝', title: 'قدم الطلب',   desc: 'اسم النشاط + نوعه + نبذة' },
-  { n: 2, emoji: '🔍', title: 'مراجعة سريعة', desc: 'فريق EAH بيراجع خلال 24 ساعة' },
-  { n: 3, emoji: '🏪', title: 'لوحة النشاط', desc: 'تتحول لـ Merchant وتدير مكانك' },
+  { n: 1, emoji: '', title: 'قدم الطلب',   desc: 'اسم النشاط + نوعه + نبذة' },
+  { n: 2, emoji: '', title: 'مراجعة سريعة', desc: 'فريق EAH بيراجع خلال 24 ساعة' },
+  { n: 3, emoji: '', title: 'لوحة النشاط', desc: 'تتحول لـ Merchant وتدير مكانك' },
 ]
 
 export const metadata = {
@@ -102,7 +102,7 @@ export default async function MerchantApplyPage({
 
         {sent === '1' && (
           <div className="ap-alert ap-alert--success">
-            <span className="ap-alert__emoji">✅</span>
+            <span className="ap-alert__emoji"></span>
             <div>
               <strong className="ap-alert__title">تم إرسال طلبك</strong>
               <p className="ap-alert__text">فريق EAH هيراجعه وهيرد عليك قريب.</p>
@@ -112,7 +112,7 @@ export default async function MerchantApplyPage({
 
         {hasPending ? (
           <div className="ap-alert ap-alert--info">
-            <span className="ap-alert__emoji">⏳</span>
+            <span className="ap-alert__emoji"></span>
             <div>
               <strong className="ap-alert__title">عندك طلب قيد المراجعة</strong>
               <p className="ap-alert__text">هنتواصل معاك على رقم موبايلك بعد المراجعة.</p>
@@ -121,7 +121,7 @@ export default async function MerchantApplyPage({
         ) : (
           <section className="ap-card">
             <header className="ap-card__head">
-              <h2 className="ap-card__title">📋 بيانات النشاط</h2>
+              <h2 className="ap-card__title">بيانات النشاط</h2>
               <p className="ap-card__sub">كل البيانات سرية — مش هتظهر لأي حد غير فريق EAH.</p>
             </header>
 
@@ -154,7 +154,7 @@ export default async function MerchantApplyPage({
               </div>
 
               <button type="submit" className="ap-submit">
-                ⚡ إرسال طلب صاحب النشاط
+                إرسال طلب صاحب النشاط
               </button>
             </form>
           </section>
@@ -175,13 +175,13 @@ export default async function MerchantApplyPage({
                   <span
                     className={`ap-status ap-status--${a.status}`}
                   >
-                    {a.status === 'pending' && '⏳ قيد المراجعة'}
-                    {a.status === 'approved' && '✅ تمت الموافقة'}
-                    {a.status === 'rejected' && '❌ مرفوض'}
+                    {a.status === 'pending' && 'قيد المراجعة'}
+                    {a.status === 'approved' && 'تمت الموافقة'}
+                    {a.status === 'rejected' && 'مرفوض'}
                     {!['pending', 'approved', 'rejected'].includes(a.status) && a.status}
                   </span>
                   {a.admin_note && (
-                    <p className="ap-history__note">💬 {a.admin_note}</p>
+                    <p className="ap-history__note">{a.admin_note}</p>
                   )}
                 </div>
               ))}
@@ -190,7 +190,7 @@ export default async function MerchantApplyPage({
         )}
 
         <section className="ap-help">
-          <span className="ap-help__emoji">💡</span>
+          <span className="ap-help__emoji"></span>
           <div>
             <strong className="ap-help__title">محتاج مساعدة؟</strong>
             <p className="ap-help__text">

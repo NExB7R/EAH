@@ -35,7 +35,7 @@ export default async function ReferralPage() {
         <header className="rf__hero">
           <Link href="/account" className="rf__back">← رجوع</Link>
           <span className="rf__kicker">الإحالة</span>
-          <h1 className="rf__title">🎁 ادعي صحابك</h1>
+          <h1 className="rf__title">ادعي صحابك</h1>
           <p className="rf__sub">كل صاحب يشترك = 50 نقطة ليك وليه</p>
         </header>
 
@@ -50,7 +50,7 @@ export default async function ReferralPage() {
             <a
               href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
               target="_blank" rel="noreferrer" className="rf__btn rf__btn--facebook"
-            >📘 شارك على فيسبوك</a>
+            >شارك على فيسبوك</a>
           </div>
         </section>
 
@@ -73,7 +73,7 @@ export default async function ReferralPage() {
             <div className="rf__history-list">
               {(refs ?? []).map(r => (
                 <div key={r.id} className="rf__history-item">
-                  <span>🎉 صاحب جديد</span>
+                  <span>صاحب جديد</span>
                   <span className="rf__history-points">+{r.bonus_points}</span>
                   <span className="rf__history-date">
                     {new Date(r.created_at).toLocaleDateString('ar-EG')}

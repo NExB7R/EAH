@@ -21,14 +21,14 @@ type Notif = {
 }
 
 const TYPE_META: Record<string, { emoji: string; label: string; color: string }> = {
-  review:       { emoji: '⭐', label: 'تقييم',   color: '#FBBF24' },
-  reply:        { emoji: '💬', label: 'رد',      color: '#A855F7' },
-  offer:        { emoji: '🔥', label: 'عرض',     color: '#F97316' },
+  review:       { emoji: '', label: 'تقييم',   color: '#FBBF24' },
+  reply:        { emoji: '', label: 'رد',      color: '#A855F7' },
+  offer:        { emoji: '', label: 'عرض',     color: '#F97316' },
   system:       { emoji: '⚙️', label: 'نظام',   color: '#6B6880' },
   ban:          { emoji: '🚫', label: 'حظر',     color: '#EF4444' },
-  points:       { emoji: '⭐', label: 'نقاط',   color: '#FBBF24' },
-  welcome:      { emoji: '🎉', label: 'ترحيب',  color: '#C084FC' },
-  reveal:       { emoji: '📞', label: 'كشف رقم', color: '#A855F7' },
+  points:       { emoji: '', label: 'نقاط',   color: '#FBBF24' },
+  welcome:      { emoji: '', label: 'ترحيب',  color: '#C084FC' },
+  reveal:       { emoji: '', label: 'كشف رقم', color: '#A855F7' },
   verification: { emoji: '✓',  label: 'توثيق',  color: '#A855F7' },
 }
 
@@ -54,7 +54,7 @@ export default async function NotificationsPage() {
         <header className="nt-hero">
           <div className="nt-hero__glow" aria-hidden />
           <span className="nt-hero__kicker">إشعارات EAH</span>
-          <h1 className="nt-hero__title">🔔 الإشعارات</h1>
+          <h1 className="nt-hero__title">الإشعارات</h1>
           <p className="nt-hero__lead">
             {unreadCount > 0 ? `عندك ${unreadCount} إشعار جديد` : 'مفيش إشعارات جديدة'}
           </p>
@@ -71,7 +71,7 @@ export default async function NotificationsPage() {
             <div className="nt-empty__logo">
               <EahLogo size="md" variant="mark" href="/" />
             </div>
-            <h2 className="nt-empty__title">مفيش إشعارات لسه 🔔</h2>
+            <h2 className="nt-empty__title">مفيش إشعارات لسه</h2>
             <p className="nt-empty__text">لما يحصلك حاجة على EAH هتلاقيها هنا.</p>
             <Link href="/explore" className="nt-empty__cta">اكتشف الأماكن ←</Link>
           </div>
