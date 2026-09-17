@@ -23,6 +23,10 @@ type Business = {
   reason: string
   open: boolean
   score?: number
+  avg_rating?: number
+  rating?: number
+  review_count?: number
+  recentViews?: number
   activeOffers?: number
   hook?: string
   workingHours?: any
@@ -117,8 +121,8 @@ export default function ExploreCard({ business, index }: { business: Business; s
           <span className="ecard__type">
             {(() => { const I = TYPE_ICON[business.type]; return <I /> })()} {TYPE_LABEL[business.type]}
           </span>
-          {business.score !== undefined && business.score > 0 && (
-            <span className="ecard__score">★ {(business.score * 5).toFixed(1)}</span>
+          {(business.avg_rating ?? business.rating ?? 0) > 0 && (
+            <span className="ecard__score">★ {(business.avg_rating ?? business.rating ?? 0).toFixed(1)}</span>
           )}
         </div>
 
