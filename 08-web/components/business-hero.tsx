@@ -1,14 +1,15 @@
 'use client'
 import Link from 'next/link'
 import './business-hero.css'
+import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from './eah-icons'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 
-const TYPE_EMOJI: Record<BusinessType, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  delivery_office: '🛵',
-  supermarket: '🛒',
+const TYPE_ICON: Record<BusinessType, React.ComponentType> = {
+  restaurant: IcRestaurant,
+  pharmacy: IcPharmacy,
+  delivery_office: IcDelivery,
+  supermarket: IcMarket,
 }
 
 const TYPE_LABEL: Record<BusinessType, string> = {
@@ -53,7 +54,9 @@ export default function BusinessHero({
       <div className="bhero__inner">
         <div className="bhero__cover">
           <div className="bhero__cover-glow" aria-hidden />
-          <span className="bhero__emoji">{TYPE_EMOJI[business.type]}</span>
+          <span className="bhero__icon" aria-hidden>
+            {(() => { const Icon = TYPE_ICON[business.type]; return <Icon /> })()}
+          </span>
 
           <div className="bhero__badges">
             
