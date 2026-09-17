@@ -82,7 +82,7 @@ export function generateReply(input: string, ctx: Context): Message {
     text: 'معلش، مش فاهم بالظبط 🤔\n\nتحب أعرفك على EAH بشكل عام؟ أو كلّمنا واتساب وهنساعدك شخصياً.',
     timestamp: Date.now(),
     quickReplies: [
-      { label: '✨ إيه هو EAH؟', action: 'reply', value: 'المنصة إيه؟' },
+      { label: ' إيه هو EAH؟', action: 'reply', value: 'المنصة إيه؟' },
       { label: 'واتساب', action: 'link', value: 'https://wa.me/201012892806' },
     ],
   }

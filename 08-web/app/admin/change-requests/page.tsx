@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import ChangeRequestActions from './ChangeRequestActions'
 import './change-requests.css'
-import { IcCalendar, IcInbox } from '@/components/eah-icons'
+import { IcCalendar, IcEdit, IcInbox } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'مراجعة التعديلات' }
@@ -122,7 +122,7 @@ export default async function AdminChangeRequestsPage({
       <header className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">مراجعة المحتوى</span>
-          <h1 className="admin-header__title">📝 مراجعة التعديلات</h1>
+          <h1 className="admin-header__title"><IcEdit /> مراجعة التعديلات</h1>
           <p className="admin-header__subtitle">
             {counts.pending > 0
               ? `⏳ ${counts.pending} طلب في انتظار المراجعة`
@@ -231,7 +231,7 @@ export default async function AdminChangeRequestsPage({
                 )}
 
                 {r.admin_note && (
-                  <div className="cr-card__note">📝 {r.admin_note}</div>
+                  <div className="cr-card__note"><IcEdit /> {r.admin_note}</div>
                 )}
 
                 <div className="cr-card__foot">

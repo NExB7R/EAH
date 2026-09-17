@@ -22,7 +22,7 @@ export function buildOrderMessage(o: OrderForTemplate): string {
   lines.push('━━━━━━━━━━━━━━━━━━')
   lines.push(`📢 *أوردر جديد${o.orderCode ? ' #' + o.orderCode : ''}*`)
   lines.push('')
-  lines.push(`🏪 النشاط: ${o.businessName}`)
+  lines.push(` النشاط: ${o.businessName}`)
   lines.push('')
   lines.push('👤 *بيانات العميل*')
   lines.push(`• الاسم: ${o.customerName}`)
@@ -47,7 +47,7 @@ export function buildOrderMessage(o: OrderForTemplate): string {
   }
   if (o.notes) {
     lines.push('')
-    lines.push(`📝 *ملاحظات:* ${o.notes}`)
+    lines.push(` *ملاحظات:* ${o.notes}`)
   }
   lines.push('')
   lines.push('━━━━━━━━━━━━━━━━━━')

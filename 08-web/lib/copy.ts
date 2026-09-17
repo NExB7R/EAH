@@ -152,7 +152,7 @@ export const COPY = {
     qr: 'كود QR',
   },
   order: {
-    newOrder: '🎉 جايبلك أوردر!',
+    newOrder: ' جايبلك أوردر!',
     sent: 'استلمنا طلبك — في السكة',
     confirmed: 'المطعم قبله',
     rejected: 'معلش، المكان ما قدرش يلبي',

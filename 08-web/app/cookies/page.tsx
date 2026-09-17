@@ -19,13 +19,13 @@ const TYPES = [
     required: true,
   },
   {
-    emoji: '🎨',
+    emoji: '',
     title: 'وظيفية',
     body: 'بتحفظ تفضيلاتك: الوضع الليلي، الفلاتر، آخر بحث. تتحسن التجربة.',
     required: false,
   },
   {
-    emoji: '📊',
+    emoji: '',
     title: 'تحليلية',
     body: 'بتساعدنا نفهم إزاي المنصة بتُستخدم. بدون أي بيانات شخصية.',
     required: false,

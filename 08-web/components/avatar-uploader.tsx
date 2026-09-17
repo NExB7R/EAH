@@ -2,7 +2,7 @@
 import { useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './avatar-uploader.css'
-import { IcTrash } from '@/components/eah-icons'
+import { IcPalette, IcTrash } from '@/components/eah-icons'
 
 type Props = {
   userId: string
@@ -103,7 +103,7 @@ export default function AvatarUploader({ userId, initialUrl, initialKey }: Props
       <div className="avup__tabs" role="tablist">
         <button type="button" role="tab" aria-selected={tab==='preset'}
           className={`avup__tab ${tab==='preset'?'is-active':''}`}
-          onClick={() => setTab('preset')}>🎨 ألوان</button>
+          onClick={() => setTab('preset')}><IcPalette /> ألوان</button>
         <button type="button" role="tab" aria-selected={tab==='upload'}
           className={`avup__tab ${tab==='upload'?'is-active':''}`}
           onClick={() => setTab('upload')}>📷 رفع</button>

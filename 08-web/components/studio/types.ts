@@ -33,7 +33,7 @@ export const SECTION_LABELS: Record<SectionType, { label: string; emoji: string 
   offers:     { label: 'العروض',     emoji: '' },
   categories: { label: 'التصنيفات',  emoji: '📂' },
   cta:        { label: 'CTA',        emoji: '📣' },
-  banner:     { label: 'بانر',       emoji: '🎨' },
+  banner:     { label: 'بانر',       emoji: '' },
   footer:     { label: 'الفوتر',     emoji: '🔻' },
 }
 

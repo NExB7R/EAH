@@ -23,13 +23,13 @@ export const FEATURES: Feature[] = [
   { key: 'gallery',          label: 'معرض صور',                    emoji: '📷', desc: 'رفع صور متعددة وتظهر في الكارد',       category: 'content' },
   { key: 'offers_gallery',   label: 'معرض عروض',                   emoji: '', desc: 'عروض غير محدودة على صفحتك',            category: 'content' },
   { key: 'qr_print',         label: 'QR للطباعة',                  emoji: '', desc: 'كود QR جاهز للطباعة على الفاتورة',     category: 'content' },
-  { key: 'analytics',        label: 'تحليلات النشاط',             emoji: '📊', desc: 'مشاهدات، ضغطات، وكشف أرقام',           category: 'insights' },
+  { key: 'analytics',        label: 'تحليلات النشاط',             emoji: '', desc: 'مشاهدات، ضغطات، وكشف أرقام',           category: 'insights' },
   { key: 'priority_support', label: 'أولوية دعم',                  emoji: '', desc: 'رد أسرع من الفريق',                     category: 'insights' },
 ]
 
 export const FEATURE_CATEGORY_LABEL: Record<string, string> = {
   orders: 'الأوردرات',
   visibility: '👁 الظهور',
-  content: '🎨 المحتوى',
-  insights: '📊 البيانات',
+  content: ' المحتوى',
+  insights: ' البيانات',
 }

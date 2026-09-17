@@ -24,5 +24,5 @@ export async function claimReferral(formData: FormData) {
 
   revalidatePath('/account/referral')
   revalidatePath('/account')
-  return { ok: true, message: `🎉 كسبت ${r.bonus} نقطة!` }
+  return { ok: true, message: ` كسبت ${r.bonus} نقطة!` }
 }

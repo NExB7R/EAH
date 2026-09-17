@@ -23,7 +23,7 @@ export const BOT_GREETING =
 
 export const BOT_QUICK_START = [
   { label: '️ عايز ألاقي مكان', action: 'reply' as const, value: 'دور لي على مكان' },
-  { label: '🏪 عندي نشاط', action: 'reply' as const, value: 'عندي مطعم أو محل' },
+  { label: ' عندي نشاط', action: 'reply' as const, value: 'عندي مطعم أو محل' },
   { label: 'الباقات والأسعار', action: 'reply' as const, value: 'الباقات بكام؟' },
   { label: 'كلّم حد', action: 'link' as const, value: 'https://wa.me/201012892806' },
 ]
@@ -82,13 +82,13 @@ export const KB: Intent[] = [
     id: 'merchant-register',
     keywords: ['عندي مطعم', 'صاحب نشاط', 'عايز أسجل نشاطي', 'صيدلية', 'سوبر ماركت', 'أضيف محلي', 'أضيف مطعمي'],
     response:
-      'عظيم! 🎉 سجّل نشاطك على EAH وهيظهر لآلاف العملاء.\n\n' +
+      'عظيم!  سجّل نشاطك على EAH وهيظهر لآلاف العملاء.\n\n' +
       'مجاناً تماماً في البداية\n' +
-      '📊 تحليلات نشاطك\n' +
+      ' تحليلات نشاطك\n' +
       'تقدر ترد على التقييمات\n' +
       'باقة مميزة للظهور الأول',
     quickReplies: [
-      { label: '🏪 سجّل نشاطك', action: 'link', value: '/merchant/apply' },
+      { label: ' سجّل نشاطك', action: 'link', value: '/merchant/apply' },
       { label: 'الباقات', action: 'link', value: '/pricing' },
     ],
   },
@@ -110,7 +110,7 @@ export const KB: Intent[] = [
       '• معرض عروض\n' +
       '• إشعارات فورية',
     quickReplies: [
-      { label: '✨ كل المميزات', action: 'link', value: '/merchant-info' },
+      { label: ' كل المميزات', action: 'link', value: '/merchant-info' },
       { label: 'سجّل نشاطك', action: 'link', value: '/merchant/apply' },
     ],
   },
@@ -144,7 +144,7 @@ export const KB: Intent[] = [
     quickReplies: [
       { label: 'واتساب', action: 'link', value: 'https://wa.me/201012892806' },
       { label: '📘 فيسبوك', action: 'link', value: 'https://facebook.com/eah.eg' },
-      { label: '📝 صفحة التواصل', action: 'link', value: '/contact' },
+      { label: ' صفحة التواصل', action: 'link', value: '/contact' },
     ],
   },
 
@@ -212,11 +212,11 @@ export const KB: Intent[] = [
     id: 'recommend',
     keywords: ['ترشيح', 'نفسي في', 'مش عارف', 'محتار', 'recommend'],
     response:
-      'خليني أساعدك تختار! ✨\n\n' +
+      'خليني أساعدك تختار! \n\n' +
       'عندنا أداة ذكية بترشحلك الأماكن حسب:\n' +
       '• مزاجك\n• ميزانيتك\n• موقعك',
     quickReplies: [
-      { label: '✨ نفسك في إيه؟', action: 'link', value: '/recommend' },
+      { label: ' نفسك في إيه؟', action: 'link', value: '/recommend' },
     ],
   },
 
@@ -245,7 +245,7 @@ export const KB: Intent[] = [
       'كلّمنا واتساب للتفاصيل.',
     quickReplies: [
       { label: 'كلّمنا', action: 'link', value: 'https://wa.me/201012892806' },
-      { label: '📄 صفحة الإعلانات', action: 'link', value: '/advertise' },
+      { label: ' صفحة الإعلانات', action: 'link', value: '/advertise' },
     ],
   },
 
@@ -328,7 +328,7 @@ export const KB: Intent[] = [
       '• كلّمنا واتساب واحنا نحاول نضيفها\n' +
       '• أو سجّل النشاط بنفسك',
     quickReplies: [
-      { label: '🏪 سجّل نشاطك', action: 'link', value: '/merchant/apply' },
+      { label: ' سجّل نشاطك', action: 'link', value: '/merchant/apply' },
       { label: 'واتساب', action: 'link', value: 'https://wa.me/201012892806' },
     ],
   },
@@ -342,7 +342,7 @@ export const KB: Intent[] = [
       '• مش بنبيعها لأي جهة\n' +
       '• تقدر تحذف حسابك في أي وقت',
     quickReplies: [
-      { label: '📄 سياسة الخصوصية', action: 'link', value: '/privacy' },
+      { label: ' سياسة الخصوصية', action: 'link', value: '/privacy' },
     ],
   },
 
@@ -352,7 +352,7 @@ export const KB: Intent[] = [
     response:
       'الشروط والأحكام متاحة بالكامل على صفحة مخصصة. كل حاجة واضحة ومباشرة 📋',
     quickReplies: [
-      { label: '📄 الشروط', action: 'link', value: '/terms' },
+      { label: ' الشروط', action: 'link', value: '/terms' },
     ],
   },
 
@@ -374,7 +374,7 @@ export const FALLBACK_RESPONSE =
   'تحب أعرفك على EAH بشكل عام؟ أو كلّمنا واتساب وهنساعدك شخصياً.'
 
 export const FALLBACK_REPLIES = [
-  { label: '✨ إيه هو EAH؟', action: 'reply' as const, value: 'المنصة إيه؟' },
+  { label: ' إيه هو EAH؟', action: 'reply' as const, value: 'المنصة إيه؟' },
   { label: 'واتساب', action: 'link' as const, value: 'https://wa.me/201012892806' },
 ]
 

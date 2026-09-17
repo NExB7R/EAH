@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import './collect.css'
-import { IcGlobe } from '@/components/eah-icons'
+import { IcGlobe, IcScroll } from '@/components/eah-icons'
 
 type Recent = {
   id: string
@@ -300,7 +300,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             </label>
 
             <label className="col__field col__field--full">
-              <span>📄 وصف قصير</span>
+              <span><IcScroll /> وصف قصير</span>
               <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
             </label>
           </div>
