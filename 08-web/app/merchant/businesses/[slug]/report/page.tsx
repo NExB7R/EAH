@@ -59,7 +59,25 @@ export default async function MerchantReportPage({
     .select('*', { count: 'exact', head: true })
     .eq('business_id', business.id)
 
-return (
+  // daily insights (last 14 days)
+  const { data: dailyViews } = await supabase
+    .from('page_view_events')
+    .select('created_at')
+    .eq('business_id', business.id)
+    .gte('created_at', new Date(Date.now() - 14 * 86400000).toISOString())
+
+  const dailyMap = new Map<string, number>()
+  for (const ev of (dailyViews ?? []) as { created_at: string }[]) {
+    const day = ev.created_at.slice(0, 10)
+    dailyMap.set(day, (dailyMap.get(day) ?? 0) + 1)
+  }
+  const daily = Array.from({ length: 14 }).map((_, i) => {
+    const d = new Date(Date.now() - (13 - i) * 86400000)
+    const key = d.toISOString().slice(0, 10)
+    return { day: key, views: dailyMap.get(key) ?? 0, reveals: 0, orders: 0 }
+  })
+
+  return (
     <>
       <FloatingCapsuleHeader />
       <main className="mpage">
@@ -282,24 +300,6 @@ return (
 
 function RatingBar({ label, value }: { label: string; value: number }) {
   const pct = (value / 5) * 100
-
-  // daily insights (last 14 days)
-  const { data: dailyViews } = await supabase
-    .from('page_view_events')
-    .select('created_at')
-    .eq('business_id', business.id)
-    .gte('created_at', new Date(Date.now() - 14 * 86400000).toISOString())
-
-  const dailyMap = new Map<string, number>()
-  for (const ev of dailyViews ?? []) {
-    const day = ev.created_at.slice(0, 10)
-    dailyMap.set(day, (dailyMap.get(day) ?? 0) + 1)
-  }
-  const daily = Array.from({ length: 14 }).map((_, i) => {
-    const d = new Date(Date.now() - (13 - i) * 86400000)
-    const key = d.toISOString().slice(0, 10)
-    return { day: key, views: dailyMap.get(key) ?? 0, reveals: 0, orders: 0 }
-  })
 
   return (
     <div>
