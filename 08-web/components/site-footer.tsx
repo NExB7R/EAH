@@ -3,6 +3,7 @@ import EahLogo from './eah-logo'
 import { IconFacebook, IconWhatsapp } from './neon-icons'
 import { CONTACT_CHANNELS, waLink } from '@/app/contact/contact-channels'
 import { APP_VERSION_LABEL } from '@/lib/version'
+import { IcChat } from './eah-icons'
 import './site-footer.css'
 
 export default function SiteFooter() {
@@ -17,7 +18,7 @@ export default function SiteFooter() {
 
         <div className="sf__follow-row">
           <a href={CONTACT_CHANNELS.whatsapp.channel} target="_blank" rel="noreferrer" className="sf__follow-card sf__follow-card--wa">
-            <span className="sf__follow-emoji">📣</span>
+            <span className="sf__follow-emoji"<IcChat />/span>
             <div className="sf__follow-info">
               <strong>قناة الواتساب</strong>
               <small>أول ما ينزل عرض — إنت أول واحد يعرف</small>

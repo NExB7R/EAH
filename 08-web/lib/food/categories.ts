@@ -29,3 +29,19 @@ export function getCategoryLabel(key: string): string {
   const c = FOOD_CATEGORIES.find((x) => x.key === key)
   return c ? `${c.emoji} ${c.label}` : key
 }
+
+
+// icon key mapping → يُترجم في UI إلى eah-icons
+const ICON_MAP: Record<string, string> = {
+  pizza: 'Pizza', crepe: 'Crepe', grill: 'Grill', liver: 'Kebab',
+  koshary: 'Koshary', syrian: 'Shawarma', shawarma: 'Shawarma',
+  sandwiches: 'Sandwich', taameya: 'Taameya', foul: 'Koshary',
+  fish: 'Fish', seafood: 'Fish', burger: 'Burger', hawawshi: 'Bread',
+  feteer: 'Bread', pasta: 'Crepe', chicken: 'Grill', rice: 'Rice',
+  molokhia: 'Koshary', juices: 'Juice', desserts: 'Dessert',
+  coffee: 'Coffee', breakfast: 'Breakfast', eastern: 'Shawarma',
+}
+
+export function getCategoryIconKey(key: string): string {
+  return ICON_MAP[key] ?? 'Sparkle'
+}

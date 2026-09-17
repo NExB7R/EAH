@@ -104,3 +104,105 @@ export const IcArrowLeft = () => (
     <path d="M19 12H5M12 19l-7-7 7-7" />
   </svg>
 )
+
+
+// ═══ Food category icons ═══
+export const IcFoodPizza = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M12 2c4 0 8 2 10 4L12 22 2 6c2-2 6-4 10-4z"/>
+    <circle cx="9" cy="9" r="1"/><circle cx="15" cy="10" r="1"/><circle cx="12" cy="14" r="1"/>
+  </svg>
+)
+export const IcFoodCrepe = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <ellipse cx="12" cy="14" rx="10" ry="6"/>
+    <path d="M5 10c2-3 5-4 7-4s5 1 7 4"/>
+  </svg>
+)
+export const IcFoodGrill = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M4 8h16M4 12h16M4 16h16"/>
+    <circle cx="8" cy="8" r="1.2" fill="currentColor"/><circle cx="16" cy="12" r="1.2" fill="currentColor"/>
+  </svg>
+)
+export const IcFoodKebab = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M5 19l3-3 8-8 3 3-8 8-3 3z"/>
+    <path d="M14 6l4 4M19 4l1 1"/>
+  </svg>
+)
+export const IcFoodKoshary = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M4 12h16a8 8 0 0 1-16 0z"/>
+    <path d="M6 12V9M10 12V8M14 12V9M18 12V10M3 20h18"/>
+  </svg>
+)
+export const IcFoodShawarma = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <ellipse cx="12" cy="6" rx="6" ry="3"/>
+    <path d="M6 6v12c0 1.7 2.7 3 6 3s6-1.3 6-3V6"/>
+    <path d="M6 12h12"/>
+  </svg>
+)
+export const IcFoodSandwich = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M4 10h16l-1 6H5z"/>
+    <path d="M4 10l2-4h12l2 4"/>
+  </svg>
+)
+export const IcFoodTaameya = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <circle cx="9" cy="12" r="4"/><circle cx="15" cy="12" r="4"/>
+  </svg>
+)
+export const IcFoodFish = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M3 12s4-5 9-5 9 5 9 5-4 5-9 5-9-5-9-5z"/>
+    <circle cx="9" cy="11" r="1" fill="currentColor"/>
+  </svg>
+)
+export const IcFoodBurger = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M4 9c0-3 4-5 8-5s8 2 8 5H4z"/>
+    <path d="M4 14h16"/>
+    <path d="M4 17h16a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/>
+  </svg>
+)
+export const IcFoodJuice = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M7 4h10l-1 16H8z"/>
+    <path d="M9 4l1-2h4l1 2"/>
+    <path d="M8 12h8"/>
+  </svg>
+)
+export const IcFoodDessert = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M6 22h12V12H6z"/>
+    <path d="M6 12c0-3 3-5 6-5s6 2 6 5"/>
+    <path d="M12 7V4M12 4h2v3"/>
+  </svg>
+)
+export const IcFoodCoffee = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z"/>
+    <path d="M6 1v3M10 1v3M14 1v3"/>
+  </svg>
+)
+export const IcFoodBread = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M3 10a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v3a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z"/>
+    <path d="M7 10v4M12 10v4M17 10v4"/>
+  </svg>
+)
+export const IcFoodBreakfast = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <ellipse cx="12" cy="14" rx="8" ry="4"/>
+    <circle cx="12" cy="14" r="2" fill="currentColor"/>
+  </svg>
+)
+export const IcFoodRice = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M4 12h16a8 8 0 0 1-16 0z"/>
+    <path d="M8 8c1-2 3-2 4-1s3 1 4-1"/>
+  </svg>
+)

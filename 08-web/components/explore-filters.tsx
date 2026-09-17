@@ -2,6 +2,7 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { FOOD_CATEGORIES } from '@/lib/food/categories'
+import * as Icons from '@/components/eah-icons'
 import './explore-filters.css'
 
 const TYPES = [
@@ -87,16 +88,21 @@ export default function ExploreFilters({ total }: { total: number }) {
               >
                 كل الأنواع
               </button>
-              {FOOD_CATEGORIES.map((c) => (
-                <button
-                  key={c.key}
-                  type="button"
-                  className={`ef__item ${food === c.key ? 'is-on' : ''}`}
-                  onClick={() => { set('food', c.key); setShowFood(false) }}
-                >
-                  {c.label}
-                </button>
-              ))}
+              {FOOD_CATEGORIES.map((c) => {
+                const iconKey = (Icons as any)['IcFood' + (c.key.charAt(0).toUpperCase() + c.key.slice(1))] ?? (Icons as any).IcSparkle
+                const Icon = iconKey
+                return (
+                  <button
+                    key={c.key}
+                    type="button"
+                    className={`ef__item ${food === c.key ? 'is-on' : ''}`}
+                    onClick={() => { set('food', c.key); setShowFood(false) }}
+                  >
+                    <Icon />
+                    <span>{c.label}</span>
+                  </button>
+                )
+              })}
             </div>
           )}
         </div>

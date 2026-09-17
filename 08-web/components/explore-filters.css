@@ -138,3 +138,18 @@
   color: #6B6580;
   margin: 0;
 }
+
+.ef__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ef__item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: #C084FC;
+  transition: color 0.2s;
+}
+.ef__item.is-on svg { color: #E8C79A; }
+.ef__item:hover svg { color: #F4F2FA; }
