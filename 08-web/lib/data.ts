@@ -66,6 +66,7 @@ type BusinessViewModel = {
   address?: string | null
   hasOwner?: boolean
   acceptsWhatsappOrders?: boolean
+  food_categories?: string[]
 }
 
 function toDemoShape(

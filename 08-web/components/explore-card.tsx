@@ -125,6 +125,13 @@ export default function ExploreCard({ business, index }: { business: Business; s
         <span className="ecard__area">📍 {business.area}</span>
 
         {hook && <p className="ecard__hook">{hook}</p>}
+        {(business as any).food_categories && (business as any).food_categories.length > 0 && (
+          <div className="ecard__tags">
+            {((business as any).food_categories as string[]).slice(0, 3).map((k: string) => (
+              <span key={k} className="ecard__tag">{k}</span>
+            ))}
+          </div>
+        )}
       </div>
     </a>
   )

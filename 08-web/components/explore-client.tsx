@@ -2,6 +2,7 @@
 import { useMemo } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import ExploreCard from './explore-card'
+import FoodFilterBar from './food-filter-bar'
 import { FOOD_CATEGORIES } from '@/lib/food/categories'
 import './explore-client.css'
 
@@ -85,10 +86,12 @@ export default function ExploreClient({
     return Array.from(set).sort()
   }, [businesses])
 
+  const [foodCat, setFoodCat] = useState<string | null>(null)
   const filtered = useMemo(() => {
     let list = businesses
 
     if (type !== 'all') list = list.filter((b) => b.type === type)
+    if (foodCat) list = list.filter((b) => (b as any).food_categories?.includes(foodCat) || (b as any).foodCategories?.includes(foodCat))
     if (area !== 'all') list = list.filter((b) => b.area === area)
     if (openOnly) list = list.filter((b) => b.open)
     if (offersOnly) list = list.filter((b) => (b.activeOffers ?? 0) > 0)

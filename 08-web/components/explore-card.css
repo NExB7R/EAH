@@ -153,3 +153,6 @@
   box-shadow: 0 0 12px rgba(251, 191, 36, 0.45);
 }
 .ecard__badge--gold svg { flex-shrink: 0; }
+
+.ecard__tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+.ecard__tag { padding: 2px 8px; border-radius: 999px; background: rgba(168,85,247,.12); border: 1px solid rgba(168,85,247,.25); font-family: var(--font-cairo, system-ui); font-size: .62rem; color: #C4B5FD; font-weight: 800; }

@@ -33,7 +33,7 @@ const cairo = Cairo({
 
 const cairoPlay = Cairo_Play({
   subsets: ['arabic'],
-  weight: ['400', '700', '900'],
+  weight: ['400', '600', '700', '800', '900'],
   display: 'swap',
   variable: '--font-cairo-play',
 })
