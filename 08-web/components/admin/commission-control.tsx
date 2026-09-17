@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
-import { IcCheckCircle } from '@/components/eah-icons'
+import { IcCheckCircle, IcMoney } from '@/components/eah-icons'
 
 export default function CommissionControl({ businessId }: { businessId: string }) {
   const [percent, setPercent] = useState(0)
@@ -42,7 +42,7 @@ export default function CommissionControl({ businessId }: { businessId: string }
   return (
     <div className="comm">
       <div className="comm__head">
-        <span className="comm__emoji">💰</span>
+        <span className="comm__emoji"><IcMoney /></span>
         <div>
           <h3 className="comm__title">عمولة المنصة</h3>
           <p className="comm__desc">النسبة اللي EAH بتاخدها من كل أوردر</p>

@@ -230,7 +230,7 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
   revalidatePath(`/businesses/${data.slug}`)
   revalidatePath('/explore')
   revalidatePath('/')
-  return { ok: true, message: 'تم الحفظ ✅' }
+  return { ok: true, message: 'تم الحفظ' }
 }
 
 export async function deleteBusiness(id: string): Promise<ActionState> {

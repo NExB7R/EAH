@@ -13,7 +13,7 @@ export default function ChangeRequestActions({ id }: { id: string }) {
   function approve() {
     start(async () => {
       const r = await reviewRequestAction(id, 'approved', '')
-      setMsg(r.ok ? 'تم الاعتماد' : `⚠ ${r.error}`)
+      setMsg(r.ok ? 'تم الاعتماد' : ` ${r.error}`)
       if (r.ok) setDone(true)
     })
   }
@@ -22,7 +22,7 @@ export default function ChangeRequestActions({ id }: { id: string }) {
     if (!note.trim()) return
     start(async () => {
       const r = await reviewRequestAction(id, 'rejected', note)
-      setMsg(r.ok ? 'تم الرفض' : `⚠ ${r.error}`)
+      setMsg(r.ok ? 'تم الرفض' : ` ${r.error}`)
       if (r.ok) {
         setDone(true)
         setMode('idle')

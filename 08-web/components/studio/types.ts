@@ -28,8 +28,8 @@ export type DesignData = {
 
 export const SECTION_LABELS: Record<SectionType, { label: string; emoji: string }> = {
   hero:       { label: 'Hero',       emoji: '🎯' },
-  featured:   { label: 'المميز',     emoji: '⭐' },
-  trending:   { label: 'الترند',     emoji: '🔥' },
+  featured:   { label: 'المميز',     emoji: '' },
+  trending:   { label: 'الترند',     emoji: '' },
   offers:     { label: 'العروض',     emoji: '' },
   categories: { label: 'التصنيفات',  emoji: '📂' },
   cta:        { label: 'CTA',        emoji: '📣' },
@@ -53,18 +53,18 @@ export function defaultProps(type: SectionType): Record<string, unknown> {
         showSearch: true,
       }
     case 'featured':
-      return { title: '⭐ المميز', subtitle: 'أماكن تستاهل', count: 6 }
+      return { title: 'المميز', subtitle: 'أماكن تستاهل', count: 6 }
     case 'trending':
-      return { title: '🔥 الترند', subtitle: 'الناس بتدور عليها', count: 6 }
+      return { title: 'الترند', subtitle: 'الناس بتدور عليها', count: 6 }
     case 'offers':
       return { title: 'العروض', subtitle: 'خصومات على الآخر', count: 4 }
     case 'categories':
       return {
         title: 'بتدور على إيه؟',
         items: [
-          { emoji: '🍽️', label: 'مطاعم' },
-          { emoji: '💊', label: 'صيدليات' },
-          { emoji: '🛵', label: 'توصيل' },
+          { emoji: '️', label: 'مطاعم' },
+          { emoji: '', label: 'صيدليات' },
+          { emoji: '', label: 'توصيل' },
         ],
       }
     case 'cta':
@@ -76,7 +76,7 @@ export function defaultProps(type: SectionType): Record<string, unknown> {
       }
     case 'banner':
       return {
-        text: '🚀 قريبًا: تتبع طلبك مباشر',
+        text: 'قريبًا: تتبع طلبك مباشر',
         color: '#A855F7',
       }
     case 'footer':

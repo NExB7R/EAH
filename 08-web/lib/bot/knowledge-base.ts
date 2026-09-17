@@ -22,10 +22,10 @@ export const BOT_GREETING =
   'أهلاً! أنا مساعد EAH الذكي 👋\nممكن أساعدك في إيه؟'
 
 export const BOT_QUICK_START = [
-  { label: '🍽️ عايز ألاقي مكان', action: 'reply' as const, value: 'دور لي على مكان' },
+  { label: '️ عايز ألاقي مكان', action: 'reply' as const, value: 'دور لي على مكان' },
   { label: '🏪 عندي نشاط', action: 'reply' as const, value: 'عندي مطعم أو محل' },
-  { label: '💰 الباقات والأسعار', action: 'reply' as const, value: 'الباقات بكام؟' },
-  { label: '💬 كلّم حد', action: 'link' as const, value: 'https://wa.me/201012892806' },
+  { label: 'الباقات والأسعار', action: 'reply' as const, value: 'الباقات بكام؟' },
+  { label: 'كلّم حد', action: 'link' as const, value: 'https://wa.me/201012892806' },
 ]
 
 // ═══ Main Knowledge Base ═══
@@ -51,15 +51,15 @@ export const KB: Intent[] = [
     keywords: ['دور لي', 'عايز آكل', 'مطعم', 'صيدلية', 'ماركت', 'توصيل', 'ألاقي', 'بفتش', 'دوّر'],
     response:
       'تمام! عايز تدور على إيه؟\n\n' +
-      '🍽️ مطاعم — أكل ومشروبات\n' +
-      '💊 صيدليات — أدوية ومستلزمات\n' +
-      '🛒 ماركت — بقالة ومستلزمات البيت\n' +
-      '🛵 توصيل — مكاتب التوصيل',
+      '️ مطاعم — أكل ومشروبات\n' +
+      'صيدليات — أدوية ومستلزمات\n' +
+      'ماركت — بقالة ومستلزمات البيت\n' +
+      'توصيل — مكاتب التوصيل',
     quickReplies: [
-      { label: '🍽️ مطاعم', action: 'link', value: '/explore?type=restaurant' },
-      { label: '💊 صيدليات', action: 'link', value: '/explore?type=pharmacy' },
-      { label: '🛒 ماركت', action: 'link', value: '/explore?type=supermarket' },
-      { label: '🛵 توصيل', action: 'link', value: '/explore?type=delivery_office' },
+      { label: '️ مطاعم', action: 'link', value: '/explore?type=restaurant' },
+      { label: 'صيدليات', action: 'link', value: '/explore?type=pharmacy' },
+      { label: 'ماركت', action: 'link', value: '/explore?type=supermarket' },
+      { label: 'توصيل', action: 'link', value: '/explore?type=delivery_office' },
     ],
   },
 
@@ -69,11 +69,11 @@ export const KB: Intent[] = [
     keywords: ['أسجل', 'تسجيل', 'حساب', 'أعمل حساب', 'أشترك'],
     response:
       'التسجيل عندنا سهل — دقيقة واحدة بس.\n\n' +
-      '📱 بتسجل بموبايلك + كلمة سر.\n' +
+      'بتسجل بموبايلك + كلمة سر.\n' +
       'مجاناً تماماً.\n' +
       'بياناتك محمية.',
     quickReplies: [
-      { label: '🚀 سجّل الآن', action: 'link', value: '/auth' },
+      { label: 'سجّل الآن', action: 'link', value: '/auth' },
     ],
   },
 
@@ -85,11 +85,11 @@ export const KB: Intent[] = [
       'عظيم! 🎉 سجّل نشاطك على EAH وهيظهر لآلاف العملاء.\n\n' +
       'مجاناً تماماً في البداية\n' +
       '📊 تحليلات نشاطك\n' +
-      '💬 تقدر ترد على التقييمات\n' +
-      '⭐ باقة مميزة للظهور الأول',
+      'تقدر ترد على التقييمات\n' +
+      'باقة مميزة للظهور الأول',
     quickReplies: [
       { label: '🏪 سجّل نشاطك', action: 'link', value: '/merchant/apply' },
-      { label: '💰 الباقات', action: 'link', value: '/pricing' },
+      { label: 'الباقات', action: 'link', value: '/pricing' },
     ],
   },
 
@@ -111,7 +111,7 @@ export const KB: Intent[] = [
       '• إشعارات فورية',
     quickReplies: [
       { label: '✨ كل المميزات', action: 'link', value: '/merchant-info' },
-      { label: '🚀 سجّل نشاطك', action: 'link', value: '/merchant/apply' },
+      { label: 'سجّل نشاطك', action: 'link', value: '/merchant/apply' },
     ],
   },
 
@@ -128,7 +128,7 @@ export const KB: Intent[] = [
       'تجربة مجانية لمدة شهر كامل',
     quickReplies: [
       { label: 'الباقات كاملة', action: 'link', value: '/pricing' },
-      { label: '💬 كلّمنا واتساب', action: 'link', value: 'https://wa.me/201012892806' },
+      { label: 'كلّمنا واتساب', action: 'link', value: 'https://wa.me/201012892806' },
     ],
   },
 
@@ -138,11 +138,11 @@ export const KB: Intent[] = [
     keywords: ['تواصل', 'رقم', 'واتس', 'كلم', 'اتصل', 'مشكلة', 'شكوى'],
     response:
       'تحب تتواصل معانا؟ 📞\n\n' +
-      '💬 واتساب: أسرع طريقة — رد فوري\n' +
+      'واتساب: أسرع طريقة — رد فوري\n' +
       '📘 فيسبوك: EAH Official\n\n' +
       'فريق EAH جاهز يساعدك في أي وقت.',
     quickReplies: [
-      { label: '💬 واتساب', action: 'link', value: 'https://wa.me/201012892806' },
+      { label: 'واتساب', action: 'link', value: 'https://wa.me/201012892806' },
       { label: '📘 فيسبوك', action: 'link', value: 'https://facebook.com/eah.eg' },
       { label: '📝 صفحة التواصل', action: 'link', value: '/contact' },
     ],
@@ -153,14 +153,14 @@ export const KB: Intent[] = [
     id: 'points',
     keywords: ['نقاط', 'مكافآت', 'جوائز', 'referral', 'صاحب', 'ادعي'],
     response:
-      'بتجمع نقاط على كل تفاعل على EAH! ⭐\n\n' +
+      'بتجمع نقاط على كل تفاعل على EAH!\n\n' +
       'زيارة يومية: نقاط\n' +
       '✍️ تكتب تقييم: نقاط\n' +
       'تدعي صاحب: 50 نقطة\n' +
-      '🔥 streak 7 أيام: +10\n\n' +
+      'streak 7 أيام: +10\n\n' +
       'واستبدل النقاط بعروض حقيقية!',
     quickReplies: [
-      { label: '💰 نقاطي', action: 'link', value: '/account/points' },
+      { label: 'نقاطي', action: 'link', value: '/account/points' },
       { label: 'ادعي صحابك', action: 'link', value: '/account/referral' },
     ],
   },
@@ -170,14 +170,14 @@ export const KB: Intent[] = [
     id: 'coming-soon',
     keywords: ['قادم', 'جديد', 'أوردر', 'طلب', 'تتبع', 'مستقبلي', 'planning'],
     response:
-      'ميزات قادمة قريب على EAH! 🚀\n\n' +
+      'ميزات قادمة قريب على EAH!\n\n' +
       '🚚 تتبّع طلبك لحظة بلحظة\n' +
       '🤖 بوت ذكي يطلب بدالك\n' +
-      '💬 شات مباشر مع المكان\n' +
+      'شات مباشر مع المكان\n' +
       '📍 خرائط تفاعلية\n\n' +
       'تابعنا على واتساب لتعرف كل جديد أول بأول.',
     quickReplies: [
-      { label: '💬 تابع واتساب', action: 'link', value: 'https://wa.me/201012892806' },
+      { label: 'تابع واتساب', action: 'link', value: 'https://wa.me/201012892806' },
     ],
   },
 
@@ -186,11 +186,11 @@ export const KB: Intent[] = [
     id: 'offers',
     keywords: ['عروض', 'خصم', 'تخفيض', 'عرض', 'discount'],
     response:
-      'شوف أحلى العروض الحالية! 🔥\n\n' +
+      'شوف أحلى العروض الحالية!\n\n' +
       'كل العروض من أماكن موثوقة على EAH.\n' +
       'بتتجدد يومياً — خليك دايماً في الجو.',
     quickReplies: [
-      { label: '🔥 كل العروض', action: 'link', value: '/offers' },
+      { label: 'كل العروض', action: 'link', value: '/offers' },
     ],
   },
 
@@ -225,10 +225,10 @@ export const KB: Intent[] = [
     id: 'favorites',
     keywords: ['مفضلة', 'حفظ', 'favorite', 'بحفظ'],
     response:
-      'تقدر تحفظ الأماكن في المفضلة! ❤️\n\n' +
+      'تقدر تحفظ الأماكن في المفضلة!\n\n' +
       'كده ترجع لأي مكان بسهولة في أي وقت.',
     quickReplies: [
-      { label: '❤️ مفضلتي', action: 'link', value: '/account' },
+      { label: 'مفضلتي', action: 'link', value: '/account' },
     ],
   },
 
@@ -254,7 +254,7 @@ export const KB: Intent[] = [
     id: 'palestine',
     keywords: ['فلسطين', 'غزة', 'دعم', 'تبرع'],
     response:
-      'فلسطين في القلب ❤️\n\n' +
+      'فلسطين في القلب\n\n' +
       'على EAH بنؤمن إن كل حد يقدر يدعم القضية بطريقته.\n' +
       'عندنا صفحة كاملة بطرق دعم واقعية وآمنة.',
     quickReplies: [
@@ -267,7 +267,7 @@ export const KB: Intent[] = [
     id: 'verify',
     keywords: ['توثيق', 'موثق', 'verified', 'شهادة'],
     response:
-      'التوثيق بيدي حسابك مصداقية أكبر ✓\n\n' +
+      'التوثيق بيدي حسابك مصداقية أكبر\n\n' +
       'حسابك الموثق:\n' +
       '• يبان أعلى في التفاعل\n' +
       '• ثقة أكبر من الناس\n' +
@@ -282,7 +282,7 @@ export const KB: Intent[] = [
     id: 'app',
     keywords: ['تطبيق', 'app', 'نزّل', 'ثبت', 'تحميل', 'instal'],
     response:
-      'ثبّت EAH على موبايلك 📱\n\n' +
+      'ثبّت EAH على موبايلك\n\n' +
       'يشتغل أوفلاين\n' +
       'أسرع 3x\n' +
       'إشعارات فورية\n\n' +
@@ -301,7 +301,7 @@ export const KB: Intent[] = [
       '• تأكد إن النت شغال\n\n' +
       'لو المشكلة مستمرة، كلّمنا واتساب.',
     quickReplies: [
-      { label: '💬 واتساب', action: 'link', value: 'https://wa.me/201012892806' },
+      { label: 'واتساب', action: 'link', value: 'https://wa.me/201012892806' },
     ],
   },
 
@@ -315,7 +315,7 @@ export const KB: Intent[] = [
       '• لو حسابك محظور، كلّمنا',
     quickReplies: [
       { label: '🔐 استرجاع كلمة السر', action: 'link', value: '/auth/recover' },
-      { label: '💬 واتساب', action: 'link', value: 'https://wa.me/201012892806' },
+      { label: 'واتساب', action: 'link', value: 'https://wa.me/201012892806' },
     ],
   },
 
@@ -329,7 +329,7 @@ export const KB: Intent[] = [
       '• أو سجّل النشاط بنفسك',
     quickReplies: [
       { label: '🏪 سجّل نشاطك', action: 'link', value: '/merchant/apply' },
-      { label: '💬 واتساب', action: 'link', value: 'https://wa.me/201012892806' },
+      { label: 'واتساب', action: 'link', value: 'https://wa.me/201012892806' },
     ],
   },
 
@@ -375,7 +375,7 @@ export const FALLBACK_RESPONSE =
 
 export const FALLBACK_REPLIES = [
   { label: '✨ إيه هو EAH؟', action: 'reply' as const, value: 'المنصة إيه؟' },
-  { label: '💬 واتساب', action: 'link' as const, value: 'https://wa.me/201012892806' },
+  { label: 'واتساب', action: 'link' as const, value: 'https://wa.me/201012892806' },
 ]
 
 // ═══ Matcher ═══

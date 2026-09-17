@@ -34,7 +34,7 @@ export async function sendPushToUser(userId: string, payload: PushPayload) {
   try {
     const supabase = createServiceClient()
 
-    // ✅ فحص تفضيلات المستخدم + ساعات الهدوء
+    // فحص تفضيلات المستخدم + ساعات الهدوء
     const { data: profile } = await supabase
       .from('profiles')
       .select('notif_prefs, notif_quiet_hours')

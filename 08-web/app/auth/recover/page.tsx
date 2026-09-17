@@ -46,7 +46,7 @@ export default function RecoverPage() {
     // الطريقة الآمنة: نطلب من Supabase إرسال رابط استرجاع للإيميل الوهمي
     // لكن الإيميل وهمي — الحل: استخدام RPC إداري (user_metadata)
 
-    // ⚠️ طريقة آمنة: تسجيل دخول بـ reset token مُولَّد من السيرفر
+    //  طريقة آمنة: تسجيل دخول بـ reset token مُولَّد من السيرفر
     // للـ MVP هنا: نستخدم إعادة تعيين عبر RPC (لو موجود) وإلا رسالة توضيحية
     const { error } = await supabase.auth.signInWithOtp({
       email,

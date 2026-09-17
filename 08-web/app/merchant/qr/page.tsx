@@ -6,7 +6,7 @@ import SiteFooter from '@/components/site-footer'
 import { getMerchantContext } from '@/lib/admin/merchant-guard'
 import QRCode from 'qrcode'
 import './qr.css'
-import { IcEye } from '@/components/eah-icons'
+import { IcEye, IcMobile } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'QR Code' }
@@ -32,7 +32,7 @@ export default async function MerchantQRPage() {
         <header className="qr__hero">
           <Link href="/merchant" className="qr__back">← لوحة النشاط</Link>
           <span className="qr__kicker">شريكنا</span>
-          <h1 className="qr__title">📱 QR Code النشاط</h1>
+          <h1 className="qr__title"><IcMobile /> QR Code النشاط</h1>
           <p className="qr__sub">اطبع ده وحطه على واجهة المكان — الزبون يمسح ويوصل لصفحتك</p>
         </header>
 

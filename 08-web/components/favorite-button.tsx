@@ -109,7 +109,7 @@ export default function FavoriteButton({
       aria-label={active ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}
       title={needsAuth ? 'سجّل عشان تضيف للمفضلة' : active ? 'في المفضلة' : 'أضف للمفضلة'}
     >
-      {active ? '❤️' : '🤍'}
+      {active ? '' : '🤍'}
     </button>
   )
 }

@@ -112,7 +112,7 @@ export async function updateOffer(
 
   revalidatePath(`/admin/businesses/${businessSlug}/offers`)
   revalidatePath(`/businesses/${businessSlug}`)
-  return { ok: true, message: 'تم الحفظ ✅' }
+  return { ok: true, message: 'تم الحفظ' }
 }
 
 // ============================================================

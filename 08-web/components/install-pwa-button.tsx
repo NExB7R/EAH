@@ -78,7 +78,7 @@ export default function InstallPWAButton({ variant = 'default' }: { variant?: 'd
                   <li>افتح الموقع على <strong>Safari</strong></li>
                   <li>اضغط زر <strong>المشاركة</strong> (مربع + سهم فوق)</li>
                   <li>اختر <strong>إضافة إلى الشاشة الرئيسية</strong></li>
-                  <li>اضغط <strong>إضافة</strong> — خلاص ✓</li>
+                  <li>اضغط <strong>إضافة</strong> — خلاص </li>
                 </ol>
               </>
             ) : (
@@ -87,7 +87,7 @@ export default function InstallPWAButton({ variant = 'default' }: { variant?: 'd
                 <ol className="ipb-modal__steps">
                   <li>افتح قائمة المتصفح (٣ نقط)</li>
                   <li>اختر <strong>تثبيت التطبيق</strong> أو <strong>إضافة إلى الشاشة الرئيسية</strong></li>
-                  <li>اضغط <strong>تثبيت</strong> — خلاص ✓</li>
+                  <li>اضغط <strong>تثبيت</strong> — خلاص </li>
                 </ol>
               </>
             )}

@@ -8,7 +8,7 @@ import RoyalAvatar from '@/components/royal-avatar'
 import EnablePushButton from '@/components/enable-push-button'
 import '@/components/royal-avatar.css'
 import './account.css'
-import { IcBan, IcCalendar, IcCheck } from '@/components/eah-icons'
+import { IcBan, IcCalendar, IcCheck, IcHeart } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'حسابي' }
@@ -120,7 +120,7 @@ export default async function AccountPage() {
           )}
 
           <div className="acc-card acc-card--third">
-            <span className="acc-card__emoji">❤️</span>
+            <span className="acc-card__emoji"><IcHeart /></span>
             <span className="acc-card__value" style={{ color: '#FB923C' }}>{favCount ?? 0}</span>
             <span className="acc-card__label">مفضلة</span>
           </div>

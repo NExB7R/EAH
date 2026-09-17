@@ -36,7 +36,7 @@ export default function BusinessActions({ id, slug, is_featured, is_published, i
         <Link href={`/admin/businesses/${slug}/access`} className="admin-btn admin-btn--sm">🔐 صلاحيات</Link>
 
         <button type="button" className={`admin-btn admin-btn--sm ${is_featured ? 'admin-btn--gold' : ''}`} onClick={() => toggle('is_featured')} disabled={pending}>
-          {is_featured ? 'مميز ✓' : 'ميّز'}
+          {is_featured ? 'مميز' : 'ميّز'}
         </button>
 
         <button type="button" className={`admin-btn admin-btn--sm ${is_published ? '' : 'admin-btn--ghost'}`} onClick={() => toggle('is_published')} disabled={pending}>

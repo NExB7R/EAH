@@ -64,19 +64,19 @@ export const COPY = {
   },
   categories: {
     title: 'نفسك في إيه؟',
-    restaurant: '🍽️ مطاعم',
-    pharmacy: '💊 صيدليات',
-    supermarket: '🛒 ماركت',
-    delivery: '🛵 توصيل',
+    restaurant: '️ مطاعم',
+    pharmacy: 'صيدليات',
+    supermarket: 'ماركت',
+    delivery: 'توصيل',
   },
   sections: {
     featured: {
-      title: '⭐ المميزين',
+      title: 'المميزين',
       subtitle: 'أماكن تستاهل',
       empty: 'لسه مفيش حد مميز',
     },
     trending: {
-      title: '🔥 مولعة النهاردة',
+      title: 'مولعة النهاردة',
       subtitle: 'الناس بتدور عليها دلوقتي',
       empty: 'لسه مفيش ترند',
     },
@@ -154,7 +154,7 @@ export const COPY = {
   order: {
     newOrder: '🎉 جايبلك أوردر!',
     sent: 'استلمنا طلبك — في السكة',
-    confirmed: 'المطعم قبله ✅',
+    confirmed: 'المطعم قبله',
     rejected: 'معلش، المكان ما قدرش يلبي',
     delivered: 'اتسلّم — بالهنا والشفا',
     contact: 'اتواصل معاهم',
@@ -207,7 +207,7 @@ export const COPY = {
     },
   },
   success: {
-    generic: 'تمام ✓',
+    generic: 'تمام',
     saved: 'تم الحفظ يا غالي',
     deleted: 'اتحذف',
     updated: 'اتحدّث',

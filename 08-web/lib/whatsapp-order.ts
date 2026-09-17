@@ -31,8 +31,8 @@ export function buildOrderMessage(o: OrderForTemplate): string {
   if (o.address) lines.push(`• العنوان: ${o.address}`)
   if (o.customerVerified || o.customerTrustScore || o.customerReviews) {
     lines.push('')
-    lines.push('⭐ *بروفايل العميل على EAH*')
-    if (o.customerVerified) lines.push('• ✅ موثّق')
+    lines.push('*بروفايل العميل على EAH*')
+    if (o.customerVerified) lines.push('• موثّق')
     if (o.customerTrustScore) lines.push(`• Trust Score: ${o.customerTrustScore}`)
     if (o.customerReviews) lines.push(`• ${o.customerReviews} تقييم`)
   }
@@ -52,7 +52,7 @@ export function buildOrderMessage(o: OrderForTemplate): string {
   lines.push('')
   lines.push('━━━━━━━━━━━━━━━━━━')
   lines.push('✋ *لما تستلم الأوردر، رد على العميل مباشرة.*')
-  lines.push('📱 EAH — اللي نفسك فيه ؟')
+  lines.push('EAH — اللي نفسك فيه ؟')
   return lines.join('\n')
 }
 

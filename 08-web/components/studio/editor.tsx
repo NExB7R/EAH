@@ -6,7 +6,7 @@ import {
 } from './types'
 import { currentHomeDesign } from './current-design'
 import Inspector from './inspector'
-import { IcBan, IcCheck, IcDown, IcEye, IcList, IcRefresh, IcTrash, IcUp } from '@/components/eah-icons'
+import { IcBan, IcCheck, IcDown, IcEye, IcList, IcMobile, IcRefresh, IcTrash, IcUp } from '@/components/eah-icons'
 
 type Viewport = 'desktop' | 'tablet' | 'mobile'
 
@@ -362,7 +362,7 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
             <div className="ed__cmd-hints">
               <span>احفظ</span>
               <span><IcRefresh /> إعادة تعيين</span>
-              <span>📱 تغيير الجهاز</span>
+              <span><IcMobile /> تغيير الجهاز</span>
               <span>أضف قسم</span>
             </div>
           </div>

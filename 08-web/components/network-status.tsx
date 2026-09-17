@@ -37,7 +37,7 @@ export default function NetworkStatus() {
     >
       
       <span className="nstatus__text">
-        {online ? 'رجع النت ✅' : 'أنت أوفلاين — وضع محدود'}
+        {online ? 'رجع النت ' : 'أنت أوفلاين — وضع محدود'}
       </span>
     </div>
   )

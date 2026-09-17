@@ -37,7 +37,7 @@ export default function ImageUploader({
   const [dragOver, setDragOver] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // ✅ Sync مع initial لما يتغير من الـ server
+  //  Sync مع initial لما يتغير من الـ server
   useEffect(() => {
     setImages(initial.map((url) => ({ url, path: '', bucket })))
   }, [initial.join('|')])  // eslint-disable-line react-hooks/exhaustive-deps
@@ -98,7 +98,7 @@ export default function ImageUploader({
     })
   }
 
-  // ✅ Controlled hidden input — value من state
+  //  Controlled hidden input — value من state
   const hiddenValue = JSON.stringify(images.map((i) => i.url))
 
   return (

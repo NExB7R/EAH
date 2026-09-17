@@ -54,7 +54,7 @@ export default function RewardCard({
     start(async () => {
       const r = await redeemReward(reward.id)
       if (r.ok) {
-        setResult({ ok: true, msg: `✓ كودك: ${r.code}` })
+        setResult({ ok: true, msg: ` كودك: ${r.code}` })
       } else {
         setResult({ ok: false, msg: r.message ?? 'خطأ' })
       }

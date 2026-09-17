@@ -153,7 +153,7 @@ export default async function AdminMerchantsPage({
         <input
           type="text"
           name="q"
-          placeholder="🔎 ابحث باسم النشاط أو رقم المتقدم..."
+          placeholder=" ابحث باسم النشاط أو رقم المتقدم..."
           defaultValue={sp.q ?? ''}
         />
       </form>

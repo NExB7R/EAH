@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { FOOD_CATEGORIES } from '@/lib/food/categories'
 import './food-categories-picker.css'
+import { IcRestaurant } from '@/components/eah-icons'
 
 export default function FoodCategoriesPicker({
   value, onChange, max = 5,
@@ -13,7 +14,7 @@ export default function FoodCategoriesPicker({
   return (
     <div className="fcp">
       <div className="fcp__head">
-        <span>🍽 التصنيفات ({value.length}/{max})</span>
+        <span><IcRestaurant /> التصنيفات ({value.length}/{max})</span>
         <small>اختار لحد {max} تصنيفات</small>
       </div>
       <div className="fcp__grid">

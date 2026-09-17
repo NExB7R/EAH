@@ -60,7 +60,7 @@ export async function bulkApproveAction(ids: string[]): Promise<ActionResult> {
       if (!error) okCount++
     }
     revalidatePath('/admin/change-requests')
-    return { ok: true, message: `✅ تم اعتماد ${okCount} طلب` }
+    return { ok: true, message: `تم اعتماد ${okCount} طلب` }
   } catch (e) {
     return { ok: false, error: String(e) }
   }

@@ -167,7 +167,7 @@ export default async function AdminReferralsPage({
           <input
             type="text"
             name="q"
-            placeholder="🔎 ابحث بالاسم أو الرقم أو الكود..."
+            placeholder=" ابحث بالاسم أو الرقم أو الكود..."
             defaultValue={sp.q ?? ''}
           />
         </form>

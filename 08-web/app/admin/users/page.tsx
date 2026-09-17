@@ -156,7 +156,7 @@ export default async function UsersPage({
         <input
           type="text"
           name="q"
-          placeholder="🔎 ابحث بالاسم أو رقم الهاتف..."
+          placeholder=" ابحث بالاسم أو رقم الهاتف..."
           defaultValue={search}
         />
       </form>

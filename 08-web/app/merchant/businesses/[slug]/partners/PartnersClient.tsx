@@ -37,7 +37,7 @@ export default function PartnersClient({
       if (error || !data?.ok) {
         setErr(data?.error ?? error?.message ?? 'فشل')
       } else {
-        setMsg('تم نقل الملكية بنجاح ✅')
+        setMsg('تم نقل الملكية بنجاح ')
         setPhone('')
         setTimeout(() => window.location.reload(), 1500)
       }

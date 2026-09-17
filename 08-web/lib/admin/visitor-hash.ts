@@ -1,6 +1,6 @@
 /**
  * Client-side helper: يولّد token ثابت لكل جهاز.
- * ⚠️ ده مش hash نهائي — السيرفر بيعيد خلطه مع IP+UA.
+ * ده مش hash نهائي — السيرفر بيعيد خلطه مع IP+UA.
  */
 
 export function getClientToken(): string {

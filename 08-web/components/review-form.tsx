@@ -6,7 +6,7 @@ import { IcCheckCircle } from '@/components/eah-icons'
 
 const RATINGS = [
   { key: 'taste',      emoji: '', label: 'الطعم' },
-  { key: 'value',      emoji: '💰', label: 'القيمة' },
+  { key: 'value',      emoji: '', label: 'القيمة' },
   { key: 'speed',      emoji: '', label: 'السرعة' },
   { key: 'experience', emoji: '', label: 'التجربة' },
 ]

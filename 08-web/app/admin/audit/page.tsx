@@ -148,7 +148,7 @@ export default async function AuditPage({
         <input
           type="text"
           name="q"
-          placeholder="🔎 ابحث بالفاعل أو العملية أو المعرّف..."
+          placeholder=" ابحث بالفاعل أو العملية أو المعرّف..."
           defaultValue={sp.q ?? ''}
         />
       </form>

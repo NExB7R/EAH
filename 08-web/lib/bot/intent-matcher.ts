@@ -83,7 +83,7 @@ export function generateReply(input: string, ctx: Context): Message {
     timestamp: Date.now(),
     quickReplies: [
       { label: '✨ إيه هو EAH؟', action: 'reply', value: 'المنصة إيه؟' },
-      { label: '💬 واتساب', action: 'link', value: 'https://wa.me/201012892806' },
+      { label: 'واتساب', action: 'link', value: 'https://wa.me/201012892806' },
     ],
   }
 }

@@ -168,7 +168,7 @@ export default async function AdminChangeRequestsPage({
         <input
           type="text"
           name="q"
-          placeholder="🔎 ابحث باسم النشاط أو رقم المقدم..."
+          placeholder=" ابحث باسم النشاط أو رقم المقدم..."
           defaultValue={sp.q ?? ''}
         />
       </form>

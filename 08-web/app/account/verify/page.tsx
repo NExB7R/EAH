@@ -64,7 +64,7 @@ export default async function VerifyPage({
             <span className="vf-alert__emoji"></span>
             <div>
               <strong className="vf-alert__title">حسابك موثق بالفعل</strong>
-              <p className="vf-alert__text">الشارة ✓ ظاهرة في بروفايلك.</p>
+              <p className="vf-alert__text">الشارة  ظاهرة في بروفايلك.</p>
             </div>
           </div>
         )}

@@ -10,7 +10,7 @@ export type PresetAvatar = { key: string; from: string; to: string }
  * نظام الشارات:
  *   👑 super_admin   → تاج ذهبي (فريد)
  *   💎 merchant_premium → ماسة (للاشتراك المدفوع)
- *   ✓  verified      → توثيق الحساب
+ *    verified      → توثيق الحساب
  */
 
 export const AVATARS: PresetAvatar[] = [

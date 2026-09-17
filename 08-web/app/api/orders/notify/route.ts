@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   if (!biz?.owner_profile_id) return NextResponse.json({ ok: false, error: 'no_owner' })
 
   const result = await sendPushToUser(biz.owner_profile_id, {
-    title: `🛒 طلب جديد من ${order.customer_name}`,
+    title: `طلب جديد من ${order.customer_name}`,
     body: order.items_summary.slice(0, 100),
     url: '/merchant/orders',
   })

@@ -27,7 +27,7 @@ export default function WorkingHoursEditor({ initial = {} }: { initial?: Working
     return out
   })
 
-  // ✅ Controlled value — مفيش DOM hacks
+  //  Controlled value — مفيش DOM hacks
   const serialized = JSON.stringify(hours)
 
   const update = (day: string, patch: Partial<DayHours>) => {
@@ -61,7 +61,7 @@ export default function WorkingHoursEditor({ initial = {} }: { initial?: Working
 
   return (
     <div className="wh-editor">
-      {/* ✅ Controlled input — value يتحدث مع state */}
+      {/*  Controlled input — value يتحدث مع state */}
       <input type="hidden" name="working_hours_json" value={serialized} readOnly />
 
       <div className="wh-editor__toolbar">
