@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './order-request.css'
 import { buildOrderMessage, generateOrderCode } from '@/lib/whatsapp-order'
+import { IcMarket, IcChat, IcPhone } from './eah-icons'
 
 type Props = {
   businessId: string
@@ -140,7 +141,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
   if (!open) {
     return (
       <button type="button" className="orr__trigger" onClick={() => setOpen(true)}>
-        <span className="orr__trigger-emoji">🛒</span>
+        <span className="orr__trigger-icon"><IcMarket /></span>
         <span className="orr__trigger-text">
           <strong>اطلب أوردر</strong>
           <small>يتبعت مباشر على واتساب المطعم</small>
@@ -155,7 +156,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
       <header className="orr__head">
         <div>
           <span className="orr__kicker">نموذج الطلب</span>
-          <h3 className="orr__title">🛒 اطلب من {businessName}</h3>
+          <h3 className="orr__title">اطلب من {businessName}</h3>
           <p className="orr__sub">
             اكتب الأوردر، ونحوله لك على واتساب المطعم مباشرة
           </p>
@@ -177,7 +178,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
             rel="noreferrer"
             className="orr__success-btn"
           >
-            💬 افتح واتساب المطعم
+            افتح واتساب المطعم
           </a>
           <button
             type="button"

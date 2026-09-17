@@ -256,3 +256,14 @@
   .orr__trigger { padding: 14px 16px; }
   .orr__trigger-emoji { font-size: 1.5rem; }
 }
+
+.orr__trigger-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #C084FC;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.4));
+}
+.orr__trigger-icon svg { width: 100%; height: 100%; }
