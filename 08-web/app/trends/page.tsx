@@ -6,15 +6,14 @@ import EahLogo from '@/components/eah-logo'
 import { createClient } from '@/lib/supabase-server'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
-import { generateMockStats } from '@/lib/mock-stats'
 import { getViewStats } from '@/lib/real-stats'
 import './trends.css'
 
 export const revalidate = 120
 
 export const metadata = {
-  title: 'الالترند النهاردة',
-  description: 'أحدث الالترند النهاردة في شبين القناطر — الأماكن الأكثر تفاعلاً وزيارات.',
+  title: 'الترند النهاردة',
+  description: 'أحدث الترند النهاردة في شبين القناطر — الأماكن الأكثر تفاعلاً وزيارات.',
 }
 
 const TYPE_EMOJI: Record<string, string> = {
@@ -33,21 +32,25 @@ const TYPE_LABEL: Record<string, string> = {
 
 export default async function TrendsPage() {
   const businesses = await getPublishedBusinesses(50)
-  const realStats = await getViewStats(businesses.map((b) => b.slug), 7)
 
-  const withStats = businesses.map((b) => {
-    const real = realStats.get(b.slug)
-    return {
-      ...b,
-      ...generateMockStats(
-        { slug: b.slug, name: b.name, featured: b.badge === 'مميز' },
-        real ? { recentViews: real.views } : undefined,
-      ),
-    }
-  })
+  const viewStats = await getViewStats(businesses.map((b) => b.slug), 7)
+  const withStats = businesses.map((b) => ({
+    ...b,
+    id: b.businessId ?? b.slug,
+    recentViews: viewStats.get(b.slug)?.views ?? 0,
+    rating: b.rating ?? 0,
+    avg_rating: b.rating ?? 0,
+    reviewCount: b.reviewCount ?? 0,
+    recentComments: b.recentComments ?? 0,
+    activeOffers: b.activeOffers ?? 0,
+    ageInDays: b.ageInDays ?? 0,
+    isFeatured: b.featured ?? false,
+    lastShownAt: undefined,
+    totalImpressions: 0,
+  }))
 
-  const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
-  const diversified = diversifyByCategory(ranked, 'type')
+  const ranked = rankBusinesses(withStats as any, { includeFeaturedBoost: true })
+  const diversified = diversifyByCategory(ranked as any, 'type') as any[]
   const top3 = diversified.slice(0, 3)
   const rest = diversified.slice(3, 20)
 
@@ -69,7 +72,7 @@ export default async function TrendsPage() {
             <EahLogo size="md" variant="full" href="/" />
           </div>
           <span className="tr__kicker">الترند النهاردة</span>
-          <h1 className="tr__title">الالترند النهاردة</h1>
+          <h1 className="tr__title">الترند النهاردة</h1>
           <p className="tr__sub">
             الأماكن الأكثر تفاعلاً وزيارات في آخر 7 أيام
           </p>
@@ -178,7 +181,7 @@ export default async function TrendsPage() {
           <div className="tr__empty">
             <span className="tr__empty-emoji"></span>
             <h3>مفيش بيانات كفاية للترند دلوقتي</h3>
-            <p>ارجعلنا قريب — الالترند النهاردة بتتجدد كل يوم.</p>
+            <p>ارجعلنا قريب — الترند النهاردة بتتجدد كل يوم.</p>
             <Link href="/explore" className="tr__empty-btn">اكتشف الأماكن</Link>
           </div>
         )}

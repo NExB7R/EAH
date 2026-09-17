@@ -7,7 +7,6 @@ import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
 import { getViewStats } from '@/lib/real-stats'
 
-import { generateMockStats } from '@/lib/mock-stats'
 
 export const revalidate = 600
 export const metadata = {
@@ -17,22 +16,26 @@ export const metadata = {
 
 export default async function RecommendPage() {
   const businesses = await getPublishedBusinesses(50)
-  const realStats = await getViewStats(businesses.map((b) => b.slug), 7)
-  const withStats = businesses.map((b) => {
-    const real = realStats.get(b.slug)
-    return {
-      ...b,
-      ...generateMockStats(
-        { slug: b.slug, name: b.name, featured: b.badge === 'مميز' },
-        real ? { recentViews: real.views } : undefined
-      ),
-    }
-  })
-  const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
+  const viewStats = await getViewStats(businesses.map((b) => b.slug), 7)
+  const withStats = businesses.map((b) => ({
+    ...b,
+    id: b.businessId ?? b.slug,
+    recentViews: viewStats.get(b.slug)?.views ?? 0,
+    rating: b.rating ?? 0,
+    avg_rating: b.rating ?? 0,
+    reviewCount: b.reviewCount ?? 0,
+    recentComments: b.recentComments ?? 0,
+    activeOffers: b.activeOffers ?? 0,
+    ageInDays: b.ageInDays ?? 0,
+    isFeatured: b.featured ?? false,
+    lastShownAt: undefined,
+    totalImpressions: 0,
+  }))
+  const ranked = rankBusinesses(withStats as any, { includeFeaturedBoost: true })
   const userTags = await loadUserProfileTags()
   const userProfile = parseUserTags(userTags)
-  const personalized = applyPersonalization(ranked, userProfile)
-  const diversified = diversifyByCategory(personalized, 'type')
+  const personalized = applyPersonalization(ranked as any, userProfile) as any
+  const diversified = diversifyByCategory(personalized as any, 'type') as any[]
 
   return (
     <>

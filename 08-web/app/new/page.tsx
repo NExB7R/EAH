@@ -6,7 +6,7 @@ import EahLogo from '@/components/eah-logo'
 import ExploreCard from '@/components/explore-card'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
-import { generateMockStats } from '@/lib/mock-stats'
+import { getViewStats } from '@/lib/real-stats'
 import './new.css'
 
 export const revalidate = 120
@@ -18,17 +18,24 @@ export const metadata = {
 
 export default async function NewPage() {
   const businesses = await getPublishedBusinesses(80)
+  const viewStats = await getViewStats(businesses.map((b) => b.slug), 7)
   const withStats = businesses.map((b) => ({
     ...b,
-    ...generateMockStats({
-      slug: b.slug,
-      name: b.name,
-      featured: b.badge === 'مميز',
-    }),
+    id: b.businessId ?? b.slug,
+    recentViews: viewStats.get(b.slug)?.views ?? 0,
+    rating: b.rating ?? 0,
+    avg_rating: b.rating ?? 0,
+    reviewCount: b.reviewCount ?? 0,
+    recentComments: b.recentComments ?? 0,
+    activeOffers: b.activeOffers ?? 0,
+    ageInDays: b.ageInDays ?? 0,
+    isFeatured: b.featured ?? false,
+    lastShownAt: undefined,
+    totalImpressions: 0,
   }))
 
-  const ranked = rankBusinesses(withStats, { includeFeaturedBoost: false })
-  const diversified = diversifyByCategory(ranked, 'type')
+  const ranked = rankBusinesses(withStats as any, { includeFeaturedBoost: false })
+  const diversified = diversifyByCategory(ranked as any, 'type') as any[]
   const newOnes = diversified
     .filter((b) => (b as any).ageInDays !== undefined && (b as any).ageInDays < 30)
     .slice(0, 24)
@@ -44,8 +51,8 @@ export default async function NewPage() {
           <div className="nw__logo">
             <EahLogo size="md" variant="full" href="/" />
           </div>
-          <span className="nw__kicker nw-theme">🌱 بدايات جديدة</span>
-          <h1 className="nw__title">🌱 مشاريع محتاجة فرصة</h1>
+          <span className="nw__kicker nw-theme">بدايات جديدة</span>
+          <h1 className="nw__title">مشاريع محتاجة فرصة</h1>
           <p className="nw__sub">
             {list.length} مكان جديد — دعمهم يبدأ بزيارة
           </p>
@@ -53,7 +60,7 @@ export default async function NewPage() {
 
         {list.length === 0 ? (
           <div className="nw__empty">
-            <span>🌱</span>
+            <span></span>
             <h3>مفيش أماكن جديدة دلوقتي</h3>
             <p>الأماكن الجديدة بتظهر أول بأول — ارجع قريب.</p>
             <Link href="/explore" className="nw__empty-btn">اكتشف الأماكن</Link>
