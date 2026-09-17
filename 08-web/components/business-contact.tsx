@@ -11,10 +11,10 @@ type ContactMethod = {
 }
 
 const METHOD_EMOJI: Record<string, string> = {
-  phone: '📞',
-  whatsapp: '💬',
-  facebook: '📘',
-  instagram: '📷',
+  phone: '',
+  whatsapp: '',
+  facebook: '',
+  instagram: '',
   website: '🌐',
   email: '✉️',
 }
@@ -87,7 +87,7 @@ export default function BusinessContact({
     return (
       <section className="bcontact bcontact--empty">
         <h2 className="bcontact__title">
-          <span className="bcontact__title-icon">📞</span>
+          <span className="bcontact__title-icon"></span>
           التواصل
         </h2>
         <p className="bcontact__empty-msg">أرقام التواصل هتظهر قريب.</p>
@@ -98,7 +98,7 @@ export default function BusinessContact({
   return (
     <section className="bcontact">
       <h2 className="bcontact__title">
-        <span className="bcontact__title-icon">📞</span>
+        <span className="bcontact__title-icon"></span>
         التواصل
       </h2>
       <p className="bcontact__hint">

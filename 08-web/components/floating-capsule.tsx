@@ -181,7 +181,7 @@ export default function FloatingCapsuleHeader() {
               </span>
               <div className="nav-drawer__user-info">
                 <span className="nav-drawer__user-name">{user.name}</span>
-                {user.role !== 'super_admin' && <span className="nav-drawer__user-points">⭐ {user.points}</span>}
+                {user.role !== 'super_admin' && <span className="nav-drawer__user-points">{user.points}</span>}
               </div>
             </a>
           )}
@@ -190,7 +190,7 @@ export default function FloatingCapsuleHeader() {
             <div className="nav-drawer__roles">
               {isStaff && <a href="/admin" className="nav-drawer__role nav-drawer__role--admin"><span className="nav-drawer__link-icon">{MI.shield}</span>غرفة التحكم</a>}
               {isMerchant && <a href="/merchant" className="nav-drawer__role nav-drawer__role--merchant"><span className="nav-drawer__link-icon">{MI.store}</span>متجري</a>}
-              {isMerchant && <a href="/merchant/subscription" className="nav-drawer__role nav-drawer__role--merchant"><span className="nav-drawer__link-icon">💎</span>اشتراكي</a>}
+              {isMerchant && <a href="/merchant/subscription" className="nav-drawer__role nav-drawer__role--merchant"><span className="nav-drawer__link-icon"></span>اشتراكي</a>}
             </div>
           )}
 
@@ -204,7 +204,7 @@ export default function FloatingCapsuleHeader() {
           <nav className="nav-drawer__group">
             <a href="/merchant/apply" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.store}</span>سجّل نشاطك</a>
             <a href="/advertise" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.megaphone}</span>أعلن معنا</a>
-            <a href="/pricing" className="nav-drawer__link"><span className="nav-drawer__link-icon">💎</span>الباقات</a>
+            <a href="/pricing" className="nav-drawer__link"><span className="nav-drawer__link-icon"></span>الباقات</a>
           </nav>
           <div className="nav-drawer__spacer" />
           <nav className="nav-drawer__group">
@@ -213,7 +213,7 @@ export default function FloatingCapsuleHeader() {
             <a href="https://facebook.com/eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.facebook}</span>فيسبوك</a>
             <a href="https://wa.me/201012892806" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.whatsapp}</span>واتساب</a>
             <a href="https://www.tiktok.com/@eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">🎵</span>تيك توك</a>
-            <a href="https://www.instagram.com/eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">📷</span>إنستجرام</a>
+            <a href="https://www.instagram.com/eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon"></span>إنستجرام</a>
           </nav>
           <div className="nav-drawer__spacer" />
           <nav className="nav-drawer__group">
@@ -242,7 +242,7 @@ export default function FloatingCapsuleHeader() {
 
 
           <div className="nav-drawer__qr">
-            <span className="nav-drawer__qr-title">📱 كيو آر EAH</span>
+            <span className="nav-drawer__qr-title">كيو آر EAH</span>
             <span className="nav-drawer__qr-sub">امسح الكود — شارك المنصة مع صحابك</span>
             <img
               src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent('https://eah-sq.vercel.app')}&size=140x140&bgcolor=0A0714&color=E8C79A&margin=8`}

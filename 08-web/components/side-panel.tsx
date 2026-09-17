@@ -17,10 +17,10 @@ type PanelData = {
 }
 
 const EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  supermarket: '🛒',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  supermarket: '',
+  delivery_office: '',
 }
 
 export default function SidePanel() {
@@ -118,7 +118,7 @@ export default function SidePanel() {
               className="side-panel__card"
             >
               <span className="side-panel__emoji">
-                {EMOJI[it.type ?? ''] ?? '📍'}
+                {EMOJI[it.type ?? ''] ?? ''}
               </span>
               <span className="side-panel__name">{it.name}</span>
             </a>
@@ -151,26 +151,26 @@ export default function SidePanel() {
 
       <Section
         title="المميز"
-        icon="⭐"
+        icon=""
         items={data.featured}
         seeAll="/featured"
       />
       <Section
         title="الترند"
-        icon="🔥"
+        icon=""
         items={data.trending}
         seeAll="/trends"
       />
       <Section
         title="جديد"
-        icon="🌱"
+        icon=""
         items={data.newest}
         seeAll="/new"
       />
 
       <div className="side-panel__cta">
         <a href="/pricing" className="side-panel__cta-btn">
-          ✨ اعرض نشاطك هنا
+          اعرض نشاطك هنا
         </a>
       </div>
     </aside>

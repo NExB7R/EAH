@@ -10,10 +10,10 @@ export type Contact = {
 }
 
 const TYPE_OPTIONS = [
-  { value: 'phone', label: 'فون', emoji: '📞' },
-  { value: 'whatsapp', label: 'واتساب', emoji: '💬' },
-  { value: 'facebook', label: 'فيسبوك', emoji: '📘' },
-  { value: 'instagram', label: 'إنستجرام', emoji: '📷' },
+  { value: 'phone', label: 'فون', emoji: '' },
+  { value: 'whatsapp', label: 'واتساب', emoji: '' },
+  { value: 'facebook', label: 'فيسبوك', emoji: '' },
+  { value: 'instagram', label: 'إنستجرام', emoji: '' },
   { value: 'website', label: 'موقع', emoji: '🌐' },
   { value: 'email', label: 'إيميل', emoji: '✉️' },
 ]
@@ -30,7 +30,7 @@ const PLACEHOLDERS: Record<string, string> = {
 export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }) {
   const [contacts, setContacts] = useState<Contact[]>(initial)
 
-  // ✅ Controlled value — مفيش DOM hacks
+  // Controlled value — مفيش DOM hacks
   const serialized = JSON.stringify(contacts)
 
   const add = (type: Contact['method_type'] = 'phone') => {
@@ -52,7 +52,7 @@ export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }
 
   return (
     <div className="ced">
-      {/* ✅ Controlled input */}
+      {/* Controlled input */}
       <input type="hidden" name="contacts_json" value={serialized} readOnly />
 
       {contacts.length > 0 && (
@@ -122,7 +122,7 @@ export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }
           <button type="button" className="ced__quick-btn" onClick={() => add('phone')}>فون</button>
           <button type="button" className="ced__quick-btn" onClick={() => add('whatsapp')}>واتساب</button>
           <button type="button" className="ced__quick-btn" onClick={() => add('facebook')}>فيسبوك</button>
-          <button type="button" className="ced__quick-btn" onClick={() => add('instagram')}>📷 إنستجرام</button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('instagram')}>إنستجرام</button>
           <button type="button" className="ced__quick-btn" onClick={() => add('website')}>🌐 موقع</button>
           <button type="button" className="ced__quick-btn" onClick={() => add('email')}>✉️ إيميل</button>
         </div>

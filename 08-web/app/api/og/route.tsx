@@ -40,7 +40,7 @@ export async function GET(request: Request) {
           padding: 60,
         }}
       >
-        <div style={{ fontSize: 60, marginBottom: 20 }}>⭐</div>
+        <div style={{ fontSize: 60, marginBottom: 20 }}></div>
         <div style={{ fontSize: 68, fontWeight: 900, color: '#F5F3FF', marginBottom: 12, textAlign: 'center' }}>
           {name}
         </div>

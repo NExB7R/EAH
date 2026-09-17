@@ -7,14 +7,14 @@ import './onboarding-overlay.css'
 type Step = 0 | 1 | 2 | 3
 
 const INTERESTS = [
-  { key: 'restaurant', emoji: '🍽️', label: 'مطاعم' },
-  { key: 'pharmacy', emoji: '💊', label: 'صيدليات' },
-  { key: 'delivery', emoji: '🛵', label: 'توصيل' },
-  { key: 'supermarket', emoji: '🛒', label: 'ماركت' },
-  { key: 'offers', emoji: '🔥', label: 'عروض' },
-  { key: 'new', emoji: '🌱', label: 'جديد' },
-  { key: 'trends', emoji: '📈', label: 'ترند' },
-  { key: 'coffee', emoji: '☕', label: 'كافيهات' },
+  { key: 'restaurant', emoji: '', label: 'مطاعم' },
+  { key: 'pharmacy', emoji: '', label: 'صيدليات' },
+  { key: 'delivery', emoji: '', label: 'توصيل' },
+  { key: 'supermarket', emoji: '', label: 'ماركت' },
+  { key: 'offers', emoji: '', label: 'عروض' },
+  { key: 'new', emoji: '', label: 'جديد' },
+  { key: 'trends', emoji: '', label: 'ترند' },
+  { key: 'coffee', emoji: '', label: 'كافيهات' },
 ]
 
 const AREAS = [
@@ -29,9 +29,9 @@ const AREAS = [
 ]
 
 const BUDGETS = [
-  { key: 'low', emoji: '💰', label: 'اقتصادي', hint: 'أقل من 50ج' },
-  { key: 'mid', emoji: '💰💰', label: 'متوسط', hint: '50 - 150ج' },
-  { key: 'high', emoji: '💎', label: 'مميز', hint: 'أكتر من 150ج' },
+  { key: 'low', emoji: '', label: 'اقتصادي', hint: 'أقل من 50ج' },
+  { key: 'mid', emoji: '', label: 'متوسط', hint: '50 - 150ج' },
+  { key: 'high', emoji: '', label: 'مميز', hint: 'أكتر من 150ج' },
 ]
 
 export default function OnboardingOverlay() {
@@ -107,34 +107,34 @@ export default function OnboardingOverlay() {
               <EahLogo size="lg" variant="full" href="/" />
             </div>
             <h2 className="onb__title">
-              أهلاً بيك {name ? `يا ${name}` : 'في EAH'} 👋
+              أهلاً بيك {name ? `يا ${name}` : 'في EAH'}
             </h2>
             <p className="onb__text">
               إحنا هنا نساعدك تلاقي أحلى <strong>مطاعم</strong>، <strong>صيدليات</strong>، و<strong>توصيل</strong> في شبين القناطر.
             </p>
             <div className="onb__features">
               <div className="onb__feature">
-                <span className="onb__feature-emoji">🔍</span>
+                <span className="onb__feature-emoji"></span>
                 <span className="onb__feature-text">اكتشف أماكن جديدة</span>
               </div>
               <div className="onb__feature">
-                <span className="onb__feature-emoji">⭐</span>
+                <span className="onb__feature-emoji"></span>
                 <span className="onb__feature-text">قيّم وشارك تجربتك</span>
               </div>
               <div className="onb__feature">
-                <span className="onb__feature-emoji">🎁</span>
+                <span className="onb__feature-emoji"></span>
                 <span className="onb__feature-text">اكسب نقاط كل يوم</span>
               </div>
             </div>
             <button className="onb__btn onb__btn--primary" onClick={() => setStep(1)}>
-              يلا نبدأ ⚡
+              يلا نبدأ
             </button>
           </>
         )}
 
         {step === 1 && (
           <>
-            <span className="onb__step-emoji">🎯</span>
+            <span className="onb__step-emoji"></span>
             <h2 className="onb__title">بتحب إيه؟</h2>
             <p className="onb__text">اختار اللي يهمك ونرشّحلك على أساسه</p>
             <div className="onb__interests">
@@ -161,7 +161,7 @@ export default function OnboardingOverlay() {
 
         {step === 2 && (
           <>
-            <span className="onb__step-emoji">📍</span>
+            <span className="onb__step-emoji"></span>
             <h2 className="onb__title">أنت منين؟</h2>
             <p className="onb__text">نرشّحلك الأقرب ليك</p>
             <div className="onb__interests">
@@ -208,7 +208,7 @@ export default function OnboardingOverlay() {
 
         {step === 3 && (
           <>
-            <span className="onb__step-emoji">🎁</span>
+            <span className="onb__step-emoji"></span>
             <h2 className="onb__title">هدية الترحيب</h2>
             <p className="onb__text">
               كل يوم تدخل EAH بتكسب <strong>نقاط</strong>.
@@ -217,21 +217,21 @@ export default function OnboardingOverlay() {
             </p>
             <div className="onb__rewards">
               <div className="onb__reward">
-                <span className="onb__reward-icon">🔥</span>
+                <span className="onb__reward-icon"></span>
                 <div>
                   <strong>7 أيام</strong>
                   <span>+10 نقطة</span>
                 </div>
               </div>
               <div className="onb__reward">
-                <span className="onb__reward-icon">🔥🔥</span>
+                <span className="onb__reward-icon"></span>
                 <div>
                   <strong>14 يوم</strong>
                   <span>+15 نقطة</span>
                 </div>
               </div>
               <div className="onb__reward">
-                <span className="onb__reward-icon">💎</span>
+                <span className="onb__reward-icon"></span>
                 <div>
                   <strong>30 يوم</strong>
                   <span>+20 نقطة</span>
@@ -245,7 +245,7 @@ export default function OnboardingOverlay() {
                 onClick={finish}
                 disabled={saving}
               >
-                {saving ? '...' : 'ابدأ الرحلة ⚡'}
+                {saving ? '...' : 'ابدأ الرحلة'}
               </button>
             </div>
           </>

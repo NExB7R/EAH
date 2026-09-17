@@ -84,7 +84,7 @@ export default function BusinessHero({
             )}
             {stats.active_offers > 0 && (
               <span className="bhero__meta-item bhero__meta-item--offer">
-                🔥 {stats.active_offers} عرض نشط
+                {stats.active_offers} عرض نشط
               </span>
             )}
           </div>

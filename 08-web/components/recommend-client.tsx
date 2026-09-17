@@ -43,10 +43,10 @@ const QUESTIONS: Question[] = [
     title: 'الميزانية؟',
     subtitle: 'قولنا نطاق السعر المناسب',
     options: [
-      { key: 'low', emoji: '💰', label: 'اقتصادي', hint: 'أقل من 50 ج' },
-      { key: 'mid', emoji: '💰💰', label: 'متوسط', hint: '50 - 150 ج' },
-      { key: 'high', emoji: '💎', label: 'مميز', hint: 'أكتر من 150 ج' },
-      { key: 'any', emoji: '🎯', label: 'مش مهم', hint: 'وريني كل حاجة' },
+      { key: 'low', emoji: '', label: 'اقتصادي', hint: 'أقل من 50 ج' },
+      { key: 'mid', emoji: '', label: 'متوسط', hint: '50 - 150 ج' },
+      { key: 'high', emoji: '', label: 'مميز', hint: 'أكتر من 150 ج' },
+      { key: 'any', emoji: '', label: 'مش مهم', hint: 'وريني كل حاجة' },
     ],
   },
   {
@@ -54,9 +54,9 @@ const QUESTIONS: Question[] = [
     title: 'مزاجك إيه؟',
     subtitle: 'اختار اللي يشبه حالتك',
     options: [
-      { key: 'new', emoji: '🌱', label: 'حاجة جديدة', hint: 'أماكن لسه مكتشفة' },
+      { key: 'new', emoji: '', label: 'حاجة جديدة', hint: 'أماكن لسه مكتشفة' },
       { key: 'trending', emoji: '', label: 'الترند', hint: 'اللي الناس عليه' },
-      { key: 'offers', emoji: '🎁', label: 'عروض حلوة', hint: 'وفّر وأنا بطلب' },
+      { key: 'offers', emoji: '', label: 'عروض حلوة', hint: 'وفّر وأنا بطلب' },
       { key: 'nearby', emoji: '', label: 'قريب مني', hint: 'مش عايز أتحرك كتير' },
     ],
   },
@@ -65,7 +65,7 @@ const QUESTIONS: Question[] = [
     title: 'مستعجل؟',
     subtitle: 'آخر سؤال ونبدأ',
     options: [
-      { key: 'now', emoji: '⚡', label: 'على طول', hint: 'لازم دلوقتي' },
+      { key: 'now', emoji: '', label: 'على طول', hint: 'لازم دلوقتي' },
       { key: 'soon', emoji: '🕐', label: 'بعد شوية', hint: 'خلال ساعة' },
       { key: 'later', emoji: '🌙', label: 'بعدين', hint: 'بسجلها للمستقبل' },
     ],

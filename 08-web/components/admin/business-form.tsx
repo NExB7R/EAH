@@ -35,10 +35,10 @@ type Props = {
 }
 
 const TYPES = [
-  { value: 'restaurant', label: '🍽️ مطعم' },
-  { value: 'pharmacy', label: '💊 صيدلية' },
-  { value: 'supermarket', label: '🛒 سوبرماركت' },
-  { value: 'delivery_office', label: '🛵 توصيل' },
+  { value: 'restaurant', label: 'مطعم' },
+  { value: 'pharmacy', label: 'صيدلية' },
+  { value: 'supermarket', label: 'سوبرماركت' },
+  { value: 'delivery_office', label: 'توصيل' },
 ]
 
 function slugify(name: string): string {
@@ -142,7 +142,7 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
           {/* Map URL */}
           <div className="admin-field admin-field--full">
             <label className="admin-field__label" htmlFor="map_url">
-              📍 رابط الموقع على الخريطة
+              رابط الموقع على الخريطة
             </label>
             <input
               id="map_url"
@@ -180,7 +180,7 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
         <h2 className="admin-form__section-title">الوصف والهوك</h2>
         <div className="admin-form__grid">
           <div className="admin-field admin-field--full">
-            <label className="admin-field__label" htmlFor="hook">الهوك ⭐</label>
+            <label className="admin-field__label" htmlFor="hook">الهوك</label>
             <input id="hook" name="hook" className="admin-input" defaultValue={initial?.hook ?? ''} placeholder="أكل بيتي زي ما ماما بتعملو" maxLength={80} />
             <span className="admin-field__hint">جملة قصيرة تظهر عند hover. حتى 80 حرف.</span>
           </div>

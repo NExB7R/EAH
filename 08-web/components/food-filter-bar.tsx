@@ -16,7 +16,7 @@ export default function FoodFilterBar({
         className={`ffb__chip ${!value ? 'is-on' : ''}`}
         onClick={() => onChange(null)}
       >
-        ✨ الكل
+        الكل
       </button>
       {FOOD_CATEGORIES.map((c) => (
         <button

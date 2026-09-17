@@ -26,19 +26,19 @@ type Business = {
 }
 
 const TYPES: { key: BusinessType | 'all'; label: string; emoji: string }[] = [
-  { key: 'all', label: 'الكل', emoji: '✨' },
-  { key: 'restaurant', label: 'مطاعم', emoji: '🍽️' },
-  { key: 'pharmacy', label: 'صيدليات', emoji: '💊' },
-  { key: 'supermarket', label: 'ماركت', emoji: '🛒' },
-  { key: 'delivery_office', label: 'توصيل', emoji: '🛵' },
+  { key: 'all', label: 'الكل', emoji: '' },
+  { key: 'restaurant', label: 'مطاعم', emoji: '' },
+  { key: 'pharmacy', label: 'صيدليات', emoji: '' },
+  { key: 'supermarket', label: 'ماركت', emoji: '' },
+  { key: 'delivery_office', label: 'توصيل', emoji: '' },
 ]
 
 const SORTS = [
-  { key: 'default', label: 'الأنسب ليك', emoji: '✨' },
-  { key: 'rating', label: 'الأعلى تقييم', emoji: '⭐' },
-  { key: 'views', label: 'الأكثر زيارة', emoji: '👁' },
-  { key: 'offers', label: 'فيه عروض', emoji: '🎁' },
-  { key: 'new', label: 'الأحدث', emoji: '🌱' },
+  { key: 'default', label: 'الأنسب ليك', emoji: '' },
+  { key: 'rating', label: 'الأعلى تقييم', emoji: '' },
+  { key: 'views', label: 'الأكثر زيارة', emoji: '' },
+  { key: 'offers', label: 'فيه عروض', emoji: '' },
+  { key: 'new', label: 'الأحدث', emoji: '' },
 ]
 
 const VALID_TYPES: BusinessType[] = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
@@ -54,7 +54,7 @@ export default function ExploreClient({
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  // ✅ URL = source of truth
+  // URL = source of truth
   const rawType = searchParams.get('type') ?? initialType ?? 'all'
   const type: BusinessType | 'all' = VALID_TYPES.includes(rawType as BusinessType)
     ? (rawType as BusinessType)
@@ -198,7 +198,7 @@ export default function ExploreClient({
               onChange={(e) => updateParams({ area: e.target.value === 'all' ? null : e.target.value })}
               aria-label="المنطقة"
             >
-              <option value="all">📍 كل المناطق</option>
+              <option value="all">كل المناطق</option>
               {areas.map((a) => (
                 <option key={a} value={a}>{a}</option>
               ))}
@@ -210,7 +210,7 @@ export default function ExploreClient({
             className={`exc-toggle ${openOnly ? 'is-active' : ''}`}
             onClick={() => updateParams({ open: openOnly ? null : '1' })}
           >
-            ✅ مفتوح دلوقتي
+            مفتوح دلوقتي
           </button>
 
           <button
@@ -218,7 +218,7 @@ export default function ExploreClient({
             className={`exc-toggle ${offersOnly ? 'is-active' : ''}`}
             onClick={() => updateParams({ offers: offersOnly ? null : '1' })}
           >
-            🔥 فيه عروض
+            فيه عروض
           </button>
 
           <select

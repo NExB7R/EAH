@@ -74,7 +74,7 @@ export default async function HomeDynamicV2() {
 
       {hasFeatured && (
         <SectionSliderV2
-          title="⭐ المميزين"
+          title="المميزين"
           subtitle="أماكن اختارها فريقنا — على مستوى عالي"
           seeAllHref="/featured"
           variant="featured"
@@ -87,7 +87,7 @@ export default async function HomeDynamicV2() {
 
       {hasTrending && (
         <SectionSliderV2
-          title="🔥 الترند"
+          title="الترند"
           subtitle="الناس بتدور عليها دلوقتي"
           seeAllHref="/trends"
           variant="trending"
@@ -100,7 +100,7 @@ export default async function HomeDynamicV2() {
 
       {hasNew && (
         <SectionSliderV2
-          title="🌱 الجديد"
+          title="الجديد"
           subtitle="أخواتنا اللي بيبدأوا — ادعمهم"
           seeAllHref="/new"
           variant="new"

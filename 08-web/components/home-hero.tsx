@@ -21,7 +21,7 @@ export default function HomeHero() {
         </div>
 
         <div className="hh__tagline">
-          <span className="hh__tagline-pin" aria-hidden>📍</span>
+          <span className="hh__tagline-pin" aria-hidden></span>
           <span className="hh__tagline-city">شبين القناطر بتحكي — وإحنا كلنا بنسمع</span>
         </div>
 

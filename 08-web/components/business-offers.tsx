@@ -18,7 +18,7 @@ export default function BusinessOffers({ offers }: { offers: Offer[] }) {
     <section className="boff">
       <div className="boff__header">
         <h2 className="boff__title">
-          <span>🔥</span> العروض النشطة
+          <span></span> العروض النشطة
         </h2>
         <span className="boff__count">{offers.length}</span>
       </div>

@@ -123,7 +123,7 @@ export default function ExploreCard({ business, index }: { business: Business; s
         </div>
 
         <h3 className="ecard__name">{business.name}</h3>
-        <span className="ecard__area">📍 {business.area}</span>
+        <span className="ecard__area">{business.area}</span>
 
         {hook && <p className="ecard__hook">{hook}</p>}
         {(business as any).food_categories && (business as any).food_categories.length > 0 && (

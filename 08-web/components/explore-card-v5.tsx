@@ -84,7 +84,7 @@ export default function ExploreCardV5({ business }: { business: Business }) {
   const reviews = business.review_count ?? business.reviewCount ?? 0
   const offers = business.activeOffers ?? 0
   const hook = HOOK_BY_TYPE[business.type] ?? 'اكتشف المكان'
-  const emoji = TYPE_EMOJI[business.type] ?? '📍'
+  const emoji = TYPE_EMOJI[business.type] ?? ''
   const typeLabel = TYPE_LABEL[business.type] ?? 'مكان'
   const gradient = TYPE_GRADIENT[business.type] ?? TYPE_GRADIENT.restaurant
 
@@ -110,7 +110,7 @@ export default function ExploreCardV5({ business }: { business: Business }) {
           </div>
 
           {business.badge && <span className="ec5__badge">{business.badge}</span>}
-          {offers > 0 && <span className="ec5__offer-badge">🔥 {offers}</span>}
+          {offers > 0 && <span className="ec5__offer-badge">{offers}</span>}
 
           <div className="ec5__fav">
             <FavoriteButton businessId={business.id ?? business.slug} size="sm" />
@@ -150,11 +150,11 @@ export default function ExploreCardV5({ business }: { business: Business }) {
             <div className="ec5__stats">
               {rating > 0 && (
                 <span className="ec5__stat">
-                  ⭐ {rating.toFixed(1)}
+                  {rating.toFixed(1)}
                   {reviews > 0 && <small>({reviews})</small>}
                 </span>
               )}
-              {business.area && <span className="ec5__stat">📍 {business.area}</span>}
+              {business.area && <span className="ec5__stat">{business.area}</span>}
             </div>
 
             <p className="ec5__hook">{hook}</p>

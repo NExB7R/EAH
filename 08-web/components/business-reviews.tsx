@@ -64,7 +64,7 @@ export default function BusinessReviews({
     return (
       <section className="brev brev--empty">
         <h2 className="brev__title">
-          <span>⭐</span> التقييمات
+          <span></span> التقييمات
         </h2>
         <p className="brev__empty-msg">
           لسه مفيش تقييمات لهذا المكان. كُن أول من يشارك تجربته.
@@ -77,7 +77,7 @@ export default function BusinessReviews({
     <section className="brev">
       <div className="brev__header">
         <h2 className="brev__title">
-          <span>⭐</span> التقييمات
+          <span></span> التقييمات
         </h2>
         <span className="brev__count">{stats.review_count} تقييم</span>
       </div>
@@ -91,9 +91,9 @@ export default function BusinessReviews({
 
         <div className="brev__bars">
           <RatingBar label="الطعم" value={stats.avg_taste} icon="😋" />
-          <RatingBar label="القيمة" value={stats.avg_value} icon="💰" />
-          <RatingBar label="السرعة" value={stats.avg_speed} icon="⚡" />
-          <RatingBar label="التجربة" value={stats.avg_experience} icon="✨" />
+          <RatingBar label="القيمة" value={stats.avg_value} icon="" />
+          <RatingBar label="السرعة" value={stats.avg_speed} icon="" />
+          <RatingBar label="التجربة" value={stats.avg_experience} icon="" />
         </div>
       </div>
 
@@ -123,7 +123,7 @@ export default function BusinessReviews({
                 )}
                 {r.merchant_reply ? (
                   <div className="brev__merchant-reply">
-                    <span className="brev__merchant-reply-label">💬 ردّ التاجر:</span>
+                    <span className="brev__merchant-reply-label">ردّ التاجر:</span>
                     <p className="brev__merchant-reply-text">{r.merchant_reply}</p>
                   </div>
                 ) : null}

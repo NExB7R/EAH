@@ -6,10 +6,10 @@ export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
 const TYPE_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  supermarket: '🛒',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  supermarket: '',
+  delivery_office: '',
 }
 
 const TYPE_LABEL: Record<string, string> = {
@@ -61,7 +61,7 @@ export default async function OgImage({
   const area = biz?.area ?? 'Shibin El-Qanater'
   const type = biz?.business_type ?? 'restaurant'
   const hook = biz?.hook ?? ''
-  const emoji = TYPE_EMOJI[type] ?? '🏪'
+  const emoji = TYPE_EMOJI[type] ?? ''
   const typeLabel = TYPE_LABEL[type] ?? 'Business'
 
   return new ImageResponse(
