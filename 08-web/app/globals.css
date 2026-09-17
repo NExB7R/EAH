@@ -254,3 +254,34 @@ body {
   position: relative;
   z-index: 1;
 }
+
+
+/* ═══ EAH Spacing System 2026 ═══ */
+:root {
+  --space-xs: 8px;
+  --space-sm: 14px;
+  --space-md: 20px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+  --space-2xl: 72px;
+  --space-section: clamp(40px, 6vw, 72px);
+  --space-container: clamp(16px, 3vw, 32px);
+}
+
+/* Base container */
+.eah-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-inline: var(--space-container);
+}
+
+/* Logical section spacing */
+section + section {
+  margin-top: var(--space-section);
+}
+
+/* First section after header — no extra */
+main > section:first-child,
+main > *:first-child {
+  margin-top: 0;
+}

@@ -1,3 +1,8 @@
+:root {
+  --fc-height: 64px;
+  --fc-height-mobile: 56px;
+}
+
 /* ═══════════════════════════════════════════════
    EAH Floating Capsule — Layout (2026)
    Visual surface lives in floating-capsule-v2.css.
