@@ -21,7 +21,7 @@ export default function HomeHero() {
 
         <div className="hh__tagline">
           <span className="hh__tagline-pin" aria-hidden>📍</span>
-          <span className="hh__tagline-city">شبين القناطر — دلوقتي</span>
+          <span className="hh__tagline-city">دولة شبين القناطر تتحدّث</span>
         </div>
 
         <h2 className="hh__hook">EAH بتجمع كل حاجة حواليك في مكان واحد.</h2>

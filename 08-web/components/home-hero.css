@@ -164,36 +164,43 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
+  padding: 5px 14px;
   border-radius: 999px;
-  background: rgba(168, 85, 247, 0.08);
+  background: rgba(168, 85, 247, 0.06);
   border: 1px solid rgba(168, 85, 247, 0.35);
-  margin: 0 auto 12px;
+  margin: 0 auto 14px;
   align-self: center;
+  animation: taglineGlow 3s ease-in-out infinite;
+}
+@keyframes taglineGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(168, 85, 247, 0.2); }
+  50%      { box-shadow: 0 0 18px rgba(168, 85, 247, 0.45); }
 }
 .hh__tagline-pin { font-size: 0.9rem; }
 .hh__tagline-city {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 0.82rem;
-  font-weight: 800;
+  font-size: 0.85rem;
+  font-weight: 900;
   color: #C4B5FD;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 8px rgba(196, 181, 253, 0.5);
 }
 
 /* Hook جديدة */
 .hh__hook {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(1.15rem, 3vw, 1.6rem);
+  font-size: clamp(1.2rem, 3.2vw, 1.7rem);
   font-weight: 900;
   text-align: center;
-  margin: 8px auto 18px;
-  line-height: 1.5;
-  letter-spacing: -0.01em;
-  max-width: 620px;
-  background: linear-gradient(135deg, #C084FC 0%, #A855F7 50%, #7C3AED 100%);
+  margin: 10px auto 22px;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  max-width: 640px;
+  background: linear-gradient(135deg, #E8C79A 0%, #C084FC 40%, #A855F7 70%, #6B21FF 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 .hh__cat { box-shadow: 0 2px 8px rgba(0,0,0,.3); }

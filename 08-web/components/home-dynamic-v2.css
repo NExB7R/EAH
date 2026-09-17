@@ -21,9 +21,11 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+  align-items: stretch;
 }
 .home-actions__card {
   position: relative;
+  min-height: 160px;
   display: flex;
   flex-direction: column;
   gap: 10px;

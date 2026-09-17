@@ -67,6 +67,22 @@ export default function ShareButton() {
               >
                 📘 فيسبوك
               </a>
+              <a
+                href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="share-modal__btn"
+              >
+                ✈️ تليجرام
+              </a>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="share-modal__btn"
+              >
+                🐦 X
+              </a>
             </div>
           </div>
         </div>

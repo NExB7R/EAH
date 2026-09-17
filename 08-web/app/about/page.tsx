@@ -69,10 +69,7 @@ export default function AboutPage() {
             <br />
             <span className="ab__title-accent">في مكان واحد</span>
           </h1>
-          <p className="ab__lead">
-            من مطعم السكة — للصيدلية اللي في الحارة.<br/>
-            EAH بتجمع كل حاجة حواليك في مكان واحد.
-          </p>
+          <p className="ab__lead">كل حاجة حواليك — على بعد كليك.</p>
           <div className="ab__hero-cta">
             <Link href="/explore" className="ab__btn ab__btn--primary">🔍 اكتشف الأماكن</Link>
             <Link href="/merchant-info" className="ab__btn ab__btn--ghost">🏪 لأصحاب الأنشطة</Link>
