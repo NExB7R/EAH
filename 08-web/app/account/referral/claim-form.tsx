@@ -1,6 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { claimReferral } from './actions'
+import { IcTarget } from '@/components/eah-icons'
 
 export default function ClaimForm() {
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null)
@@ -15,7 +16,7 @@ export default function ClaimForm() {
 
   return (
     <div className="rf__claim">
-      <h3 className="rf__claim-title">🎯 عندك كود من صاحبك؟</h3>
+      <h3 className="rf__claim-title"><IcTarget /> عندك كود من صاحبك؟</h3>
       <p className="rf__claim-sub">اكتب الكود وكسب 50 نقطة فورًا</p>
       <form action={submit} className="rf__claim-form">
         <input name="code" placeholder="مثال: A3F9B2C1" dir="ltr" maxLength={20} className="rf__claim-input" required />

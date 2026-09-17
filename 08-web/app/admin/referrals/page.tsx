@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import { updateReferralSettings } from './actions'
 import ReferralsSettingsForm from './ReferralsSettingsForm'
 import './referrals.css'
-import { IcInbox, IcSettings } from '@/components/eah-icons'
+import { IcInbox, IcSettings, IcTrophy } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الإحالات' }
@@ -143,7 +143,7 @@ export default async function AdminReferralsPage({
       {/* Top referrers */}
       {topReferrers.length > 0 && (
         <section className="ref-top">
-          <h2 className="ref-section__title">🏆 أفضل الدعاة</h2>
+          <h2 className="ref-section__title"><IcTrophy /> أفضل الدعاة</h2>
           <div className="ref-top-list">
             {topReferrers.map((t, i) => (
               <div key={t.phone} className="ref-top-item">

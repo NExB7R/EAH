@@ -18,7 +18,7 @@ type OrderForTemplate = {
 
 export function buildOrderMessage(o: OrderForTemplate): string {
   const lines: string[] = []
-  lines.push(`👑 *EAH* — ${SLOGAN}`)
+  lines.push(` *EAH* — ${SLOGAN}`)
   lines.push('━━━━━━━━━━━━━━━━━━')
   lines.push(`📢 *أوردر جديد${o.orderCode ? ' #' + o.orderCode : ''}*`)
   lines.push('')

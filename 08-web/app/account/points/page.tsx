@@ -5,7 +5,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import RewardCard from './reward-card'
 import './points.css'
-import { IcCalendar, IcCheck, IcScroll } from '@/components/eah-icons'
+import { IcCalendar, IcCheck, IcScroll, IcTrophy } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'نقاطي' }
@@ -50,7 +50,7 @@ export default async function PointsPage() {
             <span className="pt__stat-label">يوم متتالي</span>
           </div>
           <div className="pt__stat">
-            <span className="pt__stat-emoji">🏆</span>
+            <span className="pt__stat-emoji"><IcTrophy /></span>
             <span className="pt__stat-val">{longest}</span>
             <span className="pt__stat-label">أطول streak</span>
           </div>

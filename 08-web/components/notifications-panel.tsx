@@ -2,7 +2,7 @@
 import { useState, useTransition } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './notification-preferences.css'
-import { IcAlert, IcCheck, IcDiamond } from '@/components/eah-icons'
+import { IcAlert, IcCheck, IcDiamond, IcMoon } from '@/components/eah-icons'
 
 type TypeRow = {
   key: string
@@ -137,7 +137,7 @@ export default function NotificationsPanel({
       {!adminMode && (
       <div className="np__section">
         <h3 className="np__section-title">
-          <span>🌙</span>
+          <span><IcMoon /></span>
           ساعات الهدوء
         </h3>
         <p className="np__section-sub">
@@ -146,7 +146,7 @@ export default function NotificationsPanel({
 
         <label className="np__row">
           <div className="np__info">
-            <span className="np__emoji">🌙</span>
+            <span className="np__emoji"><IcMoon /></span>
             <span className="np__text">
               <span className="np__label">تفعيل ساعات الهدوء</span>
             </span>

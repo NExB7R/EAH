@@ -2,7 +2,7 @@
 import { useState, useTransition, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './review-form.css'
-import { IcCheckCircle } from '@/components/eah-icons'
+import { IcCheckCircle, IcPen } from '@/components/eah-icons'
 
 const RATINGS = [
   { key: 'taste',      emoji: '', label: 'الطعم' },
@@ -105,14 +105,14 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
         onClick={handleTrigger}
         title={needsAuth ? 'سجّل عشان تكتب تقييم' : undefined}
       >
-        ✍️ اكتب تقييم
+        <IcPen /> اكتب تقييم
       </button>
     )
   }
 
   return (
     <div className="rvf">
-      <h3 className="rvf__title">✍️ قيّم تجربتك</h3>
+      <h3 className="rvf__title"><IcPen /> قيّم تجربتك</h3>
 
       <div className="rvf__ratings">
         {RATINGS.map(r => (

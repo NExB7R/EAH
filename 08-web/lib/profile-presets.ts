@@ -8,8 +8,8 @@ export type PresetAvatar = { key: string; from: string; to: string }
  *
  * مفيش ألقاب ولا فريمات معقدة.
  * نظام الشارات:
- *   👑 super_admin   → تاج ذهبي (فريد)
- *   💎 merchant_premium → ماسة (للاشتراك المدفوع)
+ *    super_admin   → تاج ذهبي (فريد)
+ *    merchant_premium → ماسة (للاشتراك المدفوع)
  *    verified      → توثيق الحساب
  */
 

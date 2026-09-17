@@ -13,7 +13,7 @@ const CATS = [
   { v: 'discount', l: 'خصم' },
   { v: 'freebie', l: 'هدية' },
   { v: 'delivery', l: 'توصيل' },
-  { v: 'badge', l: '🏆 شارة' },
+  { v: 'badge', l: ' شارة' },
   { v: 'frame', l: 'إطار' },
   { v: 'feature', l: 'ميزة' },
   { v: 'cash', l: '💵 فلوس' },

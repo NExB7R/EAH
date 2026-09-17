@@ -27,7 +27,7 @@ export type DesignData = {
 }
 
 export const SECTION_LABELS: Record<SectionType, { label: string; emoji: string }> = {
-  hero:       { label: 'Hero',       emoji: '🎯' },
+  hero:       { label: 'Hero',       emoji: '' },
   featured:   { label: 'المميز',     emoji: '' },
   trending:   { label: 'الترند',     emoji: '' },
   offers:     { label: 'العروض',     emoji: '' },

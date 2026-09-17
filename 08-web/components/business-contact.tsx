@@ -16,7 +16,7 @@ const METHOD_EMOJI: Record<string, string> = {
   facebook: '',
   instagram: '',
   website: '',
-  email: '✉️',
+  email: '',
 }
 
 const METHOD_LABEL: Record<string, string> = {

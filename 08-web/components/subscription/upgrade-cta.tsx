@@ -74,7 +74,7 @@ export default function UpgradeCTA({
             {p.description && <small>{p.description}</small>}
             <div className="ucta__plan-meta">
               <span>⏱ {p.duration_days} يوم</span>
-              <span>{p.price_egp === null ? ' تواصل معنا' : `💎 ${p.price_egp} ج.م`}</span>
+              <span>{p.price_egp === null ? ' تواصل معنا' : ` ${p.price_egp} ج.م`}</span>
             </div>
           </button>
         ))}
