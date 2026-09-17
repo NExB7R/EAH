@@ -50,9 +50,9 @@ const WHAT_WE_DO = [
 
 const VALUES = [
   { emoji: '', title: 'بنوصّلك الصح', body: 'ترشيحات على مزاجك وميزانيتك — مش الأكثر دفعاً.' },
-  { emoji: '💜', title: 'بنسمعك دايمًا', body: 'كل اقتراح وكل شكوى بتوصلنا، وبنبني عليها.' },
+  { emoji: '', title: 'بنسمعك دايمًا', body: 'كل اقتراح وكل شكوى بتوصلنا، وبنبني عليها.' },
   { emoji: '', title: 'تجربة خفيفة', body: 'من غير تعقيد — بتلاقي وبتتواصل في ثواني.' },
-  { emoji: '🤝', title: 'دعم البيوت المحلية', body: 'بنخلي المشروع الصغير يوصل لناس أكتر.' },
+  { emoji: '', title: 'دعم البيوت المحلية', body: 'بنخلي المشروع الصغير يوصل لناس أكتر.' },
 ]
 
 export default function AboutPage() {
@@ -157,22 +157,22 @@ export default function AboutPage() {
           </header>
           <div className="ab__order-flow" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginTop: 18 }}>
             <div className="ab__flow-step" style={{ padding: 20, borderRadius: 16, background: 'rgba(37,211,102,.05)', border: '1px solid rgba(37,211,102,.25)' }}>
-              <span style={{ display: 'block', fontSize: '1.6rem', marginBottom: 8 }}>1️⃣</span>
+              <span style={{ display: 'block', fontSize: '1.6rem', marginBottom: 8 }}>1</span>
               <strong style={{ display: 'block', fontFamily: 'var(--font-cairo-play, var(--font-cairo, system-ui))', color: '#F4F2FA', marginBottom: 4 }}>اختار المكان</strong>
               <p style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5', lineHeight: 1.6, margin: 0 }}>من الرئيسية أو البحث — أي نشاط بيقبل أوردرات هيبان لك زر واضح.</p>
             </div>
             <div className="ab__flow-step" style={{ padding: 20, borderRadius: 16, background: 'rgba(168,85,247,.05)', border: '1px solid rgba(168,85,247,.25)' }}>
-              <span style={{ display: 'block', fontSize: '1.6rem', marginBottom: 8 }}>2️⃣</span>
+              <span style={{ display: 'block', fontSize: '1.6rem', marginBottom: 8 }}>2</span>
               <strong style={{ display: 'block', fontFamily: 'var(--font-cairo-play, var(--font-cairo, system-ui))', color: '#F4F2FA', marginBottom: 4 }}>اكتب طلبك</strong>
               <p style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5', lineHeight: 1.6, margin: 0 }}>اسمك، عنوانك، والأوردر — بيتبعت جاهز ومهيأ مع كود خاص.</p>
             </div>
             <div className="ab__flow-step" style={{ padding: 20, borderRadius: 16, background: 'rgba(232,199,154,.05)', border: '1px solid rgba(232,199,154,.3)' }}>
-              <span style={{ display: 'block', fontSize: '1.6rem', marginBottom: 8 }}>3️⃣</span>
+              <span style={{ display: 'block', fontSize: '1.6rem', marginBottom: 8 }}>3</span>
               <strong style={{ display: 'block', fontFamily: 'var(--font-cairo-play, var(--font-cairo, system-ui))', color: '#F4F2FA', marginBottom: 4 }}>يوصل على واتساب المكان</strong>
               <p style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5', lineHeight: 1.6, margin: 0 }}>الرسالة فيها كل حاجة — اسمك، رقمك، عنوانك، والأوردر بكود مرجعي.</p>
             </div>
             <div className="ab__flow-step" style={{ padding: 20, borderRadius: 16, background: 'rgba(16,185,129,.05)', border: '1px solid rgba(16,185,129,.3)' }}>
-              <span style={{ display: 'block', fontSize: '1.6rem', marginBottom: 8 }}>4️⃣</span>
+              <span style={{ display: 'block', fontSize: '1.6rem', marginBottom: 8 }}>4</span>
               <strong style={{ display: 'block', fontFamily: 'var(--font-cairo-play, var(--font-cairo, system-ui))', color: '#F4F2FA', marginBottom: 4 }}>تأكيد فوري</strong>
               <p style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5', lineHeight: 1.6, margin: 0 }}>لما المكان يستلم أوردرك، بيوصلك إشعار مباشر إنه اتأكد — مش هتفضل مستني.</p>
             </div>
