@@ -94,7 +94,7 @@ export default function OfferForm({ mode, action, businessSlug, businessId, init
       <div className="admin-form__foot">
         <Link href={`/admin/businesses/${businessSlug}/offers`} className="admin-btn admin-btn--ghost">إلغاء</Link>
         <button type="submit" className="admin-btn admin-btn--primary" disabled={pending}>
-          {pending ? 'جاري الحفظ...' : mode === 'create' ? '➕ إضافة العرض' : '💾 حفظ'}
+          {pending ? 'جاري الحفظ...' : mode === 'create' ? 'إضافة العرض' : 'حفظ'}
         </button>
       </div>
 

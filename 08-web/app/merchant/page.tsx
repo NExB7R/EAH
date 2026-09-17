@@ -44,7 +44,7 @@ export default async function MerchantDashboard() {
               الطلبات
             </Link>
             <Link href="/merchant/apply" className="admin-btn admin-btn--primary">
-              ➕ أضف نشاط جديد
+              أضف نشاط جديد
             </Link>
           </div>
         </div>
@@ -55,7 +55,7 @@ export default async function MerchantDashboard() {
             <h2 className="admin-empty__title">لسه مسجلتش أي نشاط</h2>
             <p className="admin-empty__msg">سجّل مطعمك أو صيدليتك أو محلك واحنا هنتواصل معاك</p>
             <Link href="/merchant/apply" className="admin-btn admin-btn--primary">
-              ➕ سجّل نشاطك
+              سجّل نشاطك
             </Link>
           </div>
         ) : (
@@ -84,7 +84,7 @@ export default async function MerchantDashboard() {
 
                 <div className="mbiz__actions">
                   <Link href={`/merchant/businesses/${b.slug}/edit`} className="admin-btn admin-btn--sm admin-btn--primary">
-                    ✏️ تعديل
+                    تعديل
                   </Link>
                   <Link href={`/merchant/businesses/${b.slug}/report`} className="admin-btn admin-btn--sm">
                     إحصائيات

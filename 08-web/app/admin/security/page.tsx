@@ -186,7 +186,7 @@ export default async function AdminSecurityPage() {
 
       <div className="sec__section">
         <header className="sec__section-head">
-          <h2 className="sec__section-title">📌 ملاحظات</h2>
+          <h2 className="sec__section-title">ملاحظات</h2>
         </header>
         <div className="sec__notes">
           <div className="sec__note">

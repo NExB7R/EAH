@@ -251,7 +251,7 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
       <div className="admin-form__foot">
         <Link href="/admin/businesses" className="admin-btn admin-btn--ghost">إلغاء</Link>
         <button type="submit" className="admin-btn admin-btn--primary" disabled={pending}>
-          {pending ? 'جاري الحفظ...' : mode === 'create' ? '➕ إضافة المكان' : '💾 حفظ التعديلات'}
+          {pending ? 'جاري الحفظ...' : mode === 'create' ? 'إضافة المكان' : 'حفظ التعديلات'}
         </button>
       </div>
 

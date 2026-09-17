@@ -184,7 +184,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
       <header className="col__head">
         <div>
           <span className="col__kicker">الجمع الذكي</span>
-          <h1 className="col__title">➕ جمع أماكن</h1>
+          <h1 className="col__title">جمع أماكن</h1>
           <p className="col__sub">
             الصق رابط Facebook / Instagram / Maps — هيستخرج البيانات تلقائياً
           </p>
@@ -346,7 +346,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
               onClick={save}
               disabled={saving || !name.trim()}
             >
-              {saving ? '...' : '💾 حفظ'}
+              {saving ? '...' : 'حفظ'}
             </button>
             <button
               type="button"

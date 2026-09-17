@@ -127,7 +127,7 @@ export default function MenuEditor({
 
       <div className="me__actions">
         <button type="button" className="me__add" onClick={openNew} disabled={pending}>
-          ➕ إضافة صنف
+          إضافة صنف
         </button>
         <span className="me__count">{items.length} صنف</span>
       </div>
@@ -166,7 +166,7 @@ export default function MenuEditor({
                       <button type="button" className="me__btn" onClick={() => toggleAvailability(item)}>
                         {item.is_available ? '👁' : '🚫'}
                       </button>
-                      <button type="button" className="me__btn" onClick={() => openEdit(item)}>✏️</button>
+                      <button type="button" className="me__btn" onClick={() => openEdit(item)}></button>
                       <button type="button" className="me__btn me__btn--danger" onClick={() => item.id && remove(item.id)}>🗑</button>
                     </div>
                   </article>
@@ -181,7 +181,7 @@ export default function MenuEditor({
         <div className="me__modal-overlay" onClick={() => setEditing(null)}>
           <div className="me__modal" onClick={(e) => e.stopPropagation()}>
             <header className="me__modal-head">
-              <h3>{editing.id ? '✏️ تعديل صنف' : '➕ صنف جديد'}</h3>
+              <h3>{editing.id ? 'تعديل صنف' : 'صنف جديد'}</h3>
               <button type="button" className="me__modal-close" onClick={() => setEditing(null)}>×</button>
             </header>
 
@@ -251,7 +251,7 @@ export default function MenuEditor({
 
             <footer className="me__modal-foot">
               <button type="button" className="me__btn-save" onClick={save} disabled={pending}>
-                {pending ? '...' : '💾 حفظ'}
+                {pending ? '...' : 'حفظ'}
               </button>
               <button type="button" className="me__btn-cancel" onClick={() => setEditing(null)}>
                 إلغاء

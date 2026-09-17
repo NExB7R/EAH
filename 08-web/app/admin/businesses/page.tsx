@@ -62,7 +62,7 @@ export default async function AdminBusinessesPage() {
         </div>
         <div className="admin-header__actions">
           <Link href="/admin/businesses/new" className="admin-btn admin-btn--primary">
-            ➕ إضافة مكان جديد
+            إضافة مكان جديد
           </Link>
         </div>
       </div>
@@ -73,7 +73,7 @@ export default async function AdminBusinessesPage() {
           <h2 className="admin-empty__title">لسه مفيش أنشطة</h2>
           <p className="admin-empty__msg">ابدأ بإضافة أول مطعم أو صيدلية أو </p>
           <Link href="/admin/businesses/new" className="admin-btn admin-btn--primary">
-            ➕ إضافة أول مكان
+            إضافة أول مكان
           </Link>
         </div>
       ) : (

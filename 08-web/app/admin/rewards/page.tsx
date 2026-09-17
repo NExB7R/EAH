@@ -83,7 +83,7 @@ export default async function AdminRewardsPage({
       {tab === 'catalog' && (
         <>
           <section className="rew-create">
-            <h2 className="rew-create__title">➕ إضافة مكافأة جديدة</h2>
+            <h2 className="rew-create__title">إضافة مكافأة جديدة</h2>
             <form action={createReward} className="rew-create__form">
               <input name="title" placeholder="العنوان" required className="rew-input" />
               <input name="emoji" placeholder="" maxLength={4} className="rew-input" />

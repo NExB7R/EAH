@@ -32,7 +32,7 @@ export default function PlanForm({ plan }: { plan?: SubscriptionPlan }) {
       {state.error && <p className="plan-form__error">⚠ {state.error}</p>}
       {state.ok && <p className="plan-form__ok">✅ تم الحفظ</p>}
       <button type="submit" disabled={pending} className="plan-form__btn">
-        {pending ? '...' : plan ? '💾 حفظ' : '➕ إضافة'}
+        {pending ? '...' : plan ? 'حفظ' : 'إضافة'}
       </button>
     </form>
   )

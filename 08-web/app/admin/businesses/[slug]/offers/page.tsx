@@ -46,7 +46,7 @@ export default async function OffersPage({
         </div>
         <div className="admin-header__actions">
           <Link href={`/admin/businesses/${biz.slug}/edit`} className="admin-btn admin-btn--ghost">← تعديل المكان</Link>
-          <Link href={`/admin/businesses/${biz.slug}/offers/new`} className="admin-btn admin-btn--primary">➕ عرض جديد</Link>
+          <Link href={`/admin/businesses/${biz.slug}/offers/new`} className="admin-btn admin-btn--primary">عرض جديد</Link>
         </div>
       </div>
 
@@ -55,7 +55,7 @@ export default async function OffersPage({
           <span className="admin-empty__emoji"></span>
           <h2 className="admin-empty__title">لسه مفيش عروض</h2>
           <p className="admin-empty__msg">أضف أول عرض لجذب العملاء</p>
-          <Link href={`/admin/businesses/${biz.slug}/offers/new`} className="admin-btn admin-btn--primary">➕ إضافة عرض</Link>
+          <Link href={`/admin/businesses/${biz.slug}/offers/new`} className="admin-btn admin-btn--primary">إضافة عرض</Link>
         </div>
       ) : (
         <div className="admin-grid admin-grid--cards">
@@ -114,7 +114,7 @@ export default async function OffersPage({
                     href={`/admin/businesses/${biz.slug}/offers/${o.id}/edit`}
                     className="admin-btn admin-btn--sm admin-btn--primary"
                   >
-                    ✏️ تعديل
+                    تعديل
                   </Link>
                   <Link
                     href={`/businesses/${biz.slug}`}

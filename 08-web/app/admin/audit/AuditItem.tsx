@@ -14,8 +14,8 @@ type Log = {
 }
 
 const ACTION_LABEL: Record<string, string> = {
-  'business.create': '➕ إضافة نشاط',
-  'business.update': '✏️ تعديل نشاط',
+  'business.create': 'إضافة نشاط',
+  'business.update': 'تعديل نشاط',
   'business.delete': '🗑️ حذف نشاط',
   'business.toggle_featured': 'تبديل المميز',
   'business.toggle_published': 'تبديل النشر',

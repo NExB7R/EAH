@@ -359,10 +359,10 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
               }}
             />
             <div className="ed__cmd-hints">
-              <span>💾 احفظ</span>
+              <span>احفظ</span>
               <span>🔄 إعادة تعيين</span>
               <span>📱 تغيير الجهاز</span>
-              <span>➕ أضف قسم</span>
+              <span>أضف قسم</span>
             </div>
           </div>
         </div>

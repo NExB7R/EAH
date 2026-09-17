@@ -37,7 +37,7 @@ export default async function NewOfferPage({
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">عرض جديد</span>
-          <h1 className="admin-header__title">➕ عرض جديد لـ {biz.name}</h1>
+          <h1 className="admin-header__title">عرض جديد لـ {biz.name}</h1>
         </div>
         <div className="admin-header__actions">
           <Link href={`/admin/businesses/${biz.slug}/offers`} className="admin-btn admin-btn--ghost">← رجوع</Link>

@@ -55,7 +55,7 @@ export default async function AdminPlansPage() {
       </div>
 
       <div className="plans-new">
-        <h2>➕ إضافة باقة جديدة</h2>
+        <h2>إضافة باقة جديدة</h2>
         <PlanForm />
       </div>
     </>

@@ -110,7 +110,7 @@ export default function BusinessContact({
           const isRevealed = revealed[c.method_type]
           const isLoading = loading[c.method_type]
           const label = METHOD_LABEL[c.method_type] ?? c.method_type
-          const emoji = METHOD_EMOJI[c.method_type] ?? '📌'
+          const emoji = METHOD_EMOJI[c.method_type] ?? ''
 
           const href =
             c.method_type === 'phone'

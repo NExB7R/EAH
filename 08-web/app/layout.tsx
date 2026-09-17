@@ -96,7 +96,7 @@ export const metadata: Metadata = {
     url: siteUrl,
     images: [
       {
-        url: '/icon-512.png',
+        url: '/crown-512.png',
         width: 512,
         height: 512,
         alt: 'EAH',
@@ -107,7 +107,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'EAH — اللي نفسك فيه ؟',
     description: 'اكتشف اللي مناسب ليك حوالينك.',
-    images: ['/icon-512.png'],
+    images: ['/crown-512.png'],
   },
 }
 
@@ -145,7 +145,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   name: 'EAH',
                   alternateName: 'اللي نفسك فيه',
                   url: siteUrl,
-                  logo: `${siteUrl}/icon-512.png`,
+                  logo: `${siteUrl}/crown-512.png`,
                   areaServed: {
                     '@type': 'City',
                     name: 'Shibin El-Qanater',
