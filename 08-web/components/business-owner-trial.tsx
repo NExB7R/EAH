@@ -6,7 +6,27 @@ import TrialCountdown from './trial-countdown'
 export function WhatsAppOrdersToggle({ businessId, initialEnabled }: { businessId: string; initialEnabled: boolean }) {
   const [enabled, setEnabled] = useState(initialEnabled)
   const [busy, setBusy] = useState(false)
+  const [isOwner, setIsOwner] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    let alive = true
+    void (async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!alive) return
+      if (!user) { setIsOwner(false); return }
+      const { data: biz } = await supabase
+        .from('businesses')
+        .select('owner_profile_id')
+        .eq('id', businessId)
+        .maybeSingle()
+      if (alive) setIsOwner(biz?.owner_profile_id === user.id)
+    })()
+    return () => { alive = false }
+  }, [businessId])
+
   async function toggle() {
+    if (isOwner !== true) return
     setBusy(true)
     try {
       const { createClient } = await import('@/lib/supabase-browser')
@@ -16,6 +36,9 @@ export function WhatsAppOrdersToggle({ businessId, initialEnabled }: { businessI
     } catch {}
     setBusy(false)
   }
+
+  if (isOwner !== true) return null
+
   return (
     <section className="wa-toggle" dir="rtl">
       <div className="wa-toggle__body">

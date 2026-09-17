@@ -136,7 +136,7 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
           />
         )}
 
-        {hasId && <BusinessContact businessId={business.businessId!} contacts={contacts} />}
+        {hasId && contacts.length > 0 && <BusinessContact businessId={business.businessId!} contacts={contacts} />}
 
         {business.businessId && (
           <div style={{ maxWidth: 900, margin: '24px auto', padding: '0 20px' }}>
