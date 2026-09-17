@@ -11,7 +11,7 @@ export const metadata = {
 const PLANS = [
   {
     key: 'free',
-    emoji: '🎁',
+    emoji: '',
     name: 'المجانية',
     badge: 'مدى الحياة',
     tagline: 'للشركاء الجديدين',
@@ -20,17 +20,17 @@ const PLANS = [
     cta: { label: 'سجّل نشاطك', href: '/merchant/apply' },
     accent: 'free',
     features: [
-      '✅ صفحة كاملة لنشاطك',
-      '✅ تظهر في البحث والاستكشاف',
-      '✅ اسم + عنوان + ساعات العمل',
-      '✅ رقم واحد للتواصل',
-      '✅ صورة رئيسية',
-      '✅ تحديث البيانات من لوحة التحكم',
+      'صفحة كاملة لنشاطك',
+      'تظهر في البحث والاستكشاف',
+      'اسم + عنوان + ساعات العمل',
+      'رقم واحد للتواصل',
+      'صورة رئيسية',
+      'تحديث البيانات من لوحة التحكم',
     ],
   },
   {
     key: 'premium',
-    emoji: '👑',
+    emoji: '',
     name: 'المميزة',
     badge: '30 يوم تجربة',
     tagline: 'تجربة كاملة قبل ما تدفع',
@@ -40,21 +40,21 @@ const PLANS = [
     accent: 'premium',
     highlight: true,
     features: [
-      '🎁 تجربة 30 يوم بكل الميزات — تلقائي',
-      '✅ كل مميزات المجانية +',
-      '👑 شارة "مميز" على صفحتك',
-      '🚀 أولوية في الترتيب والبحث',
-      '📷 معرض صور كامل',
-      '🔥 عروض غير محدودة',
-      '📊 تحليلات مفصلة (مشاهدات، ضغطات)',
-      '🔔 إشعارات فورية للعملاء',
-      '📱 QR كود للطباعة على الفاتورة',
-      '💬 أولوية دعم مباشر',
+      'تجربة 30 يوم بكل الميزات — تلقائي',
+      'كل مميزات المجانية +',
+      'شارة "مميز" على صفحتك',
+      'أولوية في الترتيب والبحث',
+      'معرض صور كامل',
+      'عروض غير محدودة',
+      'تحليلات مفصلة (مشاهدات، ضغطات)',
+      'إشعارات فورية للعملاء',
+      'QR كود للطباعة على الفاتورة',
+      'أولوية دعم مباشر',
     ],
   },
   {
     key: 'bot',
-    emoji: '🤖',
+    emoji: '',
     name: 'بوت الأوردرات',
     badge: 'Add-on',
     tagline: 'يشتغل لوحده',
@@ -63,12 +63,12 @@ const PLANS = [
     cta: { label: 'اسأل عن البوت', href: 'https://wa.me/201012892806?text=عايز أعرف أكتر عن بوت الأوردرات' },
     accent: 'bot',
     features: [
-      '🤖 بوت ذكي يستقبل الأوردرات',
+      'بوت ذكي يستقبل الأوردرات',
       '📲 يبعت لك على واتساب فورًا',
-      '📋 نموذج أوردر جاهز للعميل',
+      'نموذج أوردر جاهز للعميل',
       '⏱️ إدارة حالة الأوردر (جديد/مقبول/تم)',
-      '📈 إحصائيات الأوردرات',
-      '🔒 أمان كامل + منع التلاعب',
+      'إحصائيات الأوردرات',
+      'أمان كامل + منع التلاعب',
     ],
   },
 ]
@@ -142,13 +142,13 @@ export default function PricingPage() {
           <h2 className="pr-compare__title">الباقة vs الإعلانات</h2>
           <div className="pr-compare__grid">
             <div className="pr-compare__card">
-              <span className="pr-compare__emoji">📦</span>
+              <span className="pr-compare__emoji"></span>
               <strong>الباقة</strong>
               <p>نشاطك كامل — صفحة، منيو، عروض، أوردرات، إحصائيات.</p>
               <Link href="/merchant/apply" className="pr-compare__link">سجّل نشاطك ←</Link>
             </div>
             <div className="pr-compare__card">
-              <span className="pr-compare__emoji">📢</span>
+              <span className="pr-compare__emoji"></span>
               <strong>الإعلانات</strong>
               <p>مساحة إعلانية منفصلة — أي حد يقدر يعلن، حتى من غير باقة.</p>
               <Link href="/advertise" className="pr-compare__link">شوف الإعلانات ←</Link>
@@ -174,8 +174,8 @@ export default function PricingPage() {
             سجّل نشاطك مجانًا. تجربتك تبدأ تلقائي — وكل حاجة واضحة من غير كلام كتير.
           </p>
           <div className="pr-cta__actions">
-            <Link href="/merchant/apply" className="pr-cta__btn pr-cta__btn--primary">🚀 سجّل نشاطك</Link>
-            <a href="https://wa.me/201012892806?text=عايز أعرف الأسعار" target="_blank" rel="noreferrer" className="pr-cta__btn pr-cta__btn--ghost">💬 كلمنا</a>
+            <Link href="/merchant/apply" className="pr-cta__btn pr-cta__btn--primary">سجّل نشاطك</Link>
+            <a href="https://wa.me/201012892806?text=عايز أعرف الأسعار" target="_blank" rel="noreferrer" className="pr-cta__btn pr-cta__btn--ghost">كلمنا</a>
           </div>
           <p className="pr-cta__note">🇵🇸 جزء من كل دخل بيروح لدعم أهلنا في فلسطين.</p>
         </section>

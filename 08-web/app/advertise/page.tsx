@@ -11,7 +11,7 @@ export const metadata = {
 const SPOTS = [
   {
     key: 'hero',
-    emoji: '🎯',
+    emoji: '',
     name: 'بانر الهيرو',
     desc: 'أول حاجة عين الزائر تشوفها على الرئيسية.',
     size: 'أول حاجة الزائر يشوفها',
@@ -38,7 +38,7 @@ const SPOTS = [
   },
   {
     key: 'search',
-    emoji: '🔍',
+    emoji: '',
     name: 'نتيجة بحث مميزة',
     desc: 'لما حد يدور على حاجة معينة — إنت أول واحد.',
     size: 'على كلمة معينة',
@@ -49,11 +49,11 @@ const SPOTS = [
 
 const WHO = [
   { emoji: '🧁', title: 'Hand-made', body: 'مشاريع من البيت — حلويات، مشغولات، كروشيه.' },
-  { emoji: '📱', title: 'Online', body: 'صفحات سوشيال ميديا، متاجر انلاين، ترويج.' },
+  { emoji: '', title: 'Online', body: 'صفحات سوشيال ميديا، متاجر انلاين، ترويج.' },
   { emoji: '🏢', title: 'عقارات', body: 'شقق، محلات، مكاتب — في شبين والقرى.' },
-  { emoji: '🛵', title: 'خدمات', body: 'توصيل، صيانة، دروس، صالونات.' },
-  { emoji: '🎂', title: 'مناسبات', body: 'أفراح، حفلات، تنظيم أحداث.' },
-  { emoji: '📚', title: 'تعليم', body: 'مراكز، دروس خصوصية، كورسات.' },
+  { emoji: '', title: 'خدمات', body: 'توصيل، صيانة، دروس، صالونات.' },
+  { emoji: '', title: 'مناسبات', body: 'أفراح، حفلات، تنظيم أحداث.' },
+  { emoji: '', title: 'تعليم', body: 'مراكز، دروس خصوصية، كورسات.' },
 ]
 
 const STATS = [
@@ -82,10 +82,10 @@ export default function AdvertisePage() {
           </p>
           <div className="adv-hero__actions">
             <a href="https://wa.me/201012892806?text=عايز أعرف أسعار الإعلانات" target="_blank" rel="noreferrer" className="adv-btn adv-btn--primary">
-              💬 اعرف الأسعار
+              اعرف الأسعار
             </a>
             <Link href="/pricing" className="adv-btn adv-btn--ghost">
-              📦 شوف الباقات
+              شوف الباقات
             </Link>
           </div>
         </section>
@@ -145,7 +145,7 @@ export default function AdvertisePage() {
         <section className="adv-compare">
           <div className="adv-compare__row">
             <div className="adv-compare__col adv-compare__col--ads">
-              <h3>📢 إعلانات EAH</h3>
+              <h3>إعلانات EAH</h3>
               <p className="adv-compare__lead">مساحة إعلانية في مكان محدد.</p>
               <ul>
                 <li>تظهر لمستخدمين كتير</li>
@@ -156,7 +156,7 @@ export default function AdvertisePage() {
             </div>
             <div className="adv-compare__vs">VS</div>
             <div className="adv-compare__col adv-compare__col--pkg">
-              <h3>📦 الباقات</h3>
+              <h3>الباقات</h3>
               <p className="adv-compare__lead">نشاط كامل على EAH.</p>
               <ul>
                 <li>صفحة خاصة بنشاطك</li>
@@ -176,7 +176,7 @@ export default function AdvertisePage() {
             كلمنا على واتساب — نقولك الأسعار، والمساحات المتاحة، ونظبط كل حاجة في دقايق.
           </p>
           <a href="https://wa.me/201012892806?text=عايز أعلن على EAH" target="_blank" rel="noreferrer" className="adv-btn adv-btn--primary adv-btn--big">
-            💬 كلمنا على واتساب
+            كلمنا على واتساب
           </a>
           <p className="adv-cta__note">
             🇵🇸 5% من كل إعلان بيروح لدعم أهلنا في فلسطين — بدون أي زيادة عليك.

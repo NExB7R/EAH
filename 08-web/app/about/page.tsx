@@ -18,13 +18,13 @@ const HOOKS = [
 
 const FOR_WHO = [
   {
-    emoji: '🛍️',
+    emoji: '',
     title: 'للعميل',
     desc: 'اكتشف الأماكن اللي حواليك على مزاجك — بدون تسجيل معقّد، بدون رسوم.',
     cta: { label: 'يلا اكتشف', href: '/explore' },
   },
   {
-    emoji: '🏪',
+    emoji: '',
     title: 'للشريك',
     desc: 'سجّل نشاطك مجاناً، وابدأ تجربة 30 يوم من كل الميزات المدفوعة.',
     cta: { label: 'سجّل نشاطك', href: '/merchant-info' },
@@ -38,20 +38,20 @@ const FOR_WHO = [
 ]
 
 const WHAT_WE_DO = [
-  { icon: '🍽️', label: 'مطاعم' },
-  { icon: '💊', label: 'صيدليات' },
-  { icon: '🛒', label: 'ماركت' },
-  { icon: '🛵', label: 'توصيل' },
-  { icon: '🎁', label: 'عروض' },
-  { icon: '👑', label: 'مميزين' },
-  { icon: '🔥', label: 'الترند' },
-  { icon: '🆕', label: 'الجديد' },
+  { icon: '', label: 'مطاعم' },
+  { icon: '', label: 'صيدليات' },
+  { icon: '', label: 'ماركت' },
+  { icon: '', label: 'توصيل' },
+  { icon: '', label: 'عروض' },
+  { icon: '', label: 'مميزين' },
+  { icon: '', label: 'الترند' },
+  { icon: '', label: 'الجديد' },
 ]
 
 const VALUES = [
-  { emoji: '🎯', title: 'بنوصّلك الصح', body: 'ترشيحات على مزاجك وميزانيتك — مش الأكثر دفعاً.' },
+  { emoji: '', title: 'بنوصّلك الصح', body: 'ترشيحات على مزاجك وميزانيتك — مش الأكثر دفعاً.' },
   { emoji: '💜', title: 'بنسمعك دايمًا', body: 'كل اقتراح وكل شكوى بتوصلنا، وبنبني عليها.' },
-  { emoji: '⚡', title: 'تجربة خفيفة', body: 'من غير تعقيد — بتلاقي وبتتواصل في ثواني.' },
+  { emoji: '', title: 'تجربة خفيفة', body: 'من غير تعقيد — بتلاقي وبتتواصل في ثواني.' },
   { emoji: '🤝', title: 'دعم البيوت المحلية', body: 'بنخلي المشروع الصغير يوصل لناس أكتر.' },
 ]
 
@@ -71,8 +71,8 @@ export default function AboutPage() {
           </h1>
           <p className="ab__lead">كل حاجة حواليك — على بعد كليك.</p>
           <div className="ab__hero-cta">
-            <Link href="/explore" className="ab__btn ab__btn--primary">🔍 اكتشف الأماكن</Link>
-            <Link href="/merchant-info" className="ab__btn ab__btn--ghost">🏪 لأصحاب الأنشطة</Link>
+            <Link href="/explore" className="ab__btn ab__btn--primary">اكتشف الأماكن</Link>
+            <Link href="/merchant-info" className="ab__btn ab__btn--ghost">لأصحاب الأنشطة</Link>
           </div>
         </section>
 
@@ -178,7 +178,7 @@ export default function AboutPage() {
             </div>
           </div>
           <p style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.85rem', color: '#E8C79A', textAlign: 'center', marginTop: 20, fontWeight: 700 }}>
-            🎁 للمطاعم: استقبال أوردرات واتساب متاح مجانًا خلال تجربة الـ30 يوم
+            للمطاعم: استقبال أوردرات واتساب متاح مجانًا خلال تجربة الـ30 يوم
           </p>
         </section>
 
@@ -193,8 +193,8 @@ export default function AboutPage() {
             EAH هي المكان الصح.
           </p>
           <div className="ab__cta-actions">
-            <Link href="/contact" className="ab__btn ab__btn--primary">💬 تواصل معانا</Link>
-            <Link href="/merchant/apply" className="ab__btn ab__btn--ghost">🏪 سجّل نشاطك</Link>
+            <Link href="/contact" className="ab__btn ab__btn--primary">تواصل معانا</Link>
+            <Link href="/merchant/apply" className="ab__btn ab__btn--ghost">سجّل نشاطك</Link>
           </div>
         </section>
       </main>

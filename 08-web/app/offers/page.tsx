@@ -11,9 +11,9 @@ export const metadata = {
 }
 
 const TYPE_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  delivery_office: '',
 }
 
 const TYPE_LABEL: Record<string, string> = {
@@ -45,7 +45,7 @@ export default async function OffersPage() {
           <div className="off-hero__glow" aria-hidden />
           <span className="off-hero__kicker">عروض EAH</span>
           <h1 className="off-hero__title">
-            🔥 <span className="off-hero__accent">عروض</span> على الآخر
+            <span className="off-hero__accent">عروض</span> على الآخر
           </h1>
           <p className="off-hero__lead">
             خصومات حقيقية من مطاعم وصيدليات ومكاتب توصيل في شبين القناطر.
@@ -63,7 +63,7 @@ export default async function OffersPage() {
           <section className="off-grid">
             {offers.map((o: any) => {
               const b = o.business
-              const emoji = TYPE_EMOJI[b.business_type] ?? '📍'
+              const emoji = TYPE_EMOJI[b.business_type] ?? ''
               const label = TYPE_LABEL[b.business_type] ?? b.business_type
 
               return (
@@ -77,12 +77,12 @@ export default async function OffersPage() {
                     }
                   >
                     {!o.teaser_image_url && <span className="off-card__emoji">{emoji}</span>}
-                    <span className="off-card__badge">🔥 عرض</span>
+                    <span className="off-card__badge">عرض</span>
                   </div>
                   <div className="off-card__body">
                     <div className="off-card__meta">
                       <span className="off-card__type">{emoji} {label}</span>
-                      {b.area && <span className="off-card__area">📍 {b.area}</span>}
+                      {b.area && <span className="off-card__area">{b.area}</span>}
                     </div>
                     <h3 className="off-card__title">{o.title}</h3>
                     {o.description && <p className="off-card__desc">{o.description}</p>}

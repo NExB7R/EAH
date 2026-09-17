@@ -55,7 +55,7 @@ export default async function SearchPage({
           </div>
           <span className="sr__kicker">بحث</span>
           <SearchFilters initialFood={params.food} />
-          <h1 className="sr__title">🔍 البحث</h1>
+          <h1 className="sr__title">البحث</h1>
           <p className="sr__sub">دوّر على أي مكان في شبين القناطر</p>
           <div className="sr__search-wrap">
             <SearchBar placeholder="اسم المكان، النوع، أو المنطقة..." />
@@ -71,7 +71,7 @@ export default async function SearchPage({
 
         {businesses.length === 0 && q ? (
           <div className="sr__empty">
-            <span className="sr__empty-emoji">🔍</span>
+            <span className="sr__empty-emoji"></span>
             <h2 className="sr__empty-title">مفيش نتائج</h2>
             <p className="sr__empty-text">
               جرّب كلمة تانية، أو اكتشف الأماكن مباشرة
@@ -82,7 +82,7 @@ export default async function SearchPage({
           </div>
         ) : !q ? (
           <div className="sr__hint">
-            <span className="sr__hint-emoji">✨</span>
+            <span className="sr__hint-emoji"></span>
             <h2 className="sr__hint-title">اكتب أي حاجة</h2>
             <p className="sr__hint-text">
               اسم مطعم، نوع نشاط، أو منطقة معينة

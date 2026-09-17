@@ -45,7 +45,7 @@ export default async function FeaturedPage() {
             <EahLogo size="md" variant="full" href="/" />
           </div>
           <span className="feat__kicker">المميزين</span>
-          <h1 className="feat__title">⭐ المميزون</h1>
+          <h1 className="feat__title">المميزون</h1>
           <p className="feat__sub">
             {list.length} مكان مميز على EAH — اختيارات مختارة بعناية
           </p>
@@ -53,7 +53,7 @@ export default async function FeaturedPage() {
 
         {list.length === 0 ? (
           <div className="feat__empty">
-            <span>⭐</span>
+            <span></span>
             <h3>مفيش أماكن مميزة دلوقتي</h3>
             <p>الأماكن المميزة بتتجدد باستمرار — ارجع قريب.</p>
             <Link href="/explore" className="feat__empty-btn">اكتشف الأماكن</Link>
@@ -68,7 +68,7 @@ export default async function FeaturedPage() {
       
         <section className="feat__invite">
           <div className="feat__invite-inner">
-            <span className="feat__invite-emoji" aria-hidden>👑</span>
+            <span className="feat__invite-emoji" aria-hidden></span>
             <h3 className="feat__invite-title">نشاطك يستاهل يبقى هنا</h3>
             <p className="feat__invite-body">
               المميزين على EAH اختارهم الفريق بعناية — وعشان مكانك يبقى واحد منهم، محتاج بس تبدأ.

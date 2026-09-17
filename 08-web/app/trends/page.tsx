@@ -18,10 +18,10 @@ export const metadata = {
 }
 
 const TYPE_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  supermarket: '🛒',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  supermarket: '',
+  delivery_office: '',
 }
 
 const TYPE_LABEL: Record<string, string> = {
@@ -69,7 +69,7 @@ export default async function TrendsPage() {
             <EahLogo size="md" variant="full" href="/" />
           </div>
           <span className="tr__kicker">الترند النهاردة</span>
-          <h1 className="tr__title">🔥 الالترند النهاردة</h1>
+          <h1 className="tr__title">الالترند النهاردة</h1>
           <p className="tr__sub">
             الأماكن الأكثر تفاعلاً وزيارات في آخر 7 أيام
           </p>
@@ -81,7 +81,7 @@ export default async function TrendsPage() {
             {/* Rank 2 */}
             <article className="tr__podium-item tr__podium-item--2">
               <span className="tr__podium-rank">2</span>
-              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[1].type] ?? '📍'}</span>
+              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[1].type] ?? ''}</span>
               <h3 className="tr__podium-name">{top3[1].name}</h3>
               <p className="tr__podium-type">{TYPE_LABEL[top3[1].type] ?? top3[1].type}</p>
               <Link href={`/businesses/${top3[1].slug}`} className="tr__podium-link">
@@ -91,9 +91,9 @@ export default async function TrendsPage() {
 
             {/* Rank 1 */}
             <article className="tr__podium-item tr__podium-item--1">
-              <span className="tr__podium-crown">👑</span>
+              <span className="tr__podium-crown"></span>
               <span className="tr__podium-rank">1</span>
-              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[0].type] ?? '📍'}</span>
+              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[0].type] ?? ''}</span>
               <h3 className="tr__podium-name">{top3[0].name}</h3>
               <p className="tr__podium-type">{TYPE_LABEL[top3[0].type] ?? top3[0].type}</p>
               <Link href={`/businesses/${top3[0].slug}`} className="tr__podium-link">
@@ -104,7 +104,7 @@ export default async function TrendsPage() {
             {/* Rank 3 */}
             <article className="tr__podium-item tr__podium-item--3">
               <span className="tr__podium-rank">3</span>
-              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[2].type] ?? '📍'}</span>
+              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[2].type] ?? ''}</span>
               <h3 className="tr__podium-name">{top3[2].name}</h3>
               <p className="tr__podium-type">{TYPE_LABEL[top3[2].type] ?? top3[2].type}</p>
               <Link href={`/businesses/${top3[2].slug}`} className="tr__podium-link">
@@ -118,7 +118,7 @@ export default async function TrendsPage() {
         {rest.length > 0 && (
           <section className="tr__section">
             <header className="tr__section-head">
-              <h2 className="tr__section-title">🔥 الترند الأسبوع</h2>
+              <h2 className="tr__section-title">الترند الأسبوع</h2>
               <p className="tr__section-sub">أماكن بتاخد تفاعل متزايد</p>
             </header>
             <div className="tr__list">
@@ -130,7 +130,7 @@ export default async function TrendsPage() {
                   style={{ animationDelay: `${i * 30}ms` }}
                 >
                   <span className="tr__list-rank">#{i + 4}</span>
-                  <span className="tr__list-emoji">{TYPE_EMOJI[b.type] ?? '📍'}</span>
+                  <span className="tr__list-emoji">{TYPE_EMOJI[b.type] ?? ''}</span>
                   <div className="tr__list-body">
                     <span className="tr__list-name">{b.name}</span>
                     <span className="tr__list-type">{TYPE_LABEL[b.type] ?? b.type}</span>
@@ -145,10 +145,10 @@ export default async function TrendsPage() {
         {/* Per-category */}
         <div className="tr__categories">
           {[
-            { label: '🍽️ ترند المطاعم', items: restaurants, href: '/explore?type=restaurant' },
-            { label: '💊 ترند الصيدليات', items: pharmacies, href: '/explore?type=pharmacy' },
-            { label: '🛒 ترند الماركت', items: markets, href: '/explore?type=supermarket' },
-            { label: '🛵 ترند التوصيل', items: delivery, href: '/explore?type=delivery_office' },
+            { label: 'ترند المطاعم', items: restaurants, href: '/explore?type=restaurant' },
+            { label: 'ترند الصيدليات', items: pharmacies, href: '/explore?type=pharmacy' },
+            { label: 'ترند الماركت', items: markets, href: '/explore?type=supermarket' },
+            { label: 'ترند التوصيل', items: delivery, href: '/explore?type=delivery_office' },
           ]
             .filter((c) => c.items.length > 0)
             .map((c) => (
@@ -176,7 +176,7 @@ export default async function TrendsPage() {
         {/* Empty state */}
         {diversified.length === 0 && (
           <div className="tr__empty">
-            <span className="tr__empty-emoji">📊</span>
+            <span className="tr__empty-emoji"></span>
             <h3>مفيش بيانات كفاية للترند دلوقتي</h3>
             <p>ارجعلنا قريب — الالترند النهاردة بتتجدد كل يوم.</p>
             <Link href="/explore" className="tr__empty-btn">اكتشف الأماكن</Link>
