@@ -1,3 +1,42 @@
+# Active Changelog — v0.7.6 (2026-09-17)
+
+## Session — WhatsApp Orders + Feature Flags + Ads + Partners
+
+### Features shipped
+- WhatsApp order flow (template + confirm RPC + push)
+- Feature flags per business (admin controlled, 8 keys)
+- Ads system (slots + ads + tracking + admin + merchant UI)
+- Moderation (auto-flag + dashboard)
+- Partners (transfer ownership)
+- Facebook collect expansion (facebook + instagram + website + tiktok + email)
+- Analytics SVG chart (no deps)
+- Trial: auto-start + countdown + cron (7ص + 7م)
+- Maps (Leaflet + CartoDB)
+- Bot B7R (avatar + design)
+
+### Data (5 migrations, all applied)
+- 20260916100000_business_coordinates
+- 20260916110000_auto_trial_on_owner
+- 20260916120000_ads_system
+- 20260916130000_partners_and_moderation
+- business_features (applied via editor)
+
+### UI/Perf
+- Hero: tagline + hook
+- Crown v15 (static + pulse)
+- Footer 2027 (follow cards + QR)
+- 66 kicker إنجليزي → عربي
+- شيل 50% توهجات + infinite animations
+- AmbientBg stickers global
+- حذف 7 dead files
+
+### ⚠️ Known issues
+- 12 جدول متوقعة مش في Supabase (بس business_partners + business_menu_items اتضافوا يدوياً)
+- 111 `any` types
+- End-to-end testing لسه
+
+---
+
 # Active Changelog — v0.6.0 (2026-09-17)
 
 ## Session 2026-09-17 — UI/Perf/Security
