@@ -243,3 +243,14 @@ main > section::after,
 [class*="hero"] [class*="spin"] {
   animation: none !important;
 }
+
+/* Global body background with subtle sticker */
+body {
+  position: relative;
+  background: #07060B;
+  min-height: 100vh;
+}
+#__next, body > div {
+  position: relative;
+  z-index: 1;
+}

@@ -112,7 +112,12 @@ export default async function HomeDynamicV2() {
       <section className="home-actions">
         <div className="home-actions__grid">
           <a href="/merchant/apply" className="home-actions__card home-actions__card--biz">
-            <span className="home-actions__emoji">🏪</span>
+            <span className="home-actions__icon" aria-hidden>
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 9l1.5-5h15L21 9M3 9v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9M3 9h18"/>
+                <path d="M8 13v4M12 13v4M16 13v4"/>
+              </svg>
+            </span>
             <div className="home-actions__body">
               <h3 className="home-actions__title">عندك نشاط؟</h3>
               <p className="home-actions__desc">سجّله مجاناً — بدون عمولة على الطلبات</p>
@@ -120,7 +125,11 @@ export default async function HomeDynamicV2() {
             <span className="home-actions__cta">سجّل نشاطك ←</span>
           </a>
           <a href="/recommend" className="home-actions__card home-actions__card--rec">
-            <span className="home-actions__emoji">✨</span>
+            <span className="home-actions__icon" aria-hidden>
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 3l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"/>
+              </svg>
+            </span>
             <div className="home-actions__body">
               <h3 className="home-actions__title">مش عارف تختار؟</h3>
               <p className="home-actions__desc">قول مزاجك وإحنا نظبط</p>

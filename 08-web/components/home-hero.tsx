@@ -21,10 +21,10 @@ export default function HomeHero() {
 
         <div className="hh__tagline">
           <span className="hh__tagline-pin" aria-hidden>📍</span>
-          <span className="hh__tagline-city">دولة شبين القناطر تتحدّث</span>
+          <span className="hh__tagline-city">شبين القناطر بتحكي — وإحنا كلنا بنسمع</span>
         </div>
 
-        <h2 className="hh__hook">EAH بتجمع كل حاجة حواليك في مكان واحد.</h2>
+        <h2 className="hh__hook">كل حاجة محتاجها — في مكان واحد</h2>
 
         <div className="hh__search">
           <SearchBar placeholder="مطعم؟ صيدلية؟ ماركت؟ دوّر..." />

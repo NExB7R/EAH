@@ -44,7 +44,7 @@
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(232, 199, 154, 0.05));
   border: 1px solid rgba(168, 85, 247, 0.35);
 }
-.home-actions__emoji { font-size: 1.8rem; }
+.home-actions__icon, .home-actions__emoji { font-size: 1.8rem; }
 .home-actions__body { flex: 1; }
 .home-actions__title {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
@@ -70,4 +70,25 @@
 .home-actions__card--rec .home-actions__cta { color: #C4B5FD; }
 @media (max-width: 640px) {
   .home-actions__grid { grid-template-columns: 1fr; }
+}
+
+.home-actions__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  color: #C084FC;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(107, 33, 255, 0.06));
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  margin-bottom: 6px;
+}
+.home-actions__card--biz .home-actions__icon {
+  color: #E8C79A;
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.15), rgba(168, 85, 247, 0.06));
+  border-color: rgba(232, 199, 154, 0.45);
+}
+.home-actions__card--rec .home-actions__icon {
+  color: #C084FC;
 }

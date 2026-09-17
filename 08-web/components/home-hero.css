@@ -164,13 +164,27 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 14px;
+  padding: 6px 18px;
   border-radius: 999px;
-  background: rgba(168, 85, 247, 0.06);
-  border: 1px solid rgba(168, 85, 247, 0.35);
-  margin: 0 auto 14px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(232, 199, 154, 0.06));
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  margin: 0 auto 16px;
   align-self: center;
-  animation: taglineGlow 3s ease-in-out infinite;
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.15);
+  position: relative;
+}
+.hh__tagline::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 999px;
+  padding: 1px;
+  background: linear-gradient(135deg, #C084FC, #E8C79A, #A855F7);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.6;
+  pointer-events: none;
 }
 @keyframes taglineGlow {
   0%, 100% { box-shadow: 0 0 8px rgba(168, 85, 247, 0.2); }
@@ -179,28 +193,32 @@
 .hh__tagline-pin { font-size: 0.9rem; }
 .hh__tagline-city {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 900;
-  color: #C4B5FD;
-  letter-spacing: 0.03em;
-  text-shadow: 0 0 8px rgba(196, 181, 253, 0.5);
+  color: #F4F2FA;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, #E8C79A, #C084FC);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Hook جديدة */
 .hh__hook {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(1.2rem, 3.2vw, 1.7rem);
+  font-size: clamp(1.4rem, 4vw, 2rem);
   font-weight: 900;
   text-align: center;
-  margin: 10px auto 22px;
-  line-height: 1.45;
-  letter-spacing: -0.015em;
-  max-width: 640px;
-  background: linear-gradient(135deg, #E8C79A 0%, #C084FC 40%, #A855F7 70%, #6B21FF 100%);
+  margin: 10px auto 26px;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  max-width: 700px;
+  background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 50%, #E8C79A 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 60px rgba(168, 85, 247, 0.3);
 }
 
 .hh__cat { box-shadow: 0 2px 8px rgba(0,0,0,.3); }
