@@ -11,7 +11,9 @@ TMP=/tmp/eah-lock-$$.tar.gz
 FILES=""
 [ -f 08-web/.env.local ] && FILES="$FILES 08-web/.env.local"
 [ -f .env.local ] && FILES="$FILES .env.local"
+[ -f .baseline.env ] && FILES="$FILES .baseline.env"
 [ -d .private ] && FILES="$FILES .private"
+[ -d ~/.eah-secure/.private ] && FILES="$FILES ~/.eah-secure/.private"
 
 if [ -z "$FILES" ]; then
   echo "❌ مفيش ملفات للتشفير"
