@@ -67,7 +67,7 @@ const QUESTIONS: Question[] = [
     subtitle: 'آخر سؤال ونبدأ',
     options: [
       { key: 'now', emoji: '', label: 'على طول', hint: 'لازم دلوقتي' },
-      { key: 'soon', emoji: '🕐', label: 'بعد شوية', hint: 'خلال ساعة' },
+      { key: 'soon', emoji: '', label: 'بعد شوية', hint: 'خلال ساعة' },
       { key: 'later', emoji: '', label: 'بعدين', hint: 'بسجلها للمستقبل' },
     ],
   },

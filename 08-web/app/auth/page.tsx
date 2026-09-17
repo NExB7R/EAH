@@ -305,7 +305,7 @@ export default function AuthPage() {
             )}
 
             <button className="auth__submit" disabled={loading}>
-              {loading ? 'جاري التنفيذ…' : mode === 'login' ? 'دخول ⚡' : 'سجّل بسرعة ⚡'}
+              {loading ? 'جاري التنفيذ…' : mode === 'login' ? 'دخول ' : 'سجّل بسرعة '}
             </button>
           </form>
 

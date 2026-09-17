@@ -40,7 +40,7 @@ export default async function BusinessAccessPage({ params }: { params: Promise<{
       <input type="hidden" name="business_id" value={business.id} /><input type="hidden" name="user_id" value={owner.id} /><input type="hidden" name="slug" value={business.slug} />
       <h2>صلاحيات المالك لهذا النشاط</h2><p className="meta">تشغيل/إيقاف كل صلاحية هنا لا يؤثر على مطعم آخر يملكه نفس الرقم.</p>
       <div style={{ display: 'grid', gap: 10, marginTop: 16 }}>{permissions.map(([permission, label]) => <label key={permission} className="eah-admin-command-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, cursor: 'pointer' }}><span><strong>{label}</strong><small style={{ display: 'block', marginTop: 4 }}>{permission}</small></span><input type="checkbox" name={`permission:${permission}`} defaultChecked={ownerAccess.get(permission) === true} /></label>)}</div>
-      <button className="primary" type="submit" style={{ marginTop: 16 }}>حفظ صلاحيات النشاط ⚡</button>
+      <button className="primary" type="submit" style={{ marginTop: 16 }}>حفظ صلاحيات النشاط </button>
     </form> : <div className="card" style={{ padding: 18 }}><h2>لا يوجد مالك لهذا النشاط</h2><p className="lead">اربط رقم المالك من صفحة المستخدمين أولًا.</p><a className="eah-admin-primary" href="/admin/users">اختيار رقم المالك</a></div>}
   </section>
 }

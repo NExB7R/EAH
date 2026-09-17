@@ -2,7 +2,7 @@
 import { useState, useTransition } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './report-button.css'
-import { IcCheckCircle } from '@/components/eah-icons'
+import { IcCheckCircle, IcFlag } from '@/components/eah-icons'
 
 const REASONS = [
   { key: 'spam', label: 'محتوى مكرر / سبام' },
@@ -43,7 +43,7 @@ export default function ReportButton({ entityType, entityId }: { entityType: str
   if (!open) {
     return (
       <button type="button" className="rb-trigger" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(true) }} title="إبلاغ" aria-label="إبلاغ">
-        🚩
+        <IcFlag />
       </button>
     )
   }
@@ -51,7 +51,7 @@ export default function ReportButton({ entityType, entityId }: { entityType: str
   return (
     <div className="rb-modal" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(false) }}>
       <div className="rb-card" onClick={e => e.stopPropagation()}>
-        <h3 className="rb-title">🚩 إبلاغ</h3>
+        <h3 className="rb-title"><IcFlag /> إبلاغ</h3>
         <p className="rb-sub">ساعدنا نحسّن EAH</p>
 
         <div className="rb-reasons">

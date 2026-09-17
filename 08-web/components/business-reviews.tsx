@@ -90,7 +90,7 @@ export default function BusinessReviews({
         </div>
 
         <div className="brev__bars">
-          <RatingBar label="الطعم" value={stats.avg_taste} icon="😋" />
+          <RatingBar label="الطعم" value={stats.avg_taste} icon="" />
           <RatingBar label="القيمة" value={stats.avg_value} icon="" />
           <RatingBar label="السرعة" value={stats.avg_speed} icon="" />
           <RatingBar label="التجربة" value={stats.avg_experience} icon="" />

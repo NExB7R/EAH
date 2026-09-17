@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-browser'
 import './recover.css'
-import { IcEye, IcBan } from '@/components/eah-icons'
+import { IcBan, IcEye, IcKey } from '@/components/eah-icons'
 
 function normalizeEgyptPhone(value: string) {
   const raw = value.trim().replace(/[\s()-]/g, '')
@@ -88,7 +88,7 @@ export default function RecoverPage() {
       <div className="rc__wrap">
         <section className="rc__hero">
           <span className="rc__kicker">EAH • الاسترجاع</span>
-          <h1 className="rc__title">🔑 <span className="rc__title-accent">نسيت كلمة المرور؟</span></h1>
+          <h1 className="rc__title"><IcKey /> <span className="rc__title-accent">نسيت كلمة المرور؟</span></h1>
           <p className="rc__lead">
             اكتب رقم موبايلك وكلمة المرور الجديدة. هنراجع الطلب ونفعّله خلال دقائق.
           </p>
@@ -159,7 +159,7 @@ export default function RecoverPage() {
             {err && <div className="rc__alert">{err}</div>}
 
             <button type="submit" className="rc__submit" disabled={loading}>
-              {loading ? 'جاري الإرسال…' : '🔑 أرسل طلب الاستعادة'}
+              {loading ? 'جاري الإرسال…' : ' أرسل طلب الاستعادة'}
             </button>
 
             <Link href="/auth" className="rc__back">← رجوع للدخول</Link>

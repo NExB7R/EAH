@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import './collect.css'
-import { IcGlobe, IcLink, IcScroll } from '@/components/eah-icons'
+import { IcClock, IcGlobe, IcLink, IcScroll } from '@/components/eah-icons'
 
 type Recent = {
   id: string
@@ -295,7 +295,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             </label>
 
             <label className="col__field col__field--full">
-              <span>🕐 ساعات العمل</span>
+              <span><IcClock /> ساعات العمل</span>
               <input type="text" value={hours} onChange={(e) => setHours(e.target.value)} placeholder="يومياً من..." />
             </label>
 

@@ -125,7 +125,7 @@ export default async function MerchantReportPage({
           <section className="mreport-section">
             <h2 className="mreport-section__title">التقييمات بالتفصيل</h2>
             <div className="mratings">
-              <RatingBar label="😋 الطعم" value={stats.avg_taste} />
+              <RatingBar label=" الطعم" value={stats.avg_taste} />
               <RatingBar label="القيمة" value={stats.avg_value} />
               <RatingBar label="السرعة" value={stats.avg_speed} />
               <RatingBar label="التجربة" value={stats.avg_experience} />

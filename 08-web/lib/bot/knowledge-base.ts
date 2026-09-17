@@ -370,7 +370,7 @@ export const KB: Intent[] = [
 
 // ═══ Fallback ═══
 export const FALLBACK_RESPONSE =
-  'معلش، مش فاهم بالظبط 🤔\n\n' +
+  'معلش، مش فاهم بالظبط \n\n' +
   'تحب أعرفك على EAH بشكل عام؟ أو كلّمنا واتساب وهنساعدك شخصياً.'
 
 export const FALLBACK_REPLIES = [
