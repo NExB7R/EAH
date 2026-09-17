@@ -24,6 +24,14 @@ export default function OrderStatusButtons({
 
   function run(status: Status) {
     start(async () => {
+      // call confirm_order RPC first (sends notification to customer)
+      if (status === 'accepted') {
+        try {
+          const { createClient } = await import('@/lib/supabase-browser')
+          const supabase = createClient()
+          await supabase.rpc('confirm_order', { p_order_id: orderId })
+        } catch { /* silent */ }
+      }
       const r = await updateOrderStatus(orderId, status)
       setMsg(r.ok ? 'OK' : r.error || 'error')
       setTimeout(() => setMsg(null), 2400)

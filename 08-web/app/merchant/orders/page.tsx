@@ -68,7 +68,7 @@ export default async function MerchantOrdersPage({
 
   let query = supabase
     .from('order_requests')
-    .select('id,business_id,customer_name,customer_phone,customer_area,customer_address,items_summary,notes,status,whatsapp_url,created_at')
+    .select('id,business_id,customer_name,customer_phone,customer_area,customer_address,items_summary,notes,status,whatsapp_url,order_code,confirmed_at,created_at')
     .in('business_id', businessIds)
     .order('created_at', { ascending: false })
     .limit(200)

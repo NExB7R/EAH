@@ -56,27 +56,57 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
     const phoneNumber = merchantPhone
     setStatus('sending')
 
-    // Compose WhatsApp message
-    const msg = `*طلب أوردر جديد من EAH*\n\n` +
-      `🏪 المطعم: ${businessName}\n` +
-      `👤 الاسم: ${name.trim()}\n` +
-      `📱 الرقم: ${phone.trim()}\n` +
-      (area.trim() ? `📍 المنطقة: ${area.trim()}\n` : '') +
-      (address.trim() ? `🏠 العنوان: ${address.trim()}\n` : '') +
-      `\n📝 الأوردر:\n${items.trim()}\n` +
-      (notes.trim() ? `\n💬 ملاحظات: ${notes.trim()}\n` : '') +
-      `\n—————————————\n` +
-      `تم عبر EAH — اللي نفسك فيه`
+    const orderCode = generateOrderCode()
+
+    // fetch profile extras
+    let customerTrustScore: number | undefined
+    let customerVerified: boolean | undefined
+    let customerReviews: number | undefined
+    let customerProfileId: string | null = null
+
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        customerProfileId = user.id
+        const { data: prof } = await supabase
+          .from('profiles')
+          .select('trust_score,verified_at')
+          .eq('id', user.id)
+          .maybeSingle()
+        if (prof) {
+          customerTrustScore = prof.trust_score ?? 0
+          customerVerified = !!prof.verified_at
+        }
+        const { count } = await supabase
+          .from('business_reviews')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+        customerReviews = count ?? 0
+      }
+    } catch { /* silent */ }
+
+    const msg = buildOrderMessage({
+      orderCode,
+      businessName,
+      customerName: name.trim(),
+      customerPhone: phone.trim(),
+      area: area.trim() || null,
+      address: address.trim() || null,
+      items: items.trim(),
+      notes: notes.trim() || null,
+      customerTrustScore,
+      customerVerified,
+      customerReviews,
+    })
 
     const waUrl = `https://wa.me/${phoneNumber.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`
 
     try {
-      // Save to DB
       const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
       const { data: inserted } = await supabase.from('order_requests').insert({
         business_id: businessId,
-        customer_user_id: user?.id ?? null,
+        customer_user_id: customerProfileId,
         customer_name: name.trim(),
         customer_phone: phone.trim(),
         customer_area: area.trim() || null,
@@ -85,10 +115,10 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
         notes: notes.trim() || null,
         merchant_phone: phoneNumber,
         whatsapp_url: waUrl,
+        order_code: orderCode,
         status: 'sent',
       }).select('id').maybeSingle()
 
-      // Fire push notification (non-blocking)
       if (inserted?.id) {
         fetch('/api/orders/notify', {
           method: 'POST',
@@ -97,7 +127,6 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
         }).catch(() => {})
       }
 
-      // Open WhatsApp
       window.open(waUrl, '_blank', 'noreferrer')
       setStatus('sent')
     } catch (e) {
