@@ -45,7 +45,20 @@ export default async function MerchantReportPage({
     { label: 'عروض نشطة', value: stats.active_offers, emoji: '🔥', color: '#FB923C' },
   ]
 
-  return (
+  
+  // confirmed orders count (from WhatsApp flow)
+  const { count: confirmedOrders } = await supabase
+    .from('order_requests')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_id', biz.id)
+    .not('confirmed_at', 'is', null)
+
+  const { count: totalOrders } = await supabase
+    .from('order_requests')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_id', biz.id)
+
+return (
     <>
       <FloatingCapsuleHeader />
       <main className="mpage">
@@ -117,6 +130,16 @@ export default async function MerchantReportPage({
             </div>
           </section>
         )}
+              <div className="kpi-grid" style={{ marginTop: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
+          <div className="kpi-card" style={{ padding: 20, borderRadius: 16, background: 'linear-gradient(135deg, rgba(37,211,102,.1), rgba(168,85,247,.04))', border: '1px solid rgba(37,211,102,.3)' }}>
+            <span style={{ display: 'block', fontFamily: 'var(--font-cairo-play, var(--font-cairo, system-ui))', fontSize: '1.6rem', fontWeight: 900, color: '#86EFAC' }}>{confirmedOrders ?? 0}</span>
+            <span style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5' }}>✅ أوردر مؤكد (واتساب)</span>
+          </div>
+          <div className="kpi-card" style={{ padding: 20, borderRadius: 16, background: 'rgba(255,255,255,.02)', border: '1px solid rgba(168,85,247,.2)' }}>
+            <span style={{ display: 'block', fontFamily: 'var(--font-cairo-play, var(--font-cairo, system-ui))', fontSize: '1.6rem', fontWeight: 900, color: '#E8C79A' }}>{totalOrders ?? 0}</span>
+            <span style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5' }}>📦 إجمالي الأوردرات</span>
+          </div>
+        </div>
       </main>
 
       <style>{`
