@@ -488,3 +488,10 @@ export const IcTicket = () => (
 export const IcMask = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12c0-4 4-8 10-8s10 4 10 8-4 8-10 8-10-4-10-8z"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01"/><path d="M7 15c1.5 1 3.5 1.5 5 1.5s3.5-.5 5-1.5"/></svg>
 )
+
+export const IcClose = () => (
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+)
+export const IcMenu = () => (
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+)

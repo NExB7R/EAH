@@ -1,7 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { reviewRequestAction } from './actions'
-import { IcCheckCircle } from '@/components/eah-icons'
+import { IcCheckCircle, IcClose } from '@/components/eah-icons'
 
 export default function ChangeRequestActions({ id }: { id: string }) {
   const [pending, start] = useTransition()
@@ -57,7 +57,7 @@ export default function ChangeRequestActions({ id }: { id: string }) {
             onClick={() => setMode('reject')}
             disabled={pending}
           >
-            ✖ رفض
+            <IcClose /> رفض
           </button>
           {msg && <span className="cr-actions__msg">{msg}</span>}
         </>

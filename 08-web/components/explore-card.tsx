@@ -7,6 +7,7 @@ import './favorite-button.css'
 import './open-now-badge.css'
 import Image from 'next/image'
 import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from './eah-icons'
+import { IcStar } from '@/components/eah-icons'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 
@@ -122,7 +123,7 @@ export default function ExploreCard({ business, index }: { business: Business; s
             {(() => { const I = TYPE_ICON[business.type]; return <I /> })()} {TYPE_LABEL[business.type]}
           </span>
           {(business.avg_rating ?? business.rating ?? 0) > 0 && (
-            <span className="ecard__score">★ {(business.avg_rating ?? business.rating ?? 0).toFixed(1)}</span>
+            <span className="ecard__score"><IcStar /> {(business.avg_rating ?? business.rating ?? 0).toFixed(1)}</span>
           )}
         </div>
 

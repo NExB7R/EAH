@@ -1,7 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { reviewMerchantApp } from './actions'
-import { IcCheckCircle } from '@/components/eah-icons'
+import { IcCheckCircle, IcClose } from '@/components/eah-icons'
 
 export default function MerchantActions({ id }: { id: string }) {
   const [pending, start] = useTransition()
@@ -57,7 +57,7 @@ export default function MerchantActions({ id }: { id: string }) {
             onClick={() => setMode('reject')}
             disabled={pending}
           >
-            ✖ رفض
+            <IcClose /> رفض
           </button>
           {msg && <span className="mrch-actions__msg">{msg}</span>}
         </>

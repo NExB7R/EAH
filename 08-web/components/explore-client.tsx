@@ -5,7 +5,7 @@ import ExploreCard from './explore-card'
 import ExploreFilters from './explore-filters'
 import { FOOD_CATEGORIES } from '@/lib/food/categories'
 import './explore-client.css'
-import { IcSearch } from '@/components/eah-icons'
+import { IcClose, IcMenu, IcSearch } from '@/components/eah-icons'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 
@@ -237,7 +237,7 @@ export default function ExploreClient({
         <div className="exc-filters__right">
           {activeFiltersCount > 0 && (
             <button type="button" className="exc-clear" onClick={clearAll}>
-              ✕ امسح الفلاتر ({activeFiltersCount})
+              <IcClose /> امسح الفلاتر ({activeFiltersCount})
             </button>
           )}
 
@@ -256,7 +256,7 @@ export default function ExploreClient({
               onClick={() => updateParams({ view: 'list' })}
               aria-label="قائمة"
             >
-              ☰
+              <IcMenu />
             </button>
           </div>
         </div>

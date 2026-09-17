@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { MI } from '@/components/neon-icons-menu'
 import './admin-shell.css'
 import './admin-shell-polish.css'
+import { IcMenu } from '@/components/eah-icons'
 
 type NavItem = {
   href: string
@@ -145,7 +146,7 @@ export default function AdminShell({
             onClick={() => setMobileOpen(true)}
             aria-label="القائمة"
           >
-            ☰
+            <IcMenu />
           </button>
         </div>
         {children}

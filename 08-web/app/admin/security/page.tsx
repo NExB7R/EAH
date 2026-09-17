@@ -122,7 +122,7 @@ export default async function AdminSecurityPage() {
         <div className="sec__env-grid">
           {Object.entries(envChecks).map(([key, ok]) => (
             <div key={key} className={`sec__env-item ${ok ? 'is-ok' : 'is-miss'}`}>
-              <span className="sec__env-icon">{ok ? '' : '✕'}</span>
+              <span className="sec__env-icon">{ok ? '' : ''}</span>
               <span className="sec__env-label">{key}</span>
             </div>
           ))}
