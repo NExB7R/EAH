@@ -114,6 +114,8 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
             reason: business.reason,
             open: business.open,
             vibe: business.vibe,
+            address: business.address,
+            workingHours: business.workingHours,
           }}
           stats={{
             avg_rating: stats.avg_rating,

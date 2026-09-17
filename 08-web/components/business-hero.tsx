@@ -37,6 +37,8 @@ export default function BusinessHero({
     reason: string
     open: boolean
     vibe: string[]
+    address?: string | null
+    workingHours?: any
   }
   stats: Stats
 }) {
@@ -58,10 +60,6 @@ export default function BusinessHero({
             {(() => { const Icon = TYPE_ICON[business.type]; return <Icon /> })()}
           </span>
 
-          <div className="bhero__badges">
-            
-            
-          </div>
         </div>
 
         <div className="bhero__info">
@@ -88,6 +86,16 @@ export default function BusinessHero({
               </span>
             )}
           </div>
+
+          {business.address && (
+            <p className="bhero__address">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: 'inline', marginLeft: 6, verticalAlign: 'middle' }}>
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              {business.address}
+            </p>
+          )}
 
           <p className="bhero__reason">{business.reason}</p>
 
