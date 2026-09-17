@@ -1,7 +1,14 @@
 /**
- * EAH version — single source of truth
- * reads from NEXT_PUBLIC_APP_VERSION (set at build time)
- * fallback to package.json version
+ * EAH version — auto from package.json
+ * كل مرة تعمل commit و Vercel يبني، الفيرشن يتحدث تلقائي
  */
-export const APP_VERSION = process.env.NEXT_PUBLIC_APP_VERSION ?? '0.8.4'
+import pkg from '../package.json'
+
+export const APP_VERSION = pkg.version
 export const APP_VERSION_LABEL = `v${APP_VERSION}`
+
+// git commit قصير (Vercel بيوفره تلقائي)
+export const APP_COMMIT =
+  (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7)) || ''
+
+export const APP_BUILD = APP_COMMIT ? `${APP_VERSION_LABEL}+${APP_COMMIT}` : APP_VERSION_LABEL
