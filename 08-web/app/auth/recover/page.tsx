@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-browser'
 import './recover.css'
-import { IcBan, IcEye, IcKey } from '@/components/eah-icons'
+import { IcBan, IcEye, IcKey, IcShield } from '@/components/eah-icons'
 
 function normalizeEgyptPhone(value: string) {
   const raw = value.trim().replace(/[\s()-]/g, '')
@@ -93,7 +93,7 @@ export default function RecoverPage() {
             اكتب رقم موبايلك وكلمة المرور الجديدة. هنراجع الطلب ونفعّله خلال دقائق.
           </p>
           <div className="rc__info">
-            <span className="rc__info-emoji">🛡️</span>
+            <span className="rc__info-emoji"><IcShield /></span>
             <div>
               <strong className="rc__info-title">ليه بنطلب كل ده؟</strong>
               <p className="rc__info-text">

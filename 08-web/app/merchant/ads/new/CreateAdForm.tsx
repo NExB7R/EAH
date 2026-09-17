@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
-import { IcCalendar, IcLink } from '@/components/eah-icons'
+import { IcCalendar, IcImage, IcLink } from '@/components/eah-icons'
 
 type Slot = { id: string; code: string; name_ar: string; slot_type: string }
 
