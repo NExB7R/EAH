@@ -63,6 +63,8 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
   const [phone, setPhone] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
   const [facebook, setFacebook] = useState('')
+  const [website, setWebsite] = useState('')
+  const [instagram, setInstagram] = useState('')
   const [description, setDescription] = useState('')
   const [address, setAddress] = useState('')
   const [hours, setHours] = useState('')
