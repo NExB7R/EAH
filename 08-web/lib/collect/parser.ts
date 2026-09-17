@@ -198,6 +198,11 @@ export function extractFromHtml(html: string, sourceUrl: string): ExtractedData 
     type,
     hasDelivery,
     cuisine,
+    facebook: extractFacebook(html),
+    instagram: extractInstagram(html),
+    website: extractWebsite(html),
+    tiktok: extractTikTok(html),
+    email: extractEmail(html),
     score,
   }
 }
