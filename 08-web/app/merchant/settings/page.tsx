@@ -66,7 +66,7 @@ export default async function MerchantSettingsPage() {
           <div className="mset__actions">
             <Link href="/merchant" className="mset__action">لوحة النشاط</Link>
             <Link href="/merchant/qr" className="mset__action">QR Code</Link>
-            <Link href="/account/edit" className="mset__action">✏️ تعديل البروفايل</Link>
+            <Link href="/account/edit" className="mset__action"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{display:'inline',verticalAlign:'middle',marginLeft:4}}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> تعديل البروفايل</Link>
             <Link href="/auth/change-password" className="mset__action">كلمة المرور</Link>
           </div>
         </section>

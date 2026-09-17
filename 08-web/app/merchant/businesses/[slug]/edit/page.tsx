@@ -72,7 +72,7 @@ export default async function MerchantEditBusinessPage({
         <div className="mpage__head">
           <div>
             <span className="mpage__kicker">مراجعة مطلوبة</span>
-            <h1 className="mpage__title">✏️ تعديل: {business.name}</h1>
+            <h1 className="mpage__title"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{display:'inline',verticalAlign:'middle',marginLeft:4}}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> تعديل: {business.name}</h1>
             <p className="mpage__sub">
               التعديلات لا تُنشر فورًا — بتروح لمراجعة الأدمن أول
             </p>
