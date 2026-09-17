@@ -16,6 +16,11 @@ export type ExtractedData = {
   hasDelivery: boolean
   cuisine: string | null
   score: number
+  facebook: string | null
+  instagram: string | null
+  website: string | null
+  tiktok: string | null
+  email: string | null
 }
 
 const EG_MOBILE = /(?:\+?20|0)?1[0125]\d{8}/g
@@ -195,4 +200,32 @@ export function extractFromHtml(html: string, sourceUrl: string): ExtractedData 
     cuisine,
     score,
   }
+}
+
+function extractFacebook(html: string): string | null {
+  const m = html.match(/https?:\/\/(?:www\.)?facebook\.com\/[A-Za-z0-9._-]{3,60}/i)
+  return m?.[0] ?? null
+}
+
+function extractInstagram(html: string): string | null {
+  const m = html.match(/https?:\/\/(?:www\.)?instagram\.com\/[A-Za-z0-9._-]{3,60}/i)
+  return m?.[0] ?? null
+}
+
+function extractTikTok(html: string): string | null {
+  const m = html.match(/https?:\/\/(?:www\.)?tiktok\.com\/@[A-Za-z0-9._-]{3,60}/i)
+  return m?.[0] ?? null
+}
+
+function extractWebsite(html: string): string | null {
+  const m = html.match(/https?:\/\/(?!.*(?:facebook|instagram|tiktok|fb\.com))[A-Za-z0-9.-]+\.[A-Za-z]{2,}(?:\/[^\s"'<>]*)?/i)
+  if (!m) return null
+  const url = m[0]
+  if (url.match(/\.(?:jpg|png|gif|webp|svg|css|js)/i)) return null
+  return url
+}
+
+function extractEmail(html: string): string | null {
+  const m = html.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/i)
+  return m?.[0] ?? null
 }

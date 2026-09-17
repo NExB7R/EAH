@@ -25,6 +25,11 @@ type ExtractedData = {
   hasDelivery: boolean
   cuisine: string | null
   score: number
+  facebook?: string | null
+  instagram?: string | null
+  website?: string | null
+  tiktok?: string | null
+  email?: string | null
 }
 
 const AREAS = [
@@ -87,6 +92,9 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
       if (d.phones && d.phones.length > 0) setPhone(d.phones[0])
       if (d.whatsapp) setWhatsapp(d.whatsapp)
       if (d.sourceUrl && (d.sourceUrl.includes('facebook.com') || d.sourceUrl.includes('fb.com'))) setFacebook(d.sourceUrl)
+      if (d.facebook && !d.sourceUrl.includes('facebook')) setFacebook(d.facebook)
+      if (d.website) setWebsite(d.website)
+      if (d.instagram) setInstagram(d.instagram)
       if (d.type) setType(d.type)
     } catch (e: any) {
       setError('خطأ: ' + e.message)
@@ -132,6 +140,8 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
           phone: phone.trim(),
           whatsapp: whatsapp.trim(),
           facebook: facebook.trim(),
+          website: website.trim(),
+          instagram: instagram.trim(),
           sourceUrl: parsed?.sourceUrl || url.trim(),
           description: description.trim(),
           imageUrl: parsed?.image || '',
@@ -266,6 +276,16 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
               <input type="url" dir="ltr" value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="https://facebook.com/pagename" />
             </label>
 
+            <label className="col__field">
+              <span>🌐 الموقع</span>
+              <input type="url" dir="ltr" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." />
+            </label>
+
+            <label className="col__field">
+              <span>📷 إنستجرام</span>
+              <input type="url" dir="ltr" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="https://instagram.com/..." />
+            </label>
+
             <label className="col__field col__field--full">
               <span>📍 العنوان</span>
               <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="شارع..." />
@@ -329,7 +349,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             <button
               type="button"
               className="col__btn"
-              onClick={() => { setParsed(null); setUrl(''); setName(''); setPhone(''); setWhatsapp(''); setFacebook(''); setDescription(''); setAddress(''); setHours(''); setRawReviews('') }}
+              onClick={() => { setParsed(null); setUrl(''); setName(''); setPhone(''); setWhatsapp(''); setFacebook(''); setWebsite(''); setInstagram(''); setDescription(''); setAddress(''); setHours(''); setRawReviews('') }}
             >
               إلغاء
             </button>

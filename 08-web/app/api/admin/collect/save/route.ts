@@ -19,6 +19,8 @@ const Schema = z.object({
   phone: z.string().trim().max(40).optional().or(z.literal('')),
   whatsapp: z.string().trim().max(40).optional().or(z.literal('')),
   facebook: z.string().trim().max(500).optional().or(z.literal('')),
+  website: z.string().trim().max(500).optional().or(z.literal('')),
+  instagram: z.string().trim().max(500).optional().or(z.literal('')),
   sourceUrl: z.string().trim().max(500).optional().or(z.literal('')),
   description: z.string().trim().max(1000).optional().or(z.literal('')),
   imageUrl: z.string().trim().max(500).optional().or(z.literal('')),
@@ -127,7 +129,17 @@ export async function POST(request: Request) {
       ? d.facebook
       : 'https://facebook.com/' + d.facebook.replace(/^[/]+/, '')
     contacts.push({ business_id: created.id, method_type: 'facebook', value: fbUrl, is_primary: false, is_public: true })
-  } else if (d.sourceUrl) {
+  }
+  if (d.instagram) {
+    const igUrl = d.instagram.startsWith('http')
+      ? d.instagram
+      : 'https://instagram.com/' + d.instagram.replace(/^[/]+/, '')
+    contacts.push({ business_id: created.id, method_type: 'instagram', value: igUrl, is_primary: false, is_public: true })
+  }
+  if (d.website) {
+    contacts.push({ business_id: created.id, method_type: 'website', value: d.website, is_primary: false, is_public: true })
+  }
+  if (!d.facebook && !d.website && d.sourceUrl) {
     const isFb = d.sourceUrl.includes('facebook.com') || d.sourceUrl.includes('fb.com')
     const isIg = d.sourceUrl.includes('instagram.com')
     if (isFb) contacts.push({ business_id: created.id, method_type: 'facebook', value: d.sourceUrl, is_primary: false, is_public: true })
