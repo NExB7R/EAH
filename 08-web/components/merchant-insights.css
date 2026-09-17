@@ -7,7 +7,19 @@
 .mins__card--good { background: rgba(16,185,129,.06); border: 1px solid rgba(16,185,129,.3); }
 .mins__card--warn { background: rgba(251,146,60,.06); border: 1px solid rgba(251,146,60,.3); }
 .mins__card--info { background: rgba(168,85,247,.06); border: 1px solid rgba(168,85,247,.3); }
-.mins__emoji { font-size: 1.5rem; flex-shrink: 0; }
+.mins__icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #C084FC;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.4));
+}
+.mins__card--good .mins__icon { color: #86EFAC; filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4)); }
+.mins__card--warn .mins__icon { color: #FDBA74; filter: drop-shadow(0 0 8px rgba(251, 146, 60, 0.4)); }
+.mins__icon svg { width: 100%; height: 100%; }
 .mins__body { flex: 1; }
 .mins__card-title { display: block; font-family: var(--font-cairo-play, var(--font-cairo, system-ui)); font-size: .92rem; font-weight: 900; color: #F4F2FA; margin-bottom: 4px; }
 .mins__card-desc { font-family: var(--font-cairo, system-ui); font-size: .8rem; color: #C9C2DB; line-height: 1.65; margin: 0; }
