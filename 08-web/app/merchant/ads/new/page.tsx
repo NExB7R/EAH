@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import CreateAdForm from './CreateAdForm'
 import './new.css'
+import { IcMegaphone } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إعلان جديد' }
@@ -19,7 +20,7 @@ export default async function NewAdPage() {
       <header className="anew__hero">
         <Link href="/merchant/ads" className="anew__back">← إعلاناتي</Link>
         <span className="anew__kicker">إعلان جديد</span>
-        <h1 className="anew__title">📢 اطلب إعلانك</h1>
+        <h1 className="anew__title"><IcMegaphone /> اطلب إعلانك</h1>
         <p className="anew__sub">اختار المكان، حدّد المدة، واحنا نراجعه ونشغله</p>
       </header>
       <CreateAdForm slots={slots ?? []} />

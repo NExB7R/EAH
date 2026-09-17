@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
-import { IcBan } from '@/components/eah-icons'
+import { IcBan, IcCheckCircle } from '@/components/eah-icons'
 
 type Flagged = {
   id: string
@@ -48,8 +48,7 @@ export default function ModerationClient({ flagged }: { flagged: Flagged[] }) {
               className="mod__btn mod__btn--ok"
               disabled={busy === r.id}
               onClick={() => action(r.id, 'approve')}
-            >
-              ✅ موافق — انشر
+            ><IcCheckCircle /> موافق — انشر
             </button>
             <button
               type="button"

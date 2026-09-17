@@ -6,6 +6,7 @@ import SubscriptionBadge from '@/components/subscription/subscription-badge'
 import TrialCountdown from '@/components/subscription/trial-countdown'
 import UpgradeCTA from '@/components/subscription/upgrade-cta'
 import './subscription.css'
+import { IcCheck, IcDiamond } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'اشتراكي' }
@@ -73,7 +74,7 @@ export default async function MerchantSubscriptionPage() {
               <span>المميزات</span>
               <div className="msub__features">
                 {sub.features?.map((f) => (
-                  <span key={f} className="msub__feat">✓ {f}</span>
+                  <span key={f} className="msub__feat"><IcCheck /> {f}</span>
                 ))}
               </div>
             </div>
@@ -99,7 +100,7 @@ export default async function MerchantSubscriptionPage() {
       ) : (
         <>
           <div className="msub__empty-state">
-            <span className="msub__empty-emoji">💎</span>
+            <span className="msub__empty-emoji"><IcDiamond /></span>
             <h2>مشتركش في باقة مميزة بعد</h2>
             <p>ارقى لباقة مميزة عشان تاخد شارة + أولوية + إعلانات</p>
           </div>

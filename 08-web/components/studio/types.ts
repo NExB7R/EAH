@@ -30,7 +30,7 @@ export const SECTION_LABELS: Record<SectionType, { label: string; emoji: string 
   hero:       { label: 'Hero',       emoji: '🎯' },
   featured:   { label: 'المميز',     emoji: '⭐' },
   trending:   { label: 'الترند',     emoji: '🔥' },
-  offers:     { label: 'العروض',     emoji: '🎁' },
+  offers:     { label: 'العروض',     emoji: '' },
   categories: { label: 'التصنيفات',  emoji: '📂' },
   cta:        { label: 'CTA',        emoji: '📣' },
   banner:     { label: 'بانر',       emoji: '🎨' },
@@ -57,7 +57,7 @@ export function defaultProps(type: SectionType): Record<string, unknown> {
     case 'trending':
       return { title: '🔥 الترند', subtitle: 'الناس بتدور عليها', count: 6 }
     case 'offers':
-      return { title: '🎁 العروض', subtitle: 'خصومات على الآخر', count: 4 }
+      return { title: 'العروض', subtitle: 'خصومات على الآخر', count: 4 }
     case 'categories':
       return {
         title: 'بتدور على إيه؟',

@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import EahLogo from './eah-logo'
 import './recommend-client.css'
+import { IcRefresh } from '@/components/eah-icons'
 
 type Business = {
   slug: string
@@ -192,8 +193,7 @@ export default function RecommendClient({ businesses }: { businesses: Business[]
             </p>
 
             {results.length === 0 ? (
-              <button type="button" className="rc-reset" onClick={reset}>
-                🔄 جرّب تاني
+              <button type="button" className="rc-reset" onClick={reset}><IcRefresh /> جرّب تاني
               </button>
             ) : (
               <div className="rc-cards">
@@ -220,8 +220,7 @@ export default function RecommendClient({ businesses }: { businesses: Business[]
             )}
 
             <div className="rc-results__actions">
-              <button type="button" className="rc-reset" onClick={reset}>
-                🔄 جرّب من تاني
+              <button type="button" className="rc-reset" onClick={reset}><IcRefresh /> جرّب من تاني
               </button>
               <Link href="/explore" className="rc-explore">
                 اكتشف الكل →

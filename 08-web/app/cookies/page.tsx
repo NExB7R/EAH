@@ -2,6 +2,7 @@ import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import './legal.css'
+import { IcCalendar } from '@/components/eah-icons'
 
 export const metadata = {
   title: 'ملفات تعريف الارتباط',
@@ -12,7 +13,7 @@ const LAST_UPDATE = '2026-09-15'
 
 const TYPES = [
   {
-    emoji: '🔒',
+    emoji: '',
     title: 'ضرورية',
     body: 'لازمة لتشغيل المنصة: تسجيل الدخول، الأمان، الجلسة. مش ممكن تتعطل.',
     required: true,
@@ -43,7 +44,7 @@ export default function CookiesPage() {
             إزاي بنستخدم الـ كوكيز وإيه حقك في التحكم.
           </p>
           <div className="lg__meta">
-            <span className="lg__meta-item">📅 آخر تحديث: {LAST_UPDATE}</span>
+            <span className="lg__meta-item"><IcCalendar /> آخر تحديث: {LAST_UPDATE}</span>
           </div>
         </section>
 

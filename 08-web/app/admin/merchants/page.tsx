@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import MerchantActions from './MerchantActions'
 import './merchants.css'
+import { IcCalendar, IcInbox } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'طلبات التجار' }
@@ -159,7 +160,7 @@ export default async function AdminMerchantsPage({
 
       {rows.length === 0 ? (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">📭</span>
+          <span className="admin-empty__emoji"><IcInbox /></span>
           <h2 className="admin-empty__title">مفيش طلبات هنا</h2>
           <p className="admin-empty__msg">
             {q ? 'مفيش نتائج للبحث ده' : 'لما تجار يسجلوا، هيظهروا هنا للمراجعة'}
@@ -195,8 +196,7 @@ export default async function AdminMerchantsPage({
                 )}
 
                 <div className="mrch-card__meta">
-                  <span className="mrch-chip">
-                    📅 {new Date(a.created_at).toLocaleDateString('ar-EG')}
+                  <span className="mrch-chip"><IcCalendar /> {new Date(a.created_at).toLocaleDateString('ar-EG')}
                   </span>
                 </div>
 

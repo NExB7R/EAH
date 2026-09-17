@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import PartnersClient from './PartnersClient'
 import './partners.css'
+import { IcUsers } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'شركاء النشاط' }
@@ -35,7 +36,7 @@ export default async function PartnersPage({ params }: { params: Promise<{ slug:
       <header className="ptn__hero">
         <Link href={`/merchant/businesses/${slug}`} className="ptn__back">← رجوع للنشاط</Link>
         <span className="ptn__kicker">إدارة الشركاء</span>
-        <h1 className="ptn__title">👥 شركاء {biz.name}</h1>
+        <h1 className="ptn__title"><IcUsers /> شركاء {biz.name}</h1>
         <p className="ptn__sub">أضف مسئول أو انقل الملكية — كل حاجة موثقة</p>
       </header>
 

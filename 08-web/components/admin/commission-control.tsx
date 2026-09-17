@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
+import { IcCheckCircle } from '@/components/eah-icons'
 
 export default function CommissionControl({ businessId }: { businessId: string }) {
   const [percent, setPercent] = useState(0)
@@ -33,7 +34,7 @@ export default function CommissionControl({ businessId }: { businessId: string }
         p_notes: notes || null,
       })
       if (error || !data?.ok) setMsg('خطأ: ' + (data?.error ?? error?.message))
-      else setMsg('✅ تم الحفظ')
+      else setMsg('تم الحفظ')
     } catch (e: any) { setMsg('خطأ: ' + e.message) }
     setBusy(false)
   }
@@ -53,7 +54,7 @@ export default function CommissionControl({ businessId }: { businessId: string }
         <input type="text" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="ملاحظات (اختياري)" className="comm__input comm__input--notes" />
         <button type="button" onClick={save} disabled={busy} className="comm__btn">{busy ? '...' : 'حفظ'}</button>
       </div>
-      {msg && <p className={msg.startsWith('✅') ? 'comm__ok' : 'comm__err'}>{msg}</p>}
+      {msg && <p className={msg.startsWith('') ? 'comm__ok' : 'comm__err'}>{msg}</p>}
       <style>{`
         .comm { padding: 20px; border-radius: 16px; background: rgba(232,199,154,.04); border: 1px solid rgba(232,199,154,.25); margin-top: 20px; }
         .comm__head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }

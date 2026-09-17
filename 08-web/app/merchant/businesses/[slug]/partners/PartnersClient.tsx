@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
+import { IcAlert, IcCheckCircle, IcRefresh, IcUsers } from '@/components/eah-icons'
 
 type Partner = {
   id: string
@@ -50,7 +51,7 @@ export default function PartnersClient({
   return (
     <div className="ptn__body">
       <section className="ptn__section">
-        <h2 className="ptn__section-title">👥 المسئولين الحاليين ({list.length})</h2>
+        <h2 className="ptn__section-title"><IcUsers /> المسئولين الحاليين ({list.length})</h2>
         {list.length === 0 ? (
           <p className="ptn__empty">لسه مفيش شركاء — إنت المالك الوحيد</p>
         ) : (
@@ -72,7 +73,7 @@ export default function PartnersClient({
       </section>
 
       <section className="ptn__section ptn__section--transfer">
-        <h2 className="ptn__section-title">🔄 نقل الملكية الكاملة</h2>
+        <h2 className="ptn__section-title"><IcRefresh /> نقل الملكية الكاملة</h2>
         <p className="ptn__hint">
           اكتب رقم الموبايل المسجّل في EAH — هياخد ملكية النشاط بالكامل.
           العملية نهائية ومش بترجع.
@@ -90,8 +91,8 @@ export default function PartnersClient({
             {busy ? '...' : 'نقل الملكية'}
           </button>
         </div>
-        {err && <p className="ptn__err">⚠ {err}</p>}
-        {msg && <p className="ptn__ok">✅ {msg}</p>}
+        {err && <p className="ptn__err"><IcAlert /> {err}</p>}
+        {msg && <p className="ptn__ok"><IcCheckCircle /> {msg}</p>}
       </section>
     </div>
   )

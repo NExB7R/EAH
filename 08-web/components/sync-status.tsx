@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import { getPendingCount, flushQueue } from '@/lib/sync-manager'
 import './sync-status.css'
+import { IcCheckCircle, IcGlobe } from '@/components/eah-icons'
 
 export default function SyncStatus() {
   const [online, setOnline] = useState(true)
@@ -51,8 +52,8 @@ export default function SyncStatus() {
       <span className="sync__dot" />
       <span className="sync__text">
         {online
-          ? '✅ رجع النت — بنحدّث كل حاجة'
-          : '🌐 إنت أوفلاين — المنصة شغالة عادي'}
+          ? 'رجع النت — بنحدّث كل حاجة'
+          : 'إنت أوفلاين — المنصة شغالة عادي'}
       </span>
       {pendingCount > 0 && (
         <span className="sync__badge">{pendingCount} في الانتظار</span>

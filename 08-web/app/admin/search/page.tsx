@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
+import { IcUsers } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'بحث سريع' }
@@ -76,7 +77,7 @@ export default async function AdminSearchPage({
 
           {users.length > 0 && (
             <div>
-              <h2 style={{ fontSize: '.9rem', color: '#A855F7', margin: '0 0 12px', fontWeight: 800 }}>👥 المستخدمون ({users.length})</h2>
+              <h2 style={{ fontSize: '.9rem', color: '#A855F7', margin: '0 0 12px', fontWeight: 800 }}><IcUsers /> المستخدمون ({users.length})</h2>
               <div style={{ display: 'grid', gap: 8, maxWidth: 900 }}>
                 {users.map(u => (
                   <Link key={u.id} href={`/admin/users?u=${u.id}`} style={{ padding: 14, borderRadius: 12, background: 'rgba(20,18,28,.6)', border: '1px solid rgba(139,92,246,.15)', textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

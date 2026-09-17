@@ -6,6 +6,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import ApplyCategoryPicker from './ApplyCategoryPicker'
 import './apply.css'
+import { IcScroll } from '@/components/eah-icons'
 
 async function submitApplication(formData: FormData) {
   'use server'
@@ -162,7 +163,7 @@ export default async function MerchantApplyPage({
 
         {(applications ?? []).length > 0 && (
           <section className="ap-history">
-            <h2 className="ap-history__title">📜 طلباتك السابقة</h2>
+            <h2 className="ap-history__title"><IcScroll /> طلباتك السابقة</h2>
             <div className="ap-history__list">
               {(applications ?? []).map((a) => (
                 <div key={a.id} className="ap-history__item">

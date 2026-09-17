@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
-import { IcBan, IcEye } from '@/components/eah-icons'
+import { IcBan, IcCheckCircle, IcEye } from '@/components/eah-icons'
 
 type Ad = {
   id: string
@@ -78,7 +78,7 @@ export default function SlotAdminClient({ slot, ads }: { slot: any; ads: Ad[] })
               <div className="slot-ad__actions">
                 {a.status === 'pending' && (
                   <>
-                    <button type="button" disabled={busy === a.id} onClick={() => setStatus(a.id, 'active')} className="slot-ad__btn slot-ad__btn--ok">✅ موافقة</button>
+                    <button type="button" disabled={busy === a.id} onClick={() => setStatus(a.id, 'active')} className="slot-ad__btn slot-ad__btn--ok"><IcCheckCircle /> موافقة</button>
                     <button type="button" disabled={busy === a.id} onClick={() => setStatus(a.id, 'rejected')} className="slot-ad__btn slot-ad__btn--no"><IcBan /> رفض</button>
                   </>
                 )}

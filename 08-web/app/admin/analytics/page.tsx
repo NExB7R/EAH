@@ -8,6 +8,7 @@ import '@/components/charts/charts.css'
 import AnalyticsFilters from './AnalyticsFilters'
 import ExportPanel from './ExportPanel'
 import './analytics.css'
+import { IcUsers } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'التحليلات' }
@@ -136,7 +137,7 @@ return (
       </header>
 
       <div className="an__kpis">
-        <div className="an__kpi"><span className="an__kpi-emoji">👥</span><span className="an__kpi-val">{totalUsers ?? 0}</span><span className="an__kpi-label">مستخدم</span></div>
+        <div className="an__kpi"><span className="an__kpi-emoji"><IcUsers /></span><span className="an__kpi-val">{totalUsers ?? 0}</span><span className="an__kpi-label">مستخدم</span></div>
         <div className="an__kpi an__kpi--accent"><span className="an__kpi-emoji"></span><span className="an__kpi-val">{newUsers7d ?? 0}</span><span className="an__kpi-label">جديد 7 أيام</span></div>
         <div className="an__kpi an__kpi--accent"><span className="an__kpi-emoji"></span><span className="an__kpi-val">{activeUsers7d ?? 0}</span><span className="an__kpi-label">زيارات 7 أيام</span></div>
         <div className="an__kpi"><span className="an__kpi-emoji"></span><span className="an__kpi-val">{totalBiz ?? 0}</span><span className="an__kpi-label">نشاط</span></div>

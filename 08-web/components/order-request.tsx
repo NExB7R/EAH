@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase-browser'
 import './order-request.css'
 import { buildOrderMessage, generateOrderCode } from '@/lib/whatsapp-order'
 import { IcMarket, IcChat, IcPhone } from './eah-icons'
+import { IcCheckCircle, IcLock } from '@/components/eah-icons'
 
 type Props = {
   businessId: string
@@ -166,7 +167,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
 
       {status === 'sent' ? (
         <div className="orr__success">
-          <span className="orr__success-emoji">✅</span>
+          <span className="orr__success-emoji"><IcCheckCircle /></span>
           <h4>تم إرسال طلبك</h4>
           <p>
             الأوردر اتبعت على واتساب المطعم. لو مفتحش تلقائياً،
@@ -282,8 +283,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
             </button>
           </div>
 
-          <p className="orr__note">
-            🔒 بياناتك بتُستخدم فقط لتحويل الأوردر للمطعم. مفيش أي رسوم على العميل.
+          <p className="orr__note"><IcLock /> بياناتك بتُستخدم فقط لتحويل الأوردر للمطعم. مفيش أي رسوم على العميل.
           </p>
         </form>
       )}

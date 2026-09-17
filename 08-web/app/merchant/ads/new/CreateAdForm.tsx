@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
+import { IcCalendar } from '@/components/eah-icons'
 
 type Slot = { id: string; code: string; name_ar: string; slot_type: string }
 
@@ -75,7 +76,7 @@ export default function CreateAdForm({ slots }: { slots: Slot[] }) {
           </select>
         </label>
         <label className="anew__field">
-          <span>📅 المدة (يوم)</span>
+          <span><IcCalendar /> المدة (يوم)</span>
           <input type="number" min={1} max={365} value={days} onChange={(e) => setDays(Number(e.target.value))} />
         </label>
       </div>

@@ -23,7 +23,7 @@ export async function createReward(formData: FormData) {
   await supabase.from('reward_catalog').insert({
     title: String(formData.get('title') ?? '').trim(),
     description: String(formData.get('description') ?? '').trim() || null,
-    emoji: String(formData.get('emoji') ?? '🎁').trim() || '🎁',
+    emoji: String(formData.get('emoji') ?? '').trim() || '',
     category: String(formData.get('category') ?? 'voucher'),
     value: valueRaw ? Number(valueRaw) : null,
     value_type: String(formData.get('value_type') ?? 'none'),

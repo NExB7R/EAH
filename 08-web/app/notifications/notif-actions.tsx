@@ -1,6 +1,7 @@
 'use client'
 import { useTransition } from 'react'
 import { markAllRead, deleteNotification } from './actions'
+import { IcCheck } from '@/components/eah-icons'
 
 export function MarkAllReadButton() {
   const [pending, start] = useTransition()
@@ -11,7 +12,7 @@ export function MarkAllReadButton() {
       onClick={() => start(async () => { await markAllRead() })}
       disabled={pending}
     >
-      {pending ? '...' : '✓ اقرأ الكل'}
+      {pending ? '...' : 'اقرأ الكل'}
     </button>
   )
 }
@@ -26,7 +27,7 @@ export function DeleteNotifButton({ id }: { id: string }) {
       disabled={pending}
       aria-label="حذف"
     >
-      {pending ? '...' : '🗑️'}
+      {pending ? '...' : ''}
     </button>
   )
 }

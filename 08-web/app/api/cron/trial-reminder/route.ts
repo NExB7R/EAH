@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase-server'
 import { sendPushToUser } from '@/lib/push/send'
+import { IcDiamond } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -42,7 +43,7 @@ export async function GET(request: Request) {
     const left = Math.floor((new Date(s.expires_at).getTime() - now.getTime()) / 86400_000)
     const isTrial = s.is_trial
 
-    const title = isTrial ? '⏰ تجربتك قربت تخلص' : '💎 باقتك هتخلص قريب'
+    const title = isTrial ? '⏰ تجربتك قربت تخلص' : 'باقتك هتخلص قريب'
     const body = isTrial
       ? `فاضل ${left} يوم — اختار باقتك وكمّل على EAH`
       : `فاضل ${left} يوم — جدّد باقتك وكمّل من غير انقطاع`

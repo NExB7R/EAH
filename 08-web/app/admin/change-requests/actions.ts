@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase-server'
+import { IcCheckCircle } from '@/components/eah-icons'
 
 export type ActionResult = { ok: boolean; error?: string; message?: string }
 
@@ -39,7 +40,7 @@ export async function reviewRequestAction(
     revalidatePath('/merchant')
     return {
       ok: true,
-      message: decision === 'approved' ? '✅ تم الاعتماد' : 'تم الرفض',
+      message: decision === 'approved' ? 'تم الاعتماد' : 'تم الرفض',
     }
   } catch (e) {
     return { ok: false, error: String(e) }

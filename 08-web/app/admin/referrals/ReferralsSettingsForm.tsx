@@ -1,5 +1,6 @@
 'use client'
 import { useState, useTransition } from 'react'
+import { IcCheckCircle } from '@/components/eah-icons'
 
 type Settings = {
   referrer_bonus: number
@@ -97,7 +98,7 @@ export default function ReferralsSettingsForm({
       </div>
 
       <button type="submit" className="ref-save" disabled={pending}>
-        {pending ? '...' : saved ? '✅ اتحفظ' : 'حفظ الإعدادات'}
+        {pending ? '...' : saved ? 'اتحفظ' : 'حفظ الإعدادات'}
       </button>
     </form>
   )

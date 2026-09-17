@@ -1,7 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { banUser, unbanUser, setUserRole } from '@/app/admin/users/actions'
-import { IcBan } from '@/components/eah-icons'
+import { IcBan, IcCheck, IcCheckCircle } from '@/components/eah-icons'
 
 type Props = {
   userId: string
@@ -56,8 +56,7 @@ export default function UserActions({ userId, isBanned, currentRole, bannedUntil
           onClick={handleUnban}
           disabled={pending}
           title={`متبقي ${daysLeft} يوم`}
-        >
-          ✅ فك الحظر ({daysLeft}ي)
+        ><IcCheckCircle /> فك الحظر ({daysLeft}ي)
         </button>
       ) : (
         <button
@@ -89,7 +88,7 @@ export default function UserActions({ userId, isBanned, currentRole, bannedUntil
               onClick={() => handleRoleChange(r)}
               disabled={pending}
             >
-              {r === currentRole ? '✓ ' : ''}{r}
+              {r === currentRole ? '' : ''}{r}
             </button>
           ))}
         </div>

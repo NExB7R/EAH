@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import './upgrade-cta.css'
+import { IcAlert, IcCheckCircle } from '@/components/eah-icons'
 
 export default function UpgradeCTA({
   businessId,
@@ -43,7 +44,7 @@ export default function UpgradeCTA({
   if (done) {
     return (
       <div className="ucta ucta--success">
-        <span className="ucta__emoji">✅</span>
+        <span className="ucta__emoji"><IcCheckCircle /></span>
         <h3>تم إرسال طلبك</h3>
         <p>الإدارة هتراجعه وترد عليك في أقرب وقت.</p>
       </div>
@@ -88,7 +89,7 @@ export default function UpgradeCTA({
         rows={2}
       />
 
-      {error && <p className="ucta__error">⚠ {error}</p>}
+      {error && <p className="ucta__error"><IcAlert /> {error}</p>}
 
       <button
         className="ucta__btn"

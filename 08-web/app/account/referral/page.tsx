@@ -5,6 +5,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import ClaimForm from './claim-form'
 import './referral.css'
+import { IcScroll } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'ادعي صحابك' }
@@ -69,7 +70,7 @@ export default async function ReferralPage() {
 
         {totalRefs > 0 && (
           <section className="rf__history">
-            <h3 className="rf__history-title">📜 سجل الإحالات</h3>
+            <h3 className="rf__history-title"><IcScroll /> سجل الإحالات</h3>
             <div className="rf__history-list">
               {(refs ?? []).map(r => (
                 <div key={r.id} className="rf__history-item">

@@ -5,6 +5,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import RewardCard from './reward-card'
 import './points.css'
+import { IcCalendar, IcCheck, IcScroll } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'نقاطي' }
@@ -58,7 +59,7 @@ export default async function PointsPage() {
         <section className="pt__howto">
           <h2 className="pt__howto-title">إزاي تكسب نقاط؟</h2>
           <div className="pt__howto-grid">
-            <div className="pt__howto-item"><span>📅</span><strong>+5</strong> زيارة يومية</div>
+            <div className="pt__howto-item"><span><IcCalendar /></span><strong>+5</strong> زيارة يومية</div>
             <div className="pt__howto-item"><span></span><strong>+7</strong> 3 أيام متتالية</div>
             <div className="pt__howto-item"><span></span><strong>+10</strong> 7 أيام متتالية</div>
             <div className="pt__howto-item"><span></span><strong>+20</strong> 30 يوم متتالي</div>
@@ -82,7 +83,7 @@ export default async function PointsPage() {
 
         {redemptions.length > 0 && (
           <section className="pt__history">
-            <h2 className="pt__history-title">📜 سجل الاستبدال</h2>
+            <h2 className="pt__history-title"><IcScroll /> سجل الاستبدال</h2>
             <div className="pt__history-list">
               {redemptions.map((r: any) => (
                 <div key={r.id} className="pt__history-item">
@@ -93,7 +94,7 @@ export default async function PointsPage() {
                   </div>
                   <span className={`pt__history-status pt__history-status--${r.status}`}>
                     {r.status === 'pending' && 'معلق'}
-                    {r.status === 'approved' && '✓ معتمد'}
+                    {r.status === 'approved' && 'معتمد'}
                     {r.status === 'used' && 'مستعمل'}
                     {r.status === 'expired' && '⌛ انتهى'}
                     {r.status === 'rejected' && 'مرفوض'}

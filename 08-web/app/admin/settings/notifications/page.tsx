@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import NotificationsPanel from '@/components/notifications-panel'
+import { IcBell } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إدارة الإشعارات' }
@@ -39,7 +40,7 @@ export default async function AdminNotificationsPage() {
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">الإشعارات</span>
-          <h1 className="admin-header__title">🔔 إدارة الإشعارات</h1>
+          <h1 className="admin-header__title"><IcBell /> إدارة الإشعارات</h1>
           <p className="admin-header__subtitle">
             تفضيلاتك الشخصية + كل الأنواع المتاحة على المنصة
           </p>

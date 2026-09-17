@@ -1,7 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import './menu.css'
-import { IcBan, IcList, IcEye } from '@/components/eah-icons'
+import { IcAlert, IcBan, IcCheckCircle, IcEye, IcList, IcTrash } from '@/components/eah-icons'
 
 type Item = {
   id?: string
@@ -49,7 +49,7 @@ export default function MenuEditor({
 
   async function save() {
     if (!editing) return
-    if (!editing.name.trim()) { setMsg('⚠ اكتب الاسم'); return }
+    if (!editing.name.trim()) { setMsg('اكتب الاسم'); return }
 
     start(async () => {
       try {
@@ -69,17 +69,17 @@ export default function MenuEditor({
           }),
         })
         const data = await res.json()
-        if (!res.ok || !data.ok) { setMsg('⚠ ' + (data.error || 'فشل')); return }
+        if (!res.ok || !data.ok) { setMsg('' + (data.error || 'فشل')); return }
 
         // Refresh
         const listRes = await fetch('/api/merchant/menu?business=' + businessId)
         const listData = await listRes.json()
         if (listData.ok) setItems(listData.items)
         setEditing(null)
-        setMsg('✅ تم الحفظ')
+        setMsg('تم الحفظ')
         setTimeout(() => setMsg(null), 2000)
       } catch (e: any) {
-        setMsg('⚠ ' + e.message)
+        setMsg('' + e.message)
       }
     })
   }
@@ -93,12 +93,12 @@ export default function MenuEditor({
           { method: 'DELETE' }
         )
         const data = await res.json()
-        if (!res.ok || !data.ok) { setMsg('⚠ ' + (data.error || 'فشل')); return }
+        if (!res.ok || !data.ok) { setMsg('' + (data.error || 'فشل')); return }
         setItems(items.filter((i) => i.id !== id))
-        setMsg('✅ تم الحذف')
+        setMsg('تم الحذف')
         setTimeout(() => setMsg(null), 2000)
       } catch (e: any) {
-        setMsg('⚠ ' + e.message)
+        setMsg('' + e.message)
       }
     })
   }
@@ -168,7 +168,7 @@ export default function MenuEditor({
                         {item.is_available ? <IcEye /> : <IcBan />}
                       </button>
                       <button type="button" className="me__btn" onClick={() => openEdit(item)}></button>
-                      <button type="button" className="me__btn me__btn--danger" onClick={() => item.id && remove(item.id)}>🗑</button>
+                      <button type="button" className="me__btn me__btn--danger" onClick={() => item.id && remove(item.id)}><IcTrash /></button>
                     </div>
                   </article>
                 ))}

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase-server'
+import { IcAlert } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 
@@ -67,7 +68,7 @@ export async function GET(request: Request) {
       await supabase.from('notifications').insert({
         profile_id: ownerId,
         type: 'subscription_expiring',
-        title: daysLeft === 0 ? '⚠ انتهى اشتراكك' : `⏰ باقي ${daysLeft} يوم على انتهاء اشتراكك`,
+        title: daysLeft === 0 ? 'انتهى اشتراكك' : `⏰ باقي ${daysLeft} يوم على انتهاء اشتراكك`,
         body:
           daysLeft === 0
             ? 'تم إيقاف المميزات. جدّد الآن لاستعادة الشارة والإعلانات.'

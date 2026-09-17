@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import SettingsClient from './SettingsClient'
 import './settings.css'
+import { IcSettings } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إعدادات المنصة' }
@@ -24,7 +25,7 @@ export default async function AdminSettingsPage() {
       <header className="settings__hero">
         <Link href="/admin" className="settings__back">← غرفة التحكم</Link>
         <span className="settings__kicker">إعدادات المنصة</span>
-        <h1 className="settings__title">⚙️ الإعدادات العامة</h1>
+        <h1 className="settings__title"><IcSettings /> الإعدادات العامة</h1>
         <p className="settings__sub">تحكم في كل الأرقام والمدد من مكان واحد</p>
       </header>
       <SettingsClient initial={map} />

@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import AuditItem from './AuditItem'
 import './audit.css'
+import { IcInbox, IcScroll } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'سجل العمليات' }
@@ -103,7 +104,7 @@ export default async function AuditPage({
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">سجل العمليات</span>
-          <h1 className="admin-header__title">📜 سجل العمليات</h1>
+          <h1 className="admin-header__title"><IcScroll /> سجل العمليات</h1>
           <p className="admin-header__subtitle">
             {counts.all} عملية مسجلة — كل الحركات المهمة على المنصة
           </p>
@@ -154,7 +155,7 @@ export default async function AuditPage({
 
       {rows.length === 0 ? (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">📭</span>
+          <span className="admin-empty__emoji"><IcInbox /></span>
           <h2 className="admin-empty__title">مفيش عمليات هنا</h2>
           <p className="admin-empty__msg">
             {q ? 'مفيش نتائج للبحث ده' : 'كل العمليات هتظهر هنا لحظة بلحظة'}

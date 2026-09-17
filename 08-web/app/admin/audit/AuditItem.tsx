@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { IcCalendar, IcTrash } from '@/components/eah-icons'
 
 type Log = {
   id: string
@@ -16,7 +17,7 @@ type Log = {
 const ACTION_LABEL: Record<string, string> = {
   'business.create': 'إضافة نشاط',
   'business.update': 'تعديل نشاط',
-  'business.delete': '🗑️ حذف نشاط',
+  'business.delete': 'حذف نشاط',
   'business.toggle_featured': 'تبديل المميز',
   'business.toggle_published': 'تبديل النشر',
   'subscription.requested': '📩 طلب اشتراك',
@@ -77,8 +78,7 @@ export default function AuditItem({ log, actorName }: { log: Log; actorName?: st
             {log.entity_id.slice(0, 8)}...
           </span>
         )}
-        <span className="aud-item__chip">
-          📅 {new Date(log.created_at).toLocaleString('ar-EG')}
+        <span className="aud-item__chip"><IcCalendar /> {new Date(log.created_at).toLocaleString('ar-EG')}
         </span>
       </div>
 

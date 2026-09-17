@@ -6,7 +6,7 @@ import {
 } from './types'
 import { currentHomeDesign } from './current-design'
 import Inspector from './inspector'
-import { IcBan, IcList, IcEye } from '@/components/eah-icons'
+import { IcBan, IcCheck, IcDown, IcEye, IcList, IcRefresh, IcTrash, IcUp } from '@/components/eah-icons'
 
 type Viewport = 'desktop' | 'tablet' | 'mobile'
 
@@ -258,7 +258,7 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
             {saving ? (
               <><span className="ed__spinner" /> جاري النشر</>
             ) : saved ? (
-              <>✓ منشور</>
+              <><IcCheck /> منشور</>
             ) : (
               <>📤 انشر التحديثات</>
             )}
@@ -302,11 +302,11 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
                   <span className="ed__sec-label">{SECTION_LABELS[s.type].label}</span>
                 </div>
                 <div className="ed__sec-actions" onClick={e => e.stopPropagation()}>
-                  <button onClick={() => moveSection(s.id, -1)} disabled={i === 0} title="فوق">↑</button>
-                  <button onClick={() => moveSection(s.id, 1)} disabled={i === design.sections.length - 1} title="تحت">↓</button>
+                  <button onClick={() => moveSection(s.id, -1)} disabled={i === 0} title="فوق"><IcUp /></button>
+                  <button onClick={() => moveSection(s.id, 1)} disabled={i === design.sections.length - 1} title="تحت"><IcDown /></button>
                   <button onClick={() => toggleVisible(s.id)} title={s.visible ? 'إخفاء' : 'إظهار'}>{s.visible ? <IcEye /> : <IcBan />}</button>
                   <button onClick={() => duplicateSection(s.id)} title="تكرار"><IcList /></button>
-                  <button onClick={() => removeSection(s.id)} title="حذف" className="is-danger">🗑</button>
+                  <button onClick={() => removeSection(s.id)} title="حذف" className="is-danger"><IcTrash /></button>
                 </div>
               </div>
             ))}
@@ -361,7 +361,7 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
             />
             <div className="ed__cmd-hints">
               <span>احفظ</span>
-              <span>🔄 إعادة تعيين</span>
+              <span><IcRefresh /> إعادة تعيين</span>
               <span>📱 تغيير الجهاز</span>
               <span>أضف قسم</span>
             </div>

@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import { updateReferralSettings } from './actions'
 import ReferralsSettingsForm from './ReferralsSettingsForm'
 import './referrals.css'
+import { IcInbox, IcSettings } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الإحالات' }
@@ -135,7 +136,7 @@ export default async function AdminReferralsPage({
 
       {/* Settings */}
       <section className="ref-settings">
-        <h2 className="ref-section__title">⚙️ إعدادات النظام</h2>
+        <h2 className="ref-section__title"><IcSettings /> إعدادات النظام</h2>
         <ReferralsSettingsForm initial={settings as any} action={updateReferralSettings} />
       </section>
 
@@ -173,7 +174,7 @@ export default async function AdminReferralsPage({
 
         {filtered.length === 0 ? (
           <div className="admin-empty">
-            <span className="admin-empty__emoji">📭</span>
+            <span className="admin-empty__emoji"><IcInbox /></span>
             <h2 className="admin-empty__title">مفيش إحالات</h2>
             <p className="admin-empty__msg">
               {q ? 'مفيش نتائج للبحث ده' : 'لما العملاء يبدأوا يدعوا صحابهم، هيظهروا هنا'}

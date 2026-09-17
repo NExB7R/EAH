@@ -2,6 +2,7 @@
 import { useState, useTransition } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './report-button.css'
+import { IcCheckCircle } from '@/components/eah-icons'
 
 const REASONS = [
   { key: 'spam', label: 'محتوى مكرر / سبام' },
@@ -34,7 +35,7 @@ export default function ReportButton({ entityType, entityId }: { entityType: str
       })
       if (error) { setMsg(error.message); return }
       setDone(true)
-      setMsg('✅ تم الإرسال، شكرًا!')
+      setMsg('تم الإرسال، شكرًا!')
       setTimeout(() => { setOpen(false); setDone(false); setMsg(''); setReason(''); setNote('') }, 1800)
     })
   }

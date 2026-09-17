@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getAllPlans, formatDuration, formatPrice } from '@/lib/subscription'
 import PlanForm from './PlanForm'
 import './plans.css'
+import { IcCheck, IcSettings } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إدارة الباقات' }
@@ -14,7 +15,7 @@ export default async function AdminPlansPage() {
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">باقات الاشتراك</span>
-          <h1 className="admin-header__title">⚙️ إدارة الباقات</h1>
+          <h1 className="admin-header__title"><IcSettings /> إدارة الباقات</h1>
           <p className="admin-header__subtitle">
             {plans.length} باقة — عدّل الأسعار والمدة والمميزات
           </p>
@@ -42,7 +43,7 @@ export default async function AdminPlansPage() {
             {p.features?.length > 0 && (
               <div className="plan-card__features">
                 {p.features.map((f: string) => (
-                  <span key={f} className="plan-card__feat">✓ {f}</span>
+                  <span key={f} className="plan-card__feat"><IcCheck /> {f}</span>
                 ))}
               </div>
             )}

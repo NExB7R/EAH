@@ -5,6 +5,7 @@ import ExploreCard from './explore-card'
 import ExploreFilters from './explore-filters'
 import { FOOD_CATEGORIES } from '@/lib/food/categories'
 import './explore-client.css'
+import { IcSearch } from '@/components/eah-icons'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 
@@ -147,7 +148,7 @@ export default function ExploreClient({
     <section className="exc">
       {/* Search */}
       <div className="exc-search">
-        <span className="exc-search__icon">🔎</span>
+        <span className="exc-search__icon"><IcSearch /></span>
         <input
           type="search"
           placeholder="ابحث باسم المكان، المنطقة، أو النوع..."
@@ -264,7 +265,7 @@ export default function ExploreClient({
       {/* Results */}
       {filtered.length === 0 ? (
         <div className="exc-empty">
-          <span className="exc-empty__emoji">🔎</span>
+          <span className="exc-empty__emoji"><IcSearch /></span>
           <h3 className="exc-empty__title">مفيش نتائج</h3>
           <p className="exc-empty__msg">جرّب فلتر تاني أو امسح البحث</p>
           <button type="button" className="exc-empty__btn" onClick={clearAll}>

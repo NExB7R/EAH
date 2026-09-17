@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import UserActions from '@/components/admin/user-actions'
 import './users.css'
-import { IcBan } from '@/components/eah-icons'
+import { IcBan, IcCalendar, IcCheck, IcUsers } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'المستخدمين' }
@@ -110,7 +110,7 @@ export default async function UsersPage({
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">الأعضاء</span>
-          <h1 className="admin-header__title">👥 المستخدمين</h1>
+          <h1 className="admin-header__title"><IcUsers /> المستخدمين</h1>
           <p className="admin-header__subtitle">
             {counts.total} مستخدم — {counts.customers} عميل، {counts.merchants} تاجر، {counts.admins} أدمن
             {counts.banned > 0 && ` • ${counts.banned} محظور`}
@@ -190,13 +190,12 @@ export default async function UsersPage({
                       {ROLE_EMOJI[role]} {ROLE_LABEL[role] ?? role}
                     </span>
                     {p.phone_verified_at && (
-                      <span className="usrs-chip usrs-chip--verified">✓ موثّق</span>
+                      <span className="usrs-chip usrs-chip--verified"><IcCheck /> موثّق</span>
                     )}
                     {banned && (
                       <span className="usrs-chip usrs-chip--banned"><IcBan /> محظور</span>
                     )}
-                    <span className="usrs-chip">
-                      📅 {new Date(p.created_at).toLocaleDateString('ar-EG')}
+                    <span className="usrs-chip"><IcCalendar /> {new Date(p.created_at).toLocaleDateString('ar-EG')}
                     </span>
                   </div>
                 </div>

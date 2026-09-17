@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import './ads-list.css'
-import { IcEye } from '@/components/eah-icons'
+import { IcCalendar, IcEye, IcMegaphone } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إعلاناتي' }
@@ -31,14 +31,14 @@ export default async function MyAdsPage() {
       <header className="mads__hero">
         <Link href="/merchant" className="mads__back">← لوحة النشاط</Link>
         <span className="mads__kicker">إعلاناتي</span>
-        <h1 className="mads__title">📢 إعلاناتك على EAH</h1>
+        <h1 className="mads__title"><IcMegaphone /> إعلاناتك على EAH</h1>
         <p className="mads__sub">شوف أداء إعلاناتك وحالتها</p>
         <Link href="/merchant/ads/new" className="mads__cta">+ إعلان جديد</Link>
       </header>
 
       {(!ads || ads.length === 0) ? (
         <div className="mads__empty">
-          <span className="mads__empty-emoji">📢</span>
+          <span className="mads__empty-emoji"><IcMegaphone /></span>
           <p>لسه مفيش إعلانات</p>
           <Link href="/merchant/ads/new" className="mads__cta">اطلب أول إعلان</Link>
         </div>
@@ -62,7 +62,7 @@ export default async function MyAdsPage() {
                   <div className="mad__stats">
                     <span><IcEye /> {a.impressions}</span>
                     <span>🖱 {a.clicks}</span>
-                    {a.ends_at && <span>📅 ينتهي: {new Date(a.ends_at).toLocaleDateString('ar-EG')}</span>}
+                    {a.ends_at && <span><IcCalendar /> ينتهي: {new Date(a.ends_at).toLocaleDateString('ar-EG')}</span>}
                   </div>
                 </div>
               </article>

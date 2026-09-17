@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase-server'
 import { getAllPlans, statusLabel, statusColor } from '@/lib/subscription'
 import SubscriptionActions from './SubscriptionActions'
 import './subscriptions.css'
+import { IcCalendar, IcScroll, IcSettings } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الاشتراكات' }
@@ -74,11 +75,9 @@ export default async function AdminSubscriptionsPage({
           </p>
         </div>
         <div className="admin-header__actions">
-          <Link href="/admin/subscriptions/plans" className="admin-btn admin-btn--ghost">
-            ⚙️ إدارة الباقات
+          <Link href="/admin/subscriptions/plans" className="admin-btn admin-btn--ghost"><IcSettings /> إدارة الباقات
           </Link>
-          <Link href="/admin/subscriptions/events" className="admin-btn admin-btn--ghost">
-            📜 الأحداث
+          <Link href="/admin/subscriptions/events" className="admin-btn admin-btn--ghost"><IcScroll /> الأحداث
           </Link>
         </div>
       </div>
@@ -141,8 +140,7 @@ export default async function AdminSubscriptionsPage({
                     ⏹ {new Date(s.expires_at).toLocaleDateString('ar-EG')}
                   </span>
                 )}
-                <span className="sub-row__chip sub-row__chip--muted">
-                  📅 {new Date(s.created_at).toLocaleDateString('ar-EG')}
+                <span className="sub-row__chip sub-row__chip--muted"><IcCalendar /> {new Date(s.created_at).toLocaleDateString('ar-EG')}
                 </span>
               </div>
 

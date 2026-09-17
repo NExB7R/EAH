@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import './collect.css'
+import { IcGlobe } from '@/components/eah-icons'
 
 type Recent = {
   id: string
@@ -279,7 +280,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             </label>
 
             <label className="col__field">
-              <span>🌐 الموقع</span>
+              <span><IcGlobe /> الموقع</span>
               <input type="url" dir="ltr" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." />
             </label>
 
@@ -326,7 +327,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
                   {reviewsPreview.slice(0, 5).map((r, i) => (
                     <li key={i}>
                       <strong>{r.author}</strong>
-                      <span className="col__stars">{'★'.repeat(r.rating)}</span>
+                      <span className="col__stars">{''.repeat(r.rating)}</span>
                       <span>{r.comment.slice(0, 60)}</span>
                     </li>
                   ))}

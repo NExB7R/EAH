@@ -2,6 +2,7 @@
 import { useRef, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './avatar-uploader.css'
+import { IcTrash } from '@/components/eah-icons'
 
 type Props = {
   userId: string
@@ -93,8 +94,7 @@ export default function AvatarUploader({ userId, initialUrl, initialKey }: Props
           )}
         </div>
         {url && (
-          <button type="button" className="avup__clear" onClick={clearUpload}>
-            🗑️ امسح الصورة
+          <button type="button" className="avup__clear" onClick={clearUpload}><IcTrash /> امسح الصورة
           </button>
         )}
       </div>

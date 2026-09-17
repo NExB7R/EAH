@@ -2,6 +2,7 @@
 import { useState, useTransition } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './notification-preferences.css'
+import { IcAlert, IcCheck, IcDiamond } from '@/components/eah-icons'
 
 type TypeRow = {
   key: string
@@ -88,7 +89,7 @@ export default function NotificationsPanel({
       {/* Status banner — premium notice for merchants without active subscription */}
       {role === 'merchant' && !isPremium && (
         <div className="np__banner np__banner--info">
-          <span className="np__banner-emoji">💎</span>
+          <span className="np__banner-emoji"><IcDiamond /></span>
           <div>
             <strong>باقة مميزة بتفتح إشعارات إضافية</strong>
             <p>
@@ -107,14 +108,14 @@ export default function NotificationsPanel({
           return (
             <label key={t.key} className="np__row">
               <div className="np__info">
-                <span className="np__emoji">{t.emoji ?? '🔔'}</span>
+                <span className="np__emoji">{t.emoji ?? ''}</span>
                 <div className="np__text">
                   <span className="np__label">{t.label}</span>
                   {t.description && (
                     <span className="np__desc">{t.description}</span>
                   )}
                   {t.is_premium_only && (
-                    <span className="np__badge">💎 مميز</span>
+                    <span className="np__badge"><IcDiamond /> مميز</span>
                   )}
                 </div>
               </div>
@@ -194,10 +195,10 @@ export default function NotificationsPanel({
           {pending ? '...' : 'حفظ التفضيلات'}
         </button>
         {status === 'saved' && (
-          <span className="np__status np__status--ok">✓ تم الحفظ</span>
+          <span className="np__status np__status--ok"><IcCheck /> تم الحفظ</span>
         )}
         {status === 'error' && (
-          <span className="np__status np__status--err">⚠ فشل الحفظ</span>
+          <span className="np__status np__status--err"><IcAlert /> فشل الحفظ</span>
         )}
       </div>
     </div>

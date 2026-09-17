@@ -5,6 +5,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { submitVerification } from './actions'
 import './verify.css'
+import { IcCheck, IcScroll } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'توثيق الحساب' }
@@ -52,7 +53,7 @@ export default async function VerifyPage({
           <div className="vf-hero__glow" aria-hidden />
           <Link href="/account" className="vf-hero__back">← رجوع</Link>
           <span className="vf-hero__kicker">توثيق EAH</span>
-          <h1 className="vf-hero__title">✓ توثيق الحساب</h1>
+          <h1 className="vf-hero__title"><IcCheck /> توثيق الحساب</h1>
           <p className="vf-hero__lead">
             التوثيق بيدي حسابك شارة "موثق" تظهر في كل مكان على EAH.
           </p>
@@ -162,8 +163,7 @@ export default async function VerifyPage({
                 />
               </label>
 
-              <button type="submit" className="vf-submit">
-                ✓ قدّم طلب التوثيق
+              <button type="submit" className="vf-submit"><IcCheck /> قدّم طلب التوثيق
               </button>
             </form>
           </section>
@@ -181,7 +181,7 @@ export default async function VerifyPage({
 
         {(requests ?? []).length > 0 && (
           <section className="vf-history">
-            <h2 className="vf-section-title">📜 تاريخ طلباتك</h2>
+            <h2 className="vf-section-title"><IcScroll /> تاريخ طلباتك</h2>
             <div className="vf-history__list">
               {(requests ?? []).map(r => (
                 <div key={r.id} className="vf-history__item">

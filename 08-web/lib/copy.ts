@@ -81,7 +81,7 @@ export const COPY = {
       empty: 'لسه مفيش ترند',
     },
     offers: {
-      title: '🎁 عروض النهاردة',
+      title: 'عروض النهاردة',
       subtitle: 'على الآخر',
       empty: 'لسه مفيش عروض',
     },

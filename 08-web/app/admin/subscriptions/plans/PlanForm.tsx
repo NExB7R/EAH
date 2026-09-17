@@ -2,6 +2,7 @@
 import { useActionState } from 'react'
 import { savePlanAction } from './actions'
 import type { SubscriptionPlan } from '@/lib/subscription'
+import { IcAlert, IcCheckCircle } from '@/components/eah-icons'
 
 type State = { ok: boolean; error?: string; id?: string }
 
@@ -29,8 +30,8 @@ export default function PlanForm({ plan }: { plan?: SubscriptionPlan }) {
         <label>الترتيب<input type="number" name="display_order" defaultValue={plan?.display_order ?? 0} /></label>
         <label className="plan-form__check"><input type="checkbox" name="is_active" defaultChecked={plan?.is_active ?? true} /> نشطة</label>
       </div>
-      {state.error && <p className="plan-form__error">⚠ {state.error}</p>}
-      {state.ok && <p className="plan-form__ok">✅ تم الحفظ</p>}
+      {state.error && <p className="plan-form__error"><IcAlert /> {state.error}</p>}
+      {state.ok && <p className="plan-form__ok"><IcCheckCircle /> تم الحفظ</p>}
       <button type="submit" disabled={pending} className="plan-form__btn">
         {pending ? '...' : plan ? 'حفظ' : 'إضافة'}
       </button>

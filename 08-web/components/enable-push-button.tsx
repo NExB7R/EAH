@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './enable-push-button.css'
-import { IcBan } from '@/components/eah-icons'
+import { IcBan, IcBell } from '@/components/eah-icons'
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -92,7 +92,7 @@ export default function EnablePushButton() {
   )
   if (status === 'enabled') return (
     <div className="epb epb--on">
-      <span>🔔</span>
+      <span><IcBell /></span>
       <div className="epb__body">
         <strong>الإشعارات مفعّلة</strong>
         <span>هتوصلك تنبيهات على موبايلك</span>
@@ -103,7 +103,7 @@ export default function EnablePushButton() {
 
   return (
     <div className="epb">
-      <span className="epb__emoji">🔔</span>
+      <span className="epb__emoji"><IcBell /></span>
       <div className="epb__body">
         <strong>فعّل الإشعارات</strong>
         <span>هتوصلك تنبيهات فورية على موبايلك</span>

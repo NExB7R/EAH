@@ -46,7 +46,7 @@ export default async function EditProfilePage() {
 
         <div className="edit__status">
           <div className={`edit__status-card ${isVerified ? 'is-verified' : ''}`}>
-            <span className="edit__status-icon">{isVerified ? '✓' : ''}</span>
+            <span className="edit__status-icon">{isVerified ? '' : ''}</span>
             <div>
               <strong className="edit__status-title">
                 {isVerified ? 'حسابك موثق' : 'حسابك غير موثق'}

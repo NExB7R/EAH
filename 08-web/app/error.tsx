@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import Link from 'next/link'
 import EahLogo from '@/components/eah-logo'
 import './error.css'
+import { IcAlert } from '@/components/eah-icons'
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => { console.error(error) }, [error])
@@ -12,7 +13,7 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
       <div className="er__logo">
         <EahLogo size="md" variant="full" href="/" />
       </div>
-      <span className="er__emoji">⚠️</span>
+      <span className="er__emoji"><IcAlert /></span>
       <h1 className="er__title">حصل خطأ</h1>
       <p className="er__text">حاول تاني، ولو المشكلة مستمرة كلمنا.</p>
       <div className="er__actions">

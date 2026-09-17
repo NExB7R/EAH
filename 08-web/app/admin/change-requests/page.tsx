@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import ChangeRequestActions from './ChangeRequestActions'
 import './change-requests.css'
+import { IcCalendar, IcInbox } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'مراجعة التعديلات' }
@@ -174,7 +175,7 @@ export default async function AdminChangeRequestsPage({
 
       {rows.length === 0 ? (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">📭</span>
+          <span className="admin-empty__emoji"><IcInbox /></span>
           <h2 className="admin-empty__title">مفيش طلبات هنا</h2>
           <p className="admin-empty__msg">
             {q ? 'مفيش نتائج للبحث ده' : 'لما التجار يبعتوا تعديلات، هتظهر هنا'}
@@ -214,8 +215,7 @@ export default async function AdminChangeRequestsPage({
                   <span className="cr-chip cr-chip--op">
                     {OPERATION_LABEL[r.operation] ?? r.operation}
                   </span>
-                  <span className="cr-chip cr-chip--muted">
-                    📅 {new Date(r.created_at).toLocaleDateString('ar-EG')}
+                  <span className="cr-chip cr-chip--muted"><IcCalendar /> {new Date(r.created_at).toLocaleDateString('ar-EG')}
                   </span>
                   {r.reviewed_at && (
                     <span className="cr-chip cr-chip--muted">

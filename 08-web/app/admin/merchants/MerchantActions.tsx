@@ -1,6 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { reviewMerchantApp } from './actions'
+import { IcCheckCircle } from '@/components/eah-icons'
 
 export default function MerchantActions({ id }: { id: string }) {
   const [pending, start] = useTransition()
@@ -12,7 +13,7 @@ export default function MerchantActions({ id }: { id: string }) {
   function approve() {
     start(async () => {
       const r = await reviewMerchantApp(id, 'approved', '')
-      setMsg(r.ok ? '✅ تم القبول' : `⚠ ${r.error}`)
+      setMsg(r.ok ? 'تم القبول' : `⚠ ${r.error}`)
       if (r.ok) setDone(true)
     })
   }
@@ -48,7 +49,7 @@ export default function MerchantActions({ id }: { id: string }) {
             onClick={approve}
             disabled={pending}
           >
-            {pending ? '...' : '✅ قبول التاجر'}
+            {pending ? '...' : 'قبول التاجر'}
           </button>
           <button
             type="button"

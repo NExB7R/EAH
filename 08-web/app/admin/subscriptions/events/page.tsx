@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
+import { IcRefresh, IcScroll } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'سجل أحداث الاشتراكات' }
@@ -11,7 +12,7 @@ const EVENT_LABEL: Record<string, string> = {
   trial_started: 'تجربة بدأت',
   trial_expiring: '⏰ تنبيه انتهاء',
   expired: '⏹ انتهى',
-  renewed: '🔄 تجديد',
+  renewed: 'تجديد',
   cancelled: '⏸ إلغاء',
   payment_received: 'دفع',
 }
@@ -34,7 +35,7 @@ export default async function AdminSubsEventsPage() {
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">أحداث الاشتراك</span>
-          <h1 className="admin-header__title">📜 سجل الأحداث</h1>
+          <h1 className="admin-header__title"><IcScroll /> سجل الأحداث</h1>
           <p className="admin-header__subtitle">آخر {rows.length} حدث</p>
         </div>
         <div className="admin-header__actions">

@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import './trial-countdown.css'
+import { IcBolt } from '@/components/eah-icons'
 
 export default function TrialCountdown({
   expiresAt,
@@ -42,8 +43,7 @@ export default function TrialCountdown({
         <span className="tcd__unit">يوم متبقي</span>
       </div>
       {urgent && !expired && (
-        <p className="tcd__msg">
-          ⚡ جدّد دلوقتي عشان متخسرش شارة "مميز" والإعلانات
+        <p className="tcd__msg"><IcBolt /> جدّد دلوقتي عشان متخسرش شارة "مميز" والإعلانات
         </p>
       )}
       {expired && (

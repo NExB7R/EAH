@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase-server'
+import { IcCheckCircle } from '@/components/eah-icons'
 
 export const metadata = {
   title: 'مراجعة طلب',
@@ -69,7 +70,7 @@ export default async function AdminChangeRequestDetail({ params }: { params: Pro
             <form action={review} style={{ display: 'grid', gap: 14 }}>
               <label>ملاحظة للمطعم (اختياري)<textarea name="admin_note" rows={4} placeholder="سبب الرفض أو ملاحظة الاعتماد" /></label>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <button className="eah-admin-btn primary" type="submit" name="decision" value="approved">✅ اعتماد ونشر</button>
+                <button className="eah-admin-btn primary" type="submit" name="decision" value="approved"><IcCheckCircle /> اعتماد ونشر</button>
                 <button className="eah-admin-btn" type="submit" name="decision" value="rejected">رفض التعديل</button>
               </div>
             </form>

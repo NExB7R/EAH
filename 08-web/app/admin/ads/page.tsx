@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import './ads.css'
-import { IcEye } from '@/components/eah-icons'
+import { IcEye, IcMegaphone } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إدارة الإعلانات' }
@@ -37,7 +37,7 @@ export default async function AdminAdsPage() {
       <header className="ads__hero">
         <Link href="/admin" className="ads__back">← غرفة التحكم</Link>
         <span className="ads__kicker">إدارة الإعلانات</span>
-        <h1 className="ads__title">📢 الإعلانات والمساحات</h1>
+        <h1 className="ads__title"><IcMegaphone /> الإعلانات والمساحات</h1>
         <p className="ads__sub">إدارة المساحات الإعلانية، مراجعة الإعلانات، وتتبع الأداء</p>
       </header>
 

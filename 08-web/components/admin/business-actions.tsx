@@ -2,6 +2,7 @@
 import { useState, useTransition } from 'react'
 import { toggleBusinessFlag, deleteBusiness } from '@/app/admin/businesses/actions'
 import Link from 'next/link'
+import { IcTrash } from '@/components/eah-icons'
 
 type Props = {
   id: string
@@ -46,8 +47,7 @@ export default function BusinessActions({ id, slug, is_featured, is_published, i
           {is_open ? 'مفتوح' : '🚪 افتح'}
         </button>
 
-        <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => setShowDelete(true)} disabled={pending}>
-          🗑 حذف
+        <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => setShowDelete(true)} disabled={pending}><IcTrash /> حذف
         </button>
       </div>
 
@@ -61,7 +61,7 @@ export default function BusinessActions({ id, slug, is_featured, is_published, i
             <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
               <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setShowDelete(false)}>إلغاء</button>
               <button type="button" className="admin-btn admin-btn--danger" onClick={handleDelete} disabled={pending}>
-                {pending ? 'جاري الحذف...' : '🗑 احذف'}
+                {pending ? 'جاري الحذف...' : 'احذف'}
               </button>
             </div>
           </div>

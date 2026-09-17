@@ -5,6 +5,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import OrderStatusButtons from './_components/OrderStatusButtons'
 import './orders.css'
+import { IcCalendar, IcInbox } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الطلبات' }
@@ -130,7 +131,7 @@ export default async function MerchantOrdersPage({
 
         {(!orders || orders.length === 0) ? (
           <div className="mo__empty-state">
-            <span className="mo__empty-emoji">📭</span>
+            <span className="mo__empty-emoji"><IcInbox /></span>
             <h2 className="mo__empty-title">مفيش طلبات هنا</h2>
             <p className="mo__empty-text">
               لما العملاء يطلبوا، هتظهر طلباتهم هنا مع رقمهم والأوردر.
@@ -163,8 +164,7 @@ export default async function MerchantOrdersPage({
                     {o.customer_area && (
                       <span className="mo__meta-item">{o.customer_area}</span>
                     )}
-                    <span className="mo__meta-item">
-                      📅 {new Date(o.created_at).toLocaleString('ar-EG', {
+                    <span className="mo__meta-item"><IcCalendar /> {new Date(o.created_at).toLocaleString('ar-EG', {
                         day: 'numeric',
                         month: 'short',
                         hour: '2-digit',

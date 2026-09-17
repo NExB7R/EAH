@@ -136,13 +136,11 @@ export default async function AdminRewardsPage({
                       type="submit"
                       className={`rew-btn ${rw.is_active ? 'rew-btn--on' : 'rew-btn--off'}`}
                     >
-                      {rw.is_active ? '✓ مفعّل' : 'موقوف'}
+                      {rw.is_active ? 'مفعّل' : 'موقوف'}
                     </button>
                   </form>
                   <form action={deleteReward.bind(null, rw.id)}>
-                    <button type="submit" className="rew-btn rew-btn--danger" aria-label="حذف">
-                      🗑
-                    </button>
+                    <button type="submit" className="rew-btn rew-btn--danger" aria-label="حذف"><IcTrash /></button>
                   </form>
                 </article>
               ))}
@@ -160,12 +158,13 @@ export default async function AdminRewardsPage({
 
 // ═══ Redemptions sub-component (server) ═══
 import { reviewRedemption } from './actions'
+import { IcCalendar, IcCheck, IcInbox, IcTrash } from '@/components/eah-icons'
 
 function RewardRedemptions({ redemptions }: { redemptions: any[] }) {
   if (redemptions.length === 0) {
     return (
       <div className="admin-empty">
-        <span className="admin-empty__emoji">📭</span>
+        <span className="admin-empty__emoji"><IcInbox /></span>
         <h2 className="admin-empty__title">مفيش طلبات استبدال</h2>
         <p className="admin-empty__msg">
           لما العملاء يستبدلوا نقاطهم بمكافآت، الطلبات هتظهر هنا
@@ -201,7 +200,7 @@ function RewardRedemptions({ redemptions }: { redemptions: any[] }) {
             </div>
             <div className="rew-red__meta">
               <span className="rew-red__chip">{rd.points_spent} نقطة</span>
-              <span className="rew-red__chip">📅 {new Date(rd.created_at).toLocaleDateString('ar-EG')}</span>
+              <span className="rew-red__chip"><IcCalendar /> {new Date(rd.created_at).toLocaleDateString('ar-EG')}</span>
               {rd.voucher_code && (
                 <span className="rew-red__chip rew-red__chip--voucher">
                   🎟️ {rd.voucher_code}

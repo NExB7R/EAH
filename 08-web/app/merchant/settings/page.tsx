@@ -7,6 +7,7 @@ import EnablePushButton from '@/components/enable-push-button'
 import NotificationsPanel from '@/components/notifications-panel'
 import { getMerchantContext } from '@/lib/admin/merchant-guard'
 import './settings.css'
+import { IcSettings } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إعدادات المتجر' }
@@ -53,7 +54,7 @@ export default async function MerchantSettingsPage() {
         <header className="mset__hero">
           <Link href="/merchant" className="mset__back">← لوحة النشاط</Link>
           <span className="mset__kicker">شريكنا</span>
-          <h1 className="mset__title">⚙️ إعدادات المتجر</h1>
+          <h1 className="mset__title"><IcSettings /> إعدادات المتجر</h1>
           <p className="mset__sub">تحكم كامل في تجربتك على EAH</p>
         </header>
 

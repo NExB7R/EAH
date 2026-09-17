@@ -1,12 +1,13 @@
 'use client'
 import { useState } from 'react'
+import { IcCalendar, IcDown, IcUsers } from '@/components/eah-icons'
 
 const TYPES = [
   { key: 'businesses', label: 'الأنشطة' },
   { key: 'reviews', label: 'التقييمات' },
   { key: 'reveals', label: 'كشوف الأرقام' },
-  { key: 'users', label: '👥 المستخدمون' },
-  { key: 'visits', label: '📅 الزيارات' },
+  { key: 'users', label: 'المستخدمون' },
+  { key: 'visits', label: 'الزيارات' },
   { key: 'referrals', label: 'الإحالات' },
   { key: 'audit', label: 'سجل العمليات' },
 ]
@@ -54,7 +55,7 @@ export default function ExportPanel() {
         {TYPES.map((t) => (
           <a key={t.key} href={buildHref(t.key)} className="exp__btn">
             {t.label}
-            <span className="exp__arrow">↓</span>
+            <span className="exp__arrow"><IcDown /></span>
           </a>
         ))}
       </div>

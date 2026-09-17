@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import './offers.css'
+import { IcInbox } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = {
@@ -54,7 +55,7 @@ export default async function OffersPage() {
 
         {offers.length === 0 ? (
           <div className="off-empty">
-            <span className="off-empty__emoji">📭</span>
+            <span className="off-empty__emoji"><IcInbox /></span>
             <h2 className="off-empty__title">لسه مفيش عروض</h2>
             <p className="off-empty__text">قريب جدًا هنضيف عروض جديدة.</p>
             <Link href="/explore" className="off-empty__cta">اكتشف الأماكن ←</Link>

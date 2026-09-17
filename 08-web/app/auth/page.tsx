@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './auth.css'
 import EahLogo from '@/components/eah-logo'
-import { IcEye, IcBan } from '@/components/eah-icons'
+import { IcBan, IcBolt, IcEye, IcLock } from '@/components/eah-icons'
 
 function normalizeEgyptPhone(value: string) {
   const raw = value.trim().replace(/[\s()-]/g, '')
@@ -147,9 +147,9 @@ export default function AuthPage() {
           <span className="auth__kicker">EAH • اللي نفسك فيه</span>
           <h1 className="auth__title">
             {mode === 'login' ? (
-              <>سجّل بسرعة <span className="auth__title-accent">⚡</span></>
+              <>سجّل بسرعة <span className="auth__title-accent"><IcBolt /></span></>
             ) : (
-              <>اعمل حسابك <span className="auth__title-accent">⚡</span></>
+              <>اعمل حسابك <span className="auth__title-accent"><IcBolt /></span></>
             )}
           </h1>
           <p className="auth__lead">
@@ -159,7 +159,7 @@ export default function AuthPage() {
           </p>
 
           <div className="auth__note">
-            <strong className="auth__note-title">🔒 الجلسة بتفضل شغالة</strong>
+            <strong className="auth__note-title"><IcLock /> الجلسة بتفضل شغالة</strong>
             <p className="auth__note-text">
               لما تدخل مرة، EAH بيحافظ على جلستك ويجددها تلقائيًا طالما الحساب صالح. استخدم تسجيل الخروج لو الجهاز مش معاك.
             </p>

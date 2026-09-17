@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import './security.css'
-import { IcBan, IcList } from '@/components/eah-icons'
+import { IcBan, IcCheck, IcList, IcUsers } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الأمان' }
@@ -78,12 +78,12 @@ export default async function AdminSecurityPage() {
 
       <div className="sec__kpis">
         <div className="sec__kpi">
-          <span className="sec__kpi-emoji">👥</span>
+          <span className="sec__kpi-emoji"><IcUsers /></span>
           <span className="sec__kpi-val">{totalUsers ?? 0}</span>
           <span className="sec__kpi-label">مستخدم</span>
         </div>
         <div className="sec__kpi">
-          <span className="sec__kpi-emoji">✓</span>
+          <span className="sec__kpi-emoji"><IcCheck /></span>
           <span className="sec__kpi-val">{verifiedUsers ?? 0}</span>
           <span className="sec__kpi-label">موثّق</span>
         </div>
@@ -122,7 +122,7 @@ export default async function AdminSecurityPage() {
         <div className="sec__env-grid">
           {Object.entries(envChecks).map(([key, ok]) => (
             <div key={key} className={`sec__env-item ${ok ? 'is-ok' : 'is-miss'}`}>
-              <span className="sec__env-icon">{ok ? '✓' : '✕'}</span>
+              <span className="sec__env-icon">{ok ? '' : '✕'}</span>
               <span className="sec__env-label">{key}</span>
             </div>
           ))}

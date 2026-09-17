@@ -8,7 +8,7 @@ import RoyalAvatar from '@/components/royal-avatar'
 import EnablePushButton from '@/components/enable-push-button'
 import '@/components/royal-avatar.css'
 import './account.css'
-import { IcBan } from '@/components/eah-icons'
+import { IcBan, IcCalendar, IcCheck } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'حسابي' }
@@ -85,7 +85,7 @@ export default async function AccountPage() {
             <div className="acc-hero__meta">
               <span className="acc-chip acc-chip--role">{roleLabel}</span>
               {isPremium && <span className="acc-chip acc-chip--premium">مميز</span>}
-              {isVerified && <span className="acc-chip acc-chip--verified">✓ موثّق</span>}
+              {isVerified && <span className="acc-chip acc-chip--verified"><IcCheck /> موثّق</span>}
               {isBanned && <span className="acc-chip acc-chip--banned"><IcBan /> محظور</span>}
             </div>
 
@@ -138,7 +138,7 @@ export default async function AccountPage() {
           </div>
 
           <div className="acc-card acc-card--half">
-            <span className="acc-card__emoji">📅</span>
+            <span className="acc-card__emoji"><IcCalendar /></span>
             <span className="acc-card__value" style={{ fontSize: '1.1rem', color: '#C4B5FD' }}>{joinedAt}</span>
             <span className="acc-card__label">عضو معانا من</span>
           </div>
@@ -175,7 +175,7 @@ export default async function AccountPage() {
             </Link>
             {!isVerified && (
               <Link href="/account/verify" className="acc-action acc-action--primary">
-                <span className="acc-action__emoji">✓</span> وثّق حسابك
+                <span className="acc-action__emoji"><IcCheck /></span> وثّق حسابك
               </Link>
             )}
             <Link href="/auth/change-password" className="acc-action">
@@ -209,7 +209,7 @@ export default async function AccountPage() {
             </div>
             <div className="acc-info__row">
               <span className="acc-info__label">حالة التوثيق</span>
-              <span className="acc-info__value">{isVerified ? '✓ موثّق' : 'غير موثّق'}</span>
+              <span className="acc-info__value">{isVerified ? 'موثّق' : 'غير موثّق'}</span>
             </div>
             <div className="acc-info__row">
               <span className="acc-info__label">نوع الحساب</span>

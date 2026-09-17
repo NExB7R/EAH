@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import VerificationCard from './verification-card'
 import './verifications.css'
+import { IcCheck } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'طلبات التوثيق' }
@@ -33,7 +34,7 @@ export default async function AdminVerificationsPage() {
       <header className="eah-admin-page-header">
         <div>
           <span className="eah-admin-kicker">التوثيق</span>
-          <h1>✓ طلبات التوثيق</h1>
+          <h1><IcCheck /> طلبات التوثيق</h1>
           <p>{pending.length} طلب قيد المراجعة</p>
         </div>
         <Link href="/admin" className="eah-admin-btn">← لوحة التحكم</Link>

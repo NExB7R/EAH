@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-browser'
 import './change-password.css'
-import { IcEye, IcBan } from '@/components/eah-icons'
+import { IcBan, IcCheckCircle, IcEye, IcLock } from '@/components/eah-icons'
 
 function getStrength(pw: string) {
   let s = 0
@@ -60,7 +60,7 @@ export default function ChangePasswordPage() {
   if (success) return (
     <main className="cpw"><div className="cpw__wrap"><section className="cpw__hero">
       <span className="cpw__kicker">EAH • الأمان</span>
-      <h1 className="cpw__title">✅ تم التغيير</h1>
+      <h1 className="cpw__title"><IcCheckCircle /> تم التغيير</h1>
       <p className="cpw__lead">كلمة مرورك اتغيرت، وكل الأجهزة التانية اتطردت تلقائيًا.</p>
       <div className="cpw__success-actions">
         <Link href="/account" className="cpw__btn cpw__btn--primary">← رجوع للحساب</Link>
@@ -73,7 +73,7 @@ export default function ChangePasswordPage() {
     <main className="cpw"><div className="cpw__wrap">
       <section className="cpw__hero">
         <span className="cpw__kicker">EAH • الأمان</span>
-        <h1 className="cpw__title">🔒 تغيير كلمة المرور</h1>
+        <h1 className="cpw__title"><IcLock /> تغيير كلمة المرور</h1>
         <p className="cpw__lead">للأمان، محتاج تدخل كلمة المرور الحالية الأول. بعد التغيير، كل الأجهزة التانية هتتطرد تلقائيًا.</p>
         <div className="cpw__info">
           <span className="cpw__info-emoji">💡</span>
@@ -123,7 +123,7 @@ export default function ChangePasswordPage() {
           </div>
 
           {error && <div className="cpw__alert">{error}</div>}
-          <button type="submit" className="cpw__submit" disabled={!canSubmit}>{loading?'جاري التغيير…':'🔒 غيّر كلمة المرور'}</button>
+          <button type="submit" className="cpw__submit" disabled={!canSubmit}>{loading?'جاري التغيير…':'غيّر كلمة المرور'}</button>
           <Link href="/account" className="cpw__back">← رجوع للحساب</Link>
         </form>
       </section>

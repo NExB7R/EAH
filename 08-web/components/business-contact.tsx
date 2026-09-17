@@ -15,7 +15,7 @@ const METHOD_EMOJI: Record<string, string> = {
   whatsapp: '',
   facebook: '',
   instagram: '',
-  website: '🌐',
+  website: '',
   email: '✉️',
 }
 

@@ -1,6 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { reviewRequestAction } from './actions'
+import { IcCheckCircle } from '@/components/eah-icons'
 
 export default function ChangeRequestActions({ id }: { id: string }) {
   const [pending, start] = useTransition()
@@ -12,7 +13,7 @@ export default function ChangeRequestActions({ id }: { id: string }) {
   function approve() {
     start(async () => {
       const r = await reviewRequestAction(id, 'approved', '')
-      setMsg(r.ok ? '✅ تم الاعتماد' : `⚠ ${r.error}`)
+      setMsg(r.ok ? 'تم الاعتماد' : `⚠ ${r.error}`)
       if (r.ok) setDone(true)
     })
   }
@@ -48,7 +49,7 @@ export default function ChangeRequestActions({ id }: { id: string }) {
             onClick={approve}
             disabled={pending}
           >
-            {pending ? '...' : '✅ اعتماد'}
+            {pending ? '...' : 'اعتماد'}
           </button>
           <button
             type="button"

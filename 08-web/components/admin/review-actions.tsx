@@ -1,7 +1,7 @@
 'use client'
 import { useTransition } from 'react'
 import { setReviewStatus, deleteReview } from '@/app/admin/reviews/actions'
-import { IcEye } from '@/components/eah-icons'
+import { IcCheckCircle, IcEye, IcTrash } from '@/components/eah-icons'
 
 export default function ReviewActions({
   reviewId,
@@ -30,8 +30,7 @@ export default function ReviewActions({
   return (
     <div className="ract">
       {status !== 'approved' && (
-        <button type="button" className="admin-btn admin-btn--sm" onClick={() => set('approved')} disabled={pending}>
-          ✅ اعتماد
+        <button type="button" className="admin-btn admin-btn--sm" onClick={() => set('approved')} disabled={pending}><IcCheckCircle /> اعتماد
         </button>
       )}
       {status !== 'hidden' && (
@@ -44,9 +43,7 @@ export default function ReviewActions({
           ❌ رفض
         </button>
       )}
-      <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={remove} disabled={pending}>
-        🗑
-      </button>
+      <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={remove} disabled={pending}><IcTrash /></button>
     </div>
   )
 }

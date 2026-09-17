@@ -1,4 +1,5 @@
 'use client'
+import { IcRefresh } from '@/components/eah-icons'
 
 export default function OfflineActions() {
   return (
@@ -7,8 +8,7 @@ export default function OfflineActions() {
         type="button"
         className="off__btn off__btn--primary"
         onClick={() => window.location.reload()}
-      >
-        🔄 حاول تاني
+      ><IcRefresh /> حاول تاني
       </button>
       <a href="/" className="off__btn off__btn--ghost">
         الرئيسية

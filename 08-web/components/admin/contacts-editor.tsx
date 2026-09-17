@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import PrettySelect from './pretty-select'
 import './contacts-editor.css'
+import { IcGlobe } from '@/components/eah-icons'
 
 export type Contact = {
   method_type: 'phone' | 'whatsapp' | 'facebook' | 'instagram' | 'website' | 'email'
@@ -14,7 +15,7 @@ const TYPE_OPTIONS = [
   { value: 'whatsapp', label: 'واتساب', emoji: '' },
   { value: 'facebook', label: 'فيسبوك', emoji: '' },
   { value: 'instagram', label: 'إنستجرام', emoji: '' },
-  { value: 'website', label: 'موقع', emoji: '🌐' },
+  { value: 'website', label: 'موقع', emoji: '' },
   { value: 'email', label: 'إيميل', emoji: '✉️' },
 ]
 
@@ -123,7 +124,7 @@ export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }
           <button type="button" className="ced__quick-btn" onClick={() => add('whatsapp')}>واتساب</button>
           <button type="button" className="ced__quick-btn" onClick={() => add('facebook')}>فيسبوك</button>
           <button type="button" className="ced__quick-btn" onClick={() => add('instagram')}>إنستجرام</button>
-          <button type="button" className="ced__quick-btn" onClick={() => add('website')}>🌐 موقع</button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('website')}><IcGlobe /> موقع</button>
           <button type="button" className="ced__quick-btn" onClick={() => add('email')}>✉️ إيميل</button>
         </div>
       </div>

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import './legal.css'
+import { IcCalendar } from '@/components/eah-icons'
 
 export const metadata = {
   title: 'الشروط والأحكام',
@@ -38,7 +39,7 @@ export default function TermsPage() {
             باستخدامك EAH، أنت موافق على الشروط دي.
           </p>
           <div className="lg__meta">
-            <span className="lg__meta-item">📅 آخر تحديث: {LAST_UPDATE}</span>
+            <span className="lg__meta-item"><IcCalendar /> آخر تحديث: {LAST_UPDATE}</span>
             <span className="lg__meta-item">⏱ قراءة: {READ_TIME}</span>
           </div>
         </section>

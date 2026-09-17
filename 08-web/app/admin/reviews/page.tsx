@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import ReviewActions from '@/components/admin/review-actions'
+import { IcSmile } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'التقييمات' }
@@ -130,7 +131,7 @@ export default async function ReviewsPage({
 
                 <div className="review-card__ratings">
                   <div className="review-card__rating-item">
-                    <span className="review-card__rating-label">😋 طعم</span>
+                    <span className="review-card__rating-label"><IcSmile /> طعم</span>
                     <span className="review-card__rating-value">{r.taste}</span>
                   </div>
                   <div className="review-card__rating-item">

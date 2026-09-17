@@ -2,11 +2,12 @@
 import { useState, useTransition, useEffect } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './review-form.css'
+import { IcCheckCircle } from '@/components/eah-icons'
 
 const RATINGS = [
-  { key: 'taste',      emoji: '😋', label: 'الطعم' },
+  { key: 'taste',      emoji: '', label: 'الطعم' },
   { key: 'value',      emoji: '💰', label: 'القيمة' },
-  { key: 'speed',      emoji: '⚡', label: 'السرعة' },
+  { key: 'speed',      emoji: '', label: 'السرعة' },
   { key: 'experience', emoji: '', label: 'التجربة' },
 ]
 
@@ -76,7 +77,7 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
         }),
       }).catch(() => {})
 
-      setMsg('✅ تم الإرسال، شكرًا! هيتنشر بعد المراجعة')
+      setMsg('تم الإرسال، شكرًا! هيتنشر بعد المراجعة')
       setTimeout(() => {
         setOpen(false)
         setMsg('')
@@ -142,7 +143,7 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
         disabled={pending}
       />
 
-      {msg && <p className={`rvf__msg ${msg.startsWith('✅') ? 'is-ok' : ''}`}>{msg}</p>}
+      {msg && <p className={`rvf__msg ${msg.startsWith('') ? 'is-ok' : ''}`}>{msg}</p>}
 
       <div className="rvf__actions">
         <button type="button" className="rvf__btn rvf__btn--ghost" onClick={() => setOpen(false)} disabled={pending}>إلغاء</button>
