@@ -11,11 +11,11 @@ type HistoryItem = {
 }
 
 const LABELS: Record<string, { icon: React.ReactNode; text: string }> = {
-  sent: { emoji: '📤', text: 'أُرسل' },
+  sent: { icon: null, text: 'أُرسل' },
   seen: { icon: <IcEye />, text: 'شافه المطعم' },
-  accepted: { emoji: '✅', text: 'قبل المطعم' },
-  rejected: { emoji: '❌', text: 'رفض المطعم' },
-  delivered: { emoji: '📦', text: 'تم التسليم' },
+  accepted: { icon: null, text: 'قبل المطعم' },
+  rejected: { icon: null, text: 'رفض المطعم' },
+  delivered: { icon: null, text: 'تم التسليم' },
   cancelled: { icon: <IcBan />, text: 'ملغي' },
 }
 
@@ -27,7 +27,7 @@ export default function OrderTimeline({ items }: { items: HistoryItem[] }) {
   return (
     <ol className="otl">
       {items.map((item, i) => {
-        const meta = LABELS[item.new_status] ?? { emoji: '•', text: item.new_status }
+        const meta = LABELS[item.new_status] ?? { icon: null, text: item.new_status }
         const isLast = i === items.length - 1
         return (
           <li key={item.id} className={`otl__item ${isLast ? 'otl__item--current' : ''}`}>

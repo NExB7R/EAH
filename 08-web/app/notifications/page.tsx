@@ -22,15 +22,15 @@ type Notif = {
 }
 
 const TYPE_META: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
-  review:       { emoji: '', label: 'تقييم',   color: '#FBBF24' },
-  reply:        { emoji: '', label: 'رد',      color: '#A855F7' },
-  offer:        { emoji: '', label: 'عرض',     color: '#F97316' },
-  system:       { emoji: '⚙️', label: 'نظام',   color: '#6B6880' },
+  review:       { icon: null, label: 'تقييم',   color: '#FBBF24' },
+  reply:        { icon: null, label: 'رد',      color: '#A855F7' },
+  offer:        { icon: null, label: 'عرض',     color: '#F97316' },
+  system:       { icon: null, label: 'نظام',   color: '#6B6880' },
   ban:          { icon: <IcBan />, label: 'حظر',     color: '#EF4444' },
-  points:       { emoji: '', label: 'نقاط',   color: '#FBBF24' },
-  welcome:      { emoji: '', label: 'ترحيب',  color: '#C084FC' },
-  reveal:       { emoji: '', label: 'كشف رقم', color: '#A855F7' },
-  verification: { emoji: '✓',  label: 'توثيق',  color: '#A855F7' },
+  points:       { icon: null, label: 'نقاط',   color: '#FBBF24' },
+  welcome:      { icon: null, label: 'ترحيب',  color: '#C084FC' },
+  reveal:       { icon: null, label: 'كشف رقم', color: '#A855F7' },
+  verification: { icon: null,  label: 'توثيق',  color: '#A855F7' },
 }
 
 export default async function NotificationsPage() {
@@ -79,7 +79,7 @@ export default async function NotificationsPage() {
         ) : (
           <section className="nt-list">
             {list.map(n => {
-              const meta = TYPE_META[n.type] ?? { emoji: '📬', label: n.type, color: '#A855F7' }
+              const meta = TYPE_META[n.type] ?? { icon: null, label: n.type, color: '#A855F7' }
               const unread = !n.read_at
               const content = (
                 <>

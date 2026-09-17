@@ -5,11 +5,11 @@ import { IcBan, IcEye } from '@/components/eah-icons'
 
 type Status = 'sent' | 'seen' | 'accepted' | 'rejected' | 'delivered' | 'cancelled'
 
-const ACTIONS: { key: Status; label: string; emoji: string; variant: string }[] = [
+const ACTIONS: { key: Status; label: string; icon: React.ReactNode; variant: string }[] = [
   { key: 'seen', label: 'شفته', icon: <IcEye />, variant: 'ghost' },
-  { key: 'accepted', label: 'قبلت', emoji: '✅', variant: 'primary' },
-  { key: 'delivered', label: 'تم التسليم', emoji: '📦', variant: 'primary' },
-  { key: 'rejected', label: 'رفضت', emoji: '✖', variant: 'danger' },
+  { key: 'accepted', label: 'قبلت', icon: null, variant: 'primary' },
+  { key: 'delivered', label: 'تم التسليم', icon: null, variant: 'primary' },
+  { key: 'rejected', label: 'رفضت', icon: null, variant: 'danger' },
   { key: 'cancelled', label: 'ملغي', icon: <IcBan />, variant: 'ghost' },
 ]
 
