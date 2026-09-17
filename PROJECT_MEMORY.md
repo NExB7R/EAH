@@ -1,3 +1,48 @@
+## 2026-09-17 — v0.7.6 — WhatsApp Orders + Feature Flags + Facebook Collect
+
+### ✅ اللي خلص
+
+**WhatsApp Orders (كامل):**
+- DB: confirm_order RPC + order_code + confirmed_at
+- Template احترافي: code + اسم + رقم + عنوان + بروفايل العميل (verified + trust + reviews)
+- Toggle للشريك (accepts_whatsapp_orders)
+- Confirm button في merchant dashboard → push للعميل
+
+**Feature Flags (Admin controlled):**
+- business_features table + has_feature/set_business_feature RPCs
+- /admin/businesses/[slug]/features — toggle لكل ميزة (8 features)
+- كل ميزة لها مدة + ملاحظات
+
+**Ads System:**
+- ad_slots + ads + ad_stats_daily
+- /admin/ads — slots + ads table
+- /admin/ads/slots/[id] — slot management
+- /merchant/ads + /merchant/ads/new — partner ad creation
+- track_ad_event RPC (impressions + clicks)
+
+**Moderation:**
+- auto_flag_review trigger (links/phones/profanity)
+- /admin/moderation — flagged reviews dashboard
+
+**Partners:**
+- business_partners table + transfer_business_ownership RPC
+- /merchant/businesses/[slug]/partners — UI
+
+**Facebook Collect expansion:**
+- parser يستخرج facebook + instagram + tiktok + website + email
+- CollectClient فيه حقول جديدة
+
+**Analytics:**
+- SVG chart بدون deps
+- confirmed orders count في merchant report
+
+### 🎯 الجاي
+- Security audit (rate limit + secrets + RLS)
+- End-to-end test للـfeatures الجديدة
+- Real business data import
+
+---
+
 ## 2026-09-17 — v0.6.0 — UI/Perf/Security pass
 
 ### ✅ اللي خلص
