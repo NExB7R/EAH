@@ -20,19 +20,20 @@ export default async function HomeDynamicV2() {
     const real = realStats.get(b.slug)
     return {
       ...b,
-      id: (b as any).businessId ?? b.slug,
-      rating: (b as any).rating ?? 0,
-      reviewCount: (b as any).reviewCount ?? 0,
-      avg_rating: (b as any).avg_rating ?? (b as any).rating ?? 0,
-      review_count: (b as any).review_count ?? (b as any).reviewCount ?? 0,
+      id: b.businessId ?? b.slug,
+      rating: b.rating ?? 0,
+      reviewCount: b.reviewCount ?? 0,
+      recentComments: b.recentComments ?? 0,
       recentViews: real?.views ?? 0,
-      activeOffers: (b as any).activeOffers ?? 0,
-      ageInDays: (b as any).ageInDays ?? 0,
-      isFeatured: (b as any).featured ?? false,
+      activeOffers: b.activeOffers ?? 0,
+      ageInDays: b.ageInDays ?? 0,
+      isFeatured: b.featured ?? false,
+      lastShownAt: undefined,
+      totalImpressions: 0,
     }
   })
 
-  const ranked = rankBusinesses(withStats as any, { includeFeaturedBoost: true })
+  const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
   const userTags = await loadUserProfileTags()
   const userProfile = parseUserTags(userTags)
   const personalized = applyPersonalization(ranked, userProfile)

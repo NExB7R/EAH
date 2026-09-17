@@ -91,7 +91,7 @@ export default function ExploreClient({
     let list = businesses
 
     if (type !== 'all') list = list.filter((b) => b.type === type)
-    if (foodCat) list = list.filter((b) => (b as any).food_categories?.includes(foodCat) || (b as any).foodCategories?.includes(foodCat))
+    if (foodCat) list = list.filter((b) => (b as Business).food_categories?.includes(foodCat))
     if (area !== 'all') list = list.filter((b) => b.area === area)
     if (openOnly) list = list.filter((b) => b.open)
     if (offersOnly) list = list.filter((b) => (b.activeOffers ?? 0) > 0)
