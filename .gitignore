@@ -19,3 +19,11 @@ build/
 coverage/
 *.tsbuildinfo
 next-env.d.ts
+.vercel
+.env*
+
+# Sync scripts
+*.tar.gz
+*.tar.gz.gpg
+.env.vercel.*
+.eah-secure/
