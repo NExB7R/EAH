@@ -19,7 +19,7 @@ import OrderRequest from '@/components/order-request'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import BackToTop from '@/components/back-to-top'
 import BusinessMap from '@/components/business-map'
-import BusinessOwnerTrial from '@/components/business-owner-trial'
+import BusinessOwnerTrial, { WhatsAppOrdersToggle } from '@/components/business-owner-trial'
 import { resolveCoords } from '@/lib/map-coords'
 
 export const revalidate = 120
@@ -65,7 +65,8 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <FloatingCapsuleHeader />
-      {hasId && <BusinessOwnerTrial businessId={business.businessId!} />}
+      {hasId && <BusinessOwnerTrial businessId={business.businessId!} />
+      {hasId && <WhatsAppOrdersToggle businessId={business.businessId!} initialEnabled={business.acceptsWhatsappOrders ?? false} />}}
       <BackToTop />
       {hasId && <PageViewTracker businessId={business.businessId!} />}
 

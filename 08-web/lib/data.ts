@@ -19,6 +19,7 @@ type DbBusiness = {
   longitude?: number | null
   address_text?: string | null
   owner_profile_id?: string | null
+  accepts_whatsapp_orders?: boolean | null
 }
 
 type DbOffer = {
@@ -64,6 +65,7 @@ type BusinessViewModel = {
   longitude?: number | null
   address?: string | null
   hasOwner?: boolean
+  acceptsWhatsappOrders?: boolean
 }
 
 function toDemoShape(
@@ -114,6 +116,7 @@ function toDemoShape(
     longitude: b.longitude ?? null,
     address: b.address_text ?? null,
     hasOwner: !!b.owner_profile_id,
+    acceptsWhatsappOrders: b.accepts_whatsapp_orders ?? false,
   }
 }
 

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './order-request.css'
+import { buildOrderMessage, generateOrderCode } from '@/lib/whatsapp-order'
 
 type Props = {
   businessId: string
