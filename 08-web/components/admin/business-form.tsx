@@ -1,5 +1,7 @@
 'use client'
-import { useActionState, useState, useMemo } from 'react'
+import { useActionState, useState, useMemo, useEffect } from 'react'
+import FoodCategoriesPicker from '@/components/food-categories-picker'
+import { createClient } from '@/lib/supabase-browser'
 import Link from 'next/link'
 import ImageUploader from './image-uploader'
 import ContactsEditor, { type Contact } from './contacts-editor'
@@ -54,6 +56,32 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
   const [slug, setSlug] = useState(initial?.slug ?? '')
   const [slugTouched, setSlugTouched] = useState(mode === 'edit')
   const [mapUrl, setMapUrl] = useState(initial?.map_url ?? '')
+  const [foodCats, setFoodCats] = useState<string[]>([])
+
+  // load existing categories when editing
+  useEffect(() => {
+    if (!businessId) return
+    const supabase = createClient()
+    void (async () => {
+      const { data } = await supabase
+        .from('business_food_categories')
+        .select('category_key')
+        .eq('business_id', businessId)
+      if (data) setFoodCats(data.map((r: any) => r.category_key))
+    })()
+  }, [businessId])
+
+  // save categories (debounced on submit — via form submit handler)
+  async function saveCategories() {
+    if (!businessId) return
+    const supabase = createClient()
+    await supabase.from('business_food_categories').delete().eq('business_id', businessId)
+    if (foodCats.length > 0) {
+      await supabase.from('business_food_categories').insert(
+        foodCats.map((k) => ({ business_id: businessId, category_key: k }))
+      )
+    }
+  }
 
   const handleNameChange = (v: string) => {
     setName(v)
@@ -86,7 +114,11 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
           </div>
 
           <div className="admin-field">
-            <label className="admin-field__label" htmlFor="business_type">النوع *</label>
+            <div className="admin-field" style={{ gridColumn: '1 / -1' }}>
+            <FoodCategoriesPicker value={foodCats} onChange={setFoodCats} max={5} />
+          </div>
+
+          <label className="admin-field__label" htmlFor="business_type">النوع *</label>
             <select id="business_type" name="business_type" className="admin-select" defaultValue={initial?.business_type ?? 'restaurant'} required>
               {TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
