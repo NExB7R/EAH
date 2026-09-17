@@ -7,7 +7,7 @@ const RATINGS = [
   { key: 'taste',      emoji: '😋', label: 'الطعم' },
   { key: 'value',      emoji: '💰', label: 'القيمة' },
   { key: 'speed',      emoji: '⚡', label: 'السرعة' },
-  { key: 'experience', emoji: '✨', label: 'التجربة' },
+  { key: 'experience', emoji: '', label: 'التجربة' },
 ]
 
 export default function ReviewForm({ businessId, onDone }: { businessId: string; onDone?: () => void }) {
@@ -71,7 +71,7 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
         body: JSON.stringify({
           type: 'review',
           businessId: businessId,
-          title: '⭐ تقييم جديد',
+          title: 'تقييم جديد',
           body: `حد قيّم نشاطك (${avg} نجوم)`,
         }),
       }).catch(() => {})
