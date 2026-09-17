@@ -295,3 +295,6 @@
 @media (max-width: 720px) {
   .sf__follow-row { grid-template-columns: 1fr; }
 }
+
+.sf__follow-card--tt:hover { border-color: rgba(255, 255, 255, 0.5); }
+.sf__follow-card--ig:hover { border-color: rgba(225, 48, 108, 0.6); }
