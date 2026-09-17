@@ -108,16 +108,24 @@ export default async function HomeDynamicV2() {
         </SectionSliderV2>
       )}
 
-      <section className="home-merchant-cta">
-        <h2>🏪 عندك نشاط؟</h2>
-        <p>سجّل معانا مجاناً — بدون عمولة على الطلبات</p>
-        <div className="home-merchant-cta__actions">
-          <Link href="/merchant/apply" className="home-merchant-cta__btn">
-            🚀 سجّل نشاطك
-          </Link>
-          <Link href="/recommend" className="home-merchant-cta__btn home-merchant-cta__btn--ghost">
-            ✨ مش عارف تختار؟ قول مزاجك
-          </Link>
+      <section className="home-actions">
+        <div className="home-actions__grid">
+          <a href="/merchant/apply" className="home-actions__card home-actions__card--biz">
+            <span className="home-actions__emoji">🏪</span>
+            <div className="home-actions__body">
+              <h3 className="home-actions__title">عندك نشاط؟</h3>
+              <p className="home-actions__desc">سجّله مجاناً — بدون عمولة على الطلبات</p>
+            </div>
+            <span className="home-actions__cta">سجّل نشاطك ←</span>
+          </a>
+          <a href="/recommend" className="home-actions__card home-actions__card--rec">
+            <span className="home-actions__emoji">✨</span>
+            <div className="home-actions__body">
+              <h3 className="home-actions__title">مش عارف تختار؟</h3>
+              <p className="home-actions__desc">قول مزاجك وإحنا نظبط</p>
+            </div>
+            <span className="home-actions__cta">جرّب ←</span>
+          </a>
         </div>
       </section>
 
