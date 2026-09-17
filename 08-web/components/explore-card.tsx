@@ -6,6 +6,7 @@ import OpenNowBadge from './open-now-badge'
 import './favorite-button.css'
 import './open-now-badge.css'
 import Image from 'next/image'
+import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from './eah-icons'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 
@@ -29,11 +30,11 @@ type Business = {
   coverImageUrl?: string
 }
 
-const TYPE_EMOJI: Record<BusinessType, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  delivery_office: '🛵',
-  supermarket: '🛒',
+const TYPE_ICON: Record<BusinessType, () => React.ReactElement> = {
+  restaurant: IcRestaurant,
+  pharmacy: IcPharmacy,
+  delivery_office: IcDelivery,
+  supermarket: IcMarket,
 }
 
 const TYPE_LABEL: Record<BusinessType, string> = {
@@ -80,7 +81,7 @@ export default function ExploreCard({ business, index }: { business: Business; s
           />
         ) : (
           <div className="ecard__cover-fallback">
-            <span className="ecard__cover-emoji">{TYPE_EMOJI[business.type]}</span>
+            <span className="ecard__cover-icon">{(() => { const I = TYPE_ICON[business.type]; return <I /> })()}</span>
           </div>
         )}
         <div className="ecard__cover-overlay" />
@@ -114,7 +115,7 @@ export default function ExploreCard({ business, index }: { business: Business; s
       <div className="ecard__body">
         <div className="ecard__type-row">
           <span className="ecard__type">
-            {TYPE_EMOJI[business.type]} {TYPE_LABEL[business.type]}
+            {(() => { const I = TYPE_ICON[business.type]; return <I /> })()} {TYPE_LABEL[business.type]}
           </span>
           {business.score !== undefined && business.score > 0 && (
             <span className="ecard__score">★ {(business.score * 5).toFixed(1)}</span>

@@ -10,6 +10,7 @@ import ExploreCardV5 from '@/components/explore-card-v5'
 import VisitorValue from '@/components/visitor-value'
 import './home-dynamic-v2.css'
 import AdSlot from '@/components/ads/ad-slot'
+import { IcStore, IcSparkle } from '@/components/eah-icons'
 import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
 export default async function HomeDynamicV2() {
@@ -113,12 +114,7 @@ export default async function HomeDynamicV2() {
       <section className="home-actions">
         <div className="home-actions__grid">
           <a href="/merchant/apply" className="home-actions__card home-actions__card--biz">
-            <span className="home-actions__icon" aria-hidden>
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 9l1.5-5h15L21 9M3 9v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9M3 9h18"/>
-                <path d="M8 13v4M12 13v4M16 13v4"/>
-              </svg>
-            </span>
+            <span className="home-actions__icon"><IcSparkle /></span>
             <div className="home-actions__body">
               <h3 className="home-actions__title">عندك نشاط؟</h3>
               <p className="home-actions__desc">سجّله مجاناً — بدون عمولة على الطلبات</p>
