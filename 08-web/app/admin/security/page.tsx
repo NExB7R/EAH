@@ -70,7 +70,7 @@ export default async function AdminSecurityPage() {
       <header className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">مركز الأمان</span>
-          <h1 className="admin-header__title">🛡️ مركز الأمان</h1>
+          <h1 className="admin-header__title">مركز الأمان</h1>
           <p className="admin-header__subtitle">نظرة حقيقية على أمان المنصة</p>
         </div>
       </header>
@@ -92,12 +92,12 @@ export default async function AdminSecurityPage() {
           <span className="sec__kpi-label">محظور</span>
         </div>
         <div className="sec__kpi">
-          <span className="sec__kpi-emoji">🏪</span>
+          <span className="sec__kpi-emoji"></span>
           <span className="sec__kpi-val">{totalBiz ?? 0}</span>
           <span className="sec__kpi-label">نشاط</span>
         </div>
         <div className={`sec__kpi ${(pendingChangeReqs ?? 0) > 5 ? 'sec__kpi--warn' : ''}`}>
-          <span className="sec__kpi-emoji">📝</span>
+          <span className="sec__kpi-emoji"></span>
           <span className="sec__kpi-val">{pendingChangeReqs ?? 0}</span>
           <span className="sec__kpi-label">طلبات تعديل</span>
         </div>

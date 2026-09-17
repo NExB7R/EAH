@@ -41,8 +41,8 @@ const CHANNELS = [
 ]
 
 const TOPICS = [
-  { emoji: '🏪', title: 'أنا صاحب نشاط',      desc: 'مطعم، صيدلية، ماركت، توصيل — سجّل نشاطك', href: '/merchant/apply' },
-  { emoji: '📢', title: 'إعلانات',            desc: 'عايز أعلن على المنصة',         href: '/advertise' },
+  { emoji: '', title: 'أنا صاحب نشاط',      desc: 'مطعم، صيدلية، ماركت، توصيل — سجّل نشاطك', href: '/merchant/apply' },
+  { emoji: '', title: 'إعلانات',            desc: 'عايز أعلن على المنصة',         href: '/advertise' },
   { emoji: '🐛', title: 'مشكلة تقنية',       desc: 'لقيت حاجة مش شغالة',           href: 'https://wa.me/201012892806' },
   { emoji: '💡', title: 'اقتراح أو فكرة',    desc: 'عندك فكرة تحسّن EAH',          href: 'https://wa.me/201012892806' },
 ]
@@ -97,7 +97,7 @@ export default function ContactPage() {
         </section>
 
         <section className="ct-note">
-          <span className="ct-note__emoji">⚡</span>
+          <span className="ct-note__emoji"></span>
           <div>
             <strong className="ct-note__title">وقت الرد</strong>
             <p className="ct-note__text">

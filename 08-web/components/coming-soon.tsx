@@ -70,7 +70,7 @@ export default function ComingSoon() {
 
       <div className="cs__cta-row">
         <a href="/merchant-info" className="cs__cta cs__cta--owner">
-          🏪 عندك نشاط؟ اعرف أكتر
+          عندك نشاط؟ اعرف أكتر
         </a>
         <a
           href="/support-palestine"

@@ -31,7 +31,7 @@ export default async function MerchantSettingsPage() {
       .select('notif_prefs')
       .eq('id', userData.user.id)
       .maybeSingle(),
-    // ✅ فحص اشتراك نشط
+    // فحص اشتراك نشط
     supabase
       .from('business_subscriptions')
       .select('status,expires_at')
@@ -62,12 +62,12 @@ export default async function MerchantSettingsPage() {
         <NotificationsPanel types={types} initialPrefs={prefs} role="merchant" isPremium={isPremium} />
 
         <section className="mset__section">
-          <h2 className="mset__section-title">🚀 إجراءات سريعة</h2>
+          <h2 className="mset__section-title">إجراءات سريعة</h2>
           <div className="mset__actions">
-            <Link href="/merchant" className="mset__action">🏪 لوحة النشاط</Link>
-            <Link href="/merchant/qr" className="mset__action">📱 QR Code</Link>
+            <Link href="/merchant" className="mset__action">لوحة النشاط</Link>
+            <Link href="/merchant/qr" className="mset__action">QR Code</Link>
             <Link href="/account/edit" className="mset__action">✏️ تعديل البروفايل</Link>
-            <Link href="/auth/change-password" className="mset__action">🔒 كلمة المرور</Link>
+            <Link href="/auth/change-password" className="mset__action">كلمة المرور</Link>
           </div>
         </section>
       </main>
