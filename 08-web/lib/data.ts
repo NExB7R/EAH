@@ -196,6 +196,19 @@ export async function getPublishedBusinesses(
       loadReviewStats(ids),
     ])
 
+    // fetch food categories
+    const categoriesByBiz = new Map<string, string[]>()
+    try {
+      const { data: cats } = await supabase
+        .from('business_food_categories')
+        .select('business_id, category_key')
+        .in('business_id', ids)
+      for (const c of cats ?? []) {
+        if (!categoriesByBiz.has(c.business_id)) categoriesByBiz.set(c.business_id, [])
+        categoriesByBiz.get(c.business_id)!.push(c.category_key)
+      }
+    } catch { /* silent */ }
+
     const offersByBiz = new Map<string, DbOffer[]>()
     ;(offers ?? []).forEach((o) => {
       const list = offersByBiz.get(o.business_id) ?? []
@@ -203,9 +216,10 @@ export async function getPublishedBusinesses(
       offersByBiz.set(o.business_id, list)
     })
 
-    return data.map((b) =>
-      toDemoShape(b, offersByBiz.get(b.id) ?? [], premiumIds.has(b.id), reviewStats.get(b.id))
-    )
+    return data.map((b) => ({
+      ...toDemoShape(b, offersByBiz.get(b.id) ?? [], premiumIds.has(b.id), reviewStats.get(b.id)),
+      food_categories: categoriesByBiz.get(b.id) ?? [],
+    }))
   } catch {
     return FALLBACK(limit, intent)
   }
@@ -231,7 +245,14 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
         getSubscribedBusinessIds([data.id]),
         loadReviewStats([data.id]),
       ])
-      return toDemoShape(data, offers ?? [], premiumIds.has(data.id), reviewStats.get(data.id))
+      const { data: cats } = await supabase
+        .from('business_food_categories')
+        .select('category_key')
+        .eq('business_id', data.id)
+      return {
+        ...toDemoShape(data, offers ?? [], premiumIds.has(data.id), reviewStats.get(data.id)),
+        food_categories: (cats ?? []).map((c) => c.category_key),
+      }
     }
   } catch {
     /* silent */
