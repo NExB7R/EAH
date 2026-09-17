@@ -131,7 +131,7 @@ export default async function AdminSecurityPage() {
       {(bannedList ?? []).length > 0 && (
         <div className="sec__section">
           <header className="sec__section-head">
-            <h2 className="sec__section-title">🚫 محظورين حالياً</h2>
+            <h2 className="sec__section-title">محظورين حالياً</h2>
           </header>
           <div className="sec__list">
             {(bannedList ?? []).map((b: any) => (
@@ -152,7 +152,7 @@ export default async function AdminSecurityPage() {
 
       <div className="sec__section">
         <header className="sec__section-head">
-          <h2 className="sec__section-title">📋 آخر 10 عمليات</h2>
+          <h2 className="sec__section-title">آخر 10 عمليات</h2>
           <p className="sec__section-sub">
             {audits7d ?? 0} عملية آخر 7 أيام —{' '}
             <Link href="/admin/audit" className="sec__link">عرض الكل ←</Link>

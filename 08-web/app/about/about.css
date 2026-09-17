@@ -55,3 +55,20 @@
   .ab__forwho, .ab__values { grid-template-columns: 1fr; }
   .ab__grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+.ab__flow-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(168,85,247,.25), rgba(232,199,154,.15));
+  border: 1px solid rgba(168,85,247,.5);
+  color: #E8C79A;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-weight: 900;
+  font-size: 1rem;
+  margin-bottom: 12px;
+  box-shadow: 0 0 18px rgba(168,85,247,.35);
+}

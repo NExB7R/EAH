@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
+import { IcHandmade, IcGlobe, IcBuilding, IcCar, IcCalendar, IcBook, IcMegaphone } from '@/components/eah-icons'
 import './advertise.css'
 
 export const metadata = {
@@ -11,7 +12,7 @@ export const metadata = {
 const SPOTS = [
   {
     key: 'hero',
-    emoji: '',
+    emoji: <IcMegaphone />,
     name: 'بانر الهيرو',
     desc: 'أول حاجة عين الزائر تشوفها على الرئيسية.',
     size: 'أول حاجة الزائر يشوفها',
@@ -20,7 +21,7 @@ const SPOTS = [
   },
   {
     key: 'feed',
-    emoji: '',
+    emoji: <IcMegaphone />,
     name: 'إعلان داخل الرئيسية',
     desc: 'يظهر بين أقسام (مميزين/مولعة/الجديد).',
     size: 'بتظهر بين الأقسام',
@@ -29,7 +30,7 @@ const SPOTS = [
   },
   {
     key: 'sidebar',
-    emoji: '',
+    emoji: <IcMegaphone />,
     name: 'شريط جانبي',
     desc: 'في الجانب الأيسر أثناء التصفح.',
     size: 'ثابتة في الرحلة',
@@ -38,7 +39,7 @@ const SPOTS = [
   },
   {
     key: 'search',
-    emoji: '',
+    emoji: <IcMegaphone />,
     name: 'نتيجة بحث مميزة',
     desc: 'لما حد يدور على حاجة معينة — إنت أول واحد.',
     size: 'على كلمة معينة',
@@ -48,12 +49,12 @@ const SPOTS = [
 ]
 
 const WHO = [
-  { emoji: '', title: 'Hand-made', body: 'مشاريع من البيت — حلويات، مشغولات، كروشيه.' },
-  { emoji: '', title: 'Online', body: 'صفحات سوشيال ميديا، متاجر انلاين، ترويج.' },
-  { emoji: '', title: 'عقارات', body: 'شقق، محلات، مكاتب — في شبين والقرى.' },
-  { emoji: '', title: 'خدمات', body: 'توصيل، صيانة، دروس، صالونات.' },
-  { emoji: '', title: 'مناسبات', body: 'أفراح، حفلات، تنظيم أحداث.' },
-  { emoji: '', title: 'تعليم', body: 'مراكز، دروس خصوصية، كورسات.' },
+  { emoji: <IcHandmade />, title: 'Hand-made', body: 'مشاريع من البيت — حلويات، مشغولات، كروشيه.' },
+  { emoji: <IcGlobe />, title: 'Online', body: 'صفحات سوشيال ميديا، متاجر انلاين، ترويج.' },
+  { emoji: <IcBuilding />, title: 'عقارات', body: 'شقق، محلات، مكاتب — في شبين والقرى.' },
+  { emoji: <IcCar />, title: 'خدمات', body: 'توصيل، صيانة، دروس، صالونات.' },
+  { emoji: <IcCalendar />, title: 'مناسبات', body: 'أفراح، حفلات، تنظيم أحداث.' },
+  { emoji: <IcBook />, title: 'تعليم', body: 'مراكز، دروس خصوصية، كورسات.' },
 ]
 
 const STATS = [
