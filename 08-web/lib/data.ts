@@ -68,7 +68,7 @@ type BusinessViewModel = {
   hasOwner?: boolean
   acceptsWhatsappOrders?: boolean
   food_categories?: string[]
-  cover_image_url?: string | null
+  cover_image_url?: string
 }
 
 function toDemoShape(
@@ -120,7 +120,7 @@ function toDemoShape(
     address: b.address_text ?? null,
     hasOwner: !!b.owner_profile_id,
     acceptsWhatsappOrders: b.accepts_whatsapp_orders ?? false,
-    cover_image_url: b.cover_image_url ?? null,
+    cover_image_url: b.cover_image_url ?? undefined,
   }
 }
 
