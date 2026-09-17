@@ -32,10 +32,10 @@ const QUESTIONS: Question[] = [
     title: 'نفسك في ايه؟',
     subtitle: 'اختار من اللي تحت، وإحنا نظبطلك',
     options: [
-      { key: 'food', emoji: '🍽️', label: 'آكل حاجة', hint: 'مطاعم وأكل بيتي' },
-      { key: 'pharmacy', emoji: '💊', label: 'دو أو صيدلية', hint: 'أدوية ومستلزمات طبية' },
-      { key: 'shop', emoji: '🛒', label: 'اشترى حاجة من الماركت', hint: 'بقالة ومستلزمات' },
-      { key: 'delivery', emoji: '🛵', label: 'أوصّل حاجة', hint: 'توصيل وطلبات' },
+      { key: 'food', emoji: '', label: 'آكل حاجة', hint: 'مطاعم وأكل بيتي' },
+      { key: 'pharmacy', emoji: '', label: 'دو أو صيدلية', hint: 'أدوية ومستلزمات طبية' },
+      { key: 'shop', emoji: '', label: 'اشترى حاجة من الماركت', hint: 'بقالة ومستلزمات' },
+      { key: 'delivery', emoji: '', label: 'أوصّل حاجة', hint: 'توصيل وطلبات' },
     ],
   },
   {
@@ -55,9 +55,9 @@ const QUESTIONS: Question[] = [
     subtitle: 'اختار اللي يشبه حالتك',
     options: [
       { key: 'new', emoji: '🌱', label: 'حاجة جديدة', hint: 'أماكن لسه مكتشفة' },
-      { key: 'trending', emoji: '🔥', label: 'الترند', hint: 'اللي الناس عليه' },
+      { key: 'trending', emoji: '', label: 'الترند', hint: 'اللي الناس عليه' },
       { key: 'offers', emoji: '🎁', label: 'عروض حلوة', hint: 'وفّر وأنا بطلب' },
-      { key: 'nearby', emoji: '📍', label: 'قريب مني', hint: 'مش عايز أتحرك كتير' },
+      { key: 'nearby', emoji: '', label: 'قريب مني', hint: 'مش عايز أتحرك كتير' },
     ],
   },
   {
@@ -140,7 +140,7 @@ export default function RecommendClient({ businesses }: { businesses: Business[]
         <div className="rc-hero">
           <EahLogo size="lg" variant="full" href="/" />
           <p className="rc-hero__tagline">
-            {showResults ? 'لقينالك اللي يناسبك ✨' : 'هترشحلك إيه؟'}
+            {showResults ? 'لقينالك اللي يناسبك ' : 'هترشحلك إيه؟'}
           </p>
         </div>
 
@@ -205,11 +205,11 @@ export default function RecommendClient({ businesses }: { businesses: Business[]
                       <span className="rc-card__meta">
                         {b.area ?? ''}
                         {b.badge && <span className="rc-card__badge">{b.badge}</span>}
-                        {b.is_premium && <span className="rc-card__badge rc-card__badge--gold">⭐ مميز</span>}
+                        {b.is_premium && <span className="rc-card__badge rc-card__badge--gold"> مميز</span>}
                       </span>
                       {(b.hook || b.reason) && (
                         <p className="rc-card__reason">
-                          ✨ {b.hook ?? b.reason}
+                           {b.hook ?? b.reason}
                         </p>
                       )}
                     </div>

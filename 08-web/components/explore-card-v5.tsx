@@ -26,10 +26,10 @@ type Business = {
 }
 
 const TYPE_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  supermarket: '🛒',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  supermarket: '',
+  delivery_office: '',
 }
 
 const TYPE_LABEL: Record<string, string> = {
@@ -119,7 +119,7 @@ export default function ExploreCardV5({ business }: { business: Business }) {
           <div className="ec5__front-foot">
             <h3 className="ec5__name">{business.name}</h3>
             <span className="ec5__meta">
-              {emoji} {typeLabel}
+              {typeLabel}
               {business.area ? ` · ${business.area}` : ''}
             </span>
           </div>

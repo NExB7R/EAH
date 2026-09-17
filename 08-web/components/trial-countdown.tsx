@@ -62,7 +62,7 @@ export default function TrialCountdown({ businessId }: { businessId: string }) {
   return (
     <section className={`trial ${soon ? 'is-urgent' : ''} ${isTrial ? 'is-trial' : 'is-active'}`}>
       <div className="trial__inner">
-        <span className="trial__emoji" aria-hidden>{isTrial ? '🎁' : '💎'}</span>
+        <span className="trial__emoji" aria-hidden></span>
         <div className="trial__info">
           <strong className="trial__title">
             {isTrial ? 'تجربتك المجانية شغالة' : 'باقتك شغالة'}
@@ -76,7 +76,7 @@ export default function TrialCountdown({ businessId }: { businessId: string }) {
             <span className="trial__sep">:</span>
             <span className="trial__unit"><b>{String(s).padStart(2,'0')}</b><small>ثانية</small></span>
           </div>
-          {soon && <p className="trial__urgent">⏰ باقي أيام قليلة — جدّد من الباقات</p>}
+          {soon && <p className="trial__urgent">باقي أيام قليلة — جدّد من الباقات</p>}
         </div>
         <a href="/merchant/subscription" className="trial__cta">
           {isTrial ? 'اختار باقتك' : 'جدّد'} ←

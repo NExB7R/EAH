@@ -206,3 +206,45 @@ export const IcFoodRice = () => (
     <path d="M8 8c1-2 3-2 4-1s3 1 4-1"/>
   </svg>
 )
+
+
+// ═══ Additional UI icons ═══
+export const IcGift = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <rect x="3" y="8" width="18" height="4"/><rect x="5" y="12" width="14" height="10"/>
+    <path d="M12 8v14M12 8c-1-3-4-3-4-1s3 1 4 1c1 0 4 1 4-1s-3-2-4 1z"/>
+  </svg>
+)
+export const IcPin = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M12 22s7-7 7-13a7 7 0 1 0-14 0c0 6 7 13 7 13z"/>
+    <circle cx="12" cy="9" r="2.5"/>
+  </svg>
+)
+export const IcSparkles = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M12 2l1.5 6.5L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-1.5z"/>
+    <path d="M19 15l.8 3 3 .8-3 .8-.8 3-.8-3-3-.8 3-.8z"/>
+  </svg>
+)
+export const IcEye = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8S2 12 2 12z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </svg>
+)
+export const IcPhone = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.4 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.6 2z"/>
+  </svg>
+)
+export const IcClock = () => (
+  <svg viewBox="0 0 24 24" {...P}>
+    <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+  </svg>
+)
+export const IcHeartFilled = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/>
+  </svg>
+)

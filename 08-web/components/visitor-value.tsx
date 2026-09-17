@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import './visitor-value.css'
+import { IcRestaurant, IcSparkles, IcMarket, IcStore } from './eah-icons'
 
 const CARDS = [
   {
@@ -13,7 +14,7 @@ const CARDS = [
   },
   {
     key: 'recommend',
-    emoji: '✨',
+    emoji: 'IcSparkles',
     title: 'قول مزاجك واحنا نظبط',
     body: 'ترشيحات ذكية على حسب ميزانيتك ومنطقتك ومزاجك',
     cta: { label: 'جرّب', href: '/recommend' },
@@ -21,7 +22,7 @@ const CARDS = [
   },
   {
     key: 'order',
-    emoji: '🛒',
+    emoji: 'IcMarket',
     title: 'اطلب من أي مكان',
     body: 'اكتب طلبك — يوصل مباشرة على واتساب المكان. بدون وسيط',
     cta: { label: 'شوف الأماكن', href: '/explore' },
@@ -29,7 +30,7 @@ const CARDS = [
   },
   {
     key: 'partner',
-    emoji: '🏪',
+    emoji: 'IcStore',
     title: 'عندك نشاط؟',
     body: 'سجّل نشاطك مجاناً — بدون عمولة. اعرض لآلاف العملاء',
     cta: { label: 'سجّل نشاطك', href: '/merchant/apply' },
@@ -48,7 +49,7 @@ export default function VisitorValue() {
       <div className="vv__grid">
         {CARDS.map((c) => (
           <article key={c.key} className={`vv__card vv__card--${c.accent}`}>
-            <span className="vv__emoji">{c.emoji}</span>
+            <span className="vv__emoji">{(() => { const I = ({IcRestaurant, IcSparkles, IcMarket, IcStore} as any)[c.emoji]; return I ? <I /> : null })()}</span>
             <h3 className="vv__card-title">{c.title}</h3>
             <p className="vv__card-body">{c.body}</p>
             <Link href={c.cta.href} className="vv__cta">
