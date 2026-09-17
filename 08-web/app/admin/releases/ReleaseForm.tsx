@@ -3,10 +3,10 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 
 const AUDIENCES = [
-  { key: 'all', label: '🌍 الكل' },
-  { key: 'customers', label: '🛍️ العملاء' },
-  { key: 'merchants', label: '🏪 أصحاب الأنشطة' },
-  { key: 'admins', label: '👑 الفريق' },
+  { key: 'all', label: 'الكل' },
+  { key: 'customers', label: 'العملاء' },
+  { key: 'merchants', label: 'أصحاب الأنشطة' },
+  { key: 'admins', label: 'الفريق' },
 ]
 
 export default function ReleaseForm() {
@@ -18,7 +18,7 @@ export default function ReleaseForm() {
   const [msg, setMsg] = useState<string | null>(null)
 
   async function submit() {
-    if (!title.trim() || !version.trim()) { setMsg('⚠ العنوان والنسخة مطلوبين'); return }
+    if (!title.trim() || !version.trim()) { setMsg('العنوان والنسخة مطلوبين'); return }
     setBusy(true); setMsg(null)
     try {
       const supabase = createClient()
@@ -28,13 +28,13 @@ export default function ReleaseForm() {
         p_body: body.trim(),
         p_audience: audience,
       })
-      if (error || !data?.ok) { setMsg('⚠ ' + (data?.error ?? error?.message ?? 'فشل')) }
+      if (error || !data?.ok) { setMsg('' + (data?.error ?? error?.message ?? 'فشل')) }
       else {
-        setMsg(`✅ تم النشر — ${data.notified} مستخدم وصله إشعار`)
+        setMsg(`تم النشر — ${data.notified} مستخدم وصله إشعار`)
         setTitle(''); setBody('')
         setTimeout(() => window.location.reload(), 1500)
       }
-    } catch (e: any) { setMsg('⚠ ' + e.message) }
+    } catch (e: any) { setMsg('' + e.message) }
     setBusy(false)
   }
 
@@ -60,9 +60,9 @@ export default function ReleaseForm() {
         <span>تفاصيل (اختياري)</span>
         <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={3} placeholder="اكتب ملخص قصير عن التحديث" />
       </label>
-      {msg && <p className={msg.startsWith('✅') ? 'rel-form__ok' : 'rel-form__err'}>{msg}</p>}
+      {msg && <p className={msg.startsWith('') ? 'rel-form__ok' : 'rel-form__err'}>{msg}</p>}
       <button type="button" onClick={submit} disabled={busy} className="rel-form__submit">
-        {busy ? '...' : '📣 نشر التحديث'}
+        {busy ? '...' : 'نشر التحديث'}
       </button>
     </section>
   )

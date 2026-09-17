@@ -39,7 +39,7 @@ export default function CreateAdForm({ slots }: { slots: Slot[] }) {
         status: 'pending',
       })
       if (error) { setErr(error.message); return }
-      setMsg('✅ تم الإرسال — هيتم المراجعة قريب')
+      setMsg('تم الإرسال — هيتم المراجعة قريب')
       setTimeout(() => window.location.href = '/merchant/ads', 1500)
     } catch (e: any) { setErr(e.message) }
     finally { setBusy(false) }
@@ -48,12 +48,12 @@ export default function CreateAdForm({ slots }: { slots: Slot[] }) {
   return (
     <div className="anew__form">
       <label className="anew__field">
-        <span>📢 عنوان الإعلان *</span>
+        <span>عنوان الإعلان *</span>
         <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="مثلاً: خصم 20% على العروض" />
       </label>
 
       <label className="anew__field">
-        <span>📝 وصف مختصر</span>
+        <span>وصف مختصر</span>
         <textarea value={desc} onChange={(e) => setDesc(e.target.value)} rows={3} placeholder="جملة أو اتنين توضح العرض" />
       </label>
 
@@ -69,7 +69,7 @@ export default function CreateAdForm({ slots }: { slots: Slot[] }) {
 
       <div className="anew__row">
         <label className="anew__field">
-          <span>📍 المساحة *</span>
+          <span>المساحة *</span>
           <select value={slotId} onChange={(e) => setSlotId(e.target.value)}>
             {slots.map((s) => <option key={s.id} value={s.id}>{s.name_ar}</option>)}
           </select>
@@ -80,15 +80,15 @@ export default function CreateAdForm({ slots }: { slots: Slot[] }) {
         </label>
       </div>
 
-      {err && <p className="anew__err">⚠ {err}</p>}
+      {err && <p className="anew__err">{err}</p>}
       {msg && <p className="anew__ok">{msg}</p>}
 
       <button type="button" onClick={submit} disabled={busy} className="anew__submit">
-        {busy ? '...' : '🚀 إرسال للمراجعة'}
+        {busy ? '...' : 'إرسال للمراجعة'}
       </button>
 
       <p className="anew__note">
-        💬 الإعلان هيتحط قيد المراجعة — هنشوفه ونوافق عليه. للأسعار كلمنا على واتساب.
+        الإعلان هيتحط قيد المراجعة — هنشوفه ونوافق عليه. للأسعار كلمنا على واتساب.
       </p>
     </div>
   )

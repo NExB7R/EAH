@@ -41,7 +41,7 @@ export default async function AdminVerificationsPage() {
 
       {pending.length === 0 && done.length === 0 && (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">✨</span>
+          <span className="admin-empty__emoji"></span>
           <h2 className="admin-empty__title">مفيش طلبات</h2>
           <p className="admin-empty__msg">لما حد يقدم طلب توثيق هيظهر هنا</p>
         </div>
@@ -49,7 +49,7 @@ export default async function AdminVerificationsPage() {
 
       {pending.length > 0 && (
         <>
-          <h2 className="admin-section-title">⏳ قيد المراجعة ({pending.length})</h2>
+          <h2 className="admin-section-title">قيد المراجعة ({pending.length})</h2>
           <div className="vf-admin-list">
             {pending.map(r => (
               <VerificationCard key={r.id} request={r as any} />
@@ -61,7 +61,7 @@ export default async function AdminVerificationsPage() {
       {done.length > 0 && (
         <>
           <h2 className="admin-section-title" style={{ marginTop: 32 }}>
-            ✅ تمت المراجعة ({done.length})
+            تمت المراجعة ({done.length})
           </h2>
           <div className="vf-admin-list">
             {done.map(r => (

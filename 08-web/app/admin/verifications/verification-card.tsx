@@ -41,9 +41,9 @@ export default function VerificationCard({
           </span>
         </div>
         <span className={`vf-card__status vf-card__status--${request.status}`}>
-          {request.status === 'pending' && '⏳ معلق'}
-          {request.status === 'approved' && '✅ مقبول'}
-          {request.status === 'rejected' && '❌ مرفوض'}
+          {request.status === 'pending' && 'معلق'}
+          {request.status === 'approved' && 'مقبول'}
+          {request.status === 'rejected' && 'مرفوض'}
         </span>
       </div>
 
@@ -85,7 +85,7 @@ export default function VerificationCard({
               disabled={isPending}
               className="vf-card__btn vf-card__btn--reject"
             >
-              ❌ رفض
+              رفض
             </button>
             <button
               type="button"
@@ -93,14 +93,14 @@ export default function VerificationCard({
               disabled={isPending}
               className="vf-card__btn vf-card__btn--approve"
             >
-              {isPending ? '...' : '✅ قبول'}
+              {isPending ? '...' : 'قبول'}
             </button>
           </div>
         </>
       )}
 
       {readOnly && request.admin_note && (
-        <p className="vf-card__admin-note">💬 {request.admin_note}</p>
+        <p className="vf-card__admin-note">{request.admin_note}</p>
       )}
 
       {msg && <p className="vf-card__msg">{msg}</p>}

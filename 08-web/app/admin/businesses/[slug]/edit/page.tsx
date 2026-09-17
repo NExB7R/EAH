@@ -57,8 +57,8 @@ export default async function EditBusinessPage({
         </div>
         <div className="admin-header__actions">
           <Link href="/admin/businesses" className="admin-btn admin-btn--ghost">← رجوع</Link>
-          <Link href={`/businesses/${biz.slug}`} target="_blank" className="admin-btn">👁 مشاهدة ↗</Link>
-          <Link href={`/admin/businesses/${biz.slug}/offers`} className="admin-btn admin-btn--gold">🎁 العروض</Link>
+          <Link href={`/businesses/${biz.slug}`} target="_blank" className="admin-btn">مشاهدة ↗</Link>
+          <Link href={`/admin/businesses/${biz.slug}/offers`} className="admin-btn admin-btn--gold">العروض</Link>
         </div>
       </div>
 

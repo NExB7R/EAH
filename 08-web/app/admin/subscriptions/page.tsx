@@ -8,10 +8,10 @@ export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الاشتراكات' }
 
 const TYPE_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  supermarket: '🛒',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  supermarket: '',
+  delivery_office: '',
 }
 
 export default async function AdminSubscriptionsPage({
@@ -66,10 +66,10 @@ export default async function AdminSubscriptionsPage({
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">الاشتراكات</span>
-          <h1 className="admin-header__title">💎 الاشتراكات</h1>
+          <h1 className="admin-header__title">الاشتراكات</h1>
           <p className="admin-header__subtitle">
             {counts.pending > 0
-              ? `⏳ ${counts.pending} طلب قيد المراجعة`
+              ? `${counts.pending} طلب قيد المراجعة`
               : `${counts.all} اشتراك — كل شيء تحت السيطرة`}
           </p>
         </div>
@@ -98,7 +98,7 @@ export default async function AdminSubscriptionsPage({
 
       {rows.length === 0 ? (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">💎</span>
+          <span className="admin-empty__emoji"></span>
           <h2 className="admin-empty__title">مفيش اشتراكات هنا</h2>
           <p className="admin-empty__msg">لما التجار يطلبوا ترقية، هيظهروا هنا</p>
         </div>
@@ -108,14 +108,14 @@ export default async function AdminSubscriptionsPage({
             <article key={s.id} className="sub-row">
               <div className="sub-row__head">
                 <div className="sub-row__thumb">
-                  {TYPE_EMOJI[s.business?.business_type ?? ''] ?? '🏪'}
+                  {TYPE_EMOJI[s.business?.business_type ?? ''] ?? ''}
                 </div>
                 <div className="sub-row__info">
                   <h3 className="sub-row__name">
                     {s.business?.name ?? 'نشاط محذوف'}
                   </h3>
                   <span className="sub-row__slug">/{s.business?.slug}</span>
-                  {s.notes && <span className="sub-row__notes">📝 {s.notes}</span>}
+                  {s.notes && <span className="sub-row__notes">{s.notes}</span>}
                 </div>
                 <span
                   className="sub-row__status"
@@ -130,7 +130,7 @@ export default async function AdminSubscriptionsPage({
               </div>
 
               <div className="sub-row__meta">
-                {s.is_trial && <span className="sub-row__chip sub-row__chip--trial">🎁 تجريبي</span>}
+                {s.is_trial && <span className="sub-row__chip sub-row__chip--trial">تجريبي</span>}
                 {s.starts_at && (
                   <span className="sub-row__chip">
                     ▶ {new Date(s.starts_at).toLocaleDateString('ar-EG')}
@@ -147,7 +147,7 @@ export default async function AdminSubscriptionsPage({
               </div>
 
               {s.rejected_reason && (
-                <div className="sub-row__reason">❌ {s.rejected_reason}</div>
+                <div className="sub-row__reason">{s.rejected_reason}</div>
               )}
 
               <SubscriptionActions id={s.id} status={s.status} plans={plans} />

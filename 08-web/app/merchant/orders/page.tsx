@@ -51,7 +51,7 @@ export default async function MerchantOrdersPage({
         <FloatingCapsuleHeader />
         <main className="mo">
           <div className="mo__empty">
-            <span>🏪</span>
+            <span></span>
             <h1>مفيش نشاطات عندك</h1>
             <p>سجّل نشاطك الأول عشان تستقبل الطلبات.</p>
             <Link href="/merchant/apply" className="mo__empty-btn">
@@ -106,10 +106,10 @@ export default async function MerchantOrdersPage({
           <Link href="/merchant" className="mo__back">← لوحة النشاط</Link>
           <div>
             <span className="mo__kicker">إدارة الأوردرات</span>
-            <h1 className="mo__title">🛒 الطلبات</h1>
+            <h1 className="mo__title">الطلبات</h1>
             <p className="mo__sub">
               {counts.sent > 0
-                ? `⏳ عندك ${counts.sent} طلب جديد`
+                ? `عندك ${counts.sent} طلب جديد`
                 : 'مفيش طلبات جديدة دلوقتي'}
             </p>
           </div>
@@ -150,7 +150,7 @@ export default async function MerchantOrdersPage({
                         className="mo__phone"
                         dir="ltr"
                       >
-                        📱 {o.customer_phone}
+                        {o.customer_phone}
                       </a>
                     </div>
                     <span className={`mo__status mo__status--${STATUS_COLOR[o.status]}`}>
@@ -159,9 +159,9 @@ export default async function MerchantOrdersPage({
                   </header>
 
                   <div className="mo__meta">
-                    <span className="mo__meta-item">🏪 {biz?.name ?? 'نشاط'}</span>
+                    <span className="mo__meta-item">{biz?.name ?? 'نشاط'}</span>
                     {o.customer_area && (
-                      <span className="mo__meta-item">📍 {o.customer_area}</span>
+                      <span className="mo__meta-item">{o.customer_area}</span>
                     )}
                     <span className="mo__meta-item">
                       📅 {new Date(o.created_at).toLocaleString('ar-EG', {
@@ -174,16 +174,16 @@ export default async function MerchantOrdersPage({
                   </div>
 
                   {o.customer_address && (
-                    <div className="mo__address">🏠 {o.customer_address}</div>
+                    <div className="mo__address">{o.customer_address}</div>
                   )}
 
                   <div className="mo__items">
-                    <strong>📝 الأوردر:</strong>
+                    <strong>الأوردر:</strong>
                     <p>{o.items_summary}</p>
                   </div>
 
                   {o.notes && (
-                    <div className="mo__notes">💬 {o.notes}</div>
+                    <div className="mo__notes">{o.notes}</div>
                   )}
 
                   <OrderStatusButtons orderId={o.id} currentStatus={o.status as any} />
@@ -195,13 +195,13 @@ export default async function MerchantOrdersPage({
                       rel="noreferrer"
                       className="mo__btn mo__btn--wa"
                     >
-                      💬 رد على واتساب
+                      رد على واتساب
                     </a>
                     <a
                       href={`tel:${o.customer_phone}`}
                       className="mo__btn mo__btn--ghost"
                     >
-                      📞 اتصل
+                      اتصل
                     </a>
                   </div>
                 </Link>

@@ -39,7 +39,7 @@ export default async function AdminSearchPage({
       <header className="eah-admin-page-header">
         <div>
           <span className="eah-admin-kicker">بحث سريع</span>
-          <h1>🔍 بحث سريع</h1>
+          <h1>بحث سريع</h1>
           <p>ابحث في الأنشطة والمستخدمين</p>
         </div>
         <Link href="/admin" className="eah-admin-btn">← لوحة التحكم</Link>
@@ -59,7 +59,7 @@ export default async function AdminSearchPage({
         <>
           {businesses.length > 0 && (
             <div style={{ marginBottom: 24 }}>
-              <h2 style={{ fontSize: '.9rem', color: '#A855F7', margin: '0 0 12px', fontWeight: 800 }}>🏪 الأنشطة ({businesses.length})</h2>
+              <h2 style={{ fontSize: '.9rem', color: '#A855F7', margin: '0 0 12px', fontWeight: 800 }}>الأنشطة ({businesses.length})</h2>
               <div style={{ display: 'grid', gap: 8, maxWidth: 900 }}>
                 {businesses.map(b => (
                   <Link key={b.id} href={`/admin/businesses/${b.id}`} style={{ padding: 14, borderRadius: 12, background: 'rgba(20,18,28,.6)', border: '1px solid rgba(139,92,246,.15)', textDecoration: 'none', color: 'inherit', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -84,7 +84,7 @@ export default async function AdminSearchPage({
                       <strong style={{ color: '#F5F3FF', display: 'block', marginBottom: 4 }}>{u.display_name ?? 'مستخدم'}</strong>
                       <span style={{ fontSize: '.75rem', color: '#A5A3B8' }}>{u.phone ?? '—'}</span>
                     </div>
-                    <span style={{ fontSize: '.75rem', color: '#FBBF24', fontWeight: 800 }}>⭐ {u.trust_score ?? 0}</span>
+                    <span style={{ fontSize: '.75rem', color: '#FBBF24', fontWeight: 800 }}>{u.trust_score ?? 0}</span>
                   </Link>
                 ))}
               </div>

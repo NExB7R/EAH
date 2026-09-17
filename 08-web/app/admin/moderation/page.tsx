@@ -21,13 +21,13 @@ export default async function ModerationPage() {
       <header className="mod__hero">
         <Link href="/admin" className="mod__back">← غرفة التحكم</Link>
         <span className="mod__kicker">مراجعة المحتوى</span>
-        <h1 className="mod__title">✍️ التقييمات قيد المراجعة</h1>
+        <h1 className="mod__title">التقييمات قيد المراجعة</h1>
         <p className="mod__sub">المراجعات اللي فيها روابط أو ألفاظ — محتاجة قرارك</p>
       </header>
 
       {(!flagged || flagged.length === 0) ? (
         <div className="mod__empty">
-          <span className="mod__empty-emoji">✨</span>
+          <span className="mod__empty-emoji"></span>
           <p>مفيش حاجة قيد المراجعة — كل التقييمات نضيفة</p>
         </div>
       ) : (

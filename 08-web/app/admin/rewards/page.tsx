@@ -10,12 +10,12 @@ export const metadata = { title: 'إدارة المكافآت' }
 
 const CATS = [
   { v: 'voucher', l: '🎟️ قسيمة' },
-  { v: 'discount', l: '💰 خصم' },
-  { v: 'freebie', l: '🎁 هدية' },
-  { v: 'delivery', l: '🛵 توصيل' },
+  { v: 'discount', l: 'خصم' },
+  { v: 'freebie', l: 'هدية' },
+  { v: 'delivery', l: 'توصيل' },
   { v: 'badge', l: '🏆 شارة' },
-  { v: 'frame', l: '👑 إطار' },
-  { v: 'feature', l: '🚀 ميزة' },
+  { v: 'frame', l: 'إطار' },
+  { v: 'feature', l: 'ميزة' },
   { v: 'cash', l: '💵 فلوس' },
 ]
 
@@ -70,10 +70,10 @@ export default async function AdminRewardsPage({
       <header className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">المكافآت</span>
-          <h1 className="admin-header__title">🎁 إدارة المكافآت</h1>
+          <h1 className="admin-header__title">إدارة المكافآت</h1>
           <p className="admin-header__subtitle">
             {rewards?.length ?? 0} مكافأة ({activeCount} نشطة)
-            {pendingCount > 0 && ` • ⏳ ${pendingCount} طلب قيد المراجعة`}
+            {pendingCount > 0 && ` • ${pendingCount} طلب قيد المراجعة`}
           </p>
         </div>
       </header>
@@ -86,7 +86,7 @@ export default async function AdminRewardsPage({
             <h2 className="rew-create__title">➕ إضافة مكافأة جديدة</h2>
             <form action={createReward} className="rew-create__form">
               <input name="title" placeholder="العنوان" required className="rew-input" />
-              <input name="emoji" placeholder="🎁" maxLength={4} className="rew-input" />
+              <input name="emoji" placeholder="" maxLength={4} className="rew-input" />
               <select name="category" className="rew-input">
                 {CATS.map((c) => (
                   <option key={c.v} value={c.v}>{c.l}</option>
@@ -108,7 +108,7 @@ export default async function AdminRewardsPage({
 
           {rewards?.length === 0 ? (
             <div className="admin-empty">
-              <span className="admin-empty__emoji">🎁</span>
+              <span className="admin-empty__emoji"></span>
               <h2 className="admin-empty__title">لسه مفيش مكافآت</h2>
               <p className="admin-empty__msg">أضف أول مكافأة من فوق</p>
             </div>
@@ -185,11 +185,11 @@ function RewardRedemptions({ redemptions }: { redemptions: any[] }) {
         return (
           <article key={rd.id} className={`rew-red rew-red--${statusClass}`}>
             <div className="rew-red__head">
-              <span className="rew-red__emoji">{rd.reward?.emoji ?? '🎁'}</span>
+              <span className="rew-red__emoji">{rd.reward?.emoji ?? ''}</span>
               <div className="rew-red__info">
                 <span className="rew-red__title">{rd.reward?.title ?? 'مكافأة'}</span>
                 <span className="rew-red__user">
-                  👤 {rd.user?.display_name ?? rd.user?.phone ?? 'مستخدم'}
+                  {rd.user?.display_name ?? rd.user?.phone ?? 'مستخدم'}
                 </span>
               </div>
               <span className={`rew-red__status rew-red__status--${statusClass}`}>
@@ -200,7 +200,7 @@ function RewardRedemptions({ redemptions }: { redemptions: any[] }) {
               </span>
             </div>
             <div className="rew-red__meta">
-              <span className="rew-red__chip">💰 {rd.points_spent} نقطة</span>
+              <span className="rew-red__chip">{rd.points_spent} نقطة</span>
               <span className="rew-red__chip">📅 {new Date(rd.created_at).toLocaleDateString('ar-EG')}</span>
               {rd.voucher_code && (
                 <span className="rew-red__chip rew-red__chip--voucher">
@@ -209,7 +209,7 @@ function RewardRedemptions({ redemptions }: { redemptions: any[] }) {
               )}
             </div>
             {rd.admin_note && (
-              <div className="rew-red__note">📝 {rd.admin_note}</div>
+              <div className="rew-red__note">{rd.admin_note}</div>
             )}
             {rd.status === 'pending' && (
               <form action={async (fd: FormData) => {
@@ -222,13 +222,13 @@ function RewardRedemptions({ redemptions }: { redemptions: any[] }) {
                 <input name="voucher" placeholder="كود القسيمة (اختياري)" className="rew-input" />
                 <input name="note" placeholder="ملاحظة" className="rew-input" />
                 <button name="decision" value="approved" className="rew-btn rew-btn--primary">
-                  ✅ قبول
+                  قبول
                 </button>
                 <button name="decision" value="delivered" className="rew-btn rew-btn--on">
-                  📦 تم التسليم
+                  تم التسليم
                 </button>
                 <button name="decision" value="rejected" className="rew-btn rew-btn--danger">
-                  ✖ رفض
+                  رفض
                 </button>
               </form>
             )}

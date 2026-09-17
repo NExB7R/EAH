@@ -17,20 +17,20 @@ const ACTION_LABEL: Record<string, string> = {
   'business.create': '➕ إضافة نشاط',
   'business.update': '✏️ تعديل نشاط',
   'business.delete': '🗑️ حذف نشاط',
-  'business.toggle_featured': '⭐ تبديل المميز',
-  'business.toggle_published': '📢 تبديل النشر',
+  'business.toggle_featured': 'تبديل المميز',
+  'business.toggle_published': 'تبديل النشر',
   'subscription.requested': '📩 طلب اشتراك',
-  'subscription.approved': '✅ اعتماد اشتراك',
-  'subscription.rejected': '❌ رفض اشتراك',
+  'subscription.approved': 'اعتماد اشتراك',
+  'subscription.rejected': 'رفض اشتراك',
   'subscription.cancelled': '⏸ إلغاء اشتراك',
   'subscription.expired': '⏹ انتهاء اشتراك',
   'user.ban': '🚫 حظر مستخدم',
-  'user.unban': '✅ فك حظر',
+  'user.unban': 'فك حظر',
   'user.role_change': '🎭 تغيير دور',
-  'review.approve': '✅ اعتماد تقييم',
-  'review.reject': '❌ رفض تقييم',
-  'offer.approve': '✅ اعتماد عرض',
-  'offer.reject': '❌ رفض عرض',
+  'review.approve': 'اعتماد تقييم',
+  'review.reject': 'رفض تقييم',
+  'offer.approve': 'اعتماد عرض',
+  'offer.reject': 'رفض عرض',
 }
 
 function getColorClass(action: string): string {
@@ -71,10 +71,10 @@ export default function AuditItem({ log, actorName }: { log: Log; actorName?: st
       </div>
 
       <div className="aud-item__meta">
-        <span className="aud-item__chip">👤 {actorName ?? 'النظام'}</span>
+        <span className="aud-item__chip">{actorName ?? 'النظام'}</span>
         {log.entity_id && (
           <span className="aud-item__chip">
-            🎯 {log.entity_id.slice(0, 8)}...
+            {log.entity_id.slice(0, 8)}...
           </span>
         )}
         <span className="aud-item__chip">

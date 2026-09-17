@@ -33,10 +33,10 @@ const ROLE_LABEL: Record<string, string> = {
 }
 
 const ROLE_EMOJI: Record<string, string> = {
-  customer: '👤',
-  merchant: '🏪',
-  admin: '🛡️',
-  super_admin: '👑',
+  customer: '',
+  merchant: '',
+  admin: '',
+  super_admin: '',
 }
 
 export default async function UsersPage({
@@ -75,7 +75,7 @@ export default async function UsersPage({
   if (error) {
     return (
       <div className="admin-empty">
-        <span className="admin-empty__emoji">⚠️</span>
+        <span className="admin-empty__emoji"></span>
         <h2 className="admin-empty__title">حصل خطأ</h2>
         <p className="admin-empty__msg">{error.message}</p>
       </div>
@@ -162,7 +162,7 @@ export default async function UsersPage({
 
       {rows.length === 0 ? (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">👤</span>
+          <span className="admin-empty__emoji"></span>
           <h2 className="admin-empty__title">مفيش مستخدمين هنا</h2>
           <p className="admin-empty__msg">
             {search ? 'مفيش نتائج للبحث ده' : 'جرّب فلتر تاني'}

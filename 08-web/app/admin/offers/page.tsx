@@ -21,9 +21,9 @@ type Offer = {
 }
 
 const TYPE_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  delivery_office: '',
 }
 
 export default async function AllOffersPage() {
@@ -44,7 +44,7 @@ export default async function AllOffersPage() {
   if (error) {
     return (
       <div className="admin-empty">
-        <span className="admin-empty__emoji">⚠️</span>
+        <span className="admin-empty__emoji"></span>
         <h2 className="admin-empty__title">حصل خطأ</h2>
         <p className="admin-empty__msg">{error.message}</p>
       </div>
@@ -58,17 +58,17 @@ export default async function AllOffersPage() {
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">كل العروض</span>
-          <h1 className="admin-header__title">🔥 كل العروض</h1>
+          <h1 className="admin-header__title">كل العروض</h1>
           <p className="admin-header__subtitle">{rows.length} عرض في كل الأنشطة</p>
         </div>
       </div>
 
       {rows.length === 0 ? (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">🔥</span>
+          <span className="admin-empty__emoji"></span>
           <h2 className="admin-empty__title">لسه مفيش عروض</h2>
           <p className="admin-empty__msg">اذهب لأي مكان وأضف أول عرض</p>
-          <Link href="/admin/businesses" className="admin-btn admin-btn--primary">🏪 الأنشطة</Link>
+          <Link href="/admin/businesses" className="admin-btn admin-btn--primary">الأنشطة</Link>
         </div>
       ) : (
         <div className="offers-grid">
@@ -86,7 +86,7 @@ export default async function AllOffersPage() {
                   className="offer-card__image"
                   style={img ? { backgroundImage: `url(${img})` } : undefined}
                 >
-                  {!img && <span className="offer-card__image-placeholder">🎁</span>}
+                  {!img && <span className="offer-card__image-placeholder"></span>}
 
                   {/* شارات */}
                   <div className="offer-card__badges">
@@ -117,7 +117,7 @@ export default async function AllOffersPage() {
                       className="offer-card__biz"
                     >
                       <span className="offer-card__biz-icon">
-                        {TYPE_EMOJI[o.businesses.business_type] ?? '🏪'}
+                        {TYPE_EMOJI[o.businesses.business_type] ?? ''}
                       </span>
                       <span className="offer-card__biz-name">{o.businesses.name}</span>
                       <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="offer-card__biz-arrow">
@@ -159,7 +159,7 @@ export default async function AllOffersPage() {
                       href={`/admin/businesses/${o.businesses.slug}/offers`}
                       className="offer-card__btn"
                     >
-                      🔥 عروض المكان
+                      عروض المكان
                     </Link>
                   </div>
                 )}

@@ -39,7 +39,7 @@ export default async function OffersPage({
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">العروض</span>
-          <h1 className="admin-header__title">🎁 عروض: {biz.name}</h1>
+          <h1 className="admin-header__title">عروض: {biz.name}</h1>
           <p className="admin-header__subtitle">
             {rows.length} عرض — تظهر للعملاء في الصفحة الرئيسية وصفحة المكان
           </p>
@@ -52,7 +52,7 @@ export default async function OffersPage({
 
       {rows.length === 0 ? (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">🎁</span>
+          <span className="admin-empty__emoji"></span>
           <h2 className="admin-empty__title">لسه مفيش عروض</h2>
           <p className="admin-empty__msg">أضف أول عرض لجذب العملاء</p>
           <Link href={`/admin/businesses/${biz.slug}/offers/new`} className="admin-btn admin-btn--primary">➕ إضافة عرض</Link>
@@ -78,7 +78,7 @@ export default async function OffersPage({
                       fontSize: img ? 0 : undefined,
                     }}
                   >
-                    {!img && '🎁'}
+                    {!img && ''}
                   </div>
                   <div className="admin-biz__meta">
                     <h3 className="admin-biz__name">{o.title}</h3>
@@ -94,7 +94,7 @@ export default async function OffersPage({
                     )}
                     <div className="admin-biz__badges">
                       {isActive ? (
-                        <span className="admin-biz__badge admin-biz__badge--open">✅ نشط</span>
+                        <span className="admin-biz__badge admin-biz__badge--open">نشط</span>
                       ) : o.is_published ? (
                         <span className="admin-biz__badge">⏰ مش نشط الآن</span>
                       ) : (
@@ -121,7 +121,7 @@ export default async function OffersPage({
                     target="_blank"
                     className="admin-btn admin-btn--sm"
                   >
-                    👁 عرض في المكان
+                    عرض في المكان
                   </Link>
                 </div>
               </article>

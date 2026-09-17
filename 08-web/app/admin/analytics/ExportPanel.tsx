@@ -2,13 +2,13 @@
 import { useState } from 'react'
 
 const TYPES = [
-  { key: 'businesses', label: '🏪 الأنشطة' },
-  { key: 'reviews', label: '✍️ التقييمات' },
-  { key: 'reveals', label: '📞 كشوف الأرقام' },
+  { key: 'businesses', label: 'الأنشطة' },
+  { key: 'reviews', label: 'التقييمات' },
+  { key: 'reveals', label: 'كشوف الأرقام' },
   { key: 'users', label: '👥 المستخدمون' },
   { key: 'visits', label: '📅 الزيارات' },
-  { key: 'referrals', label: '🎁 الإحالات' },
-  { key: 'audit', label: '📋 سجل العمليات' },
+  { key: 'referrals', label: 'الإحالات' },
+  { key: 'audit', label: 'سجل العمليات' },
 ]
 
 export default function ExportPanel() {

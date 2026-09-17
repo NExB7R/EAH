@@ -39,11 +39,11 @@ export default async function MerchantReportPage({
     .gte('created_at', since)
 
   const metrics = [
-    { label: `زيارات (${rangeDays}ي)`, value: viewsCount ?? 0, emoji: '👁', color: 'var(--eah-purple-2)' },
-    { label: `كشوف (${rangeDays}ي)`, value: revealsCount ?? 0, emoji: '📞', color: '#A855F7' },
-    { label: 'إجمالي التقييمات', value: stats.review_count, emoji: '⭐', color: 'var(--eah-gold)' },
-    { label: 'متوسط التقييم', value: stats.avg_rating.toFixed(1), emoji: '📊', color: 'var(--eah-purple-soft)' },
-    { label: 'عروض نشطة', value: stats.active_offers, emoji: '🔥', color: '#FB923C' },
+    { label: `زيارات (${rangeDays}ي)`, value: viewsCount ?? 0, emoji: '', color: 'var(--eah-purple-2)' },
+    { label: `كشوف (${rangeDays}ي)`, value: revealsCount ?? 0, emoji: '', color: '#A855F7' },
+    { label: 'إجمالي التقييمات', value: stats.review_count, emoji: '', color: 'var(--eah-gold)' },
+    { label: 'متوسط التقييم', value: stats.avg_rating.toFixed(1), emoji: '', color: 'var(--eah-purple-soft)' },
+    { label: 'عروض نشطة', value: stats.active_offers, emoji: '', color: '#FB923C' },
   ]
 
   
@@ -84,7 +84,7 @@ export default async function MerchantReportPage({
         <div className="mpage__head">
           <div>
             <span className="mpage__kicker">التحليلات</span>
-            <h1 className="mpage__title">📊 إحصائيات: {business.name}</h1>
+            <h1 className="mpage__title">إحصائيات: {business.name}</h1>
             <p className="mpage__sub">نظرة سريعة على أداء النشاط على المنصة</p>
           </div>
           <Link href={`/merchant/businesses/${business.slug}/edit`} className="admin-btn admin-btn--primary">
@@ -126,9 +126,9 @@ export default async function MerchantReportPage({
             <h2 className="mreport-section__title">التقييمات بالتفصيل</h2>
             <div className="mratings">
               <RatingBar label="😋 الطعم" value={stats.avg_taste} />
-              <RatingBar label="💰 القيمة" value={stats.avg_value} />
-              <RatingBar label="⚡ السرعة" value={stats.avg_speed} />
-              <RatingBar label="✨ التجربة" value={stats.avg_experience} />
+              <RatingBar label="القيمة" value={stats.avg_value} />
+              <RatingBar label="السرعة" value={stats.avg_speed} />
+              <RatingBar label="التجربة" value={stats.avg_experience} />
             </div>
           </section>
         )}
@@ -152,11 +152,11 @@ export default async function MerchantReportPage({
               <div className="kpi-grid" style={{ marginTop: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
           <div className="kpi-card" style={{ padding: 20, borderRadius: 16, background: 'linear-gradient(135deg, rgba(37,211,102,.1), rgba(168,85,247,.04))', border: '1px solid rgba(37,211,102,.3)' }}>
             <span style={{ display: 'block', fontFamily: 'var(--font-cairo-play, var(--font-cairo, system-ui))', fontSize: '1.6rem', fontWeight: 900, color: '#86EFAC' }}>{confirmedOrders ?? 0}</span>
-            <span style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5' }}>✅ أوردر مؤكد (واتساب)</span>
+            <span style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5' }}>أوردر مؤكد (واتساب)</span>
           </div>
           <div className="kpi-card" style={{ padding: 20, borderRadius: 16, background: 'rgba(255,255,255,.02)', border: '1px solid rgba(168,85,247,.2)' }}>
             <span style={{ display: 'block', fontFamily: 'var(--font-cairo-play, var(--font-cairo, system-ui))', fontSize: '1.6rem', fontWeight: 900, color: '#E8C79A' }}>{totalOrders ?? 0}</span>
-            <span style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5' }}>📦 إجمالي الأوردرات</span>
+            <span style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5' }}>إجمالي الأوردرات</span>
           </div>
         </div>
               <MerchantInsights

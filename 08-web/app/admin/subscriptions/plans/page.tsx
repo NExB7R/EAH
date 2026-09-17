@@ -36,8 +36,8 @@ export default async function AdminPlansPage() {
             {p.description && <p className="plan-card__desc">{p.description}</p>}
             <div className="plan-card__meta">
               <span>⏱ {formatDuration(p.duration_days)}</span>
-              <span>🎁 {p.trial_days} يوم تجريبي</span>
-              <span>💎 {formatPrice(p.price_egp)}</span>
+              <span>{p.trial_days} يوم تجريبي</span>
+              <span>{formatPrice(p.price_egp)}</span>
             </div>
             {p.features?.length > 0 && (
               <div className="plan-card__features">

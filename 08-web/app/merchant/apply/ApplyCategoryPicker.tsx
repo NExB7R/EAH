@@ -2,22 +2,22 @@
 import { useState } from 'react'
 
 const PRESETS = [
-  { value: 'restaurant', label: '🍽️ مطعم' },
-  { value: 'pharmacy', label: '💊 صيدلية' },
-  { value: 'supermarket', label: '🛒 ماركت' },
-  { value: 'delivery_office', label: '🛵 مكتب توصيل' },
+  { value: 'restaurant', label: 'مطعم' },
+  { value: 'pharmacy', label: 'صيدلية' },
+  { value: 'supermarket', label: 'ماركت' },
+  { value: 'delivery_office', label: 'مكتب توصيل' },
 ]
 
 const EMOJI_OPTIONS = [
-  '🏪', '🍽️', '💊', '🛒', '🛵', '☕', '🍰', '🌯',
-  '🥗', '🎂', '📚', '✂️', '💈', '🎨', '👕', '💻',
-  '🔧', '🚗', '🏥', '🧴', '🐾', '🌹', '💎', '📷',
+  '', '', '', '', '', '', '', '',
+  '🥗', '', '', '✂️', '💈', '', '👕', '💻',
+  '🔧', '🚗', '🏥', '🧴', '🐾', '🌹', '', '',
 ]
 
 export default function ApplyCategoryPicker() {
   const [selected, setSelected] = useState<string>('restaurant')
   const [customName, setCustomName] = useState('')
-  const [customEmoji, setCustomEmoji] = useState('🏪')
+  const [customEmoji, setCustomEmoji] = useState('')
 
   const isOther = selected === 'other'
 
@@ -46,14 +46,14 @@ export default function ApplyCategoryPicker() {
             checked={isOther}
             onChange={() => setSelected('other')}
           />
-          <span className="ap-cat__inner">✨ أخرى</span>
+          <span className="ap-cat__inner">أخرى</span>
         </label>
       </div>
 
       {isOther && (
         <div className="ap-other">
           <p className="ap-other__hint">
-            💡 اكتب اسم المجال، واختار أيقونة تناسبك — الإدارة هتراجعها.
+            اكتب اسم المجال، واختار أيقونة تناسبك — الإدارة هتراجعها.
           </p>
 
           <div className="ap-other__preview">

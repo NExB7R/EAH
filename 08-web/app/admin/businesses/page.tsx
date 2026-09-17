@@ -19,15 +19,15 @@ type Business = {
 }
 
 const TYPE_LABEL: Record<string, string> = {
-  restaurant: '🍽️ مطعم',
-  pharmacy: '💊 صيدلية',
-  delivery_office: '🛵 توصيل',
+  restaurant: 'مطعم',
+  pharmacy: 'صيدلية',
+  delivery_office: 'توصيل',
 }
 
 const TYPE_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  delivery_office: '',
 }
 
 export default async function AdminBusinessesPage() {
@@ -41,7 +41,7 @@ export default async function AdminBusinessesPage() {
   if (error) {
     return (
       <div className="admin-empty">
-        <span className="admin-empty__emoji">⚠️</span>
+        <span className="admin-empty__emoji"></span>
         <h2 className="admin-empty__title">حصل خطأ</h2>
         <p className="admin-empty__msg">{error.message}</p>
       </div>
@@ -55,7 +55,7 @@ export default async function AdminBusinessesPage() {
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">إدارة الأنشطة</span>
-          <h1 className="admin-header__title">🏪 إدارة الأنشطة</h1>
+          <h1 className="admin-header__title">إدارة الأنشطة</h1>
           <p className="admin-header__subtitle">
             {rows.length} نشاط — كل عمليات التحكم في مكان واحد
           </p>
@@ -69,7 +69,7 @@ export default async function AdminBusinessesPage() {
 
       {rows.length === 0 ? (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">🏪</span>
+          <span className="admin-empty__emoji"></span>
           <h2 className="admin-empty__title">لسه مفيش أنشطة</h2>
           <p className="admin-empty__msg">ابدأ بإضافة أول مطعم أو صيدلية أو </p>
           <Link href="/admin/businesses/new" className="admin-btn admin-btn--primary">
@@ -82,13 +82,13 @@ export default async function AdminBusinessesPage() {
             <article key={b.id} className="admin-biz">
               <div className="admin-biz__head">
                 <div className="admin-biz__thumb">
-                  {TYPE_EMOJI[b.business_type] ?? '🏪'}
+                  {TYPE_EMOJI[b.business_type] ?? ''}
                 </div>
                 <div className="admin-biz__meta">
                   <h3 className="admin-biz__name">{b.name}</h3>
                   <span className="admin-biz__slug">/{b.slug}</span>
                   <span className="admin-biz__area">
-                    📍 {[b.area, b.city].filter(Boolean).join(' • ') || 'لم يُحدد'}
+                    {[b.area, b.city].filter(Boolean).join(' • ') || 'لم يُحدد'}
                   </span>
                   {b.hook && (
                     <span
@@ -99,7 +99,7 @@ export default async function AdminBusinessesPage() {
                         marginTop: 2,
                       }}
                     >
-                      ✨ {b.hook}
+                      {b.hook}
                     </span>
                   )}
                   <div className="admin-biz__badges">
@@ -108,17 +108,17 @@ export default async function AdminBusinessesPage() {
                     </span>
                     {b.is_featured && (
                       <span className="admin-biz__badge admin-biz__badge--featured">
-                        ⭐ مميز
+                        مميز
                       </span>
                     )}
                     {b.is_published && (
                       <span className="admin-biz__badge admin-biz__badge--published">
-                        📢 منشور
+                        منشور
                       </span>
                     )}
                     {b.is_open && (
                       <span className="admin-biz__badge admin-biz__badge--open">
-                        ✅ مفتوح
+                        مفتوح
                       </span>
                     )}
                   </div>

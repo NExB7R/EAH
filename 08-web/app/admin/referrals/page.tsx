@@ -104,7 +104,7 @@ export default async function AdminReferralsPage({
       <header className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">الإحالات</span>
-          <h1 className="admin-header__title">🎁 الإحالات</h1>
+          <h1 className="admin-header__title">الإحالات</h1>
           <p className="admin-header__subtitle">
             {totalRefs} إحالة · {totalBonus} نقطة موزعة · {uniqueReferrers} داعي
           </p>
@@ -161,7 +161,7 @@ export default async function AdminReferralsPage({
 
       {/* Search + List */}
       <section className="ref-list-section">
-        <h2 className="ref-section__title">📋 سجل الإحالات</h2>
+        <h2 className="ref-section__title">سجل الإحالات</h2>
         <form className="ref-search" action="/admin/referrals" method="get">
           <input
             type="text"

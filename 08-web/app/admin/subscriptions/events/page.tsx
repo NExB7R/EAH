@@ -6,14 +6,14 @@ export const metadata = { title: 'سجل أحداث الاشتراكات' }
 
 const EVENT_LABEL: Record<string, string> = {
   requested: '📩 طلب',
-  approved: '✅ موافقة',
-  rejected: '❌ رفض',
-  trial_started: '🎁 تجربة بدأت',
+  approved: 'موافقة',
+  rejected: 'رفض',
+  trial_started: 'تجربة بدأت',
   trial_expiring: '⏰ تنبيه انتهاء',
   expired: '⏹ انتهى',
   renewed: '🔄 تجديد',
   cancelled: '⏸ إلغاء',
-  payment_received: '💰 دفع',
+  payment_received: 'دفع',
 }
 
 export default async function AdminSubsEventsPage() {

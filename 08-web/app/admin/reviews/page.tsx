@@ -62,7 +62,7 @@ export default async function ReviewsPage({
   if (error) {
     return (
       <div className="admin-empty">
-        <span className="admin-empty__emoji">⚠️</span>
+        <span className="admin-empty__emoji"></span>
         <h2 className="admin-empty__title">حصل خطأ</h2>
         <p className="admin-empty__msg">{error.message}</p>
       </div>
@@ -83,7 +83,7 @@ export default async function ReviewsPage({
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">التقييمات</span>
-          <h1 className="admin-header__title">⭐ التقييمات</h1>
+          <h1 className="admin-header__title">التقييمات</h1>
           <p className="admin-header__subtitle">
             {counts.all} تقييم — {counts.pending} قيد المراجعة، {counts.approved} معتمد
           </p>
@@ -93,14 +93,14 @@ export default async function ReviewsPage({
       <div className="admin-toolbar" style={{ marginBottom: 16 }}>
         <Link href="/admin/reviews" className={`admin-btn admin-btn--sm ${!statusFilter ? 'admin-btn--primary' : ''}`}>الكل</Link>
         <Link href="/admin/reviews?status=pending" className={`admin-btn admin-btn--sm ${statusFilter === 'pending' ? 'admin-btn--primary' : ''}`}>⏰ قيد المراجعة ({counts.pending})</Link>
-        <Link href="/admin/reviews?status=approved" className={`admin-btn admin-btn--sm ${statusFilter === 'approved' ? 'admin-btn--primary' : ''}`}>✅ معتمد ({counts.approved})</Link>
-        <Link href="/admin/reviews?status=hidden" className={`admin-btn admin-btn--sm ${statusFilter === 'hidden' ? 'admin-btn--primary' : ''}`}>👁 مخفي ({counts.hidden})</Link>
-        <Link href="/admin/reviews?status=rejected" className={`admin-btn admin-btn--sm ${statusFilter === 'rejected' ? 'admin-btn--primary' : ''}`}>❌ مرفوض ({counts.rejected})</Link>
+        <Link href="/admin/reviews?status=approved" className={`admin-btn admin-btn--sm ${statusFilter === 'approved' ? 'admin-btn--primary' : ''}`}>معتمد ({counts.approved})</Link>
+        <Link href="/admin/reviews?status=hidden" className={`admin-btn admin-btn--sm ${statusFilter === 'hidden' ? 'admin-btn--primary' : ''}`}>مخفي ({counts.hidden})</Link>
+        <Link href="/admin/reviews?status=rejected" className={`admin-btn admin-btn--sm ${statusFilter === 'rejected' ? 'admin-btn--primary' : ''}`}>مرفوض ({counts.rejected})</Link>
       </div>
 
       {rows.length === 0 ? (
         <div className="admin-empty">
-          <span className="admin-empty__emoji">⭐</span>
+          <span className="admin-empty__emoji"></span>
           <h2 className="admin-empty__title">مفيش تقييمات</h2>
         </div>
       ) : (
@@ -134,15 +134,15 @@ export default async function ReviewsPage({
                     <span className="review-card__rating-value">{r.taste}</span>
                   </div>
                   <div className="review-card__rating-item">
-                    <span className="review-card__rating-label">💰 قيمة</span>
+                    <span className="review-card__rating-label">قيمة</span>
                     <span className="review-card__rating-value">{r.value_for_money}</span>
                   </div>
                   <div className="review-card__rating-item">
-                    <span className="review-card__rating-label">⚡ سرعة</span>
+                    <span className="review-card__rating-label">سرعة</span>
                     <span className="review-card__rating-value">{r.speed}</span>
                   </div>
                   <div className="review-card__rating-item">
-                    <span className="review-card__rating-label">✨ تجربة</span>
+                    <span className="review-card__rating-label">تجربة</span>
                     <span className="review-card__rating-value">{r.experience}</span>
                   </div>
                 </div>
@@ -151,7 +151,7 @@ export default async function ReviewsPage({
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
                   <span className={`admin-biz__badge ${r.status === 'approved' ? 'admin-biz__badge--published' : ''}`}>
-                    {r.status === 'pending' ? '⏰ قيد المراجعة' : r.status === 'approved' ? '✅ معتمد' : r.status === 'hidden' ? '👁 مخفي' : '❌ مرفوض'}
+                    {r.status === 'pending' ? '⏰ قيد المراجعة' : r.status === 'approved' ? 'معتمد' : r.status === 'hidden' ? 'مخفي' : 'مرفوض'}
                   </span>
                 </div>
 

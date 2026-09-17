@@ -41,10 +41,10 @@ const AREAS = [
 ]
 
 const TYPES = [
-  { key: 'restaurant', label: '🍽️ مطعم' },
-  { key: 'pharmacy', label: '💊 صيدلية' },
-  { key: 'supermarket', label: '🛒 ماركت' },
-  { key: 'delivery_office', label: '🛵 توصيل' },
+  { key: 'restaurant', label: 'مطعم' },
+  { key: 'pharmacy', label: 'صيدلية' },
+  { key: 'supermarket', label: 'ماركت' },
+  { key: 'delivery_office', label: 'توصيل' },
 ]
 
 export default function CollectClient({ recent }: { recent: Recent[] }) {
@@ -158,7 +158,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
         setError('فشل الحفظ: ' + (data.error || res.status))
         return
       }
-      setSuccess('✅ تم: /businesses/' + data.slug + ' — ' + (data.reviewsInserted || 0) + ' تقييم')
+      setSuccess('تم: /businesses/' + data.slug + ' — ' + (data.reviewsInserted || 0) + ' تقييم')
       setUrl('')
       setParsed(null)
       setName('')
@@ -211,7 +211,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             onClick={parseUrl}
             disabled={parsing || !url.trim()}
           >
-            {parsing ? '...' : '🔍 تحليل'}
+            {parsing ? '...' : 'تحليل'}
           </button>
         </div>
         <p className="col__hint">facebook.com · instagram.com · maps.google.com</p>
@@ -238,14 +238,14 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
           {(parsed.cuisine || parsed.hasDelivery || parsed.type) && (
             <div className="col__chips">
               {parsed.type && <span className="col__chip">🏷️ {parsed.type}</span>}
-              {parsed.cuisine && <span className="col__chip">🍽️ {parsed.cuisine}</span>}
-              {parsed.hasDelivery && <span className="col__chip col__chip--ok">🚚 بيوصل</span>}
+              {parsed.cuisine && <span className="col__chip">{parsed.cuisine}</span>}
+              {parsed.hasDelivery && <span className="col__chip col__chip--ok">بيوصل</span>}
             </div>
           )}
 
           <div className="col__grid">
             <label className="col__field col__field--full">
-              <span>📝 اسم النشاط *</span>
+              <span>اسم النشاط *</span>
               <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
             </label>
 
@@ -257,24 +257,24 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             </label>
 
             <label className="col__field">
-              <span>📍 المنطقة *</span>
+              <span>المنطقة *</span>
               <select value={area} onChange={(e) => setArea(e.target.value)}>
                 {AREAS.map((a) => <option key={a} value={a}>{a}</option>)}
               </select>
             </label>
 
             <label className="col__field">
-              <span>📞 رقم الموبايل</span>
+              <span>رقم الموبايل</span>
               <input type="tel" dir="ltr" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="01xxxxxxxxx" />
             </label>
 
             <label className="col__field">
-              <span>💬 رقم الواتساب</span>
+              <span>رقم الواتساب</span>
               <input type="tel" dir="ltr" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="201xxxxxxxxx" />
             </label>
 
             <label className="col__field col__field--full">
-              <span>📘 صفحة فيسبوك</span>
+              <span>صفحة فيسبوك</span>
               <input type="url" dir="ltr" value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="https://facebook.com/pagename" />
             </label>
 
@@ -284,12 +284,12 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             </label>
 
             <label className="col__field">
-              <span>📷 إنستجرام</span>
+              <span>إنستجرام</span>
               <input type="url" dir="ltr" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="https://instagram.com/..." />
             </label>
 
             <label className="col__field col__field--full">
-              <span>📍 العنوان</span>
+              <span>العنوان</span>
               <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="شارع..." />
             </label>
 
@@ -307,7 +307,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
           {/* Reviews Input */}
           <div className="col__reviews-box">
             <div className="col__reviews-head">
-              <label className="col__label">⭐ التقييمات (اختياري)</label>
+              <label className="col__label">التقييمات (اختياري)</label>
               <span className="col__reviews-hint">
                 كل سطر: <code>اسم | 5 | تعليق</code>
               </span>
@@ -321,7 +321,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             />
             {reviewsPreview.length > 0 && (
               <div className="col__reviews-preview">
-                <span>📋 هيتم إضافة {reviewsPreview.length} تقييم:</span>
+                <span>هيتم إضافة {reviewsPreview.length} تقييم:</span>
                 <ul>
                   {reviewsPreview.slice(0, 5).map((r, i) => (
                     <li key={i}>
@@ -336,8 +336,8 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             )}
           </div>
 
-          {error && <div className="col__error">⚠ {error}</div>}
-          {success && <div className="col__success">✅ {success}</div>}
+          {error && <div className="col__error">{error}</div>}
+          {success && <div className="col__success">{success}</div>}
 
           <div className="col__actions">
             <button
@@ -361,7 +361,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
 
       {/* Recent */}
       <div className="col__recent">
-        <h2 className="col__recent-title">📋 آخر 15 نشاط مضاف</h2>
+        <h2 className="col__recent-title">آخر 15 نشاط مضاف</h2>
         {recent.length === 0 ? (
           <p className="col__recent-empty">لسه مفيش أنشطة</p>
         ) : (

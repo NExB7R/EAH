@@ -25,7 +25,7 @@ export default async function ReleasesPage() {
       <header className="rel__hero">
         <Link href="/admin" className="rel__back">← غرفة التحكم</Link>
         <span className="rel__kicker">التحديثات</span>
-        <h1 className="rel__title">📣 نشر تحديث جديد</h1>
+        <h1 className="rel__title">نشر تحديث جديد</h1>
         <p className="rel__sub">انشر التحديث — هيوصل للمستخدمين حسب الجمهور المختار</p>
       </header>
       <ReleaseForm />

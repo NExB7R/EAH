@@ -20,14 +20,14 @@ export default function SubscriptionActions({
   function doApprove(trial: boolean) {
     start(async () => {
       const r = await approveAction(id, trial)
-      setMsg(r.ok ? '✅ تم التفعيل' : `⚠ ${r.error}`)
+      setMsg(r.ok ? 'تم التفعيل' : `${r.error}`)
     })
   }
   function doReject() {
     if (!reason.trim()) return
     start(async () => {
       const r = await rejectAction(id, reason.trim())
-      setMsg(r.ok ? '✅ تم الرفض' : `⚠ ${r.error}`)
+      setMsg(r.ok ? 'تم الرفض' : `${r.error}`)
       setMode('idle')
       setReason('')
     })
@@ -35,7 +35,7 @@ export default function SubscriptionActions({
   function doCancel() {
     start(async () => {
       const r = await cancelAction(id, reason.trim() || undefined)
-      setMsg(r.ok ? '✅ تم الإلغاء' : `⚠ ${r.error}`)
+      setMsg(r.ok ? 'تم الإلغاء' : `${r.error}`)
       setMode('idle')
       setReason('')
     })
@@ -50,21 +50,21 @@ export default function SubscriptionActions({
             onClick={() => doApprove(true)}
             disabled={pending}
           >
-            {pending ? '...' : '🎁 موافقة + 30 يوم تجريبي'}
+            {pending ? '...' : 'موافقة + 30 يوم تجريبي'}
           </button>
           <button
             className="sub-btn sub-btn--primary-2"
             onClick={() => doApprove(false)}
             disabled={pending}
           >
-            ✅ تفعيل مباشر
+            تفعيل مباشر
           </button>
           <button
             className="sub-btn sub-btn--danger"
             onClick={() => setMode('reject')}
             disabled={pending}
           >
-            ✖ رفض
+            رفض
           </button>
         </>
       )}

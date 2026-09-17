@@ -26,12 +26,12 @@ export default async function AdminHomePage() {
   ])
 
   const stats = [
-    { label: 'الأنشطة', value: totalBiz ?? 0, icon: '🏪', href: '/admin/businesses', color: 'var(--eah-purple-2)' },
-    { label: 'منشور', value: publishedBiz ?? 0, icon: '📢', href: '/admin/businesses', color: 'var(--eah-purple-soft)' },
-    { label: 'مميز', value: featuredBiz ?? 0, icon: '⭐', href: '/admin/businesses', color: 'var(--eah-gold)' },
+    { label: 'الأنشطة', value: totalBiz ?? 0, icon: '', href: '/admin/businesses', color: 'var(--eah-purple-2)' },
+    { label: 'منشور', value: publishedBiz ?? 0, icon: '', href: '/admin/businesses', color: 'var(--eah-purple-soft)' },
+    { label: 'مميز', value: featuredBiz ?? 0, icon: '', href: '/admin/businesses', color: 'var(--eah-gold)' },
     { label: 'مستخدمين', value: totalUsers ?? 0, icon: '👥', href: '/admin/users', color: 'var(--eah-purple-3)' },
-    { label: 'عروض', value: totalOffers ?? 0, icon: '🔥', href: '/admin/offers', color: '#FB923C' },
-    { label: 'طلبات تعديل', value: pendingChanges ?? 0, icon: '📝', href: '/admin/change-requests', color: 'var(--eah-gold)' },
+    { label: 'عروض', value: totalOffers ?? 0, icon: '', href: '/admin/offers', color: '#FB923C' },
+    { label: 'طلبات تعديل', value: pendingChanges ?? 0, icon: '', href: '/admin/change-requests', color: 'var(--eah-gold)' },
     { label: 'طلبات توثيق', value: pendingVerif ?? 0, icon: '✓', href: '/admin/verifications', color: 'var(--eah-purple-soft)' },
   ]
 
@@ -40,7 +40,7 @@ export default async function AdminHomePage() {
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">غرفة التحكم</span>
-          <h1 className="admin-header__title">👑 مرحباً بك في لوحة التحكم</h1>
+          <h1 className="admin-header__title">مرحباً بك في لوحة التحكم</h1>
           <p className="admin-header__subtitle">
             كل اللي محتاجه للتحكم في المنصة من مكان واحد
           </p>

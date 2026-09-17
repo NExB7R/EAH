@@ -18,7 +18,7 @@ export default function SettingsClient({ initial }: { initial: Record<string, an
         .from('platform_settings')
         .upsert({ key: 'trial_days_display', value: JSON.stringify(`${trialDays} يوم`) }, { onConflict: 'key' })
       if (e1 || e2) setMsg('خطأ: ' + (e1?.message ?? e2?.message))
-      else setMsg('✅ تم الحفظ — التطبيق في كل مكان')
+      else setMsg('تم الحفظ — التطبيق في كل مكان')
     } catch (e: any) {
       setMsg('خطأ: ' + e.message)
     }
@@ -29,7 +29,7 @@ export default function SettingsClient({ initial }: { initial: Record<string, an
     <div className="settings__body">
       <section className="settings__card">
         <div className="settings__card-head">
-          <span className="settings__card-emoji">🎁</span>
+          <span className="settings__card-emoji"></span>
           <div>
             <h2 className="settings__card-title">مدة التجربة المجانية</h2>
             <p className="settings__card-desc">
@@ -57,7 +57,7 @@ export default function SettingsClient({ initial }: { initial: Record<string, an
         <button type="button" onClick={save} disabled={busy} className="settings__submit">
           {busy ? '...' : '💾 حفظ الإعدادات'}
         </button>
-        {msg && <p className={msg.startsWith('✅') ? 'settings__ok' : 'settings__err'}>{msg}</p>}
+        {msg && <p className={msg.startsWith('') ? 'settings__ok' : 'settings__err'}>{msg}</p>}
       </div>
     </div>
   )

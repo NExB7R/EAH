@@ -19,10 +19,10 @@ const STATUS_CLASS: Record<string, string> = {
 }
 
 const CATEGORY_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  supermarket: '🛒',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  supermarket: '',
+  delivery_office: '',
 }
 
 const CATEGORY_LABEL: Record<string, string> = {
@@ -109,7 +109,7 @@ export default async function AdminMerchantsPage({
           <h1 className="admin-header__title">🧾 طلبات التجار</h1>
           <p className="admin-header__subtitle">
             {counts.pending > 0
-              ? `⏳ ${counts.pending} طلب قيد المراجعة — وافق أو ارفض`
+              ? `${counts.pending} طلب قيد المراجعة — وافق أو ارفض`
               : 'مفيش طلبات معلقة — كل الطلبات اتراجعت'}
           </p>
         </div>
@@ -169,7 +169,7 @@ export default async function AdminMerchantsPage({
         <div className="mrch-list">
           {rows.map((a) => {
             const p = profMap.get(a.user_id)
-            const catEmoji = CATEGORY_EMOJI[a.category] ?? '🏪'
+            const catEmoji = CATEGORY_EMOJI[a.category] ?? ''
             const catLabel = CATEGORY_LABEL[a.category] ?? a.category
             return (
               <article
@@ -182,7 +182,7 @@ export default async function AdminMerchantsPage({
                     <h3 className="mrch-card__name">{a.business_name}</h3>
                     <span className="mrch-card__cat">{catLabel}</span>
                     <span className="mrch-card__submitter">
-                      👤 {p?.display_name || 'بدون اسم'} • 📱 {p?.phone || p?.phone_e164 || '—'}
+                      {p?.display_name || 'بدون اسم'} • {p?.phone || p?.phone_e164 || '—'}
                     </span>
                   </div>
                   <span className={`mrch-status mrch-status--${STATUS_CLASS[a.status] ?? 'pending'}`}>
@@ -201,7 +201,7 @@ export default async function AdminMerchantsPage({
                 </div>
 
                 {a.admin_note && (
-                  <div className="mrch-card__note">📝 {a.admin_note}</div>
+                  <div className="mrch-card__note">{a.admin_note}</div>
                 )}
 
                 {a.status === 'pending' && (

@@ -131,22 +131,22 @@ return (
     <section className="an">
       <header className="an__hero">
         <span className="an__kicker">التحليلات</span>
-        <h1 className="an__title">📊 التحليلات</h1>
+        <h1 className="an__title">التحليلات</h1>
         <p className="an__sub">نظرة شاملة على أداء المنصة</p>
       </header>
 
       <div className="an__kpis">
         <div className="an__kpi"><span className="an__kpi-emoji">👥</span><span className="an__kpi-val">{totalUsers ?? 0}</span><span className="an__kpi-label">مستخدم</span></div>
-        <div className="an__kpi an__kpi--accent"><span className="an__kpi-emoji">📈</span><span className="an__kpi-val">{newUsers7d ?? 0}</span><span className="an__kpi-label">جديد 7 أيام</span></div>
-        <div className="an__kpi an__kpi--accent"><span className="an__kpi-emoji">⚡</span><span className="an__kpi-val">{activeUsers7d ?? 0}</span><span className="an__kpi-label">زيارات 7 أيام</span></div>
-        <div className="an__kpi"><span className="an__kpi-emoji">🏪</span><span className="an__kpi-val">{totalBiz ?? 0}</span><span className="an__kpi-label">نشاط</span></div>
-        <div className="an__kpi"><span className="an__kpi-emoji">✍️</span><span className="an__kpi-val">{totalReviews ?? 0}</span><span className="an__kpi-label">تقييم</span></div>
+        <div className="an__kpi an__kpi--accent"><span className="an__kpi-emoji"></span><span className="an__kpi-val">{newUsers7d ?? 0}</span><span className="an__kpi-label">جديد 7 أيام</span></div>
+        <div className="an__kpi an__kpi--accent"><span className="an__kpi-emoji"></span><span className="an__kpi-val">{activeUsers7d ?? 0}</span><span className="an__kpi-label">زيارات 7 أيام</span></div>
+        <div className="an__kpi"><span className="an__kpi-emoji"></span><span className="an__kpi-val">{totalBiz ?? 0}</span><span className="an__kpi-label">نشاط</span></div>
+        <div className="an__kpi"><span className="an__kpi-emoji"></span><span className="an__kpi-val">{totalReviews ?? 0}</span><span className="an__kpi-label">تقييم</span></div>
         <div className={`an__kpi ${(pendingReviews ?? 0) > 5 ? 'an__kpi--warn' : ''}`}>
-          <span className="an__kpi-emoji">⏳</span>
+          <span className="an__kpi-emoji"></span>
           <span className="an__kpi-val">{pendingReviews ?? 0}</span>
           <span className="an__kpi-label">قيد المراجعة</span>
         </div>
-        <div className="an__kpi"><span className="an__kpi-emoji">🎁</span><span className="an__kpi-val">{totalReferrals ?? 0}</span><span className="an__kpi-label">إحالة</span></div>
+        <div className="an__kpi"><span className="an__kpi-emoji"></span><span className="an__kpi-val">{totalReferrals ?? 0}</span><span className="an__kpi-label">إحالة</span></div>
       </div>
 
       <div className="an__charts">
@@ -154,10 +154,10 @@ return (
           <LineChart data={visitsData} color="#A855F7" label="👥 الزيارات اليومية (14 يوم)" />
         </div>
         <div className="an__card">
-          <LineChart data={revealsData} color="#C084FC" label="📞 كشوف الأرقام (14 يوم)" />
+          <LineChart data={revealsData} color="#C084FC" label="كشوف الأرقام (14 يوم)" />
         </div>
         <div className="an__card">
-          <BarChart data={typeData} label="🏪 الأنشطة حسب النوع" />
+          <BarChart data={typeData} label="الأنشطة حسب النوع" />
         </div>
       </div>
 

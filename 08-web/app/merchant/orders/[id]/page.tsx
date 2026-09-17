@@ -20,10 +20,10 @@ const STATUS_LABEL: Record<string, string> = {
 }
 
 const BIZ_EMOJI: Record<string, string> = {
-  restaurant: '🍽️',
-  pharmacy: '💊',
-  supermarket: '🛒',
-  delivery_office: '🛵',
+  restaurant: '',
+  pharmacy: '',
+  supermarket: '',
+  delivery_office: '',
 }
 
 export default async function MerchantOrderDetailPage({
@@ -65,7 +65,7 @@ export default async function MerchantOrderDetailPage({
     .eq('order_id', id)
     .order('created_at', { ascending: true })
 
-  const emoji = BIZ_EMOJI[biz?.business_type ?? ''] ?? '🏪'
+  const emoji = BIZ_EMOJI[biz?.business_type ?? ''] ?? ''
   const waUrl = order.whatsapp_url ?? `https://wa.me/${order.customer_phone.replace(/\D/g, '')}`
 
   return (
@@ -96,17 +96,17 @@ export default async function MerchantOrderDetailPage({
         </header>
 
         <section className="mod__card mod__card--customer">
-          <h2 className="mod__section-title">👤 بيانات العميل</h2>
+          <h2 className="mod__section-title">بيانات العميل</h2>
           <div className="mod__customer">
             <div className="mod__customer-name">
               <strong>{order.customer_name}</strong>
             </div>
             <div className="mod__customer-actions">
               <a href={`tel:${order.customer_phone}`} className="mod__btn mod__btn--call">
-                📞 اتصل
+                اتصل
               </a>
               <a href={waUrl} target="_blank" rel="noreferrer" className="mod__btn mod__btn--wa">
-                💬 واتساب
+                واتساب
               </a>
             </div>
           </div>
@@ -131,18 +131,18 @@ export default async function MerchantOrderDetailPage({
         </section>
 
         <section className="mod__card">
-          <h2 className="mod__section-title">📦 الأوردر</h2>
+          <h2 className="mod__section-title">الأوردر</h2>
           <p className="mod__items">{order.items_summary}</p>
-          {order.notes && <div className="mod__notes">💬 {order.notes}</div>}
+          {order.notes && <div className="mod__notes">{order.notes}</div>}
         </section>
 
         <section className="mod__card">
-          <h2 className="mod__section-title">🎯 إجراءات</h2>
+          <h2 className="mod__section-title">إجراءات</h2>
           <OrderStatusButtons orderId={order.id} currentStatus={order.status as any} />
         </section>
 
         <section className="mod__card">
-          <h2 className="mod__section-title">📋 سجل الحالة</h2>
+          <h2 className="mod__section-title">سجل الحالة</h2>
           <OrderTimeline items={(history ?? []) as any[]} />
         </section>
       </main>
