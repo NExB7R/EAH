@@ -1,0 +1,26 @@
+.mads { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+.mads__hero { margin-bottom: 26px; }
+.mads__back { font-family: var(--font-cairo, system-ui); font-size: .82rem; color: #A29DB5; text-decoration: none; margin-bottom: 12px; display: inline-block; }
+.mads__back:hover { color: #E8C79A; }
+.mads__kicker { display: block; font-family: var(--font-cairo, system-ui); font-size: .74rem; font-weight: 900; letter-spacing: .16em; color: #A855F7; text-transform: uppercase; margin-bottom: 6px; }
+.mads__title { font-family: var(--font-cairo-play, var(--font-cairo, system-ui)); font-size: 1.55rem; font-weight: 900; color: #F4F2FA; margin: 0 0 6px; }
+.mads__sub { font-family: var(--font-cairo, system-ui); font-size: .88rem; color: #A29DB5; margin: 0 0 14px; }
+.mads__cta { display: inline-block; padding: 10px 22px; border-radius: 12px; background: linear-gradient(135deg, #A855F7, #6B21FF); color: #fff; font-family: var(--font-cairo, system-ui); font-size: .85rem; font-weight: 900; text-decoration: none; box-shadow: 0 6px 18px rgba(168,85,247,.35); }
+.mads__empty { text-align: center; padding: 60px 20px; border-radius: 20px; background: rgba(168,85,247,.04); border: 1px solid rgba(168,85,247,.18); }
+.mads__empty-emoji { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+.mads__empty p { font-family: var(--font-cairo, system-ui); color: #A29DB5; margin: 0 0 16px; }
+.mads__list { display: flex; flex-direction: column; gap: 12px; }
+.mad { display: flex; gap: 14px; padding: 16px; border-radius: 16px; background: rgba(255,255,255,.02); border: 1px solid rgba(168,85,247,.18); }
+.mad__img { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
+.mad__body { flex: 1; min-width: 0; }
+.mad__head { display: flex; align-items: center; gap: 10px; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; }
+.mad__title { font-family: var(--font-cairo-play, var(--font-cairo, system-ui)); font-size: 1rem; font-weight: 900; color: #F4F2FA; margin: 0; }
+.mad__status { padding: 3px 10px; border-radius: 999px; font-family: var(--font-cairo, system-ui); font-size: .68rem; font-weight: 900; }
+.mad__status.is-pending { background: rgba(251,191,36,.15); color: #FCD34D; }
+.mad__status.is-active { background: rgba(168,85,247,.15); color: #C4B5FD; }
+.mad__status.is-paused { background: rgba(107,104,128,.2); color: #A29DB5; }
+.mad__status.is-expired { background: rgba(107,104,128,.15); color: #6B6580; }
+.mad__status.is-rejected { background: rgba(239,68,68,.15); color: #FCA5A5; }
+.mad__slot { display: block; font-family: var(--font-cairo, system-ui); font-size: .72rem; color: #A29DB5; margin-bottom: 6px; }
+.mad__desc { font-family: var(--font-cairo, system-ui); font-size: .82rem; color: #C9C2DB; line-height: 1.6; margin: 0 0 8px; }
+.mad__stats { display: flex; gap: 12px; flex-wrap: wrap; font-family: var(--font-cairo, system-ui); font-size: .72rem; color: #A29DB5; }
