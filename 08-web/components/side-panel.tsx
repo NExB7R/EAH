@@ -16,12 +16,7 @@ type PanelData = {
   newest: SideItem[]
 }
 
-const EMOJI: Record<string, string> = {
-  restaurant: '',
-  pharmacy: '',
-  supermarket: '',
-  delivery_office: '',
-}
+
 
 export default function SidePanel() {
   const [closed, setClosed] = useState(false) // مفتوح افتراضياً
@@ -47,28 +42,35 @@ export default function SidePanel() {
         const [f, t, n] = await Promise.all([
           supabase
             .from('businesses')
-            .select('id,name,slug,type')
+            .select('id,name,slug,business_type')
             .eq('is_published', true)
             .eq('is_featured', true)
             .limit(4),
           supabase
             .from('businesses')
-            .select('id,name,slug,type,view_count')
+            .select('id,name,slug,business_type')
             .eq('is_published', true)
-            .order('view_count', { ascending: false, nullsFirst: false })
+            .order('created_at', { ascending: false })
             .limit(4),
           supabase
             .from('businesses')
-            .select('id,name,slug,type,created_at')
+            .select('id,name,slug,business_type')
             .eq('is_published', true)
             .order('created_at', { ascending: false })
             .limit(4),
         ])
         if (!alive) return
+        const map = (arr: any[] | null): SideItem[] =>
+          (arr ?? []).map((x) => ({
+            id: x.id,
+            name: x.name,
+            slug: x.slug,
+            type: x.business_type,
+          }))
         setData({
-          featured: (f.data ?? []) as SideItem[],
-          trending: (t.data ?? []) as SideItem[],
-          newest: (n.data ?? []) as SideItem[],
+          featured: map(f.data),
+          trending: map(t.data),
+          newest: map(n.data),
         })
       } catch {
         /* silent */
@@ -104,7 +106,7 @@ export default function SidePanel() {
     return (
       <section className="side-panel__section">
         <header className="side-panel__head">
-          <span className="side-panel__head-icon">{icon}</span>
+          <span className={`side-panel__head-icon side-panel__head-icon--${icon}`} aria-hidden />
           <span className="side-panel__head-title">{title}</span>
           <a href={seeAll} className="side-panel__see-all">
             الكل
@@ -117,9 +119,6 @@ export default function SidePanel() {
               href={`/businesses/${it.slug}`}
               className="side-panel__card"
             >
-              <span className="side-panel__emoji">
-                {EMOJI[it.type ?? ''] ?? ''}
-              </span>
               <span className="side-panel__name">{it.name}</span>
             </a>
           ))}
@@ -151,19 +150,19 @@ export default function SidePanel() {
 
       <Section
         title="المميز"
-        icon=""
+        icon="star"
         items={data.featured}
         seeAll="/featured"
       />
       <Section
         title="الترند"
-        icon=""
+        icon="fire"
         items={data.trending}
         seeAll="/trends"
       />
       <Section
         title="جديد"
-        icon=""
+        icon="sparkle"
         items={data.newest}
         seeAll="/new"
       />

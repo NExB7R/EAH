@@ -190,7 +190,7 @@ export default function FloatingCapsuleHeader() {
             <div className="nav-drawer__roles">
               {isStaff && <a href="/admin" className="nav-drawer__role nav-drawer__role--admin"><span className="nav-drawer__link-icon">{MI.shield}</span>غرفة التحكم</a>}
               {isMerchant && <a href="/merchant" className="nav-drawer__role nav-drawer__role--merchant"><span className="nav-drawer__link-icon">{MI.store}</span>متجري</a>}
-              {isMerchant && <a href="/merchant/subscription" className="nav-drawer__role nav-drawer__role--merchant"><span className="nav-drawer__link-icon"></span>اشتراكي</a>}
+              {isMerchant && <a href="/merchant/subscription" className="nav-drawer__role nav-drawer__role--merchant"><span className="nav-drawer__link-icon">{MI.subscription}</span>اشتراكي</a>}
             </div>
           )}
 
@@ -204,7 +204,7 @@ export default function FloatingCapsuleHeader() {
           <nav className="nav-drawer__group">
             <a href="/merchant/apply" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.store}</span>سجّل نشاطك</a>
             <a href="/advertise" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.megaphone}</span>أعلن معنا</a>
-            <a href="/pricing" className="nav-drawer__link"><span className="nav-drawer__link-icon"></span>الباقات</a>
+            <a href="/pricing" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.tag}</span>الباقات</a>
           </nav>
           <div className="nav-drawer__spacer" />
           <nav className="nav-drawer__group">
@@ -212,7 +212,6 @@ export default function FloatingCapsuleHeader() {
             <a href="/contact" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.chat}</span>تواصل معنا</a>
             <a href="https://facebook.com/eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.facebook}</span>فيسبوك</a>
             <a href="https://wa.me/201012892806" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.whatsapp}</span>واتساب</a>
-            <a href="https://www.tiktok.com/@eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">🎵</span>تيك توك</a>
             <a href="https://www.instagram.com/eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon"></span>إنستجرام</a>
           </nav>
           <div className="nav-drawer__spacer" />
