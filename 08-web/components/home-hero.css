@@ -2,7 +2,7 @@
 
 .hh {
   position: relative;
-  padding: 96px 20px 32px;
+  padding: 140px 20px 40px;
   overflow: hidden;
   isolation: isolate;
 }
@@ -45,7 +45,12 @@
   text-align: center;
 }
 
-.hh__logo { display: flex; justify-content: center; margin: 0 0 6px; }
+.hh__logo {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding-top: 8px;
+}
 
 
 

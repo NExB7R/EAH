@@ -1,6 +1,6 @@
 .splash { position: fixed; inset: 0; z-index: 99999; background: #07060B; display: grid; place-items: center; transition: opacity 0.25s ease; }
 .splash.is-fading { opacity: 0; pointer-events: none; }
 .splash__inner { display: flex; flex-direction: column; align-items: center; }
-.splash__crown { width: 56px; height: auto; margin-bottom: -6px; margin-right: 50px; }
+.splash__crown { width: 56px; height: auto; margin-bottom: -6px; margin-right: 42px; margin-bottom: -4px; }
 .splash__word { width: 160px; height: auto; }
 .splash__tagline { font-family: var(--font-cairo, system-ui); font-size: 0.8rem; font-weight: 800; color: #E8C79A; margin: 6px 0 0; }
