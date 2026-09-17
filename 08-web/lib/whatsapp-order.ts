@@ -24,7 +24,7 @@ export function buildOrderMessage(o: OrderForTemplate): string {
   lines.push('')
   lines.push(` النشاط: ${o.businessName}`)
   lines.push('')
-  lines.push('👤 *بيانات العميل*')
+  lines.push('*بيانات العميل*')
   lines.push(`• الاسم: ${o.customerName}`)
   lines.push(`• الموبايل: ${o.customerPhone}`)
   if (o.area) lines.push(`• المنطقة: ${o.area}`)

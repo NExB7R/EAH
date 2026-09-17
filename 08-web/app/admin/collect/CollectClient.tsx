@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import './collect.css'
-import { IcClock, IcGlobe, IcLink, IcScroll } from '@/components/eah-icons'
+import { IcClock, IcGlobe, IcLink, IcScroll, IcTag } from '@/components/eah-icons'
 
 type Recent = {
   id: string
@@ -238,7 +238,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
 
           {(parsed.cuisine || parsed.hasDelivery || parsed.type) && (
             <div className="col__chips">
-              {parsed.type && <span className="col__chip">🏷️ {parsed.type}</span>}
+              {parsed.type && <span className="col__chip"><IcTag /> {parsed.type}</span>}
               {parsed.cuisine && <span className="col__chip">{parsed.cuisine}</span>}
               {parsed.hasDelivery && <span className="col__chip col__chip--ok">بيوصل</span>}
             </div>
@@ -251,7 +251,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
             </label>
 
             <label className="col__field">
-              <span>🏷️ النوع *</span>
+              <span><IcTag /> النوع *</span>
               <select value={type} onChange={(e) => setType(e.target.value)}>
                 {TYPES.map((t) => <option key={t.key} value={t.key}>{t.label}</option>)}
               </select>

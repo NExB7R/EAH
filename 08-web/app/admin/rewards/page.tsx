@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إدارة المكافآت' }
 
 const CATS = [
-  { v: 'voucher', l: '🎟️ قسيمة' },
+  { v: 'voucher', l: 'قسيمة' },
   { v: 'discount', l: 'خصم' },
   { v: 'freebie', l: 'هدية' },
   { v: 'delivery', l: 'توصيل' },
@@ -158,7 +158,7 @@ export default async function AdminRewardsPage({
 
 // ═══ Redemptions sub-component (server) ═══
 import { reviewRedemption } from './actions'
-import { IcCalendar, IcCheck, IcInbox, IcTrash } from '@/components/eah-icons'
+import { IcCalendar, IcCheck, IcInbox, IcTicket, IcTrash } from '@/components/eah-icons'
 
 function RewardRedemptions({ redemptions }: { redemptions: any[] }) {
   if (redemptions.length === 0) {
@@ -203,7 +203,7 @@ function RewardRedemptions({ redemptions }: { redemptions: any[] }) {
               <span className="rew-red__chip"><IcCalendar /> {new Date(rd.created_at).toLocaleDateString('ar-EG')}</span>
               {rd.voucher_code && (
                 <span className="rew-red__chip rew-red__chip--voucher">
-                  🎟️ {rd.voucher_code}
+                  <IcTicket /> {rd.voucher_code}
                 </span>
               )}
             </div>

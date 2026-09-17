@@ -75,7 +75,7 @@ export default function UserActions({ userId, isBanned, currentRole, bannedUntil
         onClick={() => setShowRole(!showRole)}
         disabled={pending}
       >
-        🎭 {currentRole}
+        {currentRole}
       </button>
 
       {showRole && (

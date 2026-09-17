@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import ChangeRequestActions from './ChangeRequestActions'
 import './change-requests.css'
-import { IcCalendar, IcCheck, IcEdit, IcInbox } from '@/components/eah-icons'
+import { IcCalendar, IcCheck, IcEdit, IcInbox, IcSearch, IcUser } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'مراجعة التعديلات' }
@@ -200,7 +200,7 @@ export default async function AdminChangeRequestsPage({
                     <h3 className="cr-card__name">{biz?.name ?? 'نشاط محذوف'}</h3>
                     {biz?.slug && <span className="cr-card__slug">/{biz.slug}</span>}
                     <span className="cr-card__submitter">
-                      👤 {prof?.display_name || prof?.phone || 'غير معروف'}
+                      <IcUser /> {prof?.display_name || prof?.phone || 'غير معروف'}
                     </span>
                   </div>
                   <span className={`cr-status cr-status--${STATUS_CLASS[r.status] ?? 'pending'}`}>
@@ -239,7 +239,7 @@ export default async function AdminChangeRequestsPage({
                     href={`/admin/change-requests/${r.id}`}
                     className="cr-btn cr-btn--view"
                   >
-                    🔍 مراجعة التفاصيل
+                    <IcSearch /> مراجعة التفاصيل
                   </Link>
                   {r.status === 'pending' && <ChangeRequestActions id={r.id} />}
                 </div>

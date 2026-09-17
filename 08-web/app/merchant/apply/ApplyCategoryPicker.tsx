@@ -11,7 +11,7 @@ const PRESETS = [
 const EMOJI_OPTIONS = [
   '', '', '', '', '', '', '', '',
   '🥗', '', '', '✂️', '💈', '', '👕', '💻',
-  '🔧', '🚗', '🏥', '🧴', '🐾', '🌹', '', '',
+  '🔧', '🚗', '', '🧴', '🐾', '🌹', '', '',
 ]
 
 export default function ApplyCategoryPicker() {

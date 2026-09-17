@@ -152,7 +152,7 @@ return (
 
       <div className="an__charts">
         <div className="an__card">
-          <LineChart data={visitsData} color="#A855F7" label="👥 الزيارات اليومية (14 يوم)" />
+          <LineChart data={visitsData} color="#A855F7" label=" الزيارات اليومية (14 يوم)" />
         </div>
         <div className="an__card">
           <LineChart data={revealsData} color="#C084FC" label="كشوف الأرقام (14 يوم)" />

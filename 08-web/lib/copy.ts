@@ -102,7 +102,7 @@ export const COPY = {
     },
     signupSuccess: 'تمام! أهلاً بيك في البيت',
     loginSuccess: 'نورت يا غالي',
-    logoutSuccess: 'في رعاية الله 🤝',
+    logoutSuccess: 'في رعاية الله',
     passwordChanged: 'تمام — كلمة السر اتغيرت',
     passwordError: 'معلش، كلمة السر مش مظبوطة',
     alreadyHave: 'عندك حساب؟',
@@ -261,7 +261,7 @@ export function addressBiz(gender: Gender = 'unknown'): string {
 export function formatOrderStatus(status: string): string {
   const map: Record<string, string> = {
     sent: COPY.order.sent,
-    seen: 'شافه المطعم 👁',
+    seen: 'شافه المطعم',
     accepted: COPY.order.confirmed,
     rejected: COPY.order.rejected,
     delivered: COPY.order.delivered,

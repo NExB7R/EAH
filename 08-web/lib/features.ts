@@ -29,7 +29,7 @@ export const FEATURES: Feature[] = [
 
 export const FEATURE_CATEGORY_LABEL: Record<string, string> = {
   orders: 'الأوردرات',
-  visibility: '👁 الظهور',
+  visibility: 'الظهور',
   content: ' المحتوى',
   insights: ' البيانات',
 }
