@@ -119,9 +119,9 @@ export default function ContactsEditor({ initial = [] }: { initial?: Contact[] }
       <div className="ced__quick">
         <span className="ced__quick-label">إضافة سريعة:</span>
         <div className="ced__quick-btns">
-          <button type="button" className="ced__quick-btn" onClick={() => add('phone')}>📞 فون</button>
-          <button type="button" className="ced__quick-btn" onClick={() => add('whatsapp')}>💬 واتساب</button>
-          <button type="button" className="ced__quick-btn" onClick={() => add('facebook')}>📘 فيسبوك</button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('phone')}>فون</button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('whatsapp')}>واتساب</button>
+          <button type="button" className="ced__quick-btn" onClick={() => add('facebook')}>فيسبوك</button>
           <button type="button" className="ced__quick-btn" onClick={() => add('instagram')}>📷 إنستجرام</button>
           <button type="button" className="ced__quick-btn" onClick={() => add('website')}>🌐 موقع</button>
           <button type="button" className="ced__quick-btn" onClick={() => add('email')}>✉️ إيميل</button>

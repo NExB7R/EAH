@@ -48,7 +48,7 @@ const TYPE_HUE: Record<BusinessType, string> = {
   restaurant: '#FF7A3D',
   pharmacy: '#C084FC',
   delivery_office: '#E8C79A',
-  supermarket: '🛒',
+  supermarket: '',
 }
 
 export default function ExploreCard({ business, index }: { business: Business; size?: string; index?: number }) {

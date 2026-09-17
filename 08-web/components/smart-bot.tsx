@@ -16,10 +16,10 @@ const GREETING: Msg = {
 }
 
 const QUICK = [
-  { label: '🍽️ عايز أكل', q: 'عايز أكل' },
-  { label: '💊 صيدلية قريبة', q: 'صيدلية قريبة' },
-  { label: '🛒 ماركت', q: 'ماركت' },
-  { label: '💬 كلموني', q: 'كلموني' },
+  { label: 'عايز أكل', q: 'عايز أكل' },
+  { label: 'صيدلية قريبة', q: 'صيدلية قريبة' },
+  { label: 'ماركت', q: 'ماركت' },
+  { label: 'كلموني', q: 'كلموني' },
 ]
 
 export default function SmartBot() {

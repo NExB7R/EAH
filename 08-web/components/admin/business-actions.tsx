@@ -43,7 +43,7 @@ export default function BusinessActions({ id, slug, is_featured, is_published, i
         </button>
 
         <button type="button" className={`admin-btn admin-btn--sm ${is_open ? '' : 'admin-btn--ghost'}`} onClick={() => toggle('is_open')} disabled={pending}>
-          {is_open ? '✅ مفتوح' : '🚪 افتح'}
+          {is_open ? 'مفتوح' : '🚪 افتح'}
         </button>
 
         <button type="button" className="admin-btn admin-btn--sm admin-btn--danger" onClick={() => setShowDelete(true)} disabled={pending}>

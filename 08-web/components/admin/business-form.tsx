@@ -89,7 +89,7 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
   }
 
   const err = (f: string) => state.errors?.[f]?.[0]
-  // ✅ folder ثابت خلال عمر الفورم
+  // folder ثابت خلال عمر الفورم
   const folder = useMemo(
     () => (businessId ? `biz-${businessId}` : `new-${Date.now()}`),
     [businessId]

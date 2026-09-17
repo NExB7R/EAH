@@ -38,7 +38,7 @@ export default function MerchantReplyForm({ reviewId, existingReply }: { reviewI
   if (saved) {
     return (
       <div className="mrf-existing">
-        <span className="mrf-existing__label">💬 ردّك:</span>
+        <span className="mrf-existing__label">ردّك:</span>
         <p className="mrf-existing__text">{saved}</p>
       </div>
     )
@@ -47,7 +47,7 @@ export default function MerchantReplyForm({ reviewId, existingReply }: { reviewI
   if (!open) {
     return (
       <button type="button" className="mrf-trigger" onClick={() => setOpen(true)}>
-        💬 رد على التقييم
+        رد على التقييم
       </button>
     )
   }
