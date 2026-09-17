@@ -65,8 +65,8 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <FloatingCapsuleHeader />
-      {hasId && <BusinessOwnerTrial businessId={business.businessId!} />
-      {hasId && <WhatsAppOrdersToggle businessId={business.businessId!} initialEnabled={business.acceptsWhatsappOrders ?? false} />}}
+      {hasId && <BusinessOwnerTrial businessId={business.businessId!} />}
+      {hasId && <WhatsAppOrdersToggle businessId={business.businessId!} initialEnabled={business.acceptsWhatsappOrders ?? false} />}
       <BackToTop />
       {hasId && <PageViewTracker businessId={business.businessId!} />}
 
