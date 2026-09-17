@@ -19,8 +19,6 @@ export default function BusinessShare({ slug, name }: { slug: string; name: stri
   const socials = [
     { key: 'wa', label: 'واتساب', emoji: '💬', href: `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}` },
     { key: 'fb', label: 'فيسبوك', emoji: '📘', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` },
-    { key: 'tg', label: 'تليجرام', emoji: '✈️', href: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}` },
-    { key: 'tw', label: 'تويتر', emoji: '🐦', href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}` },
   ]
 
   return (

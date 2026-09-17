@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { requireMerchantForBusiness } from '@/lib/admin/merchant-guard'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import MerchantInsights from '@/components/merchant-insights'
 import { getBusinessStats, getBusinessReviews } from '@/lib/reviews'
 
 export const dynamic = 'force-dynamic'
@@ -140,6 +141,13 @@ return (
             <span style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5' }}>📦 إجمالي الأوردرات</span>
           </div>
         </div>
+              <MerchantInsights
+          daily={[]}
+          totalViews={viewsCount ?? 0}
+          totalReveals={revealsCount ?? 0}
+          totalOrders={totalOrders ?? 0}
+          avgRating={stats.avg_rating ?? 0}
+        />
       </main>
 
       <style>{`

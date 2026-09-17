@@ -7,7 +7,7 @@ import './about.css'
 
 export const metadata = {
   title: 'من إحنا',
-  description: 'EAH — حكاية منصة اكتشاف محلية بتحب المكان اللي فيه.',
+  description: 'EAH — كل حاجة حواليك في مكان واحد.',
 }
 
 const HOOKS = [
@@ -65,12 +65,12 @@ export default function AboutPage() {
           <div className="ab__hero-glow" aria-hidden />
           <span className="ab__kicker">من إحنا</span>
           <h1 className="ab__title">
-            منصة اكتشاف محلية،
+            كل حاجة محتاجها،
             <br />
-            <span className="ab__title-accent">بتحب المكان اللي فيه</span>
+            <span className="ab__title-accent">في مكان واحد</span>
           </h1>
           <p className="ab__lead">
-            من مطعم السكة.. للصيدلية اللي جوه الحارة..<br/>
+            من مطعم السكة — للصيدلية اللي في الحارة.<br/>
             EAH بتجمع كل حاجة حواليك في مكان واحد.
           </p>
           <div className="ab__hero-cta">
@@ -93,12 +93,12 @@ export default function AboutPage() {
         <section className="ab__section">
           <header className="ab__section-head">
             <span className="ab__section-kicker">الحكاية</span>
-            <h2 className="ab__section-title">بدأنا من سؤال بسيط</h2>
+            <h2 className="ab__section-title">سؤال بسيط.. حكاية كبيرة</h2>
           </header>
           <div className="ab__story">
-            <p>إيه أفضل حاجة قريبة مني دلوقتي؟</p>
-            <p>مفيش إجابة سهلة كانت — ولحد دلوقتي.</p>
-            <p>EAH بتجاوب على السؤال ده — بسرعة، وبدون لف ودوران.</p>
+            <p>إيه أقرب حاجة ليّا دلوقتي؟</p>
+            <p>مفيش إجابة كانت سهلة.</p>
+            <p>EAH جت تجاوب — بسرعة. وبدون لف.</p>
           </div>
         </section>
 
