@@ -91,3 +91,13 @@
   .nw { padding: 90px 16px 40px; }
   .nw__grid { grid-template-columns: 1fr; }
 }
+
+/* Fresh green theme — for /new */
+.nw-theme {
+  background: linear-gradient(135deg, #34D399, #10B981);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  font-weight: 900;
+}
+.nw__title { color: #F4F2FA; }

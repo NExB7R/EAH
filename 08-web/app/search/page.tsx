@@ -7,6 +7,7 @@ import BackToTop from '@/components/back-to-top'
 import SearchBar from '@/components/search-bar'
 import ExploreCard from '@/components/explore-card'
 import './search.css'
+import FoodFilterBar from '@/components/food-filter-bar'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'البحث' }
@@ -53,6 +54,7 @@ export default async function SearchPage({
             <EahLogo size="md" variant="full" href="/" />
           </div>
           <span className="sr__kicker">بحث</span>
+        <FoodFilterBar value={null} onChange={() => {}} />
           <h1 className="sr__title">🔍 البحث</h1>
           <p className="sr__sub">دوّر على أي مكان في شبين القناطر</p>
           <div className="sr__search-wrap">
