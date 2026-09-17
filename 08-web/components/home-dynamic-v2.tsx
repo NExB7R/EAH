@@ -8,6 +8,7 @@ import HomeHero from '@/components/home-hero'
 import SectionSliderV2 from '@/components/section-slider-v2'
 import ExploreCardV5 from '@/components/explore-card-v5'
 import VisitorValue from '@/components/visitor-value'
+import './home-dynamic-v2.css'
 import AdSlot from '@/components/ads/ad-slot'
 import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
@@ -129,42 +130,7 @@ export default async function HomeDynamicV2() {
         </div>
       </section>
 
-      <style>{`
-        .home-merchant-cta {
-          max-width: 720px;
-          margin: 48px auto;
-          padding: 32px 24px;
-          border-radius: 24px;
-          text-align: center;
-          background: linear-gradient(135deg, rgba(232, 199, 154, 0.1), rgba(168, 85, 247, 0.05));
-          border: 1px solid rgba(232, 199, 154, 0.3);
-        }
-        .home-merchant-cta h2 {
-          font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-          font-size: 1.35rem;
-          font-weight: 900;
-          color: #F4F2FA;
-          margin: 0 0 8px;
-        }
-        .home-merchant-cta p {
-          font-family: var(--font-cairo, system-ui);
-          font-size: 0.88rem;
-          color: #C9C2DB;
-          margin: 0 0 18px;
-          line-height: 1.7;
-        }
-        .home-merchant-cta__btn {
-          display: inline-block;
-          padding: 12px 28px;
-          border-radius: 12px;
-          background: linear-gradient(135deg, #E8C79A, #A67C52);
-          color: #1A0F0A;
-          font-weight: 900;
-          font-size: 0.9rem;
-          text-decoration: none;
-          box-shadow: 0 8px 22px rgba(232, 199, 154, 0.4);
-        }
-      `}</style>
+      
     </>
   )
 }
