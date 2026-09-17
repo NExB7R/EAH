@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import BusinessForm from '@/components/admin/business-form'
+import CommissionControl from '@/components/admin/commission-control'
 import { updateBusiness } from '../../actions'
 
 export const metadata = { title: 'تعديل مكان' }
@@ -85,6 +86,7 @@ export default async function EditBusinessPage({
           is_published: biz.is_published,
         }}
       />
+        <CommissionControl businessId={bizId} />
     </>
   )
 }
