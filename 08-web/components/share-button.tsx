@@ -49,7 +49,7 @@ export default function ShareButton() {
             />
             <div className="share-modal__actions">
               <button type="button" onClick={copy} className="share-modal__btn">
-                📋 نسخ الرابط
+                نسخ الرابط
               </button>
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`}
@@ -57,7 +57,7 @@ export default function ShareButton() {
                 rel="noreferrer"
                 className="share-modal__btn share-modal__btn--wa"
               >
-                💬 واتساب
+                واتساب
               </a>
               <a
                 href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`}
@@ -65,7 +65,7 @@ export default function ShareButton() {
                 rel="noreferrer"
                 className="share-modal__btn share-modal__btn--fb"
               >
-                📘 فيسبوك
+                فيسبوك
               </a>
               <a
                 href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`}

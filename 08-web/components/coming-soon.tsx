@@ -84,7 +84,7 @@ export default function ComingSoon() {
           rel="noreferrer"
           className="cs__cta"
         >
-          💬 تابع واتساب
+          تابع واتساب
         </a>
       </div>
     </section>

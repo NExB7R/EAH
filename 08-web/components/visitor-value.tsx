@@ -6,7 +6,7 @@ import { IcRestaurant, IcSparkles, IcMarket, IcStore } from './eah-icons'
 const CARDS = [
   {
     key: 'discover',
-    emoji: '🔍',
+    emoji: '',
     title: 'اكتشف اللي حواليك',
     body: 'مطاعم، صيدليات، ماركت، وتوصيل — كل ده على بُعد خطوة',
     cta: { label: 'اكتشف', href: '/explore' },
