@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-browser'
 import './change-password.css'
+import { IcEye, IcBan } from '@/components/eah-icons'
 
 function getStrength(pw: string) {
   let s = 0
@@ -94,7 +95,7 @@ export default function ChangePasswordPage() {
             <label htmlFor="current" className="cpw__label">كلمة المرور الحالية</label>
             <div className="cpw__input-wrap">
               <input id="current" type={showCur?'text':'password'} value={current} onChange={e=>setCurrent(e.target.value)} autoComplete="current-password" placeholder="••••••••" className="cpw__input cpw__input--with-btn" required />
-              <button type="button" className="cpw__toggle" onClick={()=>setShowCur(v=>!v)} tabIndex={-1}>{showCur?'🙈':'👁️'}</button>
+              <button type="button" className="cpw__toggle" onClick={()=>setShowCur(v=>!v)} tabIndex={-1}>{showCur?<IcBan />:<IcEye />}</button>
             </div>
           </div>
 
@@ -102,7 +103,7 @@ export default function ChangePasswordPage() {
             <label htmlFor="next" className="cpw__label">كلمة المرور الجديدة</label>
             <div className="cpw__input-wrap">
               <input id="next" type={showNew?'text':'password'} value={next} onChange={e=>setNext(e.target.value)} autoComplete="new-password" placeholder="8 أحرف على الأقل" className="cpw__input cpw__input--with-btn" required minLength={8} />
-              <button type="button" className="cpw__toggle" onClick={()=>setShowNew(v=>!v)} tabIndex={-1}>{showNew?'🙈':'👁️'}</button>
+              <button type="button" className="cpw__toggle" onClick={()=>setShowNew(v=>!v)} tabIndex={-1}>{showNew?<IcBan />:<IcEye />}</button>
             </div>
             {next.length > 0 && (
               <div className="cpw__strength">
@@ -116,7 +117,7 @@ export default function ChangePasswordPage() {
             <label htmlFor="confirm" className="cpw__label">تأكيد كلمة المرور</label>
             <div className="cpw__input-wrap">
               <input id="confirm" type={showConf?'text':'password'} value={confirm} onChange={e=>setConfirm(e.target.value)} autoComplete="new-password" placeholder="كرر كلمة المرور" className={`cpw__input cpw__input--with-btn ${mismatch?'cpw__input--error':''}`} required />
-              <button type="button" className="cpw__toggle" onClick={()=>setShowConf(v=>!v)} tabIndex={-1}>{showConf?'🙈':'👁️'}</button>
+              <button type="button" className="cpw__toggle" onClick={()=>setShowConf(v=>!v)} tabIndex={-1}>{showConf?<IcBan />:<IcEye />}</button>
             </div>
             {mismatch && <span className="cpw__error">كلمتا المرور مش متطابقتين</span>}
           </div>

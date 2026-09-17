@@ -6,6 +6,7 @@ import SiteFooter from '@/components/site-footer'
 import { MarkAllReadButton, DeleteNotifButton } from './notif-actions'
 import './notifications.css'
 import EahLogo from '@/components/eah-logo'
+import { IcBan } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الإشعارات' }
@@ -20,12 +21,12 @@ type Notif = {
   created_at: string
 }
 
-const TYPE_META: Record<string, { emoji: string; label: string; color: string }> = {
+const TYPE_META: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
   review:       { emoji: '', label: 'تقييم',   color: '#FBBF24' },
   reply:        { emoji: '', label: 'رد',      color: '#A855F7' },
   offer:        { emoji: '', label: 'عرض',     color: '#F97316' },
   system:       { emoji: '⚙️', label: 'نظام',   color: '#6B6880' },
-  ban:          { emoji: '🚫', label: 'حظر',     color: '#EF4444' },
+  ban:          { icon: <IcBan />, label: 'حظر',     color: '#EF4444' },
   points:       { emoji: '', label: 'نقاط',   color: '#FBBF24' },
   welcome:      { emoji: '', label: 'ترحيب',  color: '#C084FC' },
   reveal:       { emoji: '', label: 'كشف رقم', color: '#A855F7' },
@@ -83,7 +84,7 @@ export default async function NotificationsPage() {
               const content = (
                 <>
                   <span className="nt-item__emoji" style={{ borderColor: `${meta.color}44`, background: `${meta.color}15` }}>
-                    {meta.emoji}
+                    {meta.icon}
                   </span>
                   <div className="nt-item__body">
                     <div className="nt-item__head">

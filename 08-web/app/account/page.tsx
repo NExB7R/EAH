@@ -8,6 +8,7 @@ import RoyalAvatar from '@/components/royal-avatar'
 import EnablePushButton from '@/components/enable-push-button'
 import '@/components/royal-avatar.css'
 import './account.css'
+import { IcBan } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'حسابي' }
@@ -85,7 +86,7 @@ export default async function AccountPage() {
               <span className="acc-chip acc-chip--role">{roleLabel}</span>
               {isPremium && <span className="acc-chip acc-chip--premium">مميز</span>}
               {isVerified && <span className="acc-chip acc-chip--verified">✓ موثّق</span>}
-              {isBanned && <span className="acc-chip acc-chip--banned">🚫 محظور</span>}
+              {isBanned && <span className="acc-chip acc-chip--banned"><IcBan /> محظور</span>}
             </div>
 
             {profile?.bio && <p className="acc-hero__bio">{profile.bio}</p>}
@@ -98,7 +99,7 @@ export default async function AccountPage() {
 
         {isBanned && (
           <div className="acc-ban">
-            <strong className="acc-ban__title">🚫 حسابك محظور مؤقتًا</strong>
+            <strong className="acc-ban__title"><IcBan /> حسابك محظور مؤقتًا</strong>
             <p className="acc-ban__text">السبب: {profile?.ban_reason ?? 'غير محدد'}</p>
             <p className="acc-ban__text">
               ينتهي في: {new Date(profile!.banned_until!).toLocaleDateString('ar-EG')}

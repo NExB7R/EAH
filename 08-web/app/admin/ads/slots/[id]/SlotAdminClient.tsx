@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
+import { IcBan, IcEye } from '@/components/eah-icons'
 
 type Ad = {
   id: string
@@ -70,7 +71,7 @@ export default function SlotAdminClient({ slot, ads }: { slot: any; ads: Ad[] })
                 {a.description && <p className="slot-ad__desc">{a.description}</p>}
                 <div className="slot-ad__meta">
                   <span className={`slot-ad__status is-${a.status}`}>{STATUS_LABEL[a.status]}</span>
-                  <span>👁 {a.impressions}</span>
+                  <span><IcEye /> {a.impressions}</span>
                   <span>🖱 {a.clicks}</span>
                 </div>
               </div>
@@ -78,7 +79,7 @@ export default function SlotAdminClient({ slot, ads }: { slot: any; ads: Ad[] })
                 {a.status === 'pending' && (
                   <>
                     <button type="button" disabled={busy === a.id} onClick={() => setStatus(a.id, 'active')} className="slot-ad__btn slot-ad__btn--ok">✅ موافقة</button>
-                    <button type="button" disabled={busy === a.id} onClick={() => setStatus(a.id, 'rejected')} className="slot-ad__btn slot-ad__btn--no">🚫 رفض</button>
+                    <button type="button" disabled={busy === a.id} onClick={() => setStatus(a.id, 'rejected')} className="slot-ad__btn slot-ad__btn--no"><IcBan /> رفض</button>
                   </>
                 )}
                 {a.status === 'active' && (

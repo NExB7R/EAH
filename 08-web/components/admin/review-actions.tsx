@@ -1,6 +1,7 @@
 'use client'
 import { useTransition } from 'react'
 import { setReviewStatus, deleteReview } from '@/app/admin/reviews/actions'
+import { IcEye } from '@/components/eah-icons'
 
 export default function ReviewActions({
   reviewId,
@@ -35,7 +36,7 @@ export default function ReviewActions({
       )}
       {status !== 'hidden' && (
         <button type="button" className="admin-btn admin-btn--sm" onClick={() => set('hidden')} disabled={pending}>
-          👁 إخفاء
+          <IcEye /> إخفاء
         </button>
       )}
       {status !== 'rejected' && (

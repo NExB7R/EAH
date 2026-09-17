@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './enable-push-button.css'
+import { IcBan } from '@/components/eah-icons'
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
@@ -87,7 +88,7 @@ export default function EnablePushButton() {
     <div className="epb epb--off"><span>📵</span> إشعارات Push مش مدعومة في المتصفح</div>
   )
   if (status === 'denied') return (
-    <div className="epb epb--denied"><span>🚫</span> الإشعارات محظورة — فعّلها من إعدادات المتصفح</div>
+    <div className="epb epb--denied"><span><IcBan /></span> الإشعارات محظورة — فعّلها من إعدادات المتصفح</div>
   )
   if (status === 'enabled') return (
     <div className="epb epb--on">

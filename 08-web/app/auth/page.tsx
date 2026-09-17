@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './auth.css'
 import EahLogo from '@/components/eah-logo'
+import { IcEye, IcBan } from '@/components/eah-icons'
 
 function normalizeEgyptPhone(value: string) {
   const raw = value.trim().replace(/[\s()-]/g, '')
@@ -271,7 +272,7 @@ export default function AuthPage() {
                   aria-label={showPassword ? 'إخفاء' : 'إظهار'}
                   tabIndex={-1}
                 >
-                  {showPassword ? '🙈' : '👁️'}
+                  {showPassword ? <IcBan /> : <IcEye />}
                 </button>
               </div>
             </div>
@@ -297,7 +298,7 @@ export default function AuthPage() {
                     aria-label={showConfirm ? 'إخفاء' : 'إظهار'}
                     tabIndex={-1}
                   >
-                    {showConfirm ? '🙈' : '👁️'}
+                    {showConfirm ? <IcBan /> : <IcEye />}
                   </button>
                 </div>
               </div>

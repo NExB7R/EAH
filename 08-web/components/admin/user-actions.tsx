@@ -1,6 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { banUser, unbanUser, setUserRole } from '@/app/admin/users/actions'
+import { IcBan } from '@/components/eah-icons'
 
 type Props = {
   userId: string
@@ -65,7 +66,7 @@ export default function UserActions({ userId, isBanned, currentRole, bannedUntil
           onClick={() => setShowBan(true)}
           disabled={pending}
         >
-          🚫 حظر
+          <IcBan /> حظر
         </button>
       )}
 
@@ -108,7 +109,7 @@ export default function UserActions({ userId, isBanned, currentRole, bannedUntil
               zIndex: 101, boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
             }}
           >
-            <h3 style={{ margin: '0 0 12px', color: 'var(--eah-text)' }}>🚫 حظر المستخدم</h3>
+            <h3 style={{ margin: '0 0 12px', color: 'var(--eah-text)' }}><IcBan /> حظر المستخدم</h3>
 
             <label className="admin-field__label" style={{ display: 'block', marginBottom: 6 }}>المدة</label>
             <div style={{ display: 'flex', gap: 6, marginBottom: 14, flexWrap: 'wrap' }}>
@@ -136,7 +137,7 @@ export default function UserActions({ userId, isBanned, currentRole, bannedUntil
             <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
               <button type="button" className="admin-btn admin-btn--ghost" onClick={() => setShowBan(false)}>إلغاء</button>
               <button type="button" className="admin-btn admin-btn--danger" onClick={handleBan} disabled={pending}>
-                {pending ? 'جاري...' : '🚫 حظر'}
+                {pending ? 'جاري...' : <><IcBan /> حظر</>}
               </button>
             </div>
           </div>

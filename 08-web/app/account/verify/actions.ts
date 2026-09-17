@@ -48,7 +48,7 @@ export async function submitVerification(formData: FormData) {
       admins.map(a => ({
         user_id: a.user_id,
         type: 'verification',
-        title: '📋 طلب توثيق جديد',
+        title: 'طلب توثيق جديد',
         body: `في طلب توثيق جديد محتاج مراجعة`,
         link: '/admin/verifications',
       }))

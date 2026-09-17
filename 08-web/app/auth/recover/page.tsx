@@ -3,6 +3,7 @@ import { FormEvent, useState } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-browser'
 import './recover.css'
+import { IcEye, IcBan } from '@/components/eah-icons'
 
 function normalizeEgyptPhone(value: string) {
   const raw = value.trim().replace(/[\s()-]/g, '')
@@ -137,7 +138,7 @@ export default function RecoverPage() {
                   onClick={() => setShowPw(v => !v)}
                   tabIndex={-1}
                 >
-                  {showPw ? '🙈' : '👁️'}
+                  {showPw ? <IcBan /> : <IcEye />}
                 </button>
               </div>
             </div>

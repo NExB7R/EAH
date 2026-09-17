@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import './orders.css'
+import { IcBan } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'طلباتي' }
@@ -129,7 +130,7 @@ export default async function AccountOrdersPage() {
                       {o.status === 'delivered' && 'تم التسليم'}
                       {o.status === 'accepted' && 'المطعم قبل طلبك'}
                       {o.status === 'rejected' && 'المطعم رفض — جرّب مكان تاني'}
-                      {o.status === 'cancelled' && '🚫 ملغي'}
+                      {o.status === 'cancelled' && <><IcBan /> ملغي</>}
                       {o.status === 'seen' && 'المطعم شاف طلبك'}
                       {o.status === 'sent' && 'في انتظار رد المطعم'}
                     </span>

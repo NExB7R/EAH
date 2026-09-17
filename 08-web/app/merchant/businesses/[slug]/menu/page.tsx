@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import MenuEditor from './MenuEditor'
+import { IcList } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إدارة المنيو' }
@@ -47,7 +48,7 @@ export default async function MenuPage({ params }: { params: Promise<{ slug: str
           <Link href="/merchant" className="mm__back">← لوحة النشاط</Link>
           <div>
             <span className="mm__kicker">إدارة المنيو</span>
-            <h1 className="mm__title">📋 منيو {biz.name}</h1>
+            <h1 className="mm__title"><IcList /> منيو {biz.name}</h1>
             <p className="mm__sub">
               ضيف الأصناف بالفئات والأسعار — تظهر للعملاء في صفحة النشاط
             </p>

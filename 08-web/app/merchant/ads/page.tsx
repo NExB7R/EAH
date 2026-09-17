@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import './ads-list.css'
+import { IcEye } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إعلاناتي' }
@@ -59,7 +60,7 @@ export default async function MyAdsPage() {
                   <span className="mad__slot">{(a as any).slot?.name_ar ?? '—'}</span>
                   {a.description && <p className="mad__desc">{a.description}</p>}
                   <div className="mad__stats">
-                    <span>👁 {a.impressions}</span>
+                    <span><IcEye /> {a.impressions}</span>
                     <span>🖱 {a.clicks}</span>
                     {a.ends_at && <span>📅 ينتهي: {new Date(a.ends_at).toLocaleDateString('ar-EG')}</span>}
                   </div>

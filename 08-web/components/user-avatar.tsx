@@ -2,6 +2,7 @@
 import { IconUser, IconBell } from './neon-icons'
 import { getAvatar, roleBadge } from '@/lib/profile-presets'
 import './user-avatar.css'
+import { IcBan } from '@/components/eah-icons'
 
 type UserAvatarProps = {
   name?: string
@@ -103,7 +104,7 @@ export default function UserAvatar({
 
       {isBanned && (
         <span className="user-avatar__ban" aria-label={`محظور لمدة ${banDays} يوم`}>
-          <span className="user-avatar__ban-icon">🚫</span>
+          <span className="user-avatar__ban-icon"><IcBan /></span>
           <span className="user-avatar__ban-days">{banDays}ي</span>
         </span>
       )}

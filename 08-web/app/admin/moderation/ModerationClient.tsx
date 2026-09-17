@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
+import { IcBan } from '@/components/eah-icons'
 
 type Flagged = {
   id: string
@@ -56,7 +57,7 @@ export default function ModerationClient({ flagged }: { flagged: Flagged[] }) {
               disabled={busy === r.id}
               onClick={() => action(r.id, 'hide')}
             >
-              🚫 اخفي
+              <IcBan /> اخفي
             </button>
           </footer>
         </article>

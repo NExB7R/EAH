@@ -1,6 +1,7 @@
 'use client'
 import { useState, useTransition } from 'react'
 import './menu.css'
+import { IcBan, IcList, IcEye } from '@/components/eah-icons'
 
 type Item = {
   id?: string
@@ -134,7 +135,7 @@ export default function MenuEditor({
 
       {items.length === 0 ? (
         <div className="me__empty">
-          <span className="me__empty-emoji">📋</span>
+          <span className="me__empty-emoji"><IcList /></span>
           <h2 className="me__empty-title">لسه مفيش أصناف</h2>
           <p className="me__empty-text">
             اضغط "إضافة صنف" وأضف أول عنصر في المنيو
@@ -164,7 +165,7 @@ export default function MenuEditor({
                     </div>
                     <div className="me__item-actions">
                       <button type="button" className="me__btn" onClick={() => toggleAvailability(item)}>
-                        {item.is_available ? '👁' : '🚫'}
+                        {item.is_available ? <IcEye /> : <IcBan />}
                       </button>
                       <button type="button" className="me__btn" onClick={() => openEdit(item)}></button>
                       <button type="button" className="me__btn me__btn--danger" onClick={() => item.id && remove(item.id)}>🗑</button>

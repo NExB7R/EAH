@@ -6,6 +6,7 @@ import SiteFooter from '@/components/site-footer'
 import { getMerchantContext } from '@/lib/admin/merchant-guard'
 import QRCode from 'qrcode'
 import './qr.css'
+import { IcEye } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'QR Code' }
@@ -44,7 +45,7 @@ export default async function MerchantQRPage() {
               ⬇️ تحميل SVG
             </a>
             <Link href={`/businesses/${biz.slug}`} className="qr__btn">
-              👁️ عرض الصفحة
+              <IcEye /> عرض الصفحة
             </Link>
           </div>
           <p className="qr__hint">

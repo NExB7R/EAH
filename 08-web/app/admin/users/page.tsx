@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import UserActions from '@/components/admin/user-actions'
 import './users.css'
+import { IcBan } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'المستخدمين' }
@@ -192,7 +193,7 @@ export default async function UsersPage({
                       <span className="usrs-chip usrs-chip--verified">✓ موثّق</span>
                     )}
                     {banned && (
-                      <span className="usrs-chip usrs-chip--banned">🚫 محظور</span>
+                      <span className="usrs-chip usrs-chip--banned"><IcBan /> محظور</span>
                     )}
                     <span className="usrs-chip">
                       📅 {new Date(p.created_at).toLocaleDateString('ar-EG')}

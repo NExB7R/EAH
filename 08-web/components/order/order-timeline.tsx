@@ -1,5 +1,6 @@
 'use client'
 import './order-timeline.css'
+import { IcBan, IcEye } from '@/components/eah-icons'
 
 type HistoryItem = {
   id: string
@@ -9,13 +10,13 @@ type HistoryItem = {
   created_at: string
 }
 
-const LABELS: Record<string, { emoji: string; text: string }> = {
+const LABELS: Record<string, { icon: React.ReactNode; text: string }> = {
   sent: { emoji: '📤', text: 'أُرسل' },
-  seen: { emoji: '👁', text: 'شافه المطعم' },
+  seen: { icon: <IcEye />, text: 'شافه المطعم' },
   accepted: { emoji: '✅', text: 'قبل المطعم' },
   rejected: { emoji: '❌', text: 'رفض المطعم' },
   delivered: { emoji: '📦', text: 'تم التسليم' },
-  cancelled: { emoji: '🚫', text: 'ملغي' },
+  cancelled: { icon: <IcBan />, text: 'ملغي' },
 }
 
 export default function OrderTimeline({ items }: { items: HistoryItem[] }) {
@@ -30,7 +31,7 @@ export default function OrderTimeline({ items }: { items: HistoryItem[] }) {
         const isLast = i === items.length - 1
         return (
           <li key={item.id} className={`otl__item ${isLast ? 'otl__item--current' : ''}`}>
-            <span className="otl__dot" aria-hidden>{meta.emoji}</span>
+            <span className="otl__dot" aria-hidden>{meta.icon}</span>
             <div className="otl__body">
               <strong className="otl__label">{meta.text}</strong>
               <span className="otl__time">

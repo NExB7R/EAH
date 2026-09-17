@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
+import { IcBan } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'العروض' }
@@ -98,7 +99,7 @@ export default async function OffersPage({
                       ) : o.is_published ? (
                         <span className="admin-biz__badge">⏰ مش نشط الآن</span>
                       ) : (
-                        <span className="admin-biz__badge">🚫 غير منشور</span>
+                        <span className="admin-biz__badge"><IcBan /> غير منشور</span>
                       )}
                       {o.ends_at && (
                         <span className="admin-biz__badge">

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
+import { IcBan } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'كل العروض' }
@@ -98,7 +99,7 @@ export default async function AllOffersPage() {
                     ) : o.is_published ? (
                       <span className="offer-card__badge offer-card__badge--pending">⏰ مش نشط</span>
                     ) : (
-                      <span className="offer-card__badge offer-card__badge--off">🚫 غير منشور</span>
+                      <span className="offer-card__badge offer-card__badge--off"><IcBan /> غير منشور</span>
                     )}
                   </div>
 

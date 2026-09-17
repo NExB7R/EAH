@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import './security.css'
+import { IcBan, IcList } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الأمان' }
@@ -87,7 +88,7 @@ export default async function AdminSecurityPage() {
           <span className="sec__kpi-label">موثّق</span>
         </div>
         <div className={`sec__kpi ${(bannedUsers ?? 0) > 0 ? 'sec__kpi--warn' : ''}`}>
-          <span className="sec__kpi-emoji">🚫</span>
+          <span className="sec__kpi-emoji"><IcBan /></span>
           <span className="sec__kpi-val">{bannedUsers ?? 0}</span>
           <span className="sec__kpi-label">محظور</span>
         </div>
@@ -102,7 +103,7 @@ export default async function AdminSecurityPage() {
           <span className="sec__kpi-label">طلبات تعديل</span>
         </div>
         <div className="sec__kpi">
-          <span className="sec__kpi-emoji">📋</span>
+          <span className="sec__kpi-emoji"><IcList /></span>
           <span className="sec__kpi-val">{audit24h ?? 0}</span>
           <span className="sec__kpi-label">أحداث 24h</span>
         </div>

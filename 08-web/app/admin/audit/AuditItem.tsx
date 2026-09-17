@@ -24,7 +24,7 @@ const ACTION_LABEL: Record<string, string> = {
   'subscription.rejected': 'رفض اشتراك',
   'subscription.cancelled': '⏸ إلغاء اشتراك',
   'subscription.expired': '⏹ انتهاء اشتراك',
-  'user.ban': '🚫 حظر مستخدم',
+  'user.ban': 'حظر مستخدم',
   'user.unban': 'فك حظر',
   'user.role_change': '🎭 تغيير دور',
   'review.approve': 'اعتماد تقييم',

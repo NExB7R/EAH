@@ -1,15 +1,16 @@
 'use client'
 import { useState, useTransition } from 'react'
 import { updateOrderStatus } from '../actions'
+import { IcBan, IcEye } from '@/components/eah-icons'
 
 type Status = 'sent' | 'seen' | 'accepted' | 'rejected' | 'delivered' | 'cancelled'
 
 const ACTIONS: { key: Status; label: string; emoji: string; variant: string }[] = [
-  { key: 'seen', label: 'شفته', emoji: '👁', variant: 'ghost' },
+  { key: 'seen', label: 'شفته', icon: <IcEye />, variant: 'ghost' },
   { key: 'accepted', label: 'قبلت', emoji: '✅', variant: 'primary' },
   { key: 'delivered', label: 'تم التسليم', emoji: '📦', variant: 'primary' },
   { key: 'rejected', label: 'رفضت', emoji: '✖', variant: 'danger' },
-  { key: 'cancelled', label: 'ملغي', emoji: '🚫', variant: 'ghost' },
+  { key: 'cancelled', label: 'ملغي', icon: <IcBan />, variant: 'ghost' },
 ]
 
 export default function OrderStatusButtons({
@@ -58,7 +59,7 @@ export default function OrderStatusButtons({
           onClick={() => run(a.key)}
           disabled={pending}
         >
-          {a.emoji} {a.label}
+          {a.icon} {a.label}
         </button>
       ))}
       {msg && <span className="osb__msg">{msg}</span>}
