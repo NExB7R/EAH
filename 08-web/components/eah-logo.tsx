@@ -11,10 +11,10 @@ type Props = {
 }
 
 const SIZE_MAP = {
-  sm: { word: 88,  crown: 30, topRatio: -0.70, restLeft: 0 },
-  md: { word: 130, crown: 42, topRatio: -0.70, restLeft: 2 },
-  lg: { word: 180, crown: 58, topRatio: -0.70, restLeft: 4 },
-  xl: { word: 240, crown: 78, topRatio: -0.70, restLeft: 6 },
+  sm: { word: 88,  crown: 30, topRatio: -0.55, restLeft: 0 },
+  md: { word: 130, crown: 42, topRatio: -0.55, restLeft: 2 },
+  lg: { word: 180, crown: 58, topRatio: -0.55, restLeft: 4 },
+  xl: { word: 240, crown: 78, topRatio: -0.55, restLeft: 6 },
 }
 
 export default function EahLogo({
