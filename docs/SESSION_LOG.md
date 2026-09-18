@@ -178,3 +178,7 @@
 ### 2026-09-18 20:58 UTC — v1.1.1
 - **Action:** feat: follows + coupons + loyalty + near-me + voice search + smart arabic
 - **Branch:** ui-onlook
+
+### 2026-09-18 21:11 UTC — v1.1.2
+- **Action:** fix: split coupon types from server-only lib (client build error)
+- **Branch:** ui-onlook

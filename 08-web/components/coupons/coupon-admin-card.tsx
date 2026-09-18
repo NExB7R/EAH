@@ -1,8 +1,8 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import type { Coupon } from '@/lib/coupons'
-import { couponLabel } from '@/lib/coupons'
+import type { Coupon } from '@/lib/coupon-types'
+import { couponLabel } from '@/lib/coupon-types'
 
 export default function CouponAdminCard({ coupon, businessName }: { coupon: Coupon; businessName: string }) {
   const router = useRouter()

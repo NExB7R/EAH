@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
-import type { Coupon } from '@/lib/coupons'
-import { couponLabel } from '@/lib/coupons'
+import type { Coupon } from '@/lib/coupon-types'
+import { couponLabel } from '@/lib/coupon-types'
 
 export default function CouponList({ coupons }: { coupons: Coupon[] }) {
   const [copied, setCopied] = useState<string | null>(null)

@@ -289,3 +289,7 @@
 ## v1.1.1 — 2026-09-18
 
 - feat: follows + coupons + loyalty + near-me + voice search + smart arabic
+
+## v1.1.2 — 2026-09-19
+
+- fix: split coupon types from server-only lib (client build error)
