@@ -47,6 +47,7 @@ export async function POST(request: Request) {
 
   try {
     await sendPushToUser(pending.requested_by, {
+      type: 'order_updates',
       title,
       body: pushBody,
       url: '/merchant/pending',

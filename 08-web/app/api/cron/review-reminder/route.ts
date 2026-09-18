@@ -39,6 +39,7 @@ export async function GET(request: Request) {
     try {
       if (order.customer_id) {
         await sendPushToUser(order.customer_id, {
+          type: 'review_replies',
           title: `رأيك يهمنا في ${biz.name}`,
           body: 'قيّم تجربتك واكسب +10 نقاط — دقيقة واحدة وخلّي رأيك يوصل',
           url: `/businesses/${biz.slug}#review`,

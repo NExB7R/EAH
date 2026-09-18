@@ -59,7 +59,7 @@ export async function GET(request: Request) {
     })
 
     try {
-      await sendPushToUser(biz.owner_profile_id, { title, body, url: deepLink })
+      await sendPushToUser(biz.owner_profile_id, { type: 'merchant_subscription', title, body, url: deepLink })
       sent++
     } catch { /* silent */ }
   }

@@ -154,3 +154,7 @@
 ### 2026-09-18 19:52 UTC — v1.1.0
 - **Action:** feat(push): type-based prefs on notifications (merchant orders + reply)
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:54 UTC — v1.1.0
+- **Action:** feat(push): add type to all remaining notifications
+- **Branch:** ui-onlook
