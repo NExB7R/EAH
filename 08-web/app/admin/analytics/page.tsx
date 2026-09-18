@@ -64,6 +64,23 @@ export default async function AnalyticsPage({
     return { label, value: revealMap.get(key) ?? 0 }
   })
 
+  // ─── الزيارات الفريدة اليومية ───
+  const { data: uniqueVisits } = await supabase
+    .from('business_unique_visits')
+    .select('visit_day')
+    .gte('visit_day', since)
+
+  const uniqueVisitMap = new Map<string, number>()
+  ;(uniqueVisits ?? []).forEach(v => {
+    uniqueVisitMap.set(v.visit_day, (uniqueVisitMap.get(v.visit_day) ?? 0) + 1)
+  })
+  const uniqueVisitsData = Array.from({ length: rangeDays }, (_, i) => {
+    const d = new Date(Date.now() - (rangeDays - 1 - i) * 86400000)
+    const key = d.toISOString().slice(0, 10)
+    const label = d.toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' })
+    return { label, value: uniqueVisitMap.get(key) ?? 0 }
+  })
+
   // ─── توزيع حسب النوع ───
   const { data: bizTypes } = await supabase
     .from('businesses')
@@ -148,6 +165,7 @@ return (
           <span className="an__kpi-label">قيد المراجعة</span>
         </div>
         <div className="an__kpi"><span className="an__kpi-emoji"></span><span className="an__kpi-val">{totalReferrals ?? 0}</span><span className="an__kpi-label">إحالة</span></div>
+        <div className="an__kpi an__kpi--accent"><span className="an__kpi-emoji"></span><span className="an__kpi-val">{uniqueVisitsData.reduce((a, b) => a + b.value, 0)}</span><span className="an__kpi-label">زيارات فريدة ({rangeDays}ي)</span></div>
       </div>
 
       <div className="an__charts">
@@ -156,6 +174,9 @@ return (
         </div>
         <div className="an__card">
           <LineChart data={revealsData} color="#C084FC" label="كشوف الأرقام (14 يوم)" />
+        </div>
+        <div className="an__card">
+          <LineChart data={uniqueVisitsData} color="#E8C79A" label="الزيارات الفريدة (يومي)" />
         </div>
         <div className="an__card">
           <BarChart data={typeData} label="الأنشطة حسب النوع" />
