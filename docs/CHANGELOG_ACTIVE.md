@@ -239,3 +239,49 @@
 - README_AI.md (5-min onboarding)
 - docs/COMPETITORS_ANALYSIS.md
 - docs/BIG_PROJECTS_BACKLOG.md
+
+---
+
+## v1.1.0 — 2026-09-18
+
+### Features
+- Cloudinary migration (auto AVIF/WebP compress)
+- Avatar crop + zoom
+- GenderPicker (fixed)
+- Points system: daily login + streak + reviews + unique visits (24h)
+- Admin points management (search by phone + adjust)
+- Audit System: pending_changes + approve/reject + notifications
+- Merchant pending requests page
+- Live polling badge (60s)
+- Analytics: funnel + peak hours + unique visits
+- Notifications: 14 types seed + adaptive prefs
+- Push notifications (admin + merchant)
+
+### UI (2026)
+- Hero: tagline + hook + signature
+- Explore: 3-col grid + views + rating badges
+- Business hero: cover image + open/closed badge
+- Admin KPIs: neon icons redesign
+- Pricing: gradient headings
+- Offline: Egyptian copy + 2026 design
+- Signature footer: Dancing Script + gold gradient
+- Layout: global body offset under header
+
+### Performance
+- Drop Dancing Script (140KB saved)
+- Service Worker v3 (slim cache)
+- Web Vitals tracking
+- Font preload + fallback
+
+### Mobile
+- Viewport export (theme color + safe areas)
+- Touch targets 44px (WCAG 2.2)
+- iOS zoom prevention
+- Reduced motion support
+- Landscape adjustments
+
+### Refactor
+- 33 inline styles → CSS classes (merchant report)
+- /admin inline styles removed
+- TYPE_EMOJI → SVG icons
+- 71 emojis → 0
