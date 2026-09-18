@@ -134,3 +134,7 @@
 ### 2026-09-18 19:40 UTC — v1.0.1
 - **Action:** feat(mobile): viewport export + touch targets + safe areas + a11y
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:45 UTC — v1.1.0
+- **Action:** feat(account): trust score visual (ring + tier badge)
+- **Branch:** ui-onlook

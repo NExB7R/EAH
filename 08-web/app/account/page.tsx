@@ -55,6 +55,14 @@ export default async function AccountPage() {
   const name = profile?.display_name ?? 'مستخدم'
   const trustScore = profile?.trust_score ?? 0
   const trustPct = Math.min(100, Math.max(0, trustScore))
+  const trustTier = trustScore >= 500 ? 'legend' : trustScore >= 200 ? 'trusted' : trustScore >= 50 ? 'active' : 'newbie'
+  const TRUST_LABELS: Record<string, string> = {
+    legend: 'أسطورة',
+    trusted: 'موثوق',
+    active: 'نشيط',
+    newbie: 'مبتدئ',
+  }
+  const trustLabel = TRUST_LABELS[trustTier]
   const joinedAt = profile?.created_at
     ? new Date(profile.created_at).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short' })
     : '—'
@@ -109,13 +117,23 @@ export default async function AccountPage() {
 
         <section className="acc-grid">
           {role !== 'super_admin' && (
-            <div className="acc-card acc-card--third">
-              <span className="acc-card__emoji"><IcSparkle /></span>
-              <span className="acc-card__value" style={{ color: '#FBBF24' }}>{trustScore}</span>
-              <span className="acc-card__label">نقاط الثقة</span>
-              <div className="acc-trust-bar">
-                <div className="acc-trust-bar__fill" style={{ width: `${trustPct}%` }} />
-              </div>
+            <div className={`acc-card acc-card--third acc-trust-card acc-trust-card--${trustTier}`}>
+              <span className="acc-trust-card__ring" aria-hidden>
+                <svg viewBox="0 0 100 100" className="acc-trust-card__ring-svg">
+                  <circle cx="50" cy="50" r="42" className="acc-trust-card__ring-track" />
+                  <circle
+                    cx="50" cy="50" r="42"
+                    className="acc-trust-card__ring-fill"
+                    style={{
+                      strokeDasharray: `${2 * Math.PI * 42}`,
+                      strokeDashoffset: `${2 * Math.PI * 42 * (1 - trustPct / 100)}`,
+                    }}
+                  />
+                </svg>
+                <span className="acc-trust-card__ring-num">{trustScore}</span>
+              </span>
+              <span className="acc-trust-card__label">نقاط الثقة</span>
+              <span className="acc-trust-card__tier">{trustLabel}</span>
             </div>
           )}
 
