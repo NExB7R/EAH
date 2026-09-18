@@ -5,8 +5,8 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { updateProfile } from './actions'
 import AvatarUploader from '@/components/avatar-uploader'
+import GenderPicker from '@/components/gender-picker'
 import './edit.css'
-import { IcUser } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'تعديل البروفايل' }
@@ -114,26 +114,7 @@ export default async function EditProfilePage() {
               <span></span>
               النوع
             </h2>
-            <div className="edit__gender">
-              <label className={`edit__gender-btn ${profile?.gender === 'male' ? 'is-active' : ''}`}>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="male"
-                  defaultChecked={profile?.gender === 'male'}
-                />
-                <span><IcUser /> ذكر</span>
-              </label>
-              <label className={`edit__gender-btn ${profile?.gender === 'female' ? 'is-active' : ''}`}>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="female"
-                  defaultChecked={profile?.gender === 'female'}
-                />
-                <span><IcUser /> أنثى</span>
-              </label>
-            </div>
+            <GenderPicker initial={(profile?.gender as 'male' | 'female' | null) ?? null} />
           </section>
 
           <section className="edit__section">
