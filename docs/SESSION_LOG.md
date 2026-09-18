@@ -66,3 +66,7 @@
 ### 2026-09-18 18:36 UTC — v1.0.1
 - **Action:** fix(home): remove duplicate home-actions section
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:48 UTC — v1.0.1
+- **Action:** feat(home): tagline + pin + hook + signature + gradient titles
+- **Branch:** ui-onlook

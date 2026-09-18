@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import EahLogo from './eah-logo'
 import SearchBar from './search-bar'
-import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from './eah-icons'
+import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery, IcPin } from './eah-icons'
 import './home-hero.css'
 
 const CATEGORIES = [
@@ -21,23 +21,26 @@ export default function HomeHero() {
         </div>
 
         <div className="hh__tagline">
-          <span className="hh__tagline-pin" aria-hidden></span>
-          <span className="hh__tagline-city">شبين القناطر بتحكي — وإحنا كلنا بنسمع</span>
+          <span className="hh__tagline-pin" aria-hidden><IcPin /></span>
+          <span className="hh__tagline-city">دولة شبين القناطر تتحدث</span>
         </div>
 
-        <h2 className="hh__hook">كل حاجة محتاجها — في مكان واحد</h2>
+        <h2 className="hh__hook">كل حاجة محتاجها في مكان واحد</h2>
 
         <div className="hh__search">
           <SearchBar placeholder="مطعم؟ صيدلية؟ ماركت؟ دوّر..." />
         </div>
 
         <nav className="hh__cats" aria-label="تصفح سريع">
-          {CATEGORIES.map((c) => (
-            <Link key={c.type} href={`/explore?type=${c.type}`} className="hh__cat">
-              <span className="hh__cat-icon"><c.Icon /></span>
-              <span className="hh__cat-label">{c.label}</span>
-            </Link>
-          ))}
+          {CATEGORIES.map((c) => {
+            const Icon = c.Icon
+            return (
+              <Link key={c.type} href={`/explore?type=${c.type}`} className="hh__cat">
+                <span className="hh__cat-icon"><Icon /></span>
+                <span className="hh__cat-label">{c.label}</span>
+              </Link>
+            )
+          })}
         </nav>
       </div>
     </section>

@@ -2,13 +2,13 @@
 
 .hh {
   position: relative;
-  padding: calc(var(--fc-height, 64px) + 40px) 20px 48px;
+  padding: calc(var(--fc-height, 64px) + 90px) 20px 52px;
   overflow: visible;
   isolation: isolate;
 }
 @media (max-width: 640px) {
   .hh {
-    padding: calc(var(--fc-height-mobile, 56px) + 32px) 16px 40px;
+    padding: calc(var(--fc-height-mobile, 56px) + 70px) 16px 44px;
   }
 }
 
@@ -53,8 +53,7 @@
 .hh__logo {
   display: flex;
   justify-content: center;
-  margin: 0;
-  padding-top: 8px;
+  margin: 0 0 6px;
 }
 
 
@@ -191,7 +190,7 @@
   border-radius: 999px;
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(232, 199, 154, 0.06));
   border: 1px solid rgba(168, 85, 247, 0.4);
-  margin: 0 auto 16px;
+  margin: 6px auto 20px;
   align-self: center;
   box-shadow: 0 4px 20px rgba(168, 85, 247, 0.15);
   position: relative;
@@ -213,7 +212,8 @@
   0%, 100% { box-shadow: 0 0 8px rgba(168, 85, 247, 0.2); }
   50%      { box-shadow: 0 0 18px rgba(168, 85, 247, 0.45); }
 }
-.hh__tagline-pin { font-size: 0.9rem; }
+.hh__tagline-pin { display: inline-flex; align-items: center; justify-content: center; color: #E8C79A; }
+.hh__tagline-pin svg { width: 16px; height: 16px; stroke-width: 1.8; }
 .hh__tagline-city {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
   font-size: 0.88rem;

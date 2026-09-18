@@ -27,9 +27,14 @@
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
   font-size: clamp(1.4rem, 3.4vw, 1.9rem);
   font-weight: 900;
-  color: #F4F2FA;
   margin: 0 0 8px;
   line-height: 1.2;
+  background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 50%, #E8C79A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 40px rgba(168, 85, 247, 0.2);
 }
 .vv__sub {
   font-family: var(--font-cairo, system-ui);

@@ -95,8 +95,11 @@ export default function SiteFooter() {
           </a>
 
           <div className="sf__legal">
-            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة <span className="sf__version">{APP_VERSION_LABEL}</span></p>
-            <p className="sf__signature"><span className="sf__signature-text">NourEldin B7R</span></p>
+            <p className="sf__signature" title="NourEldin B7R">
+              <span className="sf__signature-text">NourEldin B7R</span>
+            </p>
+            <p className="sf__copy">© {year} EAH — جميع الحقوق محفوظة</p>
+            <p className="sf__version-line">{APP_VERSION_LABEL}</p>
           </div>
         </div>
       </div>
