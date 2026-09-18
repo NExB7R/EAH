@@ -64,7 +64,7 @@ export default function BusinessReviews({
     return (
       <section className="brev brev--empty">
         <h2 className="brev__title">
-          <span></span> التقييمات
+          <span></span> التعليقات والآراء والاقتراحات
         </h2>
         <p className="brev__empty-msg">
           لسه مفيش تقييمات لهذا المكان. كُن أول من يشارك تجربته.
@@ -77,7 +77,7 @@ export default function BusinessReviews({
     <section className="brev">
       <div className="brev__header">
         <h2 className="brev__title">
-          <span></span> التقييمات
+          <span></span> التعليقات والآراء والاقتراحات
         </h2>
         <span className="brev__count">{stats.review_count} تقييم</span>
       </div>
@@ -99,7 +99,6 @@ export default function BusinessReviews({
 
       {reviews.length > 0 && (
         <div className="brev__list">
-          <h3 className="brev__list-title">التعليقات والآراء والاقتراحات</h3>
           {reviews.map((r) => {
             const avg = (r.taste + r.value_for_money + r.speed + r.experience) / 4
             return (
