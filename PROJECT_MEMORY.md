@@ -264,3 +264,85 @@
 ### 🎯 commits
 - 58e7327 — subscription migration
 - ebdfc91 — subscription lib + pages
+
+
+---
+
+## 2026-09-18 — Pending Changes + Audit + Auto-Deploy Fix
+
+### اللي خلص
+- Cloudinary migration (25GB, ضغط WebP/AVIF تلقائي)
+- Avatar crop + zoom (react-easy-crop)
+- GenderPicker (client component — كان مكسور)
+- نظام نقاط: دخول يومي + streak + reviews + unique visits (24h)
+- Admin points management (بحث بالرقم + تعديل + audit)
+- Audit System: pending_changes + approve/reject RPCs
+- /admin/pending + /merchant/pending
+- Push notifications (admin + merchant)
+- Live polling badge
+- /about rewrite احترافي
+- "احنا مين" بدل "الكلام ع إيه"
+- "التعليقات والآراء والاقتراحات" بدل "التقييمات"
+- push.sh ذكي (auto-version + session log + deploy)
+- docs/DEV_GUIDE.md + docs/SESSION_LOG.md
+
+### دروس
+1. Vercel webhook ممكن يتعطل — push.sh حل بديل
+2. Hobby cron = مرة/يومي
+3. Deployment Storage بيتملى — retention policy
+4. regex Python خطر — string replace أفضل
+5. tsc قبل commit
+6. set +H قبل أي !
+7. افحص Supabase قبل migrations
+8. Supabase SQL Editor = الصق الملف كامل
+
+### Known Issues
+- Service Role Key — محتاج rotate
+- VAPID Keys — محتاج regenerate
+- Deploy Hook URL مكشوف — Revoke
+- Deployment Storage 2.75GB/1GB
+- ~90 any types
+
+### Commits
+575355c → aacb4b6 → 0bcc552 → 3dda5d5 → cd32fa6 → ff2f310 → 40f9351 → 3f2c216 → 2732b8f → 134e6c9 → e27be99 → 7a829c7
+
+
+---
+
+## 2026-09-18 — Pending Changes + Audit + Auto-Deploy Fix
+
+### اللي خلص
+- Cloudinary migration (25GB, ضغط WebP/AVIF تلقائي)
+- Avatar crop + zoom (react-easy-crop)
+- GenderPicker (client component — كان مكسور)
+- نظام نقاط: دخول يومي + streak + reviews + unique visits (24h)
+- Admin points management (بحث بالرقم + تعديل + audit)
+- Audit System: pending_changes + approve/reject RPCs
+- /admin/pending + /merchant/pending
+- Push notifications (admin + merchant)
+- Live polling badge
+- /about rewrite احترافي
+- "احنا مين" بدل "الكلام ع إيه"
+- "التعليقات والآراء والاقتراحات" بدل "التقييمات"
+- push.sh ذكي (auto-version + session log + deploy)
+- docs/DEV_GUIDE.md + docs/SESSION_LOG.md
+
+### دروس
+1. Vercel webhook ممكن يتعطل — push.sh حل بديل
+2. Hobby cron = مرة/يومي
+3. Deployment Storage بيتملى — retention policy
+4. regex Python خطر — string replace أفضل
+5. tsc قبل commit
+6. set +H قبل أي !
+7. افحص Supabase قبل migrations
+8. Supabase SQL Editor = الصق الملف كامل
+
+### Known Issues
+- Service Role Key — محتاج rotate
+- VAPID Keys — محتاج regenerate
+- Deploy Hook URL مكشوف — Revoke
+- Deployment Storage 2.75GB/1GB
+- ~90 any types
+
+### Commits
+575355c → aacb4b6 → 0bcc552 → 3dda5d5 → cd32fa6 → ff2f310 → 40f9351 → 3f2c216 → 2732b8f → 134e6c9 → e27be99 → 7a829c7
