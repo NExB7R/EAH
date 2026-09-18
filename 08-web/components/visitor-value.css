@@ -37,10 +37,7 @@
   text-shadow: 0 0 40px rgba(168, 85, 247, 0.2);
 }
 .vv__sub {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.88rem;
-  color: #A29DB5;
-  margin: 0;
+  display: none;
 }
 
 .vv__grid {

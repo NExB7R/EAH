@@ -2,13 +2,13 @@
 
 .hh {
   position: relative;
-  padding: calc(var(--fc-height, 64px) + 90px) 20px 52px;
+  padding: 140px 20px 52px;
   overflow: visible;
   isolation: isolate;
 }
 @media (max-width: 640px) {
   .hh {
-    padding: calc(var(--fc-height-mobile, 56px) + 70px) 16px 44px;
+    padding: 140px 20px 52px;
   }
 }
 

@@ -35,7 +35,7 @@ export default function VisitorValue() {
     <section className="vv" aria-label="ليه EAH">
       <header className="vv__head">
         <h2 className="vv__title">ليه تستخدم EAH؟</h2>
-        <p className="vv__sub">كل حاجة محتاجها — في مكان واحد</p>
+        <p className="vv__sub"></p>
       </header>
 
       <div className="vv__grid">
