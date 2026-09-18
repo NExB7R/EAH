@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
 import { z } from 'zod'
+import { auditLog } from '@/lib/admin/audit'
 
 export const dynamic = 'force-dynamic'
 
@@ -89,6 +90,14 @@ export async function POST(request: Request) {
       .eq('business_id', d.business_id)
 
     if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
+
+    void auditLog({
+      action: 'offer.update',
+      entityType: 'business_menu_item',
+      entityId: d.id,
+      after: { name: d.name, category: d.category, price: d.price },
+    })
+
     return NextResponse.json({ ok: true, id: d.id })
   }
 

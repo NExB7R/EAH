@@ -146,3 +146,7 @@
 ### 2026-09-18 19:50 UTC — v1.1.0
 - **Action:** feat(audit): auto-log ad.create + business.toggle_whatsapp
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:51 UTC — v1.1.0
+- **Action:** feat(audit): log menu updates + verification submissions
+- **Branch:** ui-onlook
