@@ -17,3 +17,12 @@
 ### 2026-09-18 18:00 UTC — v1.0.1
 - **Action:** docs: project memory update
 - **Branch:** ui-onlook
+
+### Security session
+- VAPID regenerated locally
+- SECURITY.md created
+- Retention policy applied
+
+### 2026-09-18 18:04 UTC — v1.0.1
+- **Action:** chore: security checklist + VAPID rotation
+- **Branch:** ui-onlook
