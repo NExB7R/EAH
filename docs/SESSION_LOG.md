@@ -162,3 +162,7 @@
 ### 2026-09-18 19:56 UTC — v1.1.0
 - **Action:** fix(push): remove duplicate type field (line 13)
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:57 UTC — v1.1.0
+- **Action:** fix(push): allow merchant_orders type + optional
+- **Branch:** ui-onlook

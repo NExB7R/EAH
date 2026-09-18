@@ -8,7 +8,7 @@ import { UUID } from '@/lib/security/validate'
 export const dynamic = 'force-dynamic'
 
 const BodySchema = z.object({
-  type: z.enum(['review', 'reveal', 'offer', 'custom']),
+  type: z.enum(['review', 'reveal', 'offer', 'custom', 'merchant_orders']).optional(),
   businessId: UUID,
   title: z.string().max(120).optional(),
   body: z.string().max(300).optional(),
