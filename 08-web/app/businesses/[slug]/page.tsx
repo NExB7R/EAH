@@ -8,6 +8,8 @@ import {
 } from '@/lib/reviews'
 import PageViewTracker from '@/components/page-view-tracker'
 import BusinessHero from '@/components/business-hero'
+import BusinessFollowSection from '@/components/business-follow-section'
+import CouponSection from '@/components/coupon-section'
 import BusinessContact from '@/components/business-contact'
 import BusinessReviews from '@/components/business-reviews'
 import ReportButton from '@/components/report-button'
@@ -124,6 +126,10 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
             active_offers: stats.active_offers,
           }}
         />
+
+        <BusinessFollowSection slug={slug} businessId={business.businessId} />
+        <CouponSection slug={slug} />
+
 
         <BusinessOffers offers={offers} />
 

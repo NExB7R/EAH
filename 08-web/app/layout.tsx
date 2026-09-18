@@ -1,4 +1,5 @@
 import './globals.css'
+import './social.css'
 import './theme.css'
 import './design-system.css'
 import '../components/eah-admin.css'

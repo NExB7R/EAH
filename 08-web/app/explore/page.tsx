@@ -5,6 +5,7 @@ import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import BackToTop from '@/components/back-to-top'
 import EahLogo from '@/components/eah-logo'
+import SearchBar from '@/components/search/search-bar'
 import './explore-hero.css'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
@@ -72,6 +73,7 @@ export default async function ExplorePage({
             {diversified.length} مكان — مرتبة بذكاء حسب الجودة والنشاط
           </p>
         </div>
+        <div className="explore-search-wrap"><SearchBar /></div>
         <Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#A29DB5' }}>جاري التحميل...</div>}>
           <ExploreClient businesses={diversified} initialType={activeType} />
         </Suspense>

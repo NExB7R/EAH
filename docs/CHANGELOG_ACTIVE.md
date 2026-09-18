@@ -285,3 +285,7 @@
 - /admin inline styles removed
 - TYPE_EMOJI → SVG icons
 - 71 emojis → 0
+
+## v1.1.1 — 2026-09-18
+
+- feat: follows + coupons + loyalty + near-me + voice search + smart arabic

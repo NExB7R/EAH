@@ -174,3 +174,7 @@
 ### 2026-09-18 20:06 UTC — v1.1.0
 - **Action:** feat(ux): loading states for main routes
 - **Branch:** ui-onlook
+
+### 2026-09-18 20:58 UTC — v1.1.1
+- **Action:** feat: follows + coupons + loyalty + near-me + voice search + smart arabic
+- **Branch:** ui-onlook
