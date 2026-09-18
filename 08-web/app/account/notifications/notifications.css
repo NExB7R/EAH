@@ -1,0 +1,67 @@
+.nt {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 100px 20px 60px;
+}
+
+.nt__hero {
+  position: relative;
+  text-align: center;
+  margin-bottom: 24px;
+  padding: 16px;
+}
+
+.nt__back {
+  position: absolute;
+  top: 16px;
+  inset-inline-end: 16px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  color: #C4B5FD;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: var(--font-cairo, system-ui);
+  transition: all 0.12s;
+}
+
+.nt__back:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+.nt__kicker {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: #A855F7;
+  font-weight: 800;
+  font-family: var(--font-cairo, system-ui);
+}
+
+.nt__title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #F5F3FF;
+  margin: 8px 0;
+}
+
+.nt__title svg {
+  width: 26px;
+  height: 26px;
+  color: #C084FC;
+  stroke-width: 1.8;
+}
+
+.nt__sub {
+  color: #A5A3B8;
+  font-size: 0.9rem;
+  margin: 0;
+  font-family: var(--font-cairo, system-ui);
+}

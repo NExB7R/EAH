@@ -4,6 +4,7 @@ import SiteFooter from '@/components/site-footer'
 import { IconWhatsapp, IconFacebook } from '@/components/neon-icons'
 import { CONTACT_CHANNELS, waLink } from './contact-channels'
 import './contact.css'
+import { IcStore, IcMegaphone, IcAlert, IcBulb } from '@/components/eah-icons'
 
 export const metadata = {
   title: 'تواصل معنا',
@@ -41,10 +42,10 @@ const CHANNELS = [
 ]
 
 const TOPICS = [
-  { emoji: '', title: 'أنا صاحب نشاط',      desc: 'مطعم، صيدلية، ماركت، توصيل — سجّل نشاطك', href: '/merchant/apply' },
-  { emoji: '', title: 'إعلانات',            desc: 'عايز أعلن على المنصة',         href: '/advertise' },
-  { emoji: '🐛', title: 'مشكلة تقنية',       desc: 'لقيت حاجة مش شغالة',           href: 'https://wa.me/201012892806' },
-  { emoji: '', title: 'اقتراح أو فكرة',    desc: 'عندك فكرة تحسّن EAH',          href: 'https://wa.me/201012892806' },
+  { emoji: <IcStore />, title: 'أنا صاحب نشاط',      desc: 'مطعم، صيدلية، ماركت، توصيل — سجّل نشاطك', href: '/merchant/apply' },
+  { emoji: <IcMegaphone />, title: 'إعلانات',            desc: 'عايز أعلن على المنصة',         href: '/advertise' },
+  { emoji: <IcAlert />, title: 'مشكلة تقنية',       desc: 'لقيت حاجة مش شغالة',           href: 'https://wa.me/201012892806' },
+  { emoji: <IcBulb />, title: 'اقتراح أو فكرة',    desc: 'عندك فكرة تحسّن EAH',          href: 'https://wa.me/201012892806' },
 ]
 
 export default function ContactPage() {

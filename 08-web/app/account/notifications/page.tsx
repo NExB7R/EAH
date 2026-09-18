@@ -5,6 +5,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import NotificationsPanel from '@/components/notifications-panel'
 import { IcBell } from '@/components/eah-icons'
+import './notifications.css'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'إعدادات الإشعارات' }
@@ -25,12 +26,14 @@ export default async function CustomerNotificationsPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <main style={{ maxWidth: 760, margin: '0 auto', padding: '100px 20px 60px' }}>
-        <header style={{ position: 'relative', textAlign: 'center', marginBottom: 24, padding: 16 }}>
-          <Link href="/account" style={{ position: 'absolute', top: 16, right: 16, padding: '6px 12px', borderRadius: 10, background: 'rgba(139,92,246,.1)', border: '1px solid rgba(139,92,246,.25)', color: '#C4B5FD', textDecoration: 'none', fontSize: '.78rem', fontWeight: 700 }}>← حسابي</Link>
-          <span style={{ fontSize: '.7rem', letterSpacing: '.2em', color: '#A855F7', fontWeight: 800 }}>الإشعارات</span>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#F5F3FF', margin: '8px 0 8px' }}><IcBell /> الإشعارات</h1>
-          <p style={{ color: '#A5A3B8', fontSize: '.9rem', margin: 0 }}>تحكم كامل في تنبيهاتك</p>
+      <main className="nt">
+        <header className="nt__hero">
+          <Link href="/account" className="nt__back">← حسابي</Link>
+          <span className="nt__kicker">الإشعارات</span>
+          <h1 className="nt__title">
+            <IcBell /> الإشعارات
+          </h1>
+          <p className="nt__sub">تحكم كامل في تنبيهاتك — اختار اللي يهمك</p>
         </header>
 
         <NotificationsPanel types={types} initialPrefs={prefs} role="customer" />

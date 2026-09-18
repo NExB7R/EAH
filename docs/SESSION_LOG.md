@@ -122,3 +122,7 @@
 ### 2026-09-18 19:33 UTC — v1.0.1
 - **Action:** feat(ui): admin KPI redesign + pricing 2026 polish
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:35 UTC — v1.0.1
+- **Action:** feat(ui): contact icons + notifications page cleanup
+- **Branch:** ui-onlook
