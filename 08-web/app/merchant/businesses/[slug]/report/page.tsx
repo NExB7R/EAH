@@ -124,7 +124,7 @@ export default async function MerchantReportPage({
             <p className="mpage__sub">نظرة سريعة على أداء النشاط على المنصة</p>
           </div>
           <Link href={`/merchant/businesses/${business.slug}/edit`} className="admin-btn admin-btn--primary">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{display:'inline',verticalAlign:'middle',marginLeft:4}}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> تعديل البيانات
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" ><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> تعديل البيانات
           </Link>
         </div>
 
@@ -248,15 +248,14 @@ export default async function MerchantReportPage({
 
 function RatingBar({ label, value }: { label: string; value: number }) {
   const pct = (value / 5) * 100
-
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, fontFamily: 'var(--eah-font-body)', fontSize: '0.78rem' }}>
-        <span style={{ color: 'var(--eah-text-3)' }}>{label}</span>
-        <strong style={{ color: 'var(--eah-gold)' }}>{value.toFixed(1)}</strong>
+    <div className="mrating">
+      <div className="mrating__head">
+        <span className="mrating__label">{label}</span>
+        <strong className="mrating__value">{value.toFixed(1)}</strong>
       </div>
-      <div style={{ height: 6, borderRadius: 999, background: 'rgba(139, 92, 246, 0.12)', overflow: 'hidden' }}>
-        <div style={{ width: `${pct}%`, height: '100%', background: 'linear-gradient(90deg, #6B21FF, #A855F7, #E8C79A)', borderRadius: 999 }} />
+      <div className="mrating__track">
+        <div className="mrating__fill" style={{ width: `${pct}%` }} />
       </div>
     </div>
   )

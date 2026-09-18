@@ -114,3 +114,7 @@
 ### 2026-09-18 19:29 UTC — v1.0.1
 - **Action:** refactor(report): inline styles → CSS classes
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:30 UTC — v1.0.1
+- **Action:** refactor(report): RatingBar + button SVG → CSS
+- **Branch:** ui-onlook
