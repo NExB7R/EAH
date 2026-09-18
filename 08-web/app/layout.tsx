@@ -2,7 +2,7 @@ import './globals.css'
 import './theme.css'
 import './design-system.css'
 import '../components/eah-admin.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Cairo, Cairo_Play, Dancing_Script } from 'next/font/google'
 import PageViewTracker from '@/components/page-view-tracker'
 import SplashScreen from '@/components/splash-screen'
@@ -53,6 +53,18 @@ const cairoPlay = Cairo_Play({
 
 // EAH_BUILD = 1789585536.2520845
 // VERSION_MARKER: v0.3.3
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#07060B' },
+    { media: '(prefers-color-scheme: light)', color: '#07060B' },
+  ],
+}
 
 export const metadata: Metadata = {
   title: {

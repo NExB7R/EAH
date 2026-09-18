@@ -386,3 +386,73 @@ body {
     padding-top: var(--fc-height-mobile, 56px);
   }
 }
+
+/* ═══ Mobile Polish (2026) ═══ */
+
+/* Touch targets 44px minimum (WCAG 2.2) */
+@media (max-width: 640px) {
+  button,
+  a.btn,
+  .admin-btn,
+  .off__btn,
+  input[type="submit"] {
+    min-height: 44px;
+  }
+
+  /* Safe area insets (iPhone notch) */
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* Prevent zoom on input focus (iOS) */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* Landscape adjustments */
+@media (max-width: 900px) and (orientation: landscape) {
+  .hh,
+  .off,
+  .nt {
+    padding-top: 60px;
+  }
+}
+
+/* Reduced motion — honor user preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Prevent horizontal scroll */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Smooth scrolling (if not reduced motion) */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Tap highlight remove (mobile) */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Focus visible (a11y) */
+:focus-visible {
+  outline: 2px solid #A855F7;
+  outline-offset: 2px;
+}

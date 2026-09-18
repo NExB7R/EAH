@@ -130,3 +130,7 @@
 ### 2026-09-18 19:37 UTC — v1.0.1
 - **Action:** fix(icons): add IcWifi for offline page
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:40 UTC — v1.0.1
+- **Action:** feat(mobile): viewport export + touch targets + safe areas + a11y
+- **Branch:** ui-onlook
