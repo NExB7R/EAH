@@ -82,7 +82,7 @@ export default async function MerchantApplyPage({
         <section className="ap-hero">
           <div className="ap-hero__glow" aria-hidden />
           <span className="ap-hero__kicker">شريك EAH</span>
-          <h1 className="ap-hero__title">
+          <h1 className="ap-hero__title e-gradient">
             سجّل <span className="ap-hero__accent">نشاطك</span> على EAH
           </h1>
           <p className="ap-hero__lead">
@@ -102,7 +102,7 @@ export default async function MerchantApplyPage({
         </section>
 
         {sent === '1' && (
-          <div className="ap-alert ap-alert--success">
+          <div className="ap-alert ap-alert--success e-alert e-alert--success">
             <span className="ap-alert__emoji"></span>
             <div>
               <strong className="ap-alert__title">تم إرسال طلبك</strong>
@@ -112,7 +112,7 @@ export default async function MerchantApplyPage({
         )}
 
         {hasPending ? (
-          <div className="ap-alert ap-alert--info">
+          <div className="ap-alert ap-alert--info e-alert e-alert--info">
             <span className="ap-alert__emoji"></span>
             <div>
               <strong className="ap-alert__title">عندك طلب قيد المراجعة</strong>
@@ -120,9 +120,9 @@ export default async function MerchantApplyPage({
             </div>
           </div>
         ) : (
-          <section className="ap-card">
+          <section className="ap-card e-card">
             <header className="ap-card__head">
-              <h2 className="ap-card__title">بيانات النشاط</h2>
+              <h2 className="ap-card__title e-section__title">بيانات النشاط</h2>
               <p className="ap-card__sub">كل البيانات سرية — مش هتظهر لأي حد غير فريق EAH.</p>
             </header>
 
@@ -163,7 +163,7 @@ export default async function MerchantApplyPage({
 
         {(applications ?? []).length > 0 && (
           <section className="ap-history">
-            <h2 className="ap-history__title"><IcScroll /> طلباتك السابقة</h2>
+            <h2 className="ap-history__title e-section__title"><IcScroll /> طلباتك السابقة</h2>
             <div className="ap-history__list">
               {(applications ?? []).map((a) => (
                 <div key={a.id} className="ap-history__item">
@@ -193,7 +193,7 @@ export default async function MerchantApplyPage({
         <section className="ap-help">
           <span className="ap-help__emoji"></span>
           <div>
-            <strong className="ap-help__title">محتاج مساعدة؟</strong>
+            <strong className="ap-help__title e-section__title">محتاج مساعدة؟</strong>
             <p className="ap-help__text">
               كلمنا على <Link href="/contact" className="ap-help__link">صفحة التواصل</Link> لو عندك أي سؤال.
             </p>

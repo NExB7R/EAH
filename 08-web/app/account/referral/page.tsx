@@ -36,7 +36,7 @@ export default async function ReferralPage() {
         <header className="rf__hero">
           <Link href="/account" className="rf__back">← رجوع</Link>
           <span className="rf__kicker">الإحالة</span>
-          <h1 className="rf__title">ادعي صحابك</h1>
+          <h1 className="rf__title e-gradient">ادعي صحابك</h1>
           <p className="rf__sub">كل صاحب يشترك = 50 نقطة ليك وليه</p>
         </header>
 
@@ -46,11 +46,11 @@ export default async function ReferralPage() {
           <div className="rf__actions">
             <a
               href={`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`}
-              target="_blank" rel="noreferrer" className="rf__btn rf__btn--whatsapp"
+              target="_blank" rel="noreferrer" className="rf__btn rf__btn--whatsapp e-btn e-btn--ghost-wa"
             >💚 شارك على واتساب</a>
             <a
               href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-              target="_blank" rel="noreferrer" className="rf__btn rf__btn--facebook"
+              target="_blank" rel="noreferrer" className="rf__btn rf__btn--facebook e-btn e-btn--ghost-fb"
             >شارك على فيسبوك</a>
           </div>
         </section>

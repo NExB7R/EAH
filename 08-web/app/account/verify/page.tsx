@@ -53,7 +53,7 @@ export default async function VerifyPage({
           <div className="vf-hero__glow" aria-hidden />
           <Link href="/account" className="vf-hero__back">← رجوع</Link>
           <span className="vf-hero__kicker">توثيق EAH</span>
-          <h1 className="vf-hero__title"><IcCheck /> توثيق الحساب</h1>
+          <h1 className="vf-hero__title e-gradient"><IcCheck /> توثيق الحساب</h1>
           <p className="vf-hero__lead">
             التوثيق بيدي حسابك شارة "موثق" تظهر في كل مكان على EAH.
           </p>
@@ -63,7 +63,7 @@ export default async function VerifyPage({
           <div className="vf-alert vf-alert--success">
             <span className="vf-alert__emoji"></span>
             <div>
-              <strong className="vf-alert__title">حسابك موثق بالفعل</strong>
+              <strong className="vf-alert__title e-alert__title">حسابك موثق بالفعل</strong>
               <p className="vf-alert__text">الشارة  ظاهرة في بروفايلك.</p>
             </div>
           </div>
@@ -73,7 +73,7 @@ export default async function VerifyPage({
           <div className="vf-alert vf-alert--info">
             <span className="vf-alert__emoji"></span>
             <div>
-              <strong className="vf-alert__title">تم إرسال طلبك</strong>
+              <strong className="vf-alert__title e-alert__title">تم إرسال طلبك</strong>
               <p className="vf-alert__text">فريق EAH هيراجعه وهيرد عليك قريب.</p>
             </div>
           </div>
@@ -81,7 +81,7 @@ export default async function VerifyPage({
 
         {!isVerified && !hasPending && (
           <section className="vf-checks">
-            <h2 className="vf-section-title">شروط التوثيق</h2>
+            <h2 className="vf-section-title e-section__title">شروط التوثيق</h2>
             <div className="vf-checks__list">
               {Object.entries(CHECK_LABELS).map(([key, label]) => {
                 const ok = checks[key] === true
@@ -118,7 +118,7 @@ export default async function VerifyPage({
           <div className="vf-alert vf-alert--pending">
             <span className="vf-alert__emoji"></span>
             <div>
-              <strong className="vf-alert__title">طلبك قيد المراجعة</strong>
+              <strong className="vf-alert__title e-alert__title">طلبك قيد المراجعة</strong>
               <p className="vf-alert__text">هنتواصل معاك بعد ما الإدارة تراجع طلبك.</p>
             </div>
           </div>
@@ -126,7 +126,7 @@ export default async function VerifyPage({
 
         {!isVerified && !hasPending && canApply && (
           <section className="vf-form">
-            <h2 className="vf-section-title">بيانات التوثيق</h2>
+            <h2 className="vf-section-title e-section__title">بيانات التوثيق</h2>
             <form action={submitVerification} className="vf-form__inner">
               <label className="vf-field">
                 <span className="vf-field__label">الاسم الكامل (كما في البطاقة) *</span>
@@ -173,7 +173,7 @@ export default async function VerifyPage({
           <div className="vf-alert vf-alert--warning">
             <span className="vf-alert__emoji"></span>
             <div>
-              <strong className="vf-alert__title">مش مستوفي الشروط</strong>
+              <strong className="vf-alert__title e-alert__title">مش مستوفي الشروط</strong>
               <p className="vf-alert__text">كمّل الشروط الناقصة فوق وحاول تاني.</p>
             </div>
           </div>
@@ -181,7 +181,7 @@ export default async function VerifyPage({
 
         {(requests ?? []).length > 0 && (
           <section className="vf-history">
-            <h2 className="vf-section-title"><IcScroll /> تاريخ طلباتك</h2>
+            <h2 className="vf-section-title e-section__title"><IcScroll /> تاريخ طلباتك</h2>
             <div className="vf-history__list">
               {(requests ?? []).map(r => (
                 <div key={r.id} className="vf-history__item">

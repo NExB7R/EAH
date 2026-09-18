@@ -145,11 +145,11 @@ export default function AuthPage() {
         <section className="auth__hero">
           <div className="auth__logo"><EahLogo size="md" variant="full" href="/" /></div>
           <span className="auth__kicker">EAH • اللي نفسك فيه</span>
-          <h1 className="auth__title">
+          <h1 className="auth__title e-gradient">
             {mode === 'login' ? (
-              <>سجّل بسرعة <span className="auth__title-accent"><IcBolt /></span></>
+              <>سجّل بسرعة <span className="auth__title-accent e-gradient"><IcBolt /></span></>
             ) : (
-              <>اعمل حسابك <span className="auth__title-accent"><IcBolt /></span></>
+              <>اعمل حسابك <span className="auth__title-accent e-gradient"><IcBolt /></span></>
             )}
           </h1>
           <p className="auth__lead">
@@ -201,7 +201,7 @@ export default function AuthPage() {
                   <div className="auth__input-wrap">
                     <input
                       id="name"
-                      className="auth__input"
+                      className="auth__input e-input"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="مثلاً: نور الدين"
@@ -239,7 +239,7 @@ export default function AuthPage() {
               <div className="auth__input-wrap">
                 <input
                   id="phone"
-                  className="auth__input"
+                  className="auth__input e-input"
                   type="tel"
                   dir="ltr"
                   inputMode="tel"
@@ -304,7 +304,7 @@ export default function AuthPage() {
               </div>
             )}
 
-            <button className="auth__submit" disabled={loading}>
+            <button className="auth__submit e-btn e-btn--primary" disabled={loading}>
               {loading ? 'جاري التنفيذ…' : mode === 'login' ? 'دخول ' : 'سجّل بسرعة '}
             </button>
           </form>
@@ -317,7 +317,7 @@ export default function AuthPage() {
             </div>
           )}
 
-          {message && <div className="auth__alert" role="alert">{message}</div>}
+          {message && <div className="auth__alert e-alert e-alert--danger" role="alert">{message}</div>}
         </section>
       </div>
     </main>

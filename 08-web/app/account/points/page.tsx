@@ -39,7 +39,7 @@ export default async function PointsPage() {
           <Link href="/account" className="pt__back">← حسابي</Link>
           <div className="pt__glow" aria-hidden />
           <span className="pt__kicker">نقاطي</span>
-          <h1 className="pt__title">رصيدك من النقاط</h1>
+          <h1 className="pt__title e-gradient">رصيدك من النقاط</h1>
           <p className="pt__sub">كل تفاعل على EAH = نقاط. احتفظ بيها — هتعرف قيمتها قريب.</p>
         </header>
 
