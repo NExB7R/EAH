@@ -9,7 +9,7 @@ export default function RewardsTabs({
   pendingCount: number
 }) {
   const tabs = [
-    { key: 'catalog', label: '📚 الكتالوج', href: '/admin/rewards' },
+    { key: 'catalog', label: 'الكتالوج', href: '/admin/rewards' },
     { key: 'redemptions', label: ' طلبات الاستبدال', href: '/admin/rewards?tab=redemptions', badge: pendingCount },
   ]
   return (

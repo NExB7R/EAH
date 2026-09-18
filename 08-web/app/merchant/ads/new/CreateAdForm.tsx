@@ -74,7 +74,7 @@ export default function CreateAdForm({ slots }: { slots: Slot[] }) {
       </label>
 
       <label className="anew__field">
-        <span>🖼 رابط الصورة (اختياري)</span>
+        <span>رابط الصورة (اختياري)</span>
         <input type="url" dir="ltr" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://..." />
       </label>
 

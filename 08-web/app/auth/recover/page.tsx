@@ -69,7 +69,7 @@ export default function RecoverPage() {
         <div className="rc__wrap">
           <section className="rc__hero">
             <span className="rc__kicker">EAH • الاسترجاع</span>
-            <h1 className="rc__title">📬 <span className="rc__title-accent">تم الإرسال</span></h1>
+            <h1 className="rc__title"><span className="rc__title-accent">تم الإرسال</span></h1>
             <p className="rc__lead">
               بعتنا كود إعادة التعيين. عادةً الكود بيظهر في حسابك على Supabase. تواصل مع فريق EAH لو محتاج مساعدة فورية.
             </p>

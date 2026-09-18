@@ -32,9 +32,9 @@ export const SECTION_LABELS: Record<SectionType, { label: string; emoji: string 
   trending:   { label: 'الترند',     emoji: '' },
   offers:     { label: 'العروض',     emoji: '' },
   categories: { label: 'التصنيفات',  emoji: '📂' },
-  cta:        { label: 'CTA',        emoji: '📣' },
+  cta:        { label: 'CTA',        emoji: '' },
   banner:     { label: 'بانر',       emoji: '' },
-  footer:     { label: 'الفوتر',     emoji: '🔻' },
+  footer:     { label: 'الفوتر',     emoji: '' },
 }
 
 export function makeId(): string {
