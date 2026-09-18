@@ -35,14 +35,14 @@ export default async function AdminSecurityPage() {
     supabase.from('profiles').select('*', { count: 'exact', head: true }).gt('banned_until', now.toISOString()),
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase.from('profiles').select('*', { count: 'exact', head: true }).not('verified_at', 'is', null),
-    supabase.from('audit_log').select('*', { count: 'exact', head: true }).gte('created_at', since24h),
-    supabase.from('audit_log').select('*', { count: 'exact', head: true }).gte('created_at', since7d),
+    supabase.from('audit_logs').select('*', { count: 'exact', head: true }).gte('created_at', since24h),
+    supabase.from('audit_logs').select('*', { count: 'exact', head: true }).gte('created_at', since7d),
     supabase.from('businesses').select('*', { count: 'exact', head: true }),
     supabase.from('business_change_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
   ])
 
   const { data: recentAudit } = await supabase
-    .from('audit_log')
+    .from('audit_logs')
     .select('id,action,entity_type,created_at,actor_email')
     .order('created_at', { ascending: false })
     .limit(10)

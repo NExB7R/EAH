@@ -100,7 +100,7 @@ export async function GET(request: Request) {
       break
     case 'audit':
       query = supabase
-        .from('audit_log')
+        .from('audit_logs')
         .select('id,action,entity_type,entity_id,actor_email,created_at')
       if (from) query = query.gte('created_at', from)
       if (to) query = query.lte('created_at', to)
