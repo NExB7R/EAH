@@ -38,8 +38,8 @@ export async function POST(request: Request) {
   const label = ACTION_LABEL[pending.action] ?? pending.action
   const isApproved = parsed.data.status === 'approved'
 
-  const title = isApproved ? `✅ تم اعتماد ${label}` : `❌ تم رفض ${label}`
-  const body = isApproved
+  const title = isApproved ? `تم اعتماد ${label}` : `تم رفض ${label}`
+  const pushBody = isApproved
     ? 'التعديل اتنشر — شوف نشاطك على EAH'
     : parsed.data.note
       ? `السبب: ${parsed.data.note.slice(0, 100)}`
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
   try {
     await sendPushToUser(pending.requested_by, {
       title,
-      body,
+      body: pushBody,
       url: '/merchant/pending',
     })
   } catch { /* silent */ }
