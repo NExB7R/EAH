@@ -267,15 +267,30 @@
 
 
 /* ═══ Signature — NourEldin B7R ═══ */
+
+
+
+.sf__version-line {
+  margin: 0;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.68rem;
+  color: #6B6880;
+  text-align: center;
+  letter-spacing: 0.06em;
+  direction: ltr;
+}
+
+
+/* ═══ Signature — NourEldin B7R ═══ */
 .sf__signature {
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .sf__signature-text {
   font-family: var(--font-signature, 'Dancing Script', cursive);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 400;
   line-height: 1;
   background: linear-gradient(135deg, #E8C79A 0%, #F5D9A7 50%, #C084FC 100%);
