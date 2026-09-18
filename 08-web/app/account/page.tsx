@@ -70,7 +70,7 @@ export default async function AccountPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <main className="acc">
+      <main className="acc e-page">
         <section className="acc-hero">
           <div className="acc-hero__glow" aria-hidden />
 
@@ -88,7 +88,7 @@ export default async function AccountPage() {
 
           <div className="acc-hero__body">
             <span className="acc-hero__kicker">حسابي</span>
-            <h1 className="acc-hero__title">{name}</h1>
+            <h1 className="acc-hero__title e-gradient">{name}</h1>
 
             <div className="acc-hero__meta">
               <span className="acc-chip acc-chip--role">{roleLabel}</span>
@@ -106,7 +106,7 @@ export default async function AccountPage() {
         </section>
 
         {isBanned && (
-          <div className="acc-ban">
+          <div className="acc-ban e-alert e-alert--danger">
             <strong className="acc-ban__title"><IcBan /> حسابك محظور مؤقتًا</strong>
             <p className="acc-ban__text">السبب: {profile?.ban_reason ?? 'غير محدد'}</p>
             <p className="acc-ban__text">
@@ -132,80 +132,80 @@ export default async function AccountPage() {
                 </svg>
                 <span className="acc-trust-card__ring-num">{trustScore}</span>
               </span>
-              <span className="acc-trust-card__label">نقاط الثقة</span>
+              <span className="acc-trust-card__label e-badge e-badge--accent">نقاط الثقة</span>
               <span className="acc-trust-card__tier">{trustLabel}</span>
             </div>
           )}
 
-          <div className="acc-card acc-card--third">
+          <div className="acc-card acc-card--third e-stat">
             <span className="acc-card__emoji"><IcHeart /></span>
-            <span className="acc-card__value" style={{ color: '#FB923C' }}>{favCount ?? 0}</span>
-            <span className="acc-card__label">مفضلة</span>
+            <span className="acc-card__value e-stat__value" style={{ color: '#FB923C' }}>{favCount ?? 0}</span>
+            <span className="acc-card__label e-stat__label">مفضلة</span>
           </div>
 
-          <div className="acc-card acc-card--third">
+          <div className="acc-card acc-card--third e-stat">
             <span className="acc-card__emoji"><IcStar /></span>
-            <span className="acc-card__value" style={{ color: '#C084FC' }}>{reviewCount ?? 0}</span>
-            <span className="acc-card__label">تقييمات</span>
+            <span className="acc-card__value e-stat__value" style={{ color: '#C084FC' }}>{reviewCount ?? 0}</span>
+            <span className="acc-card__label e-stat__label">تقييمات</span>
           </div>
 
-          <div className="acc-card acc-card--half">
+          <div className="acc-card acc-card--half e-stat">
             <span className="acc-card__emoji"><IcBell /></span>
-            <span className="acc-card__value" style={{ color: '#A855F7' }}>{notifCount ?? 0}</span>
-            <span className="acc-card__label">إشعارات جديدة</span>
+            <span className="acc-card__value e-stat__value" style={{ color: '#A855F7' }}>{notifCount ?? 0}</span>
+            <span className="acc-card__label e-stat__label">إشعارات جديدة</span>
           </div>
 
-          <div className="acc-card acc-card--half">
+          <div className="acc-card acc-card--half e-stat">
             <span className="acc-card__emoji"><IcCalendar /></span>
-            <span className="acc-card__value" style={{ fontSize: '1.1rem', color: '#C4B5FD' }}>{joinedAt}</span>
-            <span className="acc-card__label">عضو معانا من</span>
+            <span className="acc-card__value e-stat__value" style={{ fontSize: '1.1rem', color: '#C4B5FD' }}>{joinedAt}</span>
+            <span className="acc-card__label e-stat__label">عضو معانا من</span>
           </div>
         </section>
 
         <section className="acc-section">
           <div className="acc-section__head">
-            <h2 className="acc-section__title">إجراءات سريعة</h2>
+            <h2 className="acc-section__title e-section__title">إجراءات سريعة</h2>
           </div>
           <div className="acc-actions">
-            <Link href="/explore" className="acc-action">
+            <Link href="/explore" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcCompass /></span> اكتشف الأماكن
             </Link>
-            <Link href="/recommend" className="acc-action acc-action--primary">
+            <Link href="/recommend" className="acc-action acc-action--primary e-list__item">
               <span className="acc-action__emoji"><IcSparkle /></span> نفسك في ايه؟
             </Link>
-            <Link href="/offers" className="acc-action">
+            <Link href="/offers" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcTag /></span> العروض
             </Link>
-            <Link href="/account/edit" className="acc-action acc-action--primary">
+            <Link href="/account/edit" className="acc-action acc-action--primary e-list__item">
               <span className="acc-action__emoji"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{display:'inline',verticalAlign:'middle',marginLeft:4}}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل البروفايل
             </Link>
-            <Link href="/account/notifications" className="acc-action">
+            <Link href="/account/notifications" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcBell /></span> الإشعارات
             </Link>
-            <Link href="/account/orders" className="acc-action">
+            <Link href="/account/orders" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcPackage /></span> طلباتي
             </Link>
-            <Link href="/account/points" className="acc-action">
+            <Link href="/account/points" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcDiamond /></span> نقاطي
             </Link>
-            <Link href="/account/referral" className="acc-action">
+            <Link href="/account/referral" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcUsers /></span> ادعي صحابك
             </Link>
             {!isVerified && (
-              <Link href="/account/verify" className="acc-action acc-action--primary">
+              <Link href="/account/verify" className="acc-action acc-action--primary e-list__item">
                 <span className="acc-action__emoji"><IcCheck /></span> وثّق حسابك
               </Link>
             )}
-            <Link href="/auth/change-password" className="acc-action">
+            <Link href="/auth/change-password" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcKey /></span> تغيير كلمة السر
             </Link>
             {role === 'merchant' && (
-              <Link href="/merchant" className="acc-action acc-action--primary">
+              <Link href="/merchant" className="acc-action acc-action--primary e-list__item">
                 <span className="acc-action__emoji"><IcStore /></span> لوحة النشاط
               </Link>
             )}
             {role === 'super_admin' && (
-              <Link href="/admin" className="acc-action acc-action--primary">
+              <Link href="/admin" className="acc-action acc-action--primary e-list__item">
                 <span className="acc-action__emoji"><IcShield /></span> لوحة التحكم
               </Link>
             )}
@@ -214,27 +214,27 @@ export default async function AccountPage() {
 
         <section className="acc-section">
           <div className="acc-section__head">
-            <h2 className="acc-section__title">معلومات الحساب</h2>
+            <h2 className="acc-section__title e-section__title">معلومات الحساب</h2>
           </div>
           <div className="acc-info">
-            <div className="acc-info__row">
+            <div className="acc-info__row e-list__item">
               <span className="acc-info__label">الاسم</span>
               <span className="acc-info__value">{name}</span>
             </div>
-            <div className="acc-info__row">
+            <div className="acc-info__row e-list__item">
               <span className="acc-info__label">الموبايل</span>
               <span className="acc-info__value">{profile?.phone ?? '—'}</span>
             </div>
-            <div className="acc-info__row">
+            <div className="acc-info__row e-list__item">
               <span className="acc-info__label">حالة التوثيق</span>
               <span className="acc-info__value">{isVerified ? 'موثّق' : 'غير موثّق'}</span>
             </div>
-            <div className="acc-info__row">
+            <div className="acc-info__row e-list__item">
               <span className="acc-info__label">نوع الحساب</span>
               <span className="acc-info__value">{roleLabel}</span>
             </div>
             {isPremium && (
-              <div className="acc-info__row">
+              <div className="acc-info__row e-list__item">
                 <span className="acc-info__label">الاشتراك</span>
                 <span className="acc-info__value">مميز</span>
               </div>
