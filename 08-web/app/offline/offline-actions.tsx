@@ -8,11 +8,9 @@ export default function OfflineActions() {
         type="button"
         className="off__btn off__btn--primary"
         onClick={() => window.location.reload()}
-      ><IcRefresh /> حاول تاني
+      >
+        <IcRefresh /> حاول تاني
       </button>
-      <a href="/" className="off__btn off__btn--ghost">
-        الرئيسية
-      </a>
     </div>
   )
 }

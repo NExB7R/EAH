@@ -126,3 +126,7 @@
 ### 2026-09-18 19:35 UTC — v1.0.1
 - **Action:** feat(ui): contact icons + notifications page cleanup
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:37 UTC — v1.0.1
+- **Action:** fix(icons): add IcWifi for offline page
+- **Branch:** ui-onlook

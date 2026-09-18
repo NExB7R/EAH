@@ -1,88 +1,147 @@
 .off {
   min-height: 100vh;
-  padding: 120px 20px 60px;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 60px;
+  background: #07060B;
+  position: relative;
+  overflow: hidden;
 }
+
 .off__inner {
   position: relative;
-  max-width: 480px;
   text-align: center;
-  padding: 40px 32px;
-  border-radius: 24px;
-  background: linear-gradient(180deg, rgba(20, 14, 32, 0.6), rgba(10, 7, 16, 0.5));
-  border: 1px solid rgba(168, 85, 247, 0.22);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  max-width: 480px;
+  padding: 32px 24px;
+  z-index: 1;
 }
+
 .off__glow {
   position: absolute;
-  inset: -50px;
-  background: radial-gradient(circle at 50% 20%, rgba(168, 85, 247, 0.22), transparent 60%);
-  filter: blur(30px);
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(168, 85, 247, 0.18), transparent 65%);
+  filter: blur(70px);
   pointer-events: none;
   z-index: -1;
 }
+
 .off__icon {
-  display: grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 88px;
   height: 88px;
-  margin: 0 auto 20px;
-  border-radius: 50%;
-  background: rgba(168, 85, 247, 0.08);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  color: #C4B5FD;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(232, 199, 154, 0.08));
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #C084FC;
+  margin-bottom: 22px;
+  box-shadow: 0 0 40px rgba(168, 85, 247, 0.25);
 }
+
+.off__icon svg {
+  width: 44px;
+  height: 44px;
+  stroke-width: 1.6;
+}
+
+.off__kicker {
+  display: inline-block;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #E8C79A;
+  letter-spacing: 0.22em;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.08);
+  border: 1px solid rgba(232, 199, 154, 0.28);
+  margin-bottom: 18px;
+}
+
 .off__title {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 1.6rem;
+  font-size: clamp(1.6rem, 4.5vw, 2.2rem);
   font-weight: 900;
-  color: #F4F2FA;
   margin: 0 0 12px;
+  line-height: 1.35;
+  background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 50%, #E8C79A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 60px rgba(168, 85, 247, 0.25);
 }
-.off__lead {
+
+.off__body {
+  font-family: var(--font-cairo, system-ui);
   font-size: 0.95rem;
-  line-height: 1.7;
-  color: #C9C2DB;
+  color: #A5A3B8;
+  line-height: 1.9;
   margin: 0 0 26px;
 }
+
 .off__actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
   flex-wrap: wrap;
+  margin-bottom: 20px;
 }
+
 .off__btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 12px 26px;
   border-radius: 14px;
-  font-weight: 800;
-  font-size: 0.95rem;
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.9rem;
+  font-weight: 900;
   text-decoration: none;
-  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.14s cubic-bezier(0.22, 1, 0.36, 1);
+  border: none;
 }
+
+.off__btn svg {
+  width: 16px;
+  height: 16px;
+}
+
 .off__btn--primary {
-  background: linear-gradient(135deg, #a855f7, #6b21ff);
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
   color: #fff;
-  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+  box-shadow: 0 10px 26px rgba(168, 85, 247, 0.4);
 }
+
 .off__btn--primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(168, 85, 247, 0.55);
+  box-shadow: 0 14px 34px rgba(168, 85, 247, 0.55);
 }
-.off__btn--ghost {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(168, 85, 247, 0.3);
+
+.off__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.85rem;
+  font-weight: 800;
   color: #C4B5FD;
+  text-decoration: none;
+  transition: color 0.12s;
 }
-.off__btn--ghost:hover {
-  background: rgba(168, 85, 247, 0.12);
-  border-color: rgba(168, 85, 247, 0.55);
-  color: #fff;
+
+.off__link svg {
+  width: 16px;
+  height: 16px;
+}
+
+.off__link:hover {
+  color: #E8C79A;
 }
