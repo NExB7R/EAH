@@ -9,3 +9,7 @@
 ### 2026-09-18 17:57 UTC — v1.0.1
 - **Action:** chore: auto-version + session log + dev guide
 - **Branch:** ui-onlook
+
+### 2026-09-18 17:59 UTC — v1.0.1
+- **Action:** docs: handoff + memory update
+- **Branch:** ui-onlook
