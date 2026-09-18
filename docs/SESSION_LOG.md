@@ -54,3 +54,7 @@
 ### 2026-09-18 18:26 UTC — v1.0.1
 - **Action:** fix(home): svg icon sizes for hero + actions
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:28 UTC — v1.0.1
+- **Action:** fix(home-hero): restore Icon JSX
+- **Branch:** ui-onlook
