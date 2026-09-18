@@ -6,12 +6,14 @@ import { MI } from '@/components/neon-icons-menu'
 import './admin-shell.css'
 import './admin-shell-polish.css'
 import { IcMenu } from '@/components/eah-icons'
+import PendingBadge from './pending-badge'
 
 type NavItem = {
   href: string
   label: string
   icon: React.ReactNode
   badge?: number
+  liveBadge?: boolean
 }
 
 type NavSection = {
@@ -41,7 +43,7 @@ export default function AdminShell({
       title: 'المحتوى',
       items: [
         { href: '/admin/collect', label: 'جمع أماكن', icon: MI.sparkles },
-        { href: '/admin/pending', label: 'الطلبات المعلقة', icon: MI.inbox, badge: pendingChanges },
+        { href: '/admin/pending', label: 'الطلبات المعلقة', icon: MI.inbox, liveBadge: true },
         { href: '/admin/businesses', label: 'الأنشطة', icon: MI.store },
         { href: '/admin/offers', label: 'العروض', icon: MI.fire },
         { href: '/admin/ads', label: 'الإعلانات', icon: MI.megaphone },
@@ -112,6 +114,7 @@ export default function AdminShell({
                 >
                   <span className="admin-sidebar__link-icon" aria-hidden>{item.icon}</span>
                   <span>{item.label}</span>
+                  {item.liveBadge && <PendingBadge initial={pendingChanges ?? 0} />}
                   {item.badge !== undefined && item.badge > 0 && (
                     <span className="admin-sidebar__link-badge">{item.badge}</span>
                   )}
