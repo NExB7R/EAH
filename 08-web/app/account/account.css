@@ -453,3 +453,25 @@
   border: 1px solid rgba(168, 85, 247, 0.45);
   color: #E9D5FF;
 }
+
+
+/* ═══ SVG Icons — حجم موحّد ═══ */
+.acc-card__emoji svg,
+.acc-action__emoji svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.8;
+}
+.acc-card__emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #A855F7;
+}
+.acc-action__emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #C084FC;
+  margin-left: 8px;
+}

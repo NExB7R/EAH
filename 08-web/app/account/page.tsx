@@ -8,7 +8,7 @@ import RoyalAvatar from '@/components/royal-avatar'
 import EnablePushButton from '@/components/enable-push-button'
 import '@/components/royal-avatar.css'
 import './account.css'
-import { IcBan, IcCalendar, IcCheck, IcDoor, IcHeart } from '@/components/eah-icons'
+import { IcBan, IcCalendar, IcCheck, IcDoor, IcHeart, IcStar, IcBell, IcCompass, IcSparkle, IcTag, IcPackage, IcDiamond, IcUsers, IcKey, IcStore, IcShield } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'حسابي' }
@@ -110,7 +110,7 @@ export default async function AccountPage() {
         <section className="acc-grid">
           {role !== 'super_admin' && (
             <div className="acc-card acc-card--third">
-              <span className="acc-card__emoji"></span>
+              <span className="acc-card__emoji"><IcSparkle /></span>
               <span className="acc-card__value" style={{ color: '#FBBF24' }}>{trustScore}</span>
               <span className="acc-card__label">نقاط الثقة</span>
               <div className="acc-trust-bar">
@@ -126,13 +126,13 @@ export default async function AccountPage() {
           </div>
 
           <div className="acc-card acc-card--third">
-            <span className="acc-card__emoji"></span>
+            <span className="acc-card__emoji"><IcStar /></span>
             <span className="acc-card__value" style={{ color: '#C084FC' }}>{reviewCount ?? 0}</span>
             <span className="acc-card__label">تقييمات</span>
           </div>
 
           <div className="acc-card acc-card--half">
-            <span className="acc-card__emoji"></span>
+            <span className="acc-card__emoji"><IcBell /></span>
             <span className="acc-card__value" style={{ color: '#A855F7' }}>{notifCount ?? 0}</span>
             <span className="acc-card__label">إشعارات جديدة</span>
           </div>
@@ -150,28 +150,28 @@ export default async function AccountPage() {
           </div>
           <div className="acc-actions">
             <Link href="/explore" className="acc-action">
-              <span className="acc-action__emoji"></span> اكتشف الأماكن
+              <span className="acc-action__emoji"><IcCompass /></span> اكتشف الأماكن
             </Link>
             <Link href="/recommend" className="acc-action acc-action--primary">
-              <span className="acc-action__emoji"></span> نفسك في ايه؟
+              <span className="acc-action__emoji"><IcSparkle /></span> نفسك في ايه؟
             </Link>
             <Link href="/offers" className="acc-action">
-              <span className="acc-action__emoji"></span> العروض
+              <span className="acc-action__emoji"><IcTag /></span> العروض
             </Link>
             <Link href="/account/edit" className="acc-action acc-action--primary">
               <span className="acc-action__emoji"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{display:'inline',verticalAlign:'middle',marginLeft:4}}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل البروفايل
             </Link>
             <Link href="/account/notifications" className="acc-action">
-              <span className="acc-action__emoji"></span> الإشعارات
+              <span className="acc-action__emoji"><IcBell /></span> الإشعارات
             </Link>
             <Link href="/account/orders" className="acc-action">
-              <span className="acc-action__emoji"></span> طلباتي
+              <span className="acc-action__emoji"><IcPackage /></span> طلباتي
             </Link>
             <Link href="/account/points" className="acc-action">
-              <span className="acc-action__emoji"></span> نقاطي
+              <span className="acc-action__emoji"><IcDiamond /></span> نقاطي
             </Link>
             <Link href="/account/referral" className="acc-action">
-              <span className="acc-action__emoji"></span> ادعي صحابك
+              <span className="acc-action__emoji"><IcUsers /></span> ادعي صحابك
             </Link>
             {!isVerified && (
               <Link href="/account/verify" className="acc-action acc-action--primary">
@@ -179,16 +179,16 @@ export default async function AccountPage() {
               </Link>
             )}
             <Link href="/auth/change-password" className="acc-action">
-              <span className="acc-action__emoji"></span> تغيير كلمة السر
+              <span className="acc-action__emoji"><IcKey /></span> تغيير كلمة السر
             </Link>
             {role === 'merchant' && (
               <Link href="/merchant" className="acc-action acc-action--primary">
-                <span className="acc-action__emoji"></span> لوحة النشاط
+                <span className="acc-action__emoji"><IcStore /></span> لوحة النشاط
               </Link>
             )}
             {role === 'super_admin' && (
               <Link href="/admin" className="acc-action acc-action--primary">
-                <span className="acc-action__emoji"></span> لوحة التحكم
+                <span className="acc-action__emoji"><IcShield /></span> لوحة التحكم
               </Link>
             )}
           </div>
