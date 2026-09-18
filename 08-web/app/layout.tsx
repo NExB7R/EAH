@@ -17,6 +17,7 @@ import InstallAppButton from '@/components/install-app-button'
 import SmartBot from '@/components/smart-bot'
 import CookieConsent from '@/components/cookie-consent'
 import SyncStatus from '@/components/sync-status'
+import WebVitals from '@/components/web-vitals'
 import '@/components/install-pwa-button.css'
 import '@/components/install-app-button.css'
 import '@/components/share-button.css'
@@ -170,6 +171,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }),
           }}
         />
+              <WebVitals />
       </body>
     </html>
   )

@@ -8,7 +8,7 @@
    - Offline fallback: serve /offline page for HTML navigations
    ═══════════════════════════════════════════════════════════════ */
 
-const VERSION = 'eah-v2-2026-09'
+const VERSION = 'eah-v3-2026-09'
 const SHELL_CACHE = `${VERSION}-shell`
 const STATIC_CACHE = `${VERSION}-static`
 const IMAGE_CACHE = `${VERSION}-images`
@@ -19,10 +19,7 @@ const PRE_CACHE = [
   '/',
   '/offline',
   '/manifest.webmanifest',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/apple-touch-icon.png',
-  '/eah-logo.svg',
+  '/crown-192.png',
 ]
 
 // ═══════════════════════════════════════════════════════════════

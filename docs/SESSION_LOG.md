@@ -30,3 +30,7 @@
 ### 2026-09-18 18:13 UTC — v1.0.1
 - **Action:** perf(fonts): drop Dancing Script + reduce weights + preload
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:14 UTC — v1.0.1
+- **Action:** perf: SW v3 (slim cache) + Web Vitals tracking
+- **Branch:** ui-onlook
