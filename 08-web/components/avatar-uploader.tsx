@@ -1,6 +1,5 @@
 'use client'
 import { useRef, useState } from 'react'
-import { createClient } from '@/lib/supabase-browser'
 import './avatar-uploader.css'
 import { IcCamera, IcLink, IcPalette, IcTrash } from '@/components/eah-icons'
 
@@ -41,17 +40,13 @@ export default function AvatarUploader({ userId, initialUrl, initialKey }: Props
 
     setUploading(true)
     try {
-      const supabase = createClient()
-      const ext = file.name.split('.').pop() || 'jpg'
-      const path = `${userId}/${Date.now()}.${ext}`
-
-      const { error } = await supabase.storage.from('avatars').upload(path, file, {
-        cacheControl: '3600', upsert: false, contentType: file.type,
-      })
-      if (error) throw error
-
-      const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path)
-      setUrl(publicUrl)
+      const fd = new FormData()
+      fd.append('file', file)
+      fd.append('folder', `avatars/${userId}`)
+      const res = await fetch('/api/upload', { method: 'POST', body: fd })
+      const json = await res.json()
+      if (!res.ok || !json.ok) throw new Error(json.error ?? 'فشل الرفع')
+      setUrl(json.url)
       setKey(null)
     } catch (e: any) {
       setErr(e.message || 'فشل الرفع')
