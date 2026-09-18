@@ -118,33 +118,6 @@ export default async function HomeDynamicV2() {
           ))}
         </SectionSliderV2>
       )}
-
-      <section className="home-actions">
-        <div className="home-actions__grid">
-          <a href="/merchant/apply" className="home-actions__card home-actions__card--biz">
-            <span className="home-actions__icon"><IcSparkle /></span>
-            <div className="home-actions__body">
-              <h3 className="home-actions__title">عندك نشاط؟</h3>
-              <p className="home-actions__desc">سجّله مجاناً — بدون عمولة على الطلبات</p>
-            </div>
-            <span className="home-actions__cta">سجّل نشاطك ←</span>
-          </a>
-          <a href="/recommend" className="home-actions__card home-actions__card--rec">
-            <span className="home-actions__icon" aria-hidden>
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 3l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z"/>
-              </svg>
-            </span>
-            <div className="home-actions__body">
-              <h3 className="home-actions__title">مش عارف تختار؟</h3>
-              <p className="home-actions__desc">قول مزاجك وإحنا نظبط</p>
-            </div>
-            <span className="home-actions__cta">جرّب ←</span>
-          </a>
-        </div>
-      </section>
-
-      
-    </>
+</>
   )
 }
