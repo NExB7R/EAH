@@ -42,5 +42,16 @@ export async function POST(request: Request) {
     url: '/merchant/orders',
   })
 
+  // log زيارة فريدة (نقاط تلقائية)
+  try {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      await supabase.rpc('log_unique_visit', {
+        p_business_id: order.business_id,
+        p_visit_type: 'order_confirmed',
+      })
+    }
+  } catch { /* silent */ }
+
   return NextResponse.json({ ok: true, ...result })
 }

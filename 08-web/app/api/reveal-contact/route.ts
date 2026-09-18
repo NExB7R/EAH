@@ -55,6 +55,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: 'rpc_failed' }, { status: 500 })
     }
 
+    // log زيارة فريدة (نقاط تلقائية)
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        await supabase.rpc('log_unique_visit', {
+          p_business_id: uuidCheck.data,
+          p_visit_type: 'phone_reveal',
+        })
+      }
+    } catch { /* silent */ }
+
     return NextResponse.json({ ok: true, ...(data as object) })
   } catch {
     return NextResponse.json({ ok: false, error: 'internal' }, { status: 500 })
