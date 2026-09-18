@@ -1,24 +1,52 @@
 'use client'
 import { useEffect } from 'react'
 import Link from 'next/link'
-import EahLogo from '@/components/eah-logo'
+import { IcAlert, IcRefresh, IcHome } from '@/components/eah-icons'
 import './error.css'
-import { IcAlert } from '@/components/eah-icons'
 
-export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
-  useEffect(() => { console.error(error) }, [error])
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) {
+  useEffect(() => {
+    console.error('[EAH error]', error)
+    // Sentry تلقط تلقائي لو مربوط
+  }, [error])
+
   return (
-    <main className="er">
-      <div className="er__glow" aria-hidden />
-      <div className="er__logo">
-        <EahLogo size="md" variant="full" href="/" />
-      </div>
-      <span className="er__emoji"><IcAlert /></span>
-      <h1 className="er__title">حصل خطأ</h1>
-      <p className="er__text">حاول تاني، ولو المشكلة مستمرة كلمنا.</p>
-      <div className="er__actions">
-        <button onClick={reset} className="er__btn er__btn--primary">حاول تاني</button>
-        <Link href="/" className="er__btn">الرئيسية</Link>
+    <main className="err">
+      <div className="err__inner">
+        <div className="err__glow" aria-hidden />
+
+        <span className="err__icon" aria-hidden>
+          <IcAlert />
+        </span>
+
+        <span className="err__kicker">حصلت مشكلة</span>
+
+        <h1 className="err__title">
+          حاجة غلط حصلت يا أخويا
+        </h1>
+
+        <p className="err__body">
+          جرّب تحدّث الصفحة — ولو المشكلة مستمرة، كلّمنا.
+        </p>
+
+        <div className="err__actions">
+          <button type="button" onClick={reset} className="err__btn err__btn--primary">
+            <IcRefresh /> حاول تاني
+          </button>
+          <Link href="/" className="err__btn err__btn--ghost">
+            <IcHome /> الرئيسية
+          </Link>
+        </div>
+
+        {error.digest && (
+          <p className="err__code">كود: {error.digest.slice(0, 12)}</p>
+        )}
       </div>
     </main>
   )

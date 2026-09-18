@@ -166,3 +166,7 @@
 ### 2026-09-18 19:57 UTC — v1.1.0
 - **Action:** fix(push): allow merchant_orders type + optional
 - **Branch:** ui-onlook
+
+### 2026-09-18 20:03 UTC — v1.1.0
+- **Action:** feat(errors): error boundary + not-found + 2026 design
+- **Branch:** ui-onlook
