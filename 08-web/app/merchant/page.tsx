@@ -30,43 +30,43 @@ export default async function MerchantDashboard() {
     <>
       <FloatingCapsuleHeader />
       {firstBizId && <TrialCountdown businessId={firstBizId} />}
-      <main className="mpage">
+      <main className="mpage e-page">
         <div className="mpage__head">
           <div>
             <span className="mpage__kicker">شريكنا</span>
-            <h1 className="mpage__title">لوحة النشاط</h1>
+            <h1 className="mpage__title e-gradient">لوحة النشاط</h1>
             <p className="mpage__sub">
               مرحبًا {user.email?.split('@')[0] ?? 'صاحب النشاط'} — إدارة كل أنشطتك من هنا
             </p>
           </div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <Link href="/merchant/pending" className="admin-btn admin-btn--ghost">طلباتي المعلقة</Link>
-            <Link href="/merchant/orders" className="admin-btn admin-btn--gold">
+            <Link href="/merchant/pending" className="admin-btn admin-btn--ghost e-btn e-btn--ghost">طلباتي المعلقة</Link>
+            <Link href="/merchant/orders" className="admin-btn admin-btn--gold e-btn e-btn--ghost">
               الطلبات
             </Link>
-            <Link href="/merchant/apply" className="admin-btn admin-btn--primary">
+            <Link href="/merchant/apply" className="admin-btn admin-btn--primary e-btn e-btn--primary">
               أضف نشاط جديد
             </Link>
           </div>
         </div>
 
         {businesses.length === 0 ? (
-          <div className="admin-empty">
+          <div className="admin-empty e-empty">
             <span className="admin-empty__emoji"></span>
-            <h2 className="admin-empty__title">لسه مسجلتش أي نشاط</h2>
-            <p className="admin-empty__msg">سجّل مطعمك أو صيدليتك أو محلك واحنا هنتواصل معاك</p>
-            <Link href="/merchant/apply" className="admin-btn admin-btn--primary">
+            <h2 className="admin-empty__title e-empty__title">لسه مسجلتش أي نشاط</h2>
+            <p className="admin-empty__msg e-empty__text">سجّل مطعمك أو صيدليتك أو محلك واحنا هنتواصل معاك</p>
+            <Link href="/merchant/apply" className="admin-btn admin-btn--primary e-btn e-btn--primary">
               سجّل نشاطك
             </Link>
           </div>
         ) : (
           <div className="mpage__grid">
             {businesses.map((b) => (
-              <article key={b.id} className="mbiz">
+              <article key={b.id} className="mbiz e-card">
                 <div className="mbiz__head">
                   <div className="mbiz__icon">{TYPE_EMOJI[b.business_type] ?? ''}</div>
                   <div className="mbiz__meta">
-                    <h3 className="mbiz__name">{b.name}</h3>
+                    <h3 className="mbiz__name e-section__title">{b.name}</h3>
                     <span className="mbiz__slug">/{b.slug}</span>
                     <span className="mbiz__area">
                       {[b.area, b.city].filter(Boolean).join(' • ') || 'لم يُحدد'}
@@ -75,12 +75,12 @@ export default async function MerchantDashboard() {
                 </div>
 
                 <div className="mbiz__badges">
-                  <span className="mbiz__badge mbiz__badge--type">
+                  <span className="mbiz__badge mbiz__badge--type e-badge e-badge--muted">
                     {TYPE_LABEL[b.business_type]}
                   </span>
-                  {b.is_featured && <span className="mbiz__badge mbiz__badge--featured">مميز</span>}
-                  {b.is_published && <span className="mbiz__badge mbiz__badge--published">منشور</span>}
-                  {b.is_open && <span className="mbiz__badge mbiz__badge--open">مفتوح</span>}
+                  {b.is_featured && <span className="mbiz__badge mbiz__badge--featured e-badge e-badge--gold">مميز</span>}
+                  {b.is_published && <span className="mbiz__badge mbiz__badge--published e-badge e-badge--accent">منشور</span>}
+                  {b.is_open && <span className="mbiz__badge mbiz__badge--open e-badge e-badge--success">مفتوح</span>}
                 </div>
 
                 <div className="mbiz__actions">

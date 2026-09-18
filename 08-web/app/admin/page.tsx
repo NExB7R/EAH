@@ -41,13 +41,13 @@ export default async function AdminHomePage() {
       <div className="admin-header">
         <div className="admin-header__info">
           <span className="admin-header__kicker">غرفة التحكم</span>
-          <h1 className="admin-header__title">مرحباً بك في لوحة التحكم</h1>
+          <h1 className="admin-header__title e-gradient">مرحباً بك في لوحة التحكم</h1>
           <p className="admin-header__subtitle">
             كل اللي محتاجه للتحكم في المنصة من مكان واحد
           </p>
         </div>
         <div className="admin-header__actions">
-          <Link href="/admin/businesses/new" className="admin-btn admin-btn--primary">
+          <Link href="/admin/businesses/new" className="admin-btn admin-btn--primary e-btn e-btn--primary">
             إضافة مكان
           </Link>
         </div>
@@ -55,13 +55,13 @@ export default async function AdminHomePage() {
 
       <div className="admin-grid admin-grid--cards">
         {stats.map((s) => (
-          <Link key={s.label} href={s.href} className="admin-kpi">
+          <Link key={s.label} href={s.href} className="admin-kpi e-stat">
             <span className="admin-kpi__icon" style={{ color: s.color }} aria-hidden>
               {s.icon}
             </span>
             <div className="admin-kpi__body">
-              <div className="admin-kpi__label">{s.label}</div>
-              <div className="admin-kpi__value" style={{ color: s.color }}>{s.value}</div>
+              <div className="admin-kpi__label e-stat__label">{s.label}</div>
+              <div className="admin-kpi__value e-stat__value" style={{ color: s.color }}>{s.value}</div>
             </div>
           </Link>
         ))}
