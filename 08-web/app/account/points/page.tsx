@@ -126,7 +126,8 @@ export default async function PointsPage() {
               <span className="pt__howto-icon"><IcHeart /></span>
               <div>
                 <strong>+3 نقاط</strong>
-                <span>زيارة نشاط</span>
+                <span>زيارة فريدة</span>
+                <small>لما تطلب أوردر فعلي أو تكشف رقم الفون</small>
               </div>
             </div>
             <div className="pt__howto-item">

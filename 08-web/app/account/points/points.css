@@ -98,6 +98,7 @@
 .pt__howto-item > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .pt__howto-item strong { color: #FBBF24; font-size: .85rem; font-weight: 800; }
 .pt__howto-item span { color: #A5A3B8; font-size: .75rem; }
+.pt__howto-item small { color: #6B6880; font-size: .65rem; margin-top: 2px; }
 .pt__howto-cta {
   display: inline-block; padding: 12px 22px; border-radius: 12px;
   background: linear-gradient(135deg, #8B5CF6, #A855F7);
