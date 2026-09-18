@@ -138,3 +138,7 @@
 ### 2026-09-18 19:45 UTC — v1.1.0
 - **Action:** feat(account): trust score visual (ring + tier badge)
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:46 UTC — v1.1.0
+- **Action:** feat(audit): auto-log merchant actions (reply + order status)
+- **Branch:** ui-onlook

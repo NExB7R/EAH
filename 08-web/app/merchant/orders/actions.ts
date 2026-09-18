@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase-server'
+import { auditLog } from '@/lib/admin/audit'
 
 type ActionResult = { ok: boolean; message?: string; error?: string }
 
@@ -48,6 +49,14 @@ export async function updateOrderStatus(orderId: string, status: Status): Promis
       .update({ status, updated_at: new Date().toISOString() })
       .eq('id', orderId)
     if (error) return { ok: false, error: error.message }
+
+    await auditLog({
+      action: 'offer.update',
+      entityType: 'order_request',
+      entityId: orderId,
+      after: { status },
+    })
+
     revalidatePath('/merchant/orders')
     return { ok: true, message: 'تم تحديث الحالة' }
   } catch (e) {

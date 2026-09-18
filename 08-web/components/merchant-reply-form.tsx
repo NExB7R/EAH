@@ -2,6 +2,7 @@
 import { useState, useTransition } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './merchant-reply-form.css'
+import { auditClient } from '@/lib/audit-client'
 
 export default function MerchantReplyForm({ reviewId, existingReply }: { reviewId: string; existingReply?: string | null }) {
   const [open, setOpen] = useState(false)
@@ -29,6 +30,14 @@ export default function MerchantReplyForm({ reviewId, existingReply }: { reviewI
         }
         setMsg(msgs[r?.reason] ?? 'حصل خطأ'); return
       }
+      // audit
+      void auditClient({
+        action: 'review.reply',
+        entityType: 'business_review',
+        entityId: reviewId,
+        after: { reply: reply.trim() },
+      })
+
       setSaved(reply.trim())
       setOpen(false)
       setMsg('')
