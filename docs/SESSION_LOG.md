@@ -50,3 +50,7 @@
 ### 2026-09-18 18:24 UTC — v1.0.1
 - **Action:** fix(home-hero): close media queries + tighten icons
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:26 UTC — v1.0.1
+- **Action:** fix(home): svg icon sizes for hero + actions
+- **Branch:** ui-onlook
