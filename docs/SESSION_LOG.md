@@ -86,3 +86,7 @@
 ### 2026-09-18 19:03 UTC — v1.0.1
 - **Action:** fix(header): single full logo (no duplicate on mobile) + tighter hero
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:05 UTC — v1.0.1
+- **Action:** feat(business): hero cover image + open/closed badge
+- **Branch:** ui-onlook

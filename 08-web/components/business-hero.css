@@ -172,3 +172,94 @@
   margin: 6px 0 0;
   line-height: 1.5;
 }
+
+/* ═══ Cover Image Support (2026) ═══ */
+.bhero__cover {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.bhero__cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 7, 20, 0.55) 0%,
+    rgba(168, 85, 247, 0.15) 40%,
+    rgba(10, 7, 20, 0.35) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bhero__cover-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(10, 7, 20, 0.85);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #C084FC;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 2;
+}
+
+.bhero__cover-badge svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ═══ Open/Closed Status Badge ═══ */
+.bhero__meta-item--status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.76rem;
+}
+
+.bhero__meta-item--status.is-open {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #6EE7B7;
+}
+
+.bhero__meta-item--status.is-closed {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #FCA5A5;
+}
+
+.bhero__status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.bhero__meta-item--status.is-open .bhero__status-dot {
+  animation: bheroPulse 2s ease-in-out infinite;
+}
+
+@keyframes bheroPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+/* لو في صورة، الـ cover يبقى أكبر */
+.bhero__inner.has-cover .bhero__cover {
+  min-height: 260px;
+}

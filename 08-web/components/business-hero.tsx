@@ -39,9 +39,13 @@ export default function BusinessHero({
     vibe: string[]
     address?: string | null
     workingHours?: any
+    coverImage?: string | null
   }
   stats: Stats
 }) {
+  const cover = business.coverImage ?? null
+  const Icon = TYPE_ICON[business.type]
+
   return (
     <section className="bhero">
       <div className="bhero__back">
@@ -53,13 +57,23 @@ export default function BusinessHero({
         </Link>
       </div>
 
-      <div className="bhero__inner">
-        <div className="bhero__cover">
+      <div className={`bhero__inner ${cover ? 'has-cover' : ''}`}>
+        <div
+          className="bhero__cover"
+          style={cover ? { backgroundImage: `url(${cover})` } : undefined}
+        >
+          {cover && <div className="bhero__cover-overlay" aria-hidden />}
           <div className="bhero__cover-glow" aria-hidden />
-          <span className="bhero__icon" aria-hidden>
-            {(() => { const Icon = TYPE_ICON[business.type]; return <Icon /> })()}
-          </span>
-
+          {!cover && (
+            <span className="bhero__icon" aria-hidden>
+              <Icon />
+            </span>
+          )}
+          {cover && (
+            <span className="bhero__cover-badge" aria-hidden>
+              <Icon />
+            </span>
+          )}
         </div>
 
         <div className="bhero__info">
@@ -72,6 +86,10 @@ export default function BusinessHero({
                 <circle cx="12" cy="10" r="3" />
               </svg>
               {business.area}
+            </span>
+            <span className={`bhero__meta-item bhero__meta-item--status ${business.open ? 'is-open' : 'is-closed'}`}>
+              <span className="bhero__status-dot" aria-hidden />
+              {business.open ? 'مفتوح دلوقتي' : 'مقفول حالياً'}
             </span>
             {stats.review_count > 0 && (
               <span className="bhero__meta-item">
@@ -98,20 +116,6 @@ export default function BusinessHero({
           )}
 
           <p className="bhero__reason">{business.reason}</p>
-
-          {(() => {
-            const cleaned = business.vibe.filter(
-              (v) => !['مميز', 'الأعلى تقييماً', 'عرض', 'مناسب ليك'].includes(v)
-            )
-            if (cleaned.length === 0) return null
-            return (
-              <div className="bhero__vibes">
-                {cleaned.map((v) => (
-                  <span key={v} className="bhero__vibe">#{v}</span>
-                ))}
-              </div>
-            )
-          })()}
         </div>
       </div>
     </section>
