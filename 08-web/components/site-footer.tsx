@@ -60,7 +60,7 @@ export default function SiteFooter() {
 
           <div className="sf__col">
             <h4 className="sf__col-title">عننا</h4>
-            <a href="/about" className="sf__link">الكلام ع إيه</a>
+            <a href="/about" className="sf__link">احنا مين</a>
             <a href="/contact" className="sf__link">تواصل معانا</a>
             <a href="/support-palestine" className="sf__link">فلسطين في القلب</a>
           </div>

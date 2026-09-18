@@ -131,7 +131,7 @@ export default function FloatingCapsuleHeader() {
           <div className="floating-capsule__side floating-capsule__side--end">
             <span className="fc-desktop-only">
               <NeonIconButton icon={<IconChat />} label="تواصل" ariaLabel="تواصل" href="/contact" />
-              <NeonIconButton icon={<IconInfo />} label="الكلام ع إيه" ariaLabel="نبذة" href="/about" />
+              <NeonIconButton icon={<IconInfo />} label="احنا مين" ariaLabel="نبذة" href="/about" />
               <NeonIconButton icon={<IconFacebook />} label="فيسبوك" ariaLabel="فيسبوك" href="https://facebook.com/eah.eg" />
               <NeonIconButton icon={<IconWhatsapp />} label="واتساب" ariaLabel="واتساب" href="https://wa.me/201012892806" />
             </span>
@@ -208,7 +208,7 @@ export default function FloatingCapsuleHeader() {
           </nav>
           <div className="nav-drawer__spacer" />
           <nav className="nav-drawer__group">
-            <a href="/about" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.info}</span>الكلام ع إيه</a>
+            <a href="/about" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.info}</span>احنا مين</a>
             <a href="/contact" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.chat}</span>تواصل معنا</a>
             <a href="https://facebook.com/eah.eg" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.facebook}</span>فيسبوك</a>
             <a href="https://wa.me/201012892806" target="_blank" rel="noreferrer" className="nav-drawer__link"><span className="nav-drawer__link-icon">{MI.whatsapp}</span>واتساب</a>

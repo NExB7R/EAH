@@ -99,7 +99,7 @@ export default function BusinessReviews({
 
       {reviews.length > 0 && (
         <div className="brev__list">
-          <h3 className="brev__list-title">آخر التعليقات</h3>
+          <h3 className="brev__list-title">التعليقات والآراء والاقتراحات</h3>
           {reviews.map((r) => {
             const avg = (r.taste + r.value_for_money + r.speed + r.experience) / 4
             return (
