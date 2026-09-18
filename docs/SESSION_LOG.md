@@ -170,3 +170,7 @@
 ### 2026-09-18 20:03 UTC — v1.1.0
 - **Action:** feat(errors): error boundary + not-found + 2026 design
 - **Branch:** ui-onlook
+
+### 2026-09-18 20:06 UTC — v1.1.0
+- **Action:** feat(ux): loading states for main routes
+- **Branch:** ui-onlook
