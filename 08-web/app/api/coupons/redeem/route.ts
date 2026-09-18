@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
+import { checkRate } from '@/lib/security/rate-limit'
 
 export async function POST(req: Request) {
   const sb = await createClient()
   const { data: { user } } = await sb.auth.getUser()
   if (!user) return NextResponse.json({ ok: false, reason: 'unauth' }, { status: 401 })
+
+  const rl = checkRate(`coupon-redeem:${user.id}`, 10, 60_000)
+  if (!rl.ok) return NextResponse.json({ ok: false, reason: 'rate_limit' }, { status: 429 })
 
   const body = await req.json().catch(() => null)
   if (typeof body?.coupon_id !== 'string') {
