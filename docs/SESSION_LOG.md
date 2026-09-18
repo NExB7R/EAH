@@ -82,3 +82,7 @@
 ### 2026-09-18 18:58 UTC — v1.0.1
 - **Action:** fix(home+header): logo spacing + mobile full logo + clean taglines
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:03 UTC — v1.0.1
+- **Action:** fix(header): single full logo (no duplicate on mobile) + tighter hero
+- **Branch:** ui-onlook

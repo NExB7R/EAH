@@ -124,8 +124,7 @@ export default function FloatingCapsuleHeader() {
           </div>
 
           <div className="floating-capsule__center">
-            <span className="fc-logo fc-logo--desktop"><EahLogo size="sm" variant="compact" href="/" /></span>
-            <span className="fc-logo fc-logo--mobile"><EahLogo size="sm" variant="full" href="/" /></span>
+            <span className="fc-logo"><EahLogo size="sm" variant="full" href="/" /></span>
           </div>
 
           <div className="floating-capsule__side floating-capsule__side--end">

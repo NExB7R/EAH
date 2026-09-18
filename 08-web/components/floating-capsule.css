@@ -56,7 +56,7 @@
 }
 
 .fc-logo { display: inline-flex; align-items: center; justify-content: center; }
-.fc-logo--mobile { display: inline-flex; }
+
 
 .fc-desktop-only {
   display: inline-flex;
@@ -77,8 +77,8 @@
   .fc-desktop-only { display: none; }
   .floating-capsule { width: min(960px, calc(100% - 18px)); }
   .floating-capsule__inner { min-height: 54px; }
-  .fc-logo--desktop { display: inline-flex; }
-  .fc-logo--mobile { display: inline-flex; }
+  
+  
 }
 
 @media (max-width: 640px) {
