@@ -70,17 +70,17 @@ export default function BusinessHero({
             </span>
           )}
           {cover && (
-            <span className="bhero__cover-badge" aria-hidden>
+            <span className="bhero__cover-badge e-badge e-badge--accent" aria-hidden>
               <Icon />
             </span>
           )}
         </div>
 
         <div className="bhero__info">
-          <h1 className="bhero__name">{business.name}</h1>
+          <h1 className="bhero__name e-gradient">{business.name}</h1>
 
           <div className="bhero__meta">
-            <span className="bhero__meta-item">
+            <span className="bhero__meta-item e-badge e-badge--accent">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
@@ -92,14 +92,14 @@ export default function BusinessHero({
               {business.open ? 'مفتوح دلوقتي' : 'مقفول حالياً'}
             </span>
             {stats.review_count > 0 && (
-              <span className="bhero__meta-item">
+              <span className="bhero__meta-item e-badge e-badge--accent">
                 <span className="bhero__star">★</span>
                 <strong>{stats.avg_rating.toFixed(1)}</strong>
                 <span className="bhero__count">({stats.review_count})</span>
               </span>
             )}
             {stats.active_offers > 0 && (
-              <span className="bhero__meta-item bhero__meta-item--offer">
+              <span className="bhero__meta-item bhero__meta-item--offer e-badge e-badge--accent">
                 {stats.active_offers} عرض نشط
               </span>
             )}

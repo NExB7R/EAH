@@ -93,7 +93,7 @@ export default function ExploreCard({ business, index }: { business: Business; s
 
         {/* Views badge — 2026 style */}
         {typeof (business as any).recentViews === 'number' && (business as any).recentViews > 0 && (
-          <span className="ecard__views" aria-label="مشاهدات آخر 7 أيام">
+          <span className="ecard__views e-badge e-badge--muted" aria-label="مشاهدات آخر 7 أيام">
             <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
               <circle cx="12" cy="12" r="3" />
@@ -132,7 +132,7 @@ export default function ExploreCard({ business, index }: { business: Business; s
         )}
 
         {/* Open now */}
-        <div className="ecard__opennow">
+        <div className="ecard__opennow e-badge e-badge--success">
           <OpenNowBadge workingHours={business.workingHours} />
         </div>
       </div>
@@ -140,15 +140,15 @@ export default function ExploreCard({ business, index }: { business: Business; s
       {/* Body */}
       <div className="ecard__body">
         <div className="ecard__type-row">
-          <span className="ecard__type">
+          <span className="ecard__type e-badge e-badge--accent">
             {(() => { const I = TYPE_ICON[business.type]; return <I /> })()} {TYPE_LABEL[business.type]}
           </span>
           {(business.avg_rating ?? business.rating ?? 0) > 0 && (
-            <span className="ecard__score"><IcStar /> {(business.avg_rating ?? business.rating ?? 0).toFixed(1)}</span>
+            <span className="ecard__score e-badge e-badge--gold"><IcStar /> {(business.avg_rating ?? business.rating ?? 0).toFixed(1)}</span>
           )}
         </div>
 
-        <h3 className="ecard__name">{business.name}</h3>
+        <h3 className="ecard__name e-section__title">{business.name}</h3>
         <span className="ecard__area">{business.area}</span>
 
         {hook && <p className="ecard__hook">{hook}</p>}
