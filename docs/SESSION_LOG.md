@@ -46,3 +46,7 @@
 ### 2026-09-18 18:20 UTC — v1.0.1
 - **Action:** perf(home): tighter hero + dedup sections + lighter ambient
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:24 UTC — v1.0.1
+- **Action:** fix(home-hero): close media queries + tighten icons
+- **Branch:** ui-onlook
