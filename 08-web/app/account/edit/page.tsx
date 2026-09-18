@@ -7,6 +7,7 @@ import { updateProfile } from './actions'
 import AvatarUploader from '@/components/avatar-uploader'
 import GenderPicker from '@/components/gender-picker'
 import './edit.css'
+import { IcEdit, IcCamera, IcUsers, IcChat, IcCheck, IcBan, IcCrown } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'تعديل البروفايل' }
@@ -47,7 +48,7 @@ export default async function EditProfilePage() {
 
         <div className="edit__status">
           <div className={`edit__status-card ${isVerified ? 'is-verified' : ''}`}>
-            <span className="edit__status-icon">{isVerified ? <IcVerify /> : <IcBan />}</span>
+            <span className="edit__status-icon">{isVerified ? <IcCheck /> : <IcBan />}</span>
             <div>
               <strong className="edit__status-title">
                 {isVerified ? 'حسابك موثق' : 'حسابك غير موثق'}
