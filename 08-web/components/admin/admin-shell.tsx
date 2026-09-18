@@ -64,6 +64,7 @@ export default function AdminShell({
       title: 'المستخدمين',
       items: [
         { href: '/admin/users', label: 'المستخدمين', icon: MI.info },
+        { href: '/admin/points', label: 'النقاط', icon: MI.sparkles },
         { href: '/admin/merchants', label: 'طلبات التجار', icon: MI.store },
       ],
     },
