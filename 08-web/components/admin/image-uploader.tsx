@@ -4,8 +4,7 @@ import './image-uploader.css'
 
 type UploadedImage = {
   url: string
-  path: string
-  bucket: string
+  publicId?: string
 }
 
 type Props = {
@@ -30,7 +29,7 @@ export default function ImageUploader({
   aspect = 'square',
 }: Props) {
   const [images, setImages] = useState<UploadedImage[]>(() =>
-    initial.map((url) => ({ url, path: '', bucket }))
+    initial.map((url) => ({ url }))
   )
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -39,7 +38,7 @@ export default function ImageUploader({
 
   //  Sync مع initial لما يتغير من الـ server
   useEffect(() => {
-    setImages(initial.map((url) => ({ url, path: '', bucket })))
+    setImages(initial.map((url) => ({ url })))
   }, [initial.join('|')])  // eslint-disable-line react-hooks/exhaustive-deps
 
   const uploadFiles = useCallback(
@@ -59,7 +58,7 @@ export default function ImageUploader({
             setError(json.error ?? 'فشل الرفع')
             continue
           }
-          uploaded.push({ url: json.url, path: json.path, bucket: json.bucket })
+          uploaded.push({ url: json.url, publicId: json.publicId })
         }
         setImages((prev) => (multiple ? [...prev, ...uploaded] : uploaded.slice(-1)))
       } catch (e) {
