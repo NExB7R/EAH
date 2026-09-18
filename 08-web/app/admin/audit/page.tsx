@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import AuditItem from './AuditItem'
 import './audit.css'
-import { IcInbox, IcScroll } from '@/components/eah-icons'
+import { IcInbox, IcScroll, IcCheck, IcBan, IcSparkle } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'سجل العمليات' }
@@ -17,6 +17,9 @@ type Log = {
   before_data: any
   after_data: any
   metadata: any
+  reviewed_by: string | null
+  reviewed_at: string | null
+  review_note: string | null
   created_at: string
 }
 
@@ -27,6 +30,7 @@ const FILTER_GROUPS = [
   { key: 'user', label: 'المستخدمين' },
   { key: 'review', label: 'التقييمات' },
   { key: 'offer', label: 'العروض' },
+  { key: 'points', label: 'النقاط' },
 ]
 
 export default async function AuditPage({
@@ -43,15 +47,21 @@ export default async function AuditPage({
     .select('role')
     .eq('user_id', userData.user.id)
     .maybeSingle()
-  if (roleRow?.role !== 'super_admin' && roleRow?.role !== 'admin') redirect('/')
+  if (roleRow?.role !== 'super_admin') redirect('/')
 
   const sp = await searchParams
   const filter = sp.filter ?? 'all'
   const q = (sp.q ?? '').trim().toLowerCase()
 
+  // pending count
+  const { count: pendingCount } = await supabase
+    .from('pending_changes')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'pending')
+
   let query = supabase
     .from('audit_logs')
-    .select('id,actor_user_id,action,entity_type,entity_id,before_data,after_data,metadata,created_at')
+    .select('id,actor_user_id,action,entity_type,entity_id,before_data,after_data,metadata,reviewed_by,reviewed_at,review_note,created_at')
     .order('created_at', { ascending: false })
     .limit(300)
 
@@ -61,123 +71,98 @@ export default async function AuditPage({
   let rows = (logs ?? []) as Log[]
 
   // جلب actors
-  const actorIds = [...new Set(rows.map((r) => r.actor_user_id).filter(Boolean))] as string[]
+  const actorIds = [...new Set([
+    ...rows.map((r) => r.actor_user_id).filter(Boolean),
+    ...rows.map((r) => r.reviewed_by).filter(Boolean),
+  ])] as string[]
+
   const { data: profiles } = actorIds.length
     ? await supabase.from('profiles').select('id,display_name,phone').in('id', actorIds)
     : { data: [] as any[] }
   const profMap = new Map((profiles ?? []).map((p: any) => [p.id, p]))
 
-  // filter by search
+  // search
   if (q) {
     rows = rows.filter((r) => {
       const actor = r.actor_user_id ? profMap.get(r.actor_user_id) : null
-      const haystack = [
-        r.action,
-        r.entity_type,
-        r.entity_id,
-        actor?.display_name,
-        actor?.phone,
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase()
-      return haystack.includes(q)
+      const haystack = [r.action, r.entity_type, r.entity_id, actor?.display_name, actor?.phone]
+      return haystack.some((x) => x && String(x).toLowerCase().includes(q))
     })
   }
 
-  // counts
-  const { data: allLogs } = await supabase.from('audit_logs').select('action')
-  const counts = { all: 0, business: 0, subscription: 0, user: 0, review: 0, offer: 0 }
-  for (const r of (allLogs ?? []) as { action: string }[]) {
-    counts.all++
-    const prefix = r.action.split('.')[0] as keyof typeof counts
-    if (prefix in counts) counts[prefix]++
-  }
+  // stats
+  const { data: allLogs } = await supabase
+    .from('audit_logs')
+    .select('action')
+    .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+    .limit(2000)
 
-  const tabs = FILTER_GROUPS.map((g) => ({
-    ...g,
-    count: counts[g.key as keyof typeof counts] ?? 0,
-  }))
+  const stats = { total: allLogs?.length ?? 0 }
 
   return (
-    <>
-      <div className="admin-header">
+    <section>
+      <header className="admin-header">
         <div className="admin-header__info">
-          <span className="admin-header__kicker">سجل العمليات</span>
-          <h1 className="admin-header__title"><IcScroll /> سجل العمليات</h1>
+          <span className="admin-header__kicker">السجل</span>
+          <h1 className="admin-header__title">سجل العمليات</h1>
           <p className="admin-header__subtitle">
-            {counts.all} عملية مسجلة — كل الحركات المهمة على المنصة
+            {stats.total} عملية في آخر 7 أيام
+            {pendingCount && pendingCount > 0 && ` • ${pendingCount} طلب معلق`}
           </p>
         </div>
-      </div>
-
-      <div className="aud-stats">
-        <div className="aud-stat">
-          <span className="aud-stat__num">{counts.all}</span>
-          <span className="aud-stat__label">إجمالي العمليات</span>
-        </div>
-        <div className="aud-stat">
-          <span className="aud-stat__num">{counts.business}</span>
-          <span className="aud-stat__label">عمليات الأنشطة</span>
-        </div>
-        <div className="aud-stat">
-          <span className="aud-stat__num">{counts.subscription}</span>
-          <span className="aud-stat__label">عمليات الاشتراكات</span>
-        </div>
-        <div className="aud-stat">
-          <span className="aud-stat__num">{counts.user}</span>
-          <span className="aud-stat__label">عمليات المستخدمين</span>
-        </div>
-      </div>
-
-      <div className="aud-tabs">
-        {tabs.map((t) => (
-          <Link
-            key={t.key}
-            href={`/admin/audit${t.key === 'all' ? '' : `?filter=${t.key}`}`}
-            className={`aud-tab ${filter === t.key ? 'is-active' : ''}`}
-          >
-            {t.label}
-            {t.key !== 'all' && <span className="aud-tab__badge">{t.count}</span>}
+        {pendingCount && pendingCount > 0 ? (
+          <Link href="/admin/pending" className="admin-btn admin-btn--primary">
+            <IcInbox /> الطلبات المعلقة ({pendingCount})
           </Link>
-        ))}
-      </div>
+        ) : null}
+      </header>
 
-      <form className="aud-search" action="/admin/audit" method="get">
-        {filter !== 'all' && <input type="hidden" name="filter" value={filter} />}
-        <input
-          type="text"
-          name="q"
-          placeholder=" ابحث بالفاعل أو العملية أو المعرّف..."
-          defaultValue={sp.q ?? ''}
-        />
-      </form>
-
-      {rows.length === 0 ? (
-        <div className="admin-empty">
-          <span className="admin-empty__emoji"><IcInbox /></span>
-          <h2 className="admin-empty__title">مفيش عمليات هنا</h2>
-          <p className="admin-empty__msg">
-            {q ? 'مفيش نتائج للبحث ده' : 'كل العمليات هتظهر هنا لحظة بلحظة'}
-          </p>
-        </div>
-      ) : (
-        <div className="aud-timeline">
-          {rows.map((log) => (
-            <AuditItem
-              key={log.id}
-              log={log}
-              actorName={
-                log.actor_user_id
-                  ? profMap.get(log.actor_user_id)?.display_name ??
-                    profMap.get(log.actor_user_id)?.phone ??
-                    undefined
-                  : undefined
-              }
-            />
+      <div className="aud-filters">
+        <div className="aud-filters__pills">
+          {FILTER_GROUPS.map((g) => (
+            <Link
+              key={g.key}
+              href={`/admin/audit?filter=${g.key}${q ? `&q=${q}` : ''}`}
+              className={`aud-pill ${filter === g.key ? 'is-active' : ''}`}
+            >
+              {g.label}
+            </Link>
           ))}
         </div>
+        <form className="aud-filters__search" action="/admin/audit" method="get">
+          {filter !== 'all' && <input type="hidden" name="filter" value={filter} />}
+          <input
+            type="text"
+            name="q"
+            defaultValue={q}
+            placeholder="ابحث (اسم/رقم/إجراء)..."
+          />
+          <button type="submit">ابحث</button>
+        </form>
+      </div>
+
+      {rows.length === 0 ? (
+        <div className="aud-empty">
+          <IcScroll />
+          <h3>مفيش عمليات</h3>
+          <p>لسه مفيش عمليات مسجلة في الفترة دي.</p>
+        </div>
+      ) : (
+        <div className="aud-list">
+          {rows.map((log) => {
+            const actor = log.actor_user_id ? profMap.get(log.actor_user_id) : null
+            const reviewer = log.reviewed_by ? profMap.get(log.reviewed_by) : null
+            return (
+              <AuditItem
+                key={log.id}
+                log={log}
+                actorName={actor?.display_name ?? undefined}
+                reviewerName={reviewer?.display_name ?? undefined}
+              />
+            )
+          })}
+        </div>
       )}
-    </>
+    </section>
   )
 }

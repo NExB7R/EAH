@@ -11,6 +11,9 @@ type Log = {
   before_data: any
   after_data: any
   metadata: any
+  reviewed_by?: string | null
+  reviewed_at?: string | null
+  review_note?: string | null
   created_at: string
 }
 
@@ -32,6 +35,15 @@ const ACTION_LABEL: Record<string, string> = {
   'review.reject': 'رفض تقييم',
   'offer.approve': 'اعتماد عرض',
   'offer.reject': 'رفض عرض',
+  'points.adjust': 'تعديل نقاط',
+  'business.update.approved': 'اعتماد تعديل نشاط',
+  'business.update.rejected': 'رفض تعديل نشاط',
+  'business.delete.approved': 'اعتماد حذف نشاط',
+  'business.delete.rejected': 'رفض حذف نشاط',
+  'review.delete.approved': 'اعتماد حذف تقييم',
+  'review.delete.rejected': 'رفض حذف تقييم',
+  'profile.update.approved': 'اعتماد تعديل بروفايل',
+  'profile.update.rejected': 'رفض تعديل بروفايل',
 }
 
 function getColorClass(action: string): string {
@@ -53,7 +65,7 @@ function timeAgo(iso: string): string {
   return new Date(iso).toLocaleDateString('ar-EG')
 }
 
-export default function AuditItem({ log, actorName }: { log: Log; actorName?: string }) {
+export default function AuditItem({ log, actorName, reviewerName }: { log: Log; actorName?: string; reviewerName?: string }) {
   const [expanded, setExpanded] = useState(false)
   const hasDetails =
     log.before_data || log.after_data || (log.metadata && Object.keys(log.metadata).length > 0)
@@ -80,7 +92,16 @@ export default function AuditItem({ log, actorName }: { log: Log; actorName?: st
         )}
         <span className="aud-item__chip"><IcCalendar /> {new Date(log.created_at).toLocaleString('ar-EG')}
         </span>
+        {log.reviewed_by && reviewerName && (
+          <span className="aud-item__chip aud-item__chip--review">راجعه: {reviewerName}</span>
+        )}
       </div>
+
+      {log.review_note && (
+        <div className="aud-item__note">
+          <strong>ملاحظة المراجعة:</strong> {log.review_note}
+        </div>
+      )}
 
       {hasDetails && (
         <>
