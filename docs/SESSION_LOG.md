@@ -110,3 +110,7 @@
 ### 2026-09-18 19:27 UTC — v1.0.1
 - **Action:** fix(explore): reviewCount → review_count
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:29 UTC — v1.0.1
+- **Action:** refactor(report): inline styles → CSS classes
+- **Branch:** ui-onlook

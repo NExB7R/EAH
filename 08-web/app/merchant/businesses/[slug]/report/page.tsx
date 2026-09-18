@@ -3,6 +3,7 @@ import { requireMerchantForBusiness } from '@/lib/admin/merchant-guard'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import MerchantInsights from '@/components/merchant-insights'
 import { getBusinessStats, getBusinessReviews } from '@/lib/reviews'
+import './report.css'
 import { IcUpload } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
@@ -183,47 +184,47 @@ export default async function MerchantReportPage({
             </div>
           </section>
         )}
-              <div className="kpi-grid" style={{ marginTop: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
-          <div className="kpi-card" style={{ padding: 20, borderRadius: 16, background: 'linear-gradient(135deg, rgba(37,211,102,.1), rgba(168,85,247,.04))', border: '1px solid rgba(37,211,102,.3)' }}>
-            <span style={{ display: 'block', fontFamily: 'var(--font-cairo-play, var(--font-cairo, system-ui))', fontSize: '1.6rem', fontWeight: 900, color: '#86EFAC' }}>{confirmedOrders ?? 0}</span>
-            <span style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5' }}>أوردر مؤكد (واتساب)</span>
+              <div className="mkpi-grid">
+          <div className="mkpi-card mkpi-card--success">
+            <span className="mkpi-value">{confirmedOrders ?? 0}</span>
+            <span className="mkpi-label">أوردر مؤكد (واتساب)</span>
           </div>
-          <div className="kpi-card" style={{ padding: 20, borderRadius: 16, background: 'rgba(255,255,255,.02)', border: '1px solid rgba(168,85,247,.2)' }}>
-            <span style={{ display: 'block', fontFamily: 'var(--font-cairo-play, var(--font-cairo, system-ui))', fontSize: '1.6rem', fontWeight: 900, color: '#E8C79A' }}>{totalOrders ?? 0}</span>
-            <span style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5' }}>إجمالي الأوردرات</span>
+          <div className="mkpi-card mkpi-card--gold">
+            <span className="mkpi-value">{totalOrders ?? 0}</span>
+            <span className="mkpi-label">إجمالي الأوردرات</span>
           </div>
         </div>
               <section className="mreport-section">
           <h2 className="mreport-section__title">قمع التحويل ({rangeDays} يوم)</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
-            <div style={{ padding: 16, borderRadius: 14, background: 'rgba(168,85,247,.08)', border: '1px solid rgba(168,85,247,.25)', textAlign: 'center' }}>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#C084FC' }}>{funnel.views}</div>
-              <div style={{ fontSize: '.72rem', color: '#A5A3B8', marginTop: 4 }}>مشاهدات</div>
+          <div className="mfunnel-grid">
+            <div className="mfunnel-card">
+              <div className="mfunnel-num">{funnel.views}</div>
+              <div className="mfunnel-label">مشاهدات</div>
             </div>
-            <div style={{ padding: 16, borderRadius: 14, background: 'rgba(168,85,247,.08)', border: '1px solid rgba(168,85,247,.25)', textAlign: 'center' }}>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#C4B5FD' }}>{funnel.reveals}</div>
-              <div style={{ fontSize: '.72rem', color: '#A5A3B8', marginTop: 4 }}>كشوف أرقام</div>
+            <div className="mfunnel-card mfunnel-card--reveal">
+              <div className="mfunnel-num">{funnel.reveals}</div>
+              <div className="mfunnel-label">كشوف أرقام</div>
             </div>
-            <div style={{ padding: 16, borderRadius: 14, background: 'rgba(232,199,154,.08)', border: '1px solid rgba(232,199,154,.25)', textAlign: 'center' }}>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#E8C79A' }}>{funnel.order_start}</div>
-              <div style={{ fontSize: '.72rem', color: '#A5A3B8', marginTop: 4 }}>بدأوا طلب</div>
+            <div className="mfunnel-card mfunnel-card--start">
+              <div className="mfunnel-num">{funnel.order_start}</div>
+              <div className="mfunnel-label">بدأوا طلب</div>
             </div>
-            <div style={{ padding: 16, borderRadius: 14, background: 'rgba(16,185,129,.08)', border: '1px solid rgba(16,185,129,.3)', textAlign: 'center' }}>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#6EE7B7' }}>{funnel.order_confirm}</div>
-              <div style={{ fontSize: '.72rem', color: '#A5A3B8', marginTop: 4 }}>أوردرات مؤكدة</div>
+            <div className="mfunnel-card mfunnel-card--confirm">
+              <div className="mfunnel-num">{funnel.order_confirm}</div>
+              <div className="mfunnel-label">أوردرات مؤكدة</div>
             </div>
-            <div style={{ padding: 16, borderRadius: 14, background: 'rgba(251,191,36,.08)', border: '1px solid rgba(251,191,36,.3)', textAlign: 'center', gridColumn: 'span 2' }}>
-              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#FBBF24' }}>{funnel.conversion_rate}%</div>
-              <div style={{ fontSize: '.72rem', color: '#A5A3B8', marginTop: 4 }}>معدل التحويل</div>
+            <div className="mfunnel-card mfunnel-card--rate">
+              <div className="mfunnel-num">{funnel.conversion_rate}%</div>
+              <div className="mfunnel-label">معدل التحويل</div>
             </div>
           </div>
 
           {funnel.peak_hours && funnel.peak_hours.length > 0 && (
             <>
-              <h3 style={{ fontFamily: 'var(--eah-font-display)', fontSize: '.92rem', color: '#F5F3FF', margin: '20px 0 10px' }}>أكثر ساعات النشاط</h3>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <h3 className="mpeak-title">أكثر ساعات النشاط</h3>
+              <div className="mpeak-list">
                 {funnel.peak_hours.map((h: any) => (
-                  <span key={h.hour} style={{ padding: '6px 12px', borderRadius: 10, background: 'rgba(168,85,247,.12)', border: '1px solid rgba(168,85,247,.3)', color: '#C4B5FD', fontSize: '.78rem', fontWeight: 800 }}>
+                  <span key={h.hour} className="mpeak-chip">
                     {h.hour.toString().padStart(2, '0')}:00 — {h.count}
                   </span>
                 ))}
@@ -241,134 +242,7 @@ export default async function MerchantReportPage({
           avgRating={stats.avg_rating ?? 0}
         />
       </main>
-
-      <style>{`
-        .mstats {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-          gap: 12px;
-          margin-bottom: 24px;
-        }
-        .mstat {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 6px;
-          padding: 20px 16px;
-          border-radius: 20px;
-          background: var(--eah-surface);
-          border: 1px solid var(--eah-border);
-        }
-        .mstat__emoji { font-size: 1.5rem; }
-        .mstat__value {
-          font-family: var(--eah-font-display);
-          font-size: 1.8rem;
-          font-weight: 900;
-          line-height: 1;
-        }
-        .mstat__label {
-          font-family: var(--eah-font-body);
-          font-size: 0.72rem;
-          color: var(--eah-text-3);
-          font-weight: 700;
-        }
-        .mreport-section {
-          padding: 20px;
-          border-radius: 20px;
-          background: var(--eah-surface);
-          border: 1px solid var(--eah-border);
-          margin-bottom: 16px;
-        }
-        .mreport-section__title {
-          font-family: var(--eah-font-display);
-          font-size: 1.1rem;
-          font-weight: 900;
-          color: var(--eah-text);
-          margin: 0 0 16px;
-        }
-        .mratings { display: flex; flex-direction: column; gap: 12px; }
-        .mreviews { display: flex; flex-direction: column; gap: 10px; }
-        .mreview {
-          padding: 12px 14px;
-          border-radius: 14px;
-          background: rgba(139, 92, 246, 0.05);
-          border: 1px solid var(--eah-border);
-        }
-        .mreview__head {
-          display: flex;
-          justify-content: space-between;
-          gap: 10px;
-          font-family: var(--eah-font-body);
-          font-size: 0.75rem;
-          color: var(--eah-text-4);
-          margin-bottom: 6px;
-        }
-        .mreview__head strong { color: var(--eah-text); font-weight: 900; }
-        .mreview__comment {
-          font-family: var(--eah-font-body);
-          font-size: 0.85rem;
-          line-height: 1.6;
-          color: var(--eah-text-2);
-          margin: 0;
-        }
-        .mrange {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          flex-wrap: wrap;
-          margin: 0 0 18px;
-          padding: 8px 12px;
-          border-radius: 14px;
-          background: rgba(168, 85, 247, 0.04);
-          border: 1px solid var(--eah-border);
-        }
-        .mrange__label {
-          font-family: var(--eah-font-body);
-          font-size: 0.75rem;
-          color: var(--eah-text-3);
-          font-weight: 800;
-          margin-inline-end: 4px;
-        }
-        .mrange__btn {
-          padding: 6px 12px;
-          border-radius: 8px;
-          background: transparent;
-          border: 1px solid var(--eah-border);
-          color: var(--eah-text-2);
-          font-family: var(--eah-font-body);
-          font-size: 0.72rem;
-          font-weight: 800;
-          text-decoration: none;
-          transition: all 0.2s;
-        }
-        .mrange__btn:hover {
-          border-color: var(--eah-purple-2);
-          color: var(--eah-text);
-        }
-        .mrange__btn.is-active {
-          background: linear-gradient(135deg, #6B21FF, #A855F7);
-          border-color: transparent;
-          color: #fff;
-        }
-        .mrange__export {
-          margin-inline-start: auto;
-          padding: 6px 12px;
-          border-radius: 8px;
-          background: rgba(192, 132, 252, 0.08);
-          border: 1px solid rgba(192, 132, 252, 0.3);
-          color: var(--eah-purple-soft);
-          font-family: var(--eah-font-body);
-          font-size: 0.72rem;
-          font-weight: 800;
-          text-decoration: none;
-          transition: all 0.2s;
-        }
-        .mrange__export:hover {
-          background: rgba(192, 132, 252, 0.18);
-          border-color: rgba(192, 132, 252, 0.55);
-        }
-      `}</style>
-    </>
+</>
   )
 }
 

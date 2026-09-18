@@ -1,0 +1,246 @@
+/* ═══ Merchant Report — 2026 ═══ */
+
+/* Stats grid */
+.mstats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.mstat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 16px;
+  border-radius: 20px;
+  background: var(--eah-surface);
+  border: 1px solid var(--eah-border);
+}
+.mstat__value {
+  font-family: var(--eah-font-display);
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
+}
+.mstat__label {
+  font-family: var(--eah-font-body);
+  font-size: 0.72rem;
+  color: var(--eah-text-3);
+  font-weight: 700;
+}
+
+/* Sections */
+.mreport-section {
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--eah-surface);
+  border: 1px solid var(--eah-border);
+  margin-bottom: 16px;
+}
+.mreport-section__title {
+  font-family: var(--eah-font-display);
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--eah-text);
+  margin: 0 0 16px;
+}
+
+/* Ratings + Reviews */
+.mratings { display: flex; flex-direction: column; gap: 12px; }
+.mreviews { display: flex; flex-direction: column; gap: 10px; }
+.mreview {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(139, 92, 246, 0.05);
+  border: 1px solid var(--eah-border);
+}
+.mreview__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--eah-font-body);
+  font-size: 0.75rem;
+  color: var(--eah-text-4);
+  margin-bottom: 6px;
+}
+.mreview__head strong { color: var(--eah-text); font-weight: 900; }
+.mreview__comment {
+  font-family: var(--eah-font-body);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--eah-text-2);
+  margin: 0;
+}
+
+/* Range pills */
+.mrange {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 0 0 18px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid var(--eah-border);
+}
+.mrange__label {
+  font-family: var(--eah-font-body);
+  font-size: 0.75rem;
+  color: var(--eah-text-3);
+  font-weight: 800;
+  margin-inline-end: 4px;
+}
+.mrange__btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--eah-border);
+  color: var(--eah-text-2);
+  font-family: var(--eah-font-body);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.mrange__btn:hover {
+  border-color: var(--eah-purple-2);
+  color: var(--eah-text);
+}
+.mrange__btn.is-active {
+  background: linear-gradient(135deg, #6B21FF, #A855F7);
+  border-color: transparent;
+  color: #fff;
+}
+.mrange__export {
+  margin-inline-start: auto;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(192, 132, 252, 0.08);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  color: var(--eah-purple-soft);
+  font-family: var(--eah-font-body);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.mrange__export:hover {
+  background: rgba(192, 132, 252, 0.18);
+  border-color: rgba(192, 132, 252, 0.55);
+}
+
+/* KPI Cards */
+.mkpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+.mkpi-card {
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+.mkpi-card--success {
+  background: linear-gradient(135deg, rgba(37, 211, 102, 0.1), rgba(168, 85, 247, 0.04));
+  border-color: rgba(37, 211, 102, 0.3);
+}
+.mkpi-card--gold {
+  background: rgba(232, 199, 154, 0.05);
+  border-color: rgba(232, 199, 154, 0.25);
+}
+.mkpi-value {
+  display: block;
+  font-family: var(--eah-font-display);
+  font-size: 1.6rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+.mkpi-card--success .mkpi-value { color: #86EFAC; }
+.mkpi-card--gold .mkpi-value { color: #E8C79A; }
+.mkpi-label {
+  font-family: var(--eah-font-body);
+  font-size: 0.82rem;
+  color: #A29DB5;
+  font-weight: 700;
+}
+
+/* Funnel */
+.mfunnel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+.mfunnel-card {
+  padding: 16px;
+  border-radius: 14px;
+  text-align: center;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+}
+.mfunnel-card--reveal {
+  background: rgba(168, 85, 247, 0.08);
+  border-color: rgba(168, 85, 247, 0.25);
+}
+.mfunnel-card--start {
+  background: rgba(232, 199, 154, 0.08);
+  border-color: rgba(232, 199, 154, 0.25);
+}
+.mfunnel-card--confirm {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.mfunnel-card--rate {
+  background: rgba(251, 191, 36, 0.08);
+  border-color: rgba(251, 191, 36, 0.3);
+  grid-column: span 2;
+}
+.mfunnel-num {
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+.mfunnel-card .mfunnel-num { color: #C084FC; }
+.mfunnel-card--reveal .mfunnel-num { color: #C4B5FD; }
+.mfunnel-card--start .mfunnel-num { color: #E8C79A; }
+.mfunnel-card--confirm .mfunnel-num { color: #6EE7B7; }
+.mfunnel-card--rate .mfunnel-num { color: #FBBF24; }
+.mfunnel-label {
+  font-size: 0.72rem;
+  color: #A5A3B8;
+  margin-top: 4px;
+  font-weight: 700;
+}
+
+/* Peak hours */
+.mpeak-title {
+  font-family: var(--eah-font-display);
+  font-size: 0.92rem;
+  color: #F5F3FF;
+  font-weight: 900;
+  margin: 20px 0 10px;
+}
+.mpeak-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.mpeak-chip {
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: #C4B5FD;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .mfunnel-card--rate { grid-column: span 1; }
+  .mrange { gap: 4px; padding: 6px 8px; }
+  .mrange__btn { padding: 5px 9px; font-size: 0.68rem; }
+}
