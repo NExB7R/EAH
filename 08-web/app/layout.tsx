@@ -3,7 +3,7 @@ import './theme.css'
 import './design-system.css'
 import '../components/eah-admin.css'
 import type { Metadata } from 'next'
-import { Cairo, Cairo_Play, Dancing_Script } from 'next/font/google'
+import { Cairo, Cairo_Play } from 'next/font/google'
 import PageViewTracker from '@/components/page-view-tracker'
 import SplashScreen from '@/components/splash-screen'
 import AmbientBg from '@/components/ambient-bg'
@@ -29,20 +29,17 @@ const cairo = Cairo({
   weight: ['400', '700', '900'],
   display: 'swap',
   variable: '--font-cairo',
+  preload: true,
+  adjustFontFallback: true,
 })
 
 const cairoPlay = Cairo_Play({
   subsets: ['arabic'],
-  weight: ['400', '700', '800', '900'],
+  weight: ['800', '900'],
   display: 'swap',
   variable: '--font-cairo-play',
-})
-
-const signature = Dancing_Script({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  display: 'swap',
-  variable: '--font-signature',
+  preload: true,
+  adjustFontFallback: true,
 })
 
 // EAH_BUILD = 1789585536.2520845
@@ -116,7 +113,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="ar"
       dir="rtl"
-      className={`${cairo.variable} ${cairoPlay.variable} ${signature.variable}`}
+      className={`${cairo.variable} ${cairoPlay.variable}`}
       suppressHydrationWarning
     >
       <body>

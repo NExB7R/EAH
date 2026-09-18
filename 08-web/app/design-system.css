@@ -69,7 +69,7 @@
   /* ===== الخطوط ===== */
   --eah-font-body: var(--font-cairo, 'Cairo', system-ui, sans-serif);
   --eah-font-display: var(--font-cairo-play, var(--font-cairo), system-ui, sans-serif);
-  --eah-font-signature: var(--font-signature, 'Dancing Script', cursive);
+  --eah-font-signature: var(--font-cairo-play, 'Cairo Play', cursive);
 
   --eah-fs-xs: 0.68rem;
   --eah-fs-sm: 0.78rem;

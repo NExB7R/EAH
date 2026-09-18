@@ -26,3 +26,7 @@
 ### 2026-09-18 18:04 UTC — v1.0.1
 - **Action:** chore: security checklist + VAPID rotation
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:13 UTC — v1.0.1
+- **Action:** perf(fonts): drop Dancing Script + reduce weights + preload
+- **Branch:** ui-onlook

@@ -175,7 +175,7 @@
   position: relative;
 }
 .sf__signature-text {
-  font-family: var(--font-signature, 'Dancing Script', cursive);
+  font-family: var(--font-cairo-play, 'Cairo Play', cursive); font-style: italic;
   font-size: 1rem;
   color: #A29DB5;
   display: inline-block;
