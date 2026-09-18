@@ -13,3 +13,7 @@
 ### 2026-09-18 17:59 UTC — v1.0.1
 - **Action:** docs: handoff + memory update
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:00 UTC — v1.0.1
+- **Action:** docs: project memory update
+- **Branch:** ui-onlook
