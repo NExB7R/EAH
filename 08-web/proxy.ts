@@ -50,6 +50,23 @@ export async function proxy(request: NextRequest) {
 
   const isAuthPage = path.startsWith('/auth') && !isAuthFlowExempt
 
+  // ═══ Daily Login Points (مرة واحدة كل يوم) ═══
+  if (user) {
+    const today = new Date().toISOString().slice(0, 10)
+    const lastChecked = request.cookies.get('eah-dlc')?.value
+    if (lastChecked !== today) {
+      try {
+        await supabase.rpc('award_daily_login')
+      } catch { /* silent */ }
+      response.cookies.set('eah-dlc', today, {
+        maxAge: 60 * 60 * 24,
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+      })
+    }
+  }
+
   if (isProtected && !user) {
     const redirect = request.nextUrl.clone()
     redirect.pathname = '/auth'

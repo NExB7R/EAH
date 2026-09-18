@@ -51,19 +51,29 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
         (ratings.taste + ratings.value + ratings.speed + ratings.experience) / 4
       )
 
-      const { error } = await supabase.from('business_reviews').insert({
-        business_id: businessId,
-        user_id: user.id,
-        rating: avg,
-        taste_rating: ratings.taste,
-        value_rating: ratings.value,
-        speed_rating: ratings.speed,
-        experience_rating: ratings.experience,
-        comment: comment.trim(),
-        status: 'pending',
-      })
+      const { data: inserted, error } = await supabase
+        .from('business_reviews')
+        .insert({
+          business_id: businessId,
+          user_id: user.id,
+          taste: ratings.taste,
+          value_for_money: ratings.value,
+          speed: ratings.speed,
+          experience: ratings.experience,
+          comment: comment.trim(),
+          status: 'pending',
+        })
+        .select('id')
+        .single()
 
       if (error) { setMsg(error.message); return }
+
+      // منح نقاط أول تقييم
+      if (inserted?.id) {
+        try {
+          await supabase.rpc('award_review_points', { p_review_id: inserted.id })
+        } catch { /* silent */ }
+      }
 
       // ابعت push للمالك
       fetch('/api/push/notify', {

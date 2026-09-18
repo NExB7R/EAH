@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (roleRow?.role !== 'super_admin') redirect('/?admin=denied')
 
   const { count: pendingChanges } = await supabase
-    .from('business_change_requests')
+    .from('pending_changes')
     .select('*', { count: 'exact', head: true })
     .eq('status', 'pending')
 
