@@ -475,3 +475,14 @@
   color: #C084FC;
   margin-left: 8px;
 }
+
+
+/* ═══ Join date — smaller ═══ */
+.acc-info__value--date { font-size: .85rem; color: #C4B5FD; }
+
+/* ═══ Reduce hero size on mobile ═══ */
+@media (max-width: 480px) {
+  .acc-hero__avatar-wrap { transform: scale(.85); }
+  .acc-card__value { font-size: 1.5rem; }
+  .acc-section { padding: 16px; }
+}

@@ -47,7 +47,7 @@ export default async function EditProfilePage() {
 
         <div className="edit__status">
           <div className={`edit__status-card ${isVerified ? 'is-verified' : ''}`}>
-            <span className="edit__status-icon">{isVerified ? '' : ''}</span>
+            <span className="edit__status-icon">{isVerified ? <IcVerify /> : <IcBan />}</span>
             <div>
               <strong className="edit__status-title">
                 {isVerified ? 'حسابك موثق' : 'حسابك غير موثق'}
@@ -67,7 +67,7 @@ export default async function EditProfilePage() {
 
           {role === 'super_admin' && (
             <div className="edit__status-card edit__status-card--admin">
-              <span className="edit__status-icon"></span>
+              <span className="edit__status-icon"><IcCrown /></span>
               <div>
                 <strong className="edit__status-title">حساب المالك</strong>
                 <span className="edit__status-sub">
@@ -81,7 +81,7 @@ export default async function EditProfilePage() {
         <form action={updateProfile} className="edit__form">
           <section className="edit__section">
             <h2 className="edit__section-title">
-              <span></span>
+              <IcEdit />
               الاسم الظاهر
             </h2>
             <input
@@ -98,7 +98,7 @@ export default async function EditProfilePage() {
 
           <section className="edit__section">
             <h2 className="edit__section-title">
-              <span></span>
+              <IcCamera />
               صورتك
             </h2>
             <p className="edit__section-sub">ارفع صورة من جهازك، أو اختار لون افتراضي.</p>
@@ -111,7 +111,7 @@ export default async function EditProfilePage() {
 
           <section className="edit__section">
             <h2 className="edit__section-title">
-              <span></span>
+              <IcUsers />
               النوع
             </h2>
             <GenderPicker initial={(profile?.gender as 'male' | 'female' | null) ?? null} />
@@ -119,7 +119,7 @@ export default async function EditProfilePage() {
 
           <section className="edit__section">
             <h2 className="edit__section-title">
-              <span></span>
+              <IcChat />
               نبذة عنك
             </h2>
             <textarea

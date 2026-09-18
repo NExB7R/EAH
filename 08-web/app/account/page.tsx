@@ -56,7 +56,7 @@ export default async function AccountPage() {
   const trustScore = profile?.trust_score ?? 0
   const trustPct = Math.min(100, Math.max(0, trustScore))
   const joinedAt = profile?.created_at
-    ? new Date(profile.created_at).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long' })
+    ? new Date(profile.created_at).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short' })
     : '—'
 
   return (

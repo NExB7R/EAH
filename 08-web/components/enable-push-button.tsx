@@ -85,7 +85,7 @@ export default function EnablePushButton() {
 
   if (status === 'loading') return null
   if (status === 'unsupported') return (
-    <div className="epb epb--off"><span>📵</span> إشعارات Push مش مدعومة في المتصفح</div>
+    <div className="epb epb--off"><span><IcBan /></span> إشعارات Push مش مدعومة في المتصفح</div>
   )
   if (status === 'denied') return (
     <div className="epb epb--denied"><span><IcBan /></span> الإشعارات محظورة — فعّلها من إعدادات المتصفح</div>
