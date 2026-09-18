@@ -14,6 +14,16 @@ export async function approveAction(id: string, note: string) {
   }
   revalidatePath('/admin/pending')
   revalidatePath('/admin/audit')
+
+  // notify merchant
+  try {
+    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/api/admin/pending/notify-merchant`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pendingId: id, status: 'approved', note }),
+    })
+  } catch { /* silent */ }
+
   return { ok: true }
 }
 
@@ -29,5 +39,15 @@ export async function rejectAction(id: string, note: string) {
   }
   revalidatePath('/admin/pending')
   revalidatePath('/admin/audit')
+
+  // notify merchant
+  try {
+    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/api/admin/pending/notify-merchant`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pendingId: id, status: 'rejected', note }),
+    })
+  } catch { /* silent */ }
+
   return { ok: true }
 }
