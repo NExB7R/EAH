@@ -39,12 +39,19 @@ export default async function MerchantReportPage({
     .eq('business_id', business.id)
     .gte('created_at', since)
 
+  const { count: uniqueVisitsCount } = await supabase
+    .from('business_unique_visits')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_id', business.id)
+    .gte('created_at', since)
+
   const metrics = [
-    { label: `زيارات (${rangeDays}ي)`, value: viewsCount ?? 0, emoji: '', color: 'var(--eah-purple-2)' },
-    { label: `كشوف (${rangeDays}ي)`, value: revealsCount ?? 0, emoji: '', color: '#A855F7' },
-    { label: 'إجمالي التقييمات', value: stats.review_count, emoji: '', color: 'var(--eah-gold)' },
-    { label: 'متوسط التقييم', value: stats.avg_rating.toFixed(1), emoji: '', color: 'var(--eah-purple-soft)' },
-    { label: 'عروض نشطة', value: stats.active_offers, emoji: '', color: '#FB923C' },
+    { label: `زيارات (${rangeDays}ي)`, value: viewsCount ?? 0, color: 'var(--eah-purple-2)' },
+    { label: `زيارات فريدة`, value: uniqueVisitsCount ?? 0, color: '#E8C79A' },
+    { label: `كشوف أرقام`, value: revealsCount ?? 0, color: '#A855F7' },
+    { label: `التقييمات`, value: stats.review_count, color: 'var(--eah-gold)' },
+    { label: `متوسط التقييم`, value: stats.avg_rating.toFixed(1), color: 'var(--eah-purple-soft)' },
+    { label: `عروض نشطة`, value: stats.active_offers, color: '#FB923C' },
   ]
 
   
@@ -72,10 +79,28 @@ export default async function MerchantReportPage({
     const day = ev.created_at.slice(0, 10)
     dailyMap.set(day, (dailyMap.get(day) ?? 0) + 1)
   }
+  // unique visits daily (14d)
+  const { data: uniqueRows } = await supabase
+    .from('business_unique_visits')
+    .select('visit_day')
+    .eq('business_id', business.id)
+    .gte('visit_day', new Date(Date.now() - 14 * 86400000).toISOString().slice(0, 10))
+
+  const uniqueMap = new Map<string, number>()
+  for (const row of (uniqueRows ?? []) as { visit_day: string }[]) {
+    uniqueMap.set(row.visit_day, (uniqueMap.get(row.visit_day) ?? 0) + 1)
+  }
+
   const daily = Array.from({ length: 14 }).map((_, i) => {
     const d = new Date(Date.now() - (13 - i) * 86400000)
     const key = d.toISOString().slice(0, 10)
-    return { day: key, views: dailyMap.get(key) ?? 0, reveals: 0, orders: 0 }
+    return {
+      day: key,
+      views: dailyMap.get(key) ?? 0,
+      reveals: 0,
+      orders: 0,
+      uniqueVisits: uniqueMap.get(key) ?? 0,
+    }
   })
 
   return (
@@ -115,7 +140,6 @@ export default async function MerchantReportPage({
         <div className="mstats">
           {metrics.map((m) => (
             <div key={m.label} className="mstat">
-              <span className="mstat__emoji">{m.emoji}</span>
               <span className="mstat__value" style={{ color: m.color }}>{m.value}</span>
               <span className="mstat__label">{m.label}</span>
             </div>
@@ -165,6 +189,7 @@ export default async function MerchantReportPage({
           totalViews={viewsCount ?? 0}
           totalReveals={revealsCount ?? 0}
           totalOrders={totalOrders ?? 0}
+          totalUniqueVisits={uniqueVisitsCount ?? 0}
           avgRating={stats.avg_rating ?? 0}
         />
       </main>

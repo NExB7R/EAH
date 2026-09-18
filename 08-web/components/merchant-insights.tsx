@@ -3,13 +3,14 @@ import { useMemo } from 'react'
 import './merchant-insights.css'
 import { IcFire, IcSparkle, IcHeart, IcChat, IcStar, IcEye, IcSearch, IcSparkles } from './eah-icons'
 
-type DailyPoint = { day: string; views: number; reveals: number; orders: number }
+type DailyPoint = { day: string; views: number; reveals: number; orders: number; uniqueVisits?: number }
 
 type Props = {
   daily: DailyPoint[]
   totalViews: number
   totalReveals: number
   totalOrders: number
+  totalUniqueVisits?: number
   avgRating: number
 }
 
@@ -24,10 +25,21 @@ const ICON_MAP: Record<string, React.ComponentType> = {
   sparkles: IcSparkles,
 }
 
-export default function MerchantInsights({ daily, totalViews, totalReveals, totalOrders, avgRating }: Props) {
+export default function MerchantInsights({ daily, totalViews, totalReveals, totalOrders, totalUniqueVisits = 0, avgRating }: Props) {
   const insights = useMemo(() => {
     if (daily.length === 0) return []
     const out: { icon: string; title: string; body: string; tone: 'good' | 'warn' | 'info' }[] = []
+
+    // Unique visits ratio
+    if (totalUniqueVisits > 0 && totalViews > 0) {
+      const ratio = Math.round((totalUniqueVisits / totalViews) * 100)
+      out.push({
+        icon: 'heart',
+        title: 'زيارات فريدة',
+        body: `${totalUniqueVisits} زيارة فريدة (${ratio}% من المشاهدات)`,
+        tone: ratio >= 30 ? 'good' : 'info',
+      })
+    }
 
     // Best day
     const bestDay = daily.reduce((a, b) => (b.views > a.views ? b : a))
