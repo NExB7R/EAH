@@ -1,11 +1,13 @@
 import './globals.css'
 import './social.css'
 import './theme.css'
+import './eah-ui.css'
 import './design-system.css'
 import '../components/eah-admin.css'
 import type { Metadata, Viewport } from 'next'
 import { Cairo, Cairo_Play, Dancing_Script } from 'next/font/google'
 import PageViewTracker from '@/components/page-view-tracker'
+import { ToastProvider } from '@/components/ui/toast'
 import SplashScreen from '@/components/splash-screen'
 import AmbientBg from '@/components/ambient-bg'
 import '@/components/ambient-bg.css'
@@ -143,7 +145,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SplashScreen />
         <PageViewTracker />
         <AnimReady />
-        {children}
+        <ToastProvider>{children}</ToastProvider>
         <OnboardingOverlay />
         <ServiceWorkerRegister />
         <NetworkStatus />

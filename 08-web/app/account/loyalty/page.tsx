@@ -19,9 +19,9 @@ export default async function LoyaltyPage() {
     return (
       <>
         <FloatingCapsuleHeader />
-        <main className="acc-page">
-          <h1 className="acc-title">مستواك</h1>
-          <p className="acc-sub">لسه مفيش نقاط — ابدأ من الرئيسية</p>
+        <main className="e-page">
+          <h1 className="acc-title e-gradient">مستواك</h1>
+          <p className="e-page__sub">لسه مفيش نقاط — ابدأ من الرئيسية</p>
         </main>
         <SiteFooter />
       </>
@@ -32,8 +32,8 @@ export default async function LoyaltyPage() {
     <>
       <FloatingCapsuleHeader />
       <BackToTop />
-      <main className="acc-page">
-        <h1 className="acc-title">مستواك</h1>
+      <main className="e-page">
+        <h1 className="acc-title e-gradient">مستواك</h1>
         <div className="lt-wrap">
           <LoyaltyRing data={loyalty} />
         </div>

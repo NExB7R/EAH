@@ -32,9 +32,9 @@ export default async function AdminCouponsPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <main className="acc-page">
-        <h1 className="acc-title">مراجعة الكوبونات</h1>
-        <p className="acc-sub">{pending.length} كوبون منتظر</p>
+      <main className="e-page">
+        <h1 className="acc-title e-gradient">مراجعة الكوبونات</h1>
+        <p className="e-page__sub">{pending.length} كوبون منتظر</p>
         {pending.length === 0 ? (
           <div className="acc-empty">مفيش كوبونات منتظرة</div>
         ) : (

@@ -28,9 +28,9 @@ export default async function SecurityPage() {
     <>
       <FloatingCapsuleHeader />
       <BackToTop />
-      <main className="acc-page">
-        <h1 className="acc-title">أمان الحساب</h1>
-        <p className="acc-sub">حماية إضافية بحسابك</p>
+      <main className="e-page">
+        <h1 className="acc-title e-gradient">أمان الحساب</h1>
+        <p className="e-page__sub">حماية إضافية بحسابك</p>
         <TwoFactorSetup factors={factors} />
       </main>
       <SiteFooter />

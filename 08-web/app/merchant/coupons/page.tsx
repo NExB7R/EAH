@@ -24,9 +24,9 @@ export default async function MerchantCouponsPage() {
     return (
       <>
         <FloatingCapsuleHeader />
-        <main className="acc-page">
-          <h1 className="acc-title">الكوبونات</h1>
-          <p className="acc-sub">لازم تكون صاحب نشاط</p>
+        <main className="e-page">
+          <h1 className="acc-title e-gradient">الكوبونات</h1>
+          <p className="e-page__sub">لازم تكون صاحب نشاط</p>
         </main>
         <SiteFooter />
       </>
@@ -39,9 +39,9 @@ export default async function MerchantCouponsPage() {
     <>
       <FloatingCapsuleHeader />
       <BackToTop />
-      <main className="acc-page">
-        <h1 className="acc-title">كوبونات {biz.name}</h1>
-        <p className="acc-sub">أضف عرضك — هيظهر بعد موافقة الإدارة</p>
+      <main className="e-page">
+        <h1 className="acc-title e-gradient">كوبونات {biz.name}</h1>
+        <p className="e-page__sub">أضف عرضك — هيظهر بعد موافقة الإدارة</p>
 
         <CouponForm businessId={biz.id} />
 

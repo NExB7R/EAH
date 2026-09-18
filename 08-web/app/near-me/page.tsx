@@ -23,9 +23,9 @@ export default async function NearMePage() {
     <>
       <FloatingCapsuleHeader />
       <BackToTop />
-      <main className="nm-page">
-        <h1 className="nm-title">قريب مني</h1>
-        <p className="nm-sub">بنوريك الأقرب ليك في شبين والقرى حواليها</p>
+      <main className="e-page">
+        <h1 className="nm-title e-gradient">قريب مني</h1>
+        <p className="e-page__sub">بنوريك الأقرب ليك في شبين والقرى حواليها</p>
         <NearMeClient businesses={items} />
       </main>
       <SiteFooter />

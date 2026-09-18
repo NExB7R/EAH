@@ -29,9 +29,9 @@ export default async function FollowingPage() {
     <>
       <FloatingCapsuleHeader />
       <BackToTop />
-      <main className="acc-page">
-        <h1 className="acc-title">بتتابع إيه</h1>
-        <p className="acc-sub">{businesses.length} نشاط</p>
+      <main className="e-page">
+        <h1 className="acc-title e-gradient">بتتابع إيه</h1>
+        <p className="e-page__sub">{businesses.length} نشاط</p>
 
         {businesses.length === 0 ? (
           <div className="acc-empty">
