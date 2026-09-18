@@ -406,3 +406,22 @@
   color: transparent !important;
   text-shadow: 0 0 8px rgba(251, 146, 60, 0.5);
 }
+
+/* ═══ SVG icon sizes ═══ */
+.tr__podium-emoji,
+.tr__list-emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #C084FC;
+}
+.tr__podium-emoji svg,
+.tr__list-emoji svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.8;
+}
+.tr__podium-item--1 .tr__podium-emoji svg {
+  width: 28px;
+  height: 28px;
+}

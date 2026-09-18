@@ -1,5 +1,6 @@
 'use client'
 import MerchantReplyForm from './merchant-reply-form'
+import { IcChat } from './eah-icons'
 import './merchant-reply-form.css'
 import './business-reviews.css'
 
@@ -64,7 +65,7 @@ export default function BusinessReviews({
     return (
       <section className="brev brev--empty">
         <h2 className="brev__title">
-          <span></span> التعليقات والآراء والاقتراحات
+          <IcChat /> التعليقات والآراء والاقتراحات
         </h2>
         <p className="brev__empty-msg">
           لسه مفيش تقييمات لهذا المكان. كُن أول من يشارك تجربته.
@@ -77,7 +78,7 @@ export default function BusinessReviews({
     <section className="brev">
       <div className="brev__header">
         <h2 className="brev__title">
-          <span></span> التعليقات والآراء والاقتراحات
+          <IcChat /> التعليقات والآراء والاقتراحات
         </h2>
         <span className="brev__count">{stats.review_count} تقييم</span>
       </div>

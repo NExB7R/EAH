@@ -3,6 +3,14 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import BackToTop from '@/components/back-to-top'
 import EahLogo from '@/components/eah-logo'
+import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from '@/components/eah-icons'
+
+const TYPE_ICON: Record<string, React.ComponentType> = {
+  restaurant: IcRestaurant,
+  pharmacy: IcPharmacy,
+  supermarket: IcMarket,
+  delivery_office: IcDelivery,
+}
 import { createClient } from '@/lib/supabase-server'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
@@ -14,13 +22,6 @@ export const revalidate = 120
 export const metadata = {
   title: 'الترند النهاردة',
   description: 'أحدث الترند النهاردة في شبين القناطر — الأماكن الأكثر تفاعلاً وزيارات.',
-}
-
-const TYPE_EMOJI: Record<string, string> = {
-  restaurant: '',
-  pharmacy: '',
-  supermarket: '',
-  delivery_office: '',
 }
 
 const TYPE_LABEL: Record<string, string> = {
@@ -84,7 +85,7 @@ export default async function TrendsPage() {
             {/* Rank 2 */}
             <article className="tr__podium-item tr__podium-item--2">
               <span className="tr__podium-rank">2</span>
-              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[1].type] ?? ''}</span>
+              <span className="tr__podium-emoji">{(() => { const I = TYPE_ICON[top3[1].type]; return I ? <I /> : null })()}</span>
               <h3 className="tr__podium-name">{top3[1].name}</h3>
               <p className="tr__podium-type">{TYPE_LABEL[top3[1].type] ?? top3[1].type}</p>
               <Link href={`/businesses/${top3[1].slug}`} className="tr__podium-link">
@@ -96,7 +97,7 @@ export default async function TrendsPage() {
             <article className="tr__podium-item tr__podium-item--1">
               <span className="tr__podium-crown"></span>
               <span className="tr__podium-rank">1</span>
-              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[0].type] ?? ''}</span>
+              <span className="tr__podium-emoji">{(() => { const I = TYPE_ICON[top3[0].type]; return I ? <I /> : null })()}</span>
               <h3 className="tr__podium-name">{top3[0].name}</h3>
               <p className="tr__podium-type">{TYPE_LABEL[top3[0].type] ?? top3[0].type}</p>
               <Link href={`/businesses/${top3[0].slug}`} className="tr__podium-link">
@@ -107,7 +108,7 @@ export default async function TrendsPage() {
             {/* Rank 3 */}
             <article className="tr__podium-item tr__podium-item--3">
               <span className="tr__podium-rank">3</span>
-              <span className="tr__podium-emoji">{TYPE_EMOJI[top3[2].type] ?? ''}</span>
+              <span className="tr__podium-emoji">{(() => { const I = TYPE_ICON[top3[2].type]; return I ? <I /> : null })()}</span>
               <h3 className="tr__podium-name">{top3[2].name}</h3>
               <p className="tr__podium-type">{TYPE_LABEL[top3[2].type] ?? top3[2].type}</p>
               <Link href={`/businesses/${top3[2].slug}`} className="tr__podium-link">
@@ -133,7 +134,7 @@ export default async function TrendsPage() {
                   style={{ animationDelay: `${i * 30}ms` }}
                 >
                   <span className="tr__list-rank">#{i + 4}</span>
-                  <span className="tr__list-emoji">{TYPE_EMOJI[b.type] ?? ''}</span>
+                  <span className="tr__list-emoji">{(() => { const I = TYPE_ICON[b.type]; return I ? <I /> : null })()}</span>
                   <div className="tr__list-body">
                     <span className="tr__list-name">{b.name}</span>
                     <span className="tr__list-type">{TYPE_LABEL[b.type] ?? b.type}</span>
