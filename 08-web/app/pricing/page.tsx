@@ -11,7 +11,6 @@ export const metadata = {
 const PLANS = [
   {
     key: 'free',
-    emoji: '',
     name: 'المجانية',
     badge: 'مدى الحياة',
     tagline: 'للشركاء الجديدين',
@@ -30,7 +29,6 @@ const PLANS = [
   },
   {
     key: 'premium',
-    emoji: '',
     name: 'المميزة',
     badge: '30 يوم تجربة',
     tagline: 'تجربة كاملة قبل ما تدفع',
@@ -54,7 +52,6 @@ const PLANS = [
   },
   {
     key: 'bot',
-    emoji: '',
     name: 'بوت الأوردرات',
     badge: 'Add-on',
     tagline: 'يشتغل لوحده',
@@ -119,8 +116,7 @@ export default function PricingPage() {
           {PLANS.map((plan) => (
             <article key={plan.key} className={`pr-plan pr-plan--${plan.accent} ${plan.highlight ? 'is-highlight' : ''}`}>
               {plan.badge && <span className="pr-plan__badge">{plan.badge}</span>}
-              <span className="pr-plan__emoji">{plan.emoji}</span>
-              <h3 className="pr-plan__name">{plan.name}</h3>
+                            <h3 className="pr-plan__name">{plan.name}</h3>
               <p className="pr-plan__tagline">{plan.tagline}</p>
               <div className="pr-plan__price">
                 <span className="pr-plan__price-num">{plan.price}</span>

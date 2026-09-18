@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
-import { IcBuilding, IcStore, IcStar, IcUsers, IcTag, IcEdit, IcSave, IcChart, IcMegaphone } from '@/components/eah-icons'
+import { IcBuilding, IcStore, IcStar, IcUsers, IcTag, IcEdit, IcSave, IcChart, IcMegaphone, IcSparkles, IcCheck, IcChat } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'لوحة التحكم' }
@@ -28,12 +28,12 @@ export default async function AdminHomePage() {
 
   const stats = [
     { label: 'الأنشطة', value: totalBiz ?? 0, icon: <IcBuilding />, href: '/admin/businesses', color: 'var(--eah-purple-2)' },
-    { label: 'منشور', value: publishedBiz ?? 0, icon: <IcBuilding />, href: '/admin/businesses', color: 'var(--eah-purple-soft)' },
-    { label: 'مميز', value: featuredBiz ?? 0, icon: <IcBuilding />, href: '/admin/businesses', color: 'var(--eah-gold)' },
+    { label: 'منشور', value: publishedBiz ?? 0, icon: <IcCheck />, href: '/admin/businesses', color: 'var(--eah-purple-soft)' },
+    { label: 'مميز', value: featuredBiz ?? 0, icon: <IcStar />, href: '/admin/businesses', color: 'var(--eah-gold)' },
     { label: 'مستخدمين', value: totalUsers ?? 0, icon: <IcUsers />, href: '/admin/users', color: 'var(--eah-purple-3)' },
-    { label: 'عروض', value: totalOffers ?? 0, icon: <IcBuilding />, href: '/admin/offers', color: '#FB923C' },
-    { label: 'طلبات تعديل', value: pendingChanges ?? 0, icon: <IcBuilding />, href: '/admin/change-requests', color: 'var(--eah-gold)' },
-    { label: 'طلبات توثيق', value: pendingVerif ?? 0, icon: <IcSave />, href: '/admin/verifications', color: 'var(--eah-purple-soft)' },
+    { label: 'عروض', value: totalOffers ?? 0, icon: <IcTag />, href: '/admin/offers', color: '#FB923C' },
+    { label: 'طلبات تعديل', value: pendingChanges ?? 0, icon: <IcEdit />, href: '/admin/change-requests', color: 'var(--eah-gold)' },
+    { label: 'طلبات توثيق', value: pendingVerif ?? 0, icon: <IcSparkles />, href: '/admin/verifications', color: 'var(--eah-purple-soft)' },
   ]
 
   return (
@@ -55,19 +55,13 @@ export default async function AdminHomePage() {
 
       <div className="admin-grid admin-grid--cards">
         {stats.map((s) => (
-          <Link key={s.label} href={s.href} className="admin-card" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <div style={{ width: 48, height: 48, borderRadius: 14, background: 'var(--eah-surface-2)', border: '1px solid var(--eah-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', flexShrink: 0 }}>
-                <span className="admin-card__icon" aria-hidden>{s.icon}</span>
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontFamily: 'var(--eah-font-body)', fontSize: '0.72rem', color: 'var(--eah-text-3)', fontWeight: 700 }}>
-                  {s.label}
-                </div>
-                <div style={{ fontFamily: 'var(--eah-font-display)', fontSize: '1.8rem', fontWeight: 900, color: s.color, lineHeight: 1.1 }}>
-                  {s.value}
-                </div>
-              </div>
+          <Link key={s.label} href={s.href} className="admin-kpi">
+            <span className="admin-kpi__icon" style={{ color: s.color }} aria-hidden>
+              {s.icon}
+            </span>
+            <div className="admin-kpi__body">
+              <div className="admin-kpi__label">{s.label}</div>
+              <div className="admin-kpi__value" style={{ color: s.color }}>{s.value}</div>
             </div>
           </Link>
         ))}
