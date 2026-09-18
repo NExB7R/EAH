@@ -5,6 +5,8 @@ export type PushPayload = {
   title: string
   body: string
   url?: string
+  /** نوع الإشعار — لازم يطابق notification_types.key */
+  type?: string
 }
 
 type QuietHours = { enabled: boolean; from: string; to: string }
@@ -48,7 +50,7 @@ export async function sendPushToUser(userId: string, payload: PushPayload) {
     }
 
     const prefs = (profile?.notif_prefs as Record<string, boolean> | null) ?? {}
-    const prefKey = (payload as any).type as string | undefined
+    const prefKey = payload.type
     if (prefKey && prefs[prefKey] === false) {
       return { sent: 0, blocked: true }
     }

@@ -41,6 +41,7 @@ export async function POST(request: Request) {
     title: `طلب جديد من ${order.customer_name}`,
     body: order.items_summary.slice(0, 100),
     url: '/merchant/orders',
+    type: 'merchant_orders',
   })
 
   // log زيارة فريدة (نقاط تلقائية)
