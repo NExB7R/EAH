@@ -30,7 +30,7 @@ export default async function CustomerNotificationsPage() {
         <header className="nt__hero">
           <Link href="/account" className="nt__back">← حسابي</Link>
           <span className="nt__kicker">الإشعارات</span>
-          <h1 className="nt__title">
+          <h1 className="nt__title e-gradient">
             <IcBell /> الإشعارات
           </h1>
           <p className="nt__sub">تحكم كامل في تنبيهاتك — اختار اللي يهمك</p>

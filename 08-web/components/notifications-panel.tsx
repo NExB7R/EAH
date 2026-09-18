@@ -121,12 +121,12 @@ export default function NotificationsPanel({
               </div>
               <button
                 type="button"
-                className={`np__switch ${enabled ? 'is-on' : ''}`}
+                className={`np__switch e-switch ${enabled ? 'is-on' : ''}`}
                 onClick={() => toggle(t.key)}
                 aria-pressed={enabled}
                 aria-label={t.label}
               >
-                <span className="np__switch-thumb" />
+                <span className="np__switch-thumb e-switch__thumb" />
               </button>
             </label>
           )
@@ -153,11 +153,11 @@ export default function NotificationsPanel({
           </div>
           <button
             type="button"
-            className={`np__switch ${quiet.enabled ? 'is-on' : ''}`}
+            className={`np__switch e-switch ${quiet.enabled ? 'is-on' : ''}`}
             onClick={() => setQuiet((q) => ({ ...q, enabled: !q.enabled }))}
             aria-pressed={quiet.enabled}
           >
-            <span className="np__switch-thumb" />
+            <span className="np__switch-thumb e-switch__thumb" />
           </button>
         </label>
 

@@ -1,25 +1,23 @@
+import { SkeletonTitle, SkeletonLine, SkeletonCard } from '@/components/ui/skeleton'
+
 export default function Loading() {
   return (
-    <div style={{
-      minHeight: '60vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '120px 20px 60px',
-    }}>
-      <div style={{
-        width: 36,
-        height: 36,
-        borderRadius: '50%',
-        border: '3px solid rgba(168, 85, 247, 0.2)',
-        borderTopColor: '#A855F7',
-        animation: 'eahl-spin 0.8s linear infinite',
-      }} />
-      <style>{`
-        @keyframes eahl-spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
+    <div className="e-page" style={{ maxWidth: 720 }}>
+      <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 24 }}>
+        <span className="e-skeleton" style={{ width: 64, height: 64, borderRadius: '50%' }} />
+        <div style={{ flex: 1 }}>
+          <SkeletonTitle />
+          <SkeletonLine width="40%" />
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 20 }}>
+        <SkeletonCard />
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+      <SkeletonLine width="100%" />
+      <SkeletonLine width="80%" />
+      <SkeletonLine width="60%" />
     </div>
   )
 }
