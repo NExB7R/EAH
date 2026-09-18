@@ -144,3 +144,53 @@
   .vv { margin: 16px auto; padding: 0 16px; }
   .vv__card { min-height: auto; padding: 14px 18px; }
 }
+
+/* ═══ EAH Fixes — 3-column grid + SVG icons ═══ */
+.vv__grid {
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 14px !important;
+}
+
+@media (max-width: 768px) {
+  .vv__grid { grid-template-columns: 1fr !important; }
+}
+
+.vv__emoji {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  color: #C084FC;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.vv__emoji svg {
+  width: 24px !important;
+  height: 24px !important;
+  stroke-width: 1.8;
+}
+
+.vv__card--gold .vv__emoji {
+  background: rgba(232, 199, 154, 0.1);
+  border-color: rgba(232, 199, 154, 0.35);
+  color: #E8C79A;
+}
+
+.vv__card {
+  padding: 22px 20px 18px !important;
+}
+
+.vv__card-title {
+  font-size: 1.02rem !important;
+  margin: 0 0 8px !important;
+}
+
+.vv__card-body {
+  font-size: 0.82rem !important;
+  line-height: 1.65 !important;
+}

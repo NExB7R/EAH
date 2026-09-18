@@ -1,12 +1,12 @@
 'use client'
 import Link from 'next/link'
 import './visitor-value.css'
-import { IcRestaurant, IcSparkles, IcMarket, IcStore } from './eah-icons'
+import { IcCompass, IcSparkles, IcMarket } from './eah-icons'
 
 const CARDS = [
   {
     key: 'discover',
-    emoji: '',
+    Icon: IcCompass,
     title: 'اكتشف اللي حواليك',
     body: 'مطاعم، صيدليات، ماركت، وتوصيل — كل ده على بُعد خطوة',
     cta: { label: 'اكتشف', href: '/explore' },
@@ -14,7 +14,7 @@ const CARDS = [
   },
   {
     key: 'recommend',
-    emoji: 'IcSparkles',
+    Icon: IcSparkles,
     title: 'قول مزاجك واحنا نظبط',
     body: 'ترشيحات ذكية على حسب ميزانيتك ومنطقتك ومزاجك',
     cta: { label: 'جرّب', href: '/recommend' },
@@ -22,19 +22,11 @@ const CARDS = [
   },
   {
     key: 'order',
-    emoji: 'IcMarket',
+    Icon: IcMarket,
     title: 'اطلب من أي مكان',
     body: 'اكتب طلبك — يوصل مباشرة على واتساب المكان. بدون وسيط',
     cta: { label: 'شوف الأماكن', href: '/explore' },
     accent: 'purple',
-  },
-  {
-    key: 'partner',
-    emoji: 'IcStore',
-    title: 'عندك نشاط؟',
-    body: 'سجّل نشاطك مجاناً — بدون عمولة. اعرض لآلاف العملاء',
-    cta: { label: 'سجّل نشاطك', href: '/merchant/apply' },
-    accent: 'gold',
   },
 ]
 
@@ -47,16 +39,19 @@ export default function VisitorValue() {
       </header>
 
       <div className="vv__grid">
-        {CARDS.map((c) => (
-          <article key={c.key} className={`vv__card vv__card--${c.accent}`}>
-            <span className="vv__emoji">{(() => { const I = ({IcRestaurant, IcSparkles, IcMarket, IcStore} as any)[c.emoji]; return I ? <I /> : null })()}</span>
-            <h3 className="vv__card-title">{c.title}</h3>
-            <p className="vv__card-body">{c.body}</p>
-            <Link href={c.cta.href} className="vv__cta">
-              {c.cta.label} ←
-            </Link>
-          </article>
-        ))}
+        {CARDS.map((c) => {
+          const Icon = c.Icon
+          return (
+            <article key={c.key} className={`vv__card vv__card--${c.accent}`}>
+              <span className="vv__emoji" aria-hidden><Icon /></span>
+              <h3 className="vv__card-title">{c.title}</h3>
+              <p className="vv__card-body">{c.body}</p>
+              <Link href={c.cta.href} className="vv__cta">
+                {c.cta.label} ←
+              </Link>
+            </article>
+          )
+        })}
       </div>
     </section>
   )

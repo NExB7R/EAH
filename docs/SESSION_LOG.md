@@ -58,3 +58,7 @@
 ### 2026-09-18 18:28 UTC — v1.0.1
 - **Action:** fix(home-hero): restore Icon JSX
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:31 UTC — v1.0.1
+- **Action:** fix(home): 3-card grid + sized SVG icons
+- **Branch:** ui-onlook
