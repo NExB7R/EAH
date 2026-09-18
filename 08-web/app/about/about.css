@@ -173,11 +173,19 @@
 .ab__grid-icon {
   display: inline-flex;
   align-items: center; justify-content: center;
-  width: 34px; height: 34px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.2);
   color: #C084FC;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
-.ab__grid-icon svg { width: 100%; height: 100%; }
+.ab__grid-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.8;
+}
 .ab__grid-label {
   display: block;
   font-family: var(--font-cairo, system-ui);

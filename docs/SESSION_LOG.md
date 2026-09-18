@@ -102,3 +102,7 @@
 ### 2026-09-18 19:15 UTC — v1.0.1
 - **Action:** fix(layout): global body padding-top + remove per-page hero offsets
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:23 UTC — v1.0.1
+- **Action:** fix(ui): restore hook subtitle + explore grid 3 cols + about icon sizes
+- **Branch:** ui-onlook
