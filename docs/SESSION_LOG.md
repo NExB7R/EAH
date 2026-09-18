@@ -34,3 +34,7 @@
 ### 2026-09-18 18:14 UTC — v1.0.1
 - **Action:** perf: SW v3 (slim cache) + Web Vitals tracking
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:15 UTC — v1.0.1
+- **Action:** feat(analytics): event tracking + funnel RPC
+- **Branch:** ui-onlook

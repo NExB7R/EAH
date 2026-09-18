@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto'
 import { createClient } from '@/lib/supabase-server'
 import { checkRate, getClientIp } from '@/lib/security/rate-limit'
 import { UUID } from '@/lib/security/validate'
+import { trackEvent } from '@/lib/analytics/track'
 
 const VALID_METHODS = ['phone','whatsapp','email','website','instagram','facebook'] as const
 const RATE_LIMIT = 20
@@ -65,6 +66,13 @@ export async function POST(req: Request) {
         })
       }
     } catch { /* silent */ }
+
+    // analytics: business_reveal
+    await trackEvent({
+      scope: 'business_reveal',
+      businessId: uuidCheck.data,
+      metadata: { method: method_type },
+    })
 
     return NextResponse.json({ ok: true, ...(data as object) })
   } catch {

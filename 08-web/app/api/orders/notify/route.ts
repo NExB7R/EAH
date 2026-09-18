@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase-server'
 import { sendPushToUser } from '@/lib/push/send'
 import { checkRate, getClientIp } from '@/lib/security/rate-limit'
 import { z } from 'zod'
+import { trackEvent } from '@/lib/analytics/track'
 
 export const dynamic = 'force-dynamic'
 
@@ -52,6 +53,13 @@ export async function POST(request: Request) {
       })
     }
   } catch { /* silent */ }
+
+  // analytics: order_confirm
+  await trackEvent({
+    scope: 'order_confirm',
+    businessId: order.business_id,
+    metadata: { orderId: order.id },
+  })
 
   return NextResponse.json({ ok: true, ...result })
 }
