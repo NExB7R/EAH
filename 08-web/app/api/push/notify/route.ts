@@ -39,6 +39,7 @@ export async function POST(request: Request) {
   if (!biz?.owner_profile_id) return NextResponse.json({ ok: false, error: 'no_owner' })
 
   const result = await sendPushToUser(biz.owner_profile_id, {
+    type: data.type ?? 'merchant_orders',
     title: data.title ?? 'إشعار جديد من EAH',
     body: data.body ?? '',
     url: data.url ?? `/merchant/businesses/${biz.slug}/report`,
