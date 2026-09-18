@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import type { DesignData, Section } from './types'
+import AdSlot from '@/components/ads/ad-slot'
 import './design-renderer.css'
 
 type Business = {
@@ -165,10 +166,66 @@ function SectionView({ section, businesses }: { section: Section; businesses: Bu
         </div>
       )
 
+    case 'spacer':
+      return (
+        <div
+          className="dr-spacer"
+          style={{
+            height: typeof p.height === 'number' ? p.height : 40,
+            background: typeof p.bg === 'string' ? p.bg : undefined,
+          }}
+          aria-hidden
+        />
+      )
+
+    case 'ad':
+      return <AdSection slotId={String(p.slotId ?? '')} height={typeof p.height === 'number' ? p.height : 120} label={String(p.label ?? 'مساحة إعلان')} />
+
     case 'footer':
       return null
 
     default:
       return null
   }
+}
+
+
+function AdSection({ slotId, height, label }: { slotId: string; height: number; label: string }) {
+  const [ad, setAd] = useState<{ id: string; title: string; description: string | null; image_url: string | null; href: string } | null>(null)
+  const [loading, setLoading] = useState(!!slotId)
+
+  useEffect(() => {
+    if (!slotId) { setLoading(false); return }
+    let cancelled = false
+    void (async () => {
+      try {
+        const res = await fetch(`/api/ads/active?slot=${encodeURIComponent(slotId)}`)
+        if (!res.ok) return
+        const data = await res.json()
+        if (!cancelled && data?.ad) setAd(data.ad)
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    })()
+    return () => { cancelled = true }
+  }, [slotId])
+
+  if (loading) {
+    return <div className="dr-ad dr-ad--loading" style={{ minHeight: height }}>...</div>
+  }
+
+  if (ad) {
+    return (
+      <div className="dr-ad" style={{ minHeight: height }}>
+        <AdSlot ad={ad as any} href={ad.href} />
+      </div>
+    )
+  }
+
+  return (
+    <div className="dr-ad dr-ad--empty" style={{ minHeight: height }}>
+      <span className="dr-ad__badge">إعلان</span>
+      <span className="dr-ad__label">{label || 'مساحة إعلان متاحة'}</span>
+    </div>
+  )
 }

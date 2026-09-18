@@ -5,14 +5,11 @@ import { createClient } from '@/lib/supabase-server'
 async function requireAdmin() {
   const supabase = await createClient()
   const { data: userData, error } = await supabase.auth.getUser()
-  if (error || !userData.user) return { supabase: null, error: 'unauthorized' as const }
+  if (error || !userData.user) return { supabase: null, user: null, error: 'unauthorized' as const }
   const { data: role } = await supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', userData.user.id)
-    .maybeSingle()
-  if (role?.role !== 'super_admin') return { supabase: null, error: 'forbidden' as const }
-  return { supabase, error: null }
+    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
+  if (role?.role !== 'super_admin') return { supabase: null, user: null, error: 'forbidden' as const }
+  return { supabase, user: userData.user, error: null }
 }
 
 export async function GET(request: Request) {
@@ -21,51 +18,56 @@ export async function GET(request: Request) {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('site_designs')
-    .select('data,updated_at')
+    .select('data,draft_data,updated_at,published_at')
     .eq('key', key)
     .maybeSingle()
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json(data ?? { data: null, updated_at: null })
+  return NextResponse.json({
+    data: data?.data ?? null,
+    draft_data: data?.draft_data ?? null,
+    updated_at: data?.updated_at ?? null,
+    published_at: data?.published_at ?? null,
+  })
 }
 
 export async function POST(request: Request) {
   const auth = await requireAdmin()
-  if (!auth.supabase) return NextResponse.json({ error: auth.error }, { status: 401 })
+  if (!auth.supabase || !auth.user) return NextResponse.json({ error: auth.error ?? 'unauthorized' }, { status: 401 })
 
   const body = await request.json().catch(() => null)
-  if (!body || typeof body !== 'object') {
-    return NextResponse.json({ error: 'invalid_body' }, { status: 400 })
-  }
-  const { key = 'home', data } = body as { key?: string; data?: unknown }
-  if (!data || typeof data !== 'object') {
-    return NextResponse.json({ error: 'invalid_data' }, { status: 400 })
+  if (!body || typeof body !== 'object') return NextResponse.json({ error: 'invalid_body' }, { status: 400 })
+
+  const { action = 'draft', key = 'home', data } = body as { action?: 'draft' | 'publish'; key?: string; data?: unknown }
+
+  if (action === 'publish') {
+    const { data: row, error: readErr } = await auth.supabase
+      .from('site_designs').select('draft_data,data').eq('key', key).maybeSingle()
+    if (readErr) return NextResponse.json({ error: readErr.message }, { status: 500 })
+    const nextData = row?.draft_data ?? data
+    if (!nextData || typeof nextData !== 'object') return NextResponse.json({ error: 'no_draft' }, { status: 400 })
+    const sections = (nextData as any).sections
+    if (!Array.isArray(sections) || sections.length === 0) return NextResponse.json({ error: 'empty_sections' }, { status: 400 })
+    const { error } = await auth.supabase.from('site_designs').update({
+      data: nextData,
+      published_at: new Date().toISOString(),
+      published_by: auth.user.id,
+      updated_at: new Date().toISOString(),
+    }).eq('key', key)
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    revalidatePath('/')
+    revalidatePath('/api/site-design')
+    return NextResponse.json({ ok: true, published_at: new Date().toISOString() })
   }
 
-  // منع حفظ تصميم فاضي (يحمي من مشكلة الـ empty sections)
+  if (!data || typeof data !== 'object') return NextResponse.json({ error: 'invalid_data' }, { status: 400 })
   const sections = (data as any).sections
-  if (!Array.isArray(sections) || sections.length === 0) {
-    return NextResponse.json({ error: 'empty_sections_blocked' }, { status: 400 })
-  }
+  if (!Array.isArray(sections) || sections.length === 0) return NextResponse.json({ error: 'empty_sections' }, { status: 400 })
 
-  const { data: userData } = await auth.supabase.auth.getUser()
-
-  const { error } = await auth.supabase
-    .from('site_designs')
-    .upsert(
-      {
-        key,
-        data,
-        updated_at: new Date().toISOString(),
-        updated_by: userData?.user?.id ?? null,
-      },
-      { onConflict: 'key' }
-    )
-
+  const { error } = await auth.supabase.from('site_designs').upsert({
+    key, draft_data: data,
+    updated_at: new Date().toISOString(),
+    updated_by: auth.user.id,
+  }, { onConflict: 'key' })
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-
-  // Live sync: الصفحات الرئيسية هتعيد البناء فورًا
-  revalidatePath('/')
-  revalidatePath('/api/site-design')
-
-  return NextResponse.json({ ok: true, savedAt: new Date().toISOString() })
+  return NextResponse.json({ ok: true, action: 'draft', savedAt: new Date().toISOString() })
 }

@@ -170,3 +170,32 @@
   .dr-section { padding: 24px 16px; }
   .dr-cta { padding: 40px 16px; }
 }
+
+/* spacer */
+.dr-spacer { width: 100%; display: block; }
+
+/* ad */
+.dr-ad {
+  width: 100%;
+  max-width: 900px;
+  margin: 16px auto;
+  padding: 0 16px;
+}
+.dr-ad--empty {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: repeating-linear-gradient(45deg, rgba(168,85,247,0.05), rgba(168,85,247,0.05) 10px, rgba(168,85,247,0.02) 10px, rgba(168,85,247,0.02) 20px);
+  border: 1px dashed rgba(168,85,247,0.35);
+  border-radius: 12px;
+  color: rgba(216,180,254,0.6);
+  font-size: 13px; font-weight: 600;
+}
+.dr-ad--loading {
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(216,180,254,0.4);
+}
+.dr-ad__badge {
+  background: rgba(168,85,247,0.3);
+  color: #fff;
+  border-radius: 4px; padding: 2px 6px;
+  font-size: 10px; font-weight: 800;
+}

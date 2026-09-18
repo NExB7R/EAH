@@ -7,6 +7,8 @@ export type SectionType =
   | 'cta'
   | 'banner'
   | 'footer'
+  | 'spacer'
+  | 'ad'
 
 export type Section = {
   id: string
@@ -35,6 +37,8 @@ export const SECTION_LABELS: Record<SectionType, { label: string; emoji: string 
   cta:        { label: 'CTA',        emoji: '' },
   banner:     { label: 'بانر',       emoji: '' },
   footer:     { label: 'الفوتر',     emoji: '' },
+  spacer:     { label: 'مساحة فارغة', emoji: '⬜' },
+  ad:         { label: 'مساحة إعلان', emoji: '📢' },
 }
 
 export function makeId(): string {
@@ -79,6 +83,10 @@ export function defaultProps(type: SectionType): Record<string, unknown> {
         text: 'قريبًا: تتبع طلبك مباشر',
         color: '#A855F7',
       }
+    case 'spacer':
+      return { height: 40 }
+    case 'ad':
+      return { slotId: '', label: 'مساحة إعلان', height: 120 }
     case 'footer':
       return {
         tagline: 'جمهورية شبين القناطر تتحدث...',

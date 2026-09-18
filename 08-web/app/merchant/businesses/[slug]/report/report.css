@@ -275,3 +275,196 @@
   vertical-align: middle;
   margin-inline-start: 4px;
 }
+
+/* ═══ Report actions ═══ */
+.mreport-actions {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin: 18px 0 8px;
+}
+.mreport-action {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 16px;
+  background: rgba(168,85,247,0.12);
+  border: 1px solid rgba(168,85,247,0.35);
+  border-radius: 10px;
+  color: #d8b4fe;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .15s ease;
+  font-family: inherit;
+}
+.mreport-action:hover {
+  background: rgba(168,85,247,0.22);
+  border-color: rgba(168,85,247,0.6);
+  color: #fff;
+}
+.mreport-action--pdf {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  border-color: transparent; color: #fff;
+  box-shadow: 0 4px 14px rgba(168,85,247,0.35);
+}
+.mreport-action--pdf:hover { filter: brightness(1.1); }
+.mreport-action--wa {
+  background: rgba(37,211,102,0.12);
+  border-color: rgba(37,211,102,0.4);
+  color: #86efac;
+}
+.mreport-action--wa:hover { background: rgba(37,211,102,0.22); }
+
+/* ═══ Print styles ═══ */
+@media print {
+  @page { size: A4; margin: 14mm; }
+
+  html, body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  /* اخفي كل الحاجات التفاعلية */
+  .no-print,
+  .floating-capsule,
+  nav, header:not(.print-header),
+  .site-footer, .sf,
+  .mrange,
+  .merchant-insights *[class*="toggle"],
+  button, select, input,
+  a[href*="/edit"],
+  [class*="capsule"],
+  [class*="nav-drawer"] {
+    display: none !important;
+  }
+
+  .mpage {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .mpage__head { margin-bottom: 12mm; }
+  .mpage__kicker { display: none; }
+  .mpage__title {
+    color: #111 !important;
+    font-size: 22pt !important;
+    font-weight: 900;
+    border-bottom: 3px solid #7c3aed;
+    padding-bottom: 4mm;
+    margin-bottom: 2mm;
+  }
+  .mpage__sub { color: #555 !important; font-size: 11pt; }
+
+  .mstats {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 4mm !important;
+    margin: 8mm 0 !important;
+    page-break-inside: avoid;
+  }
+  .mstat {
+    background: #f5f3ff !important;
+    border: 1px solid #c4b5fd !important;
+    border-radius: 4mm !important;
+    padding: 4mm !important;
+    color: #111 !important;
+    text-align: center;
+  }
+  .mstat__value {
+    color: #6d28d9 !important;
+    font-size: 20pt !important;
+    font-weight: 900;
+    display: block;
+  }
+  .mstat__label {
+    color: #555 !important;
+    font-size: 9pt;
+    margin-top: 2mm;
+  }
+
+  .mreport-section {
+    margin: 8mm 0 !important;
+    page-break-inside: avoid;
+    border: 1px solid #e5e7eb;
+    border-radius: 3mm;
+    padding: 5mm;
+    background: #fff;
+  }
+  .mreport-section__title {
+    color: #111 !important;
+    font-size: 14pt !important;
+    font-weight: 800;
+    margin-bottom: 4mm !important;
+    border-bottom: 2px solid #7c3aed;
+    padding-bottom: 2mm;
+  }
+
+  .mratings { gap: 3mm !important; }
+  .mrating__label { color: #555 !important; }
+  .mrating__value { color: #6d28d9 !important; }
+  .mrating__track {
+    background: #e5e7eb !important;
+    height: 3mm;
+  }
+  .mrating__fill {
+    background: linear-gradient(90deg, #a855f7, #7c3aed) !important;
+  }
+
+  .mkpi-grid, .mfunnel-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 4mm !important;
+  }
+  .mkpi-card, .mfunnel-card {
+    background: #f9fafb !important;
+    border: 1px solid #d1d5db !important;
+    color: #111 !important;
+    border-radius: 3mm !important;
+    padding: 4mm !important;
+    text-align: center;
+  }
+  .mkpi-value, .mfunnel-num {
+    color: #6d28d9 !important;
+    font-size: 18pt !important;
+    font-weight: 900;
+  }
+  .mkpi-label, .mfunnel-label {
+    color: #666 !important;
+    font-size: 9pt;
+  }
+
+  .mpeak-chip {
+    background: #f3e8ff !important;
+    color: #6d28d9 !important;
+    border: 1px solid #c4b5fd !important;
+    padding: 2mm 3mm !important;
+    border-radius: 999px;
+    font-size: 10pt;
+    font-weight: 700;
+    margin: 1mm;
+    display: inline-block;
+  }
+
+  .mreviews { gap: 3mm !important; }
+  .mreview {
+    background: #fafafa !important;
+    border: 1px solid #e5e7eb !important;
+    padding: 4mm !important;
+    border-radius: 3mm !important;
+    page-break-inside: avoid;
+  }
+  .mreview__head strong { color: #111 !important; }
+  .mreview__head span { color: #999 !important; font-size: 9pt; }
+  .mreview__comment { color: #333 !important; font-size: 10.5pt; }
+
+  /* علامة EAH في الـ footer */
+  .mpage::after {
+    content: "EAH — اللي نفسك فيه ؟  |  eah-sq.vercel.app";
+    display: block;
+    text-align: center;
+    margin-top: 10mm;
+    padding-top: 4mm;
+    border-top: 1px solid #d1d5db;
+    color: #7c3aed;
+    font-size: 10pt;
+    font-weight: 700;
+  }
+}

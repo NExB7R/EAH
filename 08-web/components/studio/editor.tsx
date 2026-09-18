@@ -24,6 +24,8 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [history, setHistory] = useState<DesignData[]>([initial ?? currentHomeDesign])
   const [historyIndex, setHistoryIndex] = useState(0)
+  const [dragId, setDragId] = useState<string | null>(null)
+  const [dragOverId, setDragOverId] = useState<string | null>(null)
 
   const selected = design.sections.find(s => s.id === selectedId) ?? null
   const autoSaveTimer = useRef<NodeJS.Timeout | null>(null)
@@ -63,7 +65,26 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
       const res = await fetch('/api/studio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: 'home', data }),
+        body: JSON.stringify({ key: 'home', data, action: 'draft' }),
+      })
+      if (res.ok) {
+        setSaved(true)
+        setLastSaved(new Date())
+        setTimeout(() => setPreviewKey(k => k + 1), 400)
+      }
+    } finally {
+      setSaving(false)
+    }
+  }, [])
+
+  const publish = useCallback(async () => {
+    if (!confirm('انشر التعديلات دي للموقع الحقيقي؟')) return
+    setSaving(true)
+    try {
+      const res = await fetch('/api/studio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'home', action: 'publish' }),
       })
       if (res.ok) {
         setSaved(true)
@@ -173,6 +194,16 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
     update({ ...design, sections: next })
   }
 
+  function moveSectionTo(fromId: string, toId: string) {
+    const from = design.sections.findIndex(s => s.id === fromId)
+    const to = design.sections.findIndex(s => s.id === toId)
+    if (from < 0 || to < 0 || from === to) return
+    const next = [...design.sections]
+    const [moved] = next.splice(from, 1)
+    next.splice(to, 0, moved)
+    update({ ...design, sections: next })
+  }
+
   function toggleVisible(id: string) {
     update({
       ...design,
@@ -252,7 +283,7 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
           </button>
           <button
             className="ed__publish"
-            onClick={() => save(design)}
+            onClick={publish}
             disabled={saving}
           >
             {saving ? (
@@ -294,10 +325,16 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
             {design.sections.map((s, i) => (
               <div
                 key={s.id}
-                className={`ed__sec ${selectedId === s.id ? 'is-active' : ''} ${!s.visible ? 'is-hidden' : ''}`}
+                className={`ed__sec ${selectedId === s.id ? 'is-active' : ''} ${!s.visible ? 'is-hidden' : ''} ${dragId === s.id ? 'is-dragging' : ''} ${dragOverId === s.id ? 'is-drag-over' : ''}`}
                 onClick={() => setSelectedId(s.id)}
+                draggable
+                onDragStart={(e) => { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', s.id); setDragId(s.id) }}
+                onDragOver={(e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; setDragOverId(s.id) }}
+                onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.getData('text/plain'); if (f && f !== s.id) moveSectionTo(f, s.id); setDragId(null); setDragOverId(null) }}
+                onDragEnd={() => { setDragId(null); setDragOverId(null) }}
               >
                 <div className="ed__sec-main">
+                  <span className="ed__sec-drag" aria-hidden>⠿</span>
                   <span className="ed__sec-emoji">{SECTION_LABELS[s.type].emoji}</span>
                   <span className="ed__sec-label">{SECTION_LABELS[s.type].label}</span>
                 </div>

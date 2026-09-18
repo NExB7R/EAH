@@ -347,3 +347,9 @@
 @media (prefers-reduced-motion: reduce) {
 
 }
+
+/* drag-drop */
+.ed__sec-drag { color: #4b5563; font-size: 13px; cursor: grab; margin-inline-end: 6px; user-select: none; }
+.ed__sec:active .ed__sec-drag { cursor: grabbing; }
+.ed__sec.is-dragging { opacity: 0.35; }
+.ed__sec.is-drag-over { border-color: #a855f7 !important; box-shadow: 0 0 0 2px rgba(168,85,247,0.4) inset; }

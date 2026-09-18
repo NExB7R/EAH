@@ -20,6 +20,8 @@ const LABEL: Record<SectionType, string> = {
   cta: 'CTA',
   banner: 'بانر',
   footer: 'الفوتر',
+  spacer: 'مساحة فارغة',
+  ad: 'مساحة إعلان',
 }
 
 const FONTS = ['Cairo', 'Cairo Play', 'Tajawal', 'IBM Plex Sans Arabic', 'Almarai']

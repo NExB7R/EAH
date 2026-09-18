@@ -4,6 +4,7 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import MerchantInsights from '@/components/merchant-insights'
 import { getBusinessStats, getBusinessReviews } from '@/lib/reviews'
 import './report.css'
+import ReportActions from '@/components/report-actions'
 import { IcUpload } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
@@ -146,6 +147,13 @@ export default async function MerchantReportPage({
             <IcUpload /> CSV
           </a>
         </div>
+
+        <ReportActions
+          businessName={business.name}
+          businessSlug={business.slug}
+          rangeDays={rangeDays}
+          metrics={metrics.map((m) => ({ label: m.label, value: m.value }))}
+        />
 
         <div className="mstats">
           {metrics.map((m) => (
