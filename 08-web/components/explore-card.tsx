@@ -91,6 +91,17 @@ export default function ExploreCard({ business, index }: { business: Business; s
         )}
         <div className="ecard__cover-overlay" />
 
+        {/* Views badge — 2026 style */}
+        {typeof (business as any).recentViews === 'number' && (business as any).recentViews > 0 && (
+          <span className="ecard__views" aria-label="مشاهدات آخر 7 أيام">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            {(business as any).recentViews}
+          </span>
+        )}
+
         {/* Badge */}
         {(business.badge || business.is_premium) && (
           <span className={`ecard__badge ${business.is_premium || business.badge === 'مميز' ? 'ecard__badge--gold' : ''}`}>

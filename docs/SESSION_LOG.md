@@ -90,3 +90,7 @@
 ### 2026-09-18 19:05 UTC — v1.0.1
 - **Action:** feat(business): hero cover image + open/closed badge
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:07 UTC — v1.0.1
+- **Action:** feat(explore): views badge + gradient overlay + bigger cards
+- **Branch:** ui-onlook
