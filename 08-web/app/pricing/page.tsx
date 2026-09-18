@@ -100,8 +100,8 @@ export default function PricingPage() {
       <main className="pr">
         <section className="pr-hero">
           <div className="pr-hero__glow" aria-hidden />
-          <span className="pr__kicker">الباقات</span>
-          <h1 className="pr__title">
+          <span className="pr__kicker e-badge e-badge--accent">الباقات</span>
+          <h1 className="pr__title e-gradient">
             ابدأ مجانًا.
             <br />
             <span className="pr__title-accent">واكتشف الباقي بنفسك</span>

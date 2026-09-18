@@ -78,8 +78,8 @@ export default function AboutPage() {
         {/* ═══ HERO ═══ */}
         <section className="ab__hero">
           <div className="ab__hero-glow" aria-hidden />
-          <span className="ab__kicker">احنا مين</span>
-          <h1 className="ab__title">
+          <span className="ab__kicker e-badge e-badge--accent">احنا مين</span>
+          <h1 className="ab__title e-gradient">
             كل حاجة محتاجها،
             <br />
             <span className="ab__title-accent">في مكان واحد</span>

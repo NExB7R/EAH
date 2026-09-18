@@ -55,8 +55,8 @@ export default function ContactPage() {
       <main className="ct">
         <section className="ct-hero">
           <div className="ct-hero__glow" aria-hidden />
-          <span className="ct-hero__kicker">تواصل معانا</span>
-          <h1 className="ct-hero__title">
+          <span className="ct-hero__kicker e-badge e-badge--accent">تواصل معانا</span>
+          <h1 className="ct-hero__title e-gradient">
             إحنا <span className="ct-hero__accent">في خدمتك</span>
           </h1>
           <p className="ct-hero__lead">

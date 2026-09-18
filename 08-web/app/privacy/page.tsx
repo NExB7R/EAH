@@ -32,8 +32,8 @@ export default function PrivacyPage() {
       <FloatingCapsuleHeader />
       <main className="lg">
         <section className="lg__hero">
-          <span className="lg__kicker">سياسة الخصوصية</span>
-          <h1 className="lg__title">سياسة الخصوصية</h1>
+          <span className="lg__kicker e-badge e-badge--accent">سياسة الخصوصية</span>
+          <h1 className="lg__title e-gradient">سياسة الخصوصية</h1>
           <p style={{ margin: 0, fontSize: '.9rem', color: '#A29DB5', lineHeight: 1.7 }}>
             التزامنا بحماية بياناتك — بشكل واضح ومباشر.
           </p>

@@ -71,8 +71,8 @@ export default function AdvertisePage() {
         {/* Hero */}
         <section className="adv-hero">
           <div className="adv-hero__glow" aria-hidden />
-          <span className="adv-hero__kicker">EAH • إعلانات</span>
-          <h1 className="adv-hero__title">
+          <span className="adv-hero__kicker e-badge e-badge--accent">EAH • إعلانات</span>
+          <h1 className="adv-hero__title e-gradient">
             خلّي مكانك
             <br />
             <span className="adv-hero__title-accent">يظهر للكل</span>
@@ -104,7 +104,7 @@ export default function AdvertisePage() {
         {/* Spots */}
         <section className="adv-section">
           <header className="adv-section__head">
-            <span className="adv-section__kicker">المساحات المتاحة</span>
+            <span className="adv-section__kicker e-badge e-badge--accent">المساحات المتاحة</span>
             <h2 className="adv-section__title">4 أماكن نار للظهور</h2>
             <p className="adv-section__sub">كل مساحة ليها موقعها، وميزتها، وسعرها حسب الطلب.</p>
           </header>
@@ -128,7 +128,7 @@ export default function AdvertisePage() {
         {/* Who */}
         <section className="adv-section">
           <header className="adv-section__head">
-            <span className="adv-section__kicker">يناسب مين</span>
+            <span className="adv-section__kicker e-badge e-badge--accent">يناسب مين</span>
             <h2 className="adv-section__title">أي حد عنده حاجة يقولها</h2>
           </header>
           <div className="adv-who">

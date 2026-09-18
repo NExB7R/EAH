@@ -72,9 +72,9 @@ export default async function TrendsPage() {
           <div className="tr__logo">
             <EahLogo size="md" variant="full" href="/" />
           </div>
-          <span className="tr__kicker">الترند النهاردة</span>
-          <h1 className="tr__title">الترند النهاردة</h1>
-          <p className="tr__sub">
+          <span className="tr__kicker e-badge e-badge--accent">الترند النهاردة</span>
+          <h1 className="tr__title e-gradient">الترند النهاردة</h1>
+          <p className="tr__sub e-page__sub">
             الأماكن الأكثر تفاعلاً وزيارات في آخر 7 أيام
           </p>
         </section>
