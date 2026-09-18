@@ -1,3 +1,5 @@
+> ⚠️ اقرأ DEPLOY_SETUP.md قبل أي deploy — webhook Vercel معطل، استخدم ./deploy.sh
+
 # EAH — Handoff to Next Chat
 
 > آخر تحديث: 2026-09-18
