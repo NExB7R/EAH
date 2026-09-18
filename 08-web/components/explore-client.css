@@ -303,3 +303,23 @@
     gap: 12px;
   }
 }
+
+/* ═══ Desktop Grid Fix (2026) ═══ */
+.exc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+
+@media (min-width: 1024px) {
+  .exc-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 1440px) {
+  .exc-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .exc-grid { grid-template-columns: 1fr; gap: 12px; }
+}

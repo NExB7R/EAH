@@ -106,3 +106,7 @@
 ### 2026-09-18 19:23 UTC — v1.0.1
 - **Action:** fix(ui): restore hook subtitle + explore grid 3 cols + about icon sizes
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:27 UTC — v1.0.1
+- **Action:** fix(explore): reviewCount → review_count
+- **Branch:** ui-onlook

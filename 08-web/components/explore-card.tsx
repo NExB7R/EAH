@@ -102,6 +102,16 @@ export default function ExploreCard({ business, index }: { business: Business; s
           </span>
         )}
 
+        {/* Rating overlay — 2026 */}
+        {typeof business.rating === 'number' && business.rating > 0 && (
+          <span className="ecard__rating-overlay" aria-label="متوسط التقييم">
+            ★ {business.rating.toFixed(1)}
+            {typeof business.review_count === 'number' && business.review_count > 0 && (
+              <small>({business.review_count})</small>
+            )}
+          </span>
+        )}
+
         {/* Badge */}
         {(business.badge || business.is_premium) && (
           <span className={`ecard__badge ${business.is_premium || business.badge === 'مميز' ? 'ecard__badge--gold' : ''}`}>

@@ -25,6 +25,8 @@ export default function HomeHero() {
           <span className="hh__tagline-city">دولة شبين القناطر تتحدث</span>
         </div>
 
+        <p className="hh__hook-sub">كل حاجة محتاجها في مكان واحد</p>
+
         <h2 className="hh__hook"></h2>
 
         <div className="hh__search">
