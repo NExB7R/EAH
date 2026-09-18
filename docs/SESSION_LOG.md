@@ -38,3 +38,7 @@
 ### 2026-09-18 18:15 UTC — v1.0.1
 - **Action:** feat(analytics): event tracking + funnel RPC
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:18 UTC — v1.0.1
+- **Action:** feat(analytics): order_start tracking + merchant funnel display
+- **Branch:** ui-onlook

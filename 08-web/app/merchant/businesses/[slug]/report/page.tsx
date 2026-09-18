@@ -45,6 +45,15 @@ export default async function MerchantReportPage({
     .eq('business_id', business.id)
     .gte('created_at', since)
 
+  // ─── Funnel data ───
+  const { data: funnelData } = await supabase.rpc('get_business_funnel', {
+    p_business_id: business.id,
+    p_days: rangeDays,
+  })
+  const funnel = (funnelData as any) ?? {
+    views: 0, reveals: 0, order_start: 0, order_confirm: 0, conversion_rate: 0, peak_hours: []
+  }
+
   const metrics = [
     { label: `زيارات (${rangeDays}ي)`, value: viewsCount ?? 0, color: 'var(--eah-purple-2)' },
     { label: `زيارات فريدة`, value: uniqueVisitsCount ?? 0, color: '#E8C79A' },
@@ -184,7 +193,46 @@ export default async function MerchantReportPage({
             <span style={{ fontFamily: 'var(--font-cairo, system-ui)', fontSize: '.82rem', color: '#A29DB5' }}>إجمالي الأوردرات</span>
           </div>
         </div>
-              <MerchantInsights
+              <section className="mreport-section">
+          <h2 className="mreport-section__title">قمع التحويل ({rangeDays} يوم)</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12 }}>
+            <div style={{ padding: 16, borderRadius: 14, background: 'rgba(168,85,247,.08)', border: '1px solid rgba(168,85,247,.25)', textAlign: 'center' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#C084FC' }}>{funnel.views}</div>
+              <div style={{ fontSize: '.72rem', color: '#A5A3B8', marginTop: 4 }}>مشاهدات</div>
+            </div>
+            <div style={{ padding: 16, borderRadius: 14, background: 'rgba(168,85,247,.08)', border: '1px solid rgba(168,85,247,.25)', textAlign: 'center' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#C4B5FD' }}>{funnel.reveals}</div>
+              <div style={{ fontSize: '.72rem', color: '#A5A3B8', marginTop: 4 }}>كشوف أرقام</div>
+            </div>
+            <div style={{ padding: 16, borderRadius: 14, background: 'rgba(232,199,154,.08)', border: '1px solid rgba(232,199,154,.25)', textAlign: 'center' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#E8C79A' }}>{funnel.order_start}</div>
+              <div style={{ fontSize: '.72rem', color: '#A5A3B8', marginTop: 4 }}>بدأوا طلب</div>
+            </div>
+            <div style={{ padding: 16, borderRadius: 14, background: 'rgba(16,185,129,.08)', border: '1px solid rgba(16,185,129,.3)', textAlign: 'center' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#6EE7B7' }}>{funnel.order_confirm}</div>
+              <div style={{ fontSize: '.72rem', color: '#A5A3B8', marginTop: 4 }}>أوردرات مؤكدة</div>
+            </div>
+            <div style={{ padding: 16, borderRadius: 14, background: 'rgba(251,191,36,.08)', border: '1px solid rgba(251,191,36,.3)', textAlign: 'center', gridColumn: 'span 2' }}>
+              <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#FBBF24' }}>{funnel.conversion_rate}%</div>
+              <div style={{ fontSize: '.72rem', color: '#A5A3B8', marginTop: 4 }}>معدل التحويل</div>
+            </div>
+          </div>
+
+          {funnel.peak_hours && funnel.peak_hours.length > 0 && (
+            <>
+              <h3 style={{ fontFamily: 'var(--eah-font-display)', fontSize: '.92rem', color: '#F5F3FF', margin: '20px 0 10px' }}>أكثر ساعات النشاط</h3>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {funnel.peak_hours.map((h: any) => (
+                  <span key={h.hour} style={{ padding: '6px 12px', borderRadius: 10, background: 'rgba(168,85,247,.12)', border: '1px solid rgba(168,85,247,.3)', color: '#C4B5FD', fontSize: '.78rem', fontWeight: 800 }}>
+                    {h.hour.toString().padStart(2, '0')}:00 — {h.count}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
+        </section>
+
+        <MerchantInsights
           daily={daily}
           totalViews={viewsCount ?? 0}
           totalReveals={revealsCount ?? 0}

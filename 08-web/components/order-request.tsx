@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import './order-request.css'
 import { buildOrderMessage, generateOrderCode } from '@/lib/whatsapp-order'
+import { trackClientEvent } from '@/lib/analytics/client'
 import { IcMarket, IcChat, IcPhone } from './eah-icons'
 import { IcCheckCircle, IcLock } from '@/components/eah-icons'
 
@@ -39,6 +40,11 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
       if (profile?.phone) setPhone(profile.phone)
     })()
   }, [open])
+
+  function openForm() {
+    setOpen(true)
+    trackClientEvent('order_start', { businessId })
+  }
 
   function validate() {
     if (name.trim().length < 2) return 'اكتب اسمك'
@@ -141,7 +147,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
 
   if (!open) {
     return (
-      <button type="button" className="orr__trigger" onClick={() => setOpen(true)}>
+      <button type="button" className="orr__trigger" onClick={openForm}>
         <span className="orr__trigger-icon"><IcMarket /></span>
         <span className="orr__trigger-text">
           <strong>اطلب أوردر</strong>
