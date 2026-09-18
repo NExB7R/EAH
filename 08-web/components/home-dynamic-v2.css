@@ -14,7 +14,7 @@
 /* Home actions — 2 cards */
 .home-actions {
   max-width: 900px;
-  margin: 48px auto;
+  margin: 28px auto;
   padding: 0 20px;
 }
 .home-actions__grid {
@@ -25,11 +25,11 @@
 }
 .home-actions__card {
   position: relative;
-  min-height: 160px;
+  min-height: 130px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 22px 22px 18px;
+  padding: 18px 18px 16px;
   border-radius: 20px;
   text-decoration: none;
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);

@@ -42,3 +42,7 @@
 ### 2026-09-18 18:18 UTC — v1.0.1
 - **Action:** feat(analytics): order_start tracking + merchant funnel display
 - **Branch:** ui-onlook
+
+### 2026-09-18 18:20 UTC — v1.0.1
+- **Action:** perf(home): tighter hero + dedup sections + lighter ambient
+- **Branch:** ui-onlook
