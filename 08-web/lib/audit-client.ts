@@ -8,6 +8,10 @@ type AuditAction =
   | 'menu.item_create'
   | 'menu.item_update'
   | 'menu.item_delete'
+  | 'ad.create'
+  | 'ad.update'
+  | 'ad.delete'
+  | 'business.toggle_whatsapp'
 
 export async function auditClient(params: {
   action: AuditAction

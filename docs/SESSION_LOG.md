@@ -142,3 +142,7 @@
 ### 2026-09-18 19:46 UTC — v1.1.0
 - **Action:** feat(audit): auto-log merchant actions (reply + order status)
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:50 UTC — v1.1.0
+- **Action:** feat(audit): auto-log ad.create + business.toggle_whatsapp
+- **Branch:** ui-onlook

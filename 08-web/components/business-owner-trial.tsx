@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import TrialCountdown from './trial-countdown'
+import { auditClient } from '@/lib/audit-client'
 
 export function WhatsAppOrdersToggle({ businessId, initialEnabled }: { businessId: string; initialEnabled: boolean }) {
   const [enabled, setEnabled] = useState(initialEnabled)
@@ -31,8 +32,16 @@ export function WhatsAppOrdersToggle({ businessId, initialEnabled }: { businessI
     try {
       const { createClient } = await import('@/lib/supabase-browser')
       const supabase = createClient()
-      await supabase.from('businesses').update({ accepts_whatsapp_orders: !enabled }).eq('id', businessId)
-      setEnabled(!enabled)
+      const next = !enabled
+      await supabase.from('businesses').update({ accepts_whatsapp_orders: next }).eq('id', businessId)
+      void auditClient({
+        action: 'business.toggle_whatsapp',
+        entityType: 'businesses',
+        entityId: businessId,
+        before: { accepts_whatsapp_orders: enabled },
+        after: { accepts_whatsapp_orders: next },
+      })
+      setEnabled(next)
     } catch {}
     setBusy(false)
   }

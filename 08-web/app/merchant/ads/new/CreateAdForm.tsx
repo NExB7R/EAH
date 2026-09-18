@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import { IcCalendar, IcImage, IcLink } from '@/components/eah-icons'
+import { auditClient } from '@/lib/audit-client'
 
 type Slot = { id: string; code: string; name_ar: string; slot_type: string }
 
@@ -27,19 +28,33 @@ export default function CreateAdForm({ slots }: { slots: Slot[] }) {
       const startsAt = new Date()
       const endsAt = new Date(startsAt.getTime() + days * 86400_000)
 
-      const { error } = await supabase.from('ads').insert({
-        slot_id: slotId,
-        owner_profile_id: user.id,
-        title: title.trim(),
-        description: desc.trim() || null,
-        image_url: imageUrl.trim() || null,
-        link_url: linkUrl.trim() || null,
-        link_type: linkUrl.startsWith('http') ? 'external' : 'internal',
-        starts_at: startsAt.toISOString(),
-        ends_at: endsAt.toISOString(),
-        status: 'pending',
-      })
+      const { data: inserted, error } = await supabase
+        .from('ads')
+        .insert({
+          slot_id: slotId,
+          owner_profile_id: user.id,
+          title: title.trim(),
+          description: desc.trim() || null,
+          image_url: imageUrl.trim() || null,
+          link_url: linkUrl.trim() || null,
+          link_type: linkUrl.startsWith('http') ? 'external' : 'internal',
+          starts_at: startsAt.toISOString(),
+          ends_at: endsAt.toISOString(),
+          status: 'pending',
+        })
+        .select('id')
+        .single()
+
       if (error) { setErr(error.message); return }
+
+      if (inserted?.id) {
+        void auditClient({
+          action: 'ad.create',
+          entityType: 'ads',
+          entityId: inserted.id,
+          after: { title: title.trim(), slotId, days },
+        })
+      }
       setMsg('تم الإرسال — هيتم المراجعة قريب')
       setTimeout(() => window.location.href = '/merchant/ads', 1500)
     } catch (e: any) { setErr(e.message) }
