@@ -60,7 +60,7 @@ export default async function ExplorePage({
     <>
       <FloatingCapsuleHeader />
       <BackToTop />
-      <main style={{ paddingTop: '80px', minHeight: '100vh' }}>
+      <main style={{ minHeight: '100vh' }}>
         <div className="explore-hero">
           <Link href="/" className="explore-hero__back">← الرئيسية</Link>
           <div className="explore-hero__logo">

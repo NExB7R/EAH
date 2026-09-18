@@ -98,3 +98,7 @@
 ### 2026-09-18 19:13 UTC — v1.0.1
 - **Action:** fix(reviews): add IcChat import
 - **Branch:** ui-onlook
+
+### 2026-09-18 19:15 UTC — v1.0.1
+- **Action:** fix(layout): global body padding-top + remove per-page hero offsets
+- **Branch:** ui-onlook

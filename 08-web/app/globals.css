@@ -258,6 +258,8 @@ body {
 
 /* ═══ EAH Spacing System 2026 ═══ */
 :root {
+  --fc-height: 64px;
+  --fc-height-mobile: 56px;
   --space-xs: 8px;
   --space-sm: 14px;
   --space-md: 20px;
@@ -370,4 +372,17 @@ h3, h4 {
 @keyframes eahFloat {
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50%      { transform: translateY(-12px) rotate(6deg); }
+}
+
+
+/* ═══ Global Header Offset ═══ */
+body {
+  padding-top: var(--fc-height, 64px);
+  background: #07060B;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding-top: var(--fc-height-mobile, 56px);
+  }
 }
