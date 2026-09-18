@@ -41,17 +41,12 @@ export default function AdminShell({
       title: 'المحتوى',
       items: [
         { href: '/admin/collect', label: 'جمع أماكن', icon: MI.sparkles },
-        { href: '/admin/pending', label: 'الطلبات المعلقة', icon: MI.inbox },
+        { href: '/admin/pending', label: 'الطلبات المعلقة', icon: MI.inbox, badge: pendingChanges },
         { href: '/admin/businesses', label: 'الأنشطة', icon: MI.store },
         { href: '/admin/offers', label: 'العروض', icon: MI.fire },
         { href: '/admin/ads', label: 'الإعلانات', icon: MI.megaphone },
         { href: '/admin/reviews', label: 'التقييمات', icon: MI.sparkles },
-        {
-          href: '/admin/change-requests',
-          label: 'طلبات التعديل',
-          icon: MI.info,
-          badge: pendingChanges,
-        },
+
       ],
     },
     {

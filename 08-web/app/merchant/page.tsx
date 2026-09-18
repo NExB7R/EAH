@@ -40,6 +40,7 @@ export default async function MerchantDashboard() {
             </p>
           </div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <Link href="/merchant/pending" className="admin-btn admin-btn--ghost">طلباتي المعلقة</Link>
             <Link href="/merchant/orders" className="admin-btn admin-btn--gold">
               الطلبات
             </Link>

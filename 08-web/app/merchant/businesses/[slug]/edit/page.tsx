@@ -53,16 +53,27 @@ export default async function MerchantEditBusinessPage({
       if (typeof v === 'string') payload[k] = v
     }
 
-    const { error } = await sb.rpc('submit_business_change_request', {
-      p_business_id: business.id,
+    const { data: pending, error } = await sb.rpc('submit_pending_change', {
+      p_action: 'business.update',
       p_entity_type: 'business',
-      p_operation: 'update',
-      p_target_id: business.id,
+      p_entity_id: business.id,
       p_payload: payload,
     })
 
     if (error) return { ok: false, message: error.message }
-    redirect('/merchant?submitted=1')
+    const r = pending as any
+    if (!r?.ok) return { ok: false, message: r?.reason ?? 'failed' }
+
+    // notify admins
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/api/admin/pending/notify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pendingId: r.id }),
+      })
+    } catch { /* silent */ }
+
+    redirect('/merchant/pending?submitted=1')
   }
 
   return (
