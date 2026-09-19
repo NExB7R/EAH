@@ -47,6 +47,7 @@ export default async function ExplorePage({
     activeOffers: b.activeOffers ?? 0,
     ageInDays: b.ageInDays ?? 0,
     isFeatured: b.featured ?? false,
+    food_categories: b.food_categories ?? [],
     lastShownAt: undefined,
     totalImpressions: 0,
   }))
