@@ -61,7 +61,6 @@ export default function ExploreClient({ businesses, initialType, clientCoords }:
   const offersOnly = searchParams.get('offers') === '1'
   const view = (searchParams.get('view') === 'list' ? 'list' : 'grid') as 'grid' | 'list'
   const [sortOpen, setSortOpen] = useState(false)
-  const [nearMe, setNearMe] = useState(false)
   const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(clientCoords ?? null)
   const [nearMe, setNearMe] = useState(!!clientCoords)
 
