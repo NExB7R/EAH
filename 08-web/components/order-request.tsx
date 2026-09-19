@@ -6,6 +6,8 @@ import { buildOrderMessage, generateOrderCode } from '@/lib/whatsapp-order'
 import { trackClientEvent } from '@/lib/analytics/client'
 import { IcMarket, IcChat, IcPhone } from './eah-icons'
 import { IcCheckCircle, IcLock } from '@/components/eah-icons'
+import LocationPicker from '@/components/locations/location-picker'
+import '@/components/locations/location-picker.css'
 
 type Props = {
   businessId: string
@@ -22,6 +24,8 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
   const [items, setItems] = useState('')
   const [notes, setNotes] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number; label?: string } | null>(null)
+  const [savedLocations, setSavedLocations] = useState<any[]>([])
   const [error, setError] = useState<string | null>(null)
 
   // Prefill name/phone from profile if logged in
@@ -50,6 +54,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
     if (name.trim().length < 2) return 'اكتب اسمك'
     if (!/^[\d+\s-]{8,}$/.test(phone.trim())) return 'رقم موبايل غير صحيح'
     if (items.trim().length < 5) return 'اكتب الأوردر بالتفصيل'
+    if (!userLocation && address.trim().length < 5) return 'حدد موقعك أو اكتب العنوان'
     if (!merchantPhone) return 'المطعم مش مسجل رقم واتساب'
     return null
   }
@@ -101,6 +106,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
       customerPhone: phone.trim(),
       area: area.trim() || null,
       address: address.trim() || null,
+      location: userLocation ? { lat: userLocation.lat, lng: userLocation.lng } : null,
       items: items.trim(),
       notes: notes.trim() || null,
       customerTrustScore,
@@ -119,6 +125,8 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
         customer_phone: phone.trim(),
         customer_area: area.trim() || null,
         customer_address: address.trim() || null,
+        delivery_lat: userLocation?.lat ?? null,
+        delivery_lng: userLocation?.lng ?? null,
         items_summary: items.trim(),
         notes: notes.trim() || null,
         merchant_phone: phoneNumber,
@@ -198,6 +206,25 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
       ) : (
         <form className="orr__form" onSubmit={submit}>
           <div className="orr__grid">
+            <div className="orr__location">
+              <span className="orr__field-label">📍 موقعك</span>
+              <LocationPicker
+                locations={savedLocations}
+                onPick={(loc: any) => {
+                  const lat = loc.latitude ?? loc.lat
+                  const lng = loc.longitude ?? loc.lng
+                  setUserLocation({ lat, lng, label: loc.label ?? 'موقعي' })
+                  if (loc.label) setArea(loc.label)
+                }}
+                compact
+              />
+              {userLocation && (
+                <p className="orr__location-ok">
+                  ✓ تم تحديد موقعك: {userLocation.label}
+                </p>
+              )}
+            </div>
+
             <label className="orr__field">
               <span>الاسم *</span>
               <input

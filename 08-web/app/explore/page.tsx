@@ -10,6 +10,7 @@ import './explore-hero.css'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { getViewStats } from '@/lib/real-stats'
+import { getPrimaryLocation } from '@/lib/locations'
 
 export const revalidate = 60
 
@@ -30,6 +31,9 @@ export default async function ExplorePage({
   const activeType = rawFilter && VALID_TYPES.includes(rawFilter) ? rawFilter : undefined
 
   const businesses = await getPublishedBusinesses(80)
+
+  const primaryLoc = await getPrimaryLocation().catch(() => null)
+  const clientCoords = primaryLoc ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude } : null
 
   const viewStats = await getViewStats(businesses.map((b) => b.slug), 7)
   const withStats = businesses.map((b) => ({
@@ -75,7 +79,7 @@ export default async function ExplorePage({
         </div>
         <div className="explore-search-wrap"><SearchBar /></div>
         <Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#A29DB5' }}>جاري التحميل...</div>}>
-          <ExploreClient businesses={diversified} initialType={activeType} />
+          <ExploreClient businesses={diversified} initialType={activeType} clientCoords={clientCoords} />
         </Suspense>
       </main>
       <SiteFooter />

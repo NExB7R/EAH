@@ -46,7 +46,7 @@ const SORTS = [
 const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
 const getType = (b: Business): string => (b.type ?? b.business_type ?? '') as string
 
-export default function ExploreClient({ businesses, initialType }: { businesses: Business[]; initialType?: string }) {
+export default function ExploreClient({ businesses, initialType, clientCoords }: { businesses: Business[]; initialType?: string; clientCoords?: { lat: number; lng: number } | null }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -61,6 +61,9 @@ export default function ExploreClient({ businesses, initialType }: { businesses:
   const offersOnly = searchParams.get('offers') === '1'
   const view = (searchParams.get('view') === 'list' ? 'list' : 'grid') as 'grid' | 'list'
   const [sortOpen, setSortOpen] = useState(false)
+  const [nearMe, setNearMe] = useState(false)
+  const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(clientCoords ?? null)
+  const [nearMe, setNearMe] = useState(!!clientCoords)
 
   function updateParams(patch: Record<string, string | null>) {
     const params = new URLSearchParams(searchParams.toString())
@@ -116,14 +119,48 @@ export default function ExploreClient({ businesses, initialType }: { businesses:
           return pb - pa
         })
     }
+    if (nearMe && userCoords) {
+      arr.sort((a, b) => {
+        const aLat = (a as any).latitude
+        const aLng = (a as any).longitude
+        const bLat = (b as any).latitude
+        const bLng = (b as any).longitude
+        if (aLat == null || aLng == null) return 1
+        if (bLat == null || bLng == null) return -1
+        return haversineKm(userCoords, { lat: aLat, lng: aLng }) -
+               haversineKm(userCoords, { lat: bLat, lng: bLng })
+      })
+    }
+
     return arr
-  }, [businesses, type, area, sort, openOnly, offersOnly, search, foodCat])
+  }, [businesses, type, area, sort, openOnly, offersOnly, search, foodCat, nearMe, userCoords])
 
   const activeFiltersCount =
     (type !== 'all' ? 1 : 0) + (area !== 'all' ? 1 : 0) + (openOnly ? 1 : 0) +
-    (offersOnly ? 1 : 0) + (search.trim() ? 1 : 0) + (foodCat ? 1 : 0)
+    (offersOnly ? 1 : 0) + (search.trim() ? 1 : 0) + (foodCat ? 1 : 0) + (nearMe ? 1 : 0)
 
-  function clearAll() { router.replace(pathname, { scroll: false }) }
+  function toggleNearMe() {
+    if (nearMe) { setNearMe(false); return }
+    if (typeof navigator === 'undefined' || !navigator.geolocation) return
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+        setNearMe(true)
+      },
+      () => setNearMe(false),
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
+    )
+  }
+
+  function haversineKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
+    const R = 6371
+    const dLat = ((b.lat - a.lat) * Math.PI) / 180
+    const dLng = ((b.lng - a.lng) * Math.PI) / 180
+    const x = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180) * Math.cos(b.lat*Math.PI/180) * Math.sin(dLng/2)**2
+    return 2 * R * Math.asin(Math.sqrt(x))
+  }
+
+  function clearAll() { router.replace(pathname, { scroll: false }); setNearMe(false) }
   const activeSort = SORTS.find((s) => s.key === sort) ?? SORTS[0]
 
   return (
@@ -169,6 +206,9 @@ export default function ExploreClient({ businesses, initialType }: { businesses:
 
           <button type="button" className={`exc-toggle ${offersOnly ? 'is-active' : ''}`}
             onClick={() => updateParams({ offers: offersOnly ? null : '1' })}>فيه عروض</button>
+
+          <button type="button" className={`exc-toggle ${nearMe ? 'is-active' : ''}`}
+            onClick={toggleNearMe}>📍 قريب مني</button>
 
           <div className="exc-sort">
             <button type="button" className="exc-sort__trigger"

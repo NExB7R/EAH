@@ -7,16 +7,24 @@ cloudinary.config({
   secure: true,
 })
 
-//  إعدادات الضغط التلقائي — جودة عالية + حجم أقل ما يمكن
-const AUTO_TRANSFORM = [
-  {
-    width: 1600,
-    height: 1600,
-    crop: 'limit',
-    quality: 'auto:good',
-    fetch_format: 'auto',
-    flags: 'progressive',
-  },
+// Watermark — لوجو EAH شفاف في النص
+const WATERMARK = {
+  overlay: 'eah:branding:watermark',
+  gravity: 'center',
+  opacity: 35,
+  width: 500,
+  crop: 'scale',
+}
+
+// صور الأنشطة — مع watermark
+const BIZ_TRANSFORM = [
+  { width: 1600, height: 1600, crop: 'limit', quality: 'auto:good', fetch_format: 'auto', flags: 'progressive' },
+  WATERMARK,
+]
+
+// avatars — بدون watermark
+const AVATAR_TRANSFORM = [
+  { width: 400, height: 400, crop: 'fill', gravity: 'face', quality: 'auto:good', fetch_format: 'auto' },
 ]
 
 export type UploadResult = {
@@ -36,10 +44,12 @@ export async function uploadToCloudinary(
   const buffer = Buffer.from(arrayBuffer)
   const dataUri = `data:${file.type};base64,${buffer.toString('base64')}`
 
+  const transform = folder.includes('avatar') ? AVATAR_TRANSFORM : BIZ_TRANSFORM
+
   const result = await cloudinary.uploader.upload(dataUri, {
     folder: `eah/${folder}`,
     resource_type: 'image',
-    transformation: AUTO_TRANSFORM,
+    transformation: transform,
     overwrite: false,
     unique_filename: true,
     use_filename: false,

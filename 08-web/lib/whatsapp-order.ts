@@ -8,6 +8,7 @@ type OrderForTemplate = {
   customerProfilePhone?: string | null
   area?: string | null
   address?: string | null
+  location?: { lat: number; lng: number } | null
   items?: string | null
   notes?: string | null
   orderId?: string

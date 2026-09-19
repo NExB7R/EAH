@@ -1,0 +1,69 @@
+.sl { display: flex; flex-direction: column; gap: 12px; }
+.sl__list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.sl__item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px;
+  background: rgba(20,15,35,.6);
+  border: 1px solid rgba(168,85,247,.25);
+  border-radius: 12px;
+}
+.sl__item-icon { font-size: 18px; }
+.sl__item-body { flex: 1; }
+.sl__item-label { font-weight: 700; color: #fff; }
+.sl__item-coords { font-size: 11.5px; color: rgba(216,180,254,.6); font-family: monospace; margin-top: 2px; }
+.sl__item-badge {
+  font-size: 10px; padding: 3px 8px;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  border-radius: 999px; color: #fff; font-weight: 800;
+}
+.sl__item-del {
+  background: rgba(239,68,68,.15); border: 1px solid rgba(239,68,68,.4);
+  color: #fca5a5; width: 28px; height: 28px; border-radius: 50%;
+  cursor: pointer; font-size: 16px; line-height: 1;
+}
+.sl__add {
+  padding: 12px;
+  background: rgba(168,85,247,.12);
+  border: 1px dashed rgba(168,85,247,.4);
+  border-radius: 12px;
+  color: #d8b4fe;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.sl__add:hover { background: rgba(168,85,247,.22); }
+.sl__form {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 16px;
+  background: rgba(20,15,35,.6);
+  border: 1px solid rgba(168,85,247,.3);
+  border-radius: 12px;
+}
+.sl__detect {
+  padding: 12px;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  color: #fff; border: 0; border-radius: 10px;
+  font-family: inherit; font-size: 14px; font-weight: 800;
+  cursor: pointer;
+}
+.sl__coords { font-size: 12.5px; color: #86efac; margin: 0; }
+.sl__input {
+  padding: 11px 14px;
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(168,85,247,.3);
+  border-radius: 10px;
+  color: #fff; font-family: inherit; font-size: 14px;
+  outline: none;
+}
+.sl__input:focus { border-color: rgba(168,85,247,.6); }
+.sl__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.sl__btn {
+  padding: 10px 16px; border-radius: 10px; border: 0;
+  font-family: inherit; font-size: 13px; font-weight: 800;
+  cursor: pointer;
+  background: rgba(168,85,247,.15); color: #d8b4fe;
+}
+.sl__btn--primary { background: linear-gradient(135deg, #a855f7, #7c3aed); color: #fff; }
+.sl__btn--ghost { background: rgba(255,255,255,.06); color: rgba(216,180,254,.7); }
+.sl__error { font-size: 12.5px; color: #fca5a5; margin: 0; }
