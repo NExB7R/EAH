@@ -416,13 +416,19 @@
   gap: 8px;
 }
 
-/* الفلاتر: ترتيب منطقي في RTL */
+/* الفلاتر — ترتيب RTL طبيعي */
 .exc-filters {
   display: flex !important;
-  flex-direction: row-reverse !important;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
 }
-.exc-filters__left { order: 2; }
-.exc-filters__right { order: 1; display: flex; align-items: center; gap: 8px; }
+.exc-filters__left {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  order: 1;
+}
+.exc-filters__right {
+  display: flex; align-items: center; gap: 8px;
+  order: 2;
+}

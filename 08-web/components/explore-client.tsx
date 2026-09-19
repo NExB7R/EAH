@@ -62,7 +62,7 @@ export default function ExploreClient({ businesses, initialType, clientCoords }:
   const view = (searchParams.get('view') === 'list' ? 'list' : 'grid') as 'grid' | 'list'
   const [sortOpen, setSortOpen] = useState(false)
   const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(clientCoords ?? null)
-  const [nearMe, setNearMe] = useState(!!clientCoords)
+  const [nearMe, setNearMe] = useState(false)
 
   function updateParams(patch: Record<string, string | null>) {
     const params = new URLSearchParams(searchParams.toString())
@@ -119,16 +119,19 @@ export default function ExploreClient({ businesses, initialType, clientCoords }:
         })
     }
     if (nearMe && userCoords) {
-      arr.sort((a, b) => {
-        const aLat = (a as any).latitude
-        const aLng = (a as any).longitude
-        const bLat = (b as any).latitude
-        const bLng = (b as any).longitude
-        if (aLat == null || aLng == null) return 1
-        if (bLat == null || bLng == null) return -1
-        return haversineKm(userCoords, { lat: aLat, lng: aLng }) -
-               haversineKm(userCoords, { lat: bLat, lng: bLng })
-      })
+      const withCoords = arr.filter((b) => (b as any).latitude != null && (b as any).longitude != null)
+      // لو مفيش أي نشاط عنده إحداثيات → نرجع كل النتائج بدون ترتيب مسافة
+      if (withCoords.length > 0) {
+        withCoords.sort((a, b) => {
+          const aLat = (a as any).latitude
+          const aLng = (a as any).longitude
+          const bLat = (b as any).latitude
+          const bLng = (b as any).longitude
+          return haversineKm(userCoords, { lat: aLat, lng: aLng }) -
+                 haversineKm(userCoords, { lat: bLat, lng: bLng })
+        })
+        return withCoords
+      }
     }
 
     return arr
