@@ -26,13 +26,30 @@ export default function NeonIconButton({
       <span className="neon-icon-btn__label">{label}</span>
     </>
   )
+
   if (href) {
+    // كل روابط خارجية تفتح في تاب جديد
+    const isExternal = href.startsWith('http://') || href.startsWith('https://')
+    if (isExternal) {
+      return (
+        <a
+          href={href}
+          className={cls}
+          aria-label={ariaLabel || label}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {content}
+        </a>
+      )
+    }
     return (
       <a href={href} className={cls} aria-label={ariaLabel || label}>
         {content}
       </a>
     )
   }
+
   return (
     <button className={cls} aria-label={ariaLabel || label} type="button" onClick={onClick}>
       {content}
