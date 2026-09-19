@@ -1,0 +1,98 @@
+.promo-info {
+  background: rgba(168,85,247,.08);
+  border: 1px solid rgba(168,85,247,.28);
+  border-radius: 14px;
+  padding: 18px;
+  margin: 20px 0;
+}
+.promo-info__title { font-size: 15px; font-weight: 900; color: #f5f3ff; margin: 0 0 10px; }
+.promo-info__list { margin: 0; padding-inline-start: 20px; display: flex; flex-direction: column; gap: 6px; }
+.promo-info__list li { font-size: 13.5px; color: rgba(216,180,254,.85); line-height: 1.7; }
+
+.promo-form { display: flex; flex-direction: column; gap: 14px; }
+.promo-label { display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; font-weight: 700; color: rgba(216,180,254,.8); }
+.promo-input {
+  padding: 12px 14px;
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(168,85,247,.3);
+  border-radius: 10px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 180ms ease;
+}
+.promo-input:focus { border-color: rgba(168,85,247,.6); }
+
+.promo-submit {
+  padding: 13px 20px;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  color: #fff;
+  border: 0;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(168,85,247,.35);
+  transition: filter 180ms ease;
+}
+.promo-submit:hover { filter: brightness(1.1); }
+.promo-submit:disabled { opacity: .55; cursor: wait; }
+
+.promo-msg { padding: 12px 14px; border-radius: 10px; font-size: 13.5px; }
+.promo-msg--ok { background: rgba(34,197,94,.12); color: #86efac; border: 1px solid rgba(34,197,94,.3); }
+.promo-msg--err { background: rgba(239,68,68,.12); color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
+
+.promo-status { margin-top: 28px; }
+.promo-status__title { font-size: 16px; font-weight: 900; color: #f5f3ff; margin: 0 0 12px; }
+.promo-status__list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.promo-status__item {
+  background: rgba(20,15,35,.5);
+  border: 1px solid rgba(168,85,247,.22);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.promo-status__item--approved { border-color: rgba(34,197,94,.35); }
+.promo-status__item--rejected { border-color: rgba(239,68,68,.3); opacity: .7; }
+.promo-status__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.promo-status__date { font-size: 11.5px; color: rgba(216,180,254,.55); }
+.promo-status__link { font-family: monospace; font-size: 11.5px; color: #d8b4fe; word-break: break-all; }
+.promo-status__ok { font-size: 12.5px; color: #86efac; margin: 6px 0 0; font-weight: 700; }
+.promo-status__note { font-size: 12.5px; color: rgba(216,180,254,.7); margin: 6px 0 0; }
+
+.promo-badge { font-size: 10.5px; padding: 3px 9px; border-radius: 999px; font-weight: 800; }
+.promo-badge--pending { background: rgba(245,197,66,.2); color: #f5c542; }
+.promo-badge--approved { background: rgba(34,197,94,.2); color: #86efac; }
+.promo-badge--rejected { background: rgba(239,68,68,.2); color: #fca5a5; }
+
+.promo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.promo-admin {
+  background: rgba(20,15,35,.6);
+  border: 1px solid rgba(168,85,247,.3);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.promo-admin__head { display: flex; justify-content: space-between; align-items: flex-start; }
+.promo-admin__biz { font-weight: 900; color: #fff; font-size: 15px; }
+.promo-admin__date { font-size: 11.5px; color: rgba(216,180,254,.55); margin-top: 2px; }
+.promo-admin__link { font-family: monospace; font-size: 11.5px; color: #d8b4fe; word-break: break-all; }
+.promo-admin__note { font-size: 12.5px; color: rgba(216,180,254,.75); margin: 0; }
+.promo-admin__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.promo-admin__btn {
+  padding: 11px; border-radius: 10px; border: 0;
+  font-family: inherit; font-size: 13px; font-weight: 800;
+  cursor: pointer; transition: filter 180ms ease;
+}
+.promo-admin__btn--ok { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
+.promo-admin__btn--no { background: rgba(239,68,68,.15); color: #fca5a5; border: 1px solid rgba(239,68,68,.4); }
+.promo-admin__btn:disabled { opacity: .5; cursor: wait; }
+.promo-empty {
+  text-align: center; padding: 40px 20px;
+  background: rgba(20,15,35,.5); border-radius: 14px;
+  border: 1px dashed rgba(168,85,247,.3);
+  color: rgba(216,180,254,.65);
+}
