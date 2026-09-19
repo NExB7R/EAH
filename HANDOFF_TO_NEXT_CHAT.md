@@ -1,3 +1,5 @@
+> للإطلاق الرسمي: اقرأ docs/LAUNCH_CHECKLIST.md (Vercel Pro + دومين + فيسبوك)
+
 > ⚠️ اقرأ DEPLOY_SETUP.md قبل أي deploy — webhook Vercel معطل، استخدم ./deploy.sh
 
 # EAH — Handoff to Next Chat
