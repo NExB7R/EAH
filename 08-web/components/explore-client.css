@@ -401,3 +401,28 @@
   background: linear-gradient(135deg, rgba(168,85,247,0.35), rgba(124,58,237,0.2));
   color: #fff;
 }
+
+/* شيل البحث القديم */
+.exc-search { display: none !important; }
+
+/* empty state أصغر */
+.exc-empty { padding: 40px 20px !important; }
+.exc-empty__emoji svg { width: 60px !important; height: 60px !important; opacity: 0.4; }
+
+/* العنوان الرئيسي أنسب */
+.exc-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* الفلاتر: ترتيب منطقي في RTL */
+.exc-filters {
+  display: flex !important;
+  flex-direction: row-reverse !important;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+.exc-filters__left { order: 2; }
+.exc-filters__right { order: 1; display: flex; align-items: center; gap: 8px; }

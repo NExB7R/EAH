@@ -7,7 +7,7 @@
   position: fixed;
   bottom: calc(env(safe-area-inset-bottom, 0) + 20px);
   inset-inline-end: 20px;
-  width: 60px;
+  width: 48px;
   height: 60px;
   border-radius: 50%;
   border: none;
@@ -305,7 +305,7 @@
   .sb-trigger {
     bottom: calc(env(safe-area-inset-bottom, 0) + 16px);
     inset-inline-end: 16px;
-    width: 56px;
+    width: 48px;
     height: 56px;
   }
   .sb-panel {
@@ -421,7 +421,7 @@
 }
 
 @media (max-width: 640px) {
-  .sb-trigger { width: 60px; height: 60px; }
+  .sb-trigger { width: 48px; height: 60px; }
 }
 
 /* ═══ رفيق — مساعد EAH ═══ */
@@ -429,7 +429,7 @@
   position: fixed;
   bottom: calc(env(safe-area-inset-bottom, 0) + 18px);
   inset-inline-end: 18px;
-  width: 60px;
+  width: 48px;
   height: 60px;
   border-radius: 50%;
   background: linear-gradient(135deg, rgba(20, 14, 34, 0.98), rgba(11, 8, 22, 0.98));

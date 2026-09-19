@@ -31,3 +31,14 @@
 .sbar--lg { padding: 8px 8px 8px 20px; }
 .sbar--lg .sbar__input { font-size: 1rem; padding: 13px 0; }
 .sbar--lg .sbar__btn { padding: 11px 24px; font-size: .9rem; }
+
+/* VoiceButton داخل البحث */
+.sbar .vb-wrap { display: inline-flex; align-items: center; }
+.sbar .vb-btn { width: 32px !important; height: 32px !important; }
+
+/* على الموبايل: خلي البحث أصغر شوية */
+@media (max-width: 480px) {
+  .sbar { padding: 4px 8px !important; gap: 6px !important; }
+  .sbar__btn { padding: 8px 14px !important; font-size: .8rem !important; }
+  .sbar__input { font-size: .9rem !important; }
+}

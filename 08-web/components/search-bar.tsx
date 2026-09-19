@@ -1,6 +1,8 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useState, FormEvent } from 'react'
+import VoiceButton from './voice/voice-button'
+import { parseArabicQuery } from '@/lib/search/normalize'
 import { IconSearch } from './neon-icons'
 import './search-bar.css'
 
@@ -8,7 +10,7 @@ export default function SearchBar({
   initialQuery = '',
   autoFocus = false,
   size = 'md',
-  placeholder = 'ابحث عن مطعم، صيدلية، عرض...',
+  placeholder = 'دوّر على إيه النهاردة؟',
 }: {
   initialQuery?: string
   autoFocus?: boolean
@@ -18,11 +20,22 @@ export default function SearchBar({
   const [q, setQ] = useState(initialQuery)
   const router = useRouter()
 
+  function go(raw: string) {
+    const text = raw.trim()
+    if (!text) { router.push('/explore'); return }
+    const parsed = parseArabicQuery(text)
+    const params = new URLSearchParams()
+    if (parsed.type) params.set('type', parsed.type)
+    if (parsed.area) params.set('area', parsed.area)
+    if (parsed.openNow === true) params.set('open', '1')
+    if (parsed.budget) params.set('budget', parsed.budget)
+    if (!parsed.hasIntent || parsed.keywords.length > 0) params.set('q', text)
+    router.push(`/explore${params.toString() ? '?' + params.toString() : ''}`)
+  }
+
   function submit(e: FormEvent) {
     e.preventDefault()
-    const query = q.trim()
-    if (query) router.push(`/search?q=${encodeURIComponent(query)}`)
-    else router.push('/search')
+    go(q)
   }
 
   return (
@@ -36,6 +49,11 @@ export default function SearchBar({
         aria-label="ابحث في EAH"
         autoFocus={autoFocus}
         className="sbar__input"
+      />
+      <VoiceButton
+        size="sm"
+        onResult={(t) => { setQ(t); setTimeout(() => go(t), 300) }}
+        onPartial={(t) => setQ(t)}
       />
       <button type="submit" className="sbar__btn">ابحث</button>
     </form>
