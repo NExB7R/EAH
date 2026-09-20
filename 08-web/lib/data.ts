@@ -232,15 +232,43 @@ export async function getPublishedBusinesses(
   }
 }
 
+
+// تطبيع الـ slug العربي — يوحّد الأحرف المتشابهة
+function normalizeSlug(s: string): string {
+  return decodeURIComponent(s)
+    .replace(/[ىي]/g, 'ي')
+    .replace(/[ةه]/g, 'ه')
+    .replace(/[أإآٱا]/g, 'ا')
+    .replace(/[ؤو]/g, 'و')
+    .replace(/[ئىي]/g, 'ي')
+    .replace(/[\s\-_]+/g, '-')
+    .replace(/[^\u0600-\u06FFa-zA-Z0-9-]/g, '')
+    .toLowerCase()
+    .trim()
+}
+
 export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel | null> {
   try {
     const supabase = await createClient()
-    const { data, error } = await supabase
+    // 1) جرّب الـ slug الأصلي
+    let { data, error } = await supabase
       .from('businesses')
       .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,cover_image_url')
       .eq('slug', slug)
       .eq('is_published', true)
       .maybeSingle()
+
+    // 2) لو مش لقي، جرّب slug normalized (مع/بدون تشكيل + استبدال ى/ي)
+    if (!data) {
+      const all = await supabase
+        .from('businesses')
+        .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,cover_image_url')
+        .eq('is_published', true)
+        .limit(500)
+      const target = normalizeSlug(slug)
+      const match = (all.data ?? []).find((b) => normalizeSlug(b.slug) === target)
+      if (match) { data = match; error = null }
+    }
 
     if (!error && data) {
       const [{ data: offers }, premiumIds, reviewStats] = await Promise.all([
