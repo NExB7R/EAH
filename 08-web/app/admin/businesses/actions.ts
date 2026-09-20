@@ -121,6 +121,15 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
     if (mErr) console.error('[createBusiness] menu insert:', mErr)
   }
 
+  // ═══ food categories ═══
+  const foodCats = parseJson<string[]>(String(formData.get('food_categories_json') ?? '[]'), [])
+  if (foodCats.length > 0) {
+    const { error: fErr } = await supabase.from('business_food_categories').insert(
+      foodCats.map((k) => ({ business_id: created.id, category_key: k }))
+    )
+    if (fErr) console.error('[createBusiness] food_cats insert:', fErr)
+  }
+
   await auditLog({
     action: 'business.create',
     entityType: 'business',
@@ -215,6 +224,16 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
       }))
     )
     if (mErr) console.error('[updateBusiness] menu insert:', mErr)
+  }
+
+  // ═══ food categories ═══
+  const foodCats = parseJson<string[]>(String(formData.get('food_categories_json') ?? '[]'), [])
+  await supabase.from('business_food_categories').delete().eq('business_id', id)
+  if (foodCats.length > 0) {
+    const { error: fErr } = await supabase.from('business_food_categories').insert(
+      foodCats.map((k) => ({ business_id: id, category_key: k }))
+    )
+    if (fErr) console.error('[updateBusiness] food_cats insert:', fErr)
   }
 
   await auditLog({

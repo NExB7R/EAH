@@ -253,3 +253,27 @@
   height: 100%;
   color: rgba(255, 255, 255, 0.9);
 }
+
+/* ═══ Slider dots ═══ */
+.ec5__dots {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+  z-index: 3;
+}
+.ec5__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: all 0.25s ease;
+}
+.ec5__dot.is-active {
+  width: 18px;
+  border-radius: 4px;
+  background: #E8C79A;
+  box-shadow: 0 0 8px rgba(232, 199, 154, 0.6);
+}

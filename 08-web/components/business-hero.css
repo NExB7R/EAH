@@ -263,3 +263,27 @@
 .bhero__inner.has-cover .bhero__cover {
   min-height: 260px;
 }
+
+/* ═══ Hero slideshow dots ═══ */
+.bhero__dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 3;
+}
+.bhero__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+.bhero__dot.is-active {
+  width: 22px;
+  border-radius: 4px;
+  background: #E8C79A;
+  box-shadow: 0 0 10px rgba(232, 199, 154, 0.7);
+}

@@ -71,18 +71,6 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
     })()
   }, [businessId])
 
-  // save categories (debounced on submit — via form submit handler)
-  async function saveCategories() {
-    if (!businessId) return
-    const supabase = createClient()
-    await supabase.from('business_food_categories').delete().eq('business_id', businessId)
-    if (foodCats.length > 0) {
-      await supabase.from('business_food_categories').insert(
-        foodCats.map((k) => ({ business_id: businessId, category_key: k }))
-      )
-    }
-  }
-
   const handleNameChange = (v: string) => {
     setName(v)
     if (!slugTouched && mode === 'create') setSlug(slugify(v))
@@ -114,15 +102,17 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
           </div>
 
           <div className="admin-field">
-            <div className="admin-field" style={{ gridColumn: '1 / -1' }}>
-            <FoodCategoriesPicker value={foodCats} onChange={setFoodCats} max={5} />
-          </div>
-
-          <label className="admin-field__label" htmlFor="business_type">النوع *</label>
+            <label className="admin-field__label" htmlFor="business_type">النوع *</label>
             <select id="business_type" name="business_type" className="admin-select" defaultValue={initial?.business_type ?? 'restaurant'} required>
               {TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
           </div>
+
+          <div className="admin-field" style={{ gridColumn: '1 / -1' }}>
+            <FoodCategoriesPicker value={foodCats} onChange={setFoodCats} max={5} />
+          </div>
+
+          <input type="hidden" name="food_categories_json" value={JSON.stringify(foodCats)} />
 
           <div className="admin-field">
             <label className="admin-field__label" htmlFor="area">المنطقة *</label>

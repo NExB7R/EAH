@@ -456,3 +456,50 @@ html, body {
   outline: 2px solid #A855F7;
   outline-offset: 2px;
 }
+
+/* ═══ Breadcrumbs 2026 ═══ */
+.bc {
+  max-width: 1100px;
+  margin: 16px auto 0;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+.bc__link {
+  color: #A29DB5;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.12);
+  transition: all 150ms ease;
+  font-weight: 700;
+}
+.bc__link:hover {
+  color: #E8C79A;
+  background: rgba(168, 85, 247, 0.14);
+  border-color: rgba(168, 85, 247, 0.35);
+}
+.bc__sep {
+  color: #4A4560;
+  font-size: 0.7rem;
+  user-select: none;
+}
+.bc__current {
+  color: #F4F2FA;
+  font-weight: 900;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(232, 199, 154, 0.08));
+  border: 1px solid rgba(168, 85, 247, 0.28);
+}
+
+@media (max-width: 640px) {
+  .bc { font-size: 0.7rem; padding: 0 14px; margin-top: 12px; }
+  .bc__link, .bc__current { padding: 3px 8px; }
+}

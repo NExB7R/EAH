@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import './business-hero.css'
 import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from './eah-icons'
@@ -40,39 +41,51 @@ export default function BusinessHero({
     address?: string | null
     workingHours?: any
     coverImage?: string | null
+    gallery?: string[]
   }
   stats: Stats
 }) {
   const cover = business.coverImage ?? null
+  const gallery = business.gallery ?? []
+  const slides: string[] = []
+  if (cover) slides.push(cover)
+  gallery.filter((g) => g !== cover).forEach((g) => slides.push(g))
+  const [slideIdx, setSlideIdx] = useState(0)
+
+  useEffect(() => {
+    if (slides.length <= 1) return
+    const t = setInterval(() => setSlideIdx((i) => (i + 1) % slides.length), 3500)
+    return () => clearInterval(t)
+  }, [slides.length])
+
+  const currentSlide = slides[slideIdx] ?? null
   const Icon = TYPE_ICON[business.type]
 
   return (
     <section className="bhero">
-      <div className="bhero__back">
-        <Link href="/explore" className="bhero__back-btn">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-          رجوع للاكتشاف
-        </Link>
-      </div>
-
-      <div className={`bhero__inner ${cover ? 'has-cover' : ''}`}>
+      <div className={`bhero__inner ${slides.length > 0 ? 'has-cover' : ''}`}>
         <div
           className="bhero__cover"
-          style={cover ? { backgroundImage: `url(${cover})` } : undefined}
+          style={currentSlide ? { backgroundImage: `url(${currentSlide})` } : undefined}
         >
-          {cover && <div className="bhero__cover-overlay" aria-hidden />}
+          {slides.length > 0 && <div className="bhero__cover-overlay" aria-hidden />}
           <div className="bhero__cover-glow" aria-hidden />
-          {!cover && (
+          {slides.length === 0 && (
             <span className="bhero__icon" aria-hidden>
               <Icon />
             </span>
           )}
-          {cover && (
+          {slides.length > 0 && (
             <span className="bhero__cover-badge e-badge e-badge--accent" aria-hidden>
               <Icon />
             </span>
+          )}
+          {slides.length > 1 && (
+            <div className="bhero__dots">
+              {slides.map((_, i) => (
+                <span key={i} className={`bhero__dot ${i === slideIdx ? 'is-active' : ''}`} />
+              ))}
+            </div>
           )}
         </div>
 

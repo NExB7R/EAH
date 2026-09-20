@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
@@ -10,7 +9,6 @@ import ExploreCardV5 from '@/components/explore-card-v5'
 import VisitorValue from '@/components/visitor-value'
 import './home-dynamic-v2.css'
 import AdSlot from '@/components/ads/ad-slot'
-import { IcStore, IcSparkle } from '@/components/eah-icons'
 import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
 export default async function HomeDynamicV2() {
@@ -40,35 +38,32 @@ export default async function HomeDynamicV2() {
   const personalized = applyPersonalization(ranked, userProfile)
   const diversified = diversifyByCategory(personalized as any, 'type') as any[]
 
-  // ═══ Featured (mixed across all categories) — sorted by views ═══
+  const total = diversified.length
+
+  // ═══ Featured ═══
   const featured = [...diversified]
     .filter((b) => b.badge === 'مميز' || b.isFeatured)
     .sort((a, b) => (b.recentViews ?? 0) - (a.recentViews ?? 0))
     .slice(0, 12)
 
-  // ═══ Trending (mixed) — sorted by ranking score ═══
+  // ═══ Trending ═══
   const trending = [...diversified]
     .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
     .slice(0, 12)
 
-  // ═══ New (mixed) — sorted by newest, under 30 days ═══
+  // ═══ New ═══
   const newOnes = [...diversified]
     .filter((b) => (b.ageInDays ?? 999) < 30)
     .sort((a, b) => (a.ageInDays ?? 999) - (b.ageInDays ?? 999))
     .slice(0, 12)
 
-  // لو الأقسام كلها نفس النشاط الوحيد → نعرض قسم واحد بس
-  const allSlugs = new Set([
-    ...featured.map(b => b.slug),
-    ...trending.map(b => b.slug),
-    ...newOnes.map(b => b.slug),
-  ])
-  // لو عندنا 1-2 نشاط بس، نعرض قسم موحّد بدل ما نكرر
-  const lowInventory = diversified.length <= 2
+  // لو عندنا <= 3 أنشطة → قسم موحّد بس (مفيش تكرار)
+  const lowInventory = total <= 3
+
   const hasFeatured = !lowInventory && featured.length > 0
   const hasTrending = !lowInventory && trending.length > 0
   const hasNew = !lowInventory && newOnes.length > 0
-  const hasUnified = lowInventory && diversified.length > 0
+  const hasUnified = lowInventory && total > 0
 
   const ad = await getActiveAdForSlot('home_banner')
   const adHref = ad ? getAdHref(ad) : '#'
@@ -82,7 +77,7 @@ export default async function HomeDynamicV2() {
       {hasUnified && (
         <SectionSliderV2
           title="اكتشف على EAH"
-          subtitle="كل الأماكن اللي عندنا دلوقتي"
+          subtitle={total === 1 ? 'أول مكان معانا — قريب كمان في السكة' : 'كل الأماكن اللي عندنا دلوقتي'}
           seeAllHref="/explore"
           variant="featured"
         >
@@ -130,6 +125,8 @@ export default async function HomeDynamicV2() {
           ))}
         </SectionSliderV2>
       )}
-</>
+
+      <VisitorValue />
+    </>
   )
 }

@@ -69,6 +69,7 @@ type BusinessViewModel = {
   acceptsWhatsappOrders?: boolean
   food_categories?: string[]
   cover_image_url?: string
+  gallery?: string[]
 }
 
 function toDemoShape(
@@ -216,6 +217,27 @@ export async function getPublishedBusinesses(
       console.error('[food_cats] exception:', e)
     }
 
+    // fetch gallery + menu from business_media
+    const galleryByBiz = new Map<string, string[]>()
+    const menuByBiz = new Map<string, string[]>()
+    try {
+      const { data: media } = await supabase
+        .from('business_media')
+        .select('business_id, media_type, storage_path, sort_order')
+        .in('business_id', ids)
+        .eq('is_published', true)
+        .order('sort_order')
+      for (const m of media ?? []) {
+        if (m.media_type === 'gallery') {
+          if (!galleryByBiz.has(m.business_id)) galleryByBiz.set(m.business_id, [])
+          galleryByBiz.get(m.business_id)!.push(m.storage_path)
+        } else if (m.media_type === 'menu') {
+          if (!menuByBiz.has(m.business_id)) menuByBiz.set(m.business_id, [])
+          menuByBiz.get(m.business_id)!.push(m.storage_path)
+        }
+      }
+    } catch {}
+
     const offersByBiz = new Map<string, DbOffer[]>()
     ;(offers ?? []).forEach((o) => {
       const list = offersByBiz.get(o.business_id) ?? []
@@ -226,6 +248,8 @@ export async function getPublishedBusinesses(
     return data.map((b) => ({
       ...toDemoShape(b, offersByBiz.get(b.id) ?? [], premiumIds.has(b.id), reviewStats.get(b.id)),
       food_categories: categoriesByBiz.get(b.id) ?? [],
+      gallery: galleryByBiz.get(b.id) ?? [],
+      menu: menuByBiz.get(b.id) ?? [],
     }))
   } catch {
     return FALLBACK(limit, intent)
@@ -284,9 +308,19 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
         .from('business_food_categories')
         .select('category_key')
         .eq('business_id', data.id)
+      const { data: media } = await supabase
+        .from('business_media')
+        .select('media_type, storage_path, sort_order')
+        .eq('business_id', data.id)
+        .eq('is_published', true)
+        .order('sort_order')
+      const gallery = (media ?? []).filter((m) => m.media_type === 'gallery').map((m) => m.storage_path)
+      const menu = (media ?? []).filter((m) => m.media_type === 'menu').map((m) => m.storage_path)
       return {
         ...toDemoShape(data, offers ?? [], premiumIds.has(data.id), reviewStats.get(data.id)),
         food_categories: (cats ?? []).map((c) => c.category_key),
+        gallery,
+        menu,
       }
     }
   } catch {

@@ -22,11 +22,12 @@ type Business = {
   cover_url?: string
   cover_image_url?: string
   gallery?: string[]
+  menu?: string[]
   [key: string]: any
 }
 
 function TypeIcon({ type }: { type: string }) {
-  const c = { width: 44, height: 44, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+  const c = { width: 48, height: 48, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
   if (type === 'restaurant') return <svg {...c}><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
   if (type === 'pharmacy') return <svg {...c}><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
   if (type === 'supermarket') return <svg {...c}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
@@ -57,20 +58,30 @@ const HOOK_BY_TYPE: Record<string, string> = {
 
 export default function ExploreCardV5({ business }: { business: Business }) {
   const [flipped, setFlipped] = useState(false)
-  const [galleryIdx, setGalleryIdx] = useState(0)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [slideIdx, setSlideIdx] = useState(0)
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const cover = business.cover || business.cover_url || business.cover_image_url || ''
-  const gallery: string[] = (business.gallery ?? []).filter(Boolean)
-  const allImages = cover ? [cover, ...gallery.filter(g => g !== cover)] : gallery
+  const gallery = (business.gallery ?? []).filter(Boolean).filter((g) => g !== cover)
+  const menu = (business.menu ?? []).filter(Boolean)
+
+  // ترتيب الشرائح: 1) غلاف  2) منيو  3) صور
+  const slides: { url: string; label: string }[] = []
+  if (cover) slides.push({ url: cover, label: business.name })
+  menu.forEach((url, i) => slides.push({ url, label: `منيو ${i + 1}` }))
+  gallery.forEach((url, i) => slides.push({ url, label: `صورة ${i + 1}` }))
 
   useEffect(() => {
-    if (!flipped || allImages.length <= 1) return
-    intervalRef.current = setInterval(() => {
-      setGalleryIdx((i) => (i + 1) % allImages.length)
-    }, 2200)
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
-  }, [flipped, allImages.length])
+    if (!flipped || slides.length <= 1) return
+    timerRef.current = setInterval(() => {
+      setSlideIdx((i) => (i + 1) % slides.length)
+    }, 3000)
+    return () => { if (timerRef.current) clearInterval(timerRef.current) }
+  }, [flipped, slides.length])
+
+  useEffect(() => {
+    if (!flipped) setSlideIdx(0)
+  }, [flipped])
 
   const enter = () => setFlipped(true)
   const leave = () => setFlipped(false)
@@ -93,15 +104,16 @@ export default function ExploreCardV5({ business }: { business: Business }) {
       aria-label={business.name}
     >
       <div className="ec5__inner">
+        {/* ═══ FRONT — الغلاف ═══ */}
         <div className="ec5__front">
           <div className="ec5__cover" style={{ backgroundImage: cover ? `url(${cover})` : gradient }}>
             {!cover && <span className="ec5__cover-icon" aria-hidden><TypeIcon type={business.type} /></span>}
           </div>
 
           {business.badge && <span className="ec5__badge">{business.badge}</span>}
-          {offers > 0 && <span className="ec5__offer-badge">+{offers}</span>}
+          {offers > 0 && <span className="ec5__offer-badge">{offers} عرض</span>}
 
-          <div className="ec5__fav">
+          <div className="ec5__fav" onClick={(e) => e.preventDefault()}>
             <FavoriteButton businessId={business.id ?? business.slug} size="sm" />
           </div>
 
@@ -113,11 +125,16 @@ export default function ExploreCardV5({ business }: { business: Business }) {
           </div>
         </div>
 
+        {/* ═══ BACK — سلايدر (منيو + صور) ═══ */}
         <div className="ec5__back">
-          {allImages.length > 0 ? (
+          {slides.length > 0 ? (
             <div className="ec5__gallery">
-              {allImages.map((url, i) => (
-                <div key={i} className={`ec5__gallery-img ${i === galleryIdx ? 'is-active' : ''}`} style={{ backgroundImage: `url(${url})` }} />
+              {slides.map((s, i) => (
+                <div
+                  key={i}
+                  className={`ec5__gallery-img ${i === slideIdx ? 'is-active' : ''}`}
+                  style={{ backgroundImage: `url(${s.url})` }}
+                />
               ))}
             </div>
           ) : (
@@ -127,6 +144,15 @@ export default function ExploreCardV5({ business }: { business: Business }) {
           )}
 
           <div className="ec5__gallery-overlay" />
+
+          {/* مؤشر الصور */}
+          {slides.length > 1 && (
+            <div className="ec5__dots">
+              {slides.map((_, i) => (
+                <span key={i} className={`ec5__dot ${i === slideIdx ? 'is-active' : ''}`} />
+              ))}
+            </div>
+          )}
 
           <div className="ec5__back-content">
             <h3 className="ec5__back-name">{business.name}</h3>
