@@ -2,8 +2,9 @@
 import { useMemo, useState } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import ExploreCard from './explore-card'
+import FilterSelect from './ui/filter-select'
 import './explore-client.css'
-import { IcClose, IcMenu, IcSearch } from '@/components/eah-icons'
+import { IcClose, IcMenu } from '@/components/eah-icons'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 
@@ -26,42 +27,36 @@ type Business = {
   [key: string]: any
 }
 
-const TYPES = [
-  { key: 'all', label: 'الكل' },
-  { key: 'restaurant', label: 'مطاعم' },
-  { key: 'pharmacy', label: 'صيدليات' },
-  { key: 'supermarket', label: 'ماركت' },
-  { key: 'delivery_office', label: 'توصيل' },
-] as const
-
-const SORTS = [
-  { key: 'default', label: 'الأنسب ليك' },
-  { key: 'rating', label: 'الأعلى تقييم' },
-  { key: 'views', label: 'الأكثر زيارة' },
-  { key: 'offers', label: 'فيه عروض' },
-  { key: 'new', label: 'الأحدث' },
-]
-
 const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
 const getType = (b: Business): string => (b.type ?? b.business_type ?? '') as string
 
-export default function ExploreClient({ businesses, initialType, clientCoords, availableFoodCats = [] }: { businesses: Business[]; initialType?: string; clientCoords?: { lat: number; lng: number } | null; availableFoodCats?: { key: string; label: string; emoji: string }[] }) {
+export default function ExploreClient({
+  businesses,
+  initialType,
+  clientCoords,
+  availableFoodCats = [],
+}: {
+  businesses: Business[]
+  initialType?: string
+  clientCoords?: { lat: number; lng: number } | null
+  availableFoodCats?: { key: string; label: string; emoji: string }[]
+}) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
   const rawType = searchParams.get('type') ?? initialType ?? 'all'
   const type = VALID_TYPES.includes(rawType) ? rawType : 'all'
-  const area = searchParams.get('area') ?? 'all'
-  const sort = searchParams.get('sort') ?? 'default'
+  const area = searchParams.get('area') ?? ''
+  const sort = searchParams.get('sort') ?? ''
   const search = searchParams.get('q') ?? ''
   const foodCat = searchParams.get('food') ?? ''
   const openOnly = searchParams.get('open') === '1'
   const offersOnly = searchParams.get('offers') === '1'
   const view = (searchParams.get('view') === 'list' ? 'list' : 'grid') as 'grid' | 'list'
-  const [sortOpen, setSortOpen] = useState(false)
-  const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(clientCoords ?? null)
+
   const [nearMe, setNearMe] = useState(false)
+  const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(clientCoords ?? null)
 
   function updateParams(patch: Record<string, string | null>) {
     const params = new URLSearchParams(searchParams.toString())
@@ -79,21 +74,42 @@ export default function ExploreClient({ businesses, initialType, clientCoords, a
     return Array.from(set).sort()
   }, [businesses])
 
+  const typeCounts = useMemo(() => {
+    const m: Record<string, number> = { all: businesses.length }
+    for (const t of VALID_TYPES) m[t] = businesses.filter((b) => getType(b) === t).length
+    return m
+  }, [businesses])
 
+  const foodCounts = useMemo(() => {
+    const m: Record<string, number> = {}
+    for (const c of availableFoodCats) {
+      m[c.key] = businesses.filter((b) => b.food_categories?.includes(c.key)).length
+    }
+    return m
+  }, [businesses, availableFoodCats])
+
+  const areaCounts = useMemo(() => {
+    const m: Record<string, number> = {}
+    for (const a of areas) m[a] = businesses.filter((b) => b.area === a).length
+    return m
+  }, [businesses, areas])
+
+  // ─── Filter + sort ───
   const filtered = useMemo(() => {
     let list = businesses
     if (type !== 'all') list = list.filter((b) => getType(b) === type)
     if (foodCat) list = list.filter((b) => b.food_categories?.includes(foodCat))
-    if (area !== 'all') list = list.filter((b) => b.area === area)
+    if (area) list = list.filter((b) => b.area === area)
     if (openOnly) list = list.filter((b) => b.open)
     if (offersOnly) list = list.filter((b) => (b.activeOffers ?? 0) > 0)
 
     if (search.trim()) {
       const q = search.trim().toLowerCase()
-      list = list.filter((b) =>
-        b.name.toLowerCase().includes(q) ||
-        b.area?.toLowerCase().includes(q) ||
-        b.vibe?.some((v) => v.toLowerCase().includes(q))
+      list = list.filter(
+        (b) =>
+          b.name.toLowerCase().includes(q) ||
+          b.area?.toLowerCase().includes(q) ||
+          b.vibe?.some((v) => v.toLowerCase().includes(q))
       )
     }
 
@@ -110,17 +126,14 @@ export default function ExploreClient({ businesses, initialType, clientCoords, a
           return pb - pa
         })
     }
+
     if (nearMe && userCoords) {
-      const withCoords = arr.filter((b) => (b as any).latitude != null && (b as any).longitude != null)
-      // لو مفيش أي نشاط عنده إحداثيات → نرجع كل النتائج بدون ترتيب مسافة
+      const withCoords = arr.filter((b) => b.latitude != null && b.longitude != null)
       if (withCoords.length > 0) {
         withCoords.sort((a, b) => {
-          const aLat = (a as any).latitude
-          const aLng = (a as any).longitude
-          const bLat = (b as any).latitude
-          const bLng = (b as any).longitude
-          return haversineKm(userCoords, { lat: aLat, lng: aLng }) -
-                 haversineKm(userCoords, { lat: bLat, lng: bLng })
+          const aD = haversineKm(userCoords, { lat: a.latitude, lng: a.longitude })
+          const bD = haversineKm(userCoords, { lat: b.latitude, lng: b.longitude })
+          return aD - bD
         })
         return withCoords
       }
@@ -130,8 +143,13 @@ export default function ExploreClient({ businesses, initialType, clientCoords, a
   }, [businesses, type, area, sort, openOnly, offersOnly, search, foodCat, nearMe, userCoords])
 
   const activeFiltersCount =
-    (type !== 'all' ? 1 : 0) + (area !== 'all' ? 1 : 0) + (openOnly ? 1 : 0) +
-    (offersOnly ? 1 : 0) + (search.trim() ? 1 : 0) + (foodCat ? 1 : 0) + (nearMe ? 1 : 0)
+    (type !== 'all' ? 1 : 0) +
+    (area ? 1 : 0) +
+    (openOnly ? 1 : 0) +
+    (offersOnly ? 1 : 0) +
+    (search.trim() ? 1 : 0) +
+    (foodCat ? 1 : 0) +
+    (nearMe ? 1 : 0)
 
   function toggleNearMe() {
     if (nearMe) { setNearMe(false); return }
@@ -150,117 +168,153 @@ export default function ExploreClient({ businesses, initialType, clientCoords, a
     const R = 6371
     const dLat = ((b.lat - a.lat) * Math.PI) / 180
     const dLng = ((b.lng - a.lng) * Math.PI) / 180
-    const x = Math.sin(dLat/2)**2 + Math.cos(a.lat*Math.PI/180) * Math.cos(b.lat*Math.PI/180) * Math.sin(dLng/2)**2
+    const x =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos((a.lat * Math.PI) / 180) * Math.cos((b.lat * Math.PI) / 180) * Math.sin(dLng / 2) ** 2
     return 2 * R * Math.asin(Math.sqrt(x))
   }
 
-  function clearAll() { router.replace(pathname, { scroll: false }); setNearMe(false) }
-  const activeSort = SORTS.find((s) => s.key === sort) ?? SORTS[0]
+  function clearAll() {
+    router.replace(pathname, { scroll: false })
+    setNearMe(false)
+  }
+
+  // ─── Options for filters ───
+  const TYPE_OPTS = [
+    { value: 'restaurant',      label: 'مطاعم',      emoji: '🍽️', count: typeCounts.restaurant },
+    { value: 'pharmacy',        label: 'صيدليات',    emoji: '💊', count: typeCounts.pharmacy },
+    { value: 'supermarket',     label: 'ماركت',      emoji: '🛒', count: typeCounts.supermarket },
+    { value: 'delivery_office', label: 'توصيل',      emoji: '📦', count: typeCounts.delivery_office },
+  ]
+
+  const AREA_OPTS = areas.map((a) => ({ value: a, label: a, count: areaCounts[a] }))
+
+  const FOOD_OPTS = availableFoodCats.map((c) => ({
+    value: c.key,
+    label: c.label,
+    emoji: c.emoji,
+    count: foodCounts[c.key] ?? 0,
+  }))
+
+  const SORT_OPTS = [
+    { value: 'rating', label: 'الأعلى تقييم', emoji: '⭐' },
+    { value: 'views',  label: 'الأكثر نشاط',   emoji: '🔥' },
+    { value: 'offers', label: 'فيه عروض',      emoji: '🎁' },
+    { value: 'new',    label: 'الأحدث',         emoji: '✨' },
+  ]
 
   return (
     <section className="exc">
-      <div className="exc-types">
-        {TYPES.map((t) => {
-          const count = t.key === 'all' ? businesses.length : businesses.filter((b) => getType(b) === t.key).length
-          return (
-            <button key={t.key} type="button" className={`exc-type ${type === t.key ? 'is-active' : ''}`}
-              onClick={() => updateParams({ type: t.key === 'all' ? null : t.key })}>
-              <span className="exc-type__label">{t.label}</span>
-              <span className="exc-type__count">{count}</span>
-            </button>
-          )
-        })}
-      </div>
+      {/* ─── Filter Bar ─── */}
+      <div className="exc-bar">
+        <div className="exc-bar__scroll">
+          <FilterSelect
+            label="النوع"
+            value={type === 'all' ? null : type}
+            options={TYPE_OPTS}
+            onChange={(v) => updateParams({ type: v })}
+            placeholder="كل الأنواع"
+          />
 
-      {/* Food category chips */}
-      {availableFoodCats.length > 0 && (type === 'all' || type === 'restaurant') && (
-        <div className="exc-food">
-          {availableFoodCats.map((c) => (
-            <button
-              key={c.key}
-              type="button"
-              className={`exc-food__chip ${foodCat === c.key ? 'is-active' : ''}`}
-              onClick={() => updateParams({ food: foodCat === c.key ? null : c.key })}
-            >
-              {c.emoji} {c.label}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="exc-filters">
-        <div className="exc-filters__left">
-          {areas.length > 1 && (
-            <select className="exc-select" value={area}
-              onChange={(e) => updateParams({ area: e.target.value === 'all' ? null : e.target.value })}
-              aria-label="المنطقة">
-              <option value="all">كل المناطق</option>
-              {areas.map((a) => <option key={a} value={a}>{a}</option>)}
-            </select>
+          {(type === 'all' || type === 'restaurant') && FOOD_OPTS.length > 0 && (
+            <FilterSelect
+              label="التصنيف"
+              value={foodCat || null}
+              options={FOOD_OPTS}
+              onChange={(v) => updateParams({ food: v })}
+              placeholder="كل الأكلات"
+            />
           )}
 
-          <button type="button" className={`exc-toggle ${openOnly ? 'is-active' : ''}`}
-            onClick={() => updateParams({ open: openOnly ? null : '1' })}>مفتوح دلوقتي</button>
+          {areas.length > 1 && (
+            <FilterSelect
+              label="المنطقة"
+              value={area || null}
+              options={AREA_OPTS}
+              onChange={(v) => updateParams({ area: v })}
+              placeholder="كل المناطق"
+            />
+          )}
 
-          <button type="button" className={`exc-toggle ${offersOnly ? 'is-active' : ''}`}
-            onClick={() => updateParams({ offers: offersOnly ? null : '1' })}>فيه عروض</button>
+          <FilterSelect
+            label="ترتيب"
+            value={sort || null}
+            options={SORT_OPTS}
+            onChange={(v) => updateParams({ sort: v })}
+            placeholder="الأنسب ليك"
+            clearable
+          />
 
-          <button type="button" className={`exc-toggle ${nearMe ? 'is-active' : ''}`}
-            onClick={toggleNearMe}>📍 قريب مني</button>
+          <button
+            type="button"
+            className={`exc-chip ${openOnly ? 'is-active' : ''}`}
+            onClick={() => updateParams({ open: openOnly ? null : '1' })}
+          >
+            مفتوح دلوقتي
+          </button>
 
-          <div className="exc-sort">
-            <button type="button" className="exc-sort__trigger"
-              onClick={() => setSortOpen((v) => !v)} aria-haspopup="listbox" aria-expanded={sortOpen}>
-              <span>{activeSort.label}</span>
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-            {sortOpen && (
-              <>
-                <div className="exc-sort__backdrop" onClick={() => setSortOpen(false)} />
-                <ul className="exc-sort__menu" role="listbox">
-                  {SORTS.map((s) => (
-                    <li key={s.key}>
-                      <button type="button" className={`exc-sort__item ${sort === s.key ? 'is-active' : ''}`}
-                        onClick={() => { updateParams({ sort: s.key === 'default' ? null : s.key }); setSortOpen(false) }}>
-                        {s.label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </div>
+          <button
+            type="button"
+            className={`exc-chip ${offersOnly ? 'is-active' : ''}`}
+            onClick={() => updateParams({ offers: offersOnly ? null : '1' })}
+          >
+            فيه عروض
+          </button>
+
+          <button
+            type="button"
+            className={`exc-chip ${nearMe ? 'is-active' : ''}`}
+            onClick={toggleNearMe}
+          >
+            قريب مني
+          </button>
         </div>
 
-        <div className="exc-filters__right">
+        <div className="exc-bar__end">
           {activeFiltersCount > 0 && (
             <button type="button" className="exc-clear" onClick={clearAll}>
-              <IcClose /> امسح الفلاتر ({activeFiltersCount})
+              <IcClose /> مسح ({activeFiltersCount})
             </button>
           )}
           <div className="exc-view">
-            <button type="button" className={`exc-view__btn ${view === 'grid' ? 'is-active' : ''}`}
-              onClick={() => updateParams({ view: null })} aria-label="شبكة">▦</button>
-            <button type="button" className={`exc-view__btn ${view === 'list' ? 'is-active' : ''}`}
-              onClick={() => updateParams({ view: 'list' })} aria-label="قائمة"><IcMenu /></button>
+            <button
+              type="button"
+              className={`exc-view__btn ${view === 'grid' ? 'is-active' : ''}`}
+              onClick={() => updateParams({ view: null })}
+              aria-label="شبكة"
+            >
+              ▦
+            </button>
+            <button
+              type="button"
+              className={`exc-view__btn ${view === 'list' ? 'is-active' : ''}`}
+              onClick={() => updateParams({ view: 'list' })}
+              aria-label="قائمة"
+            >
+              <IcMenu />
+            </button>
           </div>
         </div>
       </div>
 
+      {/* ─── Results ─── */}
       {filtered.length === 0 ? (
         <div className="exc-empty">
-          <span className="exc-empty__emoji"><IcSearch /></span>
-          <h3 className="exc-empty__title">مفيش نتائج</h3>
+          <h3 className="exc-empty__title">مفيش نتايج</h3>
           <p className="exc-empty__msg">جرّب فلتر تاني أو امسح البحث</p>
-          <button type="button" className="exc-empty__btn" onClick={clearAll}>امسح كل الفلاتر</button>
+          <button type="button" className="exc-empty__btn" onClick={clearAll}>
+            امسح كل الفلاتر
+          </button>
         </div>
       ) : (
         <>
-          <p className="exc-count"><strong>{filtered.length}</strong> مكان</p>
+          <p className="exc-count">
+            <strong>{filtered.length}</strong> مكان
+          </p>
           <div className={`exc-grid ${view === 'list' ? 'exc-grid--list' : ''}`}>
-            {filtered.map((b) => <ExploreCard key={b.slug} business={b as any} />)}
+            {filtered.map((b) => (
+              <ExploreCard key={b.slug} business={b as any} />
+            ))}
           </div>
         </>
       )}
