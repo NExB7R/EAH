@@ -71,6 +71,8 @@ type BusinessViewModel = {
   cover_image_url?: string
   gallery?: string[]
   logo?: string
+  trust_score?: number
+  trust_tier?: string
 }
 
 function toDemoShape(
@@ -123,6 +125,8 @@ function toDemoShape(
     hasOwner: !!b.owner_profile_id,
     acceptsWhatsappOrders: b.accepts_whatsapp_orders ?? false,
     cover_image_url: b.cover_image_url ?? undefined,
+    trust_score: (b as any).trust_score ?? 50,
+    trust_tier: (b as any).trust_tier ?? 'trusted',
   }
 }
 
@@ -282,7 +286,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
     // 1) جرّب الـ slug الأصلي
     let { data, error } = await supabase
       .from('businesses')
-      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,accepts_whatsapp_orders,cover_image_url')
+      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,accepts_whatsapp_orders,cover_image_url,trust_score,trust_tier')
       .eq('slug', slug)
       .eq('is_published', true)
       .maybeSingle()
@@ -291,7 +295,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
     if (!data) {
       const all = await supabase
         .from('businesses')
-        .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,accepts_whatsapp_orders,cover_image_url')
+        .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,accepts_whatsapp_orders,cover_image_url,trust_score,trust_tier')
         .eq('is_published', true)
         .limit(500)
       const target = normalizeSlug(slug)

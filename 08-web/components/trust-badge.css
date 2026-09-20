@@ -1,0 +1,57 @@
+/* ═══ EAH Trust Badge ═══ */
+.tb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--tb-color) 14%, transparent),
+    color-mix(in srgb, var(--tb-color) 6%, transparent));
+  border: 1px solid color-mix(in srgb, var(--tb-color) 40%, transparent);
+  color: var(--tb-color);
+  font-family: var(--font-cairo, system-ui);
+  font-weight: 800;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.tb__stars {
+  font-size: 0.72em;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tb__label {
+  font-size: 0.78em;
+  letter-spacing: -0.01em;
+}
+
+.tb__score {
+  font-size: 0.72em;
+  opacity: 0.75;
+  font-weight: 700;
+  padding-inline-start: 4px;
+  border-inline-start: 1px solid color-mix(in srgb, var(--tb-color) 30%, transparent);
+}
+
+/* ─── Sizes ─── */
+.tb--xs { font-size: 0.68rem; padding: 3px 8px; gap: 4px; }
+.tb--sm { font-size: 0.78rem; padding: 4px 10px; }
+.tb--md { font-size: 0.88rem; padding: 6px 14px; gap: 8px; }
+.tb--lg { font-size: 1rem;    padding: 8px 18px; gap: 10px; }
+
+/* ─── Card variant ─── */
+.tb--card {
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--tb-color) 12%, rgba(20, 14, 34, 0.7)),
+    rgba(10, 7, 20, 0.6));
+}
+
+/* ─── VIP glow ─── */
+.tb--vip {
+  box-shadow: 0 0 12px color-mix(in srgb, var(--tb-color) 40%, transparent);
+}

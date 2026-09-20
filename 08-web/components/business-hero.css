@@ -382,3 +382,9 @@
 #reviews, #write-review {
   scroll-margin-top: 100px;
 }
+
+.bh2__trust-row {
+  display: flex;
+  margin-bottom: 12px;
+  margin-top: -4px;
+}

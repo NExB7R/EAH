@@ -98,6 +98,8 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
             review_count: stats.review_count,
             active_offers: stats.active_offers,
           }}
+          trustScore={(business as any).trust_score}
+          trustTier={(business as any).trust_tier}
         />
 
         {/* ═══ Share + Follow Row ═══ */}

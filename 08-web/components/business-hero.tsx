@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import './business-hero.css'
+import TrustBadge from './trust-badge'
 import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from './eah-icons'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
@@ -29,6 +30,8 @@ type Stats = {
 export default function BusinessHero({
   business,
   stats,
+  trustScore,
+  trustTier,
 }: {
   business: {
     name: string
@@ -45,6 +48,8 @@ export default function BusinessHero({
     logo?: string | null
   }
   stats: Stats
+  trustScore?: number
+  trustTier?: string
 }) {
   const cover = business.coverImage ?? null
   const logo = business.logo ?? null
@@ -131,6 +136,12 @@ export default function BusinessHero({
           </div>
 
           <h1 className="bh2__name">{business.name}</h1>
+
+          {trustScore != null && trustTier && (
+            <div className="bh2__trust-row">
+              <TrustBadge score={trustScore} tier={trustTier} size="md" />
+            </div>
+          )}
 
           <div className="bh2__meta">
             <span className="bh2__meta-pill">
