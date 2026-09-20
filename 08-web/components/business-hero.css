@@ -287,3 +287,14 @@
   background: #E8C79A;
   box-shadow: 0 0 10px rgba(232, 199, 154, 0.7);
 }
+
+/* ═══ Hide cover badge entirely ═══ */
+.bhero__cover-badge { display: none !important; }
+
+/* ═══ Bigger cover ═══ */
+.bhero__inner.has-cover .bhero__cover {
+  min-height: 300px;
+}
+@media (max-width: 720px) {
+  .bhero__inner.has-cover .bhero__cover { min-height: 220px; }
+}

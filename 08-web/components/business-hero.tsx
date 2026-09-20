@@ -75,11 +75,6 @@ export default function BusinessHero({
               <Icon />
             </span>
           )}
-          {slides.length > 0 && (
-            <span className="bhero__cover-badge e-badge e-badge--accent" aria-hidden>
-              <Icon />
-            </span>
-          )}
           {slides.length > 1 && (
             <div className="bhero__dots">
               {slides.map((_, i) => (

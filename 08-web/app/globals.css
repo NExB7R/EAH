@@ -503,3 +503,32 @@ html, body {
   .bc { font-size: 0.7rem; padding: 0 14px; margin-top: 12px; }
   .bc__link, .bc__current { padding: 3px 8px; }
 }
+
+/* ═══ Breadcrumbs BIG override ═══ */
+nav.bc {
+  font-size: 0.9rem !important;
+  gap: 8px !important;
+  margin: 20px auto 0 !important;
+  padding: 0 24px !important;
+}
+nav.bc .bc__link,
+nav.bc .bc__current {
+  padding: 7px 16px !important;
+  font-weight: 800 !important;
+}
+nav.bc .bc__current {
+  font-size: 0.95rem !important;
+  color: #F4F2FA !important;
+  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.15);
+}
+nav.bc .bc__link {
+  color: #C4B5FD !important;
+}
+nav.bc .bc__sep {
+  color: #6B6580 !important;
+  font-size: 0.8rem !important;
+}
+@media (max-width: 640px) {
+  nav.bc { font-size: 0.78rem !important; gap: 5px !important; padding: 0 14px !important; }
+  nav.bc .bc__link, nav.bc .bc__current { padding: 5px 11px !important; }
+}

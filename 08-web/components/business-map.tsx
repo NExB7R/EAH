@@ -34,11 +34,11 @@ export default function BusinessMap({ lat, lng, name, area, address }: Props) {
       })
 
       L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         {
-          attribution: '© OpenStreetMap · © CARTO',
-          subdomains: 'abcd',
-          maxZoom: 20,
+          attribution: '© OpenStreetMap',
+          subdomains: 'abc',
+          maxZoom: 19,
         },
       ).addTo(map)
 

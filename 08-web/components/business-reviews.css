@@ -190,3 +190,23 @@
   margin: 0 auto;
   line-height: 1.7;
 }
+
+/* ═══ Empty state strong override ═══ */
+.brev.brev--empty {
+  min-height: auto !important;
+  height: auto !important;
+  max-width: 720px !important;
+  margin: 24px auto !important;
+  padding: 32px 24px !important;
+}
+.brev.brev--empty .brev__title {
+  margin-bottom: 12px;
+  font-size: 1.05rem;
+}
+.brev.brev--empty .brev__empty-msg {
+  margin: 0 auto;
+  max-width: 420px;
+  font-size: 0.9rem;
+  text-align: center;
+  line-height: 1.7;
+}
