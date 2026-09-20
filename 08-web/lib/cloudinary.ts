@@ -7,22 +7,28 @@ cloudinary.config({
   secure: true,
 })
 
-// Watermark — لوجو EAH شفاف في النص
+// ═══ Watermark — اللوجو الرسمي في Cloudinary (public_id: watermark) ═══
 const WATERMARK = {
-  overlay: 'eah:branding:watermark',
+  overlay: 'watermark',   // ← بدون eah:branding
   gravity: 'center',
-  opacity: 35,
+  opacity: 40,
   width: 500,
   crop: 'scale',
 }
 
-// صور الأنشطة — مع watermark
+// ═══ صور الأنشطة الأساسية — مع watermark ═══
+// (الغلاف + المعرض + المنيو)
 const BIZ_TRANSFORM = [
   { width: 1600, height: 1600, crop: 'limit', quality: 'auto:good', fetch_format: 'auto', flags: 'progressive' },
   WATERMARK,
 ]
 
-// avatars — بدون watermark
+// ═══ اللوجو — بدون watermark (لازم يفضل نظيف) ═══
+const LOGO_TRANSFORM = [
+  { width: 400, height: 400, crop: 'limit', quality: 'auto:good', fetch_format: 'auto' },
+]
+
+// ═══ الأفاتار — بدون watermark (وش) ═══
 const AVATAR_TRANSFORM = [
   { width: 400, height: 400, crop: 'fill', gravity: 'face', quality: 'auto:good', fetch_format: 'auto' },
 ]
@@ -44,7 +50,16 @@ export async function uploadToCloudinary(
   const buffer = Buffer.from(arrayBuffer)
   const dataUri = `data:${file.type};base64,${buffer.toString('base64')}`
 
-  const transform = folder.includes('avatar') ? AVATAR_TRANSFORM : BIZ_TRANSFORM
+  // ═══ اختيار الـ transform حسب نوع الملف ═══
+  let transform
+  if (folder.includes('avatar')) {
+    transform = AVATAR_TRANSFORM
+  } else if (folder.includes('logo')) {
+    transform = LOGO_TRANSFORM
+  } else {
+    // غلاف / معرض / منيو
+    transform = BIZ_TRANSFORM
+  }
 
   const result = await cloudinary.uploader.upload(dataUri, {
     folder: `eah/${folder}`,

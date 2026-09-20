@@ -12,7 +12,12 @@ import AdSlot from '@/components/ads/ad-slot'
 import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
 export default async function HomeDynamicV2() {
-  const businesses = await getPublishedBusinesses(50)
+  // ═══ Parallel: 3 independent queries مع بعض ═══
+  const [businesses, ad, userTags] = await Promise.all([
+    getPublishedBusinesses(50),
+    getActiveAdForSlot('home_banner'),
+    loadUserProfileTags(),
+  ])
   const realStats = await getViewStats(businesses.map((b) => b.slug), 7)
 
   const withStats = businesses.map((b) => {
@@ -33,7 +38,6 @@ export default async function HomeDynamicV2() {
   })
 
   const ranked = rankBusinesses(withStats, { includeFeaturedBoost: true })
-  const userTags = await loadUserProfileTags()
   const userProfile = parseUserTags(userTags)
   const personalized = applyPersonalization(ranked, userProfile)
   const diversified = diversifyByCategory(personalized as any, 'type') as any[]
@@ -65,7 +69,6 @@ export default async function HomeDynamicV2() {
   const hasNew = !lowInventory && newOnes.length > 0
   const hasUnified = lowInventory && total > 0
 
-  const ad = await getActiveAdForSlot('home_banner')
   const adHref = ad ? getAdHref(ad) : '#'
 
   return (

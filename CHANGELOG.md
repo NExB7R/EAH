@@ -4,6 +4,7 @@
 
 ## 2026-09-20
 
+- **19:55** — perf: parallel queries + logo watermark fix + webp logo + perf-test
 ### الملفات الحيّة
 - START_HERE.md — نقطة دخول
 - SECRETS.md — دليل الأسرار (بدون قيم)
