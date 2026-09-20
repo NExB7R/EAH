@@ -111,7 +111,7 @@ export default function UserAvatar({
     </>
   )
 
-  const avatarClass = `user-avatar${badge === 'crown' ? ' user-avatar--crown' : ''}${badge === 'premium' ? ' user-avatar--premium' : ''}`
+  const avatarClass = 'user-avatar'
 
   return (
     <div className="user-avatar-wrap">

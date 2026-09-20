@@ -113,8 +113,6 @@ export default function ExploreCardV5({ business }: { business: Business }) {
             {!cover && <span className="ec5__cover-icon" aria-hidden><TypeIcon type={business.type} /></span>}
           </div>
 
-          {business.badge && <span className="ec5__badge">{business.badge}</span>}
-          {offers > 0 && <span className="ec5__offer-badge">{offers} عرض</span>}
 
           {logo && (
             <div className="ec5__logo" aria-hidden>

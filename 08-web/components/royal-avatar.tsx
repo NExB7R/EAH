@@ -24,7 +24,7 @@ export default function RoyalAvatar({
   const badge = roleBadge(role, isPremium, verified)
 
   return (
-    <div className={`ra ra--${size} ${badge ? `ra--${badge}` : ''}`}>
+    <div className={`ra ra--${size}`}>
       {badge === 'crown' && (
         <span className="ra__crown" aria-hidden>
           <svg viewBox="0 0 48 36" fill="none">

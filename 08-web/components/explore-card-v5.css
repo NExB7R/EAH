@@ -306,3 +306,7 @@
 @media (max-width: 480px) {
   .ec5__logo { width: 36px; height: 36px; border-radius: 10px; top: 10px; inset-inline-start: 10px; }
 }
+
+/* ═══ Hidden badges (removed per 2026 design) ═══ */
+.ec5__badge,
+.ec5__offer-badge { display: none !important; }
