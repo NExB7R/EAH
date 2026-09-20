@@ -372,3 +372,173 @@
   .ac__tabs { padding: 4px; }
   .ac__tab { padding: 10px 12px; font-size: 0.82rem; }
 }
+
+/* ═══ Password eye toggle ═══ */
+.ac__pass-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.ac__pass-wrap input {
+  width: 100%;
+  padding-inline-end: 46px;
+}
+.ac__eye {
+  position: absolute;
+  inset-inline-end: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #7B7490;
+  cursor: pointer;
+  transition: all 150ms ease;
+  padding: 0;
+}
+.ac__eye:hover {
+  color: #C4B5FD;
+  background: rgba(168, 85, 247, 0.12);
+}
+.ac__eye:active {
+  transform: translateY(-50%) scale(0.94);
+}
+.ac__eye svg {
+  pointer-events: none;
+}
+
+/* ═══ Perks cards — جديدة ═══ */
+.ac__perks-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ac__perk-card {
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.5));
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ac__perk-card:hover {
+  border-color: rgba(168, 85, 247, 0.4);
+  background: linear-gradient(180deg, rgba(28, 18, 48, 0.8), rgba(14, 10, 26, 0.6));
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(168, 85, 247, 0.12);
+}
+.ac__perk-card--gold {
+  background: linear-gradient(180deg, rgba(40, 30, 18, 0.55), rgba(20, 14, 10, 0.5));
+  border-color: rgba(232, 199, 154, 0.22);
+}
+.ac__perk-card--gold:hover {
+  border-color: rgba(232, 199, 154, 0.5);
+  background: linear-gradient(180deg, rgba(50, 38, 22, 0.7), rgba(24, 18, 12, 0.6));
+  box-shadow: 0 12px 32px rgba(232, 199, 154, 0.12);
+}
+
+.ac__perk-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.ac__perk-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.ac__perk-icon-wrap--purple {
+  background: rgba(168, 85, 247, 0.16);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #C4B5FD;
+}
+.ac__perk-icon-wrap--gold {
+  background: rgba(232, 199, 154, 0.14);
+  border: 1px solid rgba(232, 199, 154, 0.4);
+  color: #E8C79A;
+}
+.ac__perk-icon-wrap--green {
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #A7F3D0;
+}
+
+.ac__perk-title {
+  margin: 0;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 0.98rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  letter-spacing: -0.01em;
+}
+
+.ac__perk-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ac__perk-list li {
+  position: relative;
+  padding-inline-start: 18px;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #B8B2C9;
+}
+.ac__perk-list li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 4px;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #A855F7, #E8C79A);
+  box-shadow: 0 0 6px rgba(168, 85, 247, 0.6);
+}
+.ac__perk-card--gold .ac__perk-list li::before {
+  background: linear-gradient(135deg, #E8C79A, #F59E0B);
+  box-shadow: 0 0 6px rgba(232, 199, 154, 0.6);
+}
+
+/* ═══ Compact card (سرعة) ═══ */
+.ac__perk-card--compact {
+  padding: 14px 16px;
+}
+.ac__perk-card--compact .ac__perk-head {
+  margin-bottom: 8px;
+}
+.ac__perk-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.ac__perk-inline span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #A7F3D0;
+}
+
+/* ═══ Responsive — على الموبايل الفورم الأول ═══ */
+@media (max-width: 900px) {
+  .ac__aside { display: block; }
+  .ac__form-wrap { order: -1; }
+}
