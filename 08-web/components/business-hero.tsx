@@ -54,76 +54,108 @@ export default function BusinessHero({
 
   useEffect(() => {
     if (slides.length <= 1) return
-    const t = setInterval(() => setSlideIdx((i) => (i + 1) % slides.length), 3500)
+    const t = setInterval(() => setSlideIdx((i) => (i + 1) % slides.length), 4000)
     return () => clearInterval(t)
   }, [slides.length])
 
   const currentSlide = slides[slideIdx] ?? null
   const Icon = TYPE_ICON[business.type]
+  const typeLabel = TYPE_LABEL[business.type]
 
   return (
-    <section className="bhero">
-      <div className={`bhero__inner ${slides.length > 0 ? 'has-cover' : ''}`}>
+    <section className="bh2">
+      {/* ═══ Breadcrumbs فوق الصورة ═══ */}
+      <nav className="bh2__crumbs" aria-label="breadcrumbs">
+        <Link href="/" className="bh2__crumb">الرئيسية</Link>
+        <span className="bh2__crumb-sep">›</span>
+        <Link href="/explore" className="bh2__crumb">اكتشف</Link>
+        <span className="bh2__crumb-sep">›</span>
+        <Link href={`/explore?type=${business.type}`} className="bh2__crumb">{typeLabel}</Link>
+        <span className="bh2__crumb-sep">›</span>
+        <span className="bh2__crumb bh2__crumb--current">{business.name}</span>
+      </nav>
+
+      {/* ═══ Cover كامل العرض ═══ */}
+      <div className="bh2__cover-wrap">
         <div
-          className="bhero__cover"
+          className="bh2__cover"
           style={currentSlide ? { backgroundImage: `url(${currentSlide})` } : undefined}
         >
-          {slides.length > 0 && <div className="bhero__cover-overlay" aria-hidden />}
-          <div className="bhero__cover-glow" aria-hidden />
-          {slides.length === 0 && (
-            <span className="bhero__icon" aria-hidden>
+          {!currentSlide && (
+            <span className="bh2__icon-fallback" aria-hidden>
               <Icon />
             </span>
           )}
+          <div className="bh2__cover-overlay" aria-hidden />
+
+          {/* Status pill فوق يمين */}
+          <span className={`bh2__status ${business.open ? 'is-open' : 'is-closed'}`}>
+            <span className="bh2__status-dot" />
+            {business.open ? 'مفتوح دلوقتي' : 'مقفول حالياً'}
+          </span>
+
+          {/* dots السلايدر */}
           {slides.length > 1 && (
-            <div className="bhero__dots">
+            <div className="bh2__dots">
               {slides.map((_, i) => (
-                <span key={i} className={`bhero__dot ${i === slideIdx ? 'is-active' : ''}`} />
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={`صورة ${i + 1}`}
+                  className={`bh2__dot ${i === slideIdx ? 'is-active' : ''}`}
+                  onClick={() => setSlideIdx(i)}
+                />
               ))}
             </div>
           )}
         </div>
 
-        <div className="bhero__info">
-          <h1 className="bhero__name e-gradient">{business.name}</h1>
+        {/* ═══ Info Card عائم فوق الصورة ═══ */}
+        <div className="bh2__card">
+          <div className="bh2__card-head">
+            <span className="bh2__type-badge">
+              <Icon /> {typeLabel}
+            </span>
+            {stats.active_offers > 0 && (
+              <span className="bh2__offers-badge">{stats.active_offers} عرض نشط</span>
+            )}
+          </div>
 
-          <div className="bhero__meta">
-            <span className="bhero__meta-item e-badge e-badge--accent">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
+          <h1 className="bh2__name">{business.name}</h1>
+
+          <div className="bh2__meta">
+            <span className="bh2__meta-pill">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.2">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
               {business.area}
             </span>
-            <span className={`bhero__meta-item bhero__meta-item--status ${business.open ? 'is-open' : 'is-closed'}`}>
-              <span className="bhero__status-dot" aria-hidden />
-              {business.open ? 'مفتوح دلوقتي' : 'مقفول حالياً'}
-            </span>
-            {stats.review_count > 0 && (
-              <span className="bhero__meta-item e-badge e-badge--accent">
-                <span className="bhero__star">★</span>
+
+            {stats.review_count > 0 ? (
+              <span className="bh2__meta-pill bh2__meta-pill--rating">
+                <span className="bh2__star">★</span>
                 <strong>{stats.avg_rating.toFixed(1)}</strong>
-                <span className="bhero__count">({stats.review_count})</span>
+                <span className="bh2__reviews-count">({stats.review_count} تقييم)</span>
               </span>
-            )}
-            {stats.active_offers > 0 && (
-              <span className="bhero__meta-item bhero__meta-item--offer e-badge e-badge--accent">
-                {stats.active_offers} عرض نشط
-              </span>
+            ) : (
+              <span className="bh2__meta-pill bh2__meta-pill--muted">لسه مفيش تقييمات</span>
             )}
           </div>
 
+          {business.reason && (
+            <p className="bh2__reason">{business.reason}</p>
+          )}
+
           {business.address && (
-            <p className="bhero__address">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: 'inline', marginLeft: 6, verticalAlign: 'middle' }}>
+            <p className="bh2__address">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: 'inline', marginLeft: 6, verticalAlign: 'middle', flexShrink: 0 }}>
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
-              {business.address}
+              <span>{business.address}</span>
             </p>
           )}
-
-          <p className="bhero__reason">{business.reason}</p>
         </div>
       </div>
     </section>

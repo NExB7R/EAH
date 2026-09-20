@@ -532,3 +532,35 @@ nav.bc .bc__sep {
   nav.bc { font-size: 0.78rem !important; gap: 5px !important; padding: 0 14px !important; }
   nav.bc .bc__link, nav.bc .bc__current { padding: 5px 11px !important; }
 }
+
+/* ═══ Biz Page 2026 ═══ */
+.biz-page {
+  padding-bottom: 40px;
+}
+.biz-actions-row {
+  max-width: 1200px;
+  margin: 0 auto 8px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.biz-review-cta {
+  max-width: 900px;
+  margin: 20px auto 0;
+  padding: 0 24px;
+}
+.biz-report-row {
+  max-width: 900px;
+  margin: 12px auto 0;
+  padding: 0 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+@media (max-width: 640px) {
+  .biz-actions-row { padding: 0 12px; }
+  .biz-review-cta { padding: 0 12px; }
+  .biz-report-row { padding: 0 12px; }
+}
