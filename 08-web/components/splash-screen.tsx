@@ -1,27 +1,41 @@
-"use client"
+'use client'
 import { useEffect, useState } from 'react'
 import './splash-screen.css'
 
 export default function SplashScreen() {
-  const [gone, setGone] = useState(false)
-  const [fading, setFading] = useState(false)
+  const [visible, setVisible] = useState(true)
+  const [hiding, setHiding] = useState(false)
+
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (sessionStorage.getItem('eah-splash-shown') === '1') { setGone(true); return }
-    const t1 = setTimeout(() => setFading(true), 700)
-    const t2 = setTimeout(() => {
-      setGone(true)
-      sessionStorage.setItem('eah-splash-shown', '1')
-    }, 1000)
-    return () => { clearTimeout(t1); clearTimeout(t2) }
+    // شاشة التحميل تختفي بعد 1.4 ثانية
+    const t1 = setTimeout(() => setHiding(true), 1100)
+    const t2 = setTimeout(() => setVisible(false), 1600)
+    return () => {
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
   }, [])
-  if (gone) return null
+
+  if (!visible) return null
+
   return (
-    <div className={`splash ${fading ? 'is-fading' : ''}`} aria-hidden>
-      <div className="splash__inner">
-        <img src="/eah-crown.webp" alt="" className="splash__crown" />
-        <img src="/eah-word.webp" alt="EAH" className="splash__word" />
-        <p className="splash__tagline">اللي نفسك فيه ؟</p>
+    <div className={`spl ${hiding ? 'is-hiding' : ''}`} aria-hidden>
+      <div className="spl__bg" />
+      <div className="spl__glow spl__glow--purple" />
+      <div className="spl__glow spl__glow--gold" />
+
+      <div className="spl__center">
+        <div className="spl__logo-wrap">
+          <img className="spl__logo" src="/crown-512.png" alt="EAH" />
+          <div className="spl__ring" />
+          <div className="spl__ring spl__ring--slow" />
+        </div>
+        <h1 className="spl__name">EAH</h1>
+        <p className="spl__tag">اللي نفسك فيه ؟</p>
+      </div>
+
+      <div className="spl__bar">
+        <span className="spl__bar-fill" />
       </div>
     </div>
   )

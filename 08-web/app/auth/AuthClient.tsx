@@ -93,7 +93,7 @@ export default function AuthClient() {
         })
         if (e1) {
           const msg = e1.message
-          if (msg.includes('already registered') || msg.includes('already been registered')) {
+          if (msg.includes('already registered') || msg.includes('already been registered') || msg.includes('already exists')) {
             setError('الرقم ده مسجل بالفعل — جرّب تدخل بدل ما تسجل')
           } else {
             setError(msg)
@@ -101,6 +101,24 @@ export default function AuthClient() {
           return
         }
         if (!data.user) { setError('حصلت مشكلة، حاول تاني'); return }
+
+        // ═══ إصلاح الاسم — نتأكد من الحفظ ═══
+        try {
+          await new Promise((r) => setTimeout(r, 500))
+          await supabase
+            .from('profiles')
+            .upsert(
+              {
+                id: data.user.id,
+                display_name: name.trim(),
+                phone: cleanPhone,
+                phone_e164: cleanPhone,
+                gender,
+              },
+              { onConflict: 'id' }
+            )
+        } catch { /* silent */ }
+
         router.replace(next)
         router.refresh()
         return
@@ -121,8 +139,25 @@ export default function AuthClient() {
       <div className="ac__bg" aria-hidden />
       <div className="ac__glow" aria-hidden />
 
+      {/* ═══ TOP: اللوجو + العنوان ═══ */}
+      <header className="ac__top">
+        <img className="ac__top-logo" src="/crown-512.png" alt="EAH" />
+        <h1 className="ac__hero">
+          {mode === 'login' ? (
+            <>سجّل <em>بسرعة</em></>
+          ) : (
+            <>اعمل <em>حسابك</em></>
+          )}
+        </h1>
+        <p className="ac__sub">
+          {mode === 'login'
+            ? 'رقمك + كلمة السر — وخلاص. من غير كود ولا SMS.'
+            : 'اسمك + رقمك + كلمة سر. 5 ثواني وتبقى جوه.'}
+        </p>
+      </header>
+
       <div className="ac__wrap">
-        {/* ═══ يسار: الفورم ═══ */}
+        {/* ═══ الفورم ═══ */}
         <main className="ac__form-wrap">
           <div className="ac__tabs">
             <button
@@ -209,7 +244,7 @@ export default function AuthClient() {
                   type="button"
                   className="ac__eye"
                   onClick={() => setShowPassword((v) => !v)}
-                  aria-label={showPassword ? 'إخفاء كلمة السر' : 'إظهار كلمة السر'}
+                  aria-label="إظهار كلمة السر"
                   tabIndex={-1}
                 >
                   <EyeIcon open={showPassword} />
@@ -232,7 +267,7 @@ export default function AuthClient() {
                     type="button"
                     className="ac__eye"
                     onClick={() => setShowConfirm((v) => !v)}
-                    aria-label={showConfirm ? 'إخفاء' : 'إظهار'}
+                    aria-label="إظهار"
                     tabIndex={-1}
                   >
                     <EyeIcon open={showConfirm} />
@@ -254,10 +289,6 @@ export default function AuthClient() {
                     <line x1="15" y1="12" x2="3" y2="12" />
                   </svg>
                   <span>{mode === 'login' ? 'دخول' : 'سجّل دلوقتي'}</span>
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12" />
-                    <polyline points="12 19 5 12 12 5" />
-                  </svg>
                 </>
               )}
             </button>
@@ -278,31 +309,9 @@ export default function AuthClient() {
           </div>
         </main>
 
-        {/* ═══ يمين: المميزات ═══ */}
+        {/* ═══ المميزات ═══ */}
         <aside className="ac__aside">
-          <div className="ac__logo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/crown-512.png" alt="EAH" />
-          </div>
-
-          <span className="ac__kicker">EAH · اللي نفسك فيه</span>
-
-          <h1 className="ac__hero">
-            {mode === 'login' ? (
-              <>سجّل <em>بسرعة</em></>
-            ) : (
-              <>اعمل <em>حسابك</em></>
-            )}
-          </h1>
-
-          <p className="ac__sub">
-            {mode === 'login'
-              ? 'رقمك + كلمة السر — وخلاص. من غير كود ولا SMS.'
-              : 'اسمك + رقمك + كلمة سر. 5 ثواني وتبقى جوه.'}
-          </p>
-
           <div className="ac__perks-cards">
-            {/* ═══ كارت 1: لك كعميل ═══ */}
             <div className="ac__perk-card">
               <div className="ac__perk-head">
                 <span className="ac__perk-icon-wrap ac__perk-icon-wrap--purple">
@@ -321,7 +330,6 @@ export default function AuthClient() {
               </ul>
             </div>
 
-            {/* ═══ كارت 2: لأصحاب الأنشطة ═══ */}
             <div className="ac__perk-card ac__perk-card--gold">
               <div className="ac__perk-head">
                 <span className="ac__perk-icon-wrap ac__perk-icon-wrap--gold">
@@ -342,7 +350,6 @@ export default function AuthClient() {
               </ul>
             </div>
 
-            {/* ═══ كارت 3: مفيش تعقيد ═══ */}
             <div className="ac__perk-card ac__perk-card--compact">
               <div className="ac__perk-head">
                 <span className="ac__perk-icon-wrap ac__perk-icon-wrap--green">
