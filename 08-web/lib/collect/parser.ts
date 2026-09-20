@@ -261,3 +261,38 @@ function extractEmail(html: string): string | null {
   const m = html.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/i)
   return m?.[0] ?? null
 }
+
+
+// استخراج اسم + إحداثيات من رابط Google Maps
+export function extractFromMapsUrl(url: string): {
+  name: string | null
+  lat: number | null
+  lng: number | null
+  address: string | null
+} {
+  const result: { name: string | null; lat: number | null; lng: number | null; address: string | null } = {
+    name: null, lat: null, lng: null, address: null,
+  }
+  try {
+    const decoded = decodeURIComponent(url)
+    // /place/اسم/  — الاسم
+    const placeMatch = decoded.match(/\/place\/([^/@?]+)/)
+    if (placeMatch) result.name = placeMatch[1].replace(/\+/g, ' ').trim()
+    // @lat,lng,
+    const atMatch = decoded.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/)
+    if (atMatch) {
+      result.lat = parseFloat(atMatch[1])
+      result.lng = parseFloat(atMatch[2])
+    }
+    // ?q=lat,lng
+    const qMatch = decoded.match(/[?&]q=(-?\d+\.\d+),(-?\d+\.\d+)/)
+    if (qMatch && result.lat === null) {
+      result.lat = parseFloat(qMatch[1])
+      result.lng = parseFloat(qMatch[2])
+    }
+    // address
+    const addrMatch = decoded.match(/\/place\/[^/]+\/([^@?]+)/)
+    if (addrMatch) result.address = addrMatch[1].replace(/\+/g, ' ').trim()
+  } catch { /* silent */ }
+  return result
+}

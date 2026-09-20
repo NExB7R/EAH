@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase-server'
 import { checkRate, getClientIp } from '@/lib/security/rate-limit'
-import { extractFromHtml, type ExtractedData } from '@/lib/collect/parser'
+import { extractFromHtml, extractFromMapsUrl, type ExtractedData } from '@/lib/collect/parser'
 
 const schema = z.object({
   url: z.string().url(),
@@ -64,6 +64,43 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ ok: false, error: 'bad_url' }, { status: 400 })
 
   const { url } = parsed.data
+
+  // Google Maps → parse مباشر من الرابط بدون fetch
+  if (/google\.com\/maps|maps\.app\.goo\.gl|goo\.gl\/maps/i.test(url)) {
+    const maps = extractFromMapsUrl(url)
+    const data: ExtractedData = {
+      name: maps.name ?? 'نشاط جديد',
+      description: '',
+      image: '',
+      sourceUrl: url,
+      phones: [],
+      whatsapp: null,
+      address: maps.address,
+      hours: null,
+      type: null,
+      hasDelivery: false,
+      cuisine: null,
+      score: 0,
+      facebook: null,
+      instagram: null,
+      website: null,
+      tiktok: null,
+      email: null,
+    }
+    return NextResponse.json({
+      ok: true,
+      data,
+      confidence: {
+        name: maps.name ? 80 : 20,
+        address: maps.address ? 80 : 20,
+        lat: maps.lat ? 95 : 0,
+        lng: maps.lng ? 95 : 0,
+      },
+      coords: maps.lat && maps.lng ? { lat: maps.lat, lng: maps.lng } : null,
+      source: { url, platform: 'google', fetched_at: new Date().toISOString() },
+    })
+  }
+
   const html = await fetchHtml(url)
   if (!html) return NextResponse.json({ ok: false, error: 'fetch_failed' }, { status: 502 })
 

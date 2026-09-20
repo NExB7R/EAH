@@ -1418,3 +1418,75 @@
   font-size: 0.68rem;
   color: var(--eah-text-4);
 }
+
+/* ═══ Admin Sidebar — 2026 enhancements ═══ */
+
+/* اللوجو فوق السايدبار */
+.admin-sidebar__logo {
+  padding: 16px 16px 8px;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(168,85,247,0.15);
+  margin-bottom: 8px;
+}
+
+/* زر الفتح/الإغلاق */
+.admin-sidebar__toggle {
+  position: absolute;
+  top: 20px;
+  inset-inline-end: -14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  border: 2px solid #0A0812;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(168,85,247,0.5);
+}
+.admin-sidebar__toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(168,85,247,0.7);
+}
+
+/* الحالة المغلقة (desktop only) */
+@media (min-width: 900px) {
+  .admin-shell[data-collapsed="true"] .admin-sidebar {
+    width: 72px;
+  }
+  .admin-shell[data-collapsed="true"] .admin-sidebar__link-label,
+  .admin-shell[data-collapsed="true"] .admin-sidebar__section {
+    display: none;
+  }
+  .admin-shell[data-collapsed="true"] .admin-sidebar__logo {
+    padding: 14px 8px;
+  }
+  .admin-shell[data-collapsed="true"] .admin-sidebar__logo [data-eah-logo] {
+    transform: scale(0.7);
+  }
+  .admin-shell[data-collapsed="true"] .admin-sidebar__link {
+    justify-content: center;
+    padding: 12px 0;
+  }
+  .admin-shell[data-collapsed="true"] .admin-sidebar__link-icon {
+    margin: 0;
+  }
+  .admin-shell[data-collapsed="true"] .admin-main {
+    margin-inline-start: 72px;
+  }
+}
+
+/* تأكد إن الـ sidebar relative عشان الزر absolute */
+.admin-sidebar {
+  position: relative;
+}
+
+/* في الموبايل — الزر مخفي */
+@media (max-width: 899px) {
+  .admin-sidebar__toggle { display: none; }
+}

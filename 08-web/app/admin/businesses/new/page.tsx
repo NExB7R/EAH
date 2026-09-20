@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
-import BusinessForm from '@/components/admin/business-form'
+import NewBusinessClient from './NewBusinessClient'
 import { createBusiness } from '../actions'
 
 export const metadata = { title: 'إضافة مكان' }
@@ -12,10 +12,7 @@ export default async function NewBusinessPage() {
   if (!userData.user) redirect('/admin/login')
 
   const { data: roleRow } = await supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', userData.user.id)
-    .maybeSingle()
+    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
   if (roleRow?.role !== 'super_admin') redirect('/')
 
   return (
@@ -24,18 +21,14 @@ export default async function NewBusinessPage() {
         <div className="admin-header__info">
           <span className="admin-header__kicker">نشاط جديد</span>
           <h1 className="admin-header__title">إضافة مكان جديد</h1>
-          <p className="admin-header__subtitle">
-            املأ البيانات الأساسية — تقدر تعدّلها في أي وقت بعد كده
-          </p>
+          <p className="admin-header__subtitle">املأ البيانات — تقدر تعدّلها في أي وقت</p>
         </div>
         <div className="admin-header__actions">
-          <Link href="/admin/businesses" className="admin-btn admin-btn--ghost">
-            ← رجوع للأنشطة
-          </Link>
+          <Link href="/admin/businesses" className="admin-btn admin-btn--ghost">← رجوع</Link>
         </div>
       </div>
 
-      <BusinessForm mode="create" action={createBusiness} />
+      <NewBusinessClient action={createBusiness} />
     </>
   )
 }

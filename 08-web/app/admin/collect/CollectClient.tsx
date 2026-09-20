@@ -87,7 +87,6 @@ function detectPlatform(url: string): { key: string; label: string; color: strin
 export default function CollectClient({ recent }: { recent: Recent[] }) {
   const [url, setUrl] = useState('')
   const [parsing, setParsing] = useState(false)
-  const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
@@ -160,42 +159,31 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
     }
   }
 
-  async function save() {
-    if (!name.trim()) { setError('الاسم مطلوب'); return }
-    if (!slug.trim()) { setError('الـ slug مطلوب'); return }
-    setSaving(true); setError(null); setSuccess(null)
-    try {
-      const res = await fetch('/api/admin/businesses', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: name.trim(),
-          slug: slug.trim(),
-          business_type: businessType,
-          area,
-          city: 'شبين القناطر',
-          description: description.trim() || null,
-          address_text: address.trim() || null,
-          food_categories: foodCats,
-          contacts: [
-            phone ? { method_type: 'phone', value: phone.trim(), is_primary: true } : null,
-            whatsapp ? { method_type: 'whatsapp', value: whatsapp.trim(), is_primary: !phone } : null,
-          ].filter(Boolean),
-        }),
-      })
-      const data = await res.json()
-      if (data.ok) {
-        setSuccess(`تم حفظ "${name}" — جاري التحويل...`)
-        setTimeout(() => { window.location.href = `/admin/businesses/${slug}/edit` }, 1200)
-      } else {
-        setError(data.error === 'duplicate' ? 'الـ slug مستخدم بالفعل' : 'فشل الحفظ')
-      }
-    } catch {
-      setError('حصلت مشكلة')
-    } finally {
-      setSaving(false)
+  function openInEditor() {
+    if (!name.trim() || !slug.trim()) { setError('الاسم والـ slug مطلوبين'); return }
+    // نخزّن كل البيانات في sessionStorage
+    const draft = {
+      name: name.trim(),
+      slug: slug.trim(),
+      business_type: businessType,
+      area,
+      city: 'شبين القناطر',
+      description: description.trim() || null,
+      address_text: address.trim() || null,
+      cover_image_url: parsed?.image ?? null,
+      map_url: url || null,
+      contacts: [
+        phone ? { method_type: 'phone', value: phone.trim(), is_primary: true } : null,
+        whatsapp ? { method_type: 'whatsapp', value: whatsapp.trim(), is_primary: !phone } : null,
+      ].filter(Boolean),
+      food_categories: foodCats,
     }
+    try {
+      sessionStorage.setItem('eah_collect_draft', JSON.stringify(draft))
+    } catch {}
+    window.location.href = '/admin/businesses/new?from=collect'
   }
+
 
   function toggleFood(k: string) {
     setFoodCats((prev) => prev.includes(k) ? prev.filter((x) => x !== k) : prev.length < 5 ? [...prev, k] : prev)
@@ -206,7 +194,7 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
       {/* ═══ HEADER ═══ */}
       <header className="collect__hero">
         <div className="collect__hero-glow" aria-hidden />
-        <span className="collect__kicker">EAH ADMIN · 2026</span>
+        <span className="collect__kicker">جمع الأنشطة</span>
         <h1 className="collect__title">جمع الأنشطة</h1>
         <p className="collect__sub">الصق رابط فيسبوك/إنستجرام/جوجل — وسحب بيانات النشاط تلقائياً</p>
       </header>
@@ -415,8 +403,8 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
                 <button type="button" className="collect__btn collect__btn--ghost" onClick={() => { setParsed(null); setUrl('') }}>
                   إلغاء
                 </button>
-                <button type="button" className="collect__btn collect__btn--primary" onClick={save} disabled={saving}>
-                  {saving ? 'جاري الحفظ...' : 'احفظ النشاط'}
+                <button type="button" className="collect__btn collect__btn--primary" onClick={openInEditor}>
+                  افتح في المحرر →
                 </button>
               </div>
             </section>
@@ -427,9 +415,6 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
                 <div className="collect__preview-cover">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={parsed.image} alt={name} />
-                  <span className="collect__preview-source">
-                    من {platform?.label ?? 'ويب'}
-                  </span>
                 </div>
               )}
 
