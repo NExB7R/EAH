@@ -11,6 +11,7 @@ import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { getViewStats } from '@/lib/real-stats'
 import { getPrimaryLocation } from '@/lib/locations'
+import { FOOD_CATEGORIES } from '@/lib/food/categories'
 
 export const revalidate = 60
 
@@ -52,6 +53,15 @@ export default async function ExplorePage({
     totalImpressions: 0,
   }))
 
+  // احسب تصنيفات الأكل المتاحة من البيانات الخام (قبل أي ranking)
+  const usedCats = new Set<string>()
+  businesses.forEach((b) => {
+    if (Array.isArray(b.food_categories)) {
+      b.food_categories.forEach((c: string) => usedCats.add(c))
+    }
+  })
+  const availableFoodCats = FOOD_CATEGORIES.filter((c) => usedCats.has(c.key))
+
   const ranked = rankBusinesses(withStats as any, { includeFeaturedBoost: true })
   const diversified = diversifyByCategory(ranked as any, 'type') as any[]
 
@@ -80,7 +90,7 @@ export default async function ExplorePage({
         </div>
         <div className="explore-search-wrap"><SearchBar /></div>
         <Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#A29DB5' }}>جاري التحميل...</div>}>
-          <ExploreClient businesses={diversified} initialType={activeType} clientCoords={clientCoords} />
+          <ExploreClient businesses={diversified} initialType={activeType} clientCoords={clientCoords} availableFoodCats={availableFoodCats} />
         </Suspense>
       </main>
       <SiteFooter />

@@ -2,7 +2,6 @@
 import { useMemo, useState } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import ExploreCard from './explore-card'
-import { FOOD_CATEGORIES } from '@/lib/food/categories'
 import './explore-client.css'
 import { IcClose, IcMenu, IcSearch } from '@/components/eah-icons'
 
@@ -46,7 +45,7 @@ const SORTS = [
 const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
 const getType = (b: Business): string => (b.type ?? b.business_type ?? '') as string
 
-export default function ExploreClient({ businesses, initialType, clientCoords }: { businesses: Business[]; initialType?: string; clientCoords?: { lat: number; lng: number } | null }) {
+export default function ExploreClient({ businesses, initialType, clientCoords, availableFoodCats = [] }: { businesses: Business[]; initialType?: string; clientCoords?: { lat: number; lng: number } | null; availableFoodCats?: { key: string; label: string; emoji: string }[] }) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -80,13 +79,6 @@ export default function ExploreClient({ businesses, initialType, clientCoords }:
     return Array.from(set).sort()
   }, [businesses])
 
-  const availableFoodCats = useMemo(() => {
-    const used = new Set<string>()
-    businesses.forEach((b) => {
-      if (Array.isArray(b.food_categories)) b.food_categories.forEach((c) => used.add(c))
-    })
-    return FOOD_CATEGORIES.filter((c) => used.has(c.key))
-  }, [businesses])
 
   const filtered = useMemo(() => {
     let list = businesses
