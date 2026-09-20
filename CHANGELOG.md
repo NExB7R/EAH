@@ -20,7 +20,8 @@
 - **22:22** — feat: clean FilterSelect + explore filters redesign
 - **22:34** — feat: about 2026 + filter-select + egyptian search + social setup + voice search button
 - **22:43** — feat: projects system live
-- **22:59** — feat: sentry CSP fix + new hook 'شبيك لبيك .. كل حاجة حواليك'<!-- AUTO_END -->
+- **22:59** — feat: sentry CSP fix + new hook 'شبيك لبيك .. كل حاجة حواليك'
+- **23:47** — feat: trust decay + name uniqueness live<!-- AUTO_END -->
 
 ---
 
