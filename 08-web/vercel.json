@@ -3,6 +3,6 @@
   "regions": ["fra1"],
   "crons": [
     { "path": "/api/cron/subscription-check", "schedule": "0 9 * * *" },
-    { "path": "/api/cron/trial-reminder", "schedule": "0 7,19 * * *" }
+    { "path": "/api/cron/trial-reminder", "schedule": "0 7 * * *" }
   ]
 }
