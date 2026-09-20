@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import EahLogo from './eah-logo'
 import './splash-screen.css'
 
 export default function SplashScreen() {
@@ -7,9 +8,8 @@ export default function SplashScreen() {
   const [hiding, setHiding] = useState(false)
 
   useEffect(() => {
-    // شاشة التحميل تختفي بعد 1.4 ثانية
-    const t1 = setTimeout(() => setHiding(true), 1100)
-    const t2 = setTimeout(() => setVisible(false), 1600)
+    const t1 = setTimeout(() => setHiding(true), 1200)
+    const t2 = setTimeout(() => setVisible(false), 1700)
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
@@ -26,7 +26,9 @@ export default function SplashScreen() {
 
       <div className="spl__center">
         <div className="spl__logo-wrap">
-          <img className="spl__logo" src="/crown-512.png" alt="EAH" />
+          <div className="spl__logo">
+            <EahLogo size="xl" variant="full" />
+          </div>
           <div className="spl__ring" />
           <div className="spl__ring spl__ring--slow" />
         </div>

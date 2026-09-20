@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase-browser'
 import { getAvatar } from '@/lib/profile-presets'
+import EahLogo from '@/components/eah-logo'
 import { IcEdit, IcCamera, IcUsers, IcChat, IcCheck, IcBan } from '@/components/eah-icons'
 
 type Gender = 'male' | 'female' | null
@@ -91,7 +92,7 @@ export default function EditClient({ userId, initial }: { userId: string; initia
     <main className="edit">
       <header className="edit__hero">
         <div className="edit__hero-logo">
-          <img src="/crown-512.png" alt="EAH" />
+          <EahLogo size="lg" variant="full" />
         </div>
         <h1 className="edit__title e-gradient">عدّل بروفايلك</h1>
         <p className="edit__sub">اسمك، صورتك، ونبذة قصيرة.</p>

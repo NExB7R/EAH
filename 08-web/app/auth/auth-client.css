@@ -412,3 +412,14 @@
   .ac__form-wrap { padding: 18px 16px; border-radius: 16px; }
   .ac__tab { font-size: 0.82rem; padding: 10px 12px; }
 }
+
+/* ═══ Logo wrap ═══ */
+.ac__top-logo {
+  display: inline-flex;
+  justify-content: center;
+  margin-bottom: 18px;
+  animation: acLogoFloat 4s ease-in-out infinite;
+}
+.ac__top-logo img {
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.5)) !important;
+}

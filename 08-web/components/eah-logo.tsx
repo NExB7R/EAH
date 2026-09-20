@@ -21,7 +21,7 @@ export default function EahLogo({
   size = 'md',
   variant = 'full',
   href,
-  showTagline = true,
+  showTagline = false,
 }: Props) {
   const s = SIZE_MAP[size]
   // crown ثابت

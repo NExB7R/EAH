@@ -3,6 +3,7 @@ import { useState, useTransition, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-browser'
+import EahLogo from '@/components/eah-logo'
 import './auth-client.css'
 
 type Mode = 'login' | 'signup'
@@ -141,7 +142,7 @@ export default function AuthClient() {
 
       {/* ═══ TOP: اللوجو + العنوان ═══ */}
       <header className="ac__top">
-        <img className="ac__top-logo" src="/crown-512.png" alt="EAH" />
+        <div className="ac__top-logo"><EahLogo size="xl" variant="full" /></div>
         <h1 className="ac__hero">
           {mode === 'login' ? (
             <>سجّل <em>بسرعة</em></>

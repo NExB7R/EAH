@@ -418,3 +418,16 @@
   font-family: var(--font-cairo, system-ui);
   font-size: 0.85rem;
 }
+
+/* ═══ Logo wrap ═══ */
+.edit__hero-logo {
+  display: inline-flex;
+  justify-content: center;
+  width: auto !important;
+  height: auto !important;
+  filter: none;
+  margin-bottom: 12px;
+}
+.edit__hero-logo img {
+  filter: drop-shadow(0 10px 30px rgba(168, 85, 247, 0.35)) !important;
+}
