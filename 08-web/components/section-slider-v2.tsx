@@ -22,7 +22,7 @@ export default function SectionSliderV2({
   seeAllHref,
   variant,
   children,
-  autoAdvanceMs = 1500,
+  autoAdvanceMs = 3500,
   paused: externalPaused = false,
 }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)

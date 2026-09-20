@@ -253,7 +253,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
     // 1) جرّب الـ slug الأصلي
     let { data, error } = await supabase
       .from('businesses')
-      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,cover_image_url')
+      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,accepts_whatsapp_orders,cover_image_url')
       .eq('slug', slug)
       .eq('is_published', true)
       .maybeSingle()
@@ -262,7 +262,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
     if (!data) {
       const all = await supabase
         .from('businesses')
-        .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,cover_image_url')
+        .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,accepts_whatsapp_orders,cover_image_url')
         .eq('is_published', true)
         .limit(500)
       const target = normalizeSlug(slug)

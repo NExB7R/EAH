@@ -1,4 +1,5 @@
 'use client'
+import EahLogo from './eah-logo'
 import { IconFacebook, IconWhatsapp } from './neon-icons'
 import { CONTACT_CHANNELS, waLink } from '@/app/contact/contact-channels'
 import { APP_VERSION_LABEL } from '@/lib/version'
@@ -11,6 +12,9 @@ export default function SiteFooter() {
   return (
     <footer className="sf">
       <div className="sf__inner">
+        <div className="sf__brand-row">
+          <EahLogo size="md" variant="full" href="/" />
+        </div>
         <div className="sf__follow-row">
           <a href={CONTACT_CHANNELS.whatsapp.channel} target="_blank" rel="noreferrer" className="sf__follow-card sf__follow-card--wa">
             <span className="sf__follow-emoji"><IcChat /></span>

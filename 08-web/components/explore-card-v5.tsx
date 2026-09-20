@@ -25,11 +25,13 @@ type Business = {
   [key: string]: any
 }
 
-const TYPE_EMOJI: Record<string, string> = {
-  restaurant: '',
-  pharmacy: '',
-  supermarket: '',
-  delivery_office: '',
+function TypeIcon({ type }: { type: string }) {
+  const c = { width: 44, height: 44, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+  if (type === 'restaurant') return <svg {...c}><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
+  if (type === 'pharmacy') return <svg {...c}><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
+  if (type === 'supermarket') return <svg {...c}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+  if (type === 'delivery_office') return <svg {...c}><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+  return <svg {...c}><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
 }
 
 const TYPE_LABEL: Record<string, string> = {
@@ -60,37 +62,29 @@ export default function ExploreCardV5({ business }: { business: Business }) {
 
   const cover = business.cover || business.cover_url || business.cover_image_url || ''
   const gallery: string[] = (business.gallery ?? []).filter(Boolean)
-  const allImages = cover ? [cover, ...gallery] : gallery
+  const allImages = cover ? [cover, ...gallery.filter(g => g !== cover)] : gallery
 
   useEffect(() => {
     if (!flipped || allImages.length <= 1) return
     intervalRef.current = setInterval(() => {
       setGalleryIdx((i) => (i + 1) % allImages.length)
     }, 2200)
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-    }
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [flipped, allImages.length])
 
-  function enter() {
-    setFlipped(true)
-    setGalleryIdx(0)
-  }
-  function leave() {
-    setFlipped(false)
-  }
+  const enter = () => setFlipped(true)
+  const leave = () => setFlipped(false)
 
   const rating = business.avg_rating ?? business.rating ?? 0
   const reviews = business.review_count ?? business.reviewCount ?? 0
   const offers = business.activeOffers ?? 0
   const hook = HOOK_BY_TYPE[business.type] ?? 'اكتشف المكان'
-  const emoji = TYPE_EMOJI[business.type] ?? ''
   const typeLabel = TYPE_LABEL[business.type] ?? 'مكان'
   const gradient = TYPE_GRADIENT[business.type] ?? TYPE_GRADIENT.restaurant
 
   return (
     <Link
-      href={`/businesses/${business.slug}`}
+      href={`/businesses/${encodeURIComponent(business.slug)}`}
       className={`ec5 ${flipped ? 'is-flipped' : ''}`}
       onMouseEnter={enter}
       onMouseLeave={leave}
@@ -100,17 +94,12 @@ export default function ExploreCardV5({ business }: { business: Business }) {
     >
       <div className="ec5__inner">
         <div className="ec5__front">
-          <div
-            className="ec5__cover"
-            style={{
-              backgroundImage: cover ? `url(${cover})` : gradient,
-            }}
-          >
-            {!cover && <span className="ec5__cover-emoji">{emoji}</span>}
+          <div className="ec5__cover" style={{ backgroundImage: cover ? `url(${cover})` : gradient }}>
+            {!cover && <span className="ec5__cover-icon" aria-hidden><TypeIcon type={business.type} /></span>}
           </div>
 
           {business.badge && <span className="ec5__badge">{business.badge}</span>}
-          {offers > 0 && <span className="ec5__offer-badge">{offers}</span>}
+          {offers > 0 && <span className="ec5__offer-badge">+{offers}</span>}
 
           <div className="ec5__fav">
             <FavoriteButton businessId={business.id ?? business.slug} size="sm" />
@@ -119,8 +108,7 @@ export default function ExploreCardV5({ business }: { business: Business }) {
           <div className="ec5__front-foot">
             <h3 className="ec5__name">{business.name}</h3>
             <span className="ec5__meta">
-              {typeLabel}
-              {business.area ? ` · ${business.area}` : ''}
+              {typeLabel}{business.area ? ` · ${business.area}` : ''}
             </span>
           </div>
         </div>
@@ -129,16 +117,12 @@ export default function ExploreCardV5({ business }: { business: Business }) {
           {allImages.length > 0 ? (
             <div className="ec5__gallery">
               {allImages.map((url, i) => (
-                <div
-                  key={i}
-                  className={`ec5__gallery-img ${i === galleryIdx ? 'is-active' : ''}`}
-                  style={{ backgroundImage: `url(${url})` }}
-                />
+                <div key={i} className={`ec5__gallery-img ${i === galleryIdx ? 'is-active' : ''}`} style={{ backgroundImage: `url(${url})` }} />
               ))}
             </div>
           ) : (
             <div className="ec5__gallery-empty" style={{ background: gradient }}>
-              <span>{emoji}</span>
+              <TypeIcon type={business.type} />
             </div>
           )}
 
@@ -146,19 +130,11 @@ export default function ExploreCardV5({ business }: { business: Business }) {
 
           <div className="ec5__back-content">
             <h3 className="ec5__back-name">{business.name}</h3>
-
             <div className="ec5__stats">
-              {rating > 0 && (
-                <span className="ec5__stat">
-                  {rating.toFixed(1)}
-                  {reviews > 0 && <small>({reviews})</small>}
-                </span>
-              )}
+              {rating > 0 && <span className="ec5__stat">★ {rating.toFixed(1)}{reviews > 0 && <small> ({reviews})</small>}</span>}
               {business.area && <span className="ec5__stat">{business.area}</span>}
             </div>
-
             <p className="ec5__hook">{hook}</p>
-
             <span className="ec5__cta">اكتشف المكان ←</span>
           </div>
         </div>

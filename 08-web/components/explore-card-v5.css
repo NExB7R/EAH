@@ -235,3 +235,21 @@
   .ec5__cover-emoji { font-size: 2.4rem; }
   .ec5__name { font-size: 0.9rem; }
 }
+
+.ec5__cover-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.9);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+}
+.ec5__gallery-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.9);
+}

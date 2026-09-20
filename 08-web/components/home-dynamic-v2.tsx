@@ -63,11 +63,9 @@ export default async function HomeDynamicV2() {
     ...trending.map(b => b.slug),
     ...newOnes.map(b => b.slug),
   ])
-  const isSingleBusiness = allSlugs.size === 1 && diversified.length === 1
-
-  const hasFeatured = featured.length > 0 && !isSingleBusiness
-  const hasTrending = trending.length > 0 && !isSingleBusiness
-  const hasNew = newOnes.length > 0 && diversified.length > 3
+  const hasFeatured = featured.length > 0
+  const hasTrending = trending.length > 0
+  const hasNew = newOnes.length > 0
 
   const ad = await getActiveAdForSlot('home_banner')
   const adHref = ad ? getAdHref(ad) : '#'
@@ -77,8 +75,6 @@ export default async function HomeDynamicV2() {
       <HomeHero />
 
       {ad && <AdSlot ad={ad} href={adHref} />}
-
-      <VisitorValue />
 
       {hasFeatured && (
         <SectionSliderV2
