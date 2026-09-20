@@ -26,10 +26,36 @@ export type ExtractedData = {
 const EG_MOBILE = /(?:\+?20|0)?1[0125]\d{8}/g
 const EG_LANDLINE = /(?:\+?20|0)?(?:13|23|24|25|26|27|28|29)\d{7}/g
 
+function decodeHtmlEntities(raw: string): string {
+  if (!raw) return raw
+  const named: Record<string, string> = {
+    amp: '&', lt: '<', gt: '>', quot: '"', apos: "'",
+    nbsp: '\u00a0', copy: '©', reg: '®', trade: '™',
+    hellip: '…', mdash: '—', ndash: '–',
+    laquo: '«', raquo: '»', lsaquo: '‹', rsaquo: '›',
+    bull: '•', middot: '·', deg: '°', times: '×',
+  }
+  return raw
+    // hex: &#x633;
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, h) => {
+      try { return String.fromCodePoint(parseInt(h, 16)) } catch { return _ }
+    })
+    // decimal: &#1587;
+    .replace(/&#(\d+);/g, (_, d) => {
+      try { return String.fromCodePoint(parseInt(d, 10)) } catch { return _ }
+    })
+    // named
+    .replace(/&([a-zA-Z]+);/g, (m, n) => named[n] ?? m)
+    // extra: bad escaping like \u0627
+    .replace(/\\u([0-9a-fA-F]{4})/g, (_, h) => {
+      try { return String.fromCharCode(parseInt(h, 16)) } catch { return _ }
+    })
+}
+
 function extractMeta(html: string, patterns: RegExp[]): string | null {
   for (const p of patterns) {
     const m = html.match(p)
-    if (m?.[1]) return m[1].trim()
+    if (m?.[1]) return decodeHtmlEntities(m[1].trim())
   }
   return null
 }
@@ -133,7 +159,8 @@ export function extractFromHtml(html: string, sourceUrl: string): ExtractedData 
     .trim()
     .slice(0, 120)
 
-  const fullText = [name, ogDesc || '', sourceUrl].join('\n')
+  const safeDesc = decodeHtmlEntities(ogDesc || '')
+  const fullText = [name, safeDesc, sourceUrl].join('\n')
 
   const jsonLd = extractJsonLd(html)
   let ldName = ''
@@ -188,7 +215,7 @@ export function extractFromHtml(html: string, sourceUrl: string): ExtractedData 
 
   return {
     name: ldName || name,
-    description: ogDesc?.slice(0, 500) || '',
+    description: decodeHtmlEntities(ogDesc || '').slice(0, 500),
     image: ogImage || '',
     sourceUrl: ogUrl || sourceUrl,
     phones: allPhones,

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase-server'
+import { createClient, createServiceClient } from '@/lib/supabase-server'
 import { getSubscribedBusinessIds } from './subscription'
 
 type DbBusiness = {
@@ -202,15 +202,19 @@ export async function getPublishedBusinesses(
     // fetch food categories
     const categoriesByBiz = new Map<string, string[]>()
     try {
-      const { data: cats } = await supabase
+      const svc = createServiceClient()
+      const { data: cats, error: catsErr } = await svc
         .from('business_food_categories')
         .select('business_id, category_key')
         .in('business_id', ids)
+      if (catsErr) console.error('[food_cats] query error:', catsErr.message)
       for (const c of cats ?? []) {
         if (!categoriesByBiz.has(c.business_id)) categoriesByBiz.set(c.business_id, [])
         categoriesByBiz.get(c.business_id)!.push(c.category_key)
       }
-    } catch { /* silent */ }
+    } catch (e) {
+      console.error('[food_cats] exception:', e)
+    }
 
     const offersByBiz = new Map<string, DbOffer[]>()
     ;(offers ?? []).forEach((o) => {
