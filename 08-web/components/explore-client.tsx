@@ -180,18 +180,7 @@ export default function ExploreClient({ businesses, initialType, clientCoords }:
         })}
       </div>
 
-      {availableFoodCats.length > 0 && (type === 'all' || type === 'restaurant') && (
-        <div className="exc-food">
-          {availableFoodCats.map((c) => (
-            <button key={c.key} type="button"
-              className={`exc-food__chip ${foodCat === c.key ? 'is-active' : ''}`}
-              onClick={() => updateParams({ food: foodCat === c.key ? null : c.key })}>
-              {c.emoji} {c.label}
-            </button>
-          ))}
-        </div>
-      )}
-
+      
       <div className="exc-filters">
         <div className="exc-filters__left">
           {areas.length > 1 && (

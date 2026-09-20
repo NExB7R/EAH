@@ -432,3 +432,124 @@
   display: flex; align-items: center; gap: 8px;
   order: 2;
 }
+
+/* ═══ تحسينات explore — 2026-09-20 ═══ */
+
+/* مسافات أفضل بين العناصر */
+.exc-types {
+  margin-bottom: 16px !important;
+  gap: 10px !important;
+}
+.exc-food {
+  margin: 0 0 16px !important;
+  padding: 0 !important;
+}
+.exc-filters {
+  margin-bottom: 20px !important;
+}
+
+/* التصنيفات — شكل 2026 */
+.exc-food__chip {
+  padding: 8px 16px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  letter-spacing: 0.2px;
+}
+.exc-food__chip.is-active {
+  box-shadow: 0 6px 20px rgba(168,85,247,0.5), 0 0 0 1px rgba(255,255,255,0.15) inset !important;
+}
+
+/* التابس — أنعم */
+.exc-type {
+  padding: 10px 18px !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+.exc-type__count {
+  font-size: 11.5px !important;
+  padding: 2px 9px !important;
+  min-width: 22px !important;
+  text-align: center;
+}
+
+/* الفلاتر — أنعم */
+.exc-toggle, .exc-select {
+  padding: 9px 15px !important;
+  font-size: 13px !important;
+}
+.exc-clear {
+  padding: 9px 14px !important;
+  font-size: 12.5px !important;
+}
+
+/* الأزرار الـ sort */
+.exc-sort__trigger {
+  padding: 9px 15px !important;
+  font-size: 13px !important;
+}
+
+/* عدّاد النتائج أنعم */
+.exc-count {
+  font-size: 14px !important;
+  padding: 8px 0 !important;
+  color: rgba(216,180,254,0.65) !important;
+}
+.exc-count strong {
+  background: linear-gradient(135deg, #d8b4fe, #a855f7 50%, #f5c542);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 18px;
+  font-weight: 900;
+  margin-inline-end: 4px;
+}
+
+/* الموبايل — تباعد أحسن */
+@media (max-width: 640px) {
+  .exc-types {
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .exc-types::-webkit-scrollbar { display: none; }
+  .exc-type {
+    flex-shrink: 0;
+  }
+  .exc-food {
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .exc-food::-webkit-scrollbar { display: none; }
+  .exc-food__chip {
+    flex-shrink: 0;
+  }
+}
+
+/* empty state أنيق */
+.exc-empty {
+  padding: 60px 24px !important;
+  border-radius: 20px !important;
+  background: radial-gradient(circle at 50% 40%, rgba(168,85,247,0.06), transparent 60%) !important;
+  border: 1px solid rgba(168,85,247,0.15) !important;
+}
+.exc-empty__title {
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  margin: 16px 0 6px !important;
+}
+.exc-empty__msg {
+  font-size: 13.5px !important;
+  color: rgba(216,180,254,0.7) !important;
+  margin-bottom: 20px !important;
+}
+.exc-empty__btn {
+  padding: 12px 22px !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 20px rgba(168,85,247,0.4) !important;
+}
