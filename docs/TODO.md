@@ -65,3 +65,8 @@
 - [ ] Facebook Page مرتبة (شوف `SOCIAL_SETUP.md`)
 - [ ] WhatsApp Channel شغالة
 - [ ] إشعارات Sentry + UptimeRobot مختبرة
+
+### UptimeRobot — نقاط مستقبلية
+- [ ] ترقية UptimeRobot لخطة مدفوعة → Region Europe فقط
+  - السبب: Monitor من أمريكا (2222ms) — مش دقيق للمستخدمين المصريين
+  - الأولوية: منخفضة (بس ممكن مع Vercel Pro)
