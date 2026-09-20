@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from 'react'
 import { IconUser, IconBell } from './neon-icons'
 import { getAvatar, roleBadge } from '@/lib/profile-presets'
 import './user-avatar.css'
@@ -31,7 +32,11 @@ export default function UserAvatar({
   href,
   onClick,
 }: UserAvatarProps) {
-  const isBanned = !!banUntil && new Date(banUntil).getTime() > Date.now()
+  // ⚠️ نحسب القيم دي بعد الـ mount فقط — عشان نمنع hydration mismatch
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
+  const isBanned = mounted && !!banUntil && new Date(banUntil).getTime() > Date.now()
   const banDays = isBanned
     ? Math.ceil((new Date(banUntil as string).getTime() - Date.now()) / 86400000)
     : 0
