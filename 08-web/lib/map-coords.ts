@@ -1,3 +1,5 @@
+import 'server-only'
+
 export const AREA_COORDS: Record<string, { lat: number; lng: number }> = {
   'شبين القناطر': { lat: 30.3144, lng: 31.3212 },
   'القلج': { lat: 30.3225, lng: 31.3603 },
