@@ -19,7 +19,8 @@
 - **21:57** — feat: splash redesign + trust page + badges live
 - **22:22** — feat: clean FilterSelect + explore filters redesign
 - **22:34** — feat: about 2026 + filter-select + egyptian search + social setup + voice search button
-- **22:43** — feat: projects system live<!-- AUTO_END -->
+- **22:43** — feat: projects system live
+- **22:59** — feat: sentry CSP fix + new hook 'شبيك لبيك .. كل حاجة حواليك'<!-- AUTO_END -->
 
 ---
 

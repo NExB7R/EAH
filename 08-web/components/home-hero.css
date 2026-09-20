@@ -290,3 +290,74 @@
 }
 
 .hh__hook { display: none; }
+
+/* ═══════════════════════════════════════════
+   Hook الجديد — "شبيك لبيك"
+   ═══════════════════════════════════════════ */
+.hh__hook {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: 20px 0 18px;
+  text-align: center;
+}
+
+.hh__hook-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  color: #A855F7;
+  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.7))
+          drop-shadow(0 0 24px rgba(168, 85, 247, 0.4));
+  margin-bottom: 4px;
+  animation: hhHookSpin 18s linear infinite;
+}
+.hh__hook-icon svg {
+  width: 100%;
+  height: 100%;
+}
+@keyframes hhHookSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.hh__hook-line {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 50%, #A855F7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.35));
+  animation: hhHookIn 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes hhHookIn {
+  0% { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.hh__hook-sub-line {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(0.95rem, 2.2vw, 1.2rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #E8C79A;
+  text-shadow: 0 0 12px rgba(232, 199, 154, 0.4);
+  opacity: 0;
+  animation: hhHookIn 700ms 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (max-width: 480px) {
+  .hh__hook { margin: 16px 0 14px; gap: 4px; }
+  .hh__hook-icon { width: 34px; height: 34px; }
+}
+
+/* إخفاء الـ hook القديم لو لسه موجود */
+.hh__hook-sub { display: none !important; }
