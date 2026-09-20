@@ -40,3 +40,28 @@
 - [x] **Fra1 region (Frankfurt) جنب Supabase**
 - [x] **Parallel + cached queries**
 - [x] **Watermark على الغلاف/المعرض/المنيو**
+
+---
+
+## 📱 قائمة التذكير قبل الإطلاق الرسمي
+
+### Monitoring
+- [ ] نزّل تطبيق UptimeRobot على الموبايل (iOS / Android)
+- [ ] تأكد من استقبال Push notifications
+- [ ] Test كل الأخطاء تعمل على موبايلك
+- [ ] Status Page عام (اختياري)
+
+### Vercel Pro Upgrade ($20/شهر)
+- [ ] ترقية من Hobby → Pro
+- [ ] تفعيل cron دقيق (كل دقيقة)
+- [ ] تفعيل Analytics
+- [ ] تفعيل Backup
+- [ ] رفع حد deployment Storage
+- [ ] دومين مخصص (eah-eg.com)
+
+### قبل الإطلاق
+- [ ] 20 نشاط حقيقي في الـ DB
+- [ ] اختبار كامل على الموبايل
+- [ ] Facebook Page مرتبة (شوف `SOCIAL_SETUP.md`)
+- [ ] WhatsApp Channel شغالة
+- [ ] إشعارات Sentry + UptimeRobot مختبرة
