@@ -15,7 +15,8 @@
 - **20:40** — fix: cron review-reminder uses customer_profile_id
 - **20:53** — fix: order_requests columns (items + customer_profile_id)
 - **21:40** — feat: Trust System v1 + voice upload + rich order message
-- **21:47** — feat: rich order form (voice + images + trust + saved locations + countdown)<!-- AUTO_END -->
+- **21:47** — feat: rich order form (voice + images + trust + saved locations + countdown)
+- **21:57** — feat: splash redesign + trust page + badges live<!-- AUTO_END -->
 
 ---
 
