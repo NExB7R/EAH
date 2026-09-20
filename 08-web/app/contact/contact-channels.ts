@@ -1,17 +1,40 @@
-// EAH Contact Channels — يقرأ من env مع fallback
+/**
+ * EAH — قنوات التواصل الرسمية
+ * مرجع واحد لكل روابط EAH.
+ * آخر تحديث: 2026-09-21
+ */
+
 export const CONTACT_CHANNELS = {
   whatsapp: {
-    number: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '201012892806',
-    label: 'واتساب',
-    channel: process.env.NEXT_PUBLIC_WHATSAPP_CHANNEL || 'https://whatsapp.com/channel/eah',
+    personal: 'https://wa.me/201012892806',
+    channel: 'https://whatsapp.com/channel/eah',
+    number: '+20 10 12892806',
+    numberClean: '201012892806',
   },
   facebook: {
-    page: process.env.NEXT_PUBLIC_FACEBOOK_PAGE || 'https://facebook.com/eah.eg',
-    label: 'فيسبوك',
+    page: 'https://facebook.com/eah.eg',
+    username: '@eah.eg',
+  },
+  email: {
+    official: 'owner@eah.app',
+    support: 'owner@eah.app',
+  },
+  site: {
+    url: 'https://eah-sq.vercel.app',
+    domain: 'eah-sq.vercel.app',
   },
 } as const
 
-export function waLink(message?: string) {
-  const base = `https://wa.me/${CONTACT_CHANNELS.whatsapp.number}`
-  return message ? `${base}?text=${encodeURIComponent(message)}` : base
+export function waLink(message?: string): string {
+  const base = 'https://wa.me/201012892806'
+  if (!message) return base
+  return `${base}?text=${encodeURIComponent(message)}`
 }
+
+export const WA_MESSAGES = {
+  general: 'السلام عليكم، عايز أستفسر عن EAH',
+  support: 'السلام عليكم، محتاج مساعدة في EAH',
+  merchant: 'السلام عليكم، عايز أسجّل نشاطي على EAH',
+  report: 'السلام عليكم، عايز أبلّغ عن حاجة على EAH',
+  feedback: 'السلام عليكم، عندي رأي/اقتراح لـ EAH',
+} as const
