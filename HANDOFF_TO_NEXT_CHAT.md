@@ -1,3 +1,5 @@
+> 🚨 **اقرأ `docs/WORKFLOW.md` أول — طريقة العمل مع Nour: حاجة حاجة بدون قوايم**
+
 > للإطلاق الرسمي: اقرأ docs/LAUNCH_CHECKLIST.md (Vercel Pro + دومين + فيسبوك)
 
 > ⚠️ اقرأ DEPLOY_SETUP.md قبل أي deploy — webhook Vercel معطل، استخدم ./deploy.sh
