@@ -60,7 +60,10 @@ export default async function ExplorePage({
       b.food_categories.forEach((c: string) => usedCats.add(c))
     }
   })
-  const availableFoodCats = FOOD_CATEGORIES.filter((c) => usedCats.has(c.key))
+  // لو البيانات مش جاية من السيرفر → نعرض كل التصنيفات (fallback)
+  const availableFoodCats = usedCats.size > 0
+    ? FOOD_CATEGORIES.filter((c) => usedCats.has(c.key))
+    : FOOD_CATEGORIES
 
   const ranked = rankBusinesses(withStats as any, { includeFeaturedBoost: true })
   const diversified = diversifyByCategory(ranked as any, 'type') as any[]
