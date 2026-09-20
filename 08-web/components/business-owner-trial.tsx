@@ -16,12 +16,25 @@ export function WhatsAppOrdersToggle({ businessId, initialEnabled }: { businessI
       const { data: { user } } = await supabase.auth.getUser()
       if (!alive) return
       if (!user) { setIsOwner(false); return }
-      const { data: biz } = await supabase
-        .from('businesses')
-        .select('owner_profile_id')
-        .eq('id', businessId)
-        .maybeSingle()
-      if (alive) setIsOwner(biz?.owner_profile_id === user.id)
+
+      // نجيب النشاط والـ role
+      const [bizRes, roleRes] = await Promise.all([
+        supabase
+          .from('businesses')
+          .select('owner_profile_id')
+          .eq('id', businessId)
+          .maybeSingle(),
+        supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .maybeSingle(),
+      ])
+
+      if (!alive) return
+      const isOwner = bizRes.data?.owner_profile_id === user.id
+      const isSuperAdmin = roleRes.data?.role === 'super_admin'
+      setIsOwner(isOwner || isSuperAdmin)
     })()
     return () => { alive = false }
   }, [businessId])

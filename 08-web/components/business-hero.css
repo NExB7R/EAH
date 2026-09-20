@@ -351,3 +351,34 @@
 @media (max-width: 640px) {
   .bh2__logo { width: 60px; height: 60px; border-radius: 16px; bottom: 14px; inset-inline-start: 14px; border-width: 2px; }
 }
+
+/* ═══ Interactive Rating Pills ═══ */
+.bh2__meta-pill--link,
+.bh2__meta-pill--cta {
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.bh2__meta-pill--link:hover {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.25), rgba(232, 199, 154, 0.1));
+  border-color: #E8C79A;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(232, 199, 154, 0.25);
+}
+.bh2__meta-pill--cta {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(107, 33, 255, 0.08));
+  border-color: rgba(168, 85, 247, 0.45);
+  color: #C4B5FD;
+}
+.bh2__meta-pill--cta:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(107, 33, 255, 0.15));
+  border-color: #A855F7;
+  color: #F4F2FA;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.3);
+}
+
+/* Scroll margin للأقسام اللي بنقفز لها */
+#reviews, #write-review {
+  scroll-margin-top: 100px;
+}

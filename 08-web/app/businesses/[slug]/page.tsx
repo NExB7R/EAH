@@ -24,6 +24,7 @@ import BusinessMap from '@/components/business-map'
 import BusinessShare from '@/components/business-share'
 import BusinessOwnerTrial, { WhatsAppOrdersToggle } from '@/components/business-owner-trial'
 import { resolveCoords } from '@/lib/map-coords'
+import LockedContent from '@/components/locked-content'
 
 export const revalidate = 120
 
@@ -146,7 +147,19 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
         )}
 
         {/* ═══ Reviews ═══ */}
-        <BusinessReviews stats={stats} reviews={reviews} />
+        <div id="reviews">
+          {stats.review_count > 0 ? (
+            <LockedContent
+              title="التقييمات والآراء"
+              hint="سجّل عشان تقرأ تجارب الناس وتشاركنا رأيك"
+              minHeight={280}
+            >
+              <BusinessReviews stats={stats} reviews={reviews} />
+            </LockedContent>
+          ) : (
+            <BusinessReviews stats={stats} reviews={reviews} />
+          )}
+        </div>
 
         {business.businessId && (
           <div className="biz-review-cta">
