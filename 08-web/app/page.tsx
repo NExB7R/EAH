@@ -4,15 +4,26 @@ import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import BackToTop from '@/components/back-to-top'
 
-export const revalidate = 60
+// cache للصفحة كلها 2 دقايق
+export const revalidate = 120
 
 export default async function Page() {
   return (
     <>
       <FloatingCapsuleHeader />
       <BackToTop />
-      <HomeDynamicV2 />
+      <Suspense fallback={<HomeSkeleton />}>
+        <HomeDynamicV2 />
+      </Suspense>
       <SiteFooter />
     </>
+  )
+}
+
+function HomeSkeleton() {
+  return (
+    <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A29DB5', fontFamily: 'Cairo, system-ui' }}>
+      جاري التحميل...
+    </div>
   )
 }

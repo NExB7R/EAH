@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 
   const { data: orders, error } = await supabase
     .from('order_requests')
-    .select('id, business_id, customer_id, confirmed_at, business:businesses(name, slug)')
+    .select('id, business_id, customer_user_id, confirmed_at, business:businesses(name, slug)')
     .not('confirmed_at', 'is', null)
     .is('review_reminder_sent_at', null)
     .lt('confirmed_at', new Date(Date.now() - 60 * 60 * 1000).toISOString())
@@ -37,8 +37,8 @@ export async function GET(request: Request) {
     const biz = (order as any).business
     if (!biz) continue
     try {
-      if (order.customer_id) {
-        await sendPushToUser(order.customer_id, {
+      if (order.customer_user_id) {
+        await sendPushToUser(order.customer_user_id, {
           type: 'review_replies',
           title: `رأيك يهمنا في ${biz.name}`,
           body: 'قيّم تجربتك واكسب +10 نقاط — دقيقة واحدة وخلّي رأيك يوصل',

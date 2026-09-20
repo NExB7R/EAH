@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
@@ -11,15 +12,40 @@ import './home-dynamic-v2.css'
 import AdSlot from '@/components/ads/ad-slot'
 import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
+// ═══════════════════════════════════════════════════════════
+// Cached queries — كل واحدة بتشتغل مرة كل X دقايق
+// ═══════════════════════════════════════════════════════════
+
+const cachedBusinesses = unstable_cache(
+  async () => getPublishedBusinesses(50),
+  ['home-businesses-v1'],
+  { revalidate: 300, tags: ['businesses'] }   // 5 دقايق
+)
+
+const cachedAd = unstable_cache(
+  async () => getActiveAdForSlot('home_banner'),
+  ['home-ad-v1'],
+  { revalidate: 120, tags: ['ads'] }          // 2 دقيقة
+)
+
 export default async function HomeDynamicV2() {
-  // ═══ Parallel: 3 independent queries ═══
+  // ═══ Parallel: cached queries + user tags ═══
   const [businesses, ad, userTags] = await Promise.all([
-    getPublishedBusinesses(50),
-    getActiveAdForSlot('home_banner'),
-    loadUserProfileTags(),
+    cachedBusinesses(),
+    cachedAd(),
+    loadUserProfileTags(),  // cookie-based — دايماً fresh
   ])
-  // الـ view stats بتعتمد على businesses — بعدها
-  const realStats = await getViewStats(businesses.map((b) => b.slug), 7)
+
+  // ═══ View stats — cached بـ slugs key ═══
+  const slugs = businesses.map((b) => b.slug)
+  const slugsKey = slugs.sort().join(',')
+
+  const cachedStats = unstable_cache(
+    async () => getViewStats(slugs, 7),
+    ['home-stats-v1', slugsKey],
+    { revalidate: 60, tags: ['view-stats'] }  // دقيقة
+  )
+  const realStats = await cachedStats()
 
   const withStats = businesses.map((b) => {
     const real = realStats.get(b.slug)
@@ -45,26 +71,21 @@ export default async function HomeDynamicV2() {
 
   const total = diversified.length
 
-  // ═══ Featured ═══
   const featured = [...diversified]
     .filter((b) => b.badge === 'مميز' || b.isFeatured)
     .sort((a, b) => (b.recentViews ?? 0) - (a.recentViews ?? 0))
     .slice(0, 12)
 
-  // ═══ Trending ═══
   const trending = [...diversified]
     .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
     .slice(0, 12)
 
-  // ═══ New ═══
   const newOnes = [...diversified]
     .filter((b) => (b.ageInDays ?? 999) < 30)
     .sort((a, b) => (a.ageInDays ?? 999) - (b.ageInDays ?? 999))
     .slice(0, 12)
 
-  // لو عندنا <= 3 أنشطة → قسم موحّد بس (مفيش تكرار)
   const lowInventory = total <= 3
-
   const hasFeatured = !lowInventory && featured.length > 0
   const hasTrending = !lowInventory && trending.length > 0
   const hasNew = !lowInventory && newOnes.length > 0

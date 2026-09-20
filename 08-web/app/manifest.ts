@@ -17,8 +17,8 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ['food', 'shopping', 'lifestyle', 'local'],
     icons: [
       { src: '/crown-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-      { src: '/crown-512.webp', sizes: '512x512', type: 'image/png', purpose: 'any' },
-      { src: '/crown-512.webp', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+      { src: '/crown-512.webp', sizes: '512x512', type: 'image/webp', purpose: 'any' },
+      { src: '/crown-512.webp', sizes: '512x512', type: 'image/webp', purpose: 'maskable' },
       { src: '/crown-180.png', sizes: '180x180', type: 'image/png' },
     ],
     shortcuts: [
