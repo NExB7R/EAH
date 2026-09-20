@@ -22,15 +22,13 @@ export default function HomeHero() {
 
         <div className="hh__tagline">
           <span className="hh__tagline-pin" aria-hidden><IcPin /></span>
-          <span className="hh__tagline-city">دولة شبين القناطر تتحدث</span>
+          <span className="hh__tagline-city">من قلب شبين القناطر</span>
         </div>
 
         <p className="hh__hook-sub">كل حاجة محتاجها في مكان واحد</p>
 
-        <h2 className="hh__hook"></h2>
-
         <div className="hh__search">
-          <SearchBar placeholder="مطعم؟ صيدلية؟ ماركت؟ دوّر..." />
+          <SearchBar placeholder="بتدوّر على ايه النهاردة؟" />
         </div>
 
         <nav className="hh__cats" aria-label="تصفح سريع">

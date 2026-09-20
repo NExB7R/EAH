@@ -11,7 +11,7 @@ import './drawer-icons.css'
 import OverlayBlur from './overlay-blur'
 import { createClient } from '@/lib/supabase-browser'
 import { useUnreadCount } from '@/lib/hooks/use-unread-count'
-import { IconFacebook, IconWhatsapp, IconMenu, IconBolt, IconSearch } from './neon-icons'
+import { IconMenu, IconBolt, IconSearch } from './neon-icons'
 import { APP_VERSION_LABEL } from '@/lib/version'
 import './floating-capsule.css'
 import './floating-capsule-v2.css'
@@ -27,23 +27,6 @@ type CapsuleUser = {
   avatarUrl: string | null | undefined
   isPremium: boolean
   verified: boolean
-}
-
-function IconInfo() {
-  return (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 16v-4M12 8h.01" />
-    </svg>
-  )
-}
-
-function IconChat() {
-  return (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-    </svg>
-  )
 }
 
 export default function FloatingCapsuleHeader() {
@@ -128,13 +111,6 @@ export default function FloatingCapsuleHeader() {
           </div>
 
           <div className="floating-capsule__side floating-capsule__side--end">
-            <span className="fc-desktop-only">
-              <NeonIconButton icon={<IconChat />} label="تواصل" ariaLabel="تواصل" href="/contact" />
-              <NeonIconButton icon={<IconInfo />} label="احنا مين" ariaLabel="نبذة" href="/about" />
-              <NeonIconButton icon={<IconFacebook />} label="فيسبوك" ariaLabel="فيسبوك" href="https://facebook.com/eah.eg" />
-              <NeonIconButton icon={<IconWhatsapp />} label="واتساب" ariaLabel="واتساب" href="https://wa.me/201012892806" />
-            </span>
-
             {loggedIn === false && (
               <NeonIconButton icon={<IconBolt />} label="سجّل" ariaLabel="سجّل" variant="accent" href="/auth" />
             )}

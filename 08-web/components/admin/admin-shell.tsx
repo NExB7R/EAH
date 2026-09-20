@@ -57,7 +57,6 @@ export default function AdminShell({
     {
       title: 'المحتوى',
       items: [
-        { href: '/admin/collect', label: 'جمع أماكن', icon: MI.sparkles },
         { href: '/admin/pending', label: 'الطلبات المعلقة', icon: MI.inbox, liveBadge: true },
         { href: '/admin/businesses', label: 'الأنشطة', icon: MI.store },
         { href: '/admin/offers', label: 'العروض', icon: MI.fire },
