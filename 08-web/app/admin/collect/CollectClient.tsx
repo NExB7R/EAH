@@ -1,8 +1,7 @@
 'use client'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import './collect.css'
-import { IcClock, IcGlobe, IcLink, IcScroll, IcTag } from '@/components/eah-icons'
 
 type Recent = {
   id: string
@@ -33,6 +32,8 @@ type ExtractedData = {
   email?: string | null
 }
 
+type Confidence = Record<string, number>
+
 const AREAS = [
   'شبين القناطر', 'القلج', 'أبو زعبل', 'الجبل الأصفر',
   'الحصافة', 'الزهويين', 'الشوبك', 'كفر الشوبك',
@@ -42,11 +43,46 @@ const AREAS = [
 ]
 
 const TYPES = [
-  { key: 'restaurant', label: 'مطعم' },
-  { key: 'pharmacy', label: 'صيدلية' },
-  { key: 'supermarket', label: 'ماركت' },
-  { key: 'delivery_office', label: 'توصيل' },
+  { key: 'restaurant', label: 'مطعم', icon: '🍽️' },
+  { key: 'pharmacy', label: 'صيدلية', icon: '💊' },
+  { key: 'supermarket', label: 'ماركت', icon: '🛒' },
+  { key: 'delivery_office', label: 'توصيل', icon: '📦' },
+] as const
+
+const FOOD_OPTIONS = [
+  { key: 'pizza', label: 'بيتزا', emoji: '🍕' },
+  { key: 'crepe', label: 'كريب', emoji: '🥞' },
+  { key: 'grill', label: 'مشويات', emoji: '🍖' },
+  { key: 'liver', label: 'كبدة', emoji: '🍗' },
+  { key: 'koshary', label: 'كشري', emoji: '🍲' },
+  { key: 'syrian', label: 'سوري', emoji: '🌯' },
+  { key: 'shawarma', label: 'شاورما', emoji: '🌯' },
+  { key: 'sandwiches', label: 'سندوتشات', emoji: '🥪' },
+  { key: 'taameya', label: 'طعمية', emoji: '🧆' },
+  { key: 'foul', label: 'فول', emoji: '🫘' },
+  { key: 'fish', label: 'أسماك', emoji: '🐟' },
+  { key: 'seafood', label: 'بحري', emoji: '🦐' },
+  { key: 'burger', label: 'برجر', emoji: '🍔' },
+  { key: 'hawawshi', label: 'حواوشي', emoji: '🥩' },
+  { key: 'feteer', label: 'فطير', emoji: '🥧' },
+  { key: 'pasta', label: 'مكرونة', emoji: '🍝' },
+  { key: 'chicken', label: 'دجاج', emoji: '🍗' },
+  { key: 'rice', label: 'رز', emoji: '🍚' },
+  { key: 'molokhia', label: 'ملوخية', emoji: '🌿' },
+  { key: 'juices', label: 'عصائر', emoji: '🧃' },
+  { key: 'desserts', label: 'حلويات', emoji: '🍰' },
+  { key: 'coffee', label: 'قهوة', emoji: '☕' },
 ]
+
+// دالة اكتشاف المنصة
+function detectPlatform(url: string): { key: string; label: string; color: string } | null {
+  if (!url) return null
+  if (/facebook\.com|fb\.com/i.test(url)) return { key: 'fb', label: 'فيسبوك', color: '#1877f2' }
+  if (/instagram\.com/i.test(url)) return { key: 'ig', label: 'إنستجرام', color: '#e1306c' }
+  if (/google\./i.test(url)) return { key: 'google', label: 'جوجل', color: '#4285f4' }
+  if (/tiktok\.com/i.test(url)) return { key: 'tt', label: 'تيك توك', color: '#000' }
+  return { key: 'web', label: 'ويب', color: '#a855f7' }
+}
 
 export default function CollectClient({ recent }: { recent: Recent[] }) {
   const [url, setUrl] = useState('')
@@ -56,24 +92,39 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
   const [success, setSuccess] = useState<string | null>(null)
 
   const [parsed, setParsed] = useState<ExtractedData | null>(null)
-  const [rawReviews, setRawReviews] = useState('')
+  const [confidence, setConfidence] = useState<Confidence>({})
 
+  // Editable fields
   const [name, setName] = useState('')
-  const [type, setType] = useState('restaurant')
+  const [slug, setSlug] = useState('')
   const [area, setArea] = useState('شبين القناطر')
+  const [businessType, setBusinessType] = useState<string>('restaurant')
   const [phone, setPhone] = useState('')
   const [whatsapp, setWhatsapp] = useState('')
-  const [facebook, setFacebook] = useState('')
-  const [website, setWebsite] = useState('')
-  const [instagram, setInstagram] = useState('')
-  const [description, setDescription] = useState('')
   const [address, setAddress] = useState('')
-  const [hours, setHours] = useState('')
+  const [description, setDescription] = useState('')
+  const [foodCats, setFoodCats] = useState<string[]>([])
 
-  async function parseUrl() {
-    if (!url.trim()) return
-    setError(null)
-    setSuccess(null)
+  const platform = useMemo(() => detectPlatform(url), [url])
+
+  // جودة التحليل
+  const quality = useMemo(() => {
+    if (!confidence || Object.keys(confidence).length === 0) return 0
+    const vals = Object.values(confidence)
+    return Math.round(vals.reduce((s, v) => s + v, 0) / vals.length)
+  }, [confidence])
+
+  function slugify(s: string): string {
+    return s
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^\u0600-\u06FFa-zA-Z0-9-]/g, '')
+      .slice(0, 60)
+  }
+
+  async function parse() {
+    setError(null); setSuccess(null); setParsed(null); setConfidence({})
+    if (!url.trim()) { setError('الصق رابط'); return }
     setParsing(true)
     try {
       const res = await fetch('/api/admin/collect/parse', {
@@ -82,303 +133,366 @@ export default function CollectClient({ recent }: { recent: Recent[] }) {
         body: JSON.stringify({ url: url.trim() }),
       })
       const data = await res.json()
-      if (!res.ok || !data.ok) {
-        setError('فشل: ' + (data.error || res.status))
+      if (!data.ok) {
+        const errMap: Record<string, string> = {
+          fetch_failed: 'مقدرناش نوصل للصفحة — تأكد إنها عامة',
+          bad_url: 'الرابط مش صحيح',
+          rate_limit: 'استنى شوية وحاول تاني',
+          forbidden: 'مش مسموح',
+        }
+        setError(errMap[data.error] ?? 'حصلت مشكلة')
         return
       }
-      const d: ExtractedData = data.data
+      const d = data.data as ExtractedData
       setParsed(d)
-      setName(d.name || '')
-      setDescription(d.description || '')
-      setAddress(d.address || '')
-      setHours(d.hours || '')
-      if (d.phones && d.phones.length > 0) setPhone(d.phones[0])
-      if (d.whatsapp) setWhatsapp(d.whatsapp)
-      if (d.sourceUrl && (d.sourceUrl.includes('facebook.com') || d.sourceUrl.includes('fb.com'))) setFacebook(d.sourceUrl)
-      if (d.facebook && !d.sourceUrl.includes('facebook')) setFacebook(d.facebook)
-      if (d.website) setWebsite(d.website)
-      if (d.instagram) setInstagram(d.instagram)
-      if (d.type) setType(d.type)
-    } catch (e: any) {
-      setError('خطأ: ' + e.message)
+      setConfidence(data.confidence ?? {})
+      setName(d.name ?? '')
+      setSlug(slugify(d.name ?? ''))
+      setPhone(d.phones?.[0] ?? '')
+      setWhatsapp(d.whatsapp ?? d.phones?.[0] ?? '')
+      setAddress(d.address ?? '')
+      setDescription(d.description ?? '')
+      setBusinessType(d.type ?? 'restaurant')
+    } catch {
+      setError('حصلت مشكلة في الاتصال')
     } finally {
       setParsing(false)
     }
   }
 
-  function parseReviewsInput(text: string) {
-    // صيغ مدعومة:
-    // اسم | 5 | تعليق
-    // اسم — 5 — تعليق
-    const lines = text.split('\n').map((l) => l.trim()).filter(Boolean)
-    const out: { author: string; rating: number; comment: string }[] = []
-    for (const line of lines) {
-      const parts = line.split(/[|—\-]/).map((p) => p.trim())
-      if (parts.length >= 3) {
-        const author = parts[0]
-        const rating = Math.min(5, Math.max(1, parseInt(parts[1], 10) || 5))
-        const comment = parts.slice(2).join(' - ').trim()
-        if (author && comment.length >= 5) {
-          out.push({ author, rating, comment })
-        }
-      }
-    }
-    return out
-  }
-
   async function save() {
-    if (!name.trim()) { setError('اكتب اسم النشاط'); return }
-    setError(null)
-    setSuccess(null)
-    setSaving(true)
+    if (!name.trim()) { setError('الاسم مطلوب'); return }
+    if (!slug.trim()) { setError('الـ slug مطلوب'); return }
+    setSaving(true); setError(null); setSuccess(null)
     try {
-      const reviews = parseReviewsInput(rawReviews)
-      const res = await fetch('/api/admin/collect/save', {
+      const res = await fetch('/api/admin/businesses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: name.trim(),
-          type,
+          slug: slug.trim(),
+          business_type: businessType,
           area,
-          phone: phone.trim(),
-          whatsapp: whatsapp.trim(),
-          facebook: facebook.trim(),
-          website: website.trim(),
-          instagram: instagram.trim(),
-          sourceUrl: parsed?.sourceUrl || url.trim(),
-          description: description.trim(),
-          imageUrl: parsed?.image || '',
-          address: address.trim(),
-          hours: hours.trim(),
-          hasDelivery: parsed?.hasDelivery || false,
-          reviews,
+          city: 'شبين القناطر',
+          description: description.trim() || null,
+          address_text: address.trim() || null,
+          food_categories: foodCats,
+          contacts: [
+            phone ? { method_type: 'phone', value: phone.trim(), is_primary: true } : null,
+            whatsapp ? { method_type: 'whatsapp', value: whatsapp.trim(), is_primary: !phone } : null,
+          ].filter(Boolean),
         }),
       })
       const data = await res.json()
-      if (!res.ok || !data.ok) {
-        setError('فشل الحفظ: ' + (data.error || res.status))
-        return
+      if (data.ok) {
+        setSuccess(`تم حفظ "${name}" — جاري التحويل...`)
+        setTimeout(() => { window.location.href = `/admin/businesses/${slug}/edit` }, 1200)
+      } else {
+        setError(data.error === 'duplicate' ? 'الـ slug مستخدم بالفعل' : 'فشل الحفظ')
       }
-      setSuccess('تم: /businesses/' + data.slug + ' — ' + (data.reviewsInserted || 0) + ' تقييم')
-      setUrl('')
-      setParsed(null)
-      setName('')
-      setPhone('')
-      setWhatsapp('')
-      setFacebook('')
-      setDescription('')
-      setAddress('')
-      setHours('')
-      setRawReviews('')
-      setTimeout(() => window.location.reload(), 1800)
-    } catch (e: any) {
-      setError('خطأ: ' + e.message)
+    } catch {
+      setError('حصلت مشكلة')
     } finally {
       setSaving(false)
     }
   }
 
-  const reviewsPreview = parseReviewsInput(rawReviews)
+  function toggleFood(k: string) {
+    setFoodCats((prev) => prev.includes(k) ? prev.filter((x) => x !== k) : prev.length < 5 ? [...prev, k] : prev)
+  }
 
   return (
-    <section className="col">
-      <header className="col__head">
-        <div>
-          <span className="col__kicker">الجمع الذكي</span>
-          <h1 className="col__title">جمع أماكن</h1>
-          <p className="col__sub">
-            الصق رابط Facebook / Instagram / Maps — هيستخرج البيانات تلقائياً
-          </p>
-        </div>
-        <Link href="/admin/businesses" className="col__link">← الأنشطة</Link>
+    <div className="collect">
+      {/* ═══ HEADER ═══ */}
+      <header className="collect__hero">
+        <div className="collect__hero-glow" aria-hidden />
+        <span className="collect__kicker">EAH ADMIN · 2026</span>
+        <h1 className="collect__title">جمع الأنشطة</h1>
+        <p className="collect__sub">الصق رابط فيسبوك/إنستجرام/جوجل — وسحب بيانات النشاط تلقائياً</p>
       </header>
 
-      {/* URL Input */}
-      <div className="col__url-box">
-        <label className="col__label"><IcLink /> الرابط</label>
-        <div className="col__url-row">
+      {/* ═══ INPUT ═══ */}
+      <section className="collect__input-wrap">
+        <div className={`collect__input ${platform ? 'has-platform' : ''}`}>
+          <span className="collect__input-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+          </span>
           <input
             type="url"
-            className="col__input"
-            dir="ltr"
-            placeholder="https://www.facebook.com/..."
+            className="collect__input-field"
+            placeholder="https://facebook.com/... أو أي رابط"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && parseUrl()}
+            dir="ltr"
+            onKeyDown={(e) => e.key === 'Enter' && parse()}
           />
+          {platform && (
+            <span className="collect__platform" style={{ '--pc': platform.color } as any}>
+              {platform.label}
+            </span>
+          )}
           <button
             type="button"
-            className="col__btn col__btn--primary"
-            onClick={parseUrl}
+            className="collect__parse-btn"
+            onClick={parse}
             disabled={parsing || !url.trim()}
           >
-            {parsing ? '...' : 'تحليل'}
+            {parsing ? (
+              <>
+                <span className="collect__spinner" />
+                <span>بتحليل...</span>
+              </>
+            ) : (
+              <>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="7"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <span>حلّل</span>
+              </>
+            )}
           </button>
         </div>
-        <p className="col__hint">facebook.com · instagram.com · maps.google.com</p>
-      </div>
 
-      {/* Preview + Form */}
-      {parsed && (
-        <div className="col__form">
-          {parsed.image && (
-            <div className="col__preview-img">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={parsed.image} alt="preview" />
+        {error && <div className="collect__msg collect__msg--error">⚠️ {error}</div>}
+        {success && <div className="collect__msg collect__msg--ok">✓ {success}</div>}
+      </section>
+
+      {/* ═══ SKELETON ═══ */}
+      {parsing && (
+        <section className="collect__skeleton">
+          <div className="collect__skeleton-head">
+            <span className="collect__sk-circle" />
+            <div>
+              <span className="collect__sk-line" style={{ width: 200 }} />
+              <span className="collect__sk-line" style={{ width: 120, height: 10 }} />
             </div>
-          )}
-
-          <div className="col__score">
-            <span className="col__score-label">جودة الاستخراج</span>
-            <div className="col__score-bar">
-              <div className="col__score-fill" style={{ width: parsed.score + '%' }} />
-            </div>
-            <strong className="col__score-num">{parsed.score}%</strong>
           </div>
-
-          {(parsed.cuisine || parsed.hasDelivery || parsed.type) && (
-            <div className="col__chips">
-              {parsed.type && <span className="col__chip"><IcTag /> {parsed.type}</span>}
-              {parsed.cuisine && <span className="col__chip">{parsed.cuisine}</span>}
-              {parsed.hasDelivery && <span className="col__chip col__chip--ok">بيوصل</span>}
-            </div>
-          )}
-
-          <div className="col__grid">
-            <label className="col__field col__field--full">
-              <span>اسم النشاط *</span>
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-            </label>
-
-            <label className="col__field">
-              <span><IcTag /> النوع *</span>
-              <select value={type} onChange={(e) => setType(e.target.value)}>
-                {TYPES.map((t) => <option key={t.key} value={t.key}>{t.label}</option>)}
-              </select>
-            </label>
-
-            <label className="col__field">
-              <span>المنطقة *</span>
-              <select value={area} onChange={(e) => setArea(e.target.value)}>
-                {AREAS.map((a) => <option key={a} value={a}>{a}</option>)}
-              </select>
-            </label>
-
-            <label className="col__field">
-              <span>رقم الموبايل</span>
-              <input type="tel" dir="ltr" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="01xxxxxxxxx" />
-            </label>
-
-            <label className="col__field">
-              <span>رقم الواتساب</span>
-              <input type="tel" dir="ltr" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="201xxxxxxxxx" />
-            </label>
-
-            <label className="col__field col__field--full">
-              <span>صفحة فيسبوك</span>
-              <input type="url" dir="ltr" value={facebook} onChange={(e) => setFacebook(e.target.value)} placeholder="https://facebook.com/pagename" />
-            </label>
-
-            <label className="col__field">
-              <span><IcGlobe /> الموقع</span>
-              <input type="url" dir="ltr" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="https://..." />
-            </label>
-
-            <label className="col__field">
-              <span>إنستجرام</span>
-              <input type="url" dir="ltr" value={instagram} onChange={(e) => setInstagram(e.target.value)} placeholder="https://instagram.com/..." />
-            </label>
-
-            <label className="col__field col__field--full">
-              <span>العنوان</span>
-              <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="شارع..." />
-            </label>
-
-            <label className="col__field col__field--full">
-              <span><IcClock /> ساعات العمل</span>
-              <input type="text" value={hours} onChange={(e) => setHours(e.target.value)} placeholder="يومياً من..." />
-            </label>
-
-            <label className="col__field col__field--full">
-              <span><IcScroll /> وصف قصير</span>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
-            </label>
-          </div>
-
-          {/* Reviews Input */}
-          <div className="col__reviews-box">
-            <div className="col__reviews-head">
-              <label className="col__label">التقييمات (اختياري)</label>
-              <span className="col__reviews-hint">
-                كل سطر: <code>اسم | 5 | تعليق</code>
-              </span>
-            </div>
-            <textarea
-              className="col__reviews-input"
-              rows={5}
-              placeholder={'مثال:\nمحمد أحمد | 5 | أفضل مشويات في شبين\nسارة محمود | 5 | الطعم رائع والأسعار مناسبة'}
-              value={rawReviews}
-              onChange={(e) => setRawReviews(e.target.value)}
-            />
-            {reviewsPreview.length > 0 && (
-              <div className="col__reviews-preview">
-                <span>هيتم إضافة {reviewsPreview.length} تقييم:</span>
-                <ul>
-                  {reviewsPreview.slice(0, 5).map((r, i) => (
-                    <li key={i}>
-                      <strong>{r.author}</strong>
-                      <span className="col__stars">{''.repeat(r.rating)}</span>
-                      <span>{r.comment.slice(0, 60)}</span>
-                    </li>
-                  ))}
-                </ul>
-                {reviewsPreview.length > 5 && <span>+ {reviewsPreview.length - 5} تاني</span>}
-              </div>
-            )}
-          </div>
-
-          {error && <div className="col__error">{error}</div>}
-          {success && <div className="col__success">{success}</div>}
-
-          <div className="col__actions">
-            <button
-              type="button"
-              className="col__btn col__btn--primary col__btn--lg"
-              onClick={save}
-              disabled={saving || !name.trim()}
-            >
-              {saving ? '...' : 'حفظ'}
-            </button>
-            <button
-              type="button"
-              className="col__btn"
-              onClick={() => { setParsed(null); setUrl(''); setName(''); setPhone(''); setWhatsapp(''); setFacebook(''); setWebsite(''); setInstagram(''); setDescription(''); setAddress(''); setHours(''); setRawReviews('') }}
-            >
-              إلغاء
-            </button>
-          </div>
-        </div>
+          <span className="collect__sk-block" />
+          <span className="collect__sk-block" style={{ height: 100 }} />
+        </section>
       )}
 
-      {/* Recent */}
-      <div className="col__recent">
-        <h2 className="col__recent-title">آخر 15 نشاط مضاف</h2>
-        {recent.length === 0 ? (
-          <p className="col__recent-empty">لسه مفيش أنشطة</p>
-        ) : (
-          <div className="col__recent-list">
-            {recent.map((b) => (
-              <Link key={b.id} href={'/businesses/' + b.slug} target="_blank" className="col__recent-item">
-                <div>
-                  <strong>{b.name}</strong>
-                  <span>{b.area} • {b.business_type}</span>
+      {/* ═══ RESULTS ═══ */}
+      {parsed && !parsing && (
+        <>
+          {/* Quality bar */}
+          <section className="collect__quality">
+            <div className="collect__quality-head">
+              <span className="collect__quality-label">جودة البيانات</span>
+              <span className={`collect__quality-num collect__quality-num--${quality >= 70 ? 'high' : quality >= 40 ? 'mid' : 'low'}`}>
+                {quality}%
+              </span>
+            </div>
+            <div className="collect__quality-bar">
+              <div
+                className={`collect__quality-fill collect__quality-fill--${quality >= 70 ? 'high' : quality >= 40 ? 'mid' : 'low'}`}
+                style={{ width: `${quality}%` }}
+              />
+            </div>
+          </section>
+
+          <div className="collect__layout">
+            {/* ═══ FORM ═══ */}
+            <section className="collect__form">
+              <div className="collect__section">
+                <h3 className="collect__section-title">المعلومات الأساسية</h3>
+
+                <label className="collect__field">
+                  <span className="collect__label">
+                    اسم النشاط *
+                    {confidence.name != null && <ConfPill value={confidence.name} />}
+                  </span>
+                  <input className="collect__input" value={name} onChange={(e) => { setName(e.target.value); setSlug(slugify(e.target.value)) }} />
+                </label>
+
+                <label className="collect__field">
+                  <span className="collect__label">الرابط (slug) *</span>
+                  <input className="collect__input" dir="ltr" value={slug} onChange={(e) => setSlug(slugify(e.target.value))} />
+                  <span className="collect__hint">eah-sq.vercel.app/businesses/{slug || '...'}</span>
+                </label>
+
+                <div className="collect__row">
+                  <label className="collect__field">
+                    <span className="collect__label">
+                      النوع *
+                      {confidence.type != null && <ConfPill value={confidence.type} />}
+                    </span>
+                    <div className="collect__types">
+                      {TYPES.map((t) => (
+                        <button
+                          key={t.key}
+                          type="button"
+                          className={`collect__type ${businessType === t.key ? 'is-active' : ''}`}
+                          onClick={() => setBusinessType(t.key)}
+                        >
+                          <span>{t.icon}</span>
+                          <span>{t.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </label>
                 </div>
-                <span className="col__recent-arrow">↗</span>
-              </Link>
-            ))}
+
+                <div className="collect__row">
+                  <label className="collect__field">
+                    <span className="collect__label">المنطقة *</span>
+                    <select className="collect__input" value={area} onChange={(e) => setArea(e.target.value)}>
+                      {AREAS.map((a) => <option key={a} value={a}>{a}</option>)}
+                    </select>
+                  </label>
+                </div>
+              </div>
+
+              <div className="collect__section">
+                <h3 className="collect__section-title">التواصل</h3>
+
+                <div className="collect__row">
+                  <label className="collect__field">
+                    <span className="collect__label">
+                      موبايل
+                      {confidence.phone != null && <ConfPill value={confidence.phone} />}
+                    </span>
+                    <input className="collect__input" dir="ltr" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="01xxxxxxxxx" />
+                  </label>
+
+                  <label className="collect__field">
+                    <span className="collect__label">
+                      واتساب
+                      {confidence.whatsapp != null && <ConfPill value={confidence.whatsapp} />}
+                    </span>
+                    <input className="collect__input" dir="ltr" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} placeholder="201xxxxxxxxx" />
+                  </label>
+                </div>
+
+                <label className="collect__field">
+                  <span className="collect__label">
+                    العنوان
+                    {confidence.address != null && <ConfPill value={confidence.address} />}
+                  </span>
+                  <input className="collect__input" value={address} onChange={(e) => setAddress(e.target.value)} />
+                </label>
+              </div>
+
+              <div className="collect__section">
+                <h3 className="collect__section-title">الوصف</h3>
+                <label className="collect__field">
+                  <span className="collect__label">
+                    وصف قصير
+                    {confidence.description != null && <ConfPill value={confidence.description} />}
+                  </span>
+                  <textarea className="collect__input collect__input--area" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} maxLength={500} />
+                  <span className="collect__hint">{description.length}/500</span>
+                </label>
+              </div>
+
+              {businessType === 'restaurant' && (
+                <div className="collect__section">
+                  <h3 className="collect__section-title">
+                    تصنيفات الأكل <span className="collect__count">({foodCats.length}/5)</span>
+                  </h3>
+                  <div className="collect__food">
+                    {FOOD_OPTIONS.map((f) => (
+                      <button
+                        key={f.key}
+                        type="button"
+                        className={`collect__food-chip ${foodCats.includes(f.key) ? 'is-active' : ''}`}
+                        onClick={() => toggleFood(f.key)}
+                        disabled={!foodCats.includes(f.key) && foodCats.length >= 5}
+                      >
+                        {f.emoji} {f.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ═══ Actions ═══ */}
+              <div className="collect__actions">
+                <button type="button" className="collect__btn collect__btn--ghost" onClick={() => { setParsed(null); setUrl('') }}>
+                  إلغاء
+                </button>
+                <button type="button" className="collect__btn collect__btn--primary" onClick={save} disabled={saving}>
+                  {saving ? 'جاري الحفظ...' : 'احفظ النشاط'}
+                </button>
+              </div>
+            </section>
+
+            {/* ═══ PREVIEW ═══ */}
+            <aside className="collect__preview">
+              {parsed.image && (
+                <div className="collect__preview-cover">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={parsed.image} alt={name} />
+                  <span className="collect__preview-source">
+                    من {platform?.label ?? 'ويب'}
+                  </span>
+                </div>
+              )}
+
+              <div className="collect__preview-body">
+                <span className="collect__preview-type">{TYPES.find((t) => t.key === businessType)?.icon} {TYPES.find((t) => t.key === businessType)?.label}</span>
+                <h3 className="collect__preview-name">{name || '—'}</h3>
+                <p className="collect__preview-area">📍 {area}</p>
+
+                {parsed.hours && (
+                  <p className="collect__preview-line">🕒 {parsed.hours}</p>
+                )}
+
+                {parsed.facebook && (
+                  <a href={parsed.facebook} target="_blank" rel="noreferrer" className="collect__preview-link">
+                    فيسبوك ↗
+                  </a>
+                )}
+                {parsed.instagram && (
+                  <a href={parsed.instagram} target="_blank" rel="noreferrer" className="collect__preview-link">
+                    إنستجرام ↗
+                  </a>
+                )}
+
+                <a href={url} target="_blank" rel="noreferrer" className="collect__preview-link collect__preview-link--src">
+                  المصدر ↗
+                </a>
+              </div>
+            </aside>
           </div>
-        )}
-      </div>
-    </section>
+        </>
+      )}
+
+      {/* ═══ RECENT ═══ */}
+      {recent.length > 0 && !parsed && (
+        <section className="collect__recent">
+          <h2 className="collect__recent-title">آخر 15 نشاط مضافة</h2>
+          <ul className="collect__recent-list">
+            {recent.map((r) => (
+              <li key={r.id} className="collect__recent-item">
+                <Link href={`/admin/businesses/${r.slug}/edit`} className="collect__recent-link">
+                  <span className="collect__recent-icon">
+                    {TYPES.find((t) => t.key === r.business_type)?.icon ?? '📍'}
+                  </span>
+                  <div className="collect__recent-body">
+                    <div className="collect__recent-name">{r.name}</div>
+                    <div className="collect__recent-meta">
+                      {TYPES.find((t) => t.key === r.business_type)?.label} · {r.area}
+                    </div>
+                  </div>
+                  <span className="collect__recent-date">
+                    {new Date(r.created_at).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' })}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </div>
   )
+}
+
+function ConfPill({ value }: { value: number }) {
+  const cls = value >= 80 ? 'high' : value >= 50 ? 'mid' : 'low'
+  return <span className={`collect__conf collect__conf--${cls}`}>{value}%</span>
 }

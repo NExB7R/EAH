@@ -1,96 +1,86 @@
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
 import { createClient } from '@/lib/supabase-server'
 import { checkRate, getClientIp } from '@/lib/security/rate-limit'
-import { extractFromHtml } from '@/lib/collect/parser'
-import { z } from 'zod'
+import { extractFromHtml, type ExtractedData } from '@/lib/collect/parser'
 
-export const dynamic = 'force-dynamic'
-
-const Schema = z.object({
-  url: z.string().url().max(500),
+const schema = z.object({
+  url: z.string().url(),
 })
 
-const ALLOWED_DOMAINS = [
-  'facebook.com', 'fb.com', 'fb.me',
-  'instagram.com',
-  'maps.google.com', 'goo.gl', 'maps.app.goo.gl',
-]
-
-function isAllowed(url: string): boolean {
-  try {
-    const u = new URL(url)
-    return ALLOWED_DOMAINS.some((d) => u.hostname === d || u.hostname.endsWith('.' + d))
-  } catch {
-    return false
-  }
+async function requireAdmin() {
+  const sb = await createClient()
+  const { data: { user } } = await sb.auth.getUser()
+  if (!user) return { ok: false, sb: null }
+  const { data: role } = await sb
+    .from('user_roles').select('role').eq('user_id', user.id).eq('role', 'super_admin').maybeSingle()
+  return { ok: !!role, sb }
 }
 
-async function fetchPage(url: string, mobile: boolean): Promise<string | null> {
-  const target = mobile
-    ? url.replace(/^(https?:\/\/)?(www\.)?facebook\.com/, 'https://m.facebook.com')
-    : url
-
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 12000)
-
+async function fetchHtml(url: string): Promise<string | null> {
   try {
-    const res = await fetch(target, {
+    const controller = new AbortController()
+    const t = setTimeout(() => controller.abort(), 12000)
+    const res = await fetch(url, {
       headers: {
-        'User-Agent': mobile
-          ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15'
-          : 'Mozilla/5.0 (compatible; EAH-Collector/2.0; +https://eah-sq.vercel.app)',
+        'User-Agent': 'Mozilla/5.0 (compatible; EAHCollect/2026; +https://eah-sq.vercel.app)',
         'Accept': 'text/html,application/xhtml+xml',
         'Accept-Language': 'ar-EG,ar;q=0.9,en;q=0.8',
       },
       signal: controller.signal,
       redirect: 'follow',
     })
-    clearTimeout(timeout)
-
+    clearTimeout(t)
     if (!res.ok) return null
     return await res.text()
-  } catch {
-    clearTimeout(timeout)
-    return null
+  } catch { return null }
+}
+
+// حساب مستوى الثقة لكل حقل
+function computeConfidence(data: ExtractedData) {
+  return {
+    name: data.name.length >= 3 && data.name.length <= 100 ? 90 : 40,
+    type: data.type ? 95 : 30,
+    phone: data.phones.length > 0 ? 95 : 20,
+    whatsapp: data.whatsapp ? 85 : 30,
+    address: data.address ? 75 : 20,
+    hours: data.hours ? 70 : 15,
+    cuisine: data.cuisine ? 80 : 20,
+    description: data.description.length >= 30 ? 80 : 40,
+    image: data.image ? 90 : 20,
   }
 }
 
-export async function POST(request: Request) {
-  const ip = getClientIp(request)
-  const { ok: rlOk } = checkRate('collect-parse:' + ip, 30, 60_000)
-  if (!rlOk) return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 })
+export async function POST(req: Request) {
+  const ip = getClientIp(req)
+  const rl = checkRate(`collect:${ip}`, 20, 60_000)
+  if (!rl.ok) return NextResponse.json({ ok: false, error: 'rate_limit' }, { status: 429 })
 
-  const supabase = await createClient()
-  const { data: userData } = await supabase.auth.getUser()
-  if (!userData.user) return NextResponse.json({ ok: false }, { status: 401 })
+  const auth = await requireAdmin()
+  if (!auth.ok) return NextResponse.json({ ok: false, error: 'forbidden' }, { status: 403 })
 
-  const { data: role } = await supabase
-    .from('user_roles').select('role').eq('user_id', userData.user.id).maybeSingle()
-  if (role?.role !== 'super_admin') {
-    return NextResponse.json({ ok: false }, { status: 403 })
-  }
-
-  const body = await request.json().catch(() => null)
-  const parsed = Schema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json({ ok: false, error: 'invalid_url' }, { status: 400 })
-  }
+  const body = await req.json().catch(() => null)
+  const parsed = schema.safeParse(body)
+  if (!parsed.success) return NextResponse.json({ ok: false, error: 'bad_url' }, { status: 400 })
 
   const { url } = parsed.data
-  if (!isAllowed(url)) {
-    return NextResponse.json({ ok: false, error: 'domain_not_allowed' }, { status: 400 })
-  }
-
-  let html = await fetchPage(url, false)
-  if (!html || html.length < 500) {
-    html = await fetchPage(url, true)
-  }
-
-  if (!html) {
-    return NextResponse.json({ ok: false, error: 'fetch_failed' }, { status: 502 })
-  }
+  const html = await fetchHtml(url)
+  if (!html) return NextResponse.json({ ok: false, error: 'fetch_failed' }, { status: 502 })
 
   const data = extractFromHtml(html, url)
+  const confidence = computeConfidence(data)
 
-  return NextResponse.json({ ok: true, data })
+  return NextResponse.json({
+    ok: true,
+    data,
+    confidence,
+    source: {
+      url,
+      platform: /facebook|fb\.com/i.test(url) ? 'facebook'
+              : /instagram/i.test(url) ? 'instagram'
+              : /google\./i.test(url) ? 'google'
+              : 'web',
+      fetched_at: new Date().toISOString(),
+    },
+  })
 }
