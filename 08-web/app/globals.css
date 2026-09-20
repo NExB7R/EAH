@@ -564,3 +564,54 @@ nav.bc .bc__sep {
   .biz-review-cta { padding: 0 12px; }
   .biz-report-row { padding: 0 12px; }
 }
+
+/* ═══ Business Form 2026 — Sectioned Layout ═══ */
+.admin-form__section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.15);
+}
+.admin-form__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 900;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+  flex-shrink: 0;
+}
+.admin-form__uploads {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.admin-upload-block {
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(20, 14, 34, 0.4);
+  border: 1px solid rgba(168, 85, 247, 0.14);
+}
+.admin-form__section + .admin-form__section { margin-top: 24px; }
+@media (max-width: 640px) {
+  .admin-form__uploads { grid-template-columns: 1fr; gap: 14px; }
+  .admin-form__section-title { font-size: 1rem; }
+  .admin-form__step { width: 28px; height: 28px; font-size: 0.82rem; }
+}
+
+/* ═══ Wide aspect for uploader ═══ */
+.iup__grid--wide .iup__thumb,
+.iup__grid--wide .iup__item {
+  aspect-ratio: 16 / 9;
+}

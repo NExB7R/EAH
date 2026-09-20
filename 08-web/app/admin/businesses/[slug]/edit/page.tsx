@@ -38,6 +38,8 @@ export default async function EditBusinessPage({
 
   const gallery = (mediaRes.data ?? []).filter((m) => m.media_type === 'gallery').map((m) => m.storage_path)
   const menu = (mediaRes.data ?? []).filter((m) => m.media_type === 'menu').map((m) => m.storage_path)
+  const logoRow = (mediaRes.data ?? []).find((m) => m.media_type === 'logo')
+  const logo = logoRow?.storage_path ? [logoRow.storage_path] : []
 
   const actionWithId = async (
     prev: { ok: boolean; message?: string; errors?: Record<string, string[]> },
@@ -81,6 +83,7 @@ export default async function EditBusinessPage({
           contacts,
           gallery,
           menu,
+          logo,
           is_open: biz.is_open,
           is_featured: biz.is_featured,
           is_published: biz.is_published,

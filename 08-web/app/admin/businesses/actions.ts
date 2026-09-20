@@ -31,6 +31,8 @@ function formToObj(formData: FormData) {
     map_url: String(formData.get('map_url') ?? ''),
     cover_image_url: String(formData.get('cover_image_url') ?? ''),
     gallery_json: String(formData.get('gallery_json') ?? '[]'),
+    logo_json: String(formData.get('logo_json') ?? '[]'),
+    cover_json: String(formData.get('cover_json') ?? '[]'),
     menu_json: String(formData.get('menu_json') ?? '[]'),
     working_hours_json: String(formData.get('working_hours_json') ?? '{}'),
     contacts_json: String(formData.get('contacts_json') ?? '[]'),
@@ -70,7 +72,7 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
       hook: data.hook,
       address_text: data.address_text,
       map_url: data.map_url,
-      cover_image_url: data.cover_image_url || (gallery[0] ?? null),
+      cover_image_url: parseJson<string[]>(data.cover_json, [])[0] || null,
       working_hours: workingHours,
       is_open: data.is_open,
       is_featured: data.is_featured,
@@ -119,6 +121,34 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
       }))
     )
     if (mErr) console.error('[createBusiness] menu insert:', mErr)
+  }
+
+  // ═══ logo + cover في business_media ═══
+  const logo = parseJson<string[]>(data.logo_json, [])
+  const mediaRows: any[] = []
+  if (data.cover_image_url) {
+    mediaRows.push({
+      business_id: created.id,
+      media_type: 'cover',
+      storage_path: data.cover_image_url,
+      alt_text: `${data.name} - غلاف`,
+      sort_order: 0,
+      is_published: true,
+    })
+  }
+  if (logo.length > 0) {
+    mediaRows.push({
+      business_id: created.id,
+      media_type: 'logo',
+      storage_path: logo[0],
+      alt_text: `${data.name} - لوجو`,
+      sort_order: 0,
+      is_published: true,
+    })
+  }
+  if (mediaRows.length > 0) {
+    const { error: lErr } = await supabase.from('business_media').insert(mediaRows)
+    if (lErr) console.error('[createBusiness] logo/cover insert:', lErr)
   }
 
   // ═══ food categories ═══
@@ -175,7 +205,7 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
     hook: data.hook,
     address_text: data.address_text,
     map_url: data.map_url,
-    cover_image_url: data.cover_image_url || (gallery[0] ?? null),
+    cover_image_url: parseJson<string[]>(data.cover_json, [])[0] || null,
     working_hours: workingHours,
     is_open: data.is_open,
     is_featured: data.is_featured,
@@ -198,7 +228,7 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
     if (cErr) console.error('[updateBusiness] contacts insert:', cErr)
   }
 
-  await supabase.from('business_media').delete().eq('business_id', id).in('media_type', ['gallery', 'menu'])
+  await supabase.from('business_media').delete().eq('business_id', id).in('media_type', ['gallery', 'menu', 'logo', 'cover'])
   if (gallery.length > 0) {
     const { error: gErr } = await supabase.from('business_media').insert(
       gallery.map((url, i) => ({
@@ -224,6 +254,34 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
       }))
     )
     if (mErr) console.error('[updateBusiness] menu insert:', mErr)
+  }
+
+  // ═══ logo + cover في business_media ═══
+  const logo = parseJson<string[]>(data.logo_json, [])
+  const mediaRows: any[] = []
+  if (data.cover_image_url) {
+    mediaRows.push({
+      business_id: id,
+      media_type: 'cover',
+      storage_path: data.cover_image_url,
+      alt_text: `${data.name} - غلاف`,
+      sort_order: 0,
+      is_published: true,
+    })
+  }
+  if (logo.length > 0) {
+    mediaRows.push({
+      business_id: id,
+      media_type: 'logo',
+      storage_path: logo[0],
+      alt_text: `${data.name} - لوجو`,
+      sort_order: 0,
+      is_published: true,
+    })
+  }
+  if (mediaRows.length > 0) {
+    const { error: lErr } = await supabase.from('business_media').insert(mediaRows)
+    if (lErr) console.error('[updateBusiness] logo/cover insert:', lErr)
   }
 
   // ═══ food categories ═══

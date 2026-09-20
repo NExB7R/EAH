@@ -70,6 +70,7 @@ type BusinessViewModel = {
   food_categories?: string[]
   cover_image_url?: string
   gallery?: string[]
+  logo?: string
 }
 
 function toDemoShape(
@@ -217,9 +218,10 @@ export async function getPublishedBusinesses(
       console.error('[food_cats] exception:', e)
     }
 
-    // fetch gallery + menu from business_media
+    // fetch gallery + menu + logo from business_media
     const galleryByBiz = new Map<string, string[]>()
     const menuByBiz = new Map<string, string[]>()
+    const logoByBiz = new Map<string, string>()
     try {
       const { data: media } = await supabase
         .from('business_media')
@@ -234,6 +236,8 @@ export async function getPublishedBusinesses(
         } else if (m.media_type === 'menu') {
           if (!menuByBiz.has(m.business_id)) menuByBiz.set(m.business_id, [])
           menuByBiz.get(m.business_id)!.push(m.storage_path)
+        } else if (m.media_type === 'logo') {
+          if (!logoByBiz.has(m.business_id)) logoByBiz.set(m.business_id, m.storage_path)
         }
       }
     } catch {}
@@ -250,6 +254,7 @@ export async function getPublishedBusinesses(
       food_categories: categoriesByBiz.get(b.id) ?? [],
       gallery: galleryByBiz.get(b.id) ?? [],
       menu: menuByBiz.get(b.id) ?? [],
+      logo: logoByBiz.get(b.id),
     }))
   } catch {
     return FALLBACK(limit, intent)
@@ -316,11 +321,13 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
         .order('sort_order')
       const gallery = (media ?? []).filter((m) => m.media_type === 'gallery').map((m) => m.storage_path)
       const menu = (media ?? []).filter((m) => m.media_type === 'menu').map((m) => m.storage_path)
+      const logoRow = (media ?? []).find((m) => m.media_type === 'logo')
       return {
         ...toDemoShape(data, offers ?? [], premiumIds.has(data.id), reviewStats.get(data.id)),
         food_categories: (cats ?? []).map((c) => c.category_key),
         gallery,
         menu,
+        logo: logoRow?.storage_path,
       }
     }
   } catch {

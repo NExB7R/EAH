@@ -23,6 +23,8 @@ export const businessSchema = z.object({
   address_text: z.string().trim().max(200).optional().or(z.literal('')).transform((v) => v || null),
   map_url: urlOrEmpty.optional().transform((v) => v ?? null),
   cover_image_url: z.string().trim().optional().or(z.literal('')).transform((v) => v || null),
+  logo_json: z.string().optional().default('[]'),
+  cover_json: z.string().optional().default('[]'),
   gallery_json: z.string().optional().default('[]'),
   menu_json: z.string().optional().default('[]'),
   working_hours_json: z.string().optional().default('{}'),

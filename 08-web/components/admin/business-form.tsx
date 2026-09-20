@@ -28,6 +28,7 @@ type Props = {
     contacts?: Contact[]
     gallery?: string[]
     menu?: string[]
+    logo?: string[]
     is_open?: boolean
     is_featured?: boolean
     is_published?: boolean
@@ -58,7 +59,6 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
   const [mapUrl, setMapUrl] = useState(initial?.map_url ?? '')
   const [foodCats, setFoodCats] = useState<string[]>([])
 
-  // load existing categories when editing
   useEffect(() => {
     if (!businessId) return
     const supabase = createClient()
@@ -77,16 +77,18 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
   }
 
   const err = (f: string) => state.errors?.[f]?.[0]
-  // folder ثابت خلال عمر الفورم
   const folder = useMemo(
     () => (businessId ? `biz-${businessId}` : `new-${Date.now()}`),
     [businessId]
   )
 
+  const coverArr = initial?.cover_image_url ? [initial.cover_image_url] : []
+
   return (
     <form action={formAction} className="admin-form">
+      {/* ═══ 1. الأساسيات ═══ */}
       <section className="admin-form__section">
-        <h2 className="admin-form__section-title">المعلومات الأساسية</h2>
+        <h2 className="admin-form__section-title"><span className="admin-form__step">1</span> المعلومات الأساسية</h2>
         <div className="admin-form__grid">
           <div className="admin-field">
             <label className="admin-field__label" htmlFor="name">اسم المكان *</label>
@@ -108,12 +110,6 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
             </select>
           </div>
 
-          <div className="admin-field" style={{ gridColumn: '1 / -1' }}>
-            <FoodCategoriesPicker value={foodCats} onChange={setFoodCats} max={5} />
-          </div>
-
-          <input type="hidden" name="food_categories_json" value={JSON.stringify(foodCats)} />
-
           <div className="admin-field">
             <label className="admin-field__label" htmlFor="area">المنطقة *</label>
             <input id="area" name="area" className="admin-input" defaultValue={initial?.area ?? ''} placeholder="شبين القناطر" required />
@@ -123,51 +119,17 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
             <label className="admin-field__label" htmlFor="city">المدينة</label>
             <input id="city" name="city" className="admin-input" defaultValue={initial?.city ?? 'شبين القناطر'} />
           </div>
-
-          <div className="admin-field admin-field--full">
-            <label className="admin-field__label" htmlFor="address_text">العنوان التفصيلي</label>
-            <input id="address_text" name="address_text" className="admin-input" defaultValue={initial?.address_text ?? ''} placeholder="شارع الجمهورية، أمام البنك" />
-          </div>
-
-          {/* Map URL */}
-          <div className="admin-field admin-field--full">
-            <label className="admin-field__label" htmlFor="map_url">
-              رابط الموقع على الخريطة
-            </label>
-            <input
-              id="map_url"
-              name="map_url"
-              type="url"
-              className="admin-input"
-              dir="ltr"
-              value={mapUrl}
-              onChange={(e) => setMapUrl(e.target.value)}
-              placeholder="https://maps.app.goo.gl/xxxxx"
-            />
-            <span className="admin-field__hint">
-              افتح Google Maps → اختار المكان → Share → Copy link → الصق الرابط هنا
-            </span>
-            {mapUrl && (
-              <a
-                href={mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="admin-map-preview"
-              >
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
-                فتح الموقع على الخريطة ↗
-              </a>
-            )}
-            {err('map_url') && <span className="admin-field__hint" style={{ color: 'var(--eah-red)' }}>{err('map_url')}</span>}
-          </div>
         </div>
+
+        <div className="admin-field" style={{ marginTop: 16 }}>
+          <FoodCategoriesPicker value={foodCats} onChange={setFoodCats} max={5} />
+        </div>
+        <input type="hidden" name="food_categories_json" value={JSON.stringify(foodCats)} />
       </section>
 
+      {/* ═══ 2. الوصف ═══ */}
       <section className="admin-form__section">
-        <h2 className="admin-form__section-title">الوصف والهوك</h2>
+        <h2 className="admin-form__section-title"><span className="admin-form__step">2</span> الوصف والهوك</h2>
         <div className="admin-form__grid">
           <div className="admin-field admin-field--full">
             <label className="admin-field__label" htmlFor="hook">الهوك</label>
@@ -182,41 +144,102 @@ export default function BusinessForm({ mode, action, initial, businessId }: Prop
         </div>
       </section>
 
+      {/* ═══ 3. الصور ═══ */}
       <section className="admin-form__section">
-        <h2 className="admin-form__section-title">صور المكان</h2>
-        <ImageUploader
-          bucket="business-media"
-          folder={`${folder}/gallery`}
-          multiple
-          initial={initial?.gallery ?? []}
-          name="gallery_json"
-          label="معرض الصور (الغلاف أول صورة)"
-          hint="JPG/PNG/WebP · حتى 5MB"
-        />
-        <ImageUploader
-          bucket="business-menu"
-          folder={`${folder}/menu`}
-          multiple
-          initial={initial?.menu ?? []}
-          name="menu_json"
-          label="صور المنيو"
-          hint="صفحات المنيو"
-        />
-        <input type="hidden" name="cover_image_url" value={initial?.cover_image_url ?? ''} />
+        <h2 className="admin-form__section-title"><span className="admin-form__step">3</span> صور النشاط</h2>
+
+        <div className="admin-form__uploads">
+          <div className="admin-upload-block">
+            <ImageUploader
+              bucket="business-media"
+              folder={`${folder}/logo`}
+              multiple={false}
+              initial={initial?.logo ?? []}
+              name="logo_json"
+              label="◆ اللوجو"
+              hint="مربع (1:1) — يظهر على الكارت + الهيرو"
+              aspect="square"
+            />
+          </div>
+
+          <div className="admin-upload-block">
+            <ImageUploader
+              bucket="business-media"
+              folder={`${folder}/cover`}
+              multiple={false}
+              initial={coverArr}
+              name="cover_json"
+              label="▣ الغلاف"
+              hint="عريض — يظهر في الهيرو فوق"
+              aspect="wide"
+            />
+          </div>
+        </div>
+
+        <div className="admin-upload-block" style={{ marginTop: 20 }}>
+          <ImageUploader
+            bucket="business-media"
+            folder={`${folder}/gallery`}
+            multiple
+            initial={initial?.gallery ?? []}
+            name="gallery_json"
+            label="❖ معرض الصور"
+            hint="حتى 10 صور — تظهر في الكارد والهيرو"
+            aspect="square"
+          />
+        </div>
+
+        <div className="admin-upload-block" style={{ marginTop: 20 }}>
+          <ImageUploader
+            bucket="business-menu"
+            folder={`${folder}/menu`}
+            multiple
+            initial={initial?.menu ?? []}
+            name="menu_json"
+            label="▤ المنيو"
+            hint="صور صفحات المنيو — تظهر في قسم المنيو"
+            aspect="wide"
+          />
+        </div>
       </section>
 
+      {/* ═══ 4. التواصل ═══ */}
       <section className="admin-form__section">
-        <h2 className="admin-form__section-title">التواصل</h2>
+        <h2 className="admin-form__section-title"><span className="admin-form__step">4</span> التواصل</h2>
         <ContactsEditor initial={initial?.contacts ?? []} />
       </section>
 
+      {/* ═══ 5. أوقات العمل ═══ */}
       <section className="admin-form__section">
-        <h2 className="admin-form__section-title">أوقات العمل</h2>
+        <h2 className="admin-form__section-title"><span className="admin-form__step">5</span> أوقات العمل</h2>
         <WorkingHoursEditor initial={initial?.working_hours ?? {}} />
       </section>
 
+      {/* ═══ 6. الموقع ═══ */}
       <section className="admin-form__section">
-        <h2 className="admin-form__section-title">الحالة والظهور</h2>
+        <h2 className="admin-form__section-title"><span className="admin-form__step">6</span> الموقع</h2>
+        <div className="admin-form__grid">
+          <div className="admin-field admin-field--full">
+            <label className="admin-field__label" htmlFor="address_text">العنوان التفصيلي</label>
+            <input id="address_text" name="address_text" className="admin-input" defaultValue={initial?.address_text ?? ''} placeholder="شارع الجمهورية، أمام البنك" />
+          </div>
+
+          <div className="admin-field admin-field--full">
+            <label className="admin-field__label" htmlFor="map_url">رابط الموقع على الخريطة</label>
+            <input id="map_url" name="map_url" type="url" className="admin-input" dir="ltr" value={mapUrl} onChange={(e) => setMapUrl(e.target.value)} placeholder="https://maps.app.goo.gl/xxxxx" />
+            <span className="admin-field__hint">افتح Google Maps → اختار المكان → Share → Copy link → الصق الرابط هنا</span>
+            {mapUrl && (
+              <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="admin-map-preview">
+                فتح الموقع على الخريطة ↗
+              </a>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ 7. الحالة ═══ */}
+      <section className="admin-form__section">
+        <h2 className="admin-form__section-title"><span className="admin-form__step">7</span> الحالة والظهور</h2>
         <div className="admin-form__grid">
           <label className="admin-toggle">
             <input type="checkbox" name="is_published" defaultChecked={initial?.is_published ?? true} />
