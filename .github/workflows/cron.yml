@@ -1,0 +1,32 @@
+name: EAH Cron Jobs
+
+on:
+  schedule:
+    # كل ساعة بالظبط (cron دقيق — مجاني في GitHub)
+    - cron: '0 * * * *'
+  workflow_dispatch: # تشغيل يدوي كمان
+
+jobs:
+  review-reminder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger review reminder
+        run: |
+          echo "→ POST review-reminder"
+          curl -sS -X GET \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "https://eah-sq.vercel.app/api/cron/review-reminder" \
+            -w "\nHTTP: %{http_code}\n" \
+            --max-time 60
+
+  subscription-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger subscription check
+        run: |
+          echo "→ POST subscription-check"
+          curl -sS -X GET \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "https://eah-sq.vercel.app/api/cron/subscription-check" \
+            -w "\nHTTP: %{http_code}\n" \
+            --max-time 60
