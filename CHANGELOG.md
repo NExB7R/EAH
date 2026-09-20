@@ -8,7 +8,8 @@
 
 ### 2026-09-20
 
-<!-- AUTO_END -->
+
+- **20:13** — perf: fra1 region + ads JOIN + WebP logo everywhere<!-- AUTO_END -->
 
 ---
 

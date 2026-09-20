@@ -83,7 +83,7 @@ export const metadata: Metadata = {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
       { url: '/crown-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/crown-512.png', sizes: '512x512', type: 'image/png' },
+      { url: '/crown-512.webp', sizes: '512x512', type: 'image/png' },
     ],
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
     shortcut: '/favicon.ico',
@@ -117,7 +117,7 @@ export const metadata: Metadata = {
     url: siteUrl,
     images: [
       {
-        url: '/crown-512.png',
+        url: '/crown-512.webp',
         width: 512,
         height: 512,
         alt: 'EAH',
@@ -128,7 +128,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'EAH — اللي نفسك فيه ؟',
     description: 'اكتشف اللي مناسب ليك حوالينك.',
-    images: ['/crown-512.png'],
+    images: ['/crown-512.webp'],
   },
 }
 
@@ -166,7 +166,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   name: 'EAH',
                   alternateName: 'اللي نفسك فيه',
                   url: siteUrl,
-                  logo: `${siteUrl}/crown-512.png`,
+                  logo: `${siteUrl}/crown-512.webp`,
                   areaServed: {
                     '@type': 'City',
                     name: 'Shibin El-Qanater',

@@ -9,15 +9,17 @@ export async function GET(request: Request) {
   if (!slotCode) return NextResponse.json({ ad: null })
 
   const sb = await createClient()
-  const { data: slot } = await sb
-    .from('ad_slots').select('id,code').eq('code', slotCode).eq('is_active', true).maybeSingle()
-  if (!slot) return NextResponse.json({ ad: null })
-
   const now = new Date().toISOString()
+
+  // ═══ Query واحد بـ JOIN — بدل اتنين ═══
   const { data: ad } = await sb
     .from('ads')
-    .select('id,title,description,image_url,target_url,status,starts_at,ends_at')
-    .eq('slot_id', slot.id)
+    .select(`
+      id, title, description, image_url, target_url,
+      ad_slots!inner(code, is_active)
+    `)
+    .eq('ad_slots.code', slotCode)
+    .eq('ad_slots.is_active', true)
     .eq('status', 'approved')
     .or(`starts_at.is.null,starts_at.lte.${now}`)
     .or(`ends_at.is.null,ends_at.gte.${now}`)
@@ -26,6 +28,7 @@ export async function GET(request: Request) {
     .maybeSingle()
 
   if (!ad) return NextResponse.json({ ad: null })
+
   return NextResponse.json({
     ad: {
       id: ad.id,
@@ -33,6 +36,10 @@ export async function GET(request: Request) {
       description: ad.description,
       image_url: ad.image_url,
       href: ad.target_url ?? '/',
+    },
+  }, {
+    headers: {
+      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
     },
   })
 }

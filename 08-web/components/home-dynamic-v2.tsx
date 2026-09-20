@@ -12,12 +12,13 @@ import AdSlot from '@/components/ads/ad-slot'
 import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
 export default async function HomeDynamicV2() {
-  // ═══ Parallel: 3 independent queries مع بعض ═══
+  // ═══ Parallel: 3 independent queries ═══
   const [businesses, ad, userTags] = await Promise.all([
     getPublishedBusinesses(50),
     getActiveAdForSlot('home_banner'),
     loadUserProfileTags(),
   ])
+  // الـ view stats بتعتمد على businesses — بعدها
   const realStats = await getViewStats(businesses.map((b) => b.slug), 7)
 
   const withStats = businesses.map((b) => {
