@@ -16,7 +16,6 @@ type Initial = {
   avatarUrl: string | null
   avatarKey: string | null
   isVerified: boolean
-  role: string
 }
 
 const AVATAR_KEYS = ['av1','av2','av3','av4','av5','av6','av7','av8','av9','av10','av11','av12']
@@ -59,29 +58,39 @@ export default function EditClient({ userId, initial }: { userId: string; initia
     setError(null)
     if (name.trim().length < 2) { setError('الاسم لازم يكون حرفين على الأقل'); return }
     if (name.trim().length > 40) { setError('الاسم طويل جدًا'); return }
-    if (bio && bio.length > 200) { setError('البايو طويل جدًا'); return }
+    if (bio.length > 200) { setError('البايو طويل جدًا'); return }
 
     start(async () => {
-      const supabase = createClient()
-      const updates: Record<string, unknown> = {
-        display_name: name.trim(),
-        bio: bio.trim() || null,
-        gender,
-        avatar_key: avatarKey,
+      try {
+        const res = await fetch('/api/profile/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            display_name: name.trim(),
+            bio: bio.trim() || null,
+            gender,
+            avatar_key: avatarKey,
+            avatar_url: avatarUrl,
+          }),
+        })
+
+        const data = await res.json()
+        console.log('[edit] response:', res.status, data)
+
+        if (!res.ok || !data.ok) {
+          setError(data.error ?? 'فشل الحفظ — حاول تاني')
+          return
+        }
+
+        setSaved(true)
+        setTimeout(() => {
+          router.push('/account?updated=1')
+          router.refresh()
+        }, 600)
+      } catch (err) {
+        console.error('[edit] exception:', err)
+        setError(err instanceof Error ? err.message : 'خطأ في الاتصال')
       }
-      if (avatarUrl) updates.avatar_url = avatarUrl
-
-      const { error: err } = await supabase
-        .from('profiles')
-        .update(updates)
-        .eq('id', userId)
-
-      if (err) { setError(err.message); return }
-      setSaved(true)
-      setTimeout(() => {
-        router.push('/account?updated=1')
-        router.refresh()
-      }, 500)
     })
   }
 
@@ -90,17 +99,22 @@ export default function EditClient({ userId, initial }: { userId: string; initia
 
   return (
     <main className="edit">
+      {/* ═══ اللوجو + العنوان ═══ */}
       <header className="edit__hero">
         <div className="edit__hero-logo">
           <EahLogo size="lg" variant="full" />
         </div>
-        <h1 className="edit__title e-gradient">عدّل بروفايلك</h1>
+        <h1 className="edit__title e-gradient">
+          <IcEdit /> عدّل بروفايلك
+        </h1>
         <p className="edit__sub">اسمك، صورتك، ونبذة قصيرة.</p>
       </header>
 
       <div className="edit__card">
+        {/* ═══ 1. الصورة ═══ */}
         <section className="edit__section">
           <h2 className="edit__section-title"><IcCamera /> صورتك</h2>
+          <p className="edit__section-sub">ارفع صورة من جهازك، أو اختار لون افتراضي.</p>
           <div className="edit__avatar-row">
             <div
               className="edit__avatar-preview"
@@ -147,6 +161,7 @@ export default function EditClient({ userId, initial }: { userId: string; initia
           </div>
         </section>
 
+        {/* ═══ 2. الاسم ═══ */}
         <section className="edit__section">
           <h2 className="edit__section-title"><IcEdit /> الاسم الظاهر</h2>
           <input
@@ -159,6 +174,7 @@ export default function EditClient({ userId, initial }: { userId: string; initia
           <span className="edit__hint">ده اللي هيظهر لكل الناس على EAH.</span>
         </section>
 
+        {/* ═══ 3. النوع ═══ */}
         <section className="edit__section">
           <h2 className="edit__section-title"><IcUsers /> النوع</h2>
           <div className="edit__gender">
@@ -171,6 +187,7 @@ export default function EditClient({ userId, initial }: { userId: string; initia
           </div>
         </section>
 
+        {/* ═══ 4. النبذة ═══ */}
         <section className="edit__section">
           <h2 className="edit__section-title"><IcChat /> نبذة عنك</h2>
           <textarea
@@ -184,6 +201,7 @@ export default function EditClient({ userId, initial }: { userId: string; initia
           <span className="edit__hint">{bio.length}/200 حرف.</span>
         </section>
 
+        {/* ═══ الأزرار ═══ */}
         <div className="edit__actions">
           <Link href="/account" className="edit__cancel">إلغاء</Link>
           <button type="button" className="edit__save" onClick={save} disabled={pending || uploading}>
@@ -194,7 +212,7 @@ export default function EditClient({ userId, initial }: { userId: string; initia
         {error && <div className="edit__error">{error}</div>}
       </div>
 
-      {/* ═══ التوثيق في الآخر (بعد ما المستخدم يخلّص) ═══ */}
+      {/* ═══ التوثيق — آخر الصفحة ═══ */}
       <div className="edit__status">
         <div className={`edit__status-card ${initial.isVerified ? 'is-verified' : ''}`}>
           <span className="edit__status-icon">{initial.isVerified ? <IcCheck /> : <IcBan />}</span>

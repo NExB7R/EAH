@@ -37,7 +37,6 @@ export default async function EditProfilePage() {
           avatarUrl: profile?.avatar_url ?? null,
           avatarKey: profile?.avatar_key ?? null,
           isVerified: !!profile?.verified_at,
-          role: roleRow?.role ?? 'customer',
         }}
       />
       <SiteFooter />
