@@ -84,6 +84,7 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
             workingHours: business.workingHours,
             coverImage: business.cover_image_url,
             gallery: business.gallery ?? [],
+            logo: business.logo ?? null,
           }}
           stats={{
             avg_rating: stats.avg_rating,

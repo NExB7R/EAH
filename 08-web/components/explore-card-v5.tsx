@@ -23,6 +23,7 @@ type Business = {
   cover_image_url?: string
   gallery?: string[]
   menu?: string[]
+  logo?: string
   [key: string]: any
 }
 
@@ -62,11 +63,13 @@ export default function ExploreCardV5({ business }: { business: Business }) {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const cover = business.cover || business.cover_url || business.cover_image_url || ''
+  const logo = business.logo || ''
   const gallery = (business.gallery ?? []).filter(Boolean).filter((g) => g !== cover)
   const menu = (business.menu ?? []).filter(Boolean)
 
-  // ترتيب الشرائح: 1) غلاف  2) منيو  3) صور
+  // ترتيب الشرائح: 1) لوجو  2) غلاف  3) منيو  4) صور
   const slides: { url: string; label: string }[] = []
+  if (logo) slides.push({ url: logo, label: 'لوجو' })
   if (cover) slides.push({ url: cover, label: business.name })
   menu.forEach((url, i) => slides.push({ url, label: `منيو ${i + 1}` }))
   gallery.forEach((url, i) => slides.push({ url, label: `صورة ${i + 1}` }))
@@ -112,6 +115,13 @@ export default function ExploreCardV5({ business }: { business: Business }) {
 
           {business.badge && <span className="ec5__badge">{business.badge}</span>}
           {offers > 0 && <span className="ec5__offer-badge">{offers} عرض</span>}
+
+          {logo && (
+            <div className="ec5__logo" aria-hidden>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={logo} alt="" />
+            </div>
+          )}
 
           <div className="ec5__fav" onClick={(e) => e.preventDefault()}>
             <FavoriteButton businessId={business.id ?? business.slug} size="sm" />

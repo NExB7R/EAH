@@ -42,10 +42,12 @@ export default function BusinessHero({
     workingHours?: any
     coverImage?: string | null
     gallery?: string[]
+    logo?: string | null
   }
   stats: Stats
 }) {
   const cover = business.coverImage ?? null
+  const logo = business.logo ?? null
   const gallery = business.gallery ?? []
   const slides: string[] = []
   if (cover) slides.push(cover)
@@ -93,6 +95,13 @@ export default function BusinessHero({
             <span className="bh2__status-dot" />
             {business.open ? 'مفتوح دلوقتي' : 'مقفول حالياً'}
           </span>
+
+          {logo && (
+            <div className="bh2__logo" aria-hidden>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={logo} alt="" />
+            </div>
+          )}
 
           {/* dots السلايدر */}
           {slides.length > 1 && (
