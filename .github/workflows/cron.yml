@@ -2,31 +2,39 @@ name: EAH Cron Jobs
 
 on:
   schedule:
-    # كل ساعة بالظبط (cron دقيق — مجاني في GitHub)
+    # كل ساعة
     - cron: '0 * * * *'
-  workflow_dispatch: # تشغيل يدوي كمان
+    # يوم 1 من كل شهر الساعة 3 ص (trust decay)
+    - cron: '0 3 1 * *'
+  workflow_dispatch:
 
 jobs:
-  review-reminder:
+  hourly-tasks:
     runs-on: ubuntu-latest
+    if: github.event.schedule == '0 * * * *' || github.event_name == 'workflow_dispatch'
     steps:
-      - name: Trigger review reminder
+      - name: Review reminder
         run: |
-          echo "→ POST review-reminder"
           curl -sS -X GET \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             "https://eah-sq.vercel.app/api/cron/review-reminder" \
-            -w "\nHTTP: %{http_code}\n" \
-            --max-time 60
+            -w "\nHTTP: %{http_code}\n" --max-time 60
 
-  subscription-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger subscription check
+      - name: Subscription check
         run: |
-          echo "→ POST subscription-check"
           curl -sS -X GET \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             "https://eah-sq.vercel.app/api/cron/subscription-check" \
-            -w "\nHTTP: %{http_code}\n" \
-            --max-time 60
+            -w "\nHTTP: %{http_code}\n" --max-time 60
+
+  monthly-trust-decay:
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 3 1 * *'
+    steps:
+      - name: Apply trust decay
+        run: |
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "https://eah-sq.vercel.app/api/cron/trust-decay" \
+            -w "\nHTTP: %{http_code}\n" --max-time 60
