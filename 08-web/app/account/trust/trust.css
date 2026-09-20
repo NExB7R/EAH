@@ -1,0 +1,273 @@
+/* ═══ EAH Trust Page ═══ */
+.trp {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 80px 20px 60px;
+}
+
+.trp__hero {
+  margin-bottom: 24px;
+}
+.trp__back {
+  display: inline-block;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.82rem;
+  color: #A29DB5;
+  text-decoration: none;
+  margin-bottom: 14px;
+  transition: color 160ms ease;
+}
+.trp__back:hover { color: #E8C79A; }
+
+.trp__title {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  font-weight: 900;
+  color: #F4F2FA;
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+}
+.trp__sub {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.9rem;
+  color: #A29DB5;
+  margin: 0;
+}
+
+/* ─── Main Card ─── */
+.trp__main {
+  text-align: center;
+  padding: 32px 24px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.6));
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  margin-bottom: 24px;
+}
+.trp__main--pro { border-color: rgba(232, 199, 154, 0.4); }
+.trp__main--vip {
+  border-color: rgba(251, 191, 36, 0.5);
+  background: linear-gradient(180deg, rgba(40, 30, 18, 0.5), rgba(10, 7, 20, 0.6));
+  box-shadow: 0 0 40px rgba(251, 191, 36, 0.15);
+}
+
+.trp__score-wrap {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+.trp__score-num {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1;
+  background: linear-gradient(135deg, #F4F2FA, #E8C79A 50%, #A855F7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.trp__score-max {
+  font-size: 1.2rem;
+  color: #A29DB5;
+  font-weight: 700;
+}
+
+.trp__tier-desc {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.92rem;
+  color: #B8B2C9;
+  margin: 12px 0 20px;
+  line-height: 1.6;
+}
+
+.trp__progress {
+  max-width: 420px;
+  margin: 0 auto;
+}
+.trp__progress-track {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.12);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.trp__progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #A855F7, #E8C79A);
+  transition: width 600ms ease;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+}
+.trp__progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
+  color: #A29DB5;
+  font-weight: 700;
+}
+
+/* ─── Sections ─── */
+.trp__section {
+  margin-bottom: 24px;
+  padding: 20px 22px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(20, 14, 34, 0.5), rgba(10, 7, 20, 0.4));
+  border: 1px solid rgba(168, 85, 247, 0.15);
+}
+.trp__section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1rem;
+  font-weight: 900;
+  color: #F4F2FA;
+}
+.trp__section-title svg { color: #C084FC; width: 18px; height: 18px; }
+
+/* ─── Perks ─── */
+.trp__perks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.trp__perk {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.88rem;
+  color: #D8D4E3;
+}
+.trp__perk-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.15);
+  color: #A7F3D0;
+  flex-shrink: 0;
+}
+.trp__perk-icon svg { width: 12px; height: 12px; }
+
+/* ─── Badges ─── */
+.trp__badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+.trp__badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 10px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.08), rgba(168, 85, 247, 0.04));
+  border: 1px solid rgba(232, 199, 154, 0.25);
+  text-align: center;
+}
+.trp__badge-icon { font-size: 1.6rem; }
+.trp__badge-label {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #E8C79A;
+}
+
+/* ─── Events ─── */
+.trp__events {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.trp__event {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(10, 7, 20, 0.5);
+}
+.trp__event-delta {
+  min-width: 40px;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-family: var(--font-cairo, system-ui);
+  font-weight: 900;
+  font-size: 0.82rem;
+}
+.trp__event-delta.is-plus {
+  background: rgba(16, 185, 129, 0.15);
+  color: #A7F3D0;
+}
+.trp__event-delta.is-minus {
+  background: rgba(239, 68, 68, 0.15);
+  color: #FCA5A5;
+}
+.trp__event-delta.is-zero {
+  background: rgba(168, 85, 247, 0.12);
+  color: #C4B5FD;
+}
+.trp__event-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.trp__event-label {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #F4F2FA;
+  text-transform: capitalize;
+}
+.trp__event-date {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
+  color: #7B7490;
+}
+.trp__event-score {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  color: #A29DB5;
+  font-weight: 700;
+  direction: ltr;
+}
+
+/* ─── Tips ─── */
+.trp__tips {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.86rem;
+  color: #D8D4E3;
+  line-height: 1.6;
+}
+
+.trp__empty {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.85rem;
+  color: #A29DB5;
+  margin: 0;
+  text-align: center;
+  padding: 20px;
+}
+
+@media (max-width: 640px) {
+  .trp { padding: 72px 16px 40px; }
+  .trp__main { padding: 24px 18px; }
+  .trp__section { padding: 16px 18px; }
+}

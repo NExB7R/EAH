@@ -5,10 +5,11 @@ import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
 import { ROLE_LABEL } from '@/lib/profile-presets'
 import RoyalAvatar from '@/components/royal-avatar'
+import TrustBadge from '@/components/trust-badge'
 import EnablePushButton from '@/components/enable-push-button'
 import '@/components/royal-avatar.css'
 import './account.css'
-import { IcBan, IcCalendar, IcCheck, IcDoor, IcHeart, IcStar, IcBell, IcCompass, IcSparkle, IcTag, IcPackage, IcDiamond, IcUsers, IcKey, IcStore, IcShield } from '@/components/eah-icons'
+import { IcBan, IcCalendar, IcCheck, IcDoor, IcHeart, IcStar, IcBell, IcCompass, IcSparkle, IcTag, IcPackage, IcDiamond, IcUsers, IcKey, IcStore, IcShield, IcTrophy } from '@/components/eah-icons'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'حسابي' }
@@ -30,7 +31,7 @@ export default async function AccountPage() {
   ] = await Promise.all([
     supabase
       .from('profiles')
-      .select('display_name,phone,trust_score,created_at,banned_until,ban_reason,avatar_key,bio,gender,verified_at,avatar_url')
+      .select('display_name,phone,trust_score,trust_tier,created_at,banned_until,ban_reason,avatar_key,bio,gender,verified_at,avatar_url,successful_orders')
       .eq('id', user.id)
       .maybeSingle(),
     supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle(),
@@ -84,6 +85,13 @@ export default async function AccountPage() {
             <h1 className="acc-hero__title e-gradient">{name}</h1>
 
             <div className="acc-hero__meta">
+              {profile?.trust_tier && (
+                <TrustBadge
+                  score={profile.trust_score ?? 50}
+                  tier={profile.trust_tier}
+                  size="md"
+                />
+              )}
               <span className="acc-chip acc-chip--role">{roleLabel}</span>
               {isPremium && <span className="acc-chip acc-chip--premium">مميز</span>}
               {isVerified && <span className="acc-chip acc-chip--verified"><IcCheck /> موثّق</span>}
@@ -185,6 +193,9 @@ export default async function AccountPage() {
             </Link>
             <Link href="/account/points" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcDiamond /></span> نقاطي
+            </Link>
+            <Link href="/account/trust" className="acc-action e-list__item">
+              <span className="acc-action__emoji"><IcTrophy /></span> مصداقيتي
             </Link>
             <Link href="/account/referral" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcUsers /></span> ادعي صحابك
