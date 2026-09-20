@@ -4,14 +4,17 @@ cd ~/EAH/08-web
 npx tsc --noEmit
 cd ~/EAH
 
-# تحديث الملف الحيّ
+# 1. سجل التعديل في CHANGELOG
+./add-changelog.sh "$1"
+
+# 2. تحديث الملف الحيّ
 ./sync-docs.sh
 
-# commit + push
+# 3. commit + push
 git add -A
 git commit -m "$1" || true
 git push origin ui-onlook
 
-# deploy
+# 4. deploy
 cd ~/EAH/08-web
 vercel --prod --yes
