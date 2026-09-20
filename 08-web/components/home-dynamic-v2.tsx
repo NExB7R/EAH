@@ -63,9 +63,12 @@ export default async function HomeDynamicV2() {
     ...trending.map(b => b.slug),
     ...newOnes.map(b => b.slug),
   ])
-  const hasFeatured = featured.length > 0
-  const hasTrending = trending.length > 0
-  const hasNew = newOnes.length > 0
+  // لو عندنا 1-2 نشاط بس، نعرض قسم موحّد بدل ما نكرر
+  const lowInventory = diversified.length <= 2
+  const hasFeatured = !lowInventory && featured.length > 0
+  const hasTrending = !lowInventory && trending.length > 0
+  const hasNew = !lowInventory && newOnes.length > 0
+  const hasUnified = lowInventory && diversified.length > 0
 
   const ad = await getActiveAdForSlot('home_banner')
   const adHref = ad ? getAdHref(ad) : '#'
@@ -75,6 +78,19 @@ export default async function HomeDynamicV2() {
       <HomeHero />
 
       {ad && <AdSlot ad={ad} href={adHref} />}
+
+      {hasUnified && (
+        <SectionSliderV2
+          title="اكتشف على EAH"
+          subtitle="كل الأماكن اللي عندنا دلوقتي"
+          seeAllHref="/explore"
+          variant="featured"
+        >
+          {diversified.map((b) => (
+            <ExploreCardV5 key={b.slug} business={b} />
+          ))}
+        </SectionSliderV2>
+      )}
 
       {hasFeatured && (
         <SectionSliderV2
