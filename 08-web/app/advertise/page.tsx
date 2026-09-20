@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import { IcHandmade, IcGlobe, IcBuilding, IcCar, IcCalendar, IcBook, IcMegaphone } from '@/components/eah-icons'
 import './advertise.css'
@@ -67,6 +68,7 @@ export default function AdvertisePage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="adv">
         {/* Hero */}
         <section className="adv-hero">

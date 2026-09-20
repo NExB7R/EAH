@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import { getMyFollowingIds } from '@/lib/follows'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import BackToTop from '@/components/back-to-top'
 
@@ -28,6 +29,7 @@ export default async function FollowingPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <BackToTop />
       <main className="e-page">
         <h1 className="acc-title e-gradient">بتتابع إيه</h1>

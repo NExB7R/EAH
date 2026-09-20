@@ -122,3 +122,37 @@
 @media (prefers-reduced-motion: reduce) {
   .nt-empty__logo .eah-logo { animation: none; }
 }
+
+/* ═══ Notifications 2026 — hero + logo ═══ */
+.nt { padding-top: 72px; }
+.nt-hero {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 28px;
+  padding: 8px 20px 0;
+  position: relative;
+}
+.nt-hero__glow {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 420px;
+  height: 240px;
+  background: radial-gradient(ellipse, rgba(168, 85, 247, 0.15), transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+.nt-hero__logo {
+  display: inline-flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  animation: ntLogoFloat 4s ease-in-out infinite;
+}
+.nt-hero__logo img {
+  filter: drop-shadow(0 10px 28px rgba(168, 85, 247, 0.4)) !important;
+}
+@keyframes ntLogoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.nt-hero__kicker { display: none !important; }

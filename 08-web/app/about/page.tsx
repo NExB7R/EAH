@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import TrustSection from '@/components/trust-section'
 import ComingSoon from '@/components/coming-soon'
@@ -74,6 +75,7 @@ export default function AboutPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="ab">
         {/* ═══ HERO ═══ */}
         <section className="ab__hero">

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import './points.css'
 import { IcCalendar, IcCheck, IcScroll, IcTrophy, IcSparkle, IcFire, IcGift, IcHeart, IcChat, IcStore, IcPackage, IcCrown } from '@/components/eah-icons'
@@ -34,6 +35,7 @@ export default async function PointsPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="pt">
         <header className="pt__hero">
           <Link href="/account" className="pt__back">← حسابي</Link>

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import './orders.css'
 import { IcBan } from '@/components/eah-icons'
@@ -60,6 +61,7 @@ export default async function AccountOrdersPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="ao">
         <header className="ao__head">
           <Link href="/account" className="ao__back">← حسابي</Link>

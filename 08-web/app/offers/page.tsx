@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import './offers.css'
 import { IcInbox } from '@/components/eah-icons'
@@ -41,6 +42,7 @@ export default async function OffersPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="off">
         <section className="off-hero">
           <div className="off-hero__glow" aria-hidden />

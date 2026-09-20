@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import { submitVerification } from './actions'
 import './verify.css'
@@ -48,6 +49,7 @@ export default async function VerifyPage({
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="vf">
         <header className="vf-hero">
           <div className="vf-hero__glow" aria-hidden />

@@ -5,6 +5,7 @@ import { getMyLocations } from '@/lib/locations'
 import LocationPicker from '@/components/locations/location-picker'
 import SavedLocationsList from '@/components/locations/saved-locations-list'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import '@/components/locations/location-picker.css'
 import './locations.css'
@@ -22,6 +23,7 @@ export default async function LocationsPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="e-page">
         <h1 className="e-page__title">مواقعي</h1>
         <p className="e-page__sub">احفظ مواقعك عشان تطلب وتبحث بسرعة</p>

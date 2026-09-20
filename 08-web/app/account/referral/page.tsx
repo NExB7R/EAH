@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import ClaimForm from './claim-form'
 import './referral.css'
@@ -32,6 +33,7 @@ export default async function ReferralPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="rf">
         <header className="rf__hero">
           <Link href="/account" className="rf__back">← رجوع</Link>

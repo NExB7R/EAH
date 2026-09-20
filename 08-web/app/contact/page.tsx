@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import { IconWhatsapp, IconFacebook } from '@/components/neon-icons'
 import { CONTACT_CHANNELS, waLink } from './contact-channels'
@@ -52,6 +53,7 @@ export default function ContactPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="ct">
         <section className="ct-hero">
           <div className="ct-hero__glow" aria-hidden />

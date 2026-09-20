@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import TwoFactorSetup from '@/components/security/two-factor-setup'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import BackToTop from '@/components/back-to-top'
 
@@ -27,6 +28,7 @@ export default async function SecurityPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <BackToTop />
       <main className="e-page">
         <h1 className="acc-title e-gradient">أمان الحساب</h1>

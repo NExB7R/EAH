@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import './pricing.css'
 
@@ -97,6 +98,7 @@ export default function PricingPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="pr">
         <section className="pr-hero">
           <div className="pr-hero__glow" aria-hidden />

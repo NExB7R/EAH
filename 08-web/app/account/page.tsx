@@ -37,14 +37,7 @@ export default async function AccountPage() {
     supabase.from('favorites').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
     supabase.from('business_reviews').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
     supabase.from('notifications').select('*', { count: 'exact', head: true }).eq('user_id', user.id).is('read_at', null),
-    supabase
-      .from('business_subscriptions')
-      .select('status,expires_at')
-      .eq('owner_id', user.id)
-      .eq('status', 'active')
-      .gt('expires_at', new Date().toISOString())
-      .limit(1)
-      .maybeSingle(),
+    Promise.resolve({ data: null }),
   ])
 
   const role = roleRow?.role ?? 'customer'
@@ -167,21 +160,26 @@ export default async function AccountPage() {
             <h2 className="acc-section__title e-section__title">إجراءات سريعة</h2>
           </div>
           <div className="acc-actions">
-            <Link href="/explore" className="acc-action e-list__item">
-              <span className="acc-action__emoji"><IcCompass /></span> اكتشف الأماكن
-            </Link>
+            {/* ═══ الرئيسية ═══ */}
             <Link href="/recommend" className="acc-action acc-action--primary e-list__item">
               <span className="acc-action__emoji"><IcSparkle /></span> نفسك في ايه؟
+            </Link>
+            <Link href="/explore" className="acc-action acc-action--primary e-list__item">
+              <span className="acc-action__emoji"><IcCompass /></span> اكتشف الأماكن
             </Link>
             <Link href="/offers" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcTag /></span> العروض
             </Link>
-            <Link href="/account/edit" className="acc-action acc-action--primary e-list__item">
-              <span className="acc-action__emoji"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{display:'inline',verticalAlign:'middle',marginLeft:4}}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span> تعديل البروفايل
-            </Link>
-            <Link href="/account/notifications" className="acc-action e-list__item">
+
+            {/* ═══ حسابي ═══ */}
+            <Link href="/notifications" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcBell /></span> الإشعارات
             </Link>
+            {role === 'merchant' && (
+              <Link href="/merchant/orders" className="acc-action e-list__item">
+                <span className="acc-action__emoji"><IcPackage /></span> طلبات النشاط
+              </Link>
+            )}
             <Link href="/account/orders" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcPackage /></span> طلباتي
             </Link>
@@ -191,14 +189,23 @@ export default async function AccountPage() {
             <Link href="/account/referral" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcUsers /></span> ادعي صحابك
             </Link>
+
+            {/* ═══ الإعدادات ═══ */}
+            <Link href="/account/edit" className="acc-action e-list__item">
+              <span className="acc-action__emoji">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </span> تعديل البروفايل
+            </Link>
+            <Link href="/auth/change-password" className="acc-action e-list__item">
+              <span className="acc-action__emoji"><IcKey /></span> تغيير كلمة السر
+            </Link>
             {!isVerified && (
               <Link href="/account/verify" className="acc-action acc-action--primary e-list__item">
                 <span className="acc-action__emoji"><IcCheck /></span> وثّق حسابك
               </Link>
             )}
-            <Link href="/auth/change-password" className="acc-action e-list__item">
-              <span className="acc-action__emoji"><IcKey /></span> تغيير كلمة السر
-            </Link>
+
+            {/* ═══ أدوار ═══ */}
             {role === 'merchant' && (
               <Link href="/merchant" className="acc-action acc-action--primary e-list__item">
                 <span className="acc-action__emoji"><IcStore /></span> لوحة النشاط

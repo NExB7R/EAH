@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase-server'
 import { getMyLoyalty, getTiers } from '@/lib/loyalty'
 import LoyaltyRing from '@/components/loyalty/loyalty-ring'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import BackToTop from '@/components/back-to-top'
 
@@ -19,6 +20,7 @@ export default async function LoyaltyPage() {
     return (
       <>
         <FloatingCapsuleHeader />
+      <PageLogo />
         <main className="e-page">
           <h1 className="acc-title e-gradient">مستواك</h1>
           <p className="e-page__sub">لسه مفيش نقاط — ابدأ من الرئيسية</p>

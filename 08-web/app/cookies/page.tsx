@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import './legal.css'
 import { IcCalendar } from '@/components/eah-icons'
@@ -36,6 +37,7 @@ export default function CookiesPage() {
   return (
     <>
       <FloatingCapsuleHeader />
+      <PageLogo />
       <main className="lg">
         <section className="lg__hero">
           <span className="lg__kicker">سياسة الكوكيز</span>
