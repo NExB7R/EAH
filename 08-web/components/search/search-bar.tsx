@@ -37,7 +37,7 @@ export default function SearchBar({ initialQuery = '', autoFocus = false, classN
     else router.push(url)
   }
 
-  return (
+return (
     <div className={`sb-wrap ${className}`}>
       <form
         className="sb-form"

@@ -55,6 +55,19 @@ export async function createBusiness(_prev: ActionState, formData: FormData): Pr
     return { ok: false, message: 'الـ slug مستخدم', errors: { slug: ['اختار slug مختلف'] } }
   }
 
+  // ═══ فحص اسم النشاط (مطابق أو متشابه) ═══
+  const { data: nameCheck } = await supabase.rpc('check_business_name_unique', {
+    p_name: data.name,
+    p_exclude_id: null,
+  })
+  if (nameCheck && nameCheck.ok === false) {
+    return {
+      ok: false,
+      message: nameCheck.message || 'في نشاط بنفس الاسم',
+      errors: { name: [nameCheck.message || 'اسم النشاط مستخدم'] },
+    }
+  }
+
   const gallery = parseJson<string[]>(data.gallery_json, [])
   const menu = parseJson<string[]>(data.menu_json, [])
   const workingHours = parseJson<WorkingHours>(data.working_hours_json, {})
@@ -188,6 +201,21 @@ export async function updateBusiness(id: string, _prev: ActionState, formData: F
   if (data.slug !== before.slug) {
     const { data: dup } = await supabase.from('businesses').select('id').eq('slug', data.slug).neq('id', id).maybeSingle()
     if (dup) return { ok: false, message: 'الـ slug مستخدم', errors: { slug: ['اختار slug مختلف'] } }
+  }
+
+  // ═══ فحص اسم النشاط (لو اتغير) ═══
+  if (data.name !== before.name) {
+    const { data: nameCheck } = await supabase.rpc('check_business_name_unique', {
+      p_name: data.name,
+      p_exclude_id: id,
+    })
+    if (nameCheck && nameCheck.ok === false) {
+      return {
+        ok: false,
+        message: nameCheck.message || 'في نشاط بنفس الاسم',
+        errors: { name: [nameCheck.message || 'اسم النشاط مستخدم'] },
+      }
+    }
   }
 
   const gallery = parseJson<string[]>(data.gallery_json, [])
