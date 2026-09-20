@@ -17,7 +17,8 @@
 - **21:40** — feat: Trust System v1 + voice upload + rich order message
 - **21:47** — feat: rich order form (voice + images + trust + saved locations + countdown)
 - **21:57** — feat: splash redesign + trust page + badges live
-- **22:22** — feat: clean FilterSelect + explore filters redesign<!-- AUTO_END -->
+- **22:22** — feat: clean FilterSelect + explore filters redesign
+- **22:34** — feat: about 2026 + filter-select + egyptian search + social setup + voice search button<!-- AUTO_END -->
 
 ---
 
