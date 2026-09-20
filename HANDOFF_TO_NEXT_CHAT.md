@@ -1,3 +1,7 @@
+> 🚨 **اقرأ PROJECT_STATE.md أول — الحالة الكاملة**
+> 🚨 **اقرأ docs/WORKFLOW.md — طريقة العمل (حاجة حاجة)**
+> 🚨 **اقرأ docs/audit/README.md — التدقيق الجاري**
+
 > 🚨 **اقرأ `docs/WORKFLOW.md` أول — طريقة العمل مع Nour: حاجة حاجة بدون قوايم**
 
 > للإطلاق الرسمي: اقرأ docs/LAUNCH_CHECKLIST.md (Vercel Pro + دومين + فيسبوك)
