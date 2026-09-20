@@ -1,21 +1,21 @@
 # EAH — TODO (الشغل الحالي)
 
-> إيه اللي بنعمله دلوقتي. بيتحدّث يدوياً.
 > آخر تحديث: 2026-09-20
 
 ## 🔴 أولوية عالية
 
 - [ ] إضافة 5+ أنشطة حقيقية (مطاعم/صيدليات/ماركت)
 - [ ] إصلاح /explore — ترتيب الفلاتر + شكل الكارد
-- [ ] اختبار شريط Quick Actions في صفحة النشاط
+- [ ] اختبار Quick Actions في صفحة النشاط
 - [ ] اختبار Lightbox للمعرض والمنيو
+- [ ] اختبار رفع صور جديدة (watermark يظهر صح)
 
 ## 🟠 أولوية متوسطة
 
-- [ ] Referral system — تتبع الإحالات
+- [ ] إصلاح كل كود بيستخدم items_summary (الصح: items)
+- [ ] Referral system — تتبع الإحالات + النقاط
 - [ ] نقاط قابلة للاستبدال (خصومات/مميز)
-- [ ] تحسين Business Form (رابط بدل رفع)
-- [ ] استوديو — drag/drop حقيقي
+- [ ] Business Form (رابط URL بدل رفع)
 
 ## 🟡 أولوية منخفضة
 
@@ -24,11 +24,19 @@
 - [ ] تقارير أسبوعية للتاجر
 - [ ] تصدير Excel
 
-## ✅ خلص قريب
+## ✅ خلص مؤخراً
 
 - [x] Business page كاملة (Gallery + Menu + Hours + Quick Actions)
-- [x] تقييمات auto-approve
-- [x] إشعارات + welcome
-- [x] حفظ البروفايل
-- [x] الملفات الحيّة (5 ملفات)
+- [x] تقييمات auto-approve + flagging
+- [x] إشعارات + welcome + NotifLink
+- [x] حفظ البروفايل (API-based)
+- [x] 8 ملفات حيّة (START_HERE + SECRETS + ARCHITECTURE + LIVE_STATE + CHANGELOG + TODO + ROADMAP + DECISIONS)
 - [x] تنظيف 7 ملفات يتيمة
+- [x] **cron كل ساعة (GitHub Actions)** ← جديد
+- [x] **GRANT service_role على 60 جدول** ← جديد
+- [x] **إشعار عميل بعد أوردر (Push)**
+- [x] **إشعار تاجر عند أوردر جديد**
+- [x] **إشعار تاجر عند تقييم جديد**
+- [x] **Fra1 region (Frankfurt) جنب Supabase**
+- [x] **Parallel + cached queries**
+- [x] **Watermark على الغلاف/المعرض/المنيو**
