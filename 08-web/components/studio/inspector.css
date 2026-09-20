@@ -190,3 +190,29 @@
 @media (max-width: 1024px) {
   .ins { width: 100%; }
 }
+
+.ins__hint {
+  margin: 0 16px 12px;
+  padding: 10px 12px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #C9A5E8;
+}
+.ins__range-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ins__range-val {
+  min-width: 40px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #A855F7;
+  background: rgba(168, 85, 247, 0.1);
+  border-radius: 6px;
+  padding: 3px 8px;
+}

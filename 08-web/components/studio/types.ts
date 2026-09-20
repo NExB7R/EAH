@@ -2,6 +2,7 @@ export type SectionType =
   | 'hero'
   | 'featured'
   | 'trending'
+  | 'new'
   | 'offers'
   | 'categories'
   | 'cta'
@@ -32,6 +33,7 @@ export const SECTION_LABELS: Record<SectionType, { label: string; emoji: string 
   hero:       { label: 'Hero',       emoji: '' },
   featured:   { label: 'المميز',     emoji: '' },
   trending:   { label: 'الترند',     emoji: '' },
+  new:        { label: 'الجديد',     emoji: '' },
   offers:     { label: 'العروض',     emoji: '' },
   categories: { label: 'التصنيفات',  emoji: '📂' },
   cta:        { label: 'CTA',        emoji: '' },
@@ -57,9 +59,11 @@ export function defaultProps(type: SectionType): Record<string, unknown> {
         showSearch: true,
       }
     case 'featured':
-      return { title: 'المميز', subtitle: 'أماكن تستاهل', count: 6 }
+      return { title: 'المميزين', subtitle: 'أماكن اختارها فريقنا', count: 6 }
     case 'trending':
-      return { title: 'الترند', subtitle: 'الناس بتدور عليها', count: 6 }
+      return { title: 'الترند', subtitle: 'الناس بتدور عليها دلوقتي', count: 6 }
+    case 'new':
+      return { title: 'الجديد', subtitle: 'أخواتنا اللي بيبدأوا — ادعمهم', count: 6 }
     case 'offers':
       return { title: 'العروض', subtitle: 'خصومات على الآخر', count: 4 }
     case 'categories':
@@ -107,6 +111,7 @@ export function defaultDesign(): DesignData {
       { id: makeId(), type: 'categories', visible: true, props: defaultProps('categories') },
       { id: makeId(), type: 'featured', visible: true, props: defaultProps('featured') },
       { id: makeId(), type: 'trending', visible: true, props: defaultProps('trending') },
+      { id: makeId(), type: 'new', visible: true, props: defaultProps('new') },
       { id: makeId(), type: 'offers', visible: true, props: defaultProps('offers') },
       { id: makeId(), type: 'cta', visible: true, props: defaultProps('cta') },
       { id: makeId(), type: 'footer', visible: true, props: defaultProps('footer') },

@@ -1,5 +1,4 @@
 'use client'
-import { useState } from 'react'
 import type { Section, SectionType } from './types'
 import './inspector.css'
 
@@ -9,202 +8,152 @@ type Props = {
   onClose: () => void
 }
 
-type Tab = 'content' | 'style' | 'advanced'
+type FieldDef =
+  | { key: string; label: string; type: 'text' | 'textarea' | 'color' | 'range'; min?: number; max?: number; placeholder?: string }
+
+const F: Record<SectionType, FieldDef[]> = {
+  hero: [
+    { key: 'title', label: 'العنوان الرئيسي', type: 'text' },
+    { key: 'subtitle', label: 'الوصف', type: 'textarea' },
+    { key: 'ctaText', label: 'نص الزر', type: 'text' },
+    { key: 'ctaHref', label: 'رابط الزر', type: 'text', placeholder: '/explore' },
+    { key: 'padding', label: 'المسافة الداخلية', type: 'range', min: 0, max: 120 },
+  ],
+  featured: [
+    { key: 'title', label: 'العنوان', type: 'text' },
+    { key: 'subtitle', label: 'الوصف', type: 'textarea' },
+    { key: 'count', label: 'عدد العناصر', type: 'range', min: 2, max: 12 },
+  ],
+  trending: [
+    { key: 'title', label: 'العنوان', type: 'text' },
+    { key: 'subtitle', label: 'الوصف', type: 'textarea' },
+    { key: 'count', label: 'عدد العناصر', type: 'range', min: 2, max: 12 },
+  ],
+  new: [
+    { key: 'title', label: 'العنوان', type: 'text' },
+    { key: 'subtitle', label: 'الوصف', type: 'textarea' },
+    { key: 'count', label: 'عدد العناصر', type: 'range', min: 2, max: 12 },
+  ],
+  offers: [
+    { key: 'title', label: 'العنوان', type: 'text' },
+    { key: 'subtitle', label: 'الوصف', type: 'textarea' },
+    { key: 'count', label: 'عدد العناصر', type: 'range', min: 2, max: 12 },
+  ],
+  categories: [
+    { key: 'title', label: 'العنوان', type: 'text' },
+  ],
+  cta: [
+    { key: 'title', label: 'العنوان', type: 'text' },
+    { key: 'subtitle', label: 'الوصف', type: 'textarea' },
+    { key: 'ctaText', label: 'نص الزر', type: 'text' },
+    { key: 'ctaHref', label: 'رابط الزر', type: 'text' },
+  ],
+  banner: [
+    { key: 'text', label: 'النص', type: 'text' },
+    { key: 'color', label: 'اللون', type: 'color' },
+  ],
+  footer: [
+    { key: 'tagline', label: 'الشعار', type: 'text' },
+    { key: 'copyright', label: 'حقوق النشر', type: 'text' },
+  ],
+  spacer: [
+    { key: 'height', label: 'الارتفاع', type: 'range', min: 8, max: 200 },
+  ],
+  ad: [
+    { key: 'slotId', label: 'Slot ID', type: 'text', placeholder: 'home_banner' },
+    { key: 'label', label: 'اسم المساحة', type: 'text' },
+    { key: 'height', label: 'الارتفاع', type: 'range', min: 60, max: 400 },
+  ],
+}
 
 const LABEL: Record<SectionType, string> = {
-  hero: 'Hero',
-  featured: 'المميز',
+  hero: 'Hero — القسم الرئيسي',
+  featured: 'المميزين',
   trending: 'الترند',
+  new: 'الجديد',
   offers: 'العروض',
   categories: 'التصنيفات',
-  cta: 'CTA',
+  cta: 'دعوة للتسجيل',
   banner: 'بانر',
   footer: 'الفوتر',
   spacer: 'مساحة فارغة',
   ad: 'مساحة إعلان',
 }
 
-const FONTS = ['Cairo', 'Cairo Play', 'Tajawal', 'IBM Plex Sans Arabic', 'Almarai']
-const ALIGN = ['right', 'center', 'left'] as const
-
 export default function Inspector({ section, onChange, onClose }: Props) {
-  const [tab, setTab] = useState<Tab>('content')
   const p = section.props as Record<string, unknown>
-  const get = (k: string) => (p[k] as string | number | undefined) ?? ''
+  const fields = F[section.type]
 
   return (
     <aside className="ins">
       <header className="ins__head">
         <div>
-          <span className="ins__kicker">تعديل</span>
+          <span className="ins__kicker">تعديل قسم</span>
           <h3 className="ins__title">{LABEL[section.type]}</h3>
         </div>
-        <button className="ins__close" onClick={onClose} aria-label="close">x</button>
+        <button className="ins__close" onClick={onClose} aria-label="إغلاق">×</button>
       </header>
 
-      <div className="ins__tabs">
-        {(['content', 'style', 'advanced'] as Tab[]).map((t) => (
-          <button
-            key={t}
-            className={'ins__tab' + (tab === t ? ' is-active' : '')}
-            onClick={() => setTab(t)}
-          >
-            {t === 'content' ? 'المحتوى' : t === 'style' ? 'المظهر' : 'متقدم'}
-          </button>
-        ))}
+      <div className="ins__hint">
+        💡 اضغط على أي نص في المعاينة واكتب — بيتحفظ تلقائياً
       </div>
 
       <div className="ins__body">
-        {tab === 'content' && (
-          <>
-            <Field label="العنوان">
-              <input
-                className="ins__input"
-                value={String(get('title'))}
-                onChange={(e) => onChange('title', e.target.value)}
-              />
-            </Field>
-            {'subtitle' in p && (
-              <Field label="الوصف">
+        {fields.map((f) => {
+          const value = p[f.key]
+          return (
+            <div className="ins__field" key={f.key}>
+              <label className="ins__label">{f.label}</label>
+              {f.type === 'text' && (
+                <input
+                  className="ins__input"
+                  dir={f.key === 'ctaHref' || f.key === 'slotId' ? 'ltr' : 'auto'}
+                  value={String(value ?? '')}
+                  placeholder={f.placeholder}
+                  onChange={(e) => onChange(f.key, e.target.value)}
+                />
+              )}
+              {f.type === 'textarea' && (
                 <textarea
                   className="ins__input ins__input--area"
-                  rows={2}
-                  value={String(get('subtitle'))}
-                  onChange={(e) => onChange('subtitle', e.target.value)}
+                  rows={3}
+                  value={String(value ?? '')}
+                  onChange={(e) => onChange(f.key, e.target.value)}
                 />
-              </Field>
-            )}
-            {'ctaText' in p && (
-              <Field label="نص الزر">
-                <input
-                  className="ins__input"
-                  value={String(get('ctaText'))}
-                  onChange={(e) => onChange('ctaText', e.target.value)}
-                />
-              </Field>
-            )}
-            {'ctaHref' in p && (
-              <Field label="رابط الزر">
-                <input
-                  className="ins__input"
-                  dir="ltr"
-                  value={String(get('ctaHref'))}
-                  onChange={(e) => onChange('ctaHref', e.target.value)}
-                />
-              </Field>
-            )}
-            {'count' in p && (
-              <Field label={'عدد العناصر: ' + get('count')}>
-                <input
-                  type="range"
-                  min={2}
-                  max={12}
-                  value={Number(get('count') || 6)}
-                  onChange={(e) => onChange('count', Number(e.target.value))}
-                  className="ins__range"
-                />
-              </Field>
-            )}
-            {'text' in p && (
-              <Field label="النص">
-                <input
-                  className="ins__input"
-                  value={String(get('text'))}
-                  onChange={(e) => onChange('text', e.target.value)}
-                />
-              </Field>
-            )}
-          </>
-        )}
-
-        {tab === 'style' && (
-          <>
-            <Field label="محاذاة">
-              <div className="ins__align">
-                {ALIGN.map((a) => (
-                  <button
-                    key={a}
-                    className={'ins__align-btn' + (get('align') === a ? ' is-active' : '')}
-                    onClick={() => onChange('align', a)}
-                    type="button"
-                  >
-                    {a === 'right' ? '⬅' : a === 'center' ? '⬌' : '➡'}
-                  </button>
-                ))}
-              </div>
-            </Field>
-            <Field label="اللون الأساسي">
-              <div className="ins__color-row">
-                <input
-                  type="color"
-                  className="ins__color"
-                  value={String(get('accent') || '#A855F7')}
-                  onChange={(e) => onChange('accent', e.target.value)}
-                />
-                <input
-                  className="ins__input"
-                  dir="ltr"
-                  value={String(get('accent') || '#A855F7')}
-                  onChange={(e) => onChange('accent', e.target.value)}
-                />
-              </div>
-            </Field>
-            <Field label="الخط">
-              <select
-                className="ins__select"
-                value={String(get('font') || 'Cairo')}
-                onChange={(e) => onChange('font', e.target.value)}
-              >
-                {FONTS.map((f) => <option key={f} value={f}>{f}</option>)}
-              </select>
-            </Field>
-            <Field label={'المسافة الداخلية (' + (get('padding') || 32) + 'px)'}>
-              <input
-                type="range"
-                min={0}
-                max={120}
-                value={Number(get('padding') || 32)}
-                onChange={(e) => onChange('padding', Number(e.target.value))}
-                className="ins__range"
-              />
-            </Field>
-            <Field label={'المسافة الخارجية (' + (get('margin') || 0) + 'px)'}>
-              <input
-                type="range"
-                min={0}
-                max={80}
-                value={Number(get('margin') || 0)}
-                onChange={(e) => onChange('margin', Number(e.target.value))}
-                className="ins__range"
-              />
-            </Field>
-          </>
-        )}
-
-        {tab === 'advanced' && (
-          <>
-            <Field label="ID">
-              <input className="ins__input" dir="ltr" value={section.id} readOnly />
-            </Field>
-            <Field label="النوع">
-              <input className="ins__input" value={section.type} readOnly />
-            </Field>
-            <div className="ins__note">
-              التغييرات بتتحفظ تلقائياً كل 2 ثانية.
-              اضغط Cmd+Z للتراجع.
+              )}
+              {f.type === 'color' && (
+                <div className="ins__color-row">
+                  <input
+                    type="color"
+                    className="ins__color"
+                    value={String(value ?? '#A855F7')}
+                    onChange={(e) => onChange(f.key, e.target.value)}
+                  />
+                  <input
+                    className="ins__input"
+                    dir="ltr"
+                    value={String(value ?? '#A855F7')}
+                    onChange={(e) => onChange(f.key, e.target.value)}
+                  />
+                </div>
+              )}
+              {f.type === 'range' && (
+                <div className="ins__range-wrap">
+                  <input
+                    type="range"
+                    className="ins__range"
+                    min={f.min ?? 0}
+                    max={f.max ?? 100}
+                    value={Number(value ?? f.min ?? 0)}
+                    onChange={(e) => onChange(f.key, Number(e.target.value))}
+                  />
+                  <span className="ins__range-val">{Number(value ?? f.min ?? 0)}</span>
+                </div>
+              )}
             </div>
-          </>
-        )}
+          )
+        })}
       </div>
     </aside>
-  )
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="ins__field">
-      <label className="ins__label">{label}</label>
-      {children}
-    </div>
   )
 }

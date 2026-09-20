@@ -96,7 +96,7 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
     }
   }, [])
 
-  // ═══ Live preview: postMessage to iframe ═══
+  // ═══ Live preview: postMessage to iframe + receive inline edits ═══
   useEffect(() => {
     const onMsg = (e: MessageEvent) => {
       if (e.data?.type === 'EAH_PREVIEW_READY') {
@@ -105,10 +105,20 @@ export default function StudioEditor({ initial }: { initial: DesignData | null }
           '*'
         )
       }
+      if (e.data?.type === 'EAH_INLINE_EDIT') {
+        const { sectionId, propKey, value } = e.data
+        const next: DesignData = {
+          ...design,
+          sections: design.sections.map((s) =>
+            s.id === sectionId ? { ...s, props: { ...s.props, [propKey]: value } } : s
+          ),
+        }
+        update(next)
+      }
     }
     window.addEventListener('message', onMsg)
     return () => window.removeEventListener('message', onMsg)
-  }, [design])
+  }, [design, update])
 
   useEffect(() => {
     iframeRef.current?.contentWindow?.postMessage(
