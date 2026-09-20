@@ -42,7 +42,7 @@ export default async function AccountOrdersPage() {
 
   const { data: orders } = await supabase
     .from('order_requests')
-    .select('id,business_id,customer_name,customer_phone,customer_area,customer_address,items_summary,notes,status,created_at,updated_at')
+    .select('id,business_id,customer_name,customer_phone,customer_area,customer_address,items,notes,status,created_at,updated_at')
     .eq('customer_user_id', userData.user.id)
     .order('created_at', { ascending: false })
     .limit(100)
@@ -114,7 +114,7 @@ export default async function AccountOrdersPage() {
                   </header>
 
                   <div className="ao__items">
-                    <p>{o.items_summary}</p>
+                    <p>{o.items}</p>
                   </div>
 
                   {o.customer_address && (

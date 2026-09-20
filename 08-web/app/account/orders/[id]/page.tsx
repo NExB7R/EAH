@@ -101,7 +101,7 @@ export default async function OrderDetailPage({
 
         <section className="od__card">
           <h2 className="od__section-title">تفاصيل الأوردر</h2>
-          <p className="od__items">{order.items_summary}</p>
+          <p className="od__items">{order.items}</p>
           {order.notes && (
             <div className="od__notes">{order.notes}</div>
           )}

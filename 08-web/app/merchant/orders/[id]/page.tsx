@@ -132,7 +132,7 @@ export default async function MerchantOrderDetailPage({
 
         <section className="mod__card">
           <h2 className="mod__section-title">الأوردر</h2>
-          <p className="mod__items">{order.items_summary}</p>
+          <p className="mod__items">{order.items}</p>
           {order.notes && <div className="mod__notes">{order.notes}</div>}
         </section>
 

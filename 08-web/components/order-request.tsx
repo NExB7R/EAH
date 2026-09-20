@@ -127,7 +127,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
         customer_address: address.trim() || null,
         delivery_lat: userLocation?.lat ?? null,
         delivery_lng: userLocation?.lng ?? null,
-        items_summary: items.trim(),
+        items: items.trim(),
         notes: notes.trim() || null,
         merchant_phone: phoneNumber,
         whatsapp_url: waUrl,

@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   const supabase = await createClient()
   const { data: order } = await supabase
     .from('order_requests')
-    .select('id, business_id, customer_name, customer_phone, items_summary')
+    .select('id, business_id, customer_name, customer_phone, items')
     .eq('id', parsed.data.orderId)
     .maybeSingle()
 
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
   const result = await sendPushToUser(biz.owner_profile_id, {
     title: `طلب جديد من ${order.customer_name}`,
-    body: order.items_summary.slice(0, 100),
+    body: order.items.slice(0, 100),
     url: '/merchant/orders',
     type: 'merchant_orders',
   })
