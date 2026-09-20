@@ -615,3 +615,27 @@ nav.bc .bc__sep {
 .iup__grid--wide .iup__item {
   aspect-ratio: 16 / 9;
 }
+
+/* ═══ Biz Reviews Section — side-by-side 2026 ═══ */
+.biz-reviews-section {
+  max-width: 1200px;
+  margin: 32px auto;
+  padding: 0 24px;
+}
+.biz-reviews-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+}
+.biz-reviews-main { min-width: 0; }
+.biz-reviews-aside { position: relative; }
+.biz-reviews-aside__sticky {
+  position: sticky;
+  top: 88px;
+}
+@media (max-width: 900px) {
+  .biz-reviews-grid { grid-template-columns: 1fr; gap: 20px; }
+  .biz-reviews-aside__sticky { position: static; }
+  .biz-reviews-section { padding: 0 16px; }
+}

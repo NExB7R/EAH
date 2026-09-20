@@ -13,7 +13,7 @@ import { getViewStats } from '@/lib/real-stats'
 import { getPrimaryLocation } from '@/lib/locations'
 import { FOOD_CATEGORIES } from '@/lib/food/categories'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export const metadata = {
   title: 'اكتشف',
@@ -83,7 +83,6 @@ export default async function ExplorePage({
           <div className="explore-hero__logo">
             <EahLogo size="lg" variant="full" href="/" />
           </div>
-          <div className="explore-hero__kicker">اكتشف</div>
           <h1 className="explore-hero__title e-gradient">{headline}</h1>
           <p className="explore-hero__subtitle">
             {diversified.length} مكان — مرتبة بذكاء حسب الجودة والنشاط

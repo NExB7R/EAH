@@ -115,3 +115,24 @@
   .explore-hero__logo svg,
   .explore-hero__logo img { max-width: 140px; }
 }
+
+/* ═══ Explore Hero 2026 cleanup ═══ */
+.explore-hero {
+  padding-top: 12px !important;
+  padding-bottom: 16px !important;
+}
+.explore-hero__logo { margin-bottom: 4px !important; }
+.explore-hero__title {
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem) !important;
+  margin-bottom: 6px !important;
+}
+.explore-hero__subtitle {
+  font-size: 0.85rem !important;
+  color: #A29DB5 !important;
+  margin-bottom: 0 !important;
+}
+.explore-search-wrap {
+  max-width: 720px;
+  margin: 0 auto 12px !important;
+  padding: 0 20px;
+}

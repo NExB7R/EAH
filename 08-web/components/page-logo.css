@@ -2,14 +2,29 @@
   display: flex;
   justify-content: center;
   padding: 12px 20px 16px;
-  animation: plogoFloat 4s ease-in-out infinite;
+}
+.plogo a {
+  display: inline-flex;
+  text-decoration: none;
+  animation: plogoPulse 2.8s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+.plogo a:hover {
+  animation-play-state: paused;
+  transform: scale(1.05);
 }
 .plogo img {
-  filter: drop-shadow(0 8px 22px rgba(168, 85, 247, 0.35)) !important;
+  filter: drop-shadow(0 8px 22px rgba(168, 85, 247, 0.45)) !important;
 }
-@keyframes plogoFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+@keyframes plogoPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.35));
+  }
+  50% {
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 28px rgba(168, 85, 247, 0.6));
+  }
 }
 @media (max-width: 640px) {
   .plogo { padding: 8px 14px 12px; }

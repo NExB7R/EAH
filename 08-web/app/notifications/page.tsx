@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import { MarkAllReadButton, DeleteNotifButton } from './notif-actions'
+import { MarkAllReadButton, DeleteNotifButton, NotifLink } from './notif-actions'
 import './notifications.css'
 import EahLogo from '@/components/eah-logo'
 import { IcBan, IcBell, IcStar, IcChat, IcTag, IcGift, IcCheckCircle, IcSparkles } from '@/components/eah-icons'
@@ -28,7 +28,13 @@ const TYPE_META: Record<string, { icon: React.ReactNode; label: string; color: s
   system:       { icon: <IcBell />,         label: 'نظام',    color: '#6B6880' },
   ban:          { icon: <IcBan />,          label: 'حظر',      color: '#EF4444' },
   points:       { icon: <IcGift />,         label: 'نقاط',    color: '#FBBF24' },
-  welcome:      { icon: <IcSparkles />,     label: 'ترحيب',   color: '#C084FC' },
+  welcome:      { icon: (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 8l3 3 6-6 6 6 3-3v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8z"/>
+      <path d="M3 19h18"/>
+      <circle cx="12" cy="3" r="0.8" fill="currentColor"/>
+    </svg>
+  ), label: 'ترحيب',   color: '#E8C79A' },
   reveal:       { icon: <IcCheckCircle />,  label: 'كشف رقم', color: '#A855F7' },
   verification: { icon: <IcCheckCircle />,  label: 'توثيق',    color: '#A855F7' },
 }
@@ -101,11 +107,14 @@ export default async function NotificationsPage() {
                   <DeleteNotifButton id={n.id} />
                 </>
               )
-              return n.deep_link ? (
-                <Link key={n.id} href={n.deep_link} className={`nt-item ${unread ? 'nt-item--unread' : ''}`}>
-                  {content}
-                </Link>
-              ) : (
+              if (n.deep_link) {
+                return (
+                  <NotifLink key={n.id} href={n.deep_link} id={n.id} unread={unread}>
+                    {content}
+                  </NotifLink>
+                )
+              }
+              return (
                 <div key={n.id} className={`nt-item ${unread ? 'nt-item--unread' : ''}`}>
                   {content}
                 </div>

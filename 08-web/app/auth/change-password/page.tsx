@@ -49,8 +49,24 @@ export default function ChangePasswordPage() {
     setError('')
     setLoading(true)
     const supabase = createClient()
-    const { error: upErr } = await supabase.auth.updateUser({ password: next, current_password: current })
-    if (upErr) { setLoading(false); setError(upErr.message || 'تعذر تغيير كلمة المرور. تأكد من كلمة المرور الحالية.'); return }
+
+    // 1) اتحقق من الباسورد الحالي
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user?.email) { setLoading(false); setError('الجلسة انتهت — سجّل دخول تاني'); return }
+
+    const { error: signInErr } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: current,
+    })
+    if (signInErr) {
+      setLoading(false)
+      setError('كلمة المرور الحالية غلط')
+      return
+    }
+
+    // 2) غيّر الباسورد
+    const { error: upErr } = await supabase.auth.updateUser({ password: next })
+    if (upErr) { setLoading(false); setError(upErr.message || 'تعذر تغيير كلمة المرور'); return }
     const { error: soErr } = await supabase.auth.signOut({ scope: 'others' })
     setLoading(false)
     if (soErr) { setError('تم التغيير، لكن تعذر تسجيل خروج الأجهزة الأخرى.'); return }

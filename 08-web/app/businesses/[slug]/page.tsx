@@ -23,6 +23,10 @@ import BackToTop from '@/components/back-to-top'
 import BusinessMap from '@/components/business-map'
 import BusinessShare from '@/components/business-share'
 import BusinessOwnerTrial, { WhatsAppOrdersToggle } from '@/components/business-owner-trial'
+import BusinessQuickActions from '@/components/business-quick-actions'
+import BusinessHours from '@/components/business-hours'
+import BusinessGallery from '@/components/business-gallery'
+import BusinessMenu from '@/components/business-menu'
 import { resolveCoords } from '@/lib/map-coords'
 import LockedContent from '@/components/locked-content'
 
@@ -63,6 +67,8 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
   ])
 
   const coords = resolveCoords(business.latitude, business.longitude, business.area)
+  const phoneNum = contacts.find((c) => c.method_type === 'phone')?.value ?? null
+  const waNum = contacts.find((c) => c.method_type === 'whatsapp')?.value ?? phoneNum
 
   return (
     <>
@@ -94,12 +100,38 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
           }}
         />
 
-        {/* ═══ Share Row ═══ */}
+        {/* ═══ Share + Follow Row ═══ */}
         {hasId && (
           <div className="biz-actions-row">
             <BusinessShare slug={business.slug} name={business.name} />
             <BusinessFollowSection slug={slug} businessId={business.businessId} />
           </div>
+        )}
+
+        {/* ═══ Quick Actions Bar ═══ */}
+        {hasId && (
+          <BusinessQuickActions
+            businessId={business.businessId!}
+            businessName={business.name}
+            phone={phoneNum}
+            whatsapp={waNum}
+            slug={business.slug}
+          />
+        )}
+
+        {/* ═══ Gallery ═══ */}
+        {business.gallery && business.gallery.length > 0 && (
+          <BusinessGallery images={business.gallery} name={business.name} />
+        )}
+
+        {/* ═══ Hours ═══ */}
+        {business.workingHours && Object.keys(business.workingHours).length > 0 && (
+          <BusinessHours hours={business.workingHours} />
+        )}
+
+        {/* ═══ Menu ═══ */}
+        {business.menu && business.menu.length > 0 && (
+          <BusinessMenu pages={business.menu} name={business.name} />
         )}
 
         {/* ═══ Owner Controls ═══ */}

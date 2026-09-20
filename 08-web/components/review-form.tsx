@@ -61,7 +61,7 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
           speed: ratings.speed,
           experience: ratings.experience,
           comment: comment.trim(),
-          status: 'pending',
+          status: 'approved',  // الـ trigger هيخليها pending لو فيها flag
         })
         .select('id')
         .single()
