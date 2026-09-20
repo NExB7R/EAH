@@ -70,3 +70,38 @@
 - [ ] ترقية UptimeRobot لخطة مدفوعة → Region Europe فقط
   - السبب: Monitor من أمريكا (2222ms) — مش دقيق للمستخدمين المصريين
   - الأولوية: منخفضة (بس ممكن مع Vercel Pro)
+
+---
+
+## 🆕 طلبات جديدة (2026-09-21)
+
+### 🏪 الفروع (Branches)
+- [ ] إضافة جدول `business_branches`:
+  - `business_id` (النشاط الأصلي)
+  - `name` (اسم الفرع — مثلاً "فرع المعادي")
+  - `area` + `address_text` + `latitude` + `longitude`
+  - `working_hours` (jsonb)
+  - `phone` + `whatsapp` (اختياري)
+  - `is_primary` (الفرع الرئيسي)
+  - `is_active`
+- [ ] UI في `/admin/businesses/[slug]/branches` — إضافة/تعديل/حذف فروع
+- [ ] UI في `/merchant/businesses/[slug]/branches` — للمالك
+- [ ] عرض الفروع في صفحة النشاط
+- [ ] الأوردر يحدد الفرع (لو عندهم أكتر من فرع)
+- [ ] الخريطة تعرض كل الفروع
+
+### 🚫 منع تكرار الأسماء
+- [ ] Unique constraint على `businesses.name` (case-insensitive)
+- [ ] Check في actions.ts قبل insert:
+  - اسم مطابق تماماً → رفض
+  - اسم متشابه (Levenshtein distance ≤ 2) → تحذير
+- [ ] رسالة واضحة: "في نشاط بنفس الاسم أو قريب جداً — جرّب اسم مختلف"
+
+### 📞 أرقام تواصل متعددة
+- [ ] التأكد إن `business_contact_methods` بيسمح بأكتر من رقم phone
+- [ ] UI: زر "+ ضيف رقم تاني"
+- [ ] الأرقام تظهر كلها في صفحة النشاط (لو الـ RLS تسمح)
+
+### 🔧 حاجات صغيرة
+- [ ] `lib/map-coords.ts` mark as server-only ✅ (اتعمل)
+- [ ] `user-avatar.tsx` hydration fix ✅ (اتعمل)
