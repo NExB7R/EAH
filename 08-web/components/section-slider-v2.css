@@ -151,3 +151,53 @@
   .ss2__nav,
   .ss2__see-all { transition: none; }
 }
+
+
+/* ═══ Projects variant — مميز جداً ═══ */
+.ss2--projects {
+  position: relative;
+  padding: 24px 0;
+}
+.ss2--projects::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(232, 199, 154, 0.08), transparent 65%);
+  pointer-events: none;
+  z-index: -1;
+}
+.ss2--projects .ss2__title {
+  font-size: clamp(1.3rem, 2.8vw, 1.75rem) !important;
+  background: linear-gradient(135deg, #F5D9A7 0%, #E8C79A 40%, #C084FC 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+.ss2--projects .ss2__title::before {
+  content: '🌱 ';
+  -webkit-text-fill-color: initial;
+}
+.ss2--projects .ss2__subtitle {
+  color: #E8C79A !important;
+  font-weight: 800;
+}
+.ss2--projects .ss2__see-all {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.15), rgba(232, 199, 154, 0.05));
+  border-color: rgba(232, 199, 154, 0.4);
+  color: #E8C79A;
+}
+.ss2--projects .ss2__see-all:hover {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.25), rgba(232, 199, 154, 0.1));
+  border-color: #F5D9A7;
+  color: #F5D9A7;
+}
+.ss2--projects .ss2__nav {
+  border-color: rgba(232, 199, 154, 0.4);
+  color: #E8C79A;
+}
+.ss2--projects .ss2__nav:hover {
+  background: linear-gradient(135deg, #E8C79A, #D4A76A);
+  color: #1A0F0A;
+}

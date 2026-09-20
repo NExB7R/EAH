@@ -80,8 +80,14 @@ export default async function HomeDynamicV2() {
     .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
     .slice(0, 12)
 
+  // ═══ مشاريع جديدة ═══
+  const projects = [...diversified]
+    .filter((b: any) => b.is_new_project === true)
+    .sort((a: any, b: any) => (a.ageInDays ?? 999) - (b.ageInDays ?? 999))
+    .slice(0, 12)
+
   const newOnes = [...diversified]
-    .filter((b) => (b.ageInDays ?? 999) < 30)
+    .filter((b) => (b.ageInDays ?? 999) < 30 && !(b as any).is_new_project)
     .sort((a, b) => (a.ageInDays ?? 999) - (b.ageInDays ?? 999))
     .slice(0, 12)
 
@@ -89,6 +95,7 @@ export default async function HomeDynamicV2() {
   const hasFeatured = !lowInventory && featured.length > 0
   const hasTrending = !lowInventory && trending.length > 0
   const hasNew = !lowInventory && newOnes.length > 0
+  const hasProjects = projects.length > 0
   const hasUnified = lowInventory && total > 0
 
   const adHref = ad ? getAdHref(ad) : '#'
@@ -133,6 +140,21 @@ export default async function HomeDynamicV2() {
           variant="trending"
         >
           {trending.map((b) => (
+            <ExploreCardV5 key={b.slug} business={b} />
+          ))}
+        </SectionSliderV2>
+      )}
+
+      {/* ═══ المشاريع الجديدة — بين الترند والجديد ═══ */}
+      {hasProjects && (
+        <SectionSliderV2
+          title="مشاريع جديدة — ادعمها"
+          subtitle="فرصتنا مع بعض نبني حاجة من الأول"
+          seeAllHref="/projects"
+          variant="projects"
+          autoAdvanceMs={2200}
+        >
+          {projects.map((b) => (
             <ExploreCardV5 key={b.slug} business={b} />
           ))}
         </SectionSliderV2>

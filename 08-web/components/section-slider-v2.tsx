@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import Link from 'next/link'
 import './section-slider-v2.css'
 
-type Variant = 'featured' | 'trending' | 'new' | 'offers'
+type Variant = 'featured' | 'trending' | 'new' | 'offers' | 'projects'
 
 type Props = {
   title: string
@@ -22,7 +22,7 @@ export default function SectionSliderV2({
   seeAllHref,
   variant,
   children,
-  autoAdvanceMs = 3500,
+  autoAdvanceMs = 2500,
   paused: externalPaused = false,
 }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null)

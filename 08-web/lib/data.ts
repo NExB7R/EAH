@@ -73,6 +73,7 @@ type BusinessViewModel = {
   logo?: string
   trust_score?: number
   trust_tier?: string
+  is_new_project?: boolean
 }
 
 function toDemoShape(
@@ -127,6 +128,7 @@ function toDemoShape(
     cover_image_url: b.cover_image_url ?? undefined,
     trust_score: (b as any).trust_score ?? 50,
     trust_tier: (b as any).trust_tier ?? 'trusted',
+    is_new_project: (b as any).is_new_project ?? false,
   }
 }
 
@@ -286,7 +288,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
     // 1) جرّب الـ slug الأصلي
     let { data, error } = await supabase
       .from('businesses')
-      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,accepts_whatsapp_orders,cover_image_url,trust_score,trust_tier')
+      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,accepts_whatsapp_orders,cover_image_url,trust_score,trust_tier,is_new_project,is_new_project,is_new_project')
       .eq('slug', slug)
       .eq('is_published', true)
       .maybeSingle()
@@ -295,7 +297,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
     if (!data) {
       const all = await supabase
         .from('businesses')
-        .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,accepts_whatsapp_orders,cover_image_url,trust_score,trust_tier')
+        .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,accepts_whatsapp_orders,cover_image_url,trust_score,trust_tier,is_new_project')
         .eq('is_published', true)
         .limit(500)
       const target = normalizeSlug(slug)
@@ -332,6 +334,7 @@ export async function getBusinessBySlug(slug: string): Promise<BusinessViewModel
         gallery,
         menu,
         logo: logoRow?.storage_path,
+        is_new_project: (data as any).is_new_project ?? false,
       }
     }
   } catch {
