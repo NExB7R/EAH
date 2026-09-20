@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
@@ -41,7 +42,13 @@ export default async function ProjectsPage() {
           </p>
         </header>
 
-        <ProjectsClient businesses={projects as any} />
+        <Suspense fallback={
+          <div style={{ padding: 60, textAlign: 'center', color: '#A29DB5', fontFamily: 'Cairo, system-ui' }}>
+            جاري التحميل...
+          </div>
+        }>
+          <ProjectsClient businesses={projects as any} />
+        </Suspense>
       </main>
       <SiteFooter />
     </>
