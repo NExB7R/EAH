@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
-# EAH — إضافة سطر تلقائي في CHANGELOG
 set -e
 cd "$(dirname "$0")"
 
 MSG="$1"
-if [ -z "$MSG" ]; then
-  echo "الاستخدام: ./add-changelog.sh 'feat: something'"
-  exit 1
-fi
+[ -z "$MSG" ] && { echo "Usage: ./add-changelog.sh 'msg'"; exit 1; }
 
 TODAY=$(date -u +"%Y-%m-%d")
 TIME=$(date -u +"%H:%M")
@@ -24,34 +20,41 @@ s = p.read_text(encoding="utf-8")
 today = "$TODAY"
 msg = "$MSG"
 time = "$TIME"
+today_header = f"### {today}"
 
-# لو النهاردة موجود كـ section
-header = f"## {today}"
-if header in s:
-    # ضيف السطر بعد الهيدر مباشرة
-    lines = s.split("\n")
+start_marker = "<!-- AUTO_START -->"
+end_marker = "<!-- AUTO_END -->"
+
+if start_marker not in s or end_marker not in s:
+    print("⚠️ markers مش موجودة")
+    exit(0)
+
+# ابحث على الـ section بتاع النهاردة في الـ AUTO area
+auto_start = s.index(start_marker) + len(start_marker)
+auto_end = s.index(end_marker)
+auto_block = s[auto_start:auto_end]
+
+if today_header in auto_block:
+    # ضيف سطر في الـ section
+    lines = auto_block.split("\n")
     for i, line in enumerate(lines):
-        if line.strip() == header:
-            # ابحث عن آخر سطر بيبدأ بـ - ** تحت الهيدر
+        if line.strip() == today_header:
             insert_at = i + 1
-            # تخطّى سطر فاضي
             while insert_at < len(lines) and lines[insert_at].strip() == "":
+                insert_at += 1
+            while insert_at < len(lines) and lines[insert_at].strip().startswith("- **"):
                 insert_at += 1
             lines.insert(insert_at, f"- **{time}** — {msg}")
             break
-    s = "\n".join(lines)
+    new_block = "\n".join(lines)
 else:
-    # اعمل section جديد بعد المقدمة
-    marker = "> كل تعديل كبير بيتسجّل هنا. صيغة: YYYY-MM-DD — الوصف"
-    if marker in s:
-        idx = s.index(marker) + len(marker)
-        # تخطّى السطور لحد أول ##
-        next_h = s.index("\n## ", idx) if "\n## " in s[idx:] else len(s)
-        new_section = f"\n\n## {today}\n\n- **{time}** — {msg}\n"
-        s = s[:next_h] + new_section + s[next_h:]
+    # اعمل section جديد
+    if auto_block.strip():
+        new_block = auto_block.rstrip() + f"\n\n{today_header}\n\n- **{time}** — {msg}\n"
     else:
-        s += f"\n\n## {today}\n\n- **{time}** — {msg}\n"
+        new_block = f"\n\n{today_header}\n\n- **{time}** — {msg}\n"
 
+s = s[:auto_start] + new_block + s[auto_end:]
 p.write_text(s, encoding="utf-8")
-print(f"✓ CHANGELOG محدّث: {today} {time}")
+print(f"✓ CHANGELOG: {today} {time}")
 PYEOF
