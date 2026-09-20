@@ -11,7 +11,8 @@
 
 - **20:13** — perf: fra1 region + ads JOIN + WebP logo everywhere
 - **20:14** — perf: fra1 region + ads JOIN + WebP logo everywhere
-- **20:31** — perf: unstable_cache for home + fix review-reminder column<!-- AUTO_END -->
+- **20:31** — perf: unstable_cache for home + fix review-reminder column
+- **20:40** — fix: cron review-reminder uses customer_profile_id<!-- AUTO_END -->
 
 ---
 
