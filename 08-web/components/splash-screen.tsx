@@ -30,8 +30,6 @@ export default function SplashScreen() {
           <div className="spl__ring" />
           <div className="spl__ring spl__ring--slow" />
         </div>
-        <h1 className="spl__name">EAH</h1>
-        <p className="spl__tag">اللي نفسك فيه ؟</p>
       </div>
 
       <div className="spl__bar">
