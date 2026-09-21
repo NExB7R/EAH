@@ -30,3 +30,25 @@
 - business-hero.tsx + .css
 - explore-card-v5.tsx + .css
 - data.ts
+
+## 🚀 Deploy Rules (إجباري):
+
+1. قبل أي deploy — tag للحالة الحالية:
+   git tag -a vX.Y.Z-pre-deploy -m "Before deploy"
+   git push origin vX.Y.Z-pre-deploy
+
+2. دائماً Preview الأول — من Vercel Dashboard:
+   - افتح Preview URL لآخر commit
+   - جرّب: home, explore, profile, business page
+   - لو تمام → deploy
+   - لو مشكلة → أصلح
+
+3. بعد الـ deploy — تأكد من Production:
+   - افتح الموقع
+   - جرّب نفس الحاجات
+   - لو مشكلة → rollback بالـ tag
+
+4. ممنوع:
+   - deploy بدون Preview
+   - deploy بدون tag
+   - deploy بدون أمر صريح من Nour
