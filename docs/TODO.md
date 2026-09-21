@@ -201,3 +201,31 @@
   - ✅ اختبار رحلة التاجر
 - **بعدها** نبدأ نظام الشركاء (3 ساعات)
 
+
+## ✅ خلص (2026-09-21)
+
+### Legal Pages
+- [x] LegalPage component موحّد (hero + TOC + sections)
+- [x] Terms / Privacy / Cookies بتصميم 2026
+- [x] أرقام تلقائية للأقسام (01, 02, 03...)
+- [x] Card-based للكوكيز (required/optional)
+
+### Home Sliders
+- [x] 3 سلايدرات بستايل مختلف (مميز/ترند/جديد)
+- [x] الكل بـ personality مختلفة
+- [x] أيقونات الفئات 2026 (gradients + neon)
+
+### VisitorValue Cards
+- [x] 3 كروت فخمة (purple/gold/green)
+- [x] gradient accents + hover animations
+
+### General
+- [x] شيل SmartBot
+- [x] deploy.sh build واحد بس (Vercel Hobby)
+- [x] مرجع main sync يدوي
+
+## 🔜 الجاي
+- [ ] الفروع (Branches) — جدول + UI + عرض
+- [ ] الشركاء (Aladdin's lamp) — نظام كامل
+- [ ] التقارير الشهرية
+- [ ] إضافة 20 نشاط
