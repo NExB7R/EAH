@@ -28,6 +28,7 @@ import BusinessGallery from '@/components/business-gallery'
 import BusinessMenu from '@/components/business-menu'
 import { resolveCoords } from '@/lib/map-coords'
 import LockedContent from '@/components/locked-content'
+import BusinessBranchesSection from '@/components/business-branches-section'
 import SectionSliderV3 from '@/components/section-slider-v3'
 import ExploreCardV5 from '@/components/explore-card-v5'
 import { getPublishedBusinesses } from '@/lib/data'
@@ -83,6 +84,21 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
     .sort((a: any, b: any) => (b.rating ?? 0) - (a.rating ?? 0))
     .slice(0, 12)
 
+  // ═══ الفروع ═══
+  let branches: any[] = []
+  if (hasId) {
+    const { createClient } = await import('@/lib/supabase-server')
+    const sb = await createClient()
+    const { data: br } = await sb
+      .from('business_branches')
+      .select('id,name,area,address_text,latitude,longitude,phone,whatsapp,is_primary')
+      .eq('business_id', business.businessId!)
+      .eq('is_active', true)
+      .order('is_primary', { ascending: false })
+      .order('sort_order')
+    branches = br ?? []
+  }
+
   const coords = resolveCoords(business.latitude, business.longitude, business.area)
   const phoneNum = contacts.find((c) => c.method_type === 'phone')?.value ?? null
   const waNum = contacts.find((c) => c.method_type === 'whatsapp')?.value ?? phoneNum
@@ -128,6 +144,11 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
             whatsapp={waNum}
             slug={business.slug}
           />
+        )}
+
+        {/* ═══ Branches ═══ */}
+        {branches.length > 0 && (
+          <BusinessBranchesSection branches={branches} businessName={business.name} />
         )}
 
         {/* ═══ Gallery ═══ */}

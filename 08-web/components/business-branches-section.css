@@ -1,0 +1,145 @@
+/* ═══ Business Branches Section ═══ */
+.bbs {
+  max-width: 1200px;
+  margin: 32px auto 0;
+  padding: 24px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.4));
+  border: 1px solid rgba(168, 85, 247, 0.18);
+}
+
+.bbs__head { margin-bottom: 18px; }
+.bbs__kicker {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #C084FC;
+  margin-bottom: 4px;
+}
+.bbs__title {
+  margin: 0;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #F4F2FA;
+}
+
+.bbs__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.bbs__card {
+  position: relative;
+  padding: 18px 18px 16px;
+  border-radius: 16px;
+  background: rgba(10, 7, 20, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  transition: all 220ms ease;
+}
+.bbs__card:hover {
+  border-color: rgba(168, 85, 247, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+.bbs__card.is-primary {
+  border-color: rgba(232, 199, 154, 0.5);
+  box-shadow: 0 0 24px rgba(232, 199, 154, 0.1);
+}
+
+.bbs__badge {
+  position: absolute;
+  top: -8px;
+  inset-inline-end: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #F5D9A7, #D4A76A);
+  color: #1A0F0A;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.62rem;
+  font-weight: 900;
+  box-shadow: 0 4px 12px rgba(232, 199, 154, 0.4);
+}
+.bbs__badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #1A0F0A;
+}
+
+.bbs__name {
+  margin: 0 0 10px;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1rem;
+  font-weight: 900;
+  color: #F4F2FA;
+}
+
+.bbs__info { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.bbs__info-item {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  color: #A29DB5;
+  line-height: 1.5;
+}
+.bbs__info-item svg { color: #A855F7; flex-shrink: 0; margin-top: 2px; }
+
+.bbs__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.bbs__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: 9px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  color: #C4B5FD;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 160ms ease;
+}
+.bbs__btn:hover {
+  background: rgba(168, 85, 247, 0.2);
+  border-color: #A855F7;
+  color: #F4F2FA;
+  transform: translateY(-1px);
+}
+.bbs__btn--wa {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #6EE7B7;
+}
+.bbs__btn--wa:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10B981;
+}
+.bbs__btn--map {
+  background: rgba(232, 199, 154, 0.08);
+  border-color: rgba(232, 199, 154, 0.3);
+  color: #E8C79A;
+}
+.bbs__btn--map:hover {
+  background: rgba(232, 199, 154, 0.2);
+  border-color: #E8C79A;
+}
+
+@media (max-width: 640px) {
+  .bbs { padding: 18px; margin: 20px 12px 0; border-radius: 18px; }
+  .bbs__grid { grid-template-columns: 1fr; gap: 10px; }
+  .bbs__title { font-size: 1rem; }
+}
