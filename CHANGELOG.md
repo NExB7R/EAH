@@ -45,6 +45,7 @@
 - **18:35** — debug: remove unstable_cache
 - **18:40** — fix: home hero + slider + voice
 - **18:55** — fix: remove unstable_cache from stats
+- **19:45** — style: 2026 cleanup — soften shadows/gradients, remove supermarket/emoji from UI, add About section + AI contract files
 <!-- AUTO_END -->
 
 ---
