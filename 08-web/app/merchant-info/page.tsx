@@ -9,21 +9,21 @@ export const metadata = {
 }
 
 const FREE_BENEFITS = [
-  { emoji: '', title: 'عرض مجاني بالكامل', body: 'سجّل نشاطك واعرضه لآلاف العملاء بدون أي رسوم.' },
-  { emoji: '', title: 'تحليلات نشاطك', body: 'اعرف كام حد شاف نشاطك، وكام حد كشف رقمك.' },
-  { emoji: '', title: 'رد على التقييمات', body: 'تواصل مع عملائك مباشرة ورد على تعليقاتهم.' },
-  { emoji: '', title: 'QR Code للنشاط', body: 'اطبع QR على الفاتورة أو المحل — العملاء يكتشفوك بسهولة.' },
-  { emoji: '', title: 'عروض وخصومات', body: 'انشر عروضك ووصل لعملاء جداد.' },
-  { emoji: '', title: 'تقييمات موثوقة', body: 'تقييمات حقيقية من عملاء موثقين — بدون تلاعب.' },
+  { title: 'عرض مجاني بالكامل', body: 'سجّل نشاطك واعرضه لآلاف العملاء بدون أي رسوم.' },
+  { title: 'تحليلات نشاطك', body: 'اعرف كام حد شاف نشاطك، وكام حد كشف رقمك.' },
+  { title: 'رد على التقييمات', body: 'تواصل مع عملائك مباشرة ورد على تعليقاتهم.' },
+  { title: 'QR Code للنشاط', body: 'اطبع QR على الفاتورة أو المحل — العملاء يكتشفوك بسهولة.' },
+  { title: 'عروض وخصومات', body: 'انشر عروضك ووصل لعملاء جداد.' },
+  { title: 'تقييمات موثوقة', body: 'تقييمات حقيقية من عملاء موثقين — بدون تلاعب.' },
 ]
 
 const PREMIUM_BENEFITS = [
-  { emoji: '', title: 'ظهور أول في البحث', body: 'نشاطك يظهر في المقدمة على المنصة.' },
-  { emoji: '', title: 'شارة ذهبية', body: 'شارة مميزة بجانب اسم نشاطك تعطي مصداقية أعلى.' },
-  { emoji: '', title: 'معرض عروض مميز', body: 'قسم خاص لعروضك في الصفحة الرئيسية.' },
-  { emoji: '', title: 'إشعارات فورية', body: 'تنبيهات لحظية عن كل تقييم أو تفاعل.' },
-  { emoji: '', title: 'تحليلات متقدمة', body: 'تقارير تفصيلية عن الأداء والاتجاهات.' },
-  { emoji: '', title: 'إعلانات مخصصة', body: 'مساحات إعلانية على الصفحة الرئيسية.' },
+  { title: 'ظهور أول في البحث', body: 'نشاطك يظهر في المقدمة على المنصة.' },
+  { title: 'شارة ذهبية', body: 'شارة مميزة بجانب اسم نشاطك تعطي مصداقية أعلى.' },
+  { title: 'معرض عروض مميز', body: 'قسم خاص لعروضك في الصفحة الرئيسية.' },
+  { title: 'إشعارات فورية', body: 'تنبيهات لحظية عن كل تقييم أو تفاعل.' },
+  { title: 'تحليلات متقدمة', body: 'تقارير تفصيلية عن الأداء والاتجاهات.' },
+  { title: 'إعلانات مخصصة', body: 'مساحات إعلانية على الصفحة الرئيسية.' },
 ]
 
 const FAQ = [
@@ -66,7 +66,6 @@ export default function MerchantInfoPage() {
           <div className="mi__grid">
             {FREE_BENEFITS.map((b) => (
               <div key={b.title} className="mi__card">
-                <span className="mi__emoji">{b.emoji}</span>
                 <h3 className="mi__card-title">{b.title}</h3>
                 <p className="mi__card-body">{b.body}</p>
               </div>
@@ -83,7 +82,6 @@ export default function MerchantInfoPage() {
           <div className="mi__grid">
             {PREMIUM_BENEFITS.map((b) => (
               <div key={b.title} className="mi__card mi__card--premium">
-                <span className="mi__emoji">{b.emoji}</span>
                 <h3 className="mi__card-title">{b.title}</h3>
                 <p className="mi__card-body">{b.body}</p>
               </div>

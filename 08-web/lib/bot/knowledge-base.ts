@@ -37,7 +37,7 @@ export const KB: Intent[] = [
     response:
       'EAH منصة اكتشاف محلية لشبين القناطر والقرى حواليها.\n\n' +
       ' بتساعدك تلاقي:\n' +
-      '• مطاعم\n• صيدليات\n• ماركت\n• توصيل\n\n' +
+      '• مطاعم\n• صيدليات\n• توصيل\n\n' +
       'كل ده مجاناً للعميل — بدون أي رسوم.',
     quickReplies: [
       { label: 'اكتشف الأماكن', action: 'link', value: '/explore' },
@@ -53,12 +53,11 @@ export const KB: Intent[] = [
       'تمام! عايز تدور على إيه؟\n\n' +
       '️ مطاعم — أكل ومشروبات\n' +
       'صيدليات — أدوية ومستلزمات\n' +
-      'ماركت — بقالة ومستلزمات البيت\n' +
+      
       'توصيل — مكاتب التوصيل',
     quickReplies: [
       { label: '️ مطاعم', action: 'link', value: '/explore?type=restaurant' },
       { label: 'صيدليات', action: 'link', value: '/explore?type=pharmacy' },
-      { label: 'ماركت', action: 'link', value: '/explore?type=supermarket' },
       { label: 'توصيل', action: 'link', value: '/explore?type=delivery_office' },
     ],
   },

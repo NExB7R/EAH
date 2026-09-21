@@ -22,14 +22,12 @@ const STATUS_CLASS: Record<string, string> = {
 const CATEGORY_EMOJI: Record<string, string> = {
   restaurant: '',
   pharmacy: '',
-  supermarket: '',
   delivery_office: '',
 }
 
 const CATEGORY_LABEL: Record<string, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
-  supermarket: 'ماركت',
   delivery_office: 'توصيل',
 }
 

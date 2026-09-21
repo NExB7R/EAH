@@ -76,7 +76,6 @@ export default function FeaturesClient({
               const enabled = row?.enabled ?? false
               return (
                 <article key={f.key} className={`bf__item ${enabled ? 'is-on' : ''}`}>
-                  <span className="bf__item-emoji">{f.emoji}</span>
                   <div className="bf__item-body">
                     <strong className="bf__item-label">{f.label}</strong>
                     <span className="bf__item-desc">{f.desc}</span>

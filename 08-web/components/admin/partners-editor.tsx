@@ -25,10 +25,10 @@ export type Partner = {
 }
 
 const ROLE_META = {
-  owner:   { label: 'صاحب النشاط', emoji: '👑', color: 'gold',     desc: 'كل حاجة — مايتشالش' },
-  manager: { label: 'مدير',        emoji: '⭐', color: 'purple',   desc: 'يدير كل حاجة إلا الشركاء' },
-  editor:  { label: 'محرر',        emoji: '📝', color: 'blue',     desc: 'يعدل + يرفع صور' },
-  viewer:  { label: 'مشاهد',       emoji: '👁️', color: 'gray',     desc: 'يشوف التقارير بس' },
+  owner:   { label: 'صاحب النشاط', color: 'gold',     desc: 'كل حاجة — مايتشالش' },
+  manager: { label: 'مدير', color: 'purple',   desc: 'يدير كل حاجة إلا الشركاء' },
+  editor:  { label: 'محرر', color: 'blue',     desc: 'يعدل + يرفع صور' },
+  viewer:  { label: 'مشاهد', color: 'gray',     desc: 'يشوف التقارير بس' },
 } as const
 
 const STATUS_META = {
@@ -235,7 +235,7 @@ export default function PartnersEditor({
                       )}
                     </div>
                     <span className={`pe__role-badge pe__role-badge--${role.color}`}>
-                      {role.emoji} {role.label}
+                      {role.label}
                     </span>
                   </div>
 
@@ -316,7 +316,7 @@ export default function PartnersEditor({
                     </span>
                   </div>
                   <p className="pe__card-role-desc">
-                    {role.emoji} {role.label}
+                    {role.label}
                   </p>
                   <p className="pe__card-meta-item">
                     بعتت {new Date(p.invited_at).toLocaleDateString('ar-EG', { month: 'short', day: 'numeric' })}

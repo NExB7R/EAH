@@ -3,10 +3,10 @@ import { useTransition, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { acceptInvitation, rejectInvitation } from './actions'
 
-const ROLE_META: Record<string, { label: string; emoji: string; desc: string; color: string }> = {
-  manager: { label: 'مدير', emoji: '⭐', desc: 'هتقدر تدير كل حاجة إلا الشركاء', color: 'purple' },
-  editor: { label: 'محرر', emoji: '📝', desc: 'هتقدر تعدل البيانات وترفع صور', color: 'blue' },
-  viewer: { label: 'مشاهد', emoji: '👁️', desc: 'هتشوف التقارير بس', color: 'gray' },
+const ROLE_META: Record<string, { label: string; desc: string; color: string }> = {
+  manager: { label: 'مدير', desc: 'هتقدر تدير كل حاجة إلا الشركاء', color: 'purple' },
+  editor: { label: 'محرر', desc: 'هتقدر تعدل البيانات وترفع صور', color: 'blue' },
+  viewer: { label: 'مشاهد', desc: 'هتشوف التقارير بس', color: 'gray' },
 }
 
 export default function InvitationCard({
@@ -86,7 +86,7 @@ export default function InvitationCard({
           )}
         </div>
         <span className={`ic__role ic__role--${meta.color}`}>
-          {meta.emoji} {meta.label}
+          {meta.label}
         </span>
       </div>
 

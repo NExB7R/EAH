@@ -47,9 +47,9 @@ async function submitApplication(formData: FormData) {
 }
 
 const STEPS = [
-  { n: 1, emoji: '', title: 'قدم الطلب',   desc: 'اسم النشاط + نوعه + نبذة' },
-  { n: 2, emoji: '', title: 'مراجعة سريعة', desc: 'فريق EAH بيراجع خلال 24 ساعة' },
-  { n: 3, emoji: '', title: 'لوحة النشاط', desc: 'تتحول لـ Merchant وتدير مكانك' },
+  { n: 1, title: 'قدم الطلب',   desc: 'اسم النشاط + نوعه + نبذة' },
+  { n: 2, title: 'مراجعة سريعة', desc: 'فريق EAH بيراجع خلال 24 ساعة' },
+  { n: 3, title: 'لوحة النشاط', desc: 'تتحول لـ Merchant وتدير مكانك' },
 ]
 
 export const metadata = {
@@ -94,7 +94,6 @@ export default async function MerchantApplyPage({
           {STEPS.map((s) => (
             <div key={s.n} className="ap-step">
               <span className="ap-step__n">{s.n}</span>
-              <span className="ap-step__emoji">{s.emoji}</span>
               <span className="ap-step__title">{s.title}</span>
               <span className="ap-step__desc">{s.desc}</span>
             </div>

@@ -5,10 +5,10 @@ import './review-form.css'
 import { IcCheckCircle, IcPen } from '@/components/eah-icons'
 
 const RATINGS = [
-  { key: 'taste',      emoji: '', label: 'الطعم' },
-  { key: 'value',      emoji: '', label: 'القيمة' },
-  { key: 'speed',      emoji: '', label: 'السرعة' },
-  { key: 'experience', emoji: '', label: 'التجربة' },
+  { key: 'taste', label: 'الطعم' },
+  { key: 'value', label: 'القيمة' },
+  { key: 'speed', label: 'السرعة' },
+  { key: 'experience', label: 'التجربة' },
 ]
 
 export default function ReviewForm({ businessId, onDone }: { businessId: string; onDone?: () => void }) {
@@ -127,7 +127,7 @@ export default function ReviewForm({ businessId, onDone }: { businessId: string;
       <div className="rvf__ratings">
         {RATINGS.map(r => (
           <div key={r.key} className="rvf__rating">
-            <span className="rvf__rating-label">{r.emoji} {r.label}</span>
+            <span className="rvf__rating-label">{r.label}</span>
             <div className="rvf__stars">
               {[1, 2, 3, 4, 5].map(n => (
                 <button

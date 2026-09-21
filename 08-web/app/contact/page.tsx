@@ -43,7 +43,7 @@ const CHANNELS = [
 ]
 
 const TOPICS = [
-  { emoji: <IcStore />, title: 'أنا صاحب نشاط',      desc: 'مطعم، صيدلية، ماركت، توصيل — سجّل نشاطك', href: '/merchant/apply' },
+  { emoji: <IcStore />, title: 'أنا صاحب نشاط',      desc: 'مطعم، صيدلية، توصيل — سجّل نشاطك', href: '/merchant/apply' },
   { emoji: <IcMegaphone />, title: 'إعلانات',            desc: 'عايز أعلن على المنصة',         href: '/advertise' },
   { emoji: <IcAlert />, title: 'مشكلة تقنية',       desc: 'لقيت حاجة مش شغالة',           href: 'https://wa.me/201012892806' },
   { emoji: <IcBulb />, title: 'اقتراح أو فكرة',    desc: 'عندك فكرة تحسّن EAH',          href: 'https://wa.me/201012892806' },

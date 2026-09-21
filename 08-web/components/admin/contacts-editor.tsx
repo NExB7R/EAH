@@ -11,12 +11,12 @@ export type Contact = {
 }
 
 const TYPE_OPTIONS = [
-  { value: 'phone', label: 'فون', emoji: '' },
-  { value: 'whatsapp', label: 'واتساب', emoji: '' },
-  { value: 'facebook', label: 'فيسبوك', emoji: '' },
-  { value: 'instagram', label: 'إنستجرام', emoji: '' },
-  { value: 'website', label: 'موقع', emoji: '' },
-  { value: 'email', label: 'إيميل', emoji: '' },
+  { value: 'phone', label: 'فون' },
+  { value: 'whatsapp', label: 'واتساب' },
+  { value: 'facebook', label: 'فيسبوك' },
+  { value: 'instagram', label: 'إنستجرام' },
+  { value: 'website', label: 'موقع' },
+  { value: 'email', label: 'إيميل' },
 ]
 
 const PLACEHOLDERS: Record<string, string> = {

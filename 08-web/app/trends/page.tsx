@@ -8,7 +8,6 @@ import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from '@/components/eah
 const TYPE_ICON: Record<string, React.ComponentType> = {
   restaurant: IcRestaurant,
   pharmacy: IcPharmacy,
-  supermarket: IcMarket,
   delivery_office: IcDelivery,
 }
 import { createClient } from '@/lib/supabase-server'
@@ -27,7 +26,6 @@ export const metadata = {
 const TYPE_LABEL: Record<string, string> = {
   restaurant: 'مطاعم',
   pharmacy: 'صيدليات',
-  supermarket: 'ماركت',
   delivery_office: 'توصيل',
 }
 
@@ -58,7 +56,6 @@ export default async function TrendsPage() {
   // Category groups
   const restaurants = diversified.filter((b) => b.type === 'restaurant').slice(0, 5)
   const pharmacies = diversified.filter((b) => b.type === 'pharmacy').slice(0, 5)
-  const markets = diversified.filter((b) => b.type === 'supermarket').slice(0, 5)
   const delivery = diversified.filter((b) => b.type === 'delivery_office').slice(0, 5)
 
   return (
@@ -151,7 +148,6 @@ export default async function TrendsPage() {
           {[
             { label: 'ترند المطاعم', items: restaurants, href: '/explore?type=restaurant' },
             { label: 'ترند الصيدليات', items: pharmacies, href: '/explore?type=pharmacy' },
-            { label: 'ترند الماركت', items: markets, href: '/explore?type=supermarket' },
             { label: 'ترند التوصيل', items: delivery, href: '/explore?type=delivery_office' },
           ]
             .filter((c) => c.items.length > 0)
