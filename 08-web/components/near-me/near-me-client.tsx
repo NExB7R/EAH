@@ -15,7 +15,7 @@ type Biz = {
 
 const TYPE_LABEL: Record<string, string> = {
   restaurant: 'مطعم', pharmacy: 'صيدلية',
-  supermarket: 'ماركت', delivery_office: 'توصيل',
+  delivery_office: 'توصيل',
 }
 
 export default function NearMeClient({ businesses }: { businesses: Biz[] }) {

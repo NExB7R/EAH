@@ -67,7 +67,7 @@ return (
             if (parsed.type) {
               const typeNames: Record<string, string> = {
                 restaurant: 'مطاعم', pharmacy: 'صيدليات',
-                supermarket: 'ماركت', delivery_office: 'توصيل',
+                delivery_office: 'توصيل',
               }
               setHint(`جاري البحث في ${typeNames[parsed.type] ?? ''}...`)
             }

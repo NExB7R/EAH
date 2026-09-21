@@ -62,19 +62,18 @@ export default function ProjectsClient({ businesses }: { businesses: Business[] 
   }, [businesses, type, area, sort])
 
   const TYPE_OPTS = [
-    { value: 'restaurant',      label: 'مطاعم',   emoji: '🍽️' },
-    { value: 'pharmacy',        label: 'صيدليات', emoji: '💊' },
-    { value: 'supermarket',     label: 'ماركت',   emoji: '🛒' },
-    { value: 'delivery_office', label: 'توصيل',   emoji: '📦' },
+    { value: 'restaurant',      label: 'مطاعم' },
+    { value: 'pharmacy',        label: 'صيدليات' },
+    { value: 'delivery_office', label: 'توصيل' },
   ]
 
   const AREA_OPTS = areas.map((a) => ({ value: a, label: a }))
 
   const SORT_OPTS = [
-    { value: 'newest', label: 'الأجدد',         emoji: '✨' },
-    { value: 'oldest', label: 'الأقدم',         emoji: '⏳' },
-    { value: 'rating', label: 'الأعلى تقييم', emoji: '⭐' },
-    { value: 'views',  label: 'الأكثر نشاط',   emoji: '🔥' },
+    { value: 'newest', label: 'الأجدد' },
+    { value: 'oldest', label: 'الأقدم' },
+    { value: 'rating', label: 'الأعلى تقييم' },
+    { value: 'views',  label: 'الأكثر نشاط' },
   ]
 
   if (businesses.length === 0) {

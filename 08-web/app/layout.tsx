@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     template: '%s | EAH',
   },
   description:
-    'EAH منصة اكتشاف محلية تبدأ من شبين القناطر: مطاعم، صيدليات، سوبرماركت، توصيل — اختيارات مظبوطة على مزاجك.',
+    'EAH منصة اكتشاف محلية تبدأ من شبين القناطر: مطاعم، صيدليات، توصيل — اختيارات مظبوطة على مزاجك.',
   metadataBase: new URL(siteUrl),
   applicationName: 'EAH',
   generator: 'Next.js',
@@ -109,7 +109,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'EAH — اللي نفسك فيه ؟',
-    description: 'اكتشف اللي مناسب ليك حوالينك — مطاعم، صيدليات، ماركت، توصيل.',
+    description: 'اكتشف اللي مناسب ليك حوالينك — مطاعم، صيدليات، توصيل.',
     type: 'website',
     locale: 'ar_EG',
     siteName: 'EAH',

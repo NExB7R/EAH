@@ -35,25 +35,22 @@ type Business = {
   coverImageUrl?: string
 }
 
-const TYPE_ICON: Record<BusinessType, () => React.ReactElement> = {
+const TYPE_ICON: Partial<Record<BusinessType, () => React.ReactElement>> = {
   restaurant: IcRestaurant,
   pharmacy: IcPharmacy,
   delivery_office: IcDelivery,
-  supermarket: IcMarket,
 }
 
-const TYPE_LABEL: Record<BusinessType, string> = {
+const TYPE_LABEL: Partial<Record<BusinessType, string>> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
   delivery_office: 'توصيل',
-  supermarket: 'ماركت',
 }
 
-const TYPE_HUE: Record<BusinessType, string> = {
+const TYPE_HUE: Partial<Record<BusinessType, string>> = {
   restaurant: '#FF7A3D',
   pharmacy: '#C084FC',
   delivery_office: '#E8C79A',
-  supermarket: '',
 }
 
 export default function ExploreCard({ business, index }: { business: Business; size?: string; index?: number }) {
@@ -86,7 +83,7 @@ export default function ExploreCard({ business, index }: { business: Business; s
           />
         ) : (
           <div className="ecard__cover-fallback">
-            <span className="ecard__cover-icon">{(() => { const I = TYPE_ICON[business.type]; return <I /> })()}</span>
+            <span className="ecard__cover-icon">{(() => { const I = TYPE_ICON[business.type] ?? TYPE_ICON.restaurant!; return <I /> })()}</span>
           </div>
         )}
         <div className="ecard__cover-overlay" />
@@ -141,7 +138,7 @@ export default function ExploreCard({ business, index }: { business: Business; s
       <div className="ecard__body">
         <div className="ecard__type-row">
           <span className="ecard__type e-badge e-badge--accent">
-            {(() => { const I = TYPE_ICON[business.type]; return <I /> })()} {TYPE_LABEL[business.type]}
+            {(() => { const I = TYPE_ICON[business.type] ?? TYPE_ICON.restaurant!; return <I /> })()} {TYPE_LABEL[business.type] ?? ''}
           </span>
           {(business.avg_rating ?? business.rating ?? 0) > 0 && (
             <span className="ecard__score e-badge e-badge--gold"><IcStar /> {(business.avg_rating ?? business.rating ?? 0).toFixed(1)}</span>

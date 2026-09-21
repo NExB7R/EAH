@@ -7,14 +7,13 @@ import './onboarding-overlay.css'
 type Step = 0 | 1 | 2 | 3
 
 const INTERESTS = [
-  { key: 'restaurant', emoji: '', label: 'مطاعم' },
-  { key: 'pharmacy', emoji: '', label: 'صيدليات' },
-  { key: 'delivery', emoji: '', label: 'توصيل' },
-  { key: 'supermarket', emoji: '', label: 'ماركت' },
-  { key: 'offers', emoji: '', label: 'عروض' },
-  { key: 'new', emoji: '', label: 'جديد' },
-  { key: 'trends', emoji: '', label: 'ترند' },
-  { key: 'coffee', emoji: '', label: 'كافيهات' },
+  { key: 'restaurant', label: 'مطاعم' },
+  { key: 'pharmacy', label: 'صيدليات' },
+  { key: 'delivery', label: 'توصيل' },
+  { key: 'offers', label: 'عروض' },
+  { key: 'new', label: 'جديد' },
+  { key: 'trends', label: 'ترند' },
+  { key: 'coffee', label: 'كافيهات' },
 ]
 
 const AREAS = [
@@ -29,9 +28,9 @@ const AREAS = [
 ]
 
 const BUDGETS = [
-  { key: 'low', emoji: '', label: 'اقتصادي', hint: 'أقل من 50ج' },
-  { key: 'mid', emoji: '', label: 'متوسط', hint: '50 - 150ج' },
-  { key: 'high', emoji: '', label: 'مميز', hint: 'أكتر من 150ج' },
+  { key: 'low', label: 'اقتصادي', hint: 'أقل من 50ج' },
+  { key: 'mid', label: 'متوسط', hint: '50 - 150ج' },
+  { key: 'high', label: 'مميز', hint: 'أكتر من 150ج' },
 ]
 
 export default function OnboardingOverlay() {
@@ -145,7 +144,6 @@ export default function OnboardingOverlay() {
                   className={`onb__interest ${selected.includes(i.key) ? 'is-selected' : ''}`}
                   onClick={() => toggleInterest(i.key)}
                 >
-                  <span className="onb__interest-emoji">{i.emoji}</span>
                   <span>{i.label}</span>
                 </button>
               ))}
@@ -186,7 +184,6 @@ export default function OnboardingOverlay() {
                   className={`onb__budget ${budget === b.key ? 'is-selected' : ''}`}
                   onClick={() => setBudget(b.key)}
                 >
-                  <span className="onb__budget-emoji">{b.emoji}</span>
                   <strong>{b.label}</strong>
                   <small>{b.hint}</small>
                 </button>

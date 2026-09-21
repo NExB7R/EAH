@@ -23,7 +23,7 @@ type Question = {
   id: string
   title: string
   subtitle?: string
-  options: { key: string; emoji: string; label: string; hint?: string }[]
+  options: { key: string; label: string; hint?: string }[]
   multi?: boolean
 }
 
@@ -33,10 +33,9 @@ const QUESTIONS: Question[] = [
     title: 'نفسك في ايه؟',
     subtitle: 'اختار من اللي تحت، وإحنا نظبطلك',
     options: [
-      { key: 'food', emoji: '', label: 'آكل حاجة', hint: 'مطاعم وأكل بيتي' },
-      { key: 'pharmacy', emoji: '', label: 'دو أو صيدلية', hint: 'أدوية ومستلزمات طبية' },
-      { key: 'shop', emoji: '', label: 'اشترى حاجة من الماركت', hint: 'بقالة ومستلزمات' },
-      { key: 'delivery', emoji: '', label: 'أوصّل حاجة', hint: 'توصيل وطلبات' },
+      { key: 'food', label: 'آكل حاجة', hint: 'مطاعم وأكل بيتي' },
+      { key: 'pharmacy', label: 'دو أو صيدلية', hint: 'أدوية ومستلزمات طبية' },
+      { key: 'delivery', label: 'أوصّل حاجة', hint: 'توصيل وطلبات' },
     ],
   },
   {
@@ -44,10 +43,10 @@ const QUESTIONS: Question[] = [
     title: 'الميزانية؟',
     subtitle: 'قولنا نطاق السعر المناسب',
     options: [
-      { key: 'low', emoji: '', label: 'اقتصادي', hint: 'أقل من 50 ج' },
-      { key: 'mid', emoji: '', label: 'متوسط', hint: '50 - 150 ج' },
-      { key: 'high', emoji: '', label: 'مميز', hint: 'أكتر من 150 ج' },
-      { key: 'any', emoji: '', label: 'مش مهم', hint: 'وريني كل حاجة' },
+      { key: 'low', label: 'اقتصادي', hint: 'أقل من 50 ج' },
+      { key: 'mid', label: 'متوسط', hint: '50 - 150 ج' },
+      { key: 'high', label: 'مميز', hint: 'أكتر من 150 ج' },
+      { key: 'any', label: 'مش مهم', hint: 'وريني كل حاجة' },
     ],
   },
   {
@@ -55,10 +54,10 @@ const QUESTIONS: Question[] = [
     title: 'مزاجك إيه؟',
     subtitle: 'اختار اللي يشبه حالتك',
     options: [
-      { key: 'new', emoji: '', label: 'حاجة جديدة', hint: 'أماكن لسه مكتشفة' },
-      { key: 'trending', emoji: '', label: 'الترند', hint: 'اللي الناس عليه' },
-      { key: 'offers', emoji: '', label: 'عروض حلوة', hint: 'وفّر وأنا بطلب' },
-      { key: 'nearby', emoji: '', label: 'قريب مني', hint: 'مش عايز أتحرك كتير' },
+      { key: 'new', label: 'حاجة جديدة', hint: 'أماكن لسه مكتشفة' },
+      { key: 'trending', label: 'الترند', hint: 'اللي الناس عليه' },
+      { key: 'offers', label: 'عروض حلوة', hint: 'وفّر وأنا بطلب' },
+      { key: 'nearby', label: 'قريب مني', hint: 'مش عايز أتحرك كتير' },
     ],
   },
   {
@@ -66,9 +65,9 @@ const QUESTIONS: Question[] = [
     title: 'مستعجل؟',
     subtitle: 'آخر سؤال ونبدأ',
     options: [
-      { key: 'now', emoji: '', label: 'على طول', hint: 'لازم دلوقتي' },
-      { key: 'soon', emoji: '', label: 'بعد شوية', hint: 'خلال ساعة' },
-      { key: 'later', emoji: '', label: 'بعدين', hint: 'بسجلها للمستقبل' },
+      { key: 'now', label: 'على طول', hint: 'لازم دلوقتي' },
+      { key: 'soon', label: 'بعد شوية', hint: 'خلال ساعة' },
+      { key: 'later', label: 'بعدين', hint: 'بسجلها للمستقبل' },
     ],
   },
 ]
@@ -112,7 +111,6 @@ export default function RecommendClient({ businesses }: { businesses: Business[]
     const intent = answers.intent
     if (intent === 'pharmacy') list = list.filter((b) => b.type === 'pharmacy')
     else if (intent === 'delivery') list = list.filter((b) => b.type === 'delivery_office')
-    else if (intent === 'shop') list = list.filter((b) => b.type === 'supermarket')
     else if (intent === 'food') list = list.filter((b) => b.type === 'restaurant')
 
     // mood boosts
@@ -167,7 +165,7 @@ export default function RecommendClient({ businesses }: { businesses: Business[]
                   className={`rc-option ${answers[currentQ.id] === o.key ? 'is-selected' : ''}`}
                   onClick={() => pick(o.key)}
                 >
-                  <span className="rc-option__emoji">{o.emoji}</span>
+                  <span className="rc-option__emoji"></span>
                   <div className="rc-option__text">
                     <span className="rc-option__label">{o.label}</span>
                     {o.hint && <span className="rc-option__hint">{o.hint}</span>}

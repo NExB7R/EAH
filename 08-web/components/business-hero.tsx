@@ -7,18 +7,16 @@ import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from './eah-icons'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 
-const TYPE_ICON: Record<BusinessType, React.ComponentType> = {
+const TYPE_ICON: Partial<Record<BusinessType, React.ComponentType>> = {
   restaurant: IcRestaurant,
   pharmacy: IcPharmacy,
   delivery_office: IcDelivery,
-  supermarket: IcMarket,
 }
 
-const TYPE_LABEL: Record<BusinessType, string> = {
+const TYPE_LABEL: Partial<Record<BusinessType, string>> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
   delivery_office: 'توصيل',
-  supermarket: 'ماركت',
 }
 
 type Stats = {
@@ -66,8 +64,8 @@ export default function BusinessHero({
   }, [slides.length])
 
   const currentSlide = slides[slideIdx] ?? null
-  const Icon = TYPE_ICON[business.type]
-  const typeLabel = TYPE_LABEL[business.type]
+  const Icon = TYPE_ICON[business.type] ?? TYPE_ICON.restaurant!
+  const typeLabel = TYPE_LABEL[business.type] ?? ''
 
   return (
     <section className="bh2">

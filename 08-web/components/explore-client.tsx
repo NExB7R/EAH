@@ -181,10 +181,9 @@ export default function ExploreClient({
 
   // ─── Options for filters ───
   const TYPE_OPTS = [
-    { value: 'restaurant',      label: 'مطاعم',      emoji: '🍽️', count: typeCounts.restaurant },
-    { value: 'pharmacy',        label: 'صيدليات',    emoji: '💊', count: typeCounts.pharmacy },
-    { value: 'supermarket',     label: 'ماركت',      emoji: '🛒', count: typeCounts.supermarket },
-    { value: 'delivery_office', label: 'توصيل',      emoji: '📦', count: typeCounts.delivery_office },
+    { value: 'restaurant',      label: 'مطاعم', count: typeCounts.restaurant },
+    { value: 'pharmacy',        label: 'صيدليات', count: typeCounts.pharmacy },
+    { value: 'delivery_office', label: 'توصيل', count: typeCounts.delivery_office },
   ]
 
   const AREA_OPTS = areas.map((a) => ({ value: a, label: a, count: areaCounts[a] }))
@@ -196,10 +195,10 @@ export default function ExploreClient({
   }))
 
   const SORT_OPTS = [
-    { value: 'rating', label: 'الأعلى تقييم', emoji: '⭐' },
-    { value: 'views',  label: 'الأكثر نشاط',   emoji: '🔥' },
-    { value: 'offers', label: 'فيه عروض',      emoji: '🎁' },
-    { value: 'new',    label: 'الأحدث',         emoji: '✨' },
+    { value: 'rating', label: 'الأعلى تقييم' },
+    { value: 'views',  label: 'الأكثر نشاط' },
+    { value: 'offers', label: 'فيه عروض' },
+    { value: 'new',    label: 'الأحدث' },
   ]
 
   return (

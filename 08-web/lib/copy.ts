@@ -51,7 +51,7 @@ export const COPY = {
   },
   search: {
     placeholder: 'دوّر على إيه النهاردة؟',
-    placeholderFood: 'مطعم؟ صيدلية؟ ماركت؟ دوّر...',
+    placeholderFood: 'مطعم؟ صيدلية؟ دوّر...',
     noResults: {
       title: 'معلش، مفيش حاجة هنا',
       body: 'لفينا وما لقيناش — جرّب كلمة تانية',

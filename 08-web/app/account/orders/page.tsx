@@ -77,7 +77,7 @@ export default async function AccountOrdersPage() {
             <span className="ao__empty-emoji"></span>
             <h2 className="ao__empty-title">مفيش طلبات لسه</h2>
             <p className="ao__empty-text">
-              اطلب من أي مطعم أو صيدلية أو ماركت في المنصة — كل طلباتك هتظهر هنا
+              اطلب من أي مطعم أو صيدلية في المنصة — كل طلباتك هتظهر هنا
             </p>
             <Link href="/explore" className="ao__empty-btn">
               اكتشف الأماكن

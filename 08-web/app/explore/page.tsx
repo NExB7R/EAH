@@ -17,7 +17,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata = {
   title: 'اكتشف',
-  description: 'اكتشف كل الأماكن في شبين القناطر — مطاعم، صيدليات، ماركت، توصيل',
+  description: 'اكتشف كل الأماكن في شبين القناطر — مطاعم، صيدليات، توصيل',
 }
 
 const VALID_TYPES = ['restaurant', 'pharmacy', 'delivery_office']

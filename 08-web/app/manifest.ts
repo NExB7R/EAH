@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'EAH — اللي نفسك فيه ؟',
     short_name: 'EAH',
     description:
-      'اكتشف المطاعم والصيدليات والماركت والتوصيل في شبين القناطر والقرى حواليها.',
+      'اكتشف المطاعم والصيدليات والتوصيل في شبين القناطر والقرى حواليها.',
     start_url: '/',
     scope: '/',
     display: 'standalone',
