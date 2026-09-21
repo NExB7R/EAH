@@ -639,3 +639,6 @@ nav.bc .bc__sep {
   .biz-reviews-aside__sticky { position: static; }
   .biz-reviews-section { padding: 0 16px; }
 }
+
+/* إخفاء الصف القديم */
+.biz-actions-row { display: none !important; }

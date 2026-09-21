@@ -102,14 +102,6 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
           trustTier={(business as any).trust_tier}
         />
 
-        {/* ═══ Share + Follow Row ═══ */}
-        {hasId && (
-          <div className="biz-actions-row">
-            <BusinessShare slug={business.slug} name={business.name} />
-            <BusinessFollowSection slug={slug} businessId={business.businessId} />
-          </div>
-        )}
-
         {/* ═══ Quick Actions Bar ═══ */}
         {hasId && (
           <BusinessQuickActions

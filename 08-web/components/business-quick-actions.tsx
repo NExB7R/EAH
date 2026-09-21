@@ -83,39 +83,29 @@ export default function BusinessQuickActions({ businessId, businessName, phone, 
   return (
     <div className="bqa" role="toolbar">
       <div className="bqa__inner">
-        {telHref ? (
-          <a href={telHref} className="bqa__btn bqa__btn--call">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.4 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.6 2z"/>
-            </svg>
-            <span>اتصال</span>
-          </a>
-        ) : (
-          <button type="button" className="bqa__btn bqa__btn--call" onClick={() => window.location.href = `/auth?next=/businesses/${slug}`}>
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-            <span>اتصال</span>
-          </button>
-        )}
+        <a
+          href={telHref ?? `/auth?next=/businesses/${slug}`}
+          className="bqa__btn bqa__btn--call"
+          {...(telHref ? {} : { onClick: (e: React.MouseEvent) => { e.preventDefault(); window.location.href = `/auth?next=/businesses/${slug}` } })}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.4 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.6 2z"/>
+          </svg>
+          <span>{telHref ? 'اتصال' : 'سجّل للاتصال'}</span>
+        </a>
 
-        {waHref ? (
-          <a href={waHref} target="_blank" rel="noreferrer" className="bqa__btn bqa__btn--wa">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-            </svg>
-            <span>واتساب</span>
-          </a>
-        ) : (
-          <button type="button" className="bqa__btn bqa__btn--wa" onClick={() => window.location.href = `/auth?next=/businesses/${slug}`}>
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-            <span>واتساب</span>
-          </button>
-        )}
+        <a
+          href={waHref ?? `/auth?next=/businesses/${slug}`}
+          target={waHref ? '_blank' : undefined}
+          rel="noreferrer"
+          className="bqa__btn bqa__btn--wa"
+          onClick={waHref ? undefined : (e: React.MouseEvent) => { e.preventDefault(); window.location.href = `/auth?next=/businesses/${slug}` }}
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>
+          <span>{waHref ? 'واتساب' : 'سجّل للواتساب'}</span>
+        </a>
 
         <button type="button" className="bqa__btn" onClick={share}>
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">

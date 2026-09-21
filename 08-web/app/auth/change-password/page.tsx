@@ -48,29 +48,23 @@ export default function ChangePasswordPage() {
     if (!canSubmit) return
     setError('')
     setLoading(true)
-    const supabase = createClient()
-
-    // 1) اتحقق من الباسورد الحالي
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user?.email) { setLoading(false); setError('الجلسة انتهت — سجّل دخول تاني'); return }
-
-    const { error: signInErr } = await supabase.auth.signInWithPassword({
-      email: user.email,
-      password: current,
-    })
-    if (signInErr) {
+    try {
+      const res = await fetch('/api/auth/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ current_password: current, new_password: next }),
+      })
+      const data = await res.json()
       setLoading(false)
-      setError('كلمة المرور الحالية غلط')
-      return
+      if (!res.ok || !data.ok) {
+        setError(data.error || 'حصل خطأ — حاول تاني')
+        return
+      }
+      setSuccess(true); setCurrent(''); setNext(''); setConfirm('')
+    } catch (e) {
+      setLoading(false)
+      setError('حصل خطأ في الاتصال')
     }
-
-    // 2) غيّر الباسورد
-    const { error: upErr } = await supabase.auth.updateUser({ password: next })
-    if (upErr) { setLoading(false); setError(upErr.message || 'تعذر تغيير كلمة المرور'); return }
-    const { error: soErr } = await supabase.auth.signOut({ scope: 'others' })
-    setLoading(false)
-    if (soErr) { setError('تم التغيير، لكن تعذر تسجيل خروج الأجهزة الأخرى.'); return }
-    setSuccess(true); setCurrent(''); setNext(''); setConfirm('')
   }
 
   if (success) return (

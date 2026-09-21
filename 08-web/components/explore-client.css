@@ -181,3 +181,22 @@
 @media (max-width: 480px) {
   .exc-chip { padding: 8px 12px; font-size: 0.76rem; }
 }
+
+/* ═══ إصلاح z-index للفلاتر — لازم يبانوا فوق النتائج ═══ */
+.exc-bar {
+  position: relative !important;
+  z-index: 50 !important;
+}
+.exc-bar__scroll {
+  position: relative;
+  z-index: 51;
+}
+.exc-grid,
+.exc-count,
+.exc-empty {
+  position: relative;
+  z-index: 1;
+}
+.fs__menu {
+  z-index: 1000 !important;
+}
