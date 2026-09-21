@@ -5,7 +5,7 @@ import './eah-ui.css'
 import './design-system.css'
 import '../components/eah-admin.css'
 import type { Metadata, Viewport } from 'next'
-import { Cairo, Cairo_Play, Dancing_Script } from 'next/font/google'
+import { Cairo, Dancing_Script } from 'next/font/google'
 import PageViewTracker from '@/components/page-view-tracker'
 import { ToastProvider } from '@/components/ui/toast'
 import SplashScreen from '@/components/splash-screen'
@@ -44,7 +44,7 @@ const signature = Dancing_Script({
   preload: false,
 })
 
-const cairoPlay = Cairo_Play({
+const cairoPlay = Cairo({
   subsets: ['arabic'],
   weight: ['800', '900'],
   display: 'swap',
