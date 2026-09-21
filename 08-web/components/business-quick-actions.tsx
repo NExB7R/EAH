@@ -77,7 +77,9 @@ export default function BusinessQuickActions({ businessId, businessName, phone, 
     } catch {}
   }
 
-  const waHref = whatsapp ? `https://wa.me/${cleanPhone(whatsapp)}?text=${encodeURIComponent(`مرحباً، تواصلت معاكم من EAH — ${businessName}`)}` : null
+  const waHref = whatsapp
+    ? `https://wa.me/${cleanPhone(whatsapp)}?text=${encodeURIComponent(`مرحباً، تواصلت معاكم من EAH — ${businessName}`)}`
+    : null
   const telHref = phone ? `tel:+${cleanPhone(phone)}` : null
 
   return (

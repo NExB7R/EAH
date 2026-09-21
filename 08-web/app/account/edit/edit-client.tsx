@@ -27,6 +27,8 @@ export default function EditClient({ userId, initial }: { userId: string; initia
   const [gender, setGender] = useState<Gender>(initial.gender)
   const [avatarKey, setAvatarKey] = useState<string | null>(initial.avatarKey)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(initial.avatarUrl)
+  const [avatarUrlInput, setAvatarUrlInput] = useState('')
+  const [showUrlInput, setShowUrlInput] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [pending, start] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -52,6 +54,19 @@ export default function EditClient({ userId, initial }: { userId: string; initia
     } finally {
       setUploading(false)
     }
+  }
+
+  function applyAvatarUrl() {
+    const url = avatarUrlInput.trim()
+    if (!url) return
+    if (!/^https?:\/\//.test(url)) {
+      setError('الرابط لازم يبدأ بـ http:// أو https://')
+      return
+    }
+    setAvatarUrl(url)
+    setAvatarKey(null)
+    setAvatarUrlInput('')
+    setShowUrlInput(false)
   }
 
   function save() {
@@ -132,6 +147,13 @@ export default function EditClient({ userId, initial }: { userId: string; initia
                 <input type="file" accept="image/*" hidden onChange={handleUpload} disabled={uploading} />
                 {uploading ? 'جاري الرفع...' : 'ارفع صورة'}
               </label>
+              <button
+                type="button"
+                className="edit__url-btn"
+                onClick={() => setShowUrlInput((v) => !v)}
+              >
+                {showUrlInput ? 'إلغاء الرابط' : 'من رابط URL'}
+              </button>
               {avatarUrl && (
                 <button
                   type="button"
@@ -143,6 +165,23 @@ export default function EditClient({ userId, initial }: { userId: string; initia
               )}
             </div>
           </div>
+          {showUrlInput && (
+            <div className="edit__url-row">
+              <input
+                type="url"
+                className="edit__input"
+                placeholder="https://example.com/image.jpg"
+                dir="ltr"
+                value={avatarUrlInput}
+                onChange={(e) => setAvatarUrlInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applyAvatarUrl() } }}
+              />
+              <button type="button" className="edit__url-apply" onClick={applyAvatarUrl}>
+                طبق
+              </button>
+            </div>
+          )}
+
           <div className="edit__avatar-presets">
             {AVATAR_KEYS.map((k) => {
               const a = getAvatar(k)
