@@ -28,6 +28,7 @@
 - **00:14** — feat: design system 2026 live
 - **00:25** — redesign: about compact 7 sections + design system 2026 live
 - **00:29** — fix: business reviews owner-only reply + compact empty state
+- **00:32** — feat: unified quick actions + share modal live
 <!-- AUTO_END -->
 
 ---
