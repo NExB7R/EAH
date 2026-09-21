@@ -1,9 +1,5 @@
 import Link from 'next/link'
-import FloatingCapsuleHeader from '@/components/floating-capsule'
-import PageLogo from '@/components/page-logo'
-import SiteFooter from '@/components/site-footer'
-import './legal.css'
-import { IcCalendar } from '@/components/eah-icons'
+import LegalPage from '@/components/legal-page'
 
 export const metadata = {
   title: 'ملفات تعريف الارتباط',
@@ -14,19 +10,16 @@ const LAST_UPDATE = '2026-09-15'
 
 const TYPES = [
   {
-    emoji: '',
     title: 'ضرورية',
     body: 'لازمة لتشغيل المنصة: تسجيل الدخول، الأمان، الجلسة. مش ممكن تتعطل.',
     required: true,
   },
   {
-    emoji: '',
     title: 'وظيفية',
     body: 'بتحفظ تفضيلاتك: الوضع الليلي، الفلاتر، آخر بحث. تتحسن التجربة.',
     required: false,
   },
   {
-    emoji: '',
     title: 'تحليلية',
     body: 'بتساعدنا نفهم إزاي المنصة بتُستخدم. بدون أي بيانات شخصية.',
     required: false,
@@ -34,23 +27,21 @@ const TYPES = [
 ]
 
 export default function CookiesPage() {
-  return (
-    <>
-      <FloatingCapsuleHeader />
-      <PageLogo />
-      <main className="lg">
-        <section className="lg__hero">
-          <span className="lg__kicker">سياسة الكوكيز</span>
-          <h1 className="lg__title">ملفات تعريف الارتباط</h1>
-          <p style={{ margin: 0, fontSize: '.9rem', color: '#A29DB5', lineHeight: 1.7 }}>
-            إزاي بنستخدم الـ كوكيز وإيه حقك في التحكم.
-          </p>
-          <div className="lg__meta">
-            <span className="lg__meta-item"><IcCalendar /> آخر تحديث: {LAST_UPDATE}</span>
-          </div>
-        </section>
+  const TOC = [
+    { id: 'what', label: 'إيه هي ملفات الارتباط؟' },
+    { id: 'types', label: 'أنواع الكوكيز' },
+    { id: 'control', label: 'إزاي تتحكم؟' },
+  ]
 
-        <div className="lg__body">
+  return (
+    <LegalPage
+      title="ملفات تعريف الارتباط"
+      kicker="الكوكيز"
+      sub="إزاي بنستخدم الـ كوكيز وإيه حقك في التحكم."
+      lastUpdate={LAST_UPDATE}
+      readTime="3 دقائق"
+      toc={TOC}
+    >
           <section className="lg__section">
             <h2 className="lg__section-title">إيه هي ملفات الارتباط؟</h2>
             <div className="lg__section-body">
@@ -64,44 +55,17 @@ export default function CookiesPage() {
           <section className="lg__section">
             <h2 className="lg__section-title">الأنواع اللي بنستخدمها</h2>
             <div className="lg__section-body">
-              <div style={{ display: 'grid', gap: 12, marginTop: 12 }}>
-                {TYPES.map((t) => (
-                  <div
-                    key={t.title}
-                    style={{
-                      padding: '18px 20px',
-                      borderRadius: 14,
-                      background: 'rgba(168, 85, 247, 0.04)',
-                      border: '1px solid rgba(168, 85, 247, 0.14)',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                      <span style={{ fontSize: '1.5rem' }}>{t.emoji}</span>
-                      <strong style={{ fontSize: '.95rem', color: '#F4F2FA' }}>
-                        {t.title}
-                      </strong>
-                      <span
-                        style={{
-                          fontSize: '.68rem',
-                          padding: '2px 8px',
-                          borderRadius: 999,
-                          background: t.required
-                            ? 'rgba(239, 68, 68, 0.15)'
-                            : 'rgba(192, 132, 252, 0.15)',
-                          color: t.required ? '#FCA5A5' : '#C4B5FD',
-                          fontWeight: 800,
-                          marginInlineStart: 'auto',
-                        }}
-                      >
-                        {t.required ? 'إلزامي' : 'اختياري'}
-                      </span>
-                    </div>
-                    <p style={{ margin: 0, fontSize: '.85rem', lineHeight: 1.7, color: '#C9C2DB' }}>
-                      {t.body}
-                    </p>
+              {TYPES.map((t) => (
+                <div key={t.title} className="lp__type-card">
+                  <div className="lp__type-head">
+                    <h3 className="lp__type-title">{t.title}</h3>
+                    <span className={`lp__type-badge lp__type-badge--${t.required ? 'required' : 'optional'}`}>
+                      {t.required ? 'إلزامي' : 'اختياري'}
+                    </span>
                   </div>
-                ))}
-              </div>
+                  <p className="lp__type-body">{t.body}</p>
+                </div>
+              ))}
             </div>
           </section>
 
@@ -142,11 +106,6 @@ export default function CookiesPage() {
               </div>
             </div>
           </section>
-        </div>
-
-        <Link href="/" className="lg__back">← الرئيسية</Link>
-      </main>
-      <SiteFooter />
-    </>
+    </LegalPage>
   )
 }

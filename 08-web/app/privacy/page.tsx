@@ -1,9 +1,5 @@
 import Link from 'next/link'
-import FloatingCapsuleHeader from '@/components/floating-capsule'
-import PageLogo from '@/components/page-logo'
-import SiteFooter from '@/components/site-footer'
-import './legal.css'
-import { IcCalendar } from '@/components/eah-icons'
+import LegalPage from '@/components/legal-page'
 
 export const metadata = {
   title: 'سياسة الخصوصية',
@@ -29,34 +25,14 @@ const TOC = [
 
 export default function PrivacyPage() {
   return (
-    <>
-      <FloatingCapsuleHeader />
-      <PageLogo />
-      <main className="lg">
-        <section className="lg__hero">
-          <span className="lg__kicker e-badge e-badge--accent">سياسة الخصوصية</span>
-          <h1 className="lg__title e-gradient">سياسة الخصوصية</h1>
-          <p style={{ margin: 0, fontSize: '.9rem', color: '#A29DB5', lineHeight: 1.7 }}>
-            التزامنا بحماية بياناتك — بشكل واضح ومباشر.
-          </p>
-          <div className="lg__meta">
-            <span className="lg__meta-item"><IcCalendar /> آخر تحديث: {LAST_UPDATE}</span>
-            <span className="lg__meta-item">⏱ قراءة: {READ_TIME}</span>
-          </div>
-        </section>
-
-        <nav className="lg__toc">
-          <h2 className="lg__toc-title">محتويات الصفحة</h2>
-          <ul className="lg__toc-list">
-            {TOC.map((t) => (
-              <li key={t.id}>
-                <a href={`#${t.id}`}>· {t.label}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="lg__body">
+    <LegalPage
+      title="سياسة الخصوصية"
+      kicker="الخصوصية"
+      sub="التزامنا بحماية بياناتك — بشكل واضح ومباشر."
+      lastUpdate={LAST_UPDATE}
+      readTime={READ_TIME}
+      toc={TOC}
+    >
           <section className="lg__section" id="intro">
             <h2 className="lg__section-title">مقدمة</h2>
             <div className="lg__section-body">
@@ -215,11 +191,6 @@ export default function PrivacyPage() {
               </div>
             </div>
           </section>
-        </div>
-
-        <Link href="/" className="lg__back">← الرئيسية</Link>
-      </main>
-      <SiteFooter />
-    </>
+    </LegalPage>
   )
 }
