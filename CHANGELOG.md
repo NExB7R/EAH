@@ -34,6 +34,7 @@
 - **01:02** — redesign: admin shell 2026 live
 - **16:47** — feat: sliders + message lock live
 - **16:53** — feat: home icons + visitor cards live
+- **17:01** — redesign: legal pages live
 <!-- AUTO_END -->
 
 ---
