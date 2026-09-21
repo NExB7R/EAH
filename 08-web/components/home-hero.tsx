@@ -25,8 +25,12 @@ export default function HomeHero() {
         </div>
 
         <div className="hh__hook">
-          <span className="hh__hook-line">شبيك لبيك</span>
-          <span className="hh__hook-sub-line">كل حاجة حواليك</span>
+          <span className="hh__hook-line"><span className="hh__hook-motion">شبيك لبيك</span></span>
+          <span className="hh__hook-sub-line"><span className="hh__hook-motion">كل حاجة حواليك</span></span>
+        </div>
+
+        <div className="hh__slogan" aria-label="اللي نفسك فيه">
+          <span className="hh__slogan-text">اللي نفسك فيه ؟</span>
         </div>
 
         <div className="hh__search">

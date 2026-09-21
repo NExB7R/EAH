@@ -62,12 +62,13 @@ export default function EahLogo({
           <img
             src="/eah-word.webp"
             alt="EAH"
+            className="eah-logo__word"
             style={{
               width: '100%',
               height: 'auto',
               display: 'block',
               filter:
-                'drop-shadow(0 0 14px rgba(168,85,247,0.6)) drop-shadow(0 0 28px rgba(168,85,247,0.3))',
+                'drop-shadow(0 0 1px rgba(168,85,247,0.9)) drop-shadow(0 0 14px rgba(168,85,247,0.35)) drop-shadow(0 0 48px rgba(168,85,247,0.15))',
             }}
           />
         )}
@@ -87,7 +88,7 @@ export default function EahLogo({
             transform: `rotate(${crownRotation}deg)`,
             animation: 'crownPulse 3s ease-in-out infinite',
             filter:
-              'drop-shadow(0 3px 10px rgba(251,191,36,0.9)) drop-shadow(0 0 22px rgba(232,199,154,0.6))',
+              'drop-shadow(0 0 1px rgba(232,199,154,0.95)) drop-shadow(0 4px 12px rgba(232,199,154,0.4)) drop-shadow(0 0 36px rgba(232,199,154,0.2))',
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}

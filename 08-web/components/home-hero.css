@@ -457,3 +457,107 @@
   .hh__cat-icon svg { width: 22px; height: 22px; }
   .hh__cat-label { font-size: 0.78rem; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   2026 — السلوغان المحفور بذهب + الهوك المتحرك
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── السلوغان — محفور ذهبي ─── */
+.hh__slogan {
+  display: flex;
+  justify-content: center;
+  margin: 6px auto 22px;
+  position: relative;
+}
+
+.hh__slogan-text {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  position: relative;
+  padding: 4px 24px;
+
+  /* تدرج ذهبي — محفور */
+  background: linear-gradient(
+    180deg,
+    #F5E4BC 0%,
+    #E8C79A 45%,
+    #C9A56C 75%,
+    #9B7844 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  /* تأثير محفور + glow ناعم */
+  filter:
+    drop-shadow(0 1px 0 rgba(0, 0, 0, 0.75))
+    drop-shadow(0 -1px 0 rgba(255, 255, 255, 0.08))
+    drop-shadow(0 0 14px rgba(232, 199, 154, 0.35))
+    drop-shadow(0 0 40px rgba(232, 199, 154, 0.12));
+
+  animation: sloganBreathe 5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* خطوط ذهبية جانبية */
+.hh__slogan-text::before,
+.hh__slogan-text::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232, 199, 154, 0.7), transparent);
+  transform: translateY(-50%);
+}
+.hh__slogan-text::before { inset-inline-start: -20px; }
+.hh__slogan-text::after  { inset-inline-end: -20px; }
+
+@keyframes sloganBreathe {
+  0%, 100% {
+    filter:
+      drop-shadow(0 1px 0 rgba(0, 0, 0, 0.75))
+      drop-shadow(0 -1px 0 rgba(255, 255, 255, 0.08))
+      drop-shadow(0 0 12px rgba(232, 199, 154, 0.3))
+      drop-shadow(0 0 36px rgba(232, 199, 154, 0.1));
+  }
+  50% {
+    filter:
+      drop-shadow(0 1px 0 rgba(0, 0, 0, 0.75))
+      drop-shadow(0 -1px 0 rgba(255, 255, 255, 0.12))
+      drop-shadow(0 0 18px rgba(232, 199, 154, 0.45))
+      drop-shadow(0 0 56px rgba(232, 199, 154, 0.18));
+  }
+}
+
+/* ─── الهوك — حركة خفيفة ─── */
+.hh__hook-motion {
+  display: inline-block;
+  animation: hookFloat 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform;
+}
+.hh__hook-sub-line .hh__hook-motion {
+  animation-delay: 0.5s;
+}
+
+@keyframes hookFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hh__slogan-text,
+  .hh__hook-motion {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .hh__slogan-text { font-size: 1rem; padding: 4px 14px; }
+  .hh__slogan-text::before,
+  .hh__slogan-text::after { width: 18px; }
+  .hh__slogan-text::before { inset-inline-start: -10px; }
+  .hh__slogan-text::after  { inset-inline-end: -10px; }
+}

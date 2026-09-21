@@ -4,3 +4,29 @@
   0%, 100% { transform: scale(1) rotate(-18deg); }
   50%      { transform: scale(1.05) rotate(-18deg); }
 }
+
+/* ═══ v15 — Breathing للكلمة (Soft Neon) ═══ */
+
+@keyframes eahWordBreathe {
+  0%, 100% {
+    filter: brightness(0.96)
+      drop-shadow(0 0 1px rgba(168,85,247,0.85))
+      drop-shadow(0 0 12px rgba(168,85,247,0.3))
+      drop-shadow(0 0 44px rgba(168,85,247,0.12));
+  }
+  50% {
+    filter: brightness(1.05)
+      drop-shadow(0 0 1px rgba(168,85,247,1))
+      drop-shadow(0 0 16px rgba(168,85,247,0.42))
+      drop-shadow(0 0 56px rgba(168,85,247,0.18));
+  }
+}
+
+.eah-logo__word {
+  animation: eahWordBreathe 5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: filter;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eah-logo__word { animation: none; }
+}
