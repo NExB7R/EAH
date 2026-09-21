@@ -102,7 +102,7 @@
   align-items: center;
   justify-content: center;
   color: #C084FC;
-  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.4));
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
   transition: color 0.25s, filter 0.25s;
 }
 .hh__cat-icon svg { width: 22px; height: 22px; }
@@ -211,8 +211,8 @@
   pointer-events: none;
 }
 @keyframes taglineGlow {
-  0%, 100% { box-shadow: 0 0 8px rgba(168, 85, 247, 0.2); }
-  50%      { box-shadow: 0 0 18px rgba(168, 85, 247, 0.45); }
+  0%, 100% { box-shadow: var(--sh-sm); }
+  50%      { box-shadow: var(--sh-md); }
 }
 .hh__tagline-pin { display: inline-flex; align-items: center; justify-content: center; color: #E8C79A; }
 .hh__tagline-pin svg { width: 16px; height: 16px; stroke-width: 1.8; }
