@@ -1,44 +1,14 @@
-/* EAH Home Hero — 2026 Neon Vector Stickers */
+/* EAH Home Hero — clean 2026 */
 
 .hh {
   position: relative;
-  padding: 32px 20px 52px;
+  padding: 32px 20px 40px;
   overflow: visible;
-  isolation: isolate;
 }
 @media (max-width: 640px) {
-  .hh {
-    padding: 90px 16px 40px;
-  }
+  .hh { padding: 90px 16px 32px; }
 }
 
-
-/* Ambient gradient */
-.hh__bg::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 800px;
-  height: 600px;
-  background: radial-gradient(ellipse, rgba(168, 85, 247, 0.08) 0%, transparent 65%);
-  filter: blur(60px);
-}
-.hh__bg::after {
-  content: '';
-  position: absolute;
-  bottom: -10%;
-  left: 30%;
-  width: 500px;
-  height: 400px;
-  background: radial-gradient(ellipse, rgba(232, 199, 154, 0.05) 0%, transparent 65%);
-  filter: blur(60px);
-}
-
-/* Vector stickers layer */
-
-/* Content */
 .hh__inner {
   position: relative;
   max-width: 880px;
@@ -46,175 +16,61 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 0;
   text-align: center;
 }
 
 .hh__logo {
   display: flex;
   justify-content: center;
-  margin: 0 0 6px;
+  margin: 0 0 4px;
 }
 
-
-
-.hh__sub { font-family: var(--font-cairo, system-ui); font-size: clamp(0.95rem, 2.2vw, 1.1rem); color: #A29DB5; margin: 0; line-height: 1.75; animation: hh-fade-up 880ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both; }
-
-.hh__search {
-  width: 100%;
-  max-width: 560px;
-  margin-top: 8px;
-  animation: hh-fade-up 960ms cubic-bezier(0.22, 1, 0.36, 1) 240ms both;
-}
-
-.hh__cats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  width: 100%;
-  max-width: 560px;
-  margin-top: 6px;
-  animation: hh-fade-up 1040ms cubic-bezier(0.22, 1, 0.36, 1) 300ms both;
-}
-.hh__cat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 8px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(168, 85, 247, 0.08);
-  text-decoration: none;
-  transition: all 0.12s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.hh__cat:hover {
-  background: rgba(168, 85, 247, 0.1);
-  border-color: rgba(168, 85, 247, 0.5);
-  transform: translateY(-3px);
-  
-}
-.hh__cat-icon {
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
+/* ─── Slogan: اللي نفسك فيه ؟ ─── */
+.hh__slogan {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #C084FC;
-  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.4));
-  transition: color 0.25s, filter 0.25s;
-}
-.hh__cat-icon svg { width: 22px; height: 22px; }
-.hh__cat:hover .hh__cat-icon {
-  color: #E8C79A;
-  filter: drop-shadow(0 0 10px rgba(232, 199, 154, 0.6));
-}
-.hh__cat-label {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: #F4F2FA;
-}
-
-.hh__recommend {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  max-width: 560px;
-  padding: 14px 18px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(232, 199, 154, 0.05));
-  border: 1px solid rgba(232, 199, 154, 0.3);
-  text-decoration: none;
-  transition: all 0.12s cubic-bezier(0.22, 1, 0.36, 1);
-  margin-top: 6px;
-  animation: hh-fade-up 1120ms cubic-bezier(0.22, 1, 0.36, 1) 360ms both;
-}
-.hh__recommend:hover {
-  border-color: rgba(232, 199, 154, 0.65);
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(232, 199, 154, 0.05));
-  transform: translateY(-2px);
-  
-}
-.hh__recommend-emoji { font-size: 1.5rem; flex-shrink: 0; }
-.hh__recommend-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  text-align: start;
-}
-.hh__recommend-body strong {
+  margin: 10px auto 6px;
+  padding: 0 4px;
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 0.92rem;
+  font-size: clamp(1.5rem, 4.2vw, 2.2rem);
   font-weight: 900;
-  color: #F4F2FA;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-align: center;
+  filter: drop-shadow(0 0 18px rgba(232, 199, 154, 0.55));
+  animation: hh-fade-up 700ms cubic-bezier(0.22, 1, 0.36, 1) 100ms both;
 }
-.hh__recommend-body small {
-  font-family: var(--font-cairo, system-ui);
-  font-size: 0.75rem;
-  color: #A29DB5;
-}
-.hh__recommend-arrow {
+.hh__slogan-text {
+  position: relative;
+  display: inline-block;
   color: #E8C79A;
-  font-size: 1.1rem;
-  font-weight: 900;
-  transition: transform 0.10s;
-}
-.hh__recommend:hover .hh__recommend-arrow { transform: translateX(-4px); }
-
-
-
-@keyframes hh-fade-up {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  background: linear-gradient(135deg, #FFFBEB 0%, #E8C79A 45%, #F5D9A7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-@media (max-width: 640px) {
-  .hh {
-    padding: 90px 16px 40px;
-  }
-  .hh__cats { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hh__sub, .hh__search, .hh__cats, .hh__recommend { animation: none; }
-}
-
-/* Tagline نيون */
+/* ─── Tagline pill: من قلب شبين القناطر ─── */
 .hh__tagline {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 18px;
+  padding: 6px 16px;
   border-radius: 999px;
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(232, 199, 154, 0.06));
-  border: 1px solid rgba(168, 85, 247, 0.4);
-  margin: 6px auto 20px;
-  align-self: center;
-  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.15);
-  position: relative;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  margin: 8px auto 4px;
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.12);
+  animation: hh-fade-up 800ms cubic-bezier(0.22, 1, 0.36, 1) 160ms both;
 }
-.hh__tagline::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 999px;
-  padding: 1px;
-  background: linear-gradient(135deg, #C084FC, #E8C79A, #A855F7);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0.6;
-  pointer-events: none;
+.hh__tagline-pin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #E8C79A;
 }
-@keyframes taglineGlow {
-  0%, 100% { box-shadow: 0 0 8px rgba(168, 85, 247, 0.2); }
-  50%      { box-shadow: 0 0 18px rgba(168, 85, 247, 0.45); }
-}
-.hh__tagline-pin { display: inline-flex; align-items: center; justify-content: center; color: #E8C79A; }
 .hh__tagline-pin svg { width: 16px; height: 16px; stroke-width: 1.8; }
 .hh__tagline-city {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
@@ -228,146 +84,71 @@
   -webkit-text-fill-color: transparent;
 }
 
-/* Hook جديدة */
-.hh__hook {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(1.4rem, 4vw, 2rem);
-  font-weight: 900;
-  text-align: center;
-  margin: 10px auto 26px;
-  line-height: 1.35;
-  letter-spacing: -0.02em;
-  max-width: 700px;
-  background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 50%, #E8C79A 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 60px rgba(168, 85, 247, 0.3);
-}
-
-.hh__cat { box-shadow: 0 2px 8px rgba(0,0,0,.3); }
-.hh__recommend { box-shadow: 0 4px 12px rgba(0,0,0,.25); }
-
-/* ═══ Hook subtitle (under tagline) ═══ */
-.hh__hook-sub {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(1.15rem, 3vw, 1.7rem);
-  font-weight: 900;
-  text-align: center;
-  margin: 18px auto 22px;
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-  max-width: 700px;
-  background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 50%, #E8C79A 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 60px rgba(168, 85, 247, 0.25);
-}
-
-/* ═══ شيل الـ hh__hook القديم لو موجود ═══ */
-.hh__hook {
-  display: none;
-}
-
-/* ═══ Hook subtitle ═══ */
-.hh__hook-sub {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(1.15rem, 3vw, 1.7rem);
-  font-weight: 900;
-  text-align: center;
-  margin: 18px auto 22px;
-  line-height: 1.35;
-  max-width: 700px;
-  background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 50%, #E8C79A 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 60px rgba(168, 85, 247, 0.25);
-}
-
-.hh__hook { display: none; }
-
-/* ═══════════════════════════════════════════
-   Hook الجديد — "شبيك لبيك"
-   ═══════════════════════════════════════════ */
+/* ─── Hook: شبيك لبيك / كل حاجة حواليك ─── */
 .hh__hook {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  margin: 20px 0 18px;
+  gap: 4px;
+  margin: 12px 0 10px;
   text-align: center;
+  animation: hh-fade-up 880ms cubic-bezier(0.22, 1, 0.36, 1) 220ms both;
 }
-
 .hh__hook-line {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
   font-weight: 900;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: #C084FC;
   background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 50%, #A855F7 100%);
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.35));
-  animation: hhHookIn 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  filter: drop-shadow(0 0 22px rgba(168, 85, 247, 0.5));
 }
-@keyframes hhHookIn {
-  0% { opacity: 0; transform: translateY(8px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
 .hh__hook-sub-line {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(0.95rem, 2.2vw, 1.2rem);
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
   font-weight: 800;
   letter-spacing: -0.01em;
   color: #E8C79A;
-  text-shadow: 0 0 12px rgba(232, 199, 154, 0.4);
-  opacity: 0;
-  animation: hhHookIn 700ms 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  text-shadow: 0 0 12px rgba(232, 199, 154, 0.45);
 }
 
-@media (max-width: 480px) {
-  .hh__hook { margin: 16px 0 14px; gap: 4px; }
-  .hh__hook-icon { width: 34px; height: 34px; }
+/* ─── Search ─── */
+.hh__search {
+  width: 100%;
+  max-width: 560px;
+  margin-top: 12px;
+  animation: hh-fade-up 960ms cubic-bezier(0.22, 1, 0.36, 1) 280ms both;
 }
 
-/* إخفاء الـ hook القديم لو لسه موجود */
-.hh__hook-sub { display: none !important; }
-
-/* ═══════════════════════════════════════════════════════════════
-   Home Hero Categories — 2026 Distinctive Icons
-   ═══════════════════════════════════════════════════════════════ */
-
+/* ─── Categories ─── */
 .hh__cats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
+  width: 100%;
+  max-width: 560px;
   margin-top: 20px;
+  animation: hh-fade-up 1040ms cubic-bezier(0.22, 1, 0.36, 1) 340ms both;
 }
-
 .hh__cat {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 20px 10px 18px;
+  padding: 18px 10px 16px;
   border-radius: 18px;
   background: linear-gradient(180deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.5));
-  border: 1px solid rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.18);
   text-decoration: none;
   transition: all 280ms cubic-bezier(0.22, 1, 0.36, 1);
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
-
-/* Gradient overlay on hover */
 .hh__cat::before {
   content: '';
   position: absolute;
@@ -376,30 +157,15 @@
   transition: opacity 300ms ease;
   pointer-events: none;
 }
-
-/* Unique gradient لكل نوع */
-.hh__cat:nth-child(1)::before {
-  background: radial-gradient(ellipse at 50% 0%, rgba(236, 72, 153, 0.18), transparent 65%);
-}
-.hh__cat:nth-child(2)::before {
-  background: radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.2), transparent 65%);
-}
-.hh__cat:nth-child(3)::before {
-  background: radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.18), transparent 65%);
-}
-.hh__cat:nth-child(4)::before {
-  background: radial-gradient(ellipse at 50% 0%, rgba(107, 33, 255, 0.22), transparent 65%);
-}
-
+.hh__cat:nth-child(1)::before { background: radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.22), transparent 65%); }
+.hh__cat:nth-child(2)::before { background: radial-gradient(ellipse at 50% 0%, rgba(16, 185, 129, 0.2), transparent 65%); }
+.hh__cat:nth-child(3)::before { background: radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.2), transparent 65%); }
 .hh__cat:hover {
   transform: translateY(-4px);
-  border-color: rgba(168, 85, 247, 0.5);
-  box-shadow:
-    0 16px 40px rgba(0, 0, 0, 0.4),
-    0 0 24px rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.55);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 24px rgba(168, 85, 247, 0.18);
 }
 .hh__cat:hover::before { opacity: 1; }
-
 .hh__cat-icon {
   position: relative;
   display: inline-flex;
@@ -411,37 +177,23 @@
   transition: all 280ms cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 1;
 }
-.hh__cat-icon svg {
-  width: 26px;
-  height: 26px;
-}
-
-/* Colors لكل نوع */
+.hh__cat-icon svg { width: 26px; height: 26px; }
 .hh__cat:nth-child(1) .hh__cat-icon {
-  background: linear-gradient(135deg, #EC4899, #7C3AED);
-  color: #fff;
-  box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-}
-.hh__cat:nth-child(2) .hh__cat-icon {
   background: linear-gradient(135deg, #A855F7, #6B21FF);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.hh__cat:nth-child(2) .hh__cat-icon {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .hh__cat:nth-child(3) .hh__cat-icon {
   background: linear-gradient(135deg, #F59E0B, #DC2626);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
-.hh__cat:nth-child(4) .hh__cat-icon {
-  background: linear-gradient(135deg, #A855F7, #6B21FF);
-  color: #fff;
-  box-shadow: 0 8px 20px rgba(107, 33, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
-}
-
-.hh__cat:hover .hh__cat-icon {
-  transform: scale(1.08) rotate(-3deg);
-}
-
+.hh__cat:hover .hh__cat-icon { transform: scale(1.08) rotate(-3deg); }
 .hh__cat-label {
   position: relative;
   z-index: 1;
@@ -452,10 +204,20 @@
   letter-spacing: -0.01em;
 }
 
+@keyframes hh-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @media (max-width: 640px) {
+  .hh { padding: 90px 16px 32px; }
   .hh__cats { gap: 8px; }
   .hh__cat { padding: 14px 8px 12px; border-radius: 14px; }
-  .hh__cat-icon { width: 42px; height: 42px; border-radius: 12px; }
+  .hh__cat-icon { width: 44px; height: 44px; border-radius: 12px; }
   .hh__cat-icon svg { width: 22px; height: 22px; }
-  .hh__cat-label { font-size: 0.78rem; }
+  .hh__cat-label { font-size: 0.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hh__slogan, .hh__tagline, .hh__hook, .hh__search, .hh__cats { animation: none; }
 }

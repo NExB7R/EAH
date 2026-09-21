@@ -43,6 +43,7 @@
 - **18:00** — fix: bump home cache keys
 - **18:04** — debug: home data check
 - **18:35** — debug: remove unstable_cache
+- **18:40** — fix: home hero + slider + voice
 <!-- AUTO_END -->
 
 ---
