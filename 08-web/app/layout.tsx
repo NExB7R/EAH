@@ -17,7 +17,6 @@ import ServiceWorkerRegister from '@/components/sw-register'
 import NetworkStatus from '@/components/network-status'
 import OfflineQueueMount from '@/components/offline-queue-mount'
 import InstallAppButton from '@/components/install-app-button'
-import SmartBot from '@/components/smart-bot'
 import CookieConsent from '@/components/cookie-consent'
 import SyncStatus from '@/components/sync-status'
 import WebVitals from '@/components/web-vitals'
@@ -151,7 +150,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <NetworkStatus />
         <OfflineQueueMount />
         <InstallAppButton />
-        <SmartBot />
         <CookieConsent />
         <SyncStatus />
         <script
