@@ -1,7 +1,7 @@
 
 /* ─── Gradient Title (زي الهوم) ─── */
 .e-gradient {
-  background: linear-gradient(135deg, #d8b4fe 0%, #a855f7 35%, #f5c542 100%);
+  background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 55%, #E8C79A 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -38,7 +38,7 @@
 /* h1 + h2 — تدرج قوي */
 h1:not(.no-gradient):not([class*="logo"]):not([class*="Logo"]),
 h2:not(.no-gradient):not([class*="logo"]):not([class*="Logo"]) {
-  background: linear-gradient(135deg, #d8b4fe 0%, #a855f7 40%, #f5c542 100%);
+  background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 55%, #E8C79A 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -49,7 +49,7 @@ h2:not(.no-gradient):not([class*="logo"]):not([class*="Logo"]) {
 
 /* h3 — تدرج ناعم (أفتح، مش صارخ) */
 h3:not(.no-gradient):not([class*="logo"]):not([class*="Logo"]) {
-  background: linear-gradient(135deg, #f5f3ff 0%, #d8b4fe 60%, #a855f7 100%);
+  background: linear-gradient(135deg, #F4F2FA 0%, #D8B4FE 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

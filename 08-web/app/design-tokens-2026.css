@@ -78,6 +78,23 @@
   --sh-lg: 0 16px 40px rgba(0, 0, 0, 0.4);
   --sh-glow: 0 0 24px rgba(168, 85, 247, 0.25);
   --sh-glow-gold: 0 0 24px rgba(232, 199, 154, 0.25);
+
+  /* ═══ Aliases — للنظام القديم --eah-* (توافق مؤقت) ═══ */
+  --eah-radius-xs: var(--r-xs);
+  --eah-radius-sm: var(--r-sm);
+  --eah-radius: var(--r-md);
+  --eah-radius-md: var(--r-lg);
+  --eah-radius-lg: var(--r-xl);
+  --eah-radius-pill: var(--r-pill);
+  --eah-space-xs: var(--sp-1);
+  --eah-space-sm: var(--sp-2);
+  --eah-space: var(--sp-4);
+  --eah-space-md: var(--sp-6);
+  --eah-space-lg: var(--sp-8);
+  --eah-space-xl: var(--sp-12);
+  --eah-shadow-sm: var(--sh-sm);
+  --eah-shadow-md: var(--sh-md);
+  --eah-shadow-lg: var(--sh-lg);
 }
 
 /* ═══════════════════════════════════════════════════════════════
