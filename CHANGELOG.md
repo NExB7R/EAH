@@ -36,6 +36,7 @@
 - **16:53** — feat: home icons + visitor cards live
 - **17:01** — redesign: legal pages live
 - **17:14** — feat: branches live
+- **17:20** — feat: partners system live
 <!-- AUTO_END -->
 
 ---
