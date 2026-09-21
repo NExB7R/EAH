@@ -72,7 +72,7 @@
     linear-gradient(160deg, rgba(107, 33, 255, 0.28), #0A0714 90%);
   overflow: hidden;
   border: 1px solid rgba(168, 85, 247, 0.22);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  box-shadow: var(--sh-lg, 0 16px 40px rgba(0, 0, 0, 0.4));
 }
 
 .bh2__icon-fallback {
@@ -122,20 +122,26 @@
   background: rgba(16, 185, 129, 0.16);
   border: 1px solid rgba(16, 185, 129, 0.5);
   color: #A7F3D0;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(16, 185, 129, 0.45),
+    0 0 12px rgba(16, 185, 129, 0.2),
+    0 0 32px rgba(16, 185, 129, 0.06);
 }
 .bh2__status.is-closed {
   background: rgba(239, 68, 68, 0.16);
   border: 1px solid rgba(239, 68, 68, 0.5);
   color: #FCA5A5;
-  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(239, 68, 68, 0.45),
+    0 0 12px rgba(239, 68, 68, 0.2),
+    0 0 32px rgba(239, 68, 68, 0.06);
 }
 .bh2__status-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 10px currentColor;
+  box-shadow: 0 0 6px currentColor, 0 0 12px currentColor;
 }
 .bh2__status.is-open .bh2__status-dot {
   animation: bh2Pulse 2s ease-in-out infinite;
@@ -169,7 +175,7 @@
   width: 26px;
   border-radius: 5px;
   background: #E8C79A;
-  box-shadow: 0 0 12px rgba(232, 199, 154, 0.8);
+  box-shadow: 0 0 8px rgba(232, 199, 154, 0.5), 0 0 18px rgba(232, 199, 154, 0.2);
 }
 
 /* ═══ Floating info card ═══ */
@@ -387,4 +393,63 @@
   display: flex;
   margin-bottom: 12px;
   margin-top: -4px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   2026 — Glass + Soft Neon على BusinessHero
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── الكارد الرئيسي — Glass 2.0 ─── */
+.bh2__card {
+  background: var(--glass-bg-strong, rgba(20, 14, 34, 0.75));
+  backdrop-filter: var(--glass-blur, blur(24px) saturate(180%));
+  -webkit-backdrop-filter: var(--glass-blur, blur(24px) saturate(180%));
+  border: 1px solid var(--glass-border-strong, rgba(168, 85, 247, 0.28));
+  box-shadow:
+    var(--glass-inner, inset 0 1px 0 rgba(255, 255, 255, 0.06)),
+    var(--sh-lg, 0 16px 40px rgba(0, 0, 0, 0.4));
+}
+
+/* ─── crumbs — Glass خفيف ─── */
+.bh2__crumb {
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  transition: all 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ─── type badge — Soft Neon ذهبي ─── */
+.bh2__type-badge {
+  animation: bh2TypeBreathe 5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes bh2TypeBreathe {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(232, 199, 154, 0.25));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 8px rgba(232, 199, 154, 0.4))
+      drop-shadow(0 0 18px rgba(232, 199, 154, 0.12));
+  }
+}
+
+/* ─── offers badge — Soft Neon بنفسجي ─── */
+.bh2__offers-badge {
+  animation: bh2OffersBreathe 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes bh2OffersBreathe {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.25));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 8px rgba(168, 85, 247, 0.45))
+      drop-shadow(0 0 18px rgba(168, 85, 247, 0.15));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bh2__type-badge,
+  .bh2__offers-badge { animation: none; }
 }
