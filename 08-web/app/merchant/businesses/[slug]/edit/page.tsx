@@ -93,6 +93,7 @@ export default async function MerchantEditBusinessPage({
 
         <div style={{ maxWidth: 900, margin: '0 auto 16px', padding: '0 20px', display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
         <a href={`/merchant/businesses/${biz.slug}/branches`} className="admin-btn">إدارة الفروع</a>
+        <a href={`/merchant/businesses/${biz.slug}/partners`} className="admin-btn">الشركاء 🪄</a>
       </div>
       <BusinessForm
           mode="edit"

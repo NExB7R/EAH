@@ -27,6 +27,7 @@ export default async function AccountPage() {
     { count: favCount },
     { count: reviewCount },
     { count: notifCount },
+    { count: pendingInvites },
     { data: sub },
   ] = await Promise.all([
     supabase
@@ -37,6 +38,7 @@ export default async function AccountPage() {
     supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle(),
     supabase.from('favorites').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
     supabase.from('business_reviews').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
+    supabase.from('business_partners').select('*', { count: 'exact', head: true }).eq('profile_id', user.id).eq('status', 'pending'),
     supabase.from('notifications').select('*', { count: 'exact', head: true }).eq('user_id', user.id).is('read_at', null),
     Promise.resolve({ data: null }),
   ])
@@ -196,6 +198,22 @@ export default async function AccountPage() {
             </Link>
             <Link href="/account/trust" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcTrophy /></span> مصداقيتي
+            </Link>
+            <Link href="/account/partners/invitations" className="acc-action e-list__item" style={{ position: 'relative' }}>
+              <span className="acc-action__emoji">🪄</span> دعوات الانضمام
+              {(pendingInvites ?? 0) > 0 && (
+                <span style={{
+                  position: 'absolute',
+                  top: 8,
+                  insetInlineStart: 8,
+                  padding: '2px 8px',
+                  borderRadius: 999,
+                  background: 'linear-gradient(135deg, #F5D9A7, #D4A76A)',
+                  color: '#1A0F0A',
+                  fontSize: '0.68rem',
+                  fontWeight: 900,
+                }}>{pendingInvites}</span>
+              )}
             </Link>
             <Link href="/account/referral" className="acc-action e-list__item">
               <span className="acc-action__emoji"><IcUsers /></span> ادعي صحابك
