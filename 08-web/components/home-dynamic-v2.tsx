@@ -32,12 +32,7 @@ export default async function HomeDynamicV2() {
   const slugs = businesses.map((b) => b.slug)
   const slugsKey = slugs.sort().join(',')
 
-  const cachedStats = unstable_cache(
-    async () => getViewStats(slugs, 7),
-    ['home-stats-v1', slugsKey],
-    { revalidate: 60, tags: ['view-stats'] }  // دقيقة
-  )
-  const realStats = await cachedStats()
+  const realStats = await getViewStats(slugs, 7)
 
   const withStats = businesses.map((b) => {
     const real = realStats.get(b.slug)
