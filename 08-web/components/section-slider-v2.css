@@ -86,7 +86,7 @@
   z-index: 5;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 8px rgba(168, 85, 247, 0.15);
+  box-shadow: var(--sh-md);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.12s, transform 0.12s, background 0.10s;
@@ -251,7 +251,7 @@
   background: linear-gradient(135deg, rgba(232, 199, 154, 0.28), rgba(232, 199, 154, 0.1)) !important;
   border-color: #F5D9A7 !important;
   color: #FFFBEB !important;
-  box-shadow: 0 4px 20px rgba(232, 199, 154, 0.3);
+  box-shadow: 0 4px 16px rgba(232, 199, 154, 0.12);
 }
 .ss2--featured .ec5__front,
 .ss2--featured .ec5__back {
@@ -311,7 +311,7 @@
   background: linear-gradient(135deg, rgba(251, 146, 60, 0.3), rgba(251, 146, 60, 0.15)) !important;
   border-color: #FB923C !important;
   color: #FFEDD5 !important;
-  box-shadow: 0 4px 20px rgba(251, 146, 60, 0.35);
+  box-shadow: 0 4px 16px rgba(251, 146, 60, 0.12);
 }
 .ss2--trending .ec5__front,
 .ss2--trending .ec5__back {
@@ -371,7 +371,7 @@
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(16, 185, 129, 0.12)) !important;
   border-color: #34D399 !important;
   color: #D1FAE5 !important;
-  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.12);
 }
 .ss2--new .ec5__front,
 .ss2--new .ec5__back {

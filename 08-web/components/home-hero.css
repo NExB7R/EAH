@@ -194,7 +194,7 @@
   border: 1px solid rgba(168, 85, 247, 0.4);
   margin: 6px auto 20px;
   align-self: center;
-  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.15);
+  box-shadow: var(--sh-sm);
   position: relative;
 }
 .hh__tagline::before {
@@ -394,9 +394,7 @@
 .hh__cat:hover {
   transform: translateY(-4px);
   border-color: rgba(168, 85, 247, 0.5);
-  box-shadow:
-    0 16px 40px rgba(0, 0, 0, 0.4),
-    0 0 24px rgba(168, 85, 247, 0.15);
+  box-shadow: var(--sh-lg);
 }
 .hh__cat:hover::before { opacity: 1; }
 
@@ -420,22 +418,22 @@
 .hh__cat:nth-child(1) .hh__cat-icon {
   background: linear-gradient(135deg, #EC4899, #7C3AED);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 6px 18px rgba(236, 72, 153, 0.15), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 .hh__cat:nth-child(2) .hh__cat-icon {
   background: linear-gradient(135deg, #A855F7, #6B21FF);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.15), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 .hh__cat:nth-child(3) .hh__cat-icon {
   background: linear-gradient(135deg, #F59E0B, #DC2626);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.15), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 .hh__cat:nth-child(4) .hh__cat-icon {
   background: linear-gradient(135deg, #A855F7, #6B21FF);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(107, 33, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 6px 18px rgba(107, 33, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
 .hh__cat:hover .hh__cat-icon {

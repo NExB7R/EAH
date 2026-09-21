@@ -27,7 +27,7 @@
   border-radius: 22px;
   overflow: hidden;
   border: 1px solid rgba(168, 85, 247, 0.22);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--sh-md);
   transition: opacity 0.17s ease, transform 0.33s cubic-bezier(0.22, 1, 0.36, 1);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
@@ -90,7 +90,7 @@
   font-size: 0.66rem;
   font-weight: 900;
   z-index: 3;
-  box-shadow: 0 4px 14px rgba(232, 199, 154, 0.4);
+  box-shadow: 0 4px 14px rgba(232, 199, 154, 0.15);
 }
 .ec5__offer-badge {
   position: absolute;
@@ -214,7 +214,7 @@
   color: #fff;
   font-size: 0.72rem;
   font-weight: 900;
-  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.45);
+  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.18);
 }
 
 /* ═══ Per-section tints ═══ */
@@ -275,7 +275,7 @@
   width: 18px;
   border-radius: 4px;
   background: #E8C79A;
-  box-shadow: 0 0 8px rgba(232, 199, 154, 0.6);
+  box-shadow: 0 0 6px rgba(232, 199, 154, 0.35);
 }
 
 /* ═══ Logo badge on card front ═══ */
@@ -292,7 +292,7 @@
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 4;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 12px rgba(232, 199, 154, 0.25);
+  box-shadow: var(--sh-md);
   display: flex;
   align-items: center;
   justify-content: center;

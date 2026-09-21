@@ -92,9 +92,7 @@
 .vv__card:hover {
   transform: translateY(-6px);
   border-color: var(--vv-border, rgba(168, 85, 247, 0.5));
-  box-shadow:
-    0 20px 50px rgba(0, 0, 0, 0.45),
-    0 0 40px var(--vv-shadow, rgba(168, 85, 247, 0.15));
+  box-shadow: var(--sh-lg);
 }
 .vv__card:hover::before { opacity: 1; }
 
@@ -136,17 +134,17 @@
 .vv__card--purple .vv__icon {
   background: linear-gradient(135deg, #A855F7, #6B21FF);
   color: #fff;
-  box-shadow: 0 10px 24px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.18), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 .vv__card--gold .vv__icon {
   background: linear-gradient(135deg, #F5D9A7, #D4A76A);
   color: #1A0F0A;
-  box-shadow: 0 10px 24px rgba(232, 199, 154, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  box-shadow: 0 6px 16px rgba(232, 199, 154, 0.18), inset 0 1px 0 rgba(255,255,255,0.3);
 }
 .vv__card--green .vv__icon {
   background: linear-gradient(135deg, #10B981, #059669);
   color: #fff;
-  box-shadow: 0 10px 24px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.18), inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
 .vv__content { position: relative; z-index: 1; }
@@ -202,7 +200,7 @@
   background: linear-gradient(135deg, #A855F7, #6B21FF);
   border-color: transparent;
   color: #fff;
-  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
+  box-shadow: 0 6px 16px rgba(168, 85, 247, 0.2);
   transform: translateX(-4px);
 }
 
@@ -215,7 +213,7 @@
   background: linear-gradient(135deg, #F5D9A7, #D4A76A);
   border-color: transparent;
   color: #1A0F0A;
-  box-shadow: 0 8px 20px rgba(232, 199, 154, 0.4);
+  box-shadow: 0 6px 16px rgba(232, 199, 154, 0.2);
   transform: translateX(-4px);
 }
 
@@ -228,7 +226,7 @@
   background: linear-gradient(135deg, #10B981, #059669);
   border-color: transparent;
   color: #fff;
-  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.2);
   transform: translateX(-4px);
 }
 
