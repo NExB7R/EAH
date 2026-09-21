@@ -54,7 +54,7 @@
 .adv-compare__lead { font-family: var(--font-cairo, system-ui); font-size: .82rem; color: #A29DB5; margin: 0 0 14px; }
 .adv-compare__col ul { margin: 0 0 14px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .adv-compare__col li { font-family: var(--font-cairo, system-ui); font-size: .82rem; color: #C9C2DB; padding-inline-start: 18px; position: relative; }
-.adv-compare__col li::before { content: '•'; position: absolute; inset-inline-start: 0; color: #A855F7; font-weight: 900; }
+.adv-compare__col li::before { content: ''; position: absolute; inset-inline-start: 0; width: 4px; height: 4px; border-radius: 50%; background: #A855F7; top: 50%; transform: translateY(-50%); }
 .adv-compare__vs { font-family: var(--font-cairo-play, var(--font-cairo, system-ui)); font-size: 1rem; font-weight: 900; color: #6B6580; letter-spacing: .1em; }
 .adv-compare__cta { font-family: var(--font-cairo, system-ui); font-size: .82rem; font-weight: 900; color: #E8C79A; text-decoration: none; }
 .adv-compare__cta:hover { color: #F5D9A7; }
