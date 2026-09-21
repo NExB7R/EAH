@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import FavoriteButton from './favorite-button'
 import './explore-card-v5.css'
+import { ESticker } from './stickers'
 
 type Business = {
   id?: string
@@ -92,6 +93,11 @@ export default function ExploreCardV5({ business }: { business: Business }) {
   const hook = HOOK_BY_TYPE[business.type] ?? 'اكتشف المكان'
   const typeLabel = TYPE_LABEL[business.type] ?? 'مكان'
   const gradient = TYPE_GRADIENT[business.type] ?? TYPE_GRADIENT.restaurant
+  const ageInDays: number = business.ageInDays ?? business.age_in_days ?? 999
+  const recentViews: number = business.recentViews ?? business.recent_views ?? 0
+  const isNew = ageInDays < 7
+  const isTrending = recentViews >= 50
+  const hasStickers = isNew || isTrending
 
   return (
     <Link
@@ -115,6 +121,13 @@ export default function ExploreCardV5({ business }: { business: Business }) {
             <div className="ec5__logo" aria-hidden>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={logo} alt="" />
+            </div>
+          )}
+
+          {hasStickers && (
+            <div className="ec5__stickers" aria-hidden>
+              {isNew && <ESticker variant="new" size="sm" rotate={-8} />}
+              {isTrending && <ESticker variant="trending" size="sm" rotate={6} />}
             </div>
           )}
 

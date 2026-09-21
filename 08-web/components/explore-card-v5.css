@@ -1,8 +1,6 @@
 /* EAH Explore Card v5 — 3D Flip + Gallery */
 
 .ec5 {
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
   display: block;
   flex: 0 0 auto;
   width: 240px;
@@ -37,7 +35,10 @@
 
 /* FRONT — visible by default */
 .ec5__front {
-  background: linear-gradient(180deg, #140E22 0%, #0A0714 100%);
+  background: linear-gradient(180deg, rgba(20, 14, 34, 0.72) 0%, rgba(10, 7, 20, 0.88) 100%);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   transform: rotateY(0deg);
   opacity: 1;
   z-index: 2;
@@ -50,7 +51,10 @@
 
 /* BACK — hidden by default */
 .ec5__back {
-  background: #0A0714;
+  background: rgba(10, 7, 20, 0.88);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   transform: rotateY(-180deg);
   opacity: 0;
   z-index: 1;
@@ -312,3 +316,38 @@
 /* ═══ Hidden badges (removed per 2026 design) ═══ */
 .ec5__badge,
 .ec5__offer-badge { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   Stickers 2026 — فوق على الشمال (عكس الـ fav)
+   ═══════════════════════════════════════════════════════════════ */
+
+.ec5__stickers {
+  position: absolute;
+  top: 10px;
+  inset-inline-start: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  z-index: 4;
+  pointer-events: none;
+  animation: ec5StickersIn 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes ec5StickersIn {
+  from { opacity: 0; transform: translateY(-8px) scale(0.85); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* نخليهم أصغر شوية جوه الكارد */
+.ec5__stickers .e-sticker__inner {
+  padding: 3px 8px 3px 7px;
+  border-radius: 9px;
+  gap: 3px;
+}
+.ec5__stickers .e-sticker__icon  { width: 11px; height: 11px; }
+.ec5__stickers .e-sticker__label { font-size: 0.65rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ec5__stickers { animation: none; }
+}
