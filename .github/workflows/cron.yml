@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '0 * * * *'
     - cron: '0 3 1 * *'
+    # يوم 2 من كل شهر الساعة 4 ص — توليد التقارير الشهرية
+    - cron: '0 4 2 * *'
   workflow_dispatch:
     inputs:
       job:
@@ -15,6 +17,7 @@ on:
           - all
           - hourly
           - trust-decay
+          - reports
 
 jobs:
   hourly-tasks:
@@ -36,6 +39,20 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             "https://eah-sq.vercel.app/api/cron/subscription-check" \
             -w "\nHTTP: %{http_code}\n" --max-time 60
+
+  monthly-reports:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.schedule == '0 4 2 * *' ||
+      (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'reports'))
+    steps:
+      - name: Generate monthly reports
+        run: |
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "https://eah-sq.vercel.app/api/cron/monthly-reports" \
+            -w "\nHTTP: %{http_code}\n" --max-time 120
 
   monthly-trust-decay:
     runs-on: ubuntu-latest
