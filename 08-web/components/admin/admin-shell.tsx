@@ -84,6 +84,7 @@ export default function AdminShell({
       items: [
         { href: '/admin', label: 'نظرة عامة', icon: I.home },
         { href: '/admin/analytics', label: 'الإحصائيات', icon: I.chart },
+        { href: '/admin/reports', label: 'التقارير الشهرية', icon: I.chart },
       ],
     },
     {
