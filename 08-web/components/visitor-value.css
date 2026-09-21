@@ -1,198 +1,246 @@
-/* Visitor Value — What EAH offers */
+/* ═══════════════════════════════════════════════════════════════
+   EAH Visitor Value — 2026 Premium Cards
+   ═══════════════════════════════════════════════════════════════ */
 
 .vv {
-  max-width: 1100px;
-  margin: 16px auto;
+  max-width: 1200px;
+  margin: 40px auto;
   padding: 0 20px;
 }
 
 .vv__head {
   text-align: center;
-  margin-bottom: 16px;
+  margin-bottom: 28px;
 }
 .vv__kicker {
   display: inline-block;
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 0.68rem;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
   font-weight: 900;
-  color: #E8C79A;
-  letter-spacing: 0.22em;
-  padding: 4px 14px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #C084FC;
+  padding: 6px 14px;
   border-radius: 999px;
-  background: rgba(232, 199, 154, 0.08);
-  border: 1px solid rgba(232, 199, 154, 0.28);
-  margin-bottom: 14px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  margin-bottom: 12px;
 }
 .vv__title {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(1.4rem, 3.4vw, 1.9rem);
-  font-weight: 900;
   margin: 0 0 8px;
-  line-height: 1.2;
-  background: linear-gradient(135deg, #F4F2FA 0%, #C084FC 50%, #E8C79A 100%);
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #F4F2FA, #E8C79A 60%, #C084FC 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 40px rgba(168, 85, 247, 0.2);
 }
 .vv__sub {
-  display: none;
+  margin: 0;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.92rem;
+  color: #A29DB5;
 }
 
 .vv__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
 .vv__card {
   position: relative;
-  padding: 14px 22px 22px;
-  border-radius: 22px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  padding: 26px 22px 22px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.4));
+  border: 1px solid rgba(168, 85, 247, 0.18);
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(168, 85, 247, 0.16);
-  transition: all 0.15s cubic-bezier(0.22, 1, 0.36, 1);
-  min-height: auto;
+  transition: all 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: vvCardIn 500ms calc(var(--vv-i) * 80ms) cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+@keyframes vvCardIn {
+  from { opacity: 0; transform: translateY(12px); }
+}
+
 .vv__card::before {
   content: '';
   position: absolute;
-  top: -50%;
-  inset-inline-end: -30%;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--vv-accent, linear-gradient(90deg, #A855F7, #C084FC));
+  opacity: 0.8;
+  transition: opacity 200ms ease;
+}
+.vv__card::after {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  opacity: 0.15;
-  filter: blur(50px);
+  background: var(--vv-glow, radial-gradient(circle, rgba(168, 85, 247, 0.15), transparent 70%));
+  filter: blur(40px);
   pointer-events: none;
 }
+
 .vv__card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(168, 85, 247, 0.4);
+  transform: translateY(-6px);
+  border-color: var(--vv-border, rgba(168, 85, 247, 0.5));
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.45),
+    0 0 40px var(--vv-shadow, rgba(168, 85, 247, 0.15));
 }
-.vv__card:hover::before { opacity: 0.3; }
+.vv__card:hover::before { opacity: 1; }
 
-.vv__card--purple { background: linear-gradient(180deg, rgba(168, 85, 247, 0.08), rgba(10, 7, 20, 0.5)); }
-.vv__card--purple::before { background: radial-gradient(circle, #A855F7, transparent 70%); }
-.vv__card--purple:hover { border-color: rgba(168, 85, 247, 0.6); box-shadow: 0 16px 40px rgba(168, 85, 247, 0.2); }
-
-.vv__card--gold { background: linear-gradient(180deg, rgba(232, 199, 154, 0.08), rgba(10, 7, 20, 0.5)); }
-.vv__card--gold::before { background: radial-gradient(circle, #E8C79A, transparent 70%); }
-.vv__card--gold:hover { border-color: rgba(232, 199, 154, 0.6); box-shadow: 0 16px 40px rgba(232, 199, 154, 0.2); }
-
-.vv__card--purple { background: linear-gradient(180deg, rgba(192, 132, 252, 0.08), rgba(10, 7, 20, 0.5)); }
-.vv__card--purple::before { background: radial-gradient(circle, #C084FC, transparent 70%); }
-.vv__card--purple:hover { border-color: rgba(192, 132, 252, 0.6); box-shadow: 0 16px 40px rgba(192, 132, 252, 0.2); }
-
-.vv__emoji {
-  font-size: 2.2rem;
-  line-height: 1;
-  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.4));
+/* ─── Accent variants ─── */
+.vv__card--purple {
+  --vv-accent: linear-gradient(90deg, #A855F7, #6B21FF);
+  --vv-glow: radial-gradient(circle, rgba(168, 85, 247, 0.2), transparent 70%);
+  --vv-border: rgba(168, 85, 247, 0.5);
+  --vv-shadow: rgba(168, 85, 247, 0.2);
 }
+.vv__card--gold {
+  --vv-accent: linear-gradient(90deg, #F5D9A7, #D4A76A);
+  --vv-glow: radial-gradient(circle, rgba(232, 199, 154, 0.18), transparent 70%);
+  --vv-border: rgba(232, 199, 154, 0.5);
+  --vv-shadow: rgba(232, 199, 154, 0.2);
+}
+.vv__card--green {
+  --vv-accent: linear-gradient(90deg, #10B981, #059669);
+  --vv-glow: radial-gradient(circle, rgba(16, 185, 129, 0.15), transparent 70%);
+  --vv-border: rgba(16, 185, 129, 0.5);
+  --vv-shadow: rgba(16, 185, 129, 0.18);
+}
+
+.vv__icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  z-index: 1;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.vv__icon svg { width: 26px; height: 26px; }
+.vv__card:hover .vv__icon { transform: scale(1.08) rotate(-3deg); }
+
+.vv__card--purple .vv__icon {
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.vv__card--gold .vv__icon {
+  background: linear-gradient(135deg, #F5D9A7, #D4A76A);
+  color: #1A0F0A;
+  box-shadow: 0 10px 24px rgba(232, 199, 154, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.vv__card--green .vv__icon {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.vv__content { position: relative; z-index: 1; }
+
+.vv__card-kicker {
+  display: block;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #A29DB5;
+  margin-bottom: 4px;
+}
+
 .vv__card-title {
+  margin: 0 0 8px;
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 900;
   color: #F4F2FA;
-  margin: 0;
-  line-height: 1.3;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
 }
+
 .vv__card-body {
+  margin: 0 0 18px;
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   line-height: 1.7;
-  color: #C9C2DB;
-  margin: 0;
-  flex: 1;
+  color: #B8B2C9;
 }
+
 .vv__cta {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  align-self: flex-start;
-  margin-top: 6px;
-  padding: 8px 14px;
+  gap: 6px;
+  padding: 9px 16px;
   border-radius: 10px;
-  background: rgba(168, 85, 247, 0.12);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  color: #C4B5FD;
   font-family: var(--font-cairo, system-ui);
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 900;
   text-decoration: none;
-  transition: all 0.11s;
+  transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-.vv__card--gold .vv__cta {
-  background: rgba(232, 199, 154, 0.1);
-  border-color: rgba(232, 199, 154, 0.35);
-  color: #F5D9A7;
-}
+
 .vv__card--purple .vv__cta {
-  background: rgba(192, 132, 252, 0.1);
-  border-color: rgba(192, 132, 252, 0.3);
-  color: #D8B4FE;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(168, 85, 247, 0.05));
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #C4B5FD;
 }
-.vv__cta:hover {
-  transform: translateX(-2px);
-  background: rgba(168, 85, 247, 0.22);
+.vv__card--purple .vv__cta:hover {
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
+  transform: translateX(-4px);
+}
+
+.vv__card--gold .vv__cta {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.15), rgba(232, 199, 154, 0.05));
+  border: 1px solid rgba(232, 199, 154, 0.35);
+  color: #E8C79A;
+}
+.vv__card--gold .vv__cta:hover {
+  background: linear-gradient(135deg, #F5D9A7, #D4A76A);
+  border-color: transparent;
+  color: #1A0F0A;
+  box-shadow: 0 8px 20px rgba(232, 199, 154, 0.4);
+  transform: translateX(-4px);
+}
+
+.vv__card--green .vv__cta {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #6EE7B7;
+}
+.vv__card--green .vv__cta:hover {
+  background: linear-gradient(135deg, #10B981, #059669);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+  transform: translateX(-4px);
+}
+
+@media (max-width: 900px) {
+  .vv__grid { grid-template-columns: 1fr; gap: 12px; }
+  .vv { margin: 28px auto; }
 }
 
 @media (max-width: 640px) {
-  .vv { margin: 16px auto; padding: 0 16px; }
-  .vv__card { min-height: auto; padding: 14px 18px; }
-}
-
-/* ═══ EAH Fixes — 3-column grid + SVG icons ═══ */
-.vv__grid {
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 14px !important;
-}
-
-@media (max-width: 768px) {
-  .vv__grid { grid-template-columns: 1fr !important; }
-}
-
-.vv__emoji {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background: rgba(168, 85, 247, 0.1);
-  border: 1px solid rgba(168, 85, 247, 0.25);
-  color: #C084FC;
-  margin-bottom: 14px;
-  flex-shrink: 0;
-}
-
-.vv__emoji svg {
-  width: 24px !important;
-  height: 24px !important;
-  stroke-width: 1.8;
-}
-
-.vv__card--gold .vv__emoji {
-  background: rgba(232, 199, 154, 0.1);
-  border-color: rgba(232, 199, 154, 0.35);
-  color: #E8C79A;
-}
-
-.vv__card {
-  padding: 22px 20px 18px !important;
-}
-
-.vv__card-title {
-  font-size: 1.02rem !important;
-  margin: 0 0 8px !important;
-}
-
-.vv__card-body {
-  font-size: 0.82rem !important;
-  line-height: 1.65 !important;
+  .vv { padding: 0 14px; }
+  .vv__card { padding: 20px 18px; border-radius: 16px; }
+  .vv__icon { width: 44px; height: 44px; margin-bottom: 12px; }
+  .vv__icon svg { width: 22px; height: 22px; }
+  .vv__card-title { font-size: 1.05rem; }
 }

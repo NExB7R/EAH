@@ -340,3 +340,122 @@
 
 /* إخفاء الـ hook القديم لو لسه موجود */
 .hh__hook-sub { display: none !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   Home Hero Categories — 2026 Distinctive Icons
+   ═══════════════════════════════════════════════════════════════ */
+
+.hh__cats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.hh__cat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 10px 18px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.5));
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  text-decoration: none;
+  transition: all 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+/* Gradient overlay on hover */
+.hh__cat::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+/* Unique gradient لكل نوع */
+.hh__cat:nth-child(1)::before {
+  background: radial-gradient(ellipse at 50% 0%, rgba(236, 72, 153, 0.18), transparent 65%);
+}
+.hh__cat:nth-child(2)::before {
+  background: radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.2), transparent 65%);
+}
+.hh__cat:nth-child(3)::before {
+  background: radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.18), transparent 65%);
+}
+.hh__cat:nth-child(4)::before {
+  background: radial-gradient(ellipse at 50% 0%, rgba(107, 33, 255, 0.22), transparent 65%);
+}
+
+.hh__cat:hover {
+  transform: translateY(-4px);
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.4),
+    0 0 24px rgba(168, 85, 247, 0.15);
+}
+.hh__cat:hover::before { opacity: 1; }
+
+.hh__cat-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  transition: all 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+.hh__cat-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* Colors لكل نوع */
+.hh__cat:nth-child(1) .hh__cat-icon {
+  background: linear-gradient(135deg, #EC4899, #7C3AED);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.hh__cat:nth-child(2) .hh__cat-icon {
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.hh__cat:nth-child(3) .hh__cat-icon {
+  background: linear-gradient(135deg, #F59E0B, #DC2626);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.hh__cat:nth-child(4) .hh__cat-icon {
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(107, 33, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.hh__cat:hover .hh__cat-icon {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.hh__cat-label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: #F4F2FA;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 640px) {
+  .hh__cats { gap: 8px; }
+  .hh__cat { padding: 14px 8px 12px; border-radius: 14px; }
+  .hh__cat-icon { width: 42px; height: 42px; border-radius: 12px; }
+  .hh__cat-icon svg { width: 22px; height: 22px; }
+  .hh__cat-label { font-size: 0.78rem; }
+}
