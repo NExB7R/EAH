@@ -83,7 +83,7 @@ function toDemoShape(
   reviewStats?: { rating: number; reviewCount: number; recentComments: number },
 ): BusinessViewModel {
   const type = b.business_type as BusinessViewModel['type']
-  const validType = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'].includes(type)
+  const validType = ['restaurant', 'pharmacy', 'delivery_office'].includes(type)
     ? (type as 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office')
     : 'restaurant'
 
@@ -187,7 +187,7 @@ export async function getPublishedBusinesses(
       .order('created_at', { ascending: false })
       .limit(limit)
 
-    if (intent && ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'].includes(intent)) {
+    if (intent && ['restaurant', 'pharmacy', 'delivery_office'].includes(intent)) {
       query = query.eq('business_type', intent)
     }
 

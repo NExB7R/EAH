@@ -1,33 +1,33 @@
-export const FOOD_CATEGORIES: { key: string; label: string; emoji: string }[] = [
-  { key: 'pizza',      label: 'بيتزا',        emoji: '' },
-  { key: 'crepe',      label: 'كريب',         emoji: '' },
-  { key: 'grill',      label: 'مشويات',       emoji: '🍖' },
-  { key: 'liver',      label: 'كبدة',         emoji: '' },
-  { key: 'koshary',    label: 'كشري',         emoji: '🍲' },
-  { key: 'syrian',     label: 'سوري',         emoji: '' },
-  { key: 'shawarma',   label: 'شاورما',       emoji: '🌯' },
-  { key: 'sandwiches', label: 'سندوتشات',     emoji: '🥪' },
-  { key: 'taameya',    label: 'طعمية',        emoji: '🧆' },
-  { key: 'foul',       label: 'فول',          emoji: '🫘' },
-  { key: 'fish',       label: 'أسماك',        emoji: '🐟' },
-  { key: 'seafood',    label: 'مأكولات بحرية', emoji: '' },
-  { key: 'burger',     label: 'برجر',         emoji: '' },
-  { key: 'hawawshi',   label: 'حواوشي',       emoji: '🥩' },
-  { key: 'feteer',     label: 'فطير',         emoji: '🥧' },
-  { key: 'pasta',      label: 'مكرونة',       emoji: '🍝' },
-  { key: 'chicken',    label: 'دجاج',         emoji: '' },
-  { key: 'rice',       label: 'رز',           emoji: '🍚' },
-  { key: 'molokhia',   label: 'ملوخية',       emoji: '🌿' },
-  { key: 'juices',     label: 'عصائر',        emoji: '🧃' },
-  { key: 'desserts',   label: 'حلويات',       emoji: '🍰' },
-  { key: 'coffee',     label: 'قهوة',         emoji: '☕' },
-  { key: 'breakfast',  label: 'فطار',         emoji: '🍳' },
-  { key: 'eastern',    label: 'شرقي',         emoji: '🫓' },
+export const FOOD_CATEGORIES: { key: string; label: string }[] = [
+  { key: 'pizza',      label: 'بيتزا' },
+  { key: 'crepe',      label: 'كريب' },
+  { key: 'grill',      label: 'مشويات' },
+  { key: 'liver',      label: 'كبدة' },
+  { key: 'koshary',    label: 'كشري' },
+  { key: 'syrian',     label: 'سوري' },
+  { key: 'shawarma',   label: 'شاورما' },
+  { key: 'sandwiches', label: 'سندوتشات' },
+  { key: 'taameya',    label: 'طعمية' },
+  { key: 'foul',       label: 'فول' },
+  { key: 'fish',       label: 'أسماك' },
+  { key: 'seafood',    label: 'مأكولات بحرية' },
+  { key: 'burger',     label: 'برجر' },
+  { key: 'hawawshi',   label: 'حواوشي' },
+  { key: 'feteer',     label: 'فطير' },
+  { key: 'pasta',      label: 'مكرونة' },
+  { key: 'chicken',    label: 'دجاج' },
+  { key: 'rice',       label: 'رز' },
+  { key: 'molokhia',   label: 'ملوخية' },
+  { key: 'juices',     label: 'عصائر' },
+  { key: 'desserts',   label: 'حلويات' },
+  { key: 'coffee',     label: 'قهوة' },
+  { key: 'breakfast',  label: 'فطار' },
+  { key: 'eastern',    label: 'شرقي' },
 ]
 
 export function getCategoryLabel(key: string): string {
   const c = FOOD_CATEGORIES.find((x) => x.key === key)
-  return c ? `${c.emoji} ${c.label}` : key
+  return c ? c.label : key
 }
 
 

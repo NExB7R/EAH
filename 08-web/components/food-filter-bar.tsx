@@ -25,7 +25,7 @@ export default function FoodFilterBar({
           className={`ffb__chip ${value === c.key ? 'is-on' : ''}`}
           onClick={() => onChange(value === c.key ? null : c.key)}
         >
-          {c.emoji} {c.label}
+          {c.label}
         </button>
       ))}
     </div>

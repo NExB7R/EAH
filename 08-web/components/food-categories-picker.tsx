@@ -22,7 +22,6 @@ export default function FoodCategoriesPicker({
           const active = value.includes(c.key)
           return (
             <button key={c.key} type="button" onClick={() => toggle(c.key)} className={`fcp__chip ${active ? 'is-on' : ''}`}>
-              <span>{c.emoji}</span>
               <span>{c.label}</span>
             </button>
           )

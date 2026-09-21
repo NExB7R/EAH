@@ -2,13 +2,12 @@
 import Link from 'next/link'
 import EahLogo from './eah-logo'
 import SearchBar from './search-bar'
-import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery, IcPin } from './eah-icons'
+import { IcRestaurant, IcPharmacy, IcDelivery, IcPin } from './eah-icons'
 import './home-hero.css'
 
 const CATEGORIES = [
   { type: 'restaurant', Icon: IcRestaurant, label: 'مطاعم' },
   { type: 'pharmacy', Icon: IcPharmacy, label: 'صيدليات' },
-  { type: 'supermarket', Icon: IcMarket, label: 'ماركت' },
   { type: 'delivery_office', Icon: IcDelivery, label: 'توصيل' },
 ]
 

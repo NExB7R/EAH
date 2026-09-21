@@ -20,7 +20,7 @@ export const metadata = {
   description: 'اكتشف كل الأماكن في شبين القناطر — مطاعم، صيدليات، ماركت، توصيل',
 }
 
-const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
+const VALID_TYPES = ['restaurant', 'pharmacy', 'delivery_office']
 
 export default async function ExplorePage({
   searchParams,
@@ -69,7 +69,6 @@ export default async function ExplorePage({
   const headline = activeType
     ? activeType === 'restaurant' ? 'المطاعم'
     : activeType === 'pharmacy' ? 'الصيدليات'
-    : activeType === 'supermarket' ? 'الماركت'
     : 'التوصيل'
     : 'كل اللي حواليك'
 

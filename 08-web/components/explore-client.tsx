@@ -39,7 +39,7 @@ export default function ExploreClient({
   businesses: Business[]
   initialType?: string
   clientCoords?: { lat: number; lng: number } | null
-  availableFoodCats?: { key: string; label: string; emoji: string }[]
+  availableFoodCats?: { key: string; label: string }[]
 }) {
   const router = useRouter()
   const pathname = usePathname()
@@ -192,7 +192,6 @@ export default function ExploreClient({
   const FOOD_OPTS = availableFoodCats.map((c) => ({
     value: c.key,
     label: c.label,
-    emoji: c.emoji,
     count: foodCounts[c.key] ?? 0,
   }))
 

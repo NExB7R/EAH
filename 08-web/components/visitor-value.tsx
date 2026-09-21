@@ -9,7 +9,7 @@ const CARDS = [
     Icon: IcCompass,
     kicker: 'اكتشف',
     title: 'اللي حواليك',
-    body: 'مطاعم، صيدليات، ماركت، وتوصيل — كل ده على بُعد خطوة',
+    body: 'مطاعم، صيدليات، وتوصيل — كل ده على بُعد خطوة',
     cta: { label: 'ابدأ الاستكشاف', href: '/explore' },
     accent: 'purple',
   },

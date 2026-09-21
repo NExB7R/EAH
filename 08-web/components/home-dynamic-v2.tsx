@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
@@ -12,10 +13,21 @@ import AdSlot from '@/components/ads/ad-slot'
 import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
 export default async function HomeDynamicV2() {
-  // ═══ Parallel fetch — مفيش cache (بيسبب مشاكل مع Map + user context) ═══
+  // ═══ Cached businesses + ad (safe, no Map inside) ═══
+  const cachedBusinesses = unstable_cache(
+    async () => getPublishedBusinesses(50),
+    ['home-businesses-v3'],
+    { revalidate: 300, tags: ['businesses'] }
+  )
+  const cachedAd = unstable_cache(
+    async () => getActiveAdForSlot('home_banner'),
+    ['home-ad-v3'],
+    { revalidate: 120, tags: ['ads'] }
+  )
+
   const [businesses, ad, userTags] = await Promise.all([
-    getPublishedBusinesses(50),
-    getActiveAdForSlot('home_banner'),
+    cachedBusinesses(),
+    cachedAd(),
     loadUserProfileTags(),
   ])
 
