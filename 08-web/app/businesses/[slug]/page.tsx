@@ -180,10 +180,10 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
               hint="سجّل عشان تقرأ تجارب الناس وتشاركنا رأيك"
               minHeight={280}
             >
-              <BusinessReviews stats={stats} reviews={reviews} />
+              <BusinessReviews stats={stats} reviews={reviews} businessId={business.businessId} />
             </LockedContent>
           ) : (
-            <BusinessReviews stats={stats} reviews={reviews} />
+            <BusinessReviews stats={stats} reviews={reviews} businessId={business.businessId} />
           )}
         </div>
 

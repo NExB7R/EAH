@@ -1,4 +1,6 @@
 'use client'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase-browser'
 import MerchantReplyForm from './merchant-reply-form'
 import { IcChat } from './eah-icons'
 import './merchant-reply-form.css'
@@ -57,10 +59,32 @@ function RatingBar({ label, value, icon }: { label: string; value: number; icon:
 export default function BusinessReviews({
   stats,
   reviews,
+  businessId,
 }: {
   stats: Stats
   reviews: Review[]
+  businessId?: string
 }) {
+  const [isOwner, setIsOwner] = useState(false)
+
+  useEffect(() => {
+    if (!businessId) return
+    let alive = true
+    void (async () => {
+      try {
+        const sb = createClient()
+        const { data: { user } } = await sb.auth.getUser()
+        if (!user || !alive) return
+        const { data: biz } = await sb
+          .from('businesses')
+          .select('owner_profile_id')
+          .eq('id', businessId)
+          .maybeSingle()
+        if (alive) setIsOwner(biz?.owner_profile_id === user.id)
+      } catch { /* silent */ }
+    })()
+    return () => { alive = false }
+  }, [businessId])
   if (stats.review_count === 0) {
     return (
       <section className="brev brev--empty">
@@ -127,7 +151,9 @@ export default function BusinessReviews({
                     <p className="brev__merchant-reply-text">{r.merchant_reply}</p>
                   </div>
                 ) : null}
-                {r.id && <MerchantReplyForm reviewId={r.id} existingReply={r.merchant_reply} />}
+                {isOwner && r.id && (
+                  <MerchantReplyForm reviewId={r.id} existingReply={r.merchant_reply} />
+                )}
               </div>
             )
           })}

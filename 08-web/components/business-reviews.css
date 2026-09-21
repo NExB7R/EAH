@@ -210,3 +210,23 @@
   text-align: center;
   line-height: 1.7;
 }
+
+/* ═══ Empty state — مضغوط ═══ */
+.brev.brev--empty {
+  max-width: 720px !important;
+  margin: 20px auto !important;
+  padding: 24px 20px !important;
+  min-height: auto !important;
+  text-align: center !important;
+}
+.brev.brev--empty .brev__title {
+  justify-content: center;
+  font-size: 1rem !important;
+  margin-bottom: 8px !important;
+}
+.brev.brev--empty .brev__empty-msg {
+  margin: 0 auto;
+  max-width: 380px;
+  font-size: 0.86rem !important;
+  line-height: 1.7 !important;
+}
