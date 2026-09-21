@@ -16,17 +16,9 @@ import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 // Cached queries — كل واحدة بتشتغل مرة كل X دقايق
 // ═══════════════════════════════════════════════════════════
 
-const cachedBusinesses = unstable_cache(
-  async () => getPublishedBusinesses(50),
-  ['home-businesses-v2'],
-  { revalidate: 300, tags: ['businesses'] }   // 5 دقايق
-)
+const cachedBusinesses = async () => getPublishedBusinesses(50)
 
-const cachedAd = unstable_cache(
-  async () => getActiveAdForSlot('home_banner'),
-  ['home-ad-v2'],
-  { revalidate: 120, tags: ['ads'] }          // 2 دقيقة
-)
+const cachedAd = async () => getActiveAdForSlot('home_banner')
 
 export default async function HomeDynamicV2() {
   // ═══ Parallel: cached queries + user tags ═══

@@ -42,6 +42,7 @@
 - **17:55** — fix: bust home cache
 - **18:00** — fix: bump home cache keys
 - **18:04** — debug: home data check
+- **18:35** — debug: remove unstable_cache
 <!-- AUTO_END -->
 
 ---
