@@ -8,14 +8,18 @@ cd ~/EAH
 ./add-changelog.sh "$1"
 ./sync-docs.sh
 
-# 2. commit + push ui-onlook
+# 2. commit + push UI-ONLOOK فقط
 git add -A
 git commit -m "$1" || true
 git push origin ui-onlook
 
-# 3. مزامنة main (للـ GitHub Actions)
-git push origin ui-onlook:main --force 2>/dev/null || true
-
-# 4. deploy
+# 3. Deploy مباشر
 cd ~/EAH/08-web
 vercel --prod --yes
+
+# 4. مزامنة main — يدوي بس لو اتغير workflow
+# (مش هنا عشان ميعملش build تاني)
+cd ~/EAH
+echo ""
+echo "✅ Done"
+echo "📌 ملاحظة: main مش اتزامن — لو عدلت workflow قوللي"
