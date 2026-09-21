@@ -30,6 +30,7 @@
 - **00:29** — fix: business reviews owner-only reply + compact empty state
 - **00:32** — feat: unified quick actions + share modal live
 - **00:35** — fix: remove hook icon
+- **00:46** — redesign: admin shell 2026 live
 <!-- AUTO_END -->
 
 ---
