@@ -2,16 +2,26 @@ name: EAH Cron Jobs
 
 on:
   schedule:
-    # كل ساعة
     - cron: '0 * * * *'
-    # يوم 1 من كل شهر الساعة 3 ص (trust decay)
     - cron: '0 3 1 * *'
   workflow_dispatch:
+    inputs:
+      job:
+        description: 'الـ job اللي عايز تشغّله'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - hourly
+          - trust-decay
 
 jobs:
   hourly-tasks:
     runs-on: ubuntu-latest
-    if: github.event.schedule == '0 * * * *' || github.event_name == 'workflow_dispatch'
+    if: |
+      github.event.schedule == '0 * * * *' ||
+      (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'hourly'))
     steps:
       - name: Review reminder
         run: |
@@ -29,7 +39,9 @@ jobs:
 
   monthly-trust-decay:
     runs-on: ubuntu-latest
-    if: github.event.schedule == '0 3 1 * *'
+    if: |
+      github.event.schedule == '0 3 1 * *' ||
+      (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'trust-decay'))
     steps:
       - name: Apply trust decay
         run: |
