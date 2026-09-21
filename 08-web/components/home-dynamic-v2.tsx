@@ -18,13 +18,13 @@ import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
 const cachedBusinesses = unstable_cache(
   async () => getPublishedBusinesses(50),
-  ['home-businesses-v1'],
+  ['home-businesses-v2'],
   { revalidate: 300, tags: ['businesses'] }   // 5 دقايق
 )
 
 const cachedAd = unstable_cache(
   async () => getActiveAdForSlot('home_banner'),
-  ['home-ad-v1'],
+  ['home-ad-v2'],
   { revalidate: 120, tags: ['ads'] }          // 2 دقيقة
 )
 
