@@ -21,7 +21,12 @@
 - **22:34** — feat: about 2026 + filter-select + egyptian search + social setup + voice search button
 - **22:43** — feat: projects system live
 - **22:59** — feat: sentry CSP fix + new hook 'شبيك لبيك .. كل حاجة حواليك'
-- **23:47** — feat: trust decay + name uniqueness live<!-- AUTO_END -->
+- **23:47** — feat: trust decay + name uniqueness live
+
+### 2026-09-21
+
+- **00:14** — feat: design system 2026 live
+<!-- AUTO_END -->
 
 ---
 
