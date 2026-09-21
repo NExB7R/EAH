@@ -79,6 +79,54 @@
   --sh-glow: 0 0 24px rgba(168, 85, 247, 0.25);
   --sh-glow-gold: 0 0 24px rgba(232, 199, 154, 0.25);
 
+  /* ═══════════════════════════════════════════════════════════════
+     SOFT NEON 2026 — 3-Layer Glow (Core + Near + Atmos)
+     نفس ألوان EAH — بس بطبقات بدل طبقة واحدة
+     ═══════════════════════════════════════════════════════════════ */
+  --glow-soft-sm:
+    0 0 0 1px rgba(168, 85, 247, 0.35),
+    0 0 10px rgba(168, 85, 247, 0.12),
+    0 0 32px rgba(168, 85, 247, 0.04);
+  --glow-soft-md:
+    0 0 0 1px rgba(168, 85, 247, 0.45),
+    0 0 16px rgba(168, 85, 247, 0.18),
+    0 0 60px rgba(168, 85, 247, 0.06);
+  --glow-soft-lg:
+    0 0 0 1px rgba(168, 85, 247, 0.55),
+    0 0 24px rgba(168, 85, 247, 0.25),
+    0 0 100px rgba(168, 85, 247, 0.09);
+
+  /* Gold Glow — للسلوغان والشعار */
+  --glow-gold-sm:
+    0 0 0 1px rgba(232, 199, 154, 0.4),
+    0 0 10px rgba(232, 199, 154, 0.15),
+    0 0 32px rgba(232, 199, 154, 0.06);
+  --glow-gold-md:
+    0 0 0 1px rgba(232, 199, 154, 0.5),
+    0 0 18px rgba(232, 199, 154, 0.22),
+    0 0 60px rgba(232, 199, 154, 0.09);
+  --glow-gold-lg:
+    0 0 0 1px rgba(232, 199, 154, 0.6),
+    0 0 28px rgba(232, 199, 154, 0.3),
+    0 0 110px rgba(232, 199, 154, 0.12);
+
+  /* ═══════════════════════════════════════════════════════════════
+     GLASS 2.0 — 2026
+     ═══════════════════════════════════════════════════════════════ */
+  --glass-bg: rgba(20, 14, 34, 0.55);
+  --glass-bg-strong: rgba(20, 14, 34, 0.75);
+  --glass-border: rgba(168, 85, 247, 0.15);
+  --glass-border-strong: rgba(168, 85, 247, 0.28);
+  --glass-blur: blur(24px) saturate(180%);
+  --glass-inner: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  /* ═══════════════════════════════════════════════════════════════
+     BREATHING — حركة "التنفس" (خفيفة)
+     ═══════════════════════════════════════════════════════════════ */
+  --breathe-duration: 4s;
+  --breathe-ease: cubic-bezier(0.45, 0, 0.55, 1);
+
+
   /* ═══ Aliases — للنظام القديم --eah-* (توافق مؤقت) ═══ */
   --eah-radius-xs: var(--r-xs);
   --eah-radius-sm: var(--r-sm);
@@ -277,5 +325,44 @@ button:not(:disabled):active,
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Breathing Animations 2026
+   ═══════════════════════════════════════════════════════════════ */
+
+@keyframes breathe-glow {
+  0%, 100% { opacity: 0.65; }
+  50%      { opacity: 1; }
+}
+
+@keyframes breathe-scale {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.015); }
+}
+
+@keyframes breathe-soft {
+  0%, 100% { filter: brightness(0.95); }
+  50%      { filter: brightness(1.08); }
+}
+
+/* utility classes */
+.eah-breathe-glow {
+  animation: breathe-glow var(--breathe-duration) var(--breathe-ease) infinite;
+}
+.eah-breathe-scale {
+  animation: breathe-scale var(--breathe-duration) var(--breathe-ease) infinite;
+}
+.eah-breathe-soft {
+  animation: breathe-soft var(--breathe-duration) var(--breathe-ease) infinite;
+}
+
+/* احترام prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .eah-breathe-glow,
+  .eah-breathe-scale,
+  .eah-breathe-soft {
+    animation: none !important;
   }
 }
