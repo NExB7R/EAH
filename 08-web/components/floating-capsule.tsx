@@ -104,6 +104,7 @@ export default function FloatingCapsuleHeader() {
           <div className="floating-capsule__side floating-capsule__side--start">
             <NeonIconButton icon={<IconMenu />} label="القائمة" ariaLabel="القائمة" onClick={() => setMenuOpen(true)} />
             <NeonIconButton icon={<IconSearch />} label="اكتشف" ariaLabel="اكتشف" href="/explore" />
+            <NeonIconButton icon={<span className="fc-info-icon">{MI.info}</span>} label="عن EAH" ariaLabel="عن EAH" href="/about" />
           </div>
 
           <div className="floating-capsule__center">

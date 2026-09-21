@@ -1,0 +1,106 @@
+/* ═══ About Teaser — Soft 2026 ═══ */
+.at {
+  padding: 64px 20px;
+  background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.03));
+}
+.at__inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.at__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  align-items: center;
+}
+.at__kicker {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  color: #C4B5FD;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.at__title {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+  line-height: 1.25;
+  color: #F4F2FA;
+  margin: 0;
+}
+.at__title-accent {
+  background: linear-gradient(135deg, #A855F7, #E8C79A);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.at__body {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 1rem;
+  line-height: 1.85;
+  color: #A29DB5;
+  max-width: 540px;
+  margin: 0;
+}
+.at__stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+.at__stat {
+  padding: 12px 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 100px;
+}
+.at__stat strong {
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #E8C79A;
+}
+.at__stat small {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
+  color: #A29DB5;
+  font-weight: 700;
+}
+.at__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(168, 85, 247, 0.35);
+  transition: all 240ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.at__cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(168, 85, 247, 0.5);
+}
+.at__cta svg { transform: scaleX(-1); }
+
+@media (max-width: 640px) {
+  .at { padding: 48px 16px; }
+  .at__stat { padding: 10px 16px; min-width: 90px; }
+}
