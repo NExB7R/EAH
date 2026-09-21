@@ -38,6 +38,7 @@
 - **17:14** — feat: branches live
 - **17:20** — feat: partners system live
 - **17:32** — fix: dedupe normalize + reports
+- **17:35** — feat: reports in admin
 <!-- AUTO_END -->
 
 ---
