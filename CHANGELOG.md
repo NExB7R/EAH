@@ -32,6 +32,7 @@
 - **00:35** — fix: remove hook icon
 - **00:46** — redesign: admin shell 2026 live
 - **01:02** — redesign: admin shell 2026 live
+- **16:47** — feat: sliders + message lock live
 <!-- AUTO_END -->
 
 ---
