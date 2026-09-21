@@ -2,12 +2,13 @@
 import Link from 'next/link'
 import EahLogo from './eah-logo'
 import SearchBar from './search-bar'
-import { IcRestaurant, IcPharmacy, IcDelivery, IcPin } from './eah-icons'
+import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery, IcPin } from './eah-icons'
 import './home-hero.css'
 
 const CATEGORIES = [
   { type: 'restaurant', Icon: IcRestaurant, label: 'مطاعم' },
   { type: 'pharmacy', Icon: IcPharmacy, label: 'صيدليات' },
+  { type: 'supermarket', Icon: IcMarket, label: 'ماركت' },
   { type: 'delivery_office', Icon: IcDelivery, label: 'توصيل' },
 ]
 
@@ -17,10 +18,6 @@ export default function HomeHero() {
       <div className="hh__inner">
         <div className="hh__logo">
           <EahLogo size="xl" variant="full" href="/" />
-        </div>
-
-        <div className="hh__slogan">
-          <span className="hh__slogan-text">اللي نفسك فيه ؟</span>
         </div>
 
         <div className="hh__tagline">

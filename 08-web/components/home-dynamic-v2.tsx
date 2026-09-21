@@ -1,4 +1,3 @@
-import { unstable_cache } from 'next/cache'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
@@ -12,27 +11,23 @@ import './home-dynamic-v2.css'
 import AdSlot from '@/components/ads/ad-slot'
 import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
-// ═══════════════════════════════════════════════════════════
-// Cached queries — كل واحدة بتشتغل مرة كل X دقايق
-// ═══════════════════════════════════════════════════════════
-
-const cachedBusinesses = async () => getPublishedBusinesses(50)
-
-const cachedAd = async () => getActiveAdForSlot('home_banner')
-
 export default async function HomeDynamicV2() {
-  // ═══ Parallel: cached queries + user tags ═══
+  // ═══ Parallel fetch — مفيش cache (بيسبب مشاكل مع Map + user context) ═══
   const [businesses, ad, userTags] = await Promise.all([
-    cachedBusinesses(),
-    cachedAd(),
-    loadUserProfileTags(),  // cookie-based — دايماً fresh
+    getPublishedBusinesses(50),
+    getActiveAdForSlot('home_banner'),
+    loadUserProfileTags(),
   ])
 
-  // ═══ View stats — cached بـ slugs key ═══
+  // ═══ View stats — مع try/catch للأمان ═══
   const slugs = businesses.map((b) => b.slug)
-  const slugsKey = slugs.sort().join(',')
-
-  const realStats = await getViewStats(slugs, 7)
+  let realStats: Map<string, { views: number }> = new Map()
+  try {
+    const stats = await getViewStats(slugs, 7)
+    if (stats instanceof Map) realStats = stats as Map<string, { views: number }>
+  } catch {
+    realStats = new Map()
+  }
 
   const withStats = businesses.map((b) => {
     const real = realStats.get(b.slug)
@@ -67,7 +62,6 @@ export default async function HomeDynamicV2() {
     .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
     .slice(0, 12)
 
-  // ═══ مشاريع جديدة ═══
   const projects = [...diversified]
     .filter((b: any) => b.is_new_project === true)
     .sort((a: any, b: any) => (a.ageInDays ?? 999) - (b.ageInDays ?? 999))
@@ -132,7 +126,6 @@ export default async function HomeDynamicV2() {
         </SectionSliderV2>
       )}
 
-      {/* ═══ المشاريع الجديدة — بين الترند والجديد ═══ */}
       {hasProjects && (
         <SectionSliderV2
           title="مشاريع جديدة — ادعمها"
