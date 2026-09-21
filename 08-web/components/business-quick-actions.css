@@ -52,3 +52,16 @@
   .bqa__inner { padding: 6px; gap: 4px; border-radius: 18px; }
   .bqa__btn { padding: 8px 4px; font-size: 0.68rem; border-radius: 12px; }
 }
+
+/* ═══ 5 أزرار — أصغر ومتناسقة ═══ */
+.bqa__inner {
+  grid-template-columns: repeat(5, 1fr);
+}
+.bqa__btn.is-following {
+  color: #86EFAC;
+  background: rgba(16, 185, 129, 0.12);
+}
+@media (max-width: 480px) {
+  .bqa__btn { font-size: 0.6rem !important; padding: 6px 2px !important; }
+  .bqa__btn svg { width: 15px !important; height: 15px !important; }
+}

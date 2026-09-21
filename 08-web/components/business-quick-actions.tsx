@@ -23,6 +23,8 @@ export default function BusinessQuickActions({ businessId, businessName, phone, 
   const [fav, setFav] = useState(false)
   const [busy, setBusy] = useState(false)
   const [shareUrl, setShareUrl] = useState('')
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [followBusy, setFollowBusy] = useState(false)
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -33,13 +35,13 @@ export default function BusinessQuickActions({ businessId, businessName, phone, 
       const sb = createClient()
       const { data: { user } } = await sb.auth.getUser()
       if (!user || !alive) return
-      const { data } = await sb
-        .from('favorites')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('business_id', businessId)
-        .maybeSingle()
-      if (alive) setFav(!!data)
+      const [favRes, followRes] = await Promise.all([
+        sb.from('favorites').select('id').eq('user_id', user.id).eq('business_id', businessId).maybeSingle(),
+        sb.from('business_follows').select('id').eq('user_id', user.id).eq('business_id', businessId).maybeSingle(),
+      ])
+      if (!alive) return
+      setFav(!!favRes.data)
+      setIsFollowing(!!followRes.data)
     })()
     return () => { alive = false }
   }, [businessId, slug])
@@ -63,6 +65,27 @@ export default function BusinessQuickActions({ businessId, businessName, phone, 
       }
     } catch {}
     setBusy(false)
+  }
+
+  async function toggleFollow() {
+    setFollowBusy(true)
+    const sb = createClient()
+    const { data: { user } } = await sb.auth.getUser()
+    if (!user) {
+      window.location.href = `/auth?next=/businesses/${slug}`
+      setFollowBusy(false)
+      return
+    }
+    try {
+      if (isFollowing) {
+        await sb.from('business_follows').delete().eq('user_id', user.id).eq('business_id', businessId)
+        setIsFollowing(false)
+      } else {
+        await sb.from('business_follows').insert({ user_id: user.id, business_id: businessId })
+        setIsFollowing(true)
+      }
+    } catch {}
+    setFollowBusy(false)
   }
 
   async function share() {
@@ -115,6 +138,17 @@ export default function BusinessQuickActions({ businessId, businessName, phone, 
             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
           </svg>
           <span>شارك</span>
+        </button>
+
+        <button type="button" className={`bqa__btn ${isFollowing ? 'is-following' : ''}`} onClick={toggleFollow} disabled={followBusy}>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="8.5" cy="7" r="4" />
+            {isFollowing
+              ? <polyline points="17 11 19 13 23 9" />
+              : <><line x1="20" y1="8" x2="20" y2="14" /><line x1="23" y1="11" x2="17" y2="11" /></>}
+          </svg>
+          <span>{isFollowing ? 'متابَع' : 'متابعة'}</span>
         </button>
 
         <button type="button" className={`bqa__btn ${fav ? 'is-fav' : ''}`} onClick={toggleFav} disabled={busy}>

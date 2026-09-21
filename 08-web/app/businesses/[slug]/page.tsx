@@ -8,7 +8,6 @@ import {
 } from '@/lib/reviews'
 import PageViewTracker from '@/components/page-view-tracker'
 import BusinessHero from '@/components/business-hero'
-import BusinessFollowSection from '@/components/business-follow-section'
 import CouponSection from '@/components/coupon-section'
 import BusinessContact from '@/components/business-contact'
 import BusinessReviews from '@/components/business-reviews'
