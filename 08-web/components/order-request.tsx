@@ -389,6 +389,7 @@ export default function OrderRequest({ businessId, businessName, merchantPhone }
         order_code: tempCode,
         voice_url: finalVoiceUrl,
         images,
+        whatsapp_message: msg,
         status: 'sent',
       }).select('id, expires_at').maybeSingle()
 

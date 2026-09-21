@@ -28,6 +28,9 @@ import BusinessGallery from '@/components/business-gallery'
 import BusinessMenu from '@/components/business-menu'
 import { resolveCoords } from '@/lib/map-coords'
 import LockedContent from '@/components/locked-content'
+import SectionSliderV3 from '@/components/section-slider-v3'
+import ExploreCardV5 from '@/components/explore-card-v5'
+import { getPublishedBusinesses } from '@/lib/data'
 
 export const revalidate = 120
 
@@ -64,6 +67,21 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
     hasId ? getBusinessOffers(business.businessId!) : Promise.resolve([]),
     hasId ? getBusinessContacts(business.businessId!) : Promise.resolve([]),
   ])
+
+  // ═══ الأنشطة المشابهة (نفس النوع أو المنطقة) ═══
+  const allBusinesses = await getPublishedBusinesses(50)
+  const similar = allBusinesses
+    .filter((b: any) => b.slug !== business.slug && (b.type === business.type || b.area === business.area))
+    .slice(0, 12)
+
+  const featuredList = allBusinesses
+    .filter((b: any) => b.slug !== business.slug && (b.featured || b.badge === 'مميز'))
+    .slice(0, 12)
+
+  const trendingList = allBusinesses
+    .filter((b: any) => b.slug !== business.slug)
+    .sort((a: any, b: any) => (b.rating ?? 0) - (a.rating ?? 0))
+    .slice(0, 12)
 
   const coords = resolveCoords(business.latitude, business.longitude, business.area)
   const phoneNum = contacts.find((c) => c.method_type === 'phone')?.value ?? null
@@ -250,6 +268,53 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
       {!business.hasOwner && (
         <BusinessClaimCTA businessName={typeof business?.name === 'string' ? business.name : undefined} />
       )}
+
+      {/* ═══ سلايدرات في آخر الصفحة ═══ */}
+      {similar.length > 0 && (
+        <SectionSliderV3
+          title="أماكن شبهه"
+          subtitle="نفس الروح، تجارب تانية"
+          seeAllHref={`/explore?type=${business.type}`}
+          variant="similar"
+        >
+          {similar.map((b) => (
+            <div key={b.slug} className="sv3-card">
+              <ExploreCardV5 business={b as any} />
+            </div>
+          ))}
+        </SectionSliderV3>
+      )}
+
+      {featuredList.length > 0 && (
+        <SectionSliderV3
+          title="المميزين"
+          subtitle="أماكن اختارها فريقنا"
+          seeAllHref="/featured"
+          variant="featured"
+        >
+          {featuredList.map((b) => (
+            <div key={b.slug} className="sv3-card">
+              <ExploreCardV5 business={b as any} />
+            </div>
+          ))}
+        </SectionSliderV3>
+      )}
+
+      {trendingList.length > 0 && (
+        <SectionSliderV3
+          title="الترند دلوقتي"
+          subtitle="الناس بتدور عليها"
+          seeAllHref="/trends"
+          variant="trending"
+        >
+          {trendingList.map((b) => (
+            <div key={b.slug} className="sv3-card">
+              <ExploreCardV5 business={b as any} />
+            </div>
+          ))}
+        </SectionSliderV3>
+      )}
+
       <SiteFooter />
     </>
   )
