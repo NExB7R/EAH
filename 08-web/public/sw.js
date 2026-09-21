@@ -15,6 +15,17 @@ const IMAGE_CACHE = `${VERSION}-images`
 const PAGE_CACHE = `${VERSION}-pages`
 
 // نُبقي أول زيارة مخففة جدًا — الباقي cache-on-demand
+// صفحات احتياطية تظهر أوفلاين
+const OFFLINE_FALLBACKS = {
+  '/explore': '/offline',
+  '/offers': '/offline',
+  '/trends': '/offline',
+  '/new': '/offline',
+  '/featured': '/offline',
+  '/projects': '/offline',
+  '/account': '/offline',
+}
+
 const PRE_CACHE = [
   '/',
   '/offline',
