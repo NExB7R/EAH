@@ -26,14 +26,6 @@ export default function HomeHero() {
         </div>
 
         <div className="hh__hook">
-          <span className="hh__hook-icon" aria-hidden>
-            <svg viewBox="0 0 32 32" fill="none">
-              <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="1.4" opacity="0.35"/>
-              <circle cx="16" cy="16" r="8" stroke="currentColor" strokeWidth="1.6" opacity="0.7"/>
-              <circle cx="16" cy="16" r="2.6" fill="currentColor"/>
-              <path d="M16 1.5 L16 5.5 M16 26.5 L16 30.5 M1.5 16 L5.5 16 M26.5 16 L30.5 16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-            </svg>
-          </span>
           <span className="hh__hook-line">شبيك لبيك</span>
           <span className="hh__hook-sub-line">كل حاجة حواليك</span>
         </div>
