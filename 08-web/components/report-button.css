@@ -10,7 +10,7 @@
 .rb-modal {
   position: fixed; inset: 0; z-index: 9999;
   display: flex; align-items: center; justify-content: center; padding: 20px;
-  background: rgba(7,6,11,.9); backdrop-filter: blur(20px);
+  background: rgba(7,6,11,.9); 
   animation: rbFade 0.10s ease;
 }
 @keyframes rbFade { from { opacity: 0; } to { opacity: 1; } }

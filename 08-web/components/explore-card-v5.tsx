@@ -1,6 +1,7 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import FavoriteButton from './favorite-button'
 import OpenNowBadge from './open-now-badge'
 import './explore-card-v5.css'
@@ -59,7 +60,7 @@ const HOOK_BY_TYPE: Record<string, string> = {
   delivery_office: 'طلبك في السكة',
 }
 
-export default function ExploreCardV5({ business }: { business: Business }) {
+function ExploreCardV5Base({ business }: { business: Business }) {
   const [flipped, setFlipped] = useState(false)
   const [slideIdx, setSlideIdx] = useState(0)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -126,7 +127,7 @@ export default function ExploreCardV5({ business }: { business: Business }) {
           {logo && (
             <div className="ec5__logo" aria-hidden>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logo} alt="" />
+              <Image src={logo} alt="" width={60} height={60} sizes="60px" loading="lazy" />
             </div>
           )}
 
@@ -161,7 +162,7 @@ export default function ExploreCardV5({ business }: { business: Business }) {
                 <div
                   key={i}
                   className={`ec5__gallery-img ${i === slideIdx ? 'is-active' : ''}`}
-                  style={{ backgroundImage: `url(${s.url})` }}
+                  style={{ backgroundImage: `url(${s.url})`, contentVisibility: `auto` }}
                 />
               ))}
             </div>
@@ -196,3 +197,5 @@ export default function ExploreCardV5({ business }: { business: Business }) {
     </Link>
   )
 }
+
+export default React.memo(ExploreCardV5Base)

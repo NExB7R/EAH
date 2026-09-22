@@ -11,8 +11,6 @@
   border-radius: 999px;
   background: linear-gradient(135deg, rgba(20, 14, 34, 0.98), rgba(11, 8, 22, 0.98));
   border: 1px solid rgba(168, 85, 247, 0.4);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
   font-family: var(--font-cairo, system-ui);
   font-size: 0.78rem;

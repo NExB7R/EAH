@@ -119,7 +119,6 @@ select:focus {
   border: 1px solid var(--e-border);
   border-radius: var(--e-r-lg);
   padding: 20px;
-  backdrop-filter: blur(12px);
   transition: border-color var(--e-trans), transform var(--e-trans), box-shadow var(--e-trans);
 }
 .e-card:hover {
@@ -322,7 +321,6 @@ textarea, select {
 .e-modal {
   position: fixed; inset: 0; z-index: 1000;
   background: rgba(5,2,15,0.78);
-  backdrop-filter: blur(10px);
   display: flex; align-items: flex-end; justify-content: center;
   animation: e-fade 180ms ease;
 }
@@ -555,7 +553,6 @@ textarea, select {
 .e-drawer {
   position: fixed; inset: 0; z-index: 1000;
   background: rgba(5,2,15,0.78);
-  backdrop-filter: blur(8px);
   animation: e-fade 180ms ease;
 }
 .e-drawer__panel {
@@ -609,7 +606,6 @@ textarea, select {
   padding: 8px;
   z-index: 200;
   box-shadow: 0 16px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(168,85,247,0.08) inset;
-  backdrop-filter: blur(14px);
   animation: e-pop-in 150ms ease;
 }
 .e-popover__panel--end { inset-inline-start: auto; inset-inline-end: 0; }
@@ -721,7 +717,6 @@ textarea, select {
 .e-sheet {
   position: fixed; inset: 0; z-index: 1000;
   background: rgba(5,2,15,0.78);
-  backdrop-filter: blur(8px);
   display: flex; align-items: flex-end; justify-content: center;
   animation: e-fade 180ms ease;
 }
@@ -834,7 +829,6 @@ textarea, select {
   border: 1px solid var(--e-border-strong);
   border-radius: var(--e-r-md);
   box-shadow: 0 16px 40px rgba(0,0,0,0.6);
-  backdrop-filter: blur(14px);
   z-index: 100;
   padding: 6px;
   animation: e-pop-in 150ms ease;
@@ -989,7 +983,6 @@ textarea, select {
   border: 1px solid var(--e-border-strong);
   border-radius: var(--e-r-md);
   box-shadow: 0 16px 40px rgba(0,0,0,0.6);
-  backdrop-filter: blur(14px);
   padding: 12px;
   z-index: 100;
   animation: e-pop-in 150ms ease;

@@ -57,21 +57,21 @@ export default async function HomeDynamicV2() {
   const featured = [...diversified]
     .filter((b) => b.badge === 'مميز' || b.isFeatured)
     .sort((a, b) => (b.recentViews ?? 0) - (a.recentViews ?? 0))
-    .slice(0, 12)
+    .slice(0, 6)
 
   const trending = [...diversified]
     .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
-    .slice(0, 12)
+    .slice(0, 6)
 
   const projects = [...diversified]
     .filter((b: any) => b.is_new_project === true)
     .sort((a: any, b: any) => (a.ageInDays ?? 999) - (b.ageInDays ?? 999))
-    .slice(0, 12)
+    .slice(0, 6)
 
   const newOnes = [...diversified]
     .filter((b) => (b.ageInDays ?? 999) < 30 && !(b as any).is_new_project)
     .sort((a, b) => (a.ageInDays ?? 999) - (b.ageInDays ?? 999))
-    .slice(0, 12)
+    .slice(0, 6)
 
   const lowInventory = total <= 3
   const hasFeatured = !lowInventory && featured.length > 0

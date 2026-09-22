@@ -10,8 +10,6 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 220ms cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
 }
 
 .nav-drawer.is-open {

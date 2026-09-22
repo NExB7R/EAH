@@ -490,3 +490,12 @@
 @media (prefers-reduced-motion: reduce) {
   .ss2__see-all { animation: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Performance 2026 — content-visibility
+   المتصفح يتجاهل السلايدرز خارج الشاشة
+   ═══════════════════════════════════════════════════════════════ */
+.ss2 {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 380px;
+}

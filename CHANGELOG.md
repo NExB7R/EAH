@@ -54,6 +54,7 @@
 - **17:06** — feat: 2026 soft neon + glass — filter/voice/business-hours polish + PRs merge
 - **17:15** — perf: major performance fix — remove card blurs + stop continuous animations
 - **17:21** — perf: aggressive fix — remove 40+ backdrop-filter + all card animations + aurora orbs
+- **17:30** — perf: next/image for covers + reduce to 6 cards per section + React.memo + content-visibility
 <!-- AUTO_END -->
 
 ---
