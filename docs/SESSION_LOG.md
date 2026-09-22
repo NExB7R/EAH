@@ -182,3 +182,9 @@
 ### 2026-09-18 21:11 UTC — v1.1.2
 - **Action:** fix: split coupon types from server-only lib (client build error)
 - **Branch:** ui-onlook
+
+### 2026-09-22 — Sprint 2026 Home & Mobile (kickoff)
+- **Action:** feat(security): migrate abuse-sensitive routes to atomic DB rate limiter (pre-prod item 6)
+- **Action:** fix(home/mobile): open-now cyan state on V5 cards, no auto-advance on mobile/reduced-motion, 44px touch targets (back-to-top, slider nav, search buttons)
+- **Docs:** docs/sprints/SPRINT_2026_HOME_MOBILE.md
+- **Branch:** arena/01a0c683-eah

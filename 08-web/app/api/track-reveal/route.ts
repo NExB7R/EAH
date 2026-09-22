@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase-server'
-import { checkRate, getClientIp } from '@/lib/security/rate-limit'
+import { checkRateDb, getClientIp } from '@/lib/security/rate-limit'
 
 const Schema = z.object({
   business_id: z.string().uuid(),
@@ -9,7 +9,7 @@ const Schema = z.object({
 })
 
 export async function POST(request: Request) {
-  const rate = checkRate(`track-reveal:${getClientIp(request)}`, 40, 60_000)
+  const rate = await checkRateDb(`track-reveal:${getClientIp(request)}`, 40, 60_000)
   if (!rate.ok) return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 })
 
   try {

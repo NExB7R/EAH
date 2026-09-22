@@ -35,8 +35,13 @@ export default function SectionSliderV2({
     if (isPaused || items.length === 0) return
     const el = scrollRef.current
     if (!el) return
+    // لا حركة مستمرة مع تقليل الحركة أو على الشاشات الصغيرة
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (window.matchMedia('(max-width: 640px)').matches) return
 
     const t = setInterval(() => {
+      // لو الشاشة بقت صغيرة أثناء التشغيل — وقّف التمرير التلقائي
+      if (window.matchMedia('(max-width: 640px)').matches) return
       const max = el.scrollWidth - el.clientWidth
       if (max <= 4) return
       const isRTL = getComputedStyle(el).direction === 'rtl'

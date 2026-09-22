@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import FavoriteButton from './favorite-button'
+import OpenNowBadge from './open-now-badge'
 import './explore-card-v5.css'
 import { ESticker } from './stickers'
 
@@ -77,6 +78,8 @@ export default function ExploreCardV5({ business }: { business: Business }) {
 
   useEffect(() => {
     if (!flipped || slides.length <= 1) return
+    // لا تبديل تلقائي للصور مع تقليل الحركة
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     timerRef.current = setInterval(() => {
       setSlideIdx((i) => (i + 1) % slides.length)
     }, 3000)
@@ -133,6 +136,10 @@ export default function ExploreCardV5({ business }: { business: Business }) {
               {isTrending && <ESticker variant="trending" size="sm" rotate={6} />}
             </div>
           )}
+
+          <div className="ec5__open">
+            <OpenNowBadge workingHours={business.workingHours} />
+          </div>
 
           <div className="ec5__fav" onClick={(e) => e.preventDefault()}>
             <FavoriteButton businessId={business.id ?? business.slug} size="sm" />

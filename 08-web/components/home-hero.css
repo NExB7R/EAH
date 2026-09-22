@@ -561,3 +561,41 @@
   .hh__slogan-text::before { inset-inline-start: -10px; }
   .hh__slogan-text::after  { inset-inline-end: -10px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Sprint 2026 Home & Mobile — الترتيب والمساحات النهائية
+   (سلوجان → هوك → بحث → 3 تصنيفات، بدون مساحات ميتة)
+   ═══════════════════════════════════════════════════════════════ */
+.hh { padding: 28px 20px 40px; }
+@media (max-width: 640px) {
+  .hh { padding: 84px 16px 32px; }
+}
+
+.hh__tagline { margin: 4px auto 14px; }
+
+/* السلوجان فوق والهوك تحته */
+.hh__slogan { margin: 2px auto 10px; }
+.hh__hook { margin: 0 0 18px; gap: 6px; }
+
+.hh__search { margin-top: 0; }
+
+/* 3 تصنيفات بدل 4 */
+.hh__cats {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 440px;
+  margin: 16px auto 0;
+  gap: 10px;
+}
+/* التالت دلوقتي = توصيل (بنفسجي) */
+.hh__cat:nth-child(3)::before {
+  background: radial-gradient(ellipse at 50% 0%, rgba(107, 33, 255, 0.22), transparent 65%);
+}
+.hh__cat:nth-child(3) .hh__cat-icon {
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(107, 33, 255, 0.15), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+@media (max-width: 640px) {
+  .hh__cats { grid-template-columns: repeat(3, 1fr); max-width: 100%; gap: 8px; margin-top: 14px; }
+  .hh__hook { margin-bottom: 14px; }
+}

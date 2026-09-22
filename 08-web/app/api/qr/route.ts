@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
-import { checkRate, getClientIp } from '@/lib/security/rate-limit'
+import { checkRateDb, getClientIp } from '@/lib/security/rate-limit'
 
 export const runtime = 'nodejs'
 
 export async function GET(request: Request) {
-  const rate = checkRate(`qr:${getClientIp(request)}`, 60, 60_000)
+  const rate = await checkRateDb(`qr:${getClientIp(request)}`, 60, 60_000)
   if (!rate.ok) return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 })
 
   const { searchParams } = new URL(request.url)

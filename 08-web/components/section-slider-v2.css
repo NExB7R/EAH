@@ -142,7 +142,8 @@
   .ss2 { padding: 0 12px; margin: 16px auto; }
   .ss2__head { gap: 10px; }
   .ss2__see-all { font-size: 0.72rem; padding: 5px 10px; }
-  .ss2__nav { width: 38px; height: 38px; font-size: 1.1rem; }
+  /* 44px: الحد الأدنى لمساحات اللمس على الموبايل */
+  .ss2__nav { width: 44px; height: 44px; font-size: 1.1rem; }
   .ss2__track { gap: 10px; }
 }
 

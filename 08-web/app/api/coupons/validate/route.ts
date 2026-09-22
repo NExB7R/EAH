@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
-import { checkRate, getClientIp } from '@/lib/security/rate-limit'
+import { checkRateDb, getClientIp } from '@/lib/security/rate-limit'
 
 export async function POST(req: Request) {
   const ip = getClientIp(req)
-  const rl = checkRate(`coupon-validate:${ip}`, 20, 60_000)
+  const rl = await checkRateDb(`coupon-validate:${ip}`, 20, 60_000)
   if (!rl.ok) return NextResponse.json({ ok: false, reason: 'rate_limit' }, { status: 429 })
 
   const body = await req.json().catch(() => null)

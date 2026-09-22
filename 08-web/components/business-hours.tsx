@@ -27,9 +27,9 @@ function to12h(time: string): string {
 export default function BusinessHours({ hours }: { hours: WorkingHours | null | undefined }) {
   if (!hours || Object.keys(hours).length === 0) return null
 
-  const today = new Date().getDay() // 0=Sun..6=Sat
-  // convert JS day (0=Sun) to our keys
-  const todayKey = ['sun','mon','tue','wed','thu','fri','sat'][today]
+  // "النهارده" بتوقيت القاهرة مش بتوقيت السيرفر
+  const egyptNow = new Date(new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' }))
+  const todayKey = ['sun','mon','tue','wed','thu','fri','sat'][egyptNow.getDay()]
 
   return (
     <section className="bhrs">
@@ -53,7 +53,7 @@ export default function BusinessHours({ hours }: { hours: WorkingHours | null | 
                 {d.label}
               </span>
               <span className="bhrs__time">
-                {h.closed ? 'مقفول' : `${to12h(h.open)} — ${to12h(h.close)}`}
+                {h.closed ? 'مقفول' : h.open === h.close ? 'مفتوح 24 ساعة' : `${to12h(h.open)} — ${to12h(h.close)}`}
               </span>
             </li>
           )
