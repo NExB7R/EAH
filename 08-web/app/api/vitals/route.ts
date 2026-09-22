@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 
 const Schema = z.object({
   name: z.enum(['LCP', 'INP', 'CLS', 'FCP', 'TTFB']),

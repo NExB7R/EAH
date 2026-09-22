@@ -123,9 +123,13 @@
   cursor: pointer;
   transition: all 120ms ease;
 }
-.fs__item:hover {
+.fs__item:hover:not(:disabled) {
   background: rgba(168, 85, 247, 0.1);
   color: #F4F2FA;
+}
+.fs__item:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
 }
 .fs__item.is-selected {
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(168, 85, 247, 0.08));

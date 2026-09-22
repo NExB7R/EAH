@@ -2,7 +2,6 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 import EahLogo from '@/components/eah-logo'
 import './about-2026.css'
 
@@ -56,7 +55,6 @@ export default function AboutPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
 
       <main className="ab2">
         {/* ═══ 1. HERO — أول لقاء (مختصر) ═══ */}

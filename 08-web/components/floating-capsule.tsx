@@ -219,7 +219,7 @@ export default function FloatingCapsuleHeader() {
             <span className="nav-drawer__qr-title">كيو آر EAH</span>
             <span className="nav-drawer__qr-sub">امسح الكود — شارك المنصة مع صحابك</span>
             <img
-              src={`https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent('https://eah-sq.vercel.app')}&size=140x140&bgcolor=0A0714&color=E8C79A&margin=8`}
+              src={`/api/qr?url=${encodeURIComponent('https://eah-sq.vercel.app')}&size=256`}
               alt="QR EAH"
               className="nav-drawer__qr-img"
               loading="lazy"

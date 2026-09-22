@@ -32,6 +32,7 @@ function TypeIcon({ type }: { type: string }) {
   const c = { width: 48, height: 48, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
   if (type === 'restaurant') return <svg {...c}><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>
   if (type === 'pharmacy') return <svg {...c}><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
+  if (type === 'supermarket') return <svg {...c}><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.5 12.5a2 2 0 0 0 2 1.5h8.5a2 2 0 0 0 2-1.6L22 7H6"/></svg>
   if (type === 'delivery_office') return <svg {...c}><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
   return <svg {...c}><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
 }
@@ -39,12 +40,14 @@ function TypeIcon({ type }: { type: string }) {
 const TYPE_LABEL: Record<string, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
+  supermarket: 'ماركت',
   delivery_office: 'توصيل',
 }
 
 const TYPE_GRADIENT: Record<string, string> = {
   restaurant: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
   pharmacy: 'linear-gradient(135deg, #A855F7 0%, #9333EA 100%)',
+  supermarket: 'linear-gradient(135deg, #00D9B8 0%, #0F766E 100%)',
   delivery_office: 'linear-gradient(135deg, #A855F7 0%, #6B21FF 100%)',
 }
 

@@ -5,7 +5,6 @@ import { getMyFollowingIds } from '@/lib/follows'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'بتتابع إيه' }
@@ -30,7 +29,6 @@ export default async function FollowingPage() {
     <>
       <FloatingCapsuleHeader />
       <PageLogo />
-      <BackToTop />
       <main className="e-page">
         <h1 className="acc-title e-gradient">بتتابع إيه</h1>
         <p className="e-page__sub">{businesses.length} نشاط</p>

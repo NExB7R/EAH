@@ -3,6 +3,12 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+:root {
+  --font-cairo: 'Cairo Variable', 'Tahoma', system-ui, sans-serif;
+  --font-cairo-play: 'Cairo Variable', 'Tahoma', system-ui, sans-serif;
+  --font-signature: 'Dancing Script Variable', cursive;
+}
+
 html {
   margin: 0;
   padding: 0;
@@ -234,9 +240,7 @@ main > section::before,
 main > section::after,
 [class*="bg-"],
 [class*="background-"],
-[class*="glow"],
-[class*="aura"],
-[class*="orb"] {
+[class*="glow"] {
   animation: none !important;
 }
 
@@ -356,27 +360,6 @@ h3, h4 {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
   font-weight: 900;
 }
-
-/* ═══ 2026 Icon Background Layer ═══ */
-.eah-icon-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-  opacity: 0.35;
-}
-.eah-icon-bg__item {
-  position: absolute;
-  color: #A855F7;
-  filter: drop-shadow(0 0 6px currentColor);
-  animation: eahFloat 20s ease-in-out infinite;
-}
-@keyframes eahFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-12px) rotate(6deg); }
-}
-
 
 /* ═══ Global Header Offset ═══ */
 body {

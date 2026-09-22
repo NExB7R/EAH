@@ -2,7 +2,6 @@ import { getPublishedBusinesses } from '@/lib/data'
 import NearMeClient from '@/components/near-me/near-me-client'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 
 export const revalidate = 120
 export const metadata = { title: 'قريب مني' }
@@ -22,7 +21,6 @@ export default async function NearMePage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main className="e-page">
         <h1 className="nm-title e-gradient">قريب مني</h1>
         <p className="e-page__sub">بنوريك الأقرب ليك في شبين والقرى حواليها</p>

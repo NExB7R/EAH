@@ -3,31 +3,51 @@
   width: 100%; max-width: 600px;
   padding: 6px 6px 6px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(139,92,246,.35);
-  background: rgba(10,8,18,.85);
+  position: relative;
+  border: 1px solid rgba(168, 85, 247, 0.32);
+  background: linear-gradient(180deg, rgba(18, 13, 31, 0.92), rgba(9, 7, 16, 0.9));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), inset 0 0 24px rgba(168,85,247,.045), 0 12px 36px rgba(0,0,0,.24);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-  transition: all 0.15s ease;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
 }
 .sbar:focus-within {
-  border-color: #A855F7;
-  box-shadow: 0 0 8px rgba(168,85,247,.4);
+  border-color: rgba(0, 217, 184, 0.72);
+  background: linear-gradient(180deg, rgba(18, 17, 32, 0.96), rgba(8, 11, 18, 0.94));
+  box-shadow: inset 0 0 30px rgba(0,217,184,.055), 0 0 0 3px rgba(0,217,184,.1), 0 14px 42px rgba(0,0,0,.3);
 }
 .sbar__icon { width: 20px; height: 20px; color: #A29DB5; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
 .sbar__icon svg { width: 100%; height: 100%; }
 .sbar__input {
-  flex: 1; border: none; outline: none; background: transparent;
+  flex: 1; min-width: 0; border: none; outline: none; background: transparent;
   color: #F4F2FA; font-family: inherit; font-size: .92rem; padding: 11px 0;
+  appearance: none;
 }
-.sbar__input::placeholder { color: #A29DB5; opacity: .7; }
+.sbar__input::-webkit-search-cancel-button { display: none; }
+.sbar__input::placeholder { color: #A29DB5; opacity: .78; }
+.sbar__clear {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(168,85,247,.09);
+  color: #B8B2C9;
+  font: 700 1.15rem/1 system-ui;
+  cursor: pointer;
+}
+.sbar__clear:hover { color: #fff; background: rgba(168,85,247,.18); }
 .sbar__btn {
   border: none; padding: 9px 20px; border-radius: 999px;
   background: linear-gradient(135deg,#6B21FF,#A855F7);
   color: #fff; font-weight: 900; font-size: .85rem;
   cursor: pointer; transition: all 0.10s ease;
-  box-shadow: 0 0 16px rgba(107,33,255,.5);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 6px 18px rgba(107,33,255,.24);
   font-family: inherit;
 }
-.sbar__btn:hover { transform: translateY(-1px); box-shadow: 0 0 8px rgba(107,33,255,.7); }
+.sbar__btn:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,.24), 0 8px 22px rgba(107,33,255,.32); }
 .sbar--lg { padding: 8px 8px 8px 20px; }
 .sbar--lg .sbar__input { font-size: 1rem; padding: 13px 0; }
 .sbar--lg .sbar__btn { padding: 11px 24px; font-size: .9rem; }

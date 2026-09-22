@@ -3,7 +3,6 @@ import { createClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import EahLogo from '@/components/eah-logo'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 import SearchBar from '@/components/search-bar'
 import ExploreCard from '@/components/explore-card'
 import './search.css'
@@ -46,7 +45,6 @@ export default async function SearchPage({
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main className="sr">
         <header className="sr__hero">
           <Link href="/" className="sr__back">← الرئيسية</Link>

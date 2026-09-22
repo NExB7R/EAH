@@ -2,7 +2,6 @@ import { Suspense } from 'react'
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 import EahLogo from '@/components/eah-logo'
 import ProjectsClient from '@/components/projects-client'
 import { getPublishedBusinesses } from '@/lib/data'
@@ -26,7 +25,6 @@ export default async function ProjectsPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main className="prj">
         <header className="prj__hero">
           <div className="prj__hero-glow" aria-hidden />

@@ -4,7 +4,6 @@ import { getMerchantCoupons, couponLabel } from '@/lib/coupons'
 import CouponForm from '@/components/coupons/coupon-form'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'الكوبونات' }
@@ -38,7 +37,6 @@ export default async function MerchantCouponsPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main className="e-page">
         <h1 className="acc-title e-gradient">كوبونات {biz.name}</h1>
         <p className="e-page__sub">أضف عرضك — هيظهر بعد موافقة الإدارة</p>

@@ -1,6 +1,7 @@
 'use server'
 import { revalidatePath } from 'next/cache'
 import { approvePendingChange, rejectPendingChange } from '@/lib/admin/pending'
+import { notifyPendingDecision } from '@/lib/admin/pending-notifications'
 
 export async function approveAction(id: string, note: string) {
   const r = await approvePendingChange(id, note || undefined)
@@ -15,14 +16,11 @@ export async function approveAction(id: string, note: string) {
   revalidatePath('/admin/pending')
   revalidatePath('/admin/audit')
 
-  // notify merchant
   try {
-    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/api/admin/pending/notify-merchant`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pendingId: id, status: 'approved', note }),
-    })
-  } catch { /* silent */ }
+    await notifyPendingDecision(id, 'approved', note || undefined)
+  } catch {
+    // The moderation decision succeeded; push delivery must not roll it back.
+  }
 
   return { ok: true }
 }
@@ -40,14 +38,11 @@ export async function rejectAction(id: string, note: string) {
   revalidatePath('/admin/pending')
   revalidatePath('/admin/audit')
 
-  // notify merchant
   try {
-    await fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/api/admin/pending/notify-merchant`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ pendingId: id, status: 'rejected', note }),
-    })
-  } catch { /* silent */ }
+    await notifyPendingDecision(id, 'rejected', note || undefined)
+  } catch {
+    // The moderation decision succeeded; push delivery must not roll it back.
+  }
 
   return { ok: true }
 }

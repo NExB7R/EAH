@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: '**.googleusercontent.com' },
       { protocol: 'https', hostname: '**.fbcdn.net' },
+      { protocol: 'https', hostname: 'res.cloudinary.com' },
     ],
     minimumCacheTTL: 2592000,
   },
@@ -32,18 +33,27 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
+    const scriptSrc = [
+      "'self'",
+      "'unsafe-inline'",
+      ...(!isProd ? ["'unsafe-eval'"] : []),
+      'https://va.vercel-scripts.com',
+      'https://challenges.cloudflare.com',
+    ].join(' ')
+
     const csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "font-src 'self' https://fonts.gstatic.com data:",
-      "img-src 'self' data: blob: https: https://*.supabase.co https://images.unsplash.com",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vitals.vercel-insights.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://*.ingest.us.sentry.io",
+      `script-src ${scriptSrc}`,
+      "style-src 'self' 'unsafe-inline'",
+      "font-src 'self' data:",
+      "img-src 'self' data: blob: https: https://*.supabase.co https://images.unsplash.com https://res.cloudinary.com",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vitals.vercel-insights.com https://challenges.cloudflare.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://*.ingest.us.sentry.io",
+      "frame-src 'self' https://challenges.cloudflare.com",
       "frame-ancestors 'self'",
       "base-uri 'self'",
       "form-action 'self'",
       "object-src 'none'",
-      "upgrade-insecure-requests",
+      ...(isProd ? ['upgrade-insecure-requests'] : []),
     ].join('; ')
 
     return [
@@ -83,12 +93,6 @@ const nextConfig: NextConfig = {
           { key: 'Service-Worker-Allowed', value: '/' },
         ],
       },
-      ...(isProd
-        ? [{
-            source: '/_next/static/(.*)',
-            headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
-          }]
-        : []),
     ]
   },
 }

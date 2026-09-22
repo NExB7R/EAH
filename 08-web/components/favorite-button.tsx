@@ -2,7 +2,32 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase-browser'
 import { enqueue } from '@/lib/offline-queue'
+import { IcHeart } from '@/components/eah-icons'
 import './favorite-button.css'
+
+type FavoriteState = { userId: string | null; ids: Set<string> }
+let favoriteStatePromise: Promise<FavoriteState> | null = null
+
+function loadFavoriteState(): Promise<FavoriteState> {
+  if (favoriteStatePromise) return favoriteStatePromise
+
+  favoriteStatePromise = (async () => {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { userId: null, ids: new Set<string>() }
+
+    const { data } = await supabase
+      .from('favorites')
+      .select('business_id')
+      .eq('user_id', user.id)
+    return {
+      userId: user.id,
+      ids: new Set((data ?? []).map((row) => row.business_id as string)),
+    }
+  })().catch(() => ({ userId: null, ids: new Set<string>() }))
+
+  return favoriteStatePromise
+}
 
 export default function FavoriteButton({
   businessId,
@@ -12,104 +37,82 @@ export default function FavoriteButton({
   size?: 'sm' | 'md'
 }) {
   const [active, setActive] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const [ready, setReady] = useState(false)
   const [busy, setBusy] = useState(false)
   const [needsAuth, setNeedsAuth] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-    const supabase = createClient()
     let alive = true
-    void (async () => {
-      const { data: { user } } = await supabase.auth.getUser()
+    void loadFavoriteState().then((state) => {
       if (!alive) return
-      if (!user) {
-        setNeedsAuth(true)
-        return
-      }
-      const { data } = await supabase
-        .from('favorites')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('business_id', businessId)
-        .maybeSingle()
-      if (alive) setActive(!!data)
-    })()
+      setNeedsAuth(!state.userId)
+      setActive(state.ids.has(businessId))
+      setReady(true)
+    })
     return () => { alive = false }
   }, [businessId])
 
-  async function toggle(e: React.MouseEvent) {
-    e.preventDefault()
-    e.stopPropagation()
-    if (busy || !mounted) return
+  async function toggle(event: React.MouseEvent) {
+    event.preventDefault()
+    event.stopPropagation()
+    if (busy || !ready) return
 
     if (needsAuth) {
-      // نودّي المستخدم للتسجيل
-      const next = typeof window !== 'undefined' ? window.location.pathname : '/'
+      const next = `${window.location.pathname}${window.location.search}`
       window.location.href = `/auth?next=${encodeURIComponent(next)}`
       return
     }
 
-    const willBeActive = !active
-    setActive(willBeActive)
+    const nextActive = !active
+    setActive(nextActive)
     setBusy(true)
 
-    // Offline — enqueue
-    if (typeof navigator !== 'undefined' && !navigator.onLine) {
-      try {
+    try {
+      const state = await loadFavoriteState()
+      if (!state.userId) throw new Error('unauthorized')
+
+      if (!navigator.onLine) {
         await enqueue({
           type: 'favorite',
           endpoint: '/api/favorites',
-          method: willBeActive ? 'POST' : 'DELETE',
-          payload: { business_id: businessId, action: willBeActive ? 'add' : 'remove' },
+          method: nextActive ? 'POST' : 'DELETE',
+          payload: { business_id: businessId, action: nextActive ? 'add' : 'remove' },
         })
         window.dispatchEvent(new CustomEvent('eah:queue-updated'))
-      } catch {
-        setActive(!willBeActive)
-      } finally {
-        setBusy(false)
-      }
-      return
-    }
-
-    // Online — direct
-    try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        setNeedsAuth(true)
-        setActive(!willBeActive)
-        return
-      }
-      if (willBeActive) {
-        await supabase.from('favorites').insert({ user_id: user.id, business_id: businessId })
       } else {
-        await supabase.from('favorites').delete().eq('user_id', user.id).eq('business_id', businessId)
+        const supabase = createClient()
+        const result = nextActive
+          ? await supabase.from('favorites').upsert(
+              { user_id: state.userId, business_id: businessId },
+              { onConflict: 'user_id,business_id' },
+            )
+          : await supabase.from('favorites')
+              .delete()
+              .eq('user_id', state.userId)
+              .eq('business_id', businessId)
+        if (result.error) throw result.error
       }
+
+      if (nextActive) state.ids.add(businessId)
+      else state.ids.delete(businessId)
     } catch {
-      await enqueue({
-        type: 'favorite',
-        endpoint: '/api/favorites',
-        method: willBeActive ? 'POST' : 'DELETE',
-        payload: { business_id: businessId, action: willBeActive ? 'add' : 'remove' },
-      })
+      setActive(!nextActive)
     } finally {
       setBusy(false)
     }
   }
 
-  const isDisabled = mounted && busy
-
   return (
     <button
       type="button"
-      className={'fav-btn fav-btn--' + size + (active ? ' is-active' : '')}
+      className={`fav-btn fav-btn--${size}${active ? ' is-active' : ''}`}
       onClick={toggle}
-      disabled={isDisabled}
+      disabled={busy}
       aria-label={active ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}
+      aria-pressed={active}
       title={needsAuth ? 'سجّل عشان تضيف للمفضلة' : active ? 'في المفضلة' : 'أضف للمفضلة'}
     >
-      {active ? '' : '🤍'}
+      <IcHeart />
     </button>
   )
 }

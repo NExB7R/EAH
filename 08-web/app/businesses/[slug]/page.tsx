@@ -18,7 +18,6 @@ import SiteFooter from '@/components/site-footer'
 import BusinessClaimCTA from '@/components/business-claim-cta'
 import OrderRequest from '@/components/order-request'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
-import BackToTop from '@/components/back-to-top'
 import BusinessMap from '@/components/business-map'
 import BusinessShare from '@/components/business-share'
 import BusinessOwnerTrial, { WhatsAppOrdersToggle } from '@/components/business-owner-trial'
@@ -106,7 +105,6 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       {hasId && <PageViewTracker businessId={business.businessId!} />}
 
       <main className="biz-page">

@@ -60,40 +60,23 @@ export async function checkRateDb(
 ): Promise<{ ok: boolean; remaining: number; resetAt: number }> {
   try {
     const supabase = createServiceClient()
-    const now = new Date()
-    const resetAt = new Date(now.getTime() + windowMs)
+    const { data, error } = await supabase.rpc('consume_rate_limit', {
+      p_key: key.slice(0, 300),
+      p_limit: limit,
+      p_window_seconds: Math.max(1, Math.ceil(windowMs / 1000)),
+    })
+    if (error) throw error
 
-    // upsert مع increment
-    const { data: existing } = await supabase
-      .from('rate_limits')
-      .select('count,reset_at')
-      .eq('key', key)
-      .maybeSingle()
+    const row = Array.isArray(data) ? data[0] : data
+    if (!row) throw new Error('empty_rate_limit_response')
 
-    if (!existing || new Date(existing.reset_at) < now) {
-      await supabase
-        .from('rate_limits')
-        .upsert({ key, count: 1, reset_at: resetAt.toISOString() }, { onConflict: 'key' })
-      return { ok: true, remaining: limit - 1, resetAt: resetAt.getTime() }
-    }
-
-    if (existing.count >= limit) {
-      return {
-        ok: false,
-        remaining: 0,
-        resetAt: new Date(existing.reset_at).getTime(),
-      }
-    }
-
-    const newCount = existing.count + 1
-    await supabase.from('rate_limits').update({ count: newCount }).eq('key', key)
     return {
-      ok: true,
-      remaining: limit - newCount,
-      resetAt: new Date(existing.reset_at).getTime(),
+      ok: Boolean(row.allowed),
+      remaining: Number(row.remaining ?? 0),
+      resetAt: new Date(row.reset_at).getTime(),
     }
   } catch {
-    // fallback → memory
+    // Safe fallback for local development or before the migration is applied.
     return checkRate(key, limit, windowMs)
   }
 }

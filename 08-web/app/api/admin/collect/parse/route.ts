@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase-server'
 import { checkRate, getClientIp } from '@/lib/security/rate-limit'
 import { extractFromHtml, extractFromMapsUrl, type ExtractedData } from '@/lib/collect/parser'
+import { fetchSafeExternalHtml } from '@/lib/security/safe-url'
 
 const schema = z.object({
   url: z.string().url(),
@@ -17,23 +18,16 @@ async function requireAdmin() {
   return { ok: !!role, sb }
 }
 
-async function fetchHtml(url: string): Promise<string | null> {
+async function fetchHtml(url: string): Promise<{ html: string; finalUrl: string } | null> {
   try {
-    const controller = new AbortController()
-    const t = setTimeout(() => controller.abort(), 12000)
-    const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; EAHCollect/2026; +https://eah-sq.vercel.app)',
-        'Accept': 'text/html,application/xhtml+xml',
-        'Accept-Language': 'ar-EG,ar;q=0.9,en;q=0.8',
-      },
-      signal: controller.signal,
-      redirect: 'follow',
+    return await fetchSafeExternalHtml(url, {
+      'User-Agent': 'Mozilla/5.0 (compatible; EAHCollect/2026; +https://eah-sq.vercel.app)',
+      Accept: 'text/html,application/xhtml+xml',
+      'Accept-Language': 'ar-EG,ar;q=0.9,en;q=0.8',
     })
-    clearTimeout(t)
-    if (!res.ok) return null
-    return await res.text()
-  } catch { return null }
+  } catch {
+    return null
+  }
 }
 
 // حساب مستوى الثقة لكل حقل
@@ -101,10 +95,10 @@ export async function POST(req: Request) {
     })
   }
 
-  const html = await fetchHtml(url)
-  if (!html) return NextResponse.json({ ok: false, error: 'fetch_failed' }, { status: 502 })
+  const fetched = await fetchHtml(url)
+  if (!fetched) return NextResponse.json({ ok: false, error: 'fetch_failed' }, { status: 502 })
 
-  const data = extractFromHtml(html, url)
+  const data = extractFromHtml(fetched.html, fetched.finalUrl)
   const confidence = computeConfidence(data)
 
   return NextResponse.json({
@@ -112,10 +106,10 @@ export async function POST(req: Request) {
     data,
     confidence,
     source: {
-      url,
-      platform: /facebook|fb\.com/i.test(url) ? 'facebook'
-              : /instagram/i.test(url) ? 'instagram'
-              : /google\./i.test(url) ? 'google'
+      url: fetched.finalUrl,
+      platform: /facebook|fb\.com/i.test(fetched.finalUrl) ? 'facebook'
+              : /instagram/i.test(fetched.finalUrl) ? 'instagram'
+              : /google\./i.test(fetched.finalUrl) ? 'google'
               : 'web',
       fetched_at: new Date().toISOString(),
     },

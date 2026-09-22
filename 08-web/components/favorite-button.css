@@ -1,16 +1,29 @@
 .fav-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  background: rgba(10,8,16,.7);
-  border: 1px solid rgba(139,92,246,.2);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.10s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0;
-  line-height: 1;
+  border: 1px solid rgba(168,85,247,.26);
+  border-radius: 50%;
+  background: rgba(10,8,16,.78);
+  color: #D8D4E3;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 5px 14px rgba(0,0,0,.24);
   backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: transform 150ms ease, color 150ms ease, border-color 150ms ease, background 150ms ease;
 }
-.fav-btn--md { width: 36px; height: 36px; font-size: 1.1rem; }
-.fav-btn--sm { width: 28px; height: 28px; font-size: .9rem; }
-.fav-btn:hover:not(:disabled) { transform: scale(1.1); border-color: rgba(236,72,153,.6); }
-.fav-btn.is-active { background: rgba(236,72,153,.15); border-color: rgba(236,72,153,.5); }
+.fav-btn--md { width: 36px; height: 36px; }
+.fav-btn--sm { width: 30px; height: 30px; }
+.fav-btn svg { width: 52%; height: 52%; }
+.fav-btn:hover:not(:disabled) {
+  transform: scale(1.06);
+  color: #F472B6;
+  border-color: rgba(244,114,182,.58);
+}
+.fav-btn.is-active {
+  color: #F472B6;
+  background: rgba(236,72,153,.16);
+  border-color: rgba(244,114,182,.55);
+}
+.fav-btn.is-active svg { fill: currentColor; }
 .fav-btn:disabled { opacity: .5; cursor: wait; }

@@ -1,17 +1,29 @@
 .onb {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 3px 10px; border-radius: 999px;
-  font-size: .68rem; font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: .68rem;
+  font-weight: 800;
+  backdrop-filter: blur(8px);
+}
+.onb::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 9px currentColor;
 }
 .onb--open {
-  background: rgba(168,85,247,.12);
-  border: 1px solid rgba(168,85,247,.35);
-  color: #C084FC;
+  background: rgba(0,217,184,.12);
+  border: 1px solid rgba(0,217,184,.34);
+  color: #55E7D1;
 }
 .onb--closed {
   background: rgba(107,104,128,.15);
   border: 1px solid rgba(107,104,128,.3);
   color: #A5A3B8;
 }
-
-@keyframes onbPulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }

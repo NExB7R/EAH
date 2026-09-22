@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createHash } from 'node:crypto'
 import { createClient } from '@/lib/supabase-server'
-import { checkRate, getClientIp } from '@/lib/security/rate-limit'
+import { checkRateDb, getClientIp } from '@/lib/security/rate-limit'
 import { UUID } from '@/lib/security/validate'
 import { trackEvent } from '@/lib/analytics/track'
 
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     }
 
     const ip = getClientIp(req)
-    const { ok } = checkRate(`reveal:${ip}`, RATE_LIMIT, RATE_WINDOW)
+    const { ok } = await checkRateDb(`reveal:${ip}`, RATE_LIMIT, RATE_WINDOW)
     if (!ok) return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 })
 
     const salt = process.env.EAH_VISITOR_SALT ?? ''

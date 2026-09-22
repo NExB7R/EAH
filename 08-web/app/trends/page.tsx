@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 import EahLogo from '@/components/eah-logo'
 import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from '@/components/eah-icons'
 
@@ -61,7 +60,6 @@ export default async function TrendsPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main className="tr">
         {/* Hero */}
         <section className="tr__hero">
