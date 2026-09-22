@@ -5,9 +5,22 @@
  * بيدعم: businesses بكل الحقول + contacts + media + offers + menu_items + reviews.
  * Idempotent: بيتخطى أي slug موجود بالفعل.
  */
-import { createClient } from '@supabase/supabase-js'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { createRequire } from 'node:module'
+
+// السكربت بيتنفذ من 08-web عشان يلاقي @supabase/supabase-js في node_modules بتاعها
+const require = createRequire(resolve(process.cwd(), 'package.json'))
+const { createClient } = require('@supabase/supabase-js')
+
+// حمّل .env.local لو موجود (Next بيحمّلها لوحدها، بس node العادي لأ)
+try {
+  const envPath = resolve(process.cwd(), '.env.local')
+  for (const line of readFileSync(envPath, 'utf-8').split('\n')) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/)
+    if (m && !process.env[m[1]]) process.env[m[1]] = m[2].trim()
+  }
+} catch { /* مفيش env file — نعتمد على env النظام */ }
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
