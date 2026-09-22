@@ -35,9 +35,7 @@
 
 /* FRONT — visible by default */
 .ec5__front {
-  background: linear-gradient(180deg, rgba(20, 14, 34, 0.72) 0%, rgba(10, 7, 20, 0.88) 100%);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  background: linear-gradient(180deg, #140E22 0%, #0A0714 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   transform: rotateY(0deg);
   opacity: 1;
@@ -52,8 +50,6 @@
 /* BACK — hidden by default */
 .ec5__back {
   background: rgba(10, 7, 20, 0.88);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   transform: rotateY(-180deg);
   opacity: 0;
@@ -306,7 +302,6 @@
   overflow: hidden;
   border: 2px solid rgba(232, 199, 154, 0.6);
   background: rgba(10, 7, 20, 0.85);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 4;
   box-shadow: var(--sh-md);

@@ -464,7 +464,7 @@
 .ss2__see-all {
   color: #E8C79A;
   transition: all 240ms cubic-bezier(0.22, 1, 0.36, 1);
-  animation: ss2SeeAllBreathe 5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  /* see-all breathing متوقف */
 }
 .ss2__see-all:hover {
   color: #F5D9A7;

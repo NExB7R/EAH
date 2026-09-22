@@ -498,7 +498,7 @@
     drop-shadow(0 0 14px rgba(232, 199, 154, 0.35))
     drop-shadow(0 0 40px rgba(232, 199, 154, 0.12));
 
-  animation: sloganBreathe 5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  /* slogan breathing متوقف للأداء */
 }
 
 /* خطوط ذهبية جانبية */
@@ -535,7 +535,7 @@
 /* ─── الهوك — حركة خفيفة ─── */
 .hh__hook-motion {
   display: inline-block;
-  animation: hookFloat 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  /* hook float متوقف للأداء */
   will-change: transform;
 }
 .hh__hook-sub-line .hh__hook-motion {

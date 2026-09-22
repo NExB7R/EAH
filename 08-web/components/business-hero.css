@@ -401,9 +401,7 @@
 
 /* ─── الكارد الرئيسي — Glass 2.0 ─── */
 .bh2__card {
-  background: var(--glass-bg-strong, rgba(20, 14, 34, 0.75));
-  backdrop-filter: var(--glass-blur, blur(24px) saturate(180%));
-  -webkit-backdrop-filter: var(--glass-blur, blur(24px) saturate(180%));
+  background: linear-gradient(180deg, rgba(20, 14, 34, 0.95), rgba(10, 7, 20, 0.9));
   border: 1px solid var(--glass-border-strong, rgba(168, 85, 247, 0.28));
   box-shadow:
     var(--glass-inner, inset 0 1px 0 rgba(255, 255, 255, 0.06)),
@@ -419,7 +417,7 @@
 
 /* ─── type badge — Soft Neon ذهبي ─── */
 .bh2__type-badge {
-  animation: bh2TypeBreathe 5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  /* badge breathing متوقف */
 }
 
 @keyframes bh2TypeBreathe {
@@ -435,7 +433,7 @@
 
 /* ─── offers badge — Soft Neon بنفسجي ─── */
 .bh2__offers-badge {
-  animation: bh2OffersBreathe 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  /* offers breathing متوقف */
 }
 
 @keyframes bh2OffersBreathe {

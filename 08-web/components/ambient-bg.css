@@ -17,7 +17,7 @@
   aspect-ratio: 1;
   border-radius: 50%;
   opacity: 0.32;
-  filter: blur(72px);
+  filter: blur(48px);
   transform: translate3d(0, 0, 0);
   will-change: transform;
 }
@@ -26,7 +26,7 @@
   top: -34%;
   inset-inline-start: -16%;
   background: radial-gradient(circle, rgba(139, 92, 246, 0.46), rgba(107, 33, 255, 0.08) 48%, transparent 70%);
-  animation: ambient-drift-purple 24s ease-in-out infinite alternate;
+  /* animation متوقفة للأداء */
 }
 
 .ambient-aurora__orb--gold {
@@ -34,7 +34,7 @@
   inset-inline-end: -28%;
   width: min(48vw, 600px);
   background: radial-gradient(circle, rgba(232, 199, 154, 0.28), rgba(166, 124, 82, 0.05) 52%, transparent 72%);
-  animation: ambient-drift-gold 30s ease-in-out infinite alternate;
+
 }
 
 .ambient-aurora__orb--cyan {
@@ -42,7 +42,7 @@
   inset-inline-start: 18%;
   width: min(42vw, 520px);
   background: radial-gradient(circle, rgba(0, 217, 184, 0.17), rgba(0, 217, 184, 0.03) 54%, transparent 72%);
-  animation: ambient-drift-cyan 28s ease-in-out infinite alternate;
+
 }
 
 .ambient-aurora__grain {
