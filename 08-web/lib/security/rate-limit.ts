@@ -1,10 +1,14 @@
 /**
  * EAH Rate Limiting
- * Strategy: In-memory (fast) → DB fallback for distributed needs.
- * Uses sliding window approximation.
+ * Strategy:
+ *  - checkRateDb (default for abuse-sensitive routes): atomic DB limiter
+ *    (`consume_rate_limit` RPC) — distributed across serverless instances.
+ *    Falls back to the in-memory limiter if the RPC is unavailable.
+ *  - checkRate (in-memory): only for high-volume / low-abuse endpoints
+ *    (e.g. analytics tracking) where a DB roundtrip per request is not worth it.
  *
  * Usage:
- *   const { ok, remaining } = await checkRate('login:ip', 10, 60_000)
+ *   const { ok, remaining } = await checkRateDb('login:ip', 10, 60_000)
  */
 
 import { createServiceClient } from '@/lib/supabase-server'

@@ -56,11 +56,12 @@
 .sbar .vb-wrap { display: inline-flex; align-items: center; }
 .sbar .vb-btn { width: 32px !important; height: 32px !important; }
 
-/* على الموبايل: خلي البحث أصغر شوية */
+/* على الموبايل: خلي البحث أصغر شوية — مع الحفاظ على 44px لأزرار اللمس */
 @media (max-width: 480px) {
   .sbar { padding: 4px 8px !important; gap: 6px !important; }
-  .sbar__btn { padding: 8px 14px !important; font-size: .8rem !important; }
+  .sbar__btn { padding: 8px 14px !important; font-size: .8rem !important; min-height: 44px; }
   .sbar__input { font-size: .9rem !important; }
+  .sbar .vb-btn { width: 40px !important; height: 40px !important; }
 }
 
 /* ═══ VoiceButton ═══ */

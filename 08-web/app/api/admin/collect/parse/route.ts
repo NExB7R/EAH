@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase-server'
-import { checkRate, getClientIp } from '@/lib/security/rate-limit'
+import { checkRateDb, getClientIp } from '@/lib/security/rate-limit'
 import { extractFromHtml, extractFromMapsUrl, type ExtractedData } from '@/lib/collect/parser'
 import { fetchSafeExternalHtml } from '@/lib/security/safe-url'
 
@@ -47,7 +47,7 @@ function computeConfidence(data: ExtractedData) {
 
 export async function POST(req: Request) {
   const ip = getClientIp(req)
-  const rl = checkRate(`collect:${ip}`, 20, 60_000)
+  const rl = await checkRateDb(`collect:${ip}`, 20, 60_000)
   if (!rl.ok) return NextResponse.json({ ok: false, error: 'rate_limit' }, { status: 429 })
 
   const auth = await requireAdmin()

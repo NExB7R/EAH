@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
 import { sendPushToUser } from '@/lib/push/send'
-import { checkRate, getClientIp } from '@/lib/security/rate-limit'
+import { checkRateDb, getClientIp } from '@/lib/security/rate-limit'
 import { z } from 'zod'
 import { UUID } from '@/lib/security/validate'
 
@@ -17,7 +17,7 @@ const BodySchema = z.object({
 
 export async function POST(request: Request) {
   const ip = getClientIp(request)
-  const { ok } = checkRate(`push-notify:${ip}`, 15, 60_000)
+  const { ok } = await checkRateDb(`push-notify:${ip}`, 15, 60_000)
   if (!ok) return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 })
 
   const supabase = await createClient()

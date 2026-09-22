@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
 import { sendPushToUser } from '@/lib/push/send'
-import { checkRate, getClientIp } from '@/lib/security/rate-limit'
+import { checkRateDb, getClientIp } from '@/lib/security/rate-limit'
 import { z } from 'zod'
 import { trackEvent } from '@/lib/analytics/track'
 
@@ -13,7 +13,7 @@ const Schema = z.object({
 
 export async function POST(request: Request) {
   const ip = getClientIp(request)
-  const { ok } = checkRate(`order-notify:${ip}`, 20, 60_000)
+  const { ok } = await checkRateDb(`order-notify:${ip}`, 20, 60_000)
   if (!ok) return NextResponse.json({ ok: false, error: 'rate_limited' }, { status: 429 })
 
   const body = await request.json().catch(() => null)

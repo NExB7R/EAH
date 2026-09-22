@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
 import { uploadToCloudinary } from '@/lib/cloudinary'
-import { checkRate } from '@/lib/security/rate-limit'
+import { checkRateDb } from '@/lib/security/rate-limit'
 
 const MAX_SIZE = 10 * 1024 * 1024
 const ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg']
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const user = userData.user
     if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const rate = checkRate(`avatar-upload:${user.id}`, 12, 60 * 60 * 1000)
+    const rate = await checkRateDb(`avatar-upload:${user.id}`, 12, 60 * 60 * 1000)
     if (!rate.ok) return NextResponse.json({ error: 'جرّب تاني بعد شوية' }, { status: 429 })
 
     const formData = await request.formData()
