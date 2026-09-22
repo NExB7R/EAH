@@ -3,8 +3,11 @@
   margin: 24px auto 0;
   padding: 20px 24px;
   border-radius: 20px;
-  background: linear-gradient(180deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.5));
-  border: 1px solid rgba(168, 85, 247, 0.18);
+  background: var(--glass-bg, rgba(20, 14, 34, 0.55));
+  backdrop-filter: var(--glass-blur, blur(24px) saturate(180%));
+  -webkit-backdrop-filter: var(--glass-blur, blur(24px) saturate(180%));
+  border: 1px solid var(--glass-border, rgba(168, 85, 247, 0.15));
+  box-shadow: var(--glass-inner, inset 0 1px 0 rgba(255, 255, 255, 0.06));
 }
 .bhrs__head { margin-bottom: 14px; }
 .bhrs__title {
@@ -37,7 +40,11 @@
 }
 .bhrs__row.is-today {
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(168, 85, 247, 0.06));
-  border: 1px solid rgba(168, 85, 247, 0.35);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow:
+    0 0 0 1px rgba(168, 85, 247, 0.35),
+    0 0 12px rgba(168, 85, 247, 0.15),
+    0 0 36px rgba(168, 85, 247, 0.05);
 }
 .bhrs__row.is-closed { opacity: 0.55; }
 .bhrs__day {
@@ -54,7 +61,7 @@
   height: 7px;
   border-radius: 50%;
   background: #A855F7;
-  box-shadow: 0 0 8px #A855F7;
+  box-shadow: 0 0 4px #A855F7, 0 0 10px rgba(168, 85, 247, 0.5);
 }
 .bhrs__time {
   font-family: var(--font-cairo, system-ui);
