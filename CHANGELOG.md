@@ -51,6 +51,7 @@
 ### 2026-09-22
 
 - **16:59** — chore: merge 2026 home mobile + data seed + fix home cache
+- **17:06** — feat: 2026 soft neon + glass — filter/voice/business-hours polish + PRs merge
 <!-- AUTO_END -->
 
 ---
