@@ -8,7 +8,6 @@
   background: rgba(10,8,16,.78);
   color: #D8D4E3;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 5px 14px rgba(0,0,0,.24);
-  backdrop-filter: blur(8px);
   cursor: pointer;
   transition: transform 150ms ease, color 150ms ease, border-color 150ms ease, background 150ms ease;
 }

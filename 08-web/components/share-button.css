@@ -18,7 +18,6 @@
 .share-modal {
   position: fixed; inset: 0; z-index: 1000;
   background: rgba(5,2,15,0.78);
-  backdrop-filter: blur(10px);
   display: flex; align-items: flex-end; justify-content: center;
   animation: sm-fade .18s ease;
 }

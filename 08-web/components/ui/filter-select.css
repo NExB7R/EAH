@@ -85,8 +85,6 @@
   box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.6),
     0 0 30px rgba(168, 85, 247, 0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   animation: fsMenuIn 180ms cubic-bezier(0.22, 1, 0.36, 1);
   scrollbar-width: thin;
   scrollbar-color: rgba(168, 85, 247, 0.3) transparent;

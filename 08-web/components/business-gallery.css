@@ -68,7 +68,6 @@
   inset: 0;
   z-index: 9999;
   background: rgba(5, 3, 8, 0.95);
-  backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,7 +106,6 @@
   cursor: pointer;
   display: grid;
   place-items: center;
-  backdrop-filter: blur(10px);
 }
 .bg2-lightbox__nav--prev { inset-inline-start: 20px; }
 .bg2-lightbox__nav--next { inset-inline-end: 20px; }

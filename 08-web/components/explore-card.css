@@ -69,7 +69,6 @@
   padding: 4px 10px;
   border-radius: 999px;
   background: rgba(10,8,16,.85);
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(139,92,246,.4);
   color: #C4B5FD;
   font-size: .68rem; font-weight: 800;
@@ -196,8 +195,6 @@
   padding: 4px 9px;
   border-radius: 999px;
   background: rgba(10, 8, 16, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(232, 199, 154, 0.3);
   color: #E8C79A;
   font-size: 0.68rem;
@@ -233,8 +230,6 @@
   padding: 4px 10px;
   border-radius: 999px;
   background: rgba(10, 8, 16, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(251, 191, 36, 0.35);
   color: #FBBF24;
   font-size: 0.72rem;
