@@ -105,7 +105,6 @@ export default function FilterSelect({
                 aria-selected={isSel}
                 disabled={opt.disabled}
               >
-                {opt.emoji && <span className="fs__item-emoji">{opt.emoji}</span>}
                 <span className="fs__item-label">{opt.label}</span>
                 {opt.count != null && <span className="fs__item-count">{opt.count}</span>}
                 {isSel && <span className="fs__check">✓</span>}
