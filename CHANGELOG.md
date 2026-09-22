@@ -52,6 +52,7 @@
 
 - **16:59** — chore: merge 2026 home mobile + data seed + fix home cache
 - **17:06** — feat: 2026 soft neon + glass — filter/voice/business-hours polish + PRs merge
+- **17:15** — perf: major performance fix — remove card blurs + stop continuous animations
 <!-- AUTO_END -->
 
 ---
