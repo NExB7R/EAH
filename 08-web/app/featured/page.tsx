@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 import EahLogo from '@/components/eah-logo'
 import ExploreCard from '@/components/explore-card'
 import { getPublishedBusinesses } from '@/lib/data'
@@ -44,7 +43,6 @@ export default async function FeaturedPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main className="feat">
         <section className="feat__hero">
           <div className="feat__hero-glow" aria-hidden />

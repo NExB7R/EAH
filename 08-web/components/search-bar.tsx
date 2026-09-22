@@ -1,60 +1,90 @@
 'use client'
+import { FormEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useState, FormEvent } from 'react'
 import VoiceButton from './voice/voice-button'
-import { parseArabicQuery } from '@/lib/search/normalize'
+import { buildExploreSearchUrl, smartPlaceholder } from '@/lib/search/normalize'
 import { IconSearch } from './neon-icons'
 import './search-bar.css'
+
+type Props = {
+  initialQuery?: string
+  autoFocus?: boolean
+  size?: 'md' | 'lg'
+  placeholder?: string
+  className?: string
+  onNavigate?: (url: string) => void
+}
 
 export default function SearchBar({
   initialQuery = '',
   autoFocus = false,
   size = 'md',
-  placeholder = 'دوّر على إيه النهاردة؟',
-}: {
-  initialQuery?: string
-  autoFocus?: boolean
-  size?: 'md' | 'lg'
-  placeholder?: string
-}) {
-  const [q, setQ] = useState(initialQuery)
+  placeholder,
+  className = '',
+  onNavigate,
+}: Props) {
+  const [query, setQuery] = useState(initialQuery)
+  const [smartHint, setSmartHint] = useState(placeholder ?? 'دوّر على إيه النهاردة؟')
+  const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
-  function go(raw: string) {
-    const text = raw.trim()
-    if (!text) { router.push('/explore'); return }
-    const parsed = parseArabicQuery(text)
-    const params = new URLSearchParams()
-    if (parsed.type) params.set('type', parsed.type)
-    if (parsed.area) params.set('area', parsed.area)
-    if (parsed.openNow === true) params.set('open', '1')
-    if (parsed.budget) params.set('budget', parsed.budget)
-    if (!parsed.hasIntent || parsed.keywords.length > 0) params.set('q', text)
-    router.push(`/explore${params.toString() ? '?' + params.toString() : ''}`)
+  useEffect(() => {
+    setQuery(initialQuery)
+  }, [initialQuery])
+
+  useEffect(() => {
+    if (!placeholder) setSmartHint(smartPlaceholder())
+  }, [placeholder])
+
+  const go = useCallback((raw: string) => {
+    const url = buildExploreSearchUrl(raw)
+    if (onNavigate) onNavigate(url)
+    else router.push(url)
+  }, [onNavigate, router])
+
+  const submit = (event: FormEvent) => {
+    event.preventDefault()
+    go(query)
   }
 
-  function submit(e: FormEvent) {
-    e.preventDefault()
-    go(q)
-  }
+  const handleVoiceResult = useCallback((transcript: string) => {
+    setQuery(transcript)
+    go(transcript)
+  }, [go])
+
+  const handleVoicePartial = useCallback((transcript: string) => {
+    setQuery(transcript)
+  }, [])
 
   return (
-    <form onSubmit={submit} className={`sbar sbar--${size}`}>
+    <form onSubmit={submit} className={`sbar sbar--${size} ${className}`.trim()} role="search">
       <span className="sbar__icon" aria-hidden><IconSearch /></span>
       <input
-        type="text"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder={placeholder}
+        ref={inputRef}
+        type="search"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder={smartHint}
         aria-label="ابحث في EAH"
         autoFocus={autoFocus}
+        autoComplete="off"
+        enterKeyHint="search"
         className="sbar__input"
       />
-      <VoiceButton
-        size="sm"
-        onResult={(t) => { setQ(t); setTimeout(() => go(t), 300) }}
-        onPartial={(t) => setQ(t)}
-      />
+      {query && (
+        <button
+          type="button"
+          className="sbar__clear"
+          onClick={() => {
+            setQuery('')
+            inputRef.current?.focus()
+          }}
+          aria-label="امسح البحث"
+        >
+          ×
+        </button>
+      )}
+      <VoiceButton size="sm" onResult={handleVoiceResult} onPartial={handleVoicePartial} />
       <button type="submit" className="sbar__btn">ابحث</button>
     </form>
   )

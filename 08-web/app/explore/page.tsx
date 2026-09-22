@@ -3,7 +3,6 @@ import Link from 'next/link'
 import ExploreClient from '@/components/explore-client'
 import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
-import BackToTop from '@/components/back-to-top'
 import EahLogo from '@/components/eah-logo'
 import SearchBar from '@/components/search/search-bar'
 import './explore-hero.css'
@@ -20,23 +19,25 @@ export const metadata = {
   description: 'اكتشف كل الأماكن في شبين القناطر — مطاعم، صيدليات، توصيل',
 }
 
-const VALID_TYPES = ['restaurant', 'pharmacy', 'delivery_office']
+const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
 
 export default async function ExplorePage({
   searchParams,
 }: {
-  searchParams: Promise<{ type?: string; intent?: string }>
+  searchParams: Promise<{ type?: string; intent?: string; q?: string }>
 }) {
   const params = await searchParams
   const rawFilter = params.type ?? params.intent
   const activeType = rawFilter && VALID_TYPES.includes(rawFilter) ? rawFilter : undefined
 
-  const businesses = await getPublishedBusinesses(80)
-
-  const primaryLoc = await getPrimaryLocation().catch(() => null)
+  const [businesses, primaryLoc] = await Promise.all([
+    getPublishedBusinesses(80),
+    getPrimaryLocation().catch(() => null),
+  ])
   const clientCoords = primaryLoc ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude } : null
 
-  const viewStats = await getViewStats(businesses.map((b) => b.slug), 7)
+  const viewStats = await getViewStats(businesses.map((business) => business.slug), 7)
+    .catch(() => new Map())
   const withStats = businesses.map((b) => ({
     ...b,
     id: b.businessId ?? b.slug,
@@ -53,14 +54,6 @@ export default async function ExplorePage({
     totalImpressions: 0,
   }))
 
-  // احسب تصنيفات الأكل المتاحة من البيانات الخام (قبل أي ranking)
-  const usedCats = new Set<string>()
-  businesses.forEach((b) => {
-    if (Array.isArray(b.food_categories)) {
-      b.food_categories.forEach((c: string) => usedCats.add(c))
-    }
-  })
-  // نعرض كل التصنيفات دايماً
   const availableFoodCats = FOOD_CATEGORIES
 
   const ranked = rankBusinesses(withStats as any, { includeFeaturedBoost: true })
@@ -69,13 +62,13 @@ export default async function ExplorePage({
   const headline = activeType
     ? activeType === 'restaurant' ? 'المطاعم'
     : activeType === 'pharmacy' ? 'الصيدليات'
+    : activeType === 'supermarket' ? 'الماركت والمقاضي'
     : 'التوصيل'
     : 'كل اللي حواليك'
 
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main style={{ minHeight: '100vh' }}>
         <div className="explore-hero">
           <Link href="/" className="explore-hero__back">← الرئيسية</Link>
@@ -87,7 +80,7 @@ export default async function ExplorePage({
             {diversified.length} مكان — مرتبة بذكاء حسب الجودة والنشاط
           </p>
         </div>
-        <div className="explore-search-wrap"><SearchBar /></div>
+        <div className="explore-search-wrap"><SearchBar initialQuery={params.q ?? ''} /></div>
         <Suspense fallback={<div style={{ padding: 40, textAlign: 'center', color: '#A29DB5' }}>جاري التحميل...</div>}>
           <ExploreClient businesses={diversified} initialType={activeType} clientCoords={clientCoords} availableFoodCats={availableFoodCats} />
         </Suspense>

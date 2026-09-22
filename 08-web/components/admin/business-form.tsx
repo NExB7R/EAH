@@ -38,6 +38,7 @@ type Props = {
 const TYPES = [
   { value: 'restaurant', label: 'مطعم' },
   { value: 'pharmacy', label: 'صيدلية' },
+  { value: 'supermarket', label: 'ماركت / مقاضي' },
   { value: 'delivery_office', label: 'توصيل' },
 ]
 

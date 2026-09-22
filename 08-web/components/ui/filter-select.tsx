@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import './filter-select.css'
 
 export type FilterOption = {
@@ -7,6 +7,7 @@ export type FilterOption = {
   label: string
   emoji?: string
   count?: number
+  disabled?: boolean
 }
 
 type Props = {
@@ -30,14 +31,24 @@ export default function FilterSelect({
 }: Props) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const menuId = useId()
 
   useEffect(() => {
-    function onClick(e: MouseEvent) {
+    function onClick(event: MouseEvent) {
       if (!ref.current) return
-      if (!ref.current.contains(e.target as Node)) setOpen(false)
+      if (!ref.current.contains(event.target as Node)) setOpen(false)
     }
-    if (open) document.addEventListener('mousedown', onClick)
-    return () => document.removeEventListener('mousedown', onClick)
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') setOpen(false)
+    }
+    if (open) {
+      document.addEventListener('mousedown', onClick)
+      document.addEventListener('keydown', onKeyDown)
+    }
+    return () => {
+      document.removeEventListener('mousedown', onClick)
+      document.removeEventListener('keydown', onKeyDown)
+    }
   }, [open])
 
   const selected = options.find((o) => o.value === value)
@@ -51,6 +62,7 @@ export default function FilterSelect({
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-controls={open ? menuId : undefined}
       >
         <span className="fs__label">{label}</span>
         <span className="fs__value">
@@ -72,7 +84,7 @@ export default function FilterSelect({
       </button>
 
       {open && (
-        <div className={`fs__menu fs__menu--${align}`} role="listbox">
+        <div id={menuId} className={`fs__menu fs__menu--${align}`} role="listbox" aria-label={label}>
           {clearable && (
             <button
               type="button"
@@ -93,6 +105,7 @@ export default function FilterSelect({
                 onClick={() => { onChange(opt.value); setOpen(false) }}
                 role="option"
                 aria-selected={isSel}
+                disabled={opt.disabled}
               >
                 {opt.emoji && <span className="fs__item-emoji">{opt.emoji}</span>}
                 <span className="fs__item-label">{opt.label}</span>

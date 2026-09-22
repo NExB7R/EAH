@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 import EahLogo from '@/components/eah-logo'
 import ExploreCard from '@/components/explore-card'
 import { getPublishedBusinesses } from '@/lib/data'
@@ -44,7 +43,6 @@ export default async function NewPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main className="nw">
         <section className="nw__hero">
           <div className="nw__hero-glow" aria-hidden />

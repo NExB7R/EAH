@@ -5,7 +5,6 @@ import LoyaltyRing from '@/components/loyalty/loyalty-ring'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'مستواك' }
@@ -33,7 +32,6 @@ export default async function LoyaltyPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main className="e-page">
         <h1 className="acc-title e-gradient">مستواك</h1>
         <div className="lt-wrap">

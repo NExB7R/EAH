@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import FloatingCapsuleHeader from './floating-capsule'
 import SiteFooter from './site-footer'
-import BackToTop from './back-to-top'
 import EahLogo from './eah-logo'
 import './legal-page.css'
 
@@ -28,7 +27,6 @@ export default function LegalPage({
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main className="lp">
         <header className="lp__hero">
           <div className="lp__hero-glow" aria-hidden />

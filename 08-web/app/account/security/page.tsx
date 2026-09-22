@@ -4,7 +4,6 @@ import TwoFactorSetup from '@/components/security/two-factor-setup'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 
 export const dynamic = 'force-dynamic'
 export const metadata = { title: 'أمان الحساب' }
@@ -29,7 +28,6 @@ export default async function SecurityPage() {
     <>
       <FloatingCapsuleHeader />
       <PageLogo />
-      <BackToTop />
       <main className="e-page">
         <h1 className="acc-title e-gradient">أمان الحساب</h1>
         <p className="e-page__sub">حماية إضافية بحسابك</p>

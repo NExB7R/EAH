@@ -7,12 +7,20 @@
 
 /* ─── Filter Bar ─── */
 .exc-bar {
+  position: sticky;
+  top: calc(var(--fc-height, 64px) + 8px);
+  z-index: 50;
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 20px;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(168, 85, 247, 0.1);
+  padding: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.16);
+  border-radius: 16px;
+  background: rgba(8, 6, 14, 0.86);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045), 0 10px 30px rgba(0,0,0,.24);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
 }
 
 .exc-bar__scroll {
@@ -20,12 +28,10 @@
   align-items: center;
   gap: 8px;
   flex: 1;
-  overflow-x: auto;
-  padding: 4px 2px 10px;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  flex-wrap: wrap;
+  overflow: visible;
+  padding: 2px;
 }
-.exc-bar__scroll::-webkit-scrollbar { display: none; }
 
 .exc-bar__end {
   display: flex;
@@ -135,7 +141,7 @@
 /* ─── Empty ─── */
 .exc-empty {
   text-align: center;
-  padding: 60px 20px;
+  padding: 42px 20px;
   border-radius: 20px;
   background: linear-gradient(180deg, rgba(20, 14, 34, 0.4), rgba(10, 7, 20, 0.3));
   border: 1px solid rgba(168, 85, 247, 0.15);
@@ -169,9 +175,11 @@
 @media (max-width: 768px) {
   .exc { padding: 0 14px 40px; }
   .exc-bar {
+    top: calc(var(--fc-height-mobile, 56px) + 6px);
     flex-direction: column;
     align-items: stretch;
     gap: 8px;
+    border-radius: 14px;
   }
   .exc-bar__end {
     justify-content: space-between;
@@ -182,9 +190,9 @@
   .exc-chip { padding: 8px 12px; font-size: 0.76rem; }
 }
 
-/* ═══ إصلاح z-index للفلاتر — لازم يبانوا فوق النتائج ═══ */
+/* الفلاتر فوق النتائج والقوائم المنسدلة من غير clipping */
 .exc-bar {
-  position: relative !important;
+  position: sticky !important;
   z-index: 50 !important;
 }
 .exc-bar__scroll {
@@ -199,4 +207,19 @@
 }
 .fs__menu {
   z-index: 1000 !important;
+}
+
+/* وضع القائمة يعرض صورة ومعلومات في صف فعلي. */
+.exc-grid--list .ecard__link { flex-direction: row; }
+.exc-grid--list .ecard__cover {
+  width: min(32%, 260px);
+  min-width: 180px;
+  aspect-ratio: 4 / 3;
+}
+.exc-grid--list .ecard__body { justify-content: center; }
+
+@media (max-width: 640px) {
+  .exc-grid--list .ecard__cover { width: 116px; min-width: 116px; }
+  .exc-grid--list .ecard__body { padding: 10px; }
+  .exc-grid--list .ecard__hook { -webkit-line-clamp: 1; }
 }

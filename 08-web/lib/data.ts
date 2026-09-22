@@ -1,4 +1,4 @@
-import { createClient, createServiceClient } from '@/lib/supabase-server'
+import { createClient } from '@/lib/supabase-server'
 import { getSubscribedBusinessIds } from './subscription'
 
 type DbBusiness = {
@@ -83,7 +83,7 @@ function toDemoShape(
   reviewStats?: { rating: number; reviewCount: number; recentComments: number },
 ): BusinessViewModel {
   const type = b.business_type as BusinessViewModel['type']
-  const validType = ['restaurant', 'pharmacy', 'delivery_office'].includes(type)
+  const validType = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'].includes(type)
     ? (type as 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office')
     : 'restaurant'
 
@@ -187,7 +187,7 @@ export async function getPublishedBusinesses(
       .order('created_at', { ascending: false })
       .limit(limit)
 
-    if (intent && ['restaurant', 'pharmacy', 'delivery_office'].includes(intent)) {
+    if (intent && ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'].includes(intent)) {
       query = query.eq('business_type', intent)
     }
 
@@ -210,8 +210,7 @@ export async function getPublishedBusinesses(
     // fetch food categories
     const categoriesByBiz = new Map<string, string[]>()
     try {
-      const svc = createServiceClient()
-      const { data: cats, error: catsErr } = await svc
+      const { data: cats, error: catsErr } = await supabase
         .from('business_food_categories')
         .select('business_id, category_key')
         .in('business_id', ids)

@@ -1,6 +1,5 @@
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 import RecommendClient from '@/components/recommend-client'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
@@ -40,7 +39,6 @@ export default async function RecommendPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main style={{ minHeight: '100vh' }}>
         <RecommendClient businesses={diversified} />
       </main>

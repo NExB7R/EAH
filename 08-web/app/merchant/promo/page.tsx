@@ -4,7 +4,6 @@ import PromoSubmit from '@/components/promo/promo-submit'
 import PromoStatus from '@/components/promo/promo-status'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import SiteFooter from '@/components/site-footer'
-import BackToTop from '@/components/back-to-top'
 import '@/components/promo/promo.css'
 
 export const dynamic = 'force-dynamic'
@@ -46,7 +45,6 @@ export default async function PromoPage() {
   return (
     <>
       <FloatingCapsuleHeader />
-      <BackToTop />
       <main className="e-page">
         <h1 className="e-page__title">شارك EAH</h1>
         <p className="e-page__sub">

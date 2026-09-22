@@ -1,10 +1,11 @@
 'use client'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import ExploreCard from './explore-card'
 import FilterSelect from './ui/filter-select'
 import './explore-client.css'
 import { IcClose, IcMenu } from '@/components/eah-icons'
+import { normalizeArabic } from '@/lib/search/normalize'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
 
@@ -53,10 +54,32 @@ export default function ExploreClient({
   const foodCat = searchParams.get('food') ?? ''
   const openOnly = searchParams.get('open') === '1'
   const offersOnly = searchParams.get('offers') === '1'
+  const nearRequested = searchParams.get('near') === '1'
   const view = (searchParams.get('view') === 'list' ? 'list' : 'grid') as 'grid' | 'list'
 
-  const [nearMe, setNearMe] = useState(false)
+  const [nearMe, setNearMe] = useState(nearRequested && Boolean(clientCoords))
   const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(clientCoords ?? null)
+  const requestedLocationRef = useRef(false)
+
+  useEffect(() => {
+    if (!nearRequested || nearMe || requestedLocationRef.current) return
+    if (clientCoords) {
+      setUserCoords(clientCoords)
+      setNearMe(true)
+      return
+    }
+    if (!navigator.geolocation) return
+
+    requestedLocationRef.current = true
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserCoords({ lat: position.coords.latitude, lng: position.coords.longitude })
+        setNearMe(true)
+      },
+      () => setNearMe(false),
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 },
+    )
+  }, [clientCoords, nearMe, nearRequested])
 
   function updateParams(patch: Record<string, string | null>) {
     const params = new URLSearchParams(searchParams.toString())
@@ -104,13 +127,17 @@ export default function ExploreClient({
     if (offersOnly) list = list.filter((b) => (b.activeOffers ?? 0) > 0)
 
     if (search.trim()) {
-      const q = search.trim().toLowerCase()
-      list = list.filter(
-        (b) =>
-          b.name.toLowerCase().includes(q) ||
-          b.area?.toLowerCase().includes(q) ||
-          b.vibe?.some((v) => v.toLowerCase().includes(q))
-      )
+      const query = normalizeArabic(search)
+      list = list.filter((business) => {
+        const searchable = normalizeArabic([
+          business.name,
+          business.area,
+          business.reason,
+          business.hook,
+          ...(business.vibe ?? []),
+        ].filter(Boolean).join(' '))
+        return query.split(' ').every((word) => searchable.includes(word))
+      })
     }
 
     const arr = [...list]
@@ -152,15 +179,20 @@ export default function ExploreClient({
     (nearMe ? 1 : 0)
 
   function toggleNearMe() {
-    if (nearMe) { setNearMe(false); return }
+    if (nearMe) {
+      setNearMe(false)
+      updateParams({ near: null })
+      return
+    }
     if (typeof navigator === 'undefined' || !navigator.geolocation) return
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+      (position) => {
+        setUserCoords({ lat: position.coords.latitude, lng: position.coords.longitude })
         setNearMe(true)
+        updateParams({ near: '1' })
       },
       () => setNearMe(false),
-      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 },
     )
   }
 
@@ -181,17 +213,19 @@ export default function ExploreClient({
 
   // ─── Options for filters ───
   const TYPE_OPTS = [
-    { value: 'restaurant',      label: 'مطاعم', count: typeCounts.restaurant },
-    { value: 'pharmacy',        label: 'صيدليات', count: typeCounts.pharmacy },
-    { value: 'delivery_office', label: 'توصيل', count: typeCounts.delivery_office },
+    { value: 'restaurant',      label: 'مطاعم', count: typeCounts.restaurant, disabled: typeCounts.restaurant === 0 },
+    { value: 'pharmacy',        label: 'صيدليات', count: typeCounts.pharmacy, disabled: typeCounts.pharmacy === 0 },
+    { value: 'supermarket',     label: 'ماركت', count: typeCounts.supermarket, disabled: typeCounts.supermarket === 0 },
+    { value: 'delivery_office', label: 'توصيل', count: typeCounts.delivery_office, disabled: typeCounts.delivery_office === 0 },
   ]
 
   const AREA_OPTS = areas.map((a) => ({ value: a, label: a, count: areaCounts[a] }))
 
-  const FOOD_OPTS = availableFoodCats.map((c) => ({
-    value: c.key,
-    label: c.label,
-    count: foodCounts[c.key] ?? 0,
+  const FOOD_OPTS = availableFoodCats.map((category) => ({
+    value: category.key,
+    label: category.label,
+    count: foodCounts[category.key] ?? 0,
+    disabled: (foodCounts[category.key] ?? 0) === 0,
   }))
 
   const SORT_OPTS = [
@@ -310,8 +344,8 @@ export default function ExploreClient({
             <strong>{filtered.length}</strong> مكان
           </p>
           <div className={`exc-grid ${view === 'list' ? 'exc-grid--list' : ''}`}>
-            {filtered.map((b) => (
-              <ExploreCard key={b.slug} business={b as any} />
+            {filtered.map((business, index) => (
+              <ExploreCard key={business.slug} business={business as any} index={index} />
             ))}
           </div>
         </>

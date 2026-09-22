@@ -1,3 +1,5 @@
+import '@fontsource-variable/cairo'
+import '@fontsource-variable/dancing-script'
 import './globals.css'
 import './social.css'
 import './theme.css'
@@ -5,11 +7,11 @@ import './eah-ui.css'
 import './design-system.css'
 import '../components/eah-admin.css'
 import type { Metadata, Viewport } from 'next'
-import { Cairo, Dancing_Script } from 'next/font/google'
 import PageViewTracker from '@/components/page-view-tracker'
 import { ToastProvider } from '@/components/ui/toast'
 import SplashScreen from '@/components/splash-screen'
 import AmbientBg from '@/components/ambient-bg'
+import BackToTop from '@/components/back-to-top'
 import '@/components/ambient-bg.css'
 import AnimReady from '@/components/anim-ready'
 import OnboardingOverlay from '@/components/onboarding-overlay'
@@ -26,32 +28,6 @@ import '@/components/share-button.css'
 import '@/components/offline-queue-mount.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-
-const cairo = Cairo({
-  subsets: ['arabic'],
-  weight: ['400', '700', '900'],
-  display: 'swap',
-  variable: '--font-cairo',
-  preload: true,
-  adjustFontFallback: true,
-})
-
-const signature = Dancing_Script({
-  subsets: ['latin'],
-  weight: ['400'],
-  display: 'swap',
-  variable: '--font-signature',
-  preload: false,
-})
-
-const cairoPlay = Cairo({
-  subsets: ['arabic'],
-  weight: ['800', '900'],
-  display: 'swap',
-  variable: '--font-cairo-play',
-  preload: true,
-  adjustFontFallback: true,
-})
 
 // EAH_BUILD = 1789585536.2520845
 // VERSION_MARKER: v0.3.3
@@ -82,7 +58,7 @@ export const metadata: Metadata = {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
       { url: '/crown-192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/crown-512.webp', sizes: '512x512', type: 'image/png' },
+      { url: '/crown-512.webp', sizes: '512x512', type: 'image/webp' },
     ],
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
     shortcut: '/favicon.ico',
@@ -136,7 +112,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="ar"
       dir="rtl"
-      className={`${cairo.variable} ${cairoPlay.variable} ${signature.variable}`}
       suppressHydrationWarning
     >
       <body>
@@ -145,6 +120,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PageViewTracker />
         <AnimReady />
         <ToastProvider>{children}</ToastProvider>
+        <BackToTop />
         <OnboardingOverlay />
         <ServiceWorkerRegister />
         <NetworkStatus />

@@ -16,8 +16,8 @@ type SpeechRecognitionLike = {
   start: () => void
   stop: () => void
   abort: () => void
-  onresult: ((e: any) => void) | null
-  onerror: ((e: any) => void) | null
+  onresult: ((event: any) => void) | null
+  onerror: ((event: any) => void) | null
   onend: (() => void) | null
 }
 
@@ -25,71 +25,82 @@ export default function VoiceButton({ onResult, onPartial, className = '', size 
   const [supported, setSupported] = useState(false)
   const [listening, setListening] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const recRef = useRef<SpeechRecognitionLike | null>(null)
-  const finalRef = useRef<string>('')
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
+  const finalRef = useRef('')
+  const failedRef = useRef(false)
+  const onResultRef = useRef(onResult)
+  const onPartialRef = useRef(onPartial)
+
+  useEffect(() => { onResultRef.current = onResult }, [onResult])
+  useEffect(() => { onPartialRef.current = onPartial }, [onPartial])
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    const W = window as any
-    const SR = W.SpeechRecognition || W.webkitSpeechRecognition
-    if (SR) {
-      setSupported(true)
-      const rec: SpeechRecognitionLike = new SR()
-      rec.lang = 'ar-EG'
-      rec.continuous = false
-      rec.interimResults = true
-      rec.maxAlternatives = 1
+    const browser = window as any
+    const SpeechRecognition = browser.SpeechRecognition || browser.webkitSpeechRecognition
+    if (!SpeechRecognition) return
 
-      rec.onresult = (e: any) => {
-        let interim = ''
-        for (let i = e.resultIndex; i < e.results.length; i++) {
-          const res = e.results[i]
-          const txt = res[0].transcript
-          if (res.isFinal) finalRef.current += txt
-          else interim += txt
-        }
-        const shown = (finalRef.current + (interim ? ' ' + interim : '')).trim()
-        if (interim && onPartial) onPartial(shown)
-        if (finalRef.current) onResult(finalRef.current.trim())
+    setSupported(true)
+    const recognition: SpeechRecognitionLike = new SpeechRecognition()
+    recognition.lang = 'ar-EG'
+    recognition.continuous = false
+    recognition.interimResults = true
+    recognition.maxAlternatives = 1
+
+    recognition.onresult = (event: any) => {
+      let interim = ''
+      for (let index = event.resultIndex; index < event.results.length; index++) {
+        const result = event.results[index]
+        const transcript = result[0].transcript
+        if (result.isFinal) finalRef.current += `${transcript} `
+        else interim += `${transcript} `
       }
-      rec.onerror = (e: any) => {
-        setListening(false)
-        if (e.error === 'not-allowed') setError('لازم تسمح بالميكروفون')
-        else if (e.error === 'no-speech') setError('مسمعتش حاجة، جرب تاني')
-        else setError('في مشكلة، جرب تاني')
-      }
-      rec.onend = () => {
-        setListening(false)
-      }
-      recRef.current = rec
+      const shown = `${finalRef.current}${interim}`.trim()
+      if (shown) onPartialRef.current?.(shown)
     }
-  }, [onResult, onPartial])
+
+    recognition.onerror = (event: any) => {
+      failedRef.current = true
+      setListening(false)
+      if (event.error === 'not-allowed') setError('لازم تسمح بالميكروفون')
+      else if (event.error === 'no-speech') setError('مسمعتش حاجة، جرب تاني')
+      else if (event.error !== 'aborted') setError('في مشكلة، جرب تاني')
+    }
+
+    recognition.onend = () => {
+      setListening(false)
+      const transcript = finalRef.current.trim()
+      if (!failedRef.current && transcript) onResultRef.current(transcript)
+    }
+
+    recognitionRef.current = recognition
+    return () => {
+      try { recognition.abort() } catch { /* already stopped */ }
+      recognitionRef.current = null
+    }
+  }, [])
 
   const start = () => {
-    if (!recRef.current) return
+    if (!recognitionRef.current) return
     setError(null)
     finalRef.current = ''
+    failedRef.current = false
     try {
-      recRef.current.start()
+      recognitionRef.current.start()
       setListening(true)
-      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) navigator.vibrate?.(15)
+      navigator.vibrate?.(15)
     } catch {
-      // already started
+      // Browsers throw when recognition is already starting.
     }
   }
 
   const stop = () => {
-    if (!recRef.current) return
-    try { recRef.current.stop() } catch {}
+    try { recognitionRef.current?.stop() } catch { /* already stopped */ }
     setListening(false)
   }
 
   const sizes = { sm: 32, md: 40, lg: 56 }
   const px = sizes[size]
-
-  if (!supported) {
-    return null
-  }
+  if (!supported) return null
 
   return (
     <div className={`vb-wrap ${className}`}>
@@ -99,9 +110,10 @@ export default function VoiceButton({ onResult, onPartial, className = '', size 
         style={{ width: px, height: px }}
         onClick={listening ? stop : start}
         aria-label={listening ? 'وقف التسجيل' : 'ابحث بصوتك'}
+        aria-pressed={listening}
         title={listening ? 'بسمعك...' : 'اتكلم'}
       >
-        <svg viewBox="0 0 24 24" width={px * 0.5} height={px * 0.5} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" width={px * 0.5} height={px * 0.5} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
           <rect x="9" y="3" width="6" height="12" rx="3" />
           <path d="M5 10v1a7 7 0 0 0 14 0v-1" />
           <line x1="12" y1="18" x2="12" y2="22" />
@@ -109,7 +121,7 @@ export default function VoiceButton({ onResult, onPartial, className = '', size 
         </svg>
         {listening && <span className="vb-ring" />}
       </button>
-      {error && <span className="vb-error">{error}</span>}
+      {error && <span className="vb-error" role="status">{error}</span>}
     </div>
   )
 }
