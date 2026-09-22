@@ -47,6 +47,10 @@
 - **18:55** — fix: remove unstable_cache from stats
 - **19:45** — style: 2026 cleanup — soften shadows/gradients, remove supermarket/emoji from UI, add About section + AI contract files
 - **22:49** — feat: 2026 soft neon redesign — logo breathing, gold slogan, stickers, glass cards, soft shadows
+
+### 2026-09-22
+
+- **16:59** — chore: merge 2026 home mobile + data seed + fix home cache
 <!-- AUTO_END -->
 
 ---
