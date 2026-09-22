@@ -5,7 +5,6 @@ import './filter-select.css'
 export type FilterOption = {
   value: string
   label: string
-  emoji?: string
   count?: number
   disabled?: boolean
 }
@@ -66,7 +65,6 @@ export default function FilterSelect({
       >
         <span className="fs__label">{label}</span>
         <span className="fs__value">
-          {selected?.emoji && <span className="fs__emoji">{selected.emoji}</span>}
           {selected ? selected.label : placeholder}
         </span>
         <svg

@@ -15,12 +15,17 @@
   flex: 0 0 6px;
   border-radius: 50%;
   background: currentColor;
-  box-shadow: 0 0 9px currentColor;
+  box-shadow: 0 0 6px currentColor, 0 0 12px currentColor;
 }
 .onb--open {
-  background: rgba(0,217,184,.12);
-  border: 1px solid rgba(0,217,184,.34);
+  background: rgba(0,217,184,.10);
+  border: 1px solid rgba(0,217,184,.4);
   color: #55E7D1;
+  box-shadow:
+    0 0 0 1px rgba(0, 217, 184, 0.35),
+    0 0 10px rgba(0, 217, 184, 0.15),
+    0 0 30px rgba(0, 217, 184, 0.05);
+  animation: onbBreathe 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 .onb--closed {
   background: rgba(107,104,128,.15);
