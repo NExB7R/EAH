@@ -293,3 +293,7 @@
 ## v1.1.2 — 2026-09-19
 
 - fix: split coupon types from server-only lib (client build error)
+
+## v1.1.3 — 2026-09-22
+
+- fix(home): رئيسية طازة من غير كاش قديم

@@ -188,3 +188,7 @@
 - **Action:** fix(home/mobile): open-now cyan state on V5 cards, no auto-advance on mobile/reduced-motion, 44px touch targets (back-to-top, slider nav, search buttons)
 - **Docs:** docs/sprints/SPRINT_2026_HOME_MOBILE.md
 - **Branch:** arena/01a0c683-eah
+
+### 2026-09-22 02:05 UTC — v1.1.3
+- **Action:** fix(home): رئيسية طازة من غير كاش قديم
+- **Branch:** ui-onlook

@@ -3,8 +3,8 @@ import HomeDynamicV2 from '@/components/home-dynamic-v2'
 import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 
-// cache للصفحة كلها 2 دقايق
-export const revalidate = 120
+// طازة دايماً زي explore — الكاش الثابت كان بيرجّع رئيسية فاضية بعد إضافة بيانات جديدة
+export const dynamic = 'force-dynamic'
 
 export default async function Page() {
   return (
