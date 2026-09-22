@@ -19,6 +19,7 @@ const TYPE_EMOJI: Record<string, string> = {
 const TYPE_LABEL: Record<string, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
+  supermarket: 'ماركت',
   delivery_office: 'توصيل',
 }
 
