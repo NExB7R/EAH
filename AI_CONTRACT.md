@@ -68,3 +68,26 @@
 - ⛔ ممنوع deploy بدون tag للحالة الحالية
 - ⛔ ممنوع deploy بدون أمر صريح
 - ✅ دائماً: tag قبل → preview → تجربة → موافقة → deploy
+---
+
+## ⚠️ قاعدة Typecheck (إجبارية)
+
+### قبل أي commit:
+`cd ~/EAH/08-web && npx tsc --noEmit`
+
+**لو فيه أي error → ممنوع commit.**
+
+### ليه؟
+- `deploy.sh` بيستخدم `|| true` في الـ commit — يعني ممكن يعمل commit رغم الفشل
+- ده بيكسر Production بدون ما ناخد بالنا
+
+### القاعدة:
+1. شغّل typecheck يدوياً قبل أي commit
+2. لو نجح → commit
+3. لو فشل → أصلح، وبعدها commit
+4. متعتمدش على `deploy.sh` إنه يوقف لوحده
+
+### لو اكتشفت commit فاسد:
+- `cd ~/EAH/08-web && npx tsc --noEmit` → شوف الأخطاء
+- أصلح
+- `git add -A && git commit -m "fix: typecheck errors" && git push origin ui-onlook`
