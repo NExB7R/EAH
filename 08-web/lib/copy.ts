@@ -67,6 +67,7 @@ export const COPY = {
     restaurant: '️ مطاعم',
     pharmacy: 'صيدليات',
     supermarket: 'ماركت',
+    misc: 'أنشطة أخرى',
     delivery: 'توصيل',
   },
   sections: {

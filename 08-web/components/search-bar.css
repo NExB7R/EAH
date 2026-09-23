@@ -143,3 +143,125 @@
 @media (prefers-reduced-motion: reduce) {
   .vb-btn.vb-live { animation: none; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Voice Button — مميز واحترافي
+   ═══════════════════════════════════════════════════════════════ */
+
+.sbar .vb-wrap {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 4px;
+}
+
+.sbar .vb-btn {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(168, 85, 247, 0.05));
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #C084FC;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: all 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sbar .vb-btn:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.28), rgba(168, 85, 247, 0.12));
+  border-color: rgba(168, 85, 247, 0.6);
+  color: #E8C79A;
+  transform: scale(1.06);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.35);
+}
+
+.sbar .vb-btn:active {
+  transform: scale(0.98);
+}
+
+.sbar .vb-btn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* ═══ Live (بيسمع) ═══ */
+.sbar .vb-btn.vb-live {
+  background: linear-gradient(135deg, #A855F7, #6B21FF);
+  border-color: #A855F7;
+  color: #fff;
+  box-shadow:
+    0 0 0 1px rgba(168, 85, 247, 0.6),
+    0 0 16px rgba(168, 85, 247, 0.5),
+    0 0 40px rgba(168, 85, 247, 0.25);
+  animation: sbarVoicePulse 1.4s ease-in-out infinite;
+}
+
+@keyframes sbarVoicePulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(168, 85, 247, 0.6),
+      0 0 16px rgba(168, 85, 247, 0.5),
+      0 0 40px rgba(168, 85, 247, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(168, 85, 247, 0.9),
+      0 0 24px rgba(168, 85, 247, 0.75),
+      0 0 60px rgba(168, 85, 247, 0.35);
+  }
+}
+
+/* ═══ Ring (دائرة النبض) ═══ */
+.sbar .vb-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(192, 132, 252, 0.6);
+  animation: sbarVoiceRing 1.4s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes sbarVoiceRing {
+  0%   { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ═══ Error ═══ */
+.sbar .vb-error {
+  position: absolute;
+  top: calc(100% + 6px);
+  inset-inline-end: 0;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #FCA5A5;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/* ═══ Mobile ═══ */
+@media (max-width: 480px) {
+  .sbar .vb-btn {
+    width: 38px;
+    height: 38px;
+  }
+  .sbar .vb-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sbar .vb-btn.vb-live { animation: none; }
+  .sbar .vb-ring { animation: none; display: none; }
+}

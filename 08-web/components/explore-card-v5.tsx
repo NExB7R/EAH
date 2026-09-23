@@ -44,6 +44,7 @@ const TYPE_LABEL: Record<string, string> = {
   pharmacy: 'صيدلية',
   supermarket: 'ماركت',
   delivery_office: 'توصيل',
+  misc: 'أنشطة أخرى',
 }
 
 const TYPE_GRADIENT: Record<string, string> = {
@@ -58,6 +59,7 @@ const HOOK_BY_TYPE: Record<string, string> = {
   pharmacy: 'قرب منك وقت الحاجة',
   supermarket: 'البيت محتاج إيه؟',
   delivery_office: 'طلبك في السكة',
+  misc: 'اكتشف كل حاجة',
 }
 
 function ExploreCardV5Base({ business }: { business: Business }) {

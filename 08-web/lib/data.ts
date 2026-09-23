@@ -46,7 +46,7 @@ type BusinessViewModel = {
   businessId?: string
   name: string
   slug: string
-  type: 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
+  type: 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
   area: string
   badge?: string
   vibe: string[]
@@ -83,8 +83,8 @@ function toDemoShape(
   reviewStats?: { rating: number; reviewCount: number; recentComments: number },
 ): BusinessViewModel {
   const type = b.business_type as BusinessViewModel['type']
-  const validType = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'].includes(type)
-    ? (type as 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office')
+  const validType = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc'].includes(type)
+    ? (type as 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc')
     : 'restaurant'
 
   const now = Date.now()
@@ -187,7 +187,7 @@ export async function getPublishedBusinesses(
       .order('created_at', { ascending: false })
       .limit(limit)
 
-    if (intent && ['restaurant', 'pharmacy', 'supermarket', 'delivery_office'].includes(intent)) {
+    if (intent && ['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc'].includes(intent)) {
       query = query.eq('business_type', intent)
     }
 

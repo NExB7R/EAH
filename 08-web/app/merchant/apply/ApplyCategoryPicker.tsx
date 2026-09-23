@@ -4,7 +4,9 @@ import { useState } from 'react'
 const PRESETS = [
   { value: 'restaurant', label: 'مطعم' },
   { value: 'pharmacy', label: 'صيدلية' },
+  { value: 'supermarket', label: 'ماركت' },
   { value: 'delivery_office', label: 'مكتب توصيل' },
+  { value: 'misc', label: 'أنشطة أخرى' },
 ]
 
 export default function ApplyCategoryPicker() {

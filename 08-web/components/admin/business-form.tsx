@@ -40,6 +40,7 @@ const TYPES = [
   { value: 'pharmacy', label: 'صيدلية' },
   { value: 'supermarket', label: 'ماركت / مقاضي' },
   { value: 'delivery_office', label: 'توصيل' },
+  { value: 'misc', label: 'أنشطة أخرى' },
 ]
 
 function slugify(name: string): string {

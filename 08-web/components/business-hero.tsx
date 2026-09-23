@@ -5,7 +5,7 @@ import './business-hero.css'
 import TrustBadge from './trust-badge'
 import { IcRestaurant, IcPharmacy, IcMarket, IcDelivery } from './eah-icons'
 
-type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
+type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
 
 const TYPE_ICON: Partial<Record<BusinessType, React.ComponentType>> = {
   restaurant: IcRestaurant,
@@ -16,7 +16,9 @@ const TYPE_ICON: Partial<Record<BusinessType, React.ComponentType>> = {
 const TYPE_LABEL: Partial<Record<BusinessType, string>> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
+  supermarket: 'ماركت',
   delivery_office: 'توصيل',
+  misc: 'أنشطة أخرى',
 }
 
 type Stats = {

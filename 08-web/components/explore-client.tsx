@@ -7,7 +7,7 @@ import './explore-client.css'
 import { IcClose, IcMenu } from '@/components/eah-icons'
 import { normalizeArabic } from '@/lib/search/normalize'
 
-type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office'
+type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
 
 type Business = {
   slug: string
@@ -28,7 +28,7 @@ type Business = {
   [key: string]: any
 }
 
-const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
+const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc']
 const getType = (b: Business): string => (b.type ?? b.business_type ?? '') as string
 
 export default function ExploreClient({
@@ -217,6 +217,7 @@ export default function ExploreClient({
     { value: 'pharmacy',        label: 'صيدليات', count: typeCounts.pharmacy, disabled: typeCounts.pharmacy === 0 },
     { value: 'supermarket',     label: 'ماركت', count: typeCounts.supermarket, disabled: typeCounts.supermarket === 0 },
     { value: 'delivery_office', label: 'توصيل', count: typeCounts.delivery_office, disabled: typeCounts.delivery_office === 0 },
+    { value: 'misc',            label: 'أنشطة أخرى', count: typeCounts.misc, disabled: typeCounts.misc === 0 },
   ]
 
   const AREA_OPTS = areas.map((a) => ({ value: a, label: a, count: areaCounts[a] }))
