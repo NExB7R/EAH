@@ -15,8 +15,7 @@
 .nav-drawer.is-open {
   opacity: 1;
   pointer-events: auto;
-  backdrop-filter: blur(6px) saturate(0.85);
-  -webkit-backdrop-filter: blur(6px) saturate(0.85);
+  -webkit-
   background: rgba(4, 2, 10, 0.35);
 }
 

@@ -1,14 +1,60 @@
-/* Ambient 2026 — light gradient (perf optimized) */
+/* ═══════════════════════════════════════════════════════════════
+   EAH — Starfield Background (same as Welcome Gate)
+   No blur. Pure CSS. GPU-friendly.
+   ═══════════════════════════════════════════════════════════════ */
+
 .ambient-aurora {
   position: fixed;
   inset: 0;
   z-index: 0;
-  overflow: hidden;
   pointer-events: none;
-  background:
-    radial-gradient(circle at 50% -20%, rgba(168, 85, 247, 0.08), transparent 42%),
-    radial-gradient(circle at 100% 60%, rgba(232, 199, 154, 0.04), transparent 50%),
-    linear-gradient(180deg, #07060b 0%, #09060f 48%, #050308 100%);
+  overflow: hidden;
+  background: #07020D;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(157, 78, 221, 0.12), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, rgba(232, 199, 154, 0.06), transparent 50%),
+    radial-gradient(ellipse at 0% 60%, rgba(157, 78, 221, 0.05), transparent 50%),
+    linear-gradient(180deg, #07020D 0%, #0A0514 50%, #07020D 100%);
 }
-.ambient-aurora__orb,
-.ambient-aurora__grain { display: none; }
+
+/* ─── Stars ─── */
+.ambient-aurora__star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #C084FC;
+  box-shadow: 0 0 5px rgba(192, 132, 252, 0.55);
+  animation: ambientTwinkle 3s ease-in-out infinite;
+  will-change: opacity;
+  pointer-events: none;
+}
+
+.ambient-aurora__star--gold {
+  background: #E8C79A;
+  box-shadow: 0 0 5px rgba(232, 199, 154, 0.55);
+}
+
+.ambient-aurora__star--lg { width: 4px; height: 4px; }
+.ambient-aurora__star--sm { width: 2px; height: 2px; }
+
+@keyframes ambientTwinkle {
+  0%, 100% { opacity: 0.12; transform: scale(1); }
+  50%      { opacity: 0.85; transform: scale(1.35); }
+}
+
+/* ─── Mobile — أخف ─── */
+@media (max-width: 640px) {
+  .ambient-aurora__star {
+    animation-duration: 4s;
+  }
+  .ambient-aurora__star--lg { width: 3px; height: 3px; }
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .ambient-aurora__star {
+    animation: none;
+    opacity: 0.4;
+  }
+}
