@@ -923,17 +923,33 @@ nav.bc .bc__sep {
 /* ═══════════════════════════════════════════════════════════════
    Starfield — Content above background
    ═══════════════════════════════════════════════════════════════ */
-body > main,
-body > header,
-body > footer,
-body > div:not(.ambient-aurora) {
-  position: relative;
-  z-index: 1;
-}
+/* ═══════════════════════════════════════════════════════════════
+   Starfield — Content above background (careful: don't break fixed elements)
+   ═══════════════════════════════════════════════════════════════ */
 
 body > .ambient-aurora {
   position: fixed !important;
   inset: 0 !important;
   z-index: 0 !important;
   pointer-events: none !important;
+}
+
+body > header,
+body > main,
+body > footer,
+body > nav {
+  position: relative;
+  z-index: 1;
+}
+
+/* Welcome Gate — always on top */
+body > .wg {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483647 !important;
+}
+
+/* Floating capsule header — always fixed */
+body > .floating-capsule {
+  position: fixed !important;
 }
