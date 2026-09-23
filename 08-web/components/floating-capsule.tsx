@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import EahLogo from './eah-logo'
 import NeonIconButton from './neon-icon-button'
 import UserAvatar from './user-avatar'
@@ -30,7 +30,9 @@ type CapsuleUser = {
 }
 
 export default function FloatingCapsuleHeader() {
-  const [scrollProgress, setScrollProgress] = useState(0)
+  const headerRef = useRef<HTMLElement>(null)
+  const lastScrolledRef = useRef(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [user, setUser] = useState<CapsuleUser | null>(null)
   const [loggedIn, setLoggedIn] = useState<boolean | null>(null)
@@ -39,9 +41,15 @@ export default function FloatingCapsuleHeader() {
   useEffect(() => {
     let frame = 0
     const update = () => {
-      const revealDistance = 550  // hero section height — full header by end of hero
+      const revealDistance = 550
       const progress = Math.min(1, Math.max(0, window.scrollY / revealDistance))
-      setScrollProgress(progress)
+      const el = headerRef.current
+      if (el) el.style.setProperty('--fc-scroll-progress', String(progress))
+      const next = progress > 0
+      if (next !== lastScrolledRef.current) {
+        lastScrolledRef.current = next
+        setIsScrolled(next)
+      }
       frame = 0
     }
     const onScroll = () => {
@@ -97,8 +105,8 @@ export default function FloatingCapsuleHeader() {
   return (
     <>
       <header
-        className={`floating-capsule ${scrollProgress > 0 ? 'is-scrolled' : ''}`}
-        style={{ '--fc-scroll-progress': scrollProgress } as React.CSSProperties}
+        ref={headerRef}
+        className={`floating-capsule ${isScrolled ? 'is-scrolled' : ''}`}
       >
         <div className="floating-capsule__inner">
           <div className="floating-capsule__side floating-capsule__side--start">

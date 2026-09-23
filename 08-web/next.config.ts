@@ -26,8 +26,6 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2592000,
   },
 
-  serverExternalPackages: ['@sentry/nextjs'],
-
   experimental: {
     optimizePackageImports: ['@supabase/ssr', '@supabase/supabase-js'],
   },
