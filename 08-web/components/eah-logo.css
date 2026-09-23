@@ -30,3 +30,10 @@
 @media (prefers-reduced-motion: reduce) {
   .eah-logo__word { animation: none; }
 }
+
+/* PERF OVERRIDE — kill animations */
+[class*="crown"],
+[class*="eah-logo"],
+[class*="word"] {
+  animation: none !important;
+}

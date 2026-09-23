@@ -512,3 +512,10 @@
   contain: none !important;
   contain-intrinsic-size: auto !important;
 }
+
+/* PERF OVERRIDE — kill animations */
+.ss2--trending .ss2__title::before,
+.ss2--new .ss2__title::before,
+.ss2__see-all {
+  animation: none !important;
+}

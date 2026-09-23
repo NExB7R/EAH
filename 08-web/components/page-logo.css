@@ -29,3 +29,9 @@
 @media (max-width: 640px) {
   .plogo { padding: 8px 14px 12px; }
 }
+
+/* PERF OVERRIDE — kill animations */
+.plogo,
+[class*="plogo"] {
+  animation: none !important;
+}

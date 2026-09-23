@@ -269,3 +269,12 @@
 /* ═══ Performance — disable continuous animations ═══ */
 .hh__logo { animation: none !important; }
 .hh__hook-motion { animation: none !important; will-change: auto !important; }
+
+/* PERF OVERRIDE — kill animations */
+.hh__logo,
+.hh__hook-motion,
+.hh__hook-line .hh__hook-motion,
+.hh__hook-sub-line .hh__hook-motion {
+  animation: none !important;
+  will-change: auto !important;
+}

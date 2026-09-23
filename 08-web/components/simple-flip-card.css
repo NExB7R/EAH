@@ -477,3 +477,22 @@ html body .sfc * {
               linear-gradient(135deg, #1A0E2E, #0F061C);
   color: #C084FC;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   PERF OVERRIDE — kill animations (safe, additive)
+   ═══════════════════════════════════════════════════════════════ */
+.sfc__layer--cover,
+.sfc__layer--logo,
+.sfc:hover .sfc__layer--menu1,
+.sfc:hover .sfc__layer--menu2,
+.sfc:hover .sfc__layer--menu3,
+.sfc:hover .sfc__layer--menu4 {
+  animation: none !important;
+}
+
+/* Hide logo layer entirely — only cover shown */
+.sfc__layer--logo {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  display: none !important;
+}
