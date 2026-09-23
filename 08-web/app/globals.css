@@ -986,3 +986,15 @@ body > .floating-capsule {
 
 /* Footer + Below-fold sections */
 
+
+
+/* ═══ FORCE — kill any remaining content-visibility ═══ */
+.sfc, .ss2, .ss3, .section-slider, .ec5,
+.sf, .vv, .acc-section,
+.sfc *, .ss2 *, .ss3 * {
+  content-visibility: visible !important;
+}
+.sf, .ss2, .ss3, .section-slider, .ec5 {
+  contain: none !important;
+  contain-intrinsic-size: auto !important;
+}

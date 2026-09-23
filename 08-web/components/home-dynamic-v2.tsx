@@ -60,7 +60,7 @@ function sampleDiverse<T extends { type?: string }>(arr: T[], n: number): T[] {
 }
 
 const getCachedBusinesses = unstable_cache(
-  async () => getPublishedBusinesses(100),
+  async () => getPublishedBusinesses(40),
   ['home-businesses-v5'],
   { revalidate: 300, tags: ['businesses'] }
 )
@@ -125,7 +125,7 @@ export default async function HomeDynamicV2() {
   // ═══════════════════════════════════════════════════════════
   const trendingTop = [...diversified]
     .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
-    .slice(0, 12)
+    .slice(0, 8)
   const hasTrending = !lowInventory && trendingTop.length > 0
 
   // ═══════════════════════════════════════════════════════════
@@ -134,7 +134,7 @@ export default async function HomeDynamicV2() {
   const offersAll = diversified
     .filter((b) => (b.activeOffers ?? 0) > 0)
     .sort((a, b) => (b.activeOffers ?? 0) - (a.activeOffers ?? 0))
-  const offersTop = offersAll.slice(0, 10)
+  const offersTop = offersAll.slice(0, 8)
   const hasOffers = !lowInventory && offersTop.length > 0
 
   // ═══════════════════════════════════════════════════════════
@@ -143,7 +143,7 @@ export default async function HomeDynamicV2() {
   const newAll = diversified.filter(
     (b) => (b.ageInDays ?? 999) < 30 && !(b as any).is_new_project
   )
-  const newOnes = sampleDiverse(newAll, 15)
+  const newOnes = sampleDiverse(newAll, 8)
   const hasNew = !lowInventory && newOnes.length > 0
 
   // ═══ Fallback: لو المحتوى قليل ═══
@@ -264,7 +264,7 @@ export default async function HomeDynamicV2() {
           {newOnes.map((b) => (
             <SimpleFlipCard key={b.slug} business={b} variant="new" />
           ))}
-          {newAll.length > 15 && (
+          {newAll.length > 8 && (
             <SeeAllCard
               href="/new"
               label="شوف كل الجديد"

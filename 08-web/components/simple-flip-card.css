@@ -382,3 +382,15 @@
   margin-inline-start: 2px;
   font-weight: 700;
 }
+
+/* ═══ FORCE — remove content-visibility on cards ═══ */
+.sfc,
+.sfc *,
+.sfc__cover,
+.sfc__body,
+.sfc__img,
+.sfc__layer {
+  content-visibility: visible !important;
+  contain: none !important;
+  contain-intrinsic-size: auto !important;
+}

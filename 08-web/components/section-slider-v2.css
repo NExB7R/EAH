@@ -504,3 +504,13 @@
 .ss2__track > * {
   will-change: transform;
 }
+
+/* ═══ FORCE — remove content-visibility on sliders ═══ */
+.ss2,
+.ss2 *,
+.ss2__track,
+.ss2__wrapper {
+  content-visibility: visible !important;
+  contain: none !important;
+  contain-intrinsic-size: auto !important;
+}
