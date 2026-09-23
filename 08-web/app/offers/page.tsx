@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase-server'
+import { createPublicClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import PageLogo from '@/components/page-logo'
 import SiteFooter from '@/components/site-footer'
 import './offers.css'
 import { IcInbox } from '@/components/eah-icons'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 120
 export const metadata = {
   title: 'العروض',
   description: 'أحلى العروض في شبين القناطر — خصومات وعروض من مطاعم وصيدليات ومكاتب توصيل',
@@ -25,7 +25,7 @@ const TYPE_LABEL: Record<string, string> = {
 }
 
 export default async function OffersPage() {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
 
   const { data } = await supabase
     .from('offers')

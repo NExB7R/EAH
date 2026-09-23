@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next'
-import { createClient } from '@/lib/supabase-server'
+import { createPublicClient } from '@/lib/supabase-server'
+
+export const revalidate = 3600
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://eah-sq.vercel.app'
 
@@ -32,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Business pages
   let bizEntries: MetadataRoute.Sitemap = []
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data } = await supabase
       .from('businesses')
       .select('slug,updated_at')

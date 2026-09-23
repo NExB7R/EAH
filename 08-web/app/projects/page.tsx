@@ -8,7 +8,7 @@ import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses } from '@/lib/ranking'
 import './projects.css'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 120
 
 export const metadata = {
   title: 'مشاريع جديدة — ادعمها',

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase-server'
 import AdminShell from '@/components/admin/admin-shell'
+import '@/components/eah-admin.css'
 
 export const dynamic = 'force-dynamic'
 
