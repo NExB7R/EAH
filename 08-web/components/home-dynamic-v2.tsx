@@ -1,37 +1,84 @@
+import { unstable_cache } from 'next/cache'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
 import { getViewStats } from '@/lib/real-stats'
 
-/* ═══ دالة أخذ عينة عشوائية ═══ */
-function sampleN<T>(arr: T[], n: number): T[] {
-  if (arr.length <= n) return arr
-  const shuffled = [...arr]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
-  return shuffled.slice(0, n)
-}
-
-
 import HomeHero from '@/components/home-hero'
 import SectionSliderV2 from '@/components/section-slider-v2'
 import SimpleFlipCard from '@/components/simple-flip-card'
+import SeeAllCard from '@/components/see-all-card'
 import VisitorValue from '@/components/visitor-value'
 import './home-dynamic-v2.css'
 import AdSlot from '@/components/ads/ad-slot'
 import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
 
+/* ═══════════════════════════════════════════════════════════════
+   Helper: Random shuffle (Fisher-Yates)
+   ═══════════════════════════════════════════════════════════════ */
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Helper: Smart sample — random N with category diversity
+   ═══════════════════════════════════════════════════════════════ */
+function sampleDiverse<T extends { type?: string }>(arr: T[], n: number): T[] {
+  if (arr.length <= n) return shuffle(arr)
+
+  const shuffled = shuffle(arr)
+  const result: T[] = []
+  const seenTypes = new Map<string, number>()
+  const maxPerType = Math.ceil(n / 2) // أقصى 50% من نفس النوع
+
+  for (const item of shuffled) {
+    const t = item.type ?? 'other'
+    const c = seenTypes.get(t) ?? 0
+    if (c < maxPerType) {
+      result.push(item)
+      seenTypes.set(t, c + 1)
+      if (result.length >= n) break
+    }
+  }
+
+  // لو لسه ناقصين، نكمل بأي عنصر
+  if (result.length < n) {
+    for (const item of shuffled) {
+      if (!result.includes(item)) {
+        result.push(item)
+        if (result.length >= n) break
+      }
+    }
+  }
+
+  return result
+}
+
 export default async function HomeDynamicV2() {
-  // ═══ بيانات طازة كل طلب (الكاش الثابت كان بيسبب رئيسية فاضية) ═══
+  // ═══ Cached data ═══
+  const cachedBusinesses = unstable_cache(
+    async () => getPublishedBusinesses(100),
+    ['home-businesses-v3'],
+    { revalidate: 300, tags: ['businesses'] }
+  )
+  const cachedAd = unstable_cache(
+    async () => getActiveAdForSlot('home_banner'),
+    ['home-ad-v3'],
+    { revalidate: 120, tags: ['ads'] }
+  )
+
   const [businesses, ad, userTags] = await Promise.all([
-    getPublishedBusinesses(50),
-    getActiveAdForSlot('home_banner'),
+    cachedBusinesses(),
+    cachedAd(),
     loadUserProfileTags(),
   ])
 
-  // ═══ View stats — مع try/catch للأمان ═══
+  // ═══ View stats ═══
   const slugs = businesses.map((b) => b.slug)
   let realStats: Map<string, { views: number }> = new Map()
   try {
@@ -64,31 +111,42 @@ export default async function HomeDynamicV2() {
   const diversified = diversifyByCategory(personalized as any, 'type') as any[]
 
   const total = diversified.length
-
-  const featured = [...diversified]
-    .filter((b) => b.badge === 'مميز' || b.isFeatured)
-    .sort((a, b) => (b.recentViews ?? 0) - (a.recentViews ?? 0))
-    .slice(0, 6)
-
-  const trending = [...diversified]
-    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
-    .slice(0, 6)
-
-  const projects = [...diversified]
-    .filter((b: any) => b.is_new_project === true)
-    .sort((a: any, b: any) => (a.ageInDays ?? 999) - (b.ageInDays ?? 999))
-    .slice(0, 6)
-
-  const newOnes = [...diversified]
-    .filter((b) => (b.ageInDays ?? 999) < 30 && !(b as any).is_new_project)
-    .sort((a, b) => (a.ageInDays ?? 999) - (b.ageInDays ?? 999))
-    .slice(0, 6)
-
   const lowInventory = total <= 3
+
+  // ═══════════════════════════════════════════════════════════
+  // المميزين — كل المميزين (عشوائي) — عرض عادل للمدفوع
+  // ═══════════════════════════════════════════════════════════
+  const featuredAll = diversified.filter((b) => b.badge === 'مميز' || b.isFeatured)
+  const featured = shuffle(featuredAll) // عشوائي عشان كل المدفوع ياخد فرصة
   const hasFeatured = !lowInventory && featured.length > 0
-  const hasTrending = !lowInventory && trending.length > 0
+
+  // ═══════════════════════════════════════════════════════════
+  // الترند — Top 12 بأعلى score + ترتيب
+  // ═══════════════════════════════════════════════════════════
+  const trendingTop = [...diversified]
+    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+    .slice(0, 12)
+  const hasTrending = !lowInventory && trendingTop.length > 0
+
+  // ═══════════════════════════════════════════════════════════
+  // العروض — Top 10 عروض نشطة
+  // ═══════════════════════════════════════════════════════════
+  const offersAll = diversified
+    .filter((b) => (b.activeOffers ?? 0) > 0)
+    .sort((a, b) => (b.activeOffers ?? 0) - (a.activeOffers ?? 0))
+  const offersTop = offersAll.slice(0, 10)
+  const hasOffers = !lowInventory && offersTop.length > 0
+
+  // ═══════════════════════════════════════════════════════════
+  // الجديد — 15 عشوائي (فرص عادلة) من آخر 30 يوم
+  // ═══════════════════════════════════════════════════════════
+  const newAll = diversified.filter(
+    (b) => (b.ageInDays ?? 999) < 30 && !(b as any).is_new_project
+  )
+  const newOnes = sampleDiverse(newAll, 15)
   const hasNew = !lowInventory && newOnes.length > 0
-  const hasProjects = projects.length > 0
+
+  // ═══ Fallback: لو المحتوى قليل ═══
   const hasUnified = lowInventory && total > 0
 
   const adHref = ad ? getAdHref(ad) : '#'
@@ -99,6 +157,7 @@ export default async function HomeDynamicV2() {
 
       {ad && <AdSlot ad={ad} href={adHref} />}
 
+      {/* ═══ Unified (Low inventory) ═══ */}
       {hasUnified && (
         <SectionSliderV2
           title="اكتشف على EAH"
@@ -109,9 +168,17 @@ export default async function HomeDynamicV2() {
           {diversified.map((b) => (
             <SimpleFlipCard key={b.slug} business={b} variant="default" />
           ))}
+          <SeeAllCard
+            href="/explore"
+            label="اكتشف كل الأماكن"
+            count={total}
+            variant="default"
+            ctaText="ابدأ الاستكشاف"
+          />
         </SectionSliderV2>
       )}
 
+      {/* ═══ ⭐ المميزين — كل المميزين عشوائي ═══ */}
       {hasFeatured && (
         <SectionSliderV2
           title="المميزين"
@@ -120,48 +187,82 @@ export default async function HomeDynamicV2() {
           variant="featured"
         >
           {featured.map((b) => (
-            <SimpleFlipCard key={b.slug} business={b} variant="default" />
+            <SimpleFlipCard key={b.slug} business={b} variant="featured" />
           ))}
+          {featured.length >= 4 && (
+            <SeeAllCard
+              href="/featured"
+              label="شوف كل المميزين"
+              count={featuredAll.length}
+              variant="featured"
+              ctaText="اكتشف المميزين"
+            />
+          )}
         </SectionSliderV2>
       )}
 
+      {/* ═══ 🔥 الترند — Top 12 + Teaser ═══ */}
       {hasTrending && (
         <SectionSliderV2
-          title="الترند"
+          title="الترند النهاردة"
           subtitle="الناس بتدور عليها دلوقتي"
           seeAllHref="/trends"
           variant="trending"
         >
-          {trending.map((b) => (
-            <SimpleFlipCard key={b.slug} business={b} variant="default" />
+          {trendingTop.map((b, i) => (
+            <SimpleFlipCard key={b.slug} business={b} variant="trending" rank={i + 1} />
           ))}
+          <SeeAllCard
+            href="/trends"
+            label="شوف الترند الكامل"
+            count={diversified.length}
+            variant="trending"
+            ctaText="كل الترند"
+          />
         </SectionSliderV2>
       )}
 
-      {hasProjects && (
+      {/* ═══ 🎁 العروض — Top 10 + Teaser ═══ */}
+      {hasOffers && (
         <SectionSliderV2
-          title="مشاريع جديدة — ادعمها"
-          subtitle="فرصتنا مع بعض نبني حاجة من الأول"
-          seeAllHref="/projects"
-          variant="projects"
-          autoAdvanceMs={2200}
+          title="عروض حلوة"
+          subtitle="وفّر على طلبك"
+          seeAllHref="/offers"
+          variant="offers"
         >
-          {projects.map((b) => (
-            <SimpleFlipCard key={b.slug} business={b} variant="default" />
+          {offersTop.map((b) => (
+            <SimpleFlipCard key={b.slug} business={b} variant="offers" />
           ))}
+          <SeeAllCard
+            href="/offers"
+            label="شوف كل العروض"
+            count={offersAll.length}
+            variant="offers"
+            ctaText="كل العروض"
+          />
         </SectionSliderV2>
       )}
 
+      {/* ═══ ✨ الجديد — 15 عشوائي + Teaser ═══ */}
       {hasNew && (
         <SectionSliderV2
-          title="الجديد"
+          title="جديد — محتاج فرصتنا"
           subtitle="أخواتنا اللي بيبدأوا — ادعمهم"
           seeAllHref="/new"
           variant="new"
         >
           {newOnes.map((b) => (
-            <SimpleFlipCard key={b.slug} business={b} variant="default" />
+            <SimpleFlipCard key={b.slug} business={b} variant="new" />
           ))}
+          {newAll.length > 15 && (
+            <SeeAllCard
+              href="/new"
+              label="شوف كل الجديد"
+              count={newAll.length}
+              variant="new"
+              ctaText="ادعم الجديد"
+            />
+          )}
         </SectionSliderV2>
       )}
 

@@ -115,6 +115,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem('eah-welcome-seen-v1')){document.documentElement.classList.add('wg-seen')}}catch(e){}`,
+          }}
+        />
         <AmbientBg />
         <SplashScreen />
         <PageViewTracker />
