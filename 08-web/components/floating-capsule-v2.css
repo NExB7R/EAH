@@ -96,7 +96,6 @@
     scale(calc(0.88 + 0.12 * var(--fc-scroll-progress, 0)));
   pointer-events: none;
   transition: opacity 60ms linear, transform 60ms linear;
-  will-change: opacity, transform;
 }
 
 .floating-capsule.is-scrolled .fc-logo {

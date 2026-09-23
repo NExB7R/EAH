@@ -1026,3 +1026,37 @@ body > .floating-capsule {
 .sfc *, .ss2 *, .ss3 *, [class*="content-visibility"] {
   content-visibility: visible !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   PERF SCROLL LAYER — anti-jank for smooth scroll
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 1. HTML smooth scroll — نخليه لـ prefers-reduced-motion فقط */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* 2. Slider track — scroll بدون reflow */
+.ss2__track {
+  will-change: scroll-position;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 3. Cards — GPU layer فقط عند hover */
+.sfc {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.sfc:hover {
+  will-change: transform;
+}
+
+/* 4. Global img — object-fit + display block */
+img { display: block; max-width: 100%; height: auto; }
+.sfc__img,
+.sfc__layer { object-fit: cover; }
+
+/* 5. منع layout shift من الصور */
+.sfc__cover { aspect-ratio: 4 / 3; }

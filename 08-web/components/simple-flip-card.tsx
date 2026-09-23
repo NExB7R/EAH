@@ -118,15 +118,18 @@ type Props = {
   rank?: number
 }
 
+
+/* Cloudinary transforms helper */
+function cloudinaryUrl(url: string | undefined, w = 400, h = 300): string {
+  if (!url) return ''
+  if (!url.includes('res.cloudinary.com')) return url
+  // لو فيها transforms يدوية → نسيبها
+  if (url.includes('/upload/f_') || url.includes('/upload/q_')) return url
+  return url.replace('/upload/', `/upload/f_auto,q_auto:eco,w_${w},h_${h},c_fill/`)
+}
+
 function getCover(b: SimpleBusiness): string {
-  const direct = b.cover || b.cover_url || b.cover_image_url
-  if (direct) return optimizeImage(direct)
-  // Fallback chain: gallery → menu → logo
-  if (Array.isArray(b.gallery) && b.gallery.length > 0) return optimizeImage(b.gallery[0])
-  if (Array.isArray(b.menu) && b.menu.length > 0) return optimizeImage(b.menu[0])
-  const logo = b.logo || b.logo_url
-  if (logo) return logo
-  return ''
+  return cloudinaryUrl(b.cover || b.cover_url || b.cover_image_url, 400, 300)
 }
 function getRating(b: SimpleBusiness): number {
   return b.avg_rating ?? b.rating ?? 0
