@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache'
 import { getPublishedBusinesses } from '@/lib/data'
 import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
@@ -58,11 +59,22 @@ function sampleDiverse<T extends { type?: string }>(arr: T[], n: number): T[] {
   return result
 }
 
+const getCachedBusinesses = unstable_cache(
+  async () => getPublishedBusinesses(100),
+  ['home-businesses-v5'],
+  { revalidate: 300, tags: ['businesses'] }
+)
+
+const getCachedAd = unstable_cache(
+  async () => getActiveAdForSlot('home_banner'),
+  ['home-ad-v5'],
+  { revalidate: 120, tags: ['ads'] }
+)
+
 export default async function HomeDynamicV2() {
-  // ═══ Data (no unstable_cache — cookies() incompatible) ═══
   const [businesses, ad, userTags] = await Promise.all([
-    getPublishedBusinesses(100),
-    getActiveAdForSlot('home_banner'),
+    getCachedBusinesses(),
+    getCachedAd(),
     loadUserProfileTags(),
   ])
 

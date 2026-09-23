@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase-server'
+import { createClient, createPublicClient } from '@/lib/supabase-server'
 import { getSubscribedBusinessIds } from './subscription'
 
 type DbBusiness = {
@@ -46,7 +46,7 @@ type BusinessViewModel = {
   businessId?: string
   name: string
   slug: string
-  type: 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
+  type: 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc' | 'misc'
   area: string
   badge?: string
   vibe: string[]
@@ -138,7 +138,7 @@ async function loadReviewStats(businessIds: string[]) {
   const stats = new Map<string, { rating: number; reviewCount: number; recentComments: number }>()
   if (!businessIds.length) return stats
 
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data } = await supabase
     .from('business_reviews')
     .select('business_id,taste,value_for_money,speed,experience,comment,created_at')
@@ -178,7 +178,7 @@ export async function getPublishedBusinesses(
   intent?: string
 ): Promise<BusinessViewModel[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     let query = supabase
       .from('businesses')
       .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,cover_image_url')

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase-server'
+import { createClient, createPublicClient } from '@/lib/supabase-server'
 import type {
   BusinessSubscription,
   SubscriptionPlan,
@@ -180,7 +180,7 @@ export async function getSubscribedBusinessIds(
 ): Promise<Set<string>> {
   if (businessIds.length === 0) return new Set()
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const nowIso = new Date().toISOString()
     const { data } = await supabase
       .from('business_subscriptions')

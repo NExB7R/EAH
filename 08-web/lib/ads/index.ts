@@ -1,9 +1,9 @@
-import { createClient } from '@/lib/supabase-server'
+import { createPublicClient } from '@/lib/supabase-server'
 import type { Ad, AdSlot, AdSlotType } from './types'
 
 export async function getActiveAdForSlot(slotCode: AdSlotType): Promise<Ad | null> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const now = new Date().toISOString()
     const { data } = await supabase
       .from('ads')
@@ -23,7 +23,7 @@ export async function getActiveAdForSlot(slotCode: AdSlotType): Promise<Ad | nul
 
 export async function getAllAdSlots(): Promise<AdSlot[]> {
   try {
-    const supabase = await createClient()
+    const supabase = createPublicClient()
     const { data } = await supabase
       .from('ad_slots')
       .select('*')

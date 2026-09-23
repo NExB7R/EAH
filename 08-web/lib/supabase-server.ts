@@ -47,3 +47,13 @@ export function createServiceClient() {
     auth: { autoRefreshToken: false, persistSession: false },
   })
 }
+
+// Public client (no cookies) — for cacheable public reads
+export function createPublicClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+  if (!url || !key) throw new Error('Missing Supabase env vars')
+  return createSupabaseClient(url, key, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  })
+}
