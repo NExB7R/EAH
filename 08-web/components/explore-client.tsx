@@ -6,6 +6,7 @@ import FilterSelect from './ui/filter-select'
 import './explore-client.css'
 import { IcClose, IcMenu } from '@/components/eah-icons'
 import { normalizeArabic } from '@/lib/search/normalize'
+import Link from 'next/link'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
 
@@ -238,6 +239,17 @@ export default function ExploreClient({
 
   return (
     <section className="exc">
+
+      {/* ═══ Back Button — Right side ═══ */}
+      <div className="exp-back-wrap">
+        <Link href="/" className="exp-back-btn">
+          <span>الرئيسية</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </Link>
+      </div>
+
       {/* ─── Filter Bar ─── */}
       <div className="exc-bar">
         <div className="exc-bar__scroll">
