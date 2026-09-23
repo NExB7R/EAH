@@ -6,7 +6,7 @@
 :root {
   --font-cairo: 'Cairo Variable', 'Tahoma', system-ui, sans-serif;
   --font-cairo-play: 'Cairo Variable', 'Tahoma', system-ui, sans-serif;
-  --font-signature: 'Dancing Script Variable', cursive;
+  --font-signature: 'Brush Script MT', 'Segoe Script', 'Apple Chancery', cursive;
 }
 
 html {
