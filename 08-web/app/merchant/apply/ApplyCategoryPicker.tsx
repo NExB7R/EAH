@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { MISC_CATEGORIES } from '@/lib/misc-categories'
 
 const PRESETS = [
   { value: 'restaurant', label: 'مطعم' },
@@ -12,6 +13,7 @@ const PRESETS = [
 export default function ApplyCategoryPicker() {
   const [selected, setSelected] = useState<string>('restaurant')
   const [customName, setCustomName] = useState('')
+  const [subCategory, setSubCategory] = useState<string | null>(null)
 
   return (
     <div className="ap-field">

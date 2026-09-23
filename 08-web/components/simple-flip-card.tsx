@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useState } from 'react'
+import { getMiscLabel } from '@/lib/misc-categories'
 import './simple-flip-card.css'
 
 /* ═══ Inline Icons ═══ */
@@ -87,6 +88,7 @@ export type SimpleBusiness = {
   slug: string
   name: string
   type?: string
+  sub_category?: string
   area?: string
   cover?: string
   cover_url?: string
@@ -130,12 +132,15 @@ function getTrust(b: SimpleBusiness): number {
   return Math.min(100, Math.round(getRating(b) * 20))
 }
 
-function getTypeLabel(type?: string): string {
+function getTypeLabel(type?: string, subCategory?: string): string {
   if (type === 'restaurant') return 'مطعم'
   if (type === 'pharmacy') return 'صيدلية'
   if (type === 'delivery_office') return 'توصيل'
   if (type === 'supermarket') return 'ماركت'
-  if (type === 'misc') return 'متجر'
+  if (type === 'misc') {
+    if (subCategory) return getMiscLabel(subCategory)
+    return 'متجر'
+  }
   return 'مكان'
 }
 
@@ -164,7 +169,7 @@ export default function SimpleFlipCard({ business, variant = 'default', rank }: 
   const reviews = getReviews(business)
   const trust = getTrust(business)
   const hook = getHook(business)
-  const typeLabel = getTypeLabel(business.type)
+  const typeLabel = getTypeLabel(business.type, business.sub_category)
   const isOpen = typeof business.open === 'boolean' ? business.open : null
   const wa = hasWhatsApp(business)
 
