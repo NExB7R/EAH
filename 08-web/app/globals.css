@@ -132,7 +132,6 @@ button, a {
 .static-page__content a:hover { color: var(--eah-gold); }
 .static-page__content strong { color: var(--eah-text); font-weight: 900; }
 
-
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
 
 /* ═══ EAH Custom Scrollbar — 2026 brand colors ═══ */
@@ -279,7 +278,6 @@ body > .ambient-aurora {
   opacity: 1 !important;
 }
 
-
 /* ═══ EAH Spacing System 2026 ═══ */
 :root {
   --fc-height: 64px;
@@ -311,7 +309,6 @@ main > section:first-child,
 main > *:first-child {
   margin-top: 0;
 }
-
 
 /* ═══ 2026 Neon Gradient Text — Global ═══ */
 .gradient-heading,
@@ -977,22 +974,8 @@ body > .floating-capsule {
    ═══════════════════════════════════════════════════════════════ */
 
 /* Section sliders — 380px height */
-.ss2,
-.ss3,
-.section-slider {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 380px;
-}
 
 /* Explore + Favorites card — 320px height */
-.ec5,
-.sfc,
-.v7-xcard,
-.v7-fcard,
-.v7-fav {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 320px;
-}
 
 /* Grid containers */
 .exp-grid,
@@ -1003,13 +986,4 @@ body > .floating-capsule {
 }
 
 /* Footer + Below-fold sections */
-.sf {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 600px;
-}
 
-.acc-section,
-.vv {
-  content-visibility: auto;
-  contain-intrinsic-size: 0 400px;
-}

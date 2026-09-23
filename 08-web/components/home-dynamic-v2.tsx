@@ -155,7 +155,17 @@ export default async function HomeDynamicV2() {
     <>
       <HomeHero />
 
-      {ad && <AdSlot ad={ad} href={adHref} />}
+      {ad ? (
+        <AdSlot ad={ad} href={adHref} />
+      ) : (
+        <div className="home-ad-placeholder">
+          <div className="home-ad-placeholder__inner">
+            <span className="home-ad-placeholder__label">مساحة إعلانية</span>
+            <span className="home-ad-placeholder__name">Home Banner</span>
+            <span className="home-ad-placeholder__size">1200 × 200</span>
+          </div>
+        </div>
+      )}
 
       {/* ═══ Unified (Low inventory) ═══ */}
       {hasUnified && (

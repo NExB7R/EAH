@@ -19,7 +19,7 @@ export const metadata = {
   description: 'اكتشف كل الأماكن في شبين القناطر — مطاعم، صيدليات، توصيل',
 }
 
-const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office']
+const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc']
 
 export default async function ExplorePage({
   searchParams,
@@ -59,12 +59,12 @@ export default async function ExplorePage({
   const ranked = rankBusinesses(withStats as any, { includeFeaturedBoost: true })
   const diversified = diversifyByCategory(ranked as any, 'type') as any[]
 
-  const headline = activeType
-    ? activeType === 'restaurant' ? 'المطاعم'
+  const headline = activeType === 'restaurant' ? 'المطاعم'
     : activeType === 'pharmacy' ? 'الصيدليات'
     : activeType === 'supermarket' ? 'الماركت والمقاضي'
-    : 'التوصيل'
-    : 'كل اللي حواليك'
+    : activeType === 'misc' ? 'أنشطة أخرى'
+    : activeType === 'delivery_office' ? 'التوصيل'
+    : 'كل اللي حواليك';
 
   return (
     <>

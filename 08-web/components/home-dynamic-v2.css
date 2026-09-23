@@ -125,3 +125,16 @@
   border-color: rgba(168, 85, 247, 0.35);
   color: #C084FC;
 }
+
+/* Home ad placeholder */
+.home-ad-placeholder { max-width: 1200px; margin: 8px auto 6px; padding: 0 20px; }
+.home-ad-placeholder__inner {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  padding: 16px; border: 1px dashed rgba(232, 199, 154, 0.35); border-radius: 14px;
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.04), rgba(168, 85, 247, 0.03));
+  color: rgba(232, 199, 154, 0.85); font-family: var(--font-cairo, system-ui);
+  font-size: 0.8rem; font-weight: 800;
+}
+.home-ad-placeholder__label { padding: 4px 12px; border-radius: 999px; background: rgba(232, 199, 154, 0.15); border: 1px solid rgba(232, 199, 154, 0.3); }
+.home-ad-placeholder__size { opacity: 0.6; font-size: 0.72rem; }
+@media (max-width: 640px) { .home-ad-placeholder__inner { flex-wrap: wrap; gap: 8px; padding: 12px; font-size: 0.72rem; } }
