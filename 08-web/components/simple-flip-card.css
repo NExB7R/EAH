@@ -6,9 +6,6 @@
    ═══════════════════════════════════════════════════════════════ */
 
 .sfc {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 340px;
-  contain: layout style paint;
   --sfc-w: 220px;
   --sfc-neon: 168, 85, 247;
 

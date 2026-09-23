@@ -584,14 +584,10 @@
    PERFORMANCE — content-visibility for section
    ═══════════════════════════════════════════════════════════════ */
 .ss2 {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 380px;
-  contain: layout style;
 }
 
 /* Track — lazy render cards out of view */
 .ss2__track {
-  contain: layout style;
 }
 
 /* Cards inside — no need for content-visibility (track handles it) */
