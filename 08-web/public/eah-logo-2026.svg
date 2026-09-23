@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 150" fill="none" role="img" aria-label="EAH">
+  <defs>
+    <linearGradient id="eahWordGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C77DFF"/>
+      <stop offset="50%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="eahCrownGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F5E4BC"/>
+      <stop offset="45%" stop-color="#E8C79A"/>
+      <stop offset="75%" stop-color="#C9A56C"/>
+      <stop offset="100%" stop-color="#9B7844"/>
+    </linearGradient>
+    <filter id="eahGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Word -->
+  <g filter="url(#eahGlow)">
+    <text x="170" y="122"
+          text-anchor="middle"
+          font-family="'IBM Plex Sans Arabic','Tajawal',system-ui,sans-serif"
+          font-weight="900"
+          font-size="100"
+          letter-spacing="-4"
+          fill="url(#eahWordGrad)"
+          stroke="#C77DFF"
+          stroke-width="0.6"
+          stroke-opacity="0.35">
+      EAH
+    </text>
+  </g>
+
+  <!-- Crown -->
+  <g transform="translate(170, 32)">
+    <path d="M -34 8 L -34 15 L 34 15 L 34 8 L 17 -3 L 8 8 L 0 -10 L -8 8 L -17 -3 Z"
+          fill="url(#eahCrownGrad)"
+          stroke="#F5D9A7"
+          stroke-width="0.8"
+          stroke-opacity="0.55"/>
+    <circle cx="-34" cy="5" r="3.2" fill="#F5E4BC" opacity="0.95"/>
+    <circle cx="0" cy="-12" r="3.2" fill="#F5E4BC" opacity="0.95"/>
+    <circle cx="34" cy="5" r="3.2" fill="#F5E4BC" opacity="0.95"/>
+    <line x1="-34" y1="11" x2="34" y2="11"
+          stroke="#9B7844" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
+</svg>
