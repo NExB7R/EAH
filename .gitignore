@@ -27,3 +27,4 @@ next-env.d.ts
 *.tar.gz.gpg
 .env.vercel.*
 .eah-secure/
+*.backup
