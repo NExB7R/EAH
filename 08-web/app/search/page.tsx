@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase-server'
+import { createPublicClient } from '@/lib/supabase-server'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
 import EahLogo from '@/components/eah-logo'
 import SiteFooter from '@/components/site-footer'
@@ -8,7 +8,7 @@ import ExploreCard from '@/components/explore-card'
 import './search.css'
 import SearchFilters from '@/components/search-filters'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 export const metadata = { title: 'البحث' }
 
 export default async function SearchPage({
@@ -21,7 +21,7 @@ export default async function SearchPage({
   const type = params.type ?? null
   const sort = params.sort ?? 'relevance'
 
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data: results } = await supabase.rpc('search_businesses', {
     p_query: q,
     p_type: type,
