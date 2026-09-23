@@ -221,3 +221,64 @@
   .exc-grid--list .ecard__body { padding: 10px; }
   .exc-grid--list .ecard__hook { -webkit-line-clamp: 1; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   EAH — Sub-categories chips (for misc businesses)
+   ═══════════════════════════════════════════════════════════════ */
+
+.exp-subcats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 16px 16px;
+  margin-top: -4px;
+}
+
+.exp-subcat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.06);
+  border: 1px solid rgba(232, 199, 154, 0.2);
+  color: #C9C2DB;
+  font-family: var(--font-body, var(--font-cairo, system-ui));
+  font-size: 0.76rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 200ms var(--ease, cubic-bezier(0.22, 1, 0.36, 1));
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.exp-subcat:hover {
+  border-color: rgba(232, 199, 154, 0.5);
+  color: #F4F2FA;
+  transform: translateY(-1px);
+}
+
+.exp-subcat.is-active {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.22), rgba(232, 199, 154, 0.08));
+  border-color: rgba(232, 199, 154, 0.65);
+  color: #F5D9A7;
+  box-shadow: 0 0 12px rgba(232, 199, 154, 0.25);
+}
+
+.exp-subcat__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.15);
+  font-size: 0.62rem;
+  font-weight: 900;
+}
+
+.exp-subcat.is-active .exp-subcat__count {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFF;
+}

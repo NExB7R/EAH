@@ -98,6 +98,14 @@ export default function ExploreClient({
     return Array.from(set).sort()
   }, [businesses])
 
+  const subCatCounts: Record<string, number> = {}
+  for (const b of businesses as any[]) {
+    if (b.type === 'misc' && b.category) {
+      const c = b.category as string
+      subCatCounts[c] = (subCatCounts[c] ?? 0) + 1
+    }
+  }
+
   const typeCounts = useMemo(() => {
     const m: Record<string, number> = { all: businesses.length }
     for (const t of VALID_TYPES) m[t] = businesses.filter((b) => getType(b) === t).length
