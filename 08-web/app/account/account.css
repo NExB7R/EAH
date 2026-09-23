@@ -20,7 +20,6 @@
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(168, 85, 247, 0.03));
   border: 1px solid rgba(139, 92, 246, 0.2);
   overflow: hidden;
--webkit-
 }
 
 .acc-hero__glow {
@@ -135,8 +134,7 @@
   border-radius: 20px;
   background: rgba(20, 18, 28, 0.6);
   border: 1px solid rgba(139, 92, 246, 0.12);
--webkit-
-overflow: hidden;
+  overflow: hidden;
   transition: all 0.17s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
@@ -204,7 +202,6 @@ overflow: hidden;
   border-radius: 24px;
   background: rgba(20, 18, 28, 0.5);
   border: 1px solid rgba(139, 92, 246, 0.12);
--webkit-
 }
 
 .acc-section__head {

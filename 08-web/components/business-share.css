@@ -9,8 +9,8 @@
 
 .bshare__overlay {
   position: fixed; inset: 0; z-index: 1000;
-  background: rgba(0,0,0,0.75);
-display: flex; align-items: flex-end; justify-content: center;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+  display: flex; align-items: flex-end; justify-content: center;
   animation: bshare-fade .2s ease;
 }
 @media (min-width: 640px) { .bshare__overlay { align-items: center; } }

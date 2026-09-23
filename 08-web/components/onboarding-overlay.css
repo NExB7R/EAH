@@ -7,7 +7,6 @@
 .onb__backdrop {
   position: absolute; inset: 0;
   background: rgba(7,6,11,.95);
--webkit-
 }
 .onb__glow {
   position: absolute;

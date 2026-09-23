@@ -274,8 +274,7 @@
   height: var(--adm-topbar-h);
   padding: 0 20px;
   background: rgba(7, 6, 11, 0.85);
--webkit-
-border-bottom: 1px solid rgba(168, 85, 247, 0.12);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.12);
 }
 
 .adm__menu-btn {
@@ -404,7 +403,7 @@ border-bottom: 1px solid rgba(168, 85, 247, 0.12);
   position: fixed;
   inset: 0;
   background: rgba(5, 3, 8, 0.7);
-z-index: 35;
+  z-index: 35;
 }
 
 /* ═══════════════════════════════════════════════════════════════

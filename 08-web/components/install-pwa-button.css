@@ -136,9 +136,7 @@
 }
 
 /* ═══ EAH Install Modal (2026) ═══ */
-.ipb-modal{position:fixed;inset:0;z-index:9999;background:rgba(7,6,11,.82);
--webkit-
-display:flex;align-items:center;justify-content:center;padding:20px;animation:ipbFade 240ms ease-out both}
+.ipb-modal{position:fixed;inset:0;z-index:9999;background:rgba(7,6,11,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:20px;animation:ipbFade 240ms ease-out both}
 @keyframes ipbFade{from{opacity:0}to{opacity:1}}
 .ipb-modal__panel{position:relative;width:min(440px,100%);padding:28px 24px 22px;border-radius:22px;background:linear-gradient(135deg,rgba(20,14,34,.98),rgba(11,8,22,.98));border:1px solid rgba(168,85,247,.4);box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 8px rgba(168,85,247,.25);animation:ipbPop 320ms cubic-bezier(.22,1,.36,1) both}
 @keyframes ipbPop{from{opacity:0;transform:translateY(20px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}

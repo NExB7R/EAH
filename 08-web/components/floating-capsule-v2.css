@@ -41,8 +41,7 @@
   transition:
     border-color 180ms linear,
     background 180ms linear,
-    box-shadow 180ms linear,
-
+    box-shadow 180ms linear;
 }
 
 /* Scrolled: full glass */
