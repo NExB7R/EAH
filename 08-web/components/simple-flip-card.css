@@ -341,23 +341,8 @@
   display: block;
   z-index: 0;
 }
-.sfc__img--placeholder {
-  background:
-    radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.15), transparent 60%),
-    radial-gradient(circle at 70% 70%, rgba(232, 199, 154, 0.1), transparent 60%),
-    linear-gradient(135deg, #1A0E2E, #0F061C);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.sfc__img--placeholder::before {
-  content: 'EAH';
-  font-family: var(--font-cairo, system-ui);
-  font-size: 1.4rem;
-  font-weight: 900;
-  color: rgba(168, 85, 247, 0.25);
-  letter-spacing: 0.15em;
-}
+
+
 
 /* Disable legacy animated layers entirely */
 .sfc__layer { display: none !important; }
@@ -418,4 +403,77 @@ html body .sfc * {
   contain: none !important;
   contain-intrinsic-size: auto !important;
   will-change: auto !important;
+}
+
+
+/* ═══ Category placeholders — Linear/Stripe style ═══ */
+.sfc__ph {
+  position: absolute !important;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.sfc__ph-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 12px currentColor);
+}
+
+.sfc__ph-label {
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  text-transform: uppercase;
+}
+
+/* Restaurant — warm orange */
+.sfc__ph--restaurant {
+  background: radial-gradient(circle at 30% 20%, rgba(251, 146, 60, 0.35), transparent 65%),
+              linear-gradient(135deg, #2A1408, #1A0E14);
+  color: #FDBA74;
+}
+
+/* Pharmacy — teal/green */
+.sfc__ph--pharmacy {
+  background: radial-gradient(circle at 30% 20%, rgba(85, 231, 209, 0.3), transparent 65%),
+              linear-gradient(135deg, #062018, #0A1428);
+  color: #6EE7B7;
+}
+
+/* Delivery — purple */
+.sfc__ph--delivery_office {
+  background: radial-gradient(circle at 30% 20%, rgba(168, 85, 247, 0.35), transparent 65%),
+              linear-gradient(135deg, #1A0E2E, #14082A);
+  color: #C084FC;
+}
+
+/* Supermarket — gold */
+.sfc__ph--supermarket {
+  background: radial-gradient(circle at 30% 20%, rgba(232, 199, 154, 0.32), transparent 65%),
+              linear-gradient(135deg, #2A1E0A, #1A0F0A);
+  color: #F5D9A7;
+}
+
+/* Misc — purple + gold split */
+.sfc__ph--misc {
+  background: radial-gradient(circle at 25% 25%, rgba(192, 132, 252, 0.28), transparent 60%),
+              radial-gradient(circle at 75% 75%, rgba(232, 199, 154, 0.22), transparent 60%),
+              linear-gradient(135deg, #1A0E2E, #0F061C);
+  color: #C084FC;
+}
+
+/* Fallback for null type */
+.sfc__ph {
+  background: radial-gradient(circle at 30% 20%, rgba(168, 85, 247, 0.3), transparent 65%),
+              linear-gradient(135deg, #1A0E2E, #0F061C);
+  color: #C084FC;
 }

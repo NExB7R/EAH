@@ -157,6 +157,40 @@ function getHook(b: SimpleBusiness): string {
   return 'اكتشف المكان'
 }
 
+
+function phIcon(type?: string) {
+  if (type === 'restaurant') return (
+    <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M7 2v20M17 2v20M7 8h10M7 14h10" />
+    </svg>
+  )
+  if (type === 'pharmacy') return (
+    <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="3" y="8" width="18" height="10" rx="5" />
+      <path d="M12 8v10M8 12h8" />
+    </svg>
+  )
+  if (type === 'delivery_office') return (
+    <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="18" cy="18" r="3" />
+      <path d="M6 18h6l4-8h4M14 6h4M9 6l3 6" />
+    </svg>
+  )
+  if (type === 'supermarket') return (
+    <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M3 3h2l2 14h12l2-11H6" />
+      <circle cx="9" cy="21" r="1.2" />
+      <circle cx="18" cy="21" r="1.2" />
+    </svg>
+  )
+  return (
+    <svg viewBox="0 0 24 24" width="52" height="52" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M12 3l2.5 6L21 11l-5.5 4L17 21l-5-3-5 3 1.5-6L3 11l6.5-2z" />
+    </svg>
+  )
+}
+
 export default function SimpleFlipCard({ business, variant = 'default', rank }: Props) {
   const cover = getCover(business)
   const rating = getRating(business)
@@ -201,7 +235,10 @@ export default function SimpleFlipCard({ business, variant = 'default', rank }: 
             decoding="async"
           />
         ) : (
-          <div className="sfc__img sfc__img--placeholder" />
+          <div className={`sfc__img sfc__ph sfc__ph--${business.type ?? 'misc'}`}>
+            <span className="sfc__ph-icon">{phIcon(business.type)}</span>
+            <span className="sfc__ph-label">{typeLabel}</span>
+          </div>
         )}
         <div className="sfc__grad" />
 
