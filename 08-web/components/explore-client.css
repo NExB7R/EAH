@@ -225,17 +225,12 @@
 /* ═══════════════════════════════════════════════════════════════
    PERFORMANCE — Explore grid
    ═══════════════════════════════════════════════════════════════ */
-.exp-grid,
-[class*="grid"] {
+.exp-grid {
   contain: layout style;
 }
 
 /* Each card */
-.exp-grid > *,
-.sfc {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 340px;
-}
+
 
 /* ═══════════════════════════════════════════════════════════════
    Breadcrumb — on the right

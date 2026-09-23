@@ -977,12 +977,7 @@ body > .floating-capsule {
 /* Explore + Favorites card — 320px height */
 
 /* Grid containers */
-.exp-grid,
-.explore-grid,
-.v7-exp__grid,
-.v7-fav__grid {
-  contain: layout style;
-}
+
 
 /* Footer + Below-fold sections */
 

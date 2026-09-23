@@ -501,9 +501,7 @@
 }
 
 /* Cards inside — no need for content-visibility (track handles it) */
-.ss2__track > * {
-  will-change: transform;
-}
+.ss2__track > * { /* will-change removed for performance */ }
 
 /* ═══ FORCE — remove content-visibility on sliders ═══ */
 .ss2,

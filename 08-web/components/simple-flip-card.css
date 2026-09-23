@@ -394,3 +394,14 @@
   contain: none !important;
   contain-intrinsic-size: auto !important;
 }
+
+
+/* ═══ ULTRA FORCE — specificity override ═══ */
+html body .sfc,
+html body .sfc.sfc,
+html body .sfc * {
+  content-visibility: visible !important;
+  contain: none !important;
+  contain-intrinsic-size: auto !important;
+  will-change: auto !important;
+}
