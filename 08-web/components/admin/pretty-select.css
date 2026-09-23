@@ -73,9 +73,8 @@
   padding: 6px;
   border-radius: var(--eah-radius);
   background: rgba(15, 11, 26, 0.98);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--eah-border-2);
+-webkit-
+border: 1px solid var(--eah-border-2);
   box-shadow:
     0 16px 40px rgba(0, 0, 0, 0.5),
     0 0 8px rgba(107, 33, 255, 0.15);

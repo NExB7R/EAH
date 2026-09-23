@@ -15,7 +15,6 @@
 .nav-drawer.is-open {
   opacity: 1;
   pointer-events: auto;
-  -webkit-
   background: rgba(4, 2, 10, 0.35);
 }
 

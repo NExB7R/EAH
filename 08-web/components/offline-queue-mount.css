@@ -16,9 +16,8 @@
   border: 1px solid rgba(251, 191, 36, 0.55);
   color: #FDE68A;
   box-shadow: 0 8px 26px rgba(251, 191, 36, 0.25);
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  animation: oq-in 320ms cubic-bezier(0.22, 1, 0.36, 1);
+-webkit-
+animation: oq-in 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 

@@ -156,9 +156,8 @@
   position: absolute;
   inset: 0;
   background: rgba(5, 3, 8, 0.7);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  opacity: 0;
+-webkit-
+opacity: 0;
   transition: opacity 200ms ease;
   display: flex;
   align-items: center;

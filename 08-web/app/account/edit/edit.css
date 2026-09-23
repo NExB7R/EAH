@@ -20,7 +20,7 @@
   padding: 24px; border-radius: 22px;
   background: rgba(20, 18, 28, 0.55);
   border: 1px solid rgba(139, 92, 246, 0.12);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+-webkit-
 }
 .edit__section-title { font-size: 1.05rem; font-weight: 900; color: #F5F3FF; margin: 0 0 8px; }
 .edit__section-sub { color: #A5A3B8; font-size: 0.82rem; margin: 0 0 14px; line-height: 1.6; }

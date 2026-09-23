@@ -45,7 +45,7 @@
 /* Modal */
 .adp__overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,.7);
-  backdrop-filter: blur(6px); z-index: 1000;
+z-index: 1000;
   display: grid; place-items: center; padding: 20px;
 }
 .adp__modal {

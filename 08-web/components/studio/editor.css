@@ -6,8 +6,7 @@
   align-items: center; gap: 16px;
   padding: 10px 18px;
   background: rgba(20,18,28,.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(139,92,246,.2);
+border-bottom: 1px solid rgba(139,92,246,.2);
   z-index: 10;
 }
 .ed__brand { display: flex; align-items: center; gap: 8px; }
@@ -230,8 +229,7 @@
 /* ═══ INSPECTOR ═══ */
 .ed__inspector {
   background: rgba(20,18,28,.7);
-  backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(139,92,246,.15);
+border-right: 1px solid rgba(139,92,246,.15);
   padding: 16px;
   overflow-y: auto;
   animation: edSlideIn 0.12s ease-out;
@@ -305,8 +303,7 @@
 .ed__cmd-overlay {
   position: fixed; inset: 0; z-index: 1000;
   background: rgba(7,6,11,.8);
-  backdrop-filter: blur(12px);
-  display: flex; justify-content: center; padding-top: 15vh;
+display: flex; justify-content: center; padding-top: 15vh;
   animation: edFade 0.07s ease;
 }
 @keyframes edFade { from { opacity: 0; } to { opacity: 1; } }

@@ -302,8 +302,8 @@
   overflow: hidden;
   border: 2px solid rgba(232, 199, 154, 0.6);
   background: rgba(10, 7, 20, 0.85);
-  -webkit-backdrop-filter: blur(8px);
-  z-index: 4;
+  -webkit-
+z-index: 4;
   box-shadow: var(--sh-md);
   display: flex;
   align-items: center;

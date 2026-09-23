@@ -7,8 +7,7 @@
 .onb__backdrop {
   position: absolute; inset: 0;
   background: rgba(7,6,11,.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+-webkit-
 }
 .onb__glow {
   position: absolute;
