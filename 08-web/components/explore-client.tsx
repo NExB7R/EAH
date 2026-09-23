@@ -130,6 +130,7 @@ export default function ExploreClient({
   const filtered = useMemo(() => {
     let list = businesses
     if (type !== 'all') list = list.filter((b) => getType(b) === type)
+    if (type === 'misc' && subCat) list = list.filter((b) => (b as any).sub_category === subCat)
     if (foodCat) list = list.filter((b) => b.food_categories?.includes(foodCat))
     if (area) list = list.filter((b) => b.area === area)
     if (openOnly) list = list.filter((b) => b.open)
@@ -311,6 +312,31 @@ export default function ExploreClient({
             قريب مني
           </button>
         </div>
+
+        {type === 'misc' && MISC_CATEGORIES.length > 0 && (
+          <div
+            className="exc-subcats"
+            style={{ display: 'flex', gap: 8, padding: '12px 16px', overflowX: 'auto', borderTop: '1px solid rgba(0,0,0,0.06)' }}
+          >
+            <button
+              type="button"
+              className={`exc-chip ${!subCat ? 'is-active' : ''}`}
+              onClick={() => updateParams({ subcat: null })}
+            >
+              الكل
+            </button>
+            {MISC_CATEGORIES.map((c) => (
+              <button
+                key={c.key}
+                type="button"
+                className={`exc-chip ${subCat === c.key ? 'is-active' : ''}`}
+                onClick={() => updateParams({ subcat: subCat === c.key ? null : c.key })}
+              >
+                {c.label} ({subCatCounts[c.key] ?? 0})
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="exc-bar__end">
           {activeFiltersCount > 0 && (
