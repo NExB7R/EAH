@@ -26,8 +26,22 @@ export function useUnreadCount() {
     }
 
     fetch()
-    const interval = setInterval(fetch, 30000)
-    return () => { active = false; clearInterval(interval) }
+
+    // فقط نحدّث لما الصفحة visible (توفير bandwidth)
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') fetch()
+    }, 60000)
+
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') fetch()
+    }
+    document.addEventListener('visibilitychange', onVisible)
+
+    return () => {
+      active = false
+      clearInterval(interval)
+      document.removeEventListener('visibilitychange', onVisible)
+    }
   }, [])
 
   return { count, loading }
