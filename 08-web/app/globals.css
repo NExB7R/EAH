@@ -55,10 +55,7 @@ section {
 button, a {
   touch-action: manipulation;
 }
-.scroll-icons-bg,
-#eah-scroll-root {
-  contain: strict;
-}
+
 
 /* ===== Static Pages ===== */
 .static-page {
