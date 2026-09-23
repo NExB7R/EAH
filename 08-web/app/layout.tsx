@@ -11,14 +11,8 @@ import AmbientBg from '@/components/ambient-bg'
 import BackToTop from '@/components/back-to-top'
 import '@/components/ambient-bg.css'
 import AnimReady from '@/components/anim-ready'
-import OnboardingOverlay from '@/components/onboarding-overlay'
-import ServiceWorkerRegister from '@/components/sw-register'
-import NetworkStatus from '@/components/network-status'
-import OfflineQueueMount from '@/components/offline-queue-mount'
-import InstallAppButton from '@/components/install-app-button'
-import CookieConsent from '@/components/cookie-consent'
-import SyncStatus from '@/components/sync-status'
 import WebVitals from '@/components/web-vitals'
+import DeferredMounts from '@/components/deferred-mounts'
 import '@/components/install-pwa-button.css'
 import '@/components/install-app-button.css'
 import '@/components/share-button.css'
@@ -122,13 +116,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AnimReady />
         <ToastProvider>{children}</ToastProvider>
         <BackToTop />
-        <OnboardingOverlay />
-        <ServiceWorkerRegister />
-        <NetworkStatus />
-        <OfflineQueueMount />
-        <InstallAppButton />
-        <CookieConsent />
-        <SyncStatus />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -169,7 +156,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }),
           }}
         />
-              <WebVitals />
+              <DeferredMounts />
+        <WebVitals />
       </body>
     </html>
   )
