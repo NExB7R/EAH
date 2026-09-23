@@ -6,7 +6,6 @@ import Link from 'next/link'
 import ImageUploader from './image-uploader'
 import ContactsEditor, { type Contact } from './contacts-editor'
 import WorkingHoursEditor, { type WorkingHours } from './working-hours-editor'
-import { MISC_CATEGORIES } from '@/lib/misc-categories'
 
 type ActionState = { ok: boolean; message?: string; errors?: Record<string, string[]> }
 

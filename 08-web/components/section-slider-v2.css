@@ -1,7 +1,6 @@
 /* EAH Section Slider v2 — Auto-advance cinematic strip */
 
 .ss2 {
-  margin-bottom: 56px;
   position: relative;
   max-width: 1280px;
   margin: 32px auto;
@@ -135,12 +134,10 @@
 
 /* ═══ Responsive ═══ */
 @media (max-width: 900px) {
-  .ss2 {
-  margin-bottom: 56px; padding: 0 16px; margin: 20px auto; }
+  .ss2 { padding: 0 16px; margin: 20px auto; }
 }
 @media (max-width: 640px) {
-  .ss2 {
-  margin-bottom: 56px; padding: 0 12px; margin: 16px auto; }
+  .ss2 { padding: 0 12px; margin: 16px auto; }
   .ss2__head { gap: 10px; }
   .ss2__see-all { font-size: 0.72rem; padding: 5px 10px; }
   /* 44px: الحد الأدنى لمساحات اللمس على الموبايل */
@@ -499,7 +496,6 @@
    المتصفح يتجاهل السلايدرز خارج الشاشة
    ═══════════════════════════════════════════════════════════════ */
 .ss2 {
-  margin-bottom: 56px;
   content-visibility: auto;
   contain-intrinsic-size: 0 380px;
 }

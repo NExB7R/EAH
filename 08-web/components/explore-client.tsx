@@ -1,12 +1,11 @@
 'use client'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
-import SimpleFlipCard from './simple-flip-card'
+import ExploreCard from './explore-card'
 import FilterSelect from './ui/filter-select'
 import './explore-client.css'
 import { IcClose, IcMenu } from '@/components/eah-icons'
 import { normalizeArabic } from '@/lib/search/normalize'
-import { MISC_CATEGORIES } from '@/lib/misc-categories'
 
 type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
 
@@ -53,7 +52,6 @@ export default function ExploreClient({
   const sort = searchParams.get('sort') ?? ''
   const search = searchParams.get('q') ?? ''
   const foodCat = searchParams.get('food') ?? ''
-  const subCat = searchParams.get('subcat') ?? ''
   const openOnly = searchParams.get('open') === '1'
   const offersOnly = searchParams.get('offers') === '1'
   const nearRequested = searchParams.get('near') === '1'
@@ -99,15 +97,6 @@ export default function ExploreClient({
     return Array.from(set).sort()
   }, [businesses])
 
-  const subCatCounts = useMemo(() => {
-    const m: Record<string, number> = {}
-    for (const b of businesses as any[]) {
-      const c = (b.sub_category ?? b.category) as string | undefined
-      if (c) m[c] = (m[c] ?? 0) + 1
-    }
-    return m
-  }, [businesses])
-
   const typeCounts = useMemo(() => {
     const m: Record<string, number> = { all: businesses.length }
     for (const t of VALID_TYPES) m[t] = businesses.filter((b) => getType(b) === t).length
@@ -132,7 +121,6 @@ export default function ExploreClient({
   const filtered = useMemo(() => {
     let list = businesses
     if (type !== 'all') list = list.filter((b) => getType(b) === type)
-    if (type === 'misc' && subCat) list = list.filter((b) => { const v = (b as any).sub_category ?? (b as any).category; return v === subCat })
     if (foodCat) list = list.filter((b) => b.food_categories?.includes(foodCat))
     if (area) list = list.filter((b) => b.area === area)
     if (openOnly) list = list.filter((b) => b.open)
@@ -315,31 +303,6 @@ export default function ExploreClient({
           </button>
         </div>
 
-        {type === 'misc' && MISC_CATEGORIES.length > 0 && (
-          <div
-            className="exc-subcats"
-            style={{ display: 'flex', gap: 8, padding: '12px 16px', overflowX: 'auto', borderTop: '1px solid rgba(0,0,0,0.06)' }}
-          >
-            <button
-              type="button"
-              className={`exc-chip ${!subCat ? 'is-active' : ''}`}
-              onClick={() => updateParams({ subcat: null })}
-            >
-              الكل
-            </button>
-            {MISC_CATEGORIES.map((c) => (
-              <button
-                key={c.key}
-                type="button"
-                className={`exc-chip ${subCat === c.key ? 'is-active' : ''}`}
-                onClick={() => updateParams({ subcat: subCat === c.key ? null : c.key })}
-              >
-                {c.label} ({subCatCounts[c.key] ?? 0})
-              </button>
-            ))}
-          </div>
-        )}
-
         <div className="exc-bar__end">
           {activeFiltersCount > 0 && (
             <button type="button" className="exc-clear" onClick={clearAll}>
@@ -383,7 +346,7 @@ export default function ExploreClient({
           </p>
           <div className={`exc-grid ${view === 'list' ? 'exc-grid--list' : ''}`}>
             {filtered.map((business, index) => (
-              <SimpleFlipCard key={business.slug} business={business as any} variant="grid" />
+              <ExploreCard key={business.slug} business={business as any} index={index} />
             ))}
           </div>
         </>

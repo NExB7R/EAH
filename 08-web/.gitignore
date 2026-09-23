@@ -11,4 +11,3 @@ out/
 tsconfig.tsbuildinfo
 .env.local
 .env.production.local
-*.backup

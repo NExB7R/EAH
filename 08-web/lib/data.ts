@@ -181,7 +181,7 @@ export async function getPublishedBusinesses(
     const supabase = await createClient()
     let query = supabase
       .from('businesses')
-      .select('id,business_type,sub_category,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,cover_image_url')
+      .select('id,business_type,name,slug,description,area,city,is_open,is_featured,is_published,hook,working_hours,created_at,latitude,longitude,address_text,owner_profile_id,cover_image_url')
       .eq('is_published', true)
       .order('is_featured', { ascending: false })
       .order('created_at', { ascending: false })

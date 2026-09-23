@@ -29,7 +29,7 @@ import { resolveCoords } from '@/lib/map-coords'
 import LockedContent from '@/components/locked-content'
 import BusinessBranchesSection from '@/components/business-branches-section'
 import SectionSliderV3 from '@/components/section-slider-v3'
-import SimpleFlipCard from '@/components/simple-flip-card'
+import ExploreCardV5 from '@/components/explore-card-v5'
 import { getPublishedBusinesses } from '@/lib/data'
 
 export const revalidate = 120
@@ -297,7 +297,9 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
           variant="similar"
         >
           {similar.map((b) => (
-            <SimpleFlipCard key={b.slug} business={b as any} variant="default" />
+            <div key={b.slug} className="sv3-card">
+              <ExploreCardV5 business={b as any} />
+            </div>
           ))}
         </SectionSliderV3>
       )}
@@ -310,7 +312,9 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
           variant="featured"
         >
           {featuredList.map((b) => (
-            <SimpleFlipCard key={b.slug} business={b as any} variant="featured" />
+            <div key={b.slug} className="sv3-card">
+              <ExploreCardV5 business={b as any} />
+            </div>
           ))}
         </SectionSliderV3>
       )}
@@ -323,7 +327,9 @@ export default async function BusinessPage({ params }: { params: Promise<{ slug:
           variant="trending"
         >
           {trendingList.map((b) => (
-            <SimpleFlipCard key={b.slug} business={b as any} variant="trending" />
+            <div key={b.slug} className="sv3-card">
+              <ExploreCardV5 business={b as any} />
+            </div>
           ))}
         </SectionSliderV3>
       )}

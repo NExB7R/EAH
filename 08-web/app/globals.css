@@ -4,10 +4,8 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 :root {
-  --font-cairo: 'IBM Plex Sans Arabic', 'Tahoma', system-ui, sans-serif;
-  --font-body: 'IBM Plex Sans Arabic', 'Tahoma', system-ui, sans-serif;
-  --font-cairo-play: 'Tajawal', 'IBM Plex Sans Arabic', 'Tahoma', system-ui, sans-serif;
-  --font-display: 'Tajawal', 'IBM Plex Sans Arabic', 'Tahoma', system-ui, sans-serif;
+  --font-cairo: 'Cairo Variable', 'Tahoma', system-ui, sans-serif;
+  --font-cairo-play: 'Cairo Variable', 'Tahoma', system-ui, sans-serif;
   --font-signature: 'Dancing Script Variable', cursive;
 }
 

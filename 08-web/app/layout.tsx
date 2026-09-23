@@ -1,12 +1,4 @@
-// EAH 2026 Fonts — IBM Plex Sans Arabic + Tajawal
-import '@fontsource/ibm-plex-sans-arabic/400.css'
-import '@fontsource/ibm-plex-sans-arabic/500.css'
-import '@fontsource/ibm-plex-sans-arabic/600.css'
-import '@fontsource/ibm-plex-sans-arabic/700.css'
-import '@fontsource/tajawal/500.css'
-import '@fontsource/tajawal/700.css'
-import '@fontsource/tajawal/800.css'
-import '@fontsource/tajawal/900.css'
+import '@fontsource-variable/cairo'
 import '@fontsource-variable/dancing-script'
 import './globals.css'
 import './social.css'
