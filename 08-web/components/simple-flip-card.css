@@ -1,13 +1,12 @@
 /* ═══════════════════════════════════════════════════════════════
-   EAH — Breathing Neon Card 2026
-   Cover → Logo on hover + نيون نابض
-   No flip. No 3D.
+   EAH — Slideshow Card 2026
+   Gradient (per section) → Slideshow on hover (3s each)
+   No 3D. No flip. GPU-friendly.
    ═══════════════════════════════════════════════════════════════ */
 
 .sfc {
   --sfc-w: 220px;
   --sfc-neon: 168, 85, 247;
-  --sfc-neon-hex: #A855F7;
 
   position: relative;
   width: var(--sfc-w);
@@ -20,35 +19,30 @@
   overflow: hidden;
   background: #130822;
   border: 1px solid rgba(var(--sfc-neon), 0.2);
-  transition: border-color 240ms ease, transform 240ms ease;
+  transition: border-color 240ms ease, transform 240ms ease, box-shadow 240ms ease;
   isolation: isolate;
 }
 
-/* ═══ Soft neon on hover ═══ */
+/* ═══ Soft Neon Breathing on hover ═══ */
 .sfc:hover {
-  border-color: rgba(var(--sfc-neon), 0.75);
+  border-color: rgba(var(--sfc-neon), 0.7);
   transform: translateY(-3px);
-  box-shadow:
-    0 0 0 1px rgba(var(--sfc-neon), 0.4),
-    0 0 20px rgba(var(--sfc-neon), 0.4),
-    0 0 50px rgba(var(--sfc-neon), 0.15),
-    0 12px 28px rgba(0, 0, 0, 0.5);
-  animation: sfcBreath 2.4s ease-in-out infinite;
+  animation: sfcBreath 2.8s ease-in-out infinite;
 }
 
 @keyframes sfcBreath {
   0%, 100% {
     box-shadow:
-      0 0 0 1px rgba(var(--sfc-neon), 0.4),
-      0 0 20px rgba(var(--sfc-neon), 0.4),
-      0 0 50px rgba(var(--sfc-neon), 0.15),
-      0 12px 28px rgba(0, 0, 0, 0.5);
+      0 0 0 1px rgba(var(--sfc-neon), 0.35),
+      0 0 18px rgba(var(--sfc-neon), 0.35),
+      0 0 45px rgba(var(--sfc-neon), 0.12),
+      0 10px 24px rgba(0, 0, 0, 0.45);
   }
   50% {
     box-shadow:
-      0 0 0 1px rgba(var(--sfc-neon), 0.7),
-      0 0 28px rgba(var(--sfc-neon), 0.6),
-      0 0 70px rgba(var(--sfc-neon), 0.25),
+      0 0 0 1px rgba(var(--sfc-neon), 0.65),
+      0 0 26px rgba(var(--sfc-neon), 0.55),
+      0 0 65px rgba(var(--sfc-neon), 0.22),
       0 14px 32px rgba(0, 0, 0, 0.55);
   }
 }
@@ -66,68 +60,98 @@
   overflow: hidden;
 }
 
-/* ─── Cover image ─── */
-.sfc__cover-img {
+/* ═══ Slideshow container ═══ */
+.sfc__slides {
+  position: absolute;
+  inset: 0;
+}
+
+.sfc__slide {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  transition: opacity 320ms ease;
+  background-color: #1A0E2E;
+  opacity: 0;
+  transition: opacity 600ms ease;
+  will-change: opacity;
 }
 
-.sfc:hover .sfc__cover-img {
+/* ─── Default: cover visible ─── */
+.sfc__slide--cover {
+  opacity: 1;
+}
+
+/* ─── On hover: slideshow plays ─── */
+.sfc:hover .sfc__slide {
   opacity: 0;
 }
 
-/* ─── Logo layer (overlays the cover on hover) ─── */
-.sfc__logo-layer {
-  position: absolute;
-  inset: 0;
+/* Slide 1 (logo) — 0-3s */
+.sfc:hover .sfc__slide--logo {
+  animation: sfcSlideShow1 12s ease-in-out infinite;
+}
+
+/* Slide 2 (cover) — 3-6s */
+.sfc:hover .sfc__slide--cover {
+  animation: sfcSlideShow2 12s ease-in-out infinite;
+}
+
+/* Slide 3 (menu) — 6-9s */
+.sfc:hover .sfc__slide--menu {
+  animation: sfcSlideShow3 12s ease-in-out infinite;
+}
+
+/* Slide 4 (gallery) — 9-12s */
+.sfc:hover .sfc__slide--gallery {
+  animation: sfcSlideShow4 12s ease-in-out infinite;
+}
+
+/* ─── Keyframes for 4 slides in 12s (3s each) ─── */
+@keyframes sfcSlideShow1 {
+  0%, 22%   { opacity: 1; }
+  25%, 100% { opacity: 0; }
+}
+
+@keyframes sfcSlideShow2 {
+  0%, 24%   { opacity: 0; }
+  25%, 47%  { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes sfcSlideShow3 {
+  0%, 49%   { opacity: 0; }
+  50%, 72%  { opacity: 1; }
+  75%, 100% { opacity: 0; }
+}
+
+@keyframes sfcSlideShow4 {
+  0%, 74%   { opacity: 0; }
+  75%, 97%  { opacity: 1; }
+  100%      { opacity: 0; }
+}
+
+/* ═══ Logo slide (contain, centered) ═══ */
+.sfc__slide--logo {
+  background: radial-gradient(ellipse at center, rgba(var(--sfc-neon), 0.15), transparent 70%),
+    linear-gradient(180deg, #1A0E2E, #0F061C);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background:
-    radial-gradient(ellipse at center, rgba(var(--sfc-neon), 0.15), transparent 70%),
-    linear-gradient(180deg, #1A0E2E, #0F061C);
-  opacity: 0;
-  transition: opacity 320ms ease;
-  z-index: 2;
 }
 
-.sfc:hover .sfc__logo-layer {
-  opacity: 1;
-}
-
-.sfc__logo {
-  max-width: 70%;
-  max-height: 70%;
+.sfc__logo-img {
+  max-width: 75%;
+  max-height: 75%;
   width: auto;
   height: auto;
   object-fit: contain;
   filter:
     drop-shadow(0 0 1px rgba(var(--sfc-neon), 0.9))
-    drop-shadow(0 0 12px rgba(var(--sfc-neon), 0.4))
-    drop-shadow(0 0 30px rgba(var(--sfc-neon), 0.15));
-  animation: sfcLogoGlow 2.4s ease-in-out infinite;
+    drop-shadow(0 0 12px rgba(var(--sfc-neon), 0.4));
 }
 
-@keyframes sfcLogoGlow {
-  0%, 100% {
-    filter:
-      drop-shadow(0 0 1px rgba(var(--sfc-neon), 0.9))
-      drop-shadow(0 0 12px rgba(var(--sfc-neon), 0.4))
-      drop-shadow(0 0 30px rgba(var(--sfc-neon), 0.15));
-  }
-  50% {
-    filter:
-      drop-shadow(0 0 2px rgba(var(--sfc-neon), 1))
-      drop-shadow(0 0 20px rgba(var(--sfc-neon), 0.65))
-      drop-shadow(0 0 50px rgba(var(--sfc-neon), 0.3));
-  }
-}
-
-/* ─── Fallback (حرف الاسم لو مفيش لوجو) ─── */
 .sfc__logo-letter {
   font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
   font-size: 3rem;
@@ -138,25 +162,71 @@
     0 0 30px rgba(var(--sfc-neon), 0.3);
 }
 
-/* ─── Gradient over cover ─── */
+/* ═══ Section gradient overlay (per variant) ═══ */
 .sfc__cover-grad {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg,
-    rgba(7, 2, 13, 0.3) 0%,
+  pointer-events: none;
+  transition: opacity 400ms ease;
+  z-index: 2;
+}
+
+/* Default (purple) */
+.sfc--default .sfc__cover-grad,
+.sfc--grid .sfc__cover-grad {
+  background: linear-gradient(135deg,
+    rgba(168, 85, 247, 0.25) 0%,
     transparent 40%,
     transparent 60%,
-    rgba(7, 2, 13, 0.6) 100%);
-  pointer-events: none;
-  transition: opacity 320ms ease;
-  z-index: 1;
+    rgba(168, 85, 247, 0.35) 100%),
+    linear-gradient(180deg, rgba(7, 2, 13, 0.3) 0%, transparent 50%, rgba(7, 2, 13, 0.7) 100%);
+}
+
+/* Featured (gold) */
+.sfc--featured .sfc__cover-grad {
+  background: linear-gradient(135deg,
+    rgba(232, 199, 154, 0.25) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(232, 199, 154, 0.35) 100%),
+    linear-gradient(180deg, rgba(7, 2, 13, 0.3) 0%, transparent 50%, rgba(7, 2, 13, 0.7) 100%);
+}
+
+/* Trending (orange) */
+.sfc--trending .sfc__cover-grad {
+  background: linear-gradient(135deg,
+    rgba(251, 146, 60, 0.25) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(251, 146, 60, 0.35) 100%),
+    linear-gradient(180deg, rgba(7, 2, 13, 0.3) 0%, transparent 50%, rgba(7, 2, 13, 0.7) 100%);
+}
+
+/* New (teal) */
+.sfc--new .sfc__cover-grad {
+  background: linear-gradient(135deg,
+    rgba(85, 231, 209, 0.25) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(85, 231, 209, 0.35) 100%),
+    linear-gradient(180deg, rgba(7, 2, 13, 0.3) 0%, transparent 50%, rgba(7, 2, 13, 0.7) 100%);
+}
+
+/* Offers (gold) */
+.sfc--offers .sfc__cover-grad {
+  background: linear-gradient(135deg,
+    rgba(232, 199, 154, 0.3) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(232, 199, 154, 0.4) 100%),
+    linear-gradient(180deg, rgba(7, 2, 13, 0.3) 0%, transparent 50%, rgba(7, 2, 13, 0.7) 100%);
 }
 
 .sfc:hover .sfc__cover-grad {
-  opacity: 0;
+  opacity: 0.3;
 }
 
-/* ─── Badge ─── */
+/* ═══ Badge ═══ */
 .sfc__badge {
   position: absolute;
   top: 8px;
@@ -175,7 +245,7 @@
 }
 .sfc__badge svg { width: 9px; height: 9px; }
 
-/* ─── Status ─── */
+/* ═══ Status ═══ */
 .sfc__status {
   position: absolute;
   top: 8px;
@@ -317,7 +387,6 @@
   flex-shrink: 0;
 }
 
-/* Footer tags */
 .sfc__footer {
   display: flex;
   align-items: center;
@@ -348,31 +417,19 @@
 .sfc__tag--wa svg { color: #25D366; }
 
 /* ═══════════════════════════════════════════════════════════════
-   VARIANTS — نيون مختلف لكل قسم
+   VARIANTS
    ═══════════════════════════════════════════════════════════════ */
 
-.sfc--featured {
-  --sfc-w: 240px;
-  --sfc-neon: 232, 199, 154;
-}
+.sfc--featured { --sfc-w: 240px; --sfc-neon: 232, 199, 154; }
 .sfc--featured .sfc__cover { aspect-ratio: 1/1; }
 
-.sfc--trending {
-  --sfc-w: 200px;
-  --sfc-neon: 251, 146, 60;
-}
+.sfc--trending { --sfc-w: 200px; --sfc-neon: 251, 146, 60; }
 .sfc--trending .sfc__cover { aspect-ratio: 4/3; }
 
-.sfc--offers {
-  --sfc-w: 280px;
-  --sfc-neon: 232, 199, 154;
-}
+.sfc--offers { --sfc-w: 280px; --sfc-neon: 232, 199, 154; }
 .sfc--offers .sfc__cover { aspect-ratio: 16/10; }
 
-.sfc--new {
-  --sfc-w: 200px;
-  --sfc-neon: 85, 231, 209;
-}
+.sfc--new { --sfc-w: 200px; --sfc-neon: 85, 231, 209; }
 .sfc--new .sfc__cover { aspect-ratio: 4/3; }
 
 .sfc--default { --sfc-w: 220px; --sfc-neon: 168, 85, 247; }
@@ -395,13 +452,10 @@
   .sfc__body { padding: 8px 10px 10px; }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   Reduced Motion
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══ Reduced Motion ═══ */
 @media (prefers-reduced-motion: reduce) {
   .sfc,
-  .sfc__cover-img,
-  .sfc__logo-layer,
+  .sfc__slide,
   .sfc__cover-grad {
     transition: none;
   }
@@ -409,7 +463,10 @@
     animation: none;
     transform: none;
   }
-  .sfc__logo {
+  .sfc:hover .sfc__slide {
     animation: none;
+  }
+  .sfc:hover .sfc__slide--cover {
+    opacity: 1;
   }
 }

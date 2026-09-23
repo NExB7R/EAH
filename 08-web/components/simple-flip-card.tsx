@@ -85,6 +85,8 @@ export type SimpleBusiness = {
   cover_image_url?: string
   logo?: string
   logo_url?: string
+  gallery?: string[]
+  menu?: string[]
   badge?: string
   activeOffers?: number
   open?: boolean
@@ -114,6 +116,18 @@ function getCover(b: SimpleBusiness): string {
 
 function getLogo(b: SimpleBusiness): string {
   return b.logo || b.logo_url || ''
+}
+
+function getMenuImage(b: SimpleBusiness): string {
+  const menu = Array.isArray(b.menu) ? b.menu.filter(Boolean) : []
+  return menu[0] || ''
+}
+
+function getGalleryImage(b: SimpleBusiness): string {
+  const gallery = Array.isArray(b.gallery) ? b.gallery.filter(Boolean) : []
+  const cover = getCover(b)
+  const first = gallery.find((g) => g && g !== cover)
+  return first || ''
 }
 
 function getRating(b: SimpleBusiness): number {
@@ -158,6 +172,8 @@ function hasWhatsApp(b: SimpleBusiness): boolean {
 export default function SimpleFlipCard({ business, variant = 'default', rank }: Props) {
   const cover = getCover(business)
   const logo = getLogo(business)
+  const menuImg = getMenuImage(business)
+  const galleryImg = getGalleryImage(business)
   const rating = getRating(business)
   const reviews = getReviews(business)
   const trust = getTrust(business)
@@ -173,33 +189,48 @@ export default function SimpleFlipCard({ business, variant = 'default', rank }: 
     <Link href={href} className={`sfc sfc--${variant}`}>
       {/* ═══ Cover ═══ */}
       <div className="sfc__cover">
-        {/* ─── Cover Image ─── */}
-        <div
-          className="sfc__cover-img"
-          style={cover ? { backgroundImage: `url(${cover})` } : undefined}
-        />
+        <div className="sfc__slides">
 
-        {/* ─── Logo Layer (يظهر على hover) ─── */}
-        <div className="sfc__logo-layer" aria-hidden>
-          {logo ? (
-            /* eslint-disable-next-line @next/next/no-img-element */
-            <img
-              src={logo}
-              alt=""
-              className="sfc__logo"
-              loading="lazy"
-            />
-          ) : (
-            <span className="sfc__logo-letter">
-              {business.name.charAt(0).toUpperCase()}
-            </span>
-          )}
+          {/* Slide 1 — Logo */}
+          <div className="sfc__slide sfc__slide--logo">
+            {logo ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={logo}
+                alt=""
+                className="sfc__logo-img"
+                loading="lazy"
+              />
+            ) : (
+              <span className="sfc__logo-letter">
+                {business.name.charAt(0).toUpperCase()}
+              </span>
+            )}
+          </div>
+
+          {/* Slide 2 — Cover */}
+          <div
+            className="sfc__slide sfc__slide--cover"
+            style={cover ? { backgroundImage: `url(${cover})` } : undefined}
+          />
+
+          {/* Slide 3 — Menu (لو موجود) */}
+          <div
+            className="sfc__slide sfc__slide--menu"
+            style={menuImg ? { backgroundImage: `url(${menuImg})` } : undefined}
+          />
+
+          {/* Slide 4 — Gallery (لو موجود) */}
+          <div
+            className="sfc__slide sfc__slide--gallery"
+            style={galleryImg ? { backgroundImage: `url(${galleryImg})` } : undefined}
+          />
         </div>
 
-        {/* ─── Gradient ─── */}
+        {/* Section gradient */}
         <div className="sfc__cover-grad" />
 
-        {/* ─── Badge ─── */}
+        {/* Badge */}
         {business.badge === 'مميز' ? (
           <span className="sfc__badge"><ICrown /> مميز</span>
         ) : typeof rank === 'number' ? (
@@ -208,7 +239,7 @@ export default function SimpleFlipCard({ business, variant = 'default', rank }: 
           <span className="sfc__badge"><IGift /> عرض</span>
         ) : null}
 
-        {/* ─── Status ─── */}
+        {/* Status */}
         {isOpen !== null && (
           <span className={`sfc__status sfc__status--${isOpen ? 'open' : 'closed'}`}>
             <span className="sfc__status-dot" />
@@ -219,7 +250,6 @@ export default function SimpleFlipCard({ business, variant = 'default', rank }: 
 
       {/* ═══ Body ═══ */}
       <div className="sfc__body">
-
         <h3 className="sfc__name">{business.name}</h3>
         <p className="sfc__hook">{hook}</p>
 
