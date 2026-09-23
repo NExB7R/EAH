@@ -55,6 +55,10 @@
 - **17:15** — perf: major performance fix — remove card blurs + stop continuous animations
 - **17:21** — perf: aggressive fix — remove 40+ backdrop-filter + all card animations + aurora orbs
 - **17:30** — perf: next/image for covers + reduce to 6 cards per section + React.memo + content-visibility
+
+### 2026-09-23
+
+- **08:20** — revert: back to old design (ui-onlook) — v7 becomes preview only
 <!-- AUTO_END -->
 
 ---
