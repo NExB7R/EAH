@@ -24,10 +24,20 @@
   display: flex;
   justify-content: center;
   margin-bottom: 4px;
-  /* pulse killed for perf */
+  animation: hhLogoPulse 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  transform-origin: center;
 }
 
-
+@keyframes hhLogoPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.12));
+  }
+  50% {
+    transform: scale(1.012);
+    filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.28));
+  }
+}
 
 /* ═══ Slogan ═══ */
 .hh__slogan {
@@ -113,7 +123,8 @@
 
 .hh__hook-motion {
   display: inline-block;
-  /* hook float killed for perf */
+  animation: hhHookFloat 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform;
 }
 .hh__hook-sub-line .hh__hook-motion { animation-delay: 0.5s; }
 
@@ -133,7 +144,9 @@
   color: #A29DB5;
 }
 
-
+@keyframes hhHookFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px); }
 }
 
 /* ═══ Search ═══ */
