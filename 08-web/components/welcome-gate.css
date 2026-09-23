@@ -5,11 +5,12 @@
 .wg {
   position: fixed;
   inset: 0;
-  z-index: 9998;
-  background:
+  z-index: 99999 !important;
+  background: #07020D !important;
+  background-image:
     radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.15), transparent 55%),
     radial-gradient(ellipse at 100% 100%, rgba(232, 199, 154, 0.08), transparent 50%),
-    linear-gradient(180deg, #07020D 0%, #0A0514 50%, #07020D 100%);
+    linear-gradient(180deg, #07020D 0%, #0A0514 50%, #07020D 100%) !important;
   display: flex;
   flex-direction: column;
   align-items: center;
