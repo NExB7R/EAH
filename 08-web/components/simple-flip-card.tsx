@@ -1,9 +1,8 @@
 'use client'
 import Link from 'next/link'
-import { useState } from 'react'
 import './simple-flip-card.css'
 
-/* ═══ Inline Icons ═══ */
+/* ═══ Icons ═══ */
 function IPin() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -64,15 +63,6 @@ function IWhatsapp() {
   )
 }
 
-function IClock() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <circle cx="12" cy="12" r="9" />
-      <polyline points="12 7 12 12 15 14" />
-    </svg>
-  )
-}
-
 function IArrow() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -87,6 +77,7 @@ export type SimpleBusiness = {
   slug: string
   name: string
   type?: string
+  sub_category?: string
   area?: string
   cover?: string
   cover_url?: string
@@ -157,8 +148,6 @@ function hasWhatsApp(b: SimpleBusiness): boolean {
 
 /* ═══ Component ═══ */
 export default function SimpleFlipCard({ business, variant = 'default', rank }: Props) {
-  const [flipped, setFlipped] = useState(false)
-
   const cover = getCover(business)
   const rating = getRating(business)
   const reviews = getReviews(business)
@@ -170,143 +159,94 @@ export default function SimpleFlipCard({ business, variant = 'default', rank }: 
 
   const href = `/businesses/${encodeURIComponent(business.slug)}`
 
-  /* ═══ 3 Facts — الأهم ═══ */
-  const facts = []
-
-  // 1. Rating
-  facts.push({
-    key: 'rating',
-    icon: <IStar />,
-    label: 'التقييم',
-    value: rating > 0 ? `${rating.toFixed(1)} ★` + (reviews > 0 ? ` (${reviews})` : '') : 'جديد',
-  })
-
-  // 2. Area
-  if (business.area) {
-    facts.push({
-      key: 'area',
-      icon: <IPin />,
-      label: 'المنطقة',
-      value: business.area,
-    })
-  }
-
-  // 3. Trust أو WhatsApp أو Offers
-  if (trust > 0) {
-    facts.push({
-      key: 'trust',
-      icon: <IShield />,
-      label: 'مصداقية',
-      value: `${trust}%`,
-    })
-  } else if (business.activeOffers && business.activeOffers > 0) {
-    facts.push({
-      key: 'offers',
-      icon: <IGift />,
-      label: 'عروض',
-      value: `${business.activeOffers} عرض`,
-    })
-  } else {
-    facts.push({
-      key: 'status',
-      icon: <IClock />,
-      label: 'الحالة',
-      value: isOpen === true ? 'مفتوح' : isOpen === false ? 'مغلق' : wa ? 'واتساب متاح' : 'متاح',
-    })
-  }
-
   return (
-    <div
-      className={`sfc sfc--${variant} ${flipped ? 'is-flipped' : ''}`}
-      onClick={() => setFlipped((v) => !v)}
-    >
+    <Link href={href} className={`sfc sfc--${variant}`}>
       <div className="sfc__inner">
 
-        {/* ═══ FRONT ═══ */}
-        <Link
-          href={href}
-          className="sfc__face sfc__front"
-          onClick={(e) => {
-            // لو على موبايل → نقلب بدل ما ننقل
-            if (typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches) {
-              e.preventDefault()
-              setFlipped(true)
-            }
-          }}
-        >
-          <div
-            className="sfc__img"
-            style={cover ? { backgroundImage: `url(${cover})` } : undefined}
-          />
-          <div className="sfc__grad" />
+        {/* Image */}
+        <div
+          className="sfc__img"
+          style={cover ? { backgroundImage: `url(${cover})` } : undefined}
+        />
 
-          {/* Badge */}
-          {business.badge === 'مميز' ? (
-            <span className="sfc__badge"><ICrown /> مميز</span>
-          ) : typeof rank === 'number' ? (
-            <span className="sfc__badge">#{rank}</span>
-          ) : business.activeOffers && business.activeOffers > 0 ? (
-            <span className="sfc__badge"><IGift /> عرض</span>
-          ) : null}
+        {/* Gradient */}
+        <div className="sfc__grad" />
 
-          {/* Status */}
-          {isOpen !== null && (
-            <span className={`sfc__status sfc__status--${isOpen ? 'open' : 'closed'}`}>
-              <span className="sfc__status-dot" />
-              {isOpen ? 'مفتوح' : 'مغلق'}
+        {/* Badge */}
+        {business.badge === 'مميز' ? (
+          <span className="sfc__badge"><ICrown /> مميز</span>
+        ) : typeof rank === 'number' ? (
+          <span className="sfc__badge">#{rank}</span>
+        ) : business.activeOffers && business.activeOffers > 0 ? (
+          <span className="sfc__badge"><IGift /> عرض</span>
+        ) : null}
+
+        {/* Status */}
+        {isOpen !== null && (
+          <span className={`sfc__status sfc__status--${isOpen ? 'open' : 'closed'}`}>
+            <span className="sfc__status-dot" />
+            {isOpen ? 'مفتوح' : 'مغلق'}
+          </span>
+        )}
+
+        {/* Info */}
+        <div className="sfc__info">
+          <h3 className="sfc__name">{business.name}</h3>
+          <p className="sfc__hook">{hook}</p>
+          <div className="sfc__chips">
+            <span className="sfc__chip">
+              <ICompass />
+              {typeLabel}
+            </span>
+            {rating > 0 && (
+              <span className="sfc__chip sfc__chip--rating">
+                <IStar />
+                {rating.toFixed(1)}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Hover overlay */}
+        <div className="sfc__hover" aria-hidden>
+          <h4 className="sfc__hover-name">{business.name}</h4>
+          <p className="sfc__hover-hook">{hook}</p>
+
+          {rating > 0 && (
+            <span className="sfc__hover-fact">
+              <IStar />
+              {rating.toFixed(1)}
+              {reviews > 0 && ` · ${reviews} تقييم`}
             </span>
           )}
 
-          {/* Info */}
-          <div className="sfc__info">
-            <h3 className="sfc__name">{business.name}</h3>
-            <p className="sfc__hook">{hook}</p>
-            <div className="sfc__chips">
-              <span className="sfc__chip">
-                <ICompass />
-                {typeLabel}
-              </span>
-              {rating > 0 && (
-                <span className="sfc__chip sfc__chip--rating">
-                  <IStar />
-                  {rating.toFixed(1)}
-                </span>
-              )}
-            </div>
-          </div>
-        </Link>
+          {business.area && (
+            <span className="sfc__hover-fact">
+              <IPin />
+              {business.area}
+            </span>
+          )}
 
-        {/* ═══ BACK ═══ */}
-        <div className="sfc__face sfc__back">
-          <div className="sfc__back-head">
-            <h4 className="sfc__back-name">{business.name}</h4>
-            <span className="sfc__back-type">{typeLabel}</span>
-          </div>
+          {trust > 0 && (
+            <span className="sfc__hover-fact">
+              <IShield />
+              مصداقية {trust}%
+            </span>
+          )}
 
-          <p className="sfc__back-hook">{hook}</p>
+          {wa && (
+            <span className="sfc__hover-fact">
+              <IWhatsapp />
+              أوردرات واتساب
+            </span>
+          )}
 
-          <div className="sfc__facts">
-            {facts.slice(0, 3).map((f) => (
-              <div key={f.key} className="sfc__fact">
-                <span className="sfc__fact-icon">{f.icon}</span>
-                <div className="sfc__fact-body">
-                  <span className="sfc__fact-label">{f.label}</span>
-                  <span className="sfc__fact-value">{f.value}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <Link
-            href={href}
-            className="sfc__cta"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <span className="sfc__hover-cta">
             اكتشف المكان
             <IArrow />
-          </Link>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
