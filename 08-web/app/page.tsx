@@ -2,13 +2,15 @@ import { Suspense } from 'react'
 import HomeDynamicV2 from '@/components/home-dynamic-v2'
 import SiteFooter from '@/components/site-footer'
 import FloatingCapsuleHeader from '@/components/floating-capsule'
+import WelcomeGate from '@/components/welcome-gate'
 
-// طازة دايماً زي explore — الكاش الثابت كان بيرجّع رئيسية فاضية بعد إضافة بيانات جديدة
+// طازة دايماً زي explore
 export const dynamic = 'force-dynamic'
 
 export default async function Page() {
   return (
     <>
+      <WelcomeGate />
       <FloatingCapsuleHeader />
       <Suspense fallback={<HomeSkeleton />}>
         <HomeDynamicV2 />

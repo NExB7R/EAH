@@ -5,7 +5,7 @@ import { getViewStats } from '@/lib/real-stats'
 
 import HomeHero from '@/components/home-hero'
 import SectionSliderV2 from '@/components/section-slider-v2'
-import ExploreCardV5 from '@/components/explore-card-v5'
+import SimpleFlipCard from '@/components/simple-flip-card'
 import VisitorValue from '@/components/visitor-value'
 import './home-dynamic-v2.css'
 import AdSlot from '@/components/ads/ad-slot'
@@ -95,7 +95,7 @@ export default async function HomeDynamicV2() {
           variant="featured"
         >
           {diversified.map((b) => (
-            <ExploreCardV5 key={b.slug} business={b} />
+            <SimpleFlipCard key={b.slug} business={b} variant="default" />
           ))}
         </SectionSliderV2>
       )}
@@ -108,7 +108,7 @@ export default async function HomeDynamicV2() {
           variant="featured"
         >
           {featured.map((b) => (
-            <ExploreCardV5 key={b.slug} business={b} />
+            <SimpleFlipCard key={b.slug} business={b} variant="default" />
           ))}
         </SectionSliderV2>
       )}
@@ -121,7 +121,7 @@ export default async function HomeDynamicV2() {
           variant="trending"
         >
           {trending.map((b) => (
-            <ExploreCardV5 key={b.slug} business={b} />
+            <SimpleFlipCard key={b.slug} business={b} variant="default" />
           ))}
         </SectionSliderV2>
       )}
@@ -135,7 +135,7 @@ export default async function HomeDynamicV2() {
           autoAdvanceMs={2200}
         >
           {projects.map((b) => (
-            <ExploreCardV5 key={b.slug} business={b} />
+            <SimpleFlipCard key={b.slug} business={b} variant="default" />
           ))}
         </SectionSliderV2>
       )}
@@ -148,7 +148,7 @@ export default async function HomeDynamicV2() {
           variant="new"
         >
           {newOnes.map((b) => (
-            <ExploreCardV5 key={b.slug} business={b} />
+            <SimpleFlipCard key={b.slug} business={b} variant="default" />
           ))}
         </SectionSliderV2>
       )}
