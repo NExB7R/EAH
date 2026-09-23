@@ -387,3 +387,13 @@
   color: var(--eah-text-3);
   margin: 0;
 }
+
+/* Back button — absolute top-right (RTL) */
+.explore-hero { position: relative; }
+.explore-hero__back {
+  position: absolute;
+  top: 12px;
+  inset-inline-start: 12px;
+  margin-bottom: 0 !important;
+  z-index: 5;
+}

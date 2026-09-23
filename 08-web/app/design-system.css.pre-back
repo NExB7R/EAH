@@ -1,0 +1,389 @@
+/* ============================================================
+   EAH Design System v1.0
+   كل الألوان والمسافات والحركات في مكان واحد
+   ============================================================ */
+
+:root {
+  /* ===== الألوان الأساسية ===== */
+  --eah-black: #050308;
+  --eah-black-2: #0A0812;
+  --eah-black-3: #0F0B1A;
+  --eah-surface: rgba(10, 8, 18, 0.6);
+  --eah-surface-2: rgba(139, 92, 246, 0.05);
+
+  --eah-purple: #6B21FF;
+  --eah-purple-2: #A855F7;
+  --eah-purple-3: #C4B5FD;
+  --eah-purple-soft: rgba(139, 92, 246, 0.15);
+
+  --eah-gold: #E8C79A;
+  --eah-gold-2: #A67C52;
+  --eah-gold-soft: rgba(232, 199, 154, 0.15);
+
+  --eah-orange: #FB923C;
+  --eah-purple-soft: #C084FC;
+  --eah-red: #F87171;
+
+  /* ===== النصوص ===== */
+  --eah-text: #F4F2FA;
+  --eah-text-2: #C9C2DB;
+  --eah-text-3: #A29DB5;
+  --eah-text-4: #6B6580;
+
+  /* ===== الحدود ===== */
+  --eah-border: rgba(139, 92, 246, 0.2);
+  --eah-border-2: rgba(139, 92, 246, 0.3);
+  --eah-border-3: rgba(139, 92, 246, 0.4);
+  --eah-border-soft: rgba(255, 255, 255, 0.06);
+  --eah-border-gold: rgba(232, 199, 154, 0.3);
+
+  /* ===== الخلفيات المتدرجة ===== */
+  --eah-gradient-purple: linear-gradient(135deg, #6B21FF, #A855F7);
+  --eah-gradient-gold: linear-gradient(135deg, #E8C79A, #A67C52);
+  --eah-gradient-card: linear-gradient(160deg, rgba(107, 33, 255, 0.08), rgba(10, 8, 18, 0.6));
+  --eah-gradient-overlay: linear-gradient(to top, rgba(10, 8, 18, 0.95), transparent);
+
+  /* ===== الظلال ===== */
+  --eah-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --eah-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --eah-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+  --eah-shadow-purple: 0 0 8px rgba(107, 33, 255, 0.35);
+  --eah-shadow-gold: 0 0 8px rgba(232, 199, 154, 0.3);
+
+  /* ===== الحدود المدورة ===== */
+  --eah-radius-xs: 8px;
+  --eah-radius-sm: 12px;
+  --eah-radius: 16px;
+  --eah-radius-md: 20px;
+  --eah-radius-lg: 24px;
+  --eah-radius-pill: 999px;
+
+  /* ===== المسافات ===== */
+  --eah-space-xs: 4px;
+  --eah-space-sm: 8px;
+  --eah-space: 16px;
+  --eah-space-md: 24px;
+  --eah-space-lg: 32px;
+  --eah-space-xl: 48px;
+
+  /* ===== الخطوط ===== */
+  --eah-font-body: var(--font-cairo, 'Cairo', system-ui, sans-serif);
+  --eah-font-display: var(--font-cairo-play, var(--font-cairo), system-ui, sans-serif);
+  --eah-font-signature: var(--font-cairo-play, 'Cairo Play', cursive);
+
+  --eah-fs-xs: 0.68rem;
+  --eah-fs-sm: 0.78rem;
+  --eah-fs: 0.88rem;
+  --eah-fs-md: 1rem;
+  --eah-fs-lg: 1.15rem;
+  --eah-fs-xl: 1.5rem;
+  --eah-fs-2xl: 2rem;
+
+  /* ===== الحركات ===== */
+  --eah-ease: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --eah-ease-smooth: cubic-bezier(0.34, 1.2, 0.64, 1);
+  --eah-t-fast: 180ms;
+  --eah-t: 260ms;
+  --eah-t-slow: 400ms;
+}
+
+/* ============================================================
+   UI KIT — Classes جاهزة
+   ============================================================ */
+
+/* ===== الأساس ===== */
+.eah-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--eah-space-md);
+}
+
+.eah-section {
+  max-width: 1000px;
+  margin: var(--eah-space-lg) auto 0;
+  padding: var(--eah-space-md);
+  border-radius: var(--eah-radius-lg);
+  background: var(--eah-surface);
+  border: 1px solid var(--eah-border);
+}
+
+.eah-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: var(--eah-space);
+}
+
+.eah-section__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--eah-font-display);
+  font-size: var(--eah-fs-lg);
+  font-weight: 900;
+  color: var(--eah-text);
+  margin: 0;
+}
+
+.eah-section__count {
+  padding: 4px 12px;
+  border-radius: var(--eah-radius-pill);
+  background: var(--eah-purple-soft);
+  border: 1px solid var(--eah-border-2);
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs-xs);
+  font-weight: 700;
+  color: var(--eah-purple-3);
+}
+
+/* ===== الأزرار ===== */
+.eah-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: var(--eah-radius-pill);
+  border: 1px solid var(--eah-border-2);
+  background: var(--eah-purple-soft);
+  color: var(--eah-text);
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--eah-t) var(--eah-ease);
+}
+.eah-btn:hover {
+  border-color: var(--eah-purple-2);
+  background: rgba(139, 92, 246, 0.2);
+  transform: translateY(-2px);
+  box-shadow: var(--eah-shadow-purple);
+}
+
+.eah-btn--primary {
+  background: var(--eah-gradient-purple);
+  border-color: transparent;
+  color: #fff;
+}
+.eah-btn--primary:hover {
+  box-shadow: 0 0 8px rgba(107, 33, 255, 0.6);
+}
+
+.eah-btn--gold {
+  background: var(--eah-gradient-gold);
+  border-color: transparent;
+  color: #1A0F0A;
+}
+.eah-btn--gold:hover {
+  box-shadow: var(--eah-shadow-gold);
+}
+
+.eah-btn--ghost {
+  background: transparent;
+  border-color: var(--eah-border);
+}
+
+.eah-btn--sm { padding: 6px 12px; font-size: var(--eah-fs-sm); }
+.eah-btn--lg { padding: 14px 24px; font-size: var(--eah-fs-md); }
+
+/* ===== الـ chips ===== */
+.eah-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--eah-radius-pill);
+  background: var(--eah-purple-soft);
+  border: 1px solid var(--eah-border);
+  color: var(--eah-purple-3);
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs-xs);
+  font-weight: 700;
+}
+.eah-chip--gold {
+  background: var(--eah-gold-soft);
+  border-color: var(--eah-border-gold);
+  color: var(--eah-gold);
+}
+.eah-chip--live {
+  color: var(--eah-purple-soft);
+  background: rgba(192, 132, 252, 0.1);
+  border-color: rgba(192, 132, 252, 0.3);
+}
+
+/* ===== الأفاتار ===== */
+.eah-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--eah-radius-pill);
+  background: var(--eah-gradient-purple);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--eah-font-body);
+  font-weight: 900;
+  font-size: var(--eah-fs-md);
+  flex-shrink: 0;
+}
+
+/* ===== الـ badge ===== */
+.eah-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--eah-radius-pill);
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs-xs);
+  font-weight: 900;
+}
+.eah-badge--gold {
+  background: var(--eah-gradient-gold);
+  color: #1A0F0A;
+}
+.eah-badge--purple {
+  background: var(--eah-gradient-purple);
+  color: #fff;
+}
+
+/* ===== النقطة الحية ===== */
+
+
+@keyframes eah-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1);   }
+  50%      { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* ===== Spinner ===== */
+.eah-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--eah-border-2);
+  border-top-color: var(--eah-purple-2);
+  border-radius: 50%;
+  
+}
+
+@keyframes eah-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== الـ Grid ===== */
+.eah-grid {
+  display: grid;
+  gap: var(--eah-space);
+}
+.eah-grid--2 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.eah-grid--3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.eah-grid--4 { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+
+/* ===== Spacer ===== */
+.eah-spacer-sm { height: var(--eah-space-sm); }
+.eah-spacer    { height: var(--eah-space);    }
+.eah-spacer-md { height: var(--eah-space-md); }
+.eah-spacer-lg { height: var(--eah-space-lg); }
+
+/* ===== Explore Hero ===== */
+.explore-hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--eah-space-md) var(--eah-space-md) var(--eah-space);
+}
+.explore-hero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--eah-radius-pill);
+  border: 1px solid var(--eah-border);
+  background: var(--eah-purple-soft);
+  color: var(--eah-text);
+  text-decoration: none;
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs-sm);
+  font-weight: 700;
+  margin-bottom: var(--eah-space);
+  transition: all var(--eah-t) var(--eah-ease);
+}
+.explore-hero__back:hover {
+  border-color: var(--eah-purple-2);
+  background: rgba(139, 92, 246, 0.2);
+  transform: translateX(3px);
+}
+.explore-hero__kicker {
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs-sm);
+  font-weight: 700;
+  color: var(--eah-gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.explore-hero__title {
+  font-family: var(--eah-font-display);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+  color: var(--eah-text);
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+.explore-hero__subtitle {
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs-md);
+  color: var(--eah-text-3);
+  margin: 0;
+}
+
+/* ===== Explore Hero ===== */
+.explore-hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--eah-space-md) var(--eah-space-md) var(--eah-space);
+}
+.explore-hero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--eah-radius-pill);
+  border: 1px solid var(--eah-border);
+  background: var(--eah-purple-soft);
+  color: var(--eah-text);
+  text-decoration: none;
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs-sm);
+  font-weight: 700;
+  margin-bottom: var(--eah-space);
+  transition: all var(--eah-t) var(--eah-ease);
+}
+.explore-hero__back:hover {
+  border-color: var(--eah-purple-2);
+  background: rgba(139, 92, 246, 0.2);
+  transform: translateX(3px);
+}
+.explore-hero__kicker {
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs-sm);
+  font-weight: 700;
+  color: var(--eah-gold);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.explore-hero__title {
+  font-family: var(--eah-font-display);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+  color: var(--eah-text);
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+.explore-hero__subtitle {
+  font-family: var(--eah-font-body);
+  font-size: var(--eah-fs-md);
+  color: var(--eah-text-3);
+  margin: 0;
+}

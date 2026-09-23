@@ -127,10 +127,10 @@
 .ss2--offers::before { background: radial-gradient(ellipse, #FBBF24 0%, transparent 65%); opacity: 0.2; }
 
 /* ═══ Title accents per section ═══ */
-.ss2--featured .ss2__title { color: #F5D9A7; }
-.ss2--trending .ss2__title { color: #FDBA74; }
-.ss2--new .ss2__title { color: #D8B4FE; }
-.ss2--offers .ss2__title { color: #FCD34D; }
+.ss2--featured .ss2__title { color: #F5D9A7 !important; }
+.ss2--trending .ss2__title { color: #FDBA74 !important; }
+.ss2--new .ss2__title { color: #55E7D1 !important; }
+.ss2--offers .ss2__title { color: #FCD34D !important; }
 
 /* ═══ Responsive ═══ */
 @media (max-width: 900px) {
@@ -164,15 +164,7 @@
   pointer-events: none;
   z-index: -1;
 }
-.ss2--projects .ss2__title {
-  font-size: clamp(1.3rem, 2.8vw, 1.75rem) !important;
-  background: linear-gradient(135deg, #F5D9A7 0%, #E8C79A 40%, #C084FC 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
-  -webkit-text-fill-color: transparent;
-  font-weight: 900;
-}
+.ss2--projects .ss2__title { color: #E8C79A !important; }
 .ss2--projects .ss2__subtitle {
   color: #E8C79A !important;
   font-weight: 800;
@@ -218,15 +210,7 @@
   pointer-events: none;
   z-index: -1;
 }
-.ss2--featured .ss2__title {
-  background: linear-gradient(135deg, #FFFBEB, #F5D9A7 40%, #E8C79A 100%) !important;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
-  -webkit-text-fill-color: transparent;
-  font-size: clamp(1.3rem, 2.8vw, 1.7rem) !important;
-  letter-spacing: -0.02em;
-}
+.ss2--featured .ss2__title { color: #F5D9A7 !important; }
 .ss2--featured .ss2__subtitle {
   color: #E8C79A !important;
   opacity: 0.85;
@@ -269,14 +253,7 @@
   pointer-events: none;
   z-index: -1;
 }
-.ss2--trending .ss2__title {
-  background: linear-gradient(135deg, #FED7AA 0%, #FB923C 50%, #F97316 100%) !important;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
-  -webkit-text-fill-color: transparent;
-  font-size: clamp(1.3rem, 2.8vw, 1.7rem) !important;
-}
+.ss2--trending .ss2__title { color: #FDBA74 !important; }
 @keyframes ssFlamePulse {
   0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(251, 146, 60, 0.6)); }
   50% { transform: scale(1.15); filter: drop-shadow(0 0 12px rgba(251, 146, 60, 0.9)); }
@@ -322,14 +299,7 @@
   pointer-events: none;
   z-index: -1;
 }
-.ss2--new .ss2__title {
-  background: linear-gradient(135deg, #D1FAE5 0%, #6EE7B7 50%, #34D399 100%) !important;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
-  -webkit-text-fill-color: transparent;
-  font-size: clamp(1.3rem, 2.8vw, 1.7rem) !important;
-}
+.ss2--new .ss2__title { color: #55E7D1 !important; }
 @keyframes ssSparkle {
   0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.8; }
   50% { transform: rotate(15deg) scale(1.15); opacity: 1; filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.8)); }
@@ -375,14 +345,7 @@
   pointer-events: none;
   z-index: -1;
 }
-.ss2--projects .ss2__title {
-  background: linear-gradient(135deg, #F5D9A7 0%, #E8C79A 40%, #C084FC 100%) !important;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
-  -webkit-text-fill-color: transparent;
-  font-size: clamp(1.3rem, 2.8vw, 1.7rem) !important;
-}
+.ss2--projects .ss2__title { color: #E8C79A !important; }
 .ss2--projects .ss2__subtitle { color: #E8C79A !important; }
 .ss2--projects .ss2__see-all {
   background: linear-gradient(135deg, rgba(232, 199, 154, 0.15), rgba(232, 199, 154, 0.05)) !important;
@@ -495,20 +458,15 @@
 }
 
 /* ═══ FEATURED — ذهبي ═══ */
-.ss2--featured .ss2__title { color: #F5D9A7; }
+.ss2--featured .ss2__title { color: #F5D9A7 !important; }
 /* ═══ TRENDING — برتقالي ═══ */
-.ss2--trending .ss2__title { color: #FDBA74; }
+.ss2--trending .ss2__title { color: #FDBA74 !important; }
 /* ═══ NEW — Teal ═══ */
-.ss2--new .ss2__title { color: #55E7D1; }
+.ss2--new .ss2__title { color: #55E7D1 !important; }
 /* ═══ OFFERS — ذهبي/برتقالي ═══ */
-.ss2--offers .ss2__title { color: #FCD34D; }
+.ss2--offers .ss2__title { color: #FCD34D !important; }
 /* ═══ PROJECTS ═══ */
-.ss2--projects .ss2__title {
-  background: linear-gradient(135deg, #F5D9A7, #C084FC);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+.ss2--projects .ss2__title { color: #E8C79A !important; }
 .ss2__see-all {
   display: inline-flex;
   align-items: center;
