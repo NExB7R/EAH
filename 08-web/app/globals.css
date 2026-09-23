@@ -254,7 +254,6 @@ main > section::after,
 body {
   position: relative;
   background: #07060B;
-  min-height: 100vh;
 }
 #__next {
   position: relative;
