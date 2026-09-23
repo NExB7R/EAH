@@ -257,9 +257,26 @@ body {
   background: #07060B;
   min-height: 100vh;
 }
-#__next, body > div {
+#__next {
   position: relative;
   z-index: 1;
+}
+
+/* كل div في body — z-index 1 — عدا ambient */
+body > div:not(.ambient-aurora) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ambient-aurora — z-index 0 دايماً */
+body > .ambient-aurora {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 
