@@ -151,7 +151,6 @@
   .ss2__see-all { transition: none; }
 }
 
-
 /* ═══ Projects variant — مميز جداً ═══ */
 .ss2--projects {
   position: relative;
@@ -173,10 +172,6 @@
   color: transparent !important;
   -webkit-text-fill-color: transparent;
   font-weight: 900;
-}
-.ss2--projects .ss2__title::before {
-  content: '🌱 ';
-  -webkit-text-fill-color: initial;
 }
 .ss2--projects .ss2__subtitle {
   color: #E8C79A !important;
@@ -232,11 +227,6 @@
   font-size: clamp(1.3rem, 2.8vw, 1.7rem) !important;
   letter-spacing: -0.02em;
 }
-.ss2--featured .ss2__title::before {
-  content: '👑 ';
-  -webkit-text-fill-color: initial;
-  margin-inline-end: 4px;
-}
 .ss2--featured .ss2__subtitle {
   color: #E8C79A !important;
   opacity: 0.85;
@@ -286,13 +276,6 @@
   color: transparent !important;
   -webkit-text-fill-color: transparent;
   font-size: clamp(1.3rem, 2.8vw, 1.7rem) !important;
-}
-.ss2--trending .ss2__title::before {
-  content: '🔥 ';
-  -webkit-text-fill-color: initial;
-  margin-inline-end: 4px;
-  display: inline-block;
-  animation: ssFlamePulse 1.6s ease-in-out infinite;
 }
 @keyframes ssFlamePulse {
   0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(251, 146, 60, 0.6)); }
@@ -347,13 +330,6 @@
   -webkit-text-fill-color: transparent;
   font-size: clamp(1.3rem, 2.8vw, 1.7rem) !important;
 }
-.ss2--new .ss2__title::before {
-  content: '✨ ';
-  -webkit-text-fill-color: initial;
-  margin-inline-end: 4px;
-  display: inline-block;
-  animation: ssSparkle 2.4s ease-in-out infinite;
-}
 @keyframes ssSparkle {
   0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.8; }
   50% { transform: rotate(15deg) scale(1.15); opacity: 1; filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.8)); }
@@ -406,11 +382,6 @@
   color: transparent !important;
   -webkit-text-fill-color: transparent;
   font-size: clamp(1.3rem, 2.8vw, 1.7rem) !important;
-}
-.ss2--projects .ss2__title::before {
-  content: '🌱 ';
-  -webkit-text-fill-color: initial;
-  margin-inline-end: 4px;
 }
 .ss2--projects .ss2__subtitle { color: #E8C79A !important; }
 .ss2--projects .ss2__see-all {
@@ -523,31 +494,14 @@
   gap: 8px;
 }
 
-.ss2__title::before {
-  content: '';
-  width: 4px;
-  height: 22px;
-  border-radius: 2px;
-  background: linear-gradient(180deg, #A855F7, #6B21FF);
-  flex-shrink: 0;
-}
-
 /* ═══ FEATURED — ذهبي ═══ */
 .ss2--featured .ss2__title { color: #F5D9A7; }
-.ss2--featured .ss2__title::before { background: linear-gradient(180deg, #F5D9A7, #E8C79A); }
-
 /* ═══ TRENDING — برتقالي ═══ */
 .ss2--trending .ss2__title { color: #FDBA74; }
-.ss2--trending .ss2__title::before { background: linear-gradient(180deg, #FB923C, #EA580C); }
-
 /* ═══ NEW — Teal ═══ */
 .ss2--new .ss2__title { color: #55E7D1; }
-.ss2--new .ss2__title::before { background: linear-gradient(180deg, #55E7D1, #00D9B8); }
-
 /* ═══ OFFERS — ذهبي/برتقالي ═══ */
 .ss2--offers .ss2__title { color: #FCD34D; }
-.ss2--offers .ss2__title::before { background: linear-gradient(180deg, #FCD34D, #EA580C); }
-
 /* ═══ PROJECTS ═══ */
 .ss2--projects .ss2__title {
   background: linear-gradient(135deg, #F5D9A7, #C084FC);
@@ -555,8 +509,6 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.ss2--projects .ss2__title::before { background: linear-gradient(180deg, #E8C79A, #C084FC); }
-
 .ss2__see-all {
   display: inline-flex;
   align-items: center;

@@ -328,3 +328,57 @@
   .sfc:hover .sfc__layer--menu3,
   .sfc:hover .sfc__layer--menu4 { animation: none; opacity: 0; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   2026 — Static cover (no animations)
+   ═══════════════════════════════════════════════════════════════ */
+.sfc__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 0;
+}
+.sfc__img--placeholder {
+  background: linear-gradient(135deg, #1A0E2E, #0F061C);
+}
+
+/* Disable legacy animated layers entirely */
+.sfc__layer { display: none !important; }
+
+/* WhatsApp indicator */
+.sfc__wa {
+  position: absolute;
+  bottom: 8px;
+  inset-inline-end: 8px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(37, 211, 102, 0.2);
+  border: 1px solid rgba(37, 211, 102, 0.55);
+  color: #25D366;
+  z-index: 3;
+}
+.sfc__wa svg { width: 14px; height: 14px; }
+
+/* Badge variants */
+.sfc__badge--crown { background: linear-gradient(135deg, #F5D9A7, #E8C79A); color: #1A0F0A; }
+.sfc__badge--fire { background: linear-gradient(135deg, #FB923C, #EA580C); color: #FFFFFF; }
+.sfc__badge--sparkle { background: linear-gradient(135deg, #6EE7B7, #10B981); color: #062018; }
+.sfc__badge--gift { background: linear-gradient(135deg, #FCD34D, #F59E0B); color: #1A0F0A; }
+
+/* Category chip */
+.sfc__chip--cat {
+  background: rgba(232, 199, 154, 0.1);
+  border-color: rgba(232, 199, 154, 0.28);
+  color: #E8C79A;
+}
+.sfc__chip-count {
+  opacity: 0.75;
+  margin-inline-start: 2px;
+  font-weight: 700;
+}
