@@ -50,23 +50,10 @@
 }
 
 /* Cover layer — always visible, fades */
-.sfc__layer--cover {
-  opacity: 1;
-  animation: sfcAltCover 10s infinite;
-}
+.sfc__layer--cover { opacity: 1; }
 
 /* Logo layer — hidden by default, shows at midpoint */
-.sfc__layer--logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background:
-    radial-gradient(ellipse at center, rgba(var(--sfc-neon), 0.15), transparent 70%),
-    linear-gradient(180deg, #1A0E2E, #0F061C);
-  opacity: 0;
-  animation: sfcAltLogo 10s infinite;
-}
+.sfc__layer--logo { display: none; }
 
 .sfc__logo-img {
   max-width: 70%;
@@ -75,20 +62,15 @@
   height: auto;
   object-fit: contain;
   filter:
-    drop-shadow(0 0 1px rgba(var(--sfc-neon), 0.9))
-    drop-shadow(0 0 14px rgba(var(--sfc-neon), 0.4));
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
 }
 
 /* ═══ 5s cover, 5s logo, repeat ═══ */
-@keyframes sfcAltCover {
-  0%, 45%    { opacity: 1; }
-  50%, 95%   { opacity: 0; }
+
   100%       { opacity: 1; }
 }
 
-@keyframes sfcAltLogo {
-  0%, 45%    { opacity: 0; }
-  50%, 95%   { opacity: 1; }
+
   100%       { opacity: 0; }
 }
 
@@ -105,29 +87,17 @@
 .sfc__layer--menu3 { opacity: 0; transition: opacity 800ms ease; }
 .sfc__layer--menu4 { opacity: 0; transition: opacity 800ms ease; }
 
-.sfc:hover .sfc__layer--menu1 { animation: sfcMenu1 16s ease-in-out infinite; }
-.sfc:hover .sfc__layer--menu2 { animation: sfcMenu2 16s ease-in-out infinite; }
-.sfc:hover .sfc__layer--menu3 { animation: sfcMenu3 16s ease-in-out infinite; }
-.sfc:hover .sfc__layer--menu4 { animation: sfcMenu4 16s ease-in-out infinite; }
 
-@keyframes sfcMenu1 {
-  0%, 20%   { opacity: 1; }
-  25%, 100% { opacity: 0; }
+
+
+
+
+
+
 }
-@keyframes sfcMenu2 {
-  0%, 20%   { opacity: 0; }
-  25%, 45%  { opacity: 1; }
-  50%, 100% { opacity: 0; }
+
 }
-@keyframes sfcMenu3 {
-  0%, 45%   { opacity: 0; }
-  50%, 70%  { opacity: 1; }
-  75%, 100% { opacity: 0; }
-}
-@keyframes sfcMenu4 {
-  0%, 70%   { opacity: 0; }
-  75%, 95%  { opacity: 1; }
-  100%      { opacity: 0; }
+
 }
 
 /* Gradient overlay */
@@ -323,10 +293,10 @@
   .sfc__layer--cover,
   .sfc__layer--logo { animation: none; opacity: 1; }
   .sfc__layer--logo { opacity: 0; }
-  .sfc:hover .sfc__layer--menu1 { animation: none; opacity: 1; }
+  
   .sfc:hover .sfc__layer--menu2,
   .sfc:hover .sfc__layer--menu3,
-  .sfc:hover .sfc__layer--menu4 { animation: none; opacity: 0; }
+  
 }
 
 /* ═══════════════════════════════════════════════════════════════

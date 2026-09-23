@@ -254,10 +254,7 @@
   z-index: -1;
 }
 .ss2--trending .ss2__title { color: #FDBA74 !important; }
-@keyframes ssFlamePulse {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(251, 146, 60, 0.6)); }
-  50% { transform: scale(1.15); filter: drop-shadow(0 0 12px rgba(251, 146, 60, 0.9)); }
-}
+
 .ss2--trending .ss2__subtitle {
   color: #FDBA74 !important;
 }
@@ -300,10 +297,7 @@
   z-index: -1;
 }
 .ss2--new .ss2__title { color: #55E7D1 !important; }
-@keyframes ssSparkle {
-  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.8; }
-  50% { transform: rotate(15deg) scale(1.15); opacity: 1; filter: drop-shadow(0 0 8px rgba(52, 211, 153, 0.8)); }
-}
+
 .ss2--new .ss2__subtitle {
   color: #6EE7B7 !important;
 }
@@ -405,16 +399,7 @@
     drop-shadow(0 0 16px rgba(232, 199, 154, 0.15));
 }
 
-@keyframes ss2SeeAllBreathe {
-  0%, 100% {
-    filter: drop-shadow(0 0 4px rgba(232, 199, 154, 0.25));
-  }
-  50% {
-    filter:
-      drop-shadow(0 0 8px rgba(232, 199, 154, 0.4))
-      drop-shadow(0 0 20px rgba(232, 199, 154, 0.12));
-  }
-}
+
 
 /* ─── Title — breathing ناعم ─── */
 .ss2__title {
