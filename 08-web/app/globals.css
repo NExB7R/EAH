@@ -970,3 +970,46 @@ body > .wg {
 body > .floating-capsule {
   position: fixed !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   PERFORMANCE 2026 — content-visibility
+   المتصفح يتجاهل رسم العناصر بره الشاشة
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Section sliders — 380px height */
+.ss2,
+.ss3,
+.section-slider {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 380px;
+}
+
+/* Explore + Favorites card — 320px height */
+.ec5,
+.sfc,
+.v7-xcard,
+.v7-fcard,
+.v7-fav {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 320px;
+}
+
+/* Grid containers */
+.exp-grid,
+.explore-grid,
+.v7-exp__grid,
+.v7-fav__grid {
+  contain: layout style;
+}
+
+/* Footer + Below-fold sections */
+.sf {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
+.acc-section,
+.vv {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}

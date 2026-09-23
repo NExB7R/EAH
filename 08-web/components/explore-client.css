@@ -221,3 +221,18 @@
   .exc-grid--list .ecard__body { padding: 10px; }
   .exc-grid--list .ecard__hook { -webkit-line-clamp: 1; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   PERFORMANCE — Explore grid
+   ═══════════════════════════════════════════════════════════════ */
+.exp-grid,
+[class*="grid"] {
+  contain: layout style;
+}
+
+/* Each card */
+.exp-grid > *,
+.sfc {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 340px;
+}
