@@ -3,9 +3,10 @@
    ═══════════════════════════════════════════════════════════════ */
 
 .wg {
+  will-change: opacity;
   position: fixed;
   inset: 0;
-  z-index: 99999 !important;
+  z-index: 2147483647 !important;
   background: #07020D !important;
   background-image:
     radial-gradient(ellipse at 50% 0%, rgba(168, 85, 247, 0.15), transparent 55%),
@@ -403,6 +404,7 @@
 /* ═══ Mobile ═══ */
 @media (max-width: 640px) {
   .wg {
+  will-change: opacity;
     padding: 30px 16px 30px;
   }
 

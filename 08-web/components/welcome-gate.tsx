@@ -57,45 +57,51 @@ function IArrowLeft() {
 
 /* ═══ Features ═══ */
 const FEATURES = [
-  {
-    icon: <ICompass />,
-    title: 'كل حاجة حواليك في مكان واحد',
-    desc: 'مطاعم • صيدليات • توصيل • ماركت • أنشطة أخرى',
-    accent: '',
-  },
-  {
-    icon: <IChat />,
-    title: 'اطلب على واتساب مباشرة',
-    desc: 'بدون وسيط، بدون عمولة، بدون تعقيد',
-    accent: 'teal',
-  },
-  {
-    icon: <IStar />,
-    title: 'مميزين + ترند + عروض',
-    desc: 'تعرف الأماكن الأفضل والترند النهاردة بسرعة',
-    accent: 'gold',
-  },
-  {
-    icon: <ISparkles />,
-    title: 'تجربة عربية أصلية',
-    desc: 'بتتكلم لغتك، من قلب شبين القناطر والقرى حواليها',
-    accent: '',
-  },
+  { icon: <ICompass />, title: 'كل حاجة حواليك في مكان واحد', desc: 'مطاعم • صيدليات • توصيل • ماركت • أنشطة أخرى', accent: '' },
+  { icon: <IChat />, title: 'اطلب على واتساب مباشرة', desc: 'بدون وسيط، بدون عمولة، بدون تعقيد', accent: 'teal' },
+  { icon: <IStar />, title: 'مميزين + ترند + عروض', desc: 'تعرف الأماكن الأفضل والترند النهاردة بسرعة', accent: 'gold' },
+  { icon: <ISparkles />, title: 'تجربة عربية أصلية', desc: 'بتتكلم لغتك، من قلب شبين القناطر والقرى حواليها', accent: '' },
 ]
 
-/* ═══ Main ═══ */
+/* ═══ Stars ═══ */
+const STARS = [
+  { top: '8%',  left: '12%',  gold: false, delay: '0s' },
+  { top: '15%', left: '78%',  gold: true,  delay: '0.5s' },
+  { top: '25%', left: '8%',   gold: false, delay: '1s' },
+  { top: '32%', left: '88%',  gold: false, delay: '1.5s' },
+  { top: '45%', left: '6%',   gold: true,  delay: '2s' },
+  { top: '55%', left: '92%',  gold: false, delay: '0.8s' },
+  { top: '68%', left: '10%',  gold: false, delay: '1.3s' },
+  { top: '75%', left: '85%',  gold: true,  delay: '0.3s' },
+  { top: '85%', left: '18%',  gold: false, delay: '1.8s' },
+  { top: '88%', left: '80%',  gold: false, delay: '0.6s' },
+  { top: '5%',  left: '48%',  gold: true,  delay: '2.2s' },
+  { top: '95%', left: '55%',  gold: false, delay: '1.1s' },
+]
+
+/* ═══ Component ═══ */
 export default function WelcomeGate() {
-  const [show, setShow] = useState(false)
+  // ✅ lazy initializer — يفحص localStorage قبل أول render
+  const [show, setShow] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false
+    try {
+      return !localStorage.getItem(STORAGE_KEY)
+    } catch {
+      return false
+    }
+  })
+
   const [leaving, setLeaving] = useState(false)
 
+  // منع scroll في الصفحة
   useEffect(() => {
-    try {
-      const seen = localStorage.getItem(STORAGE_KEY)
-      if (!seen) setShow(true)
-    } catch {
-      setShow(true)
+    if (!show) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
     }
-  }, [])
+  }, [show])
 
   function dismiss() {
     setLeaving(true)
@@ -109,27 +115,10 @@ export default function WelcomeGate() {
 
   if (!show) return null
 
-  /* ═══ Stars — 12 نجمة موزعة ═══ */
-  const stars = [
-    { top: '8%',  left: '12%',  gold: false, delay: '0s' },
-    { top: '15%', left: '78%',  gold: true,  delay: '0.5s' },
-    { top: '25%', left: '8%',   gold: false, delay: '1s' },
-    { top: '32%', left: '88%',  gold: false, delay: '1.5s' },
-    { top: '45%', left: '6%',   gold: true,  delay: '2s' },
-    { top: '55%', left: '92%',  gold: false, delay: '0.8s' },
-    { top: '68%', left: '10%',  gold: false, delay: '1.3s' },
-    { top: '75%', left: '85%',  gold: true,  delay: '0.3s' },
-    { top: '85%', left: '18%',  gold: false, delay: '1.8s' },
-    { top: '88%', left: '80%',  gold: false, delay: '0.6s' },
-    { top: '5%',  left: '48%',  gold: true,  delay: '2.2s' },
-    { top: '95%', left: '55%',  gold: false, delay: '1.1s' },
-  ]
-
   return (
     <div className={`wg ${leaving ? 'is-leaving' : ''}`} role="dialog" aria-label="مرحبا بيك في EAH">
-      {/* ═══ Stars ═══ */}
       <div className="wg__stars" aria-hidden>
-        {stars.map((s, i) => (
+        {STARS.map((s, i) => (
           <span
             key={i}
             className={`wg__star ${s.gold ? 'wg__star--gold' : ''}`}
@@ -138,10 +127,7 @@ export default function WelcomeGate() {
         ))}
       </div>
 
-      {/* ═══ Content ═══ */}
       <div className="wg__inner">
-
-        {/* Logo + Crown */}
         <div className="wg__logo">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/eah-word.webp" alt="EAH" />
@@ -149,10 +135,8 @@ export default function WelcomeGate() {
           <img src="/eah-crown.webp" alt="" />
         </div>
 
-        {/* Slogan */}
         <h1 className="wg__slogan">اللي نفسك فيه ؟</h1>
 
-        {/* Hook */}
         <div className="wg__hook">
           <p className="wg__hook-line">شبيك لبيك</p>
           <p className="wg__hook-sub">كل حاجة حواليك</p>
@@ -160,11 +144,9 @@ export default function WelcomeGate() {
 
         <div className="wg__divider" />
 
-        {/* Pitch */}
         <div className="wg__pitch">
           <h2 className="wg__pitch-title">
-            منصة <span>محلية مصرية</span>،
-            <br />
+            منصة <span>محلية مصرية</span>،<br />
             مبنية بحب من قلب شبين القناطر
           </h2>
           <p className="wg__pitch-body">
@@ -173,7 +155,6 @@ export default function WelcomeGate() {
           </p>
         </div>
 
-        {/* Features */}
         <div className="wg__features">
           {FEATURES.map((f) => (
             <div key={f.title} className={`wg__feature ${f.accent ? `wg__feature--${f.accent}` : ''}`}>
@@ -186,7 +167,6 @@ export default function WelcomeGate() {
           ))}
         </div>
 
-        {/* Punchline */}
         <div className="wg__punch">
           <p className="wg__punch-q">« شوفت الفكرة دي قبل كده؟ »</p>
           <p className="wg__punch-a">
@@ -194,7 +174,6 @@ export default function WelcomeGate() {
           </p>
         </div>
 
-        {/* CTA */}
         <button type="button" className="wg__cta" onClick={dismiss}>
           <IBolt />
           <span>يلا ابدأ</span>
