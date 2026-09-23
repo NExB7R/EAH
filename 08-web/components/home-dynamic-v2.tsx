@@ -7,7 +7,6 @@ import HomeHero from '@/components/home-hero'
 import SectionSliderV2 from '@/components/section-slider-v2'
 import ExploreCardV5 from '@/components/explore-card-v5'
 import VisitorValue from '@/components/visitor-value'
-import AboutTeaser from '@/components/about-teaser'
 import './home-dynamic-v2.css'
 import AdSlot from '@/components/ads/ad-slot'
 import { getActiveAdForSlot, getAdHref } from '@/lib/ads'
@@ -155,7 +154,6 @@ export default async function HomeDynamicV2() {
       )}
 
       <VisitorValue />
-      <AboutTeaser />
     </>
   )
 }

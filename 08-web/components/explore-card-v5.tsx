@@ -5,7 +5,6 @@ import Image from 'next/image'
 import FavoriteButton from './favorite-button'
 import OpenNowBadge from './open-now-badge'
 import './explore-card-v5.css'
-import { ESticker } from './stickers'
 
 type Business = {
   id?: string
@@ -106,8 +105,7 @@ function ExploreCardV5Base({ business }: { business: Business }) {
   const recentViews: number = business.recentViews ?? business.recent_views ?? 0
   const isNew = ageInDays < 7
   const isTrending = recentViews >= 50
-  const hasStickers = isNew || isTrending
-
+  
   return (
     <Link
       href={`/businesses/${encodeURIComponent(business.slug)}`}
@@ -133,12 +131,7 @@ function ExploreCardV5Base({ business }: { business: Business }) {
             </div>
           )}
 
-          {hasStickers && (
-            <div className="ec5__stickers" aria-hidden>
-              {isNew && <ESticker variant="new" size="sm" rotate={-8} />}
-              {isTrending && <ESticker variant="trending" size="sm" rotate={6} />}
-            </div>
-          )}
+          
 
           <div className="ec5__open">
             <OpenNowBadge workingHours={business.workingHours} />
