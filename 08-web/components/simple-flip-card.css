@@ -50,18 +50,68 @@
 }
 
 /* Cover layer — always visible, fades */
+.sfc__layer--cover { opacity: 1; }
 
 /* Logo layer — hidden by default, shows at midpoint */
+.sfc__layer--logo { display: none; }
+
+.sfc__logo-img {
+  max-width: 70%;
+  max-height: 70%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
 
 /* ═══ 5s cover, 5s logo, repeat ═══ */
 
   100%       { opacity: 1; }
 }
 
+
   100%       { opacity: 0; }
 }
 
 /* ═══ On hover: logo/cover stop, menu slideshow starts ═══ */
+.sfc:hover .sfc__layer--cover,
+.sfc:hover .sfc__layer--logo {
+  animation: none;
+  opacity: 0;
+}
+
+/* Menu layers — one per image, 4 slides max */
+.sfc__layer--menu1 { opacity: 0; transition: opacity 800ms ease; }
+.sfc__layer--menu2 { opacity: 0; transition: opacity 800ms ease; }
+.sfc__layer--menu3 { opacity: 0; transition: opacity 800ms ease; }
+.sfc__layer--menu4 { opacity: 0; transition: opacity 800ms ease; }
+
+
+
+
+
+
+
+
+}
+
+}
+
+}
+
+/* Gradient overlay */
+.sfc__grad {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(7, 2, 13, 0.3) 0%,
+    transparent 35%,
+    transparent 55%,
+    rgba(7, 2, 13, 0.85) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
 
 /* Badge */
 .sfc__badge {
@@ -241,8 +291,8 @@
 @media (prefers-reduced-motion: reduce) {
   .sfc__layer { transition: none; }
   .sfc__layer--cover,
-  
-  
+  .sfc__layer--logo { animation: none; opacity: 1; }
+  .sfc__layer--logo { opacity: 0; }
   
   .sfc:hover .sfc__layer--menu2,
   .sfc:hover .sfc__layer--menu3,
@@ -261,6 +311,8 @@
   display: block;
   z-index: 0;
 }
+
+
 
 /* Disable legacy animated layers entirely */
 .sfc__layer { display: none !important; }
@@ -312,6 +364,7 @@
   contain-intrinsic-size: auto !important;
 }
 
+
 /* ═══ ULTRA FORCE — specificity override ═══ */
 html body .sfc,
 html body .sfc.sfc,
@@ -321,6 +374,7 @@ html body .sfc * {
   contain-intrinsic-size: auto !important;
   will-change: auto !important;
 }
+
 
 /* ═══ Category placeholders — Linear/Stripe style ═══ */
 .sfc__ph {
