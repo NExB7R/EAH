@@ -71,6 +71,23 @@ const getCachedAd = unstable_cache(
   { revalidate: 120, tags: ['ads'] }
 )
 
+const getCachedViewStats = unstable_cache(
+  async (slugs: string[]) => {
+    try {
+      const stats = await getViewStats(slugs, 7)
+      if (stats instanceof Map) {
+        // unstable_cache serializes — convert Map to plain object
+        return Object.fromEntries(stats)
+      }
+      return {}
+    } catch {
+      return {}
+    }
+  },
+  ['home-viewstats-v1'],
+  { revalidate: 300, tags: ['view_stats'] }
+)
+
 export default async function HomeDynamicV2() {
   const [businesses, ad, userTags] = await Promise.all([
     getCachedBusinesses(),
@@ -80,13 +97,10 @@ export default async function HomeDynamicV2() {
 
   // ═══ View stats ═══
   const slugs = businesses.map((b) => b.slug)
-  let realStats: Map<string, { views: number }> = new Map()
-  try {
-    const stats = await getViewStats(slugs, 7)
-    if (stats instanceof Map) realStats = stats as Map<string, { views: number }>
-  } catch {
-    realStats = new Map()
-  }
+  const statsObj = await getCachedViewStats(slugs)
+  const realStats = new Map<string, { views: number }>(
+    Object.entries(statsObj).map(([k, v]) => [k, v as { views: number }])
+  )
 
   const withStats = businesses.map((b) => {
     const real = realStats.get(b.slug)
