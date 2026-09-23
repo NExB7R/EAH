@@ -218,7 +218,7 @@
    ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 640px) {
   .hh {
-    padding: 88px 14px 40px;
+    padding: clamp(96px, 12vh, 140px) 18px clamp(64px, 10vh, 100px);
   }
 
   .hh__inner { gap: 12px; }
