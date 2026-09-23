@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
-import ExploreCard from './explore-card'
+import SimpleFlipCard from './simple-flip-card'
 import FilterSelect from './ui/filter-select'
 import './explore-client.css'
 import { IcClose, IcMenu } from '@/components/eah-icons'
@@ -346,7 +346,7 @@ export default function ExploreClient({
           </p>
           <div className={`exc-grid ${view === 'list' ? 'exc-grid--list' : ''}`}>
             {filtered.map((business, index) => (
-              <ExploreCard key={business.slug} business={business as any} index={index} />
+              <SimpleFlipCard key={business.slug} business={business as any} variant="grid" />
             ))}
           </div>
         </>

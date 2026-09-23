@@ -9,7 +9,6 @@ import '../components/eah-admin.css'
 import type { Metadata, Viewport } from 'next'
 import PageViewTracker from '@/components/page-view-tracker'
 import { ToastProvider } from '@/components/ui/toast'
-import SplashScreen from '@/components/splash-screen'
 import AmbientBg from '@/components/ambient-bg'
 import BackToTop from '@/components/back-to-top'
 import '@/components/ambient-bg.css'
@@ -121,8 +120,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <AmbientBg />
-        <SplashScreen />
-        <PageViewTracker />
+<PageViewTracker />
         <AnimReady />
         <ToastProvider>{children}</ToastProvider>
         <BackToTop />
