@@ -919,3 +919,21 @@ nav.bc .bc__sep {
     font-size: 0.68rem !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Starfield — Content above background
+   ═══════════════════════════════════════════════════════════════ */
+body > main,
+body > header,
+body > footer,
+body > div:not(.ambient-aurora) {
+  position: relative;
+  z-index: 1;
+}
+
+body > .ambient-aurora {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}

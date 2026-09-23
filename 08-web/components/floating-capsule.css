@@ -105,3 +105,29 @@
     transition: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Header — Transparent at top, solid on scroll
+   ═══════════════════════════════════════════════════════════════ */
+
+.floating-capsule {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.floating-capsule__inner {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  transition: background 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+}
+
+/* عند التمرير → يبقى solid */
+.floating-capsule.is-scrolled .floating-capsule__inner {
+  background: rgba(7, 2, 13, 0.92) !important;
+  border: 1px solid rgba(157, 78, 221, 0.2) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
