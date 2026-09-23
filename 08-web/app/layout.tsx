@@ -1,5 +1,4 @@
 import '@fontsource-variable/cairo'
-import '@fontsource-variable/dancing-script'
 import './globals.css'
 import './social.css'
 import './theme.css'

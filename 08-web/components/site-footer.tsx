@@ -4,6 +4,7 @@ import { IconFacebook, IconWhatsapp } from './neon-icons'
 import { CONTACT_CHANNELS, waLink } from '@/app/contact/contact-channels'
 import { APP_VERSION_LABEL } from '@/lib/version'
 import { IcChat } from './eah-icons'
+import '@fontsource-variable/dancing-script'
 import './site-footer.css'
 
 export default function SiteFooter() {

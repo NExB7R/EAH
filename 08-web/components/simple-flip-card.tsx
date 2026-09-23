@@ -1,6 +1,20 @@
 import Link from 'next/link'
 import './simple-flip-card.css'
 
+/* Cloudinary optimization — إضافة transforms لو مش موجودة */
+function optimizeImage(url: string | undefined): string {
+  if (!url) return ''
+  // لو Cloudinary ومش فيها transforms
+  if (url.includes('res.cloudinary.com') && !url.includes('/upload/f_')) {
+    return url.replace(
+      '/upload/',
+      '/upload/f_auto,q_auto,w_400,h_300,c_fill/'
+    )
+  }
+  return url
+}
+
+
 function IPin() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -105,7 +119,7 @@ type Props = {
 }
 
 function getCover(b: SimpleBusiness): string {
-  return b.cover || b.cover_url || b.cover_image_url || ''
+  return optimizeImage(b.cover || b.cover_url || b.cover_image_url)
 }
 function getRating(b: SimpleBusiness): number {
   return b.avg_rating ?? b.rating ?? 0
