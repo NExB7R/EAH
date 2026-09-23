@@ -342,7 +342,21 @@
   z-index: 0;
 }
 .sfc__img--placeholder {
-  background: linear-gradient(135deg, #1A0E2E, #0F061C);
+  background:
+    radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.15), transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(232, 199, 154, 0.1), transparent 60%),
+    linear-gradient(135deg, #1A0E2E, #0F061C);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sfc__img--placeholder::before {
+  content: 'EAH';
+  font-family: var(--font-cairo, system-ui);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: rgba(168, 85, 247, 0.25);
+  letter-spacing: 0.15em;
 }
 
 /* Disable legacy animated layers entirely */

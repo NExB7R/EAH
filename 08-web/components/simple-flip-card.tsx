@@ -119,7 +119,14 @@ type Props = {
 }
 
 function getCover(b: SimpleBusiness): string {
-  return optimizeImage(b.cover || b.cover_url || b.cover_image_url)
+  const direct = b.cover || b.cover_url || b.cover_image_url
+  if (direct) return optimizeImage(direct)
+  // Fallback chain: gallery → menu → logo
+  if (Array.isArray(b.gallery) && b.gallery.length > 0) return optimizeImage(b.gallery[0])
+  if (Array.isArray(b.menu) && b.menu.length > 0) return optimizeImage(b.menu[0])
+  const logo = b.logo || b.logo_url
+  if (logo) return logo
+  return ''
 }
 function getRating(b: SimpleBusiness): number {
   return b.avg_rating ?? b.rating ?? 0
