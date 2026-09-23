@@ -442,3 +442,15 @@
     animation: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Welcome Gate — hide if already seen (prevents flash)
+   الـ class ده بيتحط من inline script قبل React hydration
+   ═══════════════════════════════════════════════════════════════ */
+
+html.wg-seen .wg {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

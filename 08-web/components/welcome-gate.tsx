@@ -4,7 +4,6 @@ import './welcome-gate.css'
 
 const STORAGE_KEY = 'eah-welcome-seen-v1'
 
-/* ═══ Icons ═══ */
 function ICompass() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -55,7 +54,6 @@ function IArrowLeft() {
   )
 }
 
-/* ═══ Features ═══ */
 const FEATURES = [
   { icon: <ICompass />, title: 'كل حاجة حواليك في مكان واحد', desc: 'مطاعم • صيدليات • توصيل • ماركت • أنشطة أخرى', accent: '' },
   { icon: <IChat />, title: 'اطلب على واتساب مباشرة', desc: 'بدون وسيط، بدون عمولة، بدون تعقيد', accent: 'teal' },
@@ -63,7 +61,6 @@ const FEATURES = [
   { icon: <ISparkles />, title: 'تجربة عربية أصلية', desc: 'بتتكلم لغتك، من قلب شبين القناطر والقرى حواليها', accent: '' },
 ]
 
-/* ═══ Stars ═══ */
 const STARS = [
   { top: '8%',  left: '12%',  gold: false, delay: '0s' },
   { top: '15%', left: '78%',  gold: true,  delay: '0.5s' },
@@ -79,21 +76,32 @@ const STARS = [
   { top: '95%', left: '55%',  gold: false, delay: '1.1s' },
 ]
 
-/* ═══ Component ═══ */
 export default function WelcomeGate() {
-  // ✅ lazy initializer — يفحص localStorage قبل أول render
-  const [show, setShow] = useState<boolean>(() => {
-    if (typeof window === 'undefined') return false
-    try {
-      return !localStorage.getItem(STORAGE_KEY)
-    } catch {
-      return false
-    }
-  })
-
+  const [mounted, setMounted] = useState(false)
+  const [show, setShow] = useState(false)
   const [leaving, setLeaving] = useState(false)
 
-  // منع scroll في الصفحة
+  useEffect(() => {
+    setMounted(true)
+
+    // لو الـ html عنده wg-seen → المستخدم شافه قبل كده
+    if (document.documentElement.classList.contains('wg-seen')) {
+      return
+    }
+
+    // فحص إضافي (للمتصفحات اللي مكتبتش الـ script)
+    try {
+      if (localStorage.getItem(STORAGE_KEY)) {
+        document.documentElement.classList.add('wg-seen')
+        return
+      }
+    } catch {
+      /* silent */
+    }
+
+    setShow(true)
+  }, [])
+
   useEffect(() => {
     if (!show) return
     const prev = document.body.style.overflow
@@ -107,13 +115,15 @@ export default function WelcomeGate() {
     setLeaving(true)
     try {
       localStorage.setItem(STORAGE_KEY, '1')
+      document.documentElement.classList.add('wg-seen')
     } catch {
       /* silent */
     }
     setTimeout(() => setShow(false), 500)
   }
 
-  if (!show) return null
+  // لو لسه مش mounted → مش بنعرض حاجة
+  if (!mounted || !show) return null
 
   return (
     <div className={`wg ${leaving ? 'is-leaving' : ''}`} role="dialog" aria-label="مرحبا بيك في EAH">

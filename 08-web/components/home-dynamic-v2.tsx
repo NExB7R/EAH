@@ -3,6 +3,18 @@ import { rankBusinesses, diversifyByCategory } from '@/lib/ranking'
 import { loadUserProfileTags, parseUserTags, applyPersonalization } from '@/lib/personalization'
 import { getViewStats } from '@/lib/real-stats'
 
+/* ═══ دالة أخذ عينة عشوائية ═══ */
+function sampleN<T>(arr: T[], n: number): T[] {
+  if (arr.length <= n) return arr
+  const shuffled = [...arr]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled.slice(0, n)
+}
+
+
 import HomeHero from '@/components/home-hero'
 import SectionSliderV2 from '@/components/section-slider-v2'
 import SimpleFlipCard from '@/components/simple-flip-card'
