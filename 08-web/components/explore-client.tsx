@@ -53,6 +53,7 @@ export default function ExploreClient({
   const sort = searchParams.get('sort') ?? ''
   const search = searchParams.get('q') ?? ''
   const foodCat = searchParams.get('food') ?? ''
+  const subCat = searchParams.get('subcat') ?? ''
   const openOnly = searchParams.get('open') === '1'
   const offersOnly = searchParams.get('offers') === '1'
   const nearRequested = searchParams.get('near') === '1'
@@ -98,13 +99,14 @@ export default function ExploreClient({
     return Array.from(set).sort()
   }, [businesses])
 
-  const subCatCounts: Record<string, number> = {}
-  for (const b of businesses as any[]) {
-    if (b.type === 'misc' && b.category) {
-      const c = b.category as string
-      subCatCounts[c] = (subCatCounts[c] ?? 0) + 1
+  const subCatCounts = useMemo(() => {
+    const m: Record<string, number> = {}
+    for (const b of businesses as any[]) {
+      const c = (b.sub_category ?? b.category) as string | undefined
+      if (c) m[c] = (m[c] ?? 0) + 1
     }
-  }
+    return m
+  }, [businesses])
 
   const typeCounts = useMemo(() => {
     const m: Record<string, number> = { all: businesses.length }
@@ -130,7 +132,7 @@ export default function ExploreClient({
   const filtered = useMemo(() => {
     let list = businesses
     if (type !== 'all') list = list.filter((b) => getType(b) === type)
-    if (type === 'misc' && subCat) list = list.filter((b) => (b as any).sub_category === subCat)
+    if (type === 'misc' && subCat) list = list.filter((b) => { const v = (b as any).sub_category ?? (b as any).category; return v === subCat })
     if (foodCat) list = list.filter((b) => b.food_categories?.includes(foodCat))
     if (area) list = list.filter((b) => b.area === area)
     if (openOnly) list = list.filter((b) => b.open)
