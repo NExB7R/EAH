@@ -281,3 +281,44 @@
   .exp-breadcrumb { padding: 8px 12px 0; }
   .exp-breadcrumb__link { font-size: 0.74rem; padding: 6px 12px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Back Button — Right side (RTL)
+   ═══════════════════════════════════════════════════════════════ */
+.exp-back-wrap {
+  display: flex;
+  justify-content: flex-start;
+  /* في RTL: flex-start = right side */
+  padding: 12px 16px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.exp-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px 8px 12px;
+  border-radius: 999px;
+  background: rgba(157, 78, 221, 0.08);
+  border: 1px solid rgba(157, 78, 221, 0.28);
+  color: #C77DFF;
+  font-family: var(--font-cairo, system-ui);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 200ms ease;
+}
+
+.exp-back-btn:hover {
+  background: rgba(157, 78, 221, 0.18);
+  border-color: rgba(157, 78, 221, 0.55);
+  color: #E8C79A;
+  transform: translateX(3px);
+}
+
+@media (max-width: 640px) {
+  .exp-back-wrap { padding: 8px 12px 0; }
+  .exp-back-btn { font-size: 0.74rem; padding: 6px 12px 6px 10px; }
+}

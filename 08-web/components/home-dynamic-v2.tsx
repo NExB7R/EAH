@@ -63,12 +63,12 @@ export default async function HomeDynamicV2() {
   // ═══ Cached data ═══
   const cachedBusinesses = unstable_cache(
     async () => getPublishedBusinesses(100),
-    ['home-businesses-v3'],
+    ['home-businesses-v4'],
     { revalidate: 300, tags: ['businesses'] }
   )
   const cachedAd = unstable_cache(
     async () => getActiveAdForSlot('home_banner'),
-    ['home-ad-v3'],
+    ['home-ad-v4'],
     { revalidate: 120, tags: ['ads'] }
   )
 

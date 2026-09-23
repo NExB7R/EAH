@@ -4,7 +4,7 @@
 
 .hh {
   position: relative;
-  padding: 100px 16px 48px;
+  padding: 140px 16px 60px;
   overflow: hidden;
 }
 
@@ -218,7 +218,7 @@
    ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 640px) {
   .hh {
-    padding: 88px 14px 40px;
+    padding: 120px 16px 50px;
   }
 
   .hh__inner { gap: 12px; }

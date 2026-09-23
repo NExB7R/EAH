@@ -147,3 +147,45 @@
   background: transparent !important;
   box-shadow: none !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   FORCE TRANSPARENT — Header at top
+   ═══════════════════════════════════════════════════════════════ */
+
+/* عند scroll = 0 */
+.floating-capsule[style*="--fc-scroll-progress: 0;"] .floating-capsule__inner,
+.floating-capsule[style*="--fc-scroll-progress: 0.0"] .floating-capsule__inner {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* الـ inner كله شفاف لما is-scrolled مش موجود */
+.floating-capsule:not(.is-scrolled) .floating-capsule__inner {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.floating-capsule:not(.is-scrolled)::after,
+.floating-capsule:not(.is-scrolled) .floating-capsule__inner::after {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+/* الـ buttons نفسها شفافة */
+.floating-capsule:not(.is-scrolled) .icon-btn,
+.floating-capsule:not(.is-scrolled) .neon-icon-btn {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+.floating-capsule:not(.is-scrolled) .icon-btn:hover,
+.floating-capsule:not(.is-scrolled) .neon-icon-btn:hover {
+  background: rgba(157, 78, 221, 0.15) !important;
+  border-color: rgba(157, 78, 221, 0.3) !important;
+}
