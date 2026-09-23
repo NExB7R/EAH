@@ -59,6 +59,7 @@
 ### 2026-09-23
 
 - **08:20** — revert: back to old design (ui-onlook) — v7 becomes preview only
+- **08:45** — feat: 5 categories + misc sub-categories
 <!-- AUTO_END -->
 
 ---
