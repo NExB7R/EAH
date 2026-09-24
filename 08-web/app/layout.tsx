@@ -107,6 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body>
+        <SplashScreen />
         <script
           dangerouslySetInnerHTML={{
             __html: `try{if(localStorage.getItem('eah-welcome-seen-v1')){document.documentElement.classList.add('wg-seen')}}catch(e){}`,
@@ -158,7 +159,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
               <DeferredMounts />
-        <SplashScreen />
         <WebVitals />
       </body>
     </html>
