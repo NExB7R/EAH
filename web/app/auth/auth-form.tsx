@@ -1,8 +1,8 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import Logo from '@/components/logo'
 import {
   signupAction,
   loginAction,
@@ -42,8 +42,7 @@ export default function AuthForm() {
     <div className={styles.page}>
       <div className={styles.card}>
         <div className={styles.header}>
-          <div className={styles.logo}>EAH</div>
-          <div className={styles.tagline}>اللي نفسك فيه ؟</div>
+          <Logo size="md" />
         </div>
 
         <div className={styles.tabs}>
