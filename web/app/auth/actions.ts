@@ -140,12 +140,22 @@ export async function loginAction(formData: FormData): Promise<AuthResult> {
     password: parsed.data.password,
   })
 
-  // 2. لو فشل → جرّب الصيغة القديمة (للأدمن + legacy users)
+  // 2. لو فشل → جرّب الصيغة القديمة v1 (للأدمن)
   if (result.error) {
     const digits = phoneE164.replace('+', '')
-    const legacyEmail = `phone_${digits}@accounts.eah.invalid`
+    const legacyV1Email = `phone_${digits}@accounts.eah.invalid`
     result = await supabase.auth.signInWithPassword({
-      email: legacyEmail,
+      email: legacyV1Email,
+      password: parsed.data.password,
+    })
+  }
+
+  // 3. لو فشل → جرّب الصيغة القديمة v2 (eah.local)
+  if (result.error) {
+    const digits = phoneE164.replace('+', '')
+    const legacyV2Email = `${digits}@eah.local`
+    result = await supabase.auth.signInWithPassword({
+      email: legacyV2Email,
       password: parsed.data.password,
     })
   }
