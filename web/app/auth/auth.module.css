@@ -60,28 +60,23 @@
 .header {
   display: flex;
   justify-content: center;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-5);
+  position: relative;
 }
 
-.subtitle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 0.82rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin-bottom: var(--space-2);
-  line-height: 1.6;
-  letter-spacing: 0.02em;
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.3), transparent);
 }
 
-.subtitleIcon {
-  display: inline-flex;
-  align-items: center;
-  color: var(--purple-neon);
-  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.6));
-}
+
 
 
 /* ─── Tabs ─── */
