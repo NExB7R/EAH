@@ -94,3 +94,30 @@
   width: 100%;
   margin: 8px auto 24px;
 }
+
+/* ═══ VOICE BUTTON — ensure visible ═══ */
+.sbar .vb-wrap,
+.sbar .vb-btn,
+.sbar button[aria-label*="صوت"],
+.sbar button[aria-label*="voice"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  border-radius: 999px !important;
+  background: rgba(168,85,247,0.12) !important;
+  border: 1px solid rgba(168,85,247,0.35) !important;
+  color: #d8b4fe !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.sbar .vb-btn:hover {
+  background: rgba(168,85,247,0.25) !important;
+  color: #fff !important;
+}
+.sbar .vb-btn svg {
+  width: 16px !important;
+  height: 16px !important;
+}

@@ -278,3 +278,13 @@
   animation: none !important;
   will-change: auto !important;
 }
+
+/* ═══ HERO FLOAT — logo appears only at top, fades on scroll ═══ */
+.hh__logo {
+  animation: heroFloatFade 500ms ease both;
+}
+
+@keyframes heroFloatFade {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -9,7 +9,6 @@ import SectionSliderV2 from '@/components/section-slider-v2'
 import FeaturedBento from '@/components/featured-bento'
 import TrendingList from '@/components/trending-list'
 import SnapStrip from '@/components/snap-strip'
-import AboutSplit from '@/components/about-split'
 import SimpleFlipCard from '@/components/simple-flip-card'
 import SeeAllCard from '@/components/see-all-card'
 import VisitorValue from '@/components/visitor-value'
@@ -173,17 +172,7 @@ export default async function HomeDynamicV2() {
     <>
       <HomeHero />
 
-      {ad ? (
-        <AdSlot ad={ad} href={adHref} />
-      ) : (
-        <div className="home-ad-placeholder">
-          <div className="home-ad-placeholder__inner">
-            <span className="home-ad-placeholder__label">مساحة إعلانية</span>
-            <span className="home-ad-placeholder__name">Home Banner</span>
-            <span className="home-ad-placeholder__size">1200 × 200</span>
-          </div>
-        </div>
-      )}
+      {ad && <AdSlot ad={ad} href={adHref} />}
 
       {/* ═══ Unified (Low inventory) ═══ */}
       {hasUnified && (
@@ -222,7 +211,6 @@ export default async function HomeDynamicV2() {
       {/* ═══ ✨ الجديد — 15 عشوائي + Teaser ═══ */}
       <SnapStrip variant="new" businesses={newOnes} totalCount={newAll.length} />
 
-      <AboutSplit />
       <VisitorValue />
     </>
   )

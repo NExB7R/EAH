@@ -289,22 +289,19 @@
   align-items: center;
 }
 .sf__signature-text {
-  font-family: var(--font-signature, 'Dancing Script', cursive);
-  font-size: 1.15rem;
+  font-family: 'Brush Script MT', 'Segoe Script', 'Apple Chancery', cursive;
+  font-size: 1.3rem;
   font-weight: 400;
+  font-style: italic;
   line-height: 1;
-  background: linear-gradient(135deg, #E8C79A 0%, #F5D9A7 50%, #C084FC 100%);
+  letter-spacing: 0.02em;
+  background: linear-gradient(180deg, #F5D9A7 0%, #E8C79A 55%, #C9A56C 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  transition: filter 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 0 3px rgba(232, 199, 154, 0.22));
   cursor: default;
-  letter-spacing: 0.02em;
-}
-.sf__signature:hover .sf__signature-text {
-  filter: drop-shadow(0 0 12px rgba(232, 199, 154, 0.7))
-          drop-shadow(0 0 4px rgba(192, 132, 252, 0.5));
 }
 .sf__version-line {
   margin: 0;

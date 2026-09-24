@@ -4,76 +4,29 @@ import './welcome-gate.css'
 
 const STORAGE_KEY = 'eah-welcome-seen-v1'
 
+function IClose() {
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+}
 function ICompass() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <circle cx="12" cy="12" r="9" />
-      <polygon points="16 8 14 14 8 16 10 10 16 8" />
-    </svg>
-  )
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16 8 14 14 8 16 10 10 16 8"/></svg>
 }
-
 function IChat() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-    </svg>
-  )
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
 }
-
 function IStar() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <polygon points="12 2 15 9 22 9.3 17 14 18.5 21 12 17.3 5.5 21 7 14 2 9.3 9 9" />
-    </svg>
-  )
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15 9 22 9.3 17 14 18.5 21 12 17.3 5.5 21 7 14 2 9.3 9 9"/></svg>
 }
-
-function ISparkles() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8" />
-    </svg>
-  )
-}
-
 function IBolt() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10" />
-    </svg>
-  )
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
 }
-
-function IArrowLeft() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <line x1="19" y1="12" x2="5" y2="12" />
-      <polyline points="12 19 5 12 12 5" />
-    </svg>
-  )
+function IArrow() {
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
 }
 
 const FEATURES = [
-  { icon: <ICompass />, title: 'كل حاجة حواليك في مكان واحد', desc: 'مطاعم • صيدليات • توصيل • ماركت • أنشطة أخرى', accent: '' },
+  { icon: <ICompass />, title: 'اكتشف كل اللي حواليك', desc: 'مطاعم • صيدليات • توصيل • ماركت', accent: '' },
   { icon: <IChat />, title: 'اطلب على واتساب مباشرة', desc: 'بدون وسيط، بدون عمولة، بدون تعقيد', accent: 'teal' },
-  { icon: <IStar />, title: 'مميزين + ترند + عروض', desc: 'تعرف الأماكن الأفضل والترند النهاردة بسرعة', accent: 'gold' },
-  { icon: <ISparkles />, title: 'تجربة عربية أصلية', desc: 'بتتكلم لغتك، من قلب شبين القناطر والقرى حواليها', accent: '' },
-]
-
-const STARS = [
-  { top: '8%',  left: '12%',  gold: false, delay: '0s' },
-  { top: '15%', left: '78%',  gold: true,  delay: '0.5s' },
-  { top: '25%', left: '8%',   gold: false, delay: '1s' },
-  { top: '32%', left: '88%',  gold: false, delay: '1.5s' },
-  { top: '45%', left: '6%',   gold: true,  delay: '2s' },
-  { top: '55%', left: '92%',  gold: false, delay: '0.8s' },
-  { top: '68%', left: '10%',  gold: false, delay: '1.3s' },
-  { top: '75%', left: '85%',  gold: true,  delay: '0.3s' },
-  { top: '85%', left: '18%',  gold: false, delay: '1.8s' },
-  { top: '88%', left: '80%',  gold: false, delay: '0.6s' },
-  { top: '5%',  left: '48%',  gold: true,  delay: '2.2s' },
-  { top: '95%', left: '55%',  gold: false, delay: '1.1s' },
+  { icon: <IStar />, title: 'مميزين + ترند + عروض', desc: 'تعرف الأفضل والترند بسرعة', accent: 'gold' },
 ]
 
 export default function WelcomeGate() {
@@ -83,22 +36,13 @@ export default function WelcomeGate() {
 
   useEffect(() => {
     setMounted(true)
-
-    // لو الـ html عنده wg-seen → المستخدم شافه قبل كده
-    if (document.documentElement.classList.contains('wg-seen')) {
-      return
-    }
-
-    // فحص إضافي (للمتصفحات اللي مكتبتش الـ script)
+    if (document.documentElement.classList.contains('wg-seen')) return
     try {
       if (localStorage.getItem(STORAGE_KEY)) {
         document.documentElement.classList.add('wg-seen')
         return
       }
-    } catch {
-      /* silent */
-    }
-
+    } catch {}
     setShow(true)
   }, [])
 
@@ -106,9 +50,7 @@ export default function WelcomeGate() {
     if (!show) return
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prev
-    }
+    return () => { document.body.style.overflow = prev }
   }, [show])
 
   function dismiss() {
@@ -116,27 +58,15 @@ export default function WelcomeGate() {
     try {
       localStorage.setItem(STORAGE_KEY, '1')
       document.documentElement.classList.add('wg-seen')
-    } catch {
-      /* silent */
-    }
-    setTimeout(() => setShow(false), 500)
+    } catch {}
+    setTimeout(() => setShow(false), 400)
   }
 
-  // لو لسه مش mounted → مش بنعرض حاجة
   if (!mounted || !show) return null
 
   return (
     <div className={`wg ${leaving ? 'is-leaving' : ''}`} role="dialog" aria-label="مرحبا بيك في EAH">
-      <div className="wg__stars" aria-hidden>
-        {STARS.map((s, i) => (
-          <span
-            key={i}
-            className={`wg__star ${s.gold ? 'wg__star--gold' : ''}`}
-            style={{ top: s.top, left: s.left, animationDelay: s.delay }}
-          />
-        ))}
-      </div>
-
+      <button type="button" className="wg__close" onClick={dismiss} aria-label="إغلاق"><IClose /></button>
       <div className="wg__inner">
         <div className="wg__logo">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -144,55 +74,30 @@ export default function WelcomeGate() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/eah-crown.webp" alt="" />
         </div>
-
-        <h1 className="wg__slogan">اللي نفسك فيه ؟</h1>
-
-        <div className="wg__hook">
-          <p className="wg__hook-line">شبيك لبيك</p>
-          <p className="wg__hook-sub">كل حاجة حواليك</p>
-        </div>
-
-        <div className="wg__divider" />
-
+        <p className="wg__hook-line">شبيك لبيك</p>
+        <p className="wg__hook-sub">كل حاجة حواليك</p>
+        <p className="wg__slogan">اللي نفسك فيه ؟</p>
         <div className="wg__pitch">
-          <h2 className="wg__pitch-title">
-            منصة <span>محلية مصرية</span>،<br />
-            مبنية بحب من قلب شبين القناطر
-          </h2>
           <p className="wg__pitch-body">
-            بنوصّل الناس بأماكنهم المفضلة، وبنخلي كل صاحب نشاط صغير يبان.
-            بدون وسيط، بدون عمولة، بدون تعقيد.
+            منصة <strong>محلية مصرية</strong> من قلب شبين القناطر —
+            توصّل الناس بأماكنهم، وتخلي كل صاحب نشاط صغير يبان.
           </p>
         </div>
-
         <div className="wg__features">
           {FEATURES.map((f) => (
             <div key={f.title} className={`wg__feature ${f.accent ? `wg__feature--${f.accent}` : ''}`}>
               <span className="wg__feature-icon">{f.icon}</span>
-              <div className="wg__feature-body">
+              <div>
                 <p className="wg__feature-title">{f.title}</p>
-                <p className="wg__feature-desc">{f.desc}</p>
+                <p className="wg__feature-desc" style={{ margin: '2px 0 0', fontSize: '0.7rem', color: '#A29DB5', fontWeight: 600 }}>{f.desc}</p>
               </div>
             </div>
           ))}
         </div>
-
-        <div className="wg__punch">
-          <p className="wg__punch-q">« شوفت الفكرة دي قبل كده؟ »</p>
-          <p className="wg__punch-a">
-            احنا مختلفين — تجربة محلية أصلية، بتتكلم لغتك، وبتفهم مزاجك.
-          </p>
-        </div>
-
         <button type="button" className="wg__cta" onClick={dismiss}>
-          <IBolt />
-          <span>يلا ابدأ</span>
-          <IArrowLeft />
+          <IBolt /><span>يلا ابدأ</span><IArrow />
         </button>
-
-        <p className="wg__note">
-          صنع بكل <strong>♥</strong> في شبين القناطر — فلسطين في القلب 🇵🇸
-        </p>
+        <p className="wg__note">صنع بكل <strong>♥</strong> في شبين القناطر</p>
       </div>
     </div>
   )
