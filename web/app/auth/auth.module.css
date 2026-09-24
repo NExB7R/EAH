@@ -114,6 +114,7 @@
   position: absolute;
   top: 4px;
   bottom: 4px;
+  inset-inline-start: 4px;
   width: calc(50% - 4px);
   background: linear-gradient(135deg, rgba(157, 78, 221, 0.25), rgba(168, 85, 247, 0.18));
   border: var(--border-thin) solid rgba(168, 85, 247, 0.35);
@@ -128,7 +129,8 @@
 }
 
 .tabIndicatorRight {
-  transform: translateX(calc(100% + 4px));
+  /* RTL: نتحرك للشمال (سلبي) بدل اليمين */
+  transform: translateX(calc(-100% - 8px));
 }
 
 /* ─── Form ─── */
