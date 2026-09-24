@@ -7,6 +7,8 @@ import { getViewStats } from '@/lib/real-stats'
 import HomeHero from '@/components/home-hero'
 import SectionSliderV2 from '@/components/section-slider-v2'
 import FeaturedBento from '@/components/featured-bento'
+import TrendingList from '@/components/trending-list'
+import SnapStrip from '@/components/snap-strip'
 import SimpleFlipCard from '@/components/simple-flip-card'
 import SeeAllCard from '@/components/see-all-card'
 import VisitorValue from '@/components/visitor-value'
@@ -209,69 +211,15 @@ export default async function HomeDynamicV2() {
       )}
 
       {/* ═══ 🔥 الترند — Top 12 + Teaser ═══ */}
-      {hasTrending && (
-        <SectionSliderV2
-          title="الترند النهاردة"
-          subtitle="الناس بتدور عليها دلوقتي"
-          seeAllHref="/trends"
-          variant="trending"
-        >
-          {trendingTop.map((b, i) => (
-            <SimpleFlipCard key={b.slug} business={b} variant="trending" rank={i + 1} />
-          ))}
-          <SeeAllCard
-            href="/trends"
-            label="شوف الترند الكامل"
-            count={diversified.length}
-            variant="trending"
-            ctaText="كل الترند"
-          />
-        </SectionSliderV2>
+      {trendingTop.length > 0 && (
+        <TrendingList businesses={trendingTop} totalCount={diversified.length} />
       )}
 
       {/* ═══ 🎁 العروض — Top 10 + Teaser ═══ */}
-      {hasOffers && (
-        <SectionSliderV2
-          title="عروض حلوة"
-          subtitle="وفّر على طلبك"
-          seeAllHref="/offers"
-          variant="offers"
-        >
-          {offersTop.map((b) => (
-            <SimpleFlipCard key={b.slug} business={b} variant="offers" />
-          ))}
-          <SeeAllCard
-            href="/offers"
-            label="شوف كل العروض"
-            count={offersAll.length}
-            variant="offers"
-            ctaText="كل العروض"
-          />
-        </SectionSliderV2>
-      )}
+      <SnapStrip variant="offers" businesses={offersTop} totalCount={offersAll.length} />
 
       {/* ═══ ✨ الجديد — 15 عشوائي + Teaser ═══ */}
-      {hasNew && (
-        <SectionSliderV2
-          title="جديد — محتاج فرصتنا"
-          subtitle="أخواتنا اللي بيبدأوا — ادعمهم"
-          seeAllHref="/new"
-          variant="new"
-        >
-          {newOnes.map((b) => (
-            <SimpleFlipCard key={b.slug} business={b} variant="new" />
-          ))}
-          {newAll.length > 8 && (
-            <SeeAllCard
-              href="/new"
-              label="شوف كل الجديد"
-              count={newAll.length}
-              variant="new"
-              ctaText="ادعم الجديد"
-            />
-          )}
-        </SectionSliderV2>
-      )}
+      <SnapStrip variant="new" businesses={newOnes} totalCount={newAll.length} />
 
       <VisitorValue />
     </>

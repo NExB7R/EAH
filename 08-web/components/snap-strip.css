@@ -1,0 +1,38 @@
+.fstrip { max-width: 1280px; margin: 24px auto; padding: 0 16px; }
+.fstrip__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.fstrip__title { margin: 0; font-family: var(--font-cairo, system-ui); font-size: 1.15rem; font-weight: 900; }
+.fstrip--offers .fstrip__title { color: #FCD34D; }
+.fstrip--new .fstrip__title { color: #55E7D1; }
+.fstrip__subtitle { margin: 2px 0 0; font-family: var(--font-cairo, system-ui); font-size: 0.72rem; color: #A29DB5; }
+.fstrip__all { display: inline-flex; align-items: center; gap: 4px; padding: 5px 12px; border-radius: 999px; font-family: var(--font-cairo, system-ui); font-size: 0.72rem; font-weight: 900; text-decoration: none; white-space: nowrap; transition: all 200ms ease; }
+.fstrip--offers .fstrip__all { background: rgba(252,211,77,0.08); border: 1px solid rgba(252,211,77,0.35); color: #FCD34D; box-shadow: 0 0 0 1px rgba(252,211,77,0.08), 0 0 14px rgba(252,211,77,0.12); }
+.fstrip--offers .fstrip__all:hover { background: rgba(252,211,77,0.18); border-color: #FCD34D; }
+.fstrip--new .fstrip__all { background: rgba(85,231,209,0.08); border: 1px solid rgba(85,231,209,0.35); color: #55E7D1; box-shadow: 0 0 0 1px rgba(85,231,209,0.08), 0 0 14px rgba(85,231,209,0.12); }
+.fstrip--new .fstrip__all:hover { background: rgba(85,231,209,0.18); border-color: #55E7D1; }
+.fstrip__track { display: flex; gap: 12px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: none; -ms-overflow-style: none; -webkit-overflow-scrolling: touch; }
+.fstrip__track::-webkit-scrollbar { display: none; }
+.fstrip__card { scroll-snap-align: start; flex: 0 0 220px; width: 220px; border-radius: 14px; overflow: hidden; background: #130822; text-decoration: none; color: inherit; transition: transform 200ms ease, box-shadow 200ms ease; }
+.fstrip--offers .fstrip__card { border: 1px solid rgba(252,211,77,0.22); }
+.fstrip--new .fstrip__card { border: 1px solid rgba(85,231,209,0.22); }
+.fstrip--offers .fstrip__card:hover { border-color: rgba(252,211,77,0.65); transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(252,211,77,0.25), 0 0 20px rgba(252,211,77,0.18); }
+.fstrip--new .fstrip__card:hover { border-color: rgba(85,231,209,0.65); transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(85,231,209,0.25), 0 0 20px rgba(85,231,209,0.18); }
+.fstrip__media { position: relative; width: 100%; aspect-ratio: 4/3; background: linear-gradient(135deg,#1A0E2E,#0F061C); overflow: hidden; }
+.fstrip__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fstrip__badge { position: absolute; top: 8px; inset-inline-start: 8px; display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px; border-radius: 999px; font-family: var(--font-cairo, system-ui); font-size: 0.58rem; font-weight: 900; }
+.fstrip--offers .fstrip__badge { background: linear-gradient(135deg,#FCD34D,#F59E0B); color: #1A0F0A; }
+.fstrip--new .fstrip__badge { background: linear-gradient(135deg,#6EE7B7,#10B981); color: #062018; }
+.fstrip__body { padding: 8px 10px 10px; display: flex; flex-direction: column; gap: 3px; }
+.fstrip__name { font-family: var(--font-cairo, system-ui); font-size: 0.8rem; font-weight: 900; color: #F4F2FA; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fstrip__meta { display: flex; align-items: center; gap: 6px; font-family: var(--font-cairo, system-ui); font-size: 0.64rem; color: #A29DB5; }
+.fstrip__rating { font-weight: 800; }
+.fstrip--offers .fstrip__rating { color: #FCD34D; }
+.fstrip--new .fstrip__rating { color: #55E7D1; }
+.fstrip__empty { padding: 32px 20px; text-align: center; color: #A29DB5; font-family: var(--font-cairo, system-ui); font-size: 0.85rem; border-radius: 14px; }
+.fstrip--offers .fstrip__empty { background: rgba(252,211,77,0.04); border: 1px dashed rgba(252,211,77,0.28); }
+.fstrip--new .fstrip__empty { background: rgba(85,231,209,0.04); border: 1px dashed rgba(85,231,209,0.28); }
+@media (max-width: 640px) {
+  .fstrip { margin: 16px auto; padding: 0 12px; }
+  .fstrip__card { flex: 0 0 180px; width: 180px; }
+  .fstrip__name { font-size: 0.74rem; }
+}
+@media (prefers-reduced-motion: reduce) { .fstrip__card { transition: none; } }
