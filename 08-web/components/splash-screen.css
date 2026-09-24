@@ -1,77 +1,51 @@
-/* EAH Splash — CSS-only, hidden after 1.1s */
-.spl {
-  position: fixed;
-  inset: 0;
-  z-index: 2147483647;
-  background: #07020D;
-  background-image:
-    radial-gradient(ellipse at 50% 30%, rgba(168, 85, 247, 0.18), transparent 60%),
-    radial-gradient(ellipse at 50% 100%, rgba(232, 199, 154, 0.06), transparent 55%),
-    linear-gradient(180deg, #07020D 0%, #0A0514 50%, #07020D 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  overflow: hidden;
-  pointer-events: none;
-  animation: splHide 200ms ease 1000ms forwards;
-}
-@keyframes splHide {
-  to { opacity: 0; visibility: hidden; }
-}
-
+/* EAH Splash — inner styles only (position handled inline) */
 .spl__logo {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: splPop 500ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  animation: splPop 500ms cubic-bezier(0.22, 1, 0.36, 1) both !important;
 }
 @keyframes splPop {
   from { opacity: 0; transform: scale(0.9); }
   to   { opacity: 1; transform: scale(1); }
 }
-
 .spl__word {
-  width: clamp(140px, 30vw, 180px);
-  height: auto;
-  display: block;
+  width: clamp(140px, 30vw, 180px) !important;
+  height: auto !important;
+  display: block !important;
   filter:
     drop-shadow(0 0 0.5px rgba(192, 132, 252, 0.9))
-    drop-shadow(0 0 10px rgba(168, 85, 247, 0.4));
+    drop-shadow(0 0 10px rgba(168, 85, 247, 0.4)) !important;
 }
-
 .spl__crown {
-  position: absolute;
-  top: -30%;
-  left: 50%;
-  transform: translateX(-50%) rotate(-10deg);
-  width: clamp(38px, 9vw, 52px);
-  height: auto;
+  position: absolute !important;
+  top: -30% !important;
+  left: 50% !important;
+  transform: translateX(-50%) rotate(-10deg) !important;
+  width: clamp(38px, 9vw, 52px) !important;
+  height: auto !important;
   filter:
     drop-shadow(0 0 0.5px rgba(232, 199, 154, 0.95))
-    drop-shadow(0 0 8px rgba(232, 199, 154, 0.45));
+    drop-shadow(0 0 8px rgba(232, 199, 154, 0.45)) !important;
 }
-
 .spl__slogan {
-  font-family: var(--font-cairo-play, var(--font-cairo, system-ui));
-  font-size: clamp(0.9rem, 2.6vw, 1.1rem);
-  font-weight: 900;
-  letter-spacing: 0.06em;
-  background: linear-gradient(180deg, #F5E4BC 0%, #E8C79A 50%, #C9A56C 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  filter: drop-shadow(0 0 6px rgba(232, 199, 154, 0.3));
-  animation: splFade 500ms ease 200ms both;
+  font-family: var(--font-cairo-play, var(--font-cairo, system-ui)) !important;
+  font-size: clamp(0.9rem, 2.6vw, 1.1rem) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  background: linear-gradient(180deg, #F5E4BC 0%, #E8C79A 50%, #C9A56C 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  filter: drop-shadow(0 0 6px rgba(232, 199, 154, 0.3)) !important;
+  animation: splFade 500ms ease 200ms both !important;
 }
 @keyframes splFade {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
 @media (prefers-reduced-motion: reduce) {
-  .spl__logo, .spl__slogan { animation: none; }
+  .spl__logo, .spl__slogan { animation: none !important; }
 }
