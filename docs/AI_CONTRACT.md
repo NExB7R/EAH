@@ -1,0 +1,305 @@
+# ⛔ EAH — AI_CONTRACT.md
+
+> القواعد الإجبارية لأي AI أو مطور يشتغل على EAH.
+> اقرأ ده قبل MASTER_BRIEF.md.
+
+**آخر تحديث:** 2026-09-24
+**الإصدار:** 1.0
+
+---
+
+## 0. القاعدة الصفرية
+
+قبل أي سطر كود:
+1. اقرأ الملف ده كامل
+2. اقرأ MASTER_BRIEF.md + SACRED.md
+3. قول: "قرأت. جاهز."
+4. استنى التعليمات
+5. ممنوع أي تعديل بدون سؤال صريح
+
+لو مش فاهم حاجة → اسأل. ممنوع تخمّن.
+
+---
+
+## 1. الممنوعات المطلقة
+
+### 1.1 في الكود
+- any بدون سبب موثّق
+- @ts-ignore بدون تعليق
+- console.log في الإنتاج
+- img بدون Cloudinary transforms
+- unstable_cache جوه component
+- content-visibility على العناصر الأساسية
+- createClient في public reads
+- emojis في UI (SVG فقط)
+- تعديل Schema/SQL بدون سؤال
+- build محلي (SIGILL)
+
+### 1.2 في التصميم
+- animations مستمرة (infinite)
+- backdrop-filter على الكروت
+- will-change دائم
+- ألوان خارج الهوية
+- خطوط غير Cairo + Tajawal
+- light mode
+
+### 1.3 في Git
+- secrets في commit
+- commit بدون typecheck
+- push بدون اختبار
+- force push بدون backup
+- commit كبير (يخلط ميزات)
+
+### 1.4 في Deploy
+- deploy بدون preview
+- deploy بدون موافقة صريحة
+- deploy بدون tag
+- deploy محلي
+
+### 1.5 في Schema
+- تعديل migration موجودة
+- RLS بدون اختبار
+- queries بدون indexes
+- تعديل production DB مباشرة
+
+---
+
+## 2. المسموحات
+
+### 2.1 من غير سؤال
+- إصلاح typo في النص
+- إصلاح bug بسيط
+- تحديث docs
+- تحديث CHANGELOG
+- إضافة تعليقات
+
+### 2.2 بعد سؤال صريح
+- إضافة feature جديدة
+- تعديل UI/UX
+- تعديل Schema
+- تغيير تصميم
+- تعديل ملفات مقدسة
+- تعديل dependencies
+
+---
+
+## 3. سير العمل
+
+### 3.1 قبل التعديل
+قول بالحرف:
+> هعدل [اسم الملف]. السبب: [السبب]. موافق؟
+
+استنى:
+> موافق
+
+بعدها ابدأ.
+
+### 3.2 أثناء التعديل
+- عدّل حاجة واحدة بس
+- متفتحش ملفات تانية بدون داعي
+- سجّل كل خطوة
+
+### 3.3 بعد التعديل
+- typecheck:
+  cd ~/EAH-V2/08-web && npx tsc --noEmit
+- لو نظيف → commit
+- لو فيه أخطاء → أصلح، وبعدين commit
+- قول: خلص. اختبر.
+
+### 3.4 بعد الاختبار
+- لو تمام → نكمل
+- لو فيه مشكلة → revert، وأصلح
+
+---
+
+## 4. عند الخطأ
+
+### 4.1 لو لقيت خطأ في الكود
+1. وقف فوراً — لا تكمل
+2. بلّغ: فيه مشكلة في X
+3. استنى تعليمات
+4. بعد الموافقة → أصلح
+5. typecheck + commit منفصل
+
+### 4.2 لو كسرت حاجة
+1. git revert فوراً
+2. push
+3. بلّغ
+4. استنى
+
+### 4.3 لو حاجة غامضة
+- متخمّنش
+- اسأل
+- استنى الرد
+
+---
+
+## 5. الحالات الطارئة
+
+### 5.1 الموقع وقع
+1. ما تعدّلش أي حاجة
+2. افحص Vercel logs
+3. ابلغ بالتشخيص
+4. استنى تعليمات
+
+### 5.2 Production data اتمسحت
+1. ما تعدّلش أي حاجة
+2. افحص Supabase backups
+3. ابلغ
+4. استنى تعليمات
+
+### 5.3 Secret اتكشف
+1. غيّره فوراً (Supabase/Cloudinary/Vercel)
+2. امسح من Git history
+3. ابلغ
+4. راجع كل الـ secrets
+
+---
+
+## 6. الملفات المقدسة (SACRED)
+
+ممنوع تعديل بدون تصريح خاص:
+
+- components/home-hero.tsx + .css
+- components/home-dynamic-v2.tsx
+- components/section-slider-v2.tsx + .css
+- components/simple-flip-card.tsx + .css
+- components/floating-capsule.tsx + .css
+- lib/data.ts
+- lib/ranking.ts
+- lib/supabase-server.ts
+- app/layout.tsx
+- app/page.tsx
+- app/globals.css
+- proxy.ts
+- next.config.ts
+
+قبل أي تعديل عليها:
+> هعدل [الملف]. السبب: [السبب]. موافق؟
+
+---
+
+## 7. الملفات الممنوعة تماماً
+
+ممنوع لمس أي من دول تحت أي ظرف:
+
+- .env.local (secrets)
+- .env.production (secrets)
+- .vercel/ (project link)
+- package-lock.json (إلا بعد npm install)
+- tsconfig.json (إلا بعد موافقة صريحة)
+- schema SQL في production
+
+---
+
+## 8. أنماط الكود
+
+### 8.1 TypeScript
+- strict mode دايماً
+- مفيش any بدون تعليق
+- مفيش as unknown as X بدون سبب
+- استخدم discriminated unions
+
+### 8.2 React
+- Server Components أولاً
+- use client فقط عند الحاجة
+- useMemo/useCallback عند الحاجة فقط
+- keys دايماً في map
+
+### 8.3 CSS
+- CSS Modules
+- مفيش inline styles (إلا dynamic)
+- مفيش !important بدون سبب
+- استخدم CSS variables
+
+### 8.4 Naming
+- Components: PascalCase
+- Files: kebab-case
+- Variables: camelCase
+- Constants: UPPER_SNAKE
+- Arabic في النص، إنجليزي في الكود
+
+---
+
+## 9. Style Guide
+
+### 9.1 Comments
+- عربي بسيط
+- واضح ومختصر
+- يشرح WHY مش WHAT
+- مفيش تعليق يقول نفس الكود
+
+### 9.2 Function Names
+- describeAction (fetchBusinesses)
+- handleEvent (handleClick)
+- is/has/can (isOpen, hasOwner)
+- get/set للـ props
+
+### 9.3 Component Structure
+1. imports
+2. types
+3. helpers
+4. component
+5. export
+
+---
+
+## 10. Communication
+
+### 10.1 لما تسأل
+- سؤال واحد في المرة
+- واضح ومحدد
+- مع سياق
+- بدون تخمين
+
+### 10.2 لما ترد
+- مختصر ومباشر
+- بالعامية المصرية
+- بدون إيموجي كتير
+- مع أمثلة لو محتاج
+
+### 10.3 لما تعمل commit
+- رسالة واضحة
+- نوع: feat / fix / docs / perf / chore
+- نطاق: (home) (explore) (auth) ...
+- وصف قصير
+
+مثال:
+> feat(home): add bento grid for featured
+> fix(explore): correct misc filter
+> perf(layer5): kill 60+ infinite animations
+
+---
+
+## 11. توقيعك
+
+**كل AI يشتغل على EAH يلتزم بـ:**
+
+- احترام الملفات المقدسة
+- عدم التخمين
+- السؤال قبل التعديل
+- Backup قبل أي تعديل كبير
+- typecheck قبل أي commit
+- اختبار قبل أي deploy
+- الحفاظ على الهوية (نيون بنفسجي + ذهبي)
+- الحفاظ على السرعة (Lighthouse 95+)
+
+---
+
+## 12. الخلاصة
+
+**القاعدة الذهبية:**
+> لو شاكك → اسأل.
+> لو مش متأكد → اسأل.
+> لو فيه خطر → اسأل.
+
+**التزامك بالقواعد دي = مشروع نظيف.**
+**تجاهلك ليها = مشروع ملخبط.**
+
+**الهدف:** منصة نظيفة تخدم الناس لسنين.
+
+---
+
+**آخر تحديث:** 2026-09-24
+**الإصدار:** 1.0
+**المالك:** NourEldin B7R — فلسطين في القلب
