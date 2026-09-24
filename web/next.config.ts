@@ -14,7 +14,7 @@ const csp = [
   "default-src 'self'",
   isDev
     ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'"
-    : "script-src 'self'",
+    : "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
   `img-src 'self' data: blob: https://${CLOUDINARY_HOST} https://${SUPABASE_HOST}`,
   `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://api.cloudinary.com`,
