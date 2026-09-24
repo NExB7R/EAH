@@ -58,7 +58,7 @@ const MERCHANT_HOOKS = [
   },
   {
     title: 'اظهر في المميزين',
-    desc: 'وصول أكتر لعملاء جدد حوالين نشاطك — بـ 200ج/شهر',
+    desc: 'وصول أكتر لعملاء جدد حوالين نشاطك، من غير ما تدفع',
   },
 ]
 
@@ -98,8 +98,10 @@ export default function AuthForm() {
           <Logo size="md" />
         </div>
 
-        <div className={styles.tagline}>
-          منصة اكتشاف محلية مصرية — من قلب شبين القناطر
+        <div className={styles.subtitle}>
+          {tab === 'login'
+            ? 'رقم + كلمة سر، وخلاص'
+            : '3 حقول، ثانية واحدة، وتبدأ'}
         </div>
 
         <div className={styles.tabs}>
@@ -114,14 +116,14 @@ export default function AuthForm() {
             className={`${styles.tab} ${tab === 'login' ? styles.tabActive : ''}`}
             onClick={() => switchTab('login')}
           >
-            دخول
+            دخول سريع
           </button>
           <button
             type="button"
             className={`${styles.tab} ${tab === 'signup' ? styles.tabActive : ''}`}
             onClick={() => switchTab('signup')}
           >
-            حساب جديد
+            تسجيل سريع
           </button>
         </div>
 

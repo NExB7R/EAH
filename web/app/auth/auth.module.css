@@ -63,13 +63,14 @@
   margin-bottom: var(--space-6);
 }
 
-.tagline {
+.subtitle {
   text-align: center;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 700;
   color: var(--text-tertiary);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-5);
   line-height: 1.6;
+  letter-spacing: 0.01em;
 }
 
 /* ─── Tabs ─── */
