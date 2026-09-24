@@ -1,0 +1,606 @@
+-- =============================================================
+-- EAH - SCHEMA.sql
+-- =============================================================
+-- 
+-- ⚠️ IMPORTANT: هذا الملف مرجعي فقط (documentation)
+-- 
+-- الـ Database الفعلي موجود في Supabase project:
+--   npmpiivmdksdirrumbmt (Frankfurt, eu-central-1)
+--
+-- ممنوع تشغيل هذا الملف ضد Production مباشرة
+-- لو محتاج تغيير في DB:
+--   1. اكتب migration جديدة في Supabase SQL Editor
+--   2. اختبرها على staging أولاً
+--   3. بعدها على production
+--
+-- =============================================================
+
+-- =============================================================
+-- 1. EXTENSIONS
+-- =============================================================
+-- uuid-ossp      : UUID generation
+-- pgcrypto       : hashing, encryption
+-- postgis        : geo queries (near me)
+
+-- =============================================================
+-- 2. ENUMS
+-- =============================================================
+
+-- app_role
+-- customer | merchant | admin | super_admin
+
+-- business_type
+-- restaurant | pharmacy | supermarket | delivery_office | misc
+
+-- notification_type
+-- welcome | review | reply | points | order | system | offer
+
+-- order_status
+-- pending | confirmed | preparing | on_way | delivered | cancelled
+
+-- subscription_status
+-- pending | trial | active | expired | cancelled
+
+-- ad_status
+-- active | paused | expired | scheduled | rejected
+
+-- =============================================================
+-- 3. CORE TABLES
+-- =============================================================
+
+-- ------------------------------------------------------------
+-- profiles (user data, linked to auth.users)
+-- ------------------------------------------------------------
+-- id              uuid PK = auth.users.id
+-- display_name    text NOT NULL
+-- phone           text
+-- phone_e164      text
+-- gender          text (male | female | null)
+-- bio             text
+-- avatar_key      text (av1..av12)
+-- avatar_url      text (cloudinary)
+-- trust_score     int DEFAULT 50
+-- trust_tier      text DEFAULT 'trusted'
+-- streak_count    int DEFAULT 0
+-- verified_at     timestamptz
+-- banned_until    timestamptz
+-- interests       text[] (personalization tags)
+-- onboarding_done boolean DEFAULT false
+-- referral_code   text UNIQUE
+-- referred_by     uuid (FK profiles)
+-- created_at      timestamptz DEFAULT now()
+-- updated_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- user_roles
+-- ------------------------------------------------------------
+-- user_id         uuid FK profiles
+-- role            app_role DEFAULT 'customer'
+-- PK (user_id, role)
+
+-- ------------------------------------------------------------
+-- businesses
+-- ------------------------------------------------------------
+-- id                    uuid PK
+-- slug                  text UNIQUE
+-- name                  text NOT NULL
+-- business_type         business_type NOT NULL
+-- description           text
+-- hook                  text
+-- area                  text
+-- city                  text DEFAULT 'شبين القناطر'
+-- address_text          text
+-- latitude              numeric
+-- longitude             numeric
+-- is_open               boolean DEFAULT true
+-- is_featured           boolean DEFAULT false
+-- is_published          boolean DEFAULT false
+-- owner_profile_id      uuid FK profiles
+-- accepts_whatsapp_orders boolean DEFAULT false
+-- working_hours         jsonb
+-- cover_image_url       text
+-- trust_score           int DEFAULT 50
+-- trust_tier            text DEFAULT 'trusted'
+-- is_new_project        boolean DEFAULT false
+-- is_opportunity        boolean DEFAULT false
+-- featured_order        int DEFAULT 0
+-- featured_until        timestamptz
+-- featured_pin          boolean DEFAULT false
+-- new_until             timestamptz
+-- created_at            timestamptz DEFAULT now()
+-- updated_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_media (images: logo, cover, gallery, menu)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- media_type      text (logo | cover | gallery | menu)
+-- storage_path    text
+-- sort_order      int DEFAULT 0
+-- is_published    boolean DEFAULT true
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_contact_methods
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- method_type     text (phone | whatsapp | facebook | instagram | website | email)
+-- value           text
+-- is_primary      boolean DEFAULT false
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_food_categories
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- category_key    text (pizza | grill | koshary | coffee ...)
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_branches
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- name            text
+-- area            text
+-- address_text    text
+-- latitude        numeric
+-- longitude       numeric
+-- phone           text
+-- whatsapp        text
+-- is_primary      boolean DEFAULT false
+-- is_active       boolean DEFAULT true
+-- sort_order      int DEFAULT 0
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_reviews
+-- ------------------------------------------------------------
+-- id                    uuid PK
+-- business_id           uuid FK businesses
+-- user_id               uuid FK profiles
+-- taste                 smallint (1-5)
+-- value_for_money       smallint (1-5)
+-- speed                 smallint (1-5)
+-- experience            smallint (1-5)
+-- comment               text
+-- status                text (approved | pending | rejected)
+-- source                text (organic | post_order)
+-- order_id              uuid FK order_requests
+-- flagged_reason        text
+-- merchant_reply        text
+-- merchant_reply_at     timestamptz
+-- merchant_reply_by     uuid FK profiles
+-- created_at            timestamptz DEFAULT now()
+-- updated_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- offers
+-- ------------------------------------------------------------
+-- id                    uuid PK
+-- business_id           uuid FK businesses
+-- title                 text
+-- description           text
+-- teaser_image_path     text
+-- teaser_image_url      text
+-- image_url             text
+-- price                 numeric
+-- starts_at             timestamptz
+-- ends_at               timestamptz
+-- is_published          boolean DEFAULT false
+-- is_active             boolean DEFAULT true
+-- created_at            timestamptz DEFAULT now()
+-- updated_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- order_requests
+-- ------------------------------------------------------------
+-- id                    uuid PK
+-- business_id           uuid FK businesses
+-- customer_profile_id   uuid FK profiles
+-- order_code            text UNIQUE
+-- message               text (locked, non-editable)
+-- items                 jsonb
+-- customer_name         text
+-- customer_phone        text
+-- address               text
+-- notes                 text
+-- images                text[]
+-- voice_url             text
+-- status                order_status DEFAULT 'pending'
+-- confirmed_at          timestamptz
+-- rejected_at           timestamptz
+-- reject_reason         text
+-- expires_at            timestamptz (10 min default)
+-- created_at            timestamptz DEFAULT now()
+-- updated_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- order_status_history
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- order_id        uuid FK order_requests
+-- status          order_status
+-- actor_id        uuid FK profiles
+-- notes           text
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- notifications
+-- ------------------------------------------------------------
+-- id                    uuid PK
+-- user_id               uuid FK profiles
+-- notification_type     notification_type
+-- title                 text
+-- body                  text
+-- deep_link             text
+-- metadata              jsonb
+-- read_at               timestamptz
+-- created_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- notification_preferences
+-- ------------------------------------------------------------
+-- user_id               uuid PK FK profiles
+-- quiet_hours_start     time
+-- quiet_hours_end       time
+-- push_enabled          boolean DEFAULT true
+-- email_enabled         boolean DEFAULT false
+-- per_type              jsonb (per notification type toggle)
+-- updated_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- favorites
+-- ------------------------------------------------------------
+-- user_id         uuid FK profiles
+-- business_id     uuid FK businesses
+-- created_at      timestamptz DEFAULT now()
+-- PK (user_id, business_id)
+
+-- ------------------------------------------------------------
+-- follows
+-- ------------------------------------------------------------
+-- user_id         uuid FK profiles
+-- business_id     uuid FK businesses
+-- created_at      timestamptz DEFAULT now()
+-- PK (user_id, business_id)
+
+-- ------------------------------------------------------------
+-- points_log
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- user_id         uuid FK profiles
+-- delta           int
+-- reason          text (daily_login, review, order, invite...)
+-- balance_after   int
+-- metadata        jsonb
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- user_loyalty (current tier, streak)
+-- ------------------------------------------------------------
+-- user_id             uuid PK FK profiles
+-- total_points        int DEFAULT 0
+-- current_tier        text DEFAULT 'bronze'
+-- tier_since          timestamptz
+-- last_activity_at    timestamptz
+-- streak_days         int DEFAULT 0
+-- updated_at          timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- redemptions (rewards redemption)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- user_id         uuid FK profiles
+-- points_used     int
+-- reward_type     text (offer, coupon, delivery)
+-- reward_id       uuid
+-- status          text (pending, approved, used, expired)
+-- expires_at      timestamptz
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- push_subscriptions
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- user_id         uuid FK profiles
+-- endpoint        text UNIQUE
+-- p256dh          text
+-- auth            text
+-- user_agent      text
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_subscriptions
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- plan_id         uuid FK subscription_plans
+-- status          subscription_status DEFAULT 'pending'
+-- is_trial        boolean DEFAULT false
+-- starts_at       timestamptz
+-- expires_at      timestamptz
+-- rejected_reason text
+-- notes           text
+-- created_at      timestamptz DEFAULT now()
+-- updated_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- subscription_plans
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- code            text UNIQUE
+-- name            text
+-- price_monthly   numeric
+-- price_yearly    numeric
+-- features        jsonb
+-- display_order   int
+-- is_active       boolean DEFAULT true
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- subscription_events (audit trail)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- subscription_id uuid FK business_subscriptions
+-- event_type      text
+-- actor_id        uuid FK profiles
+-- metadata        jsonb
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- ad_slots
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- code            text UNIQUE
+-- name            text
+-- dimensions      text
+-- price_weekly    numeric
+-- is_active       boolean DEFAULT true
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- ads
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- slot_id         uuid FK ad_slots
+-- business_id     uuid FK businesses
+-- title           text
+-- image_url       text
+-- link_type       text (external, internal, business)
+-- link_url        text
+-- target_business_id uuid FK businesses
+-- status          ad_status DEFAULT 'scheduled'
+-- starts_at       timestamptz
+-- ends_at         timestamptz
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- ad_stats_daily
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- ad_id           uuid FK ads
+-- date            date
+-- impressions     int DEFAULT 0
+-- clicks          int DEFAULT 0
+-- PK (ad_id, date)
+
+-- ------------------------------------------------------------
+-- page_view_events (analytics)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- visitor_id      uuid (hashed)
+-- page_path       text
+-- referrer        text
+-- user_agent      text
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- visitor_sessions (live visitors)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- visitor_id      uuid
+-- last_heartbeat  timestamptz
+-- page_path       text
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- rate_limits
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- identifier      text (IP or user_id)
+-- action          text
+-- count           int DEFAULT 1
+-- window_start    timestamptz
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- audit_logs
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- actor_id        uuid FK profiles
+-- action          text
+-- entity_type     text
+-- entity_id       uuid
+-- metadata        jsonb
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- pending_changes (merchant edits awaiting approval)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- submitted_by    uuid FK profiles
+-- change_type     text
+-- payload         jsonb
+-- status          text (pending, approved, rejected)
+-- reviewed_by     uuid FK profiles
+-- reviewed_at     timestamptz
+-- reject_reason   text
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- reports (user reports)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- reporter_id     uuid FK profiles
+-- entity_type     text (business, review, user)
+-- entity_id       uuid
+-- reason          text
+-- status          text (pending, reviewed, resolved)
+-- reviewed_by     uuid FK profiles
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- customer_locations
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- user_id         uuid FK profiles
+-- label           text (home, work)
+-- address         text
+-- latitude        numeric
+-- longitude       numeric
+-- is_default      boolean DEFAULT false
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- site_settings (key-value config)
+-- ------------------------------------------------------------
+-- key             text PK
+-- value           jsonb
+-- updated_at      timestamptz DEFAULT now()
+
+-- =============================================================
+-- 4. INDEXES (المهمة)
+-- =============================================================
+-- businesses(slug) UNIQUE
+-- businesses(is_published, is_featured)
+-- businesses(business_type, is_published)
+-- businesses(owner_profile_id)
+-- business_media(business_id, media_type)
+-- business_reviews(business_id, status)
+-- business_reviews(user_id)
+-- offers(business_id, is_published)
+-- order_requests(business_id, status)
+-- order_requests(customer_profile_id)
+-- notifications(user_id, read_at)
+-- points_log(user_id, created_at DESC)
+-- page_view_events(business_id, created_at DESC)
+-- page_view_events(visitor_id)
+
+-- =============================================================
+-- 5. FUNCTIONS (مرجع مختصر - 95 function في الـ DB)
+-- =============================================================
+-- 
+-- CORE:
+--   handle_new_user           : trigger عند تسجيل مستخدم
+--   is_open_now(business)     : يحسب هل مفتوح دلوقتي
+--   search_businesses()       : البحث العربي
+--   reveal_contact()          : كشف رقم (rate-limited)
+--
+-- POINTS:
+--   award_daily_login         : +5 نقاط يومياً
+--   award_review_points       : +20 نقطة عند تقييم
+--   get_user_points           : رصيد المستخدم
+--   get_loyalty_tier          : المستوى الحالي
+--   redeem_reward             : استبدال نقاط
+--
+-- ORDERS:
+--   confirm_order             : تأكيد من التاجر
+--   assign_order_code_v2      : trigger لتوليد order_code
+--   lock_order_message        : trigger لمنع تعديل الرسالة
+--   get_next_order_seq        : رقم تسلسلي
+--
+-- ANALYTICS:
+--   record_page_view          : تسجيل مشاهدة
+--   log_unique_visit          : زيارة فريدة
+--   get_business_view_stats   : إحصائيات نشاط
+--   check_rate_limit          : فحص rate limit
+--   heartbeat_page_session    : نبض الزائر (live)
+--
+-- ADMIN:
+--   admin_search_user         : بحث عن مستخدم
+--   admin_analytics_summary   : ملخص التحليلات
+--   admin_adjust_points       : تعديل نقاط (بحذر)
+--   apply_trust_decay         : انخفاض الثقة للخاملين
+--
+-- SUBSCRIPTIONS:
+--   get_trial_status          : حالة التجربة
+--   expire_old_subscriptions  : cron للانتهاء
+--   generate_monthly_report   : تقرير شهري
+--
+-- REVIEWS:
+--   auto_flag_review          : trigger للكشف عن محتوى مسيء
+--   reply_to_review           : رد التاجر
+--
+-- TRUST:
+--   award_trust_points        : نقاط ثقة
+--   check_verification_eligibility : فحص أهليّة التوثيق
+--
+-- كل function لها signature خاص. راجع Supabase Dashboard
+-- في Database → Functions
+
+-- =============================================================
+-- 6. RLS POLICIES (ملخص)
+-- =============================================================
+-- 
+-- profiles       : SELECT public, UPDATE self, INSERT via trigger
+-- user_roles     : SELECT public, INSERT/UPDATE admin only
+-- businesses     : SELECT is_published=true, UPDATE owner OR admin
+-- business_media : SELECT public, ALL admin (via is_business_owner)
+-- business_reviews: SELECT approved OR self, INSERT self, UPDATE self
+-- favorites      : ALL self only
+-- follows        : ALL self only
+-- notifications  : SELECT self only
+-- order_requests : SELECT customer OR business owner, INSERT customer
+-- points_log     : SELECT self, INSERT service_role only
+-- page_view_events: INSERT public, SELECT admin
+-- rate_limits    : ALL service_role only
+-- audit_logs     : SELECT admin, INSERT service_role
+--
+-- private.is_admin() - SECURITY DEFINER دالة
+-- بتشيك على user_roles.role = 'super_admin'
+
+-- =============================================================
+-- 7. STORAGE BUCKETS
+-- =============================================================
+-- 
+-- business-media  : public read, owner write
+--   paths: {business_id}/{logo|cover|gallery|menu}/{filename}
+--
+-- avatars         : public read, self write
+--   paths: {user_id}/{filename}
+--
+-- order-images    : private, self + merchant read
+--   paths: {order_id}/{filename}
+--
+-- order-voice     : private, self + merchant read
+--   paths: {order_id}/{filename}
+
+-- =============================================================
+-- 8. IMPORTANT NOTES
+-- =============================================================
+--
+-- 1. الملف ده مرجعي فقط — مش تنفيذي
+-- 2. الـ DB الفعلي في Supabase (npmpiivmdksdirrumbmt)
+-- 3. أي تعديل جديد → migration جديدة في Supabase SQL Editor
+-- 4. RLS شغّال 100% على كل الجداول
+-- 5. Service Role Key ممنوع على Client
+-- 6. أي عملية إدارية → audit_logs
+--
+-- للتعديلات:
+--   1. اكتب SQL في Supabase SQL Editor
+--   2. اختبره على بيانات حقيقية
+--   3. Commit كـ migration في `docs/migrations/`
+--
+-- =============================================================
+-- END OF SCHEMA REFERENCE
+-- =============================================================
+
+-- Last updated: 2026-09-24
+-- Owner: NourEldin B7R
+-- Supabase project: npmpiivmdksdirrumbmt (Frankfurt, eu-central-1)
