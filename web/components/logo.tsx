@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { LocationIcon, AlertIcon } from './icons'
 import styles from './logo.module.css'
 
 type Size = 'sm' | 'md' | 'lg' | 'xl'
@@ -54,13 +53,8 @@ export default function Logo({
 
       {variant === 'full' && (
         <span className={styles.slogan} aria-hidden>
-          <span className={styles.sloganIcon}>
-            <LocationIcon size={12} />
-          </span>
-          <span>دولة شبين القناطر تتحدث</span>
-          <span className={styles.sloganIconEnd}>
-            <AlertIcon size={12} />
-          </span>
+          <span>اللى نفسك فيه</span>
+          <span className={styles.punct}>؟</span>
         </span>
       )}
     </>

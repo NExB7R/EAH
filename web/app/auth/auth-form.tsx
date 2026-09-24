@@ -3,6 +3,7 @@
 import { useActionState, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Logo from '@/components/logo'
+import { LocationIcon } from '@/components/icons'
 import {
   EyeIcon,
   EyeOffIcon,
@@ -99,6 +100,12 @@ export default function AuthForm() {
         </div>
 
         <div className={styles.subtitle}>
+          <span className={styles.subtitleIcon}>
+            <LocationIcon size={14} />
+          </span>
+          <span>دولة شبين القناطر تتحدث</span>
+        </div>
+        <div className={styles.subtitleHint}>
           {tab === 'login'
             ? 'رقم + كلمة سر، وخلاص'
             : '3 حقول، ثانية واحدة، وتبدأ'}
