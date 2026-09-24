@@ -1,0 +1,168 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Logo Component Styles
+   ═══════════════════════════════════════════════════════════ */
+
+.logo {
+  --logo-w: 260px;
+  --crown-w: 36.5%;
+  --slogan-fs: 0.84rem;
+  --crown-base-top: -22%;
+  --crown-hover-top: -28%;
+  --crown-base-left: 22%;
+  --slogan-base-bottom: -12%;
+
+  position: relative;
+  display: inline-block;
+  width: var(--logo-w);
+  max-width: 100%;
+  aspect-ratio: 546 / 231;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  color: inherit;
+  font-family: var(--font-body);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Sizes ─── */
+.sm { --logo-w: 160px; --slogan-fs: 0.55rem; }
+.md { --logo-w: 260px; --slogan-fs: 0.85rem; }
+.lg { --logo-w: 380px; --slogan-fs: 1.2rem; }
+.xl { --logo-w: 520px; --slogan-fs: 1.6rem; }
+
+/* ─── Glow ─── */
+.glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 55% 45% at 50% 55%,
+    rgba(168, 85, 247, 0.35) 0%,
+    rgba(157, 78, 221, 0.15) 30%,
+    transparent 65%
+  );
+  filter: blur(20px);
+  border-radius: 50%;
+}
+
+/* ─── Word ─── */
+.word {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter:
+    drop-shadow(0 0 4px rgba(168, 85, 247, 0.35))
+    drop-shadow(0 0 10px rgba(157, 78, 221, 0.18));
+}
+
+/* ─── Crown ─── */
+.crown {
+  position: absolute;
+  left: var(--crown-base-left);
+  top: var(--crown-base-top);
+  width: var(--crown-w);
+  height: auto;
+  transform: translate(-50%, 0) rotate(-14deg);
+  transform-origin: 50% 100%;
+  transition:
+    left var(--motion-slow) var(--ease-out),
+    top var(--motion-slow) var(--ease-out),
+    transform var(--motion-slow) var(--ease-out);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ─── Crown variant ─── */
+.crownOnly {
+  --logo-w: 120px;
+  aspect-ratio: 489 / 264;
+  cursor: default;
+}
+.crownOnly .crown {
+  position: relative;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  width: 100%;
+}
+
+/* ─── Slogan ─── */
+.slogan {
+  position: absolute;
+  left: 50%;
+  bottom: var(--slogan-base-bottom);
+  transform: translate(calc(-50% - 30px), 28px) rotate(-9deg) scale(0.9);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  font-weight: 900;
+  font-size: var(--slogan-fs);
+  letter-spacing: 0.01em;
+  color: var(--gold-primary);
+  text-shadow:
+    0 0 8px rgba(232, 199, 154, 0.45),
+    0 0 18px rgba(168, 85, 247, 0.22);
+  transform-origin: 50% 100%;
+  transition:
+    opacity var(--motion-slow) var(--ease-out) 60ms,
+    transform var(--motion-slow) var(--ease-out) 60ms;
+  z-index: 3;
+}
+
+.punct {
+  display: inline-block;
+  color: var(--purple-neon);
+  font-weight: 900;
+  text-shadow:
+    0 0 8px rgba(168, 85, 247, 0.85),
+    0 0 18px rgba(168, 85, 247, 0.5);
+  transform: translateY(-0.04em);
+}
+
+/* ─── Hover (desktop) ─── */
+@media (hover: hover) and (pointer: fine) {
+  .logo:hover .crown {
+    left: 50%;
+    top: var(--crown-hover-top);
+    transform: translate(-50%, 0) rotate(0deg);
+  }
+  .logo:hover .slogan {
+    opacity: 1;
+    transform: translate(calc(-50% - 25px), -6px) rotate(-3deg) scale(1.05);
+  }
+}
+
+/* ─── Touch devices ─── */
+@media (hover: none) {
+  .slogan {
+    opacity: 0.8;
+    transform: translate(calc(-50% - 20px), -4px) rotate(-3deg) scale(1);
+  }
+  .logo:active .crown {
+    left: 50%;
+    top: var(--crown-hover-top);
+    transform: translate(-50%, 0) rotate(0deg);
+  }
+  .logo:active .slogan {
+    opacity: 1;
+    transform: translate(calc(-50% - 25px), -6px) rotate(-3deg) scale(1.05);
+  }
+}
+
+/* ─── Small screens ─── */
+@media (max-width: 640px) {
+  .xl { --logo-w: 320px; --slogan-fs: 1rem; }
+  .lg { --logo-w: 280px; --slogan-fs: 0.9rem; }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .crown,
+  .slogan {
+    transition: none;
+  }
+}
