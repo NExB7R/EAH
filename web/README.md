@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EAH — Web App
 
-## Getting Started
+> Next.js 16 + React 19 + TypeScript.
+> جزء من مشروع EAH.
 
-First, run the development server:
+## المتطلبات
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js v22+
+- npm v10+
+- Supabase account
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## التشغيل
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. npm install
+2. cp .env.example .env.local
+3. املأ القيم في .env.local
+4. npm run dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+افتح http://localhost:3000
 
-## Learn More
+## الأوامر
 
-To learn more about Next.js, take a look at the following resources:
+- npm run dev — dev server
+- npm run build — production (SIGILL محلي)
+- npm run start — production
+- npm run lint — ESLint
+- npx tsc --noEmit — typecheck
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## البنية
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- app/ — App Router
+- components/ — مكونات
+- lib/ — supabase + data + ranking
+- public/ — assets
+- proxy.ts — session refresh
 
-## Deploy on Vercel
+## الهوية
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- خلفية: #07020D
+- بنفسجي: #9D4EDD / #A855F7 / #C77DFF
+- ذهبي: #E8C79A / #F5D9A7
+- خطوط: Cairo Variable + Tajawal Variable
+- ستايل: نيون ناعم، dark-only
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## القواعد
+
+1. typecheck قبل كل commit
+2. commits صغيرة
+3. build محلي ممنوع (SIGILL)
+4. استخدم WmImage لكل صورة
+
+## للمزيد
+
+- ../docs/MASTER_BRIEF.md
+- ../docs/AI_CONTRACT.md
+- ../docs/AI_HANDOFF.md
+- ../docs/PROGRESS.md
