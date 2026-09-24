@@ -95,10 +95,13 @@
   position: absolute;
   left: 50%;
   bottom: var(--slogan-base-bottom);
-  transform: translate(calc(-50% - 30px), 28px) rotate(-9deg) scale(0.9);
-  opacity: 0;
+  transform: translate(-50%, 0);
+  opacity: 0.85;
   pointer-events: none;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-weight: 900;
   font-size: var(--slogan-fs);
   letter-spacing: 0.01em;
@@ -107,21 +110,24 @@
     0 0 8px rgba(232, 199, 154, 0.45),
     0 0 18px rgba(168, 85, 247, 0.22);
   transform-origin: 50% 100%;
-  transition:
-    opacity var(--motion-slow) var(--ease-out) 60ms,
-    transform var(--motion-slow) var(--ease-out) 60ms;
+  transition: opacity var(--motion-slow) var(--ease-out);
   z-index: 3;
 }
 
-.punct {
-  display: inline-block;
+.sloganIcon {
+  display: inline-flex;
+  align-items: center;
   color: var(--purple-neon);
-  font-weight: 900;
-  text-shadow:
-    0 0 8px rgba(168, 85, 247, 0.85),
-    0 0 18px rgba(168, 85, 247, 0.5);
-  transform: translateY(-0.04em);
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.6));
 }
+
+.sloganIconEnd {
+  display: inline-flex;
+  align-items: center;
+  color: var(--gold-primary);
+  filter: drop-shadow(0 0 4px rgba(232, 199, 154, 0.5));
+}
+
 
 /* ─── Hover (desktop) ─── */
 @media (hover: hover) and (pointer: fine) {
@@ -132,7 +138,6 @@
   }
   .logo:hover .slogan {
     opacity: 1;
-    transform: translate(calc(-50% - 25px), -6px) rotate(-3deg) scale(1.05);
   }
 }
 

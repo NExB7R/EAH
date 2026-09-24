@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { LocationIcon, AlertIcon } from './icons'
 import styles from './logo.module.css'
 
 type Size = 'sm' | 'md' | 'lg' | 'xl'
@@ -9,14 +10,14 @@ type LogoProps = {
   size?: Size
   variant?: Variant
   className?: string
-  href?: string
+  href?: string | null
 }
 
 export default function Logo({
   size = 'md',
   variant = 'full',
   className = '',
-  href,
+  href = "/",
 }: LogoProps) {
   const sizeCls = styles[size]
   const variantCls = variant === 'crown' ? styles.crownOnly : ''
@@ -53,8 +54,13 @@ export default function Logo({
 
       {variant === 'full' && (
         <span className={styles.slogan} aria-hidden>
-          <span>اللى نفسك فيه</span>
-          <span className={styles.punct}>؟</span>
+          <span className={styles.sloganIcon}>
+            <LocationIcon size={12} />
+          </span>
+          <span>دولة شبين القناطر تتحدث</span>
+          <span className={styles.sloganIconEnd}>
+            <AlertIcon size={12} />
+          </span>
         </span>
       )}
     </>
