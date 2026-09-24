@@ -1,3 +1,141 @@
+# EAH - ARCHITECTURE.md
+
+> Technical architecture for EAH platform.
+> Read MASTER_BRIEF.md first.
+
+Last updated: 2026-09-24
+Version: 1.0
+
+---
+
+## 1. Tech Stack
+
+### Frontend
+- Next.js 16 (App Router)
+- React 19
+- TypeScript 5.9 (strict)
+- CSS Modules
+- @fontsource-variable/cairo
+- @fontsource-variable/tajawal
+
+### Backend
+- Supabase (Postgres + Auth + Storage + Realtime)
+- Next.js API Routes (serverless)
+- Vercel Cron Jobs
+
+### Services
+- Cloudinary (images)
+- Web Push (VAPID)
+- Cloudflare Turnstile (bot protection)
+
+### Hosting
+- Vercel (Frankfurt - fra1)
+- Supabase (Frankfurt - eu-central-1)
+- Cloudinary (global CDN)
+
+---
+
+## 2. Project Structure
+
+eah/
+├── docs/               # Documentation (13 files)
+├── web/                # Next.js app
+│   ├── app/            # App Router
+│   │   ├── (public)/   # Public routes
+│   │   ├── account/    # User account
+│   │   ├── merchant/   # Merchant dashboard
+│   │   ├── admin/      # Admin panel
+│   │   ├── api/        # API routes
+│   │   ├── layout.tsx
+│   │   ├── page.tsx    # Home
+│   │   └── globals.css
+│   ├── components/
+│   │   ├── ui/         # Base UI
+│   │   ├── icons/      # SVG icons
+│   │   └── [feature]/  # Feature components
+│   ├── lib/
+│   │   ├── supabase/   # 4 clients
+│   │   ├── data/       # Data fetchers
+│   │   ├── search/     # Search logic
+│   │   ├── ranking/    # Business ranking
+│   │   └── utils/      # Helpers
+│   └── public/
+└── package.json
+
+---
+
+## 3. Supabase Clients
+
+### 3.1 Public Client
+File: lib/supabase/public.ts
+Used for: Public reads (businesses, offers, reviews)
+Features: No cookies, cacheable
+Auth: Anonymous
+Use with: unstable_cache
+
+### 3.2 Server Client
+File: lib/supabase/server.ts
+Used for: Auth-aware server components
+Features: Reads cookies
+Auth: User session
+Use with: force-dynamic only
+
+### 3.3 Service Client
+File: lib/supabase/service.ts
+Used for: Admin operations (bypass RLS)
+Features: Service role key
+Auth: Server-only
+Use with: Audit-logged
+
+### 3.4 Browser Client
+File: lib/supabase/browser.ts
+Used for: Client components with auth
+Features: Browser session
+Auth: User session
+Use with: Client components only
+
+---
+
+## 4. Data Flow
+
+### 4.1 Public Reads (Home, Explore)
+Route: force-dynamic
+Client: createPublicClient (no cookies)
+Cache: unstable_cache at module level
+Flow: Request -> cache check -> if miss: query Supabase (RLS public) -> cache + return
+
+### 4.2 Auth-Aware Reads (Account, Merchant)
+Route: force-dynamic
+Client: createClient (with cookies)
+Cache: No cache (user-specific)
+Flow: Request -> proxy.ts session check -> query Supabase (RLS self) -> return
+
+### 4.3 Mutations (Create, Update, Delete)
+Route: API routes
+Client: createClient OR createServiceClient
+Cache: revalidatePath/tag after
+Flow: Client submit -> validate (zod) -> rate limit -> mutation -> revalidate -> return
+
+---
+
+## 5. Caching Strategy
+
+### 5.1 Module-Level Cache
+unstable_cache with tags + revalidate
+MUST be at module level, NEVER inside component
+
+### 5.2 Route-Level Cache
+export const revalidate = 120
+Used in: /offers, /trends, /new, /businesses/[slug], /search, /recommend, /sitemap
+
+### 5.3 Static Cache
+export const dynamic = 'force-static'
+Used in: /about, /terms, /privacy, /cookies, /pricing
+
+### 5.4 No Cache
+export const dynamic = 'force-dynamic'
+Used in: /, /explore, /account/*, /merchant/*, /admin/*
+
 
 ---
 

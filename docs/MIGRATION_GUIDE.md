@@ -1,3 +1,109 @@
+# EAH - MIGRATION_GUIDE.md
+
+> دليل البناء من جديد على نفس قاعدة البيانات والبنية التحتية.
+
+آخر تحديث: 2026-09-24
+الإصدار: 1.0
+
+---
+
+## 1. الفلسفة
+
+إحنا مش بنبني DB جديد. إحنا بنبني كود جديد على DB موجود.
+
+الفرق:
+- Supabase الحالي: يفضل زي ما هو
+- Vercel: يفضل مربوط
+- Cloudinary: يفضل مربوط
+- Domain: يفضل شغال
+- الكود فقط هو اللي بيتبني من الصفر
+
+ليه؟
+- صفر مخاطرة على البيانات
+- صفر downtime
+- Auth شغال
+- RLS مختبر
+- البيانات موجودة (53 نشاط)
+
+---
+
+## 2. البنية الحالية
+
+### Supabase
+- Project ID: npmpiivmdksdirrumbmt
+- Region: Frankfurt (eu-central-1)
+- URL: https://npmpiivmdksdirrumbmt.supabase.co
+- Tables: 20+
+- Functions: 95
+- RLS: 100% enabled
+- Storage buckets: business-media, avatars, order-images, order-voice
+
+### Vercel
+- Team: eah-74a0
+- Project: eah
+- Production URL: https://eah-sq.vercel.app
+- Region: fra1
+- Root Directory: web
+- Branch: v2
+- Auto-deploy: on every push to v2
+
+### Cloudinary
+- Cloud name: zlgcimmg
+- Folder structure: eah/{business_id}/{type}
+- Auto-transforms: WebP + AVIF
+
+### Git
+- Repo: NExB7R/EAH (private)
+- Branch: v2 (default)
+- Old code: archive/v1
+- Old code backup: backup-4ffe42d
+- Old tags: v0.2.0 through v1.4.0
+
+---
+
+## 3. الحالة الحالية
+
+### الكود
+- Next.js 16 (Turbopack)
+- React 19
+- TypeScript strict
+- صفحة placeholder واحدة
+- صفر مكونات
+- صفر API routes
+
+### الـ DB
+- كل الجداول موجودة
+- كل الـ Functions شغالة
+- كل الـ RLS مضبوطة
+- 53 نشاط حقيقي
+- بيانات جاهزة للاستخدام
+
+### Vercel
+- Production live
+- Auto-deploy على push
+- Root Directory = web
+- Region fra1
+
+---
+
+## 4. المبادئ الأساسية
+
+1. صفر migration على الـ DB الحالي
+2. صفر downtime
+3. الكود الجديد يستخدم الـ DB زي ما هو
+4. أي إضافة جديدة = migration جديدة في SQL Editor
+5. Backup قبل أي تعديل كبير
+
+---
+
+## 5. خطة البناء
+
+المرحلة 1 (4 أسابيع): الأساس
+المرحلة 2 (4 أسابيع): التفاعل
+المرحلة 3 (4 أسابيع): الإطلاق
+
+التفاصيل: docs/ROADMAP.md
+
 ---
 
 ## 3. الملفات الحساسة
