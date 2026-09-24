@@ -6,6 +6,7 @@ import { getViewStats } from '@/lib/real-stats'
 
 import HomeHero from '@/components/home-hero'
 import SectionSliderV2 from '@/components/section-slider-v2'
+import FeaturedBento from '@/components/featured-bento'
 import SimpleFlipCard from '@/components/simple-flip-card'
 import SeeAllCard from '@/components/see-all-card'
 import VisitorValue from '@/components/visitor-value'
@@ -203,26 +204,8 @@ export default async function HomeDynamicV2() {
       )}
 
       {/* ═══ ⭐ المميزين — كل المميزين عشوائي ═══ */}
-      {hasFeatured && (
-        <SectionSliderV2
-          title="المميزين"
-          subtitle="أماكن اختارها فريقنا — على مستوى عالي"
-          seeAllHref="/featured"
-          variant="featured"
-        >
-          {featured.map((b) => (
-            <SimpleFlipCard key={b.slug} business={b} variant="featured" />
-          ))}
-          {featured.length >= 4 && (
-            <SeeAllCard
-              href="/featured"
-              label="شوف كل المميزين"
-              count={featuredAll.length}
-              variant="featured"
-              ctaText="اكتشف المميزين"
-            />
-          )}
-        </SectionSliderV2>
+      {featured.length > 0 && (
+        <FeaturedBento businesses={featured} totalCount={featuredAll.length} />
       )}
 
       {/* ═══ 🔥 الترند — Top 12 + Teaser ═══ */}
