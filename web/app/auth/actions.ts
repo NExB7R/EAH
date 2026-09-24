@@ -131,16 +131,26 @@ export async function loginAction(formData: FormData): Promise<AuthResult> {
   }
 
   const phoneE164 = toE164(parsed.data.phone)
-  const fakeEmail = phoneToEmail(phoneE164)
-
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email: fakeEmail,
+  // 1. جرّب الصيغة الحديثة
+  const primaryEmail = phoneToEmail(phoneE164)
+  let result = await supabase.auth.signInWithPassword({
+    email: primaryEmail,
     password: parsed.data.password,
   })
 
-  if (error) {
+  // 2. لو فشل → جرّب الصيغة القديمة (للأدمن + legacy users)
+  if (result.error) {
+    const digits = phoneE164.replace('+', '')
+    const legacyEmail = `phone_${digits}@accounts.eah.invalid`
+    result = await supabase.auth.signInWithPassword({
+      email: legacyEmail,
+      password: parsed.data.password,
+    })
+  }
+
+  if (result.error) {
     return {
       ok: false,
       error: 'الرقم أو كلمة السر مش صح',
