@@ -70,11 +70,10 @@
   gap: 6px;
   font-size: 0.82rem;
   font-weight: 800;
-  color: var(--gold-primary);
+  color: var(--text-primary);
   margin-bottom: var(--space-2);
   line-height: 1.6;
   letter-spacing: 0.02em;
-  text-shadow: 0 0 12px rgba(232, 199, 154, 0.25);
 }
 
 .subtitleIcon {
