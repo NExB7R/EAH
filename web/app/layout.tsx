@@ -1,4 +1,8 @@
 import type { Metadata, Viewport } from 'next'
+import '@fontsource-variable/cairo'
+import '@fontsource/tajawal/700.css'
+import '@fontsource/tajawal/800.css'
+import '@fontsource/tajawal/900.css'
 import './globals.css'
 
 export const metadata: Metadata = {
