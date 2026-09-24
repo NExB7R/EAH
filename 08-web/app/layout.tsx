@@ -12,6 +12,7 @@ import BackToTop from '@/components/back-to-top'
 import '@/components/ambient-bg.css'
 import AnimReady from '@/components/anim-ready'
 import WebVitals from '@/components/web-vitals'
+import SplashScreen from '@/components/splash-screen'
 import DeferredMounts from '@/components/deferred-mounts'
 import '@/components/install-pwa-button.css'
 import '@/components/install-app-button.css'
@@ -157,6 +158,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
               <DeferredMounts />
+        <SplashScreen />
         <WebVitals />
       </body>
     </html>
