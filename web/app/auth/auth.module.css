@@ -84,14 +84,6 @@
   filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.6));
 }
 
-.subtitleHint {
-  text-align: center;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  margin-bottom: var(--space-5);
-  line-height: 1.5;
-}
 
 /* ─── Tabs ─── */
 .tabs {

@@ -105,11 +105,7 @@ export default function AuthForm() {
           </span>
           <span>دولة شبين القناطر تتحدث</span>
         </div>
-        <div className={styles.subtitleHint}>
-          {tab === 'login'
-            ? 'رقم + كلمة سر، وخلاص'
-            : '3 حقول، ثانية واحدة، وتبدأ'}
-        </div>
+
 
         <div className={styles.tabs}>
           <div
