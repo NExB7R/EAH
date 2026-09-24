@@ -44,6 +44,12 @@ const nextConfig: NextConfig = {
         hostname: SUPABASE_HOST,
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        // مؤقت — بيانات تجريبية
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
 
