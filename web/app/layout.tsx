@@ -3,6 +3,7 @@ import '@fontsource-variable/cairo'
 import '@fontsource/tajawal/700.css'
 import '@fontsource/tajawal/800.css'
 import '@fontsource/tajawal/900.css'
+import Splash from '@/components/splash'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -23,7 +24,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
-      <body>{children}</body>
+      <body>
+        <Splash />
+        {children}
+      </body>
     </html>
   )
 }
