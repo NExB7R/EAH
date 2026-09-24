@@ -9,6 +9,7 @@ import SectionSliderV2 from '@/components/section-slider-v2'
 import FeaturedBento from '@/components/featured-bento'
 import TrendingList from '@/components/trending-list'
 import SnapStrip from '@/components/snap-strip'
+import AboutSplit from '@/components/about-split'
 import SimpleFlipCard from '@/components/simple-flip-card'
 import SeeAllCard from '@/components/see-all-card'
 import VisitorValue from '@/components/visitor-value'
@@ -221,6 +222,7 @@ export default async function HomeDynamicV2() {
       {/* ═══ ✨ الجديد — 15 عشوائي + Teaser ═══ */}
       <SnapStrip variant="new" businesses={newOnes} totalCount={newAll.length} />
 
+      <AboutSplit />
       <VisitorValue />
     </>
   )
