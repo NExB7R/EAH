@@ -1,0 +1,70 @@
+import { z } from 'zod'
+
+// ═══════════════════════════════════════════════════════════
+// EAH — Auth Validation Schemas
+// ═══════════════════════════════════════════════════════════
+
+// ─── الرقم المصري (11 رقم) ───
+// 010, 011, 012, 015 — مقدمات فودافون + اتصالات + أورنج + وي
+const EGYPT_PHONE_REGEX = /^01[0125][0-9]{8}$/
+
+// ─── تحويل الرقم لصيغة E.164 ───
+// مثال: 01012892806 → +201012892806
+export function toE164(phone: string): string {
+  return `+20${phone.slice(1)}`
+}
+
+// ─── اسم العرض ───
+const displayNameSchema = z
+  .string()
+  .trim()
+  .min(2, 'الاسم قصير — لازم حرفين على الأقل')
+  .max(50, 'الاسم طويل — 50 حرف كحد أقصى')
+
+// ─── الرقم ───
+const phoneSchema = z
+  .string()
+  .trim()
+  .regex(EGYPT_PHONE_REGEX, 'الرقم مش صح — لازم 11 رقم يبدأ بـ 010/011/012/015')
+
+// ─── كلمة السر ───
+const passwordSchema = z
+  .string()
+  .min(8, 'كلمة السر قصيرة — 8 حروف على الأقل')
+  .max(72, 'كلمة السر طويلة — 72 حرف كحد أقصى')
+
+// ─── الجنس (اختياري) ───
+const genderSchema = z
+  .enum(['male', 'female'])
+  .optional()
+  .nullable()
+
+// ─── Schema التسجيل ───
+export const signupSchema = z
+  .object({
+    display_name: displayNameSchema,
+    phone: phoneSchema,
+    password: passwordSchema,
+    confirm_password: z.string(),
+    gender: genderSchema,
+  })
+  .refine((data) => data.password === data.confirm_password, {
+    message: 'كلمتين السر مش متطابقتين',
+    path: ['confirm_password'],
+  })
+
+// ─── Schema الدخول ───
+export const loginSchema = z.object({
+  phone: phoneSchema,
+  password: z.string().min(1, 'اكتب كلمة السر'),
+})
+
+// ─── Schema الاسترجاع (إيميل بديل) ───
+export const recoverSchema = z.object({
+  phone: phoneSchema,
+})
+
+// ─── الأنواع ───
+export type SignupInput = z.infer<typeof signupSchema>
+export type LoginInput = z.infer<typeof loginSchema>
+export type RecoverInput = z.infer<typeof recoverSchema>
