@@ -540,5 +540,6 @@ html {
 
 /* Search form wrapper (specific per usage, but style shared) */
 .eah-search-form {
+  position: relative;
   width: 100%;
 }
