@@ -280,3 +280,68 @@
 الغلطة: useState(false) + useEffect في component SSR
 الصح: mounted state + early return null
 السبب: hydration mismatch (React #418).
+
+### 8.6 lib/data.ts + lib/data/ تعارض
+
+الغلطة: data.ts + data/index.ts مع بعض.
+الصح: data/businesses.ts + data/user.ts + data/index.ts.
+السبب: Next.js بيفضّل .ts على /index.ts.
+
+### 8.7 BadgeCheckIcon مش موجود
+
+الغلطة: import لأيقونة قبل ما تتعمل.
+الصح: grep -c "IconName" components/icons/index.tsx قبل أي import.
+
+### 8.8 useState في SSR
+
+الغلطة: useState(false) + useEffect في SSR.
+الصح: mounted state + if (!mounted) return null.
+السبب: hydration mismatch (React #418).
+
+### 8.9 NextResponse.next signature
+
+الغلطة: NextResponse.next({ request }).
+الصح: NextResponse.next().
+
+### 8.10 CSP script-src 'self'
+
+الغلطة: script-src 'self' في production.
+الصح: script-src 'self' 'unsafe-inline'.
+
+---
+
+## 9. قواعد قبل أي تعديل
+
+### 9.1 دوّر الأول
+find web -name "filename"
+grep -rn "ComponentName" web/
+
+### 9.2 اقرأ كامل
+cat file.tsx
+
+### 9.3 افهم
+- إيه وظيفته؟
+- فين بيتستخدم؟
+
+### 9.4 بعدها فقط
+عدّل أو أنشئ.
+
+ممنوع: ملف جديد بدون فحص.
+ممنوع: تعديل بدون قراءة.
+
+---
+
+## 10. الخلاصة
+
+أي AI جديد:
+1. اقرأ AI_CONTRACT §19 + §20.
+2. اقرأ LESSONS.md.
+3. دوّر قبل ما تعمل.
+4. اقرأ قبل ما تعدّل.
+5. اسأل قبل ما تخمّن.
+
+الهدف: صفر أخطاء متكررة.
+
+---
+
+آخر تحديث: 2026-09-25

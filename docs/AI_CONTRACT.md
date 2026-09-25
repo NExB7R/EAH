@@ -534,3 +534,74 @@ wc -l file && tail -3 file
 ---
 
 آخر تحديث: 2026-09-25
+
+---
+
+## 19. Pre-Edit Protocol (إجباري)
+
+### 19.1 قبل أي تعديل
+
+1. دوّر: find web -name "filename.tsx"
+2. اقرأ: cat web/components/file.tsx
+3. افهم: الوظيفة + الاستخدامات
+4. دوّر: grep -rn "ComponentName" web/
+5. استنى التعليمات. متعدّلش ولا تعمل جديد.
+
+### 19.2 ممنوعات مطلقة
+
+- إنشاء ملف قبل التأكد من عدم وجوده.
+- تعديل بدون قراءة كامل.
+- تخمين مكان الملف.
+- تكرار component/dalة.
+- إنشاء ملف مشابه لموجود.
+
+### 19.3 قبل إنشاء ملف جديد
+
+1. ls web/components/
+2. grep -rn "ComponentName" web/
+3. لو موجود → عدّل.
+4. لو مش موجود → اسأل الأول.
+
+### 19.4 عند الخطأ
+
+1. سجّل في docs/LESSONS.md.
+2. رقّمه.
+3. اكتب: الغلطة + السبب + الحل.
+
+---
+
+## 20. ممنوعات Chat جديدة
+
+### 20.1 Terminal
+- heredoc > 50 سطر
+- nano لمحتوى طويل
+- paste CSS/JS في terminal
+- npx tsc من ~/ (لازم من web/)
+
+### 20.2 SSR
+- useState + useEffect + window بدون mounted guard
+- Date/Math.random() في server component
+
+### 20.3 CSP/Next.js
+- script-src 'self' بدون 'unsafe-inline'
+- NextResponse.next({ request })
+- lib/data.ts + lib/data/ في نفس الوقت
+
+### 20.4 Imports
+- import أيقونة مش موجودة
+- عدم التحقق من grep قبل import
+
+### 20.5 التنسيق
+- inline styles
+- key={index}
+- ملف > 300 سطر
+
+### 20.6 قبل أي شغل
+
+اقرأ: MASTER_BRIEF → AI_CONTRACT → SACRED → LESSONS → STRUCTURE → SECURITY → AI_HANDOFF → PROGRESS
+
+بعدها: "قرأت. جاهز." واستنى.
+
+---
+
+آخر تحديث: 2026-09-25
