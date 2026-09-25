@@ -47,7 +47,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
   text-align: center;
 }
 
@@ -81,7 +81,6 @@
   color: var(--text-primary);
   letter-spacing: -0.02em;
   margin: 0;
-  text-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
   animation: fadeUp 600ms var(--ease-out) 400ms both;
 }
 
@@ -92,7 +91,6 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 16px rgba(232, 199, 154, 0.4));
   animation: gradientShift 4s ease-in-out infinite;
 }
 
@@ -109,18 +107,8 @@
   width: 40px;
   height: 40px;
   color: var(--gold-light);
-  filter: drop-shadow(0 0 12px rgba(232, 199, 154, 0.8)) drop-shadow(0 0 24px rgba(168, 85, 247, 0.4));
-  animation: crownGlow 3s ease-in-out infinite;
 }
 
-@keyframes crownGlow {
-  0%, 100% {
-    filter: drop-shadow(0 0 10px rgba(232, 199, 154, 0.7)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.4));
-  }
-  50% {
-    filter: drop-shadow(0 0 16px rgba(232, 199, 154, 1)) drop-shadow(0 0 28px rgba(168, 85, 247, 0.6));
-  }
-}
 
 /* ─── Shibin Sign ─── */
 .shibinSign {
@@ -239,6 +227,27 @@
 .micBtn:hover {
   background: linear-gradient(135deg, rgba(157, 78, 221, 0.35), rgba(168, 85, 247, 0.25));
   box-shadow: var(--glow-purple-sm);
+  transform: scale(1.05);
+}
+
+.suggestBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--gold-light);
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.2), rgba(168, 85, 247, 0.1));
+  border: 1px solid rgba(232, 199, 154, 0.35);
+  flex-shrink: 0;
+  text-decoration: none;
+  transition: all var(--motion-fast) var(--ease);
+}
+
+.suggestBtn:hover {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.35), rgba(168, 85, 247, 0.2));
+  box-shadow: var(--glow-gold-sm);
   transform: scale(1.05);
 }
 

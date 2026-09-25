@@ -10,6 +10,7 @@ import {
   SparklesIcon,
   CrownIcon,
   LocationIcon,
+  SparkleStarIcon,
 } from './icons'
 import styles from './home-hero.module.css'
 
@@ -75,6 +76,7 @@ export default function HomeHero() {
               placeholder="دور على مطعم، صيدلية، ماركت..."
               aria-label="البحث"
               autoComplete="off"
+              enterKeyHint="search"
             />
             <Link
               href="/explore?voice=1"
@@ -83,6 +85,14 @@ export default function HomeHero() {
               prefetch={false}
             >
               <MicIcon size={18} />
+            </Link>
+            <Link
+              href="/explore?suggest=1"
+              className={styles.suggestBtn}
+              aria-label="رشحلي"
+              prefetch={false}
+            >
+              <SparkleStarIcon size={18} />
             </Link>
           </div>
         </form>
