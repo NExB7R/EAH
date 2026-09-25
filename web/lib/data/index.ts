@@ -14,3 +14,10 @@ export {
   isOpenNow,
 } from './businesses'
 export type { Business, BusinessType, WorkingHours, WorkingDay } from './businesses'
+
+export {
+  AREAS,
+  DEFAULT_AREA,
+  AREA_COORDS,
+} from './areas'
+export type { Area } from './areas'
