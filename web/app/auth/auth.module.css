@@ -507,3 +507,121 @@
     transition: none;
   }
 }
+
+/* ─── Location Section ─── */
+.locationSection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  margin-top: 4px;
+  border-radius: var(--radius-lg);
+  background: rgba(10, 5, 20, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.sectionTitle svg {
+  color: var(--purple-neon);
+}
+
+.optionalTag {
+  margin-inline-start: auto;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 2px 8px;
+  background: rgba(168, 85, 247, 0.08);
+  border-radius: var(--radius-full);
+}
+
+.sectionHint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ─── Select styling ─── */
+select.input {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237B7490' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 16px center;
+  padding-inline-end: 44px;
+}
+
+select.input option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* ─── GPS Row ─── */
+.gpsRow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.gpsBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.15), rgba(168, 85, 247, 0.08));
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: var(--purple-light);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.gpsBtn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(168, 85, 247, 0.15));
+  box-shadow: var(--glow-purple-sm);
+  transform: translateY(-1px);
+}
+
+.gpsBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gpsSuccess {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: var(--radius-full);
+  background: rgba(85, 231, 209, 0.1);
+  border: 1px solid rgba(85, 231, 209, 0.4);
+  color: var(--teal);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.gpsError {
+  font-size: 0.72rem;
+  color: var(--red);
+  text-align: center;
+  padding: 4px 8px;
+}

@@ -3,6 +3,7 @@
 import { useActionState, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Logo from '@/components/logo'
+import { AREAS } from '@/lib/data/areas'
 import {
   EyeIcon,
   EyeOffIcon,
@@ -12,6 +13,9 @@ import {
   MaleIcon,
   FemaleIcon,
   CheckIcon,
+  MapPinIcon,
+  NavigationIcon,
+  CheckCircleIcon,
 } from '@/components/icons'
 import { signupAction, loginAction, type AuthResult } from './actions'
 import styles from './auth.module.css'
@@ -69,6 +73,11 @@ export default function AuthForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
   const [hooksMode, setHooksMode] = useState<'customer' | 'merchant'>('customer')
+  const [area, setArea] = useState('')
+  const [address, setAddress] = useState('')
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null)
+  const [gpsLoading, setGpsLoading] = useState(false)
+  const [gpsError, setGpsError] = useState<string | null>(null)
 
   const [state, dispatch, isPending] = useActionState(formAction, null)
 
@@ -90,6 +99,31 @@ export default function AuthForm() {
   }
 
   const hooks = hooksMode === 'customer' ? CUSTOMER_HOOKS : MERCHANT_HOOKS
+
+  const handleGPS = () => {
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      setGpsError('متصفحك مش بيدعم تحديد الموقع')
+      return
+    }
+
+    setGpsLoading(true)
+    setGpsError(null)
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setCoords({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        })
+        setGpsLoading(false)
+      },
+      () => {
+        setGpsError('مش قادرين نجيب موقعك — تأكد من الإذن')
+        setGpsLoading(false)
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    )
+  }
 
   return (
     <div className={styles.page}>
@@ -267,6 +301,99 @@ export default function AuthForm() {
                 <input type="hidden" name="gender" value={gender ?? ''} />
               </div>
             </>
+          )}
+
+          {tab === 'signup' && (
+            <div className={styles.locationSection}>
+              <div className={styles.sectionTitle}>
+                <MapPinIcon size={16} />
+                <span>عنوانك الافتراضي</span>
+                <span className={styles.optionalTag}>اختياري</span>
+              </div>
+              <p className={styles.sectionHint}>
+                عشان نعرضلك الأماكن القريبة منك
+              </p>
+
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="default_area">
+                  المنطقة
+                </label>
+                <div className={styles.inputWrap}>
+                  <span className={styles.inputIcon}>
+                    <MapPinIcon size={18} />
+                  </span>
+                  <select
+                    id="default_area"
+                    name="default_area"
+                    className={styles.input}
+                    value={area}
+                    onChange={(e) => setArea(e.target.value)}
+                    disabled={isPending}
+                  >
+                    <option value="">اختر منطقتك</option>
+                    {AREAS.map((a) => (
+                      <option key={a} value={a}>{a}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="default_address">
+                  العنوان التفصيلي
+                </label>
+                <div className={styles.inputWrap}>
+                  <span className={styles.inputIcon}>
+                    <NavigationIcon size={18} />
+                  </span>
+                  <input
+                    id="default_address"
+                    name="default_address"
+                    type="text"
+                    className={styles.input}
+                    placeholder="الشارع، رقم العمارة، الدور"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    disabled={isPending}
+                    maxLength={200}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.gpsRow}>
+                {coords ? (
+                  <span className={styles.gpsSuccess}>
+                    <CheckCircleIcon size={16} />
+                    <span>تم تحديد موقعك</span>
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    className={styles.gpsBtn}
+                    onClick={handleGPS}
+                    disabled={gpsLoading || isPending}
+                  >
+                    <NavigationIcon size={16} />
+                    <span>{gpsLoading ? 'جاري التحديد...' : 'استخدم موقعي الحالي'}</span>
+                  </button>
+                )}
+                {gpsError && (
+                  <span className={styles.gpsError}>{gpsError}</span>
+                )}
+              </div>
+
+              {/* Hidden inputs للـ coords */}
+              <input
+                type="hidden"
+                name="default_latitude"
+                value={coords?.lat ?? ''}
+              />
+              <input
+                type="hidden"
+                name="default_longitude"
+                value={coords?.lng ?? ''}
+              />
+            </div>
           )}
 
           <button type="submit" className={styles.submit} disabled={isPending}>
