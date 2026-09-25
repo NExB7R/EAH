@@ -208,6 +208,30 @@ export const getBusinessesByType = unstable_cache(
 )
 
 // ═══════════════════════════════════════════════════════════
+// 4.5. Top Businesses (للـ fallback في Featured)
+// ═══════════════════════════════════════════════════════════
+
+export const getTopBusinesses = unstable_cache(
+  async (limit = 15): Promise<Business[]> => {
+    const supabase = createPublicClient()
+    const { data, error } = await supabase
+      .from('businesses')
+      .select(BUSINESS_COLUMNS)
+      .eq('is_published', true)
+      .order('trust_score', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error('[data] getTopBusinesses error:', error.message)
+      return []
+    }
+    return (data ?? []) as Business[]
+  },
+  ['businesses-top'],
+  { revalidate: 120, tags: ['businesses'] }
+)
+
+// ═══════════════════════════════════════════════════════════
 // 5. الفرص (Opportunities)
 // ═══════════════════════════════════════════════════════════
 

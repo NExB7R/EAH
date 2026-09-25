@@ -86,3 +86,18 @@ export function dailyShuffle<T extends { id: string }>(items: T[]): T[] {
     return (hash(a.id + seed) % 1000) - (hash(b.id + seed) % 1000)
   })
 }
+
+
+// ═══════════════════════════════════════════════════════════
+// Fisher-Yates Shuffle (client-side — عشوائي حقيقي)
+// ═══════════════════════════════════════════════════════════
+export function shuffleArray<T>(items: T[]): T[] {
+  const arr = [...items]
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const tmp = arr[i]!
+    arr[i] = arr[j]!
+    arr[j] = tmp
+  }
+  return arr
+}

@@ -11,6 +11,7 @@ export {
   getNewBusinesses,
   getBusinessesByType,
   getBusinessBySlug,
+  getTopBusinesses,
   getOpportunities,
   isOpenNow,
 } from './businesses'
