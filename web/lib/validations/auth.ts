@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { AREAS } from '@/lib/data/areas'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Auth Validation Schemas
@@ -39,6 +40,32 @@ const genderSchema = z
   .optional()
   .nullable()
 
+// ─── المنطقة (اختياري) ───
+const areaSchema = z
+  .enum(AREAS)
+  .optional()
+  .nullable()
+
+// ─── العنوان الافتراضي (اختياري) ───
+const addressSchema = z
+  .string()
+  .trim()
+  .max(200, 'العنوان طويل — 200 حرف كحد أقصى')
+  .optional()
+  .nullable()
+
+// ─── الإحداثيات (اختياري) ───
+// preprocess: '' → null (مش 0)
+const latSchema = z.preprocess(
+  (v) => (v === '' || v === null || v === undefined ? null : Number(v)),
+  z.number().min(-90).max(90).nullable()
+)
+
+const lngSchema = z.preprocess(
+  (v) => (v === '' || v === null || v === undefined ? null : Number(v)),
+  z.number().min(-180).max(180).nullable()
+)
+
 // ─── Schema التسجيل ───
 export const signupSchema = z
   .object({
@@ -47,6 +74,10 @@ export const signupSchema = z
     password: passwordSchema,
     confirm_password: z.string(),
     gender: genderSchema,
+    default_area: areaSchema,
+    default_address: addressSchema,
+    default_latitude: latSchema,
+    default_longitude: lngSchema,
   })
   .refine((data) => data.password === data.confirm_password, {
     message: 'كلمتين السر مش متطابقتين',

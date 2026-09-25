@@ -54,7 +54,16 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
     }
   }
 
-  const { display_name, phone, password, gender } = parsed.data
+  const {
+    display_name,
+    phone,
+    password,
+    gender,
+    default_area,
+    default_address,
+    default_latitude,
+    default_longitude,
+  } = parsed.data
   const phoneE164 = toE164(phone)
   const fakeEmail = phoneToEmail(phoneE164)
 
@@ -84,6 +93,10 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
         display_name,
         phone_e164: phoneE164,
         gender: gender || null,
+        default_area: default_area || null,
+        default_address: default_address || null,
+        default_latitude: default_latitude ?? null,
+        default_longitude: default_longitude ?? null,
       },
     },
   })
