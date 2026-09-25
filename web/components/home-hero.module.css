@@ -1,0 +1,323 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Home Hero
+   ═══════════════════════════════════════════════════════════ */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 16px 60px;
+  padding-top: calc(100px + env(safe-area-inset-top));
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Ambient gradient */
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(168, 85, 247, 0.18), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(232, 199, 154, 0.06), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% 100%, rgba(157, 78, 221, 0.1), transparent 60%);
+}
+
+/* Grid dots */
+.grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(168, 85, 247, 0.1) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 80%);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+/* ─── Logo ─── */
+.logoWrap {
+  margin-bottom: 8px;
+  animation: fadeUp 600ms var(--ease-out) both;
+}
+
+/* ─── Shibin Tagline ─── */
+.shibin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+  animation: fadeUp 600ms var(--ease-out) 200ms both;
+}
+
+.shibinDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--purple-neon);
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.8), 0 0 16px rgba(168, 85, 247, 0.4);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.9); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Hook ─── */
+.hook {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+  font-weight: 900;
+  line-height: 1.3;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  animation: fadeUp 600ms var(--ease-out) 400ms both;
+}
+
+.hookAccent {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--purple-light) 0%, var(--gold-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ─── Search ─── */
+.searchWrap {
+  width: 100%;
+  margin-top: 12px;
+  animation: fadeUp 600ms var(--ease-out) 600ms both;
+}
+
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 56px;
+  padding: 0 12px 0 16px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.85), rgba(10, 7, 20, 0.92));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: var(--radius-full);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(168, 85, 247, 0.08);
+  transition:
+    border-color var(--motion-base) var(--ease),
+    box-shadow var(--motion-base) var(--ease);
+}
+
+.searchBox:focus-within {
+  border-color: var(--purple-neon);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(168, 85, 247, 0.2);
+}
+
+.searchIcon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: color var(--motion-fast) var(--ease);
+}
+
+.searchBox:focus-within .searchIcon {
+  color: var(--purple-light);
+}
+
+.searchInput {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: start;
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* إخفاء زرار الـ clear */
+.searchInput::-webkit-search-cancel-button {
+  display: none;
+}
+
+.micBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--purple-light);
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(168, 85, 247, 0.12));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  flex-shrink: 0;
+  text-decoration: none;
+  transition: all var(--motion-fast) var(--ease);
+}
+
+.micBtn:hover {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.35), rgba(168, 85, 247, 0.25));
+  box-shadow: var(--glow-purple-sm);
+  transform: scale(1.05);
+}
+
+/* ─── Categories ─── */
+.categories {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+  animation: fadeUp 600ms var(--ease-out) 800ms both;
+}
+
+.category {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 14px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.8));
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  border-radius: var(--radius-base);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition:
+    border-color var(--motion-fast) var(--ease),
+    background var(--motion-fast) var(--ease),
+    transform var(--motion-fast) var(--ease);
+}
+
+.category:hover {
+  border-color: var(--purple-primary);
+  background: linear-gradient(160deg, rgba(30, 20, 48, 0.85), rgba(15, 10, 25, 0.95));
+  transform: translateY(-2px);
+}
+
+.categoryIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(168, 85, 247, 0.1));
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  color: var(--purple-light);
+  flex-shrink: 0;
+  transition: all var(--motion-fast) var(--ease);
+}
+
+.category:hover .categoryIcon {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.35), rgba(168, 85, 247, 0.2));
+  box-shadow: var(--glow-purple-sm);
+}
+
+.categoryLabel {
+  flex: 1;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-align: start;
+}
+
+.categoryCount {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 2px 8px;
+  background: rgba(168, 85, 247, 0.08);
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+/* آخر عنصر (أنشطة أخرى) — يمتد */
+.category:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* ─── Tablet ─── */
+@media (min-width: 640px) {
+  .categories {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .category:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}
+
+/* ─── Desktop ─── */
+@media (min-width: 1024px) {
+  .categories {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .hero {
+    padding-top: 120px;
+  }
+}
+
+/* ─── Small mobile ─── */
+@media (max-width: 380px) {
+  .searchBox {
+    height: 52px;
+  }
+  .category {
+    padding: 12px;
+    gap: 8px;
+  }
+  .categoryLabel {
+    font-size: 0.78rem;
+  }
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .logoWrap,
+  .shibin,
+  .shibinDot,
+  .hook,
+  .searchWrap,
+  .categories {
+    animation: none;
+  }
+  .category,
+  .micBtn,
+  .searchBox {
+    transition: none;
+  }
+}
