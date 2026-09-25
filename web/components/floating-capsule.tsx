@@ -43,15 +43,34 @@ export default function FloatingCapsule({ session }: Props) {
   }, [pathname])
 
   const handleShare = async () => {
-    if (typeof navigator === 'undefined' || !navigator.share) return
+    if (typeof window === 'undefined') return
+
+    const url = window.location.origin
+    const title = 'EAH — اللي نفسك فيه ؟'
+    const text = 'اكتشف أحسن الأماكن حواليك في شبين القناطر'
+
+    // Web Share API (mobile + بعض desktop)
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text, url })
+        return
+      } catch {
+        // المستخدم قفل
+        return
+      }
+    }
+
+    // Fallback: copy to clipboard
     try {
-      await navigator.share({
-        title: 'EAH — اللي نفسك فيه ؟',
-        text: 'اكتشف أحسن الأماكن حواليك',
-        url: window.location.origin,
-      })
+      await navigator.clipboard.writeText(url)
+      window.dispatchEvent(
+        new CustomEvent('eah:toast', {
+          detail: { message: 'تم نسخ الرابط ✓' },
+        })
+      )
     } catch {
-      // المستخدم قفل الـ share — نتجاهل
+      // Fallback أخير: prompt
+      window.prompt('انسخ الرابط:', url)
     }
   }
 
@@ -109,7 +128,7 @@ export default function FloatingCapsule({ session }: Props) {
           {/* ─── النص: اللوجو ─── */}
           <div className={styles.center}>
             <Link href="/" aria-label="EAH — الرئيسية">
-              <Logo size="sm" variant="full" href={undefined} />
+              <Logo size="xs" variant="compact" href={undefined} />
             </Link>
           </div>
 

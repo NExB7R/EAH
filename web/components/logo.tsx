@@ -2,8 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from './logo.module.css'
 
-type Size = 'sm' | 'md' | 'lg' | 'xl'
-type Variant = 'full' | 'mark' | 'crown'
+type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+type Variant = 'full' | 'compact' | 'mark' | 'crown'
 
 type LogoProps = {
   size?: Size

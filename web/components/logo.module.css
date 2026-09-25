@@ -25,6 +25,7 @@
 }
 
 /* ─── Sizes ─── */
+.xs { --logo-w: 100px; --slogan-fs: 0.45rem; }
 .sm { --logo-w: 160px; --slogan-fs: 0.55rem; }
 .md { --logo-w: 260px; --slogan-fs: 0.85rem; }
 .lg { --logo-w: 380px; --slogan-fs: 1.2rem; }
