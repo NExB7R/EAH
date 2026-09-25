@@ -296,10 +296,9 @@
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .logoWrap,
-  .shibin,
-  .shibinDot,
   .hook,
-  
   .category,
-  .micBtn,
+  .shibinSign {
+    animation: none;
   }
+}
