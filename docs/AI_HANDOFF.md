@@ -1,3 +1,27 @@
+# EAH — AI Handoff
+
+> تسليم سريع لأي AI/مطور.
+
+**آخر تحديث:** 2026-09-25
+**الإصدار:** v2.0.0-alpha
+
+---
+
+## 0. ابدأ من هنا
+
+1. اقرأ MASTER_BRIEF.md + AI_CONTRACT.md + SACRED.md
+2. اقرأ LESSONS.md
+3. اقرأ PROGRESS.md
+4. اقرأ SESSION_LOG.md
+5. قول "قرأت. جاهز." واستنى
+
+---
+
+## 1. هيكل الريبو
+
+- docs/ — الوثائق
+- web/ — Next.js app
+- CHANGELOG.md
 
 ---
 
