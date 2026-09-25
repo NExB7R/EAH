@@ -1,0 +1,214 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Menu Drawer
+   ═══════════════════════════════════════════════════════════ */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(7, 2, 13, 0.7);
+  animation: fadeIn 200ms var(--ease-out);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  inset-inline-start: 0;
+  bottom: 0;
+  z-index: 201;
+  width: min(340px, 88vw);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
+  border-inline-end: 1px solid rgba(168, 85, 247, 0.25);
+  box-shadow: 8px 0 40px rgba(0, 0, 0, 0.5), 0 0 60px rgba(168, 85, 247, 0.08);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  animation: slideIn 280ms var(--ease-out);
+  overflow-y: auto;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 12px;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(180deg, rgba(20, 14, 34, 0.98), rgba(20, 14, 34, 0.85));
+  backdrop-filter: blur(8px);
+  z-index: 1;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--motion-fast) var(--ease);
+}
+
+.closeBtn:hover {
+  color: var(--purple-light);
+  background: var(--purple-soft);
+}
+
+/* ─── Nav ─── */
+.nav {
+  display: flex;
+  flex-direction: column;
+  padding: 0 12px 24px;
+  gap: 4px;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-base);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: start;
+  transition:
+    color var(--motion-fast) var(--ease),
+    background var(--motion-fast) var(--ease),
+    transform var(--motion-fast) var(--ease);
+}
+
+.item:hover {
+  color: var(--purple-light);
+  background: var(--purple-soft);
+  transform: translateX(2px);
+}
+
+.item:active {
+  transform: translateX(0);
+}
+
+.itemIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--text-tertiary);
+  transition: color var(--motion-fast) var(--ease);
+}
+
+.item:hover .itemIcon {
+  color: var(--purple-neon);
+}
+
+/* ─── Divider ─── */
+.divider {
+  height: 1px;
+  margin: 8px 14px;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.2), transparent);
+}
+
+/* ─── Logout ─── */
+.logout {
+  color: var(--red);
+}
+
+.logout:hover {
+  background: rgba(252, 165, 165, 0.1);
+  color: var(--red);
+}
+
+.logout:hover .itemIcon {
+  color: var(--red);
+}
+
+/* ─── Login CTA ─── */
+.loginCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  margin: 8px 14px;
+  border-radius: var(--radius-base);
+  background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
+  color: white;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    transform var(--motion-fast) var(--ease),
+    box-shadow var(--motion-fast) var(--ease);
+}
+
+.loginCta:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--glow-purple-md);
+}
+
+.loginCta:active {
+  transform: translateY(0);
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 480px) {
+  .drawer {
+    width: 92vw;
+  }
+
+  .item {
+    padding: 11px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .drawer {
+    animation: none;
+  }
+
+  .item,
+  .itemIcon,
+  .closeBtn,
+  .loginCta {
+    transition: none;
+  }
+}
