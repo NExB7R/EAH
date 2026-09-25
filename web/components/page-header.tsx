@@ -41,9 +41,7 @@ export default function PageHeader({
       </div>
 
       {/* السطر النيون */}
-      <div className={styles.neonLine} aria-hidden>
-        <span className={styles.neonDot} />
-      </div>
+      <div className={styles.neonLine} aria-hidden />
 
       {/* العنوان + العدد */}
       {(title || count !== undefined) && (
