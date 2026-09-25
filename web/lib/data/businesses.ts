@@ -33,6 +33,8 @@ export type Business = {
   is_featured: boolean
   is_new_project: boolean
   is_opportunity: boolean
+  opportunity_until: string | null
+  opportunity_note: string | null
   trust_score: number
   trust_tier: string
   successful_orders: number
@@ -95,7 +97,7 @@ export function isOpenNow(hours: WorkingHours | null): boolean {
 const BUSINESS_COLUMNS = `
   id, slug, name, business_type, description, hook,
   area, city, cover_image_url,
-  is_open, is_featured, is_new_project, is_opportunity,
+  is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   trust_score, trust_tier, successful_orders,
   featured_order, featured_until, featured_pin,
   new_until, working_hours, accepts_whatsapp_orders,
@@ -206,7 +208,35 @@ export const getBusinessesByType = unstable_cache(
 )
 
 // ═══════════════════════════════════════════════════════════
-// 5. نشاط واحد (slug)
+// 5. الفرص (Opportunities)
+// ═══════════════════════════════════════════════════════════
+
+export const getOpportunities = unstable_cache(
+  async (limit = 10): Promise<Business[]> => {
+    const supabase = createPublicClient()
+    const now = new Date().toISOString()
+    const { data, error } = await supabase
+      .from('businesses')
+      .select(BUSINESS_COLUMNS)
+      .eq('is_published', true)
+      .eq('is_opportunity', true)
+      .or(`opportunity_until.is.null,opportunity_until.gt.${now}`)
+      .order('opportunity_until', { ascending: true, nullsFirst: false })
+      .order('trust_score', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error('[data] getOpportunities error:', error.message)
+      return []
+    }
+    return (data ?? []) as Business[]
+  },
+  ['businesses-opportunities'],
+  { revalidate: 120, tags: ['businesses', 'opportunities'] }
+)
+
+// ═══════════════════════════════════════════════════════════
+// 6. نشاط واحد (slug)
 // ═══════════════════════════════════════════════════════════
 
 export const getBusinessBySlug = unstable_cache(

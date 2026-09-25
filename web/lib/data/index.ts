@@ -11,6 +11,7 @@ export {
   getNewBusinesses,
   getBusinessesByType,
   getBusinessBySlug,
+  getOpportunities,
   isOpenNow,
 } from './businesses'
 export type { Business, BusinessType, WorkingHours, WorkingDay } from './businesses'
