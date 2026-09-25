@@ -414,3 +414,34 @@ export function MicIcon({ size = 20, className }: IconProps) {
     </svg>
   )
 }
+
+export function LampIcon({ size = 24, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M9 2h6l-1 5h-4L9 2z" />
+      <path d="M10 7c0 3-3 4-3 8a5 5 0 0 0 10 0c0-4-3-5-3-8" />
+      <path d="M12 15v7" />
+      <circle cx="12" cy="15" r="1.5" />
+    </svg>
+  )
+}
+
+export function SparkleStarIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5L12 2z" />
+      <path d="M19 15l.75 2.75L22.5 18.5l-2.75.75L19 22l-.75-2.75L15.5 18.5l2.75-.75L19 15z" />
+    </svg>
+  )
+}
+
+export function CrownGoldIcon({ size = 24, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M3 8l4 4 5-7 5 7 4-4v10H3V8z" />
+      <circle cx="5" cy="6" r="1.5" />
+      <circle cx="12" cy="4" r="1.5" />
+      <circle cx="19" cy="6" r="1.5" />
+    </svg>
+  )
+}
