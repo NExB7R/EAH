@@ -4,37 +4,35 @@ import {
   getFeaturedBusinesses,
   getTopBusinesses,
 } from '@/lib/data'
+import { dailyShuffle } from '@/lib/ranking'
 import type { Business } from '@/lib/data'
-
-// ═══════════════════════════════════════════════════════════
-// EAH — Home Page
-// ═══════════════════════════════════════════════════════════
 
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  // Featured — مميزين + top trust (fallback)
   const [featured, topTrust] = await Promise.all([
     getFeaturedBusinesses(15),
     getTopBusinesses(15),
   ])
 
-  // دمج بدون تكرار — مميزين أولاً
+  // دمج بدون تكرار
   const seen = new Set<string>()
-  const featuredList: Business[] = []
-
+  const all: Business[] = []
   for (const b of [...featured, ...topTrust]) {
     if (!seen.has(b.id)) {
       seen.add(b.id)
-      featuredList.push(b)
+      all.push(b)
     }
-    if (featuredList.length >= 15) break
+    if (all.length >= 15) break
   }
+
+  // shuffle على الـ server (ثابت في نفس اليوم → بدون hydration mismatch)
+  const shuffled = dailyShuffle(all)
 
   return (
     <main>
       <HomeHero />
-      <FeaturedBento businesses={featuredList} />
+      <FeaturedBento businesses={shuffled} />
     </main>
   )
 }
