@@ -605,3 +605,65 @@ wc -l file && tail -3 file
 ---
 
 آخر تحديث: 2026-09-25
+
+---
+
+## 21. Unified Resources (صفر تكرار)
+
+### 21.1 القاعدة الذهبية
+
+ملف موحد + نعدّل فيه + نستدعيه.
+مش: نضيف ملف جديد لكل حاجة.
+
+### 21.2 الموارد الموحدة
+
+- أيقونات: components/icons/index.tsx
+- Design tokens: app/globals.css
+- Keyframes: app/globals.css (eah-*)
+- Utilities: app/globals.css (eah-*)
+- Data: lib/data/*.ts
+- Validations: lib/validations/*.ts
+- Helpers: lib/utils/*.ts
+
+### 21.3 قبل إضافة أي حاجة جديدة
+
+1. grep للبحث (في الملف الموحد).
+2. لو موجود → استخدمه.
+3. لو مش موجود → أضفه في الملف الموحد.
+
+### 21.4 ممنوع
+
+- keyframes جديد بدون فحص globals.css.
+- utility class جديد بدون فحص globals.css.
+- دالة جديدة قبل فحص lib/utils/.
+- component جديد قبل فحص components/ui/.
+- icon جديد قبل فحص components/icons/index.tsx.
+
+### 21.5 الـ Utilities الموحدة
+
+في globals.css:
+- .eah-backdrop — modal overlay
+- .eah-modal — modal card
+- .eah-close — close button
+- .eah-btn-primary — primary button
+- .eah-btn-secondary — secondary button
+
+### 21.6 الـ Keyframes الموحدة
+
+في globals.css:
+- eah-fade-in
+- eah-fade-up
+- eah-slide-up
+- eah-slide-in-start
+- eah-scale-in
+
+### 21.7 الفحص الدوري
+
+- grep -rh "@keyframes" components/ app/ | sort | uniq -c
+- grep -rh "^import" components/ | sort | uniq -c
+
+أي تكرار → إصلاح فوري.
+
+---
+
+آخر تحديث: 2026-09-25
