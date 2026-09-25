@@ -1,0 +1,342 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Featured Bento
+   ═══════════════════════════════════════════════════════════ */
+
+.section {
+  position: relative;
+  width: 100%;
+  padding: 60px 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Ambient gradient */
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 40% at 50% 30%, rgba(232, 199, 154, 0.08), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(168, 85, 247, 0.06), transparent 60%);
+}
+
+/* Grid dots */
+.grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(232, 199, 154, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black, transparent 80%);
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ─── Header ─── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.titleWrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.titleIcon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--gold-light);
+  filter: drop-shadow(0 0 10px rgba(232, 199, 154, 0.6));
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.titleBadge {
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+  color: var(--bg-base);
+  box-shadow: 0 0 12px rgba(232, 199, 154, 0.4);
+}
+
+.viewAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  background: rgba(232, 199, 154, 0.08);
+  border: 1px solid rgba(232, 199, 154, 0.25);
+  transition: all 180ms var(--ease);
+  flex-shrink: 0;
+}
+
+.viewAll:hover {
+  background: rgba(232, 199, 154, 0.15);
+  border-color: rgba(232, 199, 154, 0.5);
+  box-shadow: 0 0 16px rgba(232, 199, 154, 0.25);
+}
+
+.viewAll svg {
+  transition: transform 180ms var(--ease);
+}
+
+.viewAll:hover svg {
+  transform: translateX(-3px);
+}
+
+/* ─── Neon Line ─── */
+.neonLine {
+  height: 1px;
+  width: 100%;
+  margin-bottom: 24px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(232, 199, 154, 0.3) 20%,
+    var(--gold-primary) 50%,
+    rgba(232, 199, 154, 0.3) 80%,
+    transparent 100%
+  );
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 12px rgba(232, 199, 154, 0.3);
+}
+
+/* ─── Bento Grid ─── */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: minmax(120px, auto);
+  gap: 12px;
+  min-height: 480px;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  animation: cellIn 400ms var(--ease-out) both;
+}
+
+.cell > * {
+  flex: 1;
+  height: 100%;
+}
+
+/* البطاقة الكبيرة — تأخد 4 أعمدة وصفين */
+.cellBig {
+  grid-column: span 4;
+  grid-row: span 2;
+}
+
+/* البطاقات الصغيرة */
+.cell:not(.cellBig) {
+  grid-column: span 2;
+}
+
+/* stagger animation */
+.cell:nth-child(1) { animation-delay: 0ms; }
+.cell:nth-child(2) { animation-delay: 80ms; }
+.cell:nth-child(3) { animation-delay: 160ms; }
+.cell:nth-child(4) { animation-delay: 240ms; }
+.cell:nth-child(5) { animation-delay: 320ms; }
+
+@keyframes cellIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Controls ─── */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.controlBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(232, 199, 154, 0.08);
+  border: 1px solid rgba(232, 199, 154, 0.25);
+  color: var(--gold-light);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.controlBtn:hover {
+  background: rgba(232, 199, 154, 0.15);
+  border-color: rgba(232, 199, 154, 0.5);
+  box-shadow: 0 0 12px rgba(232, 199, 154, 0.3);
+}
+
+/* ─── Dots ─── */
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(232, 199, 154, 0.25);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.dot:hover {
+  background: rgba(232, 199, 154, 0.5);
+}
+
+.dotActive {
+  width: 24px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, var(--gold-primary), var(--gold-light));
+  box-shadow: 0 0 10px rgba(232, 199, 154, 0.5);
+}
+
+/* ─── Speed buttons ─── */
+.speeds {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: rgba(232, 199, 154, 0.05);
+  border: 1px solid rgba(232, 199, 154, 0.15);
+  border-radius: var(--radius-full);
+}
+
+.speedBtn {
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.speedBtn:hover {
+  color: var(--gold-light);
+}
+
+.speedBtnActive {
+  background: rgba(232, 199, 154, 0.15);
+  color: var(--gold-light);
+  box-shadow: 0 0 8px rgba(232, 199, 154, 0.2);
+}
+
+/* ─── Tablet ─── */
+@media (max-width: 1024px) {
+  .bento {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .cellBig {
+    grid-column: span 4;
+    grid-row: span 2;
+  }
+
+  .cell:not(.cellBig) {
+    grid-column: span 2;
+  }
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .section {
+    padding: 40px 0;
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+
+  .bento {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(160px, auto);
+    gap: 10px;
+    min-height: auto;
+  }
+
+  .cellBig {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+
+  .cell:not(.cellBig) {
+    grid-column: span 1;
+  }
+
+  .controls {
+    gap: 10px;
+  }
+
+  .speeds {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: center;
+  }
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .cell {
+    animation: none;
+  }
+
+  .controlBtn,
+  .dot,
+  .speedBtn,
+  .viewAll {
+    transition: none;
+  }
+}
