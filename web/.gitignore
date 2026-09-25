@@ -5,6 +5,5 @@
 node_modules
 .next
 *.bak
-tsconfig.tsbuildinfo
 .env.example.bak
 tsconfig.tsbuildinfo
