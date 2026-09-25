@@ -417,11 +417,18 @@ export function MicIcon({ size = 20, className }: IconProps) {
 
 export function LampIcon({ size = 24, className }: IconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
-      <path d="M9 2h6l-1 5h-4L9 2z" />
-      <path d="M10 7c0 3-3 4-3 8a5 5 0 0 0 10 0c0-4-3-5-3-8" />
-      <path d="M12 15v7" />
-      <circle cx="12" cy="15" r="1.5" />
+    <svg width={size} height={size} viewBox="0 0 32 32" className={className} {...base}>
+      {/* السلسلة */}
+      <line x1="18" y1="2" x2="20" y2="7" />
+      {/* الفوهة */}
+      <path d="M14 8 L24 8 L22 10 L16 10 Z" />
+      {/* جسم المصباح */}
+      <path d="M15 10 C10 14, 8 18, 11 22 C14 25, 22 25, 25 22 C27 19, 25 15, 21 11 Z" />
+      {/* الفتحة الجانبية */}
+      <path d="M23 12 L27 10" />
+      {/* القاعدة */}
+      <path d="M12 24 L24 24" />
+      <path d="M13 26 L23 26" />
     </svg>
   )
 }
