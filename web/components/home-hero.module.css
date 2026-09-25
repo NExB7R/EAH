@@ -101,48 +101,24 @@
   50% { background-position: 100% 50%; }
 }
 
-/* ─── Lamp ─── */
-.lampWrap {
-  position: relative;
+/* ─── Crown ─── */
+.crownWrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(232, 199, 154, 0.2), rgba(168, 85, 247, 0.08) 40%, transparent 70%);
+  width: 40px;
+  height: 40px;
   color: var(--gold-light);
-  filter: drop-shadow(0 0 10px rgba(232, 199, 154, 0.7)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.4));
-  animation: lampGlow 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(232, 199, 154, 0.8)) drop-shadow(0 0 24px rgba(168, 85, 247, 0.4));
+  animation: crownGlow 3s ease-in-out infinite;
 }
 
-.lampWrap::before {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(232, 199, 154, 0.15), transparent 60%);
-  pointer-events: none;
-  animation: smoke 4s ease-in-out infinite;
-}
-
-@keyframes lampGlow {
+@keyframes crownGlow {
   0%, 100% {
     filter: drop-shadow(0 0 10px rgba(232, 199, 154, 0.7)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.4));
   }
   50% {
-    filter: drop-shadow(0 0 18px rgba(232, 199, 154, 1)) drop-shadow(0 0 30px rgba(168, 85, 247, 0.6));
-  }
-}
-
-@keyframes smoke {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.9;
+    filter: drop-shadow(0 0 16px rgba(232, 199, 154, 1)) drop-shadow(0 0 28px rgba(168, 85, 247, 0.6));
   }
 }
 
@@ -151,7 +127,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 8px 18px;
+  margin-bottom: 4px;
   border-radius: var(--radius-full);
   background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), rgba(168, 85, 247, 0.08));
   border: 1px solid rgba(232, 199, 154, 0.35);
@@ -269,8 +246,8 @@
 .categories {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
   margin-top: 12px;
   animation: fadeUp 600ms var(--ease-out) 800ms both;
 }

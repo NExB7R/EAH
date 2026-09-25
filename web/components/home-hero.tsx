@@ -8,7 +8,7 @@ import {
   CartIcon,
   BikeIcon,
   SparklesIcon,
-  LampIcon,
+  CrownIcon,
   LocationIcon,
 } from './icons'
 import styles from './home-hero.module.css'
@@ -40,22 +40,22 @@ export default function HomeHero() {
         {/* مساحة جمالية */}
         <div className={styles.spacer} aria-hidden />
 
-        {/* الهوك — جملة واحدة */}
-        <h1 className={styles.hook}>
-          <span>شبيك لبيك</span>
-          <span className={styles.lampWrap} aria-hidden>
-            <LampIcon size={30} />
-          </span>
-          <span className={styles.hookAccent}>كل حاجة حواليك</span>
-        </h1>
-
-        {/* لافتة دولة شبين القناطر */}
+        {/* لافتة دولة شبين القناطر — فوق الهوك */}
         <div className={styles.shibinSign}>
           <span className={styles.signIcon} aria-hidden>
             <LocationIcon size={14} />
           </span>
           <span className={styles.signText}>دولة شبين القناطر تتحدث</span>
         </div>
+
+        {/* الهوك — جملة واحدة */}
+        <h1 className={styles.hook}>
+          <span className={styles.hookAccent}>شبيك لبيك</span>
+          <span className={styles.crownWrap} aria-hidden>
+            <CrownIcon size={32} />
+          </span>
+          <span className={styles.hookAccent}>كل حاجة حواليك</span>
+        </h1>
 
         {/* Search */}
         <form
