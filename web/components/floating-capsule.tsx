@@ -45,8 +45,12 @@ export default function FloatingCapsule({ session }: Props) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // auto-close عند تغيير الصفحة — نستخدم setTimeout
   useEffect(() => {
-    setDrawerOpen(false)
+    if (drawerOpen) {
+      const t = setTimeout(() => setDrawerOpen(false), 100)
+      return () => clearTimeout(t)
+    }
   }, [pathname])
 
   const handleShare = async () => {
@@ -103,7 +107,10 @@ export default function FloatingCapsule({ session }: Props) {
             <button
               type="button"
               className={styles.iconBtn}
-              onClick={() => setDrawerOpen(true)}
+              onClick={() => {
+                console.log('MENU CLICKED')
+                setDrawerOpen(true)
+              }}
               aria-label="القائمة"
             >
               <MenuIcon size={20} />
