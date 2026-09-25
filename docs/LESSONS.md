@@ -246,3 +246,37 @@
 ---
 
 آخر تحديث: 2026-09-25
+
+---
+
+## 8. غلطات AI (2026-09-25)
+
+### 8.1 NextResponse.next signature
+
+الغلطة: NextResponse.next({ request })
+الصح: NextResponse.next()
+السبب: init.request بياخد { headers } مش NextRequest.
+
+### 8.2 CSP script-src 'self'
+
+الغلطة: script-src 'self' في production
+الصح: script-src 'self' 'unsafe-inline'
+السبب: Next.js 16 محتاج للـ hydration + Server Actions.
+
+### 8.3 lib/data.ts + lib/data/ تعارض
+
+الغلطة: وجود data.ts + data/index.ts
+الصح: data/businesses.ts + data/user.ts + data/index.ts
+السبب: Next.js بيفضّل .ts على /index.ts.
+
+### 8.4 BadgeCheckIcon missing
+
+الغلطة: import لدالة مش موجودة
+الصح: grep قبل أي import
+السبب: كتبت استيراد قبل ما الأيقونة تتعمل.
+
+### 8.5 useState في SSR components
+
+الغلطة: useState(false) + useEffect في component SSR
+الصح: mounted state + early return null
+السبب: hydration mismatch (React #418).

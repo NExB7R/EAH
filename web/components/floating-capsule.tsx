@@ -22,9 +22,14 @@ type Props = {
 }
 
 export default function FloatingCapsule({ session }: Props) {
+  const [mounted, setMounted] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const pathname = usePathname()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
@@ -56,6 +61,9 @@ export default function FloatingCapsule({ session }: Props) {
   }
 
   const isLoggedIn = !!session
+
+  // ⚠️ منع hydration mismatch — متظهرش على الـ server
+  if (!mounted) return null
 
   return (
     <>

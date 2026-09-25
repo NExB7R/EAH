@@ -7,8 +7,13 @@ import styles from './splash.module.css'
 const SESSION_KEY = 'eah-splash-shown'
 
 export default function Splash() {
+  const [mounted, setMounted] = useState(false)
   const [hidden, setHidden] = useState(true)
   const [fading, setFading] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     // لو ظهر قبل كده في نفس الـ session — متظهرش تاني
@@ -34,7 +39,7 @@ export default function Splash() {
     }
   }, [])
 
-  if (hidden) return null
+  if (!mounted || hidden) return null
 
   return (
     <div
