@@ -80,17 +80,19 @@ export default function HomeHero() {
             />
             <Link
               href="/explore?voice=1"
-              className={styles.micBtn}
+              className={styles.iconAction}
               aria-label="بحث صوتي"
               prefetch={false}
+              data-tooltip="بحث صوتي"
             >
               <MicIcon size={18} />
             </Link>
             <Link
               href="/explore?suggest=1"
-              className={styles.suggestBtn}
+              className={`${styles.iconAction} ${styles.iconGold}`}
               aria-label="رشحلي"
               prefetch={false}
+              data-tooltip="رشحلي"
             >
               <SparkleStarIcon size={18} />
             </Link>
