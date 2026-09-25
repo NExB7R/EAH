@@ -33,16 +33,16 @@ export default function SignupPrompt() {
   if (!visible) return null
 
   return (
-    <div className={styles.backdrop} onClick={dismiss}>
+    <div className="eah-backdrop" onClick={dismiss}>
       <div
-        className={styles.modal}
+        className="eah-modal"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
       >
         <button
           type="button"
-          className={styles.closeBtn}
+          className="eah-close"
           onClick={dismiss}
           aria-label="إغلاق"
         >
@@ -59,10 +59,10 @@ export default function SignupPrompt() {
         </p>
 
         <div className={styles.actions}>
-          <Link href="/auth" className={styles.primary} onClick={dismiss}>
+          <Link href="/auth" className="eah-btn-primary" onClick={dismiss}>
             سجّل الآن
           </Link>
-          <button type="button" className={styles.secondary} onClick={dismiss}>
+          <button type="button" className="eah-btn-secondary" onClick={dismiss}>
             مش دلوقتي
           </button>
         </div>

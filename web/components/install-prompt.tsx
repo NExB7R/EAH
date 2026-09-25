@@ -73,16 +73,16 @@ export default function InstallPrompt() {
   if (!visible) return null
 
   return (
-    <div className={styles.backdrop} onClick={dismiss}>
+    <div className="eah-backdrop" onClick={dismiss}>
       <div
-        className={styles.modal}
+        className="eah-modal"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
       >
         <button
           type="button"
-          className={styles.closeBtn}
+          className="eah-close"
           onClick={dismiss}
           aria-label="إغلاق"
         >
@@ -102,15 +102,15 @@ export default function InstallPrompt() {
 
         <div className={styles.actions}>
           {isIOS ? (
-            <button type="button" className={styles.primary} onClick={dismiss}>
+            <button type="button" className="eah-btn-primary" onClick={dismiss}>
               تمام
             </button>
           ) : (
-            <button type="button" className={styles.primary} onClick={install}>
+            <button type="button" className="eah-btn-primary" onClick={install}>
               ثبّت الآن
             </button>
           )}
-          <button type="button" className={styles.secondary} onClick={dismiss}>
+          <button type="button" className="eah-btn-secondary" onClick={dismiss}>
             مش دلوقتي
           </button>
         </div>
