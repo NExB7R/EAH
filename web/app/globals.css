@@ -377,3 +377,168 @@ html {
     animation: none;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════
+   EAH — Search Utilities (shared)
+   ═══════════════════════════════════════════════════════════ */
+
+.eah-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 56px;
+  padding: 0 12px 0 16px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.85), rgba(10, 7, 20, 0.92));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: var(--radius-full);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 30px rgba(168, 85, 247, 0.08);
+  transition:
+    border-color 240ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 240ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.eah-search-box:focus-within {
+  border-color: var(--purple-neon);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(168, 85, 247, 0.2);
+}
+
+.eah-search-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: color 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.eah-search-box:focus-within .eah-search-icon {
+  color: var(--purple-light);
+}
+
+.eah-search-input {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: start;
+  min-width: 0;
+}
+
+.eah-search-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.eah-search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* Action buttons (mic, suggest) */
+.eah-icon-action {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: var(--purple-light);
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.25), rgba(168, 85, 247, 0.15));
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  flex-shrink: 0;
+  text-decoration: none;
+  transition: all 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.eah-icon-action::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  padding: 5px 10px;
+  background: linear-gradient(135deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.98));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms cubic-bezier(0.4, 0, 0.2, 1),
+              transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+}
+
+.eah-icon-action:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.eah-icon-action:hover {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.4), rgba(168, 85, 247, 0.25));
+  box-shadow: var(--glow-purple-sm);
+  transform: scale(1.05);
+}
+
+.eah-icon-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.eah-icon-gold {
+  color: var(--gold-light);
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.25), rgba(168, 85, 247, 0.1));
+  border-color: rgba(232, 199, 154, 0.4);
+}
+
+.eah-icon-gold::after {
+  border-color: rgba(232, 199, 154, 0.35);
+}
+
+.eah-icon-gold:hover {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.4), rgba(168, 85, 247, 0.2));
+  box-shadow: var(--glow-gold-sm);
+}
+
+/* Listening state (voice) */
+.eah-icon-listening {
+  color: var(--red);
+  background: rgba(252, 165, 165, 0.15);
+  border-color: rgba(252, 165, 165, 0.5);
+  animation: eah-pulse-red 1.2s ease-in-out infinite;
+}
+
+@keyframes eah-pulse-red {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(252, 165, 165, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(252, 165, 165, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eah-icon-listening {
+    animation: none;
+  }
+}
+
+
+/* Search form wrapper (specific per usage, but style shared) */
+.eah-search-form {
+  width: 100%;
+}

@@ -109,7 +109,6 @@
   color: var(--gold-light);
 }
 
-
 /* ─── Shibin Sign ─── */
 .shibinSign {
   display: inline-flex;
@@ -141,139 +140,6 @@
   text-shadow: 0 0 8px rgba(232, 199, 154, 0.3);
   letter-spacing: 0.02em;
 }
-
-/* ─── Search ─── */
-.searchWrap {
-  width: 100%;
-  margin-top: 12px;
-  animation: fadeUp 600ms var(--ease-out) 600ms both;
-}
-
-.searchBox {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 56px;
-  padding: 0 12px 0 16px;
-  background: linear-gradient(160deg, rgba(20, 14, 34, 0.85), rgba(10, 7, 20, 0.92));
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  border-radius: var(--radius-full);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.3),
-    0 0 30px rgba(168, 85, 247, 0.08);
-  transition:
-    border-color var(--motion-base) var(--ease),
-    box-shadow var(--motion-base) var(--ease);
-}
-
-.searchBox:focus-within {
-  border-color: var(--purple-neon);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(168, 85, 247, 0.2);
-}
-
-.searchIcon {
-  display: inline-flex;
-  align-items: center;
-  color: var(--text-muted);
-  flex-shrink: 0;
-  transition: color var(--motion-fast) var(--ease);
-}
-
-.searchBox:focus-within .searchIcon {
-  color: var(--purple-light);
-}
-
-.searchInput {
-  flex: 1;
-  height: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-align: start;
-}
-
-.searchInput::placeholder {
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
-/* إخفاء زرار الـ clear */
-.searchInput::-webkit-search-cancel-button {
-  display: none;
-}
-
-.iconAction {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  color: var(--purple-light);
-  background: linear-gradient(135deg, rgba(157, 78, 221, 0.25), rgba(168, 85, 247, 0.15));
-  border: 1px solid rgba(168, 85, 247, 0.4);
-  flex-shrink: 0;
-  text-decoration: none;
-  transition: all var(--motion-fast) var(--ease);
-  cursor: pointer;
-}
-
-.iconAction::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%) translateY(-4px);
-  padding: 5px 10px;
-  background: linear-gradient(135deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.98));
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 700;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--motion-fast) var(--ease), transform var(--motion-fast) var(--ease);
-  z-index: 10;
-}
-
-.iconAction:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-.iconAction:hover {
-  background: linear-gradient(135deg, rgba(157, 78, 221, 0.4), rgba(168, 85, 247, 0.25));
-  box-shadow: var(--glow-purple-sm);
-  transform: scale(1.05);
-}
-
-.iconGold {
-  color: var(--gold-light);
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.25), rgba(168, 85, 247, 0.1));
-  border-color: rgba(232, 199, 154, 0.4);
-}
-
-.iconGold::after {
-  border-color: rgba(232, 199, 154, 0.35);
-}
-
-.iconGold:hover {
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.4), rgba(168, 85, 247, 0.2));
-  box-shadow: var(--glow-gold-sm);
-}
-
-
 
 /* ─── Categories ─── */
 .categories {
@@ -418,10 +284,7 @@
 
 /* ─── Small mobile ─── */
 @media (max-width: 380px) {
-  .searchBox {
-    height: 52px;
-  }
-  .category {
+    .category {
     padding: 12px;
     gap: 8px;
   }
@@ -436,13 +299,7 @@
   .shibin,
   .shibinDot,
   .hook,
-  .searchWrap,
-  .categories {
-    animation: none;
-  }
+  
   .category,
   .micBtn,
-  .searchBox {
-    transition: none;
   }
-}

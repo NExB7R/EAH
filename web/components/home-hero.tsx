@@ -62,17 +62,17 @@ export default function HomeHero() {
         <form
           action="/explore"
           method="get"
-          className={styles.searchWrap}
+          className="eah-search-form"
           role="search"
         >
-          <div className={styles.searchBox}>
-            <span className={styles.searchIcon} aria-hidden>
+          <div className="eah-search-box">
+            <span className="eah-search-icon" aria-hidden>
               <SearchIcon size={20} />
             </span>
             <input
               type="search"
               name="q"
-              className={styles.searchInput}
+              className="eah-search-input"
               placeholder="دور على مطعم، صيدلية، ماركت..."
               aria-label="البحث"
               autoComplete="off"
@@ -80,7 +80,7 @@ export default function HomeHero() {
             />
             <Link
               href="/explore?voice=1"
-              className={styles.iconAction}
+              className="eah-icon-action"
               aria-label="بحث صوتي"
               prefetch={false}
               data-tooltip="بحث صوتي"
@@ -89,7 +89,7 @@ export default function HomeHero() {
             </Link>
             <Link
               href="/explore?suggest=1"
-              className={`${styles.iconAction} ${styles.iconGold}`}
+              className="eah-icon-action eah-icon-gold"
               aria-label="رشحلي"
               prefetch={false}
               data-tooltip="رشحلي"
