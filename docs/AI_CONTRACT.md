@@ -328,3 +328,106 @@
 **بعد كل كتابة ملف:**
 ```bash
 wc -l file && tail -3 file
+
+---
+
+## 15. Code Principles
+
+### 15.1 DRY (Don't Repeat Yourself)
+- 3 مرات تكرار → استخرج Helper/Component/Function.
+- 3 مرات CSS → CSS Variable أو Utility.
+- 3 مرات Query → دالة في `lib/data.ts`.
+- 3 مرات Validation → Zod schema مشترك.
+
+### 15.2 KISS (Keep It Simple)
+- أبسط حل = الأحسن.
+- مفيش over-engineering.
+- مفيش abstractions قبل الحاجة.
+
+### 15.3 YAGNI (You Aren't Gonna Need It)
+- متضيفش features لم تُطلب.
+- متضيفش flexibility قبل الحاجة.
+
+### 15.4 Single Responsibility
+- ملف واحد = مسؤولية واحدة.
+- Component واحد = غرض واحد.
+- Function واحدة = مهمة واحدة.
+- لو الملف > 300 سطر → قسّمه.
+
+### 15.5 عتبات
+| القاعدة | العتبة |
+|---------|--------|
+| استخرج Helper | 3 تكرارات |
+| استخرج Component | 3 استخدامات |
+| اقسم الملف | > 300 سطر |
+| اقسم Function | > 50 سطر |
+
+---
+
+## 16. Security Rules
+
+### 16.1 Input Validation
+- كل input → Zod schema.
+- Validation on server-side دايماً.
+- ممنوع trust على client.
+
+### 16.2 Rate Limiting
+- `/auth/login` → 5 محاولات/15 دقيقة.
+- `/auth/signup` → 3 محاولات/ساعة.
+- `/api/*` → حسب الـ endpoint.
+
+### 16.3 CSRF
+- Server Actions → Next.js بيعملها تلقائي.
+- API routes → تحقق Origin header.
+
+### 16.4 XSS
+- React بيمنع HTML غير موثوق.
+- `dangerouslySetInnerHTML` → ممنوع بدون sanitize.
+- CSP → طبقة إضافية.
+
+### 16.5 SQL Injection
+- Supabase parameterized queries.
+- `.from().select()` آمن.
+
+### 16.6 Secrets
+- `.env.local` → Git ممنوع.
+- Service Role → server only.
+- ممنوع `NEXT_PUBLIC_` لأي حاجة حساسة.
+
+### 16.7 Authentication
+- `getUser()` (مش `getSession()`) في middleware.
+- `proxy.ts` → session refresh.
+- Protected routes → في `proxy.ts`.
+
+### 16.8 Authorization
+- RLS → 100% على كل الجداول.
+- `is_admin()` → SECURITY DEFINER.
+
+### 16.9 Audit Logging
+- كل عملية إدارية → `audit_logs`.
+- ممنوع حذف audit logs.
+
+### 16.10 المراجع
+- `docs/SECURITY.md`
+- `docs/ARCHITECTURE.md §15`
+- `docs/SACRED.md §11`
+
+---
+
+## 17. المراجع للقراءة الأولى
+
+أي AI/مطور جديد لازم يقرأ بالترتيب:
+1. `MASTER_BRIEF.md`
+2. `AI_CONTRACT.md` (هذا الملف)
+3. `SACRED.md`
+4. `LESSONS.md`
+5. `STRUCTURE.md`
+6. `SECURITY.md`
+7. `AI_HANDOFF.md`
+8. `PROGRESS.md`
+
+بعدها: "قرأت. جاهز." واستنى.
+
+---
+
+آخر تحديث: 2026-09-25
