@@ -10,9 +10,6 @@
   animation: eah-fade-in 200ms var(--ease-out);
 }
 
-  to { opacity: 1; }
-}
-
 .drawer {
   position: fixed;
   top: 0;
@@ -29,9 +26,6 @@
   padding-bottom: env(safe-area-inset-bottom);
   animation: eah-slide-in-start 280ms var(--ease-out);
   overflow-y: auto;
-}
-
-  to { transform: translateX(0); }
 }
 
 .header {
