@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ExploreSearch from '@/components/explore-search'
+import PageHeader from '@/components/page-header'
 import BusinessCard from '@/components/business-card'
 import {
   getPublishedBusinesses,
@@ -9,7 +10,6 @@ import {
 import type { BusinessType } from '@/lib/data/businesses'
 import { smartSearch } from '@/lib/search'
 import { sortByTrust, dailyShuffle } from '@/lib/ranking'
-import { HomeIcon } from '@/components/icons'
 import styles from './explore.module.css'
 
 export const metadata: Metadata = {
@@ -70,20 +70,9 @@ export default async function ExplorePage({
 
   return (
     <main className={styles.page}>
-      <header className={styles.header}>
-        <div className={styles.container}>
-          <Link href="/" className={styles.back} aria-label="الرئيسية">
-            <HomeIcon size={20} />
-          </Link>
-          <div className={styles.searchWrap}>
-            <ExploreSearch initialQuery={q} />
-          </div>
-        </div>
-        <div className={styles.titleRow}>
-          <h1 className={styles.title}>{title}</h1>
-          <span className={styles.count}>{businesses.length} نشاط</span>
-        </div>
-      </header>
+      <PageHeader title={title} count={businesses.length}>
+        <ExploreSearch initialQuery={q} />
+      </PageHeader>
 
       <div className={styles.content}>
         {businesses.length > 0 ? (
