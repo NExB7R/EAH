@@ -18,6 +18,8 @@
 
 .inner {
   pointer-events: auto;
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 1200px;
   display: grid;
@@ -41,14 +43,8 @@
     0 0 30px rgba(168, 85, 247, 0.12);
 }
 
-/* Logo فقط عند scroll = 0 (مخفي) */
+/* اللوجو مخفي عند scroll = 0 (الأيقونات تفضل ظاهرة) */
 .capsule[data-scrolled='false'] .center {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.capsule[data-scrolled='false'] .right,
-.capsule[data-scrolled='false'] .left {
   opacity: 0;
   pointer-events: none;
 }
@@ -57,6 +53,7 @@
 .center,
 .left {
   opacity: 1;
+  pointer-events: auto;
   transition: opacity 400ms var(--ease-out);
 }
 
