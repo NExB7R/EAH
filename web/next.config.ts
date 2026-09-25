@@ -16,7 +16,7 @@ const csp = [
     ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'"
     : "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' data: blob: https://${CLOUDINARY_HOST} https://${SUPABASE_HOST}`,
+  `img-src 'self' data: blob: https://${CLOUDINARY_HOST} https://${SUPABASE_HOST} https://images.unsplash.com https://scontent-iad3-2.xx.fbcdn.net`,
   `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://api.cloudinary.com`,
   "font-src 'self' data:",
   "frame-ancestors 'none'",
@@ -48,6 +48,12 @@ const nextConfig: NextConfig = {
         // مؤقت — بيانات تجريبية
         protocol: "https",
         hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        // مؤقت — صور تجريبية من فيسبوك
+        protocol: "https",
+        hostname: "scontent-iad3-2.xx.fbcdn.net",
         pathname: "/**",
       },
     ],
