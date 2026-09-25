@@ -431,3 +431,106 @@ wc -l file && tail -3 file
 ---
 
 آخر تحديث: 2026-09-25
+---
+
+## 18. Zero Tolerance Rules
+
+### 18.1 Zero Duplication
+
+قبل أي كود جديد:
+1. افحص: grep -rn "functionName" components/ lib/ app/
+2. لو موجود → استخدمه.
+3. لو مش موجود → اكتبه.
+
+ممنوع:
+- دالة بنفس الاسم في ملفين.
+- Component بنفس الوظيفة.
+- CSS class مكرر.
+- Import مكرر.
+
+العتبة: 3 تكرارات → استخرج Helper.
+
+### 18.2 Zero Vibe Errors
+
+ممنوع:
+- any / @ts-ignore / as unknown as
+- useState في Server Components
+- useEffect بدون cleanup
+- 'use client' بدون حاجة
+- inline styles (إلا dynamic)
+- key={index} في lists
+- dangerouslySetInnerHTML بدون sanitize
+- console.log في production
+
+مسموح:
+- as بعد Zod validation
+- unknown للـ catch errors
+
+### 18.3 Security 2026
+
+كل:
+- input → Zod
+- form → Server Action
+- API → Rate limit
+- admin action → Audit log
+- صورة → WmImage
+- secret → .env.local (server only)
+
+ممنوع:
+- NEXT_PUBLIC_ لحاجة حساسة
+- Service Role على client
+- RLS متعطّل
+- HTML غير موثوق
+
+### 18.4 Sync All
+
+قبل أي تعديل:
+- git pull origin v2
+- npx tsc --noEmit
+
+بعد كل تعديل:
+- npx tsc --noEmit (نظيف)
+- git add + git commit (رسالة واضحة)
+- git push origin main:v2
+
+### 18.5 Check Before Build
+
+قبل أي feature:
+1. افحص الموجود: grep -rn "featureName"
+2. حدد المسؤولية
+3. اعمل الملفات
+4. اختبر
+
+قبل أي component: ls components/ + grep
+قبل أي function: grep -rn "functionName" lib/
+
+### 18.6 Quality Standards
+
+كل ملف:
+- مسؤولية واحدة
+- أقل من 300 سطر
+- أقل من 50 سطر/function
+
+كل component:
+- غرض واحد
+- Props واضحة
+- مفيش side effects مخفية
+
+كل function:
+- مهمة واحدة
+- اسم واضح
+- تعليق WHY (مش WHAT)
+
+### 18.7 الفحص الدوري
+
+أوامر الفحص:
+- grep -rc "^export function" components/ lib/
+- grep -rn "export function" components/ lib/ | awk uniq -d
+- grep -rn "any\|@ts-ignore" components/ lib/ app/
+- npx tsc --noEmit
+
+أي نتيجة → إصلاح فوري.
+
+---
+
+آخر تحديث: 2026-09-25
