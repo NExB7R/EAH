@@ -23,7 +23,10 @@ type SearchParams = {
   q?: string
   type?: string
   suggest?: string
+  page?: string
 }
+
+const PAGE_SIZE = 12
 
 const VALID_TYPES: BusinessType[] = [
   'restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc',
@@ -46,6 +49,7 @@ export default async function ExplorePage({
   const q = params.q?.trim() ?? ''
   const type = params.type?.trim() ?? ''
   const suggest = params.suggest === '1'
+  const page = Math.max(1, parseInt(params.page ?? '1', 10) || 1)
 
   let businesses = await getPublishedBusinesses()
   let title = 'اكتشف'
@@ -68,19 +72,47 @@ export default async function ExplorePage({
     businesses = sortByTrust(businesses)
   }
 
+  // ─── Pagination ───
+  const totalCount = businesses.length
+  const startIdx = (page - 1) * PAGE_SIZE
+  const endIdx = startIdx + PAGE_SIZE
+  const hasMore = endIdx < totalCount
+  businesses = businesses.slice(startIdx, endIdx)
+
   return (
     <main className={styles.page}>
-      <PageHeader title={title} count={businesses.length}>
+      <PageHeader title={title} count={totalCount}>
         <ExploreSearch initialQuery={q} />
       </PageHeader>
 
       <div className={styles.content}>
         {businesses.length > 0 ? (
-          <div className={styles.grid}>
-            {businesses.map((b) => (
-              <BusinessCard key={b.id} business={b} />
-            ))}
-          </div>
+          <>
+            <div className={styles.grid}>
+              {businesses.map((b) => (
+                <BusinessCard key={b.id} business={b} />
+              ))}
+            </div>
+
+            {hasMore && (
+              <div className={styles.loadMoreWrap}>
+                <Link
+                  href={`/explore?${new URLSearchParams({
+                    ...(q ? { q } : {}),
+                    ...(type ? { type } : {}),
+                    ...(suggest ? { suggest: '1' } : {}),
+                    page: String(page + 1),
+                  }).toString()}`}
+                  className={styles.loadMore}
+                >
+                  شوف المزيد
+                </Link>
+                <span className={styles.counter}>
+                  بتشوف {businesses.length} من {totalCount}
+                </span>
+              </div>
+            )}
+          </>
         ) : (
           <div className={styles.empty}>
             <div className={styles.emptyIcon}>🔍</div>
