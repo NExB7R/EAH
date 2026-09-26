@@ -10,12 +10,16 @@ import {
   BellIcon,
   MenuIcon,
   InfoIcon,
-  ShareIcon,
   InstallIcon,
   LockIcon,
 } from './icons'
 import type { UserSession } from '@/lib/data/user'
 import styles from './floating-capsule.module.css'
+
+// ═══════════════════════════════════════════════════════════
+// EAH — Floating Capsule
+// يمين: [☰] [⬇️] [ℹ️]  |  نص: [👑 EAH]  |  شمال: [🔔] [👤]
+// ═══════════════════════════════════════════════════════════
 
 type Props = {
   session: UserSession | null
@@ -45,7 +49,7 @@ export default function FloatingCapsule({ session }: Props) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // auto-close عند تغيير الصفحة (بتأخير بسيط)
+  // auto-close عند تغيير الصفحة
   const prevPathRef = useRef(pathname)
   useEffect(() => {
     if (prevPathRef.current !== pathname) {
@@ -55,46 +59,12 @@ export default function FloatingCapsule({ session }: Props) {
     }
   }, [pathname])
 
-  const handleShare = async () => {
-    if (typeof window === 'undefined') return
-
-    const url = window.location.origin
-    const title = 'EAH — اللي نفسك فيه ؟'
-    const text = 'اكتشف أحسن الأماكن حواليك في شبين القناطر'
-
-    // Web Share API (mobile + بعض desktop)
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, text, url })
-        return
-      } catch {
-        // المستخدم قفل
-        return
-      }
-    }
-
-    // Fallback: copy to clipboard
-    try {
-      await navigator.clipboard.writeText(url)
-      window.dispatchEvent(
-        new CustomEvent('eah:toast', {
-          detail: { message: 'تم نسخ الرابط ✓' },
-        })
-      )
-    } catch {
-      // Fallback أخير: prompt
-      window.prompt('انسخ الرابط:', url)
-    }
-  }
-
   const handleInstall = () => {
-    // يُطلق حدث مخصص — InstallPrompt يستمع له
     window.dispatchEvent(new CustomEvent('eah:install-request'))
   }
 
   const isLoggedIn = !!session
 
-  // ⚠️ منع hydration mismatch — متظهرش على الـ server
   if (!mounted) return null
 
   return (
@@ -108,34 +78,31 @@ export default function FloatingCapsule({ session }: Props) {
           <div className={styles.right}>
             <button
               type="button"
-              className={styles.iconBtn}
+              className={`${styles.iconBtn} ${styles.iconPrimary}`}
               onClick={() => setDrawerOpen(true)}
               aria-label="القائمة"
             >
               <MenuIcon size={20} />
             </button>
 
-            <Link href="/about" className={styles.iconBtn} aria-label="مين إحنا">
-              <InfoIcon size={20} />
-            </Link>
-
             <button
               type="button"
-              className={styles.iconBtn}
-              onClick={handleShare}
-              aria-label="مشاركة"
-            >
-              <ShareIcon size={20} />
-            </button>
-
-            <button
-              type="button"
-              className={styles.iconBtn}
+              className={`${styles.iconBtn} ${styles.iconGold} ${styles.installBtn}`}
               onClick={handleInstall}
-              aria-label="تثبيت التطبيق"
+              aria-label="ثبّت التطبيق"
+              data-tooltip="ثبّت التطبيق"
             >
               <InstallIcon size={20} />
             </button>
+
+            <Link
+              href="/about"
+              className={styles.iconBtn}
+              aria-label="مين إحنا"
+              data-tooltip="مين إحنا"
+            >
+              <InfoIcon size={20} />
+            </Link>
           </div>
 
           {/* ─── النص: اللوجو ─── */}
