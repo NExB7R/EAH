@@ -287,3 +287,116 @@
     transition: none;
   }
 }
+
+/* ─── Drawer Scrollbar ─── */
+.drawer::-webkit-scrollbar {
+  width: 4px;
+}
+
+.drawer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.drawer::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: var(--radius-full);
+}
+
+.drawer::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.5);
+}
+
+/* ─── Social Section ─── */
+.socialSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px 0;
+}
+
+.socialTitle {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 8px 14px 4px;
+}
+
+.socialItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-base);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 180ms var(--ease);
+}
+
+.socialItem:hover {
+  color: var(--purple-light);
+  background: var(--purple-soft);
+}
+
+.socialIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.socialExternal {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: auto;
+  color: var(--text-muted);
+  transition: transform 180ms var(--ease), color 180ms var(--ease);
+}
+
+.socialItem:hover .socialExternal {
+  color: var(--purple-light);
+  transform: translate(2px, -2px);
+}
+
+/* ─── Footer ─── */
+.footer {
+  padding: 20px 12px 28px;
+  text-align: center;
+  border-top: 1px solid rgba(168, 85, 247, 0.1);
+  margin-top: 16px;
+}
+
+.footerLine {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0 0 4px;
+  line-height: 1.5;
+}
+
+.heart {
+  color: var(--red);
+  font-size: 0.75rem;
+}
+
+.footerCopy {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-disabled);
+  margin: 8px 0 0;
+  letter-spacing: 0.05em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .socialItem,
+  .socialExternal {
+    transition: none;
+  }
+}

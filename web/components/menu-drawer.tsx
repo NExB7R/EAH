@@ -20,6 +20,7 @@ import {
   CloseIcon,
   BadgeCheckIcon,
   ArrowLeftIcon,
+  ExternalLinkIcon,
 } from './icons'
 import Avatar from './avatar'
 import type { UserSession } from '@/lib/data/user'
@@ -261,6 +262,60 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
               </Link>
             </>
           )}
+          {/* ─── Social ─── */}
+          <div className={styles.divider} />
+
+          <div className={styles.socialSection}>
+            <div className={styles.socialTitle}>تابعنا</div>
+
+            <a
+              href="/coming-soon?platform=facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialItem}
+            >
+              <span className={styles.socialIcon}>📘</span>
+              <span>فيسبوك</span>
+              <span className={styles.socialExternal}>
+                <ExternalLinkIcon size={14} />
+              </span>
+            </a>
+
+            <a
+              href="/coming-soon?platform=whatsapp-channel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialItem}
+            >
+              <span className={styles.socialIcon}>💬</span>
+              <span>قناة واتساب</span>
+              <span className={styles.socialExternal}>
+                <ExternalLinkIcon size={14} />
+              </span>
+            </a>
+
+            <a
+              href="https://wa.me/201012892806"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialItem}
+            >
+              <span className={styles.socialIcon}>📱</span>
+              <span>تواصل معانا</span>
+              <span className={styles.socialExternal}>
+                <ExternalLinkIcon size={14} />
+              </span>
+            </a>
+          </div>
+
+          {/* ─── Footer ─── */}
+          <footer className={styles.footer}>
+            <p className={styles.footerLine}>
+              صنع بـ <span className={styles.heart}>♥</span> في شبين القناطر
+            </p>
+            <p className={styles.footerLine}>فلسطين في القلب 🇵🇸</p>
+            <p className={styles.footerCopy}>© 2026 EAH</p>
+          </footer>
         </nav>
       </aside>
     </>
