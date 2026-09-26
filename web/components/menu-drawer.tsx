@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -60,9 +60,12 @@ const BOTTOM_ITEMS: MenuItem[] = [
 export default function MenuDrawer({ open, onClose, session }: Props) {
   const pathname = usePathname()
 
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
+
   useEffect(() => {
-    onClose()
-  }, [pathname, onClose])
+    onCloseRef.current()
+  }, [pathname])
 
   useEffect(() => {
     if (!open) return
