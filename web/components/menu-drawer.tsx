@@ -19,7 +19,9 @@ import {
   LogoutIcon,
   CloseIcon,
   BadgeCheckIcon,
+  ArrowLeftIcon,
 } from './icons'
+import Avatar from './avatar'
 import type { UserSession } from '@/lib/data/user'
 import styles from './menu-drawer.module.css'
 
@@ -127,6 +129,42 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             <CloseIcon size={20} />
           </button>
         </div>
+
+        {session && (
+          <Link
+            href="/account"
+            className={styles.profileSection}
+            onClick={onClose}
+          >
+            <Avatar
+              displayName={session.displayName}
+              avatarUrl={session.avatarUrl}
+              role={session.role}
+              phoneVerified={session.phoneVerified}
+              size="lg"
+            />
+            <div className={styles.profileInfo}>
+              <div className={styles.profileName}>
+                <span>{session.displayName}</span>
+                {session.phoneVerified && (
+                  <span className={styles.verifiedIcon}>
+                    <BadgeCheckIcon size={14} />
+                  </span>
+                )}
+              </div>
+              <div className={styles.profileStats}>
+                <span>مصداقية {session.trustScore}</span>
+                <span className={styles.dot} aria-hidden>·</span>
+                <span>0 نقطة</span>
+                <span className={styles.dot} aria-hidden>·</span>
+                <span>Bronze</span>
+              </div>
+            </div>
+            <span className={styles.chevron} aria-hidden>
+              <ArrowLeftIcon size={18} />
+            </span>
+          </Link>
+        )}
 
         <nav className={styles.nav}>
           <ul className={styles.list}>

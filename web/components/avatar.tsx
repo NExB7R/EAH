@@ -12,7 +12,7 @@ type AvatarProps = {
   avatarUrl: string | null
   role: AppRole
   phoneVerified?: boolean
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'xs' | 'sm' | 'md' | 'lg'
 }
 
 export default function Avatar({
