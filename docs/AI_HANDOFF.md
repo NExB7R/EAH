@@ -2,18 +2,30 @@
 
 > تسليم سريع لأي AI/مطور.
 
-**آخر تحديث:** 2026-09-25
-**الإصدار:** v2.0.0-alpha
+**آخر تحديث:** 2026-09-27
+**الإصدار:** v2.0.0
 
 ---
 
 ## 0. ابدأ من هنا
 
-1. اقرأ MASTER_BRIEF.md + AI_CONTRACT.md + SACRED.md
-2. اقرأ LESSONS.md
-3. اقرأ PROGRESS.md
-4. اقرأ SESSION_LOG.md
-5. قول "قرأت. جاهز." واستنى
+اقرأ بالترتيب:
+
+1. MASTER_BRIEF.md
+2. AI_CONTRACT.md
+3. SACRED.md
+4. LESSONS.md
+5. STRUCTURE.md
+6. SECURITY.md
+7. CODE_STANDARDS.md
+8. DEBUGGING.md
+9. PRODUCTION_CHECKLIST.md
+10. DATABASE_RULES.md
+11. AI_HANDOFF.md
+12. PROGRESS.md
+13. TODO.md
+
+بعدها: "قرأت. جاهز." واستنى.
 
 ---
 
@@ -167,5 +179,5 @@ rm -rf .next              # لو dev بطيء
 
 ---
 
-**آخر تحديث:** 2026-09-25
+**آخر تحديث:** 2026-09-27
 **المالك:** NourEldin B7R — فلسطين في القلب 🇵🇸
