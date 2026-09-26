@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Logo from './logo'
@@ -45,11 +45,12 @@ export default function FloatingCapsule({ session }: Props) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // auto-close عند تغيير الصفحة — نستخدم setTimeout
+  // auto-close عند تغيير الصفحة فقط
+  const prevPathRef = useRef(pathname)
   useEffect(() => {
-    if (drawerOpen) {
-      const t = setTimeout(() => setDrawerOpen(false), 100)
-      return () => clearTimeout(t)
+    if (prevPathRef.current !== pathname) {
+      setDrawerOpen(false)
+      prevPathRef.current = pathname
     }
   }, [pathname])
 
