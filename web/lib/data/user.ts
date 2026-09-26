@@ -18,6 +18,8 @@ export type UserSession = {
   notifCount: number
   phoneVerified: boolean
   emailVerified: boolean
+  trustScore: number
+  trustTier: string
 }
 
 export const getUserSession = cache(async (): Promise<UserSession | null> => {
@@ -32,7 +34,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
   const [{ data: profile }, { data: roleRow }, { count }] = await Promise.all([
     supabase
       .from('profiles')
-      .select('display_name, avatar_url, phone_verified_at')
+      .select('display_name, avatar_url, phone_verified_at, trust_score, trust_tier')
       .eq('id', user.id)
       .maybeSingle(),
     supabase
@@ -56,5 +58,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     notifCount: count ?? 0,
     phoneVerified: !!profile?.phone_verified_at,
     emailVerified: !!user.email_confirmed_at,
+    trustScore: profile?.trust_score ?? 50,
+    trustTier: profile?.trust_tier ?? 'trusted',
   }
 })
