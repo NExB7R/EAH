@@ -109,3 +109,55 @@
 | `AI_HANDOFF.md` | ⚠️ ناقص (ينقص 3 أقسام) |
 | `PROGRESS.md` | ✅ |
 | `migrations/2026-09-25-normalize-profiles.sql` | ✅ |
+
+---
+
+## Docs الجديدة (2026-09-27)
+
+| الملف | الحالة |
+|------|--------|
+| `CODE_STANDARDS.md` | ✅ |
+| `DEBUGGING.md` | ✅ |
+| `PRODUCTION_CHECKLIST.md` | ✅ |
+| `DATABASE_RULES.md` | ✅ |
+| `TODO.md` | ✅ |
+| `LESSONS.md` | ✅ |
+
+---
+
+## إحصائيات الـ Docs
+
+- **Total docs:** 22 ملف
+- **Total lines:** ~4,500 سطر
+- **آخر تحديث:** 2026-09-27
+
+---
+
+## الـ commits الأخيرة (2026-09-25 → 2026-09-27)
+
+- `69c2ec4` — Drawer full rewrite
+- `6543857` — Social + Footer + scrollbar
+- `8682b81` — Profile Section
+- `3f2163e` — TODO + UserSession trust
+- `59e346a` — Capsule new layout
+- `5559928` — Drawer onCloseRef fix
+- `cc92e76` — Drawer debug
+- `b47b4f8` — Drawer auto-close fix
+- `2e64e41` — Scroll detection fix
+- `b63c3bb` — Capsule icons pointer-events
+- `2abbcd5` — Capsule smaller
+- `d88036a` — Featured lightweight
+- `253562b` — Business Card
+- `4139936` — Smart Search
+- `7fdf3fe` — Explore Search + History
+- `f95cbab` — Explore Page
+- `76b2f9b` — CODE_STANDARDS
+- `3066474` — DEBUGGING
+- `a4e2270` — PRODUCTION_CHECKLIST
+- `6682e9c` — DATABASE_RULES
+- `0354e99` — AI_CONTRACT §22-24
+- `d2bb4ac` — AI_HANDOFF update
+
+---
+
+آخر تحديث: 2026-09-27
