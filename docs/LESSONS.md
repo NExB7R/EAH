@@ -345,3 +345,95 @@ cat file.tsx
 ---
 
 آخر تحديث: 2026-09-25
+
+---
+
+## 11. أخطاء 2026-09-25 → 27
+
+### 11.1 React #418 (Hydration Mismatch) — للمرة الثانية
+
+الغلطة: useState + useEffect + shuffleArray في Featured Bento (Client).
+الصح: shuffle في الـ server (dailyShuffle) + تمرير النتيجة جاهزة.
+السبب: random مختلف بين server/client.
+
+### 11.2 Drawer auto-close على كل render
+
+الغلطة: useEffect(() => onClose(), [pathname, onClose]) — onClose new function كل render.
+الصح: onCloseRef + useEffect يعتمد على pathname بس.
+السبب: onClose مش memoized.
+
+### 11.3 Console.log مش بيظهر في Firefox
+
+الأعراض: console.log('test') → undefined بس.
+السبب: Firefox Console عنده مشكلة في عرض output.
+الحل: جرب Chrome / Edge. متعتمدش على Firefox Console.
+
+### 11.4 الأزرار مش شغّالة — CSS
+
+الغلطة: pointer-events: none على .right و .left قبل mounted.
+الصح: mounted guard + pointer-events: auto دايماً.
+السبب: CSS كان بيخفي الأيقونات في حالة data-scrolled=false.
+
+### 11.5 Facebook CDN 502
+
+الغلطة: صور من scontent-iad3-2.xx.fbcdn.net.
+النتيجة: 502 Bad Gateway على Vercel.
+الحل: نتجاهل Facebook CDN — fallback gradient في BusinessCard.
+السبب: Facebook CDN مش مستقر.
+
+### 11.6 نسيان git add لملفات جديدة
+
+الغلطة: إنشاء featured-bento.tsx + .module.css بدون git add.
+النتيجة: build فشل على Vercel (Module not found).
+الحل: بعد كل ملف جديد → git status --short للتحقق.
+
+### 11.7 مسح ملفات احتياطية بدون تفكير
+
+الغلطة: محاولة حذف .env.local.bak + .env.original.
+الصح: نسيبهم (احتياطي — في .gitignore).
+السبب: ممكن نحتاجهم لو .env.local حصلت مشكلة.
+
+### 11.8 تعديلات على ملفات SACRED بدون مراجعة
+
+الغلطة: تعديل next.config.ts مرات كتير.
+الصح: SACRED files → موافقة صريحة + مراجعة قبل كل تعديل.
+
+### 11.9 502 صور متكررة بدون rate limit
+
+الغلطة: next/image بيحاول يحمّل صور Facebook CDN كل مرة.
+النتيجة: بطء + سجلات مليانة 502.
+الحل: fallback سريع (placeholder gradient) + تجاهل الدومين.
+
+### 11.10 ملفات CSS broken (orphan selectors)
+
+الغلطة: Python patch بيسيب orphan selectors (.micBtn بدون @keyframes).
+النتيجة: Vercel build فشل (Invalid empty selector).
+الحل: بعد كل patch → فحص { = } + grep على الملف.
+
+---
+
+## 12. قواعد جديدة (من الأخطاء دي)
+
+### 12.1 قبل commit
+- typecheck.
+- git status --short.
+- فحص CSS ({ = }).
+
+### 12.2 قبل deploy
+- git push بنجاح.
+- Vercel deploy Ready.
+- اختبار على Chrome.
+
+### 12.3 عند المشاكل
+- جرب متصفح تاني (مش Firefox بس).
+- اجمع أدلة (Console + Network).
+- متحذفش بدون backup.
+
+### 12.4 عند الحذف
+- backup أولاً.
+- تحقق من git.
+- موافقة صريحة.
+
+---
+
+آخر تحديث: 2026-09-27
