@@ -400,3 +400,33 @@
     transition: none;
   }
 }
+
+/* ─── External Icon (for social links) ─── */
+.externalIcon {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: auto;
+  color: var(--text-muted);
+  transition: transform 180ms var(--ease), color 180ms var(--ease);
+}
+
+.item:hover .externalIcon {
+  color: var(--purple-light);
+  transform: translate(2px, -2px);
+}
+
+/* ─── Footer Version ─── */
+.footerVersion {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-disabled);
+  margin: 6px 0 0;
+  letter-spacing: 0.05em;
+  font-family: monospace;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .externalIcon {
+    transition: none;
+  }
+}

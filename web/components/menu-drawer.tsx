@@ -11,7 +11,6 @@ import {
   TrendingUpIcon,
   SparklesIcon,
   BellIcon,
-  UserIcon,
   SettingsIcon,
   InfoIcon,
   ShareIcon,
@@ -21,8 +20,18 @@ import {
   BadgeCheckIcon,
   ArrowLeftIcon,
   ExternalLinkIcon,
+  FacebookIcon,
+  WhatsAppIcon,
+  ShieldIcon,
+  FileTextIcon,
+  CookieIcon,
+  TargetIcon,
+  LayoutDashboardIcon,
+  ShieldCheckIcon,
+  LocationIcon,
 } from './icons'
 import Avatar from './avatar'
+import Logo from './logo'
 import type { UserSession } from '@/lib/data/user'
 import styles from './menu-drawer.module.css'
 
@@ -45,19 +54,30 @@ const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/offers', label: 'العروض', Icon: TagIcon },
   { href: '/trends', label: 'الترند', Icon: TrendingUpIcon },
   { href: '/new', label: 'الجديد', Icon: SparklesIcon },
+  { href: '/explore?nearby=1', label: 'قريب منك', Icon: LocationIcon },
+  { href: '/suggest', label: 'رشحلي', Icon: TargetIcon },
 ]
 
 const USER_ITEMS: MenuItem[] = [
-  { href: '/account', label: 'حسابي', Icon: UserIcon },
   { href: '/notifications', label: 'الإشعارات', Icon: BellIcon },
 ]
 
 const MERCHANT_ITEMS: MenuItem[] = [
-  { href: '/merchant', label: 'لوحة التحكم', Icon: SettingsIcon },
+  { href: '/merchant', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
+]
+
+const ADMIN_ITEMS: MenuItem[] = [
+  { href: '/admin', label: 'لوحة الأدمن', Icon: ShieldCheckIcon },
 ]
 
 const BOTTOM_ITEMS: MenuItem[] = [
   { href: '/about', label: 'مين إحنا', Icon: InfoIcon },
+]
+
+const LEGAL_ITEMS: MenuItem[] = [
+  { href: '/terms', label: 'الشروط والأحكام', Icon: FileTextIcon },
+  { href: '/privacy', label: 'سياسة الخصوصية', Icon: ShieldIcon },
+  { href: '/cookies', label: 'ملفات الكوكيز', Icon: CookieIcon },
 ]
 
 export default function MenuDrawer({ open, onClose, session }: Props) {
@@ -80,7 +100,12 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
   }, [open, onClose])
 
   const isLoggedIn = !!session
-  const isMerchant = session?.role === 'merchant' || session?.role === 'admin' || session?.role === 'super_admin'
+  const isMerchant =
+    session?.role === 'merchant' ||
+    session?.role === 'admin' ||
+    session?.role === 'super_admin'
+  const isAdmin =
+    session?.role === 'admin' || session?.role === 'super_admin'
 
   const handleShare = async () => {
     if (typeof navigator === 'undefined' || !navigator.share) return
@@ -110,17 +135,18 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
 
   if (!open) return null
 
+  const appVersion =
+    process.env.NEXT_PUBLIC_APP_VERSION ?? 'v2.0.0'
+
   return (
     <>
-      <div
-        className={styles.backdrop}
-        onClick={onClose}
-        aria-hidden
-      />
+      <div className={styles.backdrop} onClick={onClose} aria-hidden />
 
       <aside className={styles.drawer} role="dialog" aria-modal="true">
         <div className={styles.header}>
-          <h2 className={styles.title}>القائمة</h2>
+          <Link href="/" onClick={onClose} aria-label="EAH — الرئيسية">
+            <Logo size="xs" variant="compact" href={undefined} />
+          </Link>
           <button
             type="button"
             className={styles.closeBtn}
@@ -168,10 +194,11 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
         )}
 
         <nav className={styles.nav}>
+          {/* ─── Public ─── */}
           <ul className={styles.list}>
             {PUBLIC_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
-                <Link href={href} className={styles.item}>
+                <Link href={href} className={styles.item} onClick={onClose}>
                   <span className={styles.itemIcon}><Icon size={20} /></span>
                   <span>{label}</span>
                 </Link>
@@ -179,13 +206,14 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             ))}
           </ul>
 
+          {/* ─── User ─── */}
           {isLoggedIn && (
             <>
               <div className={styles.divider} />
               <ul className={styles.list}>
                 {USER_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item}>
+                    <Link href={href} className={styles.item} onClick={onClose}>
                       <span className={styles.itemIcon}><Icon size={20} /></span>
                       <span>{label}</span>
                     </Link>
@@ -195,13 +223,14 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             </>
           )}
 
+          {/* ─── Merchant ─── */}
           {isMerchant && (
             <>
               <div className={styles.divider} />
               <ul className={styles.list}>
                 {MERCHANT_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item}>
+                    <Link href={href} className={styles.item} onClick={onClose}>
                       <span className={styles.itemIcon}><Icon size={20} /></span>
                       <span>{label}</span>
                     </Link>
@@ -211,12 +240,29 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             </>
           )}
 
-          <div className={styles.divider} />
+          {/* ─── Admin ─── */}
+          {isAdmin && (
+            <>
+              <div className={styles.divider} />
+              <ul className={styles.list}>
+                {ADMIN_ITEMS.map(({ href, label, Icon }) => (
+                  <li key={href}>
+                    <Link href={href} className={styles.item} onClick={onClose}>
+                      <span className={styles.itemIcon}><Icon size={20} /></span>
+                      <span>{label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
 
+          {/* ─── Bottom ─── */}
+          <div className={styles.divider} />
           <ul className={styles.list}>
             {BOTTOM_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
-                <Link href={href} className={styles.item}>
+                <Link href={href} className={styles.item} onClick={onClose}>
                   <span className={styles.itemIcon}><Icon size={20} /></span>
                   <span>{label}</span>
                 </Link>
@@ -238,6 +284,67 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             </li>
           </ul>
 
+          {/* ─── Legal ─── */}
+          <div className={styles.divider} />
+          <ul className={styles.list}>
+            {LEGAL_ITEMS.map(({ href, label, Icon }) => (
+              <li key={href}>
+                <Link href={href} className={styles.item} onClick={onClose}>
+                  <span className={styles.itemIcon}><Icon size={20} /></span>
+                  <span>{label}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* ─── Social ─── */}
+          <div className={styles.divider} />
+          <ul className={styles.list}>
+            <li>
+              <a
+                href="/coming-soon?platform=facebook"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.item}
+              >
+                <span className={styles.itemIcon}><FacebookIcon size={20} /></span>
+                <span>فيسبوك</span>
+                <span className={styles.externalIcon}>
+                  <ExternalLinkIcon size={14} />
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/coming-soon?platform=whatsapp-channel"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.item}
+              >
+                <span className={styles.itemIcon}><WhatsAppIcon size={20} /></span>
+                <span>قناة واتساب</span>
+                <span className={styles.externalIcon}>
+                  <ExternalLinkIcon size={14} />
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://wa.me/201012892806"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.item}
+              >
+                <span className={styles.itemIcon}><WhatsAppIcon size={20} /></span>
+                <span>تواصل معانا</span>
+                <span className={styles.externalIcon}>
+                  <ExternalLinkIcon size={14} />
+                </span>
+              </a>
+            </li>
+          </ul>
+
+          {/* ─── Login/Logout ─── */}
           {isLoggedIn ? (
             <>
               <div className={styles.divider} />
@@ -257,56 +364,11 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
           ) : (
             <>
               <div className={styles.divider} />
-              <Link href="/auth" className={styles.loginCta}>
+              <Link href="/auth" className={styles.loginCta} onClick={onClose}>
                 ادخل بسرعة
               </Link>
             </>
           )}
-          {/* ─── Social ─── */}
-          <div className={styles.divider} />
-
-          <div className={styles.socialSection}>
-            <div className={styles.socialTitle}>تابعنا</div>
-
-            <a
-              href="/coming-soon?platform=facebook"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.socialItem}
-            >
-              <span className={styles.socialIcon}>📘</span>
-              <span>فيسبوك</span>
-              <span className={styles.socialExternal}>
-                <ExternalLinkIcon size={14} />
-              </span>
-            </a>
-
-            <a
-              href="/coming-soon?platform=whatsapp-channel"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.socialItem}
-            >
-              <span className={styles.socialIcon}>💬</span>
-              <span>قناة واتساب</span>
-              <span className={styles.socialExternal}>
-                <ExternalLinkIcon size={14} />
-              </span>
-            </a>
-
-            <a
-              href="https://wa.me/201012892806"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.socialItem}
-            >
-              <span className={styles.socialIcon}>📱</span>
-              <span>تواصل معانا</span>
-              <span className={styles.socialExternal}>
-                <ExternalLinkIcon size={14} />
-              </span>
-            </a>
-          </div>
 
           {/* ─── Footer ─── */}
           <footer className={styles.footer}>
@@ -314,7 +376,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
               صنع بـ <span className={styles.heart}>♥</span> في شبين القناطر
             </p>
             <p className={styles.footerLine}>فلسطين في القلب 🇵🇸</p>
-            <p className={styles.footerCopy}>© 2026 EAH</p>
+            <p className={styles.footerVersion}>{appVersion}</p>
           </footer>
         </nav>
       </aside>
