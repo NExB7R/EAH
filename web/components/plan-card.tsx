@@ -7,7 +7,7 @@ import {
   CheckCircleIcon,
   ArrowLeftIcon,
   SparklesIcon,
-  ShieldCheckIcon,
+  FileTextIcon,
 } from './icons'
 import type { SubscriptionPlan, PlanFeatureKey } from '@/lib/data/subscriptions'
 import { FEATURE_LABEL } from '@/lib/data/subscriptions'
@@ -32,10 +32,19 @@ const PLAN_TAGLINE: Record<string, string> = {
   featured_yearly: 'كل حاجة بدون حدود',
 }
 
+const PLAN_RETENTION: Record<string, number> = {
+  basic: 3,
+  featured_monthly: 6,
+  featured_quarterly: 12,
+  featured_yearly: 24,
+}
+
 export default function PlanCard({ plan, featured = false }: Props) {
   const Icon = PLAN_ICON[plan.code] ?? CrownGoldIcon
   const tagline = PLAN_TAGLINE[plan.code]
   const isFree = plan.price_egp === 0
+  const retentionCount = PLAN_RETENTION[plan.code] ?? 3
+  const hasAI = plan.code === 'featured_quarterly' || plan.code === 'featured_yearly'
 
   return (
     <div className={`${styles.card} ${featured ? styles.featured : ''} ${isFree ? styles.free : ''}`}>
@@ -88,6 +97,20 @@ export default function PlanCard({ plan, featured = false }: Props) {
           </li>
         ))}
       </ul>
+
+      {/* Extras */}
+      <div className={styles.extras}>
+        <div className={styles.extra}>
+          <FileTextIcon size={14} />
+          <span>آخر {retentionCount} تقرير ذكي محفوظ</span>
+        </div>
+        {hasAI && (
+          <div className={`${styles.extra} ${styles.extraAI}`}>
+            <SparklesIcon size={14} />
+            <span>مساعد EAH الذكي (تحليل شامل)</span>
+          </div>
+        )}
+      </div>
 
       <Link href="/merchant/apply" className={styles.cta}>
         <span>{isFree ? 'ابدأ مجاناً' : 'ابدأ التجربة'}</span>

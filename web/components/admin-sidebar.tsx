@@ -51,6 +51,7 @@ const SECTIONS: Section[] = [
     items: [
       { href: '/admin', label: 'الرئيسية', Icon: LayoutDashboardIcon },
       { href: '/admin/analytics', label: 'التحليلات', Icon: TrendingUpIcon },
+      { href: '/admin/insights', label: 'تخزين التقارير', Icon: SparklesIcon },
     ],
   },
   {

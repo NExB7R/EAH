@@ -312,3 +312,38 @@
 .free .cta:hover {
   box-shadow: 0 0 30px rgba(85,231,209,0.7);
 }
+
+/* ─── Extras (Retention + AI) ─── */
+.extras {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(232,199,154,0.12);
+}
+
+.extra {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+
+.extra svg {
+  color: var(--purple-light);
+  flex-shrink: 0;
+}
+
+.extraAI {
+  color: var(--gold-light);
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(232,199,154,0.06);
+  border: 1px dashed rgba(232,199,154,0.35);
+}
+
+.extraAI svg {
+  color: var(--gold-light);
+}

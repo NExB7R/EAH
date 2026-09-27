@@ -9,7 +9,7 @@ import {
   GiftIcon,
   CrownGoldIcon,
   SettingsIcon,
-  BellIcon,
+  SparklesIcon,
 } from './icons'
 import styles from './merchant-sidebar.module.css'
 
@@ -19,6 +19,7 @@ type Props = {
 
 const ITEMS = [
   { href: '/merchant', label: 'نظرة عامة', Icon: LayoutDashboardIcon },
+  { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon, tone: 'gold' },
   { href: '/merchant/business', label: 'نشاطي', Icon: StoreIcon },
   { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon, badge: 'orders' },
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
@@ -32,7 +33,7 @@ export default function MerchantSidebar({ newOrders = 0 }: Props) {
   return (
     <aside className={styles.sidebar}>
       <nav className={styles.nav} aria-label="تنقل التاجر">
-        {ITEMS.map(({ href, label, Icon, badge }) => {
+        {ITEMS.map(({ href, label, Icon, badge, tone }) => {
           const active =
             href === '/merchant'
               ? pathname === '/merchant'
@@ -42,7 +43,7 @@ export default function MerchantSidebar({ newOrders = 0 }: Props) {
             <Link
               key={href}
               href={href}
-              className={`${styles.item} ${active ? styles.active : ''}`}
+              className={`${styles.item} ${active ? styles.active : ''} ${tone === 'gold' ? styles.itemGold : ''}`}
               aria-current={active ? 'page' : undefined}
             >
               <span className={styles.iconWrap}>

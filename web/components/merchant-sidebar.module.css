@@ -100,3 +100,19 @@
 @media (prefers-reduced-motion: reduce) {
   .item { transition: none; }
 }
+
+/* ─── Gold Highlight (AI Advisor) ─── */
+.itemGold {
+  background: linear-gradient(135deg, rgba(232,199,154,0.06), rgba(168,85,247,0.04));
+  border: 1px solid rgba(232,199,154,0.22);
+}
+
+.itemGold:hover {
+  background: linear-gradient(135deg, rgba(232,199,154,0.15), rgba(168,85,247,0.08));
+  border-color: rgba(232,199,154,0.5);
+}
+
+.itemGold .iconWrap {
+  background: rgba(232,199,154,0.1);
+  color: var(--gold-light);
+}
