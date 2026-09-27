@@ -29,6 +29,8 @@ export type Business = {
   hook: string | null
   area: string | null
   city: string | null
+  address_text: string | null
+  map_url: string | null
   cover_image_url: string | null
   is_open: boolean
   is_featured: boolean
@@ -101,7 +103,7 @@ export function isOpenNow(hours: WorkingHours | null): boolean {
 
 const BUSINESS_COLUMNS = `
   id, slug, name, business_type, description, hook,
-  area, city, cover_image_url,
+  area, city, address_text, map_url, cover_image_url,
   is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   trust_score, trust_tier, successful_orders,
   featured_order, featured_until, featured_pin,

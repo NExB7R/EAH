@@ -73,7 +73,7 @@ export const getBusinessDetail = unstable_cache(
       .from('businesses')
       .select(`
         id, slug, name, business_type, description, hook,
-        area, city, cover_image_url,
+        area, city, address_text, map_url, cover_image_url,
         is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         trust_score, trust_tier, successful_orders,
         featured_order, featured_until, featured_pin,
@@ -173,7 +173,7 @@ export const getSimilarBusinesses = unstable_cache(
       .from('businesses')
       .select(`
         id, slug, name, business_type, description, hook,
-        area, city, cover_image_url,
+        area, city, address_text, map_url, cover_image_url,
         is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         trust_score, trust_tier, successful_orders,
         featured_order, featured_until, featured_pin,

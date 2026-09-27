@@ -1,0 +1,192 @@
+.wrap { display: flex; flex-direction: column; gap: 20px; }
+
+/* ─── Tabs Bar ─── */
+.tabs {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 14px;
+  background: rgba(20,14,34,0.6);
+  border: 1px solid rgba(168,85,247,0.18);
+}
+
+.tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 200ms var(--ease);
+}
+
+.tab:hover { color: var(--purple-light); }
+
+.active {
+  color: var(--gold-light);
+  background: linear-gradient(135deg, rgba(232,199,154,0.15), rgba(168,85,247,0.08));
+  border: 1px solid rgba(232,199,154,0.35);
+  box-shadow: 0 0 12px rgba(232,199,154,0.15);
+}
+
+.tabCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgba(232,199,154,0.2);
+  color: var(--gold-light);
+  font-size: 0.6rem;
+  font-weight: 900;
+}
+
+.content { display: flex; flex-direction: column; gap: 18px; }
+
+/* ─── Blocks ─── */
+.block {
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(20,14,34,0.5);
+  border: 1px solid rgba(232,199,154,0.15);
+}
+
+.blockTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: var(--gold-light);
+}
+
+/* ─── Contacts ─── */
+.contactList { display: flex; flex-wrap: wrap; gap: 8px; }
+.contactItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  background: rgba(168,85,247,0.05);
+  border: 1px solid rgba(168,85,247,0.2);
+  text-decoration: none;
+  transition: all 180ms var(--ease);
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+}
+.contactItem:hover { transform: translateY(-1px); }
+.contactWhatsapp { color: #25D366; border-color: rgba(37,211,102,0.3); background: rgba(37,211,102,0.05); }
+.contactWhatsapp:hover { border-color: #25D366; }
+.contactPhone { color: var(--gold-light); border-color: rgba(232,199,154,0.3); }
+.contactPhone:hover { border-color: var(--gold-light); }
+.contactFacebook { color: #818CF8; border-color: rgba(129,140,248,0.3); }
+.contactFacebook:hover { border-color: #818CF8; }
+
+/* ─── Hours ─── */
+.hoursList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.hoursRow { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed rgba(232,199,154,0.08); }
+.hoursRow:last-child { border-bottom: none; }
+.hoursDay { font-size: 0.78rem; font-weight: 800; color: var(--text-secondary); }
+.hoursTime { font-size: 0.78rem; font-weight: 700; color: var(--gold-light); font-variant-numeric: tabular-nums; direction: ltr; }
+
+/* ─── Address ─── */
+.addressText { margin: 0 0 12px; font-size: 0.82rem; font-weight: 700; color: var(--text-secondary); line-height: 1.7; }
+.mapBtn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border-radius: 999px;
+  font-size: 0.75rem; font-weight: 900; color: var(--bg-base);
+  background: linear-gradient(135deg, #55E7D1, #2BB8A4);
+  text-decoration: none;
+  box-shadow: 0 0 14px rgba(85,231,209,0.35);
+}
+
+/* ─── Description ─── */
+.desc { margin: 0; font-size: 0.82rem; font-weight: 600; color: var(--text-secondary); line-height: 1.8; }
+
+/* ─── Branches ─── */
+.branchList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.branchItem { display: flex; gap: 10px; padding: 12px 14px; border-radius: 12px; background: rgba(168,85,247,0.04); border: 1px solid rgba(168,85,247,0.12); }
+.branchItem svg { color: var(--purple-light); flex-shrink: 0; margin-top: 2px; }
+.branchBody { display: flex; flex-direction: column; gap: 3px; }
+.branchName { font-family: var(--font-display); font-size: 0.85rem; font-weight: 900; color: var(--text-primary); display: flex; align-items: center; gap: 6px; }
+.primaryBadge { padding: 1px 7px; border-radius: 999px; background: rgba(232,199,154,0.15); color: var(--gold-light); font-size: 0.58rem; font-weight: 900; }
+.branchAddr { font-size: 0.72rem; font-weight: 700; color: var(--text-tertiary); }
+
+/* ─── Gallery ─── */
+.galleryGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.galleryItem { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.15); cursor: pointer; padding: 0; }
+.galleryImg { object-fit: cover; transition: transform 300ms var(--ease); }
+.galleryItem:hover .galleryImg { transform: scale(1.08); }
+
+/* ─── Menu ─── */
+.menuGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.menuItem { position: relative; aspect-ratio: 3 / 4; border-radius: 14px; overflow: hidden; background: rgba(168,85,247,0.06); border: 1px solid rgba(232,199,154,0.2); cursor: pointer; padding: 0; }
+.menuImg { object-fit: cover; transition: transform 300ms var(--ease); }
+.menuItem:hover .menuImg { transform: scale(1.05); }
+
+/* ─── Empty ─── */
+.empty {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 60px 20px; text-align: center;
+  border-radius: 18px; background: rgba(20,14,34,0.4); border: 1px dashed rgba(168,85,247,0.25);
+}
+.empty svg { color: var(--purple-light); opacity: 0.6; }
+.empty p { margin: 0; font-size: 0.85rem; font-weight: 800; color: var(--text-tertiary); }
+
+.reviewsPlaceholder {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 60px 20px; text-align: center;
+  border-radius: 18px; background: rgba(20,14,34,0.4); border: 1px dashed rgba(232,199,154,0.25);
+}
+.reviewsPlaceholder svg { color: var(--gold-light); opacity: 0.6; }
+.reviewsPlaceholder p { margin: 0; font-size: 0.85rem; font-weight: 800; color: var(--text-tertiary); }
+
+/* ─── Lightbox ─── */
+.lightbox {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(7,2,13,0.95);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  animation: fadeIn 200ms var(--ease-out);
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.lightboxClose {
+  position: absolute; top: 20px; inset-inline-end: 20px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(232,199,154,0.15); border: 1px solid rgba(232,199,154,0.4);
+  color: var(--gold-light); font-size: 1.2rem; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.lightboxImg { position: relative; width: 100%; max-width: 900px; aspect-ratio: 3 / 4; max-height: 90vh; }
+.lightboxImage { object-fit: contain; }
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .block { padding: 14px 16px; }
+  .galleryGrid { grid-template-columns: repeat(2, 1fr); }
+  .menuGrid { grid-template-columns: repeat(2, 1fr); }
+  .tab { font-size: 0.75rem; padding: 9px 8px; gap: 4px; }
+  .tab svg { width: 13px; height: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab, .contactItem, .galleryImg, .menuImg { transition: none; }
+  .galleryItem:hover .galleryImg, .menuItem:hover .menuImg { transform: none; }
+  .lightbox { animation: none; }
+}
