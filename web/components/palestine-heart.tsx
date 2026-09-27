@@ -5,7 +5,7 @@ import { useState } from 'react'
 import styles from './palestine-heart.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Palestine Heart (neon gold heart with animated flag)
+// EAH — Palestine Heart (neon gold heart + animated flag)
 // ═══════════════════════════════════════════════════════════
 
 export default function PalestineHeart() {
@@ -20,37 +20,38 @@ export default function PalestineHeart() {
       onTouchStart={() => setActive(true)}
       onTouchEnd={() => setActive(false)}
     >
-      <div className={styles.heartWrap} aria-hidden>
+      <span className={styles.heartWrap} aria-hidden>
         <svg
-          viewBox="0 0 32 32"
+          viewBox="0 0 100 100"
           className={styles.heartSvg}
-          fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            <clipPath id="heartClip">
-              <path d="M16 28.5C16 28.5 3 20 3 11.5C3 6.5 6.5 3 11 3C13.5 3 15.3 4.2 16 5.5C16.7 4.2 18.5 3 21 3C25.5 3 29 6.5 29 11.5C29 20 16 28.5 16 28.5Z" />
+            <clipPath id="eahHeartClip">
+              <path d="M50 88C50 88 8 60 8 32C8 18 18 8 32 8C40 8 46 12 50 18C54 12 60 8 68 8C82 8 92 18 92 32C92 60 50 88 50 88Z" />
             </clipPath>
           </defs>
 
-          <path
-            d="M16 28.5C16 28.5 3 20 3 11.5C3 6.5 6.5 3 11 3C13.5 3 15.3 4.2 16 5.5C16.7 4.2 18.5 3 21 3C25.5 3 29 6.5 29 11.5C29 20 16 28.5 16 28.5Z"
-            fill="rgba(20,14,34,0.9)"
-            stroke="currentColor"
-            strokeWidth="1.2"
-            strokeLinejoin="round"
-          />
-
-          <g clipPath="url(#heartClip)" className={styles.flag}>
-            <rect x="3" y="3" width="26" height="26" fill="#000" />
-            <rect x="3" y="3" width="26" height="8.67" fill="#007A3D" />
-            <rect x="3" y="11.33" width="26" height="8.67" fill="#FFFFFF" />
-            <rect x="3" y="20" width="26" height="8.67" fill="#000" />
-            <polygon points="3,3 14,16 3,29" fill="#CE1126" />
+          {/* Flag inside heart */}
+          <g clipPath="url(#eahHeartClip)">
+            <rect x="0" y="0" width="100" height="33.3" fill="#007A3D" />
+            <rect x="0" y="33.3" width="100" height="33.4" fill="#FFFFFF" />
+            <rect x="0" y="66.7" width="100" height="33.3" fill="#000000" />
+            <polygon points="0,0 33,50 0,100" fill="#CE1126" />
           </g>
+
+          {/* Heart outline (gold neon) */}
+          <path
+            d="M50 88C50 88 8 60 8 32C8 18 18 8 32 8C40 8 46 12 50 18C54 12 60 8 68 8C82 8 92 18 92 32C92 60 50 88 50 88Z"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
         </svg>
         <span className={styles.glow} aria-hidden />
-      </div>
+      </span>
 
       <span className={styles.text}>فلسطين في القلب</span>
     </Link>
