@@ -151,3 +151,30 @@
 ### Notes
 - 10 كروت × `next/image` lazy = صفر تأثير سرعة
 - الكارد variant="small" هو الأساسي حالياً
+
+---
+
+## [v2.2.3] - 2026-09-27 — Featured Final (Home + /featured)
+
+### Added
+- Featured Bento (Home): Grid موحّد — 5×2 / 3×2 / 2×2
+- Featured Showcase (/featured): Grid موحّد — 4×2 / 3×2 / 2×2
+- تدوير تلقائي 10 ثواني (يتوقف عند Hover/الخروج من الشاشة)
+- سحب يدوي (Touch) على الموبايل والتابلت
+- IntersectionObserver (يوقف الدوران لما يخرج من الشاشة)
+- Reduced Motion support
+- عدّاد "1/6" (بدون أسهم — أنضف)
+- إطار ذهبي رفيع + توهج نيون بنفسجي
+
+### Changed
+- الكارد: كله variant="small" (موحّد)
+- `/featured` — بدون خلفية داكنة، بدون container ذهبي
+- page.tsx — شيلنا initialStart
+
+### Removed
+- Chevron arrows (كبيرة) — استبدلناها بسحب يدوي
+- Hero variant من Bento
+
+### Notes
+- الـ DOM ثابت — 10/6/4 slots فقط، بيتبدل المحتوى
+- الصور lazy — بس اللي ظاهرة بتتحمّل

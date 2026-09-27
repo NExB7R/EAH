@@ -1,38 +1,75 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — /featured Page (2026 — بدون خلفية داكنة)
+   EAH — /featured Page (Premium 2026)
    ═══════════════════════════════════════════════════════════ */
 
 .page { min-height: 100vh; }
 
 .section {
   width: 100%;
-  padding: 32px 0 70px;
+  padding: 28px 0 70px;
 }
 
-.container {
-  max-width: 1200px;
+.frame {
+  position: relative;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 22px 20px 18px;
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(20,14,34,0.55), rgba(10,7,20,0.82));
+  border: 1.5px solid rgba(232,199,154,0.32);
+  box-shadow:
+    0 0 0 1px rgba(232,199,154,0.06),
+    0 0 40px rgba(232,199,154,0.12),
+    0 0 80px rgba(168,85,247,0.06),
+    inset 0 1px 0 rgba(232,199,154,0.1);
 }
 
+/* ─── Grid ─── */
 .grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  animation: eahFade 400ms var(--ease-out);
+}
+
+@keyframes eahFade {
+  from { opacity: 0.5; }
+  to   { opacity: 1; }
 }
 
 @media (min-width: 640px) {
-  .grid { grid-template-columns: repeat(3, 1fr); }
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (min-width: 1024px) {
-  .grid { grid-template-columns: repeat(4, 1fr); }
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-@media (max-width: 480px) {
-  .section { padding: 20px 0 52px; }
-  .container { padding: 0 12px; }
+/* ─── Pager ─── */
+.pager {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
+
+.counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-tertiary);
+  background: rgba(232,199,154,0.05);
+  border: 1px solid rgba(232,199,154,0.22);
+}
+
+.counterNow { color: var(--gold-light); font-size: 0.9rem; }
+.counterSep { opacity: 0.5; margin: 0 1px; }
+.counterTotal { color: var(--text-secondary); }
 
 /* ─── Empty ─── */
 .empty {
@@ -48,4 +85,15 @@
   font-size: 0.85rem;
   color: var(--text-muted);
   font-weight: 600;
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 480px) {
+  .section { padding: 20px 0 52px; }
+  .frame { padding: 18px 14px 16px; border-radius: 18px; }
+  .grid { gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid { animation: none; }
 }

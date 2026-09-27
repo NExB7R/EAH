@@ -4,10 +4,6 @@ import PageHeader from '@/components/page-header'
 import FeaturedShowcase from './featured-showcase'
 import styles from './featured.module.css'
 
-// ═══════════════════════════════════════════════════════════
-// EAH — /featured (صفحة كل المميزين)
-// ═══════════════════════════════════════════════════════════
-
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
@@ -23,7 +19,7 @@ export default async function FeaturedPage() {
       <PageHeader title="المميزون" />
 
       <section className={styles.section}>
-        <div className={styles.container}>
+        <div className={styles.frame}>
           {all.length === 0 ? (
             <div className={styles.empty}>
               <p>لسه مفيش أنشطة مميزة</p>

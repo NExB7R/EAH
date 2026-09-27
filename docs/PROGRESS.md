@@ -205,3 +205,9 @@
 - بدون Hero variant
 - 10 كروت × Home + /featured موحّدين
 - /featured: بدون خلفية داكنة
+
+### 2026-09-27 — Featured Final ✅
+- Home: 5×2/3×2/2×2 (10/6/4)
+- /featured: 4×2/3×2/2×2 (8/6/4)
+- Auto-rotate + Touch swipe + IntersectionObserver
+- إطار ذهبي بريميوم

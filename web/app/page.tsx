@@ -4,7 +4,7 @@ import {
   getFeaturedBusinesses,
   getTopBusinesses,
 } from '@/lib/data'
-import { getRotationStart } from '@/lib/featured-rotation'
+
 import type { Business } from '@/lib/data'
 
 // ═══════════════════════════════════════════════════════════
@@ -36,13 +36,11 @@ export default async function Home() {
     if (all.length >= 15) break
   }
 
-  // نقطة البداية للدوران العادل (نفسها server/client → بدون hydration mismatch)
-  const start = getRotationStart(all.length)
 
   return (
     <main data-snap="true">
       <HomeHero />
-      <FeaturedBento businesses={all} initialStart={start} />
+      <FeaturedBento businesses={all} />
     </main>
   )
 }
