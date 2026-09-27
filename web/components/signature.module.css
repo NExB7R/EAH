@@ -8,12 +8,12 @@
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  padding: 6px 24px 10px;
+  padding: 4px 18px 6px;
 }
 
 .name {
   font-family: 'Great Vibes', 'Snell Roundhand', cursive;
-  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-size: clamp(1.3rem, 3.5vw, 1.9rem);
   font-weight: 400;
   font-style: italic;
   line-height: 1.1;
@@ -53,7 +53,7 @@
 }
 
 @media (max-width: 640px) {
-  .wrap { padding: 4px 16px 8px; }
+  .wrap { padding: 3px 12px 4px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
