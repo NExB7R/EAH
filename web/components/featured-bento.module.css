@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — Featured Bento (Premium 2026 — صفحات + أرقام)
+   EAH — Featured Bento (Premium 2026)
    ═══════════════════════════════════════════════════════════ */
 
 .section {
@@ -12,7 +12,6 @@
     linear-gradient(180deg, rgba(10,5,20,0.5), rgba(7,2,13,0.72));
   border-top: 1px solid rgba(232,199,154,0.12);
   border-bottom: 1px solid rgba(232,199,154,0.12);
-  scroll-snap-align: start;
 }
 
 .container {
@@ -87,7 +86,7 @@
   transform: translateY(-1px);
 }
 
-/* ─── Timer Row ─── */
+/* ─── Timer Row (Progress + Next) ─── */
 .timerRow {
   display: flex;
   align-items: center;
@@ -133,75 +132,60 @@
   text-overflow: ellipsis;
 }
 
-/* ─── Grid (5 cols desktop, 10 per page = 2 rows) ─── */
+/* ─── Grid (Mobile-first) ─── */
 .grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(2, 1fr);
-  animation: eahGridFade 400ms var(--ease-out);
+  grid-template-columns: 1fr 1fr;
 }
 
-@keyframes eahGridFade {
-  from { opacity: 0.4; }
-  to   { opacity: 1; }
+.heroSlot {
+  grid-column: 1 / -1;
+  min-height: 340px;
+  animation: eahHeroFade 500ms var(--ease-out);
 }
 
-@media (min-width: 640px) {
-  .grid { grid-template-columns: repeat(3, 1fr); }
+.smallSlot { min-height: 200px; }
+
+@keyframes eahHeroFade {
+  from { opacity: 0.35; transform: translateY(6px); }
+  to   { opacity: 1;    transform: translateY(0); }
 }
 
+/* ─── Tablet ─── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "hero hero"
+      "s1   s2"
+      "s3   s4";
+  }
+  .heroSlot { grid-area: hero; min-height: 380px; }
+  .smallSlot:nth-child(2) { grid-area: s1; }
+  .smallSlot:nth-child(3) { grid-area: s2; }
+  .smallSlot:nth-child(4) { grid-area: s3; }
+  .smallSlot:nth-child(5) { grid-area: s4; }
+}
+
+/* ─── Desktop: Bento حقيقي (grid-areas) ─── */
 @media (min-width: 1024px) {
-  .grid { grid-template-columns: repeat(5, 1fr); }
-}
-
-/* ─── Pager (أرقام الصفحات) ─── */
-.pager {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 26px;
-  flex-wrap: wrap;
-}
-
-.pageNum {
-  position: relative;
-  min-width: 38px;
-  height: 38px;
-  padding: 0 12px;
-  border-radius: var(--radius-full);
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 900;
-  color: var(--text-tertiary);
-  background: rgba(168,85,247,0.06);
-  border: 1px solid rgba(168,85,247,0.22);
-  cursor: pointer;
-  transition: all 200ms var(--ease);
-  font-variant-numeric: tabular-nums;
-}
-
-.pageNum:hover {
-  color: var(--purple-light);
-  border-color: rgba(168,85,247,0.6);
-  background: rgba(168,85,247,0.12);
-  transform: translateY(-1px);
-}
-
-.pageNumActive {
-  color: var(--bg-base);
-  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
-  border-color: var(--gold-light);
-  box-shadow:
-    0 0 0 3px rgba(232,199,154,0.15),
-    0 0 18px rgba(232,199,154,0.5);
-  transform: translateY(-1px);
-}
-
-.pageNumActive:hover {
-  color: var(--bg-base);
-  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
-  transform: translateY(-1px);
+  .grid {
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: repeat(2, minmax(240px, 1fr));
+    grid-template-areas:
+      "hero s1 s2"
+      "hero s3 s4";
+  }
+  .heroSlot {
+    grid-area: hero;
+    min-height: 0;
+  }
+  .smallSlot { min-height: 0; }
+  .smallSlot:nth-child(2) { grid-area: s1; }
+  .smallSlot:nth-child(3) { grid-area: s2; }
+  .smallSlot:nth-child(4) { grid-area: s3; }
+  .smallSlot:nth-child(5) { grid-area: s4; }
 }
 
 /* ─── Mobile صغير ─── */
@@ -209,14 +193,44 @@
   .section { padding: 40px 0; }
   .container { padding: 22px 14px 20px; border-radius: 18px; }
   .grid { gap: 10px; }
+  .heroSlot { min-height: 300px; }
   .nextChip { max-width: 130px; }
-  .pageNum { min-width: 34px; height: 34px; padding: 0 10px; font-size: 0.8rem; }
 }
 
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .viewAll { transition: none; }
+  .heroSlot { animation: none; }
   .progressFill { animation-duration: 10s; }
-  .grid { animation: none; }
-  .pageNum { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   2026-09-27 — Featured = صفحة كاملة (scroll-snap)
+   ═══════════════════════════════════════════════════════════ */
+
+.section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding: 40px 0;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 32px 0;
+  }
+}
+
+/* 2026-09-27 — v2: اتزان أفضل (مش centered) */
+.section {
+  align-items: flex-start;
+  padding: 60px 0 40px;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 44px 0 32px;
+  }
 }

@@ -200,8 +200,3 @@
 - api/track-action
 - migration: engagement_events
 - install-prompt redesign (persuasion)
-
-### 2026-09-27 — Featured Unified + Pagination ✅
-- Card موحّد (بدون hero/small)
-- 10 كروت × صفحة + أرقام + دوران
-- Header bg = bg-base

@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — Featured Card (2026 — موحّد + كل المعلومات)
+   EAH — Featured Card
    ═══════════════════════════════════════════════════════════ */
 
 .card {
@@ -8,54 +8,79 @@
   flex-direction: column;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  background: linear-gradient(160deg, rgba(20,14,34,0.88), rgba(10,7,20,0.95));
-  border: 1px solid rgba(168,85,247,0.2);
+  background: linear-gradient(160deg, rgba(20,14,34,0.85), rgba(10,7,20,0.92));
+  border: 1px solid rgba(168,85,247,0.22);
   text-decoration: none;
   color: inherit;
+  transition: transform 200ms var(--ease),
+              border-color 200ms var(--ease),
+              box-shadow 200ms var(--ease);
   height: 100%;
-  transition: transform 220ms var(--ease),
-              border-color 220ms var(--ease),
-              box-shadow 220ms var(--ease);
 }
 
 .card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(232,199,154,0.5);
-  box-shadow:
-    0 0 0 1px rgba(232,199,154,0.25),
-    0 10px 28px rgba(0,0,0,0.5),
-    0 0 40px rgba(168,85,247,0.15);
+  transform: translateY(-2px);
+  border-color: rgba(232,199,154,0.45);
+  box-shadow: 0 0 0 1px rgba(232,199,154,0.25), 0 8px 24px rgba(0,0,0,0.5);
 }
+
+/* ─── Hero variant ─── */
+.hero { height: 100%; min-height: 320px; }
+
+.hero .imageWrap {
+  position: absolute;
+  inset: 0;
+}
+
+.hero .content {
+  position: relative;
+  margin-top: auto;
+  padding: 20px 22px 22px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(7,2,13,0.7) 40%,
+    rgba(7,2,13,0.95) 100%
+  );
+}
+
+/* ─── Small variant ─── */
+.small { min-height: 200px; }
+
+.small .imageWrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.small .imageOverlay {
+  background: linear-gradient(180deg, transparent 40%, rgba(7,2,13,0.75) 100%);
+}
+
+.small .content {
+  padding: 12px 14px 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.small .badges { margin-top: auto; }
 
 /* ─── Image ─── */
 .imageWrap {
   position: relative;
-  aspect-ratio: 5 / 4;
-  width: 100%;
   overflow: hidden;
   background: rgba(157,78,221,0.06);
-  flex-shrink: 0;
 }
 
 .image {
   object-fit: cover;
-  transition: transform 500ms var(--ease);
+  transition: transform 400ms var(--ease);
 }
 
-.card:hover .image { transform: scale(1.06); }
-
-.imageOverlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(7,2,13,0.15) 0%,
-    transparent 30%,
-    transparent 60%,
-    rgba(7,2,13,0.65) 100%
-  );
-}
+.card:hover .image { transform: scale(1.04); }
 
 /* ─── Fallback (بدون صورة) ─── */
 .imageFallback {
@@ -74,82 +99,81 @@
 .fallbackGlow {
   position: absolute;
   inset: -20%;
-  background: radial-gradient(circle at 50% 50%, rgba(168,85,247,0.22), transparent 60%);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(168,85,247,0.22), transparent 60%);
   filter: blur(24px);
   opacity: 0.7;
 }
 
 .fallbackIcon {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--gold-light);
   opacity: 0.85;
   filter: drop-shadow(0 0 18px rgba(232,199,154,0.35));
 }
 
-/* ─── Status dot (top-left) ─── */
-.statusDot {
+/* ─── Overlay ─── */
+.imageOverlay {
   position: absolute;
-  top: 8px;
-  inset-inline-start: 8px;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  font-size: 0.6rem;
-  font-weight: 900;
-  white-space: nowrap;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ─── Top Badges ─── */
+.topBadges {
+  position: absolute;
+  top: 10px;
+  inset-inline-start: 10px;
+  inset-inline-end: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 6px;
   z-index: 2;
+  pointer-events: none;
 }
 
-.dotOpen {
-  background: rgba(85,231,209,0.22);
-  color: #8FF0E1;
-  border: 1px solid rgba(85,231,209,0.5);
-}
-
-.dotClosed {
-  background: rgba(252,165,165,0.18);
-  color: #FFC8C8;
-  border: 1px solid rgba(252,165,165,0.45);
-}
-
-/* ─── Rating badge (bottom-left على الصورة) ─── */
-.ratingBadge {
-  position: absolute;
-  bottom: 8px;
-  inset-inline-start: 8px;
+.badgePremium,
+.badgeStatus {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  padding: 3px 8px;
+  gap: 4px;
+  padding: 4px 9px;
   border-radius: var(--radius-full);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 900;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.badgePremium {
   color: var(--bg-base);
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
-  box-shadow: 0 0 12px rgba(232,199,154,0.5);
-  z-index: 2;
+  box-shadow: 0 0 14px rgba(232,199,154,0.35);
 }
 
-.ratingCount {
-  font-size: 0.55rem;
-  opacity: 0.75;
+.badgeStatus { color: #fff; }
+
+.badgeOpen {
+  background: rgba(85,231,209,0.18);
+  color: #8FF0E1;
+  border: 1px solid rgba(85,231,209,0.45);
 }
 
-/* ─── Body ─── */
-.body {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 10px 12px 12px;
-  flex: 1;
+.badgeClosed {
+  background: rgba(252,165,165,0.15);
+  color: #FFC8C8;
+  border: 1px solid rgba(252,165,165,0.4);
 }
 
+/* ─── Content ─── */
 .name {
   font-family: var(--font-display);
   font-weight: 900;
-  font-size: 0.92rem;
+  font-size: 1rem;
   color: var(--text-primary);
   margin: 0;
   line-height: 1.25;
@@ -161,47 +185,54 @@
   -webkit-box-orient: vertical;
 }
 
-.meta {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin: 0;
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: var(--text-tertiary);
-  overflow: hidden;
-  white-space: nowrap;
+.hero .name {
+  font-size: clamp(1.3rem, 3vw, 1.75rem);
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
-.metaDot { color: var(--text-muted); margin: 0 1px; }
+.hook {
+  margin: 8px 0 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
 
-/* ─── Chips ─── */
-.chips {
+/* ─── Badges (chips) ─── */
+.badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
-  margin-top: auto;
+  gap: 6px;
+  margin-top: 10px;
 }
+
+.hero .badges { margin-top: 12px; }
 
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  padding: 2px 7px;
+  gap: 4px;
+  padding: 3px 9px;
   border-radius: var(--radius-full);
-  font-size: 0.6rem;
+  font-size: 0.68rem;
   font-weight: 800;
   color: var(--text-secondary);
   background: rgba(168,85,247,0.08);
   border: 1px solid rgba(168,85,247,0.22);
   white-space: nowrap;
-  line-height: 1.3;
+  line-height: 1.4;
 }
 
 .chipGold {
   color: var(--gold-light);
-  background: rgba(232,199,154,0.1);
-  border-color: rgba(232,199,154,0.3);
+  background: rgba(232,199,154,0.08);
+  border-color: rgba(232,199,154,0.28);
 }
 
 .chipTrust {
@@ -210,15 +241,69 @@
   border-color: rgba(85,231,209,0.3);
 }
 
-.chipWhats {
+.chipWhatsapp {
   color: #A8F0B8;
   background: rgba(37,211,102,0.1);
   border-color: rgba(37,211,102,0.35);
 }
 
+.chipOffers {
+  color: #E0B8FF;
+  background: rgba(168,85,247,0.12);
+  border-color: rgba(168,85,247,0.4);
+}
+
+.chipCount {
+  font-size: 0.6rem;
+  opacity: 0.75;
+  margin-inline-start: 1px;
+}
+
+/* ─── Bottom / CTA ─── */
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: var(--gold-light);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: rgba(232,199,154,0.08);
+  border: 1px solid rgba(232,199,154,0.3);
+  transition: all 180ms var(--ease);
+}
+
+.card:hover .cta {
+  background: rgba(232,199,154,0.18);
+  border-color: rgba(232,199,154,0.55);
+}
+
+/* ─── Small: badges أصغر ─── */
+.small .chip {
+  font-size: 0.62rem;
+  padding: 2px 7px;
+  gap: 3px;
+}
+
+.small .badges { gap: 4px; margin-top: 8px; }
+
+.small .badgePremium,
+.small .badgeStatus {
+  font-size: 0.58rem;
+  padding: 3px 7px;
+}
+
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
-  .card, .image { transition: none; }
+  .card, .image, .cta { transition: none; }
   .card:hover .image { transform: none; }
   .card:hover { transform: none; }
 }

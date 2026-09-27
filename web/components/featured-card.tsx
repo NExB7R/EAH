@@ -5,27 +5,30 @@ import WmImage from './wm-image'
 import {
   StarIcon,
   MapPinIcon,
+  ArrowLeftIcon,
   UtensilsIcon,
   PillIcon,
   CartIcon,
   BikeIcon,
   SparklesIcon,
   ShieldCheckIcon,
+  CheckCircleIcon,
+  AlertIcon,
   WhatsAppIcon,
   StoreIcon,
   GiftIcon,
-  CheckCircleIcon,
-  AlertIcon,
+  CrownGoldIcon,
 } from './icons'
 import type { Business } from '@/lib/data'
 import styles from './featured-card.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Featured Card (تصميم موحّد 2026)
+// EAH — Featured Card (Hero + Small)
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
   business: Business
+  variant: 'hero' | 'small'
   priority?: boolean
 }
 
@@ -45,23 +48,24 @@ const TIER_LABEL: Record<string, string> = {
   new: 'جديد',
 }
 
-function offersText(n: number): string {
-  if (n === 0) return ''
-  if (n === 1) return 'عرض'
-  if (n === 2) return 'عرضين'
-  return `${n} عروض`
+function offersText(count: number): string {
+  if (count === 0) return ''
+  if (count === 1) return 'عرض'
+  if (count === 2) return 'عرضين'
+  return `${count} عروض`
 }
 
-function branchesText(n: number): string {
-  if (n === 0) return ''
-  if (n === 1) return 'فرع'
-  if (n === 2) return 'فرعين'
-  return `${n} فروع`
+function branchesText(count: number): string {
+  if (count === 0) return ''
+  if (count === 1) return 'فرع'
+  if (count === 2) return 'فرعين'
+  return `${count} فروع`
 }
 
-export default function FeaturedCard({ business, priority }: Props) {
-  const meta = TYPE_META[business.business_type] ?? TYPE_META.misc!
-  const TypeIcon = meta.Icon
+export default function FeaturedCard({ business, variant, priority }: Props) {
+  const typeMeta = TYPE_META[business.business_type] ?? TYPE_META.misc!
+  const TypeIcon = typeMeta.Icon
+  const typeLabel = typeMeta.label
   const tierLabel = TIER_LABEL[business.trust_tier] ?? business.trust_tier
 
   const hasRealRating = business.rating_count > 0
@@ -71,19 +75,24 @@ export default function FeaturedCard({ business, priority }: Props) {
     ? (business.trust_score / 20).toFixed(1)
     : null
 
+  const isHero = variant === 'hero'
+  const hasCover = !!business.cover_image_url
+
   return (
     <Link
       href={`/businesses/${business.slug}`}
-      className={styles.card}
+      className={`${styles.card} ${styles[variant]}`}
       aria-label={business.name}
     >
       <div className={styles.imageWrap}>
-        {business.cover_image_url ? (
+        {hasCover ? (
           <WmImage
-            src={business.cover_image_url}
+            src={business.cover_image_url!}
             alt={business.name}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 220px"
+            sizes={isHero
+              ? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 420px'
+              : '(max-width: 640px) 50vw, 200px'}
             className={styles.image}
             priority={priority}
           />
@@ -91,71 +100,93 @@ export default function FeaturedCard({ business, priority }: Props) {
           <div className={styles.imageFallback} aria-hidden>
             <div className={styles.fallbackGlow} />
             <div className={styles.fallbackIcon}>
-              <TypeIcon size={44} />
+              <TypeIcon size={isHero ? 64 : 40} />
             </div>
           </div>
         )}
         <div className={styles.imageOverlay} aria-hidden />
 
-        <span
-          className={`${styles.statusDot} ${business.is_open ? styles.dotOpen : styles.dotClosed}`}
-          aria-label={business.is_open ? 'مفتوح' : 'مقفل'}
-        >
-          {business.is_open ? <CheckCircleIcon size={11} /> : <AlertIcon size={11} />}
-        </span>
-
-        {ratingValue && (
-          <span className={styles.ratingBadge}>
-            <StarIcon size={11} />
-            {ratingValue}
-            {hasRealRating && (
-              <span className={styles.ratingCount}>({business.rating_count})</span>
-            )}
+        <div className={styles.topBadges}>
+          {isHero && (
+            <span className={styles.badgePremium}>
+              <CrownGoldIcon size={11} /> مميز
+            </span>
+          )}
+          <span
+            className={`${styles.badgeStatus} ${business.is_open ? styles.badgeOpen : styles.badgeClosed}`}
+          >
+            {business.is_open ? <CheckCircleIcon size={11} /> : <AlertIcon size={11} />}
+            {business.is_open ? 'مفتوح' : 'مقفل'}
           </span>
-        )}
+        </div>
       </div>
 
-      <div className={styles.body}>
+      <div className={styles.content}>
         <h3 className={styles.name}>{business.name}</h3>
 
-        <p className={styles.meta}>
-          <TypeIcon size={12} />
-          <span>{meta.label}</span>
-          {business.area && (
-            <>
-              <span className={styles.metaDot}>·</span>
-              <MapPinIcon size={11} />
-              <span>{business.area}</span>
-            </>
-          )}
-        </p>
+        {isHero && business.hook && (
+          <p className={styles.hook}>{business.hook}</p>
+        )}
 
-        <div className={styles.chips}>
+        <div className={styles.badges}>
+          <span className={styles.chip}>
+            <TypeIcon size={12} />
+            {typeLabel}
+          </span>
+
+          {business.area && (
+            <span className={styles.chip}>
+              <MapPinIcon size={12} />
+              {business.area}
+            </span>
+          )}
+
+          {ratingValue && (
+            <span className={`${styles.chip} ${styles.chipGold}`}>
+              <StarIcon size={12} />
+              {ratingValue}
+              {hasRealRating && (
+                <span className={styles.chipCount}>({business.rating_count})</span>
+              )}
+            </span>
+          )}
+
           {tierLabel && (
             <span className={`${styles.chip} ${styles.chipTrust}`}>
-              <ShieldCheckIcon size={11} />
+              <ShieldCheckIcon size={12} />
               {tierLabel}
             </span>
           )}
+
           {business.branches_count > 0 && (
             <span className={styles.chip}>
-              <StoreIcon size={11} />
+              <StoreIcon size={12} />
               {branchesText(business.branches_count)}
             </span>
           )}
+
           {business.offers_count > 0 && (
-            <span className={`${styles.chip} ${styles.chipGold}`}>
-              <GiftIcon size={11} />
+            <span className={`${styles.chip} ${styles.chipOffers}`}>
+              <GiftIcon size={12} />
               {offersText(business.offers_count)}
             </span>
           )}
+
           {business.accepts_whatsapp_orders && (
-            <span className={`${styles.chip} ${styles.chipWhats}`}>
-              <WhatsAppIcon size={11} />
+            <span className={`${styles.chip} ${styles.chipWhatsapp}`}>
+              <WhatsAppIcon size={12} />
               واتساب
             </span>
           )}
         </div>
+
+        {isHero && (
+          <div className={styles.bottom}>
+            <span className={styles.cta}>
+              شوف النشاط <ArrowLeftIcon size={14} />
+            </span>
+          </div>
+        )}
       </div>
     </Link>
   )
