@@ -7,10 +7,10 @@
   padding-bottom: 80px;
 }
 
-/* ─── Hero Band (فوق العنوان) ─── */
+/* ─── Hero Band ─── */
 .band {
   position: relative;
-  padding: 40px 20px 24px;
+  padding: 28px 20px 20px;
   overflow: hidden;
 }
 
@@ -19,14 +19,13 @@
   inset: -30% -10% auto -10%;
   height: 320px;
   background:
-    radial-gradient(ellipse 60% 60% at 50% 0%, rgba(232,199,154,0.18), transparent 65%),
-    radial-gradient(ellipse 60% 60% at 50% 0%, rgba(168,85,247,0.14), transparent 70%);
+    radial-gradient(ellipse 60% 60% at 50% 0%, rgba(232,199,154,0.16), transparent 65%),
+    radial-gradient(ellipse 60% 60% at 50% 0%, rgba(168,85,247,0.12), transparent 70%);
   pointer-events: none;
   filter: blur(20px);
   opacity: 0.9;
 }
 
-/* ─── Header ─── */
 .head {
   position: relative;
   max-width: 1240px;
@@ -35,22 +34,53 @@
   z-index: 1;
 }
 
-.crown {
-  display: inline-flex;
-  align-items: center;
+/* ─── Logo ─── */
+.logoWrap {
+  display: flex;
   justify-content: center;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 40%, rgba(232,199,154,0.28), rgba(232,199,154,0.05) 70%);
-  border: 1px solid rgba(232,199,154,0.35);
-  color: var(--gold-light);
   margin-bottom: 14px;
-  box-shadow:
-    0 0 0 6px rgba(232,199,154,0.04),
-    0 0 30px rgba(232,199,154,0.25);
 }
 
+/* ─── Breadcrumb ─── */
+.breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: rgba(232,199,154,0.05);
+  border: 1px solid rgba(232,199,154,0.22);
+  margin-bottom: 14px;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color 180ms var(--ease);
+}
+
+.crumb:hover {
+  color: var(--gold-light);
+}
+
+.crumbSep {
+  color: rgba(232,199,154,0.35);
+}
+
+.crumbNow {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--gold-light);
+  font-weight: 900;
+}
+
+/* ─── Title ─── */
 .title {
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 5vw, 2.4rem);
@@ -69,20 +99,11 @@
   filter: drop-shadow(0 2px 12px rgba(232,199,154,0.35));
 }
 
-.subtitle {
-  margin: 12px auto 0;
-  max-width: 540px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--text-secondary);
-  line-height: 1.7;
-}
-
 .meta {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 14px;
   padding: 6px 14px;
   border-radius: var(--radius-full);
   background: rgba(232,199,154,0.06);
@@ -100,7 +121,7 @@
   box-shadow: 0 0 8px var(--gold-light);
 }
 
-/* ─── Frame (الإطار الذهبي) ─── */
+/* ─── Frame ─── */
 .section {
   width: 100%;
   padding: 8px 20px 0;
@@ -113,15 +134,15 @@
   padding: 20px 18px 18px;
   border-radius: 22px;
   background: linear-gradient(160deg, rgba(20,14,34,0.6), rgba(10,7,20,0.85));
-  border: 1.5px solid rgba(232,199,154,0.28);
+  border: 1.5px solid rgba(232,199,154,0.32);
   box-shadow:
-    0 0 0 1px rgba(232,199,154,0.05),
-    0 0 40px rgba(232,199,154,0.1),
+    0 0 0 1px rgba(232,199,154,0.06),
+    0 0 40px rgba(232,199,154,0.12),
     0 0 80px rgba(168,85,247,0.06),
     inset 0 1px 0 rgba(232,199,154,0.08);
 }
 
-/* ─── Carousel (Wrapper + Arrows) ─── */
+/* ─── Carousel ─── */
 .carousel {
   position: relative;
   padding: 0 52px;
@@ -141,7 +162,7 @@
   .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-/* ─── Arrows ─── */
+/* ─── Arrows — تظهر بس عند Hover ─── */
 .arrow {
   position: absolute;
   top: 50%;
@@ -153,12 +174,19 @@
   justify-content: center;
   padding: 0;
   border-radius: 50%;
-  background: rgba(20,14,34,0.9);
+  background: rgba(20,14,34,0.95);
   border: 1px solid rgba(232,199,154,0.35);
   color: var(--gold-light);
   cursor: pointer;
   z-index: 5;
-  transition: all 200ms var(--ease);
+  opacity: 0;
+  transition: opacity 200ms var(--ease), transform 200ms var(--ease),
+              background 200ms var(--ease), box-shadow 200ms var(--ease);
+}
+
+.carousel:hover .arrow,
+.carousel:focus-within .arrow {
+  opacity: 1;
 }
 
 .arrow:hover {
@@ -175,11 +203,17 @@
 .arrow:focus-visible {
   outline: 2px solid var(--gold-light);
   outline-offset: 2px;
+  opacity: 1;
 }
 
 .arrowPrev { inset-inline-start: 0; }
 .arrowPrev svg { transform: scaleX(-1); }
 .arrowNext { inset-inline-end: 0; }
+
+/* ─── Touch Devices — دايماً ظاهرة ─── */
+@media (hover: none) {
+  .arrow { opacity: 1; }
+}
 
 /* ─── Empty ─── */
 .empty {
@@ -197,34 +231,12 @@
   font-weight: 600;
 }
 
-/* ─── Footer Note ─── */
-.note {
-  max-width: 720px;
-  margin: 24px auto 0;
-  padding: 14px 20px;
-  text-align: center;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--text-tertiary);
-  line-height: 1.7;
-  background: rgba(232,199,154,0.04);
-  border: 1px dashed rgba(232,199,154,0.22);
-  border-radius: 14px;
-}
-
-.note strong {
-  color: var(--gold-light);
-  font-weight: 900;
-}
-
 /* ─── Mobile ─── */
 @media (max-width: 640px) {
-  .band { padding: 24px 16px 18px; }
-  .crown { width: 46px; height: 46px; margin-bottom: 10px; }
-  .subtitle { font-size: 0.82rem; }
+  .band { padding: 20px 16px 16px; }
   .section { padding: 4px 14px 0; }
   .frame { padding: 16px 12px 14px; border-radius: 18px; }
-  .carousel { padding: 0 42px; }
+  .carousel { padding: 0 40px; }
   .arrow { width: 34px; height: 34px; }
   .arrow svg { width: 16px; height: 16px; }
   .grid { gap: 10px; }

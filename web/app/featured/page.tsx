@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { getFeaturedBusinesses } from '@/lib/data'
-import { CrownGoldIcon } from '@/components/icons'
+import { CrownGoldIcon, HomeIcon, ChevronLeftIcon } from '@/components/icons'
+import Logo from '@/components/logo'
 import FeaturedShowcase from './featured-showcase'
 import styles from './featured.module.css'
 
@@ -21,18 +23,25 @@ export default async function FeaturedPage() {
         <div className={styles.bandGlow} aria-hidden />
 
         <div className={styles.head}>
-          <span className={styles.crown} aria-hidden>
-            <CrownGoldIcon size={26} />
-          </span>
+          <div className={styles.logoWrap}>
+            <Logo size="md" />
+          </div>
+
+          <nav className={styles.breadcrumb} aria-label="مسار التنقل">
+            <Link href="/" className={styles.crumb}>
+              <HomeIcon size={13} />
+              <span>الرئيسية</span>
+            </Link>
+            <ChevronLeftIcon size={12} className={styles.crumbSep} />
+            <span className={styles.crumbNow}>
+              <CrownGoldIcon size={13} />
+              <span>المميزون</span>
+            </span>
+          </nav>
 
           <h1 className={styles.title}>
             <span className={styles.titleAccent}>المميزون</span>
           </h1>
-
-          <p className={styles.subtitle}>
-            نخبة الأنشطة في شبين القناطر والقرى حواليها — مختارة بعناية،
-            معلّمة بشارة ذهبية، وبتظهر بنفس العدالة للجميع.
-          </p>
 
           {all.length > 0 && (
             <span className={styles.meta}>
@@ -55,12 +64,6 @@ export default async function FeaturedPage() {
             <FeaturedShowcase businesses={all} />
           )}
         </div>
-
-        <p className={styles.note}>
-          الترتيب <strong>عادل 100%</strong> — يتغيّر تلقائيًا كل 5 ثواني،
-          وكل نشاط بياخد نفس عدد مرات الظهور. تقدر تستعرض الأنشطة السابقة والتالية
-          بأسهم التنقل.
-        </p>
       </section>
     </main>
   )

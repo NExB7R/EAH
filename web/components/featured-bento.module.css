@@ -125,6 +125,7 @@
 
 /* ─── Arrows ─── */
 .arrow {
+  opacity: 0;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -179,6 +180,26 @@
   .arrow { width: 34px; height: 34px; }
   .arrow svg { width: 16px; height: 16px; }
   .grid { gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewAll { transition: none; }
+  .arrow { transition: none; }
+}
+
+
+/* ─── Arrows Hover (تظهر عند الهوفر فقط) ─── */
+.carousel:hover .arrow,
+.carousel:focus-within .arrow {
+  opacity: 1;
+}
+
+.arrow:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .arrow { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

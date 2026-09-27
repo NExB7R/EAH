@@ -14,7 +14,7 @@
   overflow: hidden;
   border-radius: var(--radius-lg);
   background: linear-gradient(160deg, rgba(20,14,34,0.85), rgba(10,7,20,0.92));
-  border: 1px solid rgba(168,85,247,0.22);
+  border: 1px solid rgba(232,199,154,0.35);
   text-decoration: none;
   color: inherit;
   transition: transform 200ms var(--ease),
@@ -233,7 +233,7 @@
   font-weight: 800;
   color: var(--text-secondary);
   background: rgba(168,85,247,0.08);
-  border: 1px solid rgba(168,85,247,0.22);
+  border: 1px solid rgba(232,199,154,0.35);
   white-space: nowrap;
   line-height: 1.4;
 }
@@ -316,4 +316,14 @@
   .card, .image, .cta { transition: none; }
   .card:hover .image { transform: none; }
   .card:hover { transform: none; }
+}
+
+
+.card:hover {
+  border-color: rgba(232,199,154,0.6);
+  box-shadow:
+    0 0 0 1px rgba(232,199,154,0.35),
+    0 0 24px rgba(232,199,154,0.22),
+    0 0 40px rgba(232,199,154,0.1),
+    0 8px 24px rgba(0,0,0,0.5);
 }
