@@ -12,13 +12,14 @@ import {
   InfoIcon,
   InstallIcon,
   LockIcon,
+  TargetIcon,
 } from './icons'
 import type { UserSession } from '@/lib/data/user'
 import styles from './floating-capsule.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Floating Capsule
-// يمين: [☰] [⬇️] [ℹ️]  |  نص: [👑 EAH]  |  شمال: [🔔] [👤]
+// يمين: [☰] [⬇️] [🎯] [ℹ️]  |  نص: [👑 EAH]  |  شمال: [🔔] [👤]
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -49,7 +50,6 @@ export default function FloatingCapsule({ session }: Props) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // auto-close عند تغيير الصفحة
   const prevPathRef = useRef(pathname)
   useEffect(() => {
     if (prevPathRef.current !== pathname) {
@@ -64,7 +64,7 @@ export default function FloatingCapsule({ session }: Props) {
   }
 
   const isLoggedIn = !!session
-  const isHome = pathname === "/"
+  const isHome = pathname === '/'
 
   if (!mounted) return null
 
@@ -96,6 +96,15 @@ export default function FloatingCapsule({ session }: Props) {
             >
               <InstallIcon size={20} />
             </button>
+
+            <Link
+              href="/explore"
+              className={styles.iconBtn}
+              aria-label="اكتشف"
+              data-tooltip="اكتشف"
+            >
+              <TargetIcon size={20} />
+            </Link>
 
             <Link
               href="/about"
