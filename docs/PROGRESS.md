@@ -217,3 +217,8 @@
 - /featured: 4×2/3×2/2×2 (8/6/4)
 - Auto-rotate + Touch swipe + IntersectionObserver
 - إطار ذهبي بريميوم
+
+### 2026-09-27 — Trending ✅
+- Vertical List (10 rows)
+- Server Component — بدون JS
+- إطار بنفسجي

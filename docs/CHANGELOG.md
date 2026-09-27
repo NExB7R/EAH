@@ -205,3 +205,18 @@
 ### Notes
 - الـ DOM ثابت — 10/6/4 slots فقط، بيتبدل المحتوى
 - الصور lazy — بس اللي ظاهرة بتتحمّل
+
+---
+
+## [v2.3.0] - 2026-09-27 — Trending List (Home)
+
+### Added
+- `components/trending-list.tsx` — Server Component (صفر JS)
+- `components/trending-list.module.css` — إطار بنفسجي (يختلف عن الذهبي)
+- `getTrendingBusinesses` في lib/data
+- ترتيب: `sortByTrend` (trust + orders + recency)
+
+### Style
+- قائمة عمودية (زي Spotify) — رقم + thumb + info + right
+- Rank badges: 1 ذهبي، 2 فضي، 3 برونزي، الباقي بنفسجي
+- Server Component — صفر JS على client

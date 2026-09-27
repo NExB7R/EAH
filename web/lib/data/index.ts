@@ -13,6 +13,7 @@ export {
   getBusinessBySlug,
   getTopBusinesses,
   getOpportunities,
+  getTrendingBusinesses,
   isOpenNow,
 } from './businesses'
 export type { Business, BusinessType, WorkingHours, WorkingDay } from './businesses'

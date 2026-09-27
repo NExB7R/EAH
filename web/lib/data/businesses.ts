@@ -1,5 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { createPublicClient } from '@/lib/supabase/public'
+import { sortByTrend } from '@/lib/ranking'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Data Fetching Layer
@@ -285,4 +286,28 @@ export const getBusinessBySlug = unstable_cache(
   },
   ['business-by-slug'],
   { revalidate: 120, tags: ['businesses'] }
+)
+
+// ═══════════════════════════════════════════════════════════
+// 7. الأنشطة الترند (Trending)
+// ═══════════════════════════════════════════════════════════
+
+export const getTrendingBusinesses = unstable_cache(
+  async (limit = 10): Promise<Business[]> => {
+    const supabase = createPublicClient()
+    const { data, error } = await supabase
+      .from('businesses')
+      .select(BUSINESS_COLUMNS)
+      .eq('is_published', true)
+      .order('successful_orders', { ascending: false })
+      .limit(limit * 3)
+
+    if (error) {
+      console.error('[data] getTrendingBusinesses error:', error.message)
+      return []
+    }
+    return sortByTrend((data ?? []) as Business[]).slice(0, limit)
+  },
+  ['businesses-trending'],
+  { revalidate: 120, tags: ['businesses', 'trending'] },
 )
