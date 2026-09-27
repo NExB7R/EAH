@@ -200,3 +200,8 @@
 - api/track-action
 - migration: engagement_events
 - install-prompt redesign (persuasion)
+
+### 2026-09-27 — Featured Unified ✅
+- بدون Hero variant
+- 10 كروت × Home + /featured موحّدين
+- /featured: بدون خلفية داكنة

@@ -1,18 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import type { Business } from '@/lib/data'
 import FeaturedCard from './featured-card'
 import { CrownGoldIcon, ArrowLeftIcon } from './icons'
-import {
-  FEATURED_ROTATION_MS,
-  rotate,
-} from '@/lib/featured-rotation'
 import styles from './featured-bento.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Featured Bento (Hero + 4 صغيرة + دوران عادل)
+// EAH — Featured Bento (بدون hero — كروت موحّدة)
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -20,25 +15,12 @@ type Props = {
   initialStart: number
 }
 
-const VISIBLE_COUNT = 5
+const VISIBLE_COUNT = 10
 
-export default function FeaturedBento({ businesses, initialStart }: Props) {
-  const [offset, setOffset] = useState(initialStart)
-
-  useEffect(() => {
-    if (businesses.length <= 1) return
-    const timer = setInterval(() => {
-      setOffset((o) => (o + 1) % businesses.length)
-    }, FEATURED_ROTATION_MS)
-    return () => clearInterval(timer)
-  }, [businesses.length])
-
+export default function FeaturedBento({ businesses }: Props) {
   if (businesses.length === 0) return null
 
-  const rotated = rotate(businesses, offset)
-  const visible = rotated.slice(0, VISIBLE_COUNT)
-  const hero = visible[0]
-  const smalls = visible.slice(1)
+  const visible = businesses.slice(0, VISIBLE_COUNT)
 
   return (
     <section className={`eah-section-bg ${styles.section}`}>
@@ -49,7 +31,7 @@ export default function FeaturedBento({ businesses, initialStart }: Props) {
               <CrownGoldIcon size={22} />
             </span>
             <h2 className={styles.title}>المميزون</h2>
-            <span className={styles.titleBadge}>Premium</span>
+            <span className={styles.titleBadge}>Premium 2026</span>
           </div>
 
           <Link href="/featured" className={styles.viewAll}>
@@ -61,15 +43,8 @@ export default function FeaturedBento({ businesses, initialStart }: Props) {
         <div className={styles.neonLine} aria-hidden />
 
         <div className={styles.grid}>
-          {hero && (
-            <div className={styles.heroSlot}>
-              <FeaturedCard business={hero} variant="hero" priority />
-            </div>
-          )}
-          {smalls.map((b) => (
-            <div key={b.id} className={styles.smallSlot}>
-              <FeaturedCard business={b} variant="small" />
-            </div>
+          {visible.map((b, i) => (
+            <FeaturedCard key={b.id} business={b} variant="small" priority={i < 4} />
           ))}
         </div>
       </div>

@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import { getFeaturedBusinesses } from '@/lib/data'
-import { getRotationStart } from '@/lib/featured-rotation'
 import PageHeader from '@/components/page-header'
 import FeaturedShowcase from './featured-showcase'
 import styles from './featured.module.css'
+
+// ═══════════════════════════════════════════════════════════
+// EAH — /featured (صفحة كل المميزين)
+// ═══════════════════════════════════════════════════════════
 
 export const dynamic = 'force-dynamic'
 
@@ -14,13 +17,12 @@ export const metadata: Metadata = {
 
 export default async function FeaturedPage() {
   const all = await getFeaturedBusinesses(60)
-  const start = getRotationStart(all.length)
 
   return (
     <main className={styles.page}>
       <PageHeader title="المميزون" />
 
-      <section className={`eah-section-bg ${styles.section}`}>
+      <section className={styles.section}>
         <div className={styles.container}>
           {all.length === 0 ? (
             <div className={styles.empty}>
@@ -28,7 +30,7 @@ export default async function FeaturedPage() {
               <p className={styles.emptyHint}>هنضيف قريب إن شاء الله</p>
             </div>
           ) : (
-            <FeaturedShowcase businesses={all} initialStart={start} />
+            <FeaturedShowcase businesses={all} />
           )}
         </div>
       </section>

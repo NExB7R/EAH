@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — Featured Bento (Premium 2026)
+   EAH — Featured Bento (2026 — كروت موحّدة)
    ═══════════════════════════════════════════════════════════ */
 
 .section {
@@ -12,6 +12,7 @@
     linear-gradient(180deg, rgba(10,5,20,0.5), rgba(7,2,13,0.72));
   border-top: 1px solid rgba(232,199,154,0.12);
   border-bottom: 1px solid rgba(232,199,154,0.12);
+  scroll-snap-align: start;
 }
 
 .container {
@@ -86,151 +87,40 @@
   transform: translateY(-1px);
 }
 
-/* ─── Timer Row (Progress + Next) ─── */
-.timerRow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 22px;
-}
-
-.progressLine {
-  position: relative;
-  flex: 1;
-  height: 2px;
-  background: rgba(232,199,154,0.1);
+.neonLine {
+  height: 1px;
+  width: 100%;
+  margin-bottom: 24px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(232,199,154,0.3) 20%,
+    var(--gold-primary) 50%,
+    rgba(232,199,154,0.3) 80%,
+    transparent 100%);
   border-radius: var(--radius-full);
-  overflow: hidden;
 }
 
-.progressFill {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, var(--gold-primary), var(--gold-light));
-  box-shadow: 0 0 10px rgba(232,199,154,0.6);
-  animation: eahFeaturedProgress 10s linear forwards;
-}
-
-@keyframes eahFeaturedProgress {
-  from { width: 0; }
-  to   { width: 100%; }
-}
-
-.nextChip {
-  flex-shrink: 0;
-  font-size: 0.68rem;
-  font-weight: 800;
-  color: var(--gold-light);
-  padding: 5px 12px;
-  border-radius: var(--radius-full);
-  background: rgba(232,199,154,0.06);
-  border: 1px solid rgba(232,199,154,0.22);
-  white-space: nowrap;
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* ─── Grid (Mobile-first) ─── */
+/* ─── Grid ─── */
 .grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
 }
 
-.heroSlot {
-  grid-column: 1 / -1;
-  min-height: 340px;
-  animation: eahHeroFade 500ms var(--ease-out);
+@media (min-width: 640px) {
+  .grid { grid-template-columns: repeat(3, 1fr); }
 }
 
-.smallSlot { min-height: 200px; }
-
-@keyframes eahHeroFade {
-  from { opacity: 0.35; transform: translateY(6px); }
-  to   { opacity: 1;    transform: translateY(0); }
-}
-
-/* ─── Tablet ─── */
-@media (min-width: 768px) and (max-width: 1023px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "hero hero"
-      "s1   s2"
-      "s3   s4";
-  }
-  .heroSlot { grid-area: hero; min-height: 380px; }
-  .smallSlot:nth-child(2) { grid-area: s1; }
-  .smallSlot:nth-child(3) { grid-area: s2; }
-  .smallSlot:nth-child(4) { grid-area: s3; }
-  .smallSlot:nth-child(5) { grid-area: s4; }
-}
-
-/* ─── Desktop: Bento حقيقي (grid-areas) ─── */
 @media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: repeat(2, minmax(240px, 1fr));
-    grid-template-areas:
-      "hero s1 s2"
-      "hero s3 s4";
-  }
-  .heroSlot {
-    grid-area: hero;
-    min-height: 0;
-  }
-  .smallSlot { min-height: 0; }
-  .smallSlot:nth-child(2) { grid-area: s1; }
-  .smallSlot:nth-child(3) { grid-area: s2; }
-  .smallSlot:nth-child(4) { grid-area: s3; }
-  .smallSlot:nth-child(5) { grid-area: s4; }
+  .grid { grid-template-columns: repeat(5, 1fr); }
 }
 
-/* ─── Mobile صغير ─── */
 @media (max-width: 480px) {
   .section { padding: 40px 0; }
   .container { padding: 22px 14px 20px; border-radius: 18px; }
   .grid { gap: 10px; }
-  .heroSlot { min-height: 300px; }
-  .nextChip { max-width: 130px; }
 }
 
-/* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .viewAll { transition: none; }
-  .heroSlot { animation: none; }
-  .progressFill { animation-duration: 10s; }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   2026-09-27 — Featured = صفحة كاملة (scroll-snap)
-   ═══════════════════════════════════════════════════════════ */
-
-.section {
-  scroll-snap-align: start;
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  align-items: center;
-  padding: 40px 0;
-}
-
-@media (max-width: 640px) {
-  .section {
-    padding: 32px 0;
-  }
-}
-
-/* 2026-09-27 — v2: اتزان أفضل (مش centered) */
-.section {
-  align-items: flex-start;
-  padding: 60px 0 40px;
-}
-
-@media (max-width: 640px) {
-  .section {
-    padding: 44px 0 32px;
-  }
 }

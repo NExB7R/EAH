@@ -133,3 +133,21 @@
 - "ثبّت الآن" → يتسجّل في localStorage (مش يظهر تاني)
 - Review Reminder: يظهر بعد ساعتين من كشف الرقم/واتساب
 - أي تفاعل → يُسجّل في `engagement_events` (fire-and-forget)
+
+---
+
+## [v2.2.2] - 2026-09-27 — Featured Unified (بدون Hero) + /featured Clean
+
+### Changed
+- **Featured Bento** — كل الكروت موحّدة (10 كروت، 5 cols Desktop)
+- **/featured** — كل الكروت موحّدة (4 cols Desktop) + بدون خلفية داكنة
+- **/featured** — شيلنا الـ container (gold border + gradient bg)
+
+### Removed
+- Hero variant من Home + /featured
+- Pagination + progress bar + timer row
+- الخلفية الداكنة من /featured
+
+### Notes
+- 10 كروت × `next/image` lazy = صفر تأثير سرعة
+- الكارد variant="small" هو الأساسي حالياً

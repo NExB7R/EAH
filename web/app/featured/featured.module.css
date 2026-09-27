@@ -1,34 +1,18 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — /featured Page
+   EAH — /featured Page (2026 — بدون خلفية داكنة)
    ═══════════════════════════════════════════════════════════ */
 
 .page { min-height: 100vh; }
 
-.section { width: 100%; padding: 28px 0 60px; }
+.section {
+  width: 100%;
+  padding: 32px 0 70px;
+}
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 16px;
-}
-
-.heroWrap {
-  width: 100%;
-  min-height: 360px;
-  margin-bottom: 28px;
-}
-
-.neonLine {
-  height: 1px;
-  width: 100%;
-  margin-bottom: 24px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(232,199,154,0.3) 20%,
-    var(--gold-primary) 50%,
-    rgba(232,199,154,0.3) 80%,
-    transparent 100%);
-  border-radius: var(--radius-full);
 }
 
 .grid {
@@ -43,15 +27,14 @@
 
 @media (min-width: 1024px) {
   .grid { grid-template-columns: repeat(4, 1fr); }
-  .heroWrap { min-height: 420px; }
 }
 
 @media (max-width: 480px) {
-  .section { padding: 20px 0 48px; }
+  .section { padding: 20px 0 52px; }
   .container { padding: 0 12px; }
-  .heroWrap { min-height: 280px; }
 }
 
+/* ─── Empty ─── */
 .empty {
   text-align: center;
   padding: 80px 20px;
