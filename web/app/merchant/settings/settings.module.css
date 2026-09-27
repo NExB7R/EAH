@@ -1,0 +1,51 @@
+.list { display: flex; flex-direction: column; gap: 8px; }
+.item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(20,14,34,0.5);
+  border: 1px solid rgba(232,199,154,0.15);
+  text-decoration: none;
+  color: inherit;
+  transition: all 200ms var(--ease);
+  width: 100%;
+  text-align: start;
+  cursor: pointer;
+  font-family: inherit;
+}
+.item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(232,199,154,0.5);
+  background: rgba(20,14,34,0.7);
+}
+.itemIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(232,199,154,0.08);
+  color: var(--gold-light);
+  flex-shrink: 0;
+}
+.itemBody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.itemBody strong {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+.itemBody small {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+.chev { color: var(--text-muted); flex-shrink: 0; }
+.item:hover .chev { color: var(--gold-light); }
+.danger { border-color: rgba(252,165,165,0.25); }
+.danger .itemIcon { background: rgba(252,165,165,0.08); color: #FFC8C8; }
+.danger strong { color: #FFC8C8; }
+.danger:hover { border-color: rgba(252,165,165,0.5); }

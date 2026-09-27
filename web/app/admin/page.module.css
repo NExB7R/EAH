@@ -1,0 +1,152 @@
+.wrap { display: flex; flex-direction: column; gap: 20px; }
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(253,186,116,0.1), rgba(20,14,34,0.6));
+  border: 1.5px dashed rgba(253,186,116,0.5);
+  text-decoration: none;
+  color: inherit;
+  transition: all 200ms var(--ease);
+}
+.alert:hover { border-style: solid; }
+.alertIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(253,186,116,0.12);
+  color: #FDBA74;
+  flex-shrink: 0;
+}
+.alertBody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.alertBody strong {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: #FFD9A8;
+}
+.alertBody span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+.alertArrow { color: #FDBA74; flex-shrink: 0; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 22px 16px;
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(20,14,34,0.55), rgba(10,7,20,0.75));
+  border: 1px solid rgba(168,85,247,0.18);
+  text-decoration: none;
+  transition: all 200ms var(--ease);
+}
+.card:hover { transform: translateY(-2px); }
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(168,85,247,0.1);
+  color: var(--purple-light);
+}
+.value {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-top: 4px;
+}
+.label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+.orange { border-color: rgba(253,186,116,0.28); }
+.orange:hover { border-color: rgba(253,186,116,0.6); box-shadow: 0 0 24px rgba(253,186,116,0.15); }
+.orange .icon { background: rgba(253,186,116,0.12); color: #FDBA74; }
+.orange .value { color: #FDBA74; }
+.gold { border-color: rgba(232,199,154,0.28); }
+.gold:hover { border-color: rgba(232,199,154,0.6); box-shadow: 0 0 24px rgba(232,199,154,0.15); }
+.gold .icon { background: rgba(232,199,154,0.12); color: var(--gold-light); }
+.gold .value { color: var(--gold-light); }
+.teal { border-color: rgba(85,231,209,0.28); }
+.teal:hover { border-color: rgba(85,231,209,0.6); box-shadow: 0 0 24px rgba(85,231,209,0.15); }
+.teal .icon { background: rgba(85,231,209,0.1); color: #55E7D1; }
+.teal .value { color: #55E7D1; }
+.purple { border-color: rgba(168,85,247,0.28); }
+.purple:hover { border-color: rgba(199,125,255,0.6); box-shadow: 0 0 24px rgba(168,85,247,0.15); }
+
+.quickLinks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.quickCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(20,14,34,0.5);
+  border: 1px solid rgba(168,85,247,0.18);
+  text-decoration: none;
+  transition: all 200ms var(--ease);
+}
+.quickCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(168,85,247,0.5);
+  background: rgba(20,14,34,0.7);
+}
+.quickIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(168,85,247,0.08);
+  color: var(--purple-light);
+  flex-shrink: 0;
+}
+.quickBody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.quickBody strong {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+.quickBody small {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+.chev { color: var(--text-muted); flex-shrink: 0; transition: color 200ms var(--ease); }
+.quickCard:hover .chev { color: var(--purple-light); }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .quickLinks { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .value { font-size: 1.5rem; }
+  .card { padding: 16px 12px; }
+}
