@@ -11,14 +11,14 @@
 .plate {
   position: relative;
   width: 100%;
-  max-width: 480px;
-  padding: 8px 12px;
-  border-radius: 18px;
+  max-width: 320px;
+  padding: 6px 14px;
+  border-radius: 16px;
   background: linear-gradient(160deg, rgba(20,14,34,0.5), rgba(10,7,20,0.75));
   border: 1px solid rgba(232,199,154,0.22);
   box-shadow:
     0 0 0 1px rgba(232,199,154,0.04),
-    0 0 26px rgba(232,199,154,0.08);
+    0 0 20px rgba(232,199,154,0.08);
   transition: box-shadow 380ms var(--ease-out),
               border-color 380ms var(--ease-out);
 }
@@ -27,8 +27,8 @@
   border-color: rgba(232,199,154,0.5);
   box-shadow:
     0 0 0 1px rgba(232,199,154,0.12),
-    0 0 34px rgba(232,199,154,0.28),
-    0 0 60px rgba(232,199,154,0.14);
+    0 0 26px rgba(232,199,154,0.28),
+    0 0 46px rgba(232,199,154,0.14);
 }
 
 .svg {
@@ -43,11 +43,11 @@
 }
 
 .plate:hover .svg {
-  filter: drop-shadow(0 0 10px rgba(232,199,154,0.35));
+  filter: drop-shadow(0 0 8px rgba(232,199,154,0.35));
 }
 
 @media (max-width: 640px) {
-  .plate { max-width: 320px; padding: 6px 10px; border-radius: 14px; }
+  .plate { max-width: 260px; padding: 4px 10px; border-radius: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -41,7 +41,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
-  margin: 32px 0 48px;
+  margin: 0 0 40px;
 }
 
 .card {
@@ -174,7 +174,7 @@
   gap: 20px;
   max-width: 900px;
   margin: 0 auto;
-  padding: 36px 0 40px;
+  padding: 0 0 32px;
   border-top: 1px solid rgba(168,85,247,0.1);
   border-bottom: 1px solid rgba(168,85,247,0.1);
 }
