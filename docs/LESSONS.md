@@ -477,3 +477,15 @@ cat file.tsx
 **المشكلة 2:** `beforeinstallprompt` بيتكرر + localStorage مش بيتفحص جواه → الإشعار المزعج.
 
 **الحل:** شيلنا auto-show تماماً. الإشعار يظهر بس لما المستخدم يدوس زر التثبيت في الهيدر.
+
+---
+
+## 16. Supabase SQL Editor — Not a Terminal (2026-09-27)
+
+**الغلطة:** لصق أوامر bash (`cd ~/EAH-V2 && ...`) في Supabase SQL Editor.
+
+**النتيجة:** `ERROR: syntax error at or near "cd"`.
+
+**القاعدة:** SQL Editor بياخد **SQL بس**. صفر `cd`, `&&`, heredoc markers.
+
+**حل تاني:** `is_admin()` مش موجودة في DB الحالي → استخدمنا `user_roles` مباشرة.

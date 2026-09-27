@@ -107,3 +107,29 @@
 ### Changed
 - `splash.tsx` — initial hidden=false + useLayoutEffect
 - `install-prompt.tsx` — إزالة auto-show (30s) — يدوي فقط
+
+---
+
+## [v2.2.0] - 2026-09-27 — Engagement + Review Reminder + Smart Install
+
+### Added
+- `lib/engagement.ts` — تتبّع تفاعل + جدولة تقييم + طلب تثبيت
+- `components/review-reminder.tsx` + `.module.css` — إشعار تقييم بعد ساعتين
+- `app/api/track-action/route.ts` — POST يسجّل الأحداث في DB
+- Migration: `engagement_events` (تحليلات التفاعل)
+- RLS على `engagement_events` (INSERT service_role / SELECT admin)
+- 3 Indexes للأداء
+
+### Changed
+- `install-prompt.tsx` — Persuasion UI جديد (فوايد + زر ذهبي)
+- `install-prompt.module.css` — تصميم Premium + توهج
+- `floating-capsule.tsx` — `eah:install-request` → `eah:show-install`
+- `layout.tsx` — إضافة `<ReviewReminder />`
+- `home-hero.module.css` — فاصل 14px بين اللوجو ولافتة شبين
+
+### Behavior (المنطق)
+- Install Prompt: مش auto — يظهر عند كشف رقم / واتساب / تقييم
+- "مش دلوقتي" → cooldown دقيقتين (مش يتكرر كل مرة)
+- "ثبّت الآن" → يتسجّل في localStorage (مش يظهر تاني)
+- Review Reminder: يظهر بعد ساعتين من كشف الرقم/واتساب
+- أي تفاعل → يُسجّل في `engagement_events` (fire-and-forget)

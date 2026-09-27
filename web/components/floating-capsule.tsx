@@ -60,7 +60,7 @@ export default function FloatingCapsule({ session }: Props) {
   }, [pathname])
 
   const handleInstall = () => {
-    window.dispatchEvent(new CustomEvent('eah:install-request'))
+    window.dispatchEvent(new CustomEvent('eah:show-install'))
   }
 
   const isLoggedIn = !!session

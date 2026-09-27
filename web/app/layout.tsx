@@ -6,6 +6,7 @@ import '@fontsource/tajawal/900.css'
 import Splash from '@/components/splash'
 import FloatingCapsule from '@/components/floating-capsule'
 import InstallPrompt from '@/components/install-prompt'
+import ReviewReminder from '@/components/review-reminder'
 import SignupPrompt from '@/components/signup-prompt'
 import { getUserSession } from '@/lib/data/user'
 import './globals.css'
@@ -37,6 +38,7 @@ export default async function RootLayout({
         <FloatingCapsule session={session} />
         {children}
         <InstallPrompt />
+        <ReviewReminder />
         {!session && <SignupPrompt />}
       </body>
     </html>

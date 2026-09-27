@@ -193,3 +193,10 @@
 - Install: يدوي فقط
 - Header: توسيط سليم
 - Snap: mandatory
+
+### 2026-09-27 — Engagement + Review + Install ✅
+- lib/engagement.ts
+- review-reminder.tsx + css
+- api/track-action
+- migration: engagement_events
+- install-prompt redesign (persuasion)

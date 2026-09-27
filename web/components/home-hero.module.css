@@ -328,3 +328,8 @@
     padding-top: calc(24px + env(safe-area-inset-top));
   }
 }
+
+/* 2026-09-27 — فاصل بين اللوجو واللي تحته */
+.shibinSign {
+  margin-top: 14px;
+}

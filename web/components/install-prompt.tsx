@@ -1,11 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { InstallIcon, CloseIcon } from './icons'
+import { InstallIcon, CloseIcon, SparklesIcon, CheckIcon } from './icons'
 import styles from './install-prompt.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Install Prompt (يدوي فقط — من زر الهيدر)
+// EAH — Install Prompt (يدوي + persuasion UI)
+//   • يظهر عند حدث eah:show-install
+//   • "مش دلوقتي" → يتأخر دقيقتين
+//   • "ثبّت" → يظهر الـ native prompt
 // ═══════════════════════════════════════════════════════════
 
 type BeforeInstallPromptEvent = Event & {
@@ -13,7 +16,14 @@ type BeforeInstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
 }
 
-const STORAGE_KEY = 'eah-install-prompt-dismissed'
+const KEY_DISMISSED = 'eah-install-dismissed-at'
+const DISMISS_COOLDOWN_MS = 2 * 60 * 1000
+
+const BENEFITS = [
+  'افتح EAH من غير متصفح',
+  'اشتغل بدون إنترنت',
+  'إشعارات فورية بالعروض',
+]
 
 export default function InstallPrompt() {
   const [visible, setVisible] = useState(false)
@@ -21,7 +31,6 @@ export default function InstallPrompt() {
   const [isIOS, setIsIOS] = useState(false)
 
   useEffect(() => {
-    // مثبتة أصلاً → متشتغلش خالص
     if (window.matchMedia('(display-mode: standalone)').matches) return
 
     const ua = window.navigator.userAgent
@@ -34,18 +43,21 @@ export default function InstallPrompt() {
     }
     window.addEventListener('beforeinstallprompt', onPrompt)
 
-    // فتح يدوي فقط — من زر الهيدر
-    const onManual = () => setVisible(true)
-    window.addEventListener('eah:install-request', onManual)
+    const onShow = () => {
+      const lastDismiss = Number(localStorage.getItem(KEY_DISMISSED) ?? 0)
+      if (Date.now() - lastDismiss < DISMISS_COOLDOWN_MS) return
+      setVisible(true)
+    }
+    window.addEventListener('eah:show-install', onShow)
 
     return () => {
       window.removeEventListener('beforeinstallprompt', onPrompt)
-      window.removeEventListener('eah:install-request', onManual)
+      window.removeEventListener('eah:show-install', onShow)
     }
   }, [])
 
   const dismiss = () => {
-    localStorage.setItem(STORAGE_KEY, '1')
+    localStorage.setItem(KEY_DISMISSED, String(Date.now()))
     setVisible(false)
   }
 
@@ -58,7 +70,8 @@ export default function InstallPrompt() {
       await deferred.prompt()
       const choice = await deferred.userChoice
       if (choice.outcome === 'accepted') {
-        localStorage.setItem(STORAGE_KEY, '1')
+        const { markInstallAccepted } = await import('@/lib/engagement')
+        markInstallAccepted()
       }
       setVisible(false)
     } catch {
@@ -68,15 +81,12 @@ export default function InstallPrompt() {
 
   if (!visible) return null
 
-  // لو iOS → إرشادات يدوية
-  // لو Chrome/Edge و deferred موجود → زر تثبيت
-  // لو deferred مش موجود (متصفح مش داعم) → إرشادات عامة
   const showNativeInstall = !isIOS && !!deferred
 
   return (
     <div className="eah-backdrop" onClick={dismiss}>
       <div
-        className="eah-modal"
+        className={`eah-modal ${styles.modal}`}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -90,33 +100,58 @@ export default function InstallPrompt() {
           <CloseIcon size={18} />
         </button>
 
-        <div className={styles.iconWrap}>
-          <InstallIcon size={32} />
+        <div className={styles.hero}>
+          <div className={styles.heroGlow} aria-hidden />
+          <div className={styles.iconWrap}>
+            <InstallIcon size={38} />
+          </div>
+          <span className={styles.badge}>
+            <SparklesIcon size={12} /> موصى به
+          </span>
         </div>
 
         <h2 className={styles.title}>ثبّت EAH على جهازك</h2>
-        <p className={styles.text}>
-          {isIOS
-            ? 'اضغط زر المشاركة في المتصفح، بعدين "إضافة إلى الشاشة الرئيسية".'
-            : showNativeInstall
-            ? 'افتح أسرع، استخدمه بدون إنترنت، ووصلك إشعارات.'
-            : 'من قائمة المتصفح: "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية".'}
+        <p className={styles.subtitle}>
+          تجربة أسرع، بدون متصفح، وتوصلك إشعارات بالعروض الجديدة.
         </p>
+
+        <ul className={styles.benefits}>
+          {BENEFITS.map((b) => (
+            <li key={b} className={styles.benefit}>
+              <span className={styles.checkIcon}>
+                <CheckIcon size={14} />
+              </span>
+              {b}
+            </li>
+          ))}
+        </ul>
 
         <div className={styles.actions}>
           {showNativeInstall ? (
-            <button type="button" className="eah-btn-primary" onClick={install}>
+            <button type="button" className={styles.primaryBtn} onClick={install}>
+              <InstallIcon size={16} />
               ثبّت الآن
             </button>
+          ) : isIOS ? (
+            <button type="button" className={styles.primaryBtn} onClick={dismiss}>
+              تمام، فهمت
+            </button>
           ) : (
-            <button type="button" className="eah-btn-primary" onClick={dismiss}>
+            <button type="button" className={styles.primaryBtn} onClick={dismiss}>
               تمام
             </button>
           )}
-          <button type="button" className="eah-btn-secondary" onClick={dismiss}>
+          <button type="button" className={styles.secondaryBtn} onClick={dismiss}>
             مش دلوقتي
           </button>
         </div>
+
+        {isIOS && (
+          <p className={styles.iosHint}>
+            اضغط <strong>زر المشاركة</strong> في المتصفح، بعدين{' '}
+            <strong>&quot;إضافة إلى الشاشة الرئيسية&quot;</strong>
+          </p>
+        )}
       </div>
     </div>
   )

@@ -257,3 +257,14 @@
 - [x] Header auto-hide في الهيرو
 - [x] الهيرو بدون spacer
 - [x] توسيط اللوجو في الهيدر
+
+### ✅ خلص (2026-09-27)
+- [x] Smart Install Prompt (Persuasion UI + cooldown)
+- [x] Review Reminder بعد ساعتين
+- [x] Engagement tracking → engagement_events
+- [x] Migration + RLS + Indexes
+
+### ⏳ جاي
+- [ ] ربط trackEngagement في business page (كشف رقم / واتساب)
+- [ ] ربط trackEngagement في صفحة التقييم
+- [ ] Dashboard تحليلات في /admin
