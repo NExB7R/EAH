@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { getNearbyBusinesses } from '@/lib/data'
 import { MapPinIcon } from '@/components/icons'
-import SectionPage from '@/components/section-page'
+import SecondaryHero from '@/components/secondary-hero'
+import HeroGrid from '@/components/hero-grid'
+import SectionWrapper from '@/components/section-wrapper'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,15 +13,20 @@ export const metadata: Metadata = {
 }
 
 export default async function NearbyPage() {
-  const businesses = await getNearbyBusinesses('شبين القناطر', 50)
+  const businesses = await getNearbyBusinesses('شبين القناطر', 100)
+
   return (
-    <SectionPage
-      title="قريب منك"
-      Icon={MapPinIcon}
-      tone="teal"
-      activeKey="nearby"
-      businesses={businesses}
-      count={businesses.length}
-    />
+    <main style={{ minHeight: '100vh', paddingBottom: '80px' }}>
+      <SecondaryHero
+        activeKey="nearby"
+        title="قريب منك"
+        Icon={MapPinIcon}
+        tone="teal"
+        count={businesses.length}
+      />
+      <SectionWrapper tone="teal">
+        <HeroGrid businesses={businesses} variant="nearby" />
+      </SectionWrapper>
+    </main>
   )
 }
