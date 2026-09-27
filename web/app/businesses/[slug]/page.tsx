@@ -1,21 +1,21 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import PageHeader from '@/components/page-header'
-import WmImage from '@/components/wm-image'
 import {
-  getBusinessBySlug,
-  isOpenNow,
-} from '@/lib/data/businesses'
-import {
-  StarIcon,
-  BadgeCheckIcon,
-} from '@/components/icons'
+  getBusinessDetail,
+  getBusinessReviews,
+  getSimilarBusinesses,
+  TYPE_LABEL,
+} from '@/lib/data/business-detail'
+import { isOpenNow } from '@/lib/data/businesses'
+import { getUserSession } from '@/lib/data/user'
+import { sortByTrend } from '@/lib/ranking'
+import BusinessHero from '@/components/business-hero'
+import BusinessActions from '@/components/business-actions'
+import BusinessTabs from '@/components/business-tabs'
+import FixedCta from '@/components/fixed-cta'
+import BusinessCard from '@/components/business-card'
+import { CrownGoldIcon, ArrowLeftIcon } from '@/components/icons'
 import styles from './business.module.css'
-
-// ═══════════════════════════════════════════════════════════
-// EAH — Business Page (temporary)
-// ═══════════════════════════════════════════════════════════
 
 export const dynamic = 'force-dynamic'
 
@@ -23,108 +23,107 @@ type Props = {
   params: Promise<{ slug: string }>
 }
 
-const TYPE_LABELS: Record<string, string> = {
-  restaurant: 'مطعم',
-  pharmacy: 'صيدلية',
-  supermarket: 'ماركت',
-  delivery_office: 'توصيل',
-  misc: 'نشاط',
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const business = await getBusinessBySlug(slug)
+  const detail = await getBusinessDetail(slug)
 
-  if (!business) {
+  if (!detail) {
     return { title: 'مش موجود | EAH' }
   }
 
+  const { business } = detail
   return {
     title: `${business.name} | EAH`,
-    description: business.description ?? business.hook ?? `${business.name} في شبين القناطر`,
+    description:
+      business.description ??
+      business.hook ??
+      `${business.name} — ${TYPE_LABEL[business.business_type]} في ${business.area ?? 'شبين القناطر'}`,
   }
 }
 
 export default async function BusinessPage({ params }: Props) {
   const { slug } = await params
-  const business = await getBusinessBySlug(slug)
 
-  if (!business) {
-    notFound()
-  }
+  const detail = await getBusinessDetail(slug)
+  if (!detail) notFound()
+
+  const { business, contacts } = detail
+
+  const [reviews, similar, session] = await Promise.all([
+    getBusinessReviews(business.id, 50),
+    getSimilarBusinesses(business.id, business.business_type, 8),
+    getUserSession(),
+  ])
+
+  // Fisher-Yates shuffle (client-stable seed from business.id)
+  const seededSimilar = similar
+    .slice(0, 4)
+    .sort((a, b) => {
+      const h1 = (a.id.charCodeAt(0) + business.id.charCodeAt(0)) % 1000
+      const h2 = (b.id.charCodeAt(0) + business.id.charCodeAt(0)) % 1000
+      return h1 - h2
+    })
 
   const isOpen = isOpenNow(business.working_hours)
-  const label = TYPE_LABELS[business.business_type] ?? 'نشاط'
+  const whatsapp = contacts.find((c) => c.method_type === 'whatsapp')?.value ?? null
+  const phone = contacts.find((c) => c.method_type === 'phone')?.value ?? null
+
+  const hasWhatsapp = !!whatsapp && business.accepts_whatsapp_orders
 
   return (
     <main className={styles.page}>
-      <PageHeader title={business.name} />
+      <div className={styles.container}>
+        {/* ─── Hero ─── */}
+        <BusinessHero detail={detail} isOpen={isOpen} />
 
-      <div className={styles.content}>
-        <div className={styles.cover}>
-          {business.cover_image_url ? (
-            <WmImage
-              src={business.cover_image_url}
-              alt={business.name}
-              fill
-              sizes="(max-width: 768px) 100vw, 800px"
-              className={styles.coverImg}
-              priority
-            />
-          ) : (
-            <div className={styles.placeholder} aria-hidden />
-          )}
+        {/* ─── Quick Actions ─── */}
+        <div className={styles.actionsWrap}>
+          <BusinessActions
+            businessName={business.name}
+            isLoggedIn={!!session}
+            whatsapp={whatsapp}
+            phone={phone}
+            isOpen={isOpen}
+            acceptsWhatsapp={business.accepts_whatsapp_orders}
+          />
         </div>
 
-        <div className={styles.info}>
-          <div className={styles.head}>
-            <h1 className={styles.name}>{business.name}</h1>
-            {business.trust_tier === 'trusted' && (
-              <span className={styles.verified}>
-                <BadgeCheckIcon size={16} />
-              </span>
-            )}
-          </div>
+        {/* ─── Tabs ─── */}
+        <div className={styles.tabsWrap}>
+          <BusinessTabs detail={detail} reviewsCount={reviews.length} />
+        </div>
 
-          <div className={styles.meta}>
-            <span className={styles.type}>{label}</span>
-            {business.area && (
-              <>
-                <span className={styles.dot} aria-hidden>·</span>
-                <span>{business.area}</span>
-              </>
-            )}
-            <span className={styles.dot} aria-hidden>·</span>
-            <span className={isOpen ? styles.open : styles.closed}>
-              {isOpen ? 'مفتوح حالاً' : 'مغلق'}
-            </span>
-          </div>
-
-          {business.hook && (
-            <p className={styles.hook}>{business.hook}</p>
-          )}
-
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <StarIcon size={18} />
-              <span className={styles.statVal}>{business.trust_score}</span>
-              <span className={styles.statLabel}>ثقة</span>
-            </div>
-            {business.successful_orders > 0 && (
-              <div className={styles.stat}>
-                <span className={styles.statVal}>{business.successful_orders}</span>
-                <span className={styles.statLabel}>طلب</span>
+        {/* ─── Similar ─── */}
+        {seededSimilar.length > 0 && (
+          <section className={styles.similar}>
+            <header className={styles.similarHeader}>
+              <div className={styles.similarTitleWrap}>
+                <span className={styles.similarIcon}>
+                  <CrownGoldIcon size={18} />
+                </span>
+                <h2 className={styles.similarTitle}>
+                  {TYPE_LABEL[business.business_type]} تانية قريبة
+                </h2>
               </div>
-            )}
-          </div>
+            </header>
 
-          <div className={styles.actions}>
-            <Link href="/explore" className={styles.backBtn}>
-              اكتشف المزيد
-            </Link>
-          </div>
-        </div>
+            <div className={styles.similarGrid}>
+              {seededSimilar.map((b) => (
+                <BusinessCard key={b.id} business={b} tone="purple" />
+              ))}
+            </div>
+          </section>
+        )}
       </div>
+
+      {/* ─── Fixed CTA (Mobile) ─── */}
+      <FixedCta
+        businessName={business.name}
+        whatsapp={hasWhatsapp ? whatsapp : null}
+        phone={phone}
+        isLoggedIn={!!session}
+        isOpen={isOpen}
+      />
     </main>
   )
 }
