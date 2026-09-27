@@ -11,8 +11,8 @@
 .plate {
   position: relative;
   width: 100%;
-  max-width: 320px;
-  padding: 6px 14px;
+  max-width: 240px;
+  padding: 4px 10px;
   border-radius: 16px;
   background: linear-gradient(160deg, rgba(20,14,34,0.5), rgba(10,7,20,0.75));
   border: 1px solid rgba(232,199,154,0.22);
@@ -47,7 +47,7 @@
 }
 
 @media (max-width: 640px) {
-  .plate { max-width: 260px; padding: 4px 10px; border-radius: 12px; }
+  .plate { max-width: 200px; padding: 4px 10px; border-radius: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
