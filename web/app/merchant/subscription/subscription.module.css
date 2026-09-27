@@ -1,0 +1,229 @@
+.currentCard {
+  position: relative;
+  padding: 24px;
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(20,14,34,0.7), rgba(10,7,20,0.9));
+  border: 1.5px solid rgba(232,199,154,0.35);
+  box-shadow: 0 0 30px rgba(232,199,154,0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.currentGlow {
+  position: absolute;
+  inset: -50% -10% auto -10%;
+  height: 200px;
+  background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(232,199,154,0.15), transparent 65%);
+  pointer-events: none;
+}
+.currentBody {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 1;
+}
+.currentIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(232,199,154,0.12);
+  border: 1px solid rgba(232,199,154,0.4);
+  color: var(--gold-light);
+  flex-shrink: 0;
+}
+.currentInfo { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.currentLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.currentName {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+.currentMeta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  background: rgba(168,85,247,0.08);
+  border: 1px solid rgba(168,85,247,0.22);
+}
+.chipTrial { color: #B8F0E6; background: rgba(85,231,209,0.08); border-color: rgba(85,231,209,0.3); }
+.chipWarn { color: #FFD9A8; background: rgba(253,186,116,0.1); border-color: rgba(253,186,116,0.35); }
+.upgradeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 900;
+  color: var(--bg-base);
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+  text-decoration: none;
+  box-shadow: 0 0 14px rgba(232,199,154,0.4);
+  flex-shrink: 0;
+}
+
+.trialMsg {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(168,85,247,0.1), rgba(20,14,34,0.6));
+  border: 1.5px dashed rgba(168,85,247,0.4);
+  margin-bottom: 20px;
+}
+.trialMsgIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(168,85,247,0.12);
+  color: var(--purple-light);
+  flex-shrink: 0;
+}
+.trialMsgBody { flex: 1; min-width: 0; }
+.trialMsgBody strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+.trialMsgBody p {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+}
+.trialMsgBtn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: var(--bg-base);
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.plansTitle {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 24px 0 14px;
+}
+.plansGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.planCard {
+  position: relative;
+  padding: 18px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(20,14,34,0.5), rgba(10,7,20,0.7));
+  border: 1px solid rgba(168,85,247,0.18);
+}
+.planCurrent {
+  border-color: rgba(232,199,154,0.55);
+  box-shadow: 0 0 20px rgba(232,199,154,0.15);
+}
+.planFree { border-color: rgba(85,231,209,0.35); }
+.planHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.planName {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0;
+}
+.planBadge {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 900;
+  color: var(--bg-base);
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+}
+.planPrice { display: flex; align-items: baseline; gap: 4px; margin-bottom: 12px; }
+.price {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--gold-light);
+  font-variant-numeric: tabular-nums;
+}
+.currency { font-size: 0.7rem; font-weight: 800; color: var(--text-tertiary); }
+.freeText {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #55E7D1;
+}
+.planFeatures {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(168,85,247,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.planFeatures li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.planFeatures svg { color: var(--purple-light); flex-shrink: 0; }
+.planCta {
+  display: block;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: var(--gold-light);
+  background: rgba(232,199,154,0.08);
+  border: 1px solid rgba(232,199,154,0.3);
+  text-decoration: none;
+  transition: all 180ms var(--ease);
+}
+.planCta:hover { background: rgba(232,199,154,0.18); }
+@media (max-width: 640px) {
+  .currentBody { flex-wrap: wrap; }
+  .upgradeBtn { width: 100%; justify-content: center; }
+  .plansGrid { grid-template-columns: 1fr; }
+  .trialMsg { flex-direction: column; text-align: center; }
+  .trialMsgBtn { width: 100%; text-align: center; }
+}
