@@ -3,18 +3,13 @@ import Logo from './logo'
 import { HomeIcon } from './icons'
 import styles from './page-header.module.css'
 
-// ═══════════════════════════════════════════════════════════
-// EAH — Page Header (used across all pages)
-// ═══════════════════════════════════════════════════════════
+type LogoSize = 'sm' | 'md' | 'lg'
 
 type Props = {
-  // لو true → يظهر زرار الرجوع للرئيسية
   showBack?: boolean
-  // عنوان اختياري تحت اللوجو
   title?: string
-  // عدد اختياري (مثلاً "53 نشاط")
   count?: number
-  // محتوى إضافي تحت العنوان (search, filters)
+  logoSize?: LogoSize
   children?: React.ReactNode
 }
 
@@ -22,6 +17,7 @@ export default function PageHeader({
   showBack = true,
   title,
   count,
+  logoSize = 'sm',
   children,
 }: Props) {
   return (
@@ -32,18 +28,15 @@ export default function PageHeader({
             <HomeIcon size={20} />
           </Link>
         )}
-
         <div className={styles.logoWrap}>
           <Link href="/" aria-label="EAH — الرئيسية">
-            <Logo size="sm" variant="full" href={undefined} />
+            <Logo size={logoSize} variant="full" href={undefined} />
           </Link>
         </div>
       </div>
 
-      {/* السطر النيون */}
       <div className={styles.neonLine} aria-hidden />
 
-      {/* العنوان + العدد */}
       {(title || count !== undefined) && (
         <div className={styles.titleRow}>
           {title && <h1 className={styles.title}>{title}</h1>}
@@ -53,7 +46,6 @@ export default function PageHeader({
         </div>
       )}
 
-      {/* محتوى إضافي */}
       {children && <div className={styles.extra}>{children}</div>}
     </header>
   )

@@ -1,0 +1,142 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Section Title
+   ═══════════════════════════════════════════════════════════ */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  margin-top: 12px;
+  margin-bottom: 22px;
+  text-align: center;
+  position: relative;
+}
+
+/* ─── Icon ─── */
+.iconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, rgba(255,255,255,0.08), transparent 70%);
+  position: relative;
+}
+
+.iconWrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0.35;
+}
+
+/* ─── Title ─── */
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  margin: 0;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ─── Count ─── */
+.count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid currentColor;
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* ─── Neon Line ─── */
+.line {
+  display: block;
+  height: 2px;
+  width: 80px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  box-shadow: 0 0 12px currentColor;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Tones — كل قسم لون + توهج خاص
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── Gold (المميزون) ─── */
+.gold { color: var(--gold-light); }
+.gold .iconWrap { filter: drop-shadow(0 0 16px rgba(232,199,154,0.5)); }
+.gold .title {
+  background-image: linear-gradient(135deg, #F5E4BC 0%, #E8C79A 50%, #C9A56C 100%);
+  filter: drop-shadow(0 2px 14px rgba(232,199,154,0.4));
+}
+
+/* ─── Orange (الترند) ─── */
+.orange { color: #FDBA74; }
+.orange .iconWrap { filter: drop-shadow(0 0 16px rgba(253,186,116,0.5)); }
+.orange .title {
+  background-image: linear-gradient(135deg, #FFD9A8 0%, #FDBA74 55%, #E89B4F 100%);
+  filter: drop-shadow(0 2px 14px rgba(253,186,116,0.4));
+}
+
+/* ─── Purple (العروض) ─── */
+.purple { color: #C77DFF; }
+.purple .iconWrap { filter: drop-shadow(0 0 16px rgba(168,85,247,0.5)); }
+.purple .title {
+  background-image: linear-gradient(135deg, #E0B8FF 0%, #C77DFF 50%, #9D4EDD 100%);
+  filter: drop-shadow(0 2px 14px rgba(168,85,247,0.4));
+}
+
+/* ─── Teal (قريب مني) ─── */
+.teal { color: #55E7D1; }
+.teal .iconWrap { filter: drop-shadow(0 0 16px rgba(85,231,209,0.45)); }
+.teal .title {
+  background-image: linear-gradient(135deg, #B8F0E6 0%, #55E7D1 50%, #2BB8A4 100%);
+  filter: drop-shadow(0 2px 14px rgba(85,231,209,0.4));
+}
+
+/* ─── Pink (الأنشطة الجديدة) ─── */
+.pink { color: #F472B6; }
+.pink .iconWrap { filter: drop-shadow(0 0 16px rgba(244,114,182,0.5)); }
+.pink .title {
+  background-image: linear-gradient(135deg, #FFB8E8 0%, #F472B6 50%, #D946A6 100%);
+  filter: drop-shadow(0 2px 14px rgba(244,114,182,0.4));
+}
+
+/* ─── Blue (الترشيح) ─── */
+.blue { color: #818CF8; }
+.blue .iconWrap { filter: drop-shadow(0 0 16px rgba(129,140,248,0.5)); }
+.blue .title {
+  background-image: linear-gradient(135deg, #C8D0FF 0%, #818CF8 50%, #5B65E8 100%);
+  filter: drop-shadow(0 2px 14px rgba(129,140,248,0.4));
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 480px) {
+  .wrap { gap: 8px; margin-top: 8px; margin-bottom: 16px; }
+  .iconWrap { width: 44px; height: 44px; }
+  .iconWrap svg { width: 22px; height: 22px; }
+  .line { width: 64px; }
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .iconWrap, .line { transition: none; }
+}

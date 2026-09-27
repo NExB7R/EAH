@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { getFeaturedBusinesses } from '@/lib/data'
-import { HomeIcon, ChevronLeftIcon, CrownGoldIcon } from '@/components/icons'
+import { CrownGoldIcon } from '@/components/icons'
 import SecondaryHero from '@/components/secondary-hero'
 import FeaturedShowcase from './featured-showcase'
 import styles from './featured.module.css'
@@ -18,21 +17,13 @@ export default async function FeaturedPage() {
 
   return (
     <main className={styles.page}>
-      <SecondaryHero activeKey="featured" />
-
-      <div className={styles.crumbsWrap}>
-        <nav className={styles.breadcrumb} aria-label="مسار التنقل">
-          <Link href="/" className={styles.crumb}>
-            <HomeIcon size={13} />
-            <span>الرئيسية</span>
-          </Link>
-          <ChevronLeftIcon size={12} className={styles.crumbSep} />
-          <span className={styles.crumbNow}>
-            <CrownGoldIcon size={13} />
-            <span>المميزون</span>
-          </span>
-        </nav>
-      </div>
+      <SecondaryHero
+        activeKey="featured"
+        title="المميزون"
+        Icon={CrownGoldIcon}
+        tone="gold"
+        count={all.length > 0 ? all.length : undefined}
+      />
 
       <section className={styles.section}>
         <div className={styles.frame}>

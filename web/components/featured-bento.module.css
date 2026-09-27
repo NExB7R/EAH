@@ -104,10 +104,6 @@
 }
 
 /* ─── Carousel (Wrapper + Arrows) ─── */
-.carousel {
-  position: relative;
-  padding: 0 52px;
-}
 
 .grid {
   display: grid;
@@ -176,7 +172,6 @@
 @media (max-width: 640px) {
   .section { padding: 36px 0; }
   .frame { padding: 18px 14px 16px; border-radius: 18px; }
-  .carousel { padding: 0 42px; }
   .arrow { width: 34px; height: 34px; }
   .arrow svg { width: 16px; height: 16px; }
   .grid { gap: 10px; }

@@ -4,66 +4,20 @@
 
 .page {
   min-height: 100vh;
-  padding-top: calc(80px + env(safe-area-inset-top));
   padding-bottom: 80px;
-}
-
-/* ─── Breadcrumb ─── */
-.crumbsWrap {
-  display: flex;
-  justify-content: center;
-  padding: 0 16px;
-  margin-top: 20px;
-}
-
-.breadcrumb {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: var(--radius-full);
-  background: rgba(232,199,154,0.05);
-  border: 1px solid rgba(232,199,154,0.22);
-  font-size: 0.7rem;
-  font-weight: 800;
-}
-
-.crumb {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--text-tertiary);
-  text-decoration: none;
-  transition: color 180ms var(--ease);
-}
-
-.crumb:hover {
-  color: var(--gold-light);
-}
-
-.crumbSep {
-  color: rgba(232,199,154,0.35);
-}
-
-.crumbNow {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--gold-light);
-  font-weight: 900;
 }
 
 /* ─── Section ─── */
 .section {
   width: 100%;
-  padding: 20px 20px 0;
+  padding: 0 20px;
 }
 
 .frame {
   position: relative;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 16px 16px 16px;
+  padding: 16px;
   border-radius: 22px;
   background: linear-gradient(160deg, rgba(20,14,34,0.6), rgba(10,7,20,0.85));
   border: 1.5px solid rgba(232,199,154,0.32);
@@ -74,7 +28,7 @@
     inset 0 1px 0 rgba(232,199,154,0.08);
 }
 
-/* ─── Carousel (كامل — بدون padding للأسهم) ─── */
+/* ─── Carousel ─── */
 .carousel {
   position: relative;
 }
@@ -93,7 +47,7 @@
   .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-/* ─── Arrows — فوق الكروت بـ blur + fade ─── */
+/* ─── Arrows — تظهر عند Hover — بخلفية blur ─── */
 .arrow {
   position: absolute;
   top: 50%;
@@ -234,8 +188,8 @@
 
 /* ─── Mobile ─── */
 @media (max-width: 640px) {
-  .section { padding: 16px 12px 0; }
-  .frame { padding: 12px 12px 14px; border-radius: 18px; }
+  .section { padding: 0 12px; }
+  .frame { padding: 12px; border-radius: 18px; }
   .grid { gap: 10px; }
   .arrow { width: 38px; height: 38px; }
   .arrow svg { width: 16px; height: 16px; }

@@ -5,7 +5,7 @@
 .header {
   position: relative;
   width: 100%;
-  padding-top: calc(80px + env(safe-area-inset-top));
+  padding-top: calc(70px + env(safe-area-inset-top));
   padding-inline: 16px;
 }
 
