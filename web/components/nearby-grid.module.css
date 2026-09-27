@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — Nearby Grid (Teal 2026)
+   EAH — Nearby Grid (Teal Neon 2026)
    ═══════════════════════════════════════════════════════════ */
 
 .section {
@@ -48,7 +48,6 @@
   line-height: 1.2;
 }
 
-
 .viewAll {
   display: inline-flex;
   align-items: center;
@@ -86,17 +85,9 @@
   border-radius: var(--radius-full);
 }
 
-.grid {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-@media (min-width: 1024px) {
-  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-}
-
 .card {
+  flex-shrink: 0;
+  width: 220px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -163,7 +154,7 @@
 .rating {
   position: absolute;
   bottom: 8px;
-  inset-inline-start: 8px;
+  inset-inline-end: 8px;
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -215,7 +206,7 @@
 @media (max-width: 640px) {
   .section { padding: 36px 0; }
   .frame { padding: 18px 14px 14px; border-radius: 18px; }
-  .grid { gap: 10px; }
+  .card { width: 190px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

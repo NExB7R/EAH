@@ -1,8 +1,8 @@
 import HomeHero from '@/components/home-hero'
 import FeaturedBento from '@/components/featured-bento'
-import TrendingList from '@/components/trending-list'
+import TrendingRow from '@/components/trending-row'
 import OffersStrip from '@/components/offers-strip'
-import NewGrid from '@/components/new-grid'
+import NewRow from '@/components/new-row'
 import NearbyGrid from '@/components/nearby-grid'
 import SuggestedSection from '@/components/suggested-section'
 import {
@@ -45,9 +45,9 @@ export default async function Home() {
     <main>
       <HomeHero />
       <FeaturedBento businesses={all} />
-      <TrendingList businesses={trending.length > 0 ? trending : trendList} />
+      <TrendingRow businesses={trending.length > 0 ? trending : trendList} />
       <OffersStrip offers={offers} />
-      <NewGrid businesses={newOnes} />
+      <NewRow businesses={newOnes} />
       <NearbyGrid businesses={nearby} />
       <SuggestedSection />
     </main>

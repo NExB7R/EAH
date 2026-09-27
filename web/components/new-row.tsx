@@ -11,18 +11,18 @@ import {
   BikeIcon,
   SparklesIcon,
 } from './icons'
-import type { Business } from '@/lib/data'
 import SectionBadge from './section-badge'
-import styles from './new-grid.module.css'
+import RowCarousel from './row-carousel'
+import type { Business } from '@/lib/data'
+import styles from './new-row.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — New Grid (Home — الأنشطة الجديدة)
-//   • إطار وردي/فوشيا (Pink) — مختلف عن التيل
-//   • Server Component
+// EAH — New Row (Home — Single Row Carousel)
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
   businesses: Business[]
+  limit?: number
 }
 
 type TypeMeta = { label: string; Icon: typeof UtensilsIcon }
@@ -35,8 +35,9 @@ const TYPE_META: Record<string, TypeMeta> = {
   misc: { label: 'أنشطة', Icon: SparklesIcon },
 }
 
-export default function NewGrid({ businesses }: Props) {
+export default function NewRow({ businesses, limit = 12 }: Props) {
   if (businesses.length === 0) return null
+  const visible = businesses.slice(0, limit)
 
   return (
     <section className={styles.section}>
@@ -58,15 +59,16 @@ export default function NewGrid({ businesses }: Props) {
 
         <div className={styles.neonLine} aria-hidden />
 
-        <div className={styles.grid}>
-          {businesses.slice(0, 6).map((b) => {
+        <RowCarousel accent="#F472B6">
+          {visible.map((b) => {
             const meta = TYPE_META[b.business_type] ?? TYPE_META.misc!
             const TypeIcon = meta.Icon
-            const rating = b.rating_count > 0
-              ? b.rating_avg.toFixed(1)
-              : b.trust_score
-              ? (b.trust_score / 20).toFixed(1)
-              : null
+            const rating =
+              b.rating_count > 0
+                ? b.rating_avg.toFixed(1)
+                : b.trust_score
+                ? (b.trust_score / 20).toFixed(1)
+                : null
 
             return (
               <Link
@@ -80,7 +82,7 @@ export default function NewGrid({ businesses }: Props) {
                       src={b.cover_image_url}
                       alt={b.name}
                       fill
-                      sizes="(max-width: 640px) 50vw, 33vw"
+                      sizes="220px"
                       className={styles.image}
                     />
                   ) : (
@@ -120,7 +122,7 @@ export default function NewGrid({ businesses }: Props) {
               </Link>
             )
           })}
-        </div>
+        </RowCarousel>
       </div>
     </section>
   )

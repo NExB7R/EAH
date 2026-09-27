@@ -1,19 +1,13 @@
 import Link from 'next/link'
 import WmImage from './wm-image'
-import {
-  TagIcon,
-  ArrowLeftIcon,
-  MapPinIcon,
-} from './icons'
-import type { Offer } from '@/lib/data'
+import { TagIcon, ArrowLeftIcon, MapPinIcon } from './icons'
 import SectionBadge from './section-badge'
+import RowCarousel from './row-carousel'
+import type { Offer } from '@/lib/data'
 import styles from './offers-strip.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Offers Strip (Home — Horizontal Snap)
-//   • سحب أفقي على الموبايل
-//   • Server Component — صفر JS
-//   • برتقالي + ذهبي (مميز عن المميزون والترند)
+// EAH — Offers Strip (Home — Single Row Carousel)
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -43,19 +37,16 @@ export default function OffersStrip({ offers }: Props) {
 
         <div className={styles.neonLine} aria-hidden />
 
-        <div className={styles.scroller}>
-          <div className={styles.strip}>
-            {offers.map((offer) => (
-              <OfferCard key={offer.id} offer={offer} />
-            ))}
-          </div>
-        </div>
+        <RowCarousel accent="#C77DFF">
+          {offers.map((offer) => (
+            <OfferCard key={offer.id} offer={offer} />
+          ))}
+        </RowCarousel>
       </div>
     </section>
   )
 }
 
-// ─── Card ───
 function OfferCard({ offer }: { offer: Offer }) {
   const href = offer.business?.slug
     ? `/businesses/${offer.business.slug}`
@@ -69,7 +60,7 @@ function OfferCard({ offer }: { offer: Offer }) {
             src={offer.image_url}
             alt={offer.title}
             fill
-            sizes="(max-width: 640px) 60vw, 240px"
+            sizes="220px"
             className={styles.image}
           />
         ) : (

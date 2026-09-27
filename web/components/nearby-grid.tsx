@@ -12,13 +12,15 @@ import {
   SparklesIcon,
 } from './icons'
 import SectionBadge from './section-badge'
+import RowCarousel from './row-carousel'
 import NearbyCta from './nearby-cta'
 import type { Business } from '@/lib/data'
 import styles from './nearby-grid.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Nearby Grid (Home — 4 cards, 2×2 / 4×1)
-//   • CTA الموقع جوه الإطار (يختفي لما يفعّل)
+// EAH — Nearby Grid (Home — Single Row Carousel)
+//   • CTA الموقع جوه الإطار (فوق الصف)
+//   • CTA يختفي لما المستخدم يفعّل موقعه
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -60,15 +62,16 @@ export default function NearbyGrid({ businesses }: Props) {
 
         <NearbyCta />
 
-        <div className={styles.grid}>
-          {businesses.slice(0, 4).map((b) => {
+        <RowCarousel accent="#55E7D1">
+          {businesses.slice(0, 12).map((b) => {
             const meta = TYPE_META[b.business_type] ?? TYPE_META.misc!
             const TypeIcon = meta.Icon
-            const rating = b.rating_count > 0
-              ? b.rating_avg.toFixed(1)
-              : b.trust_score
-              ? (b.trust_score / 20).toFixed(1)
-              : null
+            const rating =
+              b.rating_count > 0
+                ? b.rating_avg.toFixed(1)
+                : b.trust_score
+                ? (b.trust_score / 20).toFixed(1)
+                : null
 
             return (
               <Link
@@ -82,7 +85,7 @@ export default function NearbyGrid({ businesses }: Props) {
                       src={b.cover_image_url}
                       alt={b.name}
                       fill
-                      sizes="(max-width: 640px) 50vw, 25vw"
+                      sizes="220px"
                       className={styles.image}
                     />
                   ) : (
@@ -117,7 +120,7 @@ export default function NearbyGrid({ businesses }: Props) {
               </Link>
             )
           })}
-        </div>
+        </RowCarousel>
       </div>
     </section>
   )
