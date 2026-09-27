@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Logo from './logo'
+import SecondaryHero from './secondary-hero'
 import Signature from './signature'
 import PalestineHeart from './palestine-heart'
 import {
@@ -22,7 +22,7 @@ import {
 import styles from './site-footer.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Site Footer (Premium 2026 — merged design)
+// EAH — Site Footer (Premium 2026 — Final)
 // ═══════════════════════════════════════════════════════════
 
 const APP_VERSION = 'v2.1.0'
@@ -85,17 +85,12 @@ export default function SiteFooter() {
     <footer className={styles.footer}>
       <div className={styles.glow} aria-hidden />
 
-      <div className={styles.container}>
-        {/* ─── Brand ─── */}
-        <div className={styles.brand}>
-          <Link href="/" aria-label="EAH — الرئيسية" className={styles.logoWrap}>
-            <Logo size="md" />
-          </Link>
-          <p className={styles.tagline}>
-            اللي نفسك فيه ؟ — من قلب شبين القناطر
-          </p>
-        </div>
+      {/* ─── Secondary Hero ─── */}
+      <div className={styles.heroWrap}>
+        <SecondaryHero activeKey="discover" />
+      </div>
 
+      <div className={styles.container}>
         {/* ─── Contact Cards ─── */}
         <div className={styles.contacts}>
           <a
@@ -147,12 +142,14 @@ export default function SiteFooter() {
           </a>
         </div>
 
-        {/* ─── Columns ─── */}
+        {/* ─── Columns (centered premium) ─── */}
         <nav className={styles.columns} aria-label="روابط الفوتر">
           {COLUMNS.map(({ key, title, Icon, links }) => (
             <div key={key} className={styles.col}>
               <h4 className={styles.colTitle}>
-                <Icon size={13} />
+                <span className={styles.colIcon}>
+                  <Icon size={14} />
+                </span>
                 <span>{title}</span>
               </h4>
               <ul className={styles.colList}>
