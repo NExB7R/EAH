@@ -1,0 +1,174 @@
+.wrap { display: flex; flex-direction: column; gap: 20px; }
+
+.hero {
+  position: relative;
+  padding: 24px;
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(20,14,34,0.7), rgba(10,7,20,0.9));
+  border: 1.5px solid rgba(232,199,154,0.28);
+  box-shadow:
+    0 0 0 1px rgba(232,199,154,0.05),
+    0 0 40px rgba(232,199,154,0.08),
+    inset 0 1px 0 rgba(232,199,154,0.1);
+  overflow: hidden;
+}
+
+.heroGlow {
+  position: absolute;
+  inset: -50% -10% auto -10%;
+  height: 200px;
+  background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(232,199,154,0.15), transparent 65%);
+  pointer-events: none;
+}
+
+.heroBody {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  z-index: 1;
+}
+
+.info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+
+.name {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.phone {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  background: rgba(232,199,154,0.08);
+  border: 1px solid rgba(232,199,154,0.28);
+}
+
+.chipOk {
+  color: #B8F0E6;
+  background: rgba(85,231,209,0.08);
+  border-color: rgba(85,231,209,0.3);
+}
+
+.editBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 900;
+  color: var(--gold-light);
+  background: rgba(232,199,154,0.08);
+  border: 1px solid rgba(232,199,154,0.32);
+  text-decoration: none;
+  transition: all 180ms var(--ease);
+  flex-shrink: 0;
+}
+
+.editBtn:hover {
+  background: rgba(232,199,154,0.18);
+  border-color: var(--gold-light);
+  transform: translateY(-1px);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 14px;
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(20,14,34,0.55), rgba(10,7,20,0.75));
+  border: 1px solid rgba(168,85,247,0.18);
+  text-decoration: none;
+  transition: all 220ms var(--ease);
+}
+
+.statCard:hover {
+  transform: translateY(-3px);
+  border-color: rgba(199,125,255,0.5);
+  box-shadow: 0 0 24px rgba(168,85,247,0.18);
+}
+
+.gold:hover {
+  border-color: rgba(232,199,154,0.6);
+  box-shadow: 0 0 24px rgba(232,199,154,0.2);
+}
+
+.statIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(168,85,247,0.1);
+  color: var(--purple-light);
+}
+
+.gold .statIcon { background: rgba(232,199,154,0.12); color: var(--gold-light); }
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.gold .statValue { color: var(--gold-light); }
+
+.statLabel {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 18px; border-radius: 18px; }
+  .heroBody { flex-wrap: wrap; gap: 14px; }
+  .editBtn { width: 100%; justify-content: center; }
+  .statCard { padding: 14px 10px; border-radius: 16px; }
+  .statIcon { width: 36px; height: 36px; }
+  .statValue { font-size: 1.3rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statCard, .editBtn { transition: none; }
+  .statCard:hover { transform: none; }
+}

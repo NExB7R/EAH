@@ -1,0 +1,119 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Account Sidebar
+   ═══════════════════════════════════════════════════════════ */
+
+.sidebar {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(20,14,34,0.6), rgba(10,7,20,0.8));
+  border: 1px solid rgba(168,85,247,0.18);
+  box-shadow: 0 0 24px rgba(168,85,247,0.06);
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  transition: background 180ms var(--ease), color 180ms var(--ease);
+}
+
+.item:hover {
+  background: rgba(168,85,247,0.08);
+  color: var(--purple-light);
+}
+
+.active {
+  background: linear-gradient(135deg, rgba(168,85,247,0.18), rgba(199,125,255,0.1));
+  color: var(--gold-light);
+  border: 1px solid rgba(232,199,154,0.25);
+}
+
+.active::before {
+  content: '';
+  position: absolute;
+  inset-inline-end: -10px;
+  inset-block: 20%;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--gold-primary), var(--gold-light));
+  box-shadow: 0 0 10px rgba(232,199,154,0.6);
+}
+
+.iconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: rgba(168,85,247,0.06);
+  color: currentColor;
+  flex-shrink: 0;
+}
+
+.active .iconWrap {
+  background: rgba(232,199,154,0.1);
+}
+
+.label {
+  flex: 1;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+  color: var(--bg-base);
+  font-size: 0.62rem;
+  font-weight: 900;
+}
+
+/* ─── Mobile: horizontal scroll ─── */
+@media (max-width: 900px) {
+  .sidebar {
+    position: static;
+    top: auto;
+    margin-bottom: 16px;
+  }
+  .nav {
+    flex-direction: row;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 8px;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .item {
+    flex-shrink: 0;
+    padding: 8px 10px;
+    font-size: 0.76rem;
+  }
+  .active::before { display: none; }
+  .label { white-space: nowrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item { transition: none; }
+}
