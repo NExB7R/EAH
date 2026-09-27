@@ -13,7 +13,7 @@ export type PlanFeatureKey =
   | 'pdf_reports'
   | 'crm_basic'
   | 'crm_full'
-  | 'banner_ad'
+
   | 'dedicated_support'
 
 export type SubscriptionPlan = {
@@ -79,6 +79,5 @@ export const FEATURE_LABEL: Record<PlanFeatureKey, string> = {
   pdf_reports: 'تقارير PDF شهرية',
   crm_basic: 'CRM بسيط (قائمة المتابعين)',
   crm_full: 'CRM كامل + تصدير CSV',
-  banner_ad: 'بانر إعلاني مجاني شهرياً',
   dedicated_support: 'دعم مخصص + أولوية رد',
 }

@@ -1,55 +1,61 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — Signature (SVG handwritten gold neon)
+   EAH — Signature (Great Vibes — simple HTML, responsive)
    ═══════════════════════════════════════════════════════════ */
 
 .wrap {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.plate {
   position: relative;
-  width: 100%;
-  max-width: 240px;
-  padding: 4px 10px;
-  border-radius: 16px;
-  background: linear-gradient(160deg, rgba(20,14,34,0.5), rgba(10,7,20,0.75));
-  border: 1px solid rgba(232,199,154,0.22);
-  box-shadow:
-    0 0 0 1px rgba(232,199,154,0.04),
-    0 0 20px rgba(232,199,154,0.08);
-  transition: box-shadow 380ms var(--ease-out),
-              border-color 380ms var(--ease-out);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 24px 10px;
 }
 
-.plate:hover {
-  border-color: rgba(232,199,154,0.5);
-  box-shadow:
-    0 0 0 1px rgba(232,199,154,0.12),
-    0 0 26px rgba(232,199,154,0.28),
-    0 0 46px rgba(232,199,154,0.14);
+.name {
+  font-family: 'Great Vibes', 'Snell Roundhand', cursive;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.1;
+  color: var(--gold-light);
+  letter-spacing: 0.01em;
+  transform: rotate(-3deg);
+  transition: color 300ms var(--ease-out), text-shadow 300ms var(--ease-out);
+  cursor: default;
+  user-select: none;
+  white-space: nowrap;
+  text-shadow:
+    0 0 8px rgba(232,199,154,0.3),
+    0 0 18px rgba(232,199,154,0.15);
 }
 
-.svg {
+.wrap:hover .name {
+  color: #FFF5DE;
+  text-shadow:
+    0 0 14px rgba(232,199,154,0.9),
+    0 0 32px rgba(232,199,154,0.5),
+    0 0 56px rgba(232,199,154,0.25);
+}
+
+.line {
   display: block;
   width: 100%;
-  height: auto;
-}
-
-.text {
-  font-style: italic;
-  letter-spacing: 0.005em;
-}
-
-.plate:hover .svg {
-  filter: drop-shadow(0 0 8px rgba(232,199,154,0.35));
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(232,199,154,0.35) 30%,
+    rgba(232,199,154,0.55) 50%,
+    rgba(232,199,154,0.35) 70%,
+    transparent 100%
+  );
+  margin-top: 2px;
 }
 
 @media (max-width: 640px) {
-  .plate { max-width: 200px; padding: 4px 10px; border-radius: 12px; }
+  .wrap { padding: 4px 16px 8px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .plate { transition: none; }
+  .name { transition: none; }
 }
