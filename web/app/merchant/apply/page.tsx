@@ -1,23 +1,49 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { StoreIcon } from '@/components/icons'
-import ComingSoon from '@/components/coming-soon'
+import SecondaryHero from '@/components/secondary-hero'
+import { getUserSession } from '@/lib/data/user'
+import { createClient } from '@/lib/supabase/server'
+import { AREAS } from '@/lib/data/areas'
+import ApplyWizard from './apply-wizard'
 
-export const metadata: Metadata = { title: 'سجّل نشاطك · EAH' }
+export const dynamic = 'force-dynamic'
 
-export default function MerchantApplyPage() {
+export const metadata: Metadata = {
+  title: 'سجّل نشاطك · EAH',
+  description: 'سجّل نشاطك مجاناً — تطبيقك الخاص على EAH',
+}
+
+export default async function MerchantApplyPage() {
+  const session = await getUserSession()
+
+  // لو مسجل → نشوف لو عنده نشاط بالفعل
+  if (session) {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('businesses')
+      .select('id')
+      .eq('owner_profile_id', session.userId)
+      .limit(1)
+      .maybeSingle()
+
+    if (data) redirect('/merchant')
+  }
+
   return (
-    <ComingSoon
-      title="سجّل نشاطك"
-      Icon={StoreIcon}
-      tone="gold"
-      message="نظام التسجيل كامل قيد التطوير — قريب"
-      details={
-        <div>
-          <p><strong>مجاناً 100%:</strong></p>
-          <p>صفحة نشاط كاملة + طلبات واتساب + إحصائيات</p>
-          <p>للتواصل المبكر: واتساب 201012892806</p>
-        </div>
-      }
-    />
+    <main>
+      <SecondaryHero
+        activeKey="merchant"
+        title="سجّل نشاطك"
+        Icon={StoreIcon}
+        tone="gold"
+        countLabel="مجاناً"
+        showNav={false}
+      />
+
+      <section style={{ padding: '20px 0 60px' }}>
+        <ApplyWizard areas={AREAS} />
+      </section>
+    </main>
   )
 }
