@@ -5,14 +5,14 @@ import Link from 'next/link'
 import type { Business } from '@/lib/data'
 import FeaturedCard from './featured-card'
 import { CrownGoldIcon, ArrowLeftIcon } from './icons'
-import {
-  FEATURED_ROTATION_MS,
-  rotate,
-} from '@/lib/featured-rotation'
+import { FEATURED_ROTATION_MS } from '@/lib/featured-rotation'
 import styles from './featured-bento.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Featured Bento (Hero + 4 صغيرة + دوران عادل)
+// EAH — Featured Bento (2026 — صفحات + أرقام)
+//   • 10 كروت في الصفحة
+//   • دوران تلقائي كل 10 ثواني
+//   • أرقام تحت → قلب يدوي
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -20,25 +20,27 @@ type Props = {
   initialStart: number
 }
 
-const VISIBLE_COUNT = 5
+const PAGE_SIZE = 10
 
 export default function FeaturedBento({ businesses, initialStart }: Props) {
-  const [offset, setOffset] = useState(initialStart)
+  const totalPages = Math.max(1, Math.ceil(businesses.length / PAGE_SIZE))
+  const initialPage = Math.max(0, initialStart % totalPages)
+  const [page, setPage] = useState(initialPage)
 
   useEffect(() => {
-    if (businesses.length <= 1) return
+    if (totalPages <= 1) return
     const timer = setInterval(() => {
-      setOffset((o) => (o + 1) % businesses.length)
+      setPage((p) => (p + 1) % totalPages)
     }, FEATURED_ROTATION_MS)
     return () => clearInterval(timer)
-  }, [businesses.length])
+  }, [totalPages])
 
   if (businesses.length === 0) return null
 
-  const rotated = rotate(businesses, offset)
-  const visible = rotated.slice(0, VISIBLE_COUNT)
-  const hero = visible[0]
-  const smalls = visible.slice(1)
+  const start = page * PAGE_SIZE
+  const visible = businesses.slice(start, start + PAGE_SIZE)
+  const nextPage = (page + 1) % totalPages
+  const nextBusiness = businesses[nextPage * PAGE_SIZE]
 
   return (
     <section className={`eah-section-bg ${styles.section}`}>
@@ -49,7 +51,7 @@ export default function FeaturedBento({ businesses, initialStart }: Props) {
               <CrownGoldIcon size={22} />
             </span>
             <h2 className={styles.title}>المميزون</h2>
-            <span className={styles.titleBadge}>Premium</span>
+            <span className={styles.titleBadge}>Premium 2026</span>
           </div>
 
           <Link href="/featured" className={styles.viewAll}>
@@ -58,20 +60,39 @@ export default function FeaturedBento({ businesses, initialStart }: Props) {
           </Link>
         </header>
 
-        <div className={styles.neonLine} aria-hidden />
+        <div className={styles.timerRow} aria-hidden>
+          <div className={styles.progressLine}>
+            <span key={page} className={styles.progressFill} />
+          </div>
+          {nextBusiness && totalPages > 1 && (
+            <span className={styles.nextChip}>
+              القادم · {nextBusiness.name}
+            </span>
+          )}
+        </div>
 
         <div className={styles.grid}>
-          {hero && (
-            <div className={styles.heroSlot}>
-              <FeaturedCard business={hero} variant="hero" priority />
-            </div>
-          )}
-          {smalls.map((b) => (
-            <div key={b.id} className={styles.smallSlot}>
-              <FeaturedCard business={b} variant="small" />
-            </div>
+          {visible.map((b, i) => (
+            <FeaturedCard key={b.id} business={b} priority={i < 3} />
           ))}
         </div>
+
+        {totalPages > 1 && (
+          <nav className={styles.pager} aria-label="صفحات المميزين">
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                className={`${styles.pageNum} ${i === page ? styles.pageNumActive : ''}`}
+                onClick={() => setPage(i)}
+                aria-label={`صفحة ${i + 1}`}
+                aria-current={i === page ? 'page' : undefined}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </nav>
+        )}
       </div>
     </section>
   )

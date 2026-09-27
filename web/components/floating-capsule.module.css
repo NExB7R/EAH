@@ -332,3 +332,13 @@
   align-items: center;
   line-height: 1;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   2026-09-27 — خلفية الهيدر = خلفية المنصة (بدون gradient داكن)
+   ═══════════════════════════════════════════════════════════ */
+
+.capsule[data-scrolled='true'] .inner {
+  background: var(--bg-base);
+  border-color: rgba(168, 85, 247, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}

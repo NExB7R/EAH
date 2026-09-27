@@ -1,40 +1,86 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — /featured Page
+   EAH — /featured Page (Premium 2026 — صفحات + أرقام)
    ═══════════════════════════════════════════════════════════ */
 
 .page { min-height: 100vh; }
 
-.section { width: 100%; padding: 28px 0 60px; }
+.section {
+  width: 100%;
+  padding: 32px 0 70px;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(232,199,154,0.05), transparent 55%),
+    radial-gradient(120% 80% at 50% 100%, rgba(157,78,221,0.08), transparent 55%),
+    linear-gradient(180deg, rgba(10,5,20,0.5), rgba(7,2,13,0.72));
+}
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 28px 22px 26px;
+  border: 1px solid rgba(232,199,154,0.16);
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(20,14,34,0.55), rgba(10,7,20,0.78));
+  box-shadow:
+    0 0 0 1px rgba(157,78,221,0.08),
+    inset 0 1px 0 rgba(232,199,154,0.08),
+    0 20px 60px rgba(0,0,0,0.4),
+    0 0 80px rgba(157,78,221,0.06);
 }
 
-.heroWrap {
-  width: 100%;
-  min-height: 360px;
-  margin-bottom: 28px;
+/* ─── Timer Row ─── */
+.timerRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
 }
 
-.neonLine {
-  height: 1px;
-  width: 100%;
-  margin-bottom: 24px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(232,199,154,0.3) 20%,
-    var(--gold-primary) 50%,
-    rgba(232,199,154,0.3) 80%,
-    transparent 100%);
+.progressLine {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  background: rgba(232,199,154,0.1);
   border-radius: var(--radius-full);
+  overflow: hidden;
 }
 
+.progressFill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--gold-primary), var(--gold-light));
+  box-shadow: 0 0 10px rgba(232,199,154,0.6);
+  animation: eahFeaturedProgress 10s linear forwards;
+}
+
+@keyframes eahFeaturedProgress {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+.pageLabel {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: var(--gold-light);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: rgba(232,199,154,0.06);
+  border: 1px solid rgba(232,199,154,0.22);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Grid ─── */
 .grid {
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(2, 1fr);
+  animation: eahGridFade 400ms var(--ease-out);
+}
+
+@keyframes eahGridFade {
+  from { opacity: 0.4; }
+  to   { opacity: 1; }
 }
 
 @media (min-width: 640px) {
@@ -42,16 +88,67 @@
 }
 
 @media (min-width: 1024px) {
-  .grid { grid-template-columns: repeat(4, 1fr); }
-  .heroWrap { min-height: 420px; }
+  .grid { grid-template-columns: repeat(5, 1fr); }
 }
 
+/* ─── Pager ─── */
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 26px;
+  flex-wrap: wrap;
+}
+
+.pageNum {
+  position: relative;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: var(--text-tertiary);
+  background: rgba(168,85,247,0.06);
+  border: 1px solid rgba(168,85,247,0.22);
+  cursor: pointer;
+  transition: all 200ms var(--ease);
+  font-variant-numeric: tabular-nums;
+}
+
+.pageNum:hover {
+  color: var(--purple-light);
+  border-color: rgba(168,85,247,0.6);
+  background: rgba(168,85,247,0.12);
+  transform: translateY(-1px);
+}
+
+.pageNumActive {
+  color: var(--bg-base);
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+  border-color: var(--gold-light);
+  box-shadow:
+    0 0 0 3px rgba(232,199,154,0.15),
+    0 0 18px rgba(232,199,154,0.5);
+  transform: translateY(-1px);
+}
+
+.pageNumActive:hover {
+  color: var(--bg-base);
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+  transform: translateY(-1px);
+}
+
+/* ─── Mobile صغير ─── */
 @media (max-width: 480px) {
-  .section { padding: 20px 0 48px; }
-  .container { padding: 0 12px; }
-  .heroWrap { min-height: 280px; }
+  .section { padding: 22px 0 52px; }
+  .container { padding: 20px 14px 18px; border-radius: 18px; }
+  .pageNum { min-width: 34px; height: 34px; padding: 0 10px; font-size: 0.8rem; }
 }
 
+/* ─── Empty ─── */
 .empty {
   text-align: center;
   padding: 80px 20px;
@@ -65,4 +162,11 @@
   font-size: 0.85rem;
   color: var(--text-muted);
   font-weight: 600;
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .progressFill { animation-duration: 10s; }
+  .grid { animation: none; }
+  .pageNum { transition: none; }
 }
