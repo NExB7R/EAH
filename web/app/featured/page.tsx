@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { getFeaturedBusinesses } from '@/lib/data'
-import { CrownGoldIcon } from '@/components/icons'
+import { CrownGoldIcon, TargetIcon } from '@/components/icons'
 import SecondaryHero from '@/components/secondary-hero'
-import FeaturedShowcase from './featured-showcase'
+import LoadMoreGrid from '@/components/load-more'
 import styles from './featured.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -22,21 +23,25 @@ export default async function FeaturedPage() {
         title="المميزون"
         Icon={CrownGoldIcon}
         tone="gold"
-        count={all.length > 0 ? all.length : undefined}
+        count={all.length}
       />
 
-      <section className={styles.section}>
-        <div className={styles.frame}>
-          {all.length === 0 ? (
-            <div className={styles.empty}>
-              <p>لسه مفيش أنشطة مميزة</p>
-              <p className={styles.emptyHint}>هنضيف قريب إن شاء الله</p>
+      <div className={styles.content}>
+        {all.length > 0 ? (
+          <LoadMoreGrid businesses={all} tone="gold" pageSize={10} />
+        ) : (
+          <div className={styles.empty}>
+            <div className={styles.emptyIcon}>
+              <TargetIcon size={44} />
             </div>
-          ) : (
-            <FeaturedShowcase businesses={all} />
-          )}
-        </div>
-      </section>
+            <h2 className={styles.emptyTitle}>لسه مفيش أنشطة مميزة</h2>
+            <p className={styles.emptyText}>هنضيف قريب إن شاء الله.</p>
+            <Link href="/explore" className={styles.emptyBtn}>
+              اكتشف كل حاجة
+            </Link>
+          </div>
+        )}
+      </div>
     </main>
   )
 }
