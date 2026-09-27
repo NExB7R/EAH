@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import WmImage from './wm-image'
 import { TagIcon, ArrowLeftIcon, MapPinIcon } from './icons'
-import SectionBadge from './section-badge'
 import RowCarousel from './row-carousel'
 import type { Offer } from '@/lib/data'
 import styles from './offers-strip.module.css'
@@ -26,7 +25,6 @@ export default function OffersStrip({ offers }: Props) {
               <TagIcon size={22} />
             </span>
             <h2 className={styles.title}>العروض</h2>
-            <SectionBadge variant="offers" />
           </div>
 
           <Link href="/offers" className={styles.viewAll}>

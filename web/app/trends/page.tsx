@@ -19,8 +19,6 @@ export default async function TrendsPage() {
       title="الترند"
       Icon={TrendingUpIcon}
       tone="orange"
-      badgeVariant="trending"
-      badgeLabel="الأكثر تفاعلاً"
       businesses={businesses}
     />
   )

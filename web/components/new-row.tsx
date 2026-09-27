@@ -11,7 +11,6 @@ import {
   BikeIcon,
   SparklesIcon,
 } from './icons'
-import SectionBadge from './section-badge'
 import RowCarousel from './row-carousel'
 import type { Business } from '@/lib/data'
 import styles from './new-row.module.css'
@@ -48,7 +47,6 @@ export default function NewRow({ businesses, limit = 12 }: Props) {
               <SparkleStarIcon size={22} />
             </span>
             <h2 className={styles.title}>الجديد</h2>
-            <SectionBadge variant="new" />
           </div>
 
           <Link href="/new" className={styles.viewAll}>

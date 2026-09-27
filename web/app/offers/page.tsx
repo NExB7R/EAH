@@ -23,8 +23,6 @@ export default async function OffersPage() {
       title="العروض"
       Icon={GiftIcon}
       tone="purple"
-      badgeVariant="offers"
-      badgeLabel="أحدث العروض"
       businesses={businesses}
     />
   )

@@ -12,7 +12,6 @@ import {
   SparklesIcon,
   ShieldCheckIcon,
 } from './icons'
-import SectionBadge from './section-badge'
 import RowCarousel from './row-carousel'
 import type { Business } from '@/lib/data'
 import styles from './trending-row.module.css'
@@ -64,7 +63,6 @@ export default function TrendingRow({ businesses, limit = 12 }: Props) {
               <TrendingUpIcon size={22} />
             </span>
             <h2 className={styles.title}>الترند</h2>
-            <SectionBadge variant="trending" />
           </div>
 
           <Link href="/trends" className={styles.viewAll}>

@@ -2,18 +2,16 @@
 
 import Link from 'next/link'
 import type { Business } from '@/lib/data'
-import FeaturedCard from './featured-card'
+import BusinessCard from './business-card'
 import { CrownGoldIcon, ArrowLeftIcon } from './icons'
 import { useFairRotation } from '@/lib/hooks/use-fair-rotation'
-import SectionBadge from './section-badge'
 import styles from './featured-bento.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Featured Bento (Home) — Premium 2026
 //   • عدالة 100% (Fisher-Yates + sessionStorage)
 //   • 8/6/4 حسب الشاشة
-//   • تبديل يدوي بأسهم + تبديل تلقائي كل 5 ثواني
-//   • يتوقف: خارج الشاشة / Hover / Tab مخفي
+//   • تبديل يدوي بأسهم + تلقائي كل 5 ثواني
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -48,7 +46,6 @@ export default function FeaturedBento({ businesses }: Props) {
               <CrownGoldIcon size={22} />
             </span>
             <h2 className={styles.title}>المميزون</h2>
-            <SectionBadge variant="featured" label="Premium 2026" />
           </div>
 
           <Link href="/featured" className={styles.viewAll}>
@@ -77,7 +74,12 @@ export default function FeaturedBento({ businesses }: Props) {
 
           <div className={styles.grid}>
             {visible.map((b) => (
-              <FeaturedCard key={b.id} business={b} variant="small" />
+              <BusinessCard
+                key={b.id}
+                business={b}
+                tone="gold"
+                variant="featured"
+              />
             ))}
           </div>
 

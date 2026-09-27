@@ -2,8 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import ExploreSearch from '@/components/explore-search'
 import SecondaryHero from '@/components/secondary-hero'
-import SectionBadge from '@/components/section-badge'
-import type { BadgeVariant } from '@/components/section-badge'
 import LoadMoreGrid from '@/components/load-more'
 import { TargetIcon } from '@/components/icons'
 import {
@@ -52,28 +50,21 @@ export default async function ExplorePage({
 
   let businesses = await getPublishedBusinesses()
   let title = 'اكتشف'
-  let badgeLabel = 'كل الأنشطة'
-  let badgeVariant: BadgeVariant = 'discover'
 
   if (type && VALID_TYPES.includes(type as BusinessType)) {
     businesses = await getBusinessesByType(type as BusinessType, 100)
     title = TYPE_TITLES[type] ?? 'اكتشف'
-    badgeLabel = title
   }
 
   if (suggest) {
     businesses = dailyShuffle(businesses).slice(0, 20)
     title = 'ترشيحات ليك'
-    badgeLabel = 'ترشيحاتك'
-    badgeVariant = 'suggest'
   }
 
   if (q) {
     const results = smartSearch(businesses, q)
     businesses = results.map((r) => r.business)
     title = 'نتائج البحث'
-    badgeLabel = `"${q}"`
-    badgeVariant = 'search'
   } else if (!suggest && !type) {
     businesses = sortByTrust(businesses)
   }
@@ -93,10 +84,6 @@ export default async function ExplorePage({
       <div className={styles.content}>
         <div className={styles.searchWrap}>
           <ExploreSearch initialQuery={q} />
-        </div>
-
-        <div className={styles.badgeRow}>
-          <SectionBadge variant={badgeVariant} label={badgeLabel} size="md" />
         </div>
 
         {businesses.length > 0 ? (

@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { SparkleStarIcon, ArrowLeftIcon } from './icons'
-import SectionBadge from './section-badge'
 import styles from './suggested-section.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -19,7 +18,6 @@ export default function SuggestedSection() {
               <SparkleStarIcon size={22} />
             </span>
             <h2 className={styles.title}>رشحلى</h2>
-            <SectionBadge variant="opportunity" label="قريباً" />
           </div>
         </header>
 

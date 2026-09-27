@@ -160,15 +160,6 @@
   box-shadow: 0 0 16px rgba(232,199,154,0.5);
 }
 
-.pageDots {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 24px;
-  height: 38px;
-  color: var(--text-tertiary);
-  font-weight: 900;
-}
 
 /* ─── Empty ─── */
 .empty {

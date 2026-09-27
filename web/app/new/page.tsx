@@ -19,8 +19,6 @@ export default async function NewPage() {
       title="الجديد"
       Icon={LampIcon}
       tone="pink"
-      badgeVariant="new"
-      badgeLabel="وصل حديثاً"
       businesses={businesses}
     />
   )

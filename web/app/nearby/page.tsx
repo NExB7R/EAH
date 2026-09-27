@@ -19,8 +19,6 @@ export default async function NearbyPage() {
       title="قريب منك"
       Icon={MapPinIcon}
       tone="teal"
-      badgeVariant="nearby"
-      badgeLabel="قريب منك"
       businesses={businesses}
     />
   )

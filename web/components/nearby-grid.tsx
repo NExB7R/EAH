@@ -11,7 +11,6 @@ import {
   BikeIcon,
   SparklesIcon,
 } from './icons'
-import SectionBadge from './section-badge'
 import RowCarousel from './row-carousel'
 import NearbyCta from './nearby-cta'
 import type { Business } from '@/lib/data'
@@ -49,7 +48,6 @@ export default function NearbyGrid({ businesses }: Props) {
               <NavigationIcon size={22} />
             </span>
             <h2 className={styles.title}>قريب منك</h2>
-            <SectionBadge variant="nearby" />
           </div>
 
           <Link href="/nearby" className={styles.viewAll}>
