@@ -489,3 +489,61 @@ cat file.tsx
 **القاعدة:** SQL Editor بياخد **SQL بس**. صفر `cd`, `&&`, heredoc markers.
 
 **حل تاني:** `is_admin()` مش موجودة في DB الحالي → استخدمنا `user_roles` مباشرة.
+
+---
+
+## 13. جلسة 2026-09-27 — دروس جديدة
+
+### 13.1 heredoc بيفشل مع ``` في المحتوى
+
+الغلطة: كتابة ملف docs فيه ```bash جوّه heredoc — الـ shell بيفسّره كأمر.
+
+الصح: شيل الـ ``` من المحتوى أو استخدم base64.
+
+### 13.2 sed متعدد السطور بيفشل
+
+الغلطة: sed 's|Line1\nLine2|...|' — sed مش بيفهم \n جوه pattern.
+
+الصح: استخدم cat > file لإعادة الكتابة الكاملة.
+
+### 13.3 Server Component مع 'use client' بيكسر
+
+الغلطة: SectionLayout كان 'use client' + بيستورد SecondaryHero (Server).
+
+الصح: افصل الـ wrapper (Server) عن الـ interactive part (Client) — LoadMoreGrid.
+
+### 13.4 Section Badges مش مريحة بصرياً
+
+الدرس: شارات كثيرة لكل قسم بتلخبط العين.
+
+الصح: الألوان (Tone) كفيلة بالتمييز — شيل الشارات.
+
+### 13.5 كل قسم لون مختلف = منصة ملخبطة
+
+الدرس: 6 ألوان (وردي + teal + أزرق + بنفسجي + ذهبي + برتقالي) = فوضى.
+
+الصح: 3 ألوان (SACRED):
+- بنفسجي = أساسي
+- ذهبي = المميزين
+- برتقالي = الترند
+الباقي تدرجات بنفسجية.
+
+### 13.6 force-dynamic على كل الصفحات
+
+المشكلة: كل زيارة = build من الأول.
+
+الحل: unstable_cache + TTL 300s + loading.tsx skeletons.
+
+### 13.7 6 queries في Home = بطيء
+
+الحل: query واحدة (getPublishedBusinesses) + فلترة في الكود + getActiveOffers منفصلة.
+
+النتيجة: 6 → 2 queries.
+
+### 13.8 queries بدون فهرسة = بطيء
+
+الدرس: EXPLAIN ANALYZE على كل query.
+
+---
+
+آخر تحديث: 2026-09-27

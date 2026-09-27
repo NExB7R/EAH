@@ -1,293 +1,53 @@
+# EAH — CHANGELOG.md
+
+كل التغييرات المهمة في المشروع.
 
 ---
 
-## [v2.1.0] - 2026-09-27 — Featured Redesign
+## [v2.1.0] - 2026-09-27
 
 ### Added
-- `lib/featured-rotation.ts` — Round-Robin عادل (8 ثواني/دورة)
-- `components/featured-card.tsx` + `.module.css` — كارت موحد (hero + small)
-- `app/featured/page.tsx` + `featured-showcase.tsx` + `featured.module.css`
+- **Featured:** Fisher-Yates fair rotation + sessionStorage
+- **Featured:** Premium 2026 design (gold + shimmer + manual arrows)
+- **Home:** RowCarousel مشترك (auto-scroll 10s + hidden arrows)
+- **Home:** 8 sections بترتيب جديد
+- **Home:** BusinessCard موحّد (tone per section + rich chips)
+- **Pages:** `/trends` `/offers` `/new` `/nearby` `/suggest`
+- **Components:** secondary-hero, section-nav, section-title, section-layout, load-more, row-carousel, scroll-to-top, loading-skeleton
+- **Home Discovery:** اكتشاف في الهيدر العائم (TargetIcon)
+- **Performance:** `loading.tsx` × 7 (skeleton نيون)
+- **Performance:** unstable_cache TTL 300s
 
 ### Changed
-- `components/featured-bento.tsx` — Hero + 4 صغيرة + دوران تلقائي
-- `components/featured-bento.module.css` — Bento حقيقي (2fr 1fr 1fr)
-- `app/page.tsx` ⚠️ SACRED — شيل dailyShuffle
+- **Home:** 6 queries → 2 (query واحدة + فلترة في الكود)
+- **Pages:** كل الصفحات بتستخدم SectionLayout موحّد
+- **Colors:** Purple Family + Gold + Orange (SACRED-compliant)
+- **Colors:** Consolidated — حذف الوردي والأزرق القديم
+- **BusinessCard:** موحّد لكل الأقسام + tone prop
+- **Featured:** سلايدر → LoadMoreGrid (10 كروت)
 
 ### Fixed
-- عدالة المميزين — كل مميز ياخد Hero بنفس عدد المرات
-- Hydration — الدوران مبني على `initialStart` من الـ server
-
----
-
-## [v2.1.2] - 2026-09-27 — Featured Card Rich Info
-
-### Added
-- Badges في الكارت: النوع (بأيقونة) + المنطقة + التقييم + المصداقية + واتساب
-- Badge "مفتوح/مقفل" على الصورة (أخضر/أحمر)
-- Badge "مميز" على الـ hero
-
-### Changed
-- `featured-card.tsx` — أيقونات نوع ديناميكية (restaurant/pharmacy/...)
-- `featured-card.module.css` — chips صغيرة + topBadges
-
-### Notes
-- صفر JS إضافي — كله CSS + JSX
-- حقول جديدة (branches_count, offers_count, rating_count) → TODO (محتاج migration)
-
----
-
-## [v2.1.3] - 2026-09-27 — Business Counts + Card Badges
-
-### Added
-- Migration: `branches_count` + `offers_count` + `rating_avg` + `rating_count`
-- Triggers على business_branches/offers/business_reviews
-- Indexes جديدة
-- أيقونات: `StoreIcon` + `GiftIcon`
-- Badges في الكارد: فروع + عروض + عدد التقييمات
-
-### Changed
-- `featured-card.tsx` — rating_avg الحقيقي لو موجود، وإلا trust_score/20
-- `Business` type — 4 حقول جديدة
-- `BUSINESS_COLUMNS` — 4 حقول جديدة
-
-### Notes
-- Denormalized counts = قراءة فورية (صفر JOIN وقت العرض)
-- Triggers تحدّث تلقائي (SECURITY DEFINER)
-- الـ migration الحالي: 9 أنشطة عندها عروض
-
----
-
-## [v2.1.4] - 2026-09-27 — Featured Bento Fix + Fallback
-
-### Fixed
-- Bento grid: `grid-template-areas` بدل `grid-column/row` (كان مش شغّال في RTL)
-- Hero بيكبر صح (2fr × 2 rows على Desktop)
-- الكروت الصغيرة مترتبة صح (s1, s2 / s3, s4)
-
-### Added
-- Fallback جميل بدون صورة: أيقونة النوع كبيرة + توهج بنفسجي/ذهبي
-
-### Notes
-- معظم الأنشطة مفيش عندها cover → الـ fallback هو الأساسي حالياً
-- صفر JS إضافي
-
----
-
-## [v2.1.5] - 2026-09-27 — Home Scroll-Snap + Header Polish
-
-### Added
-- Scroll-snap عمودي (`y proximity`) على Home — إحساس قلب صفحات
-- الهيدر مخفي في الهيرو + يظهر بعد ما تسكرول
-- featured-bento = صفحة كاملة (min-height 100dvh)
-
-### Changed
-- `home-hero` — مساحة فوق اللوجو أقل + spacer اتشال
-- `floating-capsule` — data-home + توسيط اللوجو بالظبط
-- `app/page.tsx` — `data-snap="true"` على `<main>`
-
-### Fixed
-- اللوجو في الهيدر مش متوسّط بالظبط (grid-columns minmax(0,1fr))
-- مساحة فاضية كبيرة فوق لوجو الهيرو
-
-### Notes
-- `prefers-reduced-motion` → يعطّل snap
-- الهيدر يظهر بعد 80px (بدل 50px)
-
----
-
-## [v2.1.6] - 2026-09-27 — Splash + Install + Bento Polish
-
-### Fixed
-- **Splash بيظهر متأخر** — بقى ظاهر من أول paint + useLayoutEffect يخفي قبل paint تاني
-- **Install prompt مزعج** — بقى يدوي فقط (من زر الهيدر) — مفيش auto-show
-- Header مبهدل — شيلنا `justify-items: center` (grid-columns كفاية)
-- Scroll-snap مش بيقلب — `y mandatory` بدل `y proximity`
-- Featured Bento في النص — `align-items: flex-start` بدل center
-
-### Changed
-- `splash.tsx` — initial hidden=false + useLayoutEffect
-- `install-prompt.tsx` — إزالة auto-show (30s) — يدوي فقط
-
----
-
-## [v2.2.0] - 2026-09-27 — Engagement + Review Reminder + Smart Install
-
-### Added
-- `lib/engagement.ts` — تتبّع تفاعل + جدولة تقييم + طلب تثبيت
-- `components/review-reminder.tsx` + `.module.css` — إشعار تقييم بعد ساعتين
-- `app/api/track-action/route.ts` — POST يسجّل الأحداث في DB
-- Migration: `engagement_events` (تحليلات التفاعل)
-- RLS على `engagement_events` (INSERT service_role / SELECT admin)
-- 3 Indexes للأداء
-
-### Changed
-- `install-prompt.tsx` — Persuasion UI جديد (فوايد + زر ذهبي)
-- `install-prompt.module.css` — تصميم Premium + توهج
-- `floating-capsule.tsx` — `eah:install-request` → `eah:show-install`
-- `layout.tsx` — إضافة `<ReviewReminder />`
-- `home-hero.module.css` — فاصل 14px بين اللوجو ولافتة شبين
-
-### Behavior (المنطق)
-- Install Prompt: مش auto — يظهر عند كشف رقم / واتساب / تقييم
-- "مش دلوقتي" → cooldown دقيقتين (مش يتكرر كل مرة)
-- "ثبّت الآن" → يتسجّل في localStorage (مش يظهر تاني)
-- Review Reminder: يظهر بعد ساعتين من كشف الرقم/واتساب
-- أي تفاعل → يُسجّل في `engagement_events` (fire-and-forget)
-
----
-
-## [v2.2.2] - 2026-09-27 — Featured Unified (بدون Hero) + /featured Clean
-
-### Changed
-- **Featured Bento** — كل الكروت موحّدة (10 كروت، 5 cols Desktop)
-- **/featured** — كل الكروت موحّدة (4 cols Desktop) + بدون خلفية داكنة
-- **/featured** — شيلنا الـ container (gold border + gradient bg)
+- Server/Client split في SectionLayout (كان بيعمل 500)
+- Featured arrows تظهر بس عند hover
 
 ### Removed
-- Hero variant من Home + /featured
-- Pagination + progress bar + timer row
-- الخلفية الداكنة من /featured
-
-### Notes
-- 10 كروت × `next/image` lazy = صفر تأثير سرعة
-- الكارد variant="small" هو الأساسي حالياً
-
----
-
-## [v2.2.3] - 2026-09-27 — Featured Final (Home + /featured)
-
-### Added
-- Featured Bento (Home): Grid موحّد — 5×2 / 3×2 / 2×2
-- Featured Showcase (/featured): Grid موحّد — 4×2 / 3×2 / 2×2
-- تدوير تلقائي 10 ثواني (يتوقف عند Hover/الخروج من الشاشة)
-- سحب يدوي (Touch) على الموبايل والتابلت
-- IntersectionObserver (يوقف الدوران لما يخرج من الشاشة)
-- Reduced Motion support
-- عدّاد "1/6" (بدون أسهم — أنضف)
-- إطار ذهبي رفيع + توهج نيون بنفسجي
-
-### Changed
-- الكارد: كله variant="small" (موحّد)
-- `/featured` — بدون خلفية داكنة، بدون container ذهبي
-- page.tsx — شيلنا initialStart
-
-### Removed
-- Chevron arrows (كبيرة) — استبدلناها بسحب يدوي
-- Hero variant من Bento
-
-### Notes
-- الـ DOM ثابت — 10/6/4 slots فقط، بيتبدل المحتوى
-- الصور lazy — بس اللي ظاهرة بتتحمّل
+- featured-card.tsx + .module.css
+- featured-showcase.tsx
+- section-badge.tsx + .module.css
+- editorial-list.tsx + .module.css
+- hero-grid.tsx + .module.css
+- section-wrapper.tsx + .module.css
+- section-page.tsx + .module.css
+- `.env.original` + `.env.local.bak`
 
 ---
 
-## [v2.2.3] - 2026-09-27 — Featured Final (Home + /featured)
+## [v2.0.0-alpha] - 2026-09-25
 
-### Added
-- Featured Bento (Home): Grid موحّد — 5×2 / 3×2 / 2×2
-- Featured Showcase (/featured): Grid موحّد — 4×2 / 3×2 / 2×2
-- تدوير تلقائي 10 ثواني (يتوقف عند Hover/الخروج من الشاشة)
-- سحب يدوي (Touch) على الموبايل والتابلت
-- IntersectionObserver (يوقف الدوران لما يخرج من الشاشة)
-- Reduced Motion support
-- عدّاد "1/6" (بدون أسهم — أنضف)
-- إطار ذهبي رفيع + توهج نيون بنفسجي
-
-### Changed
-- الكارد: كله variant="small" (موحّد)
-- `/featured` — بدون خلفية داكنة، بدون container ذهبي
-- page.tsx — شيلنا initialStart
-
-### Removed
-- Chevron arrows (كبيرة) — استبدلناها بسحب يدوي
-- Hero variant من Bento
-
-### Notes
-- الـ DOM ثابت — 10/6/4 slots فقط، بيتبدل المحتوى
-- الصور lazy — بس اللي ظاهرة بتتحمّل
+(Core كامل — Auth + Design + PWA + Data)
 
 ---
 
-## [v2.3.0] - 2026-09-27 — Trending List (Home)
+## [v0.1.0] - 2026-09-24
 
-### Added
-- `components/trending-list.tsx` — Server Component (صفر JS)
-- `components/trending-list.module.css` — إطار بنفسجي (يختلف عن الذهبي)
-- `getTrendingBusinesses` في lib/data
-- ترتيب: `sortByTrend` (trust + orders + recency)
-
-### Style
-- قائمة عمودية (زي Spotify) — رقم + thumb + info + right
-- Rank badges: 1 ذهبي، 2 فضي، 3 برونزي، الباقي بنفسجي
-- Server Component — صفر JS على client
-
----
-
-## [v2.4.0] - 2026-09-27 — Offers Strip (Home)
-
-### Added
-- `components/offers-strip.tsx` — Server Component
-- `components/offers-strip.module.css` — إطار برتقالي (يختلف عن الذهبي/البنفسجي)
-- `getActiveOffers` في lib/data — يجيب العروض النشطة من `offers`
-
-### Style
-- Horizontal Snap Strip (سحب أفقي)
-- 240px كارد (200px على الموبايل)
-- Badge "عرض" + سعر ذهبي + اسم النشاط + المنطقة
-
----
-
-## [v2.5.0] - 2026-09-27 — Nearby Grid (Home)
-
-### Added
-- `components/nearby-grid.tsx` — Server Component (4 كروت)
-- `components/nearby-grid.module.css` — إطار تيل (Teal)
-- `getNearbyBusinesses` في lib/data — حسب المنطقة
-
-### Style
-- 2×2 (Mobile) / 4×1 (Desktop)
-- إطار تيل #55E7D1 — مختلف عن الذهبي/البنفسجي/البرتقالي
-- Rating ذهبي على الصورة
-
----
-
-## [v2.6.0] - 2026-09-27 — New Grid (Home)
-
-### Added
-- `components/new-grid.tsx` — Server Component (6 كروت)
-- `components/new-grid.module.css` — إطار بنفسجي فاتح (#C77DFF)
-- يستخدم `getNewBusinesses` الموجود
-
-### Style
-- 2 (Mobile) / 3 (Desktop) أعمدة
-- Badge "جديد" + Rating ذهبي
-- إطار C77DFF — مختلف عن باقي الأقسام
-
-### Home Sections (الآن):
-1. HomeHero
-2. FeaturedBento (ذهبي)
-3. TrendingList (بنفسجي)
-4. OffersStrip (برتقالي)
-5. NearbyGrid (تيل)
-6. NewGrid (فوشيا)
-
----
-
-## [v2.7.0] - 2026-09-27 — About + Presentation Mode
-
-### Added
-- `app/about/page.tsx` + `.module.css` — Pitch Page كامل
-  - Hero + Problem (3) + Solution (3) + Customer (8 features)
-  - Merchant (8 features) + Stats + Steps + Palestine + CTA
-- `app/about/presentation/` — Presentation Mode (12 slides)
-  - Cover → Problem → Idea → Solution → Customer → Merchant
-  - How → Trust → Vision → Palestine → Team → CTA
-  - Keyboard (← →, Space, ESC) + Touch swipe + Click zones + Dots
-  - Auto-play (اختياري) + Progress bar + Side arrows
-  - Reduced motion + Pause on hover
-
-### Style
-- Cinematic (نيون + ذهبي)
-- Server Component لـ About
-- Client Component للـ Presentation (تفاعلي)
-- صفر مكتبات إضافية (CSS + React فقط)
+(Foundation)
