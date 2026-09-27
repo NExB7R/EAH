@@ -1,0 +1,143 @@
+.actions {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  padding: 20px 0;
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border-radius: 16px;
+  background: rgba(20,14,34,0.6);
+  border: 1px solid rgba(168,85,247,0.2);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 200ms var(--ease);
+  font-family: inherit;
+}
+
+.action:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: var(--purple-light);
+  background: rgba(20,14,34,0.85);
+}
+
+.action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.actionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(168,85,247,0.08);
+  color: inherit;
+  flex-shrink: 0;
+  transition: all 200ms var(--ease);
+}
+
+.actionLabel {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ─── Variants ─── */
+.whatsapp .actionIcon {
+  background: rgba(37,211,102,0.12);
+  color: #25D366;
+}
+.whatsapp:hover:not(:disabled) {
+  border-color: rgba(37,211,102,0.5);
+  box-shadow: 0 0 20px rgba(37,211,102,0.2);
+}
+.whatsapp:hover:not(:disabled) .actionIcon {
+  background: rgba(37,211,102,0.2);
+}
+
+.phone .actionIcon {
+  background: rgba(232,199,154,0.1);
+  color: var(--gold-light);
+}
+.phone:hover:not(:disabled) {
+  border-color: rgba(232,199,154,0.5);
+  box-shadow: 0 0 20px rgba(232,199,154,0.2);
+}
+
+.fav .actionIcon {
+  color: #FF6B9D;
+}
+.fav:hover:not(:disabled) {
+  border-color: rgba(255,107,157,0.5);
+}
+
+.follow .actionIcon {
+  color: #C77DFF;
+}
+.follow:hover:not(:disabled) {
+  border-color: rgba(199,125,255,0.5);
+}
+
+.comment .actionIcon {
+  color: #55E7D1;
+}
+.comment:hover:not(:disabled) {
+  border-color: rgba(85,231,209,0.5);
+}
+
+.share .actionIcon {
+  color: #818CF8;
+}
+.share:hover:not(:disabled) {
+  border-color: rgba(129,140,248,0.5);
+}
+
+.active {
+  border-color: var(--gold-light);
+  background: rgba(232,199,154,0.06);
+}
+
+.active .actionIcon {
+  background: rgba(232,199,154,0.15);
+  color: var(--gold-light);
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .actions {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .action {
+    padding: 10px 6px;
+    border-radius: 14px;
+  }
+  .actionIcon {
+    width: 38px;
+    height: 38px;
+  }
+  .actionIcon svg {
+    width: 18px;
+    height: 18px;
+  }
+  .actionLabel {
+    font-size: 0.65rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action, .actionIcon { transition: none; }
+  .action:hover { transform: none; }
+}
