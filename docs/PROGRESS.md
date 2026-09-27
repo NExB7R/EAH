@@ -232,3 +232,7 @@
 - 4 كروت (2×2 / 4×1)
 - إطار تيل
 - Server Component
+
+### 2026-09-27 — New Grid ✅ — Home Sections Complete
+Home الآن: Hero + Featured + Trending + Offers + Nearby + New
+كل قسم بألوانه الخاصة (ذهبي/بنفسجي/برتقالي/تيل/فوشيا)

@@ -248,3 +248,25 @@
 - 2×2 (Mobile) / 4×1 (Desktop)
 - إطار تيل #55E7D1 — مختلف عن الذهبي/البنفسجي/البرتقالي
 - Rating ذهبي على الصورة
+
+---
+
+## [v2.6.0] - 2026-09-27 — New Grid (Home)
+
+### Added
+- `components/new-grid.tsx` — Server Component (6 كروت)
+- `components/new-grid.module.css` — إطار بنفسجي فاتح (#C77DFF)
+- يستخدم `getNewBusinesses` الموجود
+
+### Style
+- 2 (Mobile) / 3 (Desktop) أعمدة
+- Badge "جديد" + Rating ذهبي
+- إطار C77DFF — مختلف عن باقي الأقسام
+
+### Home Sections (الآن):
+1. HomeHero
+2. FeaturedBento (ذهبي)
+3. TrendingList (بنفسجي)
+4. OffersStrip (برتقالي)
+5. NearbyGrid (تيل)
+6. NewGrid (فوشيا)
