@@ -2,11 +2,13 @@ import HomeHero from '@/components/home-hero'
 import FeaturedBento from '@/components/featured-bento'
 import TrendingList from '@/components/trending-list'
 import OffersStrip from '@/components/offers-strip'
+import NearbyGrid from '@/components/nearby-grid'
 import {
   getFeaturedBusinesses,
   getTopBusinesses,
   getTrendingBusinesses,
   getActiveOffers,
+  getNearbyBusinesses,
 } from '@/lib/data'
 import { sortByTrend } from '@/lib/ranking'
 import type { Business } from '@/lib/data'
@@ -14,11 +16,12 @@ import type { Business } from '@/lib/data'
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  const [featured, topTrust, trending, offers] = await Promise.all([
+  const [featured, topTrust, trending, offers, nearby] = await Promise.all([
     getFeaturedBusinesses(15),
     getTopBusinesses(15),
     getTrendingBusinesses(10),
     getActiveOffers(8),
+    getNearbyBusinesses('شبين القناطر', 4),
   ])
 
   const seen = new Set<string>()
@@ -39,6 +42,7 @@ export default async function Home() {
       <FeaturedBento businesses={all} />
       <TrendingList businesses={trending.length > 0 ? trending : trendList} />
       <OffersStrip offers={offers} />
+      <NearbyGrid businesses={nearby} area="شبين القناطر" />
     </main>
   )
 }

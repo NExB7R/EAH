@@ -234,3 +234,17 @@
 - Horizontal Snap Strip (سحب أفقي)
 - 240px كارد (200px على الموبايل)
 - Badge "عرض" + سعر ذهبي + اسم النشاط + المنطقة
+
+---
+
+## [v2.5.0] - 2026-09-27 — Nearby Grid (Home)
+
+### Added
+- `components/nearby-grid.tsx` — Server Component (4 كروت)
+- `components/nearby-grid.module.css` — إطار تيل (Teal)
+- `getNearbyBusinesses` في lib/data — حسب المنطقة
+
+### Style
+- 2×2 (Mobile) / 4×1 (Desktop)
+- إطار تيل #55E7D1 — مختلف عن الذهبي/البنفسجي/البرتقالي
+- Rating ذهبي على الصورة

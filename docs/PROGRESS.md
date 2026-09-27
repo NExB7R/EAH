@@ -227,3 +227,8 @@
 - Horizontal Snap Strip
 - إطار برتقالي
 - Server Component
+
+### 2026-09-27 — Nearby Grid ✅
+- 4 كروت (2×2 / 4×1)
+- إطار تيل
+- Server Component

@@ -356,3 +356,31 @@ export const getActiveOffers = unstable_cache(
   ['offers-active'],
   { revalidate: 120, tags: ['offers'] },
 )
+
+// ═══════════════════════════════════════════════════════════
+// 9. القريب منك (Nearby)
+// ═══════════════════════════════════════════════════════════
+
+export const getNearbyBusinesses = unstable_cache(
+  async (area?: string, limit = 4): Promise<Business[]> => {
+    const supabase = createPublicClient()
+    let q = supabase
+      .from('businesses')
+      .select(BUSINESS_COLUMNS)
+      .eq('is_published', true)
+
+    if (area) q = q.eq('area', area)
+
+    const { data, error } = await q
+      .order('trust_score', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error('[data] getNearbyBusinesses error:', error.message)
+      return []
+    }
+    return (data ?? []) as Business[]
+  },
+  ['businesses-nearby'],
+  { revalidate: 120, tags: ['businesses'] },
+)
