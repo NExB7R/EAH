@@ -15,6 +15,7 @@ import {
   BellIcon,
   TargetIcon,
   TagIcon,
+  SparklesIcon,
 } from './icons'
 import styles from './admin-sidebar.module.css'
 
