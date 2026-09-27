@@ -211,3 +211,9 @@
 - /featured: 4×2/3×2/2×2 (8/6/4)
 - Auto-rotate + Touch swipe + IntersectionObserver
 - إطار ذهبي بريميوم
+
+### 2026-09-27 — Featured Final ✅
+- Home: 5×2/3×2/2×2 (10/6/4)
+- /featured: 4×2/3×2/2×2 (8/6/4)
+- Auto-rotate + Touch swipe + IntersectionObserver
+- إطار ذهبي بريميوم
