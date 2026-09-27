@@ -19,7 +19,7 @@ type Props = {
 }
 
 const PAGE_SIZES = { mobile: 4, tablet: 6, desktop: 8 }
-const INTERVAL_MS = 5000
+const INTERVAL_MS = 8000
 
 export default function FeaturedBento({ businesses }: Props) {
   const { visible, containerRef, setPaused, next, prev } =

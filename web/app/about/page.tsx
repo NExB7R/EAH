@@ -27,6 +27,7 @@ import {
   InfoIcon,
   CheckCircleIcon,
 } from '@/components/icons'
+import AboutFreeApp from '@/components/about-free-app'
 import styles from './about.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -160,6 +161,8 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <AboutFreeApp />
 
       {/* ═══ 4. للعميل ═══ */}
       <section className={styles.section}>
