@@ -1,0 +1,43 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.name {
+  font-family: 'Brush Script MT', 'Segoe Script', cursive;
+  font-size: 2rem;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--gold-light);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  transition: text-shadow 300ms var(--ease-out),
+              color 300ms var(--ease-out);
+  cursor: default;
+  user-select: none;
+}
+
+.name:hover {
+  color: #FFF5DE;
+  text-shadow:
+    0 0 12px rgba(232,199,154,0.7),
+    0 0 24px rgba(232,199,154,0.4),
+    0 0 40px rgba(232,199,154,0.2);
+}
+
+@media (max-width: 640px) {
+  .name { font-size: 1.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .name { transition: none; }
+}
