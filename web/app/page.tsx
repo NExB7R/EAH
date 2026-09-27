@@ -40,7 +40,7 @@ export default async function Home() {
   const start = getRotationStart(all.length)
 
   return (
-    <main>
+    <main data-snap="true">
       <HomeHero />
       <FeaturedBento businesses={all} initialStart={start} />
     </main>

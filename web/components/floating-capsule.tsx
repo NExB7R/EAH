@@ -42,7 +42,7 @@ export default function FloatingCapsule({ session }: Props) {
         document.documentElement.scrollTop ||
         document.body.scrollTop ||
         0
-      setScrolled(y > 50)
+      setScrolled(y > 80)
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -64,6 +64,7 @@ export default function FloatingCapsule({ session }: Props) {
   }
 
   const isLoggedIn = !!session
+  const isHome = pathname === "/"
 
   if (!mounted) return null
 
@@ -72,6 +73,7 @@ export default function FloatingCapsule({ session }: Props) {
       <header
         className={`${styles.capsule} ${scrolled ? styles.scrolled : ''}`}
         data-scrolled={scrolled}
+        data-home={isHome}
       >
         <div className={styles.inner}>
           {/* ─── يمين: الأدوات ─── */}

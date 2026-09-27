@@ -252,3 +252,8 @@
 ### ✅ خلص (2026-09-27)
 - [x] branches_count + offers_count + rating_avg + rating_count
 - [x] Badges في الكارد للفروع + العروض
+
+- [x] Home scroll-snap عمودي
+- [x] Header auto-hide في الهيرو
+- [x] الهيرو بدون spacer
+- [x] توسيط اللوجو في الهيدر

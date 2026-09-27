@@ -38,8 +38,6 @@ export default function HomeHero() {
           <Logo size="lg" />
         </div>
 
-        {/* مساحة جمالية */}
-        <div className={styles.spacer} aria-hidden />
 
         {/* لافتة دولة شبين القناطر — فوق الهوك */}
         <div className={styles.shibinSign}>

@@ -182,3 +182,8 @@
 ### 2026-09-27 — Featured Bento Fix + Fallback ✅
 - grid-template-areas (bento صحيح)
 - Fallback جميل بدون صور
+
+### 2026-09-27 — Home Scroll-Snap ✅
+- Scroll-snap عمودي (proximity)
+- Header hide in hero + show on scroll
+- Logo centering fix

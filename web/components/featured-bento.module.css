@@ -203,3 +203,22 @@
   .heroSlot { animation: none; }
   .progressFill { animation-duration: 10s; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   2026-09-27 — Featured = صفحة كاملة (scroll-snap)
+   ═══════════════════════════════════════════════════════════ */
+
+.section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  padding: 40px 0;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 32px 0;
+  }
+}

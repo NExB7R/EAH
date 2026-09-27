@@ -70,3 +70,25 @@
 ### Notes
 - معظم الأنشطة مفيش عندها cover → الـ fallback هو الأساسي حالياً
 - صفر JS إضافي
+
+---
+
+## [v2.1.5] - 2026-09-27 — Home Scroll-Snap + Header Polish
+
+### Added
+- Scroll-snap عمودي (`y proximity`) على Home — إحساس قلب صفحات
+- الهيدر مخفي في الهيرو + يظهر بعد ما تسكرول
+- featured-bento = صفحة كاملة (min-height 100dvh)
+
+### Changed
+- `home-hero` — مساحة فوق اللوجو أقل + spacer اتشال
+- `floating-capsule` — data-home + توسيط اللوجو بالظبط
+- `app/page.tsx` — `data-snap="true"` على `<main>`
+
+### Fixed
+- اللوجو في الهيدر مش متوسّط بالظبط (grid-columns minmax(0,1fr))
+- مساحة فاضية كبيرة فوق لوجو الهيرو
+
+### Notes
+- `prefers-reduced-motion` → يعطّل snap
+- الهيدر يظهر بعد 80px (بدل 50px)

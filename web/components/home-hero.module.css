@@ -302,3 +302,29 @@
     animation: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   2026-09-27 — تحسين الهيرو
+   - مساحة أقل فوق اللوجو
+   - scroll-snap للـ home
+   ═══════════════════════════════════════════════════════════ */
+
+.hero {
+  padding: 32px 16px 48px;
+  padding-top: calc(20px + env(safe-area-inset-top));
+  scroll-snap-align: start;
+}
+
+.logoWrap {
+  margin-bottom: 0;
+}
+
+.spacer {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding-top: calc(24px + env(safe-area-inset-top));
+  }
+}

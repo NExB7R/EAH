@@ -112,3 +112,11 @@
 - badges متعددة (نوع + منطقة + تقييم + مصداقية + واتساب)
 - open/closed badge
 - حقول جديدة (branches, offers, rating) → TODO
+
+---
+
+## 2026-09-27 — Session 6: Home Scroll-Snap
+- Scroll-snap عمودي (Hero + Featured = صفحتين)
+- الهيدر مخفي في الهيرو + يظهر بعد 80px
+- spacer من الهيرو اتشال
+- اللوجو في الهيدر متوسّط

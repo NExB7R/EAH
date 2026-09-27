@@ -286,3 +286,50 @@
     animation: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   2026-09-27 — Header: مخفي في الهيرو + توسيط اللوجو
+   ═══════════════════════════════════════════════════════════ */
+
+.capsule {
+  transition:
+    transform 400ms var(--ease-out),
+    opacity 400ms var(--ease-out);
+}
+
+/* في الرئيسية + لسه في الهيرو → الهيدر مخفي بالكامل */
+.capsule[data-home='true'][data-scrolled='false'] {
+  transform: translateY(-120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.capsule[data-home='true'][data-scrolled='true'] {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* أي صفحة تانية → الهيدر دايماً ظاهر */
+.capsule[data-home='false'] {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* توسيط اللوجو بالظبط */
+.inner {
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  justify-items: center;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.center > * {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
