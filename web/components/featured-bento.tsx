@@ -11,7 +11,7 @@ import styles from './featured-bento.module.css'
 // EAH — Featured Bento (Home) — Premium 2026
 //   • عدالة 100% (Fisher-Yates + sessionStorage)
 //   • 8/6/4 حسب الشاشة
-//   • Fade ناعم كل 5 ثواني
+//   • تبديل يدوي بأسهم + تبديل تلقائي كل 5 ثواني
 //   • يتوقف: خارج الشاشة / Hover / Tab مخفي
 // ═══════════════════════════════════════════════════════════
 
@@ -23,16 +23,17 @@ const PAGE_SIZES = { mobile: 4, tablet: 6, desktop: 8 }
 const INTERVAL_MS = 5000
 
 export default function FeaturedBento({ businesses }: Props) {
-  const { visible, containerRef, setPaused } = useFairRotation<Business>({
-    items: businesses,
-    pageSizes: PAGE_SIZES,
-    intervalMs: INTERVAL_MS,
-    storageKey: 'eah:featured:home',
-  })
+  const { visible, containerRef, setPaused, next, prev } =
+    useFairRotation<Business>({
+      items: businesses,
+      pageSizes: PAGE_SIZES,
+      intervalMs: INTERVAL_MS,
+      storageKey: 'eah:featured:home',
+    })
 
   if (businesses.length === 0) return null
 
-  const cycleKey = visible.map((b) => b.id).join(',')
+  const hasMore = businesses.length > PAGE_SIZES.mobile
 
   return (
     <section
@@ -58,14 +59,37 @@ export default function FeaturedBento({ businesses }: Props) {
         <div className={styles.neonLine} aria-hidden />
 
         <div
-          key={cycleKey}
-          className={styles.grid}
+          className={styles.carousel}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          {visible.map((b) => (
-            <FeaturedCard key={b.id} business={b} variant="small" />
-          ))}
+          {hasMore && (
+            <button
+              type="button"
+              className={`${styles.arrow} ${styles.arrowPrev}`}
+              onClick={prev}
+              aria-label="السابق"
+            >
+              <ArrowLeftIcon size={20} />
+            </button>
+          )}
+
+          <div className={styles.grid}>
+            {visible.map((b) => (
+              <FeaturedCard key={b.id} business={b} variant="small" />
+            ))}
+          </div>
+
+          {hasMore && (
+            <button
+              type="button"
+              className={`${styles.arrow} ${styles.arrowNext}`}
+              onClick={next}
+              aria-label="التالي"
+            >
+              <ArrowLeftIcon size={20} />
+            </button>
+          )}
         </div>
       </div>
     </section>

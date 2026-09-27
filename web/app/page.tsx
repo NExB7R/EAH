@@ -41,7 +41,7 @@ export default async function Home() {
   const trendList = sortByTrend(topTrust).slice(0, 10)
 
   return (
-    <main data-snap="true">
+    <main>
       <HomeHero />
       <FeaturedBento businesses={all} />
       <TrendingList businesses={trending.length > 0 ? trending : trendList} />

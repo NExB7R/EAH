@@ -21,7 +21,6 @@
               border-color 200ms var(--ease),
               box-shadow 200ms var(--ease);
   height: 100%;
-  animation: eahCardFade 400ms var(--ease-out);
 }
 
 .card:hover {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 // EAH — useFairRotation
 // عدالة عشوائية موحّدة لكل الأقسام
@@ -9,6 +9,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 // - sessionStorage (كل جلسة = ترتيب جديد)
 // - يتوقف: خارج الشاشة / Hover / Tab مخفي
 // - SSR-safe
+// - Manual next / prev
 
 type PageSizes = { mobile: number; tablet: number; desktop: number }
 type Breakpoints = { tablet: number; desktop: number }
@@ -16,10 +17,11 @@ type Breakpoints = { tablet: number; desktop: number }
 type Options<T> = {
   items: T[]
   pageSizes: PageSizes
-  intervalMs: number
+  intervalMs?: number
   storageKey: string
   breakpoints?: Breakpoints
   disabled?: boolean
+  auto?: boolean
 }
 
 type Result<T> = {
@@ -27,6 +29,10 @@ type Result<T> = {
   containerRef: React.RefObject<HTMLElement | null>
   paused: boolean
   setPaused: (v: boolean) => void
+  next: () => void
+  prev: () => void
+  pageSize: number
+  total: number
 }
 
 const DEFAULT_BP: Breakpoints = { tablet: 640, desktop: 1024 }
@@ -62,10 +68,11 @@ function sliceVisible<T>(order: T[], start: number, size: number): T[] {
 export function useFairRotation<T extends { id: string }>({
   items,
   pageSizes,
-  intervalMs,
+  intervalMs = 5000,
   storageKey,
   breakpoints = DEFAULT_BP,
   disabled = false,
+  auto = true,
 }: Options<T>): Result<T> {
   const itemsKey = items.map((b) => b.id).join(',')
 
@@ -79,6 +86,54 @@ export function useFairRotation<T extends { id: string }>({
   const containerRef = useRef<HTMLElement | null>(null)
   const orderRef = useRef<T[]>([])
   const cursorRef = useRef(0)
+  const itemsRef = useRef<T[]>(items)
+  const pageSizeRef = useRef(pageSize)
+
+  itemsRef.current = items
+  pageSizeRef.current = pageSize
+
+  const persist = useCallback(() => {
+    try {
+      sessionStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          ids: orderRef.current.map((b) => b.id),
+          cursor: cursorRef.current,
+        }),
+      )
+    } catch {
+      // storage full — ignore
+    }
+  }, [storageKey])
+
+  const next = useCallback(() => {
+    const order = orderRef.current
+    if (order.length === 0) return
+    const size = pageSizeRef.current
+    const nextCursor = cursorRef.current + size
+    if (nextCursor >= order.length) {
+      orderRef.current = fisherYates(itemsRef.current)
+      cursorRef.current = 0
+    } else {
+      cursorRef.current = nextCursor
+    }
+    setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
+    persist()
+  }, [persist])
+
+  const prev = useCallback(() => {
+    const order = orderRef.current
+    if (order.length === 0) return
+    const size = pageSizeRef.current
+    const prevCursor = cursorRef.current - size
+    if (prevCursor < 0) {
+      cursorRef.current = Math.max(0, Math.floor((order.length - 1) / size) * size)
+    } else {
+      cursorRef.current = prevCursor
+    }
+    setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
+    persist()
+  }, [persist])
 
   useLayoutEffect(() => {
     const calc = () => {
@@ -147,40 +202,29 @@ export function useFairRotation<T extends { id: string }>({
   }, [])
 
   useEffect(() => {
+    if (!auto) return
     if (!mounted || reduced || disabled || paused || !inView) return
     if (orderRef.current.length <= pageSize) return
 
     const t = setInterval(() => {
-      const order = orderRef.current
-      const next = cursorRef.current + pageSize
-      if (next >= order.length) {
-        orderRef.current = fisherYates(items)
-        cursorRef.current = 0
-      } else {
-        cursorRef.current = next
-      }
-      setVisible(sliceVisible(orderRef.current, cursorRef.current, pageSize))
-      try {
-        sessionStorage.setItem(
-          storageKey,
-          JSON.stringify({
-            ids: orderRef.current.map((b) => b.id),
-            cursor: cursorRef.current,
-          }),
-        )
-      } catch {
-        // storage full — ignore
-      }
+      next()
     }, intervalMs)
-
     return () => clearInterval(t)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mounted, reduced, disabled, paused, inView, pageSize, storageKey, intervalMs])
+  }, [auto, mounted, reduced, disabled, paused, inView, pageSize, intervalMs, next])
 
   useEffect(() => {
     if (!mounted) return
     setVisible(sliceVisible(orderRef.current, cursorRef.current, pageSize))
   }, [pageSize, mounted])
 
-  return { visible, containerRef, paused, setPaused }
+  return {
+    visible,
+    containerRef,
+    paused,
+    setPaused,
+    next,
+    prev,
+    pageSize,
+    total: orderRef.current.length,
+  }
 }
