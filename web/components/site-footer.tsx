@@ -17,20 +17,68 @@ import {
   ShieldCheckIcon,
   CookieIcon,
   PhoneIcon,
+  ArrowLeftIcon,
 } from './icons'
 import styles from './site-footer.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Site Footer (Premium 2026 — 4 columns)
+// EAH — Site Footer (Premium 2026 — merged design)
 // ═══════════════════════════════════════════════════════════
 
 const APP_VERSION = 'v2.1.0'
 
-const SOCIAL = {
-  whatsapp: 'https://wa.me/201012892806',
-  facebook: 'https://facebook.com/eah',
+const CONTACTS = {
   channel: 'https://whatsapp.com/channel/eaH',
+  facebook: 'https://facebook.com/eah.eg',
+  whatsapp: 'https://wa.me/201012892806',
 }
+
+const COLUMNS = [
+  {
+    key: 'discover',
+    title: 'اكتشف',
+    Icon: TargetIcon,
+    links: [
+      { href: '/', label: 'الرئيسية', Icon: TargetIcon },
+      { href: '/featured', label: 'المميزون', Icon: CrownGoldIcon },
+      { href: '/trends', label: 'الترند', Icon: TrendingUpIcon },
+      { href: '/offers', label: 'العروض', Icon: GiftIcon },
+      { href: '/new', label: 'الجديد', Icon: LampIcon },
+      { href: '/nearby', label: 'قريب منك', Icon: MapPinIcon },
+    ],
+  },
+  {
+    key: 'merchants',
+    title: 'للتجار',
+    Icon: StoreIcon,
+    links: [
+      { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
+      { href: '/pricing', label: 'الباقات', Icon: FileTextIcon },
+      { href: '/advertise', label: 'أعلن معانا', Icon: TrendingUpIcon },
+      { href: '/faq', label: 'الأسئلة', Icon: ShieldCheckIcon },
+    ],
+  },
+  {
+    key: 'about',
+    title: 'عننا',
+    Icon: ShieldCheckIcon,
+    links: [
+      { href: '/about', label: 'مين إحنا', Icon: ShieldCheckIcon },
+      { href: '/contact', label: 'تواصل معانا', Icon: PhoneIcon },
+      { href: '/support-palestine', label: 'دعم فلسطين', Icon: MapPinIcon },
+    ],
+  },
+  {
+    key: 'legal',
+    title: 'قانوني',
+    Icon: FileTextIcon,
+    links: [
+      { href: '/terms', label: 'الشروط', Icon: FileTextIcon },
+      { href: '/privacy', label: 'الخصوصية', Icon: ShieldCheckIcon },
+      { href: '/cookies', label: 'الكوكيز', Icon: CookieIcon },
+    ],
+  },
+]
 
 export default function SiteFooter() {
   return (
@@ -38,198 +86,100 @@ export default function SiteFooter() {
       <div className={styles.glow} aria-hidden />
 
       <div className={styles.container}>
-        {/* ─── اللوجو + السلوغان + السوشيال ─── */}
-        <div className={styles.top}>
+        {/* ─── Brand ─── */}
+        <div className={styles.brand}>
           <Link href="/" aria-label="EAH — الرئيسية" className={styles.logoWrap}>
             <Logo size="md" />
           </Link>
-
-          <div className={styles.socialRow}>
-            <a
-              href={SOCIAL.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${styles.socialBtn} ${styles.whatsapp}`}
-              aria-label="واتساب"
-              data-tooltip="واتساب"
-            >
-              <WhatsAppIcon size={20} />
-            </a>
-
-            <a
-              href={SOCIAL.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${styles.socialBtn} ${styles.facebook}`}
-              aria-label="فيسبوك"
-              data-tooltip="فيسبوك"
-            >
-              <FacebookIcon size={20} />
-            </a>
-
-            <a
-              href={SOCIAL.channel}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${styles.socialBtn} ${styles.channel}`}
-              aria-label="قناة واتساب"
-              data-tooltip="قناة التحديثات"
-            >
-              <BroadcastIcon size={20} />
-            </a>
-          </div>
+          <p className={styles.tagline}>
+            اللي نفسك فيه ؟ — من قلب شبين القناطر
+          </p>
         </div>
 
-        {/* ─── 4 أعمدة ─── */}
-        <div className={styles.columns}>
-          {/* اكتشف */}
-          <div className={styles.col}>
-            <h4 className={styles.colTitle}>
-              <TargetIcon size={14} />
-              <span>اكتشف</span>
-            </h4>
-            <ul className={styles.colList}>
-              <li>
-                <Link href="/" className={styles.colLink}>
-                  <TargetIcon size={12} />
-                  <span>الرئيسية</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/featured" className={styles.colLink}>
-                  <CrownGoldIcon size={12} />
-                  <span>المميزون</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/trends" className={styles.colLink}>
-                  <TrendingUpIcon size={12} />
-                  <span>الترند</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/offers" className={styles.colLink}>
-                  <GiftIcon size={12} />
-                  <span>العروض</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/new" className={styles.colLink}>
-                  <LampIcon size={12} />
-                  <span>الجديد</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/nearby" className={styles.colLink}>
-                  <MapPinIcon size={12} />
-                  <span>قريب منك</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
+        {/* ─── Contact Cards ─── */}
+        <div className={styles.contacts}>
+          <a
+            href={CONTACTS.channel}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${styles.card} ${styles.channel}`}
+          >
+            <span className={styles.cardIcon}>
+              <BroadcastIcon size={22} />
+            </span>
+            <span className={styles.cardBody}>
+              <strong className={styles.cardTitle}>قناة الواتساب</strong>
+              <small className={styles.cardSub}>أول ما ينزل عرض — إنت أول واحد يعرف</small>
+            </span>
+            <ArrowLeftIcon size={14} className={styles.cardArrow} />
+          </a>
 
-          {/* للتجار */}
-          <div className={styles.col}>
-            <h4 className={styles.colTitle}>
-              <StoreIcon size={14} />
-              <span>للتجار</span>
-            </h4>
-            <ul className={styles.colList}>
-              <li>
-                <Link href="/merchant/apply" className={styles.colLink}>
-                  <StoreIcon size={12} />
-                  <span>سجّل نشاطك</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className={styles.colLink}>
-                  <FileTextIcon size={12} />
-                  <span>الباقات</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/advertise" className={styles.colLink}>
-                  <TrendingUpIcon size={12} />
-                  <span>أعلن معانا</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className={styles.colLink}>
-                  <ShieldCheckIcon size={12} />
-                  <span>الأسئلة</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <a
+            href={CONTACTS.facebook}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${styles.card} ${styles.facebook}`}
+          >
+            <span className={styles.cardIcon}>
+              <FacebookIcon size={22} />
+            </span>
+            <span className={styles.cardBody}>
+              <strong className={styles.cardTitle}>صفحة فيسبوك</strong>
+              <small className={styles.cardSub}>أخبار EAH وفرص للشركاء</small>
+            </span>
+            <ArrowLeftIcon size={14} className={styles.cardArrow} />
+          </a>
 
-          {/* عن EAH */}
-          <div className={styles.col}>
-            <h4 className={styles.colTitle}>
-              <ShieldCheckIcon size={14} />
-              <span>عن EAH</span>
-            </h4>
-            <ul className={styles.colList}>
-              <li>
-                <Link href="/about" className={styles.colLink}>
-                  <ShieldCheckIcon size={12} />
-                  <span>مين إحنا</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className={styles.colLink}>
-                  <PhoneIcon size={12} />
-                  <span>تواصل معانا</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/support-palestine" className={styles.colLink}>
-                  <MapPinIcon size={12} />
-                  <span>دعم فلسطين</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* قانوني */}
-          <div className={styles.col}>
-            <h4 className={styles.colTitle}>
-              <FileTextIcon size={14} />
-              <span>قانوني</span>
-            </h4>
-            <ul className={styles.colList}>
-              <li>
-                <Link href="/terms" className={styles.colLink}>
-                  <FileTextIcon size={12} />
-                  <span>الشروط</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className={styles.colLink}>
-                  <ShieldCheckIcon size={12} />
-                  <span>الخصوصية</span>
-                </Link>
-              </li>
-              <li>
-                <Link href="/cookies" className={styles.colLink}>
-                  <CookieIcon size={12} />
-                  <span>الكوكيز</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <a
+            href={CONTACTS.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${styles.card} ${styles.whatsapp}`}
+          >
+            <span className={styles.cardIcon}>
+              <WhatsAppIcon size={22} />
+            </span>
+            <span className={styles.cardBody}>
+              <strong className={styles.cardTitle}>كلم المسؤول</strong>
+              <small className={styles.cardSub}>رد خلال دقايق — بدون لف</small>
+            </span>
+            <ArrowLeftIcon size={14} className={styles.cardArrow} />
+          </a>
         </div>
 
-        {/* ─── فلسطين ─── */}
+        {/* ─── Columns ─── */}
+        <nav className={styles.columns} aria-label="روابط الفوتر">
+          {COLUMNS.map(({ key, title, Icon, links }) => (
+            <div key={key} className={styles.col}>
+              <h4 className={styles.colTitle}>
+                <Icon size={13} />
+                <span>{title}</span>
+              </h4>
+              <ul className={styles.colList}>
+                {links.map(({ href, label, Icon: LIcon }) => (
+                  <li key={href}>
+                    <Link href={href} className={styles.colLink}>
+                      <LIcon size={12} />
+                      <span>{label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+
+        {/* ─── Palestine ─── */}
         <div className={styles.palestine}>
           <PalestineHeart />
         </div>
 
-        {/* ─── التوقيع ─── */}
+        {/* ─── Signature ─── */}
         <div className={styles.signature}>
           <Signature />
         </div>
 
-        {/* ─── الحقوق ─── */}
+        {/* ─── Bottom ─── */}
         <div className={styles.bottom}>
           <p className={styles.copyright}>
             © 2026 EAH — كل الحقوق محفوظة
