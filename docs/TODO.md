@@ -268,3 +268,6 @@
 - [ ] ربط trackEngagement في business page (كشف رقم / واتساب)
 - [ ] ربط trackEngagement في صفحة التقييم
 - [ ] Dashboard تحليلات في /admin
+
+- [x] /about (Pitch page)
+- [x] /about/presentation (12 slides)

@@ -270,3 +270,24 @@
 4. OffersStrip (برتقالي)
 5. NearbyGrid (تيل)
 6. NewGrid (فوشيا)
+
+---
+
+## [v2.7.0] - 2026-09-27 — About + Presentation Mode
+
+### Added
+- `app/about/page.tsx` + `.module.css` — Pitch Page كامل
+  - Hero + Problem (3) + Solution (3) + Customer (8 features)
+  - Merchant (8 features) + Stats + Steps + Palestine + CTA
+- `app/about/presentation/` — Presentation Mode (12 slides)
+  - Cover → Problem → Idea → Solution → Customer → Merchant
+  - How → Trust → Vision → Palestine → Team → CTA
+  - Keyboard (← →, Space, ESC) + Touch swipe + Click zones + Dots
+  - Auto-play (اختياري) + Progress bar + Side arrows
+  - Reduced motion + Pause on hover
+
+### Style
+- Cinematic (نيون + ذهبي)
+- Server Component لـ About
+- Client Component للـ Presentation (تفاعلي)
+- صفر مكتبات إضافية (CSS + React فقط)

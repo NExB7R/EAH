@@ -236,3 +236,7 @@
 ### 2026-09-27 — New Grid ✅ — Home Sections Complete
 Home الآن: Hero + Featured + Trending + Offers + Nearby + New
 كل قسم بألوانه الخاصة (ذهبي/بنفسجي/برتقالي/تيل/فوشيا)
+
+### 2026-09-27 — About + Presentation ✅
+- /about — Pitch page (9 sections)
+- /about/presentation — 12 slides, cinematic
