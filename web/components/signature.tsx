@@ -3,7 +3,7 @@
 import styles from './signature.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Signature (NourEldin B7R — script, gold, glows on hover)
+// EAH — Signature (French cursive style)
 // ═══════════════════════════════════════════════════════════
 
 export default function Signature() {
