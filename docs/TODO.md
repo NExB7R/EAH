@@ -241,3 +241,10 @@
 - [ ] Opportunity Strip
 - [ ] Footer كامل
 - [ ] Explore Filters
+
+### جاي — Featured Card Extend (بعد migration)
+- [ ] `branches_count` في Business
+- [ ] `offers_count` في Business
+- [ ] `rating_avg` + `rating_count` (بدل trust_score/20)
+- [ ] `category` (تصنيف المطعم: بيتزا، مشويات...)
+- [ ] Badges إضافية: 🏢 فروع + 🎁 عروض + 🍕 تصنيف

@@ -105,3 +105,10 @@
 - Explore Filters
 - Trending Strip
 - Offers Strip
+
+---
+
+## 2026-09-27 — Session 5: Featured Card Rich Info
+- badges متعددة (نوع + منطقة + تقييم + مصداقية + واتساب)
+- open/closed badge
+- حقول جديدة (branches, offers, rating) → TODO

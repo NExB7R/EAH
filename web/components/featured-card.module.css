@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — Featured Card
+   EAH — Featured Card (Hero + Small)
    ═══════════════════════════════════════════════════════════ */
 
 .card {
@@ -24,10 +24,7 @@
 }
 
 /* ─── Hero variant ─── */
-.hero {
-  min-height: 320px;
-  height: 100%;
-}
+.hero { min-height: 320px; height: 100%; }
 
 .hero .imageWrap {
   position: absolute;
@@ -38,13 +35,16 @@
   position: relative;
   margin-top: auto;
   padding: 20px 22px 22px;
-  background: linear-gradient(180deg, transparent 0%, rgba(7,2,13,0.7) 40%, rgba(7,2,13,0.95) 100%);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(7,2,13,0.7) 40%,
+    rgba(7,2,13,0.95) 100%
+  );
 }
 
 /* ─── Small variant ─── */
-.small {
-  min-height: 200px;
-}
+.small { min-height: 200px; }
 
 .small .imageWrap {
   position: relative;
@@ -57,9 +57,7 @@
   background: linear-gradient(180deg, transparent 40%, rgba(7,2,13,0.75) 100%);
 }
 
-.small .content {
-  padding: 12px 14px 14px;
-}
+.small .content { padding: 12px 14px 14px; }
 
 /* ─── Image ─── */
 .imageWrap {
@@ -73,9 +71,7 @@
   transition: transform 400ms var(--ease);
 }
 
-.card:hover .image {
-  transform: scale(1.04);
-}
+.card:hover .image { transform: scale(1.04); }
 
 .imageFallback {
   position: absolute;
@@ -89,22 +85,52 @@
   pointer-events: none;
 }
 
-/* ─── Badge ─── */
-.badge {
+/* ─── Top Badges (فوق الصورة) ─── */
+.topBadges {
   position: absolute;
-  top: 12px;
-  inset-inline-start: 12px;
+  top: 10px;
+  inset-inline-start: 10px;
+  inset-inline-end: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 6px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.badgePremium,
+.badgeStatus {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 10px;
+  padding: 4px 9px;
   border-radius: var(--radius-full);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 900;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  backdrop-filter: none;
+}
+
+.badgePremium {
   color: var(--bg-base);
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
-  box-shadow: 0 0 12px rgba(232,199,154,0.35);
-  z-index: 2;
+  box-shadow: 0 0 14px rgba(232,199,154,0.35);
+}
+
+.badgeStatus { color: #fff; }
+
+.badgeOpen {
+  background: rgba(85,231,209,0.18);
+  color: #8FF0E1;
+  border: 1px solid rgba(85,231,209,0.45);
+}
+
+.badgeClosed {
+  background: rgba(252,165,165,0.15);
+  color: #FFC8C8;
+  border: 1px solid rgba(252,165,165,0.4);
 }
 
 /* ─── Content ─── */
@@ -129,26 +155,8 @@
   line-clamp: 2;
 }
 
-.meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 6px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--text-tertiary);
-}
-
-.dot { color: var(--text-muted); }
-
-.area {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-}
-
 .hook {
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--text-secondary);
@@ -160,27 +168,55 @@
   -webkit-box-orient: vertical;
 }
 
-.bottom {
+/* ─── Badges (chips) ─── */
+.badges {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-top: 10px;
 }
 
-.hero .bottom { margin-top: 16px; }
+.hero .badges { margin-top: 12px; }
 
-.rating {
+.chip {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 8px;
+  padding: 3px 9px;
   border-radius: var(--radius-full);
-  background: rgba(232,199,154,0.1);
-  border: 1px solid rgba(232,199,154,0.25);
-  color: var(--gold-light);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 800;
+  color: var(--text-secondary);
+  background: rgba(168,85,247,0.08);
+  border: 1px solid rgba(168,85,247,0.22);
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.chipGold {
+  color: var(--gold-light);
+  background: rgba(232,199,154,0.08);
+  border-color: rgba(232,199,154,0.28);
+}
+
+.chipTrust {
+  color: #B8F0E6;
+  background: rgba(85,231,209,0.08);
+  border-color: rgba(85,231,209,0.3);
+}
+
+.chipWhatsapp {
+  color: #A8F0B8;
+  background: rgba(37,211,102,0.1);
+  border-color: rgba(37,211,102,0.35);
+}
+
+/* ─── Bottom / CTA ─── */
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 14px;
 }
 
 .cta {
@@ -202,6 +238,22 @@
   border-color: rgba(232,199,154,0.55);
 }
 
+/* ─── Small: badges تبقى أصغر ─── */
+.small .chip {
+  font-size: 0.62rem;
+  padding: 2px 7px;
+  gap: 3px;
+}
+
+.small .badges { gap: 4px; margin-top: 8px; }
+
+.small .badgePremium,
+.small .badgeStatus {
+  font-size: 0.58rem;
+  padding: 3px 7px;
+}
+
+/* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .card, .image, .cta { transition: none; }
   .card:hover .image { transform: none; }

@@ -16,3 +16,20 @@
 ### Fixed
 - عدالة المميزين — كل مميز ياخد Hero بنفس عدد المرات
 - Hydration — الدوران مبني على `initialStart` من الـ server
+
+---
+
+## [v2.1.2] - 2026-09-27 — Featured Card Rich Info
+
+### Added
+- Badges في الكارت: النوع (بأيقونة) + المنطقة + التقييم + المصداقية + واتساب
+- Badge "مفتوح/مقفل" على الصورة (أخضر/أحمر)
+- Badge "مميز" على الـ hero
+
+### Changed
+- `featured-card.tsx` — أيقونات نوع ديناميكية (restaurant/pharmacy/...)
+- `featured-card.module.css` — chips صغيرة + topBadges
+
+### Notes
+- صفر JS إضافي — كله CSS + JSX
+- حقول جديدة (branches_count, offers_count, rating_count) → TODO (محتاج migration)
