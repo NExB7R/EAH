@@ -222,3 +222,8 @@
 - Vertical List (10 rows)
 - Server Component — بدون JS
 - إطار بنفسجي
+
+### 2026-09-27 — Offers Strip ✅
+- Horizontal Snap Strip
+- إطار برتقالي
+- Server Component

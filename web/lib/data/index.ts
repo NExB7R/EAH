@@ -14,9 +14,10 @@ export {
   getTopBusinesses,
   getOpportunities,
   getTrendingBusinesses,
+  getActiveOffers,
   isOpenNow,
 } from './businesses'
-export type { Business, BusinessType, WorkingHours, WorkingDay } from './businesses'
+export type { Business, BusinessType, WorkingHours, WorkingDay, Offer } from './businesses'
 
 export {
   AREAS,

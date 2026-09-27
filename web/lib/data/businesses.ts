@@ -311,3 +311,48 @@ export const getTrendingBusinesses = unstable_cache(
   ['businesses-trending'],
   { revalidate: 120, tags: ['businesses', 'trending'] },
 )
+
+// ═══════════════════════════════════════════════════════════
+// 8. العروض النشطة (Offers — للـ Home)
+// ═══════════════════════════════════════════════════════════
+
+export type Offer = {
+  id: string
+  title: string
+  description: string | null
+  price: number | null
+  image_url: string | null
+  starts_at: string | null
+  ends_at: string | null
+  business: {
+    id: string
+    slug: string
+    name: string
+    area: string | null
+  } | null
+}
+
+export const getActiveOffers = unstable_cache(
+  async (limit = 8): Promise<Offer[]> => {
+    const supabase = createPublicClient()
+    const now = new Date().toISOString()
+    const { data, error } = await supabase
+      .from('offers')
+      .select(`
+        id, title, description, price, image_url, starts_at, ends_at,
+        business:businesses(id, slug, name, area)
+      `)
+      .eq('is_published', true)
+      .or(`ends_at.is.null,ends_at.gt.${now}`)
+      .order('created_at', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error('[data] getActiveOffers error:', error.message)
+      return []
+    }
+    return (data ?? []) as unknown as Offer[]
+  },
+  ['offers-active'],
+  { revalidate: 120, tags: ['offers'] },
+)

@@ -220,3 +220,17 @@
 - قائمة عمودية (زي Spotify) — رقم + thumb + info + right
 - Rank badges: 1 ذهبي، 2 فضي، 3 برونزي، الباقي بنفسجي
 - Server Component — صفر JS على client
+
+---
+
+## [v2.4.0] - 2026-09-27 — Offers Strip (Home)
+
+### Added
+- `components/offers-strip.tsx` — Server Component
+- `components/offers-strip.module.css` — إطار برتقالي (يختلف عن الذهبي/البنفسجي)
+- `getActiveOffers` في lib/data — يجيب العروض النشطة من `offers`
+
+### Style
+- Horizontal Snap Strip (سحب أفقي)
+- 240px كارد (200px على الموبايل)
+- Badge "عرض" + سعر ذهبي + اسم النشاط + المنطقة
