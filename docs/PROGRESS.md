@@ -187,3 +187,9 @@
 - Scroll-snap عمودي (proximity)
 - Header hide in hero + show on scroll
 - Logo centering fix
+
+### 2026-09-27 — Splash + Install + Bento Polish ✅
+- Splash: من أول paint
+- Install: يدوي فقط
+- Header: توسيط سليم
+- Snap: mandatory

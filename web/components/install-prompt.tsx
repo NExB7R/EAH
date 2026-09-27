@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react'
 import { InstallIcon, CloseIcon } from './icons'
 import styles from './install-prompt.module.css'
 
+// ═══════════════════════════════════════════════════════════
+// EAH — Install Prompt (يدوي فقط — من زر الهيدر)
+// ═══════════════════════════════════════════════════════════
+
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
@@ -17,31 +21,20 @@ export default function InstallPrompt() {
   const [isIOS, setIsIOS] = useState(false)
 
   useEffect(() => {
-    // لو مثبتة → متظهرش
+    // مثبتة أصلاً → متشتغلش خالص
     if (window.matchMedia('(display-mode: standalone)').matches) return
 
-    // لو المستخدم رفض قبل كده → متظهرش
-    if (localStorage.getItem(STORAGE_KEY)) return
-
-    // iOS؟ (مفيش beforeinstallprompt)
     const ua = window.navigator.userAgent
     const ios = /iPad|iPhone|iPod/.test(ua) && !('MSStream' in window)
     setIsIOS(ios)
 
-    if (ios) {
-      const t = setTimeout(() => setVisible(true), 30000)
-      return () => clearTimeout(t)
-    }
-
-    // Chrome/Edge → beforeinstallprompt
     const onPrompt = (e: Event) => {
       e.preventDefault()
       setDeferred(e as BeforeInstallPromptEvent)
-      setTimeout(() => setVisible(true), 30000)
     }
-
     window.addEventListener('beforeinstallprompt', onPrompt)
 
+    // فتح يدوي فقط — من زر الهيدر
     const onManual = () => setVisible(true)
     window.addEventListener('eah:install-request', onManual)
 
@@ -57,7 +50,10 @@ export default function InstallPrompt() {
   }
 
   const install = async () => {
-    if (!deferred) return
+    if (!deferred) {
+      setVisible(false)
+      return
+    }
     try {
       await deferred.prompt()
       const choice = await deferred.userChoice
@@ -71,6 +67,11 @@ export default function InstallPrompt() {
   }
 
   if (!visible) return null
+
+  // لو iOS → إرشادات يدوية
+  // لو Chrome/Edge و deferred موجود → زر تثبيت
+  // لو deferred مش موجود (متصفح مش داعم) → إرشادات عامة
+  const showNativeInstall = !isIOS && !!deferred
 
   return (
     <div className="eah-backdrop" onClick={dismiss}>
@@ -96,18 +97,20 @@ export default function InstallPrompt() {
         <h2 className={styles.title}>ثبّت EAH على جهازك</h2>
         <p className={styles.text}>
           {isIOS
-            ? 'اضغط زر المشاركة، بعدين "إضافة إلى الشاشة الرئيسية".'
-            : 'افتح أسرع، استخدمه بدون إنترنت، ووصلك إشعارات.'}
+            ? 'اضغط زر المشاركة في المتصفح، بعدين "إضافة إلى الشاشة الرئيسية".'
+            : showNativeInstall
+            ? 'افتح أسرع، استخدمه بدون إنترنت، ووصلك إشعارات.'
+            : 'من قائمة المتصفح: "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية".'}
         </p>
 
         <div className={styles.actions}>
-          {isIOS ? (
-            <button type="button" className="eah-btn-primary" onClick={dismiss}>
-              تمام
-            </button>
-          ) : (
+          {showNativeInstall ? (
             <button type="button" className="eah-btn-primary" onClick={install}>
               ثبّت الآن
+            </button>
+          ) : (
+            <button type="button" className="eah-btn-primary" onClick={dismiss}>
+              تمام
             </button>
           )}
           <button type="button" className="eah-btn-secondary" onClick={dismiss}>

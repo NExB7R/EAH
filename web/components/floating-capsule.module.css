@@ -318,7 +318,6 @@
 /* توسيط اللوجو بالظبط */
 .inner {
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  justify-items: center;
 }
 
 .center {

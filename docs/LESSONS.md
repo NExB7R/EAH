@@ -465,3 +465,15 @@ cat file.tsx
 **السبب:** CSS Grid في RTL — ترتيب الخطوط بيختلف، والـ `grid-column: 1` مبيمتدش زي المتوقع.
 
 **الحل:** استخدام `grid-template-areas` — صريح ومستقل عن الـ direction.
+
+---
+
+## 15. Splash متأخر + Install Prompt مزعج (2026-09-27)
+
+**المشكلة 1:** `hidden = true` مبدئياً في Splash → الصفحة تظهر أول، بعدين السبلاش.
+
+**الحل:** `hidden = false` + `useLayoutEffect` (يشتغل قبل paint → يخفي فوراً لو session موجود).
+
+**المشكلة 2:** `beforeinstallprompt` بيتكرر + localStorage مش بيتفحص جواه → الإشعار المزعج.
+
+**الحل:** شيلنا auto-show تماماً. الإشعار يظهر بس لما المستخدم يدوس زر التثبيت في الهيدر.

@@ -222,3 +222,15 @@
     padding: 32px 0;
   }
 }
+
+/* 2026-09-27 — v2: اتزان أفضل (مش centered) */
+.section {
+  align-items: flex-start;
+  padding: 60px 0 40px;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 44px 0 32px;
+  }
+}

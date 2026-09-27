@@ -1,34 +1,34 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import Image from 'next/image'
 import styles from './splash.module.css'
+
+// ═══════════════════════════════════════════════════════════
+// EAH — Splash (ظاهر من أول paint + يخفي نفسه قبل paint تاني)
+// ═══════════════════════════════════════════════════════════
 
 const SESSION_KEY = 'eah-splash-shown'
 
 export default function Splash() {
-  const [mounted, setMounted] = useState(false)
-  const [hidden, setHidden] = useState(true)
+  // يبدأ ظاهر — مش هيبان "بعد" الصفحة
+  const [hidden, setHidden] = useState(false)
   const [fading, setFading] = useState(false)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    // لو ظهر قبل كده في نفس الـ session — متظهرش تاني
+  // useLayoutEffect = قبل paint → لو شفناه قبل كده، نخفيه فوراً
+  useLayoutEffect(() => {
     if (sessionStorage.getItem(SESSION_KEY)) {
-      return
-    }
-    // لو المستخدم مش عايز animations
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced) {
-      sessionStorage.setItem(SESSION_KEY, '1')
+      setHidden(true)
       return
     }
 
-    setHidden(false)
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     sessionStorage.setItem(SESSION_KEY, '1')
+
+    if (reduced) {
+      setHidden(true)
+      return
+    }
 
     const fadeTimer = setTimeout(() => setFading(true), 1100)
     const hideTimer = setTimeout(() => setHidden(true), 1500)
@@ -39,15 +39,11 @@ export default function Splash() {
     }
   }, [])
 
-  if (!mounted || hidden) return null
+  if (hidden) return null
 
   return (
-    <div
-      className={`${styles.splash} ${fading ? styles.fading : ''}`}
-      aria-hidden
-    >
+    <div className={`${styles.splash} ${fading ? styles.fading : ''}`} aria-hidden>
       <div className={styles.glow} />
-
       <div className={styles.crownWrap}>
         <Image
           src="/eah-crown.webp"
@@ -58,7 +54,6 @@ export default function Splash() {
           className={styles.crown}
         />
       </div>
-
       <div className={styles.wordWrap}>
         <Image
           src="/eah-word.webp"
@@ -69,10 +64,7 @@ export default function Splash() {
           className={styles.word}
         />
       </div>
-
-      <div className={styles.slogan}>
-        اللي نفسك فيه ؟
-      </div>
+      <div className={styles.slogan}>اللي نفسك فيه ؟</div>
     </div>
   )
 }

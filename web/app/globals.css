@@ -562,7 +562,7 @@ html {
    ═══════════════════════════════════════════════════════════ */
 
 html:has(main[data-snap='true']) {
-  scroll-snap-type: y proximity;
+  scroll-snap-type: y mandatory;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -92,3 +92,18 @@
 ### Notes
 - `prefers-reduced-motion` → يعطّل snap
 - الهيدر يظهر بعد 80px (بدل 50px)
+
+---
+
+## [v2.1.6] - 2026-09-27 — Splash + Install + Bento Polish
+
+### Fixed
+- **Splash بيظهر متأخر** — بقى ظاهر من أول paint + useLayoutEffect يخفي قبل paint تاني
+- **Install prompt مزعج** — بقى يدوي فقط (من زر الهيدر) — مفيش auto-show
+- Header مبهدل — شيلنا `justify-items: center` (grid-columns كفاية)
+- Scroll-snap مش بيقلب — `y mandatory` بدل `y proximity`
+- Featured Bento في النص — `align-items: flex-start` بدل center
+
+### Changed
+- `splash.tsx` — initial hidden=false + useLayoutEffect
+- `install-prompt.tsx` — إزالة auto-show (30s) — يدوي فقط
