@@ -6,13 +6,14 @@ import {
   MapPinIcon,
   SparklesIcon,
   TargetIcon,
+  SearchIcon,
+  StarIcon,
 } from './icons'
 import styles from './section-badge.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Section Badge
 // شارة موحّدة لكل قسم — لون + أيقونة مميزة
-// المستخدم يعرف القسم من الشارة من غير ما يقرأ التفاصيل
 // ═══════════════════════════════════════════════════════════
 
 export type BadgeVariant =
@@ -22,6 +23,9 @@ export type BadgeVariant =
   | 'nearby'
   | 'new'
   | 'opportunity'
+  | 'discover'
+  | 'search'
+  | 'suggest'
 
 export type BadgeSize = 'sm' | 'md'
 
@@ -42,6 +46,9 @@ const META: Record<BadgeVariant, Meta> = {
   nearby: { label: 'قريب', Icon: MapPinIcon },
   new: { label: 'جديد', Icon: SparklesIcon },
   opportunity: { label: 'فرصة', Icon: TargetIcon },
+  discover: { label: 'اكتشاف', Icon: TargetIcon },
+  search: { label: 'بحث', Icon: SearchIcon },
+  suggest: { label: 'ترشيحاتك', Icon: StarIcon },
 }
 
 export default function SectionBadge({

@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import ExploreSearch from '@/components/explore-search'
-import PageHeader from '@/components/page-header'
+import SecondaryHero from '@/components/secondary-hero'
 import BusinessCard from '@/components/business-card'
+import SectionBadge from '@/components/section-badge'
+import type { BadgeVariant } from '@/components/section-badge'
+import { TargetIcon } from '@/components/icons'
 import {
   getPublishedBusinesses,
   getBusinessesByType,
@@ -53,26 +56,32 @@ export default async function ExplorePage({
 
   let businesses = await getPublishedBusinesses()
   let title = 'اكتشف'
+  let badgeLabel = 'كل الأنشطة'
+  let badgeVariant: BadgeVariant = 'discover'
 
   if (type && VALID_TYPES.includes(type as BusinessType)) {
     businesses = await getBusinessesByType(type as BusinessType, 100)
     title = TYPE_TITLES[type] ?? 'اكتشف'
+    badgeLabel = title
   }
 
   if (suggest) {
     businesses = dailyShuffle(businesses).slice(0, 20)
     title = 'ترشيحات ليك'
+    badgeLabel = 'ترشيحاتك'
+    badgeVariant = 'suggest'
   }
 
   if (q) {
     const results = smartSearch(businesses, q)
     businesses = results.map((r) => r.business)
-    title = `نتائج: "${q}"`
+    title = 'نتائج البحث'
+    badgeLabel = `"${q}"`
+    badgeVariant = 'search'
   } else if (!suggest && !type) {
     businesses = sortByTrust(businesses)
   }
 
-  // ─── Pagination ───
   const totalCount = businesses.length
   const startIdx = (page - 1) * PAGE_SIZE
   const endIdx = startIdx + PAGE_SIZE
@@ -81,11 +90,23 @@ export default async function ExplorePage({
 
   return (
     <main className={styles.page}>
-      <PageHeader title={title} count={totalCount}>
-        <ExploreSearch initialQuery={q} />
-      </PageHeader>
+      <SecondaryHero
+        activeKey="discover"
+        title={title}
+        Icon={TargetIcon}
+        tone="purple"
+        count={totalCount}
+      />
 
       <div className={styles.content}>
+        <div className={styles.searchWrap}>
+          <ExploreSearch initialQuery={q} />
+        </div>
+
+        <div className={styles.badgeRow}>
+          <SectionBadge variant={badgeVariant} label={badgeLabel} size="md" />
+        </div>
+
         {businesses.length > 0 ? (
           <>
             <div className={styles.grid}>
@@ -115,7 +136,9 @@ export default async function ExplorePage({
           </>
         ) : (
           <div className={styles.empty}>
-            <div className={styles.emptyIcon}>🔍</div>
+            <div className={styles.emptyIcon}>
+              <TargetIcon size={44} />
+            </div>
             <h2 className={styles.emptyTitle}>مفيش نتائج</h2>
             <p className={styles.emptyText}>
               جرب تدور بكلمة تانية، أو اكتشف التصنيفات.

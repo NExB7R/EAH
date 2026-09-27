@@ -68,3 +68,24 @@
   color: #F0DDFF;
   border: 1px solid rgba(129, 140, 248, 0.4);
 }
+
+/* ─── Discover — بنفسجي ─── */
+.discover {
+  background: rgba(157, 78, 221, 0.12);
+  color: #C77DFF;
+  border: 1px solid rgba(157, 78, 221, 0.4);
+}
+
+/* ─── Search — ذهبي ─── */
+.search {
+  background: rgba(232, 199, 154, 0.1);
+  color: var(--gold-light);
+  border: 1px solid rgba(232, 199, 154, 0.35);
+}
+
+/* ─── Suggest — بنفسجي فاتح ─── */
+.suggest {
+  background: rgba(224, 184, 255, 0.1);
+  color: #E0B8FF;
+  border: 1px solid rgba(224, 184, 255, 0.35);
+}
