@@ -54,3 +54,19 @@
 - Denormalized counts = قراءة فورية (صفر JOIN وقت العرض)
 - Triggers تحدّث تلقائي (SECURITY DEFINER)
 - الـ migration الحالي: 9 أنشطة عندها عروض
+
+---
+
+## [v2.1.4] - 2026-09-27 — Featured Bento Fix + Fallback
+
+### Fixed
+- Bento grid: `grid-template-areas` بدل `grid-column/row` (كان مش شغّال في RTL)
+- Hero بيكبر صح (2fr × 2 rows على Desktop)
+- الكروت الصغيرة مترتبة صح (s1, s2 / s3, s4)
+
+### Added
+- Fallback جميل بدون صورة: أيقونة النوع كبيرة + توهج بنفسجي/ذهبي
+
+### Notes
+- معظم الأنشطة مفيش عندها cover → الـ fallback هو الأساسي حالياً
+- صفر JS إضافي

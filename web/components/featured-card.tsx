@@ -17,6 +17,7 @@ import {
   WhatsAppIcon,
   StoreIcon,
   GiftIcon,
+  CrownGoldIcon,
 } from './icons'
 import type { Business } from '@/lib/data'
 import styles from './featured-card.module.css'
@@ -47,9 +48,6 @@ const TIER_LABEL: Record<string, string> = {
   new: 'جديد',
 }
 
-// ═══════════════════════════════════════════════════════════
-// Helper: نص مختصر للعروض (1 / 2 / 3+)
-// ═══════════════════════════════════════════════════════════
 function offersText(count: number): string {
   if (count === 0) return ''
   if (count === 1) return 'عرض'
@@ -70,7 +68,6 @@ export default function FeaturedCard({ business, variant, priority }: Props) {
   const typeLabel = typeMeta.label
   const tierLabel = TIER_LABEL[business.trust_tier] ?? business.trust_tier
 
-  // rating: لو فيه تقييمات حقيقية → rating_avg، وإلا trust_score/20
   const hasRealRating = business.rating_count > 0
   const ratingValue = hasRealRating
     ? business.rating_avg.toFixed(1)
@@ -79,6 +76,7 @@ export default function FeaturedCard({ business, variant, priority }: Props) {
     : null
 
   const isHero = variant === 'hero'
+  const hasCover = !!business.cover_image_url
 
   return (
     <Link
@@ -87,9 +85,9 @@ export default function FeaturedCard({ business, variant, priority }: Props) {
       aria-label={business.name}
     >
       <div className={styles.imageWrap}>
-        {business.cover_image_url ? (
+        {hasCover ? (
           <WmImage
-            src={business.cover_image_url}
+            src={business.cover_image_url!}
             alt={business.name}
             fill
             sizes={isHero
@@ -99,14 +97,19 @@ export default function FeaturedCard({ business, variant, priority }: Props) {
             priority={priority}
           />
         ) : (
-          <div className={styles.imageFallback} aria-hidden />
+          <div className={styles.imageFallback} aria-hidden>
+            <div className={styles.fallbackGlow} />
+            <div className={styles.fallbackIcon}>
+              <TypeIcon size={isHero ? 64 : 40} />
+            </div>
+          </div>
         )}
         <div className={styles.imageOverlay} aria-hidden />
 
         <div className={styles.topBadges}>
           {isHero && (
             <span className={styles.badgePremium}>
-              <StarIcon size={11} /> مميز
+              <CrownGoldIcon size={11} /> مميز
             </span>
           )}
           <span

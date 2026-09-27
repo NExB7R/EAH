@@ -178,3 +178,7 @@
 - Migration `2026-09-27-add-business-counts.sql`
 - StoreIcon + GiftIcon
 - Cards: badges فروع + عروض + rating_count
+
+### 2026-09-27 — Featured Bento Fix + Fallback ✅
+- grid-template-areas (bento صحيح)
+- Fallback جميل بدون صور

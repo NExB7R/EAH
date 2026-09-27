@@ -1,15 +1,35 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — Featured Bento (Grid + Bento Layout)
+   EAH — Featured Bento (Premium 2026)
    ═══════════════════════════════════════════════════════════ */
 
-.section { width: 100%; padding: 50px 0; }
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 16px;
+.section {
+  position: relative;
+  width: 100%;
+  padding: 60px 0;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(232,199,154,0.05), transparent 55%),
+    radial-gradient(120% 80% at 50% 100%, rgba(157,78,221,0.08), transparent 55%),
+    linear-gradient(180deg, rgba(10,5,20,0.5), rgba(7,2,13,0.72));
+  border-top: 1px solid rgba(232,199,154,0.12);
+  border-bottom: 1px solid rgba(232,199,154,0.12);
 }
 
+.container {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 22px 26px;
+  border: 1px solid rgba(232,199,154,0.16);
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(20,14,34,0.55), rgba(10,7,20,0.78));
+  box-shadow:
+    0 0 0 1px rgba(157,78,221,0.08),
+    inset 0 1px 0 rgba(232,199,154,0.08),
+    0 20px 60px rgba(0,0,0,0.4),
+    0 0 80px rgba(157,78,221,0.06);
+}
+
+/* ─── Header ─── */
 .header {
   display: flex;
   align-items: center;
@@ -32,14 +52,15 @@
 }
 
 .titleBadge {
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 900;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: var(--radius-full);
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
   color: var(--bg-base);
+  box-shadow: 0 0 14px rgba(232,199,154,0.35);
 }
 
 .viewAll {
@@ -54,27 +75,61 @@
   padding: 8px 14px;
   border-radius: var(--radius-full);
   background: rgba(232,199,154,0.08);
-  border: 1px solid rgba(232,199,154,0.25);
-  transition: all 180ms var(--ease);
+  border: 1px solid rgba(232,199,154,0.28);
+  transition: all 200ms var(--ease);
   flex-shrink: 0;
 }
 
 .viewAll:hover {
-  background: rgba(232,199,154,0.15);
-  border-color: rgba(232,199,154,0.5);
+  background: rgba(232,199,154,0.16);
+  border-color: rgba(232,199,154,0.55);
+  transform: translateY(-1px);
 }
 
-.neonLine {
-  height: 1px;
-  width: 100%;
-  margin-bottom: 24px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(232,199,154,0.3) 20%,
-    var(--gold-primary) 50%,
-    rgba(232,199,154,0.3) 80%,
-    transparent 100%);
+/* ─── Timer Row (Progress + Next) ─── */
+.timerRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.progressLine {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  background: rgba(232,199,154,0.1);
   border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--gold-primary), var(--gold-light));
+  box-shadow: 0 0 10px rgba(232,199,154,0.6);
+  animation: eahFeaturedProgress 10s linear forwards;
+}
+
+@keyframes eahFeaturedProgress {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+.nextChip {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: rgba(232,199,154,0.06);
+  border: 1px solid rgba(232,199,154,0.22);
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ─── Grid (Mobile-first) ─── */
@@ -84,37 +139,67 @@
   grid-template-columns: 1fr 1fr;
 }
 
-.heroSlot { grid-column: 1 / -1; min-height: 320px; }
+.heroSlot {
+  grid-column: 1 / -1;
+  min-height: 340px;
+  animation: eahHeroFade 500ms var(--ease-out);
+}
+
 .smallSlot { min-height: 200px; }
+
+@keyframes eahHeroFade {
+  from { opacity: 0.35; transform: translateY(6px); }
+  to   { opacity: 1;    transform: translateY(0); }
+}
 
 /* ─── Tablet ─── */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .grid { grid-template-columns: 1fr 1fr; }
-  .heroSlot { grid-column: 1 / -1; min-height: 340px; }
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "hero hero"
+      "s1   s2"
+      "s3   s4";
+  }
+  .heroSlot { grid-area: hero; min-height: 380px; }
+  .smallSlot:nth-child(2) { grid-area: s1; }
+  .smallSlot:nth-child(3) { grid-area: s2; }
+  .smallSlot:nth-child(4) { grid-area: s3; }
+  .smallSlot:nth-child(5) { grid-area: s4; }
 }
 
-/* ─── Desktop: Bento حقيقي ─── */
+/* ─── Desktop: Bento حقيقي (grid-areas) ─── */
 @media (min-width: 1024px) {
   .grid {
     grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: repeat(2, minmax(220px, 1fr));
+    grid-template-rows: repeat(2, minmax(240px, 1fr));
+    grid-template-areas:
+      "hero s1 s2"
+      "hero s3 s4";
   }
   .heroSlot {
-    grid-column: 1;
-    grid-row: 1 / span 2;
+    grid-area: hero;
     min-height: 0;
   }
   .smallSlot { min-height: 0; }
+  .smallSlot:nth-child(2) { grid-area: s1; }
+  .smallSlot:nth-child(3) { grid-area: s2; }
+  .smallSlot:nth-child(4) { grid-area: s3; }
+  .smallSlot:nth-child(5) { grid-area: s4; }
 }
 
 /* ─── Mobile صغير ─── */
 @media (max-width: 480px) {
-  .section { padding: 36px 0; }
-  .container { padding: 0 12px; }
+  .section { padding: 40px 0; }
+  .container { padding: 22px 14px 20px; border-radius: 18px; }
   .grid { gap: 10px; }
+  .heroSlot { min-height: 300px; }
+  .nextChip { max-width: 130px; }
 }
 
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .viewAll { transition: none; }
+  .heroSlot { animation: none; }
+  .progressFill { animation-duration: 10s; }
 }
