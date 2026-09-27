@@ -35,18 +35,20 @@ export default function SectionPage({
       />
 
       <section className={styles.section}>
-        {businesses.length === 0 ? (
-          <div className={styles.empty}>
-            <p>لسه مفيش أنشطة هنا</p>
-            <p className={styles.emptyHint}>هنضيف قريب إن شاء الله</p>
-          </div>
-        ) : (
-          <div className={styles.grid}>
-            {businesses.map((b) => (
-              <FeaturedCard key={b.id} business={b} variant="small" />
-            ))}
-          </div>
-        )}
+        <div className={`${styles.frame} ${styles[tone]}`}>
+          {businesses.length === 0 ? (
+            <div className={styles.empty}>
+              <p>لسه مفيش أنشطة هنا</p>
+              <p className={styles.emptyHint}>هنضيف قريب إن شاء الله</p>
+            </div>
+          ) : (
+            <div className={styles.grid}>
+              {businesses.map((b) => (
+                <FeaturedCard key={b.id} business={b} variant="small" />
+              ))}
+            </div>
+          )}
+        </div>
       </section>
     </main>
   )
