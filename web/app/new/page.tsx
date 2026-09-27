@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import { getNewBusinesses } from '@/lib/data'
 import { LampIcon } from '@/components/icons'
-import SecondaryHero from '@/components/secondary-hero'
-import HeroGrid from '@/components/hero-grid'
-import SectionWrapper from '@/components/section-wrapper'
+import SectionLayout from '@/components/section-layout'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,20 +11,17 @@ export const metadata: Metadata = {
 }
 
 export default async function NewPage() {
-  const businesses = await getNewBusinesses(100)
+  const businesses = await getNewBusinesses(200)
 
   return (
-    <main style={{ minHeight: '100vh', paddingBottom: '80px' }}>
-      <SecondaryHero
-        activeKey="new"
-        title="الجديد"
-        Icon={LampIcon}
-        tone="pink"
-        count={businesses.length}
-      />
-      <SectionWrapper tone="pink">
-        <HeroGrid businesses={businesses} variant="new" />
-      </SectionWrapper>
-    </main>
+    <SectionLayout
+      activeKey="new"
+      title="الجديد"
+      Icon={LampIcon}
+      tone="pink"
+      badgeVariant="new"
+      badgeLabel="وصل حديثاً"
+      businesses={businesses}
+    />
   )
 }

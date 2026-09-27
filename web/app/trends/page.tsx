@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import { getTrendingBusinesses } from '@/lib/data'
 import { TrendingUpIcon } from '@/components/icons'
-import SecondaryHero from '@/components/secondary-hero'
-import EditorialList from '@/components/editorial-list'
-import SectionWrapper from '@/components/section-wrapper'
+import SectionLayout from '@/components/section-layout'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,20 +11,17 @@ export const metadata: Metadata = {
 }
 
 export default async function TrendsPage() {
-  const businesses = await getTrendingBusinesses(100)
+  const businesses = await getTrendingBusinesses(200)
 
   return (
-    <main style={{ minHeight: '100vh', paddingBottom: '80px' }}>
-      <SecondaryHero
-        activeKey="trends"
-        title="الترند"
-        Icon={TrendingUpIcon}
-        tone="orange"
-        count={businesses.length}
-      />
-      <SectionWrapper tone="orange">
-        <EditorialList businesses={businesses} variant="trend" />
-      </SectionWrapper>
-    </main>
+    <SectionLayout
+      activeKey="trends"
+      title="الترند"
+      Icon={TrendingUpIcon}
+      tone="orange"
+      badgeVariant="trending"
+      badgeLabel="الأكثر تفاعلاً"
+      businesses={businesses}
+    />
   )
 }
