@@ -173,3 +173,8 @@
 | `components/featured-bento.tsx` + `.module.css` | ✅ إعادة كتابة |
 | `app/featured/page.tsx` + `featured-showcase.tsx` + `featured.module.css` | ✅ جديد |
 | `app/page.tsx` ⚠️ | ✅ تعديل (SACRED) |
+
+### 2026-09-27 — Business Counts + Card Badges ✅
+- Migration `2026-09-27-add-business-counts.sql`
+- StoreIcon + GiftIcon
+- Cards: badges فروع + عروض + rating_count

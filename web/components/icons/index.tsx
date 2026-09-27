@@ -567,3 +567,54 @@ export function ShieldCheckIcon({ size = 20, className }: IconProps) {
     </svg>
   )
 }
+
+
+// ═══════════════════════════════════════════════════════════
+// StoreIcon — للفروع
+// ═══════════════════════════════════════════════════════════
+export function StoreIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M3 9l1.5-6h15L21 9" />
+      <path d="M3 9h18v10a1 1 0 01-1 1H4a1 1 0 01-1-1V9z" />
+      <path d="M9 22V12h6v10" />
+    </svg>
+  )
+}
+
+// ═══════════════════════════════════════════════════════════
+// GiftIcon — للعروض
+// ═══════════════════════════════════════════════════════════
+export function GiftIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <rect x="3" y="8" width="18" height="4" rx="1" />
+      <path d="M5 12v8a1 1 0 001 1h12a1 1 0 001-1v-8" />
+      <path d="M12 8v13" />
+      <path d="M12 8s-1.5-5-4.5-5a2.5 2.5 0 000 5H12z" />
+      <path d="M12 8s1.5-5 4.5-5a2.5 2.5 0 010 5H12z" />
+    </svg>
+  )
+}

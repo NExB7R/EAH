@@ -47,6 +47,10 @@ export type Business = {
   response_time_avg_seconds: number | null
   response_rate: number | null
   last_activity_at: string | null
+  branches_count: number
+  offers_count: number
+  rating_avg: number
+  rating_count: number
   created_at: string
   updated_at: string
 }
@@ -102,7 +106,8 @@ const BUSINESS_COLUMNS = `
   featured_order, featured_until, featured_pin,
   new_until, working_hours, accepts_whatsapp_orders,
   response_time_avg_seconds, response_rate,
-  last_activity_at, created_at, updated_at
+  last_activity_at, created_at, updated_at,
+  branches_count, offers_count, rating_avg, rating_count
 `
 
 // ═══════════════════════════════════════════════════════════

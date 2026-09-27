@@ -259,3 +259,24 @@
   .card:hover .image { transform: none; }
   .card:hover { transform: none; }
 }
+
+/* ─── Chip جديد: العروض (بنفسجي ناعم) ─── */
+.chipOffers {
+  color: #E0B8FF;
+  background: rgba(168,85,247,0.12);
+  border-color: rgba(168,85,247,0.4);
+}
+
+/* ─── رقم التقييم الصغير ─── */
+.chipCount {
+  font-size: 0.6rem;
+  opacity: 0.75;
+  margin-inline-start: 1px;
+}
+
+/* ─── Small: نخفي العروض/الفروع في الكارت الصغير (توفير مساحة) ─── */
+@media (max-width: 640px) {
+  .small .chip:has(svg[aria-hidden]) {
+    /* يفضل يبان — بس الحجم صغير */
+  }
+}

@@ -15,13 +15,14 @@ import {
   CheckCircleIcon,
   AlertIcon,
   WhatsAppIcon,
+  StoreIcon,
+  GiftIcon,
 } from './icons'
 import type { Business } from '@/lib/data'
 import styles from './featured-card.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Featured Card (Hero + Small)
-// كل حاجة badges صغيرة — خفيف وسريع
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -46,13 +47,34 @@ const TIER_LABEL: Record<string, string> = {
   new: 'جديد',
 }
 
+// ═══════════════════════════════════════════════════════════
+// Helper: نص مختصر للعروض (1 / 2 / 3+)
+// ═══════════════════════════════════════════════════════════
+function offersText(count: number): string {
+  if (count === 0) return ''
+  if (count === 1) return 'عرض'
+  if (count === 2) return 'عرضين'
+  return `${count} عروض`
+}
+
+function branchesText(count: number): string {
+  if (count === 0) return ''
+  if (count === 1) return 'فرع'
+  if (count === 2) return 'فرعين'
+  return `${count} فروع`
+}
+
 export default function FeaturedCard({ business, variant, priority }: Props) {
   const typeMeta = TYPE_META[business.business_type] ?? TYPE_META.misc!
   const TypeIcon = typeMeta.Icon
   const typeLabel = typeMeta.label
   const tierLabel = TIER_LABEL[business.trust_tier] ?? business.trust_tier
 
-  const rating = business.trust_score
+  // rating: لو فيه تقييمات حقيقية → rating_avg، وإلا trust_score/20
+  const hasRealRating = business.rating_count > 0
+  const ratingValue = hasRealRating
+    ? business.rating_avg.toFixed(1)
+    : business.trust_score
     ? (business.trust_score / 20).toFixed(1)
     : null
 
@@ -116,10 +138,13 @@ export default function FeaturedCard({ business, variant, priority }: Props) {
             </span>
           )}
 
-          {rating && (
+          {ratingValue && (
             <span className={`${styles.chip} ${styles.chipGold}`}>
               <StarIcon size={12} />
-              {rating}
+              {ratingValue}
+              {hasRealRating && (
+                <span className={styles.chipCount}>({business.rating_count})</span>
+              )}
             </span>
           )}
 
@@ -127,6 +152,20 @@ export default function FeaturedCard({ business, variant, priority }: Props) {
             <span className={`${styles.chip} ${styles.chipTrust}`}>
               <ShieldCheckIcon size={12} />
               {tierLabel}
+            </span>
+          )}
+
+          {business.branches_count > 0 && (
+            <span className={styles.chip}>
+              <StoreIcon size={12} />
+              {branchesText(business.branches_count)}
+            </span>
+          )}
+
+          {business.offers_count > 0 && (
+            <span className={`${styles.chip} ${styles.chipOffers}`}>
+              <GiftIcon size={12} />
+              {offersText(business.offers_count)}
             </span>
           )}
 

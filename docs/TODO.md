@@ -248,3 +248,7 @@
 - [ ] `rating_avg` + `rating_count` (بدل trust_score/20)
 - [ ] `category` (تصنيف المطعم: بيتزا، مشويات...)
 - [ ] Badges إضافية: 🏢 فروع + 🎁 عروض + 🍕 تصنيف
+
+### ✅ خلص (2026-09-27)
+- [x] branches_count + offers_count + rating_avg + rating_count
+- [x] Badges في الكارد للفروع + العروض
