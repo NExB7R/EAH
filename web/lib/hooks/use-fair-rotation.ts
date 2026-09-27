@@ -3,13 +3,12 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 // EAH — useFairRotation
-// عدالة عشوائية موحّدة لكل الأقسام
+// عدالة عشوائية + Pagination كاملة
 // - Fisher-Yates Shuffle (عشوائي عادل)
 // - لا تكرار قبل ظهور الكل
 // - sessionStorage (كل جلسة = ترتيب جديد)
 // - يتوقف: خارج الشاشة / Hover / Tab مخفي
-// - SSR-safe
-// - Manual next / prev
+// - يدعم: next / prev / goToPage / currentPage / totalPages
 
 type PageSizes = { mobile: number; tablet: number; desktop: number }
 type Breakpoints = { tablet: number; desktop: number }
@@ -31,8 +30,10 @@ type Result<T> = {
   setPaused: (v: boolean) => void
   next: () => void
   prev: () => void
+  goToPage: (n: number) => void
+  currentPage: number
+  totalPages: number
   pageSize: number
-  total: number
 }
 
 const DEFAULT_BP: Breakpoints = { tablet: 640, desktop: 1024 }
@@ -82,6 +83,8 @@ export function useFairRotation<T extends { id: string }>({
   const [inView, setInView] = useState(true)
   const [reduced, setReduced] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
 
   const containerRef = useRef<HTMLElement | null>(null)
   const orderRef = useRef<T[]>([])
@@ -92,19 +95,28 @@ export function useFairRotation<T extends { id: string }>({
   itemsRef.current = items
   pageSizeRef.current = pageSize
 
-  const persist = useCallback(() => {
+  const computeTotal = useCallback((orderLen: number, size: number) => {
+    return Math.max(1, Math.ceil(orderLen / size))
+  }, [])
+
+  const applyCursor = useCallback((cursor: number) => {
+    const size = pageSizeRef.current
+    const page = Math.floor(cursor / size)
+    setVisible(sliceVisible(orderRef.current, cursor, size))
+    setCurrentPage(page)
+    setTotalPages(computeTotal(orderRef.current.length, size))
     try {
       sessionStorage.setItem(
         storageKey,
         JSON.stringify({
           ids: orderRef.current.map((b) => b.id),
-          cursor: cursorRef.current,
+          cursor,
         }),
       )
     } catch {
       // storage full — ignore
     }
-  }, [storageKey])
+  }, [storageKey, computeTotal])
 
   const next = useCallback(() => {
     const order = orderRef.current
@@ -117,9 +129,8 @@ export function useFairRotation<T extends { id: string }>({
     } else {
       cursorRef.current = nextCursor
     }
-    setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
-    persist()
-  }, [persist])
+    applyCursor(cursorRef.current)
+  }, [applyCursor])
 
   const prev = useCallback(() => {
     const order = orderRef.current
@@ -127,13 +138,23 @@ export function useFairRotation<T extends { id: string }>({
     const size = pageSizeRef.current
     const prevCursor = cursorRef.current - size
     if (prevCursor < 0) {
-      cursorRef.current = Math.max(0, Math.floor((order.length - 1) / size) * size)
+      const total = computeTotal(order.length, size)
+      cursorRef.current = (total - 1) * size
     } else {
       cursorRef.current = prevCursor
     }
-    setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
-    persist()
-  }, [persist])
+    applyCursor(cursorRef.current)
+  }, [applyCursor, computeTotal])
+
+  const goToPage = useCallback((n: number) => {
+    const order = orderRef.current
+    if (order.length === 0) return
+    const size = pageSizeRef.current
+    const total = computeTotal(order.length, size)
+    const page = Math.max(0, Math.min(n, total - 1))
+    cursorRef.current = page * size
+    applyCursor(cursorRef.current)
+  }, [applyCursor, computeTotal])
 
   useLayoutEffect(() => {
     const calc = () => {
@@ -180,7 +201,7 @@ export function useFairRotation<T extends { id: string }>({
     orderRef.current = nextOrder
     cursorRef.current = nextCursor
     setMounted(true)
-    setVisible(sliceVisible(nextOrder, nextCursor, pageSize))
+    applyCursor(nextCursor)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemsKey, storageKey, disabled])
 
@@ -214,8 +235,8 @@ export function useFairRotation<T extends { id: string }>({
 
   useEffect(() => {
     if (!mounted) return
-    setVisible(sliceVisible(orderRef.current, cursorRef.current, pageSize))
-  }, [pageSize, mounted])
+    applyCursor(cursorRef.current)
+  }, [pageSize, mounted, applyCursor])
 
   return {
     visible,
@@ -224,7 +245,9 @@ export function useFairRotation<T extends { id: string }>({
     setPaused,
     next,
     prev,
+    goToPage,
+    currentPage,
+    totalPages,
     pageSize,
-    total: orderRef.current.length,
   }
 }
