@@ -5,6 +5,7 @@ import type { Business } from '@/lib/data'
 import FeaturedCard from './featured-card'
 import { CrownGoldIcon, ArrowLeftIcon } from './icons'
 import { useFairRotation } from '@/lib/hooks/use-fair-rotation'
+import SectionBadge from './section-badge'
 import styles from './featured-bento.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -47,7 +48,7 @@ export default function FeaturedBento({ businesses }: Props) {
               <CrownGoldIcon size={22} />
             </span>
             <h2 className={styles.title}>المميزون</h2>
-            <span className={styles.titleBadge}>Premium 2026</span>
+            <SectionBadge variant="featured" label="Premium 2026" />
           </div>
 
           <Link href="/featured" className={styles.viewAll}>

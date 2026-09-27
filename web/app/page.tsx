@@ -1,9 +1,12 @@
 import HomeHero from '@/components/home-hero'
+import DiscoveryCta from '@/components/discovery-cta'
 import FeaturedBento from '@/components/featured-bento'
 import TrendingList from '@/components/trending-list'
 import OffersStrip from '@/components/offers-strip'
+import NearbyCta from '@/components/nearby-cta'
 import NearbyGrid from '@/components/nearby-grid'
 import NewGrid from '@/components/new-grid'
+import SuggestedCta from '@/components/suggested-cta'
 import {
   getFeaturedBusinesses,
   getTopBusinesses,
@@ -43,11 +46,14 @@ export default async function Home() {
   return (
     <main>
       <HomeHero />
+      <DiscoveryCta />
       <FeaturedBento businesses={all} />
       <TrendingList businesses={trending.length > 0 ? trending : trendList} />
       <OffersStrip offers={offers} />
-      <NearbyGrid businesses={nearby} area="شبين القناطر" />
+      <NearbyCta />
+      <NearbyGrid businesses={nearby} />
       <NewGrid businesses={newOnes} />
+      <SuggestedCta />
     </main>
   )
 }

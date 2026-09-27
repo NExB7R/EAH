@@ -13,6 +13,7 @@ import {
   ShieldCheckIcon,
 } from './icons'
 import type { Business } from '@/lib/data'
+import SectionBadge from './section-badge'
 import styles from './trending-list.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -63,7 +64,7 @@ export default function TrendingList({ businesses, limit = 10 }: Props) {
               <TrendingUpIcon size={22} />
             </span>
             <h2 className={styles.title}>الترند</h2>
-            <span className={styles.titleBadge}>Hot</span>
+            <SectionBadge variant="trending" />
           </div>
 
           <Link href="/trends" className={styles.viewAll}>

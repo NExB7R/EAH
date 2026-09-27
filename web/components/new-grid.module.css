@@ -48,17 +48,6 @@
   line-height: 1.2;
 }
 
-.titleBadge {
-  font-size: 0.56rem;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  background: linear-gradient(135deg, #A855F7, #C77DFF);
-  color: var(--bg-base);
-  box-shadow: 0 0 14px rgba(199,125,255,0.5);
-}
 
 .viewAll {
   display: inline-flex;

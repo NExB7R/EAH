@@ -12,6 +12,7 @@ import {
   SparklesIcon,
 } from './icons'
 import type { Business } from '@/lib/data'
+import SectionBadge from './section-badge'
 import styles from './nearby-grid.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -22,7 +23,6 @@ import styles from './nearby-grid.module.css'
 
 type Props = {
   businesses: Business[]
-  area?: string
 }
 
 type TypeMeta = { label: string; Icon: typeof UtensilsIcon }
@@ -35,7 +35,7 @@ const TYPE_META: Record<string, TypeMeta> = {
   misc: { label: 'أنشطة', Icon: SparklesIcon },
 }
 
-export default function NearbyGrid({ businesses, area }: Props) {
+export default function NearbyGrid({ businesses }: Props) {
   if (businesses.length === 0) return null
 
   return (
@@ -47,7 +47,7 @@ export default function NearbyGrid({ businesses, area }: Props) {
               <NavigationIcon size={22} />
             </span>
             <h2 className={styles.title}>قريب منك</h2>
-            {area && <span className={styles.titleBadge}>{area}</span>}
+            <SectionBadge variant="nearby" />
           </div>
 
           <Link href="/nearby" className={styles.viewAll}>

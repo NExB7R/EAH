@@ -6,6 +6,7 @@ import {
   MapPinIcon,
 } from './icons'
 import type { Offer } from '@/lib/data'
+import SectionBadge from './section-badge'
 import styles from './offers-strip.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -31,7 +32,7 @@ export default function OffersStrip({ offers }: Props) {
               <TagIcon size={22} />
             </span>
             <h2 className={styles.title}>العروض</h2>
-            <span className={styles.titleBadge}>Offers</span>
+            <SectionBadge variant="offers" />
           </div>
 
           <Link href="/offers" className={styles.viewAll}>

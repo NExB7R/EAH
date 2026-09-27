@@ -12,6 +12,7 @@ import {
   SparklesIcon,
 } from './icons'
 import type { Business } from '@/lib/data'
+import SectionBadge from './section-badge'
 import styles from './new-grid.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -46,7 +47,7 @@ export default function NewGrid({ businesses }: Props) {
               <SparkleStarIcon size={22} />
             </span>
             <h2 className={styles.title}>الجديد</h2>
-            <span className={styles.titleBadge}>New</span>
+            <SectionBadge variant="new" />
           </div>
 
           <Link href="/new" className={styles.viewAll}>
