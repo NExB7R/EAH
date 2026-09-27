@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import '@fontsource-variable/cairo'
+import '@fontsource/great-vibes'
 import '@fontsource/tajawal/700.css'
 import '@fontsource/tajawal/800.css'
 import '@fontsource/tajawal/900.css'

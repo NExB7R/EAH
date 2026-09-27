@@ -1,133 +1,55 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — Signature Badge (Gold + Crown)
+   EAH — Signature (SVG handwritten gold neon)
    ═══════════════════════════════════════════════════════════ */
 
 .wrap {
-  position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 32px 40px 22px;
-  border-radius: 22px;
-  background: linear-gradient(160deg, rgba(20,14,34,0.75), rgba(10,7,20,0.9));
-  border: 1.5px solid rgba(232,199,154,0.38);
-  box-shadow:
-    0 0 0 1px rgba(232,199,154,0.08),
-    0 0 30px rgba(232,199,154,0.14),
-    0 0 60px rgba(168,85,247,0.08),
-    inset 0 1px 0 rgba(232,199,154,0.12);
-  overflow: visible;
-  max-width: 380px;
+  justify-content: center;
+  width: 100%;
 }
 
 .plate {
-  position: absolute;
-  top: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 44px;
-  height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: linear-gradient(160deg, rgba(20,14,34,0.95), rgba(10,7,20,0.95));
-  border: 1.5px solid rgba(232,199,154,0.55);
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  padding: 8px 12px;
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(20,14,34,0.5), rgba(10,7,20,0.75));
+  border: 1px solid rgba(232,199,154,0.22);
   box-shadow:
-    0 0 0 4px rgba(20,14,34,0.95),
-    0 0 18px rgba(232,199,154,0.4),
-    0 0 32px rgba(232,199,154,0.18);
-  z-index: 2;
+    0 0 0 1px rgba(232,199,154,0.04),
+    0 0 26px rgba(232,199,154,0.08);
+  transition: box-shadow 380ms var(--ease-out),
+              border-color 380ms var(--ease-out);
 }
 
-.crown {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--gold-light);
-  filter: drop-shadow(0 0 6px rgba(232,199,154,0.7));
-  animation: crownGlow 3s ease-in-out infinite;
+.plate:hover {
+  border-color: rgba(232,199,154,0.5);
+  box-shadow:
+    0 0 0 1px rgba(232,199,154,0.12),
+    0 0 34px rgba(232,199,154,0.28),
+    0 0 60px rgba(232,199,154,0.14);
 }
 
-.glow {
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(232,199,154,0.35), transparent 70%);
-  opacity: 0.8;
-  pointer-events: none;
+.svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-@keyframes crownGlow {
-  0%, 100% {
-    filter: drop-shadow(0 0 6px rgba(232,199,154,0.6));
-  }
-  50% {
-    filter: drop-shadow(0 0 12px rgba(232,199,154,1))
-            drop-shadow(0 0 20px rgba(232,199,154,0.5));
-  }
-}
-
-.name {
-  font-family:
-    'Snell Roundhand',
-    'Apple Chancery',
-    'Segoe Script',
-    'Brush Script MT',
-    'Lucida Handwriting',
-    cursive;
-  font-size: 2.4rem;
+.text {
   font-style: italic;
-  font-weight: 400;
-  color: var(--gold-light);
-  letter-spacing: -0.008em;
-  line-height: 1.1;
-  transform: rotate(-3deg);
-  display: inline-block;
-  margin: 14px 0 4px;
-  transition:
-    text-shadow 320ms var(--ease-out),
-    color 320ms var(--ease-out),
-    transform 320ms var(--ease-out),
-    filter 320ms var(--ease-out);
-  cursor: default;
-  user-select: none;
-  font-variant-ligatures: common-ligatures discretionary-ligatures contextual;
-  font-feature-settings: "liga" 1, "dlig" 1, "calt" 1, "swsh" 1;
-  filter: drop-shadow(0 1px 2px rgba(232,199,154,0.25));
+  letter-spacing: 0.005em;
 }
 
-.name:hover {
-  color: #FFF5DE;
-  transform: rotate(-3deg) scale(1.05);
-  text-shadow:
-    0 0 14px rgba(232,199,154,0.9),
-    0 0 32px rgba(232,199,154,0.55),
-    0 0 60px rgba(232,199,154,0.3);
-  filter: drop-shadow(0 2px 8px rgba(232,199,154,0.5));
-}
-
-.role {
-  font-family: var(--font-body);
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--gold-primary);
-  opacity: 0.65;
+.plate:hover .svg {
+  filter: drop-shadow(0 0 10px rgba(232,199,154,0.35));
 }
 
 @media (max-width: 640px) {
-  .wrap { padding: 28px 26px 18px; max-width: 300px; }
-  .plate { width: 38px; height: 38px; top: -19px; }
-  .plate svg { width: 18px; height: 18px; }
-  .name { font-size: 1.9rem; margin-top: 12px; }
-  .role { font-size: 0.58rem; letter-spacing: 0.2em; }
+  .plate { max-width: 320px; padding: 6px 10px; border-radius: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .name { transition: none; }
-  .name:hover { transform: rotate(-3deg); }
-  .crown { animation: none; }
+  .plate { transition: none; }
 }

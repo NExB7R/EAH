@@ -6,7 +6,7 @@ import type { SectionTone } from './section-title'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Secondary Hero
-// PageHeader (لوجو + خط) + SectionNav + SectionTitle
+// PageHeader (لوجو + خط) + SectionNav (اختياري) + SectionTitle
 // ═══════════════════════════════════════════════════════════
 
 type IconComp = ComponentType<{ size?: number; className?: string }>
@@ -17,6 +17,7 @@ type Props = {
   count?: number
   Icon?: IconComp
   tone?: SectionTone
+  showNav?: boolean
   children?: ReactNode
 }
 
@@ -26,6 +27,7 @@ export default function SecondaryHero({
   count,
   Icon,
   tone = 'gold',
+  showNav = true,
   children,
 }: Props) {
   return (
@@ -34,7 +36,7 @@ export default function SecondaryHero({
         {children}
       </PageHeader>
 
-      <SectionNav activeKey={activeKey} />
+      {showNav && <SectionNav activeKey={activeKey} />}
 
       {title && Icon && (
         <SectionTitle label={title} Icon={Icon} tone={tone} count={count} />

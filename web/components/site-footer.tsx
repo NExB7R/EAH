@@ -36,7 +36,7 @@ const CONTACTS = {
 const COLUMNS = [
   {
     key: 'discover',
-    title: 'اكتشف',
+    title: 'للعملاء',
     Icon: TargetIcon,
     links: [
       { href: '/', label: 'الرئيسية', Icon: TargetIcon },
@@ -87,7 +87,7 @@ export default function SiteFooter() {
 
       {/* ─── Secondary Hero ─── */}
       <div className={styles.heroWrap}>
-        <SecondaryHero activeKey="discover" />
+        <SecondaryHero showNav={false} />
       </div>
 
       <div className={styles.container}>
