@@ -8,6 +8,7 @@ import FloatingCapsule from '@/components/floating-capsule'
 import InstallPrompt from '@/components/install-prompt'
 import ReviewReminder from '@/components/review-reminder'
 import SignupPrompt from '@/components/signup-prompt'
+import ScrollToTop from '@/components/scroll-to-top'
 import { getUserSession } from '@/lib/data/user'
 import './globals.css'
 
@@ -40,6 +41,7 @@ export default async function RootLayout({
         <InstallPrompt />
         <ReviewReminder />
         {!session && <SignupPrompt />}
+        <ScrollToTop />
       </body>
     </html>
   )
