@@ -68,3 +68,38 @@ export async function getPendingBusinesses(limit = 50): Promise<PendingBusiness[
 
   return (data ?? []) as unknown as PendingBusiness[]
 }
+
+// ═══════════════════════════════════════════════════════════
+// Admin — Recent activity (last 24h)
+// ═══════════════════════════════════════════════════════════
+
+export type AdminRecent = {
+  newBusinesses: number
+  newUsers: number
+  newOrders: number
+  newReviews: number
+}
+
+export async function getAdminRecent(): Promise<AdminRecent> {
+  const supabase = await createClient()
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+
+  const [
+    { count: newBusinesses },
+    { count: newUsers },
+    { count: newOrders },
+    { count: newReviews },
+  ] = await Promise.all([
+    supabase.from('businesses').select('*', { count: 'exact', head: true }).gte('created_at', since),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', since),
+    supabase.from('order_requests').select('*', { count: 'exact', head: true }).gte('created_at', since),
+    supabase.from('business_reviews').select('*', { count: 'exact', head: true }).gte('created_at', since),
+  ])
+
+  return {
+    newBusinesses: newBusinesses ?? 0,
+    newUsers: newUsers ?? 0,
+    newOrders: newOrders ?? 0,
+    newReviews: newReviews ?? 0,
+  }
+}

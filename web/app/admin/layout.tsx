@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation'
 import SecondaryHero from '@/components/secondary-hero'
+import AdminSidebar from '@/components/admin-sidebar'
 import { ShieldCheckIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
+import { createClient } from '@/lib/supabase/server'
 import styles from './admin.module.css'
 
 export default async function AdminLayout({
@@ -12,20 +14,42 @@ export default async function AdminLayout({
   const session = await getUserSession()
 
   if (!session) redirect('/auth?next=/admin')
-  if (session.role !== 'admin' && session.role !== 'super_admin') {
-    redirect('/')
-  }
+  if (session.role !== 'admin' && session.role !== 'super_admin') redirect('/')
+
+  // Badges
+  const supabase = await createClient()
+  const [
+    { count: pendingBusinesses },
+    { count: flaggedReviews },
+    { count: openReports },
+    { count: pendingSubscriptions },
+  ] = await Promise.all([
+    supabase.from('businesses').select('*', { count: 'exact', head: true }).eq('is_published', false),
+    supabase.from('business_reviews').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('reports').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('business_subscriptions').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+  ])
 
   return (
     <main className={styles.page}>
       <SecondaryHero
         activeKey="admin"
-        title="لوحة الأدمن"
+        title="لوحة التحكم"
         Icon={ShieldCheckIcon}
         tone="purple"
         showNav={false}
       />
-      <div className={styles.wrap}>{children}</div>
+      <div className={styles.wrap}>
+        <AdminSidebar
+          counts={{
+            pendingBusinesses: pendingBusinesses ?? 0,
+            flaggedReviews: flaggedReviews ?? 0,
+            openReports: openReports ?? 0,
+            pendingSubscriptions: pendingSubscriptions ?? 0,
+          }}
+        />
+        <div className={styles.content}>{children}</div>
+      </div>
     </main>
   )
 }

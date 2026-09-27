@@ -2,11 +2,24 @@
   min-height: 100vh;
   padding-bottom: 80px;
 }
+
 .wrap {
-  max-width: 1240px;
+  max-width: 1320px;
   margin: 24px auto 0;
   padding: 0 24px;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
 }
-@media (max-width: 640px) {
-  .wrap { padding: 0 16px; }
+
+.content { min-width: 0; }
+
+@media (max-width: 1024px) {
+  .wrap {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+    margin-top: 16px;
+    gap: 12px;
+  }
 }
