@@ -4,8 +4,18 @@ import {
   getFeaturedBusinesses,
   getTopBusinesses,
 } from '@/lib/data'
-import { dailyShuffle } from '@/lib/ranking'
+import { getRotationStart } from '@/lib/featured-rotation'
 import type { Business } from '@/lib/data'
+
+// ═══════════════════════════════════════════════════════════
+// EAH — Home
+// ═══════════════════════════════════════════════════════════
+//
+// ملاحظة (2026-09-27):
+//   شلنا dailyShuffle من المميزين — كان بيكسر العدالة.
+//   الآن: دوران عادل (Round-Robin) جوه FeaturedBento.
+//   راجع LESSONS.md §13.
+// ═══════════════════════════════════════════════════════════
 
 export const dynamic = 'force-dynamic'
 
@@ -26,13 +36,13 @@ export default async function Home() {
     if (all.length >= 15) break
   }
 
-  // shuffle على الـ server (ثابت في نفس اليوم → بدون hydration mismatch)
-  const shuffled = dailyShuffle(all)
+  // نقطة البداية للدوران العادل (نفسها server/client → بدون hydration mismatch)
+  const start = getRotationStart(all.length)
 
   return (
     <main>
       <HomeHero />
-      <FeaturedBento businesses={shuffled} />
+      <FeaturedBento businesses={all} initialStart={start} />
     </main>
   )
 }

@@ -161,3 +161,15 @@
 ---
 
 آخر تحديث: 2026-09-27
+
+---
+
+## 2026-09-27 — Featured Redesign ✅
+
+| الملف | الحالة |
+|------|--------|
+| `lib/featured-rotation.ts` | ✅ جديد |
+| `components/featured-card.tsx` + `.module.css` | ✅ جديد |
+| `components/featured-bento.tsx` + `.module.css` | ✅ إعادة كتابة |
+| `app/featured/page.tsx` + `featured-showcase.tsx` + `featured.module.css` | ✅ جديد |
+| `app/page.tsx` ⚠️ | ✅ تعديل (SACRED) |

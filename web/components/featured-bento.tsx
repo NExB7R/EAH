@@ -2,47 +2,43 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import type { Business } from '@/lib/data/businesses'
-import BusinessCard from './business-card'
+import type { Business } from '@/lib/data'
+import FeaturedCard from './featured-card'
 import { CrownGoldIcon, ArrowLeftIcon } from './icons'
+import {
+  FEATURED_ROTATION_MS,
+  rotate,
+} from '@/lib/featured-rotation'
 import styles from './featured-bento.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Featured Bento (خفيف + بدون hydration mismatch)
+// EAH — Featured Bento (Hero + 4 صغيرة + دوران عادل)
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
   businesses: Business[]
+  initialStart: number
 }
 
-const SLIDE_SIZE = 5
-const SLIDE_INTERVAL = 10000 // 10 ثواني
+const VISIBLE_COUNT = 5
 
-export default function FeaturedBento({ businesses }: Props) {
-  const [slideIndex, setSlideIndex] = useState(0)
-  const [mounted, setMounted] = useState(false)
-
-  // تقسيم لمجموعات من 5 (ثابت — نفس الترتيب server/client)
-  const slides: Business[][] = []
-  for (let i = 0; i < businesses.length; i += SLIDE_SIZE) {
-    slides.push(businesses.slice(i, i + SLIDE_SIZE))
-  }
-  const totalSlides = slides.length
-  const currentSlide = slides[slideIndex] ?? []
+export default function FeaturedBento({ businesses, initialStart }: Props) {
+  const [offset, setOffset] = useState(initialStart)
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    if (!mounted || totalSlides <= 1) return
+    if (businesses.length <= 1) return
     const timer = setInterval(() => {
-      setSlideIndex((i) => (i + 1) % totalSlides)
-    }, SLIDE_INTERVAL)
+      setOffset((o) => (o + 1) % businesses.length)
+    }, FEATURED_ROTATION_MS)
     return () => clearInterval(timer)
-  }, [mounted, totalSlides])
+  }, [businesses.length])
 
   if (businesses.length === 0) return null
+
+  const rotated = rotate(businesses, offset)
+  const visible = rotated.slice(0, VISIBLE_COUNT)
+  const hero = visible[0]
+  const smalls = visible.slice(1)
 
   return (
     <section className={`eah-section-bg ${styles.section}`}>
@@ -65,24 +61,17 @@ export default function FeaturedBento({ businesses }: Props) {
         <div className={styles.neonLine} aria-hidden />
 
         <div className={styles.grid}>
-          {currentSlide.map((biz) => (
-            <BusinessCard key={biz.id} business={biz} variant="featured" />
+          {hero && (
+            <div className={styles.heroSlot}>
+              <FeaturedCard business={hero} variant="hero" priority />
+            </div>
+          )}
+          {smalls.map((b) => (
+            <div key={b.id} className={styles.smallSlot}>
+              <FeaturedCard business={b} variant="small" />
+            </div>
           ))}
         </div>
-
-        {totalSlides > 1 && mounted && (
-          <div className={styles.dots}>
-            {slides.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                className={`${styles.dot} ${i === slideIndex ? styles.dotActive : ''}`}
-                onClick={() => setSlideIndex(i)}
-                aria-label={`شريحة ${i + 1}`}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </section>
   )

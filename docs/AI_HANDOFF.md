@@ -181,3 +181,21 @@ rm -rf .next              # لو dev بطيء
 
 **آخر تحديث:** 2026-09-27
 **المالك:** NourEldin B7R — فلسطين في القلب 🇵🇸
+
+---
+
+## 12. آخر تحديث (2026-09-27) — Featured Redesign
+
+### Featured (Home + /featured)
+- Hero كبير + 4 صغيرة (Bento حقيقي على Desktop)
+- دوران عادل كل 8 ثواني (Round-Robin)
+- كل Reload = نقطة بداية جديدة (server-side)
+- الدوران: `lib/featured-rotation.ts`
+
+### المشاكل المحلولة
+- ❌ `dailyShuffle` على المميزين
+- ✅ Round-Robin عادل
+
+### المراجع
+- LESSONS §13
+- CHANGELOG v2.1.0

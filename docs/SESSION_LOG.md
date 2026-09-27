@@ -85,3 +85,23 @@
 ### اللي بعده
 - MIGRATION_GUIDE (خلص)
 - ROADMAP الأسبوع 1
+
+---
+
+## 2026-09-27 — Session 3: Featured Redesign
+
+### اللي اتحقق
+- `lib/featured-rotation.ts` — Round-Robin عادل
+- `components/featured-card.tsx` + `.module.css`
+- `components/featured-bento.tsx` + `.module.css` — إعادة كتابة
+- `app/featured/` — صفحة الكل بنفس الروح
+- `app/page.tsx` — شيل dailyShuffle (SACRED)
+
+### السبب
+- المميزين كانوا بيتعشوكلوا يومياً → مش عادل
+- Bento الجديد: Hero كبير + 4 صغيرة + دوران 8 ثواني
+
+### اللي بعده
+- Explore Filters
+- Trending Strip
+- Offers Strip

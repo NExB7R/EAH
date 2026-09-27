@@ -223,3 +223,21 @@
 ---
 
 آخر تحديث: 2026-09-26
+
+---
+
+## ✅ خلص (2026-09-27) — Featured Redesign
+
+- [x] Featured Bento (Hero + 4 صغيرة + دوران عادل)
+- [x] /featured page
+- [x] Round-Robin rotation
+- [x] شيل dailyShuffle من المميزين
+
+## ⏳ جاي (بالأولوية)
+
+- [ ] Trending Strip
+- [ ] Offers Strip
+- [ ] Nearby Grid
+- [ ] Opportunity Strip
+- [ ] Footer كامل
+- [ ] Explore Filters
