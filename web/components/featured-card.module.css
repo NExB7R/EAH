@@ -2,6 +2,11 @@
    EAH — Featured Card
    ═══════════════════════════════════════════════════════════ */
 
+@keyframes eahCardFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .card {
   position: relative;
   display: flex;
@@ -16,12 +21,17 @@
               border-color 200ms var(--ease),
               box-shadow 200ms var(--ease);
   height: 100%;
+  animation: eahCardFade 400ms var(--ease-out);
 }
 
 .card:hover {
   transform: translateY(-2px);
-  border-color: rgba(232,199,154,0.45);
-  box-shadow: 0 0 0 1px rgba(232,199,154,0.25), 0 8px 24px rgba(0,0,0,0.5);
+  border-color: rgba(232,199,154,0.55);
+  box-shadow:
+    0 0 0 1px rgba(232,199,154,0.4),
+    0 0 24px rgba(232,199,154,0.25),
+    0 0 40px rgba(232,199,154,0.12),
+    0 8px 24px rgba(0,0,0,0.5);
 }
 
 /* ─── Hero variant ─── */
@@ -303,6 +313,7 @@
 
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
+  .card { animation: none; }
   .card, .image, .cta { transition: none; }
   .card:hover .image { transform: none; }
   .card:hover { transform: none; }

@@ -7,3 +7,4 @@ node_modules
 *.bak
 .env.example.bak
 tsconfig.tsbuildinfo
+*.bak2
