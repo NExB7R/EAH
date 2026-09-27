@@ -5,15 +5,19 @@ import { createPublicClient } from '@/lib/supabase/public'
 // ═══════════════════════════════════════════════════════════
 
 export type PlanFeatureKey =
+  | 'basic_listing'
+  | 'whatsapp_orders'
+  | 'public_stats'
   | 'featured_badge'
   | 'verified_badge'
   | 'basic_stats'
   | 'full_stats'
+  | 'offers_gallery'
+  | 'featured_home'
   | 'trend_eligibility'
   | 'pdf_reports'
   | 'crm_basic'
   | 'crm_full'
-
   | 'dedicated_support'
 
 export type SubscriptionPlan = {
@@ -71,10 +75,15 @@ export async function getAdSlots(): Promise<AdSlot[]> {
 
 // ─── Labels ───
 export const FEATURE_LABEL: Record<PlanFeatureKey, string> = {
-  featured_badge: 'شارة "مميز" في المميزون',
+  basic_listing: 'صفحة نشاط كاملة',
+  whatsapp_orders: 'استقبال طلبات على واتساب',
+  public_stats: 'إحصائيات أساسية عامة',
+  featured_badge: 'شارة "مميز"',
   verified_badge: 'شارة "موثّق" على صفحتك',
-  basic_stats: 'إحصائيات أساسية (زوار + اتصالات)',
+  basic_stats: 'إحصائيات الزوار والاتصالات',
   full_stats: 'إحصائيات متقدمة + مصادر الزيارات',
+  offers_gallery: 'اعرض عروضك للعملاء',
+  featured_home: 'ظهور في الرئيسية',
   trend_eligibility: 'فرصة دخول الترند',
   pdf_reports: 'تقارير PDF شهرية',
   crm_basic: 'CRM بسيط (قائمة المتابعين)',

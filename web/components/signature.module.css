@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — Signature (Great Vibes — simple HTML, responsive)
+   EAH — Signature (Great Vibes — small, straight, glow)
    ═══════════════════════════════════════════════════════════ */
 
 .wrap {
@@ -7,34 +7,33 @@
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 4px 18px 6px;
+  gap: 3px;
+  padding: 2px 12px 4px;
 }
 
 .name {
   font-family: 'Great Vibes', 'Snell Roundhand', cursive;
-  font-size: clamp(1.3rem, 3.5vw, 1.9rem);
+  font-size: clamp(1.05rem, 2.6vw, 1.4rem);
   font-weight: 400;
   font-style: italic;
   line-height: 1.1;
   color: var(--gold-light);
   letter-spacing: 0.01em;
-  transform: rotate(-3deg);
   transition: color 300ms var(--ease-out), text-shadow 300ms var(--ease-out);
   cursor: default;
   user-select: none;
   white-space: nowrap;
   text-shadow:
-    0 0 8px rgba(232,199,154,0.3),
-    0 0 18px rgba(232,199,154,0.15);
+    0 0 6px rgba(232,199,154,0.35),
+    0 0 14px rgba(232,199,154,0.18);
 }
 
 .wrap:hover .name {
   color: #FFF5DE;
   text-shadow:
-    0 0 14px rgba(232,199,154,0.9),
-    0 0 32px rgba(232,199,154,0.5),
-    0 0 56px rgba(232,199,154,0.25);
+    0 0 12px rgba(232,199,154,0.9),
+    0 0 26px rgba(232,199,154,0.5),
+    0 0 44px rgba(232,199,154,0.25);
 }
 
 .line {
@@ -49,11 +48,10 @@
     rgba(232,199,154,0.35) 70%,
     transparent 100%
   );
-  margin-top: 2px;
 }
 
 @media (max-width: 640px) {
-  .wrap { padding: 3px 12px 4px; }
+  .wrap { padding: 2px 8px 3px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

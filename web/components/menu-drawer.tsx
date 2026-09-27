@@ -11,7 +11,6 @@ import {
   TrendingUpIcon,
   SparklesIcon,
   BellIcon,
-  SettingsIcon,
   InfoIcon,
   ShareIcon,
   InstallIcon,
@@ -29,6 +28,9 @@ import {
   LayoutDashboardIcon,
   ShieldCheckIcon,
   LocationIcon,
+  StoreIcon,
+  GiftIcon,
+  HelpCircleIcon,
 } from './icons'
 import Avatar from './avatar'
 import Logo from './logo'
@@ -50,12 +52,12 @@ type MenuItem = {
 const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/', label: 'الرئيسية', Icon: HomeIcon },
   { href: '/explore', label: 'اكتشف', Icon: CompassIcon },
-  { href: '/featured', label: 'المميز', Icon: StarIcon },
-  { href: '/offers', label: 'العروض', Icon: TagIcon },
+  { href: '/featured', label: 'المميزون', Icon: StarIcon },
   { href: '/trends', label: 'الترند', Icon: TrendingUpIcon },
+  { href: '/offers', label: 'العروض', Icon: TagIcon },
   { href: '/new', label: 'الجديد', Icon: SparklesIcon },
-  { href: '/explore?nearby=1', label: 'قريب منك', Icon: LocationIcon },
-  { href: '/suggest', label: 'رشحلي', Icon: TargetIcon },
+  { href: '/nearby', label: 'قريب منك', Icon: LocationIcon },
+  { href: '/suggest', label: 'رشحلى', Icon: TargetIcon },
 ]
 
 const USER_ITEMS: MenuItem[] = [
@@ -63,6 +65,9 @@ const USER_ITEMS: MenuItem[] = [
 ]
 
 const MERCHANT_ITEMS: MenuItem[] = [
+  { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
+  { href: '/pricing', label: 'الباقات', Icon: GiftIcon },
+  { href: '/advertise', label: 'أعلن معانا', Icon: TrendingUpIcon },
   { href: '/merchant', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
 ]
 
@@ -72,6 +77,9 @@ const ADMIN_ITEMS: MenuItem[] = [
 
 const BOTTOM_ITEMS: MenuItem[] = [
   { href: '/about', label: 'مين إحنا', Icon: InfoIcon },
+  { href: '/faq', label: 'الأسئلة الشائعة', Icon: HelpCircleIcon },
+  { href: '/contact', label: 'تواصل معانا', Icon: WhatsAppIcon },
+  { href: '/support-palestine', label: 'فلسطين في القلب', Icon: LocationIcon },
 ]
 
 const LEGAL_ITEMS: MenuItem[] = [
@@ -100,10 +108,6 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
   }, [open, onClose])
 
   const isLoggedIn = !!session
-  const isMerchant =
-    session?.role === 'merchant' ||
-    session?.role === 'admin' ||
-    session?.role === 'super_admin'
   const isAdmin =
     session?.role === 'admin' || session?.role === 'super_admin'
 
@@ -115,12 +119,12 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
         url: window.location.origin,
       })
     } catch {
-      // المستخدم قفل
+      // closed
     }
   }
 
   const handleInstall = () => {
-    window.dispatchEvent(new CustomEvent('eah:install-request'))
+    window.dispatchEvent(new CustomEvent('eah:show-install'))
     onClose()
   }
 
@@ -129,14 +133,13 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
       await fetch('/auth/logout', { method: 'POST' })
       window.location.href = '/'
     } catch {
-      // نتجاهل
+      // ignore
     }
   }
 
   if (!open) return null
 
-  const appVersion =
-    process.env.NEXT_PUBLIC_APP_VERSION ?? 'v2.0.0'
+  const appVersion = process.env.NEXT_PUBLIC_APP_VERSION ?? 'v2.1.0'
 
   return (
     <>
@@ -144,7 +147,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
 
       <aside className={styles.drawer} role="dialog" aria-modal="true">
         <div className={styles.header}>
-          <Link href="/" onClick={onClose} aria-label="EAH — الرئيسية">
+          <Link href="/" onClick={onClose} aria-label="EAH">
             <Logo size="xs" variant="compact" href={undefined} />
           </Link>
           <button
@@ -158,11 +161,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
         </div>
 
         {session && (
-          <Link
-            href="/account"
-            className={styles.profileSection}
-            onClick={onClose}
-          >
+          <Link href="/account" className={styles.profileSection} onClick={onClose}>
             <Avatar
               displayName={session.displayName}
               avatarUrl={session.avatarUrl}
@@ -181,20 +180,18 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
               </div>
               <div className={styles.profileStats}>
                 <span>مصداقية {session.trustScore}</span>
-                <span className={styles.dot} aria-hidden>·</span>
-                <span>0 نقطة</span>
-                <span className={styles.dot} aria-hidden>·</span>
-                <span>Bronze</span>
+                <span className={styles.dot}>·</span>
+                <span>{session.trustTier}</span>
               </div>
             </div>
-            <span className={styles.chevron} aria-hidden>
+            <span className={styles.chevron}>
               <ArrowLeftIcon size={18} />
             </span>
           </Link>
         )}
 
         <nav className={styles.nav}>
-          {/* ─── Public ─── */}
+          {/* Public */}
           <ul className={styles.list}>
             {PUBLIC_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
@@ -206,7 +203,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             ))}
           </ul>
 
-          {/* ─── User ─── */}
+          {/* User */}
           {isLoggedIn && (
             <>
               <div className={styles.divider} />
@@ -223,24 +220,34 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             </>
           )}
 
-          {/* ─── Merchant ─── */}
-          {isMerchant && (
-            <>
-              <div className={styles.divider} />
-              <ul className={styles.list}>
-                {MERCHANT_ITEMS.map(({ href, label, Icon }) => (
-                  <li key={href}>
-                    <Link href={href} className={styles.item} onClick={onClose}>
-                      <span className={styles.itemIcon}><Icon size={20} /></span>
-                      <span>{label}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
+          {/* Merchant section — للكل */}
+          <div className={styles.divider} />
+          <div className={styles.sectionLabel}>
+            <StoreIcon size={14} />
+            <span>للتجار</span>
+          </div>
+          <ul className={styles.list}>
+            {MERCHANT_ITEMS.slice(0, 3).map(({ href, label, Icon }) => (
+              <li key={href}>
+                <Link href={href} className={styles.item} onClick={onClose}>
+                  <span className={styles.itemIcon}><Icon size={20} /></span>
+                  <span>{label}</span>
+                </Link>
+              </li>
+            ))}
+            {isLoggedIn &&
+              session?.role === 'merchant' &&
+              MERCHANT_ITEMS.slice(3).map(({ href, label, Icon }) => (
+                <li key={href}>
+                  <Link href={href} className={styles.item} onClick={onClose}>
+                    <span className={styles.itemIcon}><Icon size={20} /></span>
+                    <span>{label}</span>
+                  </Link>
+                </li>
+              ))}
+          </ul>
 
-          {/* ─── Admin ─── */}
+          {/* Admin */}
           {isAdmin && (
             <>
               <div className={styles.divider} />
@@ -257,7 +264,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             </>
           )}
 
-          {/* ─── Bottom ─── */}
+          {/* Bottom */}
           <div className={styles.divider} />
           <ul className={styles.list}>
             {BOTTOM_ITEMS.map(({ href, label, Icon }) => (
@@ -284,7 +291,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             </li>
           </ul>
 
-          {/* ─── Legal ─── */}
+          {/* Legal */}
           <div className={styles.divider} />
           <ul className={styles.list}>
             {LEGAL_ITEMS.map(({ href, label, Icon }) => (
@@ -297,35 +304,31 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             ))}
           </ul>
 
-          {/* ─── Social ─── */}
+          {/* Social */}
           <div className={styles.divider} />
           <ul className={styles.list}>
             <li>
               <a
-                href="/coming-soon?platform=facebook"
+                href="https://facebook.com/eah.eg"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.item}
               >
                 <span className={styles.itemIcon}><FacebookIcon size={20} /></span>
                 <span>فيسبوك</span>
-                <span className={styles.externalIcon}>
-                  <ExternalLinkIcon size={14} />
-                </span>
+                <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
               </a>
             </li>
             <li>
               <a
-                href="/coming-soon?platform=whatsapp-channel"
+                href="https://whatsapp.com/channel/eaH"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.item}
               >
                 <span className={styles.itemIcon}><WhatsAppIcon size={20} /></span>
                 <span>قناة واتساب</span>
-                <span className={styles.externalIcon}>
-                  <ExternalLinkIcon size={14} />
-                </span>
+                <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
               </a>
             </li>
             <li>
@@ -336,15 +339,13 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                 className={styles.item}
               >
                 <span className={styles.itemIcon}><WhatsAppIcon size={20} /></span>
-                <span>تواصل معانا</span>
-                <span className={styles.externalIcon}>
-                  <ExternalLinkIcon size={14} />
-                </span>
+                <span>كلم المسؤول</span>
+                <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
               </a>
             </li>
           </ul>
 
-          {/* ─── Login/Logout ─── */}
+          {/* Login/Logout */}
           {isLoggedIn ? (
             <>
               <div className={styles.divider} />
@@ -370,7 +371,6 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             </>
           )}
 
-          {/* ─── Footer ─── */}
           <footer className={styles.footer}>
             <p className={styles.footerLine}>
               صنع بـ <span className={styles.heart}>♥</span> في شبين القناطر

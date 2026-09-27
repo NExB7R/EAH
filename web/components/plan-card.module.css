@@ -204,3 +204,111 @@
   .card, .cta { transition: none; }
   .card:hover, .cta:hover { transform: none; }
 }
+
+/* ─── Free Plan ─── */
+.free {
+  border-color: rgba(85,231,209,0.4);
+  background: linear-gradient(160deg, rgba(20,14,34,0.75), rgba(10,7,20,0.92));
+  position: relative;
+}
+
+.free::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 22px;
+  padding: 1.5px;
+  background: linear-gradient(135deg,
+    rgba(85,231,209,0.4),
+    rgba(232,199,154,0.4) 50%,
+    rgba(168,85,247,0.4));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.free:hover {
+  border-color: rgba(85,231,209,0.7);
+  box-shadow:
+    0 0 0 1px rgba(85,231,209,0.15),
+    0 0 40px rgba(85,231,209,0.2);
+}
+
+.free .icon {
+  background: rgba(85,231,209,0.12);
+  border-color: rgba(85,231,209,0.45);
+  color: #55E7D1;
+}
+
+.free .feature svg {
+  color: #55E7D1;
+}
+
+.freeRibbon {
+  position: absolute;
+  top: -12px;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  padding: 5px 16px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: var(--bg-base);
+  background: linear-gradient(135deg, #55E7D1, #2BB8A4);
+  box-shadow:
+    0 0 0 3px rgba(20,14,34,0.9),
+    0 0 22px rgba(85,231,209,0.6);
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.priceFree {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 900;
+  color: #55E7D1;
+  text-shadow: 0 0 20px rgba(85,231,209,0.4);
+  line-height: 1;
+}
+
+.tagline {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  letter-spacing: 0.02em;
+}
+
+.free .tagline {
+  color: #55E7D1;
+}
+
+.freeNote {
+  text-align: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  background: rgba(85,231,209,0.05);
+  border: 1px dashed rgba(85,231,209,0.3);
+  align-self: center;
+}
+
+.free .cta {
+  background: linear-gradient(135deg, #55E7D1, #2BB8A4);
+  box-shadow: 0 0 20px rgba(85,231,209,0.5);
+}
+
+.free .cta:hover {
+  box-shadow: 0 0 30px rgba(85,231,209,0.7);
+}
