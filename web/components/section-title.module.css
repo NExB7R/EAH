@@ -105,27 +105,27 @@
 }
 
 /* ─── Teal (قريب مني) ─── */
-.teal { color: #55E7D1; }
-.teal .iconWrap { filter: drop-shadow(0 0 16px rgba(85,231,209,0.45)); }
+.teal { color: #7C3AED; }
+.teal .iconWrap { filter: drop-shadow(0 0 16px rgba(124,58,237,0.45)); }
 .teal .title {
-  background-image: linear-gradient(135deg, #B8F0E6 0%, #55E7D1 50%, #2BB8A4 100%);
-  filter: drop-shadow(0 2px 14px rgba(85,231,209,0.4));
+  background-image: linear-gradient(135deg, #C9A9FF 0%, #7C3AED 50%, #5B21B6 100%);
+  filter: drop-shadow(0 2px 14px rgba(124,58,237,0.4));
 }
 
 /* ─── Pink (الأنشطة الجديدة) ─── */
-.pink { color: #F472B6; }
-.pink .iconWrap { filter: drop-shadow(0 0 16px rgba(244,114,182,0.5)); }
+.pink { color: #9D4EDD; }
+.pink .iconWrap { filter: drop-shadow(0 0 16px rgba(157,78,221,0.5)); }
 .pink .title {
-  background-image: linear-gradient(135deg, #FFB8E8 0%, #F472B6 50%, #D946A6 100%);
-  filter: drop-shadow(0 2px 14px rgba(244,114,182,0.4));
+  background-image: linear-gradient(135deg, #B975FF 0%, #9D4EDD 50%, #7C3AED 100%);
+  filter: drop-shadow(0 2px 14px rgba(157,78,221,0.4));
 }
 
 /* ─── Blue (الترشيح) ─── */
-.blue { color: #818CF8; }
-.blue .iconWrap { filter: drop-shadow(0 0 16px rgba(129,140,248,0.5)); }
+.blue { color: #E0B8FF; }
+.blue .iconWrap { filter: drop-shadow(0 0 16px rgba(224,184,255,0.5)); }
 .blue .title {
-  background-image: linear-gradient(135deg, #C8D0FF 0%, #818CF8 50%, #5B65E8 100%);
-  filter: drop-shadow(0 2px 14px rgba(129,140,248,0.4));
+  background-image: linear-gradient(135deg, #F0DDFF 0%, #E0B8FF 50%, #B975FF 100%);
+  filter: drop-shadow(0 2px 14px rgba(224,184,255,0.4));
 }
 
 /* ─── Mobile ─── */

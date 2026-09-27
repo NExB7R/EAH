@@ -14,12 +14,12 @@
   padding: 22px 20px 24px;
   border-radius: 22px;
   background: linear-gradient(160deg, rgba(20,14,34,0.55), rgba(10,7,20,0.82));
-  border: 1.5px solid rgba(129,140,248,0.32);
+  border: 1.5px solid rgba(224,184,255,0.32);
   box-shadow:
-    0 0 0 1px rgba(129,140,248,0.06),
-    0 0 40px rgba(129,140,248,0.14),
-    0 0 80px rgba(129,140,248,0.06),
-    inset 0 1px 0 rgba(129,140,248,0.1);
+    0 0 0 1px rgba(224,184,255,0.06),
+    0 0 40px rgba(224,184,255,0.14),
+    0 0 80px rgba(224,184,255,0.06),
+    inset 0 1px 0 rgba(224,184,255,0.1);
 }
 
 .header {
@@ -35,8 +35,8 @@
 .titleIcon {
   display: inline-flex;
   align-items: center;
-  color: #818CF8;
-  filter: drop-shadow(0 0 8px rgba(129,140,248,0.6));
+  color: #E0B8FF;
+  filter: drop-shadow(0 0 8px rgba(224,184,255,0.6));
 }
 
 .title {
@@ -54,9 +54,9 @@
   margin-bottom: 18px;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(129,140,248,0.4) 20%,
-    #818CF8 50%,
-    rgba(129,140,248,0.4) 80%,
+    rgba(224,184,255,0.4) 20%,
+    #E0B8FF 50%,
+    rgba(224,184,255,0.4) 80%,
     transparent 100%);
   border-radius: var(--radius-full);
 }
@@ -79,12 +79,12 @@
   border-radius: 50%;
   background: radial-gradient(
     circle at 50% 35%,
-    rgba(129,140,248,0.22),
-    rgba(129,140,248,0.04) 70%
+    rgba(224,184,255,0.22),
+    rgba(224,184,255,0.04) 70%
   );
-  border: 1px solid rgba(129,140,248,0.35);
-  color: #818CF8;
-  box-shadow: 0 0 24px rgba(129,140,248,0.25);
+  border: 1px solid rgba(224,184,255,0.35);
+  color: #E0B8FF;
+  box-shadow: 0 0 24px rgba(224,184,255,0.25);
 }
 
 .text {
@@ -107,15 +107,15 @@
   font-size: 0.82rem;
   font-weight: 900;
   color: var(--bg-base);
-  background: linear-gradient(135deg, #C8D0FF, #818CF8);
+  background: linear-gradient(135deg, #F0DDFF, #E0B8FF);
   text-decoration: none;
-  box-shadow: 0 0 18px rgba(129,140,248,0.4);
+  box-shadow: 0 0 18px rgba(224,184,255,0.4);
   transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
 }
 
 .cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 26px rgba(129,140,248,0.6);
+  box-shadow: 0 0 26px rgba(224,184,255,0.6);
 }
 
 @media (max-width: 480px) {

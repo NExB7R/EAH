@@ -51,20 +51,20 @@
 /* ─── Nearby — teal ناعم ─── */
 .nearby {
   background: rgba(85, 231, 209, 0.1);
-  color: #B8F0E6;
+  color: #C9A9FF;
   border: 1px solid rgba(85, 231, 209, 0.35);
 }
 
 /* ─── New — وردي ناعم ─── */
 .new {
   background: rgba(244, 114, 182, 0.1);
-  color: #FFB8E8;
+  color: #B975FF;
   border: 1px solid rgba(244, 114, 182, 0.4);
 }
 
 /* ─── Opportunity — أزرق ناعم ─── */
 .opportunity {
   background: rgba(129, 140, 248, 0.12);
-  color: #C8D0FF;
+  color: #F0DDFF;
   border: 1px solid rgba(129, 140, 248, 0.4);
 }
