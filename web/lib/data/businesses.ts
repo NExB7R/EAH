@@ -132,7 +132,7 @@ export const getPublishedBusinesses = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-published'],
-  { revalidate: 120, tags: ['businesses'] }
+  { revalidate: 300, tags: ['businesses'] }
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -159,7 +159,7 @@ export const getFeaturedBusinesses = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-featured'],
-  { revalidate: 120, tags: ['businesses', 'featured'] }
+  { revalidate: 300, tags: ['businesses', 'featured'] }
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -185,7 +185,7 @@ export const getNewBusinesses = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-new'],
-  { revalidate: 120, tags: ['businesses', 'new'] }
+  { revalidate: 300, tags: ['businesses', 'new'] }
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -210,7 +210,7 @@ export const getBusinessesByType = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-by-type'],
-  { revalidate: 120, tags: ['businesses'] }
+  { revalidate: 300, tags: ['businesses'] }
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -234,7 +234,7 @@ export const getTopBusinesses = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-top'],
-  { revalidate: 120, tags: ['businesses'] }
+  { revalidate: 300, tags: ['businesses'] }
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -262,7 +262,7 @@ export const getOpportunities = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-opportunities'],
-  { revalidate: 120, tags: ['businesses', 'opportunities'] }
+  { revalidate: 300, tags: ['businesses', 'opportunities'] }
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -285,7 +285,7 @@ export const getBusinessBySlug = unstable_cache(
     return data as Business
   },
   ['business-by-slug'],
-  { revalidate: 120, tags: ['businesses'] }
+  { revalidate: 300, tags: ['businesses'] }
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -309,7 +309,7 @@ export const getTrendingBusinesses = unstable_cache(
     return sortByTrend((data ?? []) as Business[]).slice(0, limit)
   },
   ['businesses-trending'],
-  { revalidate: 120, tags: ['businesses', 'trending'] },
+  { revalidate: 300, tags: ['businesses', 'trending'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -354,7 +354,7 @@ export const getActiveOffers = unstable_cache(
     return (data ?? []) as unknown as Offer[]
   },
   ['offers-active'],
-  { revalidate: 120, tags: ['offers'] },
+  { revalidate: 300, tags: ['offers'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -382,5 +382,5 @@ export const getNearbyBusinesses = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-nearby'],
-  { revalidate: 120, tags: ['businesses'] },
+  { revalidate: 300, tags: ['businesses'] },
 )
