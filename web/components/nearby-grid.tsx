@@ -11,14 +11,14 @@ import {
   BikeIcon,
   SparklesIcon,
 } from './icons'
-import type { Business } from '@/lib/data'
 import SectionBadge from './section-badge'
+import NearbyCta from './nearby-cta'
+import type { Business } from '@/lib/data'
 import styles from './nearby-grid.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Nearby Grid (Home — 4 cards, 2×2 / 4×1)
-//   • إطار تيل — مختلف عن باقي الأقسام
-//   • Server Component (صفر JS)
+//   • CTA الموقع جوه الإطار (يختفي لما يفعّل)
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -57,6 +57,8 @@ export default function NearbyGrid({ businesses }: Props) {
         </header>
 
         <div className={styles.neonLine} aria-hidden />
+
+        <NearbyCta />
 
         <div className={styles.grid}>
           {businesses.slice(0, 4).map((b) => {

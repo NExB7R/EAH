@@ -1,16 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { NavigationIcon, MapPinIcon, CheckCircleIcon } from './icons'
+import { NavigationIcon, MapPinIcon } from './icons'
 import styles from './nearby-cta.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Nearby CTA (Location)
-//   • بيطلب الموقع تلقائياً
+// EAH — Nearby CTA (Location) — يظهر جوه Nearby Grid
+//   • أول مرة → يطلب الإذن تلقائياً
 //   • لو رفض → يظهر زرار "حدد موقعي"
+//   • لما يفعّل → يختفي تماماً
 // ═══════════════════════════════════════════════════════════
 
-type State = 'idle' | 'loading' | 'granted' | 'denied'
+type State = 'idle' | 'loading' | 'denied' | 'granted'
 
 export default function NearbyCta() {
   const [state, setState] = useState<State>('idle')
@@ -28,22 +29,14 @@ export default function NearbyCta() {
     )
   }
 
-  if (state === 'granted') {
-    return (
-      <div className={`${styles.wrap} ${styles.ok}`}>
-        <span className={styles.icon} aria-hidden>
-          <CheckCircleIcon size={20} />
-        </span>
-        <span className={styles.text}>تمام! هنعرض الأنشطة القريبة منك</span>
-      </div>
-    )
-  }
+  // لما يفعّل → يختفي
+  if (state === 'granted') return null
 
   return (
     <div className={styles.wrap}>
       <div className={styles.left}>
         <span className={styles.icon} aria-hidden>
-          <NavigationIcon size={22} />
+          <NavigationIcon size={20} />
         </span>
         <div className={styles.textWrap}>
           <span className={styles.title}>قريب منك؟</span>
@@ -60,7 +53,11 @@ export default function NearbyCta() {
         disabled={state === 'loading'}
         className={styles.btn}
       >
-        {state === 'loading' ? 'بندور عليك…' : state === 'denied' ? 'جرّب تاني' : 'حدد موقعي'}
+        {state === 'loading'
+          ? 'بندور عليك…'
+          : state === 'denied'
+          ? 'جرّب تاني'
+          : 'حدد موقعي'}
       </button>
     </div>
   )

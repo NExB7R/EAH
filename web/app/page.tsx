@@ -3,7 +3,6 @@ import FeaturedBento from '@/components/featured-bento'
 import TrendingList from '@/components/trending-list'
 import OffersStrip from '@/components/offers-strip'
 import NewGrid from '@/components/new-grid'
-import NearbyCta from '@/components/nearby-cta'
 import NearbyGrid from '@/components/nearby-grid'
 import SuggestedSection from '@/components/suggested-section'
 import {
@@ -49,7 +48,6 @@ export default async function Home() {
       <TrendingList businesses={trending.length > 0 ? trending : trendList} />
       <OffersStrip offers={offers} />
       <NewGrid businesses={newOnes} />
-      <NearbyCta />
       <NearbyGrid businesses={nearby} />
       <SuggestedSection />
     </main>
