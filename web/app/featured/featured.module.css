@@ -13,7 +13,7 @@
   display: flex;
   justify-content: center;
   padding: 0 16px;
-  margin-top: 8px;
+  margin-top: 20px;
 }
 
 .breadcrumb {
@@ -63,7 +63,7 @@
   position: relative;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 20px 18px 18px;
+  padding: 16px 16px 16px;
   border-radius: 22px;
   background: linear-gradient(160deg, rgba(20,14,34,0.6), rgba(10,7,20,0.85));
   border: 1.5px solid rgba(232,199,154,0.32);
@@ -74,7 +74,7 @@
     inset 0 1px 0 rgba(232,199,154,0.08);
 }
 
-/* ─── Carousel ─── */
+/* ─── Carousel (كامل — بدون padding للأسهم) ─── */
 .carousel {
   position: relative;
 }
@@ -93,50 +93,68 @@
   .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
-/* ─── Arrows — تظهر بس عند Hover ─── */
+/* ─── Arrows — فوق الكروت بـ blur + fade ─── */
 .arrow {
   position: absolute;
   top: 50%;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   border-radius: 50%;
-  background: rgba(20,14,34,0.95);
-  border: 1px solid rgba(232,199,154,0.35);
+  background: rgba(20, 14, 34, 0.55);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(232, 199, 154, 0.45);
   color: var(--gold-light);
   cursor: pointer;
-  z-index: 5;
+  z-index: 6;
   opacity: 0;
-  transition: opacity 200ms var(--ease), transform 200ms var(--ease),
-              background 200ms var(--ease), box-shadow 200ms var(--ease);
+  transform: translateY(-50%) scale(0.9);
+  transition: opacity 220ms var(--ease-out),
+              transform 220ms var(--ease-out),
+              background 220ms var(--ease),
+              border-color 220ms var(--ease),
+              box-shadow 220ms var(--ease);
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.45),
+    0 0 12px rgba(232, 199, 154, 0.15);
 }
 
 .carousel:hover .arrow,
 .carousel:focus-within .arrow {
   opacity: 1;
+  transform: translateY(-50%) scale(1);
 }
 
 .arrow:hover {
-  background: rgba(232,199,154,0.15);
+  background: rgba(232, 199, 154, 0.18);
   border-color: var(--gold-light);
-  box-shadow: 0 0 18px rgba(232,199,154,0.45);
+  box-shadow:
+    0 4px 22px rgba(0, 0, 0, 0.5),
+    0 0 22px rgba(232, 199, 154, 0.55);
+  transform: translateY(-50%) scale(1.06);
+}
+
+.arrow:active {
+  transform: translateY(-50%) scale(0.97);
 }
 
 .arrow:focus-visible {
   outline: 2px solid var(--gold-light);
   outline-offset: 2px;
   opacity: 1;
+  transform: translateY(-50%) scale(1);
 }
 
-.arrowPrev { inset-inline-start: -8px; }
+.arrowPrev { inset-inline-start: 8px; }
 .arrowPrev svg { transform: scaleX(-1); }
-.arrowNext { inset-inline-end: -8px; }
+.arrowNext { inset-inline-end: 8px; }
 
 @media (hover: none) {
-  .arrow { opacity: 1; }
+  .arrow { opacity: 1; transform: translateY(-50%) scale(1); }
 }
 
 /* ─── Pagination ─── */
@@ -146,7 +164,7 @@
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
-  margin-top: 20px;
+  margin-top: 22px;
   padding: 0 16px;
 }
 
@@ -154,9 +172,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
-  height: 36px;
-  padding: 0 10px;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 11px;
   border-radius: var(--radius-full);
   font-family: var(--font-body);
   font-size: 0.78rem;
@@ -177,7 +195,7 @@
 }
 
 .pageBtn:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
@@ -193,7 +211,7 @@
   align-items: center;
   justify-content: center;
   min-width: 24px;
-  height: 36px;
+  height: 38px;
   color: var(--text-tertiary);
   font-weight: 900;
 }
@@ -216,16 +234,17 @@
 
 /* ─── Mobile ─── */
 @media (max-width: 640px) {
-  .section { padding: 16px 14px 0; }
-  .frame { padding: 16px 12px 14px; border-radius: 18px; }
+  .section { padding: 16px 12px 0; }
+  .frame { padding: 12px 12px 14px; border-radius: 18px; }
   .grid { gap: 10px; }
-  .arrow { width: 34px; height: 34px; }
+  .arrow { width: 38px; height: 38px; }
   .arrow svg { width: 16px; height: 16px; }
-  .arrowPrev { inset-inline-start: -4px; }
-  .arrowNext { inset-inline-end: -4px; }
-  .pageBtn { min-width: 32px; height: 32px; font-size: 0.72rem; }
+  .arrowPrev { inset-inline-start: 4px; }
+  .arrowNext { inset-inline-end: 4px; }
+  .pageBtn { min-width: 34px; height: 34px; font-size: 0.72rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .arrow, .pageBtn { transition: none; }
+  .arrow { backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
