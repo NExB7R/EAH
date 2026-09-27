@@ -15,6 +15,7 @@ type Props = {
   activeKey?: string
   title?: string
   count?: number
+  countLabel?: string
   Icon?: IconComp
   tone?: SectionTone
   showNav?: boolean
@@ -27,6 +28,7 @@ export default function SecondaryHero({
   count,
   Icon,
   tone = 'gold',
+  countLabel,
   showNav = true,
   children,
 }: Props) {
@@ -39,7 +41,7 @@ export default function SecondaryHero({
       {showNav && <SectionNav activeKey={activeKey} />}
 
       {title && Icon && (
-        <SectionTitle label={title} Icon={Icon} tone={tone} count={count} />
+        <SectionTitle label={title} Icon={Icon} tone={tone} count={count} countLabel={countLabel} />
       )}
     </>
   )

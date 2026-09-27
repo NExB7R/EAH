@@ -31,6 +31,7 @@ export default async function PricingPage() {
         Icon={GiftIcon}
         tone="gold"
         count={plans.length}
+        countLabel="باقة"
         showNav={false}
       />
 

@@ -16,6 +16,7 @@ type Props = {
   Icon: IconComp
   tone?: SectionTone
   count?: number
+  countLabel?: string
 }
 
 export default function SectionTitle({
@@ -23,6 +24,7 @@ export default function SectionTitle({
   Icon,
   tone = 'gold',
   count,
+  countLabel,
 }: Props) {
   return (
     <div className={`${styles.wrap} ${styles[tone]}`}>
@@ -33,7 +35,7 @@ export default function SectionTitle({
       <h1 className={styles.title}>{label}</h1>
 
       {count !== undefined && (
-        <span className={styles.count}>{count} نشاط</span>
+        <span className={styles.count}>{count} {countLabel ?? "نشاط"}</span>
       )}
 
       <span className={styles.line} aria-hidden />

@@ -6,7 +6,7 @@
   position: relative;
   margin-top: 60px;
   padding: 0 0 36px;
-  background: linear-gradient(180deg, transparent, rgba(20,14,34,0.65));
+  background: transparent;
   border-top: 1px solid rgba(168,85,247,0.15);
   overflow: hidden;
 }
@@ -19,7 +19,7 @@
     radial-gradient(ellipse 60% 55% at 50% 0%, rgba(168,85,247,0.12), transparent 65%),
     radial-gradient(ellipse 60% 55% at 50% 0%, rgba(232,199,154,0.07), transparent 70%);
   pointer-events: none;
-  filter: blur(22px);
+  filter: blur(22px); opacity: 0.6;
 }
 
 .heroWrap {

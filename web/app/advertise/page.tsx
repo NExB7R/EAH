@@ -46,6 +46,7 @@ export default async function AdvertisePage() {
         Icon={TrendingUpIcon}
         tone="orange"
         count={slots.length}
+        countLabel="مكان"
         showNav={false}
       />
 
