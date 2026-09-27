@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import ExploreSearch from '@/components/explore-search'
 import SecondaryHero from '@/components/secondary-hero'
-import BusinessCard from '@/components/business-card'
 import SectionBadge from '@/components/section-badge'
 import type { BadgeVariant } from '@/components/section-badge'
+import LoadMoreGrid from '@/components/load-more'
 import { TargetIcon } from '@/components/icons'
 import {
   getPublishedBusinesses,
@@ -26,10 +26,7 @@ type SearchParams = {
   q?: string
   type?: string
   suggest?: string
-  page?: string
 }
-
-const PAGE_SIZE = 12
 
 const VALID_TYPES: BusinessType[] = [
   'restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc',
@@ -52,7 +49,6 @@ export default async function ExplorePage({
   const q = params.q?.trim() ?? ''
   const type = params.type?.trim() ?? ''
   const suggest = params.suggest === '1'
-  const page = Math.max(1, parseInt(params.page ?? '1', 10) || 1)
 
   let businesses = await getPublishedBusinesses()
   let title = 'اكتشف'
@@ -83,10 +79,6 @@ export default async function ExplorePage({
   }
 
   const totalCount = businesses.length
-  const startIdx = (page - 1) * PAGE_SIZE
-  const endIdx = startIdx + PAGE_SIZE
-  const hasMore = endIdx < totalCount
-  businesses = businesses.slice(startIdx, endIdx)
 
   return (
     <main className={styles.page}>
@@ -108,32 +100,7 @@ export default async function ExplorePage({
         </div>
 
         {businesses.length > 0 ? (
-          <>
-            <div className={styles.grid}>
-              {businesses.map((b) => (
-                <BusinessCard key={b.id} business={b} />
-              ))}
-            </div>
-
-            {hasMore && (
-              <div className={styles.loadMoreWrap}>
-                <Link
-                  href={`/explore?${new URLSearchParams({
-                    ...(q ? { q } : {}),
-                    ...(type ? { type } : {}),
-                    ...(suggest ? { suggest: '1' } : {}),
-                    page: String(page + 1),
-                  }).toString()}`}
-                  className={styles.loadMore}
-                >
-                  شوف المزيد
-                </Link>
-                <span className={styles.counter}>
-                  بتشوف {businesses.length} من {totalCount}
-                </span>
-              </div>
-            )}
-          </>
+          <LoadMoreGrid businesses={businesses} tone="purple" pageSize={10} />
         ) : (
           <div className={styles.empty}>
             <div className={styles.emptyIcon}>

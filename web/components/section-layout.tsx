@@ -1,20 +1,17 @@
-'use client'
-
-import { useState } from 'react'
-import Link from 'next/link'
 import type { ComponentType } from 'react'
+import Link from 'next/link'
 import SecondaryHero from './secondary-hero'
-import BusinessCard from './business-card'
-import type { CardTone } from './business-card'
 import SectionBadge from './section-badge'
 import type { BadgeVariant } from './section-badge'
 import type { SectionTone } from './section-title'
+import type { CardTone } from './business-card'
 import { TargetIcon } from './icons'
+import LoadMoreGrid from './load-more'
 import type { Business } from '@/lib/data'
 import styles from './section-layout.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Section Layout (shared for all section pages)
+// EAH — Section Layout (Server Component)
 // ═══════════════════════════════════════════════════════════
 
 type IconComp = ComponentType<{ size?: number; className?: string }>
@@ -30,8 +27,6 @@ type Props = {
   pageSize?: number
 }
 
-const PAGE_SIZE = 12
-
 export default function SectionLayout({
   activeKey,
   title,
@@ -40,27 +35,15 @@ export default function SectionLayout({
   badgeVariant,
   badgeLabel,
   businesses,
-  pageSize = PAGE_SIZE,
+  pageSize = 10,
 }: Props) {
-  const [page, setPage] = useState(1)
-
-  const totalCount = businesses.length
-  const endIdx = page * pageSize
-  const hasMore = endIdx < totalCount
-  const visible = businesses.slice(0, endIdx)
-
   const cardTone: CardTone = (
-    tone === 'gold'
-      ? 'gold'
-      : tone === 'orange'
-      ? 'orange'
-      : tone === 'teal'
-      ? 'teal'
-      : tone === 'pink'
-      ? 'pink'
-      : tone === 'blue'
-      ? 'blue'
-      : 'purple'
+    tone === 'gold' ? 'gold'
+    : tone === 'orange' ? 'orange'
+    : tone === 'teal' ? 'teal'
+    : tone === 'pink' ? 'pink'
+    : tone === 'blue' ? 'blue'
+    : 'purple'
   )
 
   return (
@@ -70,50 +53,27 @@ export default function SectionLayout({
         title={title}
         Icon={Icon}
         tone={tone}
-        count={totalCount}
+        count={businesses.length}
       />
 
       <div className={styles.content}>
         <div className={styles.badgeRow}>
-          <SectionBadge
-            variant={badgeVariant}
-            label={badgeLabel}
-            size="md"
-          />
+          <SectionBadge variant={badgeVariant} label={badgeLabel} size="md" />
         </div>
 
-        {visible.length > 0 ? (
-          <>
-            <div className={styles.grid}>
-              {visible.map((b) => (
-                <BusinessCard key={b.id} business={b} tone={cardTone} />
-              ))}
-            </div>
-
-            {hasMore && (
-              <div className={styles.loadMoreWrap}>
-                <button
-                  type="button"
-                  onClick={() => setPage((p) => p + 1)}
-                  className={styles.loadMore}
-                >
-                  شوف المزيد
-                </button>
-                <span className={styles.counter}>
-                  بتشوف {visible.length} من {totalCount}
-                </span>
-              </div>
-            )}
-          </>
+        {businesses.length > 0 ? (
+          <LoadMoreGrid
+            businesses={businesses}
+            tone={cardTone}
+            pageSize={pageSize}
+          />
         ) : (
           <div className={styles.empty}>
             <div className={styles.emptyIcon}>
               <TargetIcon size={44} />
             </div>
             <h2 className={styles.emptyTitle}>لسه مفيش حاجة هنا</h2>
-            <p className={styles.emptyText}>
-              هنضيف قريب إن شاء الله.
-            </p>
+            <p className={styles.emptyText}>هنضيف قريب إن شاء الله.</p>
             <Link href="/explore" className={styles.emptyBtn}>
               اكتشف كل حاجة
             </Link>
