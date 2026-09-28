@@ -77,3 +77,31 @@
 ---
 
 آخر تحديث: 2026-09-27
+
+
+
+## 2026-09-28 — Session 4: Business Page + AI Insights
+
+### اللي اتحقق
+- Business Page كاملة (Hero + Actions + Tabs + Lightbox + Fixed CTA)
+- Smart Lock Modal (قفل ذكي)
+- AI Business Advisor (محرك التحليل + Storage + Retention)
+- Merchant Apply Wizard (4 خطوات)
+- Merchant Dashboard (7 صفحات)
+- Admin Dashboard (5 صفحات)
+- Pricing + Advertise (4 باقات + 4 إعلانات)
+- Account (9 صفحات)
+- DB: business_insights + 4 باقات + 4 ad_slots
+
+### المحاولات الفاشلة
+- Hermes Agent: اتصب واتمسح (RAM 2GB + Rate limits)
+
+### اللي معلق
+- التعليقات + التقييمات الكاملة
+- نظام المصداقية الديناميكي
+- الفرص الجديدة (30 يوم)
+- 5 صفحات Admin المتبقية
+
+---
+
+آخر تحديث: 2026-09-28
