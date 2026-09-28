@@ -14,14 +14,19 @@ import {
   ImageIcon,
   MessageCircleIcon,
 } from './icons'
-import type { BusinessDetail } from '@/lib/data/business-detail'
+import ReviewsList from './reviews-list'
+import type { BusinessDetail, Review, ReviewStats } from '@/lib/data/business-detail'
 import styles from './business-tabs.module.css'
 
 type Tab = 'info' | 'menu' | 'reviews'
 
 type Props = {
   detail: BusinessDetail
-  reviewsCount: number
+  reviews: Review[]
+  reviewStats: ReviewStats
+  isLoggedIn: boolean
+  hasReviewed: boolean
+  isOwner: boolean
 }
 
 const DAY_LABEL: Record<string, string> = {
@@ -31,7 +36,14 @@ const DAY_LABEL: Record<string, string> = {
 
 const DAY_ORDER = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri']
 
-export default function BusinessTabs({ detail, reviewsCount }: Props) {
+export default function BusinessTabs({
+  detail,
+  reviews,
+  reviewStats,
+  isLoggedIn,
+  hasReviewed,
+  isOwner,
+}: Props) {
   const [tab, setTab] = useState<Tab>('info')
   const [lightbox, setLightbox] = useState<string | null>(null)
 
@@ -75,7 +87,7 @@ export default function BusinessTabs({ detail, reviewsCount }: Props) {
         >
           <MessageCircleIcon size={15} />
           <span>التقييمات</span>
-          {reviewsCount > 0 && <span className={styles.tabCount}>{reviewsCount}</span>}
+          {reviewStats.count > 0 && <span className={styles.tabCount}>{reviewStats.count}</span>}
         </button>
       </div>
 
@@ -278,10 +290,15 @@ export default function BusinessTabs({ detail, reviewsCount }: Props) {
       {/* ─── Reviews Tab ─── */}
       {tab === 'reviews' && (
         <div className={styles.content}>
-          <div className={styles.reviewsPlaceholder}>
-            <MessageCircleIcon size={40} />
-            <p>قسم التقييمات هيتم تفعيله قريب</p>
-          </div>
+          <ReviewsList
+            businessId={business.id}
+            slug={business.slug}
+            reviews={reviews}
+            stats={reviewStats}
+            isLoggedIn={isLoggedIn}
+            hasReviewed={hasReviewed}
+            isOwner={isOwner}
+          />
         </div>
       )}
 

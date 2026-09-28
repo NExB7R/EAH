@@ -24,6 +24,7 @@ export type Business = {
   id: string
   slug: string
   name: string
+  owner_profile_id: string
   business_type: BusinessType
   description: string | null
   hook: string | null

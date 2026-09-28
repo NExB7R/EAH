@@ -4,6 +4,8 @@ import {
   getBusinessDetail,
   getBusinessReviews,
   getSimilarBusinesses,
+  getUserReview,
+  computeReviewStats,
   TYPE_LABEL,
 } from '@/lib/data/business-detail'
 import { isOpenNow } from '@/lib/data/businesses'
@@ -55,6 +57,14 @@ export default async function BusinessPage({ params }: Props) {
     getUserSession(),
   ])
 
+  const reviewStats = computeReviewStats(reviews)
+  const isLoggedIn = !!session
+  const isOwner = session?.userId === business.owner_profile_id
+  const userReview = session && isLoggedIn
+    ? await getUserReview(business.id, session.userId)
+    : null
+  const hasReviewed = !!userReview
+
   // Fisher-Yates shuffle (client-stable seed from business.id)
   const seededSimilar = similar
     .slice(0, 4)
@@ -90,7 +100,14 @@ export default async function BusinessPage({ params }: Props) {
 
         {/* ─── Tabs ─── */}
         <div className={styles.tabsWrap}>
-          <BusinessTabs detail={detail} reviewsCount={reviews.length} />
+          <BusinessTabs
+            detail={detail}
+            reviews={reviews}
+            reviewStats={reviewStats}
+            isLoggedIn={isLoggedIn}
+            hasReviewed={hasReviewed}
+            isOwner={isOwner}
+          />
         </div>
 
         {/* ─── Similar ─── */}

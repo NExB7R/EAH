@@ -1,4 +1,5 @@
 import { unstable_cache } from 'next/cache'
+import { createClient } from '@/lib/supabase/server'
 import { createPublicClient } from '@/lib/supabase/public'
 import type { Business } from './businesses'
 
@@ -72,7 +73,7 @@ export const getBusinessDetail = unstable_cache(
     const { data: biz } = await supabase
       .from('businesses')
       .select(`
-        id, slug, name, business_type, description, hook,
+        id, slug, name, owner_profile_id, business_type, description, hook,
         area, city, address_text, map_url, cover_image_url,
         is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         trust_score, trust_tier, successful_orders,
@@ -161,6 +162,55 @@ export const getBusinessReviews = unstable_cache(
   ['business-reviews-v1'],
   { revalidate: 120, tags: ['reviews'] },
 )
+
+export type ReviewStats = {
+  count: number
+  avg: number
+  taste: number | null
+  value_for_money: number | null
+  speed: number | null
+  experience: number | null
+}
+
+export function computeReviewStats(reviews: Review[]): ReviewStats {
+  if (reviews.length === 0) {
+    return { count: 0, avg: 0, taste: null, value_for_money: null, speed: null, experience: null }
+  }
+
+  const avg = (arr: number[]) => arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : null
+  const collect = (key: keyof Review) =>
+    reviews.map((r) => r[key]).filter((v): v is number => typeof v === 'number')
+
+  const taste = avg(collect('taste'))
+  const vfm = avg(collect('value_for_money'))
+  const speed = avg(collect('speed'))
+  const exp = avg(collect('experience'))
+
+  const overall = reviews
+    .map((r) => {
+      const vals = [r.taste, r.value_for_money, r.speed, r.experience].filter((v): v is number => typeof v === 'number')
+      return vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : null
+    })
+    .filter((v): v is number => typeof v === 'number')
+
+  return {
+    count: reviews.length,
+    avg: overall.length > 0 ? overall.reduce((a, b) => a + b, 0) / overall.length : 0,
+    taste, value_for_money: vfm, speed, experience: exp,
+  }
+}
+
+// ─── فحص هل المستخدم قيّم قبل كده ───
+export async function getUserReview(businessId: string, userId: string) {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('business_reviews')
+    .select('id, status')
+    .eq('business_id', businessId)
+    .eq('user_id', userId)
+    .maybeSingle()
+  return data as { id: string; status: string } | null
+}
 
 // ═══════════════════════════════════════════════════════════
 // 3. Similar Businesses (for discovery)
