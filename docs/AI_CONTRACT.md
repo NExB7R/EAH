@@ -749,7 +749,7 @@ Doc-to-Code = 1:1. لو الكود اتغير وما اتوثّقش → الشغ
 
 | المعلومة | المصدر الوحيد |
 |---------|--------------|
-| آخر commit | PROGRESS.md |
+| آخر commit موثّق | PROGRESS.md |
 | الإصدار الحالي | PROGRESS.md |
 | حالة الملفات | PROGRESS.md |
 | Sacred files | SACRED.md قسم 4 |
