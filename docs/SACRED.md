@@ -146,35 +146,39 @@ EAH - 3 حروف، بالحروف اللاتينية. مش إيه، مش eah، �
 ---
 ## 4. الملفات المقدسة
 
-ممنوع تعديل بدون تصريح خاص:
+ممنوع تعديل بدون تصريح خاص. القائمة دي **المصدر الوحيد** — أي ملف تاني بيشاور عليها.
 
-Frontend Core:
-- components/home-hero.tsx + .css
-- components/home-dynamic-v2.tsx + .css
-- components/section-slider-v2.tsx + .css
-- components/simple-flip-card.tsx + .css
-- components/floating-capsule.tsx + .css
-- components/site-footer.tsx + .css
+### الهوية
+- `app/globals.css`
+- `app/layout.tsx`
+- `app/page.tsx`
 
-Backend:
-- lib/data.ts
-- lib/ranking.ts
-- lib/personalization.ts
-- lib/supabase-server.ts
-- lib/supabase-browser.ts
-- proxy.ts
-- next.config.ts
+### Core UI
+- `components/home-hero.tsx` + `.module.css`
+- `components/featured-bento.tsx` + `.module.css`
+- `components/business-card.tsx` + `.module.css`
+- `components/floating-capsule.tsx` + `.module.css`
 
-App:
-- app/layout.tsx
-- app/page.tsx
-- app/globals.css
+### Data + Logic
+- `lib/ranking.ts`
+- `lib/data/businesses.ts`
 
-Schema:
-- docs/SCHEMA.sql
+### Supabase
+- `lib/supabase/public.ts`
+- `lib/supabase/server.ts`
+- `lib/supabase/service.ts`
+
+### Config
+- `proxy.ts`
+- `next.config.ts`
+
+### Schema
+- `docs/SCHEMA.sql`
 - كل migrations
 
----
+### قبل أي تعديل
+> هعدل [الملف]. السبب: [السبب]. موافق؟
+
 
 ## 5. الملفات الممنوعة تماماً
 

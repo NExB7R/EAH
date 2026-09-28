@@ -540,20 +540,17 @@
 - Web Push (VAPID)
 
 ### هيكل
-eah/
-  docs/
-    MASTER_BRIEF.md
-    FEATURES.md
-    ROADMAP.md
-    AI_CONTRACT.md
-    SACRED.md
-    DESIGN_SYSTEM.md
-    ARCHITECTURE.md
-    SCHEMA.sql
-    MIGRATION_GUIDE.md
-  src/
-  public/
-  package.json
+EAH-V2/
+  docs/          ← 24 ملف وثائق
+  web/           ← Next.js app
+    app/
+    components/
+    lib/
+    public/
+    proxy.ts
+    next.config.ts
+    package.json
+  CHANGELOG.md
 
 ---
 
@@ -570,9 +567,10 @@ eah/
 
 ## 18. الرسالة للشات الجديد
 
-اقرأ MASTER_BRIEF.md كامل.
-اقرأ AI_CONTRACT.md + SACRED.md.
-قول قرأت. جاهز. واستنى.
+اقرأ بالترتيب:
+MASTER_BRIEF → AI_CONTRACT → SACRED → LESSONS → STRUCTURE → SECURITY → CODE_STANDARDS → DEBUGGING → PRODUCTION_CHECKLIST → DATABASE_RULES → AI_HANDOFF → PROGRESS → TODO → SESSION_LOG → AUDIT_PLAN.
+
+قول: قرأت. جاهز. واستنى.
 
 القواعد:
 1. ممنوع أي تعديل بدون سؤالي

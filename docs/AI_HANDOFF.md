@@ -2,31 +2,16 @@
 
 > تسليم سريع لأي AI/مطور.
 
-**آخر تحديث:** 2026-09-27
-**الإصدار:** v2.1.0-alpha
+**آخر تحديث:** 2026-09-28
+**الإصدار:** v2.2.0-alpha
 
 ---
 
 ## 0. ابدأ من هنا
 
-اقرأ بالترتيب:
+**الترتيب الكامل في FILE_ORDER.md** — المصدر الوحيد.
 
-1. MASTER_BRIEF.md
-2. AI_CONTRACT.md
-3. SACRED.md
-4. LESSONS.md
-5. STRUCTURE.md
-6. SECURITY.md
-7. CODE_STANDARDS.md
-8. DEBUGGING.md
-9. PRODUCTION_CHECKLIST.md
-10. DATABASE_RULES.md
-11. AI_HANDOFF.md (هذا الملف)
-12. PROGRESS.md
-13. TODO.md
-14. SESSION_LOG.md
-
-بعدها: "قرأت. جاهز." واستنى.
+بعد القراءة: "قرأت. جاهز." واستنى.
 
 ---
 
@@ -112,7 +97,7 @@
 1. SIGILL في npm run build محلي → استخدم Vercel Preview
 2. 'unsafe-inline' في CSP → مؤقت (Next.js 16)
 3. Unsplash في next.config.ts → مؤقت
-4. terminal paste للعربي → بيلخبط — استخدم nano أو base64
+4. terminal heredoc + nano للعربي → بيلخبط — استخدم base64 أو Python
 
 ---
 
@@ -147,31 +132,18 @@
 
 ## 10. الملفات المقدسة (SACRED)
 
-ممنوع تعديل بدون موافقة صريحة:
-- components/home-hero.tsx
-- components/featured-bento.tsx
-- components/row-carousel.tsx
-- components/business-card.tsx
-- components/floating-capsule.tsx
-- components/menu-drawer.tsx
-- lib/data/businesses.ts
-- lib/ranking.ts
-- lib/supabase/public.ts
-- proxy.ts
-- next.config.ts
-- app/layout.tsx
-- app/page.tsx
-- app/globals.css
+**القائمة الكاملة في SACRED.md قسم 4** — المصدر الوحيد.
 
 ---
 
 ## 11. الإصدارات
 
-- v2.1.0-alpha — الحالي (Home + Pages + Performance)
+- v2.2.0-alpha — الحالي (Business + Account + Merchant + Admin)
+- v2.1.0-alpha — Home + Pages + Performance
 - v2.0.0-alpha — Core كامل
 - v0.1.0 — Foundation
 
 ---
 
-آخر تحديث: 2026-09-27
+آخر تحديث: 2026-09-28
 المالك: NourEldin B7R — فلسطين في القلب

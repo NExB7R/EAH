@@ -4,6 +4,29 @@
 
 ---
 
+## [v2.2.0] - 2026-09-28
+
+### Added
+- **Business Page:** Hero + Tabs + Actions + Fixed CTA + Lightbox
+- **Smart Lock Modal:** قفل ذكي للمحتوى
+- **AI Business Advisor:** محرك التحليل + Storage + Retention
+- **Merchant Apply Wizard:** 4 خطوات
+- **Merchant Dashboard:** 7 صفحات
+- **Merchant Insights:** AI + Generate + Print
+- **Admin Dashboard:** 5 صفحات + Audit + Notifications + Reports + Settings + Insights
+- **Account:** 9 صفحات
+- **Pricing + Advertise:** 4 باقات + 4 إعلانات
+- **Static Pages:** /faq /terms /privacy /cookies /contact /support-palestine
+- **Components:** plan-card, paid-gate, smart-lock-modal, business-hero, business-tabs, business-actions, fixed-cta, signature, palestine-heart, sidebars, empty-state, coming-soon
+- **DB:** business_insights + 4 باقات + 4 ad_slots
+
+### Changed
+- **PROGRESS.md:** المصدر الوحيد للحقيقة
+- **SACRED.md:** قائمة الملفات المقدسة محدّثة
+- **AI_CONTRACT.md:** Single Source of Truth
+
+---
+
 ## [v2.1.0] - 2026-09-27
 
 ### Added

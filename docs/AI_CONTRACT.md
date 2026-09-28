@@ -158,23 +158,10 @@
 
 ## 6. الملفات المقدسة (SACRED)
 
-ممنوع تعديل بدون تصريح خاص:
+**القائمة الكاملة في SACRED.md قسم 4** — المصدر الوحيد.
+ممنوع تكرار القائمة هنا.
 
-- components/home-hero.tsx + .css
-- components/home-dynamic-v2.tsx
-- components/section-slider-v2.tsx + .css
-- components/simple-flip-card.tsx + .css
-- components/floating-capsule.tsx + .css
-- lib/data.ts
-- lib/ranking.ts
-- lib/supabase-server.ts
-- app/layout.tsx
-- app/page.tsx
-- app/globals.css
-- proxy.ts
-- next.config.ts
-
-قبل أي تعديل عليها:
+قبل أي تعديل:
 > هعدل [الملف]. السبب: [السبب]. موافق؟
 
 ---
@@ -416,17 +403,10 @@ wc -l file && tail -3 file
 
 ## 17. المراجع للقراءة الأولى
 
-أي AI/مطور جديد لازم يقرأ بالترتيب:
-1. `MASTER_BRIEF.md`
-2. `AI_CONTRACT.md` (هذا الملف)
-3. `SACRED.md`
-4. `LESSONS.md`
-5. `STRUCTURE.md`
-6. `SECURITY.md`
-7. `AI_HANDOFF.md`
-8. `PROGRESS.md`
+**الترتيب الكامل في FILE_ORDER.md** — المصدر الوحيد.
+ممنوع تكرار القائمة هنا.
 
-بعدها: "قرأت. جاهز." واستنى.
+بعد القراءة: "قرأت. جاهز." واستنى.
 
 ---
 
@@ -672,23 +652,9 @@ wc -l file && tail -3 file
 
 ## 22. Reading Order (إجباري)
 
-أي AI/مطور جديد لازم يقرأ بالترتيب:
+**شوف FILE_ORDER.md** — المصدر الوحيد.
 
-1. MASTER_BRIEF.md — الرؤية.
-2. AI_CONTRACT.md (هذا الملف) — القواعد.
-3. SACRED.md — المقدسات.
-4. LESSONS.md — التجارب الفاشلة.
-5. STRUCTURE.md — البنية.
-6. SECURITY.md — الأمان.
-7. CODE_STANDARDS.md — معايير الكود.
-8. DEBUGGING.md — التشخيص.
-9. PRODUCTION_CHECKLIST.md — قبل الإطلاق.
-10. DATABASE_RULES.md — قواعد DB.
-11. AI_HANDOFF.md — التسليم.
-12. PROGRESS.md — الحالة.
-13. TODO.md — خطة العمل.
-
-بعدها: "قرأت. جاهز." واستنى.
+بعد القراءة: "قرأت. جاهز." واستنى.
 
 ---
 
@@ -774,3 +740,34 @@ Doc-to-Code = 1:1. لو الكود اتغير وما اتوثّقش → الشغ
 
 ### الهدف:
 أي شات جديد يقدر يكمّل من غير سؤال — التوثيق دايماً محدّث.
+
+---
+
+## 26. Single Source of Truth (إجباري)
+
+**كل معلومة لها مصدر واحد. الباقي بيشاور عليه.**
+
+| المعلومة | المصدر الوحيد |
+|---------|--------------|
+| آخر commit | PROGRESS.md |
+| الإصدار الحالي | PROGRESS.md |
+| حالة الملفات | PROGRESS.md |
+| Sacred files | SACRED.md قسم 4 |
+| Reading order | FILE_ORDER.md |
+| المشاكل المعروفة | AI_HANDOFF.md قسم 7 |
+
+### ممنوع
+- تكرار قيمة في أكتر من ملف.
+- ملف بيقول commit قديم.
+- ملف بيقول version قديم.
+
+### بعد كل commit
+1. حدّث PROGRESS.md (commit + version + status)
+2. حدّث SESSION_LOG.md (سطر الجلسة)
+3. حدّث CHANGELOG.md (لو version جديد)
+4. حدّث NEW_CHAT_MESSAGE.md (commit + version)
+5. حدّث AI_HANDOFF.md (لو في مشكلة جديدة)
+
+### فحص دوري
+ابحث في docs/ عن أي قيمة commit أو version خارج PROGRESS.md.
+أي نتيجة = خطأ.

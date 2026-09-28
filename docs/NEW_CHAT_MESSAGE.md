@@ -2,28 +2,15 @@
 
 **التاريخ:** 2026-09-28
 **الإصدار:** v2.2.0-alpha
-**آخر commit:** 1f13a66
+**آخر commit:** 38fd06b
 
 ---
 
 ## ابدأ من هنا
 
-1. MASTER_BRIEF.md
-2. AI_CONTRACT.md
-3. SACRED.md
-4. LESSONS.md
-5. STRUCTURE.md
-6. SECURITY.md
-7. CODE_STANDARDS.md
-8. DEBUGGING.md
-9. PRODUCTION_CHECKLIST.md
-10. DATABASE_RULES.md
-11. AI_HANDOFF.md
-12. PROGRESS.md
-13. TODO.md
-14. SESSION_LOG.md
+**الترتيب الكامل في FILE_ORDER.md** — المصدر الوحيد.
 
-بعدها: "قرأت. جاهز." واستنى.
+بعد القراءة: "قرأت. جاهز." واستنى.
 
 ---
 

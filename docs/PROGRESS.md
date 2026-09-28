@@ -1,129 +1,267 @@
 # EAH — PROGRESS.md
 
-> حالة كل ملف في v2. آخر تحديث: 2026-09-27
+> حالة كل ملف في v2. المصدر الوحيد للحقيقة.
+> آخر تحديث: 2026-09-28
 
 ---
 
-## 📊 الحالة العامة
+## الحالة العامة
 
-**آخر commit:** `155a744`
+**آخر commit:** `38fd06b`
 **الفرع:** main (متزامن مع origin/v2)
-**v2.1.0-alpha**
+**الإصدار:** v2.2.0-alpha
 
 ---
 
-## web/ (Next.js app)
+## web/ — Config
 
-### Config
 | الملف | الحالة |
 |------|--------|
-| `.env.example` | ✅ |
-| `next.config.ts` | ✅ (CSP + headers) |
-| `tsconfig.json` | ✅ (strict + noUncheckedIndexedAccess) |
-| `package.json` | ✅ |
-| `eslint.config.mjs` | ✅ |
+| .env.example | ✅ |
+| next.config.ts | ✅ |
+| tsconfig.json | ✅ |
+| package.json | ✅ |
+| eslint.config.mjs | ✅ |
 
-### App — Pages
+---
+
+## web/ — Pages
+
 | الملف | الحالة |
 |------|--------|
-| `app/layout.tsx` | ✅ (Splash + Capsule + ScrollToTop) |
-| `app/page.tsx` | ✅ Home كامل (10 sections) |
-| `app/loading.tsx` | ✅ skeleton |
-| `app/globals.css` | ✅ |
-| `app/manifest.ts` | ✅ |
-| `app/explore/page.tsx` | ✅ (search + filters + load more) |
-| `app/explore/loading.tsx` | ✅ |
-| `app/featured/page.tsx` | ✅ (grid + load more, gold) |
-| `app/featured/loading.tsx` | ✅ |
-| `app/trends/page.tsx` | ✅ (orange) |
-| `app/trends/loading.tsx` | ✅ |
-| `app/offers/page.tsx` | ✅ (purple) |
-| `app/offers/loading.tsx` | ✅ |
-| `app/new/page.tsx` | ✅ (purple) |
-| `app/new/loading.tsx` | ✅ |
-| `app/nearby/page.tsx` | ✅ (purple) |
-| `app/nearby/loading.tsx` | ✅ |
-| `app/suggest/page.tsx` | ✅ (placeholder) |
-| `app/businesses/[slug]/page.tsx` | ⚠️ مؤقت |
-| `app/about/page.tsx` | ✅ |
-| `app/about/presentation/page.tsx` | ✅ (12 slides) |
+| app/layout.tsx | ✅ |
+| app/page.tsx | ✅ |
+| app/globals.css | ✅ |
+| app/manifest.ts | ✅ |
+| app/loading.tsx | ✅ |
+| app/explore/page.tsx | ✅ |
+| app/explore/loading.tsx | ✅ |
+| app/featured/page.tsx | ✅ |
+| app/featured/loading.tsx | ✅ |
+| app/trends/page.tsx | ✅ |
+| app/trends/loading.tsx | ✅ |
+| app/offers/page.tsx | ✅ |
+| app/offers/loading.tsx | ✅ |
+| app/new/page.tsx | ✅ |
+| app/new/loading.tsx | ✅ |
+| app/nearby/page.tsx | ✅ |
+| app/nearby/loading.tsx | ✅ |
+| app/suggest/page.tsx | ✅ |
+| app/businesses/[slug]/page.tsx | ✅ |
+| app/about/page.tsx | ✅ |
+| app/about/presentation/page.tsx | ✅ |
+| app/pricing/page.tsx | ✅ |
+| app/advertise/page.tsx | ✅ |
+| app/contact/page.tsx | ✅ |
+| app/terms/page.tsx | ✅ |
+| app/privacy/page.tsx | ✅ |
+| app/cookies/page.tsx | ✅ |
+| app/faq/page.tsx | ✅ |
+| app/support-palestine/page.tsx | ✅ |
 
-### App — Auth
+---
+
+## web/ — Auth
+
 | الملف | الحالة |
 |------|--------|
-| `app/auth/actions.ts` | ✅ |
-| `app/auth/auth-form.tsx` | ✅ |
-| `app/auth/auth.module.css` | ✅ |
-| `app/auth/page.tsx` | ✅ |
-| `app/auth/recover/page.tsx` | ✅ |
-| `app/auth/logout/route.ts` | ✅ |
+| app/auth/actions.ts | ✅ |
+| app/auth/auth-form.tsx | ✅ |
+| app/auth/auth.module.css | ✅ |
+| app/auth/page.tsx | ✅ |
+| app/auth/recover/page.tsx | ✅ |
+| app/auth/logout/route.ts | ✅ |
 
-### App — API
+---
+
+## web/ — API
+
 | الملف | الحالة |
 |------|--------|
-| `app/api/track-action/route.ts` | ✅ |
+| app/api/track-action/route.ts | ✅ |
 
-### Components
+---
+
+## web/ — Account
+
 | الملف | الحالة |
 |------|--------|
-| `avatar.tsx` | ✅ |
-| `business-card.tsx` | ✅ (موحّد لكل الأقسام + tone) |
-| `explore-search.tsx` | ✅ |
-| `featured-bento.tsx` | ✅ (Home — grid 8/6/4) |
-| `floating-capsule.tsx` | ✅ (🎯 اكتشف + ℹ️) |
-| `home-hero.tsx` | ✅ |
-| `install-prompt.tsx` | ✅ |
-| `loading-skeleton.tsx` | ✅ |
-| `load-more.tsx` | ✅ (client component) |
-| `logo.tsx` | ✅ |
-| `menu-drawer.tsx` | ✅ |
-| `nearby-cta.tsx` | ✅ (location) |
-| `nearby-grid.tsx` | ✅ (Home row) |
-| `new-row.tsx` | ✅ (Home row) |
-| `offers-strip.tsx` | ✅ (Home row) |
-| `page-header.tsx` | ✅ |
-| `review-reminder.tsx` | ✅ |
-| `row-carousel.tsx` | ✅ (auto-scroll + hidden arrows) |
-| `scroll-to-top.tsx` | ✅ |
-| `secondary-hero.tsx` | ✅ (لوجو + خط + nav + عنوان) |
-| `section-layout.tsx` | ✅ (Server + LoadMoreGrid) |
-| `section-nav.tsx` | ✅ (8 أيقونات) |
-| `section-title.tsx` | ✅ (6 tones) |
-| `signup-prompt.tsx` | ✅ |
-| `splash.tsx` | ✅ |
-| `suggested-section.tsx` | ✅ |
-| `trending-row.tsx` | ✅ (Home row — rank badge) |
-| `watermark.tsx` | ✅ |
-| `wm-image.tsx` | ✅ |
-| `icons/index.tsx` | ✅ (~50 أيقونة) |
+| app/account/layout.tsx | ✅ |
+| app/account/page.tsx | ✅ |
+| app/account/edit/page.tsx | ✅ |
+| app/account/edit/edit-form.tsx | ✅ |
+| app/account/favorites/page.tsx | ✅ |
+| app/account/following/page.tsx | ✅ |
+| app/account/notifications/page.tsx | ✅ |
+| app/account/orders/page.tsx | ✅ |
+| app/account/points/page.tsx | ✅ |
+| app/account/security/page.tsx | ✅ |
+| app/account/security/change-password-form.tsx | ✅ |
+| app/account/verify/page.tsx | ✅ |
 
-### Lib
+---
+
+## web/ — Merchant
+
 | الملف | الحالة |
 |------|--------|
-| `data/businesses.ts` | ✅ (11 query + cache 300s) |
-| `data/user.ts` | ✅ |
-| `data/areas.ts` | ✅ |
-| `data/index.ts` | ✅ |
-| `engagement.ts` | ✅ |
-| `featured-rotation.ts` | ⚠️ مش مستخدم (ممكن نمسحه) |
-| `hooks/use-fair-rotation.ts` | ✅ (Fisher-Yates + sessionStorage) |
-| `nav-items.ts` | ✅ (8 items) |
-| `ranking.ts` | ✅ |
-| `search/history.ts` | ✅ |
-| `search/index.ts` | ✅ |
-| `search/normalize.ts` | ✅ |
-| `search/synonyms.ts` | ✅ |
-| `supabase/public.ts` | ✅ |
-| `supabase/server.ts` | ✅ |
-| `supabase/service.ts` | ✅ |
-| `supabase/browser.ts` | ✅ |
-| `utils/distance.ts` | ✅ |
-| `validations/auth.ts` | ✅ |
+| app/merchant/layout.tsx | ✅ |
+| app/merchant/page.tsx | ✅ |
+| app/merchant/actions.ts | ✅ |
+| app/merchant/apply/page.tsx | ✅ |
+| app/merchant/apply/apply-wizard.tsx | ✅ |
+| app/merchant/apply/success/page.tsx | ✅ |
+| app/merchant/business/page.tsx | ✅ |
+| app/merchant/business/edit-form.tsx | ✅ |
+| app/merchant/orders/page.tsx | ✅ |
+| app/merchant/offers/page.tsx | ✅ |
+| app/merchant/subscription/page.tsx | ✅ |
+| app/merchant/settings/page.tsx | ✅ |
+| app/merchant/insights/page.tsx | ✅ |
+| app/merchant/insights/actions.ts | ✅ |
+| app/merchant/insights/generate-button.tsx | ✅ |
+| app/merchant/insights/[id]/page.tsx | ✅ |
+| app/merchant/insights/[id]/print-button.tsx | ✅ |
 
-### Root
+---
+
+## web/ — Admin
+
 | الملف | الحالة |
 |------|--------|
-| `proxy.ts` | ✅ (session refresh + route protection) |
+| app/admin/layout.tsx | ✅ |
+| app/admin/page.tsx | ✅ |
+| app/admin/businesses/page.tsx | ✅ |
+| app/admin/users/page.tsx | ✅ |
+| app/admin/subscriptions/page.tsx | ✅ |
+| app/admin/analytics/page.tsx | ✅ |
+| app/admin/ads/page.tsx | ✅ |
+| app/admin/moderation/page.tsx | ✅ |
+| app/admin/audit/page.tsx | ✅ |
+| app/admin/notifications/page.tsx | ✅ |
+| app/admin/reports/page.tsx | ✅ |
+| app/admin/settings/page.tsx | ✅ |
+| app/admin/insights/page.tsx | ✅ |
+
+---
+
+## web/ — Components
+
+### Layout + Navigation
+
+| الملف | الحالة |
+|------|--------|
+| floating-capsule.tsx | ✅ |
+| menu-drawer.tsx | ✅ |
+| secondary-hero.tsx | ✅ |
+| page-header.tsx | ✅ |
+| section-nav.tsx | ✅ |
+| section-title.tsx | ✅ |
+| scroll-to-top.tsx | ✅ |
+| site-footer.tsx | ✅ |
+| account-sidebar.tsx | ✅ |
+| admin-sidebar.tsx | ✅ |
+| merchant-sidebar.tsx | ✅ |
+| account-page-header.tsx | ✅ |
+
+### Cards + Home Sections
+
+| الملف | الحالة |
+|------|--------|
+| business-card.tsx | ✅ |
+| featured-bento.tsx | ✅ |
+| home-hero.tsx | ✅ |
+| trending-row.tsx | ✅ |
+| offers-strip.tsx | ✅ |
+| new-row.tsx | ✅ |
+| nearby-grid.tsx | ✅ |
+| nearby-cta.tsx | ✅ |
+| suggested-section.tsx | ✅ |
+| row-carousel.tsx | ✅ |
+| load-more.tsx | ✅ |
+| section-layout.tsx | ✅ |
+| loading-skeleton.tsx | ✅ |
+
+### UI + Business
+
+| الملف | الحالة |
+|------|--------|
+| avatar.tsx | ✅ |
+| logo.tsx | ✅ |
+| splash.tsx | ✅ |
+| signature.tsx | ✅ |
+| palestine-heart.tsx | ✅ |
+| watermark.tsx | ✅ |
+| wm-image.tsx | ✅ |
+| icons/index.tsx | ✅ |
+| install-prompt.tsx | ✅ |
+| signup-prompt.tsx | ✅ |
+| review-reminder.tsx | ✅ |
+| explore-search.tsx | ✅ |
+| business-hero.tsx | ✅ |
+| business-tabs.tsx | ✅ |
+| business-actions.tsx | ✅ |
+| fixed-cta.tsx | ✅ |
+| smart-lock-modal.tsx | ✅ |
+| paid-gate.tsx | ✅ |
+| plan-card.tsx | ✅ |
+| empty-state.tsx | ✅ |
+| coming-soon.tsx | ✅ |
+| about-free-app.tsx | ✅ |
+
+---
+
+## web/ — Lib
+
+### Data
+
+| الملف | الحالة |
+|------|--------|
+| lib/data/businesses.ts | ✅ |
+| lib/data/business-detail.ts | ✅ |
+| lib/data/account.ts | ✅ |
+| lib/data/admin.ts | ✅ |
+| lib/data/areas.ts | ✅ |
+| lib/data/insights.ts | ✅ |
+| lib/data/merchant.ts | ✅ |
+| lib/data/subscriptions.ts | ✅ |
+| lib/data/user.ts | ✅ |
+| lib/data/index.ts | ✅ |
+
+### AI + Supabase
+
+| الملف | الحالة |
+|------|--------|
+| lib/ai/business-advisor.ts | ✅ |
+| lib/ai/storage.ts | ✅ |
+| lib/supabase/public.ts | ✅ |
+| lib/supabase/server.ts | ✅ |
+| lib/supabase/service.ts | ✅ |
+| lib/supabase/browser.ts | ✅ |
+
+### Utils + Search + Hooks
+
+| الملف | الحالة |
+|------|--------|
+| lib/engagement.ts | ✅ |
+| lib/featured-rotation.ts | ⚠️ مش مستخدم |
+| lib/ranking.ts | ✅ |
+| lib/nav-items.ts | ✅ |
+| lib/hooks/use-fair-rotation.ts | ✅ |
+| lib/utils/distance.ts | ✅ |
+| lib/search/history.ts | ✅ |
+| lib/search/index.ts | ✅ |
+| lib/search/normalize.ts | ✅ |
+| lib/search/synonyms.ts | ✅ |
+| lib/validations/auth.ts | ✅ |
+| lib/validations/merchant.ts | ✅ |
+
+## web/ — Root
+
+| الملف | الحالة |
+|------|--------|
+| proxy.ts | ✅ |
+| next.config.ts | ✅ |
 
 ---
 
@@ -155,6 +293,8 @@
 | LESSONS.md | ✅ |
 | NEW_CHAT_MESSAGE.md | ✅ |
 | FILE_ORDER.md | ✅ |
+| AUDIT_PLAN.md | ✅ |
+| PERFORMANCE_SECURITY_PLAN.md | ✅ |
 
 ---
 
@@ -163,21 +303,20 @@
 - **App:** ~2400 سطر
 - **Components:** ~3500 سطر
 - **Lib:** ~1800 سطر
-- **Docs:** ~6000 سطر
+- **Docs:** ~7000 سطر
 
 ---
 
 ## 🎯 اللي جاي
 
-1. **Footer** — كامل (روح 2026).
-2. **`/about` polish**.
-3. **Account** — `/account/*`.
-4. **Merchant** — `/merchant/*`.
-5. **Admin** — `/admin/*`.
-6. **Business Page كاملة**.
-7. **Rate Limiting** (Upstash).
-8. **Turnstile** على signup.
+1. التعليقات + التقييمات الكاملة
+2. نظام المصداقية الديناميكي
+3. الفرص الجديدة (30 يوم)
+4. 5 صفحات Admin المتبقية
+5. Rate Limiting (Upstash)
+6. Turnstile على signup
+7. nonce-based CSP
 
 ---
 
-آخر تحديث: 2026-09-27
+آخر تحديث: 2026-09-28
