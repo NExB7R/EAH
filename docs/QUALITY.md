@@ -28,30 +28,35 @@
 | 4 | Secrets | gitleaks | مفاتيح وكلمات سر |
 | 5 | Dependencies | npm audit | ثغرات الحزم |
 | 6 | Dead Code | knip | ملفات ودوال ميتة |
+| 7 | Unit Tests | vitest | منطق الأعمال |
+| 8 | CI | GitHub Actions | بوابة على السيرفر |
 
 ---
 
 ## 2. إمتى بتشتغل
 
 ### Pre-commit
-- gitleaks: 0.2s
+- secrets (gitleaks): 0.4s
+- tests (vitest): 6s
 - prettier: 3s
-- eslint: 8s
-- typecheck: 9s
-- المجموع: 10 ثواني
+- eslint: 9s
+- typecheck: 11s
+- المجموع: 11 ثانية (parallel)
 
 ### Pre-push
-- eslint-full: 27s
+- eslint-full: 25s
 - npm-audit: 2s
-- prettier-full: 23s
-- typecheck-full: 10s
-- المجموع: 60 ثانية
+- prettier-full: 12s
+- tests-full: 3s
+- typecheck-full: 6s
+- المجموع: 46 ثانية
 
 ### يدوي
 cd web
 npm run lint
 npm run format
 npm run typecheck
+npm run test
 npm run knip
 npm run secrets
 
@@ -64,6 +69,8 @@ npm run secrets
 - web/.jscpd.json
 - web/.prettierrc.json
 - web/.prettierignore
+- web/vitest.config.mts
+- .github/workflows/quality.yml
 
 ---
 
@@ -74,6 +81,7 @@ npm run secrets
 - prettier: npx prettier --write
 - secrets: شيل الsecret وغيّره
 - knip: احذف او ضيف لـ ignore
+- vitest: اقرأ الخطأ، صلّح الكود أو الاختبار
 
 ---
 
@@ -84,10 +92,12 @@ npm run secrets
 - @ts-ignore بدون تعليق
 - secrets في الكود
 - unused imports
+- commit بدون اختبار للـ logic الجديد
 
 مسموح:
 - eslint-disable مع تعليق
 - ignore في knip لو false positive
+- skip test لو tricky (بحذر)
 
 ---
 
@@ -104,6 +114,7 @@ npm run secrets
 ## 7. الصيانة
 
 اسبوعياً:
+npm run test
 npm run knip
 npm run dup
 npm audit
@@ -133,6 +144,8 @@ npx npm-check-updates
 | lefthook | بوابة Git |
 | gitleaks | secrets |
 | knip | كود ميت |
+| Vitest | unit tests |
+| GitHub Actions | CI |
 
 ---
 

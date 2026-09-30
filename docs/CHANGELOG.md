@@ -4,6 +4,33 @@
 
 ---
 
+## [v2.3.0] - 2026-09-30
+
+### Added
+- Reviews System (submit + reply + display + sentiment)
+- Trust Impact System (trust.ts — 4 pillars + decay + GTA wanted level)
+- useMounted + useMediaQuery hooks (React 19 useSyncExternalStore)
+- Quality Gate: lefthook + gitleaks + knip + jscpd + vitest
+- Vercel Analytics (5KB)
+- Vitest: 58 unit tests (trust, ranking, validations)
+- GitHub Actions quality gate
+- Docs: QUALITY.md, PLAN_TRUST_SOCIAL.md, PLAN_AI_AGENT.md
+- Migration: 2026-09-30-trust-foundation.sql
+
+### Changed
+- ESLint: 55 → 0 issues
+- Prettier: 204 files formatted
+- Supabase: 4 clients → 3 (removed browser.ts)
+
+### Removed
+- lib/featured-rotation.ts
+- lib/utils/distance.ts
+- lib/supabase/browser.ts
+- 6 dead functions
+- 2 dead constants (DEFAULT_AREA, AREA_COORDS)
+
+---
+
 ## [v2.2.0] - 2026-09-28
 
 ### Added

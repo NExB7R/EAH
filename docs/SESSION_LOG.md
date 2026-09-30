@@ -2,7 +2,7 @@
 
 > سجل الجلسات. كل جلسة تبدأ من حيث انتهت اللي قبلها.
 
-آخر تحديث: 2026-09-28
+آخر تحديث: 2026-09-30
 
 ---
 
@@ -102,3 +102,44 @@
 ---
 
 آخر تحديث: 2026-09-28
+
+## 2026-09-30 — Session 5: Quality Gate System
+
+### اللي اتحقق
+- ESLint: 55 → 0 (كل errors + warnings)
+- Prettier: 204 ملف formatted
+- حذف: featured-rotation.ts + distance.ts + browser.ts (ملفات ميتة)
+- حذف: 6 دوال ميتة (getTopBusinesses, getOpportunities, generateAndRedirect, calculateQuickScore, sortByFeatured, shuffleArray)
+- حذف: DEFAULT_AREA + AREA_COORDS
+- تثبيت: lefthook + gitleaks + knip + jscpd + vitest
+- lefthook: 7 طبقات (secrets + tests + prettier + eslint + typecheck + npm-audit + eslint-full)
+- Vercel Analytics (5KB بدل Sentry 250KB)
+- Vitest: 58 اختبار (trust + ranking + validations)
+- GitHub Actions: quality gate
+- توثيق: QUALITY.md
+
+### الملفات الجديدة
+- lefthook.yml
+- web/knip.json
+- web/.jscpd.json
+- web/.prettierrc.json
+- web/.prettierignore
+- web/vitest.config.mts
+- web/lib/trust.ts
+- web/lib/hooks/use-mounted.ts
+- web/lib/trust.test.ts
+- web/lib/ranking.test.ts
+- web/lib/validations/review-auth.test.ts
+- web/app/reviews/actions.ts
+- web/lib/validations/review.ts
+- .github/workflows/quality.yml
+- docs/QUALITY.md
+- docs/PLAN_TRUST_SOCIAL.md
+- docs/PLAN_AI_AGENT.md
+- docs/migrations/2026-09-30-trust-foundation.sql
+
+### اللي معلق
+- Reviews system (backend اتبنى، لسه محتاج migration + اختبار)
+- Trust Score (trust.ts جاهز، محتاج DB)
+- البحث بالرقم
+- AI Agent
