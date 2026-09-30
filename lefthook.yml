@@ -1,53 +1,32 @@
-# EAH — Lefthook (Complete Quality Gate)
+# EAH — Lefthook (3-Stage Quality Gate)
 # ═══════════════════════════════════════════════════════════
-# بوابة واحدة — 7 طبقات حماية
+# Pre-commit: سريع (1-3s) — فحص staged files بس
+# Pre-push:  متوسط (6-8s) — typecheck كامل
+# GitHub Actions: شامل (2-5 min) — tests + secrets + كل حاجة
 # ═══════════════════════════════════════════════════════════
 
 pre-commit:
   parallel: true
   commands:
-    typecheck:
-      root: "web/"
-      glob: "**/*.{ts,tsx}"
-      run: npx tsc --noEmit
+    # secrets (سريع جداً — 0.4s)
+    secrets:
+      run: gitleaks protect --staged --redact --no-banner
 
-    eslint:
-      root: "web/"
-      glob: "**/*.{ts,tsx}"
-      run: npx eslint {staged_files}
-
+    # prettier على الملفات المعدلة
     prettier:
       root: "web/"
       glob: "**/*.{ts,tsx,css,json}"
       run: npx prettier --check {staged_files}
 
-    secrets:
-      run: gitleaks protect --staged --redact --no-banner
-
-    tests:
+    # eslint على الملفات المعدلة
+    eslint:
       root: "web/"
       glob: "**/*.{ts,tsx}"
-      run: npx vitest run --reporter=dot
+      run: npx eslint {staged_files}
 
 pre-push:
-  parallel: false
   commands:
-    typecheck-full:
+    # typecheck كامل (الفحص البطيء الوحيد)
+    typecheck:
       root: "web/"
       run: npx tsc --noEmit
-
-    eslint-full:
-      root: "web/"
-      run: npx eslint .
-
-    prettier-full:
-      root: "web/"
-      run: npx prettier --check "**/*.{ts,tsx,css,json}"
-
-    npm-audit:
-      root: "web/"
-      run: npm audit --audit-level=high
-
-    tests-full:
-      root: "web/"
-      run: npx vitest run --reporter=dot

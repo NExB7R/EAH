@@ -182,32 +182,41 @@ export async function getNotifications(userId: string, limit = 50): Promise<Noti
   return (data ?? []) as NotificationItem[]
 }
 
-// ─── Profile (Full) ───
+// ─── Profile (Full) — عبر RPC (SECURITY DEFINER) ───
+// السبب: الأعمدة الحساسة (phone, phone_e164, default_address) ممنوعة من SELECT مباشر
+// RPC بيتحقق من auth.uid() ويرجّع بيانات صاحب الحساب فقط
 export type FullProfile = {
   id: string
   display_name: string
   phone: string | null
-  gender: string | null
-  bio: string | null
+  phone_e164: string | null
+  phone_verified_at: string | null
   avatar_url: string | null
+  bio: string | null
+  gender: string | null
+  default_area: string | null
+  default_address: string | null
+  default_latitude: number | null
+  default_longitude: number | null
+  referral_code: string | null
   trust_score: number
   trust_tier: string
-  verified_at: string | null
-  phone_verified_at: string | null
-  streak_count: number
-  referral_code: string | null
+  impact_score: number
+  impact_level: string
+  wanted_level: number
+  is_premium: boolean
+  premium_until: string | null
+  display_name_mode: string
+  alias: string | null
+  hide_avatar: boolean
+  hide_favorites: boolean
+  hide_following: boolean
   created_at: string
 }
 
-export async function getFullProfile(userId: string): Promise<FullProfile | null> {
+export async function getFullProfile(_userId: string): Promise<FullProfile | null> {
+  void _userId // الـ RPC بيعتمد على auth.uid() — مش محتاج userId
   const supabase = await createClient()
-  const { data } = await supabase
-    .from('profiles')
-    .select(
-      'id, display_name, phone, gender, bio, avatar_url, trust_score, trust_tier, verified_at, phone_verified_at, streak_count, referral_code, created_at',
-    )
-    .eq('id', userId)
-    .maybeSingle()
-
+  const { data } = await supabase.rpc('get_my_profile').maybeSingle()
   return (data as FullProfile) ?? null
 }

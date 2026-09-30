@@ -21,32 +21,37 @@ type Row = {
 
 async function getUsers(): Promise<Row[]> {
   const supabase = await createClient()
-  const { data } = await supabase
-    .from('profiles')
-    .select(
-      `
-      id, display_name, avatar_url, phone, phone_verified_at,
-      trust_score, trust_tier, created_at,
-      user_roles(role)
-    `,
-    )
-    .order('created_at', { ascending: false })
-    .limit(100)
 
-  return (data ?? []).map((p: Record<string, unknown>) => {
-    const roles = p.user_roles as Array<{ role: string }> | undefined
-    return {
-      id: p.id as string,
-      display_name: p.display_name as string,
-      avatar_url: p.avatar_url as string | null,
-      phone: p.phone as string | null,
-      phone_verified_at: p.phone_verified_at as string | null,
-      trust_score: p.trust_score as number,
-      trust_tier: p.trust_tier as string,
-      created_at: p.created_at as string,
-      role: roles?.[0]?.role ?? null,
-    }
-  })
+  // 1. profiles عبر RPC (يسمح للأدمن يشوف phone)
+  const { data: profiles } = await supabase.rpc('admin_get_profiles')
+
+  if (!profiles) return []
+
+  // 2. الأدوار من user_roles
+  const { data: roles } = await supabase
+    .from('user_roles')
+    .select('user_id, role')
+    .in(
+      'user_id',
+      profiles.map((p: { id: string }) => p.id),
+    )
+
+  const rolesMap = new Map<string, string>()
+  for (const r of roles ?? []) {
+    rolesMap.set(r.user_id as string, r.role as string)
+  }
+
+  return profiles.map((p: Record<string, unknown>) => ({
+    id: p.id as string,
+    display_name: p.display_name as string,
+    avatar_url: p.avatar_url as string | null,
+    phone: p.phone as string | null,
+    phone_verified_at: p.phone_verified_at as string | null,
+    trust_score: p.trust_score as number,
+    trust_tier: p.trust_tier as string,
+    created_at: p.created_at as string,
+    role: rolesMap.get(p.id as string) ?? null,
+  }))
 }
 
 const TIER_LABEL: Record<string, string> = {

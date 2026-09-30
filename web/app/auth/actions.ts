@@ -63,14 +63,12 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
 
   const supabase = await createClient()
 
-  // ─── تحقق يدوي: الرقم مسجل قبل كده؟ ───
-  const { data: existing } = await supabase
-    .from('profiles')
-    .select('id')
-    .eq('phone_e164', phoneE164)
-    .maybeSingle()
+  // ─── تحقق يدوي: الرقم مسجل قبل كده؟ (عبر RPC) ───
+  const { data: isRegistered } = await supabase.rpc('is_phone_registered', {
+    p_phone_e164: phoneE164,
+  })
 
-  if (existing) {
+  if (isRegistered) {
     return {
       ok: false,
       error: 'الرقم ده مسجل قبل كده — جرب تدخل',

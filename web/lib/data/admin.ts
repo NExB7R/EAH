@@ -62,19 +62,32 @@ export async function getAdminStats(): Promise<AdminStats> {
 
 export async function getPendingBusinesses(limit = 50): Promise<PendingBusiness[]> {
   const supabase = await createClient()
-  const { data } = await supabase
+
+  // 1. الأنشطة المعلقة (بدون owner phone)
+  const { data: businesses } = await supabase
     .from('businesses')
-    .select(
-      `
-      id, name, slug, business_type, area, cover_image_url, description, created_at,
-      owner:profiles(display_name, phone)
-    `,
-    )
+    .select('id, name, slug, business_type, area, cover_image_url, description, created_at')
     .eq('is_published', false)
     .order('created_at', { ascending: false })
     .limit(limit)
 
-  return (data ?? []) as unknown as PendingBusiness[]
+  if (!businesses || businesses.length === 0) return []
+
+  // 2. أصحاب الأنشطة عبر RPC (يسمح للأدمن يشوف phone)
+  const { data: owners } = await supabase.rpc('admin_get_business_owners')
+
+  const ownersMap = new Map<string, { display_name: string; phone: string | null }>()
+  for (const o of owners ?? []) {
+    ownersMap.set(o.business_id, {
+      display_name: o.owner_name,
+      phone: o.owner_phone,
+    })
+  }
+
+  return businesses.map((b) => ({
+    ...b,
+    owner: ownersMap.get(b.id) ?? null,
+  })) as PendingBusiness[]
 }
 
 // ═══════════════════════════════════════════════════════════
