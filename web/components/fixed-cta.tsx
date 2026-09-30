@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { WhatsAppIcon, PhoneIcon, LockIcon } from './icons'
 import SmartLockModal, { useSmartLock } from './smart-lock-modal'
 import styles from './fixed-cta.module.css'

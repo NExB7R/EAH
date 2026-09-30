@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import {
   SparklesIcon,
-  TrendingUpIcon,
   FileTextIcon,
   ArrowLeftIcon,
   LockIcon,
@@ -139,7 +138,6 @@ export default async function MerchantInsightsPage() {
               <div className={styles.historyList}>
                 {insights.map((ins) => {
                   const date = new Date(ins.created_at).toLocaleDateString('ar-EG')
-                  const isFull = ins.summary !== null
                   return (
                     <Link
                       key={ins.id}

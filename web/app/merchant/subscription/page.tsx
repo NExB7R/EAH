@@ -31,8 +31,10 @@ export default async function MerchantSubscriptionPage() {
 
   const currentCode = subscription?.plan?.code ?? 'basic'
   const expiresAt = subscription ? new Date(subscription.expires_at) : null
+  // eslint-disable-next-line react-hooks/purity -- server component, runs per request
+  const nowMs = Date.now()
   const daysLeft = expiresAt
-    ? Math.max(0, Math.ceil((expiresAt.getTime() - Date.now()) / (24 * 60 * 60 * 1000)))
+    ? Math.max(0, Math.ceil((expiresAt.getTime() - nowMs) / (24 * 60 * 60 * 1000)))
     : 0
 
   const isTrial = subscription?.is_trial

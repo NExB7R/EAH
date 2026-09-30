@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useMounted, useMediaQuery } from '@/lib/hooks/use-mounted'
 import { ChevronLeftIcon, ChevronRightIcon } from './icons'
 import styles from './row-carousel.module.css'
 
@@ -24,14 +25,9 @@ export default function RowCarousel({
   const trackRef = useRef<HTMLDivElement | null>(null)
   const [paused, setPaused] = useState(false)
   const [inView, setInView] = useState(true)
-  const [reduced, setReduced] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const mounted = useMounted()
   const [hasOverflow, setHasOverflow] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-    setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-  }, [])
 
   useEffect(() => {
     const el = trackRef.current

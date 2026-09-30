@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import SecondaryHero from './secondary-hero'
-import { TargetIcon, ArrowLeftIcon } from './icons'
+import { ArrowLeftIcon } from './icons'
 import styles from './coming-soon.module.css'
 
 type Props = {

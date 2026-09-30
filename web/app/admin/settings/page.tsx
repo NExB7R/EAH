@@ -1,4 +1,3 @@
-import { createClient } from '@/lib/supabase/server'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import { ShieldCheckIcon } from '@/components/icons'

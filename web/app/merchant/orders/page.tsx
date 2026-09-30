@@ -1,6 +1,5 @@
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { FileTextIcon, MapPinIcon, PhoneIcon } from '@/components/icons'
+import { FileTextIcon, PhoneIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness, getMerchantOrders } from '@/lib/data/merchant'
 import AccountPageHeader from '@/components/account-page-header'

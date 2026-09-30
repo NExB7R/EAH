@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useMediaQuery } from '@/lib/hooks/use-mounted'
 import { useRouter } from 'next/navigation'
 import Logo from '@/components/logo'
 import {
@@ -41,7 +42,7 @@ const AUTOPLAY_MS = 8000
 export default function PresentationClient() {
   const router = useRouter()
   const [index, setIndex] = useState(0)
-  const [reduced, setReduced] = useState(false)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
   const [autoplay, setAutoplay] = useState(false)
   const [paused, setPaused] = useState(false)
   const touchStartX = useRef<number | null>(null)
@@ -70,11 +71,6 @@ export default function PresentationClient() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [next, prev, exit])
-
-  // reduced motion
-  useEffect(() => {
-    setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-  }, [])
 
   // autoplay
   useEffect(() => {

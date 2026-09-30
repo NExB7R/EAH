@@ -133,7 +133,7 @@ export async function getBusinessMetrics(
 
   // ─── Process orders ───
   let confirmed = 0, cancelled = 0, pending = 0
-  let responseTimes: number[] = []
+  const responseTimes: number[] = []
   const ordersByDayMap: Record<string, number> = {}
 
   for (const o of orders ?? []) {

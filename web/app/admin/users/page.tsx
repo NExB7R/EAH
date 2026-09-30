@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { UserIcon, ShieldCheckIcon, ShieldIcon, AlertIcon, StarIcon } from '@/components/icons'
+import { UserIcon, StarIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import Avatar from '@/components/avatar'

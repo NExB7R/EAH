@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useMounted } from '@/lib/hooks/use-mounted'
 import Link from 'next/link'
 import { StarIcon, CloseIcon } from './icons'
 import { getDueReview, markReviewDone } from '@/lib/engagement'
@@ -18,10 +19,9 @@ export default function ReviewReminder() {
   const [businessId, setBusinessId] = useState<string | null>(null)
   const [businessSlug, setBusinessSlug] = useState<string | null>(null)
   const [businessName, setBusinessName] = useState<string | null>(null)
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
 
   useEffect(() => {
-    setMounted(true)
     const check = () => {
       const due = getDueReview()
       if (due) {

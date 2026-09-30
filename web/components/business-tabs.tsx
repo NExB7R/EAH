@@ -7,7 +7,6 @@ import {
   PhoneIcon,
   WhatsAppIcon,
   ClockIcon,
-  StarIcon,
   FacebookIcon,
   GlobeIcon,
   StoreIcon,

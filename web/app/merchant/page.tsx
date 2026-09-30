@@ -60,8 +60,10 @@ export default async function MerchantDashboard() {
 
   const trial = subscription?.is_trial
   const expiresAt = subscription ? new Date(subscription.expires_at) : null
+  // eslint-disable-next-line react-hooks/purity -- server component, runs per request
+  const nowMs = Date.now()
   const daysLeft = expiresAt
-    ? Math.max(0, Math.ceil((expiresAt.getTime() - Date.now()) / (24 * 60 * 60 * 1000)))
+    ? Math.max(0, Math.ceil((expiresAt.getTime() - nowMs) / (24 * 60 * 60 * 1000)))
     : 0
 
   return (

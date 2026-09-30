@@ -47,6 +47,8 @@ export default function ExploreSearch({ initialQuery = '' }: Props) {
   const [showHistory, setShowHistory] = useState(false)
 
   useEffect(() => {
+    // one-time hydration from localStorage — not cascading
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHistory(getHistory())
     if (typeof window !== 'undefined') {
       const SR = (window as unknown as {
@@ -56,6 +58,7 @@ export default function ExploreSearch({ initialQuery = '' }: Props) {
         (window as unknown as {
           webkitSpeechRecognition?: new () => SpeechRecognitionLike
         }).webkitSpeechRecognition
+       
       setSupported(!!SR)
     }
   }, [])

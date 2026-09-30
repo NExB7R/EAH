@@ -88,8 +88,10 @@ export function useFairRotation<T extends { id: string }>({
   const pageSizeRef = useRef(pageSize)
   const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  itemsRef.current = items
-  pageSizeRef.current = pageSize
+  useEffect(() => {
+    itemsRef.current = items
+    pageSizeRef.current = pageSize
+  }, [items, pageSize])
 
   const persist = useCallback(() => {
     try {
@@ -145,6 +147,7 @@ export function useFairRotation<T extends { id: string }>({
   }, [pageSizes, breakpoints])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration
     setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   }, [])
 
@@ -179,6 +182,7 @@ export function useFairRotation<T extends { id: string }>({
 
     orderRef.current = nextOrder
     cursorRef.current = nextCursor
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mount
     setMounted(true)
     setVisible(sliceVisible(nextOrder, nextCursor, pageSize))
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -204,12 +208,10 @@ export function useFairRotation<T extends { id: string }>({
 
   // إيقاف أثناء السكرول
   useEffect(() => {
-    let lastY = window.scrollY
     const onScroll = () => {
       setScrolling(true)
       if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current)
       scrollTimerRef.current = setTimeout(() => setScrolling(false), 400)
-      lastY = window.scrollY
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => {

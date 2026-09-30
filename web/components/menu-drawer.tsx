@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   HomeIcon,
   CompassIcon,
@@ -90,9 +90,13 @@ const LEGAL_ITEMS: MenuItem[] = [
 
 export default function MenuDrawer({ open, onClose, session }: Props) {
   const pathname = usePathname()
+  const router = useRouter()
 
   const onCloseRef = useRef(onClose)
-  onCloseRef.current = onClose
+
+  useEffect(() => {
+    onCloseRef.current = onClose
+  }, [onClose])
 
   useEffect(() => {
     onCloseRef.current()
@@ -131,7 +135,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
   const handleLogout = async () => {
     try {
       await fetch('/auth/logout', { method: 'POST' })
-      window.location.href = '/'
+      router.push('/')
     } catch {
       // ignore
     }

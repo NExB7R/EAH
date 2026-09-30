@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { ShieldCheckIcon, StarIcon, CheckCircleIcon } from '@/components/icons'
+import { CheckCircleIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import styles from './moderation.module.css'

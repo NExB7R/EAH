@@ -8,7 +8,6 @@ import {
   AlertIcon,
   CheckCircleIcon,
   ArrowLeftIcon,
-  EyeIcon,
   TrendingUpIcon,
   GiftIcon,
   ShieldCheckIcon,

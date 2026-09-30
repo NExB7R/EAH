@@ -7,7 +7,6 @@ import {
   StoreIcon,
   UserIcon,
   CrownGoldIcon,
-  GiftIcon,
   ShieldCheckIcon,
   TrendingUpIcon,
   FileTextIcon,
@@ -22,8 +21,6 @@ import styles from './admin-sidebar.module.css'
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Sidebar (Full Control 2026)
 // ═══════════════════════════════════════════════════════════
-
-type Badge = 'pending' | 'reports' | 'expiring' | number
 
 type Props = {
   counts?: {

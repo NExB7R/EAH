@@ -33,10 +33,6 @@ export default function InstallPrompt() {
   useEffect(() => {
     if (window.matchMedia('(display-mode: standalone)').matches) return
 
-    const ua = window.navigator.userAgent
-    const ios = /iPad|iPhone|iPod/.test(ua) && !('MSStream' in window)
-    setIsIOS(ios)
-
     const onPrompt = (e: Event) => {
       e.preventDefault()
       setDeferred(e as BeforeInstallPromptEvent)
@@ -46,6 +42,9 @@ export default function InstallPrompt() {
     const onShow = () => {
       const lastDismiss = Number(localStorage.getItem(KEY_DISMISSED) ?? 0)
       if (Date.now() - lastDismiss < DISMISS_COOLDOWN_MS) return
+      const ua = window.navigator.userAgent
+      const ios = /iPad|iPhone|iPod/.test(ua) && !('MSStream' in window)
+      setIsIOS(ios)
       setVisible(true)
     }
     window.addEventListener('eah:show-install', onShow)

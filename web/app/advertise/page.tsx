@@ -3,7 +3,6 @@ import Link from 'next/link'
 import {
   TrendingUpIcon,
   TargetIcon,
-  SearchIcon,
   HomeIcon,
   GiftIcon,
   CrownGoldIcon,

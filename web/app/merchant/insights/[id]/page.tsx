@@ -5,15 +5,12 @@ import {
   ArrowLeftIcon,
   TrendingUpIcon,
   TrendingDownIcon,
-  PrinterIcon,
   StarIcon,
   EyeIcon,
   FileTextIcon,
   CheckCircleIcon,
   AlertIcon,
-  InfoIcon,
   GiftIcon,
-  TargetIcon,
   CrownGoldIcon,
 } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'

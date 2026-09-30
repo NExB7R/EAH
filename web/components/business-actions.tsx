@@ -53,7 +53,6 @@ export default function BusinessActions({
   const handleWhatsapp = () => {
     if (requireAuth('تطلب من واتساب مباشرة')) return
     if (!whatsapp || !acceptsWhatsapp) return
-    const number = whatsapp.replace(/^0/, '').replace(/^20/, '')
     const url = `https://wa.me/2${whatsapp.replace(/^0/, '').replace(/^20/, '')}?text=${encodeURIComponent(`السلام عليكم، شفت ${businessName} على EAH وعايز أطلب`)}`
     window.open(url, '_blank')
   }

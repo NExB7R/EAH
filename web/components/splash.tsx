@@ -18,6 +18,7 @@ export default function Splash() {
   // useLayoutEffect = قبل paint → لو شفناه قبل كده، نخفيه فوراً
   useLayoutEffect(() => {
     if (sessionStorage.getItem(SESSION_KEY)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync with sessionStorage before paint
       setHidden(true)
       return
     }

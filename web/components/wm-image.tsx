@@ -14,15 +14,16 @@ type WmImageProps = ImageProps & {
 export default function WmImage({
   noWatermark = false,
   className,
+  alt = '',
   ...props
 }: WmImageProps) {
   if (noWatermark) {
-    return <Image className={className} {...props} />
+    return <Image className={className} alt={alt} {...props} />
   }
 
   return (
     <Watermark>
-      <Image className={className} {...props} />
+      <Image className={className} alt={alt} {...props} />
     </Watermark>
   )
 }

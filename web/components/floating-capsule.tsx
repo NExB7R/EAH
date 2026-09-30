@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useMounted } from '@/lib/hooks/use-mounted'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Logo from './logo'
@@ -27,14 +28,10 @@ type Props = {
 }
 
 export default function FloatingCapsule({ session }: Props) {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useMounted()
   const [scrolled, setScrolled] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const pathname = usePathname()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   useEffect(() => {
     const onScroll = () => {

@@ -4,11 +4,6 @@ import Logo from '@/components/logo'
 import {
   SearchIcon,
   MicIcon,
-  UtensilsIcon,
-  PillIcon,
-  CartIcon,
-  BikeIcon,
-  SparklesIcon,
   CrownGoldIcon,
   ShieldCheckIcon,
   TagIcon,
@@ -24,8 +19,6 @@ import {
   SparkleStarIcon,
   ArrowLeftIcon,
   MapPinIcon,
-  InfoIcon,
-  CheckCircleIcon,
 } from '@/components/icons'
 import AboutFreeApp from '@/components/about-free-app'
 import styles from './about.module.css'
