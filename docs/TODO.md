@@ -1,6 +1,47 @@
 # EAH — TODO
 
-> خطة العمل الكاملة. آخر تحديث: 2026-09-27
+> خطة العمل الكاملة. 
+
+---
+
+## 🔒 Security (Phase 2)
+
+### 🔴 عالي الأولوية
+- [ ] Rate Limiting (Upstash Redis) — على /auth/* و /api/*
+- [ ] Turnstile على signup
+- [ ] nonce-based CSP (بدل unsafe-inline)
+
+### 🟠 متوسط
+- [ ] Sentry — تتبع الأخطاء
+- [ ] IP Allowlist للـ Admin
+- [ ] Audit Log شامل
+
+### 🟡 منخفض
+- [ ] 2FA اختياري
+- [ ] Cloudflare WAF
+- [ ] Penetration Testing
+
+---
+
+## 💎 Phase 3 (بعد الإطلاق)
+
+- [ ] Redis Cache (لما نعدي 10K مستخدم)
+- [ ] Elasticsearch (لما نعدي 100K)
+- [ ] CDN متقدم
+- [ ] تطبيق أصلي (iOS + Android)
+
+---
+
+## 📊 Business
+
+- [ ] Vercel Pro ($20/شهر)
+- [ ] Supabase Pro ($25/شهر)
+- [ ] Domain eah.app (~$15/سنة)
+- [ ] Google Business Profile
+
+---
+
+آخر تحديث: 2026-09-29
 
 ---
 
