@@ -1,0 +1,49 @@
+name: Quality Gate
+
+on:
+  push:
+    branches: [v2, main]
+  pull_request:
+    branches: [v2, main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript
+        run: npx tsc --noEmit
+
+      - name: ESLint
+        run: npx eslint .
+
+      - name: Prettier
+        run: npx prettier --check "**/*.{ts,tsx,css,json}"
+
+      - name: Unit Tests
+        run: npx vitest run --reporter=dot
+
+      - name: npm audit
+        run: npm audit --audit-level=high
+
+      - name: Knip (dead code)
+        run: npx knip --include files,dependencies
+        continue-on-error: true
