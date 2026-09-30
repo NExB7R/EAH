@@ -8,6 +8,8 @@ import { createClient } from '@/lib/supabase/server'
 // ═══════════════════════════════════════════════════════════
 
 export type AppRole = 'customer' | 'merchant' | 'admin' | 'super_admin'
+export type ImpactLevel = 'visitor' | 'basic' | 'member' | 'regular'
+export type DisplayNameMode = 'real' | 'alias' | 'both' | 'anonymous'
 
 export type UserSession = {
   userId: string
@@ -20,6 +22,38 @@ export type UserSession = {
   emailVerified: boolean
   trustScore: number
   trustTier: string
+  // الأثر
+  impactScore: number
+  impactLevel: ImpactLevel
+  streakDays: number
+  wantedLevel: number
+  // Premium
+  isPremium: boolean
+  premiumUntil: string | null
+  // الخصوصية
+  displayNameMode: DisplayNameMode
+  alias: string | null
+  hideAvatar: boolean
+  hideFavorites: boolean
+  hideFollowing: boolean
+}
+
+// ─── اسم العرض حسب الوضع ───
+export function resolveDisplayName(session: UserSession): string {
+  const { displayName, alias, displayNameMode, isPremium } = session
+
+  // العميل العادي: اسم حقيقي أو كنية أو الاتنين
+  if (!isPremium) {
+    if (displayNameMode === 'alias' && alias) return alias
+    if (displayNameMode === 'both' && alias) return `${displayName} (${alias})`
+    return displayName
+  }
+
+  // العميل المدفوع: + مجهول
+  if (displayNameMode === 'anonymous') return 'مستخدم EAH'
+  if (displayNameMode === 'alias' && alias) return alias
+  if (displayNameMode === 'both' && alias) return `${displayName} (${alias})`
+  return displayName
 }
 
 export const getUserSession = cache(async (): Promise<UserSession | null> => {
@@ -34,7 +68,9 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
   const [{ data: profile }, { data: roleRow }, { count }] = await Promise.all([
     supabase
       .from('profiles')
-      .select('display_name, avatar_url, phone_verified_at, trust_score, trust_tier')
+      .select(
+        'display_name, avatar_url, phone_verified_at, trust_score, trust_tier, impact_score, impact_level, streak_days, wanted_level, is_premium, premium_until, display_name_mode, alias, hide_avatar, hide_favorites, hide_following',
+      )
       .eq('id', user.id)
       .maybeSingle(),
     supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle(),
@@ -56,5 +92,16 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     emailVerified: !!user.email_confirmed_at,
     trustScore: profile?.trust_score ?? 50,
     trustTier: profile?.trust_tier ?? 'trusted',
+    impactScore: profile?.impact_score ?? 0,
+    impactLevel: (profile?.impact_level as ImpactLevel) ?? 'visitor',
+    streakDays: profile?.streak_days ?? 0,
+    wantedLevel: profile?.wanted_level ?? 0,
+    isPremium: profile?.is_premium ?? false,
+    premiumUntil: profile?.premium_until ?? null,
+    displayNameMode: (profile?.display_name_mode as DisplayNameMode) ?? 'real',
+    alias: profile?.alias ?? null,
+    hideAvatar: profile?.hide_avatar ?? false,
+    hideFavorites: profile?.hide_favorites ?? false,
+    hideFollowing: profile?.hide_following ?? false,
   }
 })

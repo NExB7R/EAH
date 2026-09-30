@@ -50,6 +50,21 @@ export type Review = {
   } | null
 }
 
+export type BusinessActivityStats = {
+  followCount: number
+  favoriteCount: number
+  likeCount: number
+  commentCount: number
+  replyCount: number
+  shareCount: number
+}
+
+export type BusinessPulse = {
+  lastHour: number
+  last24h: number
+  trend: 'hot' | 'warm' | 'cold'
+}
+
 export type BusinessDetail = {
   business: Business
   contacts: ContactMethod[]
@@ -272,4 +287,83 @@ export const TIER_LABEL: Record<string, string> = {
   trusted: 'موثوق',
   verified: 'مُوثَّق',
   new: 'جديد',
+}
+
+// ═══════════════════════════════════════════════════════════
+// Business Activity Stats
+// ═══════════════════════════════════════════════════════════
+
+export const getBusinessActivityStats = unstable_cache(
+  async (businessId: string): Promise<BusinessActivityStats> => {
+    const supabase = createPublicClient()
+    const { data } = await supabase
+      .from('business_activities')
+      .select('activity_type')
+      .eq('business_id', businessId)
+
+    const rows = data ?? []
+    const count = (t: string) => rows.filter((r) => r.activity_type === t).length
+
+    return {
+      followCount: count('follow'),
+      favoriteCount: count('favorite'),
+      likeCount: count('like'),
+      commentCount: count('comment'),
+      replyCount: count('reply'),
+      shareCount: count('share'),
+    }
+  },
+  ['business-activity-stats-v1'],
+  { revalidate: 120, tags: ['activities'] },
+)
+
+// ─── نبض النشاط (آخر ساعة / 24 ساعة) ───
+export const getBusinessPulse = unstable_cache(
+  async (businessId: string): Promise<BusinessPulse> => {
+    const supabase = createPublicClient()
+    const now = Date.now()
+    const hourAgo = new Date(now - 60 * 60 * 1000).toISOString()
+    const dayAgo = new Date(now - 24 * 60 * 60 * 1000).toISOString()
+
+    const [{ count: last24h }, { count: lastHour }] = await Promise.all([
+      supabase
+        .from('business_activities')
+        .select('*', { count: 'exact', head: true })
+        .eq('business_id', businessId)
+        .gte('created_at', dayAgo),
+      supabase
+        .from('business_activities')
+        .select('*', { count: 'exact', head: true })
+        .eq('business_id', businessId)
+        .gte('created_at', hourAgo),
+    ])
+
+    const h24 = last24h ?? 0
+    const h1 = lastHour ?? 0
+
+    let trend: 'hot' | 'warm' | 'cold' = 'cold'
+    if (h1 >= 5 || h24 >= 30) trend = 'hot'
+    else if (h1 >= 1 || h24 >= 10) trend = 'warm'
+
+    return { lastHour: h1, last24h: h24, trend }
+  },
+  ['business-pulse-v1'],
+  { revalidate: 60, tags: ['activities'] },
+)
+
+// ─── هل المستخدم تفاعل قبل كده؟ ───
+export async function getUserActivity(
+  businessId: string,
+  userId: string,
+  type: 'follow' | 'favorite',
+): Promise<boolean> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('business_activities')
+    .select('id')
+    .eq('business_id', businessId)
+    .eq('user_id', userId)
+    .eq('activity_type', type)
+    .maybeSingle()
+  return !!data
 }
