@@ -46,7 +46,9 @@ export async function getSubscriptionPlans(): Promise<SubscriptionPlan[]> {
   const supabase = createPublicClient()
   const { data, error } = await supabase
     .from('subscription_plans')
-    .select('id, code, name_ar, description, price_egp, duration_days, trial_days, features, display_order')
+    .select(
+      'id, code, name_ar, description, price_egp, duration_days, trial_days, features, display_order',
+    )
     .eq('is_active', true)
     .order('display_order', { ascending: true })
 

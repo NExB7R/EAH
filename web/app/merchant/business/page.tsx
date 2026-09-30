@@ -28,10 +28,7 @@ export default async function MerchantBusinessPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="نشاطي"
-        description="عدّل بيانات النشاط — كل تعديل يتحفظ فوراً"
-      />
+      <AccountPageHeader title="نشاطي" description="عدّل بيانات النشاط — كل تعديل يتحفظ فوراً" />
       <BusinessEditForm
         initial={{
           name: business.name,

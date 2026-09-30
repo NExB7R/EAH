@@ -20,11 +20,13 @@ async function getPendingReviews(): Promise<Row[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('business_reviews')
-    .select(`
+    .select(
+      `
       id, comment, status, created_at, flagged_reason,
       user:profiles(display_name),
       business:businesses(name, slug)
-    `)
+    `,
+    )
     .in('status', ['pending', 'flagged'])
     .order('created_at', { ascending: false })
     .limit(50)
@@ -37,13 +39,14 @@ export default async function AdminModerationPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="المراجعة"
-        description={`${reviews.length} تقييم بحاجة مراجعة`}
-      />
+      <AccountPageHeader title="المراجعة" description={`${reviews.length} تقييم بحاجة مراجعة`} />
 
       {reviews.length === 0 ? (
-        <EmptyState Icon={CheckCircleIcon} title="مفيش حاجة بحاجة مراجعة" description="كل التقييمات تمام!" />
+        <EmptyState
+          Icon={CheckCircleIcon}
+          title="مفيش حاجة بحاجة مراجعة"
+          description="كل التقييمات تمام!"
+        />
       ) : (
         <div className={styles.list}>
           {reviews.map((r) => {
@@ -56,7 +59,9 @@ export default async function AdminModerationPage() {
                     <span className={styles.dot}>·</span>
                     <span className={styles.business}>{r.business?.name ?? 'نشاط'}</span>
                   </div>
-                  <span className={`${styles.badge} ${r.status === 'flagged' ? styles.flagged : styles.pending}`}>
+                  <span
+                    className={`${styles.badge} ${r.status === 'flagged' ? styles.flagged : styles.pending}`}
+                  >
                     {r.status === 'flagged' ? 'مبلَّغ عنه' : 'معلّق'}
                   </span>
                 </div>
@@ -72,8 +77,12 @@ export default async function AdminModerationPage() {
                 <div className={styles.foot}>
                   <span className={styles.date}>{date}</span>
                   <div className={styles.actions}>
-                    <button type="button" className={styles.approve}>موافقة</button>
-                    <button type="button" className={styles.reject}>رفض</button>
+                    <button type="button" className={styles.approve}>
+                      موافقة
+                    </button>
+                    <button type="button" className={styles.reject}>
+                      رفض
+                    </button>
                   </div>
                 </div>
               </div>

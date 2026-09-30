@@ -31,10 +31,37 @@ export default async function AdminDashboard() {
   const [stats, recent] = await Promise.all([getAdminStats(), getAdminRecent()])
 
   const CARDS: Card[] = [
-    { key: 'total', label: 'كل الأنشطة', value: stats.totalBusinesses, Icon: StoreIcon, tone: 'purple' },
-    { key: 'pending', label: 'بحاجة موافقة', value: stats.pendingBusinesses, Icon: AlertIcon, tone: 'orange', href: '/admin/businesses', hint: 'راجعهم' },
-    { key: 'published', label: 'منشور', value: stats.publishedBusinesses, Icon: CheckCircleIcon, tone: 'teal' },
-    { key: 'users', label: 'المستخدمين', value: stats.totalUsers, Icon: UserIcon, tone: 'purple', href: '/admin/users' },
+    {
+      key: 'total',
+      label: 'كل الأنشطة',
+      value: stats.totalBusinesses,
+      Icon: StoreIcon,
+      tone: 'purple',
+    },
+    {
+      key: 'pending',
+      label: 'بحاجة موافقة',
+      value: stats.pendingBusinesses,
+      Icon: AlertIcon,
+      tone: 'orange',
+      href: '/admin/businesses',
+      hint: 'راجعهم',
+    },
+    {
+      key: 'published',
+      label: 'منشور',
+      value: stats.publishedBusinesses,
+      Icon: CheckCircleIcon,
+      tone: 'teal',
+    },
+    {
+      key: 'users',
+      label: 'المستخدمين',
+      value: stats.totalUsers,
+      Icon: UserIcon,
+      tone: 'purple',
+      href: '/admin/users',
+    },
     { key: 'orders', label: 'الطلبات', value: stats.totalOrders, Icon: FileTextIcon, tone: 'gold' },
     { key: 'reviews', label: 'التقييمات', value: stats.totalReviews, Icon: StarIcon, tone: 'gold' },
   ]
@@ -81,9 +108,13 @@ export default async function AdminDashboard() {
           )
           const className = `${styles.card} ${styles[tone]}`
           return href ? (
-            <Link key={key} href={href} className={className}>{content}</Link>
+            <Link key={key} href={href} className={className}>
+              {content}
+            </Link>
           ) : (
-            <div key={key} className={className}>{content}</div>
+            <div key={key} className={className}>
+              {content}
+            </div>
           )
         })}
       </section>

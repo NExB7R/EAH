@@ -23,11 +23,13 @@ async function getUsers(): Promise<Row[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('profiles')
-    .select(`
+    .select(
+      `
       id, display_name, avatar_url, phone, phone_verified_at,
       trust_score, trust_tier, created_at,
       user_roles(role)
-    `)
+    `,
+    )
     .order('created_at', { ascending: false })
     .limit(100)
 
@@ -65,10 +67,7 @@ export default async function AdminUsersPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="المستخدمين"
-        description={`${users.length} مستخدم`}
-      />
+      <AccountPageHeader title="المستخدمين" description={`${users.length} مستخدم`} />
 
       {users.length === 0 ? (
         <EmptyState Icon={UserIcon} title="مفيش مستخدمين" />
@@ -76,7 +75,7 @@ export default async function AdminUsersPage() {
         <div className={styles.list}>
           {users.map((u) => {
             const date = new Date(u.created_at).toLocaleDateString('ar-EG')
-            const roleLabel = u.role ? ROLE_LABEL[u.role] ?? u.role : 'عميل'
+            const roleLabel = u.role ? (ROLE_LABEL[u.role] ?? u.role) : 'عميل'
             return (
               <div key={u.id} className={styles.row}>
                 <Avatar

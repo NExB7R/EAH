@@ -65,15 +65,11 @@ export default function NewRow({ businesses, limit = 12 }: Props) {
               b.rating_count > 0
                 ? b.rating_avg.toFixed(1)
                 : b.trust_score
-                ? (b.trust_score / 20).toFixed(1)
-                : null
+                  ? (b.trust_score / 20).toFixed(1)
+                  : null
 
             return (
-              <Link
-                key={b.id}
-                href={`/businesses/${b.slug}`}
-                className={styles.card}
-              >
+              <Link key={b.id} href={`/businesses/${b.slug}`} className={styles.card}>
                 <div className={styles.imageWrap}>
                   {b.cover_image_url ? (
                     <WmImage

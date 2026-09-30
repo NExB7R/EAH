@@ -20,9 +20,5 @@ export {
 } from './businesses'
 export type { Business, BusinessType, WorkingHours, WorkingDay, Offer } from './businesses'
 
-export {
-  AREAS,
-  DEFAULT_AREA,
-  AREA_COORDS,
-} from './areas'
+export { AREAS, DEFAULT_AREA, AREA_COORDS } from './areas'
 export type { Area } from './areas'

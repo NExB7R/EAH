@@ -12,13 +12,7 @@ type Props = {
   ctaLabel?: string
 }
 
-export default function EmptyState({
-  Icon,
-  title,
-  description,
-  ctaHref,
-  ctaLabel,
-}: Props) {
+export default function EmptyState({ Icon, title, description, ctaHref, ctaLabel }: Props) {
   return (
     <div className={styles.wrap}>
       <span className={styles.icon} aria-hidden>

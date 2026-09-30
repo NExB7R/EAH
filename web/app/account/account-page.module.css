@@ -4,8 +4,13 @@
   gap: 12px;
 }
 @media (min-width: 1024px) {
-  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 @media (max-width: 480px) {
-  .grid { grid-template-columns: 1fr; gap: 10px; }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 }

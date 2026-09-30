@@ -9,10 +9,7 @@ export default async function SecurityPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="الأمان"
-        description="احمي حسابك بكلمة سر قوية"
-      />
+      <AccountPageHeader title="الأمان" description="احمي حسابك بكلمة سر قوية" />
       <ChangePasswordForm />
     </div>
   )

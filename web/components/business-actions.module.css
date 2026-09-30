@@ -12,8 +12,8 @@
   gap: 6px;
   padding: 12px 8px;
   border-radius: 16px;
-  background: rgba(20,14,34,0.6);
-  border: 1px solid rgba(168,85,247,0.2);
+  background: rgba(20, 14, 34, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.2);
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 200ms var(--ease);
@@ -23,7 +23,7 @@
 .action:hover:not(:disabled) {
   transform: translateY(-2px);
   border-color: var(--purple-light);
-  background: rgba(20,14,34,0.85);
+  background: rgba(20, 14, 34, 0.85);
 }
 
 .action:disabled {
@@ -38,7 +38,7 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: rgba(168,85,247,0.08);
+  background: rgba(168, 85, 247, 0.08);
   color: inherit;
   flex-shrink: 0;
   transition: all 200ms var(--ease);
@@ -56,61 +56,61 @@
 
 /* ─── Variants ─── */
 .whatsapp .actionIcon {
-  background: rgba(37,211,102,0.12);
-  color: #25D366;
+  background: rgba(37, 211, 102, 0.12);
+  color: #25d366;
 }
 .whatsapp:hover:not(:disabled) {
-  border-color: rgba(37,211,102,0.5);
-  box-shadow: 0 0 20px rgba(37,211,102,0.2);
+  border-color: rgba(37, 211, 102, 0.5);
+  box-shadow: 0 0 20px rgba(37, 211, 102, 0.2);
 }
 .whatsapp:hover:not(:disabled) .actionIcon {
-  background: rgba(37,211,102,0.2);
+  background: rgba(37, 211, 102, 0.2);
 }
 
 .phone .actionIcon {
-  background: rgba(232,199,154,0.1);
+  background: rgba(232, 199, 154, 0.1);
   color: var(--gold-light);
 }
 .phone:hover:not(:disabled) {
-  border-color: rgba(232,199,154,0.5);
-  box-shadow: 0 0 20px rgba(232,199,154,0.2);
+  border-color: rgba(232, 199, 154, 0.5);
+  box-shadow: 0 0 20px rgba(232, 199, 154, 0.2);
 }
 
 .fav .actionIcon {
-  color: #FF6B9D;
+  color: #ff6b9d;
 }
 .fav:hover:not(:disabled) {
-  border-color: rgba(255,107,157,0.5);
+  border-color: rgba(255, 107, 157, 0.5);
 }
 
 .follow .actionIcon {
-  color: #C77DFF;
+  color: #c77dff;
 }
 .follow:hover:not(:disabled) {
-  border-color: rgba(199,125,255,0.5);
+  border-color: rgba(199, 125, 255, 0.5);
 }
 
 .comment .actionIcon {
-  color: #55E7D1;
+  color: #55e7d1;
 }
 .comment:hover:not(:disabled) {
-  border-color: rgba(85,231,209,0.5);
+  border-color: rgba(85, 231, 209, 0.5);
 }
 
 .share .actionIcon {
-  color: #818CF8;
+  color: #818cf8;
 }
 .share:hover:not(:disabled) {
-  border-color: rgba(129,140,248,0.5);
+  border-color: rgba(129, 140, 248, 0.5);
 }
 
 .active {
   border-color: var(--gold-light);
-  background: rgba(232,199,154,0.06);
+  background: rgba(232, 199, 154, 0.06);
 }
 
 .active .actionIcon {
-  background: rgba(232,199,154,0.15);
+  background: rgba(232, 199, 154, 0.15);
   color: var(--gold-light);
 }
 
@@ -138,6 +138,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .action, .actionIcon { transition: none; }
-  .action:hover { transform: none; }
+  .action,
+  .actionIcon {
+    transition: none;
+  }
+  .action:hover {
+    transform: none;
+  }
 }

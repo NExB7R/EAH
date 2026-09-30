@@ -74,7 +74,10 @@ export default function ReviewsList({
               <div className={styles.barRow}>
                 <span>الطعم</span>
                 <div className={styles.barTrack}>
-                  <div className={styles.barFill} style={{ width: `${(stats.taste / 5) * 100}%` }} />
+                  <div
+                    className={styles.barFill}
+                    style={{ width: `${(stats.taste / 5) * 100}%` }}
+                  />
                 </div>
                 <span className={styles.barNum}>{stats.taste.toFixed(1)}</span>
               </div>
@@ -83,7 +86,10 @@ export default function ReviewsList({
               <div className={styles.barRow}>
                 <span>القيمة</span>
                 <div className={styles.barTrack}>
-                  <div className={styles.barFill} style={{ width: `${(stats.value_for_money / 5) * 100}%` }} />
+                  <div
+                    className={styles.barFill}
+                    style={{ width: `${(stats.value_for_money / 5) * 100}%` }}
+                  />
                 </div>
                 <span className={styles.barNum}>{stats.value_for_money.toFixed(1)}</span>
               </div>
@@ -92,7 +98,10 @@ export default function ReviewsList({
               <div className={styles.barRow}>
                 <span>السرعة</span>
                 <div className={styles.barTrack}>
-                  <div className={styles.barFill} style={{ width: `${(stats.speed / 5) * 100}%` }} />
+                  <div
+                    className={styles.barFill}
+                    style={{ width: `${(stats.speed / 5) * 100}%` }}
+                  />
                 </div>
                 <span className={styles.barNum}>{stats.speed.toFixed(1)}</span>
               </div>
@@ -101,7 +110,10 @@ export default function ReviewsList({
               <div className={styles.barRow}>
                 <span>التجربة</span>
                 <div className={styles.barTrack}>
-                  <div className={styles.barFill} style={{ width: `${(stats.experience / 5) * 100}%` }} />
+                  <div
+                    className={styles.barFill}
+                    style={{ width: `${(stats.experience / 5) * 100}%` }}
+                  />
                 </div>
                 <span className={styles.barNum}>{stats.experience.toFixed(1)}</span>
               </div>
@@ -112,11 +124,7 @@ export default function ReviewsList({
 
       {/* CTA */}
       {canShowForm && !showForm && (
-        <button
-          type="button"
-          className={styles.ctaBtn}
-          onClick={() => setShowForm(true)}
-        >
+        <button type="button" className={styles.ctaBtn} onClick={() => setShowForm(true)}>
           <StarIcon size={16} />
           اكتب تقييمك
         </button>
@@ -136,11 +144,7 @@ export default function ReviewsList({
       )}
 
       {showForm && (
-        <ReviewForm
-          businessId={businessId}
-          slug={slug}
-          onClose={() => setShowForm(false)}
-        />
+        <ReviewForm businessId={businessId} slug={slug} onClose={() => setShowForm(false)} />
       )}
 
       {/* List */}
@@ -157,7 +161,10 @@ export default function ReviewsList({
                 review={r}
                 isOwner={isOwner}
                 canReply={!r.merchant_reply}
-                onReply={(id) => { setReplyTo(id); setReplyText('') }}
+                onReply={(id) => {
+                  setReplyTo(id)
+                  setReplyText('')
+                }}
               />
 
               {replyTo === r.id && (

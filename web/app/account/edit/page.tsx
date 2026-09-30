@@ -13,10 +13,7 @@ export default async function EditPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="تعديل البيانات"
-        description="عدّل بياناتك الشخصية"
-      />
+      <AccountPageHeader title="تعديل البيانات" description="عدّل بياناتك الشخصية" />
       <EditProfileForm
         initial={{
           displayName: profile.display_name,

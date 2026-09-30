@@ -41,12 +41,7 @@ export default function SmartLockModal({ open, onClose, action, hint }: Props) {
     <>
       <div className={styles.backdrop} onClick={onClose} aria-hidden />
       <div className={styles.modal} role="dialog" aria-modal="true">
-        <button
-          type="button"
-          onClick={onClose}
-          className={styles.close}
-          aria-label="إغلاق"
-        >
+        <button type="button" onClick={onClose} className={styles.close} aria-label="إغلاق">
           <CloseIcon size={18} />
         </button>
 
@@ -61,13 +56,9 @@ export default function SmartLockModal({ open, onClose, action, hint }: Props) {
           ميزة للمسجلين
         </span>
 
-        <h2 className={styles.title}>
-          عايز {action}؟
-        </h2>
+        <h2 className={styles.title}>عايز {action}؟</h2>
 
-        <p className={styles.text}>
-          {hint ?? 'سجّل بسرعة في 30 ثانية — هي هتفتحلك كل مميزات EAH'}
-        </p>
+        <p className={styles.text}>{hint ?? 'سجّل بسرعة في 30 ثانية — هي هتفتحلك كل مميزات EAH'}</p>
 
         <ul className={styles.perks}>
           {PERKS.map((p) => (
@@ -79,18 +70,10 @@ export default function SmartLockModal({ open, onClose, action, hint }: Props) {
         </ul>
 
         <div className={styles.actions}>
-          <Link
-            href="/auth"
-            className={styles.primary}
-            onClick={onClose}
-          >
+          <Link href="/auth" className={styles.primary} onClick={onClose}>
             سجّل دلوقتي — مجاناً
           </Link>
-          <button
-            type="button"
-            onClick={onClose}
-            className={styles.ghost}
-          >
+          <button type="button" onClick={onClose} className={styles.ghost}>
             خليني أتفرج
           </button>
         </div>

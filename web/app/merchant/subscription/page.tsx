@@ -42,10 +42,7 @@ export default async function MerchantSubscriptionPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="الاشتراك"
-        description="باقتك الحالية + خيارات الترقية"
-      />
+      <AccountPageHeader title="الاشتراك" description="باقتك الحالية + خيارات الترقية" />
 
       {/* Current plan card */}
       <div className={styles.currentCard}>

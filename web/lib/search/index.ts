@@ -51,10 +51,7 @@ function scoreMatch(business: Business, query: string): SearchResult | null {
 // ═══════════════════════════════════════════════════════════
 // الدالة الرئيسية
 // ═══════════════════════════════════════════════════════════
-export function smartSearch(
-  businesses: Business[],
-  rawQuery: string
-): SearchResult[] {
+export function smartSearch(businesses: Business[], rawQuery: string): SearchResult[] {
   const query = normalizeArabic(rawQuery)
   if (!query) return []
 
@@ -74,7 +71,7 @@ export function smartSearch(
             business: b,
             score: 50,
             matchedOn: 'type',
-          }
+          },
         )
       }
     }

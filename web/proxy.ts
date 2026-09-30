@@ -43,12 +43,8 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // فحص المسارات المحمية
-  const isProtected = PROTECTED_PREFIXES.some((prefix) =>
-    pathname.startsWith(prefix)
-  )
-  const isException = PROTECTED_EXCEPTIONS.some((ex) =>
-    pathname.startsWith(ex)
-  )
+  const isProtected = PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix))
+  const isException = PROTECTED_EXCEPTIONS.some((ex) => pathname.startsWith(ex))
 
   if (isProtected && !isException && !user) {
     const redirectUrl = request.nextUrl.clone()

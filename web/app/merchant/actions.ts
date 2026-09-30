@@ -7,9 +7,7 @@ import { applySchema } from '@/lib/validations/merchant'
 // EAH — Merchant Application Action
 // ═══════════════════════════════════════════════════════════
 
-type ActionResult =
-  | { ok: true; slug: string }
-  | { ok: false; error: string }
+type ActionResult = { ok: true; slug: string } | { ok: false; error: string }
 
 function makeSlug(name: string): string {
   const base = name
@@ -22,9 +20,7 @@ function makeSlug(name: string): string {
   return `${base}-${suffix}`
 }
 
-export async function submitMerchantApplication(
-  formData: FormData,
-): Promise<ActionResult> {
+export async function submitMerchantApplication(formData: FormData): Promise<ActionResult> {
   const supabase = await createClient()
 
   // 1. Auth
@@ -110,9 +106,12 @@ export async function submitMerchantApplication(
   // 5. أضف طرق التواصل
   const contacts: Array<{ method_type: string; value: string; is_primary: boolean }> = []
   if (data.phone) contacts.push({ method_type: 'phone', value: data.phone, is_primary: true })
-  if (data.whatsapp) contacts.push({ method_type: 'whatsapp', value: data.whatsapp, is_primary: false })
-  if (data.facebook) contacts.push({ method_type: 'facebook', value: data.facebook, is_primary: false })
-  if (data.instagram) contacts.push({ method_type: 'instagram', value: data.instagram, is_primary: false })
+  if (data.whatsapp)
+    contacts.push({ method_type: 'whatsapp', value: data.whatsapp, is_primary: false })
+  if (data.facebook)
+    contacts.push({ method_type: 'facebook', value: data.facebook, is_primary: false })
+  if (data.instagram)
+    contacts.push({ method_type: 'instagram', value: data.instagram, is_primary: false })
 
   if (contacts.length > 0) {
     await supabase.from('business_contact_methods').insert(
@@ -129,10 +128,7 @@ export async function submitMerchantApplication(
   // 6. رقّيه لـ merchant
   await supabase
     .from('user_roles')
-    .upsert(
-      { user_id: user.id, role: 'merchant' },
-      { onConflict: 'user_id,role' },
-    )
+    .upsert({ user_id: user.id, role: 'merchant' }, { onConflict: 'user_id,role' })
 
   // 7. أنشئ اشتراك أساسي مجاني (بدون تجربة — مجاني للأبد)
   const { data: basicPlan } = await supabase

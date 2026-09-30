@@ -13,9 +13,7 @@ export const metadata: Metadata = {
 
 export default async function OffersPage() {
   const offers = await getActiveOffers(200)
-  const businesses: Business[] = offers
-    .map((o) => o.business)
-    .filter((b): b is Business => !!b)
+  const businesses: Business[] = offers.map((o) => o.business).filter((b): b is Business => !!b)
 
   return (
     <SectionLayout

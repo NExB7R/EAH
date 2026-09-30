@@ -63,11 +63,7 @@ function branchesText(c: number): string {
   return `${c} فروع`
 }
 
-export default function BusinessCard({
-  business,
-  tone = 'purple',
-  variant = 'default',
-}: Props) {
+export default function BusinessCard({ business, tone = 'purple', variant = 'default' }: Props) {
   const meta = TYPE_META[business.business_type] ?? TYPE_META.misc!
   const TypeIcon = meta.Icon
   const tierLabel = TIER_LABEL[business.trust_tier] ?? null
@@ -76,17 +72,15 @@ export default function BusinessCard({
   const ratingValue = hasRealRating
     ? business.rating_avg.toFixed(1)
     : business.trust_score
-    ? (business.trust_score / 20).toFixed(1)
-    : null
+      ? (business.trust_score / 20).toFixed(1)
+      : null
 
   const hasImage = !!business.cover_image_url
 
   return (
     <Link
       href={`/businesses/${business.slug}`}
-      className={`${styles.card} ${styles[tone]} ${
-        variant === 'featured' ? styles.featured : ''
-      }`}
+      className={`${styles.card} ${styles[tone]} ${variant === 'featured' ? styles.featured : ''}`}
     >
       <div className={styles.imageWrap}>
         {hasImage ? (
@@ -111,16 +105,8 @@ export default function BusinessCard({
               مميز
             </span>
           )}
-          <span
-            className={`${styles.status} ${
-              business.is_open ? styles.open : styles.closed
-            }`}
-          >
-            {business.is_open ? (
-              <CheckCircleIcon size={11} />
-            ) : (
-              <AlertIcon size={11} />
-            )}
+          <span className={`${styles.status} ${business.is_open ? styles.open : styles.closed}`}>
+            {business.is_open ? <CheckCircleIcon size={11} /> : <AlertIcon size={11} />}
             {business.is_open ? 'مفتوح' : 'مغلق'}
           </span>
         </div>
@@ -129,11 +115,7 @@ export default function BusinessCard({
           <span className={styles.ratingOnImage}>
             <StarIcon size={11} />
             {ratingValue}
-            {hasRealRating && (
-              <span className={styles.ratingCount}>
-                ({business.rating_count})
-              </span>
-            )}
+            {hasRealRating && <span className={styles.ratingCount}>({business.rating_count})</span>}
           </span>
         )}
       </div>

@@ -10,8 +10,14 @@
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .card {
@@ -24,12 +30,12 @@
   gap: 12px;
   padding: 14px 16px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(160deg, rgba(20,14,34,0.96), rgba(10,7,20,0.98));
-  border: 1px solid rgba(232,199,154,0.35);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.96), rgba(10, 7, 20, 0.98));
+  border: 1px solid rgba(232, 199, 154, 0.35);
   box-shadow:
-    0 0 0 1px rgba(232,199,154,0.08),
-    0 8px 32px rgba(0,0,0,0.55),
-    0 0 40px rgba(232,199,154,0.12);
+    0 0 0 1px rgba(232, 199, 154, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 0 40px rgba(232, 199, 154, 0.12);
 }
 
 .close {
@@ -49,7 +55,10 @@
   transition: all 180ms var(--ease);
 }
 
-.close:hover { color: var(--text-secondary); background: rgba(255,255,255,0.05); }
+.close:hover {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+}
 
 .iconWrap {
   display: inline-flex;
@@ -58,13 +67,16 @@
   width: 40px;
   height: 40px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, rgba(232,199,154,0.25), rgba(168,85,247,0.15));
-  border: 1px solid rgba(232,199,154,0.4);
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.25), rgba(168, 85, 247, 0.15));
+  border: 1px solid rgba(232, 199, 154, 0.4);
   color: var(--gold-light);
   flex-shrink: 0;
 }
 
-.content { flex: 1; min-width: 0; }
+.content {
+  flex: 1;
+  min-width: 0;
+}
 
 .title {
   font-family: var(--font-display);
@@ -98,14 +110,27 @@
   transition: all 180ms var(--ease);
 }
 
-.cta:hover { transform: translateY(-1px); box-shadow: 0 0 16px rgba(232,199,154,0.5); }
+.cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 16px rgba(232, 199, 154, 0.5);
+}
 
 @media (max-width: 380px) {
-  .card { padding: 12px; gap: 8px; }
-  .title { font-size: 0.8rem; }
-  .cta { padding: 6px 10px; font-size: 0.72rem; }
+  .card {
+    padding: 12px;
+    gap: 8px;
+  }
+  .title {
+    font-size: 0.8rem;
+  }
+  .cta {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wrap { animation: none; }
+  .wrap {
+    animation: none;
+  }
 }

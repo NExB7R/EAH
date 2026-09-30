@@ -19,7 +19,8 @@ export default function SignupPrompt() {
 
     // لو في /auth أو /account → متظهرش
     const path = window.location.pathname
-    if (path.startsWith('/auth') || path.startsWith('/account') || path.startsWith('/merchant')) return
+    if (path.startsWith('/auth') || path.startsWith('/account') || path.startsWith('/merchant'))
+      return
 
     const t = setTimeout(() => setVisible(true), 45000)
     return () => clearTimeout(t)
@@ -40,12 +41,7 @@ export default function SignupPrompt() {
         role="dialog"
         aria-modal="true"
       >
-        <button
-          type="button"
-          className="eah-close"
-          onClick={dismiss}
-          aria-label="إغلاق"
-        >
+        <button type="button" className="eah-close" onClick={dismiss} aria-label="إغلاق">
           <CloseIcon size={18} />
         </button>
 
@@ -54,9 +50,7 @@ export default function SignupPrompt() {
         </div>
 
         <h2 className={styles.title}>عايز تستفيد أكتر من EAH؟</h2>
-        <p className={styles.text}>
-          سجّل في 30 ثانية، اكتشف أماكن أقرب، واكسب نقاط مع كل طلب.
-        </p>
+        <p className={styles.text}>سجّل في 30 ثانية، اكتشف أماكن أقرب، واكسب نقاط مع كل طلب.</p>
 
         <div className={styles.actions}>
           <Link href="/auth" className="eah-btn-primary" onClick={dismiss}>

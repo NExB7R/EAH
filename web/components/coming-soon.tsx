@@ -23,12 +23,7 @@ export default function ComingSoon({
 }: Props) {
   return (
     <main className={styles.page}>
-      <SecondaryHero
-        activeKey={activeKey}
-        title={title}
-        Icon={Icon}
-        tone={tone}
-      />
+      <SecondaryHero activeKey={activeKey} title={title} Icon={Icon} tone={tone} />
 
       <section className={styles.section}>
         <div className={styles.frame}>

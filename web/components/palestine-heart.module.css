@@ -4,8 +4,8 @@
   gap: 12px;
   padding: 10px 20px;
   border-radius: var(--radius-full);
-  background: rgba(232,199,154,0.04);
-  border: 1px solid rgba(232,199,154,0.22);
+  background: rgba(232, 199, 154, 0.04);
+  border: 1px solid rgba(232, 199, 154, 0.22);
   color: var(--gold-light);
   text-decoration: none;
   font-family: var(--font-body);
@@ -16,9 +16,9 @@
 
 .wrap:hover,
 .active {
-  background: rgba(232,199,154,0.1);
+  background: rgba(232, 199, 154, 0.1);
   border-color: var(--gold-light);
-  box-shadow: 0 0 22px rgba(232,199,154,0.4);
+  box-shadow: 0 0 22px rgba(232, 199, 154, 0.4);
   transform: translateY(-1px);
 }
 
@@ -37,7 +37,7 @@
   position: relative;
   z-index: 2;
   color: var(--gold-light);
-  filter: drop-shadow(0 0 5px rgba(232,199,154,0.55));
+  filter: drop-shadow(0 0 5px rgba(232, 199, 154, 0.55));
   transition: transform 240ms var(--ease-out);
 }
 
@@ -50,7 +50,7 @@
   position: absolute;
   inset: -6px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(232,199,154,0.4), transparent 70%);
+  background: radial-gradient(circle, rgba(232, 199, 154, 0.4), transparent 70%);
   opacity: 0;
   transition: opacity 240ms var(--ease-out);
   pointer-events: none;
@@ -66,6 +66,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wrap, .heartSvg, .glow { transition: none; }
-  .wrap:hover { transform: none; }
+  .wrap,
+  .heartSvg,
+  .glow {
+    transition: none;
+  }
+  .wrap:hover {
+    transform: none;
+  }
 }

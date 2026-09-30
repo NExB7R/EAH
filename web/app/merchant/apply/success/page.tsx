@@ -20,8 +20,7 @@ export default function SuccessPage() {
           <h1 className={styles.title}>تم تسجيل نشاطك ✓</h1>
 
           <p className={styles.text}>
-            اهلاً بيك في عيلة EAH. النشاط هيتم مراجعته خلال 24 ساعة،
-            وهنبلغك أول ما يتفعّل.
+            اهلاً بيك في عيلة EAH. النشاط هيتم مراجعته خلال 24 ساعة، وهنبلغك أول ما يتفعّل.
           </p>
 
           <div className={styles.info}>

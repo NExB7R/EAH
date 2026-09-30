@@ -78,7 +78,9 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 180ms var(--ease), transform 180ms var(--ease);
+  transition:
+    opacity 180ms var(--ease),
+    transform 180ms var(--ease);
   z-index: 20;
 }
 
@@ -88,11 +90,23 @@
 }
 
 @media (max-width: 480px) {
-  .nav { gap: 4px; margin-top: 16px; }
-  .item { width: 38px; height: 38px; }
-  .item svg { width: 18px; height: 18px; }
+  .nav {
+    gap: 4px;
+    margin-top: 16px;
+  }
+  .item {
+    width: 38px;
+    height: 38px;
+  }
+  .item svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .item, .tip { transition: none; }
+  .item,
+  .tip {
+    transition: none;
+  }
 }

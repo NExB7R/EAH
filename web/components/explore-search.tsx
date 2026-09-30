@@ -2,18 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  SearchIcon,
-  MicIcon,
-  SparkleStarIcon,
-  CloseIcon,
-} from './icons'
-import {
-  getHistory,
-  addToHistory,
-  removeFromHistory,
-  clearHistory,
-} from '@/lib/search/history'
+import { SearchIcon, MicIcon, SparkleStarIcon, CloseIcon } from './icons'
+import { getHistory, addToHistory, removeFromHistory, clearHistory } from '@/lib/search/history'
 import styles from './explore-search.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -51,14 +41,19 @@ export default function ExploreSearch({ initialQuery = '' }: Props) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setHistory(getHistory())
     if (typeof window !== 'undefined') {
-      const SR = (window as unknown as {
-        SpeechRecognition?: new () => SpeechRecognitionLike
-        webkitSpeechRecognition?: new () => SpeechRecognitionLike
-      }).SpeechRecognition ||
-        (window as unknown as {
-          webkitSpeechRecognition?: new () => SpeechRecognitionLike
-        }).webkitSpeechRecognition
-       
+      const SR =
+        (
+          window as unknown as {
+            SpeechRecognition?: new () => SpeechRecognitionLike
+            webkitSpeechRecognition?: new () => SpeechRecognitionLike
+          }
+        ).SpeechRecognition ||
+        (
+          window as unknown as {
+            webkitSpeechRecognition?: new () => SpeechRecognitionLike
+          }
+        ).webkitSpeechRecognition
+
       setSupported(!!SR)
     }
   }, [])
@@ -66,13 +61,18 @@ export default function ExploreSearch({ initialQuery = '' }: Props) {
   // ─── Voice ───
   const startListening = () => {
     if (!supported) return
-    const SR = (window as unknown as {
-      SpeechRecognition?: new () => SpeechRecognitionLike
-      webkitSpeechRecognition?: new () => SpeechRecognitionLike
-    }).SpeechRecognition ||
-      (window as unknown as {
-        webkitSpeechRecognition?: new () => SpeechRecognitionLike
-      }).webkitSpeechRecognition
+    const SR =
+      (
+        window as unknown as {
+          SpeechRecognition?: new () => SpeechRecognitionLike
+          webkitSpeechRecognition?: new () => SpeechRecognitionLike
+        }
+      ).SpeechRecognition ||
+      (
+        window as unknown as {
+          webkitSpeechRecognition?: new () => SpeechRecognitionLike
+        }
+      ).webkitSpeechRecognition
     if (!SR) return
 
     const recognition = new SR()
@@ -193,11 +193,7 @@ export default function ExploreSearch({ initialQuery = '' }: Props) {
         <div className={styles.historyBox}>
           <div className={styles.historyHeader}>
             <span>آخر البحث</span>
-            <button
-              type="button"
-              className={styles.historyClear}
-              onClick={handleClear}
-            >
+            <button type="button" className={styles.historyClear} onClick={handleClear}>
               امسح الكل
             </button>
           </div>

@@ -4,10 +4,7 @@ import { useActionState } from 'react'
 import { recoverAction, type AuthResult } from '../actions'
 import styles from '../auth.module.css'
 
-async function formAction(
-  _prev: AuthResult | null,
-  formData: FormData
-): Promise<AuthResult> {
+async function formAction(_prev: AuthResult | null, formData: FormData): Promise<AuthResult> {
   return recoverAction(formData)
 }
 
@@ -37,9 +34,7 @@ export default function RecoverPage() {
           </div>
         ) : (
           <form action={dispatch} className={styles.form}>
-            {state && !state.ok && (
-              <div className={styles.error}>{state.error}</div>
-            )}
+            {state && !state.ok && <div className={styles.error}>{state.error}</div>}
 
             <div className={styles.field}>
               <label className={styles.label} htmlFor="phone">
@@ -57,11 +52,7 @@ export default function RecoverPage() {
               />
             </div>
 
-            <button
-              type="submit"
-              className={styles.submit}
-              disabled={isPending}
-            >
+            <button type="submit" className={styles.submit} disabled={isPending}>
               {isPending ? '...' : 'ابعت الطلب'}
             </button>
           </form>

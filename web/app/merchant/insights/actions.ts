@@ -11,17 +11,14 @@ import { saveInsight } from '@/lib/ai/storage'
 // EAH — Insights Server Actions
 // ═══════════════════════════════════════════════════════════
 
-type ActionResult =
-  | { ok: true; insightId: string }
-  | { ok: false; error: string }
+type ActionResult = { ok: true; insightId: string } | { ok: false; error: string }
 
-export async function generateInsight(
-  businessId: string,
-  days = 30,
-): Promise<ActionResult> {
+export async function generateInsight(businessId: string, days = 30): Promise<ActionResult> {
   const supabase = await createClient()
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'لازم تسجل دخول' }
 
   // فحص إن المستخدم هو صاحب النشاط أو أدمن

@@ -1,19 +1,110 @@
-.list { display: flex; flex-direction: column; gap: 10px; }
-.card { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border-radius: 16px; background: linear-gradient(160deg, rgba(20,14,34,0.55), rgba(10,7,20,0.75)); border: 1px solid rgba(168,85,247,0.18); }
-.head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.from { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; }
-.user { font-weight: 900; color: var(--text-primary); font-family: var(--font-display); }
-.business { font-weight: 700; color: var(--purple-light); }
-.dot { color: var(--text-muted); }
-.badge { padding: 3px 10px; border-radius: 999px; font-size: 0.62rem; font-weight: 900; }
-.pending { color: #FFD9A8; background: rgba(253,186,116,0.12); border: 1px solid rgba(253,186,116,0.4); }
-.flagged { color: #FFC8C8; background: rgba(252,165,165,0.12); border: 1px solid rgba(252,165,165,0.4); }
-.reason { margin: 0; font-size: 0.72rem; color: #FFC8C8; padding: 8px 10px; border-radius: 8px; background: rgba(252,165,165,0.06); border: 1px dashed rgba(252,165,165,0.3); }
-.reason strong { color: #FFC8C8; font-weight: 900; }
-.comment { margin: 0; padding: 10px 12px; border-radius: 10px; background: rgba(10,7,20,0.5); font-size: 0.8rem; color: var(--text-secondary); line-height: 1.7; }
-.foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.date { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); }
-.actions { display: flex; gap: 6px; }
-.approve, .reject { padding: 6px 14px; border-radius: 999px; font-size: 0.72rem; font-weight: 900; border: none; cursor: pointer; }
-.approve { color: var(--bg-base); background: linear-gradient(135deg, #25D366, #128C7E); box-shadow: 0 0 12px rgba(37,211,102,0.3); }
-.reject { color: #FFC8C8; background: rgba(252,165,165,0.1); border: 1px solid rgba(252,165,165,0.4); }
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
+  border: 1px solid rgba(168, 85, 247, 0.18);
+}
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.from {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+}
+.user {
+  font-weight: 900;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+}
+.business {
+  font-weight: 700;
+  color: var(--purple-light);
+}
+.dot {
+  color: var(--text-muted);
+}
+.badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 900;
+}
+.pending {
+  color: #ffd9a8;
+  background: rgba(253, 186, 116, 0.12);
+  border: 1px solid rgba(253, 186, 116, 0.4);
+}
+.flagged {
+  color: #ffc8c8;
+  background: rgba(252, 165, 165, 0.12);
+  border: 1px solid rgba(252, 165, 165, 0.4);
+}
+.reason {
+  margin: 0;
+  font-size: 0.72rem;
+  color: #ffc8c8;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(252, 165, 165, 0.06);
+  border: 1px dashed rgba(252, 165, 165, 0.3);
+}
+.reason strong {
+  color: #ffc8c8;
+  font-weight: 900;
+}
+.comment {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(10, 7, 20, 0.5);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.date {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.actions {
+  display: flex;
+  gap: 6px;
+}
+.approve,
+.reject {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+}
+.approve {
+  color: var(--bg-base);
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  box-shadow: 0 0 12px rgba(37, 211, 102, 0.3);
+}
+.reject {
+  color: #ffc8c8;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.4);
+}

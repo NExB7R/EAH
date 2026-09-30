@@ -72,7 +72,8 @@ export const getBusinessDetail = unstable_cache(
     // 1. Business
     const { data: biz } = await supabase
       .from('businesses')
-      .select(`
+      .select(
+        `
         id, slug, name, owner_profile_id, business_type, description, hook,
         area, city, address_text, map_url, cover_image_url,
         is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
@@ -82,7 +83,8 @@ export const getBusinessDetail = unstable_cache(
         response_time_avg_seconds, response_rate,
         last_activity_at, created_at, updated_at,
         branches_count, offers_count, rating_avg, rating_count
-      `)
+      `,
+      )
       .eq('slug', slug)
       .eq('is_published', true)
       .maybeSingle()
@@ -146,12 +148,14 @@ export const getBusinessReviews = unstable_cache(
     const supabase = createPublicClient()
     const { data } = await supabase
       .from('business_reviews')
-      .select(`
+      .select(
+        `
         id, taste, value_for_money, speed, experience,
         comment, status, created_at,
         merchant_reply, merchant_reply_at,
         reviewer:profiles(display_name, avatar_url)
-      `)
+      `,
+      )
       .eq('business_id', businessId)
       .eq('status', 'approved')
       .order('created_at', { ascending: false })
@@ -177,7 +181,8 @@ export function computeReviewStats(reviews: Review[]): ReviewStats {
     return { count: 0, avg: 0, taste: null, value_for_money: null, speed: null, experience: null }
   }
 
-  const avg = (arr: number[]) => arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : null
+  const avg = (arr: number[]) =>
+    arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : null
   const collect = (key: keyof Review) =>
     reviews.map((r) => r[key]).filter((v): v is number => typeof v === 'number')
 
@@ -188,7 +193,9 @@ export function computeReviewStats(reviews: Review[]): ReviewStats {
 
   const overall = reviews
     .map((r) => {
-      const vals = [r.taste, r.value_for_money, r.speed, r.experience].filter((v): v is number => typeof v === 'number')
+      const vals = [r.taste, r.value_for_money, r.speed, r.experience].filter(
+        (v): v is number => typeof v === 'number',
+      )
       return vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : null
     })
     .filter((v): v is number => typeof v === 'number')
@@ -196,7 +203,10 @@ export function computeReviewStats(reviews: Review[]): ReviewStats {
   return {
     count: reviews.length,
     avg: overall.length > 0 ? overall.reduce((a, b) => a + b, 0) / overall.length : 0,
-    taste, value_for_money: vfm, speed, experience: exp,
+    taste,
+    value_for_money: vfm,
+    speed,
+    experience: exp,
   }
 }
 
@@ -221,7 +231,8 @@ export const getSimilarBusinesses = unstable_cache(
     const supabase = createPublicClient()
     const { data } = await supabase
       .from('businesses')
-      .select(`
+      .select(
+        `
         id, slug, name, business_type, description, hook,
         area, city, address_text, map_url, cover_image_url,
         is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
@@ -231,7 +242,8 @@ export const getSimilarBusinesses = unstable_cache(
         response_time_avg_seconds, response_rate,
         last_activity_at, created_at, updated_at,
         branches_count, offers_count, rating_avg, rating_count
-      `)
+      `,
+      )
       .eq('business_type', businessType)
       .eq('is_published', true)
       .neq('id', businessId)

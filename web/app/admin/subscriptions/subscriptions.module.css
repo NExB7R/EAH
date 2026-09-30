@@ -1,12 +1,16 @@
-.list { display: flex; flex-direction: column; gap: 8px; }
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .row {
   display: flex;
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
   border-radius: 14px;
-  background: rgba(20,14,34,0.5);
-  border: 1px solid rgba(232,199,154,0.15);
+  background: rgba(20, 14, 34, 0.5);
+  border: 1px solid rgba(232, 199, 154, 0.15);
 }
 .icon {
   display: inline-flex;
@@ -15,17 +19,65 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: rgba(232,199,154,0.1);
+  background: rgba(232, 199, 154, 0.1);
   color: var(--gold-light);
   flex-shrink: 0;
 }
-.body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.name { font-family: var(--font-display); font-size: 0.9rem; font-weight: 900; color: var(--text-primary); }
-.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 0.7rem; color: var(--text-tertiary); font-weight: 700; font-variant-numeric: tabular-nums; }
-.dot { color: var(--text-muted); }
-.status { padding: 4px 10px; border-radius: 999px; font-size: 0.66rem; font-weight: 900; flex-shrink: 0; }
-.pending { color: #FFD9A8; background: rgba(253,186,116,0.12); border: 1px solid rgba(253,186,116,0.4); }
-.trial { color: #C9A9FF; background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.4); }
-.active { color: #A8F0B8; background: rgba(37,211,102,0.1); border: 1px solid rgba(37,211,102,0.35); }
-.expired { color: #FFC8C8; background: rgba(252,165,165,0.12); border: 1px solid rgba(252,165,165,0.4); }
-.cancelled { color: var(--text-muted); background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.2); }
+.body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.name {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.dot {
+  color: var(--text-muted);
+}
+.status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.pending {
+  color: #ffd9a8;
+  background: rgba(253, 186, 116, 0.12);
+  border: 1px solid rgba(253, 186, 116, 0.4);
+}
+.trial {
+  color: #c9a9ff;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+}
+.active {
+  color: #a8f0b8;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+}
+.expired {
+  color: #ffc8c8;
+  background: rgba(252, 165, 165, 0.12);
+  border: 1px solid rgba(252, 165, 165, 0.4);
+}
+.cancelled {
+  color: var(--text-muted);
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}

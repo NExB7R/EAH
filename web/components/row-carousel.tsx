@@ -17,11 +17,7 @@ type Props = {
   intervalMs?: number
 }
 
-export default function RowCarousel({
-  children,
-  accent,
-  intervalMs = 10000,
-}: Props) {
+export default function RowCarousel({ children, accent, intervalMs = 10000 }: Props) {
   const trackRef = useRef<HTMLDivElement | null>(null)
   const [paused, setPaused] = useState(false)
   const [inView, setInView] = useState(true)
@@ -32,10 +28,9 @@ export default function RowCarousel({
   useEffect(() => {
     const el = trackRef.current
     if (!el) return
-    const io = new IntersectionObserver(
-      ([e]) => setInView(e?.isIntersecting ?? true),
-      { threshold: 0.1 },
-    )
+    const io = new IntersectionObserver(([e]) => setInView(e?.isIntersecting ?? true), {
+      threshold: 0.1,
+    })
     io.observe(el)
     return () => io.disconnect()
   }, [])

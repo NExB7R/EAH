@@ -28,10 +28,38 @@ export default async function AccountPage() {
   const memberSince = new Date(profile.created_at).getFullYear()
 
   const STATS = [
-    { key: 'points', label: 'النقاط', value: stats.pointsBalance, href: '/account/points', Icon: GiftIcon, tone: 'gold' },
-    { key: 'favorites', label: 'المفضلات', value: stats.favoritesCount, href: '/account/favorites', Icon: CrownGoldIcon, tone: 'purple' },
-    { key: 'following', label: 'المتابعات', value: stats.followsCount, href: '/account/following', Icon: StoreIcon, tone: 'purple' },
-    { key: 'orders', label: 'الطلبات', value: stats.ordersCount, href: '/account/orders', Icon: FileTextIcon, tone: 'purple' },
+    {
+      key: 'points',
+      label: 'النقاط',
+      value: stats.pointsBalance,
+      href: '/account/points',
+      Icon: GiftIcon,
+      tone: 'gold',
+    },
+    {
+      key: 'favorites',
+      label: 'المفضلات',
+      value: stats.favoritesCount,
+      href: '/account/favorites',
+      Icon: CrownGoldIcon,
+      tone: 'purple',
+    },
+    {
+      key: 'following',
+      label: 'المتابعات',
+      value: stats.followsCount,
+      href: '/account/following',
+      Icon: StoreIcon,
+      tone: 'purple',
+    },
+    {
+      key: 'orders',
+      label: 'الطلبات',
+      value: stats.ordersCount,
+      href: '/account/orders',
+      Icon: FileTextIcon,
+      tone: 'purple',
+    },
   ] as const
 
   return (

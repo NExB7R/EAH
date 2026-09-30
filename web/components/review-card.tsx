@@ -45,7 +45,12 @@ export default function ReviewCard({ review, isOwner, canReply, onReply }: Props
   return (
     <article className={styles.card}>
       <header className={styles.header}>
-        <Avatar displayName={name} avatarUrl={review.reviewer?.avatar_url ?? null} role="customer" size="sm" />
+        <Avatar
+          displayName={name}
+          avatarUrl={review.reviewer?.avatar_url ?? null}
+          role="customer"
+          size="sm"
+        />
         <div className={styles.headerText}>
           <span className={styles.name}>{name}</span>
           <span className={styles.date}>{formatDate(review.created_at)}</span>
@@ -87,11 +92,7 @@ export default function ReviewCard({ review, isOwner, canReply, onReply }: Props
           <p className={styles.replyText}>{review.merchant_reply}</p>
         </div>
       ) : isOwner && canReply ? (
-        <button
-          type="button"
-          className={styles.replyBtn}
-          onClick={() => onReply(review.id)}
-        >
+        <button type="button" className={styles.replyBtn} onClick={() => onReply(review.id)}>
           رد على التقييم
         </button>
       ) : null}

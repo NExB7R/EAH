@@ -5,11 +5,7 @@ import { getUserSession } from '@/lib/data/user'
 import { getAccountStats } from '@/lib/data/account'
 import styles from './account.module.css'
 
-export default async function AccountLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function AccountLayout({ children }: { children: React.ReactNode }) {
   const session = await getUserSession()
   if (!session) redirect('/auth?next=/account')
 

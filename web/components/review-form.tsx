@@ -18,7 +18,7 @@ const CATEGORIES = [
   { key: 'speed', label: 'السرعة' },
 ] as const
 
-type CatKey = typeof CATEGORIES[number]['key']
+type CatKey = (typeof CATEGORIES)[number]['key']
 
 function StarPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
@@ -33,10 +33,7 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
           className={styles.pickerStar}
           onClick={() => onChange(i)}
         >
-          <StarIcon
-            size={22}
-            className={i <= value ? styles.pickerFilled : styles.pickerEmpty}
-          />
+          <StarIcon size={22} className={i <= value ? styles.pickerFilled : styles.pickerEmpty} />
         </button>
       ))}
     </div>
@@ -45,7 +42,10 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
 
 export default function ReviewForm({ businessId, slug, onClose }: Props) {
   const [ratings, setRatings] = useState<Record<CatKey, number>>({
-    experience: 0, taste: 0, value_for_money: 0, speed: 0,
+    experience: 0,
+    taste: 0,
+    value_for_money: 0,
+    speed: 0,
   })
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
@@ -110,7 +110,9 @@ export default function ReviewForm({ businessId, slug, onClose }: Props) {
       </div>
 
       <div className={styles.field}>
-        <label htmlFor="comment" className={styles.fieldLabel}>تعليقك</label>
+        <label htmlFor="comment" className={styles.fieldLabel}>
+          تعليقك
+        </label>
         <textarea
           id="comment"
           className={styles.textarea}

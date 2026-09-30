@@ -16,11 +16,7 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     const onScroll = () => {
-      const y =
-        window.scrollY ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
-        0
+      const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0
       setVisible(y > 400)
     }
     onScroll()

@@ -13,7 +13,9 @@
   align-items: start;
 }
 
-.content { min-width: 0; }
+.content {
+  min-width: 0;
+}
 
 @media (max-width: 900px) {
   .wrap {

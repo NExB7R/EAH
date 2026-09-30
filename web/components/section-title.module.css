@@ -22,7 +22,7 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 35%, rgba(255,255,255,0.08), transparent 70%);
+  background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.08), transparent 70%);
   position: relative;
 }
 
@@ -58,7 +58,7 @@
   font-family: var(--font-body);
   font-size: 0.7rem;
   font-weight: 800;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid currentColor;
   color: inherit;
   opacity: 0.85;
@@ -81,62 +81,101 @@
    ═══════════════════════════════════════════════════════════ */
 
 /* ─── Gold (المميزون) ─── */
-.gold { color: var(--gold-light); }
-.gold .iconWrap { filter: drop-shadow(0 0 16px rgba(232,199,154,0.5)); }
+.gold {
+  color: var(--gold-light);
+}
+.gold .iconWrap {
+  filter: drop-shadow(0 0 16px rgba(232, 199, 154, 0.5));
+}
 .gold .title {
-  background-image: linear-gradient(135deg, #F5E4BC 0%, #E8C79A 50%, #C9A56C 100%);
-  filter: drop-shadow(0 2px 14px rgba(232,199,154,0.4));
+  background-image: linear-gradient(135deg, #f5e4bc 0%, #e8c79a 50%, #c9a56c 100%);
+  filter: drop-shadow(0 2px 14px rgba(232, 199, 154, 0.4));
 }
 
 /* ─── Orange (الترند) ─── */
-.orange { color: #FDBA74; }
-.orange .iconWrap { filter: drop-shadow(0 0 16px rgba(253,186,116,0.5)); }
+.orange {
+  color: #fdba74;
+}
+.orange .iconWrap {
+  filter: drop-shadow(0 0 16px rgba(253, 186, 116, 0.5));
+}
 .orange .title {
-  background-image: linear-gradient(135deg, #FFD9A8 0%, #FDBA74 55%, #E89B4F 100%);
-  filter: drop-shadow(0 2px 14px rgba(253,186,116,0.4));
+  background-image: linear-gradient(135deg, #ffd9a8 0%, #fdba74 55%, #e89b4f 100%);
+  filter: drop-shadow(0 2px 14px rgba(253, 186, 116, 0.4));
 }
 
 /* ─── Purple (العروض) ─── */
-.purple { color: #C77DFF; }
-.purple .iconWrap { filter: drop-shadow(0 0 16px rgba(168,85,247,0.5)); }
+.purple {
+  color: #c77dff;
+}
+.purple .iconWrap {
+  filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.5));
+}
 .purple .title {
-  background-image: linear-gradient(135deg, #E0B8FF 0%, #C77DFF 50%, #9D4EDD 100%);
-  filter: drop-shadow(0 2px 14px rgba(168,85,247,0.4));
+  background-image: linear-gradient(135deg, #e0b8ff 0%, #c77dff 50%, #9d4edd 100%);
+  filter: drop-shadow(0 2px 14px rgba(168, 85, 247, 0.4));
 }
 
 /* ─── Teal (قريب مني) ─── */
-.teal { color: #7C3AED; }
-.teal .iconWrap { filter: drop-shadow(0 0 16px rgba(124,58,237,0.45)); }
+.teal {
+  color: #7c3aed;
+}
+.teal .iconWrap {
+  filter: drop-shadow(0 0 16px rgba(124, 58, 237, 0.45));
+}
 .teal .title {
-  background-image: linear-gradient(135deg, #C9A9FF 0%, #7C3AED 50%, #5B21B6 100%);
-  filter: drop-shadow(0 2px 14px rgba(124,58,237,0.4));
+  background-image: linear-gradient(135deg, #c9a9ff 0%, #7c3aed 50%, #5b21b6 100%);
+  filter: drop-shadow(0 2px 14px rgba(124, 58, 237, 0.4));
 }
 
 /* ─── Pink (الأنشطة الجديدة) ─── */
-.pink { color: #9D4EDD; }
-.pink .iconWrap { filter: drop-shadow(0 0 16px rgba(157,78,221,0.5)); }
+.pink {
+  color: #9d4edd;
+}
+.pink .iconWrap {
+  filter: drop-shadow(0 0 16px rgba(157, 78, 221, 0.5));
+}
 .pink .title {
-  background-image: linear-gradient(135deg, #B975FF 0%, #9D4EDD 50%, #7C3AED 100%);
-  filter: drop-shadow(0 2px 14px rgba(157,78,221,0.4));
+  background-image: linear-gradient(135deg, #b975ff 0%, #9d4edd 50%, #7c3aed 100%);
+  filter: drop-shadow(0 2px 14px rgba(157, 78, 221, 0.4));
 }
 
 /* ─── Blue (الترشيح) ─── */
-.blue { color: #E0B8FF; }
-.blue .iconWrap { filter: drop-shadow(0 0 16px rgba(224,184,255,0.5)); }
+.blue {
+  color: #e0b8ff;
+}
+.blue .iconWrap {
+  filter: drop-shadow(0 0 16px rgba(224, 184, 255, 0.5));
+}
 .blue .title {
-  background-image: linear-gradient(135deg, #F0DDFF 0%, #E0B8FF 50%, #B975FF 100%);
-  filter: drop-shadow(0 2px 14px rgba(224,184,255,0.4));
+  background-image: linear-gradient(135deg, #f0ddff 0%, #e0b8ff 50%, #b975ff 100%);
+  filter: drop-shadow(0 2px 14px rgba(224, 184, 255, 0.4));
 }
 
 /* ─── Mobile ─── */
 @media (max-width: 480px) {
-  .wrap { gap: 8px; margin-top: 8px; margin-bottom: 16px; }
-  .iconWrap { width: 44px; height: 44px; }
-  .iconWrap svg { width: 22px; height: 22px; }
-  .line { width: 64px; }
+  .wrap {
+    gap: 8px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+  .iconWrap {
+    width: 44px;
+    height: 44px;
+  }
+  .iconWrap svg {
+    width: 22px;
+    height: 22px;
+  }
+  .line {
+    width: 64px;
+  }
 }
 
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
-  .iconWrap, .line { transition: none; }
+  .iconWrap,
+  .line {
+    transition: none;
+  }
 }

@@ -53,11 +53,7 @@ export default function NearbyCta() {
         disabled={state === 'loading'}
         className={styles.btn}
       >
-        {state === 'loading'
-          ? 'بندور عليك…'
-          : state === 'denied'
-          ? 'جرّب تاني'
-          : 'حدد موقعي'}
+        {state === 'loading' ? 'بندور عليك…' : state === 'denied' ? 'جرّب تاني' : 'حدد موقعي'}
       </button>
     </div>
   )

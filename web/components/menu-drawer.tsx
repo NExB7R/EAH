@@ -60,9 +60,7 @@ const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/suggest', label: 'رشحلى', Icon: TargetIcon },
 ]
 
-const USER_ITEMS: MenuItem[] = [
-  { href: '/notifications', label: 'الإشعارات', Icon: BellIcon },
-]
+const USER_ITEMS: MenuItem[] = [{ href: '/notifications', label: 'الإشعارات', Icon: BellIcon }]
 
 const MERCHANT_ITEMS: MenuItem[] = [
   { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
@@ -71,9 +69,7 @@ const MERCHANT_ITEMS: MenuItem[] = [
   { href: '/merchant', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
 ]
 
-const ADMIN_ITEMS: MenuItem[] = [
-  { href: '/admin', label: 'لوحة الأدمن', Icon: ShieldCheckIcon },
-]
+const ADMIN_ITEMS: MenuItem[] = [{ href: '/admin', label: 'لوحة الأدمن', Icon: ShieldCheckIcon }]
 
 const BOTTOM_ITEMS: MenuItem[] = [
   { href: '/about', label: 'مين إحنا', Icon: InfoIcon },
@@ -112,8 +108,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
   }, [open, onClose])
 
   const isLoggedIn = !!session
-  const isAdmin =
-    session?.role === 'admin' || session?.role === 'super_admin'
+  const isAdmin = session?.role === 'admin' || session?.role === 'super_admin'
 
   const handleShare = async () => {
     if (typeof navigator === 'undefined' || !navigator.share) return
@@ -154,12 +149,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
           <Link href="/" onClick={onClose} aria-label="EAH">
             <Logo size="xs" variant="compact" href={undefined} />
           </Link>
-          <button
-            type="button"
-            className={styles.closeBtn}
-            onClick={onClose}
-            aria-label="إغلاق"
-          >
+          <button type="button" className={styles.closeBtn} onClick={onClose} aria-label="إغلاق">
             <CloseIcon size={20} />
           </button>
         </div>
@@ -200,7 +190,9 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             {PUBLIC_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
                 <Link href={href} className={styles.item} onClick={onClose}>
-                  <span className={styles.itemIcon}><Icon size={20} /></span>
+                  <span className={styles.itemIcon}>
+                    <Icon size={20} />
+                  </span>
                   <span>{label}</span>
                 </Link>
               </li>
@@ -215,7 +207,9 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                 {USER_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
                     <Link href={href} className={styles.item} onClick={onClose}>
-                      <span className={styles.itemIcon}><Icon size={20} /></span>
+                      <span className={styles.itemIcon}>
+                        <Icon size={20} />
+                      </span>
                       <span>{label}</span>
                     </Link>
                   </li>
@@ -234,7 +228,9 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             {MERCHANT_ITEMS.slice(0, 3).map(({ href, label, Icon }) => (
               <li key={href}>
                 <Link href={href} className={styles.item} onClick={onClose}>
-                  <span className={styles.itemIcon}><Icon size={20} /></span>
+                  <span className={styles.itemIcon}>
+                    <Icon size={20} />
+                  </span>
                   <span>{label}</span>
                 </Link>
               </li>
@@ -244,7 +240,9 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
               MERCHANT_ITEMS.slice(3).map(({ href, label, Icon }) => (
                 <li key={href}>
                   <Link href={href} className={styles.item} onClick={onClose}>
-                    <span className={styles.itemIcon}><Icon size={20} /></span>
+                    <span className={styles.itemIcon}>
+                      <Icon size={20} />
+                    </span>
                     <span>{label}</span>
                   </Link>
                 </li>
@@ -259,7 +257,9 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                 {ADMIN_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
                     <Link href={href} className={styles.item} onClick={onClose}>
-                      <span className={styles.itemIcon}><Icon size={20} /></span>
+                      <span className={styles.itemIcon}>
+                        <Icon size={20} />
+                      </span>
                       <span>{label}</span>
                     </Link>
                   </li>
@@ -274,7 +274,9 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             {BOTTOM_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
                 <Link href={href} className={styles.item} onClick={onClose}>
-                  <span className={styles.itemIcon}><Icon size={20} /></span>
+                  <span className={styles.itemIcon}>
+                    <Icon size={20} />
+                  </span>
                   <span>{label}</span>
                 </Link>
               </li>
@@ -282,14 +284,18 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
 
             <li>
               <button type="button" className={styles.item} onClick={handleInstall}>
-                <span className={styles.itemIcon}><InstallIcon size={20} /></span>
+                <span className={styles.itemIcon}>
+                  <InstallIcon size={20} />
+                </span>
                 <span>ثبّت التطبيق</span>
               </button>
             </li>
 
             <li>
               <button type="button" className={styles.item} onClick={handleShare}>
-                <span className={styles.itemIcon}><ShareIcon size={20} /></span>
+                <span className={styles.itemIcon}>
+                  <ShareIcon size={20} />
+                </span>
                 <span>شارك المنصة</span>
               </button>
             </li>
@@ -301,7 +307,9 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             {LEGAL_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
                 <Link href={href} className={styles.item} onClick={onClose}>
-                  <span className={styles.itemIcon}><Icon size={20} /></span>
+                  <span className={styles.itemIcon}>
+                    <Icon size={20} />
+                  </span>
                   <span>{label}</span>
                 </Link>
               </li>
@@ -318,9 +326,13 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                 rel="noopener noreferrer"
                 className={styles.item}
               >
-                <span className={styles.itemIcon}><FacebookIcon size={20} /></span>
+                <span className={styles.itemIcon}>
+                  <FacebookIcon size={20} />
+                </span>
                 <span>فيسبوك</span>
-                <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
+                <span className={styles.externalIcon}>
+                  <ExternalLinkIcon size={14} />
+                </span>
               </a>
             </li>
             <li>
@@ -330,9 +342,13 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                 rel="noopener noreferrer"
                 className={styles.item}
               >
-                <span className={styles.itemIcon}><WhatsAppIcon size={20} /></span>
+                <span className={styles.itemIcon}>
+                  <WhatsAppIcon size={20} />
+                </span>
                 <span>قناة واتساب</span>
-                <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
+                <span className={styles.externalIcon}>
+                  <ExternalLinkIcon size={14} />
+                </span>
               </a>
             </li>
             <li>
@@ -342,9 +358,13 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                 rel="noopener noreferrer"
                 className={styles.item}
               >
-                <span className={styles.itemIcon}><WhatsAppIcon size={20} /></span>
+                <span className={styles.itemIcon}>
+                  <WhatsAppIcon size={20} />
+                </span>
                 <span>كلم المسؤول</span>
-                <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
+                <span className={styles.externalIcon}>
+                  <ExternalLinkIcon size={14} />
+                </span>
               </a>
             </li>
           </ul>
@@ -360,7 +380,9 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                     className={`${styles.item} ${styles.logout}`}
                     onClick={handleLogout}
                   >
-                    <span className={styles.itemIcon}><LogoutIcon size={20} /></span>
+                    <span className={styles.itemIcon}>
+                      <LogoutIcon size={20} />
+                    </span>
                     <span>خروج</span>
                   </button>
                 </li>

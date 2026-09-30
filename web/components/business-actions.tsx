@@ -177,11 +177,7 @@ export default function BusinessActions({
         </button>
 
         {/* Share — مفتوح للكل */}
-        <button
-          type="button"
-          onClick={handleShare}
-          className={`${styles.action} ${styles.share}`}
-        >
+        <button type="button" onClick={handleShare} className={`${styles.action} ${styles.share}`}>
           <span className={styles.actionIcon}>
             {copied ? <CheckCircleIcon size={20} /> : <ShareIcon size={20} />}
           </span>
@@ -189,12 +185,7 @@ export default function BusinessActions({
         </button>
       </div>
 
-      <SmartLockModal
-        open={lock.open}
-        onClose={lock.close}
-        action={lock.action}
-        hint={lock.hint}
-      />
+      <SmartLockModal open={lock.open} onClose={lock.close} action={lock.action} hint={lock.hint} />
     </>
   )
 }

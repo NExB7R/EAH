@@ -82,16 +82,12 @@ export default function TrendingRow({ businesses, limit = 12 }: Props) {
               b.rating_count > 0
                 ? b.rating_avg.toFixed(1)
                 : b.trust_score
-                ? (b.trust_score / 20).toFixed(1)
-                : null
+                  ? (b.trust_score / 20).toFixed(1)
+                  : null
             const tierLabel = TIER_LABEL[b.trust_tier] ?? null
 
             return (
-              <Link
-                key={b.id}
-                href={`/businesses/${b.slug}`}
-                className={styles.card}
-              >
+              <Link key={b.id} href={`/businesses/${b.slug}`} className={styles.card}>
                 <div className={styles.imageWrap}>
                   {b.cover_image_url ? (
                     <WmImage
@@ -108,9 +104,7 @@ export default function TrendingRow({ businesses, limit = 12 }: Props) {
                   )}
                   <div className={styles.imageOverlay} aria-hidden />
 
-                  <span className={`${styles.rank} ${rankClass(rank, styles)}`}>
-                    #{rank}
-                  </span>
+                  <span className={`${styles.rank} ${rankClass(rank, styles)}`}>#{rank}</span>
 
                   {rating && (
                     <span className={styles.rating}>

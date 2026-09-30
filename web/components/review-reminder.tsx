@@ -47,12 +47,7 @@ export default function ReviewReminder() {
   return (
     <div className={styles.wrap} role="dialog" aria-modal="false">
       <div className={styles.card}>
-        <button
-          type="button"
-          className={styles.close}
-          onClick={dismiss}
-          aria-label="إغلاق"
-        >
+        <button type="button" className={styles.close} onClick={dismiss} aria-label="إغلاق">
           <CloseIcon size={14} />
         </button>
 
@@ -62,9 +57,7 @@ export default function ReviewReminder() {
 
         <div className={styles.content}>
           <p className={styles.title}>قيّم تجربتك في {businessName}</p>
-          <p className={styles.text}>
-            رأيك يساعد غيرك ويعلي تقييم النشاط.
-          </p>
+          <p className={styles.text}>رأيك يساعد غيرك ويعلي تقييم النشاط.</p>
         </div>
 
         <Link

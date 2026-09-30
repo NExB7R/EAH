@@ -7,14 +7,7 @@ import { usePathname } from 'next/navigation'
 import Logo from './logo'
 import Avatar from './avatar'
 import MenuDrawer from './menu-drawer'
-import {
-  BellIcon,
-  MenuIcon,
-  InfoIcon,
-  InstallIcon,
-  LockIcon,
-  TargetIcon,
-} from './icons'
+import { BellIcon, MenuIcon, InfoIcon, InstallIcon, LockIcon, TargetIcon } from './icons'
 import type { UserSession } from '@/lib/data/user'
 import styles from './floating-capsule.module.css'
 
@@ -35,11 +28,7 @@ export default function FloatingCapsule({ session }: Props) {
 
   useEffect(() => {
     const onScroll = () => {
-      const y =
-        window.scrollY ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop ||
-        0
+      const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0
       setScrolled(y > 80)
     }
     onScroll()
@@ -124,11 +113,7 @@ export default function FloatingCapsule({ session }: Props) {
           <div className={styles.left}>
             {isLoggedIn ? (
               <>
-                <Link
-                  href="/notifications"
-                  className={styles.iconBtn}
-                  aria-label="الإشعارات"
-                >
+                <Link href="/notifications" className={styles.iconBtn} aria-label="الإشعارات">
                   <BellIcon size={20} />
                   {session.notifCount > 0 && (
                     <span className={styles.badge}>
@@ -137,11 +122,7 @@ export default function FloatingCapsule({ session }: Props) {
                   )}
                 </Link>
 
-                <Link
-                  href="/account"
-                  className={styles.avatarLink}
-                  aria-label="حسابي"
-                >
+                <Link href="/account" className={styles.avatarLink} aria-label="حسابي">
                   <Avatar
                     displayName={session.displayName}
                     avatarUrl={session.avatarUrl}
@@ -161,11 +142,7 @@ export default function FloatingCapsule({ session }: Props) {
         </div>
       </header>
 
-      <MenuDrawer
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-        session={session}
-      />
+      <MenuDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} session={session} />
     </>
   )
 }

@@ -31,8 +31,7 @@ import styles from './about.module.css'
 
 export const metadata: Metadata = {
   title: 'من نحن · EAH',
-  description:
-    'EAH — منصة اكتشاف محلية مصرية. مجانية للعميل، بدون عمولة على التاجر.',
+  description: 'EAH — منصة اكتشاف محلية مصرية. مجانية للعميل، بدون عمولة على التاجر.',
 }
 
 export default function AboutPage() {
@@ -58,8 +57,8 @@ export default function AboutPage() {
           </h1>
 
           <p className={styles.heroText}>
-            منصة اكتشاف محلية مصرية، بتوصّل أهل شبين القناطر والقرى حواليها
-            بأماكنهم المفضلة. مجانية للعميل، بدون عمولة على التاجر.
+            منصة اكتشاف محلية مصرية، بتوصّل أهل شبين القناطر والقرى حواليها بأماكنهم المفضلة. مجانية
+            للعميل، بدون عمولة على التاجر.
           </p>
 
           <div className={styles.heroActions}>
@@ -82,8 +81,8 @@ export default function AboutPage() {
             <span className={styles.sectionBadge}>المشكلة</span>
             <h2 className={styles.sectionTitle}>ليه EAH موجودة؟</h2>
             <p className={styles.sectionText}>
-              في شبين القناطر، أصحاب الأنشطة مش دايماً معروفين. والمستخدم بيدور
-              كتير عشان يلاقي مكان كويس.
+              في شبين القناطر، أصحاب الأنشطة مش دايماً معروفين. والمستخدم بيدور كتير عشان يلاقي مكان
+              كويس.
             </p>
           </header>
 
@@ -92,16 +91,14 @@ export default function AboutPage() {
               <span className={styles.problemNum}>01</span>
               <h3 className={styles.problemTitle}>مفيش دليل موحد</h3>
               <p className={styles.problemText}>
-                كل نشاط ليه صفحة فيسبوك أو رقم واتساب، بس مفيش مكان يجمعهم
-                كلهم في حتة واحدة.
+                كل نشاط ليه صفحة فيسبوك أو رقم واتساب، بس مفيش مكان يجمعهم كلهم في حتة واحدة.
               </p>
             </div>
             <div className={styles.problemCard}>
               <span className={styles.problemNum}>02</span>
               <h3 className={styles.problemTitle}>التقييمات مبعترة</h3>
               <p className={styles.problemText}>
-                مفيش طريقة موثوقة تعرف منها النشاط ده كويس ولا لأ، وبناءً على
-                إيه.
+                مفيش طريقة موثوقة تعرف منها النشاط ده كويس ولا لأ، وبناءً على إيه.
               </p>
             </div>
             <div className={styles.problemCard}>
@@ -161,9 +158,7 @@ export default function AboutPage() {
       <section className={styles.section}>
         <div className={styles.container}>
           <header className={styles.sectionHeader}>
-            <span className={`${styles.sectionBadge} ${styles.badgePurple}`}>
-              للعميل
-            </span>
+            <span className={`${styles.sectionBadge} ${styles.badgePurple}`}>للعميل</span>
             <h2 className={styles.sectionTitle}>مجاناً 100%</h2>
             <p className={styles.sectionText}>
               كل حاجة تحتاجها عشان تكتشف وتطلب، بدون رسوم ولا اشتراكات.
@@ -176,26 +171,14 @@ export default function AboutPage() {
               title="بحث ذكي"
               text="باللهجة المصرية — يفهمك من أول كلمة."
             />
-            <FeatureCard
-              Icon={MicIcon}
-              title="بحث صوتي"
-              text="اتكلم، والنظام يدور لك."
-            />
+            <FeatureCard Icon={MicIcon} title="بحث صوتي" text="اتكلم، والنظام يدور لك." />
             <FeatureCard
               Icon={SparkleStarIcon}
               title="ترشيحات شخصية"
               text="حسب تاريخك وموقعك واهتماماتك."
             />
-            <FeatureCard
-              Icon={TagIcon}
-              title="عروض حقيقية"
-              text="خصومات من أنشطة قريبة منك."
-            />
-            <FeatureCard
-              Icon={GiftIcon}
-              title="نقاط ومكافآت"
-              text="اجمع نقاط واستبدلها بعروض."
-            />
+            <FeatureCard Icon={TagIcon} title="عروض حقيقية" text="خصومات من أنشطة قريبة منك." />
+            <FeatureCard Icon={GiftIcon} title="نقاط ومكافآت" text="اجمع نقاط واستبدلها بعروض." />
             <FeatureCard
               Icon={BellIcon}
               title="إشعارات فورية"
@@ -219,13 +202,9 @@ export default function AboutPage() {
       <section className={styles.section}>
         <div className={styles.container}>
           <header className={styles.sectionHeader}>
-            <span className={`${styles.sectionBadge} ${styles.badgeGold}`}>
-              للتاجر
-            </span>
+            <span className={`${styles.sectionBadge} ${styles.badgeGold}`}>للتاجر</span>
             <h2 className={styles.sectionTitle}>ظهور مجاني. بدون عمولة.</h2>
-            <p className={styles.sectionText}>
-              سجّل نشاطك في 5 دقايق. مش بناخد أي نسبة من طلباتك.
-            </p>
+            <p className={styles.sectionText}>سجّل نشاطك في 5 دقايق. مش بناخد أي نسبة من طلباتك.</p>
           </header>
 
           <div className={styles.featureGrid}>
@@ -259,11 +238,7 @@ export default function AboutPage() {
               title="شارة الثقة"
               text="كل ما تتفاعل، تترقّى في التصنيف."
             />
-            <FeatureCard
-              Icon={GiftIcon}
-              title="عروض وقسائم"
-              text="اعمل عروض لجذب عملاء جدد."
-            />
+            <FeatureCard Icon={GiftIcon} title="عروض وقسائم" text="اعمل عروض لجذب عملاء جدد." />
             <FeatureCard
               Icon={CrownGoldIcon}
               title="ترقيات اختيارية"
@@ -314,16 +289,12 @@ export default function AboutPage() {
             <div className={styles.step}>
               <span className={styles.stepNum}>2</span>
               <h3 className={styles.stepTitle}>اتواصل</h3>
-              <p className={styles.stepText}>
-                دوس زر الواتساب — رسالة جاهزة لنشاطك المفضل.
-              </p>
+              <p className={styles.stepText}>دوس زر الواتساب — رسالة جاهزة لنشاطك المفضل.</p>
             </div>
             <div className={styles.step}>
               <span className={styles.stepNum}>3</span>
               <h3 className={styles.stepTitle}>قيّم</h3>
-              <p className={styles.stepText}>
-                ساعد غيرك — تقييمك بيعلي تقييم النشاط.
-              </p>
+              <p className={styles.stepText}>ساعد غيرك — تقييمك بيعلي تقييم النشاط.</p>
             </div>
           </div>
         </div>
@@ -338,8 +309,7 @@ export default function AboutPage() {
               <span className={styles.palestineFlag}>🇵🇸</span>
               <h2 className={styles.palestineTitle}>فلسطين في القلب</h2>
               <p className={styles.palestineText}>
-                EAH منصة فلسطينية الهوى، مصرية الجذور. بنخصص 2% من دخل
-                الباقات لصندوق دعم فلسطين.
+                EAH منصة فلسطينية الهوى، مصرية الجذور. بنخصص 2% من دخل الباقات لصندوق دعم فلسطين.
               </p>
               <Link href="/support-palestine" className={styles.btnGhost}>
                 اعرف أكتر
@@ -357,9 +327,7 @@ export default function AboutPage() {
             <h2 className={styles.ctaTitle}>
               جاهز تبدأ مع <span className={styles.accent}>EAH</span>؟
             </h2>
-            <p className={styles.ctaText}>
-              اكتشف، اطلب، قيّم. أو سجّل نشاطك وخلّي الناس تعرفك.
-            </p>
+            <p className={styles.ctaText}>اكتشف، اطلب، قيّم. أو سجّل نشاطك وخلّي الناس تعرفك.</p>
             <div className={styles.ctaRow}>
               <Link href="/explore" className={styles.btnPrimary}>
                 اكتشف الأنشطة

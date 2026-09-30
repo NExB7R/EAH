@@ -19,21 +19,23 @@
   line-height: 1.1;
   color: var(--gold-light);
   letter-spacing: 0.01em;
-  transition: color 300ms var(--ease-out), text-shadow 300ms var(--ease-out);
+  transition:
+    color 300ms var(--ease-out),
+    text-shadow 300ms var(--ease-out);
   cursor: default;
   user-select: none;
   white-space: nowrap;
   text-shadow:
-    0 0 6px rgba(232,199,154,0.35),
-    0 0 14px rgba(232,199,154,0.18);
+    0 0 6px rgba(232, 199, 154, 0.35),
+    0 0 14px rgba(232, 199, 154, 0.18);
 }
 
 .wrap:hover .name {
-  color: #FFF5DE;
+  color: #fff5de;
   text-shadow:
-    0 0 12px rgba(232,199,154,0.9),
-    0 0 26px rgba(232,199,154,0.5),
-    0 0 44px rgba(232,199,154,0.25);
+    0 0 12px rgba(232, 199, 154, 0.9),
+    0 0 26px rgba(232, 199, 154, 0.5),
+    0 0 44px rgba(232, 199, 154, 0.25);
 }
 
 .line {
@@ -43,17 +45,21 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(232,199,154,0.35) 30%,
-    rgba(232,199,154,0.55) 50%,
-    rgba(232,199,154,0.35) 70%,
+    rgba(232, 199, 154, 0.35) 30%,
+    rgba(232, 199, 154, 0.55) 50%,
+    rgba(232, 199, 154, 0.35) 70%,
     transparent 100%
   );
 }
 
 @media (max-width: 640px) {
-  .wrap { padding: 2px 8px 3px; }
+  .wrap {
+    padding: 2px 8px 3px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .name { transition: none; }
+  .name {
+    transition: none;
+  }
 }

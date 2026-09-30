@@ -76,9 +76,6 @@
   background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.3), transparent);
 }
 
-
-
-
 /* ─── Tabs ─── */
 .tabs {
   position: relative;
@@ -235,7 +232,9 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: color var(--motion-fast) var(--ease), background var(--motion-fast) var(--ease);
+  transition:
+    color var(--motion-fast) var(--ease),
+    background var(--motion-fast) var(--ease);
 }
 
 .passwordToggle:hover {
@@ -317,9 +316,16 @@
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
 }
 
 /* ─── Submit ─── */
@@ -440,7 +446,9 @@
   background: rgba(10, 5, 20, 0.4);
   border: var(--border-thin) solid rgba(168, 85, 247, 0.1);
   border-radius: var(--radius-base);
-  transition: border-color var(--motion-fast) var(--ease), background var(--motion-fast) var(--ease);
+  transition:
+    border-color var(--motion-fast) var(--ease),
+    background var(--motion-fast) var(--ease);
 }
 
 .hook:hover {

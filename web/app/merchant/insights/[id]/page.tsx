@@ -42,7 +42,13 @@ type InsightRow = {
   score: number | null
   summary: string | null
   top_points: {
-    insights?: Array<{ id: string; severity: string; title: string; description: string; action?: string }>
+    insights?: Array<{
+      id: string
+      severity: string
+      title: string
+      description: string
+      action?: string
+    }>
     strengths?: string[]
     weaknesses?: string[]
     opportunities?: string[]
@@ -57,11 +63,7 @@ type InsightRow = {
 
 async function getInsight(id: string): Promise<InsightRow | null> {
   const supabase = await createClient()
-  const { data } = await supabase
-    .from('business_insights')
-    .select('*')
-    .eq('id', id)
-    .maybeSingle()
+  const { data } = await supabase.from('business_insights').select('*').eq('id', id).maybeSingle()
 
   return (data as InsightRow) ?? null
 }
@@ -141,9 +143,13 @@ export default async function InsightPage({ params }: Props) {
             <span>EAH — تقرير ذكي</span>
           </div>
           <div className={styles.reportMeta}>
-            <span>النشاط: <strong>{biz.name}</strong></span>
+            <span>
+              النشاط: <strong>{biz.name}</strong>
+            </span>
             <span>التاريخ: {date}</span>
-            <span>الفترة: {periodStart} — {periodEnd}</span>
+            <span>
+              الفترة: {periodStart} — {periodEnd}
+            </span>
           </div>
         </div>
 
@@ -156,9 +162,7 @@ export default async function InsightPage({ params }: Props) {
           <div className={styles.scoreInfo}>
             <span className={styles.scoreLabel}>مؤشر الأداء</span>
             <span className={`${styles.scoreGrade} ${styles[tone]}`}>{grade}</span>
-            {insight.summary && (
-              <p className={styles.summary}>{insight.summary}</p>
-            )}
+            {insight.summary && <p className={styles.summary}>{insight.summary}</p>}
           </div>
         </div>
 
@@ -166,25 +170,33 @@ export default async function InsightPage({ params }: Props) {
         {data && (
           <div className={styles.kpiGrid}>
             <div className={styles.kpi}>
-              <span className={styles.kpiIcon}><EyeIcon size={18} /></span>
+              <span className={styles.kpiIcon}>
+                <EyeIcon size={18} />
+              </span>
               <span className={styles.kpiValue}>{data.pageViews ?? 0}</span>
               <span className={styles.kpiLabel}>زيارات</span>
               <span className={styles.kpiSub}>{data.uniqueVisitors ?? 0} زائر فريد</span>
             </div>
             <div className={styles.kpi}>
-              <span className={styles.kpiIcon}><FileTextIcon size={18} /></span>
+              <span className={styles.kpiIcon}>
+                <FileTextIcon size={18} />
+              </span>
               <span className={styles.kpiValue}>{data.ordersTotal ?? 0}</span>
               <span className={styles.kpiLabel}>طلبات</span>
               <span className={styles.kpiSub}>{data.ordersConfirmed ?? 0} مكتمل</span>
             </div>
             <div className={styles.kpi}>
-              <span className={styles.kpiIcon}><StarIcon size={18} /></span>
+              <span className={styles.kpiIcon}>
+                <StarIcon size={18} />
+              </span>
               <span className={styles.kpiValue}>{data.avgRating ?? 0}</span>
               <span className={styles.kpiLabel}>متوسط التقييم</span>
               <span className={styles.kpiSub}>{data.reviewsTotal ?? 0} تقييم</span>
             </div>
             <div className={styles.kpi}>
-              <span className={styles.kpiIcon}><SparklesIcon size={18} /></span>
+              <span className={styles.kpiIcon}>
+                <SparklesIcon size={18} />
+              </span>
               <span className={styles.kpiValue}>{data.mediaCount ?? 0}</span>
               <span className={styles.kpiLabel}>صور</span>
               <span className={styles.kpiSub}>منشورة</span>
@@ -217,9 +229,7 @@ export default async function InsightPage({ params }: Props) {
                   <h3 className={styles.insightTitle}>{ins.title}</h3>
                 </div>
                 <p className={styles.insightDesc}>{ins.description}</p>
-                {ins.action && (
-                  <span className={styles.insightAction}>💡 {ins.action}</span>
-                )}
+                {ins.action && <span className={styles.insightAction}>💡 {ins.action}</span>}
               </div>
             ))}
           </div>
@@ -235,7 +245,9 @@ export default async function InsightPage({ params }: Props) {
               نقاط القوة
             </h3>
             <ul className={styles.colList}>
-              {strengths.map((s, i) => <li key={i}>{s}</li>)}
+              {strengths.map((s, i) => (
+                <li key={i}>{s}</li>
+              ))}
             </ul>
           </div>
         )}
@@ -247,7 +259,9 @@ export default async function InsightPage({ params }: Props) {
               نقاط محتاجة تحسين
             </h3>
             <ul className={styles.colList}>
-              {weaknesses.map((s, i) => <li key={i}>{s}</li>)}
+              {weaknesses.map((s, i) => (
+                <li key={i}>{s}</li>
+              ))}
             </ul>
           </div>
         )}
@@ -259,7 +273,9 @@ export default async function InsightPage({ params }: Props) {
               فرص
             </h3>
             <ul className={styles.colList}>
-              {opportunities.map((s, i) => <li key={i}>{s}</li>)}
+              {opportunities.map((s, i) => (
+                <li key={i}>{s}</li>
+              ))}
             </ul>
           </div>
         )}
@@ -273,14 +289,20 @@ export default async function InsightPage({ params }: Props) {
             <div className={styles.compRow}>
               <span className={styles.compLabel}>تقييمك</span>
               <div className={styles.compBar}>
-                <div className={styles.compFill} style={{ width: `${((data?.avgRating ?? 0) / 5) * 100}%` }} />
+                <div
+                  className={styles.compFill}
+                  style={{ width: `${((data?.avgRating ?? 0) / 5) * 100}%` }}
+                />
               </div>
               <span className={styles.compValue}>{data?.avgRating ?? 0} ⭐</span>
             </div>
             <div className={styles.compRow}>
               <span className={styles.compLabel}>متوسط المنافسين</span>
               <div className={styles.compBar}>
-                <div className={`${styles.compFill} ${styles.compAvg}`} style={{ width: `${(insight.comparison.avgRating / 5) * 100}%` }} />
+                <div
+                  className={`${styles.compFill} ${styles.compAvg}`}
+                  style={{ width: `${(insight.comparison.avgRating / 5) * 100}%` }}
+                />
               </div>
               <span className={styles.compValue}>{insight.comparison.avgRating} ⭐</span>
             </div>

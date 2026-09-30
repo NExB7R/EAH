@@ -47,7 +47,9 @@ export default function PlanCard({ plan, featured = false }: Props) {
   const hasAI = plan.code === 'featured_quarterly' || plan.code === 'featured_yearly'
 
   return (
-    <div className={`${styles.card} ${featured ? styles.featured : ''} ${isFree ? styles.free : ''}`}>
+    <div
+      className={`${styles.card} ${featured ? styles.featured : ''} ${isFree ? styles.free : ''}`}
+    >
       {featured && <span className={styles.ribbon}>الأكثر اختياراً</span>}
       {isFree && <span className={styles.freeRibbon}>مجاناً للأبد</span>}
 
@@ -57,16 +59,13 @@ export default function PlanCard({ plan, featured = false }: Props) {
         </span>
         <h3 className={styles.name}>{plan.name_ar}</h3>
         {tagline && <p className={styles.tagline}>{tagline}</p>}
-        {plan.description && (
-          <p className={styles.desc}>{plan.description}</p>
-        )}
+        {plan.description && <p className={styles.desc}>{plan.description}</p>}
       </div>
 
       <div className={styles.priceWrap}>
         {isFree ? (
           <span className={styles.priceFree}>
-            <SparklesIcon size={22} />
-            0 ج.م
+            <SparklesIcon size={22} />0 ج.م
           </span>
         ) : (
           <>
@@ -78,16 +77,10 @@ export default function PlanCard({ plan, featured = false }: Props) {
       </div>
 
       {plan.trial_days > 0 && !isFree && (
-        <div className={styles.trial}>
-          ✨ {plan.trial_days} يوم تجربة مجانية
-        </div>
+        <div className={styles.trial}>✨ {plan.trial_days} يوم تجربة مجانية</div>
       )}
 
-      {isFree && (
-        <div className={styles.freeNote}>
-          من غير بطاقة — من غير التزام — من غير رغي
-        </div>
-      )}
+      {isFree && <div className={styles.freeNote}>من غير بطاقة — من غير التزام — من غير رغي</div>}
 
       <ul className={styles.features}>
         {plan.features.map((key: PlanFeatureKey) => (

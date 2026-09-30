@@ -65,9 +65,7 @@ export default async function AdminBusinessesPage() {
                       {b.owner.phone && <span> · {b.owner.phone}</span>}
                     </div>
                   )}
-                  {b.description && (
-                    <p className={styles.desc}>{b.description.slice(0, 150)}</p>
-                  )}
+                  {b.description && <p className={styles.desc}>{b.description.slice(0, 150)}</p>}
                   <span className={styles.date}>{date}</span>
                 </div>
 

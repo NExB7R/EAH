@@ -1,11 +1,5 @@
 import WmImage from './wm-image'
-import {
-  StarIcon,
-  BadgeCheckIcon,
-  MapPinIcon,
-  CheckCircleIcon,
-  AlertIcon,
-} from './icons'
+import { StarIcon, BadgeCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
 import type { BusinessDetail } from '@/lib/data/business-detail'
 import { TYPE_LABEL, TIER_LABEL } from '@/lib/data/business-detail'
 import styles from './business-hero.module.css'
@@ -28,9 +22,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
   const tierTone = TIER_TONE[business.trust_tier] ?? 'purple'
 
   const hasRating = business.rating_count > 0
-  const ratingValue = hasRating
-    ? business.rating_avg.toFixed(1)
-    : null
+  const ratingValue = hasRating ? business.rating_avg.toFixed(1) : null
 
   return (
     <section className={styles.hero}>
@@ -107,13 +99,9 @@ export default function BusinessHero({ detail, isOpen }: Props) {
           </div>
 
           <div className={styles.badges}>
-            <span className={`${styles.tier} ${styles['tier_' + tierTone]}`}>
-              {tierLabel}
-            </span>
+            <span className={`${styles.tier} ${styles['tier_' + tierTone]}`}>{tierLabel}</span>
             {business.trust_score > 0 && (
-              <span className={styles.trust}>
-                مصداقية {business.trust_score}
-              </span>
+              <span className={styles.trust}>مصداقية {business.trust_score}</span>
             )}
           </div>
 
@@ -144,9 +132,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
             )}
           </div>
 
-          {business.hook && (
-            <p className={styles.hook}>{business.hook}</p>
-          )}
+          {business.hook && <p className={styles.hook}>{business.hook}</p>}
         </div>
       </div>
     </section>

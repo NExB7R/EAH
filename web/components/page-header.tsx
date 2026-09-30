@@ -40,9 +40,7 @@ export default function PageHeader({
       {(title || count !== undefined) && (
         <div className={styles.titleRow}>
           {title && <h1 className={styles.title}>{title}</h1>}
-          {count !== undefined && (
-            <span className={styles.count}>{count} نشاط</span>
-          )}
+          {count !== undefined && <span className={styles.count}>{count} نشاط</span>}
         </div>
       )}
 

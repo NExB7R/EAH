@@ -26,7 +26,7 @@
 .avgNum {
   font-size: 2.2rem;
   font-weight: 900;
-  color: #E8C79A;
+  color: #e8c79a;
   line-height: 1;
 }
 
@@ -36,7 +36,7 @@
 }
 
 .starFilled {
-  color: #E8C79A;
+  color: #e8c79a;
 }
 
 .starEmpty {
@@ -73,7 +73,7 @@
 
 .barFill {
   height: 100%;
-  background: linear-gradient(90deg, #9D4EDD, #E8C79A);
+  background: linear-gradient(90deg, #9d4edd, #e8c79a);
   border-radius: 999px;
   transition: width 400ms ease;
 }
@@ -168,7 +168,7 @@
 }
 
 .replyError {
-  color: #FCA5A5;
+  color: #fca5a5;
   font-size: 0.72rem;
 }
 

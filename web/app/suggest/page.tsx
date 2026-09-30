@@ -11,12 +11,7 @@ export const metadata: Metadata = {
 export default function SuggestPage() {
   return (
     <main className={styles.page}>
-      <SecondaryHero
-        activeKey="suggest"
-        title="رشحلى"
-        Icon={SparkleStarIcon}
-        tone="blue"
-      />
+      <SecondaryHero activeKey="suggest" title="رشحلى" Icon={SparkleStarIcon} tone="blue" />
       <section className={styles.section}>
         <div className={styles.empty}>
           <p>لسه محتاجين نعرفك أكتر</p>

@@ -19,11 +19,7 @@ type BeforeInstallPromptEvent = Event & {
 const KEY_DISMISSED = 'eah-install-dismissed-at'
 const DISMISS_COOLDOWN_MS = 2 * 60 * 1000
 
-const BENEFITS = [
-  'افتح EAH من غير متصفح',
-  'اشتغل بدون إنترنت',
-  'إشعارات فورية بالعروض',
-]
+const BENEFITS = ['افتح EAH من غير متصفح', 'اشتغل بدون إنترنت', 'إشعارات فورية بالعروض']
 
 export default function InstallPrompt() {
   const [visible, setVisible] = useState(false)
@@ -90,12 +86,7 @@ export default function InstallPrompt() {
         role="dialog"
         aria-modal="true"
       >
-        <button
-          type="button"
-          className="eah-close"
-          onClick={dismiss}
-          aria-label="إغلاق"
-        >
+        <button type="button" className="eah-close" onClick={dismiss} aria-label="إغلاق">
           <CloseIcon size={18} />
         </button>
 
@@ -110,9 +101,7 @@ export default function InstallPrompt() {
         </div>
 
         <h2 className={styles.title}>ثبّت EAH على جهازك</h2>
-        <p className={styles.subtitle}>
-          تجربة أسرع، بدون متصفح، وتوصلك إشعارات بالعروض الجديدة.
-        </p>
+        <p className={styles.subtitle}>تجربة أسرع، بدون متصفح، وتوصلك إشعارات بالعروض الجديدة.</p>
 
         <ul className={styles.benefits}>
           {BENEFITS.map((b) => (

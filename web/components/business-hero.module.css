@@ -1,4 +1,6 @@
-.hero { margin-bottom: 20px; }
+.hero {
+  margin-bottom: 20px;
+}
 
 /* ─── Cover ─── */
 .cover {
@@ -6,29 +8,34 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: rgba(168,85,247,0.06);
+  background: rgba(168, 85, 247, 0.06);
 }
 
 @media (min-width: 900px) {
-  .cover { aspect-ratio: 21 / 9; max-height: 380px; }
+  .cover {
+    aspect-ratio: 21 / 9;
+    max-height: 380px;
+  }
 }
 
-.coverImg { object-fit: cover; }
+.coverImg {
+  object-fit: cover;
+}
 
 .coverFallback {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 30% 30%, rgba(168,85,247,0.22), transparent 60%),
-    radial-gradient(circle at 70% 70%, rgba(232,199,154,0.15), transparent 55%),
-    linear-gradient(160deg, #170C2B, #0A0514);
+    radial-gradient(circle at 30% 30%, rgba(168, 85, 247, 0.22), transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(232, 199, 154, 0.15), transparent 55%),
+    linear-gradient(160deg, #170c2b, #0a0514);
 }
 
 .coverOverlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(180deg, transparent 40%, rgba(7,2,13,0.85) 100%);
+  background: linear-gradient(180deg, transparent 40%, rgba(7, 2, 13, 0.85) 100%);
 }
 
 /* ─── Body ─── */
@@ -47,14 +54,16 @@
   height: 110px;
   border-radius: 24px;
   overflow: hidden;
-  background: linear-gradient(160deg, rgba(20,14,34,0.95), rgba(10,7,20,0.95));
-  border: 3px solid rgba(232,199,154,0.45);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.95), rgba(10, 7, 20, 0.95));
+  border: 3px solid rgba(232, 199, 154, 0.45);
   box-shadow:
-    0 0 0 4px rgba(7,2,13,0.9),
-    0 0 30px rgba(232,199,154,0.25);
+    0 0 0 4px rgba(7, 2, 13, 0.9),
+    0 0 30px rgba(232, 199, 154, 0.25);
 }
 
-.logoImg { object-fit: cover; }
+.logoImg {
+  object-fit: cover;
+}
 
 .logoFallback {
   display: flex;
@@ -66,10 +75,12 @@
   font-size: 3rem;
   font-weight: 900;
   color: var(--gold-light);
-  background: linear-gradient(135deg, rgba(157,78,221,0.2), rgba(232,199,154,0.1));
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(232, 199, 154, 0.1));
 }
 
-.info { margin-top: 16px; }
+.info {
+  margin-top: 16px;
+}
 
 .titleRow {
   display: flex;
@@ -89,7 +100,7 @@
 .verified {
   display: inline-flex;
   color: var(--gold-light);
-  filter: drop-shadow(0 0 6px rgba(232,199,154,0.6));
+  filter: drop-shadow(0 0 6px rgba(232, 199, 154, 0.6));
   flex-shrink: 0;
 }
 
@@ -103,8 +114,12 @@
   font-weight: 700;
 }
 
-.type { color: var(--purple-light); }
-.dot { color: var(--text-muted); }
+.type {
+  color: var(--purple-light);
+}
+.dot {
+  color: var(--text-muted);
+}
 .area {
   display: inline-flex;
   align-items: center;
@@ -121,8 +136,16 @@
   font-size: 0.68rem;
   font-weight: 900;
 }
-.open { color: #8FF0E1; background: rgba(85,231,209,0.12); border: 1px solid rgba(85,231,209,0.35); }
-.closed { color: #FFC8C8; background: rgba(252,165,165,0.1); border: 1px solid rgba(252,165,165,0.35); }
+.open {
+  color: #8ff0e1;
+  background: rgba(85, 231, 209, 0.12);
+  border: 1px solid rgba(85, 231, 209, 0.35);
+}
+.closed {
+  color: #ffc8c8;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.35);
+}
 
 .badges {
   display: flex;
@@ -136,17 +159,29 @@
   font-size: 0.68rem;
   font-weight: 900;
 }
-.tier_teal { color: #8FF0E1; background: rgba(85,231,209,0.08); border: 1px solid rgba(85,231,209,0.35); }
-.tier_gold { color: var(--gold-light); background: rgba(232,199,154,0.1); border: 1px solid rgba(232,199,154,0.4); }
-.tier_purple { color: var(--purple-light); background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.3); }
+.tier_teal {
+  color: #8ff0e1;
+  background: rgba(85, 231, 209, 0.08);
+  border: 1px solid rgba(85, 231, 209, 0.35);
+}
+.tier_gold {
+  color: var(--gold-light);
+  background: rgba(232, 199, 154, 0.1);
+  border: 1px solid rgba(232, 199, 154, 0.4);
+}
+.tier_purple {
+  color: var(--purple-light);
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
 .trust {
   padding: 3px 10px;
   border-radius: 999px;
   font-size: 0.68rem;
   font-weight: 900;
   color: var(--gold-light);
-  background: rgba(232,199,154,0.06);
-  border: 1px solid rgba(232,199,154,0.25);
+  background: rgba(232, 199, 154, 0.06);
+  border: 1px solid rgba(232, 199, 154, 0.25);
 }
 
 /* ─── Stats ─── */
@@ -158,8 +193,8 @@
   margin-top: 16px;
   padding: 14px 18px;
   border-radius: 16px;
-  background: rgba(20,14,34,0.5);
-  border: 1px solid rgba(232,199,154,0.15);
+  background: rgba(20, 14, 34, 0.5);
+  border: 1px solid rgba(232, 199, 154, 0.15);
 }
 
 .ratingBig {
@@ -175,7 +210,11 @@
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
-.ratingStars { color: var(--gold-light); display: inline-flex; align-items: center; }
+.ratingStars {
+  color: var(--gold-light);
+  display: inline-flex;
+  align-items: center;
+}
 .ratingCount {
   font-size: 0.75rem;
   font-weight: 700;
@@ -189,7 +228,7 @@
   align-items: flex-start;
   gap: 2px;
   padding-inline-start: 16px;
-  border-inline-start: 1px solid rgba(232,199,154,0.15);
+  border-inline-start: 1px solid rgba(232, 199, 154, 0.15);
 }
 .statValue {
   font-family: var(--font-display);
@@ -199,7 +238,11 @@
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
-.statLabel { font-size: 0.65rem; font-weight: 700; color: var(--text-tertiary); }
+.statLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
 
 .hook {
   margin: 14px 0 0;
@@ -209,15 +252,29 @@
   font-weight: 700;
   color: var(--text-secondary);
   line-height: 1.7;
-  background: rgba(232,199,154,0.05);
+  background: rgba(232, 199, 154, 0.05);
   border-inline-start: 3px solid var(--gold-light);
 }
 
 /* ─── Mobile ─── */
 @media (max-width: 640px) {
-  .body { padding: 0 16px; margin-top: -50px; }
-  .logoWrap { width: 90px; height: 90px; border-radius: 20px; }
-  .logoFallback { font-size: 2.4rem; }
-  .stats { padding: 12px 14px; gap: 12px; }
-  .statSmall { padding-inline-start: 12px; }
+  .body {
+    padding: 0 16px;
+    margin-top: -50px;
+  }
+  .logoWrap {
+    width: 90px;
+    height: 90px;
+    border-radius: 20px;
+  }
+  .logoFallback {
+    font-size: 2.4rem;
+  }
+  .stats {
+    padding: 12px 14px;
+    gap: 12px;
+  }
+  .statSmall {
+    padding-inline-start: 12px;
+  }
 }

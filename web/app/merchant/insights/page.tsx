@@ -1,11 +1,6 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import {
-  SparklesIcon,
-  FileTextIcon,
-  ArrowLeftIcon,
-  LockIcon,
-} from '@/components/icons'
+import { SparklesIcon, FileTextIcon, ArrowLeftIcon, LockIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness } from '@/lib/data/merchant'
 import { getMySubscription } from '@/lib/data/merchant'
@@ -54,10 +49,7 @@ export default async function MerchantInsightsPage() {
 
   return (
     <div className={styles.wrap}>
-      <AccountPageHeader
-        title="مساعد EAH الذكي"
-        description="تحليل شامل لنشاطك + توصيات مخصصة"
-      />
+      <AccountPageHeader title="مساعد EAH الذكي" description="تحليل شامل لنشاطك + توصيات مخصصة" />
 
       {!hasAccess ? (
         <div className={styles.locked}>
@@ -66,8 +58,8 @@ export default async function MerchantInsightsPage() {
           </span>
           <h2 className={styles.lockedTitle}>ميزة حصرية لباقات النمو والشراكة</h2>
           <p className={styles.lockedText}>
-            مساعد EAH الذكي بيحلل كل حاجة في نشاطك — تعليقات، طلبات، زيارات —
-            وبيطلعلك تقرير شهري كامل مع توصيات مخصصة.
+            مساعد EAH الذكي بيحلل كل حاجة في نشاطك — تعليقات، طلبات، زيارات — وبيطلعلك تقرير شهري
+            كامل مع توصيات مخصصة.
           </p>
           <Link href="/pricing" className={styles.upgradeBtn}>
             <SparklesIcon size={16} />
@@ -116,9 +108,7 @@ export default async function MerchantInsightsPage() {
                       <h3 className={styles.insightTitle}>{ins.title}</h3>
                     </div>
                     <p className={styles.insightDesc}>{ins.description}</p>
-                    {ins.action && (
-                      <span className={styles.insightAction}>💡 {ins.action}</span>
-                    )}
+                    {ins.action && <span className={styles.insightAction}>💡 {ins.action}</span>}
                   </div>
                 ))}
               </div>
@@ -153,7 +143,9 @@ export default async function MerchantInsightsPage() {
                           {ins.summary?.slice(0, 100) ?? 'ملخص'}
                         </span>
                       </div>
-                      <span className={`${styles.historyScore} ${styles[getToneFromScore(ins.score ?? 0)]}`}>
+                      <span
+                        className={`${styles.historyScore} ${styles[getToneFromScore(ins.score ?? 0)]}`}
+                      >
                         {ins.score ?? '—'}
                       </span>
                       <ArrowLeftIcon size={14} className={styles.historyChev} />

@@ -4,10 +4,7 @@ import ExploreSearch from '@/components/explore-search'
 import SecondaryHero from '@/components/secondary-hero'
 import LoadMoreGrid from '@/components/load-more'
 import { TargetIcon } from '@/components/icons'
-import {
-  getPublishedBusinesses,
-  getBusinessesByType,
-} from '@/lib/data/businesses'
+import { getPublishedBusinesses, getBusinessesByType } from '@/lib/data/businesses'
 import type { BusinessType } from '@/lib/data/businesses'
 import { smartSearch } from '@/lib/search'
 import { sortByTrust, dailyShuffle } from '@/lib/ranking'
@@ -27,7 +24,11 @@ type SearchParams = {
 }
 
 const VALID_TYPES: BusinessType[] = [
-  'restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc',
+  'restaurant',
+  'pharmacy',
+  'supermarket',
+  'delivery_office',
+  'misc',
 ]
 
 const TYPE_TITLES: Record<string, string> = {
@@ -94,9 +95,7 @@ export default async function ExplorePage({
               <TargetIcon size={44} />
             </div>
             <h2 className={styles.emptyTitle}>مفيش نتائج</h2>
-            <p className={styles.emptyText}>
-              جرب تدور بكلمة تانية، أو اكتشف التصنيفات.
-            </p>
+            <p className={styles.emptyText}>جرب تدور بكلمة تانية، أو اكتشف التصنيفات.</p>
             <Link href="/explore" className={styles.emptyBtn}>
               اكتشف كل حاجة
             </Link>

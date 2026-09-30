@@ -21,10 +21,7 @@ export default async function MerchantOffersPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="العروض"
-        description="اعمل عروض لجذب العملاء"
-      />
+      <AccountPageHeader title="العروض" description="اعمل عروض لجذب العملاء" />
 
       <PaidGate
         hasAccess={hasAccess}

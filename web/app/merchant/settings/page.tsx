@@ -20,10 +20,7 @@ export default async function MerchantSettingsPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="الإعدادات"
-        description="إعدادات حسابك ونشاطك"
-      />
+      <AccountPageHeader title="الإعدادات" description="إعدادات حسابك ونشاطك" />
 
       <div className={styles.list}>
         <Link href="/account/notifications" className={styles.item}>

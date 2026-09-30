@@ -55,16 +55,31 @@ const SECTIONS: Section[] = [
   {
     title: 'الإدارة',
     items: [
-      { href: '/admin/businesses', label: 'الأنشطة', Icon: StoreIcon, badgeKey: 'pendingBusinesses' },
+      {
+        href: '/admin/businesses',
+        label: 'الأنشطة',
+        Icon: StoreIcon,
+        badgeKey: 'pendingBusinesses',
+      },
       { href: '/admin/users', label: 'المستخدمين', Icon: UserIcon },
-      { href: '/admin/subscriptions', label: 'الاشتراكات', Icon: CrownGoldIcon, badgeKey: 'pendingSubscriptions' },
+      {
+        href: '/admin/subscriptions',
+        label: 'الاشتراكات',
+        Icon: CrownGoldIcon,
+        badgeKey: 'pendingSubscriptions',
+      },
       { href: '/admin/ads', label: 'الإعلانات', Icon: TagIcon },
     ],
   },
   {
     title: 'المراجعة',
     items: [
-      { href: '/admin/moderation', label: 'المراجعة', Icon: ShieldCheckIcon, badgeKey: 'flaggedReviews' },
+      {
+        href: '/admin/moderation',
+        label: 'المراجعة',
+        Icon: ShieldCheckIcon,
+        badgeKey: 'flaggedReviews',
+      },
       { href: '/admin/reports', label: 'الإبلاغات', Icon: TargetIcon, badgeKey: 'openReports' },
     ],
   },
@@ -89,10 +104,7 @@ export default function AdminSidebar({ counts }: Props) {
             <h4 className={styles.sectionTitle}>{section.title}</h4>
             <ul className={styles.list}>
               {section.items.map(({ href, label, Icon, badgeKey }) => {
-                const active =
-                  href === '/admin'
-                    ? pathname === '/admin'
-                    : pathname.startsWith(href)
+                const active = href === '/admin' ? pathname === '/admin' : pathname.startsWith(href)
                 const badgeValue = badgeKey ? counts?.[badgeKey] : undefined
                 const showBadge = typeof badgeValue === 'number' && badgeValue > 0
 
@@ -108,9 +120,7 @@ export default function AdminSidebar({ counts }: Props) {
                       </span>
                       <span className={styles.label}>{label}</span>
                       {showBadge && (
-                        <span className={styles.badge}>
-                          {badgeValue > 99 ? '99+' : badgeValue}
-                        </span>
+                        <span className={styles.badge}>{badgeValue > 99 ? '99+' : badgeValue}</span>
                       )}
                     </Link>
                   </li>

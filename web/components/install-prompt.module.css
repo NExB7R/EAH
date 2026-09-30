@@ -22,7 +22,12 @@
   width: 160px;
   height: 160px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(232,199,154,0.35), rgba(168,85,247,0.15) 45%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(232, 199, 154, 0.35),
+    rgba(168, 85, 247, 0.15) 45%,
+    transparent 70%
+  );
   filter: blur(28px);
   pointer-events: none;
 }
@@ -35,11 +40,11 @@
   width: 76px;
   height: 76px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, rgba(157,78,221,0.3), rgba(232,199,154,0.15));
-  border: 1px solid rgba(232,199,154,0.4);
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(232, 199, 154, 0.15));
+  border: 1px solid rgba(232, 199, 154, 0.4);
   color: var(--gold-light);
   box-shadow:
-    0 0 0 6px rgba(232,199,154,0.06),
+    0 0 0 6px rgba(232, 199, 154, 0.06),
     var(--glow-purple-sm);
 }
 
@@ -56,7 +61,7 @@
   letter-spacing: 0.08em;
   color: var(--bg-base);
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
-  box-shadow: 0 0 14px rgba(232,199,154,0.4);
+  box-shadow: 0 0 14px rgba(232, 199, 154, 0.4);
 }
 
 .title {
@@ -93,8 +98,8 @@
   color: var(--text-secondary);
   padding: 8px 12px;
   border-radius: var(--radius-base);
-  background: rgba(168,85,247,0.06);
-  border: 1px solid rgba(168,85,247,0.14);
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.14);
 }
 
 .checkIcon {
@@ -104,8 +109,8 @@
   width: 20px;
   height: 20px;
   border-radius: var(--radius-full);
-  background: rgba(85,231,209,0.15);
-  color: #55E7D1;
+  background: rgba(85, 231, 209, 0.15);
+  color: #55e7d1;
   flex-shrink: 0;
 }
 
@@ -130,20 +135,22 @@
   font-weight: 900;
   color: var(--bg-base);
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
-  box-shadow: 0 0 20px rgba(232,199,154,0.35);
-  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
+  box-shadow: 0 0 20px rgba(232, 199, 154, 0.35);
+  transition:
+    transform 180ms var(--ease),
+    box-shadow 180ms var(--ease);
 }
 
 .primaryBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 0 28px rgba(232,199,154,0.55);
+  box-shadow: 0 0 28px rgba(232, 199, 154, 0.55);
 }
 
 .secondaryBtn {
   width: 100%;
   height: 44px;
   border-radius: var(--radius-base);
-  border: 1px solid rgba(168,85,247,0.25);
+  border: 1px solid rgba(168, 85, 247, 0.25);
   background: transparent;
   color: var(--text-tertiary);
   font-family: var(--font-body);
@@ -155,8 +162,8 @@
 
 .secondaryBtn:hover {
   color: var(--text-secondary);
-  border-color: rgba(168,85,247,0.45);
-  background: rgba(168,85,247,0.05);
+  border-color: rgba(168, 85, 247, 0.45);
+  background: rgba(168, 85, 247, 0.05);
 }
 
 .iosHint {
@@ -166,9 +173,16 @@
   line-height: 1.6;
 }
 
-.iosHint strong { color: var(--gold-light); }
+.iosHint strong {
+  color: var(--gold-light);
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .primaryBtn, .secondaryBtn { transition: none; }
-  .primaryBtn:hover { transform: none; }
+  .primaryBtn,
+  .secondaryBtn {
+    transition: none;
+  }
+  .primaryBtn:hover {
+    transform: none;
+  }
 }

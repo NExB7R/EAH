@@ -4,15 +4,16 @@
   gap: 12px;
   margin-bottom: 20px;
 }
-.balanceCard, .tierCard {
+.balanceCard,
+.tierCard {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
   padding: 22px 18px;
   border-radius: 20px;
-  background: linear-gradient(160deg, rgba(20,14,34,0.7), rgba(10,7,20,0.9));
-  border: 1.5px solid rgba(232,199,154,0.28);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.9));
+  border: 1.5px solid rgba(232, 199, 154, 0.28);
   position: relative;
   overflow: hidden;
 }
@@ -21,7 +22,11 @@
   position: absolute;
   inset: -50% -10% auto -10%;
   height: 200px;
-  background: radial-gradient(ellipse 60% 60% at 50% 0%, rgba(232,199,154,0.15), transparent 65%);
+  background: radial-gradient(
+    ellipse 60% 60% at 50% 0%,
+    rgba(232, 199, 154, 0.15),
+    transparent 65%
+  );
   pointer-events: none;
 }
 .balanceIcon {
@@ -32,8 +37,8 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: rgba(232,199,154,0.12);
-  border: 1px solid rgba(232,199,154,0.4);
+  background: rgba(232, 199, 154, 0.12);
+  border: 1px solid rgba(232, 199, 154, 0.4);
   color: var(--gold-light);
 }
 .balanceValue {
@@ -62,7 +67,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.04);
 }
 .tierValue {
   font-family: var(--font-display);
@@ -90,8 +95,8 @@
   align-items: center;
   padding: 12px 16px;
   border-radius: 14px;
-  background: rgba(20,14,34,0.45);
-  border: 1px solid rgba(168,85,247,0.12);
+  background: rgba(20, 14, 34, 0.45);
+  border: 1px solid rgba(168, 85, 247, 0.12);
 }
 .reason {
   font-family: var(--font-body);
@@ -105,8 +110,12 @@
   font-weight: 900;
   font-variant-numeric: tabular-nums;
 }
-.plus { color: #A8F0B8; }
-.minus { color: #FFC8C8; }
+.plus {
+  color: #a8f0b8;
+}
+.minus {
+  color: #ffc8c8;
+}
 .balance {
   font-size: 0.7rem;
   font-weight: 700;
@@ -120,10 +129,15 @@
   font-variant-numeric: tabular-nums;
 }
 @media (max-width: 640px) {
-  .top { grid-template-columns: 1fr; }
+  .top {
+    grid-template-columns: 1fr;
+  }
   .row {
     grid-template-columns: 1fr auto;
     gap: 6px;
   }
-  .balance, .date { grid-column: span 2; }
+  .balance,
+  .date {
+    grid-column: span 2;
+  }
 }

@@ -13,13 +13,13 @@
   margin: 0 auto;
   padding: 22px 20px 18px;
   border-radius: 22px;
-  background: linear-gradient(160deg, rgba(20,14,34,0.55), rgba(10,7,20,0.82));
-  border: 1.5px solid rgba(232,199,154,0.32);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.82));
+  border: 1.5px solid rgba(232, 199, 154, 0.32);
   box-shadow:
-    0 0 0 1px rgba(232,199,154,0.06),
-    0 0 40px rgba(232,199,154,0.12),
-    0 0 80px rgba(168,85,247,0.06),
-    inset 0 1px 0 rgba(232,199,154,0.1);
+    0 0 0 1px rgba(232, 199, 154, 0.06),
+    0 0 40px rgba(232, 199, 154, 0.12),
+    0 0 80px rgba(168, 85, 247, 0.06),
+    inset 0 1px 0 rgba(232, 199, 154, 0.1);
 }
 
 /* ─── Header ─── */
@@ -41,7 +41,7 @@
   display: inline-flex;
   align-items: center;
   color: var(--gold-light);
-  filter: drop-shadow(0 0 8px rgba(232,199,154,0.45));
+  filter: drop-shadow(0 0 8px rgba(232, 199, 154, 0.45));
 }
 
 .title {
@@ -52,7 +52,6 @@
   margin: 0;
   line-height: 1.2;
 }
-
 
 .viewAll {
   display: inline-flex;
@@ -65,17 +64,17 @@
   text-decoration: none;
   padding: 7px 13px;
   border-radius: var(--radius-full);
-  background: rgba(232,199,154,0.08);
-  border: 1px solid rgba(232,199,154,0.3);
+  background: rgba(232, 199, 154, 0.08);
+  border: 1px solid rgba(232, 199, 154, 0.3);
   transition: all 180ms var(--ease);
   flex-shrink: 0;
 }
 
 .viewAll:hover {
-  background: rgba(232,199,154,0.18);
+  background: rgba(232, 199, 154, 0.18);
   border-color: var(--gold-light);
   transform: translateY(-1px);
-  box-shadow: 0 0 14px rgba(232,199,154,0.35);
+  box-shadow: 0 0 14px rgba(232, 199, 154, 0.35);
 }
 
 /* ─── Neon Line ─── */
@@ -83,12 +82,14 @@
   height: 1px;
   width: 100%;
   margin-bottom: 14px;
-  background: linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     transparent 0%,
-    rgba(232,199,154,0.35) 20%,
+    rgba(232, 199, 154, 0.35) 20%,
     var(--gold-primary) 50%,
-    rgba(232,199,154,0.35) 80%,
-    transparent 100%);
+    rgba(232, 199, 154, 0.35) 80%,
+    transparent 100%
+  );
   border-radius: var(--radius-full);
 }
 
@@ -101,11 +102,15 @@
 }
 
 @media (min-width: 640px) {
-  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 1024px) {
-  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 /* ─── Arrows ─── */
@@ -121,8 +126,8 @@
   justify-content: center;
   padding: 0;
   border-radius: 50%;
-  background: rgba(20,14,34,0.9);
-  border: 1px solid rgba(232,199,154,0.35);
+  background: rgba(20, 14, 34, 0.9);
+  border: 1px solid rgba(232, 199, 154, 0.35);
   color: var(--gold-light);
   cursor: pointer;
   z-index: 5;
@@ -130,9 +135,9 @@
 }
 
 .arrow:hover {
-  background: rgba(232,199,154,0.15);
+  background: rgba(232, 199, 154, 0.15);
   border-color: var(--gold-light);
-  box-shadow: 0 0 18px rgba(232,199,154,0.45);
+  box-shadow: 0 0 18px rgba(232, 199, 154, 0.45);
   transform: translateY(-50%) scale(1.08);
 }
 
@@ -159,18 +164,34 @@
 
 /* ─── Mobile ─── */
 @media (max-width: 640px) {
-  .section { padding: 36px 0; }
-  .frame { padding: 18px 14px 16px; border-radius: 18px; }
-  .arrow { width: 34px; height: 34px; }
-  .arrow svg { width: 16px; height: 16px; }
-  .grid { gap: 10px; }
+  .section {
+    padding: 36px 0;
+  }
+  .frame {
+    padding: 18px 14px 16px;
+    border-radius: 18px;
+  }
+  .arrow {
+    width: 34px;
+    height: 34px;
+  }
+  .arrow svg {
+    width: 16px;
+    height: 16px;
+  }
+  .grid {
+    gap: 10px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .viewAll { transition: none; }
-  .arrow { transition: none; }
+  .viewAll {
+    transition: none;
+  }
+  .arrow {
+    transition: none;
+  }
 }
-
 
 /* ─── Arrows Hover (تظهر عند الهوفر فقط) ─── */
 .carousel:hover .arrow,
@@ -183,10 +204,16 @@
 }
 
 @media (hover: none) {
-  .arrow { opacity: 1; }
+  .arrow {
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .viewAll { transition: none; }
-  .arrow { transition: none; }
+  .viewAll {
+    transition: none;
+  }
+  .arrow {
+    transition: none;
+  }
 }

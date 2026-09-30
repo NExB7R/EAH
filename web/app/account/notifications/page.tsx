@@ -15,10 +15,7 @@ export default async function NotificationsPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="الإشعارات"
-        description={`${notifications.length} إشعار`}
-      />
+      <AccountPageHeader title="الإشعارات" description={`${notifications.length} إشعار`} />
       {notifications.length === 0 ? (
         <EmptyState
           Icon={BellIcon}

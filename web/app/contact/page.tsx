@@ -13,7 +13,9 @@ export default function ContactPage() {
       message="صفحة التواصل الكاملة — قريب"
       details={
         <div>
-          <p><strong>للتواصل الفوري:</strong></p>
+          <p>
+            <strong>للتواصل الفوري:</strong>
+          </p>
           <p>واتساب: 201012892806</p>
           <p>إيميل: nexb7r@gmail.com</p>
         </div>

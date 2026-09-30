@@ -38,7 +38,6 @@ export default function HomeHero() {
           <Logo size="lg" />
         </div>
 
-
         {/* لافتة دولة شبين القناطر — فوق الهوك */}
         <div className={styles.shibinSign}>
           <span className={styles.signIcon} aria-hidden>
@@ -57,12 +56,7 @@ export default function HomeHero() {
         </h1>
 
         {/* Search */}
-        <form
-          action="/explore"
-          method="get"
-          className="eah-search-form"
-          role="search"
-        >
+        <form action="/explore" method="get" className="eah-search-form" role="search">
           <div className="eah-search-box">
             <span className="eah-search-icon" aria-hidden>
               <SearchIcon size={20} />
@@ -100,11 +94,7 @@ export default function HomeHero() {
         {/* Categories */}
         <nav className={styles.categories} aria-label="التصنيفات">
           {CATEGORIES.map(({ type, label, Icon, count }) => (
-            <Link
-              key={type}
-              href={`/explore?type=${type}`}
-              className={styles.category}
-            >
+            <Link key={type} href={`/explore?type=${type}`} className={styles.category}>
               <span className={styles.categoryIcon} aria-hidden>
                 <Icon size={22} />
               </span>

@@ -3,7 +3,7 @@
   bottom: 0;
   inset-inline: 0;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-  background: linear-gradient(180deg, transparent, rgba(7,2,13,0.95) 30%);
+  background: linear-gradient(180deg, transparent, rgba(7, 2, 13, 0.95) 30%);
   z-index: 50;
   display: none;
 }
@@ -22,7 +22,9 @@
   color: var(--bg-base);
   border: none;
   cursor: pointer;
-  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
+  transition:
+    transform 180ms var(--ease),
+    box-shadow 180ms var(--ease);
 }
 
 .btn:hover {
@@ -30,29 +32,35 @@
 }
 
 .whatsapp {
-  background: linear-gradient(135deg, #25D366, #128C7E);
-  box-shadow: 0 0 24px rgba(37,211,102,0.5);
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  box-shadow: 0 0 24px rgba(37, 211, 102, 0.5);
 }
 
 .whatsapp:hover {
-  box-shadow: 0 0 36px rgba(37,211,102,0.7);
+  box-shadow: 0 0 36px rgba(37, 211, 102, 0.7);
 }
 
 .phone {
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
-  box-shadow: 0 0 24px rgba(232,199,154,0.5);
+  box-shadow: 0 0 24px rgba(232, 199, 154, 0.5);
 }
 
 .phone:hover {
-  box-shadow: 0 0 36px rgba(232,199,154,0.7);
+  box-shadow: 0 0 36px rgba(232, 199, 154, 0.7);
 }
 
 /* ─── يظهر على الموبايل بس ─── */
 @media (max-width: 768px) {
-  .bar { display: block; }
+  .bar {
+    display: block;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn { transition: none; }
-  .btn:hover { transform: none; }
+  .btn {
+    transition: none;
+  }
+  .btn:hover {
+    transform: none;
+  }
 }

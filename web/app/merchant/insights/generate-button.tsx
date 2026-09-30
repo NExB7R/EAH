@@ -29,12 +29,7 @@ export default function GenerateButton({ businessId }: Props) {
 
   return (
     <div className={styles.wrap}>
-      <button
-        type="button"
-        onClick={handleClick}
-        disabled={pending}
-        className={styles.btn}
-      >
+      <button type="button" onClick={handleClick} disabled={pending} className={styles.btn}>
         <SparklesIcon size={16} />
         <span>{pending ? 'بيتم التحليل...' : 'استخرج تقرير جديد'}</span>
       </button>

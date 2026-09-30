@@ -21,11 +21,7 @@ export default function PalestineHeart() {
       onTouchEnd={() => setActive(false)}
     >
       <span className={styles.heartWrap} aria-hidden>
-        <svg
-          viewBox="0 0 100 100"
-          className={styles.heartSvg}
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg viewBox="0 0 100 100" className={styles.heartSvg} xmlns="http://www.w3.org/2000/svg">
           <defs>
             <clipPath id="eahHeartClip">
               <path d="M50 88C50 88 8 60 8 32C8 18 18 8 32 8C40 8 46 12 50 18C54 12 60 8 68 8C82 8 92 18 92 32C92 60 50 88 50 88Z" />

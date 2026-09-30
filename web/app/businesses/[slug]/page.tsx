@@ -59,19 +59,15 @@ export default async function BusinessPage({ params }: Props) {
   const reviewStats = computeReviewStats(reviews)
   const isLoggedIn = !!session
   const isOwner = session?.userId === business.owner_profile_id
-  const userReview = session && isLoggedIn
-    ? await getUserReview(business.id, session.userId)
-    : null
+  const userReview = session && isLoggedIn ? await getUserReview(business.id, session.userId) : null
   const hasReviewed = !!userReview
 
   // Fisher-Yates shuffle (client-stable seed from business.id)
-  const seededSimilar = similar
-    .slice(0, 4)
-    .sort((a, b) => {
-      const h1 = (a.id.charCodeAt(0) + business.id.charCodeAt(0)) % 1000
-      const h2 = (b.id.charCodeAt(0) + business.id.charCodeAt(0)) % 1000
-      return h1 - h2
-    })
+  const seededSimilar = similar.slice(0, 4).sort((a, b) => {
+    const h1 = (a.id.charCodeAt(0) + business.id.charCodeAt(0)) % 1000
+    const h2 = (b.id.charCodeAt(0) + business.id.charCodeAt(0)) % 1000
+    return h1 - h2
+  })
 
   const isOpen = isOpenNow(business.working_hours)
   const whatsapp = contacts.find((c) => c.method_type === 'whatsapp')?.value ?? null

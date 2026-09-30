@@ -37,11 +37,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
       .select('display_name, avatar_url, phone_verified_at, trust_score, trust_tier')
       .eq('id', user.id)
       .maybeSingle(),
-    supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', user.id)
-      .maybeSingle(),
+    supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle(),
     supabase
       .from('notifications')
       .select('*', { count: 'exact', head: true })

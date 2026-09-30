@@ -15,10 +15,7 @@ export default async function FavoritesPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="المفضلات"
-        description={`${favorites.length} نشاط محفوظ`}
-      />
+      <AccountPageHeader title="المفضلات" description={`${favorites.length} نشاط محفوظ`} />
       {favorites.length === 0 ? (
         <EmptyState
           Icon={CrownGoldIcon}
@@ -30,11 +27,7 @@ export default async function FavoritesPage() {
       ) : (
         <div className={styles.grid}>
           {favorites.map((f) => (
-            <BusinessCard
-              key={f.id}
-              business={f.business as never}
-              tone="gold"
-            />
+            <BusinessCard key={f.id} business={f.business as never} tone="gold" />
           ))}
         </div>
       )}

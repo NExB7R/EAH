@@ -6,12 +6,7 @@ import { sortByTrend } from '@/lib/ranking'
 // EAH — Data Fetching Layer
 // ═══════════════════════════════════════════════════════════
 
-export type BusinessType =
-  | 'restaurant'
-  | 'pharmacy'
-  | 'supermarket'
-  | 'delivery_office'
-  | 'misc'
+export type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
 
 export type WorkingDay = {
   open: string
@@ -135,7 +130,7 @@ export const getPublishedBusinesses = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-published'],
-  { revalidate: 300, tags: ['businesses'] }
+  { revalidate: 300, tags: ['businesses'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -162,7 +157,7 @@ export const getFeaturedBusinesses = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-featured'],
-  { revalidate: 300, tags: ['businesses', 'featured'] }
+  { revalidate: 300, tags: ['businesses', 'featured'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -188,7 +183,7 @@ export const getNewBusinesses = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-new'],
-  { revalidate: 300, tags: ['businesses', 'new'] }
+  { revalidate: 300, tags: ['businesses', 'new'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -213,7 +208,7 @@ export const getBusinessesByType = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-by-type'],
-  { revalidate: 300, tags: ['businesses'] }
+  { revalidate: 300, tags: ['businesses'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -237,7 +232,7 @@ export const getTopBusinesses = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-top'],
-  { revalidate: 300, tags: ['businesses'] }
+  { revalidate: 300, tags: ['businesses'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -265,7 +260,7 @@ export const getOpportunities = unstable_cache(
     return (data ?? []) as Business[]
   },
   ['businesses-opportunities'],
-  { revalidate: 300, tags: ['businesses', 'opportunities'] }
+  { revalidate: 300, tags: ['businesses', 'opportunities'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -288,7 +283,7 @@ export const getBusinessBySlug = unstable_cache(
     return data as Business
   },
   ['business-by-slug'],
-  { revalidate: 300, tags: ['businesses'] }
+  { revalidate: 300, tags: ['businesses'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -341,10 +336,12 @@ export const getActiveOffers = unstable_cache(
     const now = new Date().toISOString()
     const { data, error } = await supabase
       .from('offers')
-      .select(`
+      .select(
+        `
         id, title, description, price, image_url, starts_at, ends_at,
         business:businesses(id, slug, name, area)
-      `)
+      `,
+      )
       .eq('is_published', true)
       .or(`ends_at.is.null,ends_at.gt.${now}`)
       .order('created_at', { ascending: false })
@@ -367,16 +364,11 @@ export const getActiveOffers = unstable_cache(
 export const getNearbyBusinesses = unstable_cache(
   async (area?: string, limit = 4): Promise<Business[]> => {
     const supabase = createPublicClient()
-    let q = supabase
-      .from('businesses')
-      .select(BUSINESS_COLUMNS)
-      .eq('is_published', true)
+    let q = supabase.from('businesses').select(BUSINESS_COLUMNS).eq('is_published', true)
 
     if (area) q = q.eq('area', area)
 
-    const { data, error } = await q
-      .order('trust_score', { ascending: false })
-      .limit(limit)
+    const { data, error } = await q.order('trust_score', { ascending: false }).limit(limit)
 
     if (error) {
       console.error('[data] getNearbyBusinesses error:', error.message)

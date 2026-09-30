@@ -4,11 +4,15 @@
   gap: 16px;
   padding: 24px;
   border-radius: 20px;
-  background: linear-gradient(160deg, rgba(20,14,34,0.6), rgba(10,7,20,0.8));
-  border: 1px solid rgba(168,85,247,0.18);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.8));
+  border: 1px solid rgba(168, 85, 247, 0.18);
   max-width: 540px;
 }
-.field { display: flex; flex-direction: column; gap: 8px; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .label {
   font-family: var(--font-body);
   font-size: 0.78rem;
@@ -18,18 +22,20 @@
 .input {
   padding: 12px 14px;
   border-radius: 12px;
-  background: rgba(10,7,20,0.6);
-  border: 1px solid rgba(168,85,247,0.22);
+  background: rgba(10, 7, 20, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.22);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 0.88rem;
   font-weight: 700;
   outline: none;
-  transition: border-color 180ms var(--ease), box-shadow 180ms var(--ease);
+  transition:
+    border-color 180ms var(--ease),
+    box-shadow 180ms var(--ease);
 }
 .input:focus {
   border-color: var(--purple-light);
-  box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
 }
 .msg {
   padding: 10px 14px;
@@ -37,8 +43,16 @@
   font-size: 0.78rem;
   font-weight: 800;
 }
-.ok { color: #A8F0B8; background: rgba(37,211,102,0.1); border: 1px solid rgba(37,211,102,0.3); }
-.err { color: #FFC8C8; background: rgba(252,165,165,0.1); border: 1px solid rgba(252,165,165,0.35); }
+.ok {
+  color: #a8f0b8;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.3);
+}
+.err {
+  color: #ffc8c8;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.35);
+}
 .submit {
   align-self: flex-start;
   padding: 12px 28px;
@@ -50,9 +64,18 @@
   background: linear-gradient(135deg, var(--purple-light), var(--purple-primary));
   border: none;
   cursor: pointer;
-  box-shadow: 0 0 18px rgba(168,85,247,0.4);
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.4);
   transition: transform 180ms var(--ease);
 }
-.submit:hover:not(:disabled) { transform: translateY(-1px); }
-.submit:disabled { opacity: 0.7; cursor: wait; }
-@media (max-width: 640px) { .form { padding: 18px; } }
+.submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+@media (max-width: 640px) {
+  .form {
+    padding: 18px;
+  }
+}

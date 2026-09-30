@@ -1,12 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import {
-  SparklesIcon,
-  StoreIcon,
-  FileTextIcon,
-  AlertIcon,
-  ArrowLeftIcon,
-} from '@/components/icons'
+import { SparklesIcon, StoreIcon, FileTextIcon, AlertIcon, ArrowLeftIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import styles from './storage.module.css'
@@ -27,11 +21,13 @@ async function getStorageData(): Promise<Row[]> {
   // جيب كل الأنشطة اللي عندها تقارير
   const { data } = await supabase
     .from('business_insights')
-    .select(`
+    .select(
+      `
       business_id,
       created_at,
       business:businesses(name, slug)
-    `)
+    `,
+    )
     .order('created_at', { ascending: false })
 
   if (!data) return []
@@ -73,17 +69,23 @@ export default async function AdminInsightsStoragePage() {
       {/* Summary */}
       <div className={styles.summary}>
         <div className={styles.summaryCard}>
-          <span className={styles.summaryIcon}><FileTextIcon size={20} /></span>
+          <span className={styles.summaryIcon}>
+            <FileTextIcon size={20} />
+          </span>
           <span className={styles.summaryValue}>{totalInsights}</span>
           <span className={styles.summaryLabel}>تقرير</span>
         </div>
         <div className={styles.summaryCard}>
-          <span className={styles.summaryIcon}><StoreIcon size={20} /></span>
+          <span className={styles.summaryIcon}>
+            <StoreIcon size={20} />
+          </span>
           <span className={styles.summaryValue}>{rows.length}</span>
           <span className={styles.summaryLabel}>نشاط</span>
         </div>
         <div className={styles.summaryCard}>
-          <span className={styles.summaryIcon}><SparklesIcon size={20} /></span>
+          <span className={styles.summaryIcon}>
+            <SparklesIcon size={20} />
+          </span>
           <span className={styles.summaryValue}>{estimatedSizeMb.toFixed(1)}</span>
           <span className={styles.summaryLabel}>MB</span>
         </div>
@@ -106,9 +108,7 @@ export default async function AdminInsightsStoragePage() {
       ) : (
         <div className={styles.list}>
           {rows.map((r) => {
-            const date = r.latest_at
-              ? new Date(r.latest_at).toLocaleDateString('ar-EG')
-              : '—'
+            const date = r.latest_at ? new Date(r.latest_at).toLocaleDateString('ar-EG') : '—'
             const sizeKb = r.insights_count * 100
 
             return (
@@ -122,9 +122,7 @@ export default async function AdminInsightsStoragePage() {
                 </div>
                 <div className={styles.itemBody}>
                   <span className={styles.itemName}>{r.business_name}</span>
-                  <span className={styles.itemMeta}>
-                    آخر تقرير: {date}
-                  </span>
+                  <span className={styles.itemMeta}>آخر تقرير: {date}</span>
                 </div>
                 <div className={styles.itemStats}>
                   <span className={styles.itemCount}>{r.insights_count}</span>

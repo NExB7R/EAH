@@ -17,11 +17,7 @@ export default function SectionNav({ activeKey }: Props) {
 
         if (!enabled) {
           return (
-            <span
-              key={key}
-              className={`${styles.item} ${styles.disabled}`}
-              aria-disabled="true"
-            >
+            <span key={key} className={`${styles.item} ${styles.disabled}`} aria-disabled="true">
               <Icon size={20} />
               <span className={styles.tip}>{label} — قريباً</span>
             </span>

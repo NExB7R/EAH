@@ -1,12 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import {
-  signupSchema,
-  loginSchema,
-  recoverSchema,
-  toE164,
-} from '@/lib/validations/auth'
+import { signupSchema, loginSchema, recoverSchema, toE164 } from '@/lib/validations/auth'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Auth Server Actions
@@ -14,8 +9,7 @@ import {
 
 // ─── نوع موحد للرد ───
 export type AuthResult =
-  | { ok: true; redirect?: string }
-  | { ok: false; error: string; field?: string }
+  { ok: true; redirect?: string } | { ok: false; error: string; field?: string }
 
 // ═══════════════════════════════════════════════════════════
 // Helper: توليد الإيميل الوهمي من الرقم

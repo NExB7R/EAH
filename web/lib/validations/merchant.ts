@@ -19,20 +19,14 @@ const optionalPhoneSchema = z
   .trim()
   .optional()
   .nullable()
-  .refine(
-    (v) => !v || EGYPT_PHONE_REGEX.test(v),
-    'الرقم مش صح — 11 رقم يبدأ بـ 010/011/012/015',
-  )
+  .refine((v) => !v || EGYPT_PHONE_REGEX.test(v), 'الرقم مش صح — 11 رقم يبدأ بـ 010/011/012/015')
 
 const optionalUrlSchema = z
   .string()
   .trim()
   .optional()
   .nullable()
-  .refine(
-    (v) => !v || /^(https?:\/\/)?[\w.-]+\.[a-z]{2,}/i.test(v),
-    'اللينك مش صح',
-  )
+  .refine((v) => !v || /^(https?:\/\/)?[\w.-]+\.[a-z]{2,}/i.test(v), 'اللينك مش صح')
 
 export const BUSINESS_TYPES = [
   'restaurant',
@@ -44,25 +38,12 @@ export const BUSINESS_TYPES = [
 
 export const applySchema = z.object({
   // Step 1 — الأساسيات
-  name: z
-    .string()
-    .trim()
-    .min(2, 'الاسم قصير')
-    .max(80, 'الاسم طويل'),
+  name: z.string().trim().min(2, 'الاسم قصير').max(80, 'الاسم طويل'),
   business_type: z.enum(BUSINESS_TYPES),
   area: z.enum(AREAS_LIST),
   city: z.string().trim().default('شبين القناطر'),
-  description: z
-    .string()
-    .trim()
-    .min(10, 'الوصف قصير — 10 حروف على الأقل')
-    .max(500, 'الوصف طويل'),
-  hook: z
-    .string()
-    .trim()
-    .max(100, 'الجملة طويلة')
-    .optional()
-    .nullable(),
+  description: z.string().trim().min(10, 'الوصف قصير — 10 حروف على الأقل').max(500, 'الوصف طويل'),
+  hook: z.string().trim().max(100, 'الجملة طويلة').optional().nullable(),
 
   // Step 2 — التواصل
   phone: phoneSchema,
@@ -71,11 +52,7 @@ export const applySchema = z.object({
   instagram: optionalUrlSchema,
 
   // Step 3 — الموقع
-  address_text: z
-    .string()
-    .trim()
-    .min(5, 'العنوان قصير')
-    .max(200, 'العنوان طويل'),
+  address_text: z.string().trim().min(5, 'العنوان قصير').max(200, 'العنوان طويل'),
   latitude: z.number().min(-90).max(90).optional().nullable(),
   longitude: z.number().min(-180).max(180).optional().nullable(),
 

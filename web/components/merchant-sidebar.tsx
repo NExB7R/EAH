@@ -34,10 +34,7 @@ export default function MerchantSidebar({ newOrders = 0 }: Props) {
     <aside className={styles.sidebar}>
       <nav className={styles.nav} aria-label="تنقل التاجر">
         {ITEMS.map(({ href, label, Icon, badge, tone }) => {
-          const active =
-            href === '/merchant'
-              ? pathname === '/merchant'
-              : pathname.startsWith(href)
+          const active = href === '/merchant' ? pathname === '/merchant' : pathname.startsWith(href)
 
           return (
             <Link
@@ -51,9 +48,7 @@ export default function MerchantSidebar({ newOrders = 0 }: Props) {
               </span>
               <span className={styles.label}>{label}</span>
               {badge === 'orders' && newOrders > 0 && (
-                <span className={styles.badge}>
-                  {newOrders > 9 ? '9+' : newOrders}
-                </span>
+                <span className={styles.badge}>{newOrders > 9 ? '9+' : newOrders}</span>
               )}
             </Link>
           )

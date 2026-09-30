@@ -7,11 +7,7 @@ import { getMyBusiness } from '@/lib/data/merchant'
 import { createClient } from '@/lib/supabase/server'
 import styles from './merchant.module.css'
 
-export default async function MerchantLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function MerchantLayout({ children }: { children: React.ReactNode }) {
   const session = await getUserSession()
   if (!session) redirect('/auth?next=/merchant')
 

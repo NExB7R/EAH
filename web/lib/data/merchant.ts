@@ -52,7 +52,9 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
   const supabase = await createClient()
   const { data } = await supabase
     .from('businesses')
-    .select('id, slug, name, business_type, area, cover_image_url, is_published, is_open, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at')
+    .select(
+      'id, slug, name, business_type, area, cover_image_url, is_published, is_open, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at',
+    )
     .eq('owner_profile_id', userId)
     .maybeSingle()
 
@@ -64,10 +66,12 @@ export async function getMySubscription(businessId: string): Promise<MerchantSub
   const supabase = await createClient()
   const { data } = await supabase
     .from('business_subscriptions')
-    .select(`
+    .select(
+      `
       id, status, is_trial, starts_at, expires_at,
       plan:subscription_plans(code, name_ar, price_egp, features)
-    `)
+    `,
+    )
     .eq('business_id', businessId)
     .order('created_at', { ascending: false })
     .limit(1)
@@ -94,13 +98,39 @@ export async function getMerchantStats(businessId: string): Promise<MerchantStat
     { count: ordersTotal },
     { count: reviewsCount },
   ] = await Promise.all([
-    supabase.from('page_view_events').select('*', { count: 'exact', head: true }).eq('business_id', businessId).gte('created_at', todayStart),
-    supabase.from('page_view_events').select('*', { count: 'exact', head: true }).eq('business_id', businessId).gte('created_at', weekStart),
-    supabase.from('page_view_events').select('*', { count: 'exact', head: true }).eq('business_id', businessId).gte('created_at', monthStart),
-    supabase.from('order_requests').select('*', { count: 'exact', head: true }).eq('business_id', businessId).gte('created_at', todayStart),
-    supabase.from('order_requests').select('*', { count: 'exact', head: true }).eq('business_id', businessId).gte('created_at', weekStart),
-    supabase.from('order_requests').select('*', { count: 'exact', head: true }).eq('business_id', businessId),
-    supabase.from('business_reviews').select('*', { count: 'exact', head: true }).eq('business_id', businessId),
+    supabase
+      .from('page_view_events')
+      .select('*', { count: 'exact', head: true })
+      .eq('business_id', businessId)
+      .gte('created_at', todayStart),
+    supabase
+      .from('page_view_events')
+      .select('*', { count: 'exact', head: true })
+      .eq('business_id', businessId)
+      .gte('created_at', weekStart),
+    supabase
+      .from('page_view_events')
+      .select('*', { count: 'exact', head: true })
+      .eq('business_id', businessId)
+      .gte('created_at', monthStart),
+    supabase
+      .from('order_requests')
+      .select('*', { count: 'exact', head: true })
+      .eq('business_id', businessId)
+      .gte('created_at', todayStart),
+    supabase
+      .from('order_requests')
+      .select('*', { count: 'exact', head: true })
+      .eq('business_id', businessId)
+      .gte('created_at', weekStart),
+    supabase
+      .from('order_requests')
+      .select('*', { count: 'exact', head: true })
+      .eq('business_id', businessId),
+    supabase
+      .from('business_reviews')
+      .select('*', { count: 'exact', head: true })
+      .eq('business_id', businessId),
   ])
 
   return {

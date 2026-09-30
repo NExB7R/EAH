@@ -16,12 +16,12 @@
   gap: 14px;
   padding: 48px 24px;
   border-radius: 22px;
-  background: linear-gradient(160deg, rgba(20,14,34,0.6), rgba(10,7,20,0.85));
-  border: 1.5px solid rgba(168,85,247,0.28);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.85));
+  border: 1.5px solid rgba(168, 85, 247, 0.28);
   box-shadow:
-    0 0 0 1px rgba(168,85,247,0.05),
-    0 0 40px rgba(168,85,247,0.12),
-    inset 0 1px 0 rgba(168,85,247,0.08);
+    0 0 0 1px rgba(168, 85, 247, 0.05),
+    0 0 40px rgba(168, 85, 247, 0.12),
+    inset 0 1px 0 rgba(168, 85, 247, 0.08);
   text-align: center;
 }
 
@@ -32,10 +32,14 @@
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 35%, rgba(168,85,247,0.22), rgba(168,85,247,0.04) 70%);
-  border: 1px solid rgba(168,85,247,0.35);
+  background: radial-gradient(
+    circle at 50% 35%,
+    rgba(168, 85, 247, 0.22),
+    rgba(168, 85, 247, 0.04) 70%
+  );
+  border: 1px solid rgba(168, 85, 247, 0.35);
   color: var(--purple-light);
-  box-shadow: 0 0 30px rgba(168,85,247,0.25);
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
 }
 
 .title {
@@ -60,8 +64,8 @@
   margin-top: 10px;
   padding: 16px;
   border-radius: 14px;
-  background: rgba(168,85,247,0.04);
-  border: 1px dashed rgba(168,85,247,0.22);
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px dashed rgba(168, 85, 247, 0.22);
   text-align: start;
   color: var(--text-secondary);
   font-size: 0.82rem;
@@ -82,21 +86,33 @@
   color: var(--bg-base);
   background: linear-gradient(135deg, var(--purple-light), var(--purple-primary));
   text-decoration: none;
-  box-shadow: 0 0 20px rgba(168,85,247,0.4);
-  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  transition:
+    transform 180ms var(--ease),
+    box-shadow 180ms var(--ease);
 }
 
 .cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 28px rgba(168,85,247,0.6);
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.6);
 }
 
 @media (max-width: 640px) {
-  .section { padding: 0 12px; }
-  .frame { padding: 32px 18px; border-radius: 18px; }
-  .icon { width: 72px; height: 72px; }
+  .section {
+    padding: 0 12px;
+  }
+  .frame {
+    padding: 32px 18px;
+    border-radius: 18px;
+  }
+  .icon {
+    width: 72px;
+    height: 72px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cta { transition: none; }
+  .cta {
+    transition: none;
+  }
 }

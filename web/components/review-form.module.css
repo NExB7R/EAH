@@ -72,7 +72,7 @@
 }
 
 .pickerFilled {
-  color: #E8C79A;
+  color: #e8c79a;
 }
 
 .pickerEmpty {
@@ -121,12 +121,12 @@
   border: 1px solid rgba(252, 165, 165, 0.3);
   border-radius: 8px;
   padding: 8px 12px;
-  color: #FCA5A5;
+  color: #fca5a5;
   font-size: 0.78rem;
 }
 
 .submitBtn {
-  background: linear-gradient(135deg, #9D4EDD, #A855F7);
+  background: linear-gradient(135deg, #9d4edd, #a855f7);
   color: white;
   border: none;
   border-radius: 10px;
@@ -135,7 +135,9 @@
   font-size: 0.88rem;
   font-weight: 800;
   cursor: pointer;
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 
 .submitBtn:hover:not(:disabled) {
@@ -157,7 +159,7 @@
 }
 
 .successIcon {
-  color: #E8C79A;
+  color: #e8c79a;
 }
 
 .success h3 {

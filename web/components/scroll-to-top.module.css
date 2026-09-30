@@ -12,11 +12,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(
-    160deg,
-    rgba(20, 14, 34, 0.9),
-    rgba(10, 7, 20, 0.95)
-  );
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.9), rgba(10, 7, 20, 0.95));
   border: 1px solid rgba(232, 199, 154, 0.45);
   color: var(--gold-light);
   cursor: pointer;
@@ -44,7 +40,7 @@
 
 .btn:hover {
   border-color: var(--gold-light);
-  color: #FFF5DE;
+  color: #fff5de;
   transform: translateY(-2px) scale(1.05);
   box-shadow:
     0 6px 22px rgba(0, 0, 0, 0.55),
@@ -88,13 +84,25 @@
     inset-inline-end: 14px;
     bottom: calc(14px + env(safe-area-inset-bottom));
   }
-  .btn svg { width: 20px; height: 20px; }
+  .btn svg {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
-  .btn { transition: none; }
-  .icon { transition: none; }
-  .btn:hover { transform: none; }
-  .btn { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .btn {
+    transition: none;
+  }
+  .icon {
+    transition: none;
+  }
+  .btn:hover {
+    transform: none;
+  }
+  .btn {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }

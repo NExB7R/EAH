@@ -12,11 +12,7 @@ const KEY_INSTALL_ACCEPTED = 'eah-install-accepted'
 const KEY_PENDING_REVIEWS = 'eah-pending-reviews'
 const REVIEW_DELAY_MS = 2 * 60 * 60 * 1000
 
-export type EngagementAction =
-  | 'phone_reveal'
-  | 'whatsapp'
-  | 'review'
-  | 'comment'
+export type EngagementAction = 'phone_reveal' | 'whatsapp' | 'review' | 'comment'
 
 export type BusinessRef = {
   id: string
@@ -33,10 +29,7 @@ export type PendingReview = {
 }
 
 // ─── تتبّع حدث ───
-export function trackEngagement(
-  action: EngagementAction,
-  business: BusinessRef,
-): void {
+export function trackEngagement(action: EngagementAction, business: BusinessRef): void {
   if (typeof window === 'undefined') return
 
   // 1. جدولة تذكير التقييم (للتواصل فقط)

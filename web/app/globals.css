@@ -6,35 +6,35 @@
 /* ─── 1. Design Tokens ─── */
 :root {
   /* Background */
-  --bg-base: #07020D;
-  --bg-elevated: #0A0514;
+  --bg-base: #07020d;
+  --bg-elevated: #0a0514;
   --bg-surface: #130822;
   --bg-overlay: rgba(7, 2, 13, 0.85);
 
   /* Purple */
-  --purple-primary: #9D4EDD;
-  --purple-neon: #A855F7;
-  --purple-light: #C77DFF;
+  --purple-primary: #9d4edd;
+  --purple-neon: #a855f7;
+  --purple-light: #c77dff;
   --purple-soft: rgba(168, 85, 247, 0.12);
   --purple-line: rgba(168, 85, 247, 0.28);
 
   /* Gold */
-  --gold-primary: #E8C79A;
-  --gold-light: #F5D9A7;
+  --gold-primary: #e8c79a;
+  --gold-light: #f5d9a7;
   --gold-soft: rgba(232, 199, 154, 0.12);
   --gold-line: rgba(232, 199, 154, 0.28);
 
   /* Status */
-  --teal: #55E7D1;
-  --orange: #FDBA74;
-  --red: #FCA5A5;
+  --teal: #55e7d1;
+  --orange: #fdba74;
+  --red: #fca5a5;
 
   /* Text */
-  --text-primary: #F4F2FA;
-  --text-secondary: #C9C2DB;
-  --text-tertiary: #A29DB5;
-  --text-muted: #7B7490;
-  --text-disabled: #4A4555;
+  --text-primary: #f4f2fa;
+  --text-secondary: #c9c2db;
+  --text-tertiary: #a29db5;
+  --text-muted: #7b7490;
+  --text-disabled: #4a4555;
 
   /* Fonts */
   --font-body: 'Cairo Variable', 'Cairo', system-ui, -apple-system, sans-serif;
@@ -114,7 +114,12 @@ body {
   overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   font-weight: 900;
   line-height: 1.15;
@@ -138,13 +143,17 @@ button {
   color: inherit;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: inherit;
   font-size: inherit;
   color: inherit;
 }
 
-img, svg, video {
+img,
+svg,
+video {
   max-width: 100%;
   height: auto;
   display: block;
@@ -230,35 +239,60 @@ html {
   }
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    EAH — Unified Keyframes
    استخدمهم في كل الـ components
    ═══════════════════════════════════════════════════════════ */
 
 @keyframes eah-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes eah-fade-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes eah-slide-up {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 @keyframes eah-slide-in-start {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes eah-scale-in {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -316,8 +350,9 @@ html {
   background: transparent;
   border: none;
   cursor: pointer;
-  transition: color 180ms cubic-bezier(0.4, 0, 0.2, 1),
-              background 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    color 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 180ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .eah-close:hover {
@@ -341,8 +376,9 @@ html {
   text-decoration: none;
   border: none;
   cursor: pointer;
-  transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 180ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .eah-btn-primary:hover {
@@ -362,8 +398,9 @@ html {
   font-weight: 700;
   border: 1px solid rgba(168, 85, 247, 0.2);
   cursor: pointer;
-  transition: color 180ms cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    color 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 180ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .eah-btn-secondary:hover {
@@ -377,7 +414,6 @@ html {
     animation: none;
   }
 }
-
 
 /* ═══════════════════════════════════════════════════════════
    EAH — Search Utilities (shared)
@@ -478,8 +514,9 @@ html {
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 180ms cubic-bezier(0.4, 0, 0.2, 1),
-              transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    opacity 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10;
 }
 
@@ -523,7 +560,8 @@ html {
 }
 
 @keyframes eah-pulse-red {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(252, 165, 165, 0.4);
   }
   50% {
@@ -536,7 +574,6 @@ html {
     animation: none;
   }
 }
-
 
 /* Search form wrapper (specific per usage, but style shared) */
 .eah-search-form {

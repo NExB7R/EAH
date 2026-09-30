@@ -6,11 +6,7 @@ import { getUserSession } from '@/lib/data/user'
 import { createClient } from '@/lib/supabase/server'
 import styles from './admin.module.css'
 
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getUserSession()
 
   if (!session) redirect('/auth?next=/admin')
@@ -24,10 +20,19 @@ export default async function AdminLayout({
     { count: openReports },
     { count: pendingSubscriptions },
   ] = await Promise.all([
-    supabase.from('businesses').select('*', { count: 'exact', head: true }).eq('is_published', false),
-    supabase.from('business_reviews').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase
+      .from('businesses')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_published', false),
+    supabase
+      .from('business_reviews')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'pending'),
     supabase.from('reports').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
-    supabase.from('business_subscriptions').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase
+      .from('business_subscriptions')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'pending'),
   ])
 
   return (

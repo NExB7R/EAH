@@ -66,7 +66,10 @@ export default function PresentationClient() {
       if (e.key === 'ArrowLeft') next()
       else if (e.key === 'ArrowRight') prev()
       else if (e.key === 'Escape') exit()
-      else if (e.key === ' ') { e.preventDefault(); setAutoplay((a) => !a) }
+      else if (e.key === ' ') {
+        e.preventDefault()
+        setAutoplay((a) => !a)
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -115,20 +118,12 @@ export default function PresentationClient() {
     >
       {/* Progress Bar */}
       <div className={styles.progressBar} aria-hidden>
-        <span
-          className={styles.progressFill}
-          style={{ width: `${progress}%` }}
-        />
+        <span className={styles.progressFill} style={{ width: `${progress}%` }} />
       </div>
 
       {/* Top Bar */}
       <div className={styles.topBar}>
-        <button
-          type="button"
-          className={styles.topBtn}
-          onClick={exit}
-          aria-label="خروج"
-        >
+        <button type="button" className={styles.topBtn} onClick={exit} aria-label="خروج">
           <CloseIcon size={18} />
         </button>
 
@@ -146,14 +141,16 @@ export default function PresentationClient() {
           onClick={() => setAutoplay((a) => !a)}
           aria-label={autoplay ? 'إيقاف التشغيل' : 'تشغيل تلقائي'}
         >
-          {autoplay ? <span className={styles.pause}>❚❚</span> : <span className={styles.play}>▶</span>}
+          {autoplay ? (
+            <span className={styles.pause}>❚❚</span>
+          ) : (
+            <span className={styles.play}>▶</span>
+          )}
         </button>
       </div>
 
       {/* Slides */}
-      <div className={styles.stage}>
-        {renderSlide(index)}
-      </div>
+      <div className={styles.stage}>{renderSlide(index)}</div>
 
       {/* Click zones */}
       <button
@@ -214,19 +211,32 @@ export default function PresentationClient() {
 
 function renderSlide(i: number) {
   switch (i) {
-    case 0: return <SlideCover />
-    case 1: return <SlideProblem />
-    case 2: return <SlideIdea />
-    case 3: return <SlideSolution />
-    case 4: return <SlideCustomer />
-    case 5: return <SlideMerchant />
-    case 6: return <SlideHow />
-    case 7: return <SlideTrust />
-    case 8: return <SlideVision />
-    case 9: return <SlidePalestine />
-    case 10: return <SlideTeam />
-    case 11: return <SlideCTA />
-    default: return null
+    case 0:
+      return <SlideCover />
+    case 1:
+      return <SlideProblem />
+    case 2:
+      return <SlideIdea />
+    case 3:
+      return <SlideSolution />
+    case 4:
+      return <SlideCustomer />
+    case 5:
+      return <SlideMerchant />
+    case 6:
+      return <SlideHow />
+    case 7:
+      return <SlideTrust />
+    case 8:
+      return <SlideVision />
+    case 9:
+      return <SlidePalestine />
+    case 10:
+      return <SlideTeam />
+    case 11:
+      return <SlideCTA />
+    default:
+      return null
   }
 }
 
@@ -261,9 +271,7 @@ function SlideProblem() {
     <div className={styles.slide}>
       <span className={styles.slideBadge}>01 · المشكلة</span>
       <h2 className={styles.slideTitle}>ليه EAH موجودة؟</h2>
-      <p className={styles.slideLead}>
-        في شبين القناطر، أنشطة كتير. بس مفيش طريقة سهلة تلاقيها.
-      </p>
+      <p className={styles.slideLead}>في شبين القناطر، أنشطة كتير. بس مفيش طريقة سهلة تلاقيها.</p>
       <div className={styles.trioGrid}>
         <TrioCard num="01" title="مفيش دليل موحد" text="كل نشاط في حتة — مفيش مكان يجمعهم." />
         <TrioCard num="02" title="تقييمات مبعترة" text="مفيش طريقة موثوقة تعرف منها الكويس." />
@@ -283,21 +291,27 @@ function SlideIdea() {
       </h2>
       <div className={styles.ideaBox}>
         <div className={styles.ideaRow}>
-          <span className={styles.ideaIcon}><CheckCircleIcon size={22} /></span>
+          <span className={styles.ideaIcon}>
+            <CheckCircleIcon size={22} />
+          </span>
           <div>
             <strong className={styles.ideaStrong}>مجانية للعميل</strong>
             <p className={styles.ideaText}>صفر رسوم · صفر اشتراكات</p>
           </div>
         </div>
         <div className={styles.ideaRow}>
-          <span className={styles.ideaIcon}><CheckCircleIcon size={22} /></span>
+          <span className={styles.ideaIcon}>
+            <CheckCircleIcon size={22} />
+          </span>
           <div>
             <strong className={styles.ideaStrong}>بدون عمولة على التاجر</strong>
             <p className={styles.ideaText}>كل الأرباح لصاحب النشاط</p>
           </div>
         </div>
         <div className={styles.ideaRow}>
-          <span className={styles.ideaIcon}><CheckCircleIcon size={22} /></span>
+          <span className={styles.ideaIcon}>
+            <CheckCircleIcon size={22} />
+          </span>
           <div>
             <strong className={styles.ideaStrong}>طلب مباشر</strong>
             <p className={styles.ideaText}>واتساب — بدون وسيط</p>
@@ -400,9 +414,24 @@ function SlideTrust() {
       <span className={`${styles.slideBadge} ${styles.badgeTeal}`}>أمان</span>
       <h2 className={styles.slideTitle}>أمان وشفافية</h2>
       <div className={styles.trioGrid}>
-        <TrioCard num="🛡️" title="RLS كامل" text="كل جدول محمي. صفر تسريب." icon={<ShieldCheckIcon size={22} />} />
-        <TrioCard num="🔒" title="بياناتك لك" text="مفيش بيع بيانات. مفيش تتبع خفي." icon={<InfoIcon size={22} />} />
-        <TrioCard num="✨" title="صفر Dark Patterns" text="مفيش إعلانات مزعجة. مفيش auto-subscribe." icon={<LampIcon size={22} />} />
+        <TrioCard
+          num="🛡️"
+          title="RLS كامل"
+          text="كل جدول محمي. صفر تسريب."
+          icon={<ShieldCheckIcon size={22} />}
+        />
+        <TrioCard
+          num="🔒"
+          title="بياناتك لك"
+          text="مفيش بيع بيانات. مفيش تتبع خفي."
+          icon={<InfoIcon size={22} />}
+        />
+        <TrioCard
+          num="✨"
+          title="صفر Dark Patterns"
+          text="مفيش إعلانات مزعجة. مفيش auto-subscribe."
+          icon={<LampIcon size={22} />}
+        />
       </div>
     </div>
   )
@@ -424,9 +453,24 @@ function SlideVision() {
       </div>
       <div className={styles.visionLine} aria-hidden />
       <div className={styles.trioGrid}>
-        <TrioCard num="📍" title="البداية" text="شبين القناطر + القرى" icon={<MapPinIcon size={22} />} />
-        <TrioCard num="🗺️" title="التوسّع" text="القليوبية → الدلتا" icon={<TargetIcon size={22} />} />
-        <TrioCard num="🌍" title="الحلم" text="محافظات مصر كلها" icon={<SparklesIcon size={22} />} />
+        <TrioCard
+          num="📍"
+          title="البداية"
+          text="شبين القناطر + القرى"
+          icon={<MapPinIcon size={22} />}
+        />
+        <TrioCard
+          num="🗺️"
+          title="التوسّع"
+          text="القليوبية → الدلتا"
+          icon={<TargetIcon size={22} />}
+        />
+        <TrioCard
+          num="🌍"
+          title="الحلم"
+          text="محافظات مصر كلها"
+          icon={<SparklesIcon size={22} />}
+        />
       </div>
     </div>
   )
@@ -493,15 +537,19 @@ function SlideCTA() {
 // ═══════════════════════════════════════════════════════════
 
 function TrioCard({
-  num, title, text, icon,
+  num,
+  title,
+  text,
+  icon,
 }: {
-  num: string; title: string; text: string; icon?: React.ReactNode
+  num: string
+  title: string
+  text: string
+  icon?: React.ReactNode
 }) {
   return (
     <div className={styles.trioCard}>
-      <span className={styles.trioNum}>
-        {icon ?? num}
-      </span>
+      <span className={styles.trioNum}>{icon ?? num}</span>
       <h3 className={styles.trioTitle}>{title}</h3>
       <p className={styles.trioText}>{text}</p>
     </div>
@@ -509,9 +557,13 @@ function TrioCard({
 }
 
 function IconTile({
-  Icon, label, gold,
+  Icon,
+  label,
+  gold,
 }: {
-  Icon: React.ComponentType<{ size?: number }>; label: string; gold?: boolean
+  Icon: React.ComponentType<{ size?: number }>
+  label: string
+  gold?: boolean
 }) {
   return (
     <div className={`${styles.iconTile} ${gold ? styles.iconTileGold : ''}`}>

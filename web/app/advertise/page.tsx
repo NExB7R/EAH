@@ -56,8 +56,8 @@ export default async function AdvertisePage() {
             <span className={styles.accent}> عملاء حقيقيين</span>
           </h1>
           <p className={styles.heroDesc}>
-            مش مجرد ظهور — إنت بتوصل لناس في شبين القناطر والقرى حواليها
-            بيدوروا على اللي بتقدمه بالظبط.
+            مش مجرد ظهور — إنت بتوصل لناس في شبين القناطر والقرى حواليها بيدوروا على اللي بتقدمه
+            بالظبط.
           </p>
         </div>
       </section>
@@ -76,9 +76,7 @@ export default async function AdvertisePage() {
                   </span>
                   <div className={styles.cardHeadText}>
                     <h3 className={styles.cardTitle}>{slot.name_ar}</h3>
-                    {placement && (
-                      <p className={styles.cardPlacement}>{placement}</p>
-                    )}
+                    {placement && <p className={styles.cardPlacement}>{placement}</p>}
                   </div>
                 </div>
 

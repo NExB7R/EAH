@@ -192,10 +192,10 @@ export function useFairRotation<T extends { id: string }>({
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
-    const io = new IntersectionObserver(
-      ([entry]) => setInView(entry?.isIntersecting ?? true),
-      { threshold: 0.1, rootMargin: '200px 0px' },
-    )
+    const io = new IntersectionObserver(([entry]) => setInView(entry?.isIntersecting ?? true), {
+      threshold: 0.1,
+      rootMargin: '200px 0px',
+    })
     io.observe(el)
     return () => io.disconnect()
   }, [])

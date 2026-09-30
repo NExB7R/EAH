@@ -40,19 +40,14 @@ export default async function PointsPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="النقاط والمكافآت"
-        description="كل تفاعل بياخدك خطوة أعلى"
-      />
+      <AccountPageHeader title="النقاط والمكافآت" description="كل تفاعل بياخدك خطوة أعلى" />
 
       <div className={styles.top}>
         <div className={styles.balanceCard}>
           <span className={styles.balanceIcon}>
             <GiftIcon size={28} />
           </span>
-          <span className={styles.balanceValue}>
-            {stats.pointsBalance.toLocaleString('ar-EG')}
-          </span>
+          <span className={styles.balanceValue}>{stats.pointsBalance.toLocaleString('ar-EG')}</span>
           <span className={styles.balanceLabel}>رصيد النقاط</span>
         </div>
 
@@ -84,15 +79,11 @@ export default async function PointsPage() {
             return (
               <li key={log.id} className={styles.row}>
                 <span className={styles.reason}>{label}</span>
-                <span
-                  className={`${styles.delta} ${positive ? styles.plus : styles.minus}`}
-                >
+                <span className={`${styles.delta} ${positive ? styles.plus : styles.minus}`}>
                   {positive ? '+' : ''}
                   {log.delta}
                 </span>
-                <span className={styles.balance}>
-                  الرصيد: {log.balance_after}
-                </span>
+                <span className={styles.balance}>الرصيد: {log.balance_after}</span>
                 <span className={styles.date}>{date}</span>
               </li>
             )

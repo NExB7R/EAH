@@ -55,10 +55,7 @@ export type BusinessMetrics = {
 // Main: Get Business Metrics
 // ═══════════════════════════════════════════════════════════
 
-export async function getBusinessMetrics(
-  businessId: string,
-  days = 30,
-): Promise<BusinessMetrics> {
+export async function getBusinessMetrics(businessId: string, days = 30): Promise<BusinessMetrics> {
   const supabase = await createClient()
 
   const periodEnd = new Date()
@@ -78,7 +75,9 @@ export async function getBusinessMetrics(
   ] = await Promise.all([
     supabase
       .from('businesses')
-      .select('trust_score, trust_tier, accepts_whatsapp_orders, offers_count, rating_avg, rating_count')
+      .select(
+        'trust_score, trust_tier, accepts_whatsapp_orders, offers_count, rating_avg, rating_count',
+      )
       .eq('id', businessId)
       .single(),
 
@@ -132,7 +131,9 @@ export async function getBusinessMetrics(
     .sort((a, b) => a.date.localeCompare(b.date))
 
   // ─── Process orders ───
-  let confirmed = 0, cancelled = 0, pending = 0
+  let confirmed = 0,
+    cancelled = 0,
+    pending = 0
   const responseTimes: number[] = []
   const ordersByDayMap: Record<string, number> = {}
 
@@ -155,13 +156,13 @@ export async function getBusinessMetrics(
 
   const avgResponseTimeMin =
     responseTimes.length > 0
-      ? Math.round(
-          (responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length / 60) * 10,
-        ) / 10
+      ? Math.round((responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length / 60) * 10) / 10
       : null
 
   // ─── Process reviews ───
-  let positive = 0, neutral = 0, negative = 0
+  let positive = 0,
+    neutral = 0,
+    negative = 0
   const ratingDist: Record<string, number> = { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 }
   const comments: BusinessMetrics['comments'] = []
 
@@ -246,9 +247,7 @@ export type ComparisonData = {
   totalInCategory: number
 }
 
-export async function getCategoryComparison(
-  businessId: string,
-): Promise<ComparisonData | null> {
+export async function getCategoryComparison(businessId: string): Promise<ComparisonData | null> {
   const supabase = await createClient()
 
   const { data: biz } = await supabase

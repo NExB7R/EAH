@@ -52,7 +52,9 @@ export default function Avatar({
       )}
 
       {(role === 'super_admin' || role === 'admin') && (
-        <span className={styles.badge} aria-hidden>👑</span>
+        <span className={styles.badge} aria-hidden>
+          👑
+        </span>
       )}
 
       {phoneVerified && role !== 'super_admin' && role !== 'admin' && (

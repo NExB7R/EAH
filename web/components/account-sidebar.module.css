@@ -14,9 +14,9 @@
   gap: 4px;
   padding: 10px;
   border-radius: 18px;
-  background: linear-gradient(160deg, rgba(20,14,34,0.6), rgba(10,7,20,0.8));
-  border: 1px solid rgba(168,85,247,0.18);
-  box-shadow: 0 0 24px rgba(168,85,247,0.06);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.8));
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.06);
 }
 
 .item {
@@ -31,18 +31,20 @@
   font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 700;
-  transition: background 180ms var(--ease), color 180ms var(--ease);
+  transition:
+    background 180ms var(--ease),
+    color 180ms var(--ease);
 }
 
 .item:hover {
-  background: rgba(168,85,247,0.08);
+  background: rgba(168, 85, 247, 0.08);
   color: var(--purple-light);
 }
 
 .active {
-  background: linear-gradient(135deg, rgba(168,85,247,0.18), rgba(199,125,255,0.1));
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(199, 125, 255, 0.1));
   color: var(--gold-light);
-  border: 1px solid rgba(232,199,154,0.25);
+  border: 1px solid rgba(232, 199, 154, 0.25);
 }
 
 .active::before {
@@ -53,7 +55,7 @@
   width: 3px;
   border-radius: 2px;
   background: linear-gradient(180deg, var(--gold-primary), var(--gold-light));
-  box-shadow: 0 0 10px rgba(232,199,154,0.6);
+  box-shadow: 0 0 10px rgba(232, 199, 154, 0.6);
 }
 
 .iconWrap {
@@ -63,13 +65,13 @@
   width: 30px;
   height: 30px;
   border-radius: 9px;
-  background: rgba(168,85,247,0.06);
+  background: rgba(168, 85, 247, 0.06);
   color: currentColor;
   flex-shrink: 0;
 }
 
 .active .iconWrap {
-  background: rgba(232,199,154,0.1);
+  background: rgba(232, 199, 154, 0.1);
 }
 
 .label {
@@ -104,16 +106,24 @@
     -ms-overflow-style: none;
     padding: 8px;
   }
-  .nav::-webkit-scrollbar { display: none; }
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
   .item {
     flex-shrink: 0;
     padding: 8px 10px;
     font-size: 0.76rem;
   }
-  .active::before { display: none; }
-  .label { white-space: nowrap; }
+  .active::before {
+    display: none;
+  }
+  .label {
+    white-space: nowrap;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .item { transition: none; }
+  .item {
+    transition: none;
+  }
 }

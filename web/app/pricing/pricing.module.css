@@ -19,8 +19,8 @@
   inset: -50% -10% auto -10%;
   height: 280px;
   background:
-    radial-gradient(ellipse 60% 55% at 50% 0%, rgba(232,199,154,0.16), transparent 65%),
-    radial-gradient(ellipse 60% 55% at 50% 0%, rgba(168,85,247,0.1), transparent 70%);
+    radial-gradient(ellipse 60% 55% at 50% 0%, rgba(232, 199, 154, 0.16), transparent 65%),
+    radial-gradient(ellipse 60% 55% at 50% 0%, rgba(168, 85, 247, 0.1), transparent 70%);
   filter: blur(20px);
   pointer-events: none;
 }
@@ -43,11 +43,11 @@
 }
 
 .accent {
-  background: linear-gradient(135deg, #F5E4BC, #E8C79A 50%, #C9A56C);
+  background: linear-gradient(135deg, #f5e4bc, #e8c79a 50%, #c9a56c);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 10px rgba(232,199,154,0.4));
+  filter: drop-shadow(0 2px 10px rgba(232, 199, 154, 0.4));
 }
 
 .heroDesc {
@@ -74,8 +74,8 @@
   font-size: 0.72rem;
   font-weight: 800;
   color: var(--text-secondary);
-  background: rgba(232,199,154,0.06);
-  border: 1px solid rgba(232,199,154,0.25);
+  background: rgba(232, 199, 154, 0.06);
+  border: 1px solid rgba(232, 199, 154, 0.25);
 }
 
 .pill svg {
@@ -109,8 +109,8 @@
   gap: 16px;
   padding: 22px 24px;
   border-radius: 20px;
-  background: linear-gradient(160deg, rgba(20,14,34,0.55), rgba(10,7,20,0.75));
-  border: 1px dashed rgba(232,199,154,0.35);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
+  border: 1px dashed rgba(232, 199, 154, 0.35);
 }
 
 .noteIcon {
@@ -120,8 +120,8 @@
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: rgba(232,199,154,0.1);
-  border: 1px solid rgba(232,199,154,0.4);
+  background: rgba(232, 199, 154, 0.1);
+  border: 1px solid rgba(232, 199, 154, 0.4);
   color: var(--gold-light);
   flex-shrink: 0;
 }
@@ -176,13 +176,15 @@
   color: var(--bg-base);
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
   text-decoration: none;
-  box-shadow: 0 0 24px rgba(232,199,154,0.5);
-  transition: transform 200ms var(--ease), box-shadow 200ms var(--ease);
+  box-shadow: 0 0 24px rgba(232, 199, 154, 0.5);
+  transition:
+    transform 200ms var(--ease),
+    box-shadow 200ms var(--ease);
 }
 
 .ctaBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 34px rgba(232,199,154,0.7);
+  box-shadow: 0 0 34px rgba(232, 199, 154, 0.7);
 }
 
 .ctaSecondary {
@@ -208,15 +210,35 @@
 
 /* ─── Mobile ─── */
 @media (max-width: 640px) {
-  .hero { padding: 16px 16px 28px; }
-  .plansSection { padding: 0 16px; }
-  .noteSection, .ctaSection { padding: 0 16px; }
-  .note { flex-direction: column; padding: 18px; }
-  .noteIcon { width: 40px; height: 40px; }
-  .ctaBtn { font-size: 0.82rem; padding: 12px 24px; }
+  .hero {
+    padding: 16px 16px 28px;
+  }
+  .plansSection {
+    padding: 0 16px;
+  }
+  .noteSection,
+  .ctaSection {
+    padding: 0 16px;
+  }
+  .note {
+    flex-direction: column;
+    padding: 18px;
+  }
+  .noteIcon {
+    width: 40px;
+    height: 40px;
+  }
+  .ctaBtn {
+    font-size: 0.82rem;
+    padding: 12px 24px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ctaBtn { transition: none; }
-  .ctaBtn:hover { transform: none; }
+  .ctaBtn {
+    transition: none;
+  }
+  .ctaBtn:hover {
+    transform: none;
+  }
 }

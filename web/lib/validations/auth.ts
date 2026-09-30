@@ -35,16 +35,10 @@ const passwordSchema = z
   .max(72, 'كلمة السر طويلة — 72 حرف كحد أقصى')
 
 // ─── الجنس (اختياري) ───
-const genderSchema = z
-  .enum(['male', 'female'])
-  .optional()
-  .nullable()
+const genderSchema = z.enum(['male', 'female']).optional().nullable()
 
 // ─── المنطقة (اختياري) ───
-const areaSchema = z
-  .enum(AREAS)
-  .optional()
-  .nullable()
+const areaSchema = z.enum(AREAS).optional().nullable()
 
 // ─── العنوان الافتراضي (اختياري) ───
 const addressSchema = z
@@ -58,12 +52,12 @@ const addressSchema = z
 // preprocess: '' → null (مش 0)
 const latSchema = z.preprocess(
   (v) => (v === '' || v === null || v === undefined ? null : Number(v)),
-  z.number().min(-90).max(90).nullable()
+  z.number().min(-90).max(90).nullable(),
 )
 
 const lngSchema = z.preprocess(
   (v) => (v === '' || v === null || v === undefined ? null : Number(v)),
-  z.number().min(-180).max(180).nullable()
+  z.number().min(-180).max(180).nullable(),
 )
 
 // ─── Schema التسجيل ───

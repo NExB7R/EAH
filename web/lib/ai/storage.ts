@@ -8,8 +8,8 @@ import type { AnalysisResult } from './business-advisor'
 
 export type PlanRetention = {
   planCode: string
-  totalLimit: number      // الحد الأقصى الكلي
-  completeLimit: number   // كم تقرير ببيانات كاملة
+  totalLimit: number // الحد الأقصى الكلي
+  completeLimit: number // كم تقرير ببيانات كاملة
 }
 
 const RETENTION_BY_PLAN: Record<string, PlanRetention> = {
@@ -25,9 +25,7 @@ const DEFAULT_RETENTION: PlanRetention = RETENTION_BY_PLAN.basic!
 // 1. Get Retention for Business
 // ═══════════════════════════════════════════════════════════
 
-export async function getBusinessRetention(
-  businessId: string,
-): Promise<PlanRetention> {
+export async function getBusinessRetention(businessId: string): Promise<PlanRetention> {
   const supabase = await createClient()
 
   const { data } = await supabase
@@ -39,8 +37,7 @@ export async function getBusinessRetention(
     .limit(1)
     .maybeSingle()
 
-  const planCode =
-    (data?.plan as unknown as { code?: string } | null)?.code ?? 'basic'
+  const planCode = (data?.plan as unknown as { code?: string } | null)?.code ?? 'basic'
 
   return RETENTION_BY_PLAN[planCode] ?? DEFAULT_RETENTION
 }
@@ -106,10 +103,7 @@ export async function saveInsight(
 // 3. Apply Retention — حذف القديم + تحويل الباقي لملخص
 // ═══════════════════════════════════════════════════════════
 
-export async function applyRetention(
-  businessId: string,
-  retention: PlanRetention,
-): Promise<void> {
+export async function applyRetention(businessId: string, retention: PlanRetention): Promise<void> {
   const supabase = await createClient()
 
   // كل التقارير مرتبة من الأحدث
@@ -128,9 +122,7 @@ export async function applyRetention(
   }
 
   // 2. تحويل التقارير القديمة (فوق completeLimit) لملخص فقط
-  const toSummarize = all
-    .slice(retention.completeLimit, retention.totalLimit)
-    .map((r) => r.id)
+  const toSummarize = all.slice(retention.completeLimit, retention.totalLimit).map((r) => r.id)
 
   if (toSummarize.length > 0) {
     await supabase
@@ -158,9 +150,7 @@ export async function getStorageStats(): Promise<StorageStats> {
 
   const [{ count: totalInsights }, { count: totalBusinesses }] = await Promise.all([
     supabase.from('business_insights').select('*', { count: 'exact', head: true }),
-    supabase
-      .from('business_insights')
-      .select('business_id', { count: 'exact', head: true }),
+    supabase.from('business_insights').select('business_id', { count: 'exact', head: true }),
   ])
 
   // ~150 KB للتقرير الكامل، ~15 KB للملخص

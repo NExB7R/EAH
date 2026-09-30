@@ -28,10 +28,7 @@ export default async function MerchantOrdersPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="الطلبات"
-        description={`${orders.length} طلب`}
-      />
+      <AccountPageHeader title="الطلبات" description={`${orders.length} طلب`} />
       {orders.length === 0 ? (
         <EmptyState
           Icon={FileTextIcon}
@@ -66,9 +63,7 @@ export default async function MerchantOrdersPage() {
                   </div>
                 )}
 
-                {order.message && (
-                  <p className={styles.message}>{order.message.slice(0, 200)}</p>
-                )}
+                {order.message && <p className={styles.message}>{order.message.slice(0, 200)}</p>}
 
                 <div className={styles.foot}>
                   <span className={styles.date}>{date}</span>

@@ -29,8 +29,13 @@ type Props = {
 }
 
 const DAY_LABEL: Record<string, string> = {
-  sun: 'الأحد', mon: 'الاثنين', tue: 'الثلاثاء',
-  wed: 'الأربعاء', thu: 'الخميس', fri: 'الجمعة', sat: 'السبت',
+  sun: 'الأحد',
+  mon: 'الاثنين',
+  tue: 'الثلاثاء',
+  wed: 'الأربعاء',
+  thu: 'الخميس',
+  fri: 'الجمعة',
+  sat: 'السبت',
 }
 
 const DAY_ORDER = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri']
@@ -110,7 +115,10 @@ export default function BusinessTabs({
                   </a>
                 )}
                 {phone && (
-                  <a href={`tel:${phone.value}`} className={`${styles.contactItem} ${styles.contactPhone}`}>
+                  <a
+                    href={`tel:${phone.value}`}
+                    className={`${styles.contactItem} ${styles.contactPhone}`}
+                  >
                     <PhoneIcon size={16} />
                     <span>{phone.value}</span>
                   </a>
@@ -161,7 +169,9 @@ export default function BusinessTabs({
               </h3>
               <ul className={styles.hoursList}>
                 {DAY_ORDER.map((day) => {
-                  const h = (business.working_hours as Record<string, { open: string; close: string }> | null)?.[day]
+                  const h = (
+                    business.working_hours as Record<string, { open: string; close: string }> | null
+                  )?.[day]
                   return (
                     <li key={day} className={styles.hoursRow}>
                       <span className={styles.hoursDay}>{DAY_LABEL[day]}</span>

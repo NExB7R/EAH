@@ -20,11 +20,13 @@ async function getSubscriptions(): Promise<Row[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('business_subscriptions')
-    .select(`
+    .select(
+      `
       id, status, is_trial, starts_at, expires_at,
       plan:subscription_plans(name_ar, price_egp),
       business:businesses(name, slug)
-    `)
+    `,
+    )
     .order('created_at', { ascending: false })
     .limit(100)
 
@@ -44,10 +46,7 @@ export default async function AdminSubscriptionsPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="الاشتراكات"
-        description={`${subs.length} اشتراك`}
-      />
+      <AccountPageHeader title="الاشتراكات" description={`${subs.length} اشتراك`} />
 
       {subs.length === 0 ? (
         <EmptyState Icon={CrownGoldIcon} title="مفيش اشتراكات" />
@@ -62,9 +61,7 @@ export default async function AdminSubscriptionsPage() {
                   <CrownGoldIcon size={20} />
                 </div>
                 <div className={styles.body}>
-                  <div className={styles.name}>
-                    {s.business?.name ?? '—'}
-                  </div>
+                  <div className={styles.name}>{s.business?.name ?? '—'}</div>
                   <div className={styles.meta}>
                     <span>{s.plan?.name_ar ?? '—'}</span>
                     <span className={styles.dot}>·</span>
@@ -74,7 +71,8 @@ export default async function AdminSubscriptionsPage() {
                   </div>
                 </div>
                 <span className={`${styles.status} ${styles[meta.tone]}`}>
-                  {s.is_trial && '✨ '}{meta.label}
+                  {s.is_trial && '✨ '}
+                  {meta.label}
                 </span>
               </div>
             )

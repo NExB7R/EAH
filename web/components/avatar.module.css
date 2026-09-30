@@ -30,20 +30,36 @@
 }
 
 /* Sizes */
-.sm { width: 32px; height: 32px; font-size: 0.75rem; }
-.md { width: 40px; height: 40px; font-size: 0.9rem; }
-.lg { width: 56px; height: 56px; font-size: 1.2rem; }
+.sm {
+  width: 32px;
+  height: 32px;
+  font-size: 0.75rem;
+}
+.md {
+  width: 40px;
+  height: 40px;
+  font-size: 0.9rem;
+}
+.lg {
+  width: 56px;
+  height: 56px;
+  font-size: 1.2rem;
+}
 
 /* Verified */
 .verified {
   border-color: var(--purple-neon);
-  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.4), 0 0 10px rgba(168, 85, 247, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(168, 85, 247, 0.4),
+    0 0 10px rgba(168, 85, 247, 0.25);
 }
 
 /* Merchant */
 .merchant {
   border-color: var(--gold-primary);
-  box-shadow: 0 0 0 1px rgba(232, 199, 154, 0.5), 0 0 10px rgba(232, 199, 154, 0.2);
+  box-shadow:
+    0 0 0 1px rgba(232, 199, 154, 0.5),
+    0 0 10px rgba(232, 199, 154, 0.2);
 }
 
 /* Admin / Super Admin */

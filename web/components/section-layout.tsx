@@ -27,14 +27,18 @@ export default function SectionLayout({
   businesses,
   pageSize = 10,
 }: Props) {
-  const cardTone: CardTone = (
-    tone === 'gold' ? 'gold'
-    : tone === 'orange' ? 'orange'
-    : tone === 'teal' ? 'teal'
-    : tone === 'pink' ? 'pink'
-    : tone === 'blue' ? 'blue'
-    : 'purple'
-  )
+  const cardTone: CardTone =
+    tone === 'gold'
+      ? 'gold'
+      : tone === 'orange'
+        ? 'orange'
+        : tone === 'teal'
+          ? 'teal'
+          : tone === 'pink'
+            ? 'pink'
+            : tone === 'blue'
+              ? 'blue'
+              : 'purple'
 
   return (
     <main className={styles.page}>
@@ -48,11 +52,7 @@ export default function SectionLayout({
 
       <div className={styles.content}>
         {businesses.length > 0 ? (
-          <LoadMoreGrid
-            businesses={businesses}
-            tone={cardTone}
-            pageSize={pageSize}
-          />
+          <LoadMoreGrid businesses={businesses} tone={cardTone} pageSize={pageSize} />
         ) : (
           <div className={styles.empty}>
             <div className={styles.emptyIcon}>

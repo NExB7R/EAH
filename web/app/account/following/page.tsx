@@ -15,10 +15,7 @@ export default async function FollowingPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="المتابعات"
-        description={`${following.length} نشاط بتتابعه`}
-      />
+      <AccountPageHeader title="المتابعات" description={`${following.length} نشاط بتتابعه`} />
       {following.length === 0 ? (
         <EmptyState
           Icon={StoreIcon}
@@ -30,11 +27,7 @@ export default async function FollowingPage() {
       ) : (
         <div className={styles.grid}>
           {following.map((f) => (
-            <BusinessCard
-              key={f.id}
-              business={f.business as never}
-              tone="purple"
-            />
+            <BusinessCard key={f.id} business={f.business as never} tone="purple" />
           ))}
         </div>
       )}

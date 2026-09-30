@@ -16,11 +16,7 @@ type Props = {
   pageSize?: number
 }
 
-export default function LoadMoreGrid({
-  businesses,
-  tone,
-  pageSize = 10,
-}: Props) {
+export default function LoadMoreGrid({ businesses, tone, pageSize = 10 }: Props) {
   const [page, setPage] = useState(1)
   const totalCount = businesses.length
   const endIdx = page * pageSize
@@ -37,11 +33,7 @@ export default function LoadMoreGrid({
 
       {hasMore && (
         <div className={styles.loadMoreWrap}>
-          <button
-            type="button"
-            onClick={() => setPage((p) => p + 1)}
-            className={styles.loadMore}
-          >
+          <button type="button" onClick={() => setPage((p) => p + 1)} className={styles.loadMore}>
             شوف المزيد
           </button>
           <span className={styles.counter}>

@@ -87,7 +87,6 @@ export function dailyShuffle<T extends { id: string }>(items: T[]): T[] {
   })
 }
 
-
 // ═══════════════════════════════════════════════════════════
 // Fisher-Yates Shuffle (client-side — عشوائي حقيقي)
 // ═══════════════════════════════════════════════════════════

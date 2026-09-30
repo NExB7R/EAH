@@ -16,13 +16,11 @@ export default function Logo({
   size = 'md',
   variant = 'full',
   className = '',
-  href = "/",
+  href = '/',
 }: LogoProps) {
   const sizeCls = styles[size]
   const variantCls = variant === 'crown' ? styles.crownOnly : ''
-  const cls = [styles.logo, sizeCls, variantCls, className]
-    .filter(Boolean)
-    .join(' ')
+  const cls = [styles.logo, sizeCls, variantCls, className].filter(Boolean).join(' ')
 
   const inner = (
     <>

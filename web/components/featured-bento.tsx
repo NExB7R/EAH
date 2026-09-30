@@ -22,23 +22,19 @@ const PAGE_SIZES = { mobile: 4, tablet: 6, desktop: 8 }
 const INTERVAL_MS = 8000
 
 export default function FeaturedBento({ businesses }: Props) {
-  const { visible, containerRef, setPaused, next, prev } =
-    useFairRotation<Business>({
-      items: businesses,
-      pageSizes: PAGE_SIZES,
-      intervalMs: INTERVAL_MS,
-      storageKey: 'eah:featured:home',
-    })
+  const { visible, containerRef, setPaused, next, prev } = useFairRotation<Business>({
+    items: businesses,
+    pageSizes: PAGE_SIZES,
+    intervalMs: INTERVAL_MS,
+    storageKey: 'eah:featured:home',
+  })
 
   if (businesses.length === 0) return null
 
   const hasMore = businesses.length > PAGE_SIZES.mobile
 
   return (
-    <section
-      ref={containerRef as React.RefObject<HTMLElement>}
-      className={styles.section}
-    >
+    <section ref={containerRef as React.RefObject<HTMLElement>} className={styles.section}>
       <div className={styles.frame}>
         <header className={styles.header}>
           <div className={styles.titleWrap}>
@@ -74,12 +70,7 @@ export default function FeaturedBento({ businesses }: Props) {
 
           <div className={styles.grid}>
             {visible.map((b) => (
-              <BusinessCard
-                key={b.id}
-                business={b}
-                tone="gold"
-                variant="featured"
-              />
+              <BusinessCard key={b.id} business={b} tone="gold" variant="featured" />
             ))}
           </div>
 

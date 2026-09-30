@@ -1,10 +1,5 @@
 import { redirect } from 'next/navigation'
-import {
-  ShieldCheckIcon,
-  PhoneIcon,
-  FileTextIcon,
-  CheckCircleIcon,
-} from '@/components/icons'
+import { ShieldCheckIcon, PhoneIcon, FileTextIcon, CheckCircleIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getFullProfile } from '@/lib/data/account'
 import AccountPageHeader from '@/components/account-page-header'
@@ -23,10 +18,7 @@ export default async function VerifyPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="التوثيق"
-        description="وثّق حسابك لزيادة الثقة وكسب مزايا"
-      />
+      <AccountPageHeader title="التوثيق" description="وثّق حسابك لزيادة الثقة وكسب مزايا" />
 
       <div className={`${styles.banner} ${bothVerified ? styles.bannerOk : ''}`}>
         <span className={styles.bannerIcon}>
@@ -76,9 +68,7 @@ export default async function VerifyPage() {
         </div>
       </div>
 
-      <p className={styles.note}>
-        نظام التوثيق الكامل هيتم إطلاقه قريب — للاستفسار تواصل معانا.
-      </p>
+      <p className={styles.note}>نظام التوثيق الكامل هيتم إطلاقه قريب — للاستفسار تواصل معانا.</p>
     </div>
   )
 }

@@ -206,7 +206,9 @@ export default function ApplyWizard({ areas }: Props) {
               >
                 <option value="">اختر المنطقة</option>
                 {areas.map((a) => (
-                  <option key={a} value={a}>{a}</option>
+                  <option key={a} value={a}>
+                    {a}
+                  </option>
                 ))}
               </select>
             </label>
@@ -309,11 +311,7 @@ export default function ApplyWizard({ areas }: Props) {
 
             <div className={styles.field}>
               <span className={styles.label}>الإحداثيات (اختياري)</span>
-              <button
-                type="button"
-                className={styles.locBtn}
-                onClick={handleGetLocation}
-              >
+              <button type="button" className={styles.locBtn} onClick={handleGetLocation}>
                 <MapPinIcon size={16} />
                 <span>حدد موقعي تلقائياً</span>
               </button>
@@ -357,20 +355,20 @@ export default function ApplyWizard({ areas }: Props) {
             </div>
 
             <label className={styles.agree}>
-              <input
-                type="checkbox"
-                checked={agree}
-                onChange={(e) => setAgree(e.target.checked)}
-              />
+              <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
               <span>
-                أوافق على <a href="/terms" target="_blank" rel="noreferrer" className={styles.link}>شروط الاستخدام</a> و{' '}
-                <a href="/privacy" target="_blank" rel="noreferrer" className={styles.link}>سياسة الخصوصية</a>
+                أوافق على{' '}
+                <a href="/terms" target="_blank" rel="noreferrer" className={styles.link}>
+                  شروط الاستخدام
+                </a>{' '}
+                و{' '}
+                <a href="/privacy" target="_blank" rel="noreferrer" className={styles.link}>
+                  سياسة الخصوصية
+                </a>
               </span>
             </label>
 
-            <div className={styles.freeNote}>
-              🎁 اشتراكك الأساسي مجاني للأبد — بدون رسوم
-            </div>
+            <div className={styles.freeNote}>🎁 اشتراكك الأساسي مجاني للأبد — بدون رسوم</div>
           </>
         )}
 
@@ -380,12 +378,7 @@ export default function ApplyWizard({ areas }: Props) {
       {/* Footer */}
       <div className={styles.footer}>
         {step > 0 && (
-          <button
-            type="button"
-            onClick={handleBack}
-            disabled={pending}
-            className={styles.btnGhost}
-          >
+          <button type="button" onClick={handleBack} disabled={pending} className={styles.btnGhost}>
             <ArrowRightIcon size={16} />
             <span>السابق</span>
           </button>

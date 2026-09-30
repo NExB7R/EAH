@@ -46,9 +46,7 @@ export default function OffersStrip({ offers }: Props) {
 }
 
 function OfferCard({ offer }: { offer: Offer }) {
-  const href = offer.business?.slug
-    ? `/businesses/${offer.business.slug}`
-    : '#'
+  const href = offer.business?.slug ? `/businesses/${offer.business.slug}` : '#'
 
   return (
     <Link href={href} className={styles.card}>

@@ -24,10 +24,7 @@ export default async function OrdersPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="الطلبات"
-        description={`${orders.length} طلب`}
-      />
+      <AccountPageHeader title="الطلبات" description={`${orders.length} طلب`} />
       {orders.length === 0 ? (
         <EmptyState
           Icon={FileTextIcon}
@@ -48,15 +45,10 @@ export default async function OrdersPage() {
               <li key={order.id} className={styles.row}>
                 <div className={styles.head}>
                   <span className={styles.code}>#{order.order_code}</span>
-                  <span className={`${styles.status} ${styles[meta.tone]}`}>
-                    {meta.label}
-                  </span>
+                  <span className={`${styles.status} ${styles[meta.tone]}`}>{meta.label}</span>
                 </div>
                 {order.business && (
-                  <Link
-                    href={`/businesses/${order.business.slug}`}
-                    className={styles.biz}
-                  >
+                  <Link href={`/businesses/${order.business.slug}`} className={styles.biz}>
                     {order.business.name}
                     {order.business.area && (
                       <>

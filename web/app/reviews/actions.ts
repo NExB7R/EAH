@@ -8,9 +8,7 @@ import { reviewSchema, merchantReplySchema } from '@/lib/validations/review'
 // EAH — Review Actions
 // ═══════════════════════════════════════════════════════════
 
-type ActionResult =
-  | { ok: true }
-  | { ok: false; error: string }
+type ActionResult = { ok: true } | { ok: false; error: string }
 
 // ─── إضافة تقييم جديد ───
 export async function submitReview(
@@ -20,7 +18,9 @@ export async function submitReview(
 ): Promise<ActionResult> {
   const supabase = await createClient()
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'لازم تسجل دخول الأول' }
 
   const { data: existing } = await supabase
@@ -90,7 +90,9 @@ export async function replyToReview(
 ): Promise<ActionResult> {
   const supabase = await createClient()
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'لازم تسجل دخول الأول' }
 
   const parsed = merchantReplySchema.safeParse({
@@ -110,7 +112,8 @@ export async function replyToReview(
   if (!review) return { ok: false, error: 'التقييم مش موجود' }
   if (review.merchant_reply) return { ok: false, error: 'رديت على التقييم ده قبل كده' }
 
-  const ownerId = (review.businesses as unknown as { owner_profile_id: string } | null)?.owner_profile_id
+  const ownerId = (review.businesses as unknown as { owner_profile_id: string } | null)
+    ?.owner_profile_id
   if (ownerId !== user.id) return { ok: false, error: 'مش صاحب النشاط' }
 
   const { error } = await supabase

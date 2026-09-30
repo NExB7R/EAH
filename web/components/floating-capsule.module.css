@@ -141,7 +141,8 @@
 }
 
 @keyframes installPulse {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 0 0 rgba(232, 199, 154, 0.4);
   }
   50% {
@@ -167,7 +168,9 @@
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--motion-fast) var(--ease), transform var(--motion-fast) var(--ease);
+  transition:
+    opacity var(--motion-fast) var(--ease),
+    transform var(--motion-fast) var(--ease);
   z-index: 10;
 }
 

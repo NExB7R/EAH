@@ -31,10 +31,7 @@ export default async function AdminAdsPage() {
 
   return (
     <div>
-      <AccountPageHeader
-        title="الإعلانات"
-        description={`${slots.length} مكان إعلاني`}
-      />
+      <AccountPageHeader title="الإعلانات" description={`${slots.length} مكان إعلاني`} />
 
       {slots.length === 0 ? (
         <EmptyState Icon={TagIcon} title="مفيش أماكن إعلانية" />

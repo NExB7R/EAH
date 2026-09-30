@@ -85,9 +85,9 @@ export default async function PricingPage() {
               <strong> نكبر معاكم مش عليكم</strong>.
             </p>
             <p className={styles.noteText}>
-              كل جنيه بيدخلنا — <strong>5% منه بيروح لفلسطين 🇵🇸</strong>،
-              والباقي بيرجع ليك في صورة <strong>خدمة 24 ساعة</strong>،
-              <strong> سيرفرات أقوى</strong>، و<strong>ميزات جديدة كل شهر</strong>.
+              كل جنيه بيدخلنا — <strong>5% منه بيروح لفلسطين 🇵🇸</strong>، والباقي بيرجع ليك في صورة{' '}
+              <strong>خدمة 24 ساعة</strong>،<strong> سيرفرات أقوى</strong>، و
+              <strong>ميزات جديدة كل شهر</strong>.
             </p>
             <p className={styles.noteText}>
               <strong>الأسعار دي لفترة محدودة — استفيد دلوقتي.</strong>

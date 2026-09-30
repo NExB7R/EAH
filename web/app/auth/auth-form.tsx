@@ -25,10 +25,7 @@ type Gender = 'male' | 'female' | null
 
 type FormState = AuthResult | null
 
-async function formAction(
-  _prev: FormState,
-  formData: FormData
-): Promise<AuthResult> {
+async function formAction(_prev: FormState, formData: FormData): Promise<AuthResult> {
   const mode = formData.get('_mode')
   if (mode === 'signup') return signupAction(formData)
   return loginAction(formData)
@@ -121,7 +118,7 @@ export default function AuthForm() {
         setGpsError('مش قادرين نجيب موقعك — تأكد من الإذن')
         setGpsLoading(false)
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
     )
   }
 
@@ -131,8 +128,6 @@ export default function AuthForm() {
         <div className={styles.header}>
           <Logo size="md" />
         </div>
-
-
 
         <div className={styles.tabs}>
           <div
@@ -310,9 +305,7 @@ export default function AuthForm() {
                 <span>عنوانك الافتراضي</span>
                 <span className={styles.optionalTag}>اختياري</span>
               </div>
-              <p className={styles.sectionHint}>
-                عشان نعرضلك الأماكن القريبة منك
-              </p>
+              <p className={styles.sectionHint}>عشان نعرضلك الأماكن القريبة منك</p>
 
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="default_area">
@@ -332,7 +325,9 @@ export default function AuthForm() {
                   >
                     <option value="">اختر منطقتك</option>
                     {AREAS.map((a) => (
-                      <option key={a} value={a}>{a}</option>
+                      <option key={a} value={a}>
+                        {a}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -377,22 +372,12 @@ export default function AuthForm() {
                     <span>{gpsLoading ? 'جاري التحديد...' : 'استخدم موقعي الحالي'}</span>
                   </button>
                 )}
-                {gpsError && (
-                  <span className={styles.gpsError}>{gpsError}</span>
-                )}
+                {gpsError && <span className={styles.gpsError}>{gpsError}</span>}
               </div>
 
               {/* Hidden inputs للـ coords */}
-              <input
-                type="hidden"
-                name="default_latitude"
-                value={coords?.lat ?? ''}
-              />
-              <input
-                type="hidden"
-                name="default_longitude"
-                value={coords?.lng ?? ''}
-              />
+              <input type="hidden" name="default_latitude" value={coords?.lat ?? ''} />
+              <input type="hidden" name="default_longitude" value={coords?.lng ?? ''} />
             </div>
           )}
 
@@ -413,18 +398,14 @@ export default function AuthForm() {
           <div className={styles.tabs} style={{ marginBottom: 'var(--space-4)' }}>
             <button
               type="button"
-              className={`${styles.tab} ${
-                hooksMode === 'customer' ? styles.tabActive : ''
-              }`}
+              className={`${styles.tab} ${hooksMode === 'customer' ? styles.tabActive : ''}`}
               onClick={() => setHooksMode('customer')}
             >
               للعملاء
             </button>
             <button
               type="button"
-              className={`${styles.tab} ${
-                hooksMode === 'merchant' ? styles.tabActive : ''
-              }`}
+              className={`${styles.tab} ${hooksMode === 'merchant' ? styles.tabActive : ''}`}
               onClick={() => setHooksMode('merchant')}
             >
               لأصحاب الأنشطة

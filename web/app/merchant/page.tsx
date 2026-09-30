@@ -29,9 +29,7 @@ export default async function MerchantDashboard() {
           <StoreIcon size={48} />
         </span>
         <h1 className={styles.emptyTitle}>لسه مسجلتش نشاط</h1>
-        <p className={styles.emptyText}>
-          سجّل نشاطك مجاناً — تطبيقك الخاص على EAH
-        </p>
+        <p className={styles.emptyText}>سجّل نشاطك مجاناً — تطبيقك الخاص على EAH</p>
         <Link href="/merchant/apply" className={styles.emptyCta}>
           <StoreIcon size={18} />
           <span>سجّل نشاطك دلوقتي</span>
@@ -52,10 +50,34 @@ export default async function MerchantDashboard() {
   const StatusIcon = statusBadge.Icon
 
   const STATS = [
-    { key: 'viewsToday', label: 'مشاهدات النهاردة', value: stats.viewsToday, Icon: EyeIcon, tone: 'purple' },
-    { key: 'viewsWeek', label: 'مشاهدات الأسبوع', value: stats.viewsWeek, Icon: EyeIcon, tone: 'purple' },
-    { key: 'ordersToday', label: 'طلبات النهاردة', value: stats.ordersToday, Icon: FileTextIcon, tone: 'gold' },
-    { key: 'ordersWeek', label: 'طلبات الأسبوع', value: stats.ordersWeek, Icon: FileTextIcon, tone: 'gold' },
+    {
+      key: 'viewsToday',
+      label: 'مشاهدات النهاردة',
+      value: stats.viewsToday,
+      Icon: EyeIcon,
+      tone: 'purple',
+    },
+    {
+      key: 'viewsWeek',
+      label: 'مشاهدات الأسبوع',
+      value: stats.viewsWeek,
+      Icon: EyeIcon,
+      tone: 'purple',
+    },
+    {
+      key: 'ordersToday',
+      label: 'طلبات النهاردة',
+      value: stats.ordersToday,
+      Icon: FileTextIcon,
+      tone: 'gold',
+    },
+    {
+      key: 'ordersWeek',
+      label: 'طلبات الأسبوع',
+      value: stats.ordersWeek,
+      Icon: FileTextIcon,
+      tone: 'gold',
+    },
   ] as const
 
   const trial = subscription?.is_trial

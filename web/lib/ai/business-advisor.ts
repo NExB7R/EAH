@@ -121,7 +121,8 @@ export function analyzeBusiness(
   }
   if (metrics.avgResponseTimeMin !== null && metrics.avgResponseTimeMin > 60)
     weaknesses.push(`سرعة الرد بطيئة (${metrics.avgResponseTimeMin} دقيقة)`)
-  if (metrics.mediaCount < 3) weaknesses.push(`صور قليلة (${metrics.mediaCount}) — بتزيد الطلبات 40%`)
+  if (metrics.mediaCount < 3)
+    weaknesses.push(`صور قليلة (${metrics.mediaCount}) — بتزيد الطلبات 40%`)
   if (!metrics.hasWhatsapp) weaknesses.push('الواتساب مش مفعّل — 70% بيفضلوه')
   if (metrics.uniqueVisitors < 5 && metrics.pageViews > 0)
     weaknesses.push('زيارات قليلة — انشر على السوشيال')
@@ -132,8 +133,7 @@ export function analyzeBusiness(
   if (!metrics.hasMenu) opportunities.push('أضف صور المنيو — بتزيد الطلبات 35%')
   if (metrics.mediaCount > 0 && metrics.mediaCount < 5)
     opportunities.push('أضف صور — النشاطات الغنية بتاخد 60% أكتر زيارات')
-  if (metrics.followsCount === 0)
-    opportunities.push('شجّع المتابعة — عشان توصلكم عروضكم')
+  if (metrics.followsCount === 0) opportunities.push('شجّع المتابعة — عشان توصلكم عروضكم')
 
   const compRating =
     comparison && comparison.avgRating > 0
@@ -171,12 +171,7 @@ function getScoreLabel(score: number): {
   return { scoreLabel: 'يحتاج تحسين', scoreTone: 'red' }
 }
 
-function generateSummary(
-  score: number,
-  metrics: BusinessMetrics,
-  sc: number,
-  wc: number,
-): string {
+function generateSummary(score: number, metrics: BusinessMetrics, sc: number, wc: number): string {
   if (metrics.pageViews === 0 && metrics.ordersTotal === 0 && metrics.reviewsTotal === 0) {
     return 'نشاطك جديد — ابدأ بنشر صور، تفعيل الواتساب، ودعوة العملاء للتفاعل.'
   }
@@ -186,10 +181,7 @@ function generateSummary(
   return `نشاطك محتاج شغل. ${wc} نقاط محتاجة إصلاح. ابدأ من الأولويات.`
 }
 
-function generateInsights(
-  metrics: BusinessMetrics,
-  comparison: ComparisonData | null,
-): Insight[] {
+function generateInsights(metrics: BusinessMetrics, comparison: ComparisonData | null): Insight[] {
   const insights: Insight[] = []
 
   if (metrics.reviewsTotal === 0) {

@@ -16,7 +16,10 @@ export type AccountStats = {
 export type FavoriteItem = {
   id: string
   created_at: string
-  business: Pick<Business, 'id' | 'slug' | 'name' | 'area' | 'cover_image_url' | 'business_type' | 'is_open'>
+  business: Pick<
+    Business,
+    'id' | 'slug' | 'name' | 'area' | 'cover_image_url' | 'business_type' | 'is_open'
+  >
 }
 
 export type FollowItem = FavoriteItem
@@ -60,9 +63,22 @@ export async function getAccountStats(userId: string): Promise<AccountStats> {
   ] = await Promise.all([
     supabase.from('favorites').select('*', { count: 'exact', head: true }).eq('user_id', userId),
     supabase.from('follows').select('*', { count: 'exact', head: true }).eq('user_id', userId),
-    supabase.from('order_requests').select('*', { count: 'exact', head: true }).eq('customer_profile_id', userId),
-    supabase.from('points_log').select('balance_after').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
-    supabase.from('notifications').select('*', { count: 'exact', head: true }).eq('user_id', userId).is('read_at', null),
+    supabase
+      .from('order_requests')
+      .select('*', { count: 'exact', head: true })
+      .eq('customer_profile_id', userId),
+    supabase
+      .from('points_log')
+      .select('balance_after')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('notifications')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .is('read_at', null),
   ])
 
   return {
@@ -79,10 +95,12 @@ export async function getFavorites(userId: string): Promise<FavoriteItem[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('favorites')
-    .select(`
+    .select(
+      `
       created_at,
       business:businesses(id, slug, name, area, cover_image_url, business_type, is_open)
-    `)
+    `,
+    )
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
 
@@ -101,10 +119,12 @@ export async function getFollowing(userId: string): Promise<FollowItem[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('follows')
-    .select(`
+    .select(
+      `
       created_at,
       business:businesses(id, slug, name, area, cover_image_url, business_type, is_open)
-    `)
+    `,
+    )
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
 
@@ -123,10 +143,12 @@ export async function getOrders(userId: string): Promise<OrderItem[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('order_requests')
-    .select(`
+    .select(
+      `
       id, order_code, status, message, created_at,
       business:businesses(slug, name, area)
-    `)
+    `,
+    )
     .eq('customer_profile_id', userId)
     .order('created_at', { ascending: false })
 
@@ -181,7 +203,9 @@ export async function getFullProfile(userId: string): Promise<FullProfile | null
   const supabase = await createClient()
   const { data } = await supabase
     .from('profiles')
-    .select('id, display_name, phone, gender, bio, avatar_url, trust_score, trust_tier, verified_at, phone_verified_at, streak_count, referral_code, created_at')
+    .select(
+      'id, display_name, phone, gender, bio, avatar_url, trust_score, trust_tier, verified_at, phone_verified_at, streak_count, referral_code, created_at',
+    )
     .eq('id', userId)
     .maybeSingle()
 

@@ -37,8 +37,14 @@ export async function getAdminStats(): Promise<AdminStats> {
     { count: totalReviews },
   ] = await Promise.all([
     supabase.from('businesses').select('*', { count: 'exact', head: true }),
-    supabase.from('businesses').select('*', { count: 'exact', head: true }).eq('is_published', false),
-    supabase.from('businesses').select('*', { count: 'exact', head: true }).eq('is_published', true),
+    supabase
+      .from('businesses')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_published', false),
+    supabase
+      .from('businesses')
+      .select('*', { count: 'exact', head: true })
+      .eq('is_published', true),
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
     supabase.from('order_requests').select('*', { count: 'exact', head: true }),
     supabase.from('business_reviews').select('*', { count: 'exact', head: true }),
@@ -58,10 +64,12 @@ export async function getPendingBusinesses(limit = 50): Promise<PendingBusiness[
   const supabase = await createClient()
   const { data } = await supabase
     .from('businesses')
-    .select(`
+    .select(
+      `
       id, name, slug, business_type, area, cover_image_url, description, created_at,
       owner:profiles(display_name, phone)
-    `)
+    `,
+    )
     .eq('is_published', false)
     .order('created_at', { ascending: false })
     .limit(limit)
@@ -90,10 +98,19 @@ export async function getAdminRecent(): Promise<AdminRecent> {
     { count: newOrders },
     { count: newReviews },
   ] = await Promise.all([
-    supabase.from('businesses').select('*', { count: 'exact', head: true }).gte('created_at', since),
+    supabase
+      .from('businesses')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', since),
     supabase.from('profiles').select('*', { count: 'exact', head: true }).gte('created_at', since),
-    supabase.from('order_requests').select('*', { count: 'exact', head: true }).gte('created_at', since),
-    supabase.from('business_reviews').select('*', { count: 'exact', head: true }).gte('created_at', since),
+    supabase
+      .from('order_requests')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', since),
+    supabase
+      .from('business_reviews')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', since),
   ])
 
   return {

@@ -17,13 +17,7 @@ type Props = {
   isOpen: boolean
 }
 
-export default function FixedCta({
-  businessName,
-  whatsapp,
-  phone,
-  isLoggedIn,
-  isOpen,
-}: Props) {
+export default function FixedCta({ businessName, whatsapp, phone, isLoggedIn, isOpen }: Props) {
   const lock = useSmartLock()
 
   // مفيش أي وسيلة تواصل
@@ -43,11 +37,7 @@ export default function FixedCta({
     }
   }
 
-  const label = whatsapp
-    ? isOpen
-      ? 'اطلب على واتساب'
-      : 'واتساب — مغلق حالياً'
-    : 'اتصل بالنشاط'
+  const label = whatsapp ? (isOpen ? 'اطلب على واتساب' : 'واتساب — مغلق حالياً') : 'اتصل بالنشاط'
 
   return (
     <>
@@ -58,7 +48,11 @@ export default function FixedCta({
           className={`${styles.btn} ${whatsapp ? styles.whatsapp : styles.phone}`}
         >
           {isLoggedIn ? (
-            whatsapp ? <WhatsAppIcon size={20} /> : <PhoneIcon size={20} />
+            whatsapp ? (
+              <WhatsAppIcon size={20} />
+            ) : (
+              <PhoneIcon size={20} />
+            )
           ) : (
             <LockIcon size={18} />
           )}
@@ -66,12 +60,7 @@ export default function FixedCta({
         </button>
       </div>
 
-      <SmartLockModal
-        open={lock.open}
-        onClose={lock.close}
-        action={lock.action}
-        hint={lock.hint}
-      />
+      <SmartLockModal open={lock.open} onClose={lock.close} action={lock.action} hint={lock.hint} />
     </>
   )
 }

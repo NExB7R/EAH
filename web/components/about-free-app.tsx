@@ -30,8 +30,8 @@ export default function AboutFreeApp() {
         </h2>
 
         <p className={styles.lead}>
-          تخيّل: اسمك على شاشة عميلك. يشوف منيو، يتواصل معاك، ويطلب في
-          ثانية. كل حاجة عندك — بدون رغي، بدون وسطاء.
+          تخيّل: اسمك على شاشة عميلك. يشوف منيو، يتواصل معاك، ويطلب في ثانية. كل حاجة عندك — بدون
+          رغي، بدون وسطاء.
         </p>
 
         <div className={styles.grid}>
@@ -40,9 +40,7 @@ export default function AboutFreeApp() {
               <StoreIcon size={24} />
             </span>
             <h3 className={styles.cardTitle}>صفحتك باسمك</h3>
-            <p className={styles.cardText}>
-              صورة، وصف، منيو، فروع، أوقات — كلها على تطبيقك الخاص.
-            </p>
+            <p className={styles.cardText}>صورة، وصف، منيو، فروع، أوقات — كلها على تطبيقك الخاص.</p>
           </div>
 
           <div className={styles.card}>
@@ -60,9 +58,7 @@ export default function AboutFreeApp() {
               <InstallIcon size={24} />
             </span>
             <h3 className={styles.cardTitle}>ثبّته على موبايلك</h3>
-            <p className={styles.cardText}>
-              تطبيق ويب — يشتغل بدون تحميل من App Store.
-            </p>
+            <p className={styles.cardText}>تطبيق ويب — يشتغل بدون تحميل من App Store.</p>
           </div>
         </div>
 

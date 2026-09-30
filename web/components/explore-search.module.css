@@ -77,7 +77,9 @@
   font-weight: 600;
   text-align: start;
   cursor: pointer;
-  transition: background 180ms var(--ease), color 180ms var(--ease);
+  transition:
+    background 180ms var(--ease),
+    color 180ms var(--ease);
 }
 
 .historyBtn:hover {
@@ -107,7 +109,10 @@
   color: var(--text-muted);
   cursor: pointer;
   opacity: 0;
-  transition: opacity 180ms var(--ease), color 180ms var(--ease), background 180ms var(--ease);
+  transition:
+    opacity 180ms var(--ease),
+    color 180ms var(--ease),
+    background 180ms var(--ease);
 }
 
 .historyItem:hover .historyRemove {

@@ -25,10 +25,10 @@ export const IMPACT_WEIGHTS = {
 
 // ─── أهداف القياس (normalization targets) ───
 export const IMPACT_TARGETS = {
-  reach: 10_000,      // 10K مشاهدة = 100
-  influence: 500,     // 500 تفاعل مؤثر = 100
-  trust: 100,         // 100 مستخدم فريد = 100
-  consistency: 100,   // 100 يوم streak = 100
+  reach: 10_000, // 10K مشاهدة = 100
+  influence: 500, // 500 تفاعل مؤثر = 100
+  trust: 100, // 100 مستخدم فريد = 100
+  consistency: 100, // 100 يوم streak = 100
 } as const
 
 // ─── المستويات ───

@@ -30,7 +30,13 @@ const ITEMS = [
   { key: 'following', href: '/account/following', label: 'المتابعات', Icon: StoreIcon },
   { key: 'orders', href: '/account/orders', label: 'الطلبات', Icon: FileTextIcon },
   { key: 'points', href: '/account/points', label: 'النقاط', Icon: GiftIcon },
-  { key: 'notifications', href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon, badge: 'notifs' },
+  {
+    key: 'notifications',
+    href: '/account/notifications',
+    label: 'الإشعارات',
+    Icon: BellIcon,
+    badge: 'notifs',
+  },
   { key: 'security', href: '/account/security', label: 'الأمان', Icon: LockIcon },
   { key: 'verify', href: '/account/verify', label: 'التوثيق', Icon: ShieldCheckIcon },
 ]
@@ -42,10 +48,7 @@ export default function AccountSidebar({ unreadNotifs = 0 }: Props) {
     <aside className={styles.sidebar}>
       <nav className={styles.nav} aria-label="تنقل الحساب">
         {ITEMS.map(({ key, href, label, Icon, badge }) => {
-          const active =
-            href === '/account'
-              ? pathname === '/account'
-              : pathname.startsWith(href)
+          const active = href === '/account' ? pathname === '/account' : pathname.startsWith(href)
 
           return (
             <Link
@@ -59,9 +62,7 @@ export default function AccountSidebar({ unreadNotifs = 0 }: Props) {
               </span>
               <span className={styles.label}>{label}</span>
               {badge === 'notifs' && unreadNotifs > 0 && (
-                <span className={styles.badge}>
-                  {unreadNotifs > 9 ? '9+' : unreadNotifs}
-                </span>
+                <span className={styles.badge}>{unreadNotifs > 9 ? '9+' : unreadNotifs}</span>
               )}
             </Link>
           )

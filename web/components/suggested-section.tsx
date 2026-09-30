@@ -28,9 +28,7 @@ export default function SuggestedSection() {
             <SparkleStarIcon size={40} />
           </span>
 
-          <p className={styles.text}>
-            لسه محتاجين نعرفك أكتر — تصفح أنشطة وابدأ رحلتك
-          </p>
+          <p className={styles.text}>لسه محتاجين نعرفك أكتر — تصفح أنشطة وابدأ رحلتك</p>
 
           <Link href="/explore" className={styles.cta}>
             <span>اكتشف أنشطة</span>
