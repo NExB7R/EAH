@@ -1,6 +1,6 @@
 # EAH — Lefthook (Complete Quality Gate)
 # ═══════════════════════════════════════════════════════════
-# بوابة واحدة — 6 طبقات حماية
+# بوابة واحدة — 7 طبقات حماية
 # ═══════════════════════════════════════════════════════════
 
 pre-commit:
@@ -24,6 +24,11 @@ pre-commit:
     secrets:
       run: gitleaks protect --staged --redact --no-banner
 
+    tests:
+      root: "web/"
+      glob: "**/*.{ts,tsx}"
+      run: npx vitest run --reporter=dot
+
 pre-push:
   parallel: false
   commands:
@@ -42,3 +47,7 @@ pre-push:
     npm-audit:
       root: "web/"
       run: npm audit --audit-level=high
+
+    tests-full:
+      root: "web/"
+      run: npx vitest run --reporter=dot
