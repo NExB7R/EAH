@@ -12,11 +12,14 @@ const isDev = process.env.NODE_ENV === 'development'
 // dev: نضيف unsafe-eval + unsafe-inline (لـ HMR)
 const csp = [
   "default-src 'self'",
-  isDev ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'" : "script-src 'self' 'unsafe-inline'",
+  isDev
+    ? "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com"
+    : "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com",
   "style-src 'self' 'unsafe-inline'",
   `img-src 'self' data: blob: https://${CLOUDINARY_HOST} https://${SUPABASE_HOST} https://images.unsplash.com https://scontent-iad3-2.xx.fbcdn.net`,
-  `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://api.cloudinary.com`,
+  `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://api.cloudinary.com https://challenges.cloudflare.com`,
   "font-src 'self' data:",
+  "frame-src 'self' https://challenges.cloudflare.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

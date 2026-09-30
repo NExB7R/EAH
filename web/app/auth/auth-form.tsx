@@ -17,6 +17,7 @@ import {
   NavigationIcon,
   CheckCircleIcon,
 } from '@/components/icons'
+import { Turnstile } from '@marsidev/react-turnstile'
 import { signupAction, loginAction, type AuthResult } from './actions'
 import styles from './auth.module.css'
 
@@ -75,6 +76,8 @@ export default function AuthForm() {
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null)
   const [gpsLoading, setGpsLoading] = useState(false)
   const [gpsError, setGpsError] = useState<string | null>(null)
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileKey, setTurnstileKey] = useState(0)
 
   const [state, dispatch, isPending] = useActionState(formAction, null)
 
@@ -82,6 +85,14 @@ export default function AuthForm() {
     if (state && state.ok && state.redirect) {
       router.push(state.redirect)
       router.refresh()
+      return
+    }
+    // reset Turnstile بعد أي فشل (الـ token بيستخدم مرة واحدة بس)
+    // ده sync مشروع بين نتيجة الـ server action والـ external widget
+    if (state && !state.ok) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync with external Turnstile widget after action failure
+      setTurnstileToken(null)
+      setTurnstileKey((k) => k + 1)
     }
   }, [state, router])
 
@@ -93,6 +104,8 @@ export default function AuthForm() {
     setGender(null)
     setShowPassword(false)
     setShowConfirm(false)
+    setTurnstileToken(null)
+    setTurnstileKey((k) => k + 1)
   }
 
   const hooks = hooksMode === 'customer' ? CUSTOMER_HOOKS : MERCHANT_HOOKS
@@ -381,7 +394,27 @@ export default function AuthForm() {
             </div>
           )}
 
-          <button type="submit" className={styles.submit} disabled={isPending}>
+          {tab === 'signup' && (
+            <div className={styles.turnstileWrap}>
+              <Turnstile
+                key={turnstileKey}
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ''}
+                onSuccess={(token) => setTurnstileToken(token)}
+                onError={() => setTurnstileToken(null)}
+                onExpire={() => setTurnstileToken(null)}
+                options={{ theme: 'dark', size: 'flexible' }}
+              />
+              {!turnstileToken && !isPending && (
+                <p className={styles.turnstileHint}>أكمل التحقق الأمني من فضلك</p>
+              )}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            className={styles.submit}
+            disabled={isPending || (tab === 'signup' && !turnstileToken)}
+          >
             <span>{isPending ? '...' : tab === 'login' ? 'دخول' : 'سجّل'}</span>
           </button>
         </form>

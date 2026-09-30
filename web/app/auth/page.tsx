@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+import { getUserSession } from '@/lib/data/user'
 import AuthForm from './auth-form'
 
 export const metadata: Metadata = {
@@ -6,6 +8,9 @@ export const metadata: Metadata = {
   description: 'سجّل دخولك أو اعمل حساب جديد',
 }
 
-export default function AuthPage() {
+export default async function AuthPage() {
+  const session = await getUserSession()
+  if (session) redirect('/')
+
   return <AuthForm />
 }

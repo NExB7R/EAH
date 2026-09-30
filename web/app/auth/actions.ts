@@ -27,6 +27,31 @@ function str(formData: FormData, key: string): string {
 }
 
 // ═══════════════════════════════════════════════════════════
+// Helper: التحقق من Cloudflare Turnstile
+// ═══════════════════════════════════════════════════════════
+async function verifyTurnstile(token: string): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET_KEY
+  if (!secret) {
+    // في dev محلي — لو مفيش secret، نقبل (عشان التطوير)
+    // في production — Secret مفعّل دايماً
+    return process.env.NODE_ENV !== 'production'
+  }
+
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret, response: token }),
+      cache: 'no-store',
+    })
+    const data = (await res.json()) as { success: boolean }
+    return data.success === true
+  } catch {
+    return false
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
 // SIGNUP
 // ═══════════════════════════════════════════════════════════
 export async function signupAction(formData: FormData): Promise<AuthResult> {
@@ -46,6 +71,16 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
       error: first?.message ?? 'البيانات مش صح',
       field: first?.path[0]?.toString(),
     }
+  }
+
+  // ─── التحقق من Turnstile ───
+  const turnstileToken = str(formData, 'cf-turnstile-response')
+  if (!turnstileToken) {
+    return { ok: false, error: 'أكمل التحقق الأمني من فضلك' }
+  }
+  const isValidCaptcha = await verifyTurnstile(turnstileToken)
+  if (!isValidCaptcha) {
+    return { ok: false, error: 'التحقق الأمني فشل — جرب تاني' }
   }
 
   const {
