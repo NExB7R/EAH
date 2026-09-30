@@ -1,16 +1,44 @@
-# EAH — Lefthook (Git Hooks)
+# EAH — Lefthook (Complete Quality Gate)
 # ═══════════════════════════════════════════════════════════
-# يشتغل آلياً عند git commit
+# بوابة واحدة — 6 طبقات حماية
 # ═══════════════════════════════════════════════════════════
 
 pre-commit:
   parallel: true
   commands:
     typecheck:
-      glob: "web/**/*.{ts,tsx}"
-      run: cd web && npx tsc --noEmit
+      root: "web/"
+      glob: "**/*.{ts,tsx}"
+      run: npx tsc --noEmit
+
+    eslint:
+      root: "web/"
+      glob: "**/*.{ts,tsx}"
+      run: npx eslint {staged_files}
+
+    prettier:
+      root: "web/"
+      glob: "**/*.{ts,tsx,css,json}"
+      run: npx prettier --check {staged_files}
+
+    secrets:
+      run: gitleaks protect --staged --redact --no-banner
 
 pre-push:
+  parallel: false
   commands:
     typecheck-full:
-      run: cd web && npx tsc --noEmit
+      root: "web/"
+      run: npx tsc --noEmit
+
+    eslint-full:
+      root: "web/"
+      run: npx eslint .
+
+    prettier-full:
+      root: "web/"
+      run: npx prettier --check "**/*.{ts,tsx,css,json}"
+
+    npm-audit:
+      root: "web/"
+      run: npm audit --audit-level=high

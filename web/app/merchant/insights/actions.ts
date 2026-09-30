@@ -1,6 +1,5 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { getBusinessMetrics, getCategoryComparison } from '@/lib/data/insights'
@@ -69,11 +68,4 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
   revalidatePath(`/admin/businesses/${businessId}`)
 
   return { ok: true, insightId: result.insightId }
-}
-
-export async function generateAndRedirect(businessId: string): Promise<void> {
-  const result = await generateInsight(businessId, 30)
-  if (result.ok) {
-    redirect(`/merchant/insights/${result.insightId}`)
-  }
 }

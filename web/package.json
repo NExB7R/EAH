@@ -6,8 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "prepare": "lefthook install"
+    "lint": "eslint .",
+    "prepare": "lefthook install",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,css,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,css,json}\"",
+    "typecheck": "tsc --noEmit",
+    "knip": "knip",
+    "dup": "jscpd --threshold 5 --min-tokens 70 app components lib",
+    "secrets": "gitleaks protect --staged --redact --no-banner",
+    "audit:security": "npm audit --audit-level=moderate"
   },
   "dependencies": {
     "@fontsource-variable/cairo": "^5.3.0",
@@ -24,7 +32,6 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "dotenv": "^18.0.3",
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
     "jscpd": "^5.3.3",

@@ -215,76 +215,13 @@ export const getBusinessesByType = unstable_cache(
 // 4.5. Top Businesses (للـ fallback في Featured)
 // ═══════════════════════════════════════════════════════════
 
-export const getTopBusinesses = unstable_cache(
-  async (limit = 15): Promise<Business[]> => {
-    const supabase = createPublicClient()
-    const { data, error } = await supabase
-      .from('businesses')
-      .select(BUSINESS_COLUMNS)
-      .eq('is_published', true)
-      .order('trust_score', { ascending: false })
-      .limit(limit)
-
-    if (error) {
-      console.error('[data] getTopBusinesses error:', error.message)
-      return []
-    }
-    return (data ?? []) as Business[]
-  },
-  ['businesses-top'],
-  { revalidate: 300, tags: ['businesses'] },
-)
-
 // ═══════════════════════════════════════════════════════════
 // 5. الفرص (Opportunities)
 // ═══════════════════════════════════════════════════════════
 
-export const getOpportunities = unstable_cache(
-  async (limit = 10): Promise<Business[]> => {
-    const supabase = createPublicClient()
-    const now = new Date().toISOString()
-    const { data, error } = await supabase
-      .from('businesses')
-      .select(BUSINESS_COLUMNS)
-      .eq('is_published', true)
-      .eq('is_opportunity', true)
-      .or(`opportunity_until.is.null,opportunity_until.gt.${now}`)
-      .order('opportunity_until', { ascending: true, nullsFirst: false })
-      .order('trust_score', { ascending: false })
-      .limit(limit)
-
-    if (error) {
-      console.error('[data] getOpportunities error:', error.message)
-      return []
-    }
-    return (data ?? []) as Business[]
-  },
-  ['businesses-opportunities'],
-  { revalidate: 300, tags: ['businesses', 'opportunities'] },
-)
-
 // ═══════════════════════════════════════════════════════════
 // 6. نشاط واحد (slug)
 // ═══════════════════════════════════════════════════════════
-
-export const getBusinessBySlug = unstable_cache(
-  async (slug: string): Promise<Business | null> => {
-    const supabase = createPublicClient()
-    const { data, error } = await supabase
-      .from('businesses')
-      .select(BUSINESS_COLUMNS)
-      .eq('slug', slug)
-      .eq('is_published', true)
-      .maybeSingle()
-
-    if (error || !data) {
-      return null
-    }
-    return data as Business
-  },
-  ['business-by-slug'],
-  { revalidate: 300, tags: ['businesses'] },
-)
 
 // ═══════════════════════════════════════════════════════════
 // 7. الأنشطة الترند (Trending)

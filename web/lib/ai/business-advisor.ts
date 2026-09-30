@@ -351,7 +351,3 @@ function calculateTrends(metrics: BusinessMetrics): AnalysisResult['trends'] {
     ratingTrend: 'flat',
   }
 }
-
-export function calculateQuickScore(metrics: BusinessMetrics): number {
-  return analyzeBusiness(metrics, null).score
-}

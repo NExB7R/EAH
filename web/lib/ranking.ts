@@ -46,19 +46,6 @@ export function sortByTrust(businesses: Business[]): Business[] {
   return [...businesses].sort((a, b) => b.trust_score - a.trust_score)
 }
 
-export function sortByFeatured(businesses: Business[]): Business[] {
-  return [...businesses].sort((a, b) => {
-    // pinned أولاً
-    if (a.featured_pin !== b.featured_pin) return a.featured_pin ? -1 : 1
-    // ترتيب مخصص
-    if (a.featured_order !== b.featured_order) {
-      return a.featured_order - b.featured_order
-    }
-    // ثم trust_score
-    return b.trust_score - a.trust_score
-  })
-}
-
 // ═══════════════════════════════════════════════════════════
 // Roller — يعمل shuffle يومي مستقر
 // ═══════════════════════════════════════════════════════════
@@ -85,18 +72,4 @@ export function dailyShuffle<T extends { id: string }>(items: T[]): T[] {
   return [...items].sort((a, b) => {
     return (hash(a.id + seed) % 1000) - (hash(b.id + seed) % 1000)
   })
-}
-
-// ═══════════════════════════════════════════════════════════
-// Fisher-Yates Shuffle (client-side — عشوائي حقيقي)
-// ═══════════════════════════════════════════════════════════
-export function shuffleArray<T>(items: T[]): T[] {
-  const arr = [...items]
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    const tmp = arr[i]!
-    arr[i] = arr[j]!
-    arr[j] = tmp
-  }
-  return arr
 }
