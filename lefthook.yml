@@ -1,0 +1,16 @@
+# EAH — Lefthook (Git Hooks)
+# ═══════════════════════════════════════════════════════════
+# يشتغل آلياً عند git commit
+# ═══════════════════════════════════════════════════════════
+
+pre-commit:
+  parallel: true
+  commands:
+    typecheck:
+      glob: "web/**/*.{ts,tsx}"
+      run: cd web && npx tsc --noEmit
+
+pre-push:
+  commands:
+    typecheck-full:
+      run: cd web && npx tsc --noEmit
