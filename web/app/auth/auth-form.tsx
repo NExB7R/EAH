@@ -290,7 +290,6 @@ export default function AuthForm() {
                     <span className={styles.genderIconWrap}>
                       <MaleIcon size={20} />
                     </span>
-                    راجل
                   </button>
                   <button
                     type="button"
@@ -303,7 +302,6 @@ export default function AuthForm() {
                     <span className={styles.genderIconWrap}>
                       <FemaleIcon size={20} />
                     </span>
-                    ست
                   </button>
                 </div>
                 <input type="hidden" name="gender" value={gender ?? ''} />
