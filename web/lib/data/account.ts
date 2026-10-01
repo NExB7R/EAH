@@ -211,6 +211,8 @@ export type FullProfile = {
   hide_avatar: boolean
   hide_favorites: boolean
   hide_following: boolean
+  streak_days: number
+  streak_last_date: string | null
   created_at: string
 }
 

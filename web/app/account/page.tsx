@@ -10,6 +10,7 @@ import {
   StarIcon,
 } from '@/components/icons'
 import Avatar from '@/components/avatar'
+import ImpactCard from '@/components/impact-card'
 import { getUserSession } from '@/lib/data/user'
 import { getAccountStats, getFullProfile } from '@/lib/data/account'
 import styles from './page.module.css'
@@ -99,6 +100,14 @@ export default async function AccountPage() {
           </Link>
         </div>
       </section>
+
+      <ImpactCard
+        score={profile.impact_score}
+        level={profile.impact_level as 'visitor' | 'basic' | 'member' | 'regular'}
+        streakDays={profile.streak_days ?? 0}
+        wantedLevel={profile.wanted_level ?? 0}
+        isPremium={profile.is_premium}
+      />
 
       <section className={styles.stats}>
         {STATS.map(({ key, label, value, href, Icon, tone }) => (

@@ -780,3 +780,22 @@ export function ImageIcon({ size = 20, className }: IconProps) {
     </svg>
   )
 }
+
+export function FireIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M12 2c1 4 4 5 4 9a4 4 0 0 1-8 0c0-1 .5-2 1-3-2 1-5 4-5 8a8 8 0 0 0 16 0c0-5-3-9-8-14Z" />
+    </svg>
+  )
+}
