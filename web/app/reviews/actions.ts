@@ -78,6 +78,14 @@ export async function submitReview(
 
   if (error) return { ok: false, error: error.message }
 
+  // سجّل activity (comment) — trigger هيحدّث impact_score تلقائياً
+  await supabase.from('business_activities').insert({
+    business_id: businessId,
+    user_id: user.id,
+    activity_type: 'comment',
+    metadata: { review_id: null },
+  })
+
   revalidatePath(`/businesses/${slug}`)
   return { ok: true }
 }
