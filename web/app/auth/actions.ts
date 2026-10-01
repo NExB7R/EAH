@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { signupSchema, loginSchema, recoverSchema, toE164 } from '@/lib/validations/auth'
+import { authLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Auth Server Actions
@@ -55,6 +56,11 @@ async function verifyTurnstile(token: string): Promise<boolean> {
 // SIGNUP
 // ═══════════════════════════════════════════════════════════
 export async function signupAction(formData: FormData): Promise<AuthResult> {
+  // ─── Rate Limit ───
+  const ip = await getClientIp()
+  const rl = await checkRateLimit(authLimiter, `signup:${ip}`)
+  if (!rl.ok) return { ok: false, error: rl.error }
+
   const raw = {
     display_name: str(formData, 'display_name'),
     phone: str(formData, 'phone'),
@@ -155,6 +161,11 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
 // LOGIN
 // ═══════════════════════════════════════════════════════════
 export async function loginAction(formData: FormData): Promise<AuthResult> {
+  // ─── Rate Limit ───
+  const ip = await getClientIp()
+  const rl = await checkRateLimit(authLimiter, `login:${ip}`)
+  if (!rl.ok) return { ok: false, error: rl.error }
+
   const raw = {
     phone: str(formData, 'phone'),
     password: str(formData, 'password'),
@@ -214,6 +225,11 @@ export async function loginAction(formData: FormData): Promise<AuthResult> {
 // RECOVER (MVP: Admin manual reset)
 // ═══════════════════════════════════════════════════════════
 export async function recoverAction(formData: FormData): Promise<AuthResult> {
+  // ─── Rate Limit ───
+  const ip = await getClientIp()
+  const rl = await checkRateLimit(authLimiter, `recover:${ip}`)
+  if (!rl.ok) return { ok: false, error: rl.error }
+
   const raw = { phone: str(formData, 'phone') }
 
   const parsed = recoverSchema.safeParse(raw)
