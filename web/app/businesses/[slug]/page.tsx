@@ -5,6 +5,7 @@ import {
   getBusinessReviews,
   getSimilarBusinesses,
   getUserReview,
+  getUserActivity,
   computeReviewStats,
   TYPE_LABEL,
 } from '@/lib/data/business-detail'
@@ -58,6 +59,12 @@ export default async function BusinessPage({ params }: Props) {
 
   const reviewStats = computeReviewStats(reviews)
   const isLoggedIn = !!session
+  const [isFavorite, isFollowing] = session
+    ? await Promise.all([
+        getUserActivity(business.id, session.userId, 'favorite'),
+        getUserActivity(business.id, session.userId, 'follow'),
+      ])
+    : [false, false]
   const isOwner = session?.userId === business.owner_profile_id
   const userReview = session && isLoggedIn ? await getUserReview(business.id, session.userId) : null
   const hasReviewed = !!userReview
@@ -84,12 +91,16 @@ export default async function BusinessPage({ params }: Props) {
         {/* ─── Quick Actions ─── */}
         <div className={styles.actionsWrap}>
           <BusinessActions
+            businessId={business.id}
+            businessSlug={business.slug}
             businessName={business.name}
             isLoggedIn={!!session}
             whatsapp={whatsapp}
             phone={phone}
             isOpen={isOpen}
             acceptsWhatsapp={business.accepts_whatsapp_orders}
+            isFavorite={isFavorite}
+            isFollowing={isFollowing}
           />
         </div>
 

@@ -11,6 +11,7 @@ import {
   CheckCircleIcon,
 } from './icons'
 import SmartLockModal, { useSmartLock } from './smart-lock-modal'
+import { toggleFollow, toggleFavorite } from '@/app/activities/actions'
 import styles from './business-actions.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -18,6 +19,8 @@ import styles from './business-actions.module.css'
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
+  businessId: string
+  businessSlug: string
   businessName: string
   isLoggedIn: boolean
   whatsapp: string | null
@@ -29,6 +32,8 @@ type Props = {
 }
 
 export default function BusinessActions({
+  businessId,
+  businessSlug,
   businessName,
   isLoggedIn,
   whatsapp,
@@ -42,6 +47,7 @@ export default function BusinessActions({
   const [fav, setFav] = useState(isFavorite)
   const [follow, setFollow] = useState(isFollowing)
   const [copied, setCopied] = useState(false)
+  const [pending, setPending] = useState(false)
 
   const requireAuth = (action: string, hint?: string) => {
     if (isLoggedIn) return false
@@ -65,15 +71,23 @@ export default function BusinessActions({
   }
 
   // ─── Favorite ───
-  const handleFavorite = () => {
+  const handleFavorite = async () => {
     if (requireAuth('تحفظ النشاط في مفضلاتك', 'هتلاقيه في /account/favorites دايمًا')) return
-    setFav((v) => !v)
+    if (pending) return
+    setPending(true)
+    const res = await toggleFavorite(businessId, businessSlug)
+    setPending(false)
+    if (res.ok) setFav(res.active)
   }
 
   // ─── Follow ───
-  const handleFollow = () => {
+  const handleFollow = async () => {
     if (requireAuth('تتابع النشاط', 'أول ما ينزل عرض جديد هيوصلك إشعار فوري')) return
-    setFollow((v) => !v)
+    if (pending) return
+    setPending(true)
+    const res = await toggleFollow(businessId, businessSlug)
+    setPending(false)
+    if (res.ok) setFollow(res.active)
   }
 
   // ─── Comment ───
