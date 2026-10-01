@@ -843,3 +843,63 @@ Doc-to-Code = 1:1. لو الكود اتغير وما اتوثّقش → الشغ
 - المالك لازم **يفهم** مش بس **ينفّذ**
 - عشان لو حد سأله → يعرف يجاوب
 - عشان **يتعلم** — يبقى محترف مع الوقت
+
+---
+
+## 30. فحص AI Code (إجباري — 2026-10-01)
+
+**قبل أي commit، لازم تتأكد من الحمايات دي.**
+
+### 1. RLS
+- [ ] كل جدول عليه RLS
+- [ ] كل policy فيها `auth.uid()`
+- [ ] مفيش `USING (true)`
+- [ ] كل INSERT policy فيها `WITH CHECK`
+
+### 2. Authorization
+- [ ] كل query بتتحقق من الملكية (`.eq('user_id', user.id)`)
+- [ ] كل server action بتتحقق من `auth.getUser()`
+- [ ] مفيش IDOR
+
+### 3. Secrets
+- [ ] مفيش secrets في الكود
+- [ ] كل secret في `.env.local`
+- [ ] Service Role server-only
+
+### 4. Input Validation
+- [ ] كل input → Zod
+- [ ] Server-side validation
+- [ ] مفيش trust على client
+
+### 5. SSRF
+- [ ] مفيش fetch لـ URL من المستخدم
+- [ ] allowlist للـ domains
+- [ ] مفيش `dangerouslySetInnerHTML`
+
+### 6. CSRF
+- [ ] `serverActions.allowedOrigins` في `next.config.ts`
+- [ ] API routes بتتحقق من Origin
+
+### 7. Dependencies
+- [ ] `npm audit` نظيف
+- [ ] مفيش حزم وهمية (تحقق من npm registry)
+- [ ] مفيش حزم مكررة
+
+### 8. Error Handling
+- [ ] مفيش تسريب معلومات في errors
+- [ ] `console.error` مش بيرجع للـ client
+- [ ] Errors عامة للمستخدم
+
+### 9. الأدوات
+- [ ] Next.js محدّث (إصلاحات أمنية)
+- [ ] الحزم محدّثة
+
+### 10. الفحص الدوري
+- [ ] `npx knip` (كود ميت)
+- [ ] `npx jscpd` (تكرار)
+- [ ] `npm audit`
+
+### المراجع
+- `AI_LESSONS.md` — الأخطاء الشائعة بالأرقام
+- `SECURITY_PLAN.md` — خطة الحماية
+- `QUALITY.md` — نظام الجودة

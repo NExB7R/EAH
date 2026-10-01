@@ -28,6 +28,11 @@ const csp = [
 ].join('; ')
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['eah-sq.vercel.app', 'localhost:3000'],
+    },
+  },
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
