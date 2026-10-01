@@ -2,7 +2,7 @@
 
 > سجل الجلسات. كل جلسة تبدأ من حيث انتهت اللي قبلها.
 
-آخر تحديث: 2026-09-30
+آخر تحديث: 2026-10-01
 
 ---
 
@@ -143,3 +143,87 @@
 - Trust Score (trust.ts جاهز، محتاج DB)
 - البحث بالرقم
 - AI Agent
+
+## 2026-10-01 — Session 6: Quality Gate + Security Hardening
+
+### اللي اتحقق (17 commit)
+
+**الجودة:**
+- ESLint: 55 → 0
+- Prettier: 204 ملف
+- 58 اختبار (Vitest)
+- GitHub Actions (quality + RLS)
+- knip + jscpd + gitleaks
+- lefthook (3-stage)
+- Dependabot
+
+**الأمان:**
+- Column-level REVOKE (5 أعمدة)
+- 4 RPC functions (get_my_profile, admin_get_profiles, admin_get_business_owners, is_phone_registered)
+- 4 DB Triggers (prevent_self_review, prevent_self_order, detect_review_velocity, log_review_changes)
+- Cloudflare Turnstile على التسجيل
+- Supabase Auth Rate Limits
+- Upstash Rate Limiting على Auth
+- CSRF allowedOrigins
+- Anonymous sign-ins مقفولة
+- Next.js 16.3.8
+- Security Headers (COOP, CORP, X-XSS-Protection)
+
+**Features:**
+- Impact Card في `/account` (score + level + streak + wanted)
+- Follow/Favorite live (تحديث DB + trigger يحدّث impact)
+- Review → activity (يحدّث impact تلقائياً)
+- البحث بالرقم (Truecaller style) — `/find`
+
+**DB Migrations (4):**
+1. `2026-09-30-trust-foundation.sql` — profiles + activities + reviews + moderation
+2. `2026-09-30-security-hardening.sql` — 4 triggers
+3. `2026-10-01-impact-computation.sql` — compute_user_impact + trigger
+4. `2026-10-01-find-by-phone.sql` — RPC find_by_phone
+
+**حل مشاكل:**
+- SSH over port 443 (لمشكلة GitHub push)
+- Vercel Analytics بدل Sentry (5KB vs 250KB)
+
+### الملفات الجديدة
+- lib/trust.ts + trust.test.ts
+- lib/ranking.test.ts
+- lib/validations/review-auth.test.ts
+- lib/rate-limit.ts
+- lib/hooks/use-mounted.ts
+- components/impact-card.tsx + CSS
+- components/find-by-phone.tsx + CSS
+- components/review-card.tsx + CSS
+- components/review-form.tsx + CSS
+- components/reviews-list.tsx + CSS
+- app/activities/actions.ts
+- app/reviews/actions.ts
+- app/find/page.tsx + CSS
+- app/api/find-by-phone/route.ts
+- lefthook.yml
+- web/knip.json
+- web/.jscpd.json
+- web/.prettierrc.json
+- web/vitest.config.mts
+- web/supabase/tests/rls.test.sql
+- .github/dependabot.yml
+- .github/workflows/quality.yml
+- docs/AI_LESSONS.md
+- docs/QUALITY.md
+- docs/SECURITY_PLAN.md
+- docs/PLAN_TRUST_SOCIAL.md
+- docs/PLAN_AI_AGENT.md
+- docs/migrations/ (4 ملفات)
+
+### اللي معلق
+- AI Agent (Recourse)
+- Web Push (VAPID + SW)
+- إشعارات in-app
+- اختبار المنصة
+- صفحات متبقية
+
+### ملاحظات مهمة للشات الجديد
+- **SSH over 443** مفعّل (لأن port 22 محجوب)
+- **Supabase على Free** — بيقف عند الخمول
+- **SIGILL** في جهاز المستخدم (مفيش build محلي)
+- **مفيش استفسارات عن الوقت** — المستخدم بيشتغل في أوقات متقطعة

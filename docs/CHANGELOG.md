@@ -4,6 +4,34 @@
 
 ---
 
+## [v2.4.0] - 2026-10-01
+
+### Added
+- **Quality Gate:** lefthook (3-stage) + knip + jscpd + gitleaks + Vitest (58 tests)
+- **CI:** GitHub Actions + Dependabot
+- **Security:** Cloudflare Turnstile + Upstash Rate Limiting + Supabase Auth Rate Limits
+- **Security:** Column-level REVOKE + 4 RPC functions
+- **Security:** 4 DB Triggers (prevent_self_review/order, velocity detection, audit log)
+- **Security:** CSRF allowedOrigins + Security Headers (COOP, CORP, X-XSS-Protection)
+- **Features:** Impact Card في `/account`
+- **Features:** Follow/Favorite live + Review → activity
+- **Features:** البحث بالرقم (Truecaller style) — `/find`
+- **Docs:** AI_LESSONS.md + QUALITY.md + SECURITY_PLAN.md + PLAN_TRUST_SOCIAL.md + PLAN_AI_AGENT.md
+- **DB:** 4 migrations جديدة
+
+### Changed
+- Next.js: 16.3.x → 16.3.8
+- user.ts: UserSession بقت تشمل impact + privacy fields
+- account.ts: getFullProfile بقى يستخدم RPC
+
+### Removed
+- lib/featured-rotation.ts
+- lib/utils/distance.ts
+- lib/supabase/browser.ts
+- 6 dead functions
+
+---
+
 ## [v2.3.0] - 2026-09-30
 
 ### Added
