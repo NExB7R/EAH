@@ -24,6 +24,9 @@ const csp = [
   "base-uri 'self'",
   "form-action 'self'",
   "object-src 'none'",
+  "manifest-src 'self'",
+  "worker-src 'self' blob:",
+  "media-src 'self'",
   'upgrade-insecure-requests',
 ].join('; ')
 
@@ -73,7 +76,15 @@ const nextConfig: NextConfig = {
           { key: 'Content-Security-Policy', value: csp },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
+          // OWASP: تعطيل الفلتر القديم (بيسبب ثغرات في المتصفحات القديمة)
+          { key: 'X-XSS-Protection', value: '0' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          // يعزل الـ browsing context (يمنع tabnabbing)
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin-allow-popups' },
+          // يمنع مواقع تانية تقرا مواردنا
+          { key: 'Cross-Origin-Resource-Policy', value: 'same-site' },
+          // يحسن الـ DNS resolution للأداء
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(self), geolocation=(self), payment=()',
