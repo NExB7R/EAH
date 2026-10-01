@@ -1,0 +1,186 @@
+'use client'
+
+import { useState } from 'react'
+import Link from 'next/link'
+import { SearchIcon, PhoneIcon, ShieldCheckIcon, StarIcon, AlertIcon } from './icons'
+import styles from './find-by-phone.module.css'
+
+// ═══════════════════════════════════════════════════════════
+// EAH — Find by Phone (Truecaller Style)
+// ═══════════════════════════════════════════════════════════
+
+type UserResult = {
+  user_id: string
+  display_name: string
+  alias: string | null
+  avatar_url: string | null
+  impact_score: number
+  impact_level: string
+  trust_score: number
+  trust_tier: string
+  wanted_level: number
+  is_premium: boolean
+  is_business: boolean
+  business_slug: string | null
+  business_name: string | null
+  member_since: string
+}
+
+type State =
+  | { type: 'idle' }
+  | { type: 'loading' }
+  | { type: 'found'; user: UserResult }
+  | { type: 'not-found'; message: string }
+  | { type: 'error'; message: string }
+
+const LEVEL_LABEL: Record<string, string> = {
+  visitor: 'زائر',
+  basic: 'أساسي',
+  member: 'عضو',
+  regular: 'منتظم',
+}
+
+export default function FindByPhone() {
+  const [phone, setPhone] = useState('')
+  const [state, setState] = useState<State>({ type: 'idle' })
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setState({ type: 'loading' })
+
+    try {
+      const res = await fetch('/api/find-by-phone', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phone.trim() }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        setState({ type: 'error', message: data.error ?? 'حصل خطأ' })
+        return
+      }
+
+      if (!data.found) {
+        setState({ type: 'not-found', message: data.message ?? 'الرقم مش مسجل' })
+        return
+      }
+
+      setState({ type: 'found', user: data.user })
+    } catch {
+      setState({ type: 'error', message: 'مش قادرين نبحث دلوقتي' })
+    }
+  }
+
+  return (
+    <div className={styles.wrap}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.inputWrap}>
+          <span className={styles.inputIcon}>
+            <PhoneIcon size={18} />
+          </span>
+          <input
+            type="tel"
+            inputMode="numeric"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+            placeholder="01XXXXXXXXX"
+            maxLength={11}
+            className={styles.input}
+            dir="ltr"
+            autoComplete="tel"
+          />
+          <button
+            type="submit"
+            className={styles.submit}
+            disabled={state.type === 'loading' || phone.length !== 11}
+          >
+            {state.type === 'loading' ? (
+              <span className={styles.spinner} />
+            ) : (
+              <SearchIcon size={18} />
+            )}
+          </button>
+        </div>
+        <p className={styles.hint}>الرقم الكامل (11 رقم) — يبدأ بـ 010/011/012/015</p>
+      </form>
+
+      {state.type === 'error' && (
+        <div className={`${styles.result} ${styles.error}`}>
+          <AlertIcon size={20} />
+          <p>{state.message}</p>
+        </div>
+      )}
+
+      {state.type === 'not-found' && (
+        <div className={styles.result}>
+          <AlertIcon size={20} />
+          <p>{state.message}</p>
+        </div>
+      )}
+
+      {state.type === 'found' && (
+        <div className={styles.userCard}>
+          <div className={styles.userHeader}>
+            {state.user.avatar_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={state.user.avatar_url}
+                alt={state.user.display_name}
+                className={styles.avatar}
+              />
+            ) : (
+              <div className={styles.avatarFallback}>{state.user.display_name.charAt(0)}</div>
+            )}
+
+            <div className={styles.userInfo}>
+              <h3 className={styles.userName}>
+                {state.user.alias ?? state.user.display_name}
+                {state.user.is_premium && <span className={styles.premium}>⭐</span>}
+              </h3>
+              <div className={styles.userMeta}>
+                <span className={styles.levelBadge}>
+                  {LEVEL_LABEL[state.user.impact_level] ?? state.user.impact_level}
+                </span>
+                {state.user.trust_tier === 'trusted' && (
+                  <span className={styles.verified}>
+                    <ShieldCheckIcon size={12} />
+                    موثوق
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.stats}>
+            <div className={styles.stat}>
+              <span className={styles.statValue}>{state.user.impact_score}</span>
+              <span className={styles.statLabel}>الأثر</span>
+            </div>
+            <div className={styles.stat}>
+              <span className={styles.statValue}>
+                <StarIcon size={14} />
+                {state.user.trust_score}
+              </span>
+              <span className={styles.statLabel}>الثقة</span>
+            </div>
+            {state.user.wanted_level > 0 && (
+              <div className={`${styles.stat} ${styles.statDanger}`}>
+                <span className={styles.statValue}>⚠️ {state.user.wanted_level}</span>
+                <span className={styles.statLabel}>تبليغات</span>
+              </div>
+            )}
+          </div>
+
+          {state.user.is_business && state.user.business_slug && (
+            <Link href={`/businesses/${state.user.business_slug}`} className={styles.businessBtn}>
+              <span>شوف نشاطه: {state.user.business_name}</span>
+              <span>→</span>
+            </Link>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
