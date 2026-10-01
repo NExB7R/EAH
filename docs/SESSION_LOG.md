@@ -227,3 +227,22 @@
 - **Supabase على Free** — بيقف عند الخمول
 - **SIGILL** في جهاز المستخدم (مفيش build محلي)
 - **مفيش استفسارات عن الوقت** — المستخدم بيشتغل في أوقات متقطعة
+
+## 2026-10-02 — Session 7: v1.0.0 Reset
+
+### اللي اتحقق
+- Reset version: v2.4.0-alpha → v1.0.0
+- CHANGELOG: هيكل جديد (v1.0.0 TBD + Pre-release History)
+- docs/CHANGELOG.md → pointer لـ root
+- package.json: 0.1.0 → 1.0.0
+- eslint-config-next: 16.3.6 → 16.3.8 (match next)
+- React: 19.2.8 → 19.3.0
+- React-dom: 19.2.8 → 19.3.0
+- typecheck نظيف
+
+### الملفات المعدلة
+- CHANGELOG.md (root)
+- docs/CHANGELOG.md (pointer)
+- web/package.json
+- web/package-lock.json (تلقائي)
+- docs/SESSION_LOG.md
