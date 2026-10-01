@@ -47,3 +47,24 @@ jobs:
       - name: Knip (dead code)
         run: npx knip --include files,dependencies
         continue-on-error: true
+
+  rls-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Run RLS tests
+        run: |
+          supabase test db --db-url "${{ secrets.SUPABASE_DB_URL }}"
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        continue-on-error: true

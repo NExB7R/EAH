@@ -1,0 +1,144 @@
+-- ============================================================
+-- EAH — RLS Tests (pgTAP)
+-- Date: 2026-10-01
+-- Run on: GitHub Actions (CI)
+-- ============================================================
+
+begin;
+select plan(15);
+
+-- ============================================================
+-- 1. profiles — anon
+-- ============================================================
+
+-- 1.1 anon ميقدرش يقرا profiles
+set local role anon;
+select results_eq(
+  'select count(*)::int from public.profiles',
+  ARRAY[0],
+  'anon: لا يقرأ profiles'
+);
+reset role;
+
+-- 1.2 anon ميقدرش يقرا phone_e164
+set local role anon;
+select throws_ok(
+  'select phone_e164 from public.profiles limit 1',
+  '42501',
+  NULL,
+  'anon: لا يقرأ phone_e164'
+);
+reset role;
+
+-- ============================================================
+-- 2. business_activities — RLS
+-- ============================================================
+
+-- 2.1 anon يقدر يقرا activities
+set local role anon;
+select lives_ok(
+  'select count(*) from public.business_activities',
+  'anon: يقرأ business_activities'
+);
+reset role;
+
+-- 2.2 anon ميقدرش يدخل activity
+set local role anon;
+select throws_ok(
+  $$insert into public.business_activities (business_id, user_id, activity_type)
+    values (gen_random_uuid(), gen_random_uuid(), 'follow')$$,
+  '42501',
+  NULL,
+  'anon: ممنوع إدخال activity'
+);
+reset role;
+
+-- ============================================================
+-- 3. Triggers
+-- ============================================================
+
+-- 3.1 prevent_self_review trigger موجود
+select has_trigger(
+  'public.business_reviews',
+  'trigger_prevent_self_review',
+  'trigger_prevent_self_review موجود'
+);
+
+-- 3.2 prevent_self_order trigger موجود
+select has_trigger(
+  'public.order_requests',
+  'trigger_prevent_self_order',
+  'trigger_prevent_self_order موجود'
+);
+
+-- 3.3 detect_review_velocity trigger موجود
+select has_trigger(
+  'public.business_reviews',
+  'trigger_detect_review_velocity',
+  'trigger_detect_review_velocity موجود'
+);
+
+-- 3.4 log_review_changes trigger موجود
+select has_trigger(
+  'public.business_reviews',
+  'trigger_log_review_changes',
+  'trigger_log_review_changes موجود'
+);
+
+-- ============================================================
+-- 4. Functions
+-- ============================================================
+
+-- 4.1 is_admin موجودة
+select has_function(
+  'public',
+  'is_admin',
+  'is_admin موجودة'
+);
+
+-- 4.2 get_my_profile موجودة
+select has_function(
+  'public',
+  'get_my_profile',
+  'get_my_profile موجودة'
+);
+
+-- 4.3 is_phone_registered موجودة
+select has_function(
+  'public',
+  'is_phone_registered',
+  ARRAY['text'],
+  'is_phone_registered موجودة'
+);
+
+-- 4.4 admin_get_profiles موجودة
+select has_function(
+  'public',
+  'admin_get_profiles',
+  'admin_get_profiles موجودة'
+);
+
+-- ============================================================
+-- 5. RLS enabled على كل الجداول الحساسة
+-- ============================================================
+
+select is(
+  (select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'profiles'),
+  true,
+  'RLS مفعّل على profiles'
+);
+
+select is(
+  (select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'business_activities'),
+  true,
+  'RLS مفعّل على business_activities'
+);
+
+select is(
+  (select rowsecurity from pg_tables where schemaname = 'public' and tablename = 'moderation_queue'),
+  true,
+  'RLS مفعّل على moderation_queue'
+);
+
+select * from finish();
+rollback;
