@@ -34,6 +34,7 @@ export default function Logo({
           width={546}
           height={231}
           priority
+          fetchPriority="high"
           decoding="async"
         />
       )}
@@ -46,6 +47,7 @@ export default function Logo({
         width={489}
         height={264}
         priority
+        fetchPriority="high"
         decoding="async"
       />
 

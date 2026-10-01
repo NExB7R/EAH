@@ -1,0 +1,350 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Home Hero
+   ═══════════════════════════════════════════════════════════ */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 16px 60px;
+  padding-top: calc(100px + env(safe-area-inset-top));
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Ambient gradient */
+.ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(168, 85, 247, 0.18), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(232, 199, 154, 0.06), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% 100%, rgba(157, 78, 221, 0.1), transparent 60%);
+}
+
+/* Grid dots */
+.grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(168, 85, 247, 0.1) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 80%);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+}
+
+/* ─── Logo ─── */
+.logoWrap {
+  margin-bottom: 8px;
+  animation: fadeUp 600ms var(--ease-out) both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Spacer ─── */
+.spacer {
+  height: 20px;
+}
+
+/* ─── Hook ─── */
+.hook {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 6vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1.25;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin: 0;
+  animation: fadeUp 600ms var(--ease-out) 400ms both;
+}
+
+.hookAccent {
+  display: inline-block;
+  background: linear-gradient(
+    135deg,
+    var(--purple-light) 0%,
+    var(--gold-light) 50%,
+    var(--purple-light) 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ─── Crown ─── */
+.crownWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--gold-light);
+}
+
+/* ─── Shibin Sign ─── */
+.shibinSign {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  margin-bottom: 4px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), rgba(168, 85, 247, 0.08));
+  border: 1px solid rgba(232, 199, 154, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(232, 199, 154, 0.08),
+    0 0 20px rgba(232, 199, 154, 0.15),
+    inset 0 0 20px rgba(232, 199, 154, 0.05);
+  animation: fadeUp 600ms var(--ease-out) 200ms both;
+}
+
+.signIcon {
+  display: inline-flex;
+  color: var(--purple-neon);
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.8));
+}
+
+.signText {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  text-shadow: 0 0 8px rgba(232, 199, 154, 0.3);
+  letter-spacing: 0.02em;
+}
+
+/* ─── Categories ─── */
+.categories {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+  animation: fadeUp 600ms var(--ease-out) 800ms both;
+}
+
+.category {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 18px 12px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.85), rgba(10, 7, 20, 0.92));
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  text-decoration: none;
+  overflow: hidden;
+  transition:
+    border-color var(--motion-fast) var(--ease),
+    transform var(--motion-fast) var(--ease),
+    box-shadow var(--motion-fast) var(--ease);
+}
+
+.category::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.15), transparent 60%);
+  opacity: 0;
+  transition: opacity var(--motion-fast) var(--ease);
+  pointer-events: none;
+}
+
+.category:hover {
+  border-color: var(--purple-neon);
+  transform: translateY(-3px);
+  box-shadow: var(--glow-purple-sm);
+}
+
+.category:hover::before {
+  opacity: 1;
+}
+
+.categoryIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-base);
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.25), rgba(168, 85, 247, 0.12));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: var(--purple-light);
+  flex-shrink: 0;
+  transition: all var(--motion-fast) var(--ease);
+}
+
+.category:hover .categoryIcon {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.4), rgba(168, 85, 247, 0.25));
+  color: var(--purple-light);
+}
+
+.categoryLabel {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.categoryCount {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* آخر عنصر (أنشطة أخرى) — full width */
+.category:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  padding: 16px 24px;
+  gap: 12px;
+}
+
+.category:last-child:nth-child(odd) .categoryIcon {
+  width: 40px;
+  height: 40px;
+}
+
+/* Tablet */
+@media (min-width: 640px) {
+  .categories {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .category:last-child:nth-child(odd) {
+    grid-column: auto;
+    flex-direction: column;
+    padding: 18px 12px;
+    gap: 6px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .categories {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* آخر عنصر (أنشطة أخرى) — يمتد */
+.category:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+/* ─── Tablet ─── */
+@media (min-width: 640px) {
+  .categories {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .category:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}
+
+/* ─── Desktop ─── */
+@media (min-width: 1024px) {
+  .categories {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .hero {
+    padding-top: 120px;
+  }
+}
+
+/* ─── Small mobile ─── */
+@media (max-width: 380px) {
+  .category {
+    padding: 12px;
+    gap: 8px;
+  }
+  .categoryLabel {
+    font-size: 0.78rem;
+  }
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .logoWrap,
+  .hook,
+  .category,
+  .shibinSign {
+    animation: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   2026-09-27 — تحسين الهيرو
+   - مساحة أقل فوق اللوجو
+   - scroll-snap للـ home
+   ═══════════════════════════════════════════════════════════ */
+
+.hero {
+  padding: 32px 16px 48px;
+  padding-top: calc(20px + env(safe-area-inset-top));
+}
+
+.logoWrap {
+  margin-bottom: 0;
+}
+
+.spacer {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding-top: calc(24px + env(safe-area-inset-top));
+  }
+}
+
+/* 2026-09-27 — فاصل بين اللوجو واللي تحته */
+.shibinSign {
+  margin-top: 14px;
+}

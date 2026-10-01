@@ -54,7 +54,6 @@
 /* ─── Logo ─── */
 .logoWrap {
   margin-bottom: 8px;
-  animation: fadeUp 600ms var(--ease-out) both;
 }
 
 @keyframes fadeUp {

@@ -601,3 +601,31 @@ cat file.tsx
 > أي دالة logic جديدة → معاها اختبار.
 > أي commit → lefthook يفحص.
 > أي push → GitHub Actions يفحص.
+
+---
+
+## 19. Splash + animation على LCP Element = NO_LCP (2026-10-02)
+
+**الغلطة:** 
+1. Splash component بيظهر 1.5s + animation fade على logoWrap (600ms)
+2. صورة الهيرو (LCP element) بتأخر لحد 1.5s + 600ms قبل ما تستقر
+3. Lighthouse مبيقدرش يحدد LCP element ثابت → NO_LCP
+4. Speed Index اتراجع (1.3s → 5.3s) لما شلنا Splash بس سيبنا الـ animation
+
+**السبب:**
+- Splash = anti-pattern على الويب (مفيد في native apps فقط)
+- Animation على LCP element بيعمل layout shift أو تأخير في الـ paint
+- Lighthouse بيقيس LCP بعد ما العنصر يستقر
+
+**الحل:**
+1. شيل Splash بالكامل (v1.0.0)
+2. شيل animation من أي element فيه LCP candidate
+3. ضيف `fetchPriority="high"` للصور الأساسية
+4. LCP element = صورة بدون animation + first paint مباشر
+
+**الدرس:**
+- ممنوع animation على الـ hero/LCP element
+- ممنوع Splash على الويب
+- `priority` في Next.js مش كفاية — محتاج `fetchPriority="high"` صريح
+
+**المراجع:** PERFORMANCE_BASELINE.md
