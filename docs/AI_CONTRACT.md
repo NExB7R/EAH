@@ -923,3 +923,144 @@ Doc-to-Code = 1:1. لو الكود اتغير وما اتوثّقش → الشغ
 **الأسلوب:**
 - أمر → نتيجة → أمر → نتيجة
 - خلاص
+
+---
+
+## 32. جهاز المالك (إجباري — 2026-10-02)
+
+**NourEldin بيشتغل على جهاز ضعيف (RAM قليلة + معالج قديم).**
+
+### ممنوع أشغّل أوامر تقيلة على جهازه
+
+**ممنوع:**
+- `npm run build` محلي (SIGILL أصلاً)
+- `npm install` لحزم كبيرة بدون داعي
+- `npx vercel build` محلي
+- Test suites كاملة (>30s)
+- Watchers دائمة
+- IDE / language servers تقيلة
+
+**البديل:**
+- Build → Vercel (سيرفر)
+- Test → GitHub Actions (سيرفر)
+- النتائج: تقرأ من Vercel Dashboard + GitHub Actions UI
+
+### على جهاز المالك — المسموح فقط
+
+- `git` (add/commit/push)
+- `npx tsc --noEmit` (خفيف)
+- `npx prettier --check`
+- `npx eslint <ملف>`
+- كتابة/قراءة ملفات
+- `npx vitest run <ملف واحد>` (ملف واحد مش كله)
+
+### الأوامر اللي أنا مسؤول عنها
+
+**كل أمر أقترحه → أسأل نفسي 3 مرات:**
+1. ده تقيل؟ (RAM/CPU/time)
+2. ينفع يتعمل على السيرفر بدلاً منه؟
+3. لو اتشغل، هيوقف جهاز المالك؟
+
+**لو أي إجابة "أيوه" → أبحث عن بديل.**
+
+### التذكير الدائم
+
+- قبل أي أمر → ذكر التكلفة لو معروفة
+- لو الأمر > 10 ثواني → أحذّر
+- لو > 30 ثانية → أطلب موافقة
+- لو SIGILL محتمل → مش أطلبها أصلاً
+
+---
+
+آخر تحديث: 2026-10-02
+
+---
+
+## 33. قواعد الشات الجديد (إجباري — 2026-10-02)
+
+**أي شات AI جديد يشتغل على EAH يلتزم بالآتي:**
+
+### 1. قبل أي شغل
+- اقرأ HANDOFF.md → AI_CONTRACT.md → SACRED.md → LESSONS.md → PROGRESS.md → SESSION_LOG.md
+- قول: "قرأت. جاهز." واستنى
+- ممنوع تبدأ بدون قراءة
+
+### 2. قبل أي تعديل
+- §19 Pre-Edit Protocol: find → read → understand → grep usages
+- §3.1: "هعدل [الملف]. السبب: [السبب]. موافق؟"
+- استنى "موافق" صريح
+- عدّل ملف واحد بس
+
+### 3. أثناء التعديل
+- خلي الأوامر كبيرة ومراجَعة ومظبوطة
+- تحقق 3 مرات قبل أي خطوة حرجة (path، محتوى، نتيجة)
+- لو فيه شك → اسأل، متخمّنش
+- Commit صغير + واضح
+
+### 4. بعد التعديل
+- typecheck (`npx tsc --noEmit`)
+- lefthook pre-commit (secrets + prettier + eslint)
+- لو فشل → صلّح → commit تاني (مش amend)
+- push (SSH over 443)
+
+### 5. الجودة
+- §28 Quality Gate — ممنوع `git commit --no-verify`
+- أي دالة logic جديدة → اختبار
+- أي feature → تحديث PROGRESS.md + SESSION_LOG.md + CHANGELOG.md
+
+### 6. §26 Single Source of Truth
+- version: `web/package.json` → `web/lib/version.ts`
+- CHANGELOG: `web/CHANGELOG.md` (root pointer)
+- Sacred files: SACRED.md §4
+- commit + version: PROGRESS.md
+- Reading order: FILE_ORDER.md
+
+### 7. §29 الشرح للمالك
+- لو طلب شرح → عامية مصرية، جمل قصيرة
+- بدون شرح = الافتراضي
+- §31 مختصر دايماً
+
+### 8. §32 جهاز المالك
+- ممنوع أوامر تقيلة (build/test suite)
+- Vercel + GitHub Actions هم اللي بيبنوا
+
+### 9. عند الخطأ
+- قف فوراً
+- اجمع أدلة (مفيش تخمين)
+- بلّغ
+- استنى موافقة
+- بعدها أصلح
+- سجّل في LESSONS.md
+
+### 10. الحفاظ على المشروع "لا يقدر بثمن"
+- ممنوع تكرار كود (§18.1)
+- ممنوع any / @ts-ignore (§18.2)
+- ممنوع تعديل ملف بلا قراءة كاملة
+- ممنوع commit بلا typecheck
+- ممنوع push بلا pre-push hooks
+- ممنوع deploy بلا preview
+- ممنوع force push
+- ممنوع secrets في Git
+- ممنوع حذف بدون backup
+- أتفه تعديل = يستحق تفكير
+- أي تعديل "بسيط" = يحتاج تأكيد 3 مرات إنه صح فعلاً
+
+### 11. المصادر (Source of Truth) — تُقرأ دايماً من مكانها الأصلي
+- version → `web/package.json`
+- CHANGELOG → `web/CHANGELOG.md`
+- حالة الملفات → PROGRESS.md
+- آخر commit → PROGRESS.md
+- Sacred → SACRED.md §4
+- Reading order → FILE_ORDER.md
+- المشاكل المعروفة → AI_HANDOFF.md §7
+
+### 12. اتساق الأوامر (Command Consistency)
+- أي أمر terminal → ناتج فوري
+- أي ملف → `wc -l` + `tail -3` بعد الكتابة
+- أي تعديل متعدد → commit واحد بس
+- أي git op → تحقق من `git status --short` قبل
+- أي push → تأكد من الفرع الصح (`main:v2`)
+
+---
+
+آخر تحديث: 2026-10-02
