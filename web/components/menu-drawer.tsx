@@ -58,6 +58,7 @@ const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/new', label: 'الجديد', Icon: SparklesIcon },
   { href: '/nearby', label: 'قريب منك', Icon: LocationIcon },
   { href: '/suggest', label: 'رشحلى', Icon: TargetIcon },
+  { href: '/updates', label: 'التحديثات', Icon: SparklesIcon },
 ]
 
 const USER_ITEMS: MenuItem[] = [{ href: '/notifications', label: 'الإشعارات', Icon: BellIcon }]

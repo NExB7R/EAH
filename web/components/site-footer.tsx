@@ -18,14 +18,16 @@ import {
   CookieIcon,
   PhoneIcon,
   ArrowLeftIcon,
+  SparkleStarIcon,
 } from './icons'
 import styles from './site-footer.module.css'
+import { APP_VERSION } from '@/lib/version'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Site Footer (Premium 2026 — Final)
 // ═══════════════════════════════════════════════════════════
 
-const APP_VERSION = 'v2.1.0'
+// §26 — نسخة واحدة من lib/version.ts
 
 const CONTACTS = {
   channel: 'https://whatsapp.com/channel/eaH',
@@ -66,6 +68,7 @@ const COLUMNS = [
       { href: '/about', label: 'مين إحنا', Icon: ShieldCheckIcon },
       { href: '/contact', label: 'تواصل معانا', Icon: PhoneIcon },
       { href: '/support-palestine', label: 'دعم فلسطين', Icon: MapPinIcon },
+      { href: '/updates', label: 'التحديثات', Icon: SparkleStarIcon },
     ],
   },
   {
