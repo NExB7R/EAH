@@ -819,3 +819,29 @@ export function PinIcon({ size = 20, className }: IconProps) {
     </svg>
   )
 }
+
+export function QrCodeIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+      <line x1="14" y1="14" x2="14" y2="14.01" />
+      <line x1="14" y1="18" x2="14" y2="18.01" />
+      <line x1="18" y1="14" x2="18" y2="14.01" />
+      <line x1="18" y1="18" x2="18" y2="18.01" />
+      <line x1="21" y1="21" x2="21" y2="21.01" />
+    </svg>
+  )
+}

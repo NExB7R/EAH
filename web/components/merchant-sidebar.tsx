@@ -10,6 +10,7 @@ import {
   CrownGoldIcon,
   SettingsIcon,
   SparklesIcon,
+  QrCodeIcon,
 } from './icons'
 import styles from './merchant-sidebar.module.css'
 
@@ -23,6 +24,7 @@ const ITEMS = [
   { href: '/merchant/business', label: 'نشاطي', Icon: StoreIcon },
   { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon, badge: 'orders' },
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
+  { href: '/merchant/qr', label: 'QR النشاط', Icon: QrCodeIcon },
   { href: '/merchant/subscription', label: 'الاشتراك', Icon: CrownGoldIcon },
   { href: '/merchant/settings', label: 'الإعدادات', Icon: SettingsIcon },
 ]
