@@ -10,6 +10,7 @@ import {
   TYPE_LABEL,
 } from '@/lib/data/business-detail'
 import { isOpenNow } from '@/lib/data/businesses'
+import type { BusinessDetail } from '@/lib/data/business-detail'
 import { getUserSession } from '@/lib/data/user'
 import BusinessHero from '@/components/business-hero'
 import BusinessActions from '@/components/business-actions'
@@ -41,6 +42,91 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       business.hook ??
       `${business.name} — ${TYPE_LABEL[business.business_type]} في ${business.area ?? 'شبين القناطر'}`,
   }
+}
+
+// ═══════════════════════════════════════════════════════════
+// JSON-LD Schema (LocalBusiness) — لـ SEO
+// ═══════════════════════════════════════════════════════════
+
+function buildJsonLd(
+  business: BusinessDetail['business'],
+  contacts: BusinessDetail['contacts'],
+  whatsapp: string | null,
+  phone: string | null,
+) {
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
+  const url = `${SITE_URL}/businesses/${business.slug}`
+
+  const sameAs: string[] = []
+  for (const c of contacts) {
+    if (c.method_type === 'facebook' || c.method_type === 'instagram') sameAs.push(c.value)
+  }
+
+  const schema: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    '@id': url,
+    name: business.name,
+    url,
+    description: business.description ?? business.hook ?? undefined,
+    image: business.cover_image_url ?? undefined,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: business.area ?? 'شبين القناطر',
+      addressRegion: 'القليوبية',
+      addressCountry: 'EG',
+      streetAddress: business.address_text ?? undefined,
+    },
+    telephone: phone ?? whatsapp ?? undefined,
+  }
+
+  if (sameAs.length > 0) schema.sameAs = sameAs
+
+  if (business.location) {
+    schema.geo = {
+      '@type': 'GeoCoordinates',
+      latitude: business.location.lat,
+      longitude: business.location.lng,
+    }
+  }
+
+  if (business.rating_count > 0) {
+    schema.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: business.rating_avg,
+      reviewCount: business.rating_count,
+      bestRating: 5,
+      worstRating: 1,
+    }
+  }
+
+  const hours = business.working_hours
+  if (hours && typeof hours === 'object') {
+    const dayMap: Record<string, string> = {
+      sun: 'Sunday',
+      mon: 'Monday',
+      tue: 'Tuesday',
+      wed: 'Wednesday',
+      thu: 'Thursday',
+      fri: 'Friday',
+      sat: 'Saturday',
+    }
+    const spec: Record<string, unknown>[] = []
+    for (const [day, h] of Object.entries(hours)) {
+      if (!h || typeof h !== 'object') continue
+      const dayObj = h as { open?: string; close?: string }
+      if (!dayObj.open || !dayObj.close) continue
+      spec.push({
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: `https://schema.org/${dayMap[day] ?? 'Monday'}`,
+        opens: dayObj.open,
+        closes: dayObj.close,
+      })
+    }
+    if (spec.length > 0) schema.openingHoursSpecification = spec
+  }
+
+  return schema
 }
 
 export default async function BusinessPage({ params }: Props) {
@@ -84,6 +170,12 @@ export default async function BusinessPage({ params }: Props) {
 
   return (
     <main className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildJsonLd(business, contacts, whatsapp, phone)),
+        }}
+      />
       <div className={styles.container}>
         {/* ─── Hero ─── */}
         <BusinessHero detail={detail} isOpen={isOpen} />
