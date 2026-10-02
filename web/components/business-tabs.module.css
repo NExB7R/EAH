@@ -420,3 +420,19 @@
     animation: none;
   }
 }
+
+/* ─── Featured (gold) variant ─── */
+.wrapFeatured {
+  border-color: rgba(232, 199, 154, 0.28);
+}
+
+.wrapFeatured .active {
+  color: var(--gold-light);
+  border-color: var(--gold-line);
+  background: var(--gold-soft);
+}
+
+.wrapFeatured .tab:hover:not(.active) {
+  color: var(--gold-light);
+  border-color: rgba(232, 199, 154, 0.4);
+}

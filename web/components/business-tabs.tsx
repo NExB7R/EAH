@@ -52,6 +52,7 @@ export default function BusinessTabs({
   const [lightbox, setLightbox] = useState<string | null>(null)
 
   const { business, contacts, branches, menu, gallery } = detail
+  const featured = business.is_featured
 
   const phone = contacts.find((c) => c.method_type === 'phone')
   const whatsapp = contacts.find((c) => c.method_type === 'whatsapp')
@@ -60,7 +61,7 @@ export default function BusinessTabs({
   const website = contacts.find((c) => c.method_type === 'website')
 
   return (
-    <div className={styles.wrap}>
+    <div className={`${styles.wrap} ${featured ? styles.wrapFeatured : ''}`}>
       {/* ─── Tabs Bar ─── */}
       <div className={styles.tabs} role="tablist">
         <button
