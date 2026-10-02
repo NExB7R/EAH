@@ -5,6 +5,11 @@ import '@fontsource/tajawal/700.css'
 import '@fontsource/tajawal/800.css'
 import '@fontsource/tajawal/900.css'
 import FloatingCapsule from '@/components/floating-capsule'
+import InstallPrompt from '@/components/install-prompt'
+import ReviewReminder from '@/components/review-reminder'
+import SignupPrompt from '@/components/signup-prompt'
+import ScrollToTop from '@/components/scroll-to-top'
+import SiteFooter from '@/components/site-footer'
 import { getUserSession } from '@/lib/data/user'
 import './globals.css'
 
@@ -24,10 +29,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const session = await getUserSession()
 
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body>
         <FloatingCapsule session={session} />
         {children}
+        <SiteFooter />
+        <InstallPrompt />
+        <ReviewReminder />
+        {!session && <SignupPrompt />}
+        <ScrollToTop />
       </body>
     </html>
   )
