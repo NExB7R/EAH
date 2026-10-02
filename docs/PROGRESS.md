@@ -326,3 +326,38 @@
 ## 📋 خطط مؤجلة (docs/plans/)
 
 - ANNOUNCEMENTS.md — إشعارات المسؤول المميزة
+
+---
+
+## 🤖 AI Agent (جديد 2026-10-02)
+
+| الملف | الحالة |
+|------|--------|
+| lib/ai/openrouter.ts | ✅ |
+| lib/ai/tools.ts (3 أدوات) | ✅ |
+| lib/ai/agent.ts | ✅ |
+| app/api/ai/chat/route.ts | ✅ |
+| components/ai-widget.tsx | ✅ |
+
+**الموديل:** meta-llama/llama-3.3-70b-instruct:free
+**Rate limit:** 10 أسئلة / 10 دقايق / user (Upstash)
+
+---
+
+## 📊 SEO (جديد 2026-10-02)
+
+- app/sitemap.ts (dynamic)
+- app/robots.ts
+- JSON-LD LocalBusiness على business pages
+
+---
+
+## 💰 Polish Pass (جديد 2026-10-02)
+
+راجع `docs/plans/POLISH_PASS.md`
+
+- §1 المسافة (DistanceBadge + geolocation)
+- §2 الكارد الموحد
+- §3 فخامة المميزين (gold + shimmer)
+- §4 Nav (mobile labels + purple active)
+- §5 المصداقية (trust badges)

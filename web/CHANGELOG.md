@@ -1,3 +1,47 @@
+
+## [Unreleased] - 2026-10-02
+
+### Added
+- **AI Agent:** OpenRouter + 3 أدوات + Floating widget + لهجة مصرية
+- **SEO:** sitemap.ts + robots.ts + JSON-LD LocalBusiness
+- **Notifications:**
+  - /admin/notifications (broadcast + audience)
+  - /account/notifications/preferences
+  - Auto notifications (review + reply + follow + offer + order)
+  - Announcements gold theme
+- **Orders:**
+  - OrderModal (customer)
+  - Status flow (merchant)
+  - Timeline tracking (customer)
+  - Track-contact API
+- **Push:** VAPID + Service Worker + Toggle
+- **Featured:** /admin/featured (pin/order/extend)
+- **Studio:** /admin/studio placeholder
+- **Pages:** /help + /roadmap + /account/loyalty + /account/referral
+- **Merchant:** QR + Offers CRUD
+- **Polish Pass:** DistanceBadge + Trust tiers + Nav mobile + Featured gold
+
+### Changed
+- React: 19.3.0 → 19.2.8 (compat with Next 16.3.8)
+- CHANGELOG: moved to web/CHANGELOG.md
+- Folder: EAH-V2 → EAH
+
+### Fixed
+- React #418 (nested `<a>` from Logo href=undefined)
+- Splash: LCP-safe 2026 version
+- 502 from Facebook CDN (WmImage unoptimized)
+
+### Removed
+- Splash (original — was cause of NO_LCP)
+
+### Security
+- WmImage trust host allowlist
+- Push endpoints reject unauthenticated
+- Track-contact auth required
+
+### Tests
+- 21 Playwright E2E
+- 9 new flows tests
 # EAH — CHANGELOG.md
 
 > كل التغييرات المهمة في المشروع.

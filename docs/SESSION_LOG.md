@@ -246,3 +246,101 @@
 - web/package.json
 - web/package-lock.json (تلقائي)
 - docs/SESSION_LOG.md
+
+## 2026-10-02 — Session 8: AI Agent + Polish Pass
+
+### اللي اتحقق (35+ commit)
+
+**AI Agent:**
+- OpenRouter client (lib/ai/openrouter.ts)
+- 3 أدوات: search_businesses + get_business_details + get_my_stats (lib/ai/tools.ts)
+- Agent loop (lib/ai/agent.ts)
+- API /api/ai/chat (rate limited بـ Upstash)
+- Floating widget (components/ai-widget)
+- لهجة مصرية + system prompt ذكي
+
+**SEO:**
+- sitemap.ts (dynamic — static + 5000 business)
+- robots.ts (disallow: /api /admin /account /merchant /auth)
+- JSON-LD LocalBusiness على كل business page
+
+**Features كاملة (من قبل):**
+- Push notifications + FCM-style toggle
+- /admin/notifications (broadcast + audience targeting)
+- /admin/featured (pin/order/extend)
+- /admin/studio
+- /help + /roadmap
+- /account/loyalty + /account/referral + /account/notifications/preferences
+- /merchant/qr (QR generation)
+- /merchant/offers CRUD
+- /merchant/orders (status flow)
+- /account/orders (timeline tracking)
+- OrderModal (customer ordering)
+- Reveal contact tracking
+
+**POLISH_PASS §1-5:**
+- DistanceBadge + geolocation hook
+- Trust badges (verified/trusted/new)
+- Featured premium gold + badge shimmer
+- Section nav mobile labels + purple active + auto-scroll
+- Business hero featured theme
+- Business tabs gold for featured
+- Announcements gold theme (from admin)
+
+**Regression fixes:**
+- React #418 (`<a>` جوّه `<a>`)
+- Splash 2026 (LCP-safe)
+- React 19.3 → 19.2.8
+- Folder rename EAH-V2 → EAH
+
+**Tests:**
+- 21 Playwright E2E
+- GitHub Actions E2E
+- 58 vitest unit
+
+### الملفات الجديدة
+- lib/ai/openrouter.ts
+- lib/ai/tools.ts
+- lib/ai/agent.ts
+- app/api/ai/chat/route.ts
+- components/ai-widget.tsx + .module.css
+- app/sitemap.ts
+- app/robots.ts
+- lib/utils/distance.ts
+- lib/hooks/use-geolocation.ts
+- components/distance-badge.tsx + .module.css
+- components/order-modal.tsx + .module.css
+- app/businesses/[slug]/order-actions.ts
+- app/merchant/qr/* (page + generator + actions)
+- app/merchant/offers/* (page + form + list + actions)
+- app/merchant/orders/* (page + list + row + actions)
+- app/admin/featured/* (page + row + actions)
+- app/admin/studio/*
+- app/admin/notifications/* (complete)
+- app/account/loyalty/*
+- app/account/referral/*
+- app/account/notifications/preferences/*
+- app/help/*
+- app/roadmap/*
+- app/api/push/subscribe + unsubscribe
+- app/api/track-contact
+- lib/push/server.ts + client.ts
+- lib/notifications/server.ts
+- components/push-toggle.tsx + .module.css
+- public/sw.js (Service Worker)
+- e2e/* (12+ tests)
+- docs/plans/POLISH_PASS.md
+- docs/plans/ANNOUNCEMENTS.md
+
+### اللي معلق
+- Support Bot (منفصل عن AI Agent)
+- اختبار ميداني على موبايل
+- Nonce CSP (أُجل — يخلي كل صفحة dynamic)
+- Vercel Pro + Supabase Pro (قبل الإطلاق)
+- E2E للـ AI flow
+
+### ملاحظات
+- AI Agent يشتغل بموديل مجاني (Llama 3.3 70B)
+- Rate limit: 10 أسئلة / 10 دقايق / user
+- .env.local فيه OPENROUTER_API_KEY
+- Vercel env مضبوط
