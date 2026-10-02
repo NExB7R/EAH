@@ -282,11 +282,47 @@
 
 /* ─── Featured variant (للمميزين في Home) ─── */
 .featured {
-  border-color: rgba(232, 199, 154, 0.4);
+  border-color: rgba(232, 199, 154, 0.42);
+  background: linear-gradient(
+    160deg,
+    rgba(34, 24, 18, 0.9) 0%,
+    rgba(20, 14, 34, 0.92) 55%,
+    rgba(10, 7, 20, 0.95) 100%
+  );
+}
+
+.featured::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(232, 199, 154, 0.12), transparent 70%),
+    linear-gradient(180deg, rgba(232, 199, 154, 0.06) 0%, transparent 30%);
+  z-index: 0;
+}
+
+.featured:hover {
+  border-color: rgba(232, 199, 154, 0.75);
+  box-shadow:
+    0 0 0 1px rgba(232, 199, 154, 0.45),
+    0 12px 32px rgba(0, 0, 0, 0.55),
+    0 0 48px rgba(232, 199, 154, 0.22);
 }
 
 .featured .name {
   color: var(--gold-light);
+}
+
+.featured .imageOverlay {
+  background: linear-gradient(180deg, transparent 40%, rgba(40, 25, 10, 0.72) 100%);
+}
+
+.featured .chip {
+  background: rgba(232, 199, 154, 0.08);
+  border-color: rgba(232, 199, 154, 0.28);
+  color: #f0dcbc;
 }
 
 /* ─── Mobile ─── */
@@ -319,6 +355,9 @@
   }
   .card:hover .image {
     transform: none;
+  }
+  .card:hover .featuredBadge::after {
+    animation: none;
   }
 }
 
