@@ -62,6 +62,14 @@ export default function BusinessActions({
     return true
   }
 
+  const trackContact = (method: 'phone' | 'whatsapp') => {
+    void fetch('/api/track-contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ businessId, method }),
+    }).catch(() => {})
+  }
+
   // ─── WhatsApp → Order Modal ───
   const handleWhatsapp = () => {
     if (requireAuth('تطلب من واتساب مباشرة')) return
@@ -74,6 +82,7 @@ export default function BusinessActions({
   const handlePhone = () => {
     if (requireAuth('تتصل بالنشاط مباشرة')) return
     if (!phone) return
+    trackContact('phone')
     window.location.href = `tel:${phone}`
   }
 

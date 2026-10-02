@@ -1,0 +1,138 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 680px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-md);
+  background: rgba(168, 85, 247, 0.03);
+  cursor: pointer;
+  transition: all 180ms;
+}
+
+.row:hover {
+  border-color: var(--purple-primary);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: var(--purple-soft);
+  color: var(--purple-light);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.desc {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+.switchWrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 42px;
+  height: 24px;
+}
+
+.checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.switchTrack {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--purple-line);
+  transition: all 220ms;
+}
+
+.switchTrack::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  inset-inline-start: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  transition: all 220ms;
+}
+
+.trackOn {
+  background: var(--purple-soft);
+  border-color: var(--purple-primary);
+}
+
+.trackOn::after {
+  background: var(--purple-primary);
+  transform: translateX(-18px);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.saveBtn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 180ms;
+}
+
+.saveBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.35);
+}
+
+.saveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.msg {
+  font-size: 0.8rem;
+  color: var(--teal);
+  font-weight: 800;
+}
