@@ -189,5 +189,4 @@
 
 - `docs/plans/POLISH_PASS.md` — خطة التحسين البصري
 - `docs/plans/ANNOUNCEMENTS.md` — إشعارات المسؤول
-- `docs/TODO.md` — TODO المختصر
 - `CHANGELOG.md` — اللي خلص

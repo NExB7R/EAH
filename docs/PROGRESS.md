@@ -285,7 +285,6 @@
 | SECURITY.md | ✅ |
 | AI_HANDOFF.md | ✅ |
 | PROGRESS.md | ✅ (هذا الملف) |
-| TODO.md | ✅ |
 | SESSION_LOG.md | ✅ |
 | CHANGELOG.md | ✅ |
 | STRUCTURE.md | ✅ |
