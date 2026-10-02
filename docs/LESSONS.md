@@ -684,3 +684,40 @@ cat file.tsx
 - `<a>` جوّه `<a>` = HTML غير صالح → hydration mismatch
 
 **الملفات المتأثرة:** page-header, menu-drawer, floating-capsule
+
+---
+
+## 25. طريقة الكتابة للملفات — قاعدة (2026-10-02)
+
+**القاعدة:** أي كتابة لملف (docs / code / أي حاجة) → Python (مش heredoc).
+
+**ليه:**
+- heredoc بيتقطع مع العربي + الأسطر الطويلة
+- terminal buffer بيفصل الـ paste
+- Python مضمون 100%
+
+**الطريقة:**
+- اكتب المحتوى في ملف مؤقت بـ cat > /tmp/x.txt << 'ENDCONTENT'
+- بعدها: python3 -c "open('target','a',encoding='utf-8').write(open('/tmp/x.txt',encoding='utf-8').read())"
+- أو: cat /tmp/x.txt >> target
+
+**استثناءات:**
+- ملفات قصيرة (أقل من 10 أسطر) → heredoc عادي مقبول
+- كود كبير → نكتبه كامل بالـ Python
+
+**المراجع:** AI_CONTRACT §32، LESSONS §2.1
+
+---
+
+## 26. اسم المنصة الرسمي — قاعدة (2026-10-02)
+
+**الاسم الرسمي:** `EAH اللى نفسك فيه ؟`
+
+**ممنوع:**
+- EAH — اللى نفسك فيه ؟ (بشرطة)
+- EAH - اللى نفسك فيه ؟
+- EAH | اللى نفسك فيه ؟
+
+**الأماكن:** metadata title, social, manifest, OG images
+
+**الحالة:** TODO قبل الإطلاق
