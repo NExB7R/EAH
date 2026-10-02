@@ -9,7 +9,7 @@ import {
   SettingsIcon,
   ShieldCheckIcon,
 } from '@/components/icons'
-import { FEATURE_META, type FeatureFlags } from '@/lib/features'
+import { FEATURE_META, type FeatureFlags } from '@/lib/features-shared'
 import { saveFeatureFlags } from './actions'
 import styles from './studio.module.css'
 
