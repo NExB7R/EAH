@@ -21,6 +21,7 @@ export default async function NotificationsPage() {
       <div style={{ marginBottom: 20 }}>
         <PushToggle />
       </div>
+
       {notifications.length === 0 ? (
         <EmptyState
           Icon={BellIcon}
@@ -32,9 +33,30 @@ export default async function NotificationsPage() {
           {notifications.map((n) => {
             const date = new Date(n.created_at).toLocaleDateString('ar-EG')
             const unread = !n.read_at
-            const cls = `${styles.card} ${unread ? styles.unread : ''}`
+            const isAnnouncement = n.notification_type === 'announcement'
+            const cls = `${styles.card} ${unread ? styles.unread : ''} ${isAnnouncement ? styles.announcement : ''}`
 
-            const inner = (
+            const inner = isAnnouncement ? (
+              <>
+                {unread && <span className={styles.announcementDot} aria-hidden />}
+                <span className={styles.announcementIcon}>
+                  <CrownGoldIcon size={22} />
+                </span>
+                <div className={styles.body}>
+                  <span className={styles.announcementBadge}>
+                    <CrownGoldIcon size={10} />
+                    من إدارة EAH
+                  </span>
+                  <h3 className={styles.announcementTitle}>{n.title}</h3>
+                  {n.body && <p className={styles.announcementDesc}>{n.body}</p>}
+                  <div className={styles.announcementFooter}>
+                    <span className={styles.announcementAuthor}>NourEldin B7R</span>
+                    <span className={styles.announcementSep}>·</span>
+                    <span className={styles.date}>{date}</span>
+                  </div>
+                </div>
+              </>
+            ) : (
               <>
                 {unread && <span className={styles.dot} aria-hidden />}
                 <div className={styles.body}>
