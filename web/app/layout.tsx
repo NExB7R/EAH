@@ -4,6 +4,8 @@ import '@fontsource/great-vibes'
 import '@fontsource/tajawal/700.css'
 import '@fontsource/tajawal/800.css'
 import '@fontsource/tajawal/900.css'
+import FloatingCapsule from '@/components/floating-capsule'
+import { getUserSession } from '@/lib/data/user'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -18,10 +20,15 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const session = await getUserSession()
+
   return (
     <html lang="ar" dir="rtl">
-      <body>{children}</body>
+      <body>
+        <FloatingCapsule session={session} />
+        {children}
+      </body>
     </html>
   )
 }
