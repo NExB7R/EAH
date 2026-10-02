@@ -1,0 +1,101 @@
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
+import { createClient } from '@/lib/supabase/server'
+import { createNotification } from '@/lib/notifications/server'
+
+const statusSchema = z.enum([
+  'sent',
+  'seen',
+  'accepted',
+  'rejected',
+  'delivered',
+  'cancelled',
+  'preparing',
+  'on_way',
+])
+
+export type OrderActionResult = { ok: true } | { ok: false; error: string }
+
+const STATUS_LABEL: Record<string, string> = {
+  sent: 'جديد',
+  seen: 'شافه',
+  accepted: 'اتأكد',
+  rejected: 'اترفض',
+  preparing: 'بيتحضّر',
+  on_way: 'في الطريق',
+  delivered: 'اتسلّم',
+  cancelled: 'اتلغى',
+}
+
+const STATUS_BODY: Record<string, string> = {
+  accepted: 'نشاطك وافق على طلبك — استعد!',
+  preparing: 'طلبك بيتحضّر دلوقتي',
+  on_way: 'طلبك في الطريق إليك',
+  delivered: 'وصل! يا رب تكون سعيد بالخدمة',
+  rejected: 'النشاط معتذر — حاول تاني أو كلمه',
+  cancelled: 'الطلب اتلغى',
+  seen: 'النشاط شاف طلبك',
+}
+
+async function requireMerchant() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { ok: false as const, error: 'لازم تسجل دخول' }
+
+  const { data: biz } = await supabase
+    .from('businesses')
+    .select('id, slug, name')
+    .eq('owner_profile_id', user.id)
+    .maybeSingle()
+
+  if (!biz) return { ok: false as const, error: 'مفيش نشاط مرتبط بحسابك' }
+  return { ok: true as const, supabase, biz }
+}
+
+export async function updateOrderStatus(
+  orderId: string,
+  status: string,
+): Promise<OrderActionResult> {
+  const ctx = await requireMerchant()
+  if (!ctx.ok) return { ok: false, error: ctx.error }
+
+  const parsed = statusSchema.safeParse(status)
+  if (!parsed.success) return { ok: false, error: 'حالة غير صحيحة' }
+
+  // تأكد إن الطلب لنشاطه
+  const { data: order } = await ctx.supabase
+    .from('order_requests')
+    .select('id, customer_profile_id, order_code, business_id')
+    .eq('id', orderId)
+    .eq('business_id', ctx.biz.id)
+    .maybeSingle()
+
+  if (!order) return { ok: false, error: 'الطلب مش موجود' }
+
+  const { error } = await ctx.supabase
+    .from('order_requests')
+    .update({ status: parsed.data, updated_at: new Date().toISOString() })
+    .eq('id', orderId)
+
+  if (error) return { ok: false, error: error.message }
+
+  // إشعار للعميل (لو مسجل)
+  if (order.customer_profile_id && STATUS_BODY[parsed.data]) {
+    void createNotification({
+      userId: order.customer_profile_id,
+      type: 'order_status',
+      title: `طلبك #${order.order_code ?? ''} — ${STATUS_LABEL[parsed.data] ?? parsed.data}`,
+      body: `${ctx.biz.name}: ${STATUS_BODY[parsed.data]}`,
+      deepLink: `/account/orders`,
+      pushTag: `order-${orderId}-${parsed.data}`,
+    }).catch(() => {})
+  }
+
+  revalidatePath('/merchant/orders')
+  revalidatePath('/account/orders')
+  return { ok: true }
+}

@@ -1,16 +1,14 @@
-import type { Metadata } from 'next'
-import { redirect } from 'next/navigation'
-import { getUserSession } from '@/lib/data/user'
+import { Suspense } from 'react'
 import AuthForm from './auth-form'
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'دخول · EAH',
-  description: 'سجّل دخولك أو اعمل حساب جديد',
 }
 
-export default async function AuthPage() {
-  const session = await getUserSession()
-  if (session) redirect('/')
-
-  return <AuthForm />
+export default function AuthPage() {
+  return (
+    <Suspense fallback={null}>
+      <AuthForm />
+    </Suspense>
+  )
 }
