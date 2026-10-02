@@ -1,0 +1,135 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.85));
+}
+
+.rowHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.65rem;
+  font-weight: 900;
+  border: 1px solid;
+}
+
+.gold {
+  background: var(--gold-soft);
+  border-color: var(--gold-line);
+  color: var(--gold-light);
+}
+
+.red {
+  background: rgba(252, 165, 165, 0.1);
+  border-color: rgba(252, 165, 165, 0.35);
+  color: var(--red);
+}
+
+.teal {
+  background: rgba(85, 231, 209, 0.1);
+  border-color: rgba(85, 231, 209, 0.35);
+  color: var(--teal);
+}
+
+.purple {
+  background: var(--purple-soft);
+  border-color: var(--purple-line);
+  color: var(--purple-light);
+}
+
+.neutral {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(168, 85, 247, 0.18);
+  color: var(--text-tertiary);
+}
+
+.date {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.rowBody {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.actor,
+.entity {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.actorLabel,
+.entityLabel {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.actorName {
+  color: var(--text-primary);
+  font-weight: 800;
+}
+
+.entityId {
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  font-family: monospace;
+  font-size: 0.68rem;
+  color: var(--purple-light);
+}
+
+.meta {
+  border-top: 1px solid var(--purple-line);
+  padding-top: 8px;
+}
+
+.meta summary {
+  cursor: pointer;
+  font-size: 0.7rem;
+  color: var(--purple-light);
+  font-weight: 800;
+  list-style: none;
+}
+
+.meta summary::-webkit-details-marker {
+  display: none;
+}
+
+.metaPre {
+  margin: 8px 0 0;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(7, 2, 13, 0.6);
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

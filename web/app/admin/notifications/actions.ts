@@ -83,7 +83,7 @@ export async function sendBroadcast(formData: FormData): Promise<SendResult> {
 
   // audit log
   await ctx.supabase.from('audit_logs').insert({
-    actor_id: ctx.userId,
+    actor_user_id: ctx.userId,
     action: 'notifications.broadcast',
     entity_type: 'notifications',
     entity_id: null,

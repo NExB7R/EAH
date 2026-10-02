@@ -224,3 +224,46 @@ export async function getUserIdsForAudience(type: AudienceType): Promise<string[
   const { data } = await q
   return (data ?? []).map((r) => r.id)
 }
+
+// ═══════════════════════════════════════════════════════════
+// Admin — Audit Logs
+// ═══════════════════════════════════════════════════════════
+
+export type AuditLog = {
+  id: string
+  actor_user_id: string | null
+  action: string
+  entity_type: string | null
+  entity_id: string | null
+  metadata: Record<string, unknown>
+  created_at: string
+  actor: { display_name: string } | null
+}
+
+export async function getAuditLogs(limit = 100, action?: string): Promise<AuditLog[]> {
+  const supabase = await createClient()
+  let q = supabase
+    .from('audit_logs')
+    .select('id, actor_user_id, action, entity_type, entity_id, metadata, created_at')
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (action) q = q.eq('action', action)
+
+  const { data: logs } = await q
+  if (!logs || logs.length === 0) return []
+
+  // جيب أسماء الأدمن
+  const userIds = [...new Set(logs.map((l) => l.actor_user_id).filter(Boolean))] as string[]
+  const { data: profiles } = userIds.length
+    ? await supabase.from('profiles').select('id, display_name').in('id', userIds)
+    : { data: [] }
+
+  const namesMap = new Map((profiles ?? []).map((p) => [p.id, p.display_name]))
+
+  return logs.map((l) => ({
+    ...l,
+    metadata: (l.metadata ?? {}) as Record<string, unknown>,
+    actor: l.actor_user_id ? { display_name: namesMap.get(l.actor_user_id) ?? '—' } : null,
+  })) as AuditLog[]
+}
