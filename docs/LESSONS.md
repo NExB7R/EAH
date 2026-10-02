@@ -721,3 +721,32 @@ cat file.tsx
 **الأماكن:** metadata title, social, manifest, OG images
 
 **الحالة:** TODO قبل الإطلاق
+
+---
+
+## 27. توحيد مجلد المشروع — EAH (2026-10-02)
+
+**الوضع قبل:** مجلدين
+- `~/EAH` — النسخة القديمة (46 migration + schema v0.1.0)
+- `~/EAH-V2` — النسخة الحالية
+
+**الوضع بعد:** مجلد واحد
+- `~/EAH` — الرسمي (بعد ما أخذنا نسخة من القديم في `docs/migrations-archive/`)
+
+**اللي اتحفظ من القديم:**
+- 46 migration → `docs/migrations-archive/`
+- `SCHEMA_V0_1_0.md` + `RLS_MATRIX_V0_1_0.md` + `DATABASE_PLAN.md`
+- `eah-docs-ready.txt`
+- `.vercel` project link → `.vercel.eah-old.bak`
+
+**اللي اتمسح:**
+- `~/EAH-V2` (rename لـ `~/EAH`)
+- `~/EAH` القديم
+
+**مشكلة اتحلت:**
+- lefthook مش موجود في PATH بعد الـ rename
+- الحل: symlink في `~/.local/bin/lefthook`
+
+**المراجع:**
+- `docs/migrations-archive/README.md`
+- `~/.local/bin/lefthook` (symlink)
