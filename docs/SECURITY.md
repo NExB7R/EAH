@@ -1,7 +1,17 @@
 # EAH — SECURITY.md
 
-> الحمايات الأمنية + الثغرات المحتملة + خطة التحسين.
-> آخر تحديث: 2026-09-25
+> الحمايات الأمنية الكاملة + الثغرات + خطة التحسين. **المصدر الوحيد للحقيقة.**
+> آخر تحديث: 2026-10-03
+
+---
+
+## 0. الفلسفة
+
+**الدفاع في العمق (Defense in Depth):**
+- كل حماية في طبقة مختلفة
+- لو طبقة فشلت، الطبقة اللي بعدها تحمي
+- الحمايات الحرجة في DB (مستحيل تتخطى)
+- الحمايات الثانوية في App/Cloud
 
 ---
 
@@ -18,6 +28,23 @@
 | Session management | ✅ Supabase |
 | Rate limiting (DB) | ⚠️ جزئي (rate_limits table) |
 
+**DB Triggers:**
+
+| # | الحماية | الدالة |
+|---|---------|--------|
+| 1 | منع تقييم النفس | prevent_self_review |
+| 2 | منع طلب النفس | prevent_self_order |
+| 3 | كشف Velocity (10+/ساعة) | detect_review_velocity |
+| 4 | Audit log للتقييمات | log_review_changes |
+
+**Indexes + Constraints:**
+
+| # | الحماية |
+|---|---------|
+| 5 | Unique follow/favorite |
+| 6 | CHECK على كل enum |
+| 7 | CHECK على ranges (impact, wanted) |
+
 ### 1.2 Application (Next.js)
 
 | الحماية | الحالة |
@@ -26,11 +53,13 @@
 | X-Frame-Options | ✅ DENY |
 | X-Content-Type-Options | ✅ nosniff |
 | Referrer-Policy | ✅ strict-origin-when-cross-origin |
-| Permissions-Policy | ✅ camera=(), mic=(self), geo=(self), payment=() |
+| Permissions-Policy | ✅ camera=(), mic=(self), geo=(self) |
 | HSTS | ✅ max-age=63072000; includeSubDomains |
-| CSRF | ✅ Next.js Server Actions (built-in) |
+| CSRF | ✅ Next.js Server Actions |
 | Input validation | ✅ Zod schemas |
 | Route protection | ✅ `proxy.ts` |
+| gitleaks | ✅ pre-commit |
+| npm audit | ✅ zero high |
 
 ### 1.3 Secrets
 
@@ -43,44 +72,12 @@
 
 ---
 
-## 2. الثغرات المحتملة ⚠️
+## 2. الحمايات المطبقة فعلياً
 
-### 2.1 حرجة (لازم قبل الإطلاق)
+### 2.1 CSP (next.config.ts)
 
-| # | الثغرة | الخطورة | الحل |
-|---|--------|---------|------|
-| 1 | Rate limiting على `/auth/login` | 🔴 عالي | Upstash Redis |
-| 2 | Rate limiting على `/auth/signup` | 🔴 عالي | Upstash Redis |
-| 3 | Rate limiting على `/api/*` | 🔴 عالي | Upstash Redis |
-| 4 | مفيش Turnstile على signup | 🟠 متوسط | Cloudflare Turnstile |
-| 5 | Audit logs مش مربوطة بحاجات كتير | 🟠 متوسط | ربط في كل action |
-
-### 2.2 متوسطة
-
-| # | الثغرة | الخطورة | الحل |
-|---|--------|---------|------|
-| 6 | `'unsafe-inline'` في CSP | 🟠 متوسط | nonce-based CSP |
-| 7 | مفيش X-XSS-Protection | 🟡 منخفض | إضافة header |
-| 8 | مفيش Content-Type validation | 🟡 منخفض | middleware |
-| 9 | مفيش IP allowlist للـ admin | 🟡 منخفض | Vercel config |
-
-### 2.3 منخفضة
-
-| # | الثغرة | الخطورة | الحل |
-|---|--------|---------|------|
-| 10 | مفيش Sentry (error tracking) | 🟡 منخفض | Sentry SDK |
-| 11 | مفيش 2FA | 🟡 منخفض | TOTP |
-| 12 | مفيش Security headers audit | 🟡 منخفض | securityheaders.com |
-
----
-
-## 3. الحمايات المطبقة فعلياً
-
-### 3.1 CSP (`next.config.ts`)
-
-```
 default-src 'self'
-script-src 'self' 'unsafe-inline' (production)
+script-src 'self' 'unsafe-inline'
 style-src 'self' 'unsafe-inline'
 img-src 'self' data: blob: cloudinary + supabase
 connect-src 'self' supabase + cloudinary
@@ -90,103 +87,216 @@ base-uri 'self'
 form-action 'self'
 object-src 'none'
 upgrade-insecure-requests
-```
 
-### 3.2 RLS (Supabase)
+### 2.2 RLS (Supabase)
 
-- **Public read:** businesses, business_media, reviews, offers.
-- **Owner read/write:** حسب owner_profile_id.
-- **Self read/write:** profiles, favorites, follows, orders.
-- **Admin full:** عبر is_admin().
+- Public read: businesses, business_media, reviews, offers
+- Owner read/write: حسب owner_profile_id
+- Self read/write: profiles, favorites, follows, orders
+- Admin full: عبر is_admin()
 
-### 3.3 Zod Validation
+### 2.3 Zod Validation
 
-- كل input → Zod schema.
-- Server-side فقط.
-- رسائل خطأ عربية.
+- كل input → Zod schema
+- Server-side فقط
+- رسائل خطأ عربية
 
-### 3.4 Route Protection (`proxy.ts`)
+### 2.4 Route Protection (proxy.ts)
 
-- `/account/*` → login required.
-- `/merchant/*` → login required (ما عدا `/merchant/apply`).
-- `/admin/*` → super_admin.
-- `/notifications/*` → login required.
+- /account/* → login required
+- /merchant/* → login required (ما عدا /merchant/apply)
+- /admin/* → super_admin
+- /notifications/* → login required
+
+
+---
+
+## 3. الثغرات المحتملة (من منظور مهاجم)
+
+### 3.1 من ناحية المستخدم/الزائر
+
+| الثغرة | الاستغلال | الحل الحالي | الحل المستقبلي |
+|--------|-----------|-------------|-----------------|
+| حسابات متعددة | حسابات بأرقام مختلفة | Supabase Auth | Turnstile + Fingerprint |
+| Review Bombing | حشد لتقييم سلبي | DB Trigger ✅ | - |
+| تضخيم الأثر | تعليقات قصيرة متكررة | Log Scale ✅ | Rate Limit |
+| صور مسروقة | صور من الإنترنت | - | Reverse Image Search |
+
+### 3.2 من ناحية صاحب النشاط
+
+| الثغرة | الاستغلال | الحل الحالي |
+|--------|-----------|-------------|
+| تقييم النفس | حساب عميل ويقيّم | DB Trigger ✅ |
+| طلبات وهمية | طلبات لنفسه | DB Trigger ✅ |
+| ردود متطابقة | رد متكرر | Rate Limit (بعدين) |
+
+### 3.3 من ناحية النظام
+
+| الثغرة | الاستغلال | الحل الحالي |
+|--------|-----------|-------------|
+| انتحال | رقم قديم | سياسة 30 يوم (بعدين) |
+| تجاوز RLS | ثغرة | RLS Audit (بعدين) |
+| SQL Injection | حقن | Zod + Parameterized ✅ |
+| DDoS | هجوم | Cloudflare (بعدين) |
+| Brute Force | محاولات دخول | Auth Rate Limits (بعدين) |
+| Rate Limit عام | 1000 req/s | Upstash (بعدين) |
+
 
 ---
 
 ## 4. خطة التحسين
 
-### 4.1 المرحلة 1 (قبل الإطلاق)
+### 4.1 المرحلة 1: حمايات حرجة (مجانية) — قبل الإطلاق
 
-- [ ] Rate limiting (Upstash Redis).
-- [ ] Turnstile على signup.
-- [ ] Audit logs شاملة.
-- [ ] Security headers audit.
+| # | الحماية | الأداة | الوقت |
+|---|---------|--------|-------|
+| 1 | Turnstile على التسجيل | Cloudflare Turnstile | 20 دقيقة |
+| 2 | Auth Rate Limits | Supabase Dashboard | 5 دقايق |
+| 3 | API Rate Limiting | Upstash Redis | 30 دقيقة |
+| 4 | RLS Audit | supabase-rls-linter | 15 دقيقة |
 
-### 4.2 المرحلة 2 (بعد 3 شهور)
+**تفاصيل:**
 
-- [ ] nonce-based CSP.
-- [ ] 2FA اختياري.
-- [ ] IP allowlist للـ admin.
-- [ ] Sentry.
+**1. Cloudflare Turnstile:**
+- حماية من البوتات
+- 88% من تطبيقات Supabase فيها RLS misconfigured
+- الخطوات: حساب Cloudflare → Turnstile → Add Site → Site Key + Secret
+- npm install @marsidev/react-turnstile
+- الـ widget في auth-form.tsx + التحقق في actions.ts
 
-### 4.3 المرحلة 3 (بعد سنة)
+**2. Supabase Auth Rate Limits:**
+- Dashboard → Authentication → Rate Limits
+- Sign-up/Sign-in: 5 / 15 دقيقة
+- Password reset: 3 / ساعة
+- Token refresh: 60 / ساعة
 
-- [ ] Penetration testing.
-- [ ] Bug bounty.
-- [ ] WAF (Cloudflare).
+**3. Upstash Rate Limiting:**
+- Vercel serverless مفيش shared state → Redis خارجي
+- الحدود المجانية: 10K commands/day + 256MB
+- npm install @upstash/ratelimit @upstash/redis
+- lib/rate-limit.ts + الـ limiter في proxy.ts
+
+**4. RLS Audit:**
+- npx supabase-rls-linter
+- RLS001 (missing RLS) = CRITICAL
+- RLS002 (USING true) = CRITICAL
+- SECURITY DEFINER بدون search_path = HIGH
+
+### 4.2 المرحلة 2: حمايات متوسطة — قبل الإطلاق الرسمي
+
+| # | الحماية | الأداة | الوقت |
+|---|---------|--------|-------|
+| 5 | Device Fingerprinting | FingerprintJS OSS | ساعة |
+| 6 | Audit Logs شاملة | Triggers إضافية | ساعة |
+| 7 | Open Redirect Protection | Next.js config | 15 دقيقة |
+
+**تفاصيل:**
+
+**5. Device Fingerprinting:**
+- منع الحسابات المتعددة
+- FingerprintJS (open source)
+- useFingerprint() hook
+- تخزين الـ fingerprint في profiles
+- لو 3+ حسابات من نفس الجهاز → flag
+
+**6. Audit Logs شاملة:**
+- كل عملية إدارية + تعديل بيانات حساسة
+- Trigger على: businesses, profiles, subscriptions
+
+**7. Open Redirect Protection:**
+- منع تحويلات ضارة
+- التحقق من next parameter في الـ redirects
+
+### 4.3 المرحلة 3: حمايات متقدمة — بعد Vercel Pro
+
+| # | الحماية | الأداة | السبب |
+|---|---------|--------|-------|
+| 8 | Reverse Image Search | Google Vision API | مكلف بعد free tier |
+| 9 | WAF متقدم | Cloudflare Pro | مدفوع |
+| 10 | Penetration Testing | شركة متخصصة | مكلف |
+| 11 | ShieldLabs / Sift | كشف احتيال متقدم | 99$/شهر |
+| 12 | 2FA | TOTP | مش حرج دلوقتي |
+
 
 ---
 
 ## 5. القواعد الإجبارية
 
 ### ممنوع
-- secrets في Git.
-- Service Role Key على client.
-- RLS متعطّل.
-- HTML غير موثوق (بدون sanitize).
-- بيانات شخصية بدون تشفير.
-- أي تعديل DB بدون migration.
-- `eval()` أو `Function()`.
 
-### مسموح
-- Server Actions (CSRF protected).
-- Service Role على server only.
-- Zod validation.
-- RLS.
-- HTTPS إجباري.
+- secrets في Git
+- Service Role Key على client
+- RLS متعطّل
+- HTML غير موثوق (بدون sanitize)
+- بيانات شخصية بدون تشفير
+- أي تعديل DB بدون migration
+- eval() أو Function()
+- raw SQL queries
+- trust على client input
+
+### إجباري
+
+- كل حماية حرجة في DB
+- Zod على كل input
+- RLS على كل جدول
+- Audit log للعمليات الحساسة
+- Rate limit لكل endpoint
+- Server Actions (CSRF protected)
+- Service Role على server only
+- HTTPS إجباري
 
 ---
 
 ## 6. الاستجابة للحوادث
 
 ### 6.1 Secret اتكشف
-1. غيّره فوراً (Supabase / Cloudinary / Vercel).
-2. امسح من Git history.
-3. بلّغ.
-4. راجع كل الـ secrets.
+
+1. غيّره فوراً (Supabase / Cloudinary / Vercel)
+2. امسح من Git history
+3. بلّغ
+4. راجع كل الـ secrets
 
 ### 6.2 Production data اتمسحت
-1. ما تعدّلش أي حاجة.
-2. افحص Supabase backups.
-3. بلّغ.
-4. استنى تعليمات.
+
+1. ما تعدّلش أي حاجة
+2. افحص Supabase backups
+3. بلّغ
+4. استنى تعليمات
 
 ### 6.3 الموقع وقع
-1. افحص Vercel logs.
-2. افحص Supabase status.
-3. بلّغ بالتشخيص.
-4. استنى تعليمات.
+
+1. افحص Vercel logs
+2. افحص Supabase status
+3. بلّغ بالتشخيص
+4. استنى تعليمات
 
 ---
 
-## 7. المراجع
+## 7. الأدوات
 
-- `AI_CONTRACT.md` — القواعد
-- `ARCHITECTURE.md §15` — Security
-- `SACRED.md §11` — ممنوعات الأمان
-- `LESSONS.md` — التجارب
+| الأداة | المجال | التكلفة |
+|--------|--------|---------|
+| Supabase RLS | DB | مجاني |
+| DB Triggers | DB | مجاني |
+| Zod | Validation | مجاني |
+| gitleaks | Secrets | مجاني |
+| npm audit | Dependencies | مجاني |
+| Cloudflare Turnstile | Anti-Bot | مجاني |
+| Upstash Redis | Rate Limit | مجاني (10K/day) |
+| FingerprintJS | Device ID | مجاني (OSS) |
+| Google Vision | Images | مجاني (1K/month) |
+| Cloudflare WAF | DDoS | مجاني (basic) |
 
 ---
 
-آخر تحديث: 2026-09-25
+## 8. المراجع
+
+- AI_CONTRACT.md — القواعد
+- ARCHITECTURE.md §15 — Security
+- SACRED.md §11 — ممنوعات الأمان
+- QUALITY.md — نظام الجودة
+- LESSONS.md — التجارب
+
+---
+
+آخر تحديث: 2026-10-03
