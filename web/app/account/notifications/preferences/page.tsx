@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation'
 import { getUserSession } from '@/lib/data/user'
 import AccountPageHeader from '@/components/account-page-header'
 import PrefsForm from './prefs-form'
-import styles from './preferences.module.css'
 
 export const dynamic = 'force-dynamic'
 
