@@ -1,5 +1,6 @@
 import WmImage from './wm-image'
 import { StarIcon, BadgeCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
+import DistanceBadge from './distance-badge'
 import type { BusinessDetail } from '@/lib/data/business-detail'
 import { TYPE_LABEL, TIER_LABEL } from '@/lib/data/business-detail'
 import styles from './business-hero.module.css'
@@ -25,7 +26,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
   const ratingValue = hasRating ? business.rating_avg.toFixed(1) : null
 
   return (
-    <section className={styles.hero}>
+    <section className={`${styles.hero} ${business.is_featured ? styles.featured : ''}`}>
       {/* ─── Cover ─── */}
       <div className={styles.cover}>
         {cover ? (
@@ -96,6 +97,13 @@ export default function BusinessHero({ detail, isOpen }: Props) {
               {isOpen ? <CheckCircleIcon size={11} /> : <AlertIcon size={11} />}
               {isOpen ? 'مفتوح' : 'مغلق'}
             </span>
+            {business.location && (
+              <DistanceBadge
+                lat={business.location.lat}
+                lng={business.location.lng}
+                className={styles.distanceHero}
+              />
+            )}
           </div>
 
           <div className={styles.badges}>

@@ -7,6 +7,24 @@ import type { Business } from './businesses'
 // EAH — Business Detail (Full Page Data)
 // ═══════════════════════════════════════════════════════════
 
+function normalizeBusinessRows(data: unknown[] | null): Business[] {
+  if (!data) return []
+  return data.map((row) => {
+    const raw = { ...(row as Record<string, unknown>) }
+    const locRaw = raw.business_locations
+    const locArr = Array.isArray(locRaw)
+      ? (locRaw as { latitude: number; longitude: number; is_primary: boolean }[])
+      : []
+    const primaryLoc = locArr.find((l) => l.is_primary) ?? locArr[0]
+    const location =
+      primaryLoc && Number.isFinite(primaryLoc.latitude) && Number.isFinite(primaryLoc.longitude)
+        ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
+        : null
+    delete raw.business_locations
+    return { ...(raw as unknown as Business), location }
+  })
+}
+
 export type ContactMethod = {
   method_type: 'phone' | 'whatsapp' | 'facebook' | 'instagram' | 'website' | 'email'
   value: string
@@ -97,7 +115,8 @@ export const getBusinessDetail = unstable_cache(
         new_until, working_hours, accepts_whatsapp_orders,
         response_time_avg_seconds, response_rate,
         last_activity_at, created_at, updated_at,
-        branches_count, offers_count, rating_avg, rating_count
+        branches_count, offers_count, rating_avg, rating_count,
+        business_locations(latitude, longitude, is_primary)
       `,
       )
       .eq('slug', slug)
@@ -106,7 +125,18 @@ export const getBusinessDetail = unstable_cache(
 
     if (!biz) return null
 
-    const business = biz as unknown as Business
+    const rawBiz = biz as unknown as Record<string, unknown>
+    const locRaw = rawBiz.business_locations
+    const locArr = Array.isArray(locRaw)
+      ? (locRaw as { latitude: number; longitude: number; is_primary: boolean }[])
+      : []
+    const primaryLoc = locArr.find((l) => l.is_primary) ?? locArr[0]
+    const location =
+      primaryLoc && Number.isFinite(primaryLoc.latitude) && Number.isFinite(primaryLoc.longitude)
+        ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
+        : null
+    delete rawBiz.business_locations
+    const business = { ...(rawBiz as unknown as Business), location }
 
     // 2. Parallel: contacts + media + branches
     const [contactsRes, mediaRes, branchesRes] = await Promise.all([
@@ -256,7 +286,8 @@ export const getSimilarBusinesses = unstable_cache(
         new_until, working_hours, accepts_whatsapp_orders,
         response_time_avg_seconds, response_rate,
         last_activity_at, created_at, updated_at,
-        branches_count, offers_count, rating_avg, rating_count
+        branches_count, offers_count, rating_avg, rating_count,
+        business_locations(latitude, longitude, is_primary)
       `,
       )
       .eq('business_type', businessType)
@@ -265,7 +296,7 @@ export const getSimilarBusinesses = unstable_cache(
       .order('trust_score', { ascending: false })
       .limit(limit)
 
-    return (data ?? []) as Business[]
+    return normalizeBusinessRows(data)
   },
   ['business-similar-v1'],
   { revalidate: 300, tags: ['businesses'] },
