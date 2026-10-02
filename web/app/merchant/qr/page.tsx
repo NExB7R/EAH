@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getUserSession } from '@/lib/data/user'
+import { isFeatureEnabled } from '@/lib/features'
 import { createClient } from '@/lib/supabase/server'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
@@ -12,6 +13,10 @@ export const dynamic = 'force-dynamic'
 export default async function QrPage() {
   const session = await getUserSession()
   if (!session) redirect('/auth?next=/merchant/qr')
+
+  if (!(await isFeatureEnabled('qr_enabled'))) {
+    redirect('/merchant')
+  }
 
   const supabase = await createClient()
   const { data: business } = await supabase

@@ -6,21 +6,27 @@ import { getNotifications } from '@/lib/data/account'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import PushToggle from '@/components/push-toggle'
+import { isFeatureEnabled } from '@/lib/features'
 import styles from './notifications.module.css'
 
 export default async function NotificationsPage() {
   const session = await getUserSession()
   if (!session) redirect('/auth?next=/account/notifications')
 
-  const notifications = await getNotifications(session.userId)
+  const [notifications, pushOn] = await Promise.all([
+    getNotifications(session.userId),
+    isFeatureEnabled('push_enabled'),
+  ])
 
   return (
     <div>
       <AccountPageHeader title="الإشعارات" description={`${notifications.length} إشعار`} />
 
-      <div style={{ marginBottom: 20 }}>
-        <PushToggle />
-      </div>
+      {pushOn && (
+        <div style={{ marginBottom: 20 }}>
+          <PushToggle />
+        </div>
+      )}
 
       {notifications.length === 0 ? (
         <EmptyState

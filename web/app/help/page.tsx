@@ -17,6 +17,7 @@ import {
   SparkleStarIcon,
 } from '@/components/icons'
 import SupportWidget from '@/components/support-widget'
+import { isFeatureEnabled } from '@/lib/features'
 import styles from './help.module.css'
 
 export const metadata: Metadata = {
@@ -110,7 +111,8 @@ const MERCHANT_TOPICS: Topic[] = [
   },
 ]
 
-export default function HelpPage() {
+export default async function HelpPage() {
+  const supportOn = await isFeatureEnabled('support_bot_enabled')
   return (
     <main className={styles.page}>
       <SecondaryHero title="المساعدة" activeKey="help" />
@@ -168,16 +170,18 @@ export default function HelpPage() {
           </div>
         </section>
 
-        <section className={styles.section}>
-          <div className={styles.sectionHead}>
-            <span className={styles.sectionBadge}>
-              <SparkleStarIcon size={12} />
-              مساعد فوري
-            </span>
-            <h2 className={styles.sectionTitle}>محتاج مساعدة فورية؟</h2>
-          </div>
-          <SupportWidget />
-        </section>
+        {supportOn && (
+          <section className={styles.section}>
+            <div className={styles.sectionHead}>
+              <span className={styles.sectionBadge}>
+                <SparkleStarIcon size={12} />
+                مساعد فوري
+              </span>
+              <h2 className={styles.sectionTitle}>محتاج مساعدة فورية؟</h2>
+            </div>
+            <SupportWidget />
+          </section>
+        )}
 
         <section className={styles.faq}>
           <h2 className={styles.faqTitle}>أسئلة سريعة</h2>
