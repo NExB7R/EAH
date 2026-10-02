@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from 'react'
 import { MessageCircleIcon, SendIcon, AlertIcon, ShieldCheckIcon } from './icons'
+import styles from './support-widget.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Support Widget (Inline — للـ /help)
