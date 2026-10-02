@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { reviewSchema, merchantReplySchema } from '@/lib/validations/review'
+import { createNotification } from '@/lib/notifications/server'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Review Actions
@@ -86,6 +87,24 @@ export async function submitReview(
     metadata: { review_id: null },
   })
 
+  // إشعار لصاحب النشاط
+  const { data: biz } = await supabase
+    .from('businesses')
+    .select('owner_profile_id, name')
+    .eq('id', businessId)
+    .maybeSingle()
+
+  if (biz?.owner_profile_id) {
+    void createNotification({
+      userId: biz.owner_profile_id,
+      type: 'review',
+      title: 'تقييم جديد على نشاطك',
+      body: `${biz.name}: حد كتب تقييم جديد — افتح صفحتك عشان تشوف التفاصيل وترد`,
+      deepLink: `/businesses/${slug}#reviews-section`,
+      pushTag: 'review',
+    }).catch(() => {})
+  }
+
   revalidatePath(`/businesses/${slug}`)
   return { ok: true }
 }
@@ -134,6 +153,24 @@ export async function replyToReview(
     .eq('id', reviewId)
 
   if (error) return { ok: false, error: error.message }
+
+  // إشعار لصاحب التقييم
+  const { data: reviewMeta } = await supabase
+    .from('business_reviews')
+    .select('user_id')
+    .eq('id', reviewId)
+    .maybeSingle()
+
+  if (reviewMeta?.user_id) {
+    void createNotification({
+      userId: reviewMeta.user_id,
+      type: 'review_reply',
+      title: 'رد صاحب النشاط على تقييمك',
+      body: 'شوف رده على تقييمك — يمكن يجاوب على استفسارك',
+      deepLink: `/businesses/${businessSlug}#reviews-section`,
+      pushTag: 'review-reply',
+    }).catch(() => {})
+  }
 
   revalidatePath(`/businesses/${businessSlug}`)
   return { ok: true }
