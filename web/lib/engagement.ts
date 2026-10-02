@@ -10,7 +10,6 @@
 
 const KEY_INSTALL_ACCEPTED = 'eah-install-accepted'
 const KEY_PENDING_REVIEWS = 'eah-pending-reviews'
-const REVIEW_DELAY_MS = 2 * 60 * 60 * 1000
 
 export type EngagementAction = 'phone_reveal' | 'whatsapp' | 'review' | 'comment'
 
