@@ -43,6 +43,7 @@ export type PointLogItem = {
 
 export type NotificationItem = {
   id: string
+  notification_type: string
   title: string
   body: string | null
   deep_link: string | null
@@ -174,7 +175,7 @@ export async function getNotifications(userId: string, limit = 50): Promise<Noti
   const supabase = await createClient()
   const { data } = await supabase
     .from('notifications')
-    .select('id, title, body, deep_link, read_at, created_at')
+    .select('id, notification_type, title, body, deep_link, read_at, created_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(limit)

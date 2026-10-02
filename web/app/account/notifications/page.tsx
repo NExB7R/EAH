@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { BellIcon } from '@/components/icons'
+import { BellIcon, CrownGoldIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getNotifications } from '@/lib/data/account'
 import AccountPageHeader from '@/components/account-page-header'
