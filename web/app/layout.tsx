@@ -9,7 +9,6 @@ import InstallPrompt from '@/components/install-prompt'
 import ReviewReminder from '@/components/review-reminder'
 import SignupPrompt from '@/components/signup-prompt'
 import ScrollToTop from '@/components/scroll-to-top'
-import SiteFooter from '@/components/site-footer'
 import { getUserSession } from '@/lib/data/user'
 import './globals.css'
 
@@ -33,7 +32,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <FloatingCapsule session={session} />
         {children}
-        <SiteFooter />
         <InstallPrompt />
         <ReviewReminder />
         {!session && <SignupPrompt />}
