@@ -6,6 +6,8 @@ import {
   StarIcon,
   CrownGoldIcon,
   ShieldCheckIcon,
+  BadgeCheckIcon,
+  SparkleStarIcon,
   CheckCircleIcon,
   AlertIcon,
   WhatsAppIcon,
@@ -44,10 +46,11 @@ const TYPE_META: Record<string, TypeMeta> = {
   misc: { label: 'نشاط', Icon: SparklesIcon },
 }
 
-const TIER_LABEL: Record<string, string> = {
-  trusted: 'موثوق',
-  verified: 'مُوثَّق',
-  new: 'جديد',
+type TierMeta = { label: string; cls: string; Icon: typeof ShieldCheckIcon }
+const TIER_META: Record<string, TierMeta> = {
+  verified: { label: 'مُوثَّق', cls: 'verified', Icon: BadgeCheckIcon },
+  trusted: { label: 'موثوق', cls: 'trusted', Icon: ShieldCheckIcon },
+  new: { label: 'جديد', cls: 'new', Icon: SparkleStarIcon },
 }
 
 function offersText(c: number): string {
@@ -67,7 +70,7 @@ function branchesText(c: number): string {
 export default function BusinessCard({ business, tone = 'purple', variant = 'default' }: Props) {
   const meta = TYPE_META[business.business_type] ?? TYPE_META.misc!
   const TypeIcon = meta.Icon
-  const tierLabel = TIER_LABEL[business.trust_tier] ?? null
+  const tier = TIER_META[business.trust_tier] ?? null
 
   const hasRealRating = business.rating_count > 0
   const ratingValue = hasRealRating
@@ -145,10 +148,10 @@ export default function BusinessCard({ business, tone = 'purple', variant = 'def
             </span>
           )}
 
-          {tierLabel && (
-            <span className={`${styles.chip} ${styles.chipTrust}`}>
-              <ShieldCheckIcon size={12} />
-              {tierLabel}
+          {tier && (
+            <span className={`${styles.chip} ${styles.chipTrust} ${styles[`tier_${tier.cls}`]}`}>
+              <tier.Icon size={12} />
+              {tier.label}
             </span>
           )}
 

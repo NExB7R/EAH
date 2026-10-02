@@ -368,3 +368,31 @@
   bottom: 10px;
   z-index: 3;
 }
+
+/* ─── Trust tier variants ─── */
+.tier_verified {
+  color: #a8f0d8;
+  background: rgba(85, 231, 209, 0.1);
+  border-color: rgba(85, 231, 209, 0.4);
+}
+
+.tier_trusted {
+  color: #d8b8ff;
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+.tier_new {
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(168, 85, 247, 0.18);
+}
+
+/* Glow خفيف للـ verified */
+.tier_verified svg {
+  filter: drop-shadow(0 0 4px rgba(85, 231, 209, 0.6));
+}
+
+.tier_trusted svg {
+  filter: drop-shadow(0 0 4px rgba(168, 85, 247, 0.5));
+}
