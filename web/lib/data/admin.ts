@@ -267,3 +267,212 @@ export async function getAuditLogs(limit = 100, action?: string): Promise<AuditL
     actor: l.actor_user_id ? { display_name: namesMap.get(l.actor_user_id) ?? '—' } : null,
   })) as AuditLog[]
 }
+
+// ═══════════════════════════════════════════════════════════
+// Admin — Analytics
+// ═══════════════════════════════════════════════════════════
+
+export type AnalyticsSummary = {
+  viewsToday: number
+  viewsWeek: number
+  viewsMonth: number
+  uniquesToday: number
+  uniquesWeek: number
+  uniquesMonth: number
+}
+
+export type TopPage = {
+  path: string
+  count: number
+}
+
+export type TopBusiness = {
+  id: string
+  name: string
+  slug: string
+  count: number
+}
+
+export type ReferrerStat = {
+  referrer: string
+  count: number
+}
+
+export type DeviceStat = {
+  device: string
+  count: number
+}
+
+export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
+  const supabase = await createClient()
+  const now = new Date()
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
+  const weekStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
+  const monthStart = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString()
+
+  const [
+    { count: viewsToday },
+    { count: viewsWeek },
+    { count: viewsMonth },
+    { data: todayRaw },
+    { data: weekRaw },
+    { data: monthRaw },
+  ] = await Promise.all([
+    supabase
+      .from('page_view_events')
+      .select('*', { count: 'exact', head: true })
+      .gte('occurred_at', todayStart),
+    supabase
+      .from('page_view_events')
+      .select('*', { count: 'exact', head: true })
+      .gte('occurred_at', weekStart),
+    supabase
+      .from('page_view_events')
+      .select('*', { count: 'exact', head: true })
+      .gte('occurred_at', monthStart),
+    supabase
+      .from('page_view_events')
+      .select('visitor_id')
+      .gte('occurred_at', todayStart)
+      .limit(5000),
+    supabase
+      .from('page_view_events')
+      .select('visitor_id')
+      .gte('occurred_at', weekStart)
+      .limit(10000),
+    supabase
+      .from('page_view_events')
+      .select('visitor_id')
+      .gte('occurred_at', monthStart)
+      .limit(20000),
+  ])
+
+  const uniq = (rows: { visitor_id: string }[] | null) =>
+    new Set((rows ?? []).map((r) => r.visitor_id)).size
+
+  return {
+    viewsToday: viewsToday ?? 0,
+    viewsWeek: viewsWeek ?? 0,
+    viewsMonth: viewsMonth ?? 0,
+    uniquesToday: uniq(todayRaw),
+    uniquesWeek: uniq(weekRaw),
+    uniquesMonth: uniq(monthRaw),
+  }
+}
+
+export async function getTopPages(days = 7, limit = 10): Promise<TopPage[]> {
+  const supabase = await createClient()
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
+
+  const { data } = await supabase
+    .from('page_view_events')
+    .select('path')
+    .gte('occurred_at', since)
+    .limit(10000)
+
+  if (!data) return []
+
+  const counts = new Map<string, number>()
+  for (const row of data) {
+    counts.set(row.path, (counts.get(row.path) ?? 0) + 1)
+  }
+
+  return [...counts.entries()]
+    .map(([path, count]) => ({ path, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit)
+}
+
+export async function getTopBusinesses(days = 7, limit = 10): Promise<TopBusiness[]> {
+  const supabase = await createClient()
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
+
+  const { data } = await supabase
+    .from('page_view_events')
+    .select('business_id')
+    .gte('occurred_at', since)
+    .not('business_id', 'is', null)
+    .limit(20000)
+
+  if (!data) return []
+
+  const counts = new Map<string, number>()
+  for (const row of data) {
+    if (!row.business_id) continue
+    counts.set(row.business_id, (counts.get(row.business_id) ?? 0) + 1)
+  }
+
+  const topIds = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit)
+  if (topIds.length === 0) return []
+
+  const { data: businesses } = await supabase
+    .from('businesses')
+    .select('id, name, slug')
+    .in(
+      'id',
+      topIds.map(([id]) => id),
+    )
+
+  const bizMap = new Map((businesses ?? []).map((b) => [b.id, b]))
+
+  return topIds
+    .map(([id, count]) => {
+      const b = bizMap.get(id)
+      return b ? { id, name: b.name, slug: b.slug, count } : null
+    })
+    .filter((x): x is TopBusiness => x !== null)
+}
+
+export async function getReferrers(days = 7, limit = 6): Promise<ReferrerStat[]> {
+  const supabase = await createClient()
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
+
+  const { data } = await supabase
+    .from('page_view_events')
+    .select('referrer')
+    .gte('occurred_at', since)
+    .not('referrer', 'is', null)
+    .limit(10000)
+
+  if (!data) return []
+
+  const counts = new Map<string, number>()
+  for (const row of data) {
+    if (!row.referrer) continue
+    let host = 'direct'
+    try {
+      host = new URL(row.referrer).hostname
+    } catch {
+      host = row.referrer.slice(0, 40)
+    }
+    counts.set(host, (counts.get(host) ?? 0) + 1)
+  }
+
+  return [...counts.entries()]
+    .map(([referrer, count]) => ({ referrer, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit)
+}
+
+export async function getDevices(days = 7): Promise<DeviceStat[]> {
+  const supabase = await createClient()
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
+
+  const { data } = await supabase
+    .from('page_view_events')
+    .select('device_type')
+    .gte('occurred_at', since)
+    .limit(10000)
+
+  if (!data) return []
+
+  const counts = new Map<string, number>()
+  for (const row of data) {
+    const d = row.device_type ?? 'unknown'
+    counts.set(d, (counts.get(d) ?? 0) + 1)
+  }
+
+  return [...counts.entries()]
+    .map(([device, count]) => ({ device, count }))
+    .sort((a, b) => b.count - a.count)
+}
