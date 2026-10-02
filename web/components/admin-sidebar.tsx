@@ -61,6 +61,7 @@ const SECTIONS: Section[] = [
         Icon: StoreIcon,
         badgeKey: 'pendingBusinesses',
       },
+      { href: '/admin/featured', label: 'المميزون', Icon: CrownGoldIcon },
       { href: '/admin/users', label: 'المستخدمين', Icon: UserIcon },
       {
         href: '/admin/subscriptions',

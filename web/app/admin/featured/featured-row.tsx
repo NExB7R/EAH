@@ -2,13 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
-import {
-  CrownGoldIcon,
-  PinIcon,
-  ExternalLinkIcon,
-  CheckCircleIcon,
-  CloseIcon,
-} from '@/components/icons'
+import { PinIcon, ExternalLinkIcon, CheckCircleIcon, CloseIcon } from '@/components/icons'
 import { toggleFeatured, togglePin, setFeaturedOrder, extendFeaturedUntil } from './actions'
 import styles from './featured.module.css'
 
