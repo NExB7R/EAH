@@ -1,16 +1,66 @@
 import type { Metadata } from 'next'
-import { CookieIcon } from '@/components/icons'
-import ComingSoon from '@/components/coming-soon'
+import LegalPage, { type LegalSection } from '@/components/legal-page'
 
-export const metadata: Metadata = { title: 'الكوكيز · EAH' }
+export const metadata: Metadata = {
+  title: 'سياسة الكوكيز · EAH',
+  description: 'بنستخدم كوكيز أساسية بس — بدون تتبع',
+}
+
+export const revalidate = 86400
+
+const SECTIONS: LegalSection[] = [
+  {
+    title: 'يعني إيه كوكيز؟',
+    body: [
+      'الكوكيز ملفات صغيرة بيتخزنها المتصفح بتاعك عشان المنصة تفضل فاكرة معلومات عنك (زي إنت مسجل دخول أو إيه تفضيلاتك).',
+    ],
+  },
+  {
+    title: 'الكوكيز اللي بنستخدمها',
+    body: [
+      'كوكيز تسجيل الدخول: بتفضل مسجّل دخول لمدة 7 أيام (إلا لو عملت logout).',
+      'كوكيز الجلسة: عشان نعرف إن الجلسة دي لك، مش لحد تاني.',
+      'كوكيز التفضيلات: زي إعدادات الإشعارات، الـ splash (لو ظهر قبل كده).',
+      'كوكيز الأمان: لمنع هجمات CSRF وحماية الحساب.',
+    ],
+  },
+  {
+    title: 'اللي مش بنستخدمه',
+    body: [
+      'مفيش كوكيز إعلانات (زي Google Ads أو Facebook Pixel).',
+      'مفيش كوكيز تتبع سلوك عبر المواقع التانية.',
+      'مفيش كوكيز من أطراف تالتة للتسويق.',
+    ],
+  },
+  {
+    title: 'التحكم في الكوكيز',
+    body: [
+      'ممكن تمسح الكوكيز من إعدادات المتصفح في أي وقت — بس ده هيسجّلك خروج.',
+      'ممكن تستخدم وضع incognito للتصفح بدون حفظ كوكيز.',
+      'لو عندك إضافة حجب كوكيز (زي Ad blockers)، الموقع هيفضل يشتغل بس ممكن بعض الميزات تفشل.',
+    ],
+  },
+  {
+    title: 'Local Storage',
+    body: [
+      'بنستخدم كمان Local Storage (مش كوكيز) لحفظ: الكود اللي بتستخدمه للتسجيل، إعدادات الـ splash، إلخ.',
+      'Local Storage بيفضل عندك على الجهاز وبيتمسح لو مسحت بيانات المتصفح.',
+    ],
+  },
+  {
+    title: 'التغييرات',
+    body: ['لو ضفنا أي كوكيز جديدة، بنحدّث السياسة دي وبنبلّغك.'],
+  },
+]
 
 export default function CookiesPage() {
   return (
-    <ComingSoon
-      title="ملفات الكوكيز"
-      Icon={CookieIcon}
-      tone="purple"
-      message="بنجهّز سياسة الكوكيز — قريب إن شاء الله"
+    <LegalPage
+      title="سياسة الكوكيز"
+      activeKey="cookies"
+      updated="2026-10-02"
+      intro="بنستخدم أقل قدر ممكن من الكوكيز — الأساسية بس. بدون تتبع، بدون إعلانات."
+      sections={SECTIONS}
     />
   )
 }
