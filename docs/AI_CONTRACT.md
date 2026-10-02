@@ -755,6 +755,7 @@ Doc-to-Code = 1:1. لو الكود اتغير وما اتوثّقش → الشغ
 | Sacred files | SACRED.md قسم 4 |
 | Reading order | FILE_ORDER.md |
 | المشاكل المعروفة | AI_HANDOFF.md قسم 7 |
+| التطويرات المستقبلية + أسعارها | FUTURE.md |
 
 ### ممنوع
 - تكرار قيمة في أكتر من ملف.
