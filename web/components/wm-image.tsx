@@ -1,13 +1,16 @@
+'use client'
+
+import { useState } from 'react'
 import Image, { type ImageProps } from 'next/image'
 import Watermark from './watermark'
+import styles from './wm-image.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Watermarked Image
-// next/image + العلامة المائية
+// next/image + watermark + fallback gradient عند الفشل
 // ═══════════════════════════════════════════════════════════
 
 type WmImageProps = ImageProps & {
-  // noWatermark → بدون علامة (للـ avatars / icons)
   noWatermark?: boolean
 }
 
@@ -17,13 +20,15 @@ export default function WmImage({
   alt = '',
   ...props
 }: WmImageProps) {
-  if (noWatermark) {
-    return <Image className={className} alt={alt} {...props} />
+  const [failed, setFailed] = useState(false)
+
+  if (failed) {
+    return <div className={`${className ?? ''} ${styles.failed}`} aria-hidden />
   }
 
-  return (
-    <Watermark>
-      <Image className={className} alt={alt} {...props} />
-    </Watermark>
-  )
+  const img = <Image className={className} alt={alt} onError={() => setFailed(true)} {...props} />
+
+  if (noWatermark) return img
+
+  return <Watermark>{img}</Watermark>
 }

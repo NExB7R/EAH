@@ -1,7 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
    EAH — Watermark Overlay
-   لوجو + تاج، شفاف، مائل، يمتد على العرض
-   ⚠️ مؤقت — لما نستخدم Cloudinary: transformation فعلية
+   SVG inline — صفر صور
    ═══════════════════════════════════════════════════════════ */
 
 .wrap {
@@ -24,19 +23,18 @@
   transform-origin: center;
   opacity: 0.12;
   mix-blend-mode: screen;
+  color: #f4f2fa;
 }
 
 .crown {
   width: 18%;
   height: auto;
   margin-bottom: -2%;
-  filter: brightness(1.2);
 }
 
 .word {
   width: 90%;
   height: auto;
-  filter: brightness(1.2);
 }
 
 @supports not (mix-blend-mode: screen) {
