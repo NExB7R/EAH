@@ -133,3 +133,40 @@ export async function getAdminRecent(): Promise<AdminRecent> {
     newReviews: newReviews ?? 0,
   }
 }
+
+// ═══════════════════════════════════════════════════════════
+// Admin — Featured Businesses
+// ═══════════════════════════════════════════════════════════
+
+export type FeaturedBusiness = {
+  id: string
+  name: string
+  slug: string
+  business_type: string
+  area: string | null
+  cover_image_url: string | null
+  is_published: boolean
+  is_featured: boolean
+  featured_pin: boolean
+  featured_order: number
+  featured_until: string | null
+  created_at: string
+}
+
+export async function getFeaturedBusinesses(): Promise<FeaturedBusiness[]> {
+  const supabase = await createClient()
+
+  const { data } = await supabase
+    .from('businesses')
+    .select(
+      'id, name, slug, business_type, area, cover_image_url, is_published, is_featured, featured_pin, featured_order, featured_until, created_at',
+    )
+    .or('is_featured.eq.true,is_published.eq.true')
+    .order('is_featured', { ascending: false })
+    .order('featured_pin', { ascending: false })
+    .order('featured_order', { ascending: true })
+    .order('created_at', { ascending: false })
+    .limit(200)
+
+  return (data ?? []) as FeaturedBusiness[]
+}

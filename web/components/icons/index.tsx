@@ -799,3 +799,23 @@ export function FireIcon({ size = 20, className }: IconProps) {
     </svg>
   )
 }
+
+export function PinIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <line x1="12" y1="17" x2="12" y2="22" />
+      <path d="M5 17h14l-1.5-3V8l2-2V5H5v1l2 2v6L5 17z" />
+    </svg>
+  )
+}
