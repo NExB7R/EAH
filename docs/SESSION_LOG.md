@@ -403,3 +403,51 @@
 - /admin/studio Big Features (design live + نصوص ثابتة)
 - اختبار ميداني موبايل
 - Vercel Pro + Supabase Pro (قبل الإطلاق)
+
+---
+
+## 2026-10-03 — Session 10: Deep Cleanup
+
+### §26 — Single Source of Truth اتصحح
+- `PROGRESS.md` → v1.0.0 + `0fbf16b` (commit code)
+- `AI_HANDOFF.md` + `NEW_CHAT_MESSAGE.md` → يشاوروا على `PROGRESS.md`
+
+### Git نظيف
+- حذف فرع `v2` (GitHub default بقى `main` + Vercel Production بقى `main`)
+- حذف 15 tag قديم (محلي + remote)
+- حذف 13 فرع قديم (dependabot + arena + archive)
+- شيل كل مراجع v2 كفرع من docs
+
+### OG Images (SEO)
+- `app/opengraph-image.tsx` (رئيسية)
+- `app/twitter-image.tsx`
+- `app/businesses/[slug]/opengraph-image.tsx` (لكل نشاط)
+- `public/fonts/Tajawal-Black.ttf` + `Tajawal-Bold.ttf` (satori بيقرأ من ملف، مش URL)
+- `metadataBase` + `openGraph` + `twitter` في layout
+- **مختبر:** `image/png` على Vercel ✅
+
+### Cleanup — knip نظيف
+- 2 ملفات ميتة (coming-soon + paid-gate)
+- @vitejs/plugin-react (devDep ميت)
+- server-only اتضاف (كان ناقص)
+- 19 دالة/type ميتة
+- 4 أيقونات ميتة (MonitorIcon + SmartphoneIcon + ToggleIcon + PaletteIcon)
+- `knip.json` نظّف (removed redundant entries)
+- **النتيجة:** knip = صفر dead code
+
+### Docs نظفت
+- `docs/SCHEMA.sql` (قديم — Supabase = source of truth)
+- `docs/plans/AI_AGENT.md` (اتبني)
+- `docs/migrations-archive/` (52 ملف v1 قديم)
+- `docs/SECURITY_PLAN.md` (اتدمج جوه `SECURITY.md`)
+- `docs/TODO.md` (تكرار FUTURE + SECURITY)
+
+### Speed Insights
+- اتحط → Vercel Hobby بيقول "Upgrade to Plus"
+- اتشال (مش مفيد على Hobby)
+
+### المراجع
+- commits: `4b2dc76` → `dc78e00` (12 commit)
+- Vercel: Production branch بقى `main`
+- GitHub: default branch بقى `main`
+
