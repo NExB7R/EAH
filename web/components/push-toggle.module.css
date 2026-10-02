@@ -1,0 +1,96 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-md);
+  background: rgba(168, 85, 247, 0.04);
+}
+
+.cardOn {
+  border-color: var(--teal);
+  background: rgba(85, 231, 209, 0.05);
+}
+
+.icon,
+.iconDanger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--purple-soft);
+  color: var(--purple-light);
+  flex-shrink: 0;
+}
+
+.cardOn .icon {
+  background: rgba(85, 231, 209, 0.12);
+  color: var(--teal);
+}
+
+.iconDanger {
+  background: rgba(252, 165, 165, 0.1);
+  color: var(--red);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+}
+
+.desc {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.msg {
+  font-size: 0.7rem;
+  color: var(--teal);
+  margin: 4px 0 0;
+  font-weight: 700;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--purple-primary);
+  background: var(--purple-primary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 180ms;
+  flex-shrink: 0;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnOff {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--purple-line);
+}
+
+.btnOff:hover:not(:disabled) {
+  border-color: var(--red);
+  color: var(--red);
+}

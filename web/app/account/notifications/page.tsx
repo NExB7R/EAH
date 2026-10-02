@@ -5,6 +5,7 @@ import { getUserSession } from '@/lib/data/user'
 import { getNotifications } from '@/lib/data/account'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
+import PushToggle from '@/components/push-toggle'
 import styles from './notifications.module.css'
 
 export default async function NotificationsPage() {
@@ -16,6 +17,10 @@ export default async function NotificationsPage() {
   return (
     <div>
       <AccountPageHeader title="الإشعارات" description={`${notifications.length} إشعار`} />
+
+      <div style={{ marginBottom: 20 }}>
+        <PushToggle />
+      </div>
       {notifications.length === 0 ? (
         <EmptyState
           Icon={BellIcon}
