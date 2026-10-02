@@ -1,0 +1,210 @@
+.codeCard {
+  position: relative;
+  padding: 32px 24px;
+  margin-bottom: 24px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.9));
+  text-align: center;
+  overflow: hidden;
+}
+
+.codeGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(168, 85, 247, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.codeLabel {
+  position: relative;
+  display: inline-block;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.codeBox {
+  position: relative;
+  display: inline-block;
+  padding: 12px 28px;
+  margin-bottom: 20px;
+  border: 2px dashed var(--purple-line);
+  border-radius: var(--radius-md);
+  background: rgba(168, 85, 247, 0.06);
+}
+
+.code {
+  font-family: 'Courier New', monospace;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--purple-light);
+}
+
+.shareRow {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btnPrimary,
+.btnGhost,
+.btnWa {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 180ms;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
+  color: #fff;
+  border-color: var(--purple-primary);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.35);
+}
+
+.btnGhost {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--purple-line);
+}
+
+.btnGhost:hover {
+  border-color: var(--purple-primary);
+  color: var(--purple-light);
+}
+
+.btnWa {
+  background: rgba(37, 211, 102, 0.1);
+  color: #25d366;
+  border-color: rgba(37, 211, 102, 0.3);
+}
+
+.btnWa:hover {
+  background: rgba(37, 211, 102, 0.15);
+}
+
+.rewards,
+.how {
+  margin-top: 24px;
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+}
+
+.rewardsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.rewardCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-md);
+  background: rgba(168, 85, 247, 0.04);
+}
+
+.rewardIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--gold-soft);
+  color: var(--gold-light);
+}
+
+.rewardTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 2px;
+}
+
+.rewardPoints {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin: 0;
+}
+
+.rewardPoints strong {
+  color: var(--gold-primary);
+  font-size: 0.9rem;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-md);
+  background: rgba(168, 85, 247, 0.04);
+}
+
+.stepNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--purple-primary);
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.85rem;
+}
+
+.steps p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .codeCard {
+    padding: 24px 16px;
+  }
+  .code {
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+  }
+  .rewardsGrid {
+    grid-template-columns: 1fr;
+  }
+}

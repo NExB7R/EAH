@@ -12,6 +12,7 @@ import {
   BellIcon,
   LockIcon,
   ShieldCheckIcon,
+  ShareIcon,
 } from './icons'
 import styles from './account-sidebar.module.css'
 
@@ -30,6 +31,8 @@ const ITEMS = [
   { key: 'following', href: '/account/following', label: 'المتابعات', Icon: StoreIcon },
   { key: 'orders', href: '/account/orders', label: 'الطلبات', Icon: FileTextIcon },
   { key: 'points', href: '/account/points', label: 'النقاط', Icon: GiftIcon },
+  { key: 'loyalty', href: '/account/loyalty', label: 'الولاء', Icon: CrownGoldIcon },
+  { key: 'referral', href: '/account/referral', label: 'دعوة أصدقاء', Icon: ShareIcon },
   {
     key: 'notifications',
     href: '/account/notifications',
