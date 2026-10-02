@@ -444,12 +444,12 @@ Sizes:
 - Supabase dev project
 
 ### 17.2 Preview
-- Every push to v2
+- Every push to main
 - Vercel Preview URL
 - Test before production
 
 ### 17.3 Production
-- Merge to v2 (default branch)
+- Merge to main (default branch)
 - Vercel auto-deploy
 - eah-sq.vercel.app
 

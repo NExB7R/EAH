@@ -44,8 +44,8 @@
 - Production URL: https://eah-sq.vercel.app
 - Region: fra1
 - Root Directory: web
-- Branch: v2
-- Auto-deploy: on every push to v2
+- Branch: main
+- Auto-deploy: on every push to main
 
 ### Cloudinary
 - Cloud name: zlgcimmg
@@ -54,7 +54,7 @@
 
 ### Git
 - Repo: NExB7R/EAH (private)
-- Branch: v2 (default)
+- Branch: main (default)
 - Old code: archive/v1
 - Old code backup: backup-4ffe42d
 - Old tags: v0.2.0 through v1.4.0

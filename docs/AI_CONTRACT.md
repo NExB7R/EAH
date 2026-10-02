@@ -465,13 +465,13 @@ wc -l file && tail -3 file
 ### 18.4 Sync All
 
 قبل أي تعديل:
-- git pull origin v2
+- git pull origin main
 - npx tsc --noEmit
 
 بعد كل تعديل:
 - npx tsc --noEmit (نظيف)
 - git add + git commit (رسالة واضحة)
-- git push origin main:v2
+- git push origin main
 
 ### 18.5 Check Before Build
 
@@ -1060,7 +1060,7 @@ Doc-to-Code = 1:1. لو الكود اتغير وما اتوثّقش → الشغ
 - أي ملف → `wc -l` + `tail -3` بعد الكتابة
 - أي تعديل متعدد → commit واحد بس
 - أي git op → تحقق من `git status --short` قبل
-- أي push → تأكد من الفرع الصح (`main:v2`)
+- أي push → الفرع الوحيد: `main`
 
 ---
 

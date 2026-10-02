@@ -419,7 +419,7 @@
 كل يوم لازم ينتهي بـ:
 - typecheck نظيف
 - commit واضح
-- push للـ v2
+- push للـ main
 - Preview على Vercel
 - لا regressions
 

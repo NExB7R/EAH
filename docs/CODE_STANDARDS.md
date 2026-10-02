@@ -102,7 +102,7 @@ Types:
 
 لو حصل خطأ:
 git revert <commit-hash>
-git push origin main:v2
+git push origin main
 
 ---
 
