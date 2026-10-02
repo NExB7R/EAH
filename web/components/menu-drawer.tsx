@@ -148,7 +148,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
       <aside className={styles.drawer} role="dialog" aria-modal="true">
         <div className={styles.header}>
           <Link href="/" onClick={onClose} aria-label="EAH">
-            <Logo size="xs" variant="compact" href={undefined} />
+            <Logo size="xs" variant="compact" href={null} />
           </Link>
           <button type="button" className={styles.closeBtn} onClick={onClose} aria-label="إغلاق">
             <CloseIcon size={20} />

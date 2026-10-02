@@ -105,7 +105,7 @@ export default function FloatingCapsule({ session }: Props) {
           {/* ─── النص: اللوجو ─── */}
           <div className={styles.center}>
             <Link href="/" aria-label="EAH — الرئيسية">
-              <Logo size="xs" variant="compact" href={undefined} />
+              <Logo size="xs" variant="compact" href={null} />
             </Link>
           </div>
 

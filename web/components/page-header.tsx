@@ -30,7 +30,7 @@ export default function PageHeader({
         )}
         <div className={styles.logoWrap}>
           <Link href="/" aria-label="EAH — الرئيسية">
-            <Logo size={logoSize} variant="full" href={undefined} />
+            <Logo size={logoSize} variant="full" href={null} />
           </Link>
         </div>
       </div>
