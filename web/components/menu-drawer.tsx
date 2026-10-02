@@ -61,7 +61,9 @@ const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/updates', label: 'التحديثات', Icon: SparklesIcon },
 ]
 
-const USER_ITEMS: MenuItem[] = [{ href: '/notifications', label: 'الإشعارات', Icon: BellIcon }]
+const USER_ITEMS: MenuItem[] = [
+  { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
+]
 
 const MERCHANT_ITEMS: MenuItem[] = [
   { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
