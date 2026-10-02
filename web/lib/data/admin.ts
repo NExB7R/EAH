@@ -170,3 +170,57 @@ export async function getFeaturedBusinesses(): Promise<FeaturedBusiness[]> {
 
   return (data ?? []) as FeaturedBusiness[]
 }
+
+// ═══════════════════════════════════════════════════════════
+// Admin — Audience Targeting
+// ═══════════════════════════════════════════════════════════
+
+export type AudienceType = 'all' | 'customers' | 'merchants' | 'verified' | 'premium'
+
+export type AudienceCount = {
+  type: AudienceType
+  label: string
+  count: number
+}
+
+export async function getAudienceCounts(): Promise<AudienceCount[]> {
+  const supabase = await createClient()
+
+  const [
+    { count: all },
+    { count: customers },
+    { count: merchants },
+    { count: verified },
+    { count: premium },
+  ] = await Promise.all([
+    supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'customer'),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'merchant'),
+    supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .not('phone_verified_at', 'is', null),
+    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('is_premium', true),
+  ])
+
+  return [
+    { type: 'all', label: 'كل المستخدمين', count: all ?? 0 },
+    { type: 'customers', label: 'العملاء', count: customers ?? 0 },
+    { type: 'merchants', label: 'أصحاب الأنشطة', count: merchants ?? 0 },
+    { type: 'verified', label: 'الموثقين', count: verified ?? 0 },
+    { type: 'premium', label: 'المميزين', count: premium ?? 0 },
+  ]
+}
+
+export async function getUserIdsForAudience(type: AudienceType): Promise<string[]> {
+  const supabase = await createClient()
+
+  let q = supabase.from('profiles').select('id')
+  if (type === 'customers') q = q.eq('role', 'customer')
+  if (type === 'merchants') q = q.eq('role', 'merchant')
+  if (type === 'verified') q = q.not('phone_verified_at', 'is', null)
+  if (type === 'premium') q = q.eq('is_premium', true)
+
+  const { data } = await q
+  return (data ?? []).map((r) => r.id)
+}
