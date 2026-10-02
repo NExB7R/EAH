@@ -1,34 +1,39 @@
 'use client'
 
-import { useSyncExternalStore } from 'react'
+import { useEffect, useState } from 'react'
 
 // ═══════════════════════════════════════════════════════════
-// useMounted — بديل حديث لـ mounted pattern
-// بدل: useState(false) + useEffect(() => setMounted(true))
+// useMounted — يعمل false على server + أول render على client
 // ═══════════════════════════════════════════════════════════
-// بيرجع false في SSR و true في client بعد hydration
-// بدون setState-in-effect → صفر cascading renders
+// ⚠️ مهم: بنستخدم useState+useEffect (مش useSyncExternalStore)
+// السبب: useSyncExternalStore بيستخدم getSnapshot على client
+// أثناء hydration → false/true mismatch → React #418
 // ═══════════════════════════════════════════════════════════
-
-const emptySubscribe = () => () => {}
 
 export function useMounted(): boolean {
-  return useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false,
-  )
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: mount detection requires post-hydration setState
+    setMounted(true)
+  }, [])
+
+  return mounted
 }
 
-// ─── للاستخدام مع قيم من المتصفح (مثل prefers-reduced-motion) ───
+// ─── للاستخدام مع قيم من المتصفح ───
 export function useMediaQuery(query: string): boolean {
-  return useSyncExternalStore(
-    (cb) => {
-      const mql = window.matchMedia(query)
-      mql.addEventListener('change', cb)
-      return () => mql.removeEventListener('change', cb)
-    },
-    () => window.matchMedia(query).matches,
-    () => false,
-  )
+  const [matches, setMatches] = useState(false)
+
+  useEffect(() => {
+    const mql = window.matchMedia(query)
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: sync with external MediaQueryList
+    setMatches(mql.matches)
+
+    const onChange = (e: MediaQueryListEvent) => setMatches(e.matches)
+    mql.addEventListener('change', onChange)
+    return () => mql.removeEventListener('change', onChange)
+  }, [query])
+
+  return matches
 }
