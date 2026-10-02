@@ -34,7 +34,7 @@
 
 **Day 3-4: Supabase**
 - [ ] إنشاء Supabase project (أو استخدام الحالي)
-- [ ] تشغيل `SCHEMA.sql` (migration كامل)
+- [ ] تشغيل migrations من `docs/migrations/`
 - [ ] التأكد من RLS + Policies
 - [ ] Storage buckets (business-media, avatars)
 - [ ] Seed data (أنشطة تجريبية)

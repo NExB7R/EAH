@@ -173,7 +173,6 @@ EAH - 3 حروف، بالحروف اللاتينية. مش إيه، مش eah، �
 - `next.config.ts`
 
 ### Schema
-- `docs/SCHEMA.sql`
 - كل migrations
 
 ### قبل أي تعديل

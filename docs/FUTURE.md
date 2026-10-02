@@ -189,6 +189,5 @@
 
 - `docs/plans/POLISH_PASS.md` — خطة التحسين البصري
 - `docs/plans/ANNOUNCEMENTS.md` — إشعارات المسؤول
-- `docs/PLAN_AI_AGENT.md` — AI Agent الأصلي
 - `docs/TODO.md` — TODO المختصر
 - `CHANGELOG.md` — اللي خلص

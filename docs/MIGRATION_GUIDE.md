@@ -254,7 +254,6 @@ vercel link
 
 - docs/MASTER_BRIEF.md
 - docs/ARCHITECTURE.md
-- docs/SCHEMA.sql
 - docs/ROADMAP.md
 - docs/AI_CONTRACT.md
 

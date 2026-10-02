@@ -503,7 +503,6 @@ Optional:
 ## 20. Related Files
 
 - docs/MASTER_BRIEF.md - Vision
-- docs/SCHEMA.sql - Database schema
 - docs/SACRED.md - Sacred files
 - docs/AI_CONTRACT.md - Rules
 

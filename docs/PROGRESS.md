@@ -278,7 +278,6 @@
 | ROADMAP.md | ✅ |
 | GLOSSARY.md | ✅ |
 | MIGRATION_GUIDE.md | ✅ |
-| SCHEMA.sql | ⚠️ قديم |
 | CODE_STANDARDS.md | ✅ |
 | DEBUGGING.md | ✅ |
 | PRODUCTION_CHECKLIST.md | ✅ |
