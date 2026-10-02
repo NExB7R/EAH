@@ -166,3 +166,33 @@ export async function getMerchantOrders(businessId: string, limit = 50): Promise
 
   return (data ?? []) as MerchantOrder[]
 }
+
+// ═══════════════════════════════════════════════════════════
+// Merchant — Offers
+// ═══════════════════════════════════════════════════════════
+
+export type MerchantOffer = {
+  id: string
+  title: string
+  description: string | null
+  price: number | null
+  image_url: string | null
+  starts_at: string | null
+  ends_at: string | null
+  is_published: boolean
+  created_at: string
+}
+
+export async function getMerchantOffers(businessId: string): Promise<MerchantOffer[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('offers')
+    .select(
+      'id, title, description, price, image_url, starts_at, ends_at, is_published, created_at',
+    )
+    .eq('business_id', businessId)
+    .order('created_at', { ascending: false })
+    .limit(100)
+
+  return (data ?? []) as MerchantOffer[]
+}
