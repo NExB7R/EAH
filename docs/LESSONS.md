@@ -647,3 +647,25 @@ cat file.tsx
 **الدرس:**
 - Next.js image optimizer = للدومينات الموثوقة فقط
 - صور المستخدمين من CDNs خارجية = `unoptimized` دايماً
+
+---
+
+## 21. React 19.3.0 + Next.js 16.3.8 = React #418 (2026-10-02)
+
+**الغلطة:** رقّينا React من 19.2.8 → 19.3.0. بعدها ظهر React #418 (hydration) على كل صفحة.
+
+**الأعراض:**
+- React #418 مع `args[]=HTML`
+- traceback من `MessagePort.O` (RSC streaming channel)
+- بيحصل في incognito كمان (مش extension)
+- attributes على <html> سليمة (`lang`, `dir` بس)
+
+**السبب:** عدم توافق React 19.3.0 مع Next.js 16.3.8 في RSC streaming.
+
+**الحل:** رجعنا React/react-dom لـ 19.2.8.
+
+**الدرس:**
+- Next.js 16.3.8 = مُختبَر على React 19.2.x
+- ممنوع upgrade React بدون التأكد من توافق Next
+- `npm outdated` بيقول "Latest" مش "متوافق"
+- القاعدة: `next` يقول أي React يدعم، هو المصدر
