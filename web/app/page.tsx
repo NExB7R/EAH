@@ -6,25 +6,25 @@ import NewRow from '@/components/new-row'
 import NearbyGrid from '@/components/nearby-grid'
 import SuggestedSection from '@/components/suggested-section'
 import { getPublishedBusinesses, getActiveOffers } from '@/lib/data'
+import { getFeatureFlags } from '@/lib/features'
 import { sortByTrend } from '@/lib/ranking'
 import type { Business } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  // query واحدة لكل الأنشطة + query للعروض = 2 بدل 6
-  const [all, offers] = await Promise.all([getPublishedBusinesses(), getActiveOffers(8)])
+  const [all, offers, flags] = await Promise.all([
+    getPublishedBusinesses(),
+    getActiveOffers(8),
+    getFeatureFlags(),
+  ])
 
-  // فلترة في الكود — صفر DB calls إضافية
   const featured = all.filter((b) => b.is_featured).slice(0, 15)
-  const topTrust = all.slice(0, 15) // مرتب بـ trust_score من الـ query
+  const topTrust = all.slice(0, 15)
   const newOnes = all.filter((b) => b.is_new_project).slice(0, 12)
   const nearby = all.filter((b) => b.area === 'شبين القناطر').slice(0, 12)
-
-  // trending — sort في الكود
   const trending = sortByTrend(all).slice(0, 12)
 
-  // featured = featured + topTrust (لو featured قليل)
   const seen = new Set<string>()
   const featuredMerged: Business[] = []
   for (const b of [...featured, ...topTrust]) {
@@ -38,11 +38,11 @@ export default async function Home() {
   return (
     <main>
       <HomeHero />
-      <FeaturedBento businesses={featuredMerged} />
-      <TrendingRow businesses={trending} />
-      <OffersStrip offers={offers} />
-      <NewRow businesses={newOnes} />
-      <NearbyGrid businesses={nearby} />
+      {flags.featured_enabled && <FeaturedBento businesses={featuredMerged} />}
+      {flags.trends_enabled && <TrendingRow businesses={trending} />}
+      {flags.offers_enabled && <OffersStrip offers={offers} />}
+      {flags.new_enabled && <NewRow businesses={newOnes} />}
+      {flags.nearby_enabled && <NearbyGrid businesses={nearby} />}
       <SuggestedSection />
     </main>
   )

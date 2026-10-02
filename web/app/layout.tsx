@@ -14,6 +14,7 @@ import SiteFooter from '@/components/site-footer'
 import AiWidget from '@/components/ai-widget'
 import { Analytics } from '@vercel/analytics/next'
 import { getUserSession } from '@/lib/data/user'
+import { getFeatureFlags } from '@/lib/features'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -30,7 +31,7 @@ export const viewport: Viewport = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const session = await getUserSession()
+  const [session, flags] = await Promise.all([getUserSession(), getFeatureFlags()])
 
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
@@ -42,7 +43,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <InstallPrompt />
         <ReviewReminder />
         {!session && <SignupPrompt />}
-        <AiWidget />
+        {flags.ai_agent_enabled && <AiWidget />}
         <ScrollToTop />
         <Analytics />
       </body>
