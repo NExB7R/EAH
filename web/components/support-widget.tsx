@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useTransition } from 'react'
-import { MessageCircleIcon, CloseIcon, SendIcon, AlertIcon, ShieldCheckIcon } from './icons'
-import styles from './support-widget.module.css'
+import { MessageCircleIcon, SendIcon, AlertIcon, ShieldCheckIcon } from './icons'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Support Widget (Inline — للـ /help)
