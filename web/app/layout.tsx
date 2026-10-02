@@ -17,10 +17,29 @@ import { getUserSession } from '@/lib/data/user'
 import { getFeatureFlags } from '@/lib/features'
 import './globals.css'
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
+
 export const metadata: Metadata = {
-  title: 'EAH اللى نفسك فيه ؟',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'EAH اللى نفسك فيه ؟',
+    template: '%s | EAH',
+  },
   description: 'منصة اكتشاف محلية مصرية — من قلب شبين القناطر',
   manifest: '/manifest.webmanifest',
+  openGraph: {
+    type: 'website',
+    locale: 'ar_EG',
+    url: SITE_URL,
+    siteName: 'EAH',
+    title: 'EAH اللى نفسك فيه ؟',
+    description: 'منصة اكتشاف محلية مصرية — من قلب شبين القناطر',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'EAH اللى نفسك فيه ؟',
+    description: 'منصة اكتشاف محلية مصرية — من قلب شبين القناطر',
+  },
 }
 
 export const viewport: Viewport = {
