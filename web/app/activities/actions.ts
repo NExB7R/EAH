@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { createNotification } from '@/lib/notifications/server'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Activity Actions (follow / favorite / like)
@@ -53,6 +54,26 @@ async function toggleActivity(
   })
 
   if (error) return { ok: false, error: error.message }
+
+  // إشعار لصاحب النشاط (فقط لو متابعة جديدة)
+  if (type === 'follow') {
+    const { data: biz } = await supabase
+      .from('businesses')
+      .select('owner_profile_id, name')
+      .eq('id', businessId)
+      .maybeSingle()
+
+    if (biz?.owner_profile_id) {
+      void createNotification({
+        userId: biz.owner_profile_id,
+        type: 'follow_new',
+        title: 'عميل جديد تابعك',
+        body: `حد تابع ${biz.name} — أول ما تنزل عرض جديد هيوصله إشعار فوري`,
+        deepLink: `/businesses/${slug}`,
+        pushTag: 'follow',
+      }).catch(() => {})
+    }
+  }
 
   revalidatePath(`/businesses/${slug}`)
   return { ok: true, active: true }
