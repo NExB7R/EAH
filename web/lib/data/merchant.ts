@@ -10,9 +10,13 @@ export type MerchantBusiness = {
   name: string
   business_type: string
   area: string | null
+  description: string | null
+  hook: string | null
+  address_text: string | null
   cover_image_url: string | null
   is_published: boolean
   is_open: boolean
+  accepts_whatsapp_orders: boolean
   trust_score: number
   trust_tier: string
   successful_orders: number
@@ -21,6 +25,11 @@ export type MerchantBusiness = {
   rating_avg: number
   rating_count: number
   created_at: string
+}
+
+export type MerchantContacts = {
+  phone: string | null
+  whatsapp: string | null
 }
 
 export type MerchantSubscription = {
@@ -53,12 +62,26 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
   const { data } = await supabase
     .from('businesses')
     .select(
-      'id, slug, name, business_type, area, cover_image_url, is_published, is_open, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at',
+      'id, slug, name, business_type, area, description, hook, address_text, cover_image_url, is_published, is_open, accepts_whatsapp_orders, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at',
     )
     .eq('owner_profile_id', userId)
     .maybeSingle()
 
   return (data as MerchantBusiness) ?? null
+}
+
+// ─── Contacts ───
+export async function getMyContacts(businessId: string): Promise<MerchantContacts> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('business_contact_methods')
+    .select('method_type, value')
+    .eq('business_id', businessId)
+    .in('method_type', ['phone', 'whatsapp'])
+
+  const phone = data?.find((c) => c.method_type === 'phone')?.value ?? null
+  const whatsapp = data?.find((c) => c.method_type === 'whatsapp')?.value ?? null
+  return { phone, whatsapp }
 }
 
 // ─── Subscription ───

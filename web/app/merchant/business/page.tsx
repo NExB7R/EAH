@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { StoreIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
-import { getMyBusiness } from '@/lib/data/merchant'
+import { getMyBusiness, getMyContacts } from '@/lib/data/merchant'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import BusinessEditForm from './edit-form'
@@ -26,6 +26,8 @@ export default async function MerchantBusinessPage() {
     )
   }
 
+  const contacts = await getMyContacts(business.id)
+
   return (
     <div>
       <AccountPageHeader title="نشاطي" description="عدّل بيانات النشاط — كل تعديل يتحفظ فوراً" />
@@ -33,7 +35,13 @@ export default async function MerchantBusinessPage() {
         initial={{
           name: business.name,
           area: business.area ?? '',
+          description: business.description ?? '',
+          hook: business.hook ?? '',
+          address: business.address_text ?? '',
           isOpen: business.is_open,
+          acceptsWhatsapp: business.accepts_whatsapp_orders,
+          phone: contacts.phone ?? '',
+          whatsapp: contacts.whatsapp ?? '',
         }}
       />
     </div>
