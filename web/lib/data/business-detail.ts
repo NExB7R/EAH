@@ -68,21 +68,6 @@ export type Review = {
   } | null
 }
 
-export type BusinessActivityStats = {
-  followCount: number
-  favoriteCount: number
-  likeCount: number
-  commentCount: number
-  replyCount: number
-  shareCount: number
-}
-
-export type BusinessPulse = {
-  lastHour: number
-  last24h: number
-  trend: 'hot' | 'warm' | 'cold'
-}
-
 export type BusinessDetail = {
   business: Business
   contacts: ContactMethod[]

@@ -61,5 +61,3 @@ export const applySchema = z.object({
     message: 'لازم توافق على الشروط',
   }),
 })
-
-export type ApplyInput = z.infer<typeof applySchema>

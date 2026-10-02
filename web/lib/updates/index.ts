@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { parseChangelog, type Release } from './parser'
 
-export type { Release, Entry, EntryType } from './parser'
+export type { Release } from './parser'
 
 // بيقرأ CHANGELOG.md من web/ (Vercel root)
 export function getReleases(): Release[] {

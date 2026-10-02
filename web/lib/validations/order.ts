@@ -12,5 +12,3 @@ export const orderSchema = z.object({
   items_summary: z.string().min(3, 'اكتب طلبك').max(500),
   notes: z.string().max(300).optional().or(z.literal('')),
 })
-
-export type OrderInput = z.infer<typeof orderSchema>

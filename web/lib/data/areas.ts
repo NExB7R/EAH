@@ -127,8 +127,6 @@ export const AREAS = [
   'نوى',
 ] as const
 
-export type Area = (typeof AREAS)[number]
-
 // المنطقة الافتراضية
 
 // إحداثيات المناطق (مركز كل منطقة — تقديري)

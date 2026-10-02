@@ -15,5 +15,3 @@ export const reviewSchema = z
 export const merchantReplySchema = z.object({
   reply: z.string().trim().min(5, 'الرد قصير').max(500, 'الرد طويل'),
 })
-
-export type ReviewInput = z.infer<typeof reviewSchema>

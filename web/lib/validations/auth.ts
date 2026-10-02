@@ -90,6 +90,3 @@ export const recoverSchema = z.object({
 })
 
 // ─── الأنواع ───
-export type SignupInput = z.infer<typeof signupSchema>
-export type LoginInput = z.infer<typeof loginSchema>
-export type RecoverInput = z.infer<typeof recoverSchema>
