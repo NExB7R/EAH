@@ -13,6 +13,7 @@ import ScrollToTop from '@/components/scroll-to-top'
 import SiteFooter from '@/components/site-footer'
 import AiWidget from '@/components/ai-widget'
 import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getUserSession } from '@/lib/data/user'
 import { getFeatureFlags } from '@/lib/features'
 import './globals.css'
@@ -65,6 +66,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {flags.ai_agent_enabled && <AiWidget />}
         <ScrollToTop />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
