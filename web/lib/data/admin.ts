@@ -476,3 +476,46 @@ export async function getDevices(days = 7): Promise<DeviceStat[]> {
     .map(([device, count]) => ({ device, count }))
     .sort((a, b) => b.count - a.count)
 }
+
+// ═══════════════════════════════════════════════════════════
+// Admin — Reports
+// ═══════════════════════════════════════════════════════════
+
+export type ReportRow = {
+  id: string
+  reporter_profile_id: string
+  target_type: string
+  target_id: string
+  reason: string
+  details: string | null
+  status: string
+  created_at: string
+  reporter: { display_name: string } | null
+}
+
+export async function getReports(status: string = 'open'): Promise<ReportRow[]> {
+  const supabase = await createClient()
+  let q = supabase
+    .from('reports')
+    .select('id, reporter_profile_id, target_type, target_id, reason, details, status, created_at')
+    .order('created_at', { ascending: false })
+    .limit(100)
+
+  if (status !== 'all') q = q.eq('status', status)
+
+  const { data: reports } = await q
+  if (!reports || reports.length === 0) return []
+
+  const reporterIds = [...new Set(reports.map((r) => r.reporter_profile_id))]
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('id, display_name')
+    .in('id', reporterIds)
+
+  const namesMap = new Map((profiles ?? []).map((p) => [p.id, p.display_name]))
+
+  return reports.map((r) => ({
+    ...r,
+    reporter: { display_name: namesMap.get(r.reporter_profile_id) ?? '—' },
+  })) as ReportRow[]
+}

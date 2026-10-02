@@ -1,14 +1,21 @@
 import AccountPageHeader from '@/components/account-page-header'
-import EmptyState from '@/components/empty-state'
-import { ShieldCheckIcon } from '@/components/icons'
+import { getReports } from '@/lib/data/admin'
+import ReportList from './report-list'
 
 export const dynamic = 'force-dynamic'
 
-export default async function Page() {
+export default async function AdminReportsPage() {
+  const reports = await getReports('all')
+
+  const open = reports.filter((r) => r.status === 'open' || r.status === 'reviewing').length
+
   return (
     <div>
-      <AccountPageHeader title="reports" description="قريب — قيد التطوير" />
-      <EmptyState Icon={ShieldCheckIcon} title="قريب" description="هذه الصفحة قيد التطوير" />
+      <AccountPageHeader
+        title="الإبلاغات"
+        description={`${open} إبلاغ بحاجة مراجعة من ${reports.length}`}
+      />
+      <ReportList reports={reports} />
     </div>
   )
 }

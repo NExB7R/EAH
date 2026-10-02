@@ -1,0 +1,239 @@
+.filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 180ms;
+}
+
+.filterBtn:hover {
+  border-color: var(--purple-primary);
+  color: var(--purple-light);
+}
+
+.filterActive {
+  background: var(--purple-soft);
+  border-color: var(--purple-primary);
+  color: var(--purple-light);
+}
+
+.filterCount {
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.65rem;
+  font-weight: 900;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.85));
+}
+
+.rowClosed {
+  opacity: 0.65;
+}
+
+.rowHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.targetBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: var(--purple-soft);
+  border: 1px solid var(--purple-line);
+  color: var(--purple-light);
+  font-size: 0.65rem;
+  font-weight: 900;
+}
+
+.date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.rowBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reason {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.reasonLabel {
+  color: var(--text-tertiary);
+  font-weight: 700;
+}
+
+.reason strong {
+  color: var(--text-primary);
+  font-weight: 900;
+}
+
+.details {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(168, 85, 247, 0.04);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+
+.meta strong {
+  color: var(--text-secondary);
+}
+
+.sep {
+  color: var(--text-muted);
+}
+
+.targetId {
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  font-family: monospace;
+  font-size: 0.65rem;
+  color: var(--purple-light);
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--purple-line);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 180ms;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--purple-primary);
+  color: var(--purple-light);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnReview {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.btnOk {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.btnDismiss {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.statusBadge {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 0.68rem;
+  font-weight: 900;
+  align-self: flex-start;
+  border: 1px solid;
+}
+
+.resolved {
+  background: rgba(85, 231, 209, 0.1);
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.dismissed {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--purple-line);
+  color: var(--text-tertiary);
+}
+
+.msg {
+  margin: 0;
+  font-size: 0.7rem;
+  color: var(--teal);
+  font-weight: 800;
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 60px 20px;
+  color: var(--text-tertiary);
+  border: 1px dashed var(--purple-line);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.empty p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
