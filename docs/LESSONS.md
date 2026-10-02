@@ -629,3 +629,21 @@ cat file.tsx
 - `priority` في Next.js مش كفاية — محتاج `fetchPriority="high"` صريح
 
 **المراجع:** PERFORMANCE_BASELINE.md
+
+---
+
+## 20. Facebook CDN + Next.js Image = 502 (2026-10-02)
+
+**الغلطة:** 
+- صور من scontent-*.xx.fbcdn.net في DB (53 نشاط)
+- next/image بيمررها على /_next/image → Vercel يطلب FB → 502
+- Lighthouse بيفشل في قياس LCP بسببها
+
+**الحل:** 
+- WmImage: `unoptimized` لو الدومين مش في TRUSTED_HOSTS
+- Trusted: supabase.co + res.cloudinary.com فقط
+- الباقي: المتصفح يجيب الصورة مباشرة
+
+**الدرس:**
+- Next.js image optimizer = للدومينات الموثوقة فقط
+- صور المستخدمين من CDNs خارجية = `unoptimized` دايماً
