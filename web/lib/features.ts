@@ -8,7 +8,7 @@ import { DEFAULT_FLAGS, type FeatureFlags } from './features-shared'
 // ═══════════════════════════════════════════════════════════
 
 export type { FeatureFlags } from './features-shared'
-export { DEFAULT_FLAGS, FEATURE_META } from './features-shared'
+export { DEFAULT_FLAGS } from './features-shared'
 
 async function readFlagsRaw(): Promise<FeatureFlags> {
   try {

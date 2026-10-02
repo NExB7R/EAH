@@ -28,14 +28,6 @@ export const apiLimiter = new Ratelimit({
 })
 
 // ─── Strict: operations حساسة (review / reply / reveal) ───
-export const strictLimiter = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(10, '1 h'),
-  analytics: true,
-  prefix: 'ratelimit:strict',
-})
-
-// ─── Helper: استخرج IP من الـ headers ───
 export async function getClientIp(): Promise<string> {
   const h = await headers()
   const forwarded = h.get('x-forwarded-for')

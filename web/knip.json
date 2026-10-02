@@ -2,19 +2,11 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": [
     "app/**/{page,layout,loading,error,not-found,route,manifest,sitemap,robots,opengraph-image,icon,apple-icon}.{ts,tsx}",
-    "app/**/route.{ts,tsx}",
-    "proxy.ts",
-    "next.config.ts"
+    "app/**/route.{ts,tsx}"
   ],
   "project": ["**/*.{ts,tsx}"],
-  "ignore": ["**/*.d.ts", "lib/trust.ts"],
-  "ignoreDependencies": [
-    "@fontsource-variable/cairo",
-    "@fontsource/tajawal",
-    "@fontsource/great-vibes",
-    "eslint-config-next"
-  ],
-  "ignoreBinaries": ["gitleaks", "lefthook"],
+  "ignore": ["lib/trust.ts"],
+  "ignoreBinaries": ["gitleaks"],
   "ignoreExportsUsedInFile": true,
   "rules": {
     "exports": "warn",

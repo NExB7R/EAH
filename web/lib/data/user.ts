@@ -39,23 +39,6 @@ export type UserSession = {
 }
 
 // ─── اسم العرض حسب الوضع ───
-export function resolveDisplayName(session: UserSession): string {
-  const { displayName, alias, displayNameMode, isPremium } = session
-
-  // العميل العادي: اسم حقيقي أو كنية أو الاتنين
-  if (!isPremium) {
-    if (displayNameMode === 'alias' && alias) return alias
-    if (displayNameMode === 'both' && alias) return `${displayName} (${alias})`
-    return displayName
-  }
-
-  // العميل المدفوع: + مجهول
-  if (displayNameMode === 'anonymous') return 'مستخدم EAH'
-  if (displayNameMode === 'alias' && alias) return alias
-  if (displayNameMode === 'both' && alias) return `${displayName} (${alias})`
-  return displayName
-}
-
 export const getUserSession = cache(async (): Promise<UserSession | null> => {
   const supabase = await createClient()
 

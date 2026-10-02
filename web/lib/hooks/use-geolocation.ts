@@ -99,11 +99,3 @@ export function useGeolocation(): State {
 
   return state
 }
-
-export function clearUserLocationCache() {
-  try {
-    sessionStorage.removeItem(KEY)
-  } catch {
-    /* ignore */
-  }
-}

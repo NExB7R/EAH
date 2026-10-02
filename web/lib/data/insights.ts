@@ -310,19 +310,6 @@ export type StoredInsight = {
   created_at: string
 }
 
-export async function getLatestInsight(businessId: string): Promise<StoredInsight | null> {
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('business_insights')
-    .select('*')
-    .eq('business_id', businessId)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
-
-  return (data as StoredInsight) ?? null
-}
-
 export async function getAllInsights(businessId: string, limit = 12): Promise<StoredInsight[]> {
   const supabase = await createClient()
   const { data } = await supabase

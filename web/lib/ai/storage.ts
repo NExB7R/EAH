@@ -139,62 +139,6 @@ export async function applyRetention(businessId: string, retention: PlanRetentio
 // 4. Storage Stats — للأدمن
 // ═══════════════════════════════════════════════════════════
 
-export type StorageStats = {
-  totalInsights: number
-  totalBusinesses: number
-  estimatedSizeKb: number
-}
-
-export async function getStorageStats(): Promise<StorageStats> {
-  const supabase = await createClient()
-
-  const [{ count: totalInsights }, { count: totalBusinesses }] = await Promise.all([
-    supabase.from('business_insights').select('*', { count: 'exact', head: true }),
-    supabase.from('business_insights').select('business_id', { count: 'exact', head: true }),
-  ])
-
-  // ~150 KB للتقرير الكامل، ~15 KB للملخص
-  const estimatedSizeKb = Math.round((totalInsights ?? 0) * 100)
-
-  return {
-    totalInsights: totalInsights ?? 0,
-    totalBusinesses: totalBusinesses ?? 0,
-    estimatedSizeKb,
-  }
-}
-
 // ═══════════════════════════════════════════════════════════
 // 5. Manual Cleanup — للأدمن
 // ═══════════════════════════════════════════════════════════
-
-export async function deleteInsightsBefore(
-  businessId: string,
-  beforeDate: string,
-): Promise<{ ok: boolean; deleted: number }> {
-  const supabase = await createClient()
-
-  const { data, error } = await supabase
-    .from('business_insights')
-    .delete()
-    .eq('business_id', businessId)
-    .lt('created_at', beforeDate)
-    .select('id')
-
-  if (error) return { ok: false, deleted: 0 }
-  return { ok: true, deleted: data?.length ?? 0 }
-}
-
-export async function deleteAllInsightsForBusiness(
-  businessId: string,
-): Promise<{ ok: boolean; deleted: number }> {
-  const supabase = await createClient()
-
-  const { data, error } = await supabase
-    .from('business_insights')
-    .delete()
-    .eq('business_id', businessId)
-    .select('id')
-
-  if (error) return { ok: false, deleted: 0 }
-  return { ok: true, deleted: data?.length ?? 0 }
-}

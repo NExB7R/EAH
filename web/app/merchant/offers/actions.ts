@@ -106,47 +106,6 @@ export async function createOffer(formData: FormData): Promise<ActionResult> {
 }
 
 // ─── تعديل ───
-export async function updateOffer(offerId: string, formData: FormData): Promise<ActionResult> {
-  const ctx = await myBusiness()
-  if (!ctx.ok) return { ok: false, error: ctx.error }
-
-  const parsed = offerSchema.safeParse({
-    title: String(formData.get('title') ?? '').trim(),
-    description: String(formData.get('description') ?? '').trim(),
-    price: String(formData.get('price') ?? '').trim(),
-    startsAt: String(formData.get('startsAt') ?? '').trim(),
-    endsAt: String(formData.get('endsAt') ?? '').trim(),
-    isPublished: formData.get('isPublished') === 'on',
-  })
-
-  if (!parsed.success) {
-    return { ok: false, error: parsed.error.issues[0]?.message ?? 'بيانات غير صحيحة' }
-  }
-
-  const d = parsed.data
-
-  const { error } = await ctx.supabase
-    .from('offers')
-    .update({
-      title: d.title,
-      description: d.description || null,
-      price: d.price,
-      starts_at: d.startsAt || null,
-      ends_at: d.endsAt || null,
-      is_published: d.isPublished,
-    })
-    .eq('id', offerId)
-    .eq('business_id', ctx.biz.id)
-
-  if (error) return { ok: false, error: error.message }
-
-  revalidatePath('/merchant/offers')
-  revalidatePath('/offers')
-  revalidatePath(`/businesses/${ctx.biz.slug}`)
-  return { ok: true }
-}
-
-// ─── حذف ───
 export async function deleteOffer(offerId: string): Promise<ActionResult> {
   const ctx = await myBusiness()
   if (!ctx.ok) return { ok: false, error: ctx.error }

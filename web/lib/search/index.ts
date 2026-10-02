@@ -88,6 +88,3 @@ export function smartSearch(businesses: Business[], rawQuery: string): SearchRes
   // 4. ترتيب بالـ score
   return results.sort((a, b) => b.score - a.score)
 }
-
-export { normalizeArabic } from './normalize'
-export { extractTypes } from './synonyms'

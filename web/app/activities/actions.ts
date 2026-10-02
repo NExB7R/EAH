@@ -86,7 +86,3 @@ export async function toggleFollow(businessId: string, slug: string): Promise<Ac
 export async function toggleFavorite(businessId: string, slug: string): Promise<ActionResult> {
   return toggleActivity(businessId, slug, 'favorite')
 }
-
-export async function toggleLike(businessId: string, slug: string): Promise<ActionResult> {
-  return toggleActivity(businessId, slug, 'like')
-}
