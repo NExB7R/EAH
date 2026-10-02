@@ -1,26 +1,43 @@
 'use client'
 
+import { useState } from 'react'
 import { WhatsAppIcon, PhoneIcon, LockIcon } from './icons'
 import SmartLockModal, { useSmartLock } from './smart-lock-modal'
+import OrderModal from './order-modal'
 import styles from './fixed-cta.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Fixed CTA (Mobile only)
-// بيتغير حسب المتاح: واتساب → اتصال → مفيش
+// يفتح OrderModal للواتساب، أو اتصال مباشر
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
+  businessId: string
+  businessSlug: string
   businessName: string
   whatsapp: string | null
   phone: string | null
   isLoggedIn: boolean
   isOpen: boolean
+  defaultName?: string
+  defaultPhone?: string
 }
 
-export default function FixedCta({ businessName, whatsapp, phone, isLoggedIn, isOpen }: Props) {
+export default function FixedCta({
+  businessId,
+  businessSlug,
+  businessName,
+  whatsapp,
+  phone,
+  isLoggedIn,
+  isOpen,
+  defaultName = '',
+  defaultPhone = '',
+}: Props) {
   const lock = useSmartLock()
+  const [orderOpen, setOrderOpen] = useState(false)
+  const [orderKey, setOrderKey] = useState(0)
 
-  // مفيش أي وسيلة تواصل
   if (!whatsapp && !phone) return null
 
   const handleClick = () => {
@@ -30,8 +47,8 @@ export default function FixedCta({ businessName, whatsapp, phone, isLoggedIn, is
     }
 
     if (whatsapp) {
-      const url = `https://wa.me/2${whatsapp.replace(/^0/, '').replace(/^20/, '')}?text=${encodeURIComponent(`السلام عليكم، شفت ${businessName} على EAH وعايز أطلب`)}`
-      window.open(url, '_blank')
+      setOrderKey((k) => k + 1)
+      setOrderOpen(true)
     } else if (phone) {
       window.location.href = `tel:${phone}`
     }
@@ -61,6 +78,17 @@ export default function FixedCta({ businessName, whatsapp, phone, isLoggedIn, is
       </div>
 
       <SmartLockModal open={lock.open} onClose={lock.close} action={lock.action} hint={lock.hint} />
+
+      <OrderModal
+        key={orderKey}
+        open={orderOpen}
+        onClose={() => setOrderOpen(false)}
+        businessId={businessId}
+        businessSlug={businessSlug}
+        businessName={businessName}
+        defaultName={defaultName}
+        defaultPhone={defaultPhone}
+      />
     </>
   )
 }

@@ -141,11 +141,14 @@ export default async function BusinessPage({ params }: Props) {
 
       {/* ─── Fixed CTA (Mobile) ─── */}
       <FixedCta
+        businessId={business.id}
+        businessSlug={business.slug}
         businessName={business.name}
         whatsapp={hasWhatsapp ? whatsapp : null}
         phone={phone}
         isLoggedIn={!!session}
         isOpen={isOpen}
+        defaultName={session?.displayName ?? ''}
       />
     </main>
   )
