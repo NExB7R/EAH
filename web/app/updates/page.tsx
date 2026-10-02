@@ -14,7 +14,7 @@ import {
 import styles from './updates.module.css'
 
 export const metadata: Metadata = {
-  title: 'التحديثات — EAH',
+  title: 'التحديثات · EAH',
   description: 'كل جديد في منصة EAH — ميزات، تحسينات، وإصلاحات',
 }
 

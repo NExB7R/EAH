@@ -11,7 +11,7 @@ import { sortByTrust, dailyShuffle } from '@/lib/ranking'
 import styles from './explore.module.css'
 
 export const metadata: Metadata = {
-  title: 'اكتشف | EAH',
+  title: 'اكتشف · EAH',
   description: 'اكتشف أحسن الأماكن حواليك في شبين القناطر والقرى',
 }
 

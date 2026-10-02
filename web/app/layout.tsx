@@ -16,7 +16,7 @@ import { getUserSession } from '@/lib/data/user'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'EAH — اللي نفسك فيه ؟',
+  title: 'EAH اللى نفسك فيه ؟',
   description: 'منصة اكتشاف محلية مصرية — من قلب شبين القناطر',
   manifest: '/manifest.webmanifest',
 }

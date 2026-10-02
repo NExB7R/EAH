@@ -4,7 +4,7 @@ import { getUserSession } from '@/lib/data/user'
 import AuthForm from './auth-form'
 
 export const metadata: Metadata = {
-  title: 'دخول | EAH',
+  title: 'دخول · EAH',
   description: 'سجّل دخولك أو اعمل حساب جديد',
 }
 

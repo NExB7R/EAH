@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'EAH — اللي نفسك فيه ؟',
+    name: 'EAH اللى نفسك فيه ؟',
     short_name: 'EAH',
     description: 'منصة اكتشاف محلية مصرية — من قلب شبين القناطر',
     start_url: '/',
