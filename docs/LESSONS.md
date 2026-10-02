@@ -669,3 +669,18 @@ cat file.tsx
 - ممنوع upgrade React بدون التأكد من توافق Next
 - `npm outdated` بيقول "Latest" مش "متوافق"
 - القاعدة: `next` يقول أي React يدعم، هو المصدر
+
+---
+
+## 23. `<a>` جوّه `<a>` = React #418 (2026-10-02)
+
+**الغلطة:** `Logo` عنده default `href='/'` — لما نمرر `href={undefined}`، JS بيعمل fallback للـ default مش بيلغيه. النتيجة: `<Link><Logo/></Link>` = `<a><a/></a>`.
+
+**الحل:** نمرر `href={null}` بدل `undefined`.
+
+**الدرس:**
+- `undefined` في default params = fallback للـ default
+- `null` = بيلغي الـ default
+- `<a>` جوّه `<a>` = HTML غير صالح → hydration mismatch
+
+**الملفات المتأثرة:** page-header, menu-drawer, floating-capsule
