@@ -11,6 +11,7 @@ import {
   CheckCircleIcon,
 } from './icons'
 import SmartLockModal, { useSmartLock } from './smart-lock-modal'
+import OrderModal from './order-modal'
 import { toggleFollow, toggleFavorite } from '@/app/activities/actions'
 import styles from './business-actions.module.css'
 
@@ -29,6 +30,8 @@ type Props = {
   acceptsWhatsapp: boolean
   isFavorite?: boolean
   isFollowing?: boolean
+  defaultName?: string
+  defaultPhone?: string
 }
 
 export default function BusinessActions({
@@ -42,12 +45,16 @@ export default function BusinessActions({
   acceptsWhatsapp,
   isFavorite = false,
   isFollowing = false,
+  defaultName = '',
+  defaultPhone = '',
 }: Props) {
   const lock = useSmartLock()
   const [fav, setFav] = useState(isFavorite)
   const [follow, setFollow] = useState(isFollowing)
   const [copied, setCopied] = useState(false)
   const [pending, setPending] = useState(false)
+  const [orderOpen, setOrderOpen] = useState(false)
+  const [orderKey, setOrderKey] = useState(0)
 
   const requireAuth = (action: string, hint?: string) => {
     if (isLoggedIn) return false
@@ -55,12 +62,12 @@ export default function BusinessActions({
     return true
   }
 
-  // ─── WhatsApp ───
+  // ─── WhatsApp → Order Modal ───
   const handleWhatsapp = () => {
     if (requireAuth('تطلب من واتساب مباشرة')) return
     if (!whatsapp || !acceptsWhatsapp) return
-    const url = `https://wa.me/2${whatsapp.replace(/^0/, '').replace(/^20/, '')}?text=${encodeURIComponent(`السلام عليكم، شفت ${businessName} على EAH وعايز أطلب`)}`
-    window.open(url, '_blank')
+    setOrderKey((k) => k + 1)
+    setOrderOpen(true)
   }
 
   // ─── Phone ───
@@ -200,6 +207,17 @@ export default function BusinessActions({
       </div>
 
       <SmartLockModal open={lock.open} onClose={lock.close} action={lock.action} hint={lock.hint} />
+
+      <OrderModal
+        key={orderKey}
+        open={orderOpen}
+        onClose={() => setOrderOpen(false)}
+        businessId={businessId}
+        businessSlug={businessSlug}
+        businessName={businessName}
+        defaultName={defaultName}
+        defaultPhone={defaultPhone}
+      />
     </>
   )
 }
