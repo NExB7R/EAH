@@ -1,66 +1,32 @@
 import AccountPageHeader from '@/components/account-page-header'
-import { SparklesIcon, PaletteIcon, ToggleIcon, FileTextIcon } from '@/components/icons'
+import { SparklesIcon } from '@/components/icons'
+import { getFeatureFlags } from '@/lib/features'
+import FlagsPanel from './flags-panel'
 import styles from './studio.module.css'
 
 export const dynamic = 'force-dynamic'
 
-const SECTIONS = [
-  {
-    Icon: ToggleIcon,
-    title: 'Feature Flags',
-    body: 'تفعيل/إيقاف ميزات للجمهور (قريب)',
-    status: 'قريب' as const,
-  },
-  {
-    Icon: PaletteIcon,
-    title: 'الألوان والخطوط',
-    body: 'معاينة مباشرة للهوية (قريب)',
-    status: 'قريب' as const,
-  },
-  {
-    Icon: FileTextIcon,
-    title: 'النصوص الثابتة',
-    body: 'تعديل نصوص /about /terms (قريب)',
-    status: 'قريب' as const,
-  },
-]
+export default async function StudioPage() {
+  const flags = await getFeatureFlags()
 
-export default function StudioPage() {
   return (
     <div>
-      <AccountPageHeader
-        title="استوديو التصميم"
-        description="تحكم كامل بالهوية والميزات — قيد التطوير"
-      />
+      <AccountPageHeader title="الاستوديو" description="تحكم كامل في ميزات المنصة — من مكان واحد" />
 
       <div className={styles.intro}>
         <span className={styles.introIcon}>
           <SparklesIcon size={20} />
         </span>
         <div>
-          <h3 className={styles.introTitle}>استوديو EAH</h3>
+          <h3 className={styles.introTitle}>الاستوديو</h3>
           <p className={styles.introText}>
-            هيتيحلك تعدّل الهوية والميزات بدون كود. كل تغيير بيمر على معاينة قبل النشر.
+            فعّل أو أوقف أي ميزة في المنصة. التغييرات بتطبق فوراً على كل المستخدمين، وبتتسجل في سجل
+            التدقيق.
           </p>
         </div>
       </div>
 
-      <div className={styles.grid}>
-        {SECTIONS.map((s) => (
-          <article key={s.title} className={styles.card}>
-            <span className={styles.cardIcon}>
-              <s.Icon size={22} />
-            </span>
-            <div className={styles.cardBody}>
-              <div className={styles.cardHead}>
-                <h4 className={styles.cardTitle}>{s.title}</h4>
-                <span className={styles.badge}>{s.status}</span>
-              </div>
-              <p className={styles.cardText}>{s.body}</p>
-            </div>
-          </article>
-        ))}
-      </div>
+      <FlagsPanel initial={flags} />
     </div>
   )
 }
