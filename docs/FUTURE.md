@@ -23,7 +23,6 @@
 | 4 | **Playwright mobile viewport** | 2 س | قبل الإطلاق |
 | 5 | **Vercel Speed Insights** (مجاني) | 30 د | دلوقتي |
 | 6 | **Google Search Console** (مجاني) | 30 د | بعد الإطلاق |
-| 7 | **Bing Webmaster Tools** | 15 د | بعد الإطلاق |
 | 8 | **OG Images dynamic** (next/og) | 2 س | قبل الإطلاق |
 | 9 | **PWA Install Prompt محسّن** | 1 س | قبل الإطلاق |
 | 10 | **Deep Linking** (فتح التطبيق من link) | 2 س | قبل الإطلاق |
