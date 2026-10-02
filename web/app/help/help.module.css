@@ -1,0 +1,226 @@
+.page {
+  min-height: 100vh;
+  padding-bottom: var(--space-16);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.sectionHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sectionBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: var(--purple-soft);
+  border: 1px solid var(--purple-line);
+  color: var(--purple-light);
+  font-size: 0.7rem;
+  font-weight: 800;
+  width: fit-content;
+}
+
+.badgeGold {
+  background: var(--gold-soft);
+  border-color: var(--gold-line);
+  color: var(--gold-light);
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.85));
+  transition: all 200ms;
+}
+
+.card:hover {
+  border-color: var(--purple-primary);
+  transform: translateY(-2px);
+}
+
+.cardIcon,
+.iconGold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--purple-soft);
+  color: var(--purple-light);
+}
+
+.iconGold {
+  background: var(--gold-soft);
+  color: var(--gold-light);
+}
+
+.cardTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.cardBody {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+  flex: 1;
+}
+
+.cardLink {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--purple-light);
+  text-decoration: none;
+  margin-top: 4px;
+  transition: color 180ms;
+}
+
+.cardLink:hover {
+  color: var(--purple-neon);
+}
+
+.faq {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.faqTitle {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.faqItem {
+  padding: 14px 18px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-md);
+  background: rgba(168, 85, 247, 0.04);
+  transition: border 180ms;
+}
+
+.faqItem[open] {
+  border-color: var(--purple-primary);
+}
+
+.faqItem summary {
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  list-style: none;
+  position: relative;
+  padding-inline-end: 20px;
+}
+
+.faqItem summary::-webkit-details-marker {
+  display: none;
+}
+
+.faqItem summary::after {
+  content: '+';
+  position: absolute;
+  inset-inline-end: 0;
+  font-size: 1.2rem;
+  color: var(--purple-light);
+  transition: transform 200ms;
+}
+
+.faqItem[open] summary::after {
+  content: '−';
+}
+
+.faqItem p {
+  margin: 10px 0 0;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.faqItem a {
+  color: var(--purple-light);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.contactBox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border: 1px solid var(--gold-line);
+  border-radius: var(--radius-md);
+  background: var(--gold-soft);
+  margin-top: 8px;
+}
+
+.contactBox svg {
+  color: var(--gold-light);
+  flex-shrink: 0;
+}
+
+.contactBox p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--gold-light);
+}
+
+.contactBox a {
+  color: var(--gold-primary);
+  font-weight: 800;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 var(--space-3);
+  }
+  .sectionTitle {
+    font-size: 1.2rem;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
