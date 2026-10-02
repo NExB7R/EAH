@@ -4,20 +4,39 @@ import type { NextConfig } from 'next'
 const SUPABASE_HOST = 'npmpiivmdksdirrumbmt.supabase.co'
 const CLOUDINARY_HOST = 'res.cloudinary.com'
 
-// ─── بيئة التطوير؟ ───
 const isDev = process.env.NODE_ENV === 'development'
 
-// ─── CSP ───
-// production: script-src 'self' (صارم)
-// dev: نضيف unsafe-eval + unsafe-inline (لـ HMR)
+// ═══════════════════════════════════════════════════════════
+// CSP — 2026 (بدون Nonce، بدون Trusted Types)
+// - default-src 'self' — أساس آمن
+// - script-src-elem للـ <script src> — granular
+// - script-src-attr للـ inline handlers — صفر
+// - style-src-elem للـ CSS — granular
+// - report-uri → /api/csp-report (تسجيل في Vercel logs)
+// ═══════════════════════════════════════════════════════════
+
 const csp = [
   "default-src 'self'",
+
+  // Scripts — عناصر <script>
   isDev
-    ? "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com"
-    : "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com",
-  "style-src 'self' 'unsafe-inline'",
+    ? "script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com"
+    : "script-src-elem 'self' 'unsafe-inline' https://challenges.cloudflare.com",
+  // Scripts — inline handlers (onclick=...) — ممنوع
+  "script-src-attr 'none'",
+
+  // Styles — عناصر <style> و <link>
+  "style-src-elem 'self' 'unsafe-inline'",
+  // Styles — inline (style="") — مسموح بـ React
+  "style-src-attr 'unsafe-inline'",
+
+  // Images
   `img-src 'self' data: blob: https://${CLOUDINARY_HOST} https://${SUPABASE_HOST} https://images.unsplash.com https://scontent-iad3-2.xx.fbcdn.net`,
-  `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://api.cloudinary.com https://challenges.cloudflare.com`,
+
+  // Network
+  `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://api.cloudinary.com https://challenges.cloudflare.com https://openrouter.ai`,
+
+  // Fonts + Frames + Others
   "font-src 'self' data:",
   "frame-src 'self' https://challenges.cloudflare.com",
   "frame-ancestors 'none'",
@@ -28,6 +47,9 @@ const csp = [
   "worker-src 'self' blob:",
   "media-src 'self'",
   'upgrade-insecure-requests',
+
+  // Reporting (تقارير في Vercel logs)
+  'report-uri /api/csp-report',
 ].join('; ')
 
 const nextConfig: NextConfig = {
@@ -43,28 +65,15 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: CLOUDINARY_HOST,
-        pathname: '/**',
-      },
+      { protocol: 'https', hostname: CLOUDINARY_HOST, pathname: '/**' },
       {
         protocol: 'https',
         hostname: SUPABASE_HOST,
         pathname: '/storage/v1/object/public/**',
       },
-      {
-        // مؤقت — بيانات تجريبية
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        pathname: '/**',
-      },
-      {
-        // مؤقت — صور تجريبية من فيسبوك
-        protocol: 'https',
-        hostname: 'scontent-iad3-2.xx.fbcdn.net',
-        pathname: '/**',
-      },
+      // مؤقت — صور تجريبية
+      { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
+      { protocol: 'https', hostname: 'scontent-iad3-2.xx.fbcdn.net', pathname: '/**' },
     ],
   },
 
@@ -76,14 +85,10 @@ const nextConfig: NextConfig = {
           { key: 'Content-Security-Policy', value: csp },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          // OWASP: تعطيل الفلتر القديم (بيسبب ثغرات في المتصفحات القديمة)
           { key: 'X-XSS-Protection', value: '0' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          // يعزل الـ browsing context (يمنع tabnabbing)
           { key: 'Cross-Origin-Opener-Policy', value: 'same-origin-allow-popups' },
-          // يمنع مواقع تانية تقرا مواردنا
           { key: 'Cross-Origin-Resource-Policy', value: 'same-site' },
-          // يحسن الـ DNS resolution للأداء
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
           {
             key: 'Permissions-Policy',
@@ -93,6 +98,9 @@ const nextConfig: NextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains',
           },
+          // إضافات جديدة 2026
+          { key: 'Cross-Origin-Embedder-Policy', value: 'unsafe-none' },
+          { key: 'Origin-Agent-Cluster', value: '?1' },
         ],
       },
     ]
