@@ -321,3 +321,11 @@
     transform: none;
   }
 }
+
+/* ─── Distance badge على الصورة ─── */
+.distanceOnImage {
+  position: absolute;
+  inset-inline-start: 10px;
+  bottom: 10px;
+  z-index: 3;
+}

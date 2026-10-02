@@ -50,6 +50,7 @@ export type Business = {
   offers_count: number
   rating_avg: number
   rating_count: number
+  location: { lat: number; lng: number } | null
   created_at: string
   updated_at: string
 }
@@ -106,8 +107,40 @@ const BUSINESS_COLUMNS = `
   new_until, working_hours, accepts_whatsapp_orders,
   response_time_avg_seconds, response_rate,
   last_activity_at, created_at, updated_at,
-  branches_count, offers_count, rating_avg, rating_count
+  branches_count, offers_count, rating_avg, rating_count,
+  business_locations(latitude, longitude, is_primary)
 `
+
+// ─── Normalize: extract primary location from join ───
+type RawLocation = { latitude: number; longitude: number; is_primary: boolean }
+
+function pickPrimaryLocation(raw: unknown): { lat: number; lng: number } | null {
+  if (!Array.isArray(raw) || raw.length === 0) return null
+  const arr = raw as RawLocation[]
+  const primary = arr.find((l) => l.is_primary) ?? arr[0]
+  if (!primary) return null
+  if (
+    typeof primary.latitude !== 'number' ||
+    typeof primary.longitude !== 'number' ||
+    !Number.isFinite(primary.latitude) ||
+    !Number.isFinite(primary.longitude)
+  ) {
+    return null
+  }
+  return { lat: primary.latitude, lng: primary.longitude }
+}
+
+function normalizeBusiness(raw: Record<string, unknown>): Business {
+  const loc = pickPrimaryLocation(raw.business_locations)
+  const rest: Record<string, unknown> = { ...raw }
+  delete rest.business_locations
+  return { ...(rest as unknown as Business), location: loc }
+}
+
+function normalizeBusinesses(data: unknown[] | null): Business[] {
+  if (!data) return []
+  return data.map((r) => normalizeBusiness(r as Record<string, unknown>))
+}
 
 // ═══════════════════════════════════════════════════════════
 // 1. كل الأنشطة المنشورة (للـ Home)
@@ -127,7 +160,7 @@ export const getPublishedBusinesses = unstable_cache(
       console.error('[data] getPublishedBusinesses error:', error.message)
       return []
     }
-    return (data ?? []) as Business[]
+    return normalizeBusinesses(data)
   },
   ['businesses-published'],
   { revalidate: 300, tags: ['businesses'] },
@@ -154,7 +187,7 @@ export const getFeaturedBusinesses = unstable_cache(
       console.error('[data] getFeaturedBusinesses error:', error.message)
       return []
     }
-    return (data ?? []) as Business[]
+    return normalizeBusinesses(data)
   },
   ['businesses-featured'],
   { revalidate: 300, tags: ['businesses', 'featured'] },
@@ -180,7 +213,7 @@ export const getNewBusinesses = unstable_cache(
       console.error('[data] getNewBusinesses error:', error.message)
       return []
     }
-    return (data ?? []) as Business[]
+    return normalizeBusinesses(data)
   },
   ['businesses-new'],
   { revalidate: 300, tags: ['businesses', 'new'] },
@@ -205,7 +238,7 @@ export const getBusinessesByType = unstable_cache(
       console.error('[data] getBusinessesByType error:', error.message)
       return []
     }
-    return (data ?? []) as Business[]
+    return normalizeBusinesses(data)
   },
   ['businesses-by-type'],
   { revalidate: 300, tags: ['businesses'] },
@@ -241,7 +274,7 @@ export const getTrendingBusinesses = unstable_cache(
       console.error('[data] getTrendingBusinesses error:', error.message)
       return []
     }
-    return sortByTrend((data ?? []) as Business[]).slice(0, limit)
+    return sortByTrend(normalizeBusinesses(data)).slice(0, limit)
   },
   ['businesses-trending'],
   { revalidate: 300, tags: ['businesses', 'trending'] },
@@ -311,7 +344,7 @@ export const getNearbyBusinesses = unstable_cache(
       console.error('[data] getNearbyBusinesses error:', error.message)
       return []
     }
-    return (data ?? []) as Business[]
+    return normalizeBusinesses(data)
   },
   ['businesses-nearby'],
   { revalidate: 300, tags: ['businesses'] },

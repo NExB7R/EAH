@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import WmImage from './wm-image'
+import DistanceBadge from './distance-badge'
 import type { Business } from '@/lib/data/businesses'
 import {
   StarIcon,
@@ -117,6 +118,12 @@ export default function BusinessCard({ business, tone = 'purple', variant = 'def
             {ratingValue}
             {hasRealRating && <span className={styles.ratingCount}>({business.rating_count})</span>}
           </span>
+        )}
+
+        {business.location && (
+          <div className={styles.distanceOnImage}>
+            <DistanceBadge lat={business.location.lat} lng={business.location.lng} />
+          </div>
         )}
       </div>
 
