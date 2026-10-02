@@ -11,6 +11,7 @@ import ReviewReminder from '@/components/review-reminder'
 import SignupPrompt from '@/components/signup-prompt'
 import ScrollToTop from '@/components/scroll-to-top'
 import SiteFooter from '@/components/site-footer'
+import AiWidget from '@/components/ai-widget'
 import { Analytics } from '@vercel/analytics/next'
 import { getUserSession } from '@/lib/data/user'
 import './globals.css'
@@ -41,6 +42,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <InstallPrompt />
         <ReviewReminder />
         {!session && <SignupPrompt />}
+        <AiWidget />
         <ScrollToTop />
         <Analytics />
       </body>
