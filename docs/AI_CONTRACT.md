@@ -101,7 +101,7 @@
 
 ### 3.3 بعد التعديل
 - typecheck:
-  cd ~/EAH-V2/08-web && npx tsc --noEmit
+  cd ~/EAH/web && npx tsc --noEmit
 - لو نظيف → commit
 - لو فيه أخطاء → أصلح، وبعدين commit
 - قول: خلص. اختبر.

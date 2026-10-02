@@ -540,7 +540,7 @@
 - Web Push (VAPID)
 
 ### هيكل
-EAH-V2/
+EAH/
   docs/          ← 24 ملف وثائق
   web/           ← Next.js app
     app/

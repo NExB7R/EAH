@@ -482,7 +482,7 @@ cat file.tsx
 
 ## 16. Supabase SQL Editor — Not a Terminal (2026-09-27)
 
-**الغلطة:** لصق أوامر bash (`cd ~/EAH-V2 && ...`) في Supabase SQL Editor.
+**الغلطة:** لصق أوامر bash (`cd ~/EAH && ...`) في Supabase SQL Editor.
 
 **النتيجة:** `ERROR: syntax error at or near "cd"`.
 

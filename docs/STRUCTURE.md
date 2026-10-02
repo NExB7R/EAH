@@ -7,7 +7,7 @@
 
 ## 1. البنية العامة
 
-EAH-V2/
+EAH/
 ├── docs/                      ← الوثائق (24 ملف)
 ├── web/                       ← Next.js app
 │   ├── app/                   ← App Router

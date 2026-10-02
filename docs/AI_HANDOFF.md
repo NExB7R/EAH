@@ -104,9 +104,9 @@
 ## 8. مسار سريع
 
 لو عايز تبدأ شغل:
-1. cd ~/EAH-V2/web && npx tsc --noEmit — تأكد نظيف
-2. cat ~/EAH-V2/docs/PROGRESS.md — شوف الحالة
-3. cat ~/EAH-V2/docs/SESSION_LOG.md — آخر جلسة
+1. cd ~/EAH/web && npx tsc --noEmit — تأكد نظيف
+2. cat ~/EAH/docs/PROGRESS.md — شوف الحالة
+3. cat ~/EAH/docs/SESSION_LOG.md — آخر جلسة
 4. استنى تعليمات NourEldin
 
 لو الشات اتقطع:

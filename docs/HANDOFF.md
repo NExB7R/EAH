@@ -110,16 +110,16 @@
 ## أوامر مهمة
 
 typecheck:
-cd ~/EAH-V2/web && npx tsc --noEmit
+cd ~/EAH/web && npx tsc --noEmit
 
 اختبارات:
-cd ~/EAH-V2/web && npx vitest run
+cd ~/EAH/web && npx vitest run
 
 commit (lefthook هيشتغل آلي):
-cd ~/EAH-V2 && git add -A && git commit -m "..."
+cd ~/EAH && git add -A && git commit -m "..."
 
 push (SSH over 443):
-cd ~/EAH-V2 && git push origin main:v2
+cd ~/EAH && git push origin main:v2
 
 ---
 

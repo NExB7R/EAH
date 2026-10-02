@@ -1,0 +1,5126 @@
+═══════════════════════════════════════════════════════════
+  EAH — FULL DOCUMENTATION PACKAGE
+  Repository: NExB7R/EAH (branch: v2)
+  Date: 2026-09-24
+═══════════════════════════════════════════════════════════
+
+
+═══════════════════════════════════════════════════════════
+  FILE: README.md
+═══════════════════════════════════════════════════════════
+
+# EAH — اللي نفسك فيه ؟
+
+> منصة اكتشاف محلية مصرية — تبدأ من شبين القناطر والقرى حواليها.
+
+**آخر تحديث:** 2026-09-24
+**الإصدار:** v2.0 (fresh start)
+**المالك:** NourEldin B7R — nexb7r@gmail.com
+
+---
+
+## 🎯 إيه EAH؟
+
+منصة بتوصّل أهل شبين القناطر والقرى المجاورة بأماكنهم المحلية:
+
+- **مطاعم** • **صيدليات** • **ماركت** • **توصيل** • **أنشطة أخرى**
+- بحث ذكي باللهجة المصرية
+- طلب مباشر على واتساب (بدون وسيط، بدون عمولة)
+- تجربة عربية أصلية، نيون ناعم، dark-only
+
+**المميز:** مجانية بالكامل للعميل، بدون عمولة على التاجر.
+
+---
+
+## 📚 اقرأ الأول
+
+**لو أنت AI / مطور جديد:**
+
+1. **[docs/MASTER_BRIEF.md](./docs/MASTER_BRIEF.md)** — الرؤية والهوية والأهداف
+2. **[docs/AI_CONTRACT.md](./docs/AI_CONTRACT.md)** — القواعد الإجبارية
+3. **[docs/SACRED.md](./docs/SACRED.md)** — المقدسات
+4. **[docs/ROADMAP.md](./docs/ROADMAP.md)** — خطة التنفيذ
+
+**بعدها قول:** "قرأت. جاهز." واستنى التعليمات.
+
+**لو أنت شريك / مستثمر:**
+
+- اقرأ **MASTER_BRIEF.md** فقط (10 دقايق)
+- فيه: الرؤية، الأهداف، النموذج الربحي، خطة التوسع
+
+---
+
+## 🚀 التقنيات
+
+| الطبقة | التقنية |
+|--------|---------|
+| Framework | Next.js 16 + React 19 + TypeScript |
+| Styling | CSS Modules (بدون Tailwind) |
+| Backend | Supabase (Postgres + Auth + Storage + Realtime) |
+| Images | Cloudinary |
+| Hosting | Vercel (Frankfurt) |
+| Push | Web Push (VAPID) |
+
+---
+
+## 🎨 الهوية
+
+- **الخلفية:** `#07020D` (أسود بنفسجي عميق)
+- **البنفسجي:** `#9D4EDD` / `#A855F7` / `#C77DFF`
+- **الذهبي:** `#E8C79A` / `#F5D9A7`
+- **Teal:** `#55E7D1`
+- **البرتقالي:** `#FDBA74`
+- **الخط:** Cairo Variable + Tajawal Variable
+- **الستايل:** نيون ناعم، dark-only، 2026/2027
+
+---
+
+## 📖 الوثائق الكاملة
+
+| الملف | الوصف |
+|------|-------|
+| [MASTER_BRIEF.md](./docs/MASTER_BRIEF.md) | الرؤية والهوية والأهداف |
+| [FEATURES.md](./docs/FEATURES.md) | كل الميزات بتفاصيل |
+| [ROADMAP.md](./docs/ROADMAP.md) | خطة 12 أسبوع |
+| [AI_CONTRACT.md](./docs/AI_CONTRACT.md) | قواعد AI |
+| [SACRED.md](./docs/SACRED.md) | المقدسات |
+| [DESIGN_SYSTEM.md](./docs/DESIGN_SYSTEM.md) | التصميم الكامل |
+| [ARCHITECTURE.md](./docs/ARCHITECTURE.md) | البنية التقنية |
+| [SCHEMA.sql](./docs/SCHEMA.sql) | قاعدة البيانات |
+| [MIGRATION_GUIDE.md](./docs/MIGRATION_GUIDE.md) | نقل البيانات |
+
+---
+
+## 📞 التواصل
+
+**NourEldin B7R** — nexb7r@gmail.com
+GitHub: [@NExB7R](https://github.com/NExB7R)
+WhatsApp: 201012892806
+
+---
+
+**صنع بكل ♥ في شبين القناطر — فلسطين في القلب 🇵🇸**
+
+
+═══════════════════════════════════════════════════════════
+  FILE: CHANGELOG.md
+═══════════════════════════════════════════════════════════
+
+# EAH - CHANGELOG.md
+
+كل التغييرات المهمة في المشروع.
+
+---
+
+## [v0.1.0] - 2026-09-24
+
+### Added
+- Fresh repo (v2 branch)
+- 10 documentation files:
+  - MASTER_BRIEF.md
+  - FEATURES.md
+  - ROADMAP.md
+  - AI_CONTRACT.md
+  - SACRED.md
+  - DESIGN_SYSTEM.md
+  - ARCHITECTURE.md
+  - SCHEMA.sql
+  - MIGRATION_GUIDE.md
+  - SESSION_LOG.md
+- Next.js 16 + React 19 + TypeScript
+- Supabase connection (53 businesses)
+- Vercel link
+- Production deployment
+
+### Archived
+- Old code (v1) → archive/v1 branch
+- 46 migrations → kept for reference
+- All sessions 1-5 logs
+
+### Status
+- Production live: https://eah-sq.vercel.app
+- Docs complete
+- Code: starting
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/MASTER_BRIEF.md
+═══════════════════════════════════════════════════════════
+
+# 📘 EAH — MASTER BRIEF v3.0
+
+> ملف واحد شامل يقدم المنصة كاملة لأي مطور / AI / شريك.
+> اقرأه من الأول للآخر قبل أي سطر كود.
+
+**آخر تحديث:** 2026-09-24
+**الإصدار:** 3.0
+**المالك:** NourEldin B7R — nexb7r@gmail.com
+
+---
+
+## 0. القاعدة الصفرية
+
+**قبل أي سطر كود:**
+1. اقرأ الملف ده كامل
+2. اقرأ `AI_CONTRACT.md` + `SACRED.md`
+3. قول: "قرأت. جاهز."
+4. استنى التعليمات
+5. **ممنوع أي تعديل بدون سؤال صريح**
+6. **typecheck قبل كل commit**
+7. **deploy فقط بعد preview + موافقة**
+8. **build محلي ممنوع** (SIGILL — جهاز قديم)
+
+---
+
+## 1. الهوية
+
+### الاسم والسلوغان
+- **الاسم:** EAH
+- **السلوغان:** اللي نفسك فيه ؟
+- **الهوك:** شبيك لبيك .. كل حاجة حواليك
+- **ستيكر المنطقة:** من قلب شبين القناطر (مع أيقونة location)
+- **النوع:** منصة اكتشاف محلية مصرية
+- **البداية:** شبين القناطر + القرى حواليها
+- **التوسع:** القليوبية → الدلتا → باقي المحافظات
+
+### الألوان
+- **الخلفية:** `#07020D` (أسود بنفسجي عميق)
+- **البنفسجي الأساسي:** `#9D4EDD`
+- **البنفسجي النيون:** `#A855F7`
+- **البنفسجي الفاتح:** `#C77DFF`
+- **الذهبي الأساسي:** `#E8C79A`
+- **الذهبي الفاتح:** `#F5D9A7`
+- **Teal (للنجاح):** `#55E7D1`
+- **البرتقالي (للترند):** `#FDBA74`
+- **الأحمر (للتحذير):** `#FCA5A5`
+
+### الخطوط
+- **الرئيسي:** Cairo Variable (عربي)
+- **العرض:** Tajawal Variable
+- **التوقيع:** Brush Script MT / Segoe Script
+- **ممنوع:** Poppins, Inter, Roboto
+
+### الستايل العام
+- Dark-only (بدون light mode)
+- نيون ناعم — طبقة واحدة، بدون توهج عالي
+- بدون backdrop-filter على الكروت
+- بدون animations مستمرة
+- انسيابية — CSS transitions قصيرة (180-240ms)
+- Container Queries حيث ممكن
+- View Transitions API للانتقال
+- الروح: Linear × Vercel × Stripe × Apple، 2026/2027
+
+### الشعار
+- **اللوجو الكامل:** تاج (ذهبي) + EAH (بنفسجي نيون) + slogan
+- **الأيقونة (favicon + PWA):** التاج فقط
+- **اللوجو الصغير (header/drawer):** EAH + تاج صغير
+- **الملفات:** `/public/eah-word.webp` + `/public/eah-crown.webp` + `/public/favicon.ico`
+
+### الأيقونات
+- ممنوع emoji في UI — فقط SVG icons
+- المكتبة: `components/eah-icons.tsx` (custom)
+- الستايل: outline ناعم (stroke 1.8-2.2)
+
+---
+
+## 2. المهمة والأهداف
+
+### المهمة
+توصيل أهل شبين القناطر والقرى بأماكنهم المحلية — بسرعة، بدقة، بتجربة عربية أصلية.
+
+### الأهداف
+| المرحلة | المدة | الأنشطة | الزوار/شهر | الدخل/شهر |
+|---------|-------|---------|-----------|-----------|
+| سنة 1 | 12 شهر | 100 | 10,000 | 20,000 ج.م |
+| سنة 2-3 | 24 شهر | 1,000 | 100,000 | 150,000 ج.م |
+| سنة 5 | 60 شهر | 5,000+ | 500,000+ | 500,000+ ج.م |
+
+---
+
+## 3. نموذج الربح
+
+### الباقات المدفوعة
+
+#### 🆓 الباقة المجانية — 0 ج.م
+- صفحة نشاط كاملة
+- ظهور في البحث والتصنيفات
+- استقبال طلبات واتساب
+- بدون إحصائيات متقدمة
+
+#### ⭐ الباقة المميزة — 200 ج.م/شهر
+- ظهور في المميزين
+- شارة ذهبية
+- إحصائيات أساسية
+- ترتيب أولوية
+- 3 عروض مجانية شهرياً
+- تجربة مجانية 30 يوم
+
+#### 🚀 باقة النمو — 500 ج.م/شهر
+- كل مميزات المميزة +
+- ظهور في الترند
+- تقارير PDF شهرية
+- CRM بسيط
+- 10 عروض مجانية شهرياً
+- إعلان بانر واحد شهرياً
+- تجربة مجانية 30 يوم
+
+#### 💎 باقة الشراكة — 1,500 ج.م/شهر
+- كل مميزات النمو +
+- بانر رئيسي (7 أيام/شهر)
+- تطوير مخصص
+- مدير حساب شخصي
+- أولوية المميزات الجديدة
+
+### الإعلانات
+| النوع | السعر | المدة |
+|-------|------|-------|
+| بانر الرئيسية | 1,500 ج.م | أسبوع |
+| بانر تصنيف | 800 ج.م | أسبوع |
+| Sponsored Post | 500 ج.م | مرة |
+| إعلان في الترند | 1,200 ج.م | أسبوع |
+
+### العمولة (المستقبلي)
+- مبدأ: مش بناخد نسبة من الطلبات
+- بديل: تقارير + PDF → إثبات قيمة → 2-3% على الطلبات بعد سنتين
+
+### الدخل الإضافي
+- بوت واتساب — 100 ج.م/شهر
+- CRM متقدم — 300 ج.م/شهر
+- تطبيق iOS — 50 ج.م
+- دومين مخصص — 200 ج.م/سنة
+
+---
+
+## 4. الميزات الأساسية
+
+### 4.1 للعميل
+
+**الاكتشاف:**
+- بحث ذكي باللهجة المصرية
+- بحث صوتي (Voice Search)
+- AI Assistant (مجاني)
+- فلاتر: تصنيف، منطقة، تقييم، مفتوح حالاً، عروض
+- ترشيحات شخصية
+- قريب مني (5 كم)
+
+**المعلومات:**
+- صور حقيقية + منيو + فروع
+- تقييمات موثقة
+- أوقات عمل دقيقة
+
+**الطلب:**
+- واتساب مباشر
+- بدون وسيط
+- حفظ الفواتير
+
+**التخصيص:**
+- مفضلات محفوظة
+- متابعة الأنشطة
+- إشعارات ذكية (تحكم كامل + iOS 16.4+)
+- App Badging
+
+**المكافآت:**
+- نظام نقاط
+- مستويات ولاء: Bronze / Silver / Gold / Platinum / Diamond
+- كوبونات حسب المستوى
+- دعوات → نقاط
+
+**PWA:**
+- تثبيت على الموبايل
+- iOS + Android + Desktop
+- Offline-First (Level 3: full local-first)
+- Push notifications
+
+### 4.2 للتاجر
+
+**الظهور:**
+- صفحة كاملة
+- ظهور مجاني
+- بدون عمولة
+- QR Code مخصص
+
+**الإحصائيات:**
+- زوار (يومي/أسبوعي/شهري)
+- اتصالات واتساب
+- مكالمات
+- تقارير PDF
+
+**إدارة النشاط:**
+- تعديل مباشر
+- رفع صور + منيو
+- إدارة الفروع
+- رد على التقييمات
+
+**الإشعارات:**
+- تقييم جديد
+- رد على تقييم
+- طلب جديد
+- عميل جديد
+- تقرير أسبوعي
+- انتهاء اشتراك (3 أيام قبل) — مقفل
+
+**المتابعة (Followers):**
+- عملاء يتابعوك
+- إشعار فوري عند نزول عرض
+- CRM بسيط
+- تصدير CSV
+
+### 4.3 تجربة الـ 30 يوم
+
+- 30 يوم تجربة مجانية لأي باقة
+- مؤقت احترافي في لوحة التحكم
+- إشعارات: 7 أيام / 3 أيام / يوم
+- صفحة ترقية عند الانتهاء
+- بيانات محفوظة
+
+### 4.4 نظام التحكم الكامل
+
+**للمميز:**
+- featured_pin boolean
+- featured_order int (1-10)
+- featured_until date
+- Rolling shuffle (seed تاريخي)
+
+**للإعلانات:**
+- status: active / paused / expired / scheduled
+- start_date + end_date
+- Auto-pause
+- Manual pause فوري
+
+**للباقات:**
+- status: trial / active / expired / cancelled / pending
+- auto-renew
+- Cron يومي
+- تمديد يدوي من Admin
+
+### 4.5 نظام النقاط
+
+**كسب النقاط:**
+- تسجيل دخول يومي — 5 نقاط
+- تصفح 5 أنشطة — 3 نقاط
+- مشاهدة 30s+ — 2 نقاط
+- كتابة تقييم — 20 نقطة
+- تقييم مع صورة — 30 نقطة
+- إضافة للمفضلة — 3 نقاط
+- متابعة نشاط — 5 نقاط
+- مشاركة على واتساب — 8 نقاط
+- طلب عبر واتساب (يأكده التاجر) — 25 نقطة
+- دعوة صديق (يسجل) — 30 نقطة
+- دعوة صديق (أول طلب) — 100 نقطة
+
+**المستويات:**
+- Bronze: 0-499 (1x نقاط)
+- Silver: 500-1,999 (1.25x + 5% خصم إعلانات)
+- Gold: 2,000-4,999 (1.5x + 10% خصم)
+- Platinum: 5,000-9,999 (2x + 15% خصم)
+- Diamond: 10,000+ (3x + 25% خصم)
+
+**استخدام النقاط:**
+- عرض في نشاط — 500 نقطة
+- كوبون 10% — 800 نقطة
+- كوبون 20% — 1,500 نقطة
+- توصيل مجاني — 1,200 نقطة
+- ترقية مؤقتة — 3,000 نقطة
+
+### 4.6 WhatsApp Orders (مهم جداً)
+
+- رسالة واتساب **غير قابلة للتعديل** قبل الإرسال
+- **بدون أي تلاعب** في القيم أو المحتوى
+- **تأكيد من التاجر خلال 10 دقايق**
+- العميل يشوف الرد (وافق/رفض) في الوقت الفعلي
+- كل حاجة تتسجل (Audit Log)
+- أي تلاعب: تحذير × 2 → حظر (مراجعة يدوية)
+
+### 4.7 التقييم بعد التجربة
+
+- إشعار بعد **ساعة من الطلب**
+- المستخدم يقيّم النشاط
+- التقييم يتسجل كـ "تجربة حقيقية"
+- يميزه عن التقييمات العامة
+
+### 4.8 الأقسام المقفلة
+
+**محتوى محمي للمسجلين فقط:**
+- رقم التواصل
+- التعليقات
+- إضافة للمفضلة
+- المتابعة
+- الموقع
+- التواصل على فيسبوك / واتساب
+- المنيو
+
+**العرض:** banner واضح "سجّل عشان تستفيد"
+
+---
+
+## 5. الأمان والتزامن والسرعة
+
+### الأمان
+- RLS كامل
+- Service-role فقط للحساس
+- Rate limiting
+- Server-side hashing
+- Turnstile / Cloudflare
+- صفر secrets في Git
+- CSP صارم
+- HTTPS إجباري
+
+### التزامن
+- Supabase Realtime
+- Optimistic updates
+- Retry logic
+- Offline queue
+- Push notifications
+- صفر polling غير ضروري
+
+### السرعة
+- unstable_cache (module-level)
+- createPublicClient (بدون cookies)
+- Cloudinary transforms (WebP + AVIF)
+- Lazy loading
+- CSS-only splash
+- صفر animations مستمرة
+- هدف Lighthouse: 95+
+
+### الوصول السهل
+- PWA كامل
+- Bottom sheet على الموبايل
+- ARIA labels
+- Keyboard navigation
+- iPhone SE (320px) → 4K
+
+---
+
+## 6. الصفحات الكاملة
+
+### عامة
+`/`, `/explore`, `/offers`, `/trends`, `/new`, `/featured`, `/businesses/[slug]`, `/about`, `/contact`, `/pricing`, `/advertise`, `/support-palestine`, `/terms`, `/privacy`, `/cookies`
+
+### محمية
+`/auth`, `/auth/recover`, `/auth/change-password`, `/account`, `/account/edit`, `/account/points`, `/account/loyalty`, `/account/orders`, `/account/referral`, `/account/verify`, `/account/security`, `/account/following`, `/notifications`
+
+### تاجر
+`/merchant`, `/merchant/apply`, `/merchant/orders`, `/merchant/offers`, `/merchant/subscription`, `/merchant/settings`
+
+### أدمن
+`/admin`, `/admin/businesses`, `/admin/users`, `/admin/subscriptions`, `/admin/analytics`, `/admin/ads`, `/admin/moderation`, `/admin/audit`, `/admin/studio`, `/admin/notifications`, `/admin/featured`, `/admin/settings`
+
+---
+
+## 7. لوحة التحكم
+
+### الأقسام
+- Dashboard
+- إدارة الأنشطة
+- إدارة المستخدمين
+- الاشتراكات والباقات
+- التحليلات
+- الإعلانات
+- المراجعة
+- سجل التدقيق
+- Design Studio
+- الإشعارات
+- الإعدادات
+
+### المعايير
+- سريعة (< 1s)
+- محمية (RLS + role)
+- تعمل على الموبايل
+- قابلة للتوسع
+
+---
+
+## 8. نظام الإشعارات
+
+### للعميل
+- عرض جديد من نشاط متابع
+- رد على تقييمي
+- تحديث نشاط قريب
+- نقاط جديدة
+- عروض حصرية (اختياري)
+- كوبونات (اختياري)
+- إشعارات المنصة
+
+### للتاجر
+- تقييم جديد
+- رد على تقييم
+- طلب جديد
+- عميل جديد
+- تقرير أسبوعي
+- انتهاء اشتراك (مقفل)
+- إشعار إداري (مقفل)
+
+### iOS 16.4+
+- Web Push مدعوم
+- App Badging API
+
+---
+
+## 9. التثبيت والتجاوب
+
+### PWA
+- Manifest كامل
+- Service Worker
+- Install Banner (مرة واحدة)
+- Offline-First
+
+### التجاوب
+| الجهاز | العرض | التخطيط |
+|--------|------|---------|
+| iPhone SE | 320px | 1 column |
+| iPhone 14 | 393px | 1 column |
+| iPad Mini | 768px | 2 column |
+| iPad Pro | 1024px | 2-3 column |
+| Laptop | 1440px | 3-4 column |
+| 4K | 2560px+ | Max-width 1280px |
+
+---
+
+## 10. البوت + AI Assistant
+
+### البوت
+- صفحة /about شاملة
+- Presentation Mode (PDF للـ Pitch)
+- مركز تحديثات (منفصل للعميل / للتاجر)
+- صندوق أسود
+
+### AI Assistant (مجاني)
+- مساعد ذكي داخل المنصة
+- صوت + كتابة
+- لهجة مصرية شعبية
+- يعمل في كل مكان
+
+### Support Bot (منفصل)
+- يحل مشاكل فنية
+- يوفر وقت الدعم
+
+---
+
+## 11. المشاركة + QR
+
+- Native share
+- Social: WhatsApp / Facebook / X / Telegram
+- Copy link
+- QR Code لكل صفحة
+- OG Image ديناميكي
+
+---
+
+## 12. دعم فلسطين
+
+- شارة دائمة في الفوتر
+- صفحة /support-palestine
+- 2% من دخل الباقات
+- صندوق دعم
+
+---
+
+## 13. الفوتر
+
+1. اللوجو الكامل
+2. 3 كروت تواصل
+3. 4 أعمدة (اكتشف / للتجار / عننا / قانوني)
+4. شريط فلسطين
+5. التوقيع: NourEldin B7R (Script، ذهبي)
+6. الحقوق: 2026 EAH
+7. الإصدار: v2.x.x
+
+---
+
+## 14. SEO + Integrations
+
+### LocalBusiness Schema
+- JSON-LD على كل صفحة نشاط
+
+### Google Business Profile
+- ربط كل نشاط بـ GBP
+- مزامنة تلقائية
+
+### Agentic Web
+- صفحات نظيفة + semantic
+- Public API للقراءة
+- ذكر EAH في كل بيانات
+
+---
+
+## 15. القواعد الذهبية
+
+### ممنوعات
+1. تعديل بدون سبب
+2. شيل features
+3. commit بدون typecheck
+4. deploy بدون preview + موافقة
+5. build محلي (SIGILL)
+6. تعديل Schema بدون سؤال
+7. secrets في Git
+8. img بدون Cloudinary
+9. animations مستمرة
+10. content-visibility على الأساسي
+11. unstable_cache جوه component
+12. createClient في public reads
+13. emojis في UI
+
+### مسموحات
+1. features (بعد موافقة)
+2. bug fixes
+3. perf improvements
+4. security (بعد شرح)
+5. docs
+6. CHANGELOG
+
+### سير العمل
+1. اقرأ
+2. اسأل
+3. استنى موافق
+4. عدّل حاجة واحدة
+5. typecheck
+6. خلص
+7. استنى
+
+---
+
+## 16. البنية التقنية
+
+- Next.js 16 + React 19 + TS
+- CSS Modules
+- Supabase (Postgres + Auth + Realtime)
+- Cloudinary
+- Vercel
+- Web Push (VAPID)
+
+### هيكل
+eah/
+  docs/
+    MASTER_BRIEF.md
+    FEATURES.md
+    ROADMAP.md
+    AI_CONTRACT.md
+    SACRED.md
+    DESIGN_SYSTEM.md
+    ARCHITECTURE.md
+    SCHEMA.sql
+    MIGRATION_GUIDE.md
+  src/
+  public/
+  package.json
+
+---
+
+## 17. خطة التنفيذ
+
+- أسبوع 1: أساس (Auth + Home + Explore)
+- أسبوع 2: تفاعل (Account + Merchant + Admin)
+- أسبوع 3: متقدم (Offers + Reviews + Analytics)
+- أسبوع 4: إطلاق (PWA + SEO + Testing)
+
+التفاصيل: ROADMAP.md
+
+---
+
+## 18. الرسالة للشات الجديد
+
+اقرأ MASTER_BRIEF.md كامل.
+اقرأ AI_CONTRACT.md + SACRED.md.
+قول قرأت. جاهز. واستنى.
+
+القواعد:
+1. ممنوع أي تعديل بدون سؤالي
+2. typecheck قبل كل commit
+3. deploy بعد preview + موافقي
+4. build محلي ممنوع
+5. أي مشكلة → قف واسأل
+
+الأولويات:
+1. السرعة (Lighthouse 95+)
+2. الأمان (RLS + auth + rate limiting)
+3. التزامن (realtime + offline)
+4. التصميم (نيون ناعم)
+5. التجاوب (320px → 4K)
+
+---
+
+## 19. الخلاصة
+
+EAH منصة اكتشاف محلية مصرية. مجانية للعميل، بدون عمولة على التاجر. الربح من باقات + إعلانات. تصميم 2026 نيون ناعم. تقنية نظيفة، سريعة، آمنة، offline-capable.
+
+التوقيع: NourEldin B7R — فلسطين في القلب
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/AI_CONTRACT.md
+═══════════════════════════════════════════════════════════
+
+# ⛔ EAH — AI_CONTRACT.md
+
+> القواعد الإجبارية لأي AI أو مطور يشتغل على EAH.
+> اقرأ ده قبل MASTER_BRIEF.md.
+
+**آخر تحديث:** 2026-09-24
+**الإصدار:** 1.0
+
+---
+
+## 0. القاعدة الصفرية
+
+قبل أي سطر كود:
+1. اقرأ الملف ده كامل
+2. اقرأ MASTER_BRIEF.md + SACRED.md
+3. قول: "قرأت. جاهز."
+4. استنى التعليمات
+5. ممنوع أي تعديل بدون سؤال صريح
+
+لو مش فاهم حاجة → اسأل. ممنوع تخمّن.
+
+---
+
+## 1. الممنوعات المطلقة
+
+### 1.1 في الكود
+- any بدون سبب موثّق
+- @ts-ignore بدون تعليق
+- console.log في الإنتاج
+- img بدون Cloudinary transforms
+- unstable_cache جوه component
+- content-visibility على العناصر الأساسية
+- createClient في public reads
+- emojis في UI (SVG فقط)
+- تعديل Schema/SQL بدون سؤال
+- build محلي (SIGILL)
+
+### 1.2 في التصميم
+- animations مستمرة (infinite)
+- backdrop-filter على الكروت
+- will-change دائم
+- ألوان خارج الهوية
+- خطوط غير Cairo + Tajawal
+- light mode
+
+### 1.3 في Git
+- secrets في commit
+- commit بدون typecheck
+- push بدون اختبار
+- force push بدون backup
+- commit كبير (يخلط ميزات)
+
+### 1.4 في Deploy
+- deploy بدون preview
+- deploy بدون موافقة صريحة
+- deploy بدون tag
+- deploy محلي
+
+### 1.5 في Schema
+- تعديل migration موجودة
+- RLS بدون اختبار
+- queries بدون indexes
+- تعديل production DB مباشرة
+
+---
+
+## 2. المسموحات
+
+### 2.1 من غير سؤال
+- إصلاح typo في النص
+- إصلاح bug بسيط
+- تحديث docs
+- تحديث CHANGELOG
+- إضافة تعليقات
+
+### 2.2 بعد سؤال صريح
+- إضافة feature جديدة
+- تعديل UI/UX
+- تعديل Schema
+- تغيير تصميم
+- تعديل ملفات مقدسة
+- تعديل dependencies
+
+---
+
+## 3. سير العمل
+
+### 3.1 قبل التعديل
+قول بالحرف:
+> هعدل [اسم الملف]. السبب: [السبب]. موافق؟
+
+استنى:
+> موافق
+
+بعدها ابدأ.
+
+### 3.2 أثناء التعديل
+- عدّل حاجة واحدة بس
+- متفتحش ملفات تانية بدون داعي
+- سجّل كل خطوة
+
+### 3.3 بعد التعديل
+- typecheck:
+  cd ~/EAH-V2/08-web && npx tsc --noEmit
+- لو نظيف → commit
+- لو فيه أخطاء → أصلح، وبعدين commit
+- قول: خلص. اختبر.
+
+### 3.4 بعد الاختبار
+- لو تمام → نكمل
+- لو فيه مشكلة → revert، وأصلح
+
+---
+
+## 4. عند الخطأ
+
+### 4.1 لو لقيت خطأ في الكود
+1. وقف فوراً — لا تكمل
+2. بلّغ: فيه مشكلة في X
+3. استنى تعليمات
+4. بعد الموافقة → أصلح
+5. typecheck + commit منفصل
+
+### 4.2 لو كسرت حاجة
+1. git revert فوراً
+2. push
+3. بلّغ
+4. استنى
+
+### 4.3 لو حاجة غامضة
+- متخمّنش
+- اسأل
+- استنى الرد
+
+---
+
+## 5. الحالات الطارئة
+
+### 5.1 الموقع وقع
+1. ما تعدّلش أي حاجة
+2. افحص Vercel logs
+3. ابلغ بالتشخيص
+4. استنى تعليمات
+
+### 5.2 Production data اتمسحت
+1. ما تعدّلش أي حاجة
+2. افحص Supabase backups
+3. ابلغ
+4. استنى تعليمات
+
+### 5.3 Secret اتكشف
+1. غيّره فوراً (Supabase/Cloudinary/Vercel)
+2. امسح من Git history
+3. ابلغ
+4. راجع كل الـ secrets
+
+---
+
+## 6. الملفات المقدسة (SACRED)
+
+ممنوع تعديل بدون تصريح خاص:
+
+- components/home-hero.tsx + .css
+- components/home-dynamic-v2.tsx
+- components/section-slider-v2.tsx + .css
+- components/simple-flip-card.tsx + .css
+- components/floating-capsule.tsx + .css
+- lib/data.ts
+- lib/ranking.ts
+- lib/supabase-server.ts
+- app/layout.tsx
+- app/page.tsx
+- app/globals.css
+- proxy.ts
+- next.config.ts
+
+قبل أي تعديل عليها:
+> هعدل [الملف]. السبب: [السبب]. موافق؟
+
+---
+
+## 7. الملفات الممنوعة تماماً
+
+ممنوع لمس أي من دول تحت أي ظرف:
+
+- .env.local (secrets)
+- .env.production (secrets)
+- .vercel/ (project link)
+- package-lock.json (إلا بعد npm install)
+- tsconfig.json (إلا بعد موافقة صريحة)
+- schema SQL في production
+
+---
+
+## 8. أنماط الكود
+
+### 8.1 TypeScript
+- strict mode دايماً
+- مفيش any بدون تعليق
+- مفيش as unknown as X بدون سبب
+- استخدم discriminated unions
+
+### 8.2 React
+- Server Components أولاً
+- use client فقط عند الحاجة
+- useMemo/useCallback عند الحاجة فقط
+- keys دايماً في map
+
+### 8.3 CSS
+- CSS Modules
+- مفيش inline styles (إلا dynamic)
+- مفيش !important بدون سبب
+- استخدم CSS variables
+
+### 8.4 Naming
+- Components: PascalCase
+- Files: kebab-case
+- Variables: camelCase
+- Constants: UPPER_SNAKE
+- Arabic في النص، إنجليزي في الكود
+
+---
+
+## 9. Style Guide
+
+### 9.1 Comments
+- عربي بسيط
+- واضح ومختصر
+- يشرح WHY مش WHAT
+- مفيش تعليق يقول نفس الكود
+
+### 9.2 Function Names
+- describeAction (fetchBusinesses)
+- handleEvent (handleClick)
+- is/has/can (isOpen, hasOwner)
+- get/set للـ props
+
+### 9.3 Component Structure
+1. imports
+2. types
+3. helpers
+4. component
+5. export
+
+---
+
+## 10. Communication
+
+### 10.1 لما تسأل
+- سؤال واحد في المرة
+- واضح ومحدد
+- مع سياق
+- بدون تخمين
+
+### 10.2 لما ترد
+- مختصر ومباشر
+- بالعامية المصرية
+- بدون إيموجي كتير
+- مع أمثلة لو محتاج
+
+### 10.3 لما تعمل commit
+- رسالة واضحة
+- نوع: feat / fix / docs / perf / chore
+- نطاق: (home) (explore) (auth) ...
+- وصف قصير
+
+مثال:
+> feat(home): add bento grid for featured
+> fix(explore): correct misc filter
+> perf(layer5): kill 60+ infinite animations
+
+---
+
+## 11. توقيعك
+
+**كل AI يشتغل على EAH يلتزم بـ:**
+
+- احترام الملفات المقدسة
+- عدم التخمين
+- السؤال قبل التعديل
+- Backup قبل أي تعديل كبير
+- typecheck قبل أي commit
+- اختبار قبل أي deploy
+- الحفاظ على الهوية (نيون بنفسجي + ذهبي)
+- الحفاظ على السرعة (Lighthouse 95+)
+
+---
+
+## 12. الخلاصة
+
+**القاعدة الذهبية:**
+> لو شاكك → اسأل.
+> لو مش متأكد → اسأل.
+> لو فيه خطر → اسأل.
+
+**التزامك بالقواعد دي = مشروع نظيف.**
+**تجاهلك ليها = مشروع ملخبط.**
+
+**الهدف:** منصة نظيفة تخدم الناس لسنين.
+
+---
+
+**آخر تحديث:** 2026-09-24
+**الإصدار:** 1.0
+**المالك:** NourEldin B7R — فلسطين في القلب
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/SACRED.md
+═══════════════════════════════════════════════════════════
+
+# EAH - SACRED.md
+
+> المقدسات - اللي ممنوع يتغير مهما حصل.
+> اقرأ ده قبل أي تعديل.
+
+آخر تحديث: 2026-09-24
+الإصدار: 1.0
+
+---
+
+## 0. ليه الملف ده؟
+
+فيه حاجات في EAH مش قابلة للنقاش:
+- الهوية (الألوان + الخطوط + الشعار)
+- السلوغان والهوك
+- المبادئ الأساسية (مجاني للعميل، بدون عمولة)
+- الملفات المقدسة
+
+دي اللي بتخلي EAH مميز. لو اتغيرت، EAH بيبقى منصة تانية.
+
+---
+
+## 1. الهوية البصرية (مقدسة)
+
+### 1.1 الألوان
+
+الخلفية:
+- bg: #07020D (أسود بنفسجي عميق)
+
+البنفسجي:
+- purple-1: #9D4EDD (هادئ)
+- purple-2: #A855F7 (نيون)
+- purple-3: #C77DFF (فاتح)
+
+الذهبي:
+- gold-1: #E8C79A (هادئ)
+- gold-2: #F5D9A7 (فاتح)
+
+الثانوية:
+- teal: #55E7D1 (للنجاح)
+- orange: #FDBA74 (للترند)
+- red: #FCA5A5 (للتحذير)
+
+القاعدة:
+- البنفسجي = أساسي
+- الذهبي = accent (للمميزين + العناوين)
+- Teal = للنجاح فقط
+- Orange = للترند فقط
+- Red = للتحذير فقط
+
+ممنوع:
+- أي لون خارج القائمة
+- تغيير القيم
+- إضافة تدرجات جديدة
+
+### 1.2 الخطوط
+
+- الرئيسي: Cairo Variable
+- العرض: Tajawal Variable
+- التوقيع: Brush Script MT / Segoe Script
+
+ممنوع:
+- Poppins, Inter, Roboto
+- أي خط غير معرّف
+- أكتر من 2 خطوط
+
+### 1.3 الستايل العام
+
+- Dark-only - لا light mode أبداً
+- نيون ناعم - طبقة واحدة، بدون توهج عالي
+- بدون backdrop-filter على الكروت
+- بدون animations مستمرة
+- انسيابية - transitions 180-240ms
+- الروح: Linear x Vercel x Stripe x Apple
+
+---
+
+## 2. الشعار والهوك (مقدس)
+
+### 2.1 الاسم
+EAH - 3 حروف، بالحروف اللاتينية. مش إيه، مش eah، مش E.A.H. دايماً EAH.
+
+### 2.2 السلوغان
+اللي نفسك فيه ؟
+- بالعربي، مع علامة استفهام، مع مسافة قبل الـ ؟
+- مش اللي نفسك فيه
+- مش اللي نفسك في
+- مش اللي تحب
+
+### 2.3 الهوك
+شبيك لبيك .. كل حاجة حواليك
+- سطرين دايماً
+- بنفس الترتيب
+- مع .. بينهم
+
+### 2.4 ستيكر المنطقة
+من قلب شبين القناطر
+- مع أيقونة location
+- دايماً بنفس الصيغة
+
+### 2.5 اللوجو
+
+النسخ:
+- Full - تاج + EAH + slogan
+- Compact - EAH + تاج صغير
+- Mark - التاج فقط (favicon + PWA)
+
+الألوان:
+- التاج: ذهبي (#E8C79A)
+- EAH: بنفسجي نيون (#C084FC)
+- Slogan: ذهبي ناعم
+
+ممنوع:
+- تغيير الألوان
+- إضافة stroke خارجي
+- تغيير الميلان
+- إضافة عناصر جديدة
+
+---
+
+## 3. المبادئ الأساسية (مقدسة)
+
+### 3.1 للعميل
+- مجاني بالكامل - صفر رسوم
+- بدون عمولة على الطلبات
+- بدون إعلانات مزعجة
+- بدون تتبع تسويقي
+
+### 3.2 للتاجر
+- مجاني للتسجيل - صفر رسوم
+- بدون عمولة على الطلبات
+- بدون إجبار على الباقات
+- الظهور المجاني دايماً متاح
+
+### 3.3 للمنصة
+- لا نبيع بيانات المستخدمين
+- لا نستخدم dark patterns
+- لا نضغط على الترقية
+- الشفافية دايماً
+
+### 3.4 للقضية
+- فلسطين في القلب - دايماً
+- 2% من الدخل لصندوق فلسطين
+- الموقف ثابت - لا يتغير
+
+---
+## 4. الملفات المقدسة
+
+ممنوع تعديل بدون تصريح خاص:
+
+Frontend Core:
+- components/home-hero.tsx + .css
+- components/home-dynamic-v2.tsx + .css
+- components/section-slider-v2.tsx + .css
+- components/simple-flip-card.tsx + .css
+- components/floating-capsule.tsx + .css
+- components/site-footer.tsx + .css
+
+Backend:
+- lib/data.ts
+- lib/ranking.ts
+- lib/personalization.ts
+- lib/supabase-server.ts
+- lib/supabase-browser.ts
+- proxy.ts
+- next.config.ts
+
+App:
+- app/layout.tsx
+- app/page.tsx
+- app/globals.css
+
+Schema:
+- docs/SCHEMA.sql
+- كل migrations
+
+---
+
+## 5. الملفات الممنوعة تماماً
+
+ممنوع لمس أي من دول تحت أي ظرف:
+
+- .env.local (secrets)
+- .env.production (secrets)
+- .vercel/ (project link)
+- package-lock.json (إلا بعد npm install)
+- .git/config (إلا عند الحاجة)
+- أي migration مطبقة في production
+
+---
+
+## 6. الوظائف الأساسية
+
+الوظائف دي لازم دايماً تكون موجودة:
+
+للعميل:
+- تصنيفات: مطاعم + صيدليات + ماركت + توصيل + أنشطة أخرى
+- Home: Hero + Bento + List + Strips
+- Business: Hero + Quick Actions + Branches + Reviews + Map
+- Search: عربي مصري + صوت
+- AI Assistant: مجاني
+
+للتاجر:
+- Merchant: Dashboard + Reports + Orders + Branches
+- WhatsApp Orders: 10 دقايق تأكيد
+- Notifications: تحكم كامل
+
+للأدمن:
+- Admin: Shell + Businesses + Users + Reports + Audit
+- Subscriptions: مع تفعيل/إيقاف
+- Ads: مع جدولة
+
+للمنصة:
+- Trust System
+- Branches
+- Partners
+- Monthly Reports
+- Message Lock
+- Push Notifications
+- PWA
+- Offline-First
+
+ممنوع:
+- شيل أي وظيفة من دول
+- إخفاء أي وظيفة بدون سبب
+- تعطيل أي وظيفة (إلا لحالات طارئة)
+
+---
+
+## 7. النصوص المقدسة
+
+### 7.1 النصوص الأساسية
+
+الرئيسية:
+- اللي نفسك فيه ؟
+- شبيك لبيك .. كل حاجة حواليك
+- من قلب شبين القناطر
+
+للعميل:
+- اكتشف اللي حواليك
+- اطلب على واتساب
+- قول واحنا نظبط
+
+للتاجر:
+- سجّل نشاطك مجاناً
+- بدون عمولة
+- ظهور مجاني
+
+للقضية:
+- فلسطين في القلب
+
+### 7.2 الصيغة
+
+- عربي لهجة مصرية
+- مش فصحى رسمية
+- مش إنجليزي
+- بدون إيموجي كتير (SVG فقط)
+- بدون نبرة إعلانية
+
+---
+
+## 8. الألوان المحظورة
+
+ممنوع استخدام:
+
+- الأسود الكامل (#000000)
+- الأبيض الكامل (#FFFFFF)
+- الأحمر الكامل (#FF0000)
+- الأزرق التقليدي (#0000FF)
+- الأخضر التقليدي (#00FF00)
+- أي لون "default" من مكتبات UI
+
+السبب: يخرج عن الهوية.
+
+---
+
+## 9. الحركات الممنوعة
+
+ممنوع:
+- animations مستمرة (infinite)
+- animations لأكتر من 400ms
+- bounce + elastic
+- rotations مستمرة
+- scale > 1.1
+- blur animations
+
+مسموح:
+- fade in (200-300ms)
+- slide up (200-300ms)
+- hover transforms (180-240ms)
+- entrance animations لمرة واحدة
+
+---
+
+## 10. ممنوعات الأداء
+
+ممنوع:
+- animations مستمرة
+- backdrop-filter على الكروت
+- will-change دائم
+- content-visibility على العناصر الأساسية
+- img بدون Cloudinary
+- CSS > 100KB
+- JS > 200KB initial
+
+---
+
+## 11. ممنوعات الأمان
+
+ممنوع:
+- secrets في Git
+- Service Role Key على Client
+- RLS متعطّل
+- queries بدون rate limiting
+- HTML غير موثوق (بدون sanitize)
+- بيانات شخصية بدون تشفير
+
+---
+
+## 12. ممنوعات النمو
+
+ممنوع:
+- بيع بيانات المستخدمين
+- إعلانات من جهات غير موثوقة
+- تتبع بدون موافقة
+- Dark patterns
+- Fake urgency
+- Auto-subscribe
+
+---
+
+## 13. عند الشك
+
+لو شاكك في تعديل:
+- اسأل الأول
+- اشرح الأثر
+- استنى موافقة
+- بعدها اتحرك
+
+قاعدة بسيطة:
+لو مش متأكد إن التعديل ده "يحسّن EAH" -> متعملهوش.
+
+---
+
+## 14. الالتزام
+
+كل AI أو مطور يشتغل على EAH يلتزم بـ:
+
+- احترام الملفات المقدسة
+- عدم تعديل الممنوعات
+- السؤال قبل أي تعديل
+- الحفاظ على الهوية
+- الحفاظ على السرعة
+- الحفاظ على الأمان
+- الحفاظ على القضية
+
+مخالفة أي بند -> إيقاف فوري + مراجعة.
+
+---
+
+آخر تحديث: 2026-09-24
+الإصدار: 1.0
+المالك: NourEldin B7R - فلسطين في القلب
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/GLOSSARY.md
+═══════════════════════════════════════════════════════════
+
+# EAH - GLOSSARY.md
+
+> قاموس المصطلحات. اقرأه قبل أي كود.
+
+آخر تحديث: 2026-09-24
+
+---
+
+## مكونات الواجهة
+
+Bento Grid
+- شبكة 2x2 فيها بطاقات بأحجام مختلفة
+- تستخدم في قسم المميزين
+- مستوحاة من Apple / Notion
+
+Snap Strip
+- شريط أفقي يتحرك بالـ scroll
+- CSS scroll-snap بدون JS
+- تستخدم في العروض والجديد
+
+Vertical List
+- قائمة عمودية (زي Spotify)
+- صورة 44x44 + اسم + نوع + تقييم
+- تستخدم في الترند
+
+Hero
+- القسم العلوي في الصفحة
+- لوجو + سلوغان + hook + بحث
+
+Floating Capsule
+- الهيدر العائم
+- شفاف في الأعلى، صلب عند الـ scroll
+
+Drawer
+- القائمة الجانبية
+- تفتح من اليمين (RTL)
+
+Splash
+- شاشة تحميل سريعة (1s)
+- تاج + لوجو + خلفية
+
+Welcome Gate
+- صفحة ترحيب للزوار الجدد
+- تظهر مرة واحدة فقط
+
+---
+
+## بيانات
+
+Business
+- نشاط (مطعم، صيدلية، ماركت، توصيل)
+
+Featured
+- الأنشطة المميزة (مدفوعة أو مختارة)
+
+Trending
+- الأنشطة الأعلى في التفاعل
+
+Trust Score
+- نقاط الثقة (0-100)
+- ترتفع بالتفاعل، تنخفض بالإبلاغات
+
+Loyalty Tier
+- مستوى الولاء: Bronze, Silver, Gold, Platinum, Diamond
+
+Points
+- نقاط المستخدم
+- تُكسب من التفاعل، تُستبدل بعروض
+
+---
+
+## تقني
+
+RSC
+- React Server Component
+- يعمل على السيرفر بدون JS للعميل
+
+Client Component
+- مكون يعمل على المتصفح
+- يحتاج "use client"
+
+unstable_cache
+- cache من Next.js
+- يُستخدم فقط على مستوى module
+
+publicClient
+- Supabase client بدون cookies
+- للقراءات العامة
+
+serviceClient
+- Supabase client بـ service role
+- للسيرفر فقط (bypass RLS)
+
+RLS
+- Row Level Security
+- أمان على مستوى الصف
+
+proxy.ts
+- بديل middleware.ts في Next.js 16
+- للـ session refresh
+
+---
+
+## أدوار
+
+customer
+- مستخدم عادي
+
+merchant
+- صاحب نشاط
+
+super_admin
+- أدمن (فيه مفيش admin عادي)
+
+---
+
+## مصطلحات المنصة
+
+EAH
+- اسم المنصة
+
+Hook
+- شبيك لبيك .. كل حاجة حواليك
+
+Slogan
+- اللي نفسك فيه ؟
+
+Zone
+- من قلب شبين القناطر
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/ROADMAP.md
+═══════════════════════════════════════════════════════════
+
+# 🗺️ EAH — ROADMAP.md
+
+> خطة تنفيذ على 12 أسبوع — 3 مراحل × 4 أسابيع.
+> **قاعدة صارمة:** لا قفز للمرحلة التالية قبل ما السابقة تخلص 100%.
+
+**آخر تحديث:** 2026-09-24
+**الإصدار:** 1.0
+
+---
+
+## 🎯 نظرة عامة
+
+| المرحلة | المدة | الهدف | الناتج |
+|---------|------|-------|--------|
+| **المرحلة 1: الأساس** | 4 أسابيع | بنية أساسية + الصفحات الرئيسية | موقع شغّال (بدون تفاعل) |
+| **المرحلة 2: التفاعل** | 4 أسابيع | Auth + Account + Merchant | منصة كاملة شغّالة |
+| **المرحلة 3: الإطلاق** | 4 أسابيع | Admin + PWA + AI + Polish | جاهز للجمهور |
+
+---
+
+## 🏗️ المرحلة 1 — الأساس (4 أسابيع)
+
+**الهدف:** بنية تقنية نظيفة + الصفحات العامة الأساسية.
+
+### الأسبوع 1: البنية التحتية
+
+**Day 1-2: المشروع**
+- [ ] إنشاء Next.js 16 project (بدون مثال)
+- [ ] TypeScript strict mode
+- [ ] ESLint + Prettier
+- [ ] هيكل المجلدات (src/app, src/components, src/lib)
+- [ ] `next.config.ts` كامل
+- [ ] `.env.example`
+
+**Day 3-4: Supabase**
+- [ ] إنشاء Supabase project (أو استخدام الحالي)
+- [ ] تشغيل `SCHEMA.sql` (migration كامل)
+- [ ] التأكد من RLS + Policies
+- [ ] Storage buckets (business-media, avatars)
+- [ ] Seed data (أنشطة تجريبية)
+
+**Day 5-7: Auth**
+- [ ] `createClient` + `createPublicClient` + `createServiceClient`
+- [ ] `proxy.ts` (بدل middleware)
+- [ ] Auth flow: تسجيل/دخول/خروج
+- [ ] Magic link + Password
+- [ ] صفحة `/auth` كاملة
+
+**Definition of Done:**
+- [ ] نوع مشروع مفتوح على localhost:3000
+- [ ] Auth flow شغّال (تسجيل + دخول)
+- [ ] typecheck نظيف
+- [ ] Deploy على Vercel ناجح
+
+---
+
+### الأسبوع 2: الهوية والصفحات العامة
+
+**Day 8-9: Design System**
+- [ ] `globals.css` (الألوان + الخطوط)
+- [ ] Cairo Variable + Tajawal
+- [ ] Icons library (SVG custom)
+- [ ] مكونات أساسية (Button, Input, Card)
+
+**Day 10-11: Home**
+- [ ] Splash (CSS-only، 1s)
+- [ ] Hero (لوجو + slogan + hook + search + 5 categories)
+- [ ] Featured (Bento Grid)
+- [ ] Trending (Vertical List — 10)
+- [ ] Offers (Snap Strip)
+- [ ] New (Snap Strip)
+- [ ] Footer
+
+**Day 12-13: Explore**
+- [ ] Search bar ذكي (عربي مصري)
+- [ ] Filters (تصنيف، منطقة، تقييم، مفتوح حالاً)
+- [ ] Grid + List view
+- [ ] Pagination / Infinite scroll
+- [ ] sort options
+
+**Day 14: Business Page**
+- [ ] Hero (غلاف + لوجو + اسم)
+- [ ] Quick actions (اتصال + واتساب + حفظ + مشاركة)
+- [ ] Gallery + Lightbox
+- [ ] Menu + Lightbox
+- [ ] Hours
+- [ ] Map
+- [ ] Reviews
+
+**Definition of Done:**
+- [ ] Home شغّال + 4 sections
+- [ ] Explore + فلترة + بحث
+- [ ] Business page كاملة
+- [ ] mobile responsive (320px → 4K)
+- [ ] Lighthouse > 90
+- [ ] Deploy
+
+---
+
+### الأسبوع 3: البيانات والمنطق
+
+**Day 15-16: Data Layer**
+- [ ] `lib/data.ts` (getPublishedBusinesses + getBusinessBySlug)
+- [ ] `unstable_cache` على module-level
+- [ ] `createPublicClient` للـ public reads
+- [ ] `lib/ranking.ts` (trending score + decay)
+- [ ] `lib/personalization.ts`
+
+**Day 17-18: Search + AI Assistant**
+- [ ] `lib/search/normalize.ts` (عربي مصري)
+- [ ] Voice button (Web Speech API)
+- [ ] AI Assistant (زر ثابت + داخل البحث)
+- [ ] Rate limiting على AI
+
+**Day 19-21: SEO + Schema**
+- [ ] `metadata` لكل صفحة
+- [ ] `sitemap.ts` (revalidate 3600)
+- [ ] `robots.ts`
+- [ ] `opengraph-image.tsx`
+- [ ] LocalBusiness Schema (JSON-LD) على business pages
+- [ ] Google Business Profile integration (basic)
+
+**Definition of Done:**
+- [ ] البحث شغّال باللهجة المصرية
+- [ ] AI Assistant يجاوب أسئلة بسيطة
+- [ ] SEO كامل + OG Images
+- [ ] Google يقرأ Schema
+
+---
+
+### الأسبوع 4: Polish المرحلة 1
+
+**Day 22-23: Performance**
+- [ ] Lighthouse audit
+- [ ] ضغط الصور (Cloudinary transforms)
+- [ ] إزالة الـ unused CSS
+- [ ] Code splitting
+- [ ] Preload للـ critical
+
+**Day 24-25: تجربة الموبايل**
+- [ ] Bottom sheet للفلاتر
+- [ ] Touch targets 44px+
+- [ ] Drawer menu
+- [ ] Safe areas (iPhone notch)
+- [ ] Container Queries
+
+**Day 26-27: Accessibility**
+- [ ] ARIA labels
+- [ ] Keyboard navigation
+- [ ] Screen reader testing
+- [ ] Color contrast (WCAG AA)
+
+**Day 28: Deploy + Testing**
+- [ ] Final deploy
+- [ ] Testing شامل
+- [ ] Bug fixes
+- [ ] **Tag:** v1.0.0-alpha
+
+**Definition of Done المرحلة 1:**
+- [ ] Home + Explore + Business شغالين
+- [ ] Lighthouse 95+ على Mobile
+- [ ] Responsive من 320px لـ 4K
+- [ ] SEO كامل
+- [ ] Tag: v1.0.0-alpha
+
+---
+
+## 🔄 المرحلة 2 — التفاعل (4 أسابيع)
+
+**الهدف:** Auth كامل + Account + Merchant + Admin (جزئي).
+
+**⚠️ شرط البدء:** المرحلة 1 خلصت 100%.
+
+### الأسبوع 5: Account
+
+**Day 29-30: Profile**
+- [ ] `/account` صفحة رئيسية
+- [ ] `/account/edit` (تعديل)
+- [ ] رفع Avatar (Cloudinary + Crop)
+- [ ] Trust Score + Verified badge
+
+**Day 31-32: Points + Loyalty**
+- [ ] `/account/points` (رصيد + سجل)
+- [ ] `/account/loyalty` (المستوى)
+- [ ] نظام النقاط (award_points RPC)
+- [ ] Streak tracking
+
+**Day 33-34: Favorites + Following**
+- [ ] زر "احفظ" على كل نشاط
+- [ ] زر "تابع"
+- [ ] `/account/following`
+- [ ] إشعارات عند عرض جديد
+
+**Day 35: Notifications**
+- [ ] `/notifications` صفحة
+- [ ] Push subscribe (VAPID)
+- [ ] تحكم كامل في أنواع الإشعارات
+- [ ] Quiet Hours
+
+**Definition of Done:**
+- [ ] Profile كامل
+- [ ] Points شغّالة
+- [ ] Favorites + Following
+- [ ] Push notifications
+
+---
+
+### الأسبوع 6: Merchant
+
+**Day 36-37: Merchant Dashboard**
+- [ ] `/merchant` صفحة رئيسية
+- [ ] إحصائيات أساسية
+- [ ] روابط لكل الأقسام
+
+**Day 38-39: إدارة النشاط**
+- [ ] `/merchant/businesses/[slug]/edit`
+- [ ] رفع صور (Gallery + Menu)
+- [ ] إدارة الفروع
+- [ ] أوقات العمل
+
+**Day 40-42: الطلبات + العروض**
+- [ ] `/merchant/orders`
+- [ ] WhatsApp Order Flow (مع تأكيد خلال 10 دقايق)
+- [ ] `/merchant/offers` (إنشاء + إدارة)
+- [ ] `/merchant/coupons`
+
+**Definition of Done:**
+- [ ] Dashboard كامل
+- [ ] إدارة النشاط
+- [ ] Orders + Offers شغالين
+
+---
+
+### الأسبوع 7: Admin (جزئي)
+
+**Day 43-44: Admin Shell**
+- [ ] `/admin` layout
+- [ ] Sidebar + Header
+- [ ] Dashboard أساسي
+
+**Day 45-46: إدارة الأنشطة**
+- [ ] `/admin/businesses` (list + filters)
+- [ ] الموافقة / الرفض
+- [ ] التعديل المباشر
+- [ ] `/admin/businesses/new`
+
+**Day 47-49: إدارة المستخدمين + المراجعة**
+- [ ] `/admin/users` (list + filters)
+- [ ] Ban / Unban
+- [ ] Trust Score adjust
+- [ ] `/admin/moderation` (reviews)
+
+**Definition of Done:**
+- [ ] Admin shell شغال
+- [ ] الأنشطة مُدارة
+- [ ] المستخدمين مُدارين
+- [ ] المراجعة شغّالة
+
+---
+
+### الأسبوع 8: Polish المرحلة 2
+
+**Day 50-51: WhatsApp Order Flow كامل**
+- [ ] رسالة محمية (غير قابلة للتعديل)
+- [ ] تأكيد خلال 10 دقايق (مع countdown)
+- [ ] تتبع الحالة
+- [ ] Audit log لكل عملية
+- [ ] تحذيرات للتلاعب
+
+**Day 52-53: التقييم بعد التجربة**
+- [ ] إشعار بعد ساعة
+- [ ] "تجربة موثقة"
+- [ ] تمييز عن التقييمات العامة
+
+**Day 54-55: الأقسام المقفلة**
+- [ ] Gate على رقم التواصل + التعليقات + المفضلة + المتابعة + الموقع + فيسبوك + واتساب + المنيو
+- [ ] Banner "سجّل عشان تستفيد"
+
+**Day 56: Testing + Deploy**
+- [ ] Testing شامل
+- [ ] Bug fixes
+- [ ] **Tag:** v1.0.0-beta
+
+**Definition of Done المرحلة 2:**
+- [ ] Account كامل
+- [ ] Merchant Dashboard
+- [ ] Admin أساسي
+- [ ] WhatsApp Order Flow
+- [ ] **Tag:** v1.0.0-beta
+
+---
+
+## 🚀 المرحلة 3 — الإطلاق (4 أسابيع)
+
+**الهدف:** Admin كامل + PWA + AI + Polish + إطلاق.
+
+### الأسبوع 9: Admin كامل
+
+**Day 57-58: Analytics + Reports**
+- [ ] `/admin/analytics`
+- [ ] رسوم بيانية
+- [ ] Export CSV / PDF
+
+**Day 59-60: Subscriptions + Ads**
+- [ ] `/admin/subscriptions` (إدارة كاملة)
+- [ ] `/admin/ads` (Slots + Ads)
+- [ ] تفعيل/إيقاف + جدولة
+
+**Day 61-62: Audit + Settings**
+- [ ] `/admin/audit` (timeline)
+- [ ] `/admin/settings` (عام + flags)
+- [ ] `/admin/notifications` (إرسال جماعي)
+
+**Day 63: Featured + Moderation كامل**
+- [ ] `/admin/featured` (ترتيب + pin)
+- [ ] `/admin/moderation` كامل
+
+**Definition of Done:**
+- [ ] Admin كامل
+- [ ] Analytics + Subscriptions + Ads
+- [ ] Audit + Settings
+
+---
+
+### الأسبوع 10: PWA + AI
+
+**Day 64-65: PWA كامل**
+- [ ] Manifest
+- [ ] Service Worker
+- [ ] Install prompt
+- [ ] Offline-first
+- [ ] iOS 16.4+ push
+- [ ] App Badge
+
+**Day 66-67: AI Assistant كامل**
+- [ ] Integration (OpenAI/Gemini)
+- [ ] Context من المستخدم
+- [ ] Voice input/output
+- [ ] Rate limiting
+- [ ] Fallback
+
+**Day 68-70: Support Bot**
+- [ ] `/support` صفحة
+- [ ] FAQ أساسي
+- [ ] Walkthrough
+- [ ] تصعيد للبشري
+
+**Definition of Done:**
+- [ ] PWA يعمل offline
+- [ ] Push notifications
+- [ ] AI Assistant شغّال
+- [ ] Support Bot شغّال
+
+---
+
+### الأسبوع 11: Polish نهائي
+
+**Day 71-72: Performance نهائي**
+- [ ] Lighthouse 95+
+- [ ] Core Web Vitals ممتاز
+- [ ] صفر animations مستمرة
+- [ ] صفر `content-visibility` على الأساسي
+
+**Day 73-74: Security audit**
+- [ ] RLS كامل
+- [ ] Rate limiting شامل
+- [ ] Secrets audit
+- [ ] CSP صارم
+- [ ] HTTPS + HSTS
+
+**Day 75-77: Content**
+- [ ] `/about` كامل
+- [ ] `/terms` + `/privacy` + `/cookies`
+- [ ] `/pricing` + `/advertise`
+- [ ] `/support-palestine`
+- [ ] `/contact`
+
+**Definition of Done:**
+- [ ] كل الصفحات جاهزة
+- [ ] Security audit نظيف
+- [ ] Performance ممتاز
+
+---
+
+### الأسبوع 12: الإطلاق
+
+**Day 78-79: Testing نهائي**
+- [ ] كل الصفحات على كل الأجهزة
+- [ ] Bug fixes أخير
+- [ ] Regression testing
+
+**Day 80-81: Data seeding**
+- [ ] إضافة 50+ نشاط حقيقي
+- [ ] صور + منيو
+- [ ] تقييمات أولية
+
+**Day 82-83: Marketing prep**
+- [ ] Domain نهائي
+- [ ] Google Business Profile
+- [ ] Social media
+- [ ] Launch announcement
+
+**Day 84: 🚀 LAUNCH**
+- [ ] Deploy نهائي
+- [ ] Monitoring
+- [ ] Support جاهز
+- [ ] **Tag:** v1.0.0
+
+---
+
+## قواعد صارمة للتنفيذ
+
+### قاعدة 1: لا قفز
+ممنوع البدء في المرحلة N+1 قبل إتمام المرحلة N 100%.
+- استثناء: bug fixes عاجلة
+- ممنوع: ضيف ميزة صغيرة من المرحلة 2 أثناء المرحلة 1
+
+### قاعدة 2: Definition of Done
+كل يوم لازم ينتهي بـ:
+- typecheck نظيف
+- commit واضح
+- push للـ v2
+- Preview على Vercel
+- لا regressions
+
+### قاعدة 3: Deploy Rules
+- Preview على كل push (تلقائي)
+- Production فقط في نهاية كل أسبوع (بعد موافقة صريحة)
+- Tag في نهاية كل مرحلة
+
+### قاعدة 4: الملفات الممنوعة
+ممنوع تعديل أي من دول بدون تصريح خاص:
+- home-hero.tsx
+- home-dynamic-v2.tsx
+- section-slider-v2.tsx
+- simple-flip-card.tsx
+- lib/data.ts
+- lib/ranking.ts
+- lib/supabase-server.ts
+
+### قاعدة 5: عند الخطأ
+1. وقف فوراً — لا تكمل
+2. بلّغ — فيه مشكلة في X
+3. انتظر تعليمات — لا تصلّح بنفسك
+4. بعد الموافقة — أصلح، typecheck، commit منفصل
+
+### قاعدة 6: Backup
+قبل كل تعديل كبير:
+cp file.tsx file.tsx.pre-DATE
+
+### قاعدة 7: Session Log
+في نهاية كل يوم عمل، أضف لـ docs/SESSION_LOG.md.
+
+---
+
+## Checklist عام
+
+### قبل كل commit
+- typecheck نظيف
+- مفيش console.log
+- مفيش secrets
+- الملفات مرتبة
+
+### قبل كل deploy
+- typecheck نظيف
+- Preview جاهز
+- اختبر على الموبايل والـ Desktop
+- لا regressions
+- موافقة صريحة
+
+### في نهاية كل مرحلة
+- كل الميزات خلصت
+- كل DoD اتحقق
+- Tag جديد
+- Update SESSION_LOG.md
+
+---
+
+## أنماط ممنوعة
+
+### في الكود
+- any بدون سبب
+- @ts-ignore بدون تعليق
+- console.log في الإنتاج
+- img بدون optimization
+- unstable_cache جوه component
+- content-visibility على الأساسي
+- emojis في UI
+
+### في CSS
+- !important كتير
+- backdrop-filter على الكروت
+- animations مستمرة
+- will-change دائم
+
+### في DB
+- تعديل Schema مباشر
+- RLS بدون اختبار
+- queries بدون indexes
+
+### في Git
+- commit بدون رسالة واضحة
+- push بدون typecheck
+- force push بدون backup
+
+---
+
+## معايير الجودة
+
+### Performance
+- Lighthouse: 95+ Mobile + Desktop
+- First Contentful Paint: أقل من 1.5s
+- Time to Interactive: أقل من 3s
+- Cumulative Layout Shift: أقل من 0.1
+
+### UX
+- Touch targets: 44px+
+- Contrast: WCAG AA
+- Offline: يعمل للصفحات المشوفة
+
+### Code
+- TypeScript Strict
+- صفر any
+- Bundle أقل من 200KB
+
+### Security
+- RLS على كل الجداول
+- Rate limiting شامل
+- CSP صارم
+- صفر secrets في Git
+
+---
+
+## جدول مرن + علامات النهاية
+
+### لو الشغل أسرع
+- ممكن نضغط لـ 8 أسابيع (2 أسبوع لكل مرحلة)
+- ممنوع نبدأ مرحلة قبل ما السابقة تخلص
+
+### لو الشغل أبطأ
+- مسموح نمدّ المرحلة
+- ممنوع نحذف ميزات من Definition of Done
+
+### نهاية المرحلة 1
+- اسم الإصدار: v1.0.0-alpha
+- الرابط: staging على Vercel
+- الحالة: داخلي فقط
+
+### نهاية المرحلة 2
+- اسم الإصدار: v1.0.0-beta
+- الرابط: production مع noindex
+- الحالة: 10-20 مستخدم تجريبي
+
+### نهاية المرحلة 3
+- اسم الإصدار: v1.0.0
+- الرابط: production indexable
+- الحالة: إطلاق عام
+
+---
+
+## مؤشرات النجاح
+
+### بعد شهر
+- 50+ نشاط مسجل
+- 500+ مستخدم
+- 100+ تقييم
+- Lighthouse 95+
+
+### بعد 3 شهور
+- 100+ نشاط
+- 3,000+ مستخدم
+- 500+ تقييم
+- 5+ نشاط مدفوع
+- 10,000 ج.م دخل شهري
+
+### بعد سنة
+- 300+ نشاط
+- 20,000+ مستخدم
+- 30+ نشاط مدفوع
+- 30,000 ج.م دخل شهري
+- توسع لقرى مجاورة
+
+---
+
+## كلمة أخيرة
+
+EAH مش مجرد مشروع كود — هو منتج بيخدم ناس حقيقيين.
+
+الأولوية الأولى: يشتغل صح.
+الثانية: يشتغل سريع.
+الثالثة: يبان حلو.
+
+مفيش استعجال. 3 شهور شغل صح = 3 سنين نجاح.
+
+---
+
+آخر تحديث: 2026-09-24
+الإصدار: 1.0
+المالك: NourEldin B7R
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/ARCHITECTURE.md
+═══════════════════════════════════════════════════════════
+
+# EAH - ARCHITECTURE.md
+
+> Technical architecture for EAH platform.
+> Read MASTER_BRIEF.md first.
+
+Last updated: 2026-09-24
+Version: 1.0
+
+---
+
+## 1. Tech Stack
+
+### Frontend
+- Next.js 16 (App Router)
+- React 19
+- TypeScript 5.9 (strict)
+- CSS Modules
+- @fontsource-variable/cairo
+- @fontsource-variable/tajawal
+
+### Backend
+- Supabase (Postgres + Auth + Storage + Realtime)
+- Next.js API Routes (serverless)
+- Vercel Cron Jobs
+
+### Services
+- Cloudinary (images)
+- Web Push (VAPID)
+- Cloudflare Turnstile (bot protection)
+
+### Hosting
+- Vercel (Frankfurt - fra1)
+- Supabase (Frankfurt - eu-central-1)
+- Cloudinary (global CDN)
+
+---
+
+## 2. Project Structure
+
+eah/
+├── docs/               # Documentation (13 files)
+├── web/                # Next.js app
+│   ├── app/            # App Router
+│   │   ├── (public)/   # Public routes
+│   │   ├── account/    # User account
+│   │   ├── merchant/   # Merchant dashboard
+│   │   ├── admin/      # Admin panel
+│   │   ├── api/        # API routes
+│   │   ├── layout.tsx
+│   │   ├── page.tsx    # Home
+│   │   └── globals.css
+│   ├── components/
+│   │   ├── ui/         # Base UI
+│   │   ├── icons/      # SVG icons
+│   │   └── [feature]/  # Feature components
+│   ├── lib/
+│   │   ├── supabase/   # 4 clients
+│   │   ├── data/       # Data fetchers
+│   │   ├── search/     # Search logic
+│   │   ├── ranking/    # Business ranking
+│   │   └── utils/      # Helpers
+│   └── public/
+└── package.json
+
+---
+
+## 3. Supabase Clients
+
+### 3.1 Public Client
+File: lib/supabase/public.ts
+Used for: Public reads (businesses, offers, reviews)
+Features: No cookies, cacheable
+Auth: Anonymous
+Use with: unstable_cache
+
+### 3.2 Server Client
+File: lib/supabase/server.ts
+Used for: Auth-aware server components
+Features: Reads cookies
+Auth: User session
+Use with: force-dynamic only
+
+### 3.3 Service Client
+File: lib/supabase/service.ts
+Used for: Admin operations (bypass RLS)
+Features: Service role key
+Auth: Server-only
+Use with: Audit-logged
+
+### 3.4 Browser Client
+File: lib/supabase/browser.ts
+Used for: Client components with auth
+Features: Browser session
+Auth: User session
+Use with: Client components only
+
+---
+
+## 4. Data Flow
+
+### 4.1 Public Reads (Home, Explore)
+Route: force-dynamic
+Client: createPublicClient (no cookies)
+Cache: unstable_cache at module level
+Flow: Request -> cache check -> if miss: query Supabase (RLS public) -> cache + return
+
+### 4.2 Auth-Aware Reads (Account, Merchant)
+Route: force-dynamic
+Client: createClient (with cookies)
+Cache: No cache (user-specific)
+Flow: Request -> proxy.ts session check -> query Supabase (RLS self) -> return
+
+### 4.3 Mutations (Create, Update, Delete)
+Route: API routes
+Client: createClient OR createServiceClient
+Cache: revalidatePath/tag after
+Flow: Client submit -> validate (zod) -> rate limit -> mutation -> revalidate -> return
+
+---
+
+## 5. Caching Strategy
+
+### 5.1 Module-Level Cache
+unstable_cache with tags + revalidate
+MUST be at module level, NEVER inside component
+
+### 5.2 Route-Level Cache
+export const revalidate = 120
+Used in: /offers, /trends, /new, /businesses/[slug], /search, /recommend, /sitemap
+
+### 5.3 Static Cache
+export const dynamic = 'force-static'
+Used in: /about, /terms, /privacy, /cookies, /pricing
+
+### 5.4 No Cache
+export const dynamic = 'force-dynamic'
+Used in: /, /explore, /account/*, /merchant/*, /admin/*
+
+
+---
+
+## 6. Authentication Flow
+
+### 6.1 Signup
+1. User submits phone + password
+2. Supabase Auth creates user
+3. Trigger handle_new_user runs
+4. Creates profile + assigns customer role
+5. Returns session
+6. Client stores session
+
+### 6.2 Login
+1. User submits credentials
+2. Supabase Auth verifies
+3. Returns session cookies
+4. proxy.ts refreshes session on every request
+5. Server components read user via createClient
+
+### 6.3 Session Refresh
+File: proxy.ts (not middleware.ts)
+
+- Runs on every request
+- Refreshes expired sessions
+- Redirects unauthenticated from protected routes
+- Injects user into request headers
+
+### 6.4 Logout
+- POST to /auth/logout
+- Clears session cookies
+- Redirects to /
+
+---
+
+## 7. RLS Strategy
+
+### 7.1 Public Read
+- businesses: is_published = true
+- business_media: is_published = true
+- business_reviews: status = approved
+- offers: is_published = true AND active dates
+
+### 7.2 Owner Read/Write
+- businesses: owner_profile_id = auth.uid()
+- business_media: via business ownership
+- business_reviews: business owner can reply
+
+### 7.3 Self Read/Write
+- profiles: id = auth.uid()
+- favorites: user_id = auth.uid()
+- follows: user_id = auth.uid()
+- orders: customer_profile_id = auth.uid()
+- notifications: user_id = auth.uid()
+
+### 7.4 Admin Full
+- is_admin() function checks super_admin role
+- Used for privileged operations
+- Audit logged
+
+### 7.5 Service Role
+- Bypasses RLS
+- Only on server
+- For cross-user operations
+- Never exposed to client
+
+---
+
+## 8. API Routes
+
+### 8.1 Public APIs
+- /api/qr - QR code generation
+- /api/og - OpenGraph images
+- /api/ads/active - Active ads
+- /api/reveal-contact - Contact reveal (rate-limited)
+
+### 8.2 Auth APIs
+- /api/auth/change-password
+- /api/auth/logout
+
+### 8.3 User APIs
+- /api/profile/update
+- /api/favorites
+- /api/follows
+- /api/reviews
+- /api/orders/notify
+- /api/push/subscribe
+- /api/locations
+
+### 8.4 Merchant APIs
+- /api/merchant/export
+- /api/merchant/menu
+- /api/merchant/qr-svg
+- /api/merchant/subscription/request
+- /api/admin/upload
+- /api/upload/order-image
+- /api/upload/voice
+
+### 8.5 Admin APIs
+- /api/admin/export
+- /api/admin/collect
+- /api/admin/generate-report
+- /api/admin/pending
+
+### 8.6 Cron APIs
+- /api/cron/subscription-check (daily 9am)
+- /api/cron/trial-reminder (7am, 7pm)
+- /api/cron/review-reminder
+- /api/cron/monthly-reports
+- /api/cron/trust-decay
+
+---
+
+## 9. Realtime
+
+### 9.1 Live Visitors
+- Table: page_view_events
+- Subscription: count of active visitors
+- Display: small widget on home
+
+### 9.2 Notifications
+- Table: notifications
+- Subscription: self only
+- Display: badge count in header
+
+### 9.3 Order Updates
+- Table: order_requests
+- Subscription: customer + merchant
+- Display: real-time status
+
+---
+
+## 10. Storage Buckets
+
+### 10.1 business-media
+- Public read
+- Owner write (via RLS)
+- Paths: {business_id}/{type}/{filename}
+- Types: logo, cover, gallery, menu
+
+### 10.2 avatars
+- Public read
+- Self write
+- Paths: {user_id}/{filename}
+
+### 10.3 order-images
+- Private
+- Self + merchant read
+- Self write
+- Paths: {order_id}/{filename}
+
+### 10.4 order-voice
+- Private
+- Self + merchant read
+- Self write
+- Paths: {order_id}/{filename}
+
+---
+
+## 11. Image Optimization
+
+### 11.1 Cloudinary
+
+URLs:
+- Base: res.cloudinary.com/{cloud}/image/upload/
+- Transforms: f_auto,q_auto:eco,w_{size},h_{size},c_fill
+
+Sizes:
+- Card: 400x300
+- Large: 800x600
+- Cover: 1200x800
+- Hero: 1600x1000
+
+### 11.2 next/image
+
+- Used for: local assets, user avatars
+- Formats: AVIF, WebP
+- Device sizes: [320, 480, 640, 768, 1024, 1280]
+- Image sizes: [64, 96, 128, 200, 256, 384]
+
+---
+
+## 12. Cron Jobs
+
+### 12.1 subscription-check
+- Schedule: 0 9 * * * (9am daily)
+- Task: Check expiring subscriptions, send reminders
+
+### 12.2 trial-reminder
+- Schedule: 0 7,19 * * * (7am, 7pm)
+- Task: Remind trial users before expiry
+
+### 12.3 review-reminder
+- Schedule: 0 * * * * (hourly)
+- Task: Remind users to review after 1 hour
+
+### 12.4 monthly-reports
+- Schedule: 0 10 1 * * (1st of month)
+- Task: Generate merchant reports
+
+### 12.5 trust-decay
+- Schedule: 0 0 * * * (midnight)
+- Task: Decay inactive user trust scores
+
+---
+
+## 13. Error Handling
+
+### 13.1 Client Errors
+- Toast notification
+- Log to console (dev only)
+- Retry logic for network errors
+
+### 13.2 Server Errors
+- Try/catch in API routes
+- Return structured error response
+- Log to Sentry (future)
+
+### 13.3 Fallbacks
+- Empty states (no data)
+- Error boundaries (React)
+- Offline page (PWA)
+
+---
+
+## 14. Performance
+
+### 14.1 Bundle Size
+- Target: < 200KB initial JS
+- Code splitting per route
+- Dynamic imports for heavy components
+
+### 14.2 Images
+- Cloudinary transforms
+- next/image for local
+- Lazy loading (default)
+
+### 14.3 Fonts
+- Cairo Variable (self-hosted)
+- font-display: swap
+- Preload critical
+
+### 14.4 CSS
+- CSS Modules (scoped)
+- No unused rules
+- Critical CSS inline (future)
+
+### 14.5 Caching
+- unstable_cache (module level)
+- Route revalidate
+- CDN (Vercel Edge)
+
+---
+
+## 15. Security
+
+### 15.1 Headers
+- CSP (strict)
+- X-Frame-Options
+- X-Content-Type-Options
+- Referrer-Policy
+- HSTS
+
+### 15.2 Rate Limiting
+- In-memory (dev)
+- Upstash Redis (production - future)
+- Per IP + per user
+
+### 15.3 Validation
+- Zod schemas for all inputs
+- Server-side only
+- No client trust
+
+### 15.4 Secrets
+- .env.local only
+- Never in Git
+- Vercel env vars
+- Rotated regularly
+
+---
+
+## 16. Monitoring
+
+### 16.1 Vercel Analytics
+- Page views
+- Web Vitals
+- Deployment status
+
+### 16.2 Supabase Logs
+- Query performance
+- Auth events
+- RLS denials
+
+### 16.3 Custom
+- Audit logs (in DB)
+- Error logs (future Sentry)
+- Performance metrics
+
+---
+
+## 17. Deployment
+
+### 17.1 Local
+- npm run dev
+- localhost:3000
+- Supabase dev project
+
+### 17.2 Preview
+- Every push to v2
+- Vercel Preview URL
+- Test before production
+
+### 17.3 Production
+- Merge to v2 (default branch)
+- Vercel auto-deploy
+- eah-sq.vercel.app
+
+### 17.4 Rollback
+- Vercel: Instant rollback to previous
+- Git: Revert + force push
+- Supabase: Restore from backup
+
+---
+
+## 18. Environment Variables
+
+Required:
+- NEXT_PUBLIC_SUPABASE_URL
+- NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+- SUPABASE_SERVICE_ROLE_KEY
+- NEXT_PUBLIC_SITE_URL
+- CLOUDINARY_CLOUD_NAME
+- CLOUDINARY_API_KEY
+- CLOUDINARY_API_SECRET
+- VAPID_PUBLIC_KEY
+- VAPID_PRIVATE_KEY
+- NEXT_PUBLIC_VAPID_PUBLIC_KEY
+- VAPID_SUBJECT
+- CRON_SECRET
+- EAH_VISITOR_SALT
+
+Optional:
+- NEXT_PUBLIC_APP_VERSION
+- TURNSTILE_SECRET_KEY
+- NEXT_PUBLIC_TURNSTILE_SITE_KEY
+
+---
+
+## 19. Testing Strategy
+
+### 19.1 Manual (Phase 1-3)
+- Every feature tested on:
+  - iPhone SE (320px)
+  - iPhone 14 (393px)
+  - iPad (768px)
+  - Desktop (1440px)
+
+### 19.2 Automated (Future)
+- Vitest for unit tests
+- Playwright for E2E
+- Lighthouse CI for perf
+
+---
+
+## 20. Related Files
+
+- docs/MASTER_BRIEF.md - Vision
+- docs/SCHEMA.sql - Database schema
+- docs/SACRED.md - Sacred files
+- docs/AI_CONTRACT.md - Rules
+
+---
+
+Last updated: 2026-09-24
+Version: 1.0
+Owner: NourEldin B7R
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/FEATURES.md
+═══════════════════════════════════════════════════════════
+
+# 🎯 EAH — FEATURES.md
+
+> كل ميزة في المنصة بتفاصيل كاملة — للعميل، للتاجر، للأدمن، للبوت.
+> اقرأ MASTER_BRIEF.md الأول قبل ده.
+
+**آخر تحديث:** 2026-09-24
+**الإصدار:** 1.0
+
+---
+
+## 1. للعميل (Customer)
+
+### 1.1 الاكتشاف (Discovery)
+
+#### البحث الذكي
+- **بحث عربي مصري:** يفهم "عايز أكل" = "مطعم"، "عيان" = "دكتور/صيدلية"
+- **متوقع (predictive):** يظهر نتائج أثناء الكتابة
+- **بحث صوتي:** المستخدم يتكلم، النظام يبحث (لهجة مصرية)
+- **AI Assistant:** يجاوب على أسئلة معقدة ("عايز مطعم بيتزا مفتوح دلوقتي وفيه عرض")
+- **آخر عمليات البحث** محفوظة (بعد تسجيل دخول)
+- **البحث الشائع** (Trending Searches) في Explore
+
+#### الفلاتر المتقدمة
+- **التصنيف:** مطاعم / صيدليات / ماركت / توصيل / أنشطة أخرى
+- **المنطقة:** شبين القناطر + القرى
+- **التقييم:** 4+ نجوم / 4.5+ / 5 فقط
+- **مفتوح حالاً:** toggle prominent (ميزة أساسية)
+- **العروض:** الأنشطة اللي عندها عروض نشطة
+- **السعر:** $ / $$ / $$$
+- **المسافة:** قريب مني (5 كم)
+
+#### الترتيب (Sorting)
+- **الأعلى تقييماً**
+- **الأكثر شعبية** (views + engagement)
+- **الأقرب**
+- **الأحدث**
+- **الأكثر عروضاً**
+
+#### الترشيحات الشخصية
+- على حسب تاريخ البحث
+- على حسب المفضلات السابقة
+- على حسب الموقع
+- على حسب الوقت (صبح/ليل)
+
+#### قريب مني (Near Me)
+- تحديد الموقع تلقائياً (مع إذن)
+- عرض الأنشطة داخل 5 كم
+- ترتيب بالمسافة
+- زر تبديل بين "كل الأماكن" و "قريب مني"
+
+### 1.2 المعلومات (Information)
+
+#### صفحة النشاط
+- **الغلاف (Cover)** — صورة كبيرة
+- **اللوجو** — شعار النشاط
+- **الاسم + النوع + المنطقة**
+- **التقييم + عدد المراجعات**
+- **الحالة:** مفتوح / مغلق + الوقت المتوقع
+- **شارة "مميز"** (لو مدفوع)
+
+#### الصور
+- **Gallery** — صور من المكان
+- **Lightbox** — عرض مكبّر
+- **Menu Photos** — صور المنيو
+- **صور جديدة** من المراجعات
+
+#### المنيو
+- **أصناف كاملة** مع الأسعار
+- **Food Categories** (بيتزا، مشويات، ...)
+- **صور الأصناف** (لو متوفرة)
+- **الأكثر طلباً** (موسوم)
+- **مشاركة الصنف** على واتساب
+
+#### أوقات العمل
+- **7 أيام** بالتفصيل
+- **اليوم الحالي** مميز
+- **"مفتوح حالاً"** محسوب تلقائياً
+- **الوقت المتوقع للإغلاق**
+
+#### التواصل
+- **واتساب** (زر مباشر)
+- **مكالمة** (زر مباشر)
+- **فيسبوك / إنستجرام**
+- **الموقع على الخريطة**
+- **مشاركة**
+
+⚠️ **ملاحظة:** كل المعلومات دي **مقفلة للزوار** — لازم يسجل عشان يشوفها.
+
+#### الفروع (Branches)
+- **قائمة الفروع** (لو أكثر من فرع)
+- **كل فرع:** اسم + عنوان + رقم + خريطة
+- **الفرع الرئيسي** مميز
+
+#### الموقع (Map)
+- **خريطة تفاعلية** (Leaflet)
+- **زر الاتجاهات** (Google Maps)
+- **عنوان نصي** + coordinates
+
+### 1.3 الطلب (Ordering)
+
+#### طلب عبر واتساب
+- **زر كبير** "اطلب على واتساب"
+- **رسالة جاهزة** مع:
+  - اسم النشاط
+  - اسم العميل
+  - رقم العميل
+  - العنوان
+  - الأصناف المطلوبة
+  - ملاحظات
+  - **الرسالة غير قابلة للتعديل**
+- **بدون وسيط** — العميل يكلم النشاط مباشرة
+- **بدون عمولة** على العميل
+
+#### تتبع الطلب
+- **العميل يشوف حالة الطلب:**
+  - في الانتظار (بانتظار موافقة التاجر)
+  - تم القبول (خلال 10 دقايق)
+  - جاري التحضير
+  - في الطريق
+  - تم التسليم
+- **إشعار** عند كل تغيير
+- **زر "تواصل مع التاجر"**
+
+#### سجل الطلبات
+- **كل الطلبات السابقة** في /account/orders
+- **تفاصيل كل طلب**
+- **إعادة الطلب** بضغطة
+
+### 1.4 التخصيص (Personalization)
+
+#### المفضلات
+- **زر "احفظ"** على كل نشاط
+- **قائمة المفضلات** في /account
+- **إشعار عند عرض جديد** من مفضلاتك
+
+#### المتابعة (Follow)
+- **زر "تابع"** على كل نشاط
+- **إشعارات فورية** عند أي تحديث:
+  - عرض جديد
+  - صورة جديدة
+  - تغيير في المنيو
+- **قائمة المتابعات** في /account/following
+
+#### المواقع المحفوظة
+- **حفظ المواقع** (البيت، الشغل، إلخ)
+- **إعادة استخدام** عند الطلب
+- **الموقع الأساسي** للبحث
+
+#### الإشعارات الذكية
+- **تحكم كامل** في كل نوع
+- **أوقات الهدوء** (Quiet Hours)
+- **إشعارات push** (Web Push)
+- **App Badge** (عدّاد على أيقونة التطبيق)
+### 1.5 المكافآت والولاء
+
+#### نظام النقاط
+- **كسب النقاط** من كل تفاعل:
+  - تسجيل دخول يومي — 5 نقاط
+  - تصفح 5 أنشطة — 3 نقاط
+  - مشاهدة 30s+ — 2 نقاط
+  - كتابة تقييم — 20 نقطة
+  - تقييم مع صورة — 30 نقطة
+  - إضافة للمفضلة — 3 نقاط
+  - متابعة نشاط — 5 نقاط
+  - مشاركة على واتساب — 8 نقاط
+  - طلب مكتمل — 25 نقطة
+  - دعوة صديق (تسجيل) — 30 نقطة
+  - دعوة صديق (أول طلب) — 100 نقطة
+
+#### المستويات
+- **Bronze:** 0-499 (1x)
+- **Silver:** 500-1,999 (1.25x + 5% خصم)
+- **Gold:** 2,000-4,999 (1.5x + 10% خصم)
+- **Platinum:** 5,000-9,999 (2x + 15% خصم)
+- **Diamond:** 10,000+ (3x + 25% خصم)
+
+#### استخدام النقاط
+- **عرض في نشاط** — 500 نقطة
+- **كوبون 10%** — 800 نقطة
+- **كوبون 20%** — 1,500 نقطة
+- **توصيل مجاني** — 1,200 نقطة
+- **ترقية مؤقتة** — 3,000 نقطة
+- **تبرع للأعمال الخيرية** — أي عدد
+
+#### Streak Bonus
+- **7 أيام متواصلة** → +25 نقطة
+- **30 يوم** → +150 نقطة
+- **365 يوم** → +2000 نقطة
+
+### 1.6 التقييمات
+
+#### كتابة تقييم
+- **تقييم عام** (1-5 نجوم)
+- **تقييمات مفصلة:**
+  - الطعم (للمطاعم)
+  - القيمة مقابل السعر
+  - السرعة
+  - التجربة العامة
+- **نص التعليق** (اختياري)
+- **صور** (حتى 5)
+- **إشارة "تجربة حقيقية"** (لو جاء بعد طلب)
+
+#### التقييم بعد التجربة
+- **إشعار بعد ساعة** من الطلب المكتمل
+- "قيّم تجربتك في [النشاط]"
+- التقييم يتسجل كـ "تجربة موثقة"
+- يميز عن التقييمات العامة
+
+#### القراءة
+- **التقييمات الحديثة** أولاً
+- **فلترة:** بالنجوم، مع صور، تجربة موثقة
+- **ترتيب:** الأحدث / الأعلى تقييم / الأكثر إفادة
+- **التصويت:** "هل هذا التقييم مفيد؟"
+
+#### التفاعل
+- **رد التاجر** على التقييم
+- **إبلاغ** عن تقييم مخالف
+- **حفظ** تقييمات مفيدة
+
+### 1.7 PWA (Progressive Web App)
+
+#### التثبيت
+- **Install Banner** ذكي (مرة واحدة فقط)
+- **Custom install prompt** (iOS + Android)
+- **زر "ثبّت EAH"** في الفوتر والقائمة
+
+#### Offline-First
+- **الموقع يشتغل offline** (بعد أول زيارة)
+- **الأماكن المشوفة** قبل كده → متاحة offline
+- **المفضلات** متاحة offline
+- **الطلبات المعلقة** تتزامن عند الرجوع
+
+#### Web Push
+- **إشعارات push** للعميل
+- **iOS 16.4+** مدعوم (بعد التثبيت)
+- **Android + Desktop** مدعوم مباشرة
+- **طلب الإذن** بعد action مفيد (مش أول تحميل)
+
+#### App Badge
+- **عدّاد على أيقونة التطبيق** (مثل الإشعارات غير المقروءة)
+- `navigator.setAppBadge(count)`
+- iOS 16.4+ و Chrome
+
+### 1.8 الحساب
+
+#### البروفايل
+- **الاسم + الصورة** (Avatar)
+- **الرقم** (مع تحقق)
+- **البريد** (اختياري)
+- **الجنس** (اختياري)
+- **نبذة** (Bio)
+
+#### التوثيق (Verification)
+- **توثيق رقم الهاتف**
+- **توثيق البريد**
+- **شارة "موثق"** على البروفايل
+
+#### Trust Score
+- **نقاط الثقة** (0-100)
+- **يرتفع** بالتفاعل الإيجابي
+- **ينخفض** بالإبلاغات
+- **مستويات:** trusted / verified / new
+
+#### الأمان
+- **تغيير كلمة السر**
+- **2FA** (اختياري)
+- **Sessions** (تسجيل خروج من كل الأجهزة)
+- **سجل الدخول**
+
+---
+
+## 2. للتاجر (Merchant)
+
+### 2.1 الظهور (Visibility)
+
+#### صفحة كاملة
+- **صفحة نشاط** مع:
+  - غلاف + لوجو
+  - اسم + نوع + منطقة
+  - وصف + hook
+  - صور + منيو + فروع
+  - ساعات عمل + موقع
+  - تقييمات + إحصائيات
+
+#### الظهور المجاني
+- **مجاناً 100%** — بدون رسوم تسجيل
+- **ظهور في البحث** والتصنيفات
+- **بدون عمولة** على الطلبات
+- **بدون حجب** للمعلومات
+
+#### الظهور المدفوع (اختياري)
+- **المميزين** — 200 ج.م/شهر
+- **الترند** — (على حسب الأداء)
+- **بانر** — 800-1,500 ج.م/أسبوع
+- **Sponsored** — 500 ج.م/مرة
+
+#### QR Code مخصص
+- **QR Code للنشاط**
+- **تنزيل PNG** للطباعة
+- **تخصيص:** ألوان + logo
+- **استخدامات:** ملصقات، منيو، فيسبوك
+
+### 2.2 الإحصائيات
+
+#### Dashboard
+- **زيارات الصفحة** (يومي/أسبوعي/شهري)
+- **اتصالات واتساب** (كم ضغط)
+- **مكالمات** (كم اتصل)
+- **مصادر الزيارات** (بحث / تصنيف / إعلان)
+- **الوقت** الأكثر نشاطاً
+
+#### التقارير
+- **تقرير أسبوعي** (إيميل)
+- **تقرير شهري PDF** (للطباعة)
+- **تقرير الطلبات** (على واتساب)
+- **مقارنة** بالفترة السابقة
+
+#### التفاعل
+- **عدد المتابعين**
+- **عدد التقييمات** الجديدة
+- **متوسط التقييم**
+- **Trend** التقييمات (يرتفع/ينخفض)
+
+### 2.3 إدارة النشاط
+
+#### البيانات الأساسية
+- **الاسم + النوع + المنطقة**
+- **الوصف + Hook**
+- **اللوجو + الغلاف**
+- **الموقع + Coordinates**
+
+#### الصور
+- **رفع غلاف**
+- **رفع لوجو**
+- **رفع Gallery** (حتى 20 صورة)
+- **رفع Menu Photos**
+- **ترتيب + حذف**
+
+#### المنيو
+- **إضافة أصناف**
+- **تعديل الأسعار**
+- **تحديد Food Categories**
+- **صور الأصناف**
+
+#### الفروع
+- **إضافة فرع جديد**
+- **تعديل بيانات فرع**
+- **حذف فرع**
+- **تحديد الفرع الرئيسي**
+
+#### أوقات العمل
+- **7 أيام**
+- **تحديد open/close**
+- **إشارة "مغلق"** لليوم الكامل
+- **عرض تلقائي "مفتوح حالاً"**
+
+#### التواصل
+- **رقم الهاتف**
+- **رقم الواتساب**
+- **فيسبوك / إنستجرام / تيك توك**
+- **الموقع الإلكتروني**
+
+### 2.4 الطلبات
+
+#### استقبال الطلبات
+- **إشعار فوري** عند طلب جديد
+- **صفحة الطلبات** في /merchant/orders
+- **تفاصيل كل طلب:**
+  - اسم العميل + رقم
+  - العنوان
+  - الأصناف
+  - ملاحظات
+  - وقت الطلب
+
+#### الرد على الطلب
+- **قبول** خلال 10 دقايق (الافتراضي)
+- **رفض** مع سبب
+- **بدء التحضير**
+- **إرسال مع الدليفري**
+- **تم التسليم**
+
+#### تتبع الحالة
+- **Status History** لكل طلب
+- **إشعار العميل** عند كل تغيير
+- **سجل كامل** للأرشيف
+
+### 2.5 المتابعة (Followers)
+
+#### CRM بسيط
+- **قائمة المتابعين** (اسم + رقم)
+- **تصدير CSV**
+- **فلترة:** نشطين / خاملين
+- **بيانات:** كم طلب، آخر تفاعل
+
+#### الحملات (في باقة النمو)
+- **إرسال حملة** لكل المتابعين
+- **مرة/شهر** (حد أدنى)
+- **قالب جاهز** (عرض / إعلان)
+- **إحصائيات:** كم وصل + كم فتح
+
+### 2.6 الإشعارات للتاجر
+
+#### الإشعارات الفورية
+- **تقييم جديد** — فوري
+- **رد على تقييم** — فوري
+- **طلب جديد** — فوري
+- **عميل جديد تابعني** — فوري
+
+#### الإشعارات الدورية
+- **تقرير أسبوعي** — كل أحد
+- **انتهاء اشتراك** — 3 أيام قبل (مقفل)
+- **إشعارات إدارية** — حسب الحاجة (مقفل)
+
+#### التحكم
+- **toggle لكل نوع** (ما عدا المقفلة)
+- **أوقات الهدوء** (Quiet Hours)
+- **قنوات متعددة** (Push / Email)
+
+### 2.7 الاشتراك
+
+#### الباقة الحالية
+- **اسم الباقة** + تاريخ البدء
+- **تاريخ الانتهاء** + countdown
+- **الحالة:** trial / active / expired
+
+#### الترقية
+- **مقارنة الباقات**
+- **ترقية فورية**
+- **تجربة مجانية 30 يوم**
+
+#### التجديد
+- **تجديد يدوي**
+- **Auto-renew** (اختياري)
+- **إشعارات قبل الانتهاء**
+
+### 2.8 القسائم والعروض (Coupons + Offers)
+
+#### Coupons
+- **إنشاء كوبون** (كود + خصم + مدة)
+- **استخدام مرة/عدة**
+- **إحصائيات:** كم استخدام
+- **تفعيل/إيقاف**
+
+#### Offers
+- **إنشاء عرض** (عنوان + صورة + تفاصيل)
+- **تاريخ بدء/انتهاء**
+- **تفعيل/إيقاف**
+- **إحصائيات**
+
+### 2.9 التقييمات
+
+#### قراءة
+- **كل التقييمات** في لوحة التحكم
+- **فلترة:** الجديدة / المرتفعة / المنخفضة
+- **البحث**
+
+#### الرد
+- **رد على تقييم** (مرة واحدة لكل تقييم)
+- **إشعار للعميل** عند الرد
+- **الرد يظهر** تحت التقييم
+
+#### الإبلاغ
+- **إبلاغ عن تقييم مخالف**
+- **مراجعة Admin** خلال 24-48 ساعة
+
+### 2.10 الإعلانات (Ads)
+
+#### إنشاء إعلان
+- **اختيار Slot** (رئيسية / تصنيف / ترند)
+- **صورة + عنوان + رابط**
+- **تاريخ بدء/انتهاء**
+- **الميزانية**
+
+#### الإحصائيات
+- **Impressions** (كم مرة ظهر)
+- **Clicks** (كم مرة اتداس)
+- **CTR** (نسبة النقر)
+- **تكلفة النقرة**
+
+#### التحكم
+- **تفعيل/إيقاف فوري**
+- **تعديل** (قبل الموافقة)
+- **إلغاء** (مع استرجاع)
+---
+
+## 3. للأدمن (Admin)
+
+### 3.1 Dashboard
+
+#### الأرقام السريعة
+- **عدد الأنشطة** (كل / جديد / منشور / معلق)
+- **عدد المستخدمين** (كل / نشطين / جديد)
+- **عدد الطلبات** (اليوم / الأسبوع / الشهر)
+- **الدخل الشهري** (تجديدات + إعلانات)
+
+#### الرسوم البيانية
+- **زيارات الموقع** (7/30/365 يوم)
+- **الأنشطة الجديدة** (شهرياً)
+- **الدخل** (شهرياً)
+- **الأكثر مشاهدة** (top 10)
+
+#### التنبيهات الفورية
+- **أنشطة معلقة** (بحاجة موافقة)
+- **تقييمات مُعلَّمة** (بحاجة مراجعة)
+- **تقارير مستخدمين** (بحاجة رد)
+- **اشتراكات على وشك الانتهاء**
+
+### 3.2 إدارة الأنشطة
+
+#### القائمة
+- **كل الأنشطة** مع فلترة:
+  - بحسب الحالة (منشور / معلق / موقوف)
+  - بحسب النوع (مطعم / صيدلية / ...)
+  - بحسب المنطقة
+  - بحسب الباقة (مجاني / مميز / نمو)
+- **بحث** بالاسم / الـ slug / رقم صاحب النشاط
+
+#### الموافقة / الرفض
+- **الموافقة** على نشاط جديد
+- **الرفض** مع سبب
+- **إشعار للتاجر** عند كل قرار
+- **سجل التدقيق** للقرارات
+
+#### التعديل المباشر
+- **تعديل أي نشاط** (بدون انتظار التاجر)
+- **سجل التعديلات** (audit log)
+- **إشعار للتاجر** عند التعديل
+
+#### الإضافة اليدوية
+- **إنشاء نشاط جديد** من Admin
+- **استخدام Collect** (تحليل من فيسبوك/جوجل)
+- **Bulk import** (مستقبلي)
+
+#### الحذف
+- **حذف نهائي** (مع تأكيد)
+- **أرشفة** (يختفي من الواجهة لكن يفضل في DB)
+
+### 3.3 إدارة المستخدمين
+
+#### القائمة
+- **كل المستخدمين** مع فلترة:
+  - بحسب الدور (customer / merchant / super_admin)
+  - بحسب Trust Score
+  - بحسب الحالة (نشط / محظور)
+- **بحث** بالرقم / الاسم / البريد
+
+#### التفاصيل
+- **كل بيانات المستخدم:**
+  - الاسم + الصورة
+  - الرقم + البريد
+  - Trust Score + النقاط
+  - عدد التقييمات
+  - عدد الطلبات
+  - تاريخ التسجيل
+  - آخر دخول
+
+#### الحظر / الإلغاء
+- **حظر مؤقت** (24h / 7d / 30d)
+- **حظر دائم**
+- **إلغاء الحظر**
+- **سبب** إلزامي
+- **إشعار للمستخدم**
+
+#### الصلاحيات
+- **ترقية لـ merchant**
+- **ترقية لـ super_admin** (نادر)
+- **تنزيل** لدور أقل
+
+#### Trust Score
+- **تعديل يدوي** (بحذر)
+- **سبب** إلزامي
+- **إشعار للمستخدم**
+
+### 3.4 الاشتراكات والباقات
+
+#### الباقات
+- **إنشاء باقة**
+- **تعديل باقة**
+- **إيقاف/تفعيل باقة**
+- **حذف** (لو مش مربوطة باشتراكات)
+
+#### الطلبات
+- **قائمة الطلبات المعلقة**
+- **الموافقة** (مع بدء التجربة أو الاشتراك)
+- **الرفض** مع سبب
+- **سجل كامل**
+
+#### المتابعة
+- **الاشتراكات النشطة** (مع تواريخ)
+- **الاشتراكات على وشك الانتهاء** (3 أيام)
+- **الاشتراكات المنتهية**
+- **إشعارات تلقائية** قبل الانتهاء
+
+#### التحكم
+- **تمديد يدوي** (X أيام)
+- **إلغاء فوري**
+- **تحويل** من مجاني لمدفوع
+- **ترقية/تنزيل** يدوي
+
+### 3.5 التحليلات
+
+#### زوار الموقع
+- **يومي / أسبوعي / شهري**
+- **مصادر الزيارات:**
+  - بحث
+  - تصنيف
+  - إعلان
+  - مباشر
+- **الصفحات الأكثر زيارة**
+
+#### الأنشطة
+- **الأكثر مشاهدة** (top 50)
+- **الأكثر طلباً**
+- **الأعلى تقييماً**
+- **الأكثر نمواً** (week-over-week)
+
+#### البحث
+- **أشهر كلمة بحث**
+- **الكلمات بدون نتائج** (فرص)
+- **Trending Searches**
+
+#### Export
+- **CSV** لكل تقرير
+- **PDF** للطباعة
+- **جدولة** التقارير (إيميل شهري)
+
+### 3.6 الإعلانات
+
+#### Slots
+- **قائمة Slots** (رئيسية / تصنيف / ترند)
+- **إنشاء Slot**
+- **الأبعاد + المكان**
+- **التسعير** (مدة + سعر)
+
+#### الإعلانات
+- **قائمة الإعلانات** (نشط / مجدول / منتهي)
+- **الموافقة** قبل النشر
+- **الرفض** مع سبب
+- **إحصائيات** (Impressions + Clicks + CTR)
+
+#### Billing
+- **الفواتير المعلقة**
+- **المدفوعات**
+- **الاسترجاع**
+- **تقارير مالية**
+
+### 3.7 المراجعة (Moderation)
+
+#### التقييمات
+- **المُعلَّمة** (flagged by auto-system)
+- **المُبلَّغ عنها** (by users)
+- **قرارات:**
+  - قبول
+  - رفض
+  - حذف
+- **إشعار لصاحب التقييم**
+
+#### ردود التجار
+- **مراجعة ردود التجار** (لو فيها مشاكل)
+- **إبلاغ** عن رد مسيء
+
+#### تقارير المستخدمين
+- **قائمة التقارير:**
+  - تقرير عن نشاط
+  - تقرير عن تقييم
+  - تقرير عن مستخدم
+- **قرار** لكل تقرير
+
+### 3.8 سجل التدقيق (Audit Log)
+
+#### الأحداث
+- **كل عملية إدارية:**
+  - من (Admin)
+  - ماذا (action)
+  - على (entity)
+  - متى (timestamp)
+  - metadata
+
+#### Timeline
+- **عرض زمني** للأحداث
+- **فلترة** (تاريخ / نوع / مسؤول)
+- **بحث** (entity / action)
+
+#### Export
+- **CSV / JSON**
+- **للتحقيق القانوني**
+
+### 3.9 Design Studio
+
+#### الألوان
+- **تعديل الألوان** (لكن ضمن الهوية)
+- **معاينة مباشرة**
+- **Rollback** لأي تغيير
+
+#### النصوص
+- **تعديل النصوص** (بعد موافقة)
+- **إدارة الصفحات الثابتة** (about, terms)
+- **إدارة Footer**
+
+#### Components
+- **تفعيل/إيقاف مكونات**
+- **Feature flags**
+- **A/B Testing** (مستقبلي)
+
+### 3.10 الإشعارات
+
+#### إرسال جماعي
+- **لكل المستخدمين**
+- **لفئة محددة** (merchants / customers)
+- **لفئة حسب الفلتر** (المستخدمين النشطين، إلخ)
+
+#### جدولة
+- **إشعار فوري**
+- **إشعار مجدول** (وقت محدد)
+- **إشعار متكرر** (يومي/أسبوعي)
+
+#### قوالب
+- **قوالب جاهزة** للحالات الشائعة
+- **تخصيص** النص
+- **إيموجي/أيقونات**
+
+#### التتبع
+- **كم وصل**
+- **كم فتح**
+- **كم تفاعل** (click-through)
+
+### 3.11 الإعدادات
+
+#### عام
+- **اسم الموقع**
+- **الوصف**
+- **الشعار**
+- **معلومات التواصل**
+
+#### المفاتيح
+- **مفاتيح API** (مخفية)
+- **Webhook URLs**
+- **Integrations**
+
+#### Backup
+- **Backup يدوي** (تصدير DB)
+- **جدولة Backup** (يومي/أسبوعي)
+- **استعادة** (بحذر)
+
+#### Feature Flags
+- **تفعيل/إيقاف ميزات**
+- **Testing**
+- **A/B Testing**
+
+---
+
+## 4. AI Assistant (مجاني)
+
+### 4.1 المكان
+- **زر ثابت** في المنصة (bottom-right)
+- **زر في البحث** (بجانب الصوت)
+- **صفحة مخصصة** /assistant (مستقبلي)
+
+### 4.2 القدرات
+- **أسئلة معقدة:** "عايز مطعم بيتزا قريب مني مفتوح دلوقتي وفيه عرض"
+- **مقارنة:** "إيه الفرق بين [نشاط] و [نشاط]؟"
+- **توصيات:** "اقترحلي 3 أماكن للفطار في شبين"
+- **تخطيط:** "عايز أروح [مكان]، إيه الأقرب؟"
+
+### 4.3 الصوت
+- **إدخال صوتي** (Speech-to-Text)
+- **قراءة الرد** (Text-to-Speech) — اختياري
+- **لهجة مصرية** مدعومة
+
+### 4.4 الذكاء
+- **يفهم السياق** (يعرف تاريخ المستخدم)
+- **يتذكر التفضيلات** (نباتي، بدون جلوتين)
+- **يستخدم الموقع** (نشاطات قريبة)
+
+### 4.5 القيود
+- **مجاني بالكامل**
+- **Rate limited** (10 أسئلة/يوم للزائر، 50 للمسجل)
+- **بدون تخزين** لأسئلة حساسة
+
+---
+
+## 5. Support Bot (منفصل)
+
+### 5.1 المكان
+- **صفحة /support** (مستقبلي)
+- **زر في /account**
+- **داخل /merchant** للتاجر
+
+### 5.2 القدرات
+- **أسئلة شائعة:**
+  - "إزاي أسجل نشاط؟"
+  - "مشكلة في الدفع"
+  - "ليه صفحتي مرفوضة؟"
+  - "كيف أعدّل المنيو؟"
+  - "كيف أستقبل طلبات؟"
+
+- **خطوات تفاعلية** (walkthrough)
+- **روابط مباشرة** للحل
+- **تصعيد للدعم البشري** (لو محتاج)
+
+### 5.3 الفرق عن AI Assistant
+- **AI Assistant:** يرشح أماكن
+- **Support Bot:** يحل مشاكل فنية
+---
+
+## 6. تكاملات (Integrations)
+
+### 6.1 Google Business Profile
+- **ربط كل نشاط** بـ GBP
+- **مزامنة تلقائية:**
+  - ساعات العمل
+  - العنوان
+  - التقييمات
+  - الصور
+- **تحديث عكسي** (من GBP لـ EAH)
+
+### 6.2 LocalBusiness Schema
+- **JSON-LD** على كل صفحة نشاط
+- **يفهمه Google** ويرشح النشاط
+- **بيانات:**
+  - الاسم + النوع
+  - العنوان + Coordinates
+  - ساعات العمل
+  - التقييمات
+  - الصور
+
+### 6.3 Public API (Agentic Web)
+- **API للقراءة** (read-only)
+- **Endpoints:**
+  - GET /api/v1/businesses
+  - GET /api/v1/businesses/[slug]
+  - GET /api/v1/search?q=
+  - GET /api/v1/areas
+  - GET /api/v1/categories
+- **Rate limited**
+- **Documentation** واضحة
+- **هدف:** ChatGPT/Gemini يقرأوا ويقترحوا EAH
+
+### 6.4 Cloudinary
+- **WebP + AVIF** auto
+- **Watermark** خفيف
+- **Transforms:**
+  - w_400 (بطاقة)
+  - w_600 (كبير)
+  - w_1200 (غلاف)
+- **Folder structure** منظمة
+
+### 6.5 Web Push (VAPID)
+- **Push للعميل**
+- **Push للتاجر**
+- **iOS 16.4+** مدعوم
+- **App Badge** مدعوم
+
+### 6.6 WhatsApp
+- **زر مباشر** في كل مكان
+- **Templates محمية** (غير قابلة للتعديل)
+- **Business API** (مستقبلي):
+  - ردود تلقائية
+  - إشعارات
+  - تتبع الطلبات
+
+---
+
+## 7. ميزات Offline-First
+
+### 7.1 Service Worker
+- **Cache strategy:**
+  - App shell → Cache first
+  - Pages → Network first
+  - Images → Cache first
+  - API → Network only
+- **Background sync** للعمليات المعلقة
+- **Offline fallback page**
+
+### 7.2 Offline Actions
+- **حفظ مفضلة** offline → تزامن عند الرجوع
+- **كتابة تقييم** offline → تزامن
+- **طلب واتساب** → يفتح واتساب حتى لو offline (بعدين يتزامن)
+
+### 7.3 Sync Manager
+- **كشف الاتصال**
+- **Queue للعمليات**
+- **Retry logic** (3 محاولات)
+- **إشعار المستخدم** بحالة التزامن
+
+---
+
+## 8. تجربة المستخدم (UX)
+
+### 8.1 التنقل
+- **Floating Capsule Header** (شبه شفاف)
+- **Bottom Navigation** على الموبايل (مستقبلي)
+- **Drawer جانبي** للقائمة
+- **Back button** في كل صفحة فرعية
+
+### 8.2 الحركات (Animations)
+- **قصيرة** (180-240ms)
+- **عند hover فقط** (بدون مستمرة)
+- **Entrance animations** للعناصر الجديدة
+- **View Transitions API** للانتقال بين الصفحات
+- **prefers-reduced-motion** مدعوم
+
+### 8.3 الألوان والنصوص
+- **التباين عالي** (WCAG AA)
+- **نصوص واضحة** (Cairo 900 للعناوين)
+- **بدون emoji** في UI
+- **نصوص عربية فقط** (لهجة مصرية)
+
+### 8.4 التجاوب
+- **Mobile-first**
+- **Breakpoints:**
+  - 320px (iPhone SE)
+  - 393px (iPhone 14)
+  - 768px (iPad Mini)
+  - 1024px (iPad Pro)
+  - 1440px (Laptop)
+  - 2560px+ (4K)
+- **Container Queries** حيث ممكن
+
+### 8.5 Accessibility
+- **ARIA labels** على كل عنصر تفاعلي
+- **Keyboard navigation** كامل
+- **Focus visible** واضح
+- **Skip to content** link
+- **Screen reader** compatible
+
+---
+
+## 9. البوت (Bot / Presentation)
+
+### 9.1 صفحة /about
+- **Hero:** كلمة واحدة "اللي نفسك فيه ؟"
+- **قصة المنصة:** من إمتى، ليه، مين
+- **الأرقام:** أنشطة، مستخدمين، إلخ
+- **كيف تعمل:** Flowchart تفاعلي
+- **الفريق:** NourEldin B7R + المستقبل
+- **الرؤية:** التوسع
+- **اتصل بنا:** كل القنوات
+
+### 9.2 Presentation Mode
+- **زر "اعرض المنصة"** في /about
+- **10-15 شريحة:**
+  1. المشكلة
+  2. الحل
+  3. السوق
+  4. الميزات
+  5. التمايز
+  6. النموذج الربحي
+  7. الأرقام
+  8. الفريق
+  9. الرؤية
+  10. الطلب
+- **PDF download** للـ Pitch
+
+### 9.3 Changelog
+- **صفحة /changelog**
+- **قسم منفصل للعميل** + **قسم للتاجر**
+- **تصنيفات:** جديد / تحسين / إصلاح
+- **Subscribe** للإشعارات
+
+### 9.4 Roadmap
+- **صفحة /roadmap**
+- **مراحل قادمة** مع تاريخ
+- **التصويت** على الميزات (مستقبلي)
+
+### 9.5 Announcements
+- **إعلانات مهمة** من الإدارة
+- **تظهر في البانر العلوي** (مؤقت)
+- **تختفي بعد إغلاق**
+
+---
+
+## 10. دعم القضية الفلسطينية
+
+### 10.1 الشارة الدائمة
+- **في الفوتر** في كل صفحة
+- **"فلسطين في القلب 🇵🇸"**
+- **بخط ذهبي ناعم**
+
+### 10.2 صفحة /support-palestine
+- **الموقف:** منصة فلسطينية الهوى، مصرية الجذور
+- **الدعم:** 2% من دخل الباقات
+- **كيف تنضم:** زر تبرع
+- **الشفافية:** تقارير مالية
+
+### 10.3 صندوق الدعم
+- **مفتوح دائماً** (اختياري)
+- **نقاط EAH** تتحول لتبرع
+- **شراكات** مع مؤسسات موثوقة
+
+---
+
+## 11. ميزات مستقبلية (Roadmap)
+
+### 11.1 بعد 6 شهور
+- **Bottom Navigation** للموبايل
+- **Audio Reviews** (تقييم صوتي)
+- **Video Reviews** (تقييم فيديو)
+- **Stories** (قصص 24 ساعة من النشاطات)
+
+### 11.2 بعد سنة
+- **تطبيق iOS** (Native)
+- **تطبيق Android** (Native)
+- **WhatsApp Business API** (ردود تلقائية)
+- **Telegram Bot**
+
+### 11.3 بعد سنتين
+- **CRM متقدم** للتجار
+- **Analytics متقدم** (AI-driven)
+- **Recommendation Engine** (ML)
+- **Multi-language** (فصحى + إنجليزي)
+
+### 11.4 بعد 3 سنين
+- **التوسع لمحافظات جديدة**
+- **Marketplace للأدوات** (للتجار)
+- **Franchise Model**
+
+---
+
+## 12. Q&A
+
+### 12.1 أسئلة شائعة للعميل
+
+**س: هل المنصة مجانية؟**
+ج: أيوه، 100% مجانية للعميل — بدون رسوم ولا عمولات.
+
+**س: إزاي أطلب؟**
+ج: دوس "اطلب على واتساب" — يفتح واتساب مع رسالة جاهزة. النشاط يرد خلال 10 دقايق.
+
+**س: إزاي أكسب نقاط؟**
+ج: كل تفاعل — تسجيل دخول، تقييم، مفضلة، دعوة صاحب. النقاط تتحول لعروض.
+
+**س: ليه بعض المعلومات مقفلة؟**
+ج: عشان نضمن جودة المنصة — سجّل وشوف كل حاجة مجاناً.
+
+### 12.2 أسئلة شائعة للتاجر
+
+**س: كام رسوم التسجيل؟**
+ج: مجاناً 100%. الباقات المدفوعة اختيارية (200-1500 ج.م/شهر).
+
+**س: بتاخدوا نسبة من الطلبات؟**
+ج: لأ، صفر عمولة. كل الأرباح ليك.
+
+**س: إزاي أستقبل طلبات؟**
+ج: العميل يدق واتساب مباشرة — إنت ترد خلال 10 دقايق، تأكد أو ترفض.
+
+**س: إزاي أظهر في المميزين؟**
+ج: اشترك في باقة المميزة (200 ج.م/شهر). أول 30 يوم مجاناً.
+
+**س: إزاي أشيل تقييم مسيء؟**
+ج: أبلغ عنه — المراجعة تشوفه خلال 24-48 ساعة.
+
+### 12.3 أسئلة تقنية
+
+**س: المنصة بتشتغل على iPhone؟**
+ج: أيوه — PWA كامل. ثبّتها على الشاشة الرئيسية وهتشتغل زي التطبيق.
+
+**س: بتشتغل بدون إنترنت؟**
+ج: جزئياً — الصفحات المشوفة قبل كده متاحة offline.
+
+**س: الإشعارات بتوصل إزاي؟**
+ج: Web Push — بعد ما تسمح بالإشعارات (iOS 16.4+ مدعوم).
+
+---
+
+## 13. الخلاصة
+
+**EAH** منصة اكتشاف محلية مصرية كاملة — للعميل (اكتشاف + طلب + مكافآت)، للتاجر (ظهور + إدارة + CRM)، للأدمن (تحكم كامل)، والبوت (تسويق + تحديثات).
+
+**كل ميزة مصممة عشان تكون:**
+- **سريعة** — بدون تأخير
+- **آمنة** — بدون تسريب
+- **متزامنة** — بدون انقطاع
+- **بسيطة** — بدون تعقيد
+- **عربية أصلية** — بلهجة مصرية
+
+---
+
+**آخر تحديث:** 2026-09-24
+**الإصدار:** 1.0
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/DESIGN_SYSTEM.md
+═══════════════════════════════════════════════════════════
+
+# EAH - DESIGN_SYSTEM.md
+
+> نظام التصميم الكامل: الألوان، الخطوط، المكونات، القواعد.
+> اقرأ SACRED.md الأول.
+
+آخر تحديث: 2026-09-24
+الإصدار: 1.0
+
+---
+
+## 1. الألوان
+
+### 1.1 الأساسية
+
+الخلفية:
+- bg-base: #07020D
+- bg-elevated: #0A0514
+- bg-surface: #130822
+- bg-overlay: rgba(7, 2, 13, 0.85)
+
+البنفسجي:
+- purple-primary: #9D4EDD
+- purple-neon: #A855F7
+- purple-light: #C77DFF
+- purple-soft: rgba(168, 85, 247, 0.12)
+- purple-line: rgba(168, 85, 247, 0.28)
+
+الذهبي:
+- gold-primary: #E8C79A
+- gold-light: #F5D9A7
+- gold-soft: rgba(232, 199, 154, 0.12)
+- gold-line: rgba(232, 199, 154, 0.28)
+
+الثانوية:
+- teal: #55E7D1 (نجاح)
+- orange: #FDBA74 (ترند)
+- red: #FCA5A5 (تحذير)
+
+### 1.2 النصوص
+
+- text-primary: #F4F2FA (عناوين)
+- text-secondary: #C9C2DB (نص)
+- text-tertiary: #A29DB5 (ثانوي)
+- text-muted: #7B7490 (خافت)
+- text-disabled: #4A4555
+
+### 1.3 الاستخدام
+
+البنفسجي:
+- الأزرار الأساسية
+- اللينكات
+- الحدود النشطة
+- hover states
+
+الذهبي:
+- المميزين
+- الأرقام المهمة
+- الشارات
+- التوقيع
+
+Teal:
+- رسائل النجاح
+- "تم" checkbox
+- التأكيدات
+
+Orange:
+- الترند
+- العروض
+- التنبيهات الودية
+
+Red:
+- الأخطاء
+- التحذيرات
+- "مغلق"
+- الحظر
+
+---
+
+## 2. الخطوط
+
+### 2.1 العائلات
+
+- Cairo Variable: النص الأساسي
+- Tajawal Variable: العناوين (Display)
+- Brush Script MT: التوقيع
+
+### 2.2 الأحجام
+
+- xs: 0.65rem (10px)
+- sm: 0.75rem (12px)
+- base: 0.875rem (14px)
+- md: 1rem (16px)
+- lg: 1.125rem (18px)
+- xl: 1.25rem (20px)
+- 2xl: 1.5rem (24px)
+- 3xl: 2rem (32px)
+- 4xl: 2.5rem (40px)
+
+### 2.3 الأوزان
+
+- regular: 400
+- semibold: 600
+- bold: 700
+- extrabold: 800
+- black: 900
+
+### 2.4 الارتفاعات
+
+- tight: 1.15 (عناوين)
+- normal: 1.5 (نص)
+- relaxed: 1.75 (نص طويل)
+
+---
+
+## 3. المسافات
+
+- space-1: 4px
+- space-2: 8px
+- space-3: 12px
+- space-4: 16px
+- space-5: 20px
+- space-6: 24px
+- space-8: 32px
+- space-10: 40px
+- space-12: 48px
+- space-16: 64px
+
+---
+
+## 4. الحدود
+
+- border-thin: 1px
+- border-base: 1.5px
+- border-thick: 2px
+
+- radius-sm: 8px
+- radius-base: 12px
+- radius-md: 14px
+- radius-lg: 16px
+- radius-xl: 20px
+- radius-full: 9999px
+
+---
+
+## 5. الظلال
+
+- shadow-sm: 0 2px 8px rgba(0,0,0,0.2)
+- shadow-base: 0 4px 16px rgba(0,0,0,0.3)
+- shadow-md: 0 8px 24px rgba(0,0,0,0.4)
+- shadow-lg: 0 12px 32px rgba(0,0,0,0.5)
+
+Glow:
+- glow-purple-sm: 0 0 0 1px rgba(168,85,247,0.35), 0 0 10px rgba(168,85,247,0.12)
+- glow-purple-md: 0 0 0 1px rgba(168,85,247,0.45), 0 0 16px rgba(168,85,247,0.18)
+- glow-purple-lg: 0 0 0 1px rgba(168,85,247,0.55), 0 0 24px rgba(168,85,247,0.28)
+
+- glow-gold-sm: 0 0 0 1px rgba(232,199,154,0.35), 0 0 10px rgba(232,199,154,0.15)
+- glow-gold-md: 0 0 0 1px rgba(232,199,154,0.45), 0 0 16px rgba(232,199,154,0.22)
+
+---
+
+## 6. الحركات
+
+### 6.1 المدد
+
+- instant: 100ms
+- fast: 180ms
+- base: 240ms
+- slow: 400ms
+
+### 6.2 منحنيات
+
+- ease: cubic-bezier(0.4, 0, 0.2, 1)
+- ease-out: cubic-bezier(0.22, 1, 0.36, 1)
+- spring: cubic-bezier(0.34, 1.56, 0.64, 1)
+
+### 6.3 القواعد
+
+مسموح:
+- hover transitions (180-240ms)
+- entrance animations (200-400ms)
+- focus rings (150ms)
+- color transitions (200ms)
+
+ممنوع:
+- animations مستمرة
+- durations > 400ms
+- bounce/elastic عدا الأزرار الأساسية
+- rotations مستمرة
+
+---
+
+## 7. الأنماط (Patterns)
+
+### 7.1 Glass Card
+
+خلفية: linear-gradient(160deg, rgba(20,14,34,0.85), rgba(10,7,20,0.92))
+حدود: 1px solid rgba(168,85,247,0.22)
+radius: 16px
+بدون backdrop-filter
+
+### 7.2 Neon Border
+
+حدود: 1px solid rgba(168,85,247,0.4)
+glow: 0 0 16px rgba(168,85,247,0.18)
+
+### 7.3 Gold Accent
+
+حدود: 1px solid rgba(232,199,154,0.3)
+glow: 0 0 12px rgba(232,199,154,0.15)
+
+### 7.4 Gradient Text
+
+background: linear-gradient(180deg, #F5E4BC, #E8C79A, #C9A56C)
+-webkit-background-clip: text
+-webkit-text-fill-color: transparent
+filter: drop-shadow ناعم
+
+---
+
+## 8. المكونات الأساسية
+
+### 8.1 Button
+
+Variants:
+- primary (بنفسجي)
+- gold (ذهبي)
+- ghost (شفاف)
+- danger (أحمر)
+
+Sizes:
+- sm: 32px height
+- md: 40px
+- lg: 48px
+
+States:
+- default
+- hover (translateY -1px)
+- active (translateY 0)
+- disabled (opacity 0.5)
+- loading (spinner)
+
+### 8.2 Input
+
+- Height: 40px
+- Radius: 12px
+- Border: 1px solid rgba(168,85,247,0.22)
+- Focus: border purple + glow
+- Placeholder: text-muted
+
+### 8.3 Card
+
+- Radius: 14-16px
+- Border: 1px solid rgba(168,85,247,0.2)
+- Hover: border + translateY -2px
+- Padding: 12-16px
+
+---
+
+## 9. المكونات الإضافية
+
+### Modal
+- خلفية: rgba(7,2,13,0.85)
+- Panel: glass card
+- Radius: 20px
+- Padding: 24px
+- Close X في الأعلى
+
+### Toast
+- Position: أسفل يمين (desktop) / أسفل الوسط (mobile)
+- Radius: 14px
+- Duration: 3-5 ثواني
+- Variants: success / error / info
+
+### Skeleton
+- خلفية: rgba(168,85,247,0.06)
+- Animation: shimmer (1.5s)
+- Shapes: line / circle / rect
+
+### Badge
+- Radius: 999px
+- Padding: 3-8px
+- Sizes: xs / sm / md
+- Colors: purple / gold / teal / orange / red
+
+### Chip
+- Shape: pill
+- Border: 1px solid rgba(168,85,247,0.2)
+- Background: rgba(168,85,247,0.08)
+- Font: 0.68rem / 800
+
+### Avatar
+- Sizes: 24 / 32 / 40 / 48 / 64px
+- Border-radius: 50%
+- Border: 2px solid purple-soft
+- Fallback: initial letter
+
+---
+
+## 10. Layouts
+
+### Container
+- max-width: 1280px
+- margin: 0 auto
+- padding: 0 16px (mobile) / 24px (desktop)
+
+### Section
+- margin: 24px auto
+- gap: 16px
+
+### Grid
+- 1 col (mobile)
+- 2 col (tablet)
+- 3-4 col (desktop)
+- gap: 12-16px
+
+### Flex
+- Row أو Column
+- gap: 8-16px
+
+---
+
+## 11. Responsive Breakpoints
+
+- xs: 320px (iPhone SE)
+- sm: 393px (iPhone 14)
+- md: 640px (mobile landscape)
+- lg: 768px (iPad Mini)
+- xl: 1024px (iPad Pro)
+- 2xl: 1440px (Laptop)
+- 3xl: 2560px+ (4K)
+
+---
+
+## 12. Container Queries
+
+استخدم container queries بدل media queries لما ممكن:
+
+مثال:
+- card-wrapper: container-type inline-size
+- عند min-width 400px داخل الحاوية:
+  - card يبقى grid 2fr 1fr
+
+الفايدة: الكارت يتكيف حسب حجم الحاوية، مش حجم الشاشة.
+
+---
+
+## 13. أنماط النصوص
+
+### h1 (العنوان الرئيسي)
+- Font: Tajawal
+- Size: clamp(1.5rem, 4vw, 2.5rem)
+- Weight: 900
+- Line-height: 1.15
+- Gradient ذهبي أو بنفسجي
+
+### h2 (العنوان الثانوي)
+- Font: Tajawal
+- Size: clamp(1.15rem, 2.8vw, 1.7rem)
+- Weight: 900
+
+### p (الفقرة)
+- Font: Cairo
+- Size: 0.85-0.95rem
+- Weight: 600
+- Line-height: 1.7
+
+### small (الكابشن)
+- Size: 0.68-0.75rem
+- Weight: 700
+- Color: text-tertiary
+
+---
+
+## 14. Iconography
+
+- Library: SVG custom (components/eah-icons.tsx)
+- Style: outline
+- Stroke: 1.8-2.2
+- Sizes: 14 / 16 / 18 / 20 / 24 / 32
+- ممنوع: emoji في UI
+- مسموح: emoji في بيانات (مش UI)
+
+---
+
+## 15. Accessibility
+
+- Contrast: WCAG AA
+- Touch targets: 44px+
+- Focus visible: 2px solid purple
+- ARIA labels على كل عنصر تفاعلي
+- Keyboard navigation
+- Skip to content
+- Reduced motion supported
+
+---
+
+## 16. قواعد صارمة
+
+مسموح:
+- CSS Modules
+- CSS Variables
+- Container Queries
+- Native scroll
+
+ممنوع:
+- inline styles (إلا dynamic)
+- !important بدون سبب
+- Tailwind
+- styled-components
+- CSS-in-JS libraries
+- animations مستمرة
+- backdrop-filter على الكروت
+
+---
+
+## 17. الملفات المرتبطة
+
+- docs/SACRED.md - المقدسات
+- docs/MASTER_BRIEF.md - الرؤية
+- docs/AI_CONTRACT.md - القواعد
+
+---
+
+آخر تحديث: 2026-09-24
+الإصدار: 1.0
+المالك: NourEldin B7R - فلسطين في القلب
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/SCHEMA.sql
+═══════════════════════════════════════════════════════════
+
+-- =============================================================
+-- EAH - SCHEMA.sql
+-- =============================================================
+-- 
+-- ⚠️ IMPORTANT: هذا الملف مرجعي فقط (documentation)
+-- 
+-- الـ Database الفعلي موجود في Supabase project:
+--   npmpiivmdksdirrumbmt (Frankfurt, eu-central-1)
+--
+-- ممنوع تشغيل هذا الملف ضد Production مباشرة
+-- لو محتاج تغيير في DB:
+--   1. اكتب migration جديدة في Supabase SQL Editor
+--   2. اختبرها على staging أولاً
+--   3. بعدها على production
+--
+-- =============================================================
+
+-- =============================================================
+-- 1. EXTENSIONS
+-- =============================================================
+-- uuid-ossp      : UUID generation
+-- pgcrypto       : hashing, encryption
+-- postgis        : geo queries (near me)
+
+-- =============================================================
+-- 2. ENUMS
+-- =============================================================
+
+-- app_role
+-- customer | merchant | admin | super_admin
+
+-- business_type
+-- restaurant | pharmacy | supermarket | delivery_office | misc
+
+-- notification_type
+-- welcome | review | reply | points | order | system | offer
+
+-- order_status
+-- pending | confirmed | preparing | on_way | delivered | cancelled
+
+-- subscription_status
+-- pending | trial | active | expired | cancelled
+
+-- ad_status
+-- active | paused | expired | scheduled | rejected
+
+-- =============================================================
+-- 3. CORE TABLES
+-- =============================================================
+
+-- ------------------------------------------------------------
+-- profiles (user data, linked to auth.users)
+-- ------------------------------------------------------------
+-- id              uuid PK = auth.users.id
+-- display_name    text NOT NULL
+-- phone           text
+-- phone_e164      text
+-- gender          text (male | female | null)
+-- bio             text
+-- avatar_key      text (av1..av12)
+-- avatar_url      text (cloudinary)
+-- trust_score     int DEFAULT 50
+-- trust_tier      text DEFAULT 'trusted'
+-- streak_count    int DEFAULT 0
+-- verified_at     timestamptz
+-- banned_until    timestamptz
+-- interests       text[] (personalization tags)
+-- onboarding_done boolean DEFAULT false
+-- referral_code   text UNIQUE
+-- referred_by     uuid (FK profiles)
+-- created_at      timestamptz DEFAULT now()
+-- updated_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- user_roles
+-- ------------------------------------------------------------
+-- user_id         uuid FK profiles
+-- role            app_role DEFAULT 'customer'
+-- PK (user_id, role)
+
+-- ------------------------------------------------------------
+-- businesses
+-- ------------------------------------------------------------
+-- id                    uuid PK
+-- slug                  text UNIQUE
+-- name                  text NOT NULL
+-- business_type         business_type NOT NULL
+-- description           text
+-- hook                  text
+-- area                  text
+-- city                  text DEFAULT 'شبين القناطر'
+-- address_text          text
+-- latitude              numeric
+-- longitude             numeric
+-- is_open               boolean DEFAULT true
+-- is_featured           boolean DEFAULT false
+-- is_published          boolean DEFAULT false
+-- owner_profile_id      uuid FK profiles
+-- accepts_whatsapp_orders boolean DEFAULT false
+-- working_hours         jsonb
+-- cover_image_url       text
+-- trust_score           int DEFAULT 50
+-- trust_tier            text DEFAULT 'trusted'
+-- is_new_project        boolean DEFAULT false
+-- is_opportunity        boolean DEFAULT false
+-- featured_order        int DEFAULT 0
+-- featured_until        timestamptz
+-- featured_pin          boolean DEFAULT false
+-- new_until             timestamptz
+-- created_at            timestamptz DEFAULT now()
+-- updated_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_media (images: logo, cover, gallery, menu)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- media_type      text (logo | cover | gallery | menu)
+-- storage_path    text
+-- sort_order      int DEFAULT 0
+-- is_published    boolean DEFAULT true
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_contact_methods
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- method_type     text (phone | whatsapp | facebook | instagram | website | email)
+-- value           text
+-- is_primary      boolean DEFAULT false
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_food_categories
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- category_key    text (pizza | grill | koshary | coffee ...)
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_branches
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- name            text
+-- area            text
+-- address_text    text
+-- latitude        numeric
+-- longitude       numeric
+-- phone           text
+-- whatsapp        text
+-- is_primary      boolean DEFAULT false
+-- is_active       boolean DEFAULT true
+-- sort_order      int DEFAULT 0
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_reviews
+-- ------------------------------------------------------------
+-- id                    uuid PK
+-- business_id           uuid FK businesses
+-- user_id               uuid FK profiles
+-- taste                 smallint (1-5)
+-- value_for_money       smallint (1-5)
+-- speed                 smallint (1-5)
+-- experience            smallint (1-5)
+-- comment               text
+-- status                text (approved | pending | rejected)
+-- source                text (organic | post_order)
+-- order_id              uuid FK order_requests
+-- flagged_reason        text
+-- merchant_reply        text
+-- merchant_reply_at     timestamptz
+-- merchant_reply_by     uuid FK profiles
+-- created_at            timestamptz DEFAULT now()
+-- updated_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- offers
+-- ------------------------------------------------------------
+-- id                    uuid PK
+-- business_id           uuid FK businesses
+-- title                 text
+-- description           text
+-- teaser_image_path     text
+-- teaser_image_url      text
+-- image_url             text
+-- price                 numeric
+-- starts_at             timestamptz
+-- ends_at               timestamptz
+-- is_published          boolean DEFAULT false
+-- is_active             boolean DEFAULT true
+-- created_at            timestamptz DEFAULT now()
+-- updated_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- order_requests
+-- ------------------------------------------------------------
+-- id                    uuid PK
+-- business_id           uuid FK businesses
+-- customer_profile_id   uuid FK profiles
+-- order_code            text UNIQUE
+-- message               text (locked, non-editable)
+-- items                 jsonb
+-- customer_name         text
+-- customer_phone        text
+-- address               text
+-- notes                 text
+-- images                text[]
+-- voice_url             text
+-- status                order_status DEFAULT 'pending'
+-- confirmed_at          timestamptz
+-- rejected_at           timestamptz
+-- reject_reason         text
+-- expires_at            timestamptz (10 min default)
+-- created_at            timestamptz DEFAULT now()
+-- updated_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- order_status_history
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- order_id        uuid FK order_requests
+-- status          order_status
+-- actor_id        uuid FK profiles
+-- notes           text
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- notifications
+-- ------------------------------------------------------------
+-- id                    uuid PK
+-- user_id               uuid FK profiles
+-- notification_type     notification_type
+-- title                 text
+-- body                  text
+-- deep_link             text
+-- metadata              jsonb
+-- read_at               timestamptz
+-- created_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- notification_preferences
+-- ------------------------------------------------------------
+-- user_id               uuid PK FK profiles
+-- quiet_hours_start     time
+-- quiet_hours_end       time
+-- push_enabled          boolean DEFAULT true
+-- email_enabled         boolean DEFAULT false
+-- per_type              jsonb (per notification type toggle)
+-- updated_at            timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- favorites
+-- ------------------------------------------------------------
+-- user_id         uuid FK profiles
+-- business_id     uuid FK businesses
+-- created_at      timestamptz DEFAULT now()
+-- PK (user_id, business_id)
+
+-- ------------------------------------------------------------
+-- follows
+-- ------------------------------------------------------------
+-- user_id         uuid FK profiles
+-- business_id     uuid FK businesses
+-- created_at      timestamptz DEFAULT now()
+-- PK (user_id, business_id)
+
+-- ------------------------------------------------------------
+-- points_log
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- user_id         uuid FK profiles
+-- delta           int
+-- reason          text (daily_login, review, order, invite...)
+-- balance_after   int
+-- metadata        jsonb
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- user_loyalty (current tier, streak)
+-- ------------------------------------------------------------
+-- user_id             uuid PK FK profiles
+-- total_points        int DEFAULT 0
+-- current_tier        text DEFAULT 'bronze'
+-- tier_since          timestamptz
+-- last_activity_at    timestamptz
+-- streak_days         int DEFAULT 0
+-- updated_at          timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- redemptions (rewards redemption)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- user_id         uuid FK profiles
+-- points_used     int
+-- reward_type     text (offer, coupon, delivery)
+-- reward_id       uuid
+-- status          text (pending, approved, used, expired)
+-- expires_at      timestamptz
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- push_subscriptions
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- user_id         uuid FK profiles
+-- endpoint        text UNIQUE
+-- p256dh          text
+-- auth            text
+-- user_agent      text
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- business_subscriptions
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- plan_id         uuid FK subscription_plans
+-- status          subscription_status DEFAULT 'pending'
+-- is_trial        boolean DEFAULT false
+-- starts_at       timestamptz
+-- expires_at      timestamptz
+-- rejected_reason text
+-- notes           text
+-- created_at      timestamptz DEFAULT now()
+-- updated_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- subscription_plans
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- code            text UNIQUE
+-- name            text
+-- price_monthly   numeric
+-- price_yearly    numeric
+-- features        jsonb
+-- display_order   int
+-- is_active       boolean DEFAULT true
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- subscription_events (audit trail)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- subscription_id uuid FK business_subscriptions
+-- event_type      text
+-- actor_id        uuid FK profiles
+-- metadata        jsonb
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- ad_slots
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- code            text UNIQUE
+-- name            text
+-- dimensions      text
+-- price_weekly    numeric
+-- is_active       boolean DEFAULT true
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- ads
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- slot_id         uuid FK ad_slots
+-- business_id     uuid FK businesses
+-- title           text
+-- image_url       text
+-- link_type       text (external, internal, business)
+-- link_url        text
+-- target_business_id uuid FK businesses
+-- status          ad_status DEFAULT 'scheduled'
+-- starts_at       timestamptz
+-- ends_at         timestamptz
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- ad_stats_daily
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- ad_id           uuid FK ads
+-- date            date
+-- impressions     int DEFAULT 0
+-- clicks          int DEFAULT 0
+-- PK (ad_id, date)
+
+-- ------------------------------------------------------------
+-- page_view_events (analytics)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- visitor_id      uuid (hashed)
+-- page_path       text
+-- referrer        text
+-- user_agent      text
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- visitor_sessions (live visitors)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- visitor_id      uuid
+-- last_heartbeat  timestamptz
+-- page_path       text
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- rate_limits
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- identifier      text (IP or user_id)
+-- action          text
+-- count           int DEFAULT 1
+-- window_start    timestamptz
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- audit_logs
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- actor_id        uuid FK profiles
+-- action          text
+-- entity_type     text
+-- entity_id       uuid
+-- metadata        jsonb
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- pending_changes (merchant edits awaiting approval)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- business_id     uuid FK businesses
+-- submitted_by    uuid FK profiles
+-- change_type     text
+-- payload         jsonb
+-- status          text (pending, approved, rejected)
+-- reviewed_by     uuid FK profiles
+-- reviewed_at     timestamptz
+-- reject_reason   text
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- reports (user reports)
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- reporter_id     uuid FK profiles
+-- entity_type     text (business, review, user)
+-- entity_id       uuid
+-- reason          text
+-- status          text (pending, reviewed, resolved)
+-- reviewed_by     uuid FK profiles
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- customer_locations
+-- ------------------------------------------------------------
+-- id              uuid PK
+-- user_id         uuid FK profiles
+-- label           text (home, work)
+-- address         text
+-- latitude        numeric
+-- longitude       numeric
+-- is_default      boolean DEFAULT false
+-- created_at      timestamptz DEFAULT now()
+
+-- ------------------------------------------------------------
+-- site_settings (key-value config)
+-- ------------------------------------------------------------
+-- key             text PK
+-- value           jsonb
+-- updated_at      timestamptz DEFAULT now()
+
+-- =============================================================
+-- 4. INDEXES (المهمة)
+-- =============================================================
+-- businesses(slug) UNIQUE
+-- businesses(is_published, is_featured)
+-- businesses(business_type, is_published)
+-- businesses(owner_profile_id)
+-- business_media(business_id, media_type)
+-- business_reviews(business_id, status)
+-- business_reviews(user_id)
+-- offers(business_id, is_published)
+-- order_requests(business_id, status)
+-- order_requests(customer_profile_id)
+-- notifications(user_id, read_at)
+-- points_log(user_id, created_at DESC)
+-- page_view_events(business_id, created_at DESC)
+-- page_view_events(visitor_id)
+
+-- =============================================================
+-- 5. FUNCTIONS (مرجع مختصر - 95 function في الـ DB)
+-- =============================================================
+-- 
+-- CORE:
+--   handle_new_user           : trigger عند تسجيل مستخدم
+--   is_open_now(business)     : يحسب هل مفتوح دلوقتي
+--   search_businesses()       : البحث العربي
+--   reveal_contact()          : كشف رقم (rate-limited)
+--
+-- POINTS:
+--   award_daily_login         : +5 نقاط يومياً
+--   award_review_points       : +20 نقطة عند تقييم
+--   get_user_points           : رصيد المستخدم
+--   get_loyalty_tier          : المستوى الحالي
+--   redeem_reward             : استبدال نقاط
+--
+-- ORDERS:
+--   confirm_order             : تأكيد من التاجر
+--   assign_order_code_v2      : trigger لتوليد order_code
+--   lock_order_message        : trigger لمنع تعديل الرسالة
+--   get_next_order_seq        : رقم تسلسلي
+--
+-- ANALYTICS:
+--   record_page_view          : تسجيل مشاهدة
+--   log_unique_visit          : زيارة فريدة
+--   get_business_view_stats   : إحصائيات نشاط
+--   check_rate_limit          : فحص rate limit
+--   heartbeat_page_session    : نبض الزائر (live)
+--
+-- ADMIN:
+--   admin_search_user         : بحث عن مستخدم
+--   admin_analytics_summary   : ملخص التحليلات
+--   admin_adjust_points       : تعديل نقاط (بحذر)
+--   apply_trust_decay         : انخفاض الثقة للخاملين
+--
+-- SUBSCRIPTIONS:
+--   get_trial_status          : حالة التجربة
+--   expire_old_subscriptions  : cron للانتهاء
+--   generate_monthly_report   : تقرير شهري
+--
+-- REVIEWS:
+--   auto_flag_review          : trigger للكشف عن محتوى مسيء
+--   reply_to_review           : رد التاجر
+--
+-- TRUST:
+--   award_trust_points        : نقاط ثقة
+--   check_verification_eligibility : فحص أهليّة التوثيق
+--
+-- كل function لها signature خاص. راجع Supabase Dashboard
+-- في Database → Functions
+
+-- =============================================================
+-- 6. RLS POLICIES (ملخص)
+-- =============================================================
+-- 
+-- profiles       : SELECT public, UPDATE self, INSERT via trigger
+-- user_roles     : SELECT public, INSERT/UPDATE admin only
+-- businesses     : SELECT is_published=true, UPDATE owner OR admin
+-- business_media : SELECT public, ALL admin (via is_business_owner)
+-- business_reviews: SELECT approved OR self, INSERT self, UPDATE self
+-- favorites      : ALL self only
+-- follows        : ALL self only
+-- notifications  : SELECT self only
+-- order_requests : SELECT customer OR business owner, INSERT customer
+-- points_log     : SELECT self, INSERT service_role only
+-- page_view_events: INSERT public, SELECT admin
+-- rate_limits    : ALL service_role only
+-- audit_logs     : SELECT admin, INSERT service_role
+--
+-- private.is_admin() - SECURITY DEFINER دالة
+-- بتشيك على user_roles.role = 'super_admin'
+
+-- =============================================================
+-- 7. STORAGE BUCKETS
+-- =============================================================
+-- 
+-- business-media  : public read, owner write
+--   paths: {business_id}/{logo|cover|gallery|menu}/{filename}
+--
+-- avatars         : public read, self write
+--   paths: {user_id}/{filename}
+--
+-- order-images    : private, self + merchant read
+--   paths: {order_id}/{filename}
+--
+-- order-voice     : private, self + merchant read
+--   paths: {order_id}/{filename}
+
+-- =============================================================
+-- 8. IMPORTANT NOTES
+-- =============================================================
+--
+-- 1. الملف ده مرجعي فقط — مش تنفيذي
+-- 2. الـ DB الفعلي في Supabase (npmpiivmdksdirrumbmt)
+-- 3. أي تعديل جديد → migration جديدة في Supabase SQL Editor
+-- 4. RLS شغّال 100% على كل الجداول
+-- 5. Service Role Key ممنوع على Client
+-- 6. أي عملية إدارية → audit_logs
+--
+-- للتعديلات:
+--   1. اكتب SQL في Supabase SQL Editor
+--   2. اختبره على بيانات حقيقية
+--   3. Commit كـ migration في `docs/migrations/`
+--
+-- =============================================================
+-- END OF SCHEMA REFERENCE
+-- =============================================================
+
+-- Last updated: 2026-09-24
+-- Owner: NourEldin B7R
+-- Supabase project: npmpiivmdksdirrumbmt (Frankfurt, eu-central-1)
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/MIGRATION_GUIDE.md
+═══════════════════════════════════════════════════════════
+
+# EAH - MIGRATION_GUIDE.md
+
+> دليل البناء من جديد على نفس قاعدة البيانات والبنية التحتية.
+
+آخر تحديث: 2026-09-24
+الإصدار: 1.0
+
+---
+
+## 1. الفلسفة
+
+إحنا مش بنبني DB جديد. إحنا بنبني كود جديد على DB موجود.
+
+الفرق:
+- Supabase الحالي: يفضل زي ما هو
+- Vercel: يفضل مربوط
+- Cloudinary: يفضل مربوط
+- Domain: يفضل شغال
+- الكود فقط هو اللي بيتبني من الصفر
+
+ليه؟
+- صفر مخاطرة على البيانات
+- صفر downtime
+- Auth شغال
+- RLS مختبر
+- البيانات موجودة (53 نشاط)
+
+---
+
+## 2. البنية الحالية
+
+### Supabase
+- Project ID: npmpiivmdksdirrumbmt
+- Region: Frankfurt (eu-central-1)
+- URL: https://npmpiivmdksdirrumbmt.supabase.co
+- Tables: 20+
+- Functions: 95
+- RLS: 100% enabled
+- Storage buckets: business-media, avatars, order-images, order-voice
+
+### Vercel
+- Team: eah-74a0
+- Project: eah
+- Production URL: https://eah-sq.vercel.app
+- Region: fra1
+- Root Directory: web
+- Branch: v2
+- Auto-deploy: on every push to v2
+
+### Cloudinary
+- Cloud name: zlgcimmg
+- Folder structure: eah/{business_id}/{type}
+- Auto-transforms: WebP + AVIF
+
+### Git
+- Repo: NExB7R/EAH (private)
+- Branch: v2 (default)
+- Old code: archive/v1
+- Old code backup: backup-4ffe42d
+- Old tags: v0.2.0 through v1.4.0
+
+---
+
+## 3. الحالة الحالية
+
+### الكود
+- Next.js 16 (Turbopack)
+- React 19
+- TypeScript strict
+- صفحة placeholder واحدة
+- صفر مكونات
+- صفر API routes
+
+### الـ DB
+- كل الجداول موجودة
+- كل الـ Functions شغالة
+- كل الـ RLS مضبوطة
+- 53 نشاط حقيقي
+- بيانات جاهزة للاستخدام
+
+### Vercel
+- Production live
+- Auto-deploy على push
+- Root Directory = web
+- Region fra1
+
+---
+
+## 4. المبادئ الأساسية
+
+1. صفر migration على الـ DB الحالي
+2. صفر downtime
+3. الكود الجديد يستخدم الـ DB زي ما هو
+4. أي إضافة جديدة = migration جديدة في SQL Editor
+5. Backup قبل أي تعديل كبير
+
+---
+
+## 5. خطة البناء
+
+المرحلة 1 (4 أسابيع): الأساس
+المرحلة 2 (4 أسابيع): التفاعل
+المرحلة 3 (4 أسابيع): الإطلاق
+
+التفاصيل: docs/ROADMAP.md
+
+---
+
+## 3. الملفات الحساسة
+
+### 3.1 .env.local
+الموقع: ~/EAH-V2/web/.env.local
+
+المحتوى المطلوب:
+- NEXT_PUBLIC_SUPABASE_URL
+- NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+- SUPABASE_SERVICE_ROLE_KEY
+- NEXT_PUBLIC_SITE_URL
+- CLOUDINARY_CLOUD_NAME
+- CLOUDINARY_API_KEY
+- CLOUDINARY_API_SECRET
+- VAPID_PUBLIC_KEY
+- VAPID_PRIVATE_KEY
+- NEXT_PUBLIC_VAPID_PUBLIC_KEY
+- VAPID_SUBJECT
+- CRON_SECRET
+- EAH_VISITOR_SALT
+
+القواعد:
+- ممنوع commit
+- ممنوع share
+- backup في مكان آمن
+
+---
+
+## 4. خطوات البدء
+
+### 4.1 تحقق من البيئة
+- cd ~/EAH-V2/web
+- ls -la .env.local
+- node -v (v22+)
+- npm -v (v10+)
+
+### 4.2 اختبر Supabase
+نفذ من ~/EAH-V2/web اختبار count businesses
+المتوقع: 53
+
+### 4.3 تشغيل Dev
+npm run dev
+http://localhost:3000
+
+### 4.4 ربط Vercel
+vercel link
+اختيار: eah-74a0 / eah
+
+---
+
+## 5. ما تم إنجازه سابقاً
+
+### Auth
+- Supabase Auth شغال
+- handle_new_user موجود
+- proxy.ts pattern معروف
+
+### RLS
+- كامل
+- is_admin() موجودة
+- grants مضبوطة
+
+### Storage
+- 4 buckets
+- Policies جاهزة
+- Cloudinary مربوط
+
+### Data
+- 53 نشاط حقيقي
+- صور موجودة
+- تقييمات مختبرة
+
+---
+
+## 6. ما يحتاج بناء جديد
+
+### الكود
+- Next.js app
+- كل الصفحات
+- كل الـ components
+- كل الـ API routes
+
+### Migrations (اختياري)
+- كتابة migration في Supabase SQL Editor
+- اختبر على staging
+- بعدها production
+
+---
+
+## 7. قواعد الـ DB
+
+1. Supabase الحالي يفضل زي ما هو
+2. أي تعديل جديد = migration جديدة
+3. ممنوع تعديل الجداول مباشرة
+4. RLS يفضل شغّال دايماً
+5. Service Role للـ server فقط
+
+---
+
+## 8. قواعد الـ Deploy
+
+1. Preview على كل push (تلقائي)
+2. Production فقط بعد اختبار
+3. Rollback فوري متاح
+4. Backup قبل أي migration
+
+---
+
+## 9. قواعد الـ Backup
+
+1. Backup DB قبل migration كبيرة
+2. Supabase PITR مفعّل
+3. نسخة من .env.local في مكان آمن
+4. Tag في Git قبل deploy كبير
+
+---
+
+## 10. المشاكل المعروفة
+
+### SIGILL عند npm run build محلي
+- السبب: معالج قديم
+- الحل: نعتمد على Vercel Preview
+
+### Vercel build يفشل بدون سبب
+- السبب: root directory غلط
+- الحل: تأكد من Vercel settings
+
+### Secrets في Git
+- السبب: .gitignore ناقص
+- الحل: git rm --cached + filter-branch
+
+---
+
+## 11. Checklist قبل deploy
+
+- [ ] typecheck نظيف
+- [ ] preview على Vercel جاهز
+- [ ] اختبرت على الموبايل
+- [ ] اختبرت على Desktop
+- [ ] لا regressions
+- [ ] موافقة صريحة
+- [ ] tag جاهز
+
+---
+
+## 12. الملفات المرتبطة
+
+- docs/MASTER_BRIEF.md
+- docs/ARCHITECTURE.md
+- docs/SCHEMA.sql
+- docs/ROADMAP.md
+- docs/AI_CONTRACT.md
+
+---
+
+آخر تحديث: 2026-09-24
+الإصدار: 1.0
+المالك: NourEldin B7R - فلسطين في القلب
+
+
+═══════════════════════════════════════════════════════════
+  FILE: docs/SESSION_LOG.md
+═══════════════════════════════════════════════════════════
+
+# EAH - SESSION_LOG.md
+
+> سجل الجلسات. كل جلسة تبدأ من حيث انتهت اللي قبلها.
+
+آخر تحديث: 2026-09-24
+
+---
+
+## 2026-09-24 - Session 1: Foundation
+
+### اللي اتحقق
+- Repo v2 نظيف (fresh start)
+- 10 ملفات docs (~4600 سطر)
+- Next.js 16 + TypeScript
+- Vercel مربوط + Production live
+- Supabase متصل (53 نشاط)
+- URL: https://eah-sq.vercel.app
+
+### اللي معلق
+- الكود الفعلي (Home, Explore, Business)
+- Auth flow
+- 3 ملفات docs إضافية (SESSION_LOG, CHANGELOG, GLOSSARY)
+
+### اللي بعده
+- MIGRATION_GUIDE (خلص)
+- نبدأ ROADMAP الأسبوع 1:
+  - lib/supabase/ (3 clients)
+  - proxy.ts
+  - globals.css
+  - app/layout.tsx
+  - app/page.tsx (Home)
+

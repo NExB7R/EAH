@@ -109,7 +109,7 @@
 ## 3. الملفات الحساسة
 
 ### 3.1 .env.local
-الموقع: ~/EAH-V2/web/.env.local
+الموقع: ~/EAH/web/.env.local
 
 المحتوى المطلوب:
 - NEXT_PUBLIC_SUPABASE_URL
@@ -136,13 +136,13 @@
 ## 4. خطوات البدء
 
 ### 4.1 تحقق من البيئة
-- cd ~/EAH-V2/web
+- cd ~/EAH/web
 - ls -la .env.local
 - node -v (v22+)
 - npm -v (v10+)
 
 ### 4.2 اختبر Supabase
-نفذ من ~/EAH-V2/web اختبار count businesses
+نفذ من ~/EAH/web اختبار count businesses
 المتوقع: 53
 
 ### 4.3 تشغيل Dev
