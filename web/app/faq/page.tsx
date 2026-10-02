@@ -1,16 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import SecondaryHero from '@/components/secondary-hero'
-import {
-  UserIcon,
-  StoreIcon,
-  ShieldCheckIcon,
-  GiftIcon,
-  BellIcon,
-  QrCodeIcon,
-  WhatsAppIcon,
-  CrownGoldIcon,
-} from '@/components/icons'
+import { UserIcon, StoreIcon, ShieldCheckIcon, GiftIcon, WhatsAppIcon } from '@/components/icons'
 import styles from './faq.module.css'
 
 export const metadata: Metadata = {
