@@ -344,3 +344,62 @@
 - Rate limit: 10 أسئلة / 10 دقايق / user
 - .env.local فيه OPENROUTER_API_KEY
 - Vercel env مضبوط
+
+
+---
+
+## 2026-10-03 — Session 9: Admin + AI + Feature Flags
+
+### اللي اتحقق (~15 commit)
+
+**Admin كامل:**
+- /admin/audit — سجل حقيقي من audit_logs
+- /admin/settings — feature flags + app_settings table
+- /admin/analytics — page_view_events + top pages/businesses/referrers/devices
+- /admin/reports — reports workflow كامل
+- /admin/studio — Feature Flags panel (12 flag)
+
+**AI:**
+- AI Agent (OpenRouter + Llama 3.3 مجاني)
+- Support Bot (منفصل — للأسئلة الفنية)
+- Rate limit منفصل لكل واحد
+
+**Pages مكتملة:**
+- /help + /roadmap + /contact + /terms + /privacy + /cookies + /faq
+- /support-palestine (ذهبي كامل)
+- /merchant/business edit كامل
+
+**Feature Flags:**
+- lib/features.ts — 12 flag مع caching (unstable_cache + updateTag)
+- مطبقة على: Home sections + AI widget + /merchant/qr + /help + /account/notifications
+
+**E2E:**
+- 6 اختبارات AI chat + widget
+- اختبارات admin pages (auth guards)
+
+### الملفات الجديدة
+- lib/features.ts
+- lib/ai/support.ts
+- app/api/ai/support/route.ts
+- components/support-widget.tsx + .module.css
+- app/admin/audit/* (page + module.css)
+- app/admin/settings/* (actions + form + module.css)
+- app/admin/analytics/* (page + module.css)
+- app/admin/reports/* (page + list + row + actions + module.css)
+- app/admin/studio/* (actions + flags-panel + module.css)
+- app/help/help.module.css
+- app/roadmap/*
+- app/contact/*
+- app/terms/*
+- app/privacy/*
+- app/cookies/*
+- app/faq/*
+- app/support-palestine/*
+- components/legal-page.tsx + .module.css
+- e2e/ai-chat.spec.ts
+
+### اللي معلق
+- Nonce CSP (يخلي كل صفحة dynamic — قرار)
+- /admin/studio Big Features (design live + نصوص ثابتة)
+- اختبار ميداني موبايل
+- Vercel Pro + Supabase Pro (قبل الإطلاق)
