@@ -460,3 +460,17 @@
 - created_at, updated_at
 
 **TODO بكرة:** Branches CRUD للتاجر (add/update/delete/setPrimary)
+
+## 2026-10-04 — Session 11: Splash Crash Fix
+
+### المشكلة
+- Client-side navigation بيكسر (`insertBefore`/`removeChild` errors)
+- سبب: `el.remove()` في Splash — React بيتلخبط لما يلاقي عنصر مش موجود
+
+### الحل
+- Splash بيستخدم `display: none` بدل `el.remove()`
+- commit: `952c85c`
+
+### النتيجة
+- Splash يفضل في DOM بس مخفي — React يشتغل عادي
+- مفيش DOM reconciliation errors
