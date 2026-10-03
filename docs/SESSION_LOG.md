@@ -451,3 +451,12 @@
 - Vercel: Production branch بقى `main`
 - GitHub: default branch بقى `main`
 
+
+### Schema: business_branches (للرجوع)
+
+- id, business_id, name, area (default شبين القناطر)
+- address_text, latitude, longitude, working_hours (jsonb)
+- phone, whatsapp, is_primary, is_active, sort_order
+- created_at, updated_at
+
+**TODO بكرة:** Branches CRUD للتاجر (add/update/delete/setPrimary)
