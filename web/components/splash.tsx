@@ -3,15 +3,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import styles from './splash.module.css'
 
-// ═══════════════════════════════════════════════════════════
-// EAH — Splash (2026)
-//   • يظهر أول زيارة فقط (sessionStorage)
-//   • CSS-only animations (صفر JS animation)
-//   • يختفي + يتشال من DOM بعد 1.4s
-//   • pointer-events: none → مايمنعش التفاعل
-//   • مافيش animation على Hero (LCP element)
-// ═══════════════════════════════════════════════════════════
-
 const KEY = 'eah-splash-v1'
 
 export default function Splash() {
@@ -25,11 +16,11 @@ export default function Splash() {
     try {
       shown = !!sessionStorage.getItem(KEY)
     } catch {
-      /* SSR / privacy mode */
+      /* ignore */
     }
 
     if (shown) {
-      el.remove()
+      el.style.display = 'none'
       return
     }
 
@@ -39,7 +30,9 @@ export default function Splash() {
       /* ignore */
     }
 
-    const t = setTimeout(() => el.remove(), 1400)
+    const t = setTimeout(() => {
+      if (el) el.style.display = 'none'
+    }, 1400)
     return () => clearTimeout(t)
   }, [])
 
