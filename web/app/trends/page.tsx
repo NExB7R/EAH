@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { getTrendingBusinesses } from '@/lib/data'
 import { TrendingUpIcon } from '@/components/icons'
 import SectionLayout from '@/components/section-layout'
+import AdSlot from '@/components/ad-slot'
+import { getActiveAdsForSlot } from '@/lib/data/ads'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,15 +13,25 @@ export const metadata: Metadata = {
 }
 
 export default async function TrendsPage() {
-  const businesses = await getTrendingBusinesses(200)
+  const [businesses, ads] = await Promise.all([
+    getTrendingBusinesses(200),
+    getActiveAdsForSlot('trend_pin', 1),
+  ])
 
   return (
-    <SectionLayout
-      activeKey="trends"
-      title="الترند"
-      Icon={TrendingUpIcon}
-      tone="orange"
-      businesses={businesses}
-    />
+    <>
+      {ads.length > 0 && (
+        <div style={{ maxWidth: 1240, margin: '24px auto 0', padding: '0 20px' }}>
+          <AdSlot ads={ads} variant="banner" />
+        </div>
+      )}
+      <SectionLayout
+        activeKey="trends"
+        title="الترند"
+        Icon={TrendingUpIcon}
+        tone="orange"
+        businesses={businesses}
+      />
+    </>
   )
 }

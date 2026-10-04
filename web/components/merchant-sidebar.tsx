@@ -12,6 +12,7 @@ import {
   SparklesIcon,
   QrCodeIcon,
   MapPinIcon,
+  TagIcon,
 } from './icons'
 import styles from './merchant-sidebar.module.css'
 
@@ -26,6 +27,7 @@ const ITEMS = [
   { href: '/merchant/branches', label: 'الفروع', Icon: MapPinIcon },
   { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon, badge: 'orders' },
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
+  { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
   { href: '/merchant/qr', label: 'QR النشاط', Icon: QrCodeIcon },
   { href: '/merchant/subscription', label: 'الاشتراك', Icon: CrownGoldIcon },
   { href: '/merchant/settings', label: 'الإعدادات', Icon: SettingsIcon },

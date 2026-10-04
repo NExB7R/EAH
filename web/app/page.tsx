@@ -5,18 +5,22 @@ import OffersStrip from '@/components/offers-strip'
 import NewRow from '@/components/new-row'
 import NearbyGrid from '@/components/nearby-grid'
 import SuggestedSection from '@/components/suggested-section'
+import AdSlot from '@/components/ad-slot'
 import { getPublishedBusinesses, getActiveOffers } from '@/lib/data'
 import { getFeatureFlags } from '@/lib/features'
+import { getActiveAdsForSlot } from '@/lib/data/ads'
 import { sortByTrend } from '@/lib/ranking'
 import type { Business } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  const [all, offers, flags] = await Promise.all([
+  const [all, offers, flags, homeBanner, homeFeed] = await Promise.all([
     getPublishedBusinesses(),
     getActiveOffers(8),
     getFeatureFlags(),
+    getActiveAdsForSlot('home_banner', 1),
+    getActiveAdsForSlot('home_feed', 1),
   ])
 
   const featured = all.filter((b) => b.is_featured).slice(0, 15)
@@ -39,8 +43,18 @@ export default async function Home() {
     <main>
       <HomeHero />
       {flags.featured_enabled && <FeaturedBento businesses={featuredMerged} />}
+      {homeBanner.length > 0 && (
+        <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 20px' }}>
+          <AdSlot ads={homeBanner} variant="banner" />
+        </div>
+      )}
       {flags.trends_enabled && <TrendingRow businesses={trending} />}
       {flags.offers_enabled && <OffersStrip offers={offers} />}
+      {homeFeed.length > 0 && (
+        <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 20px' }}>
+          <AdSlot ads={homeFeed} variant="banner" />
+        </div>
+      )}
       {flags.new_enabled && <NewRow businesses={newOnes} />}
       {flags.nearby_enabled && <NearbyGrid businesses={nearby} />}
       <SuggestedSection />

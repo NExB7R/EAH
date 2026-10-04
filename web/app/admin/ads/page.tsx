@@ -1,64 +1,58 @@
-import { createClient } from '@/lib/supabase/server'
 import { TagIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
+import { getAdSlots, getAllAds } from '@/lib/data/ads'
+import AdsManager from './ads-manager'
 import styles from './ads.module.css'
 
 export const dynamic = 'force-dynamic'
 
-type Slot = {
-  id: string
-  code: string
-  name_ar: string
-  description: string | null
-  base_price_egp: number
-  max_concurrent: number
-}
-
-async function getSlots(): Promise<Slot[]> {
-  const supabase = await createClient()
-  const { data } = await supabase
-    .from('ad_slots')
-    .select('id, code, name_ar, description, base_price_egp, max_concurrent')
-    .eq('is_active', true)
-    .order('display_order', { ascending: true })
-
-  return (data ?? []) as Slot[]
-}
-
 export default async function AdminAdsPage() {
-  const slots = await getSlots()
+  const [slots, ads] = await Promise.all([getAdSlots(), getAllAds()])
+
+  const pendingCount = ads.filter((a) => a.status === 'pending').length
+  const activeCount = ads.filter((a) => a.status === 'active').length
 
   return (
     <div>
-      <AccountPageHeader title="الإعلانات" description={`${slots.length} مكان إعلاني`} />
+      <AccountPageHeader
+        title="الإعلانات"
+        description={`${pendingCount} طلب بانتظار — ${activeCount} إعلان نشط`}
+      />
 
-      {slots.length === 0 ? (
-        <EmptyState Icon={TagIcon} title="مفيش أماكن إعلانية" />
-      ) : (
-        <div className={styles.grid}>
-          {slots.map((s) => (
-            <div key={s.id} className={styles.card}>
-              <div className={styles.cardHead}>
-                <span className={styles.icon}>
-                  <TagIcon size={22} />
-                </span>
-                <div>
-                  <h3 className={styles.name}>{s.name_ar}</h3>
-                  {s.description && <p className={styles.desc}>{s.description}</p>}
+      <section className={styles.intro}>
+        <span className={styles.introIcon}>
+          <TagIcon size={20} />
+        </span>
+        <p className={styles.introText}>
+          راجع طلبات الإعلانات، ووافق أو ارفض. الإعلانات المعتمدة بتظهر تلقائياً في الأماكن المخصصة.
+        </p>
+      </section>
+
+      <section className={styles.slotsSection}>
+        <h2 className={styles.sectionTitle}>الأماكن الإعلانية</h2>
+        {slots.length === 0 ? (
+          <EmptyState Icon={TagIcon} title="مفيش أماكن إعلانية" />
+        ) : (
+          <div className={styles.slotsGrid}>
+            {slots.map((s) => (
+              <div key={s.id} className={styles.slotCard}>
+                <h3 className={styles.slotName}>{s.name_ar}</h3>
+                {s.description && <p className={styles.slotDesc}>{s.description}</p>}
+                <div className={styles.slotPrice}>
+                  <span className={styles.priceNum}>{s.base_price_egp}</span>
+                  <span className={styles.priceUnit}>ج.م / أسبوع</span>
                 </div>
               </div>
-              <div className={styles.priceRow}>
-                <span className={styles.price}>{s.base_price_egp}</span>
-                <span className={styles.currency}>ج.م / أسبوع</span>
-              </div>
-              <div className={styles.meta}>
-                {s.max_concurrent} {s.max_concurrent === 1 ? 'مكان' : 'أماكن'}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className={styles.adsSection}>
+        <h2 className={styles.sectionTitle}>الإعلانات ({ads.length})</h2>
+        <AdsManager ads={ads} />
+      </section>
     </div>
   )
 }

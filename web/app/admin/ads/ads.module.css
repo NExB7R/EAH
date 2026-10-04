@@ -1,74 +1,311 @@
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-.card {
+/* ═══════════════════════════════════════════════════════════
+   EAH — Admin Ads
+   ═══════════════════════════════════════════════════════════ */
+
+.intro {
   display: flex;
-  flex-direction: column;
   gap: 12px;
-  padding: 20px;
-  border-radius: 18px;
-  background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.8));
-  border: 1px solid rgba(253, 186, 116, 0.22);
-}
-.cardHead {
-  display: flex;
   align-items: flex-start;
-  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  margin-bottom: 20px;
 }
-.icon {
+
+.introIcon {
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 46px;
-  height: 46px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: rgba(253, 186, 116, 0.1);
-  color: #fdba74;
-  flex-shrink: 0;
+  background: rgba(168, 85, 247, 0.12);
+  color: #c77dff;
 }
-.name {
-  font-family: var(--font-display);
+
+.introText {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c9c2db;
+  line-height: 1.6;
+}
+
+.slotsSection,
+.adsSection {
+  margin-bottom: 28px;
+}
+
+.sectionTitle {
+  margin: 0 0 14px;
   font-size: 1rem;
   font-weight: 900;
-  color: var(--text-primary);
-  margin: 0 0 4px;
+  color: #e8c79a;
 }
-.desc {
-  margin: 0;
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: var(--text-tertiary);
+
+.slotsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.slotCard {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(20, 14, 34, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  transition: border-color 180ms ease;
+}
+
+.slotCard:hover {
+  border-color: rgba(232, 199, 154, 0.35);
+}
+
+.slotName {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #f4f2fa;
+}
+
+.slotDesc {
+  margin: 0 0 12px;
+  font-size: 0.75rem;
+  color: #a29db5;
   line-height: 1.5;
 }
-.priceRow {
+
+.slotPrice {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(253, 186, 116, 0.15);
+  padding-top: 10px;
+  border-top: 1px solid rgba(168, 85, 247, 0.1);
 }
-.price {
-  font-family: var(--font-display);
-  font-size: 1.8rem;
+
+.priceNum {
+  font-size: 1.4rem;
   font-weight: 900;
-  color: #fdba74;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
+  color: #e8c79a;
+  letter-spacing: -0.5px;
 }
-.currency {
+
+.priceUnit {
+  font-size: 0.7rem;
+  color: #7b7490;
+  font-weight: 700;
+}
+
+/* ─── Ads List ─── */
+
+.adsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.emptyAds {
+  margin: 0;
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #7b7490;
+}
+
+.adCard {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(20, 14, 34, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  transition: border-color 180ms ease;
+}
+
+.adCard:hover {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.adCard.pending {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.adHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.slotBadge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.12);
+  color: #e8c79a;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(232, 199, 154, 0.3);
+}
+
+.status {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+}
+
+.status.ok {
+  background: rgba(85, 231, 209, 0.12);
+  color: #55e7d1;
+}
+
+.status.warning {
+  background: rgba(253, 186, 116, 0.12);
+  color: #fdba74;
+}
+
+.status.danger {
+  background: rgba(252, 165, 165, 0.12);
+  color: #fca5a5;
+}
+
+.status.muted {
+  background: rgba(122, 116, 144, 0.12);
+  color: #a29db5;
+}
+
+.price {
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #e8c79a;
+}
+
+.adTitle {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #f4f2fa;
+}
+
+.adBiz {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  color: #a29db5;
+  font-weight: 700;
+}
+
+.adMeta {
+  margin: 0 0 6px;
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--text-tertiary);
 }
-.meta {
+
+.link {
+  color: #c77dff;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.rejection {
+  margin: 8px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(252, 165, 165, 0.08);
+  border: 1px solid rgba(252, 165, 165, 0.25);
+  color: #fca5a5;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adStats {
+  display: flex;
+  gap: 16px;
+  padding: 10px 0 0;
+  border-top: 1px solid rgba(168, 85, 247, 0.1);
+  margin-top: 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #a29db5;
+}
+
+.adActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.okBtn,
+.dangerBtn,
+.mutedBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 8px;
   font-size: 0.72rem;
   font-weight: 800;
-  color: var(--text-secondary);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
 }
-@media (max-width: 640px) {
-  .grid {
-    grid-template-columns: 1fr;
+
+.okBtn {
+  background: rgba(85, 231, 209, 0.1);
+  color: #55e7d1;
+  border-color: rgba(85, 231, 209, 0.25);
+}
+
+.dangerBtn {
+  background: rgba(252, 165, 165, 0.08);
+  color: #fca5a5;
+  border-color: rgba(252, 165, 165, 0.2);
+}
+
+.mutedBtn {
+  background: rgba(122, 116, 144, 0.1);
+  color: #a29db5;
+  border-color: rgba(122, 116, 144, 0.2);
+}
+
+.okBtn:not(:disabled):hover,
+.dangerBtn:not(:disabled):hover,
+.mutedBtn:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+.error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  color: #fca5a5;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .okBtn,
+  .dangerBtn,
+  .mutedBtn,
+  .slotCard,
+  .adCard {
+    transition: none;
   }
 }
