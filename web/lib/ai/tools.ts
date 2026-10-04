@@ -7,6 +7,26 @@ import type { ToolDefinition } from './openrouter'
 // EAH — AI Tools
 // ═══════════════════════════════════════════════════════════
 
+// ═══════════════════════════════════════════════════════════
+// Input sanitization (أمان — ضد SQL wildcard injection)
+// ═══════════════════════════════════════════════════════════
+
+function sanitizeSearchInput(raw: unknown): string {
+  if (typeof raw !== 'string') return ''
+  return raw
+    .replace(/[%_\\]/g, '') // شيل wildcards
+    .replace(/[<>]/g, '') // شيل HTML
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80) // حد أقصى 80 حرف
+}
+
+function sanitizeSlug(raw: unknown): string {
+  if (typeof raw !== 'string') return ''
+  // slug: أحرف إنجليزية + أرقام + شرطة بس
+  return raw.replace(/[^a-z0-9-]/gi, '').slice(0, 100)
+}
+
 export const TOOL_DEFS: ToolDefinition[] = [
   {
     type: 'function',
@@ -77,18 +97,32 @@ async function toolSearchBusinesses(args: {
   const supabase = createPublicClient()
   const limit = Math.min(Math.max(args.limit ?? 5, 1), 10)
 
+  const query = sanitizeSearchInput(args.query)
+  const area = sanitizeSearchInput(args.area)
+  const type = sanitizeSearchInput(args.type)
+
+  const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc']
+
   let q = supabase
     .from('businesses')
     .select('name, slug, business_type, area, hook, is_open, rating_avg, rating_count, trust_tier')
     .eq('is_published', true)
 
-  if (args.type) q = q.eq('business_type', args.type)
-  if (args.area) q = q.ilike('area', `%${args.area}%`)
-  if (args.query) q = q.or(`name.ilike.%${args.query}%,hook.ilike.%${args.query}%`)
+  if (type && VALID_TYPES.includes(type)) {
+    q = q.eq('business_type', type)
+  }
+  if (area) q = q.ilike('area', `%${area}%`)
+  if (query) {
+    const safe = query.replace(/,/g, ' ')
+    q = q.or(`name.ilike.%${safe}%,hook.ilike.%${safe}%,description.ilike.%${safe}%`)
+  }
 
   const { data, error } = await q.order('trust_score', { ascending: false }).limit(limit)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) {
+    console.error('[AI Tool] search error:', error.message)
+    return { ok: false, error: 'حصلت مشكلة في البحث — جرب تاني' }
+  }
 
   return {
     ok: true,
@@ -107,17 +141,23 @@ async function toolSearchBusinesses(args: {
 }
 
 async function toolGetBusinessDetails(args: { slug: string }) {
+  const slug = sanitizeSlug(args.slug)
+  if (!slug) return { ok: false, error: 'معرف النشاط غير صحيح' }
+
   const supabase = createPublicClient()
   const { data, error } = await supabase
     .from('businesses')
     .select(
       'name, slug, business_type, description, hook, area, address_text, is_open, rating_avg, rating_count, trust_tier, working_hours, accepts_whatsapp_orders',
     )
-    .eq('slug', args.slug)
+    .eq('slug', slug)
     .eq('is_published', true)
     .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) {
+    console.error('[AI Tool] details error:', error.message)
+    return { ok: false, error: 'حصلت مشكلة — جرب تاني' }
+  }
   if (!data) return { ok: false, error: 'النشاط مش موجود' }
 
   return {

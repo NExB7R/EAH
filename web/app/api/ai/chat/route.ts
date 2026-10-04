@@ -7,21 +7,45 @@ import { Redis } from '@upstash/redis'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — AI Chat API
-// Rate limited: 10 أسئلة / 10 دقايق / user
+//   • Auth-aware (user.id من الجلسة)
+//   • Rate limited (10 / 10m / user)
+//   • History validated (roles محددة، طول محدود، آخر 6)
 // ═══════════════════════════════════════════════════════════
 
+// حقن محتمل من history
+const INJECTION_PATTERNS = [
+  /ignore\s+(all\s+)?(previous|prior|above)/i,
+  /forget\s+(all\s+)?(previous|prior|above)/i,
+  /system\s*:/i,
+  /you\s+are\s+now/i,
+  /new\s+instructions/i,
+  /انسى\s+(كل\s+)?التعليمات/i,
+  /تجاهل\s+(كل\s+)?(التعليمات|الأوامر)/i,
+  /دور\s+جديد/i,
+  /أنت\s+الآن/i,
+]
+
 const schema = z.object({
-  message: z.string().min(1).max(500),
+  message: z
+    .string()
+    .min(1)
+    .max(500)
+    .transform((s) => s.trim()),
   history: z
     .array(
       z.object({
         role: z.enum(['user', 'assistant']),
-        content: z.string().max(2000),
+        content: z.string().min(1).max(1500),
       }),
     )
     .max(6)
-    .optional(),
+    .optional()
+    .default([]),
 })
+
+function hasInjection(text: string): boolean {
+  return INJECTION_PATTERNS.some((re) => re.test(text))
+}
 
 let limiter: Ratelimit | null = null
 
@@ -41,34 +65,55 @@ function getLimiter(): Ratelimit | null {
 }
 
 export async function POST(request: Request) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  try {
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-  // Rate limit
-  const rl = getLimiter()
-  if (rl) {
-    const key = user?.id ?? request.headers.get('x-forwarded-for') ?? 'anon'
-    const { success } = await rl.limit(key)
-    if (!success) {
+    // Rate limit
+    const rl = getLimiter()
+    if (rl) {
+      const key = user?.id ?? request.headers.get('x-forwarded-for') ?? 'anon'
+      const { success } = await rl.limit(key)
+      if (!success) {
+        return NextResponse.json(
+          { ok: false, error: 'عدد كبير من الأسئلة — استنى شوية وجرب تاني' },
+          { status: 429 },
+        )
+      }
+    }
+
+    const body = await request.json().catch(() => ({}))
+    const parsed = schema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json({ ok: false, error: 'رسالة غير صحيحة' }, { status: 400 })
+    }
+
+    const { message, history } = parsed.data
+
+    // حماية ضد prompt injection
+    if (hasInjection(message)) {
       return NextResponse.json(
-        { ok: false, error: 'عدد كبير من الأسئلة — استنى شوية وجرب تاني' },
-        { status: 429 },
+        {
+          ok: true,
+          reply: 'مش هينفع يا صاحبي 😅 أنا هنا أساعدك تكتشف أماكن قريبة منك. تحب تبدأ بإيه؟',
+        },
+        { status: 200 },
       )
     }
-  }
 
-  const body = await request.json().catch(() => ({}))
-  const parsed = schema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json({ ok: false, error: 'رسالة غير صحيحة' }, { status: 400 })
-  }
+    // فلتر الـ history من أي حقن
+    const safeHistory = history.filter((m) => !hasInjection(m.content))
 
-  const res = await runAgent(parsed.data.message, parsed.data.history ?? [])
+    const res = await runAgent(message, safeHistory)
 
-  if (!res.ok) {
-    return NextResponse.json(res, { status: 500 })
+    if (!res.ok) {
+      return NextResponse.json({ ok: false, error: res.error }, { status: 500 })
+    }
+    return NextResponse.json(res)
+  } catch (err) {
+    console.error('[AI Chat API]', (err as Error).message)
+    return NextResponse.json({ ok: false, error: 'حصلت مشكلة — جرب تاني' }, { status: 500 })
   }
-  return NextResponse.json(res)
 }
