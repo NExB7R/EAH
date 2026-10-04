@@ -28,11 +28,24 @@
 
 ---
 
-### 2. Feature Flags ميتة (3 flags)
+### 2. Feature Announcements (جديد)
+
+**الحالة:** flag اتشال من الكود (2026-10-04) عشان feature مفقودة.
+
+**المطلوب:**
+- جدول `announcements` في DB (id, title, body, theme, starts_at, ends_at, is_active, created_by, created_at)
+- component `components/announcements-banner.tsx` (يظهر أعلى الصفحة)
+- admin UI: `app/admin/announcements/page.tsx` (create/edit/deactivate)
+- إعادة flag `announcements_enabled` للـ features-shared.ts
+
+**الوقت المتوقع:** ~ساعة
+
+---
+
+### 3. Feature Flags ميتة (2 flags)
 
 | Flag | المشكلة | الملف المطلوب |
 |------|---------|---------------|
-| announcements_enabled | مفيش component أصلاً | components/announcements-banner.tsx (جديد) |
 | reviews_enabled | flag معرّف، business-tabs مش بيتحقق منه | components/business-tabs.tsx |
 | orders_enabled | flag معرّف، fixed-cta مش بيتحقق منه | components/fixed-cta.tsx |
 
