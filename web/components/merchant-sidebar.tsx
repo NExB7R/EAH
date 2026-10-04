@@ -11,6 +11,7 @@ import {
   SettingsIcon,
   SparklesIcon,
   QrCodeIcon,
+  MapPinIcon,
 } from './icons'
 import styles from './merchant-sidebar.module.css'
 
@@ -22,6 +23,7 @@ const ITEMS = [
   { href: '/merchant', label: 'نظرة عامة', Icon: LayoutDashboardIcon },
   { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon, tone: 'gold' },
   { href: '/merchant/business', label: 'نشاطي', Icon: StoreIcon },
+  { href: '/merchant/branches', label: 'الفروع', Icon: MapPinIcon },
   { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon, badge: 'orders' },
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
   { href: '/merchant/qr', label: 'QR النشاط', Icon: QrCodeIcon },

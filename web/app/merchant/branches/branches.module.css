@@ -1,0 +1,347 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Merchant Branches
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── New Button ─── */
+
+.newBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #9d4edd, #a855f7);
+  border: 1px solid rgba(199, 125, 255, 0.4);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.newBtn:hover {
+  transform: translateY(-1px);
+}
+
+/* ─── Form ─── */
+
+.form {
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(20, 14, 34, 0.85);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.formHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.formTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #e8c79a;
+}
+
+.formClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: #7b7490;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.formClose:hover {
+  background: rgba(168, 85, 247, 0.1);
+  color: #f4f2fa;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.field label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #c9c2db;
+  letter-spacing: 0.3px;
+}
+
+.field input {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  background: rgba(10, 5, 20, 0.6);
+  color: #f4f2fa;
+  font-size: 0.82rem;
+  font-family: inherit;
+  outline: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.field input:focus {
+  border-color: rgba(168, 85, 247, 0.6);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  color: #fca5a5;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 180ms ease;
+  border: 1px solid transparent;
+}
+
+.primaryBtn {
+  background: linear-gradient(135deg, #9d4edd, #a855f7);
+  color: #fff;
+  border-color: rgba(199, 125, 255, 0.4);
+}
+
+.secondaryBtn {
+  background: transparent;
+  color: #c9c2db;
+  border-color: rgba(168, 85, 247, 0.25);
+}
+
+.primaryBtn:disabled,
+.secondaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primaryBtn:not(:disabled):hover,
+.secondaryBtn:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+/* ─── List ─── */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.branch {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(20, 14, 34, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  transition:
+    border-color 180ms ease,
+    opacity 180ms ease;
+}
+
+.branch:hover {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.branch.primary {
+  border-color: rgba(232, 199, 154, 0.35);
+  background: rgba(30, 20, 15, 0.5);
+}
+
+.branch.inactive {
+  opacity: 0.55;
+}
+
+.branch.pending {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.branchHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.branchName {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 900;
+  color: #f4f2fa;
+}
+
+.primaryBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.12);
+  color: #e8c79a;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(232, 199, 154, 0.3);
+}
+
+.inactiveBadge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(252, 165, 165, 0.1);
+  color: #fca5a5;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+}
+
+.branchMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  font-size: 0.75rem;
+  color: #a29db5;
+  font-weight: 700;
+}
+
+.meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #a29db5;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.meta:hover {
+  color: #c77dff;
+}
+
+.dot {
+  color: #4a4555;
+}
+
+.coords {
+  font-family: ui-monospace, monospace;
+  font-size: 0.7rem;
+  color: #7b7490;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(168, 85, 247, 0.06);
+}
+
+.rowError {
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(252, 165, 165, 0.08);
+  color: #fca5a5;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.branchActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  background: rgba(168, 85, 247, 0.08);
+  color: #c77dff;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+.actionBtn:not(:disabled):hover {
+  transform: translateY(-1px);
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+.actionBtn.danger {
+  background: rgba(252, 165, 165, 0.08);
+  color: #fca5a5;
+  border-color: rgba(252, 165, 165, 0.2);
+}
+
+.actionBtn.danger:not(:disabled):hover {
+  background: rgba(252, 165, 165, 0.15);
+  border-color: rgba(252, 165, 165, 0.4);
+}
+
+.actionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.editWrap {
+  padding: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .newBtn,
+  .primaryBtn,
+  .secondaryBtn,
+  .actionBtn,
+  .formClose {
+    transition: none;
+  }
+}

@@ -219,3 +219,36 @@ export async function getMerchantOffers(businessId: string): Promise<MerchantOff
 
   return (data ?? []) as MerchantOffer[]
 }
+
+// ═══════════════════════════════════════════════════════════
+// Branches (فروع النشاط)
+// ═══════════════════════════════════════════════════════════
+
+export type MerchantBranch = {
+  id: string
+  business_id: string
+  name: string
+  area: string
+  address_text: string | null
+  latitude: number | null
+  longitude: number | null
+  phone: string | null
+  whatsapp: string | null
+  is_primary: boolean
+  is_active: boolean
+  sort_order: number
+}
+
+export async function getMyBranches(businessId: string): Promise<MerchantBranch[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('business_branches')
+    .select(
+      'id, business_id, name, area, address_text, latitude, longitude, phone, whatsapp, is_primary, is_active, sort_order',
+    )
+    .eq('business_id', businessId)
+    .order('is_primary', { ascending: false })
+    .order('sort_order', { ascending: true })
+
+  return (data ?? []) as MerchantBranch[]
+}
