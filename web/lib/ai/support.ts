@@ -1,5 +1,5 @@
 import 'server-only'
-import { chatCompletion, type ChatMessage } from './openrouter'
+import { chatCompletion, type ChatMessage } from './providers'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Support Bot (منفصل عن AI Agent)

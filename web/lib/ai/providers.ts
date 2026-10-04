@@ -217,9 +217,3 @@ async function callProvider(
 }
 
 // ─── معلومات مفيدة ───
-
-export function getAvailableProviders(): string[] {
-  return getProviders()
-    .filter(isAvailable)
-    .map((p) => p.name)
-}

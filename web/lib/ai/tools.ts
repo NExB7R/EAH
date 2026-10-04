@@ -1,7 +1,7 @@
 import 'server-only'
 import { createPublicClient } from '@/lib/supabase/public'
 import { createClient } from '@/lib/supabase/server'
-import type { ToolDefinition } from './openrouter'
+import type { ToolDefinition } from './providers'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — AI Tools
@@ -68,6 +68,56 @@ export const TOOL_DEFS: ToolDefinition[] = [
       name: 'get_my_stats',
       description: 'هات إحصائيات المستخدم الحالي (نقاط، مفضلات، متابعات)',
       parameters: { type: 'object', properties: {} },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_offers',
+      description: 'هات العروض النشطة الحالية — لما المستخدم يسأل عن خصومات أو عروض',
+      parameters: {
+        type: 'object',
+        properties: {
+          limit: { type: 'number', description: 'أقصى عدد نتائج (1-10)' },
+        },
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_trending',
+      description:
+        'هات الأنشطة الأكثر تفاعلاً (الترند) — لما المستخدم يسأل عن الأشهر أو الأكثر شعبية',
+      parameters: {
+        type: 'object',
+        properties: {
+          limit: { type: 'number', description: 'أقصى عدد نتائج (1-10)' },
+        },
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_categories',
+      description: 'هات أنواع الأنشطة المتاحة في المنصة + عدد كل نوع',
+      parameters: { type: 'object', properties: {} },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'get_businesses_by_area',
+      description: 'هات كل الأنشطة في منطقة معينة',
+      parameters: {
+        type: 'object',
+        properties: {
+          area: { type: 'string', description: 'اسم المنطقة' },
+          limit: { type: 'number', description: 'أقصى عدد نتائج (1-20)' },
+        },
+        required: ['area'],
+      },
     },
   },
 ]
@@ -226,6 +276,160 @@ async function toolGetMyStats(): Promise<{
   }
 }
 
+// ─── Offers (العروض النشطة) ───
+
+async function toolGetOffers(args: { limit?: number }) {
+  const supabase = createPublicClient()
+  const limit = Math.min(Math.max(args.limit ?? 8, 1), 10)
+  const now = new Date().toISOString()
+
+  const { data, error } = await supabase
+    .from('offers')
+    .select(
+      `
+      id, title, price,
+      business:businesses(slug, name, area)
+    `,
+    )
+    .eq('is_published', true)
+    .or(`ends_at.is.null,ends_at.gt.${now}`)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (error) {
+    console.error('[AI Tool] offers error:', error.message)
+    return { ok: false, error: 'حصلت مشكلة — جرب تاني' }
+  }
+
+  return {
+    ok: true,
+    count: data?.length ?? 0,
+    offers: (data ?? []).map((o) => {
+      const biz = o.business as unknown as
+        { slug: string; name: string; area: string | null }[] | null
+      const single = Array.isArray(biz) ? (biz[0] ?? null) : biz
+      return {
+        title: o.title,
+        price: o.price,
+        business_name: single?.name ?? null,
+        business_slug: single?.slug ?? null,
+        area: single?.area ?? null,
+      }
+    }),
+  }
+}
+
+// ─── Trending (الأكثر تفاعلاً) ───
+
+async function toolGetTrending(args: { limit?: number }) {
+  const supabase = createPublicClient()
+  const limit = Math.min(Math.max(args.limit ?? 8, 1), 10)
+
+  const { data, error } = await supabase
+    .from('businesses')
+    .select('name, slug, business_type, area, rating_avg, rating_count, trust_score, trust_tier')
+    .eq('is_published', true)
+    .order('trust_score', { ascending: false })
+    .order('rating_avg', { ascending: false })
+    .limit(limit)
+
+  if (error) {
+    console.error('[AI Tool] trending error:', error.message)
+    return { ok: false, error: 'حصلت مشكلة — جرب تاني' }
+  }
+
+  return {
+    ok: true,
+    count: data?.length ?? 0,
+    businesses: (data ?? []).map((b, i) => ({
+      rank: i + 1,
+      name: b.name,
+      slug: b.slug,
+      type: b.business_type,
+      area: b.area,
+      rating: b.rating_count > 0 ? b.rating_avg : null,
+      trust_tier: b.trust_tier,
+    })),
+  }
+}
+
+// ─── Categories (أنواع الأنشطة) ───
+
+async function toolGetCategories() {
+  const supabase = createPublicClient()
+
+  const { data, error } = await supabase
+    .from('businesses')
+    .select('business_type')
+    .eq('is_published', true)
+
+  if (error) {
+    console.error('[AI Tool] categories error:', error.message)
+    return { ok: false, error: 'حصلت مشكلة — جرب تاني' }
+  }
+
+  const TYPE_LABEL: Record<string, string> = {
+    restaurant: 'مطاعم',
+    pharmacy: 'صيدليات',
+    supermarket: 'ماركت',
+    delivery_office: 'توصيل',
+    misc: 'أنشطة أخرى',
+  }
+
+  const counts = new Map<string, number>()
+  for (const b of data ?? []) {
+    counts.set(b.business_type, (counts.get(b.business_type) ?? 0) + 1)
+  }
+
+  return {
+    ok: true,
+    total: data?.length ?? 0,
+    categories: Array.from(counts.entries()).map(([type, count]) => ({
+      type,
+      label: TYPE_LABEL[type] ?? type,
+      count,
+    })),
+  }
+}
+
+// ─── Businesses by Area ───
+
+async function toolGetBusinessesByArea(args: { area: string; limit?: number }) {
+  const area = sanitizeSearchInput(args.area)
+  if (!area) return { ok: false, error: 'اكتب اسم المنطقة' }
+
+  const supabase = createPublicClient()
+  const limit = Math.min(Math.max(args.limit ?? 10, 1), 20)
+
+  const { data, error } = await supabase
+    .from('businesses')
+    .select('name, slug, business_type, area, rating_avg, rating_count, is_open, trust_tier')
+    .eq('is_published', true)
+    .ilike('area', `%${area}%`)
+    .order('trust_score', { ascending: false })
+    .limit(limit)
+
+  if (error) {
+    console.error('[AI Tool] by area error:', error.message)
+    return { ok: false, error: 'حصلت مشكلة — جرب تاني' }
+  }
+
+  return {
+    ok: true,
+    count: data?.length ?? 0,
+    area,
+    businesses: (data ?? []).map((b) => ({
+      name: b.name,
+      slug: b.slug,
+      type: b.business_type,
+      area: b.area,
+      is_open: b.is_open,
+      rating: b.rating_count > 0 ? b.rating_avg : null,
+      trust_tier: b.trust_tier,
+    })),
+  }
+}
+
 export async function executeTool(name: string, argsJson: string): Promise<unknown> {
   let args: Record<string, unknown> = {}
   try {
@@ -241,6 +445,14 @@ export async function executeTool(name: string, argsJson: string): Promise<unkno
       return toolGetBusinessDetails(args as { slug: string })
     case 'get_my_stats':
       return toolGetMyStats()
+    case 'get_offers':
+      return toolGetOffers(args as { limit?: number })
+    case 'get_trending':
+      return toolGetTrending(args as { limit?: number })
+    case 'get_categories':
+      return toolGetCategories()
+    case 'get_businesses_by_area':
+      return toolGetBusinessesByArea(args as { area: string; limit?: number })
     default:
       return { ok: false, error: `أداة غير معروفة: ${name}` }
   }
