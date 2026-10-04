@@ -42,7 +42,25 @@
 
 ---
 
-### 3. Feature Flags ميتة (2 flags)
+### 3. نظام الإعلانات (ناقص)
+
+**الموجود:**
+- جدول `ad_slots` في DB (4 أماكن: home_banner, home_feed, category_banner, trend_pin)
+- `/admin/ads` بيعرض الأماكن بس (read-only)
+
+**الناقص:**
+- جدول `advertisements` (الإعلانات الفعلية): id, slot_id, business_id, image_url, title, link_url, starts_at, ends_at, status, price_paid_egp, created_at
+- Admin CRUD للأماكن (edit price, max_concurrent, deactivate)
+- Admin CRUD للإعلانات (approve, reject, schedule)
+- Merchant side: `/merchant/ads` (request, view stats, pause)
+- Public API: `GET /api/ads/active?slot=home_banner` (fetch active ads for slot)
+- Components لعرض الإعلانات: `<AdSlot code="home_banner" />`
+
+**الوقت المتوقع:** ~3 ساعات
+
+---
+
+### 4. Feature Flags ميتة (2 flags)
 
 | Flag | المشكلة | الملف المطلوب |
 |------|---------|---------------|
@@ -55,18 +73,7 @@
 
 ## 🟠 متوسطة
 
-### 3. /api/ads/active مفقود
-
-**المشكلة:** Vercel logs طلع عليه 404. الكود فيه إشارات لـ `/api/ads/active` بس الـ route مش موجود.
-
-**التحقق:**
-grep -rn "api/ads/active" app/ components/ lib/
-
-**الحل:** إما نعمل route، أو نشيل الإشارات.
-
----
-
-### 4. /suggest placeholder
+### 5. /suggest placeholder
 
 **الحالة:** الصفحة بتعرض "لسه محتاجين نعرفك أكتر" + زرار. مش بترشح أنشطة فعلاً.
 
@@ -74,7 +81,7 @@ grep -rn "api/ads/active" app/ components/ lib/
 
 ---
 
-### 5. Branches CRUD للتاجر
+### 6. Branches CRUD للتاجر
 
 **الحالة:** جدول `business_branches` موجود في DB (id, business_id, name, area, address_text, latitude, longitude, working_hours, phone, whatsapp, is_primary, is_active, sort_order).
 
@@ -89,19 +96,19 @@ grep -rn "api/ads/active" app/ components/ lib/
 
 ## 🟡 صغيرة
 
-### 6. Google Search Console
+### 7. Google Search Console
 
 - سجّل الموقع على https://search.google.com/search-console
 - Submit sitemap: https://eah-sq.vercel.app/sitemap.xml
 - الوقت: 20 دقيقة
 
-### 7. اختبار ميداني موبايل
+### 8. اختبار ميداني موبايل
 
 - افتح الموقع من موبايل حقيقي على شبكة تانية
 - اختبر: تسجيل، تفاعل، طلب، إشعارات
 - الوقت: 30 دقيقة
 
-### 8. /admin/insights — احتمال تكرار
+### 9. /admin/insights — احتمال تكرار
 
 - app/admin/insights/page.tsx (139 سطر)
 - app/merchant/insights/page.tsx (169 سطر)
