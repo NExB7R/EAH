@@ -750,3 +750,34 @@ cat file.tsx
 **المراجع:**
 - `docs/migrations-archive/README.md`
 - `~/.local/bin/lefthook` (symlink)
+
+---
+
+## 28. REVOKE على business_locations خلّى الأقسام تختفي (2026-10-04)
+
+**الأعراض:**
+- الرئيسية بتعرض Hero + العروض + رشحلى بس
+- المميز + الترند + الجديد + قريب منك مش بيظهروا خالص
+- Vercel logs: getPublishedBusinesses error: permission denied
+- curl: صفر business-card-module في HTML
+
+**السبب الحقيقي:**
+- migration قديمة عملت REVOKE SELECT على business_locations من anon
+- الكود بيستخدم join: business_locations(latitude, longitude, is_primary)
+- Postgres بيرفض الاستعلام كله لما عمود/جدول واحد ممنوع
+- getPublishedBusinesses بترجع فاضية -> الأقسام تختفي بصمت
+
+**الحل:**
+GRANT SELECT (id, business_id, address_text, latitude, longitude, is_primary, created_at)
+ON public.business_locations
+TO anon, authenticated;
+
+**الدرس:**
+- أي REVOKE على جدول مستخدم في join -> يخلي الاستعلام كله يفشل
+- مفيش error واضح في UI — بس sections تختفي
+- دائماً افحص Vercel logs عند مشاكل كهذه
+- التصحيح: REVOKE على أعمدة معينة، مش الجدول كله
+
+**المراجع:**
+- migration 2026-09-25-normalize-profiles.sql (المصدر)
+- Vercel logs: getPublishedBusinesses error: permission denied
