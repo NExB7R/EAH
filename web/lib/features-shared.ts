@@ -15,6 +15,7 @@ export type FeatureFlags = {
   qr_enabled: boolean
   reviews_enabled: boolean
   orders_enabled: boolean
+  announcements_enabled: boolean
 }
 
 export const DEFAULT_FLAGS: FeatureFlags = {
@@ -29,6 +30,7 @@ export const DEFAULT_FLAGS: FeatureFlags = {
   qr_enabled: true,
   reviews_enabled: true,
   orders_enabled: true,
+  announcements_enabled: true,
 }
 
 export const FEATURE_META: Record<
@@ -88,6 +90,11 @@ export const FEATURE_META: Record<
   orders_enabled: {
     label: 'الطلبات',
     desc: 'OrderModal + flow كامل',
+    group: 'system',
+  },
+  announcements_enabled: {
+    label: 'إعلانات الإدارة',
+    desc: 'بانر إعلاني في أعلى الموقع',
     group: 'system',
   },
 }

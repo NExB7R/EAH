@@ -12,6 +12,7 @@ import {
   FileTextIcon,
   SettingsIcon,
   BellIcon,
+  BroadcastIcon,
   TargetIcon,
   TagIcon,
   SparklesIcon,
@@ -88,6 +89,7 @@ const SECTIONS: Section[] = [
     title: 'النظام',
     items: [
       { href: '/admin/notifications', label: 'الإشعارات', Icon: BellIcon },
+      { href: '/admin/announcements', label: 'الإعلانات الإدارية', Icon: BroadcastIcon },
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
       { href: '/admin/settings', label: 'الإعدادات', Icon: SettingsIcon },

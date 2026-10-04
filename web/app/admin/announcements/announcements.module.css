@@ -1,0 +1,349 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Admin Announcements
+   ═══════════════════════════════════════════════════════════ */
+
+.intro {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  margin-bottom: 16px;
+}
+
+.introIcon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.12);
+  color: #c77dff;
+}
+
+.introText {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c9c2db;
+  line-height: 1.6;
+}
+
+/* ─── New Button ─── */
+
+.newBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #9d4edd, #a855f7);
+  border: 1px solid rgba(199, 125, 255, 0.4);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.newBtn:hover {
+  transform: translateY(-1px);
+}
+
+/* ─── Form ─── */
+
+.form {
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(20, 14, 34, 0.85);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.formTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #e8c79a;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.field label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #c9c2db;
+  letter-spacing: 0.3px;
+}
+
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  background: rgba(10, 5, 20, 0.6);
+  color: #f4f2fa;
+  font-size: 0.82rem;
+  font-family: inherit;
+  outline: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  border-color: rgba(168, 85, 247, 0.6);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 56px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: #c9c2db;
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: 16px;
+  height: 16px;
+  accent-color: #a855f7;
+}
+
+.error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  color: #fca5a5;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 180ms ease;
+  border: 1px solid transparent;
+}
+
+.primaryBtn {
+  background: linear-gradient(135deg, #9d4edd, #a855f7);
+  color: #fff;
+  border-color: rgba(199, 125, 255, 0.4);
+}
+
+.secondaryBtn {
+  background: transparent;
+  color: #c9c2db;
+  border-color: rgba(168, 85, 247, 0.25);
+}
+
+.primaryBtn:disabled,
+.secondaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primaryBtn:not(:disabled):hover,
+.secondaryBtn:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+/* ─── List ─── */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(20, 14, 34, 0.6);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  transition: border-color 180ms ease;
+}
+
+.row:hover {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.row.pending {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.theme_gold {
+  border-left: 3px solid #e8c79a;
+}
+
+.theme_purple {
+  border-left: 3px solid #c77dff;
+}
+
+.theme_orange {
+  border-left: 3px solid #fdba74;
+}
+
+.theme_teal {
+  border-left: 3px solid #55e7d1;
+}
+
+.rowHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.status {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.statusActive {
+  background: rgba(85, 231, 209, 0.15);
+  color: #55e7d1;
+}
+
+.statusInactive {
+  background: rgba(252, 165, 165, 0.12);
+  color: #fca5a5;
+}
+
+.themeBadge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: rgba(168, 85, 247, 0.1);
+  color: #c77dff;
+}
+
+.date {
+  margin-left: auto;
+  font-size: 0.68rem;
+  color: #7b7490;
+  font-weight: 700;
+}
+
+.rowTitle {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #f4f2fa;
+}
+
+.rowBody {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  color: #c9c2db;
+  line-height: 1.6;
+}
+
+.rowLink,
+.rowSchedule {
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  color: #a29db5;
+  font-weight: 700;
+}
+
+.rowActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.toggleBtn,
+.deleteBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.toggleBtn {
+  background: rgba(168, 85, 247, 0.1);
+  color: #c77dff;
+  border-color: rgba(168, 85, 247, 0.25);
+}
+
+.deleteBtn {
+  background: rgba(252, 165, 165, 0.08);
+  color: #fca5a5;
+  border-color: rgba(252, 165, 165, 0.2);
+  width: 32px;
+  padding: 6px;
+  justify-content: center;
+}
+
+.toggleBtn:not(:disabled):hover,
+.deleteBtn:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .newBtn,
+  .primaryBtn,
+  .secondaryBtn,
+  .toggleBtn,
+  .deleteBtn {
+    transition: none;
+  }
+}

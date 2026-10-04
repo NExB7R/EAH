@@ -12,9 +12,11 @@ import SignupPrompt from '@/components/signup-prompt'
 import ScrollToTop from '@/components/scroll-to-top'
 import SiteFooter from '@/components/site-footer'
 import AiWidget from '@/components/ai-widget'
+import AnnouncementsBanner from '@/components/announcements-banner'
 import { Analytics } from '@vercel/analytics/next'
 import { getUserSession } from '@/lib/data/user'
 import { getFeatureFlags } from '@/lib/features'
+import { getActiveAnnouncements } from '@/lib/data/announcements'
 import './globals.css'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
@@ -50,13 +52,20 @@ export const viewport: Viewport = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [session, flags] = await Promise.all([getUserSession(), getFeatureFlags()])
+  const [session, flags, announcements] = await Promise.all([
+    getUserSession(),
+    getFeatureFlags(),
+    getActiveAnnouncements(),
+  ])
 
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body>
         <Splash />
         <FloatingCapsule session={session} />
+        {flags.announcements_enabled && announcements.length > 0 && (
+          <AnnouncementsBanner announcements={announcements} />
+        )}
         {children}
         <SiteFooter />
         <InstallPrompt />
