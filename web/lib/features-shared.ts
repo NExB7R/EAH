@@ -13,7 +13,6 @@ export type FeatureFlags = {
   support_bot_enabled: boolean
   push_enabled: boolean
   qr_enabled: boolean
-  announcements_enabled: boolean
   reviews_enabled: boolean
   orders_enabled: boolean
 }
@@ -28,7 +27,6 @@ export const DEFAULT_FLAGS: FeatureFlags = {
   support_bot_enabled: true,
   push_enabled: true,
   qr_enabled: true,
-  announcements_enabled: true,
   reviews_enabled: true,
   orders_enabled: true,
 }
@@ -81,11 +79,6 @@ export const FEATURE_META: Record<
     label: 'QR للتاجر',
     desc: 'توليد QR للنشاط',
     group: 'features',
-  },
-  announcements_enabled: {
-    label: 'إشعارات المسؤول',
-    desc: 'إرسال رسائل رسمية لكل المستخدمين',
-    group: 'system',
   },
   reviews_enabled: {
     label: 'التقييمات',
