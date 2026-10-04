@@ -10,6 +10,7 @@ import {
   TYPE_LABEL,
 } from '@/lib/data/business-detail'
 import { isOpenNow } from '@/lib/data/businesses'
+import { getFeatureFlags } from '@/lib/features'
 import type { BusinessDetail } from '@/lib/data/business-detail'
 import { getUserSession } from '@/lib/data/user'
 import BusinessHero from '@/components/business-hero'
@@ -137,10 +138,11 @@ export default async function BusinessPage({ params }: Props) {
 
   const { business, contacts } = detail
 
-  const [reviews, similar, session] = await Promise.all([
+  const [reviews, similar, session, flags] = await Promise.all([
     getBusinessReviews(business.id, 50),
     getSimilarBusinesses(business.id, business.business_type, 8),
     getUserSession(),
+    getFeatureFlags(),
   ])
 
   const reviewStats = computeReviewStats(reviews)
@@ -205,6 +207,7 @@ export default async function BusinessPage({ params }: Props) {
             isLoggedIn={isLoggedIn}
             hasReviewed={hasReviewed}
             isOwner={isOwner}
+            reviewsEnabled={flags.reviews_enabled}
           />
         </div>
 
@@ -240,6 +243,7 @@ export default async function BusinessPage({ params }: Props) {
         phone={phone}
         isLoggedIn={!!session}
         isOpen={isOpen}
+        ordersEnabled={flags.orders_enabled}
         defaultName={session?.displayName ?? ''}
       />
     </main>

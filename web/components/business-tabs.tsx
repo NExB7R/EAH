@@ -26,6 +26,7 @@ type Props = {
   isLoggedIn: boolean
   hasReviewed: boolean
   isOwner: boolean
+  reviewsEnabled: boolean
 }
 
 const DAY_LABEL: Record<string, string> = {
@@ -47,6 +48,7 @@ export default function BusinessTabs({
   isLoggedIn,
   hasReviewed,
   isOwner,
+  reviewsEnabled,
 }: Props) {
   const [tab, setTab] = useState<Tab>('info')
   const [lightbox, setLightbox] = useState<string | null>(null)
@@ -83,17 +85,19 @@ export default function BusinessTabs({
           <span>المنيو</span>
           {menu.length > 0 && <span className={styles.tabCount}>{menu.length}</span>}
         </button>
-        <button
-          role="tab"
-          aria-selected={tab === 'reviews'}
-          className={`${styles.tab} ${tab === 'reviews' ? styles.active : ''}`}
-          onClick={() => setTab('reviews')}
-          id="reviews-section"
-        >
-          <MessageCircleIcon size={15} />
-          <span>التقييمات</span>
-          {reviewStats.count > 0 && <span className={styles.tabCount}>{reviewStats.count}</span>}
-        </button>
+        {reviewsEnabled && (
+          <button
+            role="tab"
+            aria-selected={tab === 'reviews'}
+            className={`${styles.tab} ${tab === 'reviews' ? styles.active : ''}`}
+            onClick={() => setTab('reviews')}
+            id="reviews-section"
+          >
+            <MessageCircleIcon size={15} />
+            <span>التقييمات</span>
+            {reviewStats.count > 0 && <span className={styles.tabCount}>{reviewStats.count}</span>}
+          </button>
+        )}
       </div>
 
       {/* ─── Info Tab ─── */}
@@ -298,7 +302,7 @@ export default function BusinessTabs({
       )}
 
       {/* ─── Reviews Tab ─── */}
-      {tab === 'reviews' && (
+      {reviewsEnabled && tab === 'reviews' && (
         <div className={styles.content}>
           <ReviewsList
             businessId={business.id}

@@ -19,6 +19,7 @@ type Props = {
   phone: string | null
   isLoggedIn: boolean
   isOpen: boolean
+  ordersEnabled: boolean
   defaultName?: string
   defaultPhone?: string
 }
@@ -31,6 +32,7 @@ export default function FixedCta({
   phone,
   isLoggedIn,
   isOpen,
+  ordersEnabled,
   defaultName = '',
   defaultPhone = '',
 }: Props) {
@@ -47,8 +49,14 @@ export default function FixedCta({
     }
 
     if (whatsapp) {
-      setOrderKey((k) => k + 1)
-      setOrderOpen(true)
+      if (ordersEnabled) {
+        setOrderKey((k) => k + 1)
+        setOrderOpen(true)
+      } else {
+        // واتساب مباشر بدون OrderModal
+        const text = encodeURIComponent(`مرحبا، عايز أطلب من ${businessName}`)
+        window.open(`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}?text=${text}`, '_blank')
+      }
     } else if (phone) {
       window.location.href = `tel:${phone}`
     }
@@ -79,16 +87,18 @@ export default function FixedCta({
 
       <SmartLockModal open={lock.open} onClose={lock.close} action={lock.action} hint={lock.hint} />
 
-      <OrderModal
-        key={orderKey}
-        open={orderOpen}
-        onClose={() => setOrderOpen(false)}
-        businessId={businessId}
-        businessSlug={businessSlug}
-        businessName={businessName}
-        defaultName={defaultName}
-        defaultPhone={defaultPhone}
-      />
+      {ordersEnabled && (
+        <OrderModal
+          key={orderKey}
+          open={orderOpen}
+          onClose={() => setOrderOpen(false)}
+          businessId={businessId}
+          businessSlug={businessSlug}
+          businessName={businessName}
+          defaultName={defaultName}
+          defaultPhone={defaultPhone}
+        />
+      )}
     </>
   )
 }
