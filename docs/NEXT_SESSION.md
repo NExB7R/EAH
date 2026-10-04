@@ -9,26 +9,7 @@
 
 ## 🔴 حرجة
 
-### 1. Migrations ناقصة (أهم حاجة)
-
-**المشكلة:**
-- `app_settings` table اتضاف يدوي في Supabase (2026-10-04) — مش موجود في `docs/migrations/`
-- `GRANT SELECT ON business_locations TO anon, authenticated` اتصلح يدوي (2026-10-04) — مش موجود في migrations
-
-**الخطر:**
-- لو Supabase اتعمله reset/recreate من migrations -> الموقع يقع تاني
-- الأقسام هتختفي (نفس مشكلة §28 في LESSONS.md)
-
-**الحل المطلوب:**
-اكتب migration جديد: `docs/migrations/2026-10-04-app-settings-and-locations-grant.sql`
-
-محتوى:
-- CREATE TABLE app_settings (key, value, updated_at) + RLS (super_admin only)
-- GRANT SELECT (id, business_id, address_text, latitude, longitude, is_primary, created_at) ON business_locations TO anon, authenticated
-
----
-
-### 2. Feature Announcements (جديد)
+### 1. Feature Announcements (جديد)
 
 **الحالة:** flag اتشال من الكود (2026-10-04) عشان feature مفقودة.
 
@@ -42,7 +23,7 @@
 
 ---
 
-### 3. نظام الإعلانات (ناقص)
+### 2. نظام الإعلانات (ناقص)
 
 **الموجود:**
 - جدول `ad_slots` في DB (4 أماكن: home_banner, home_feed, category_banner, trend_pin)
@@ -60,20 +41,9 @@
 
 ---
 
-### 4. Feature Flags ميتة (2 flags)
-
-| Flag | المشكلة | الملف المطلوب |
-|------|---------|---------------|
-| reviews_enabled | flag معرّف، business-tabs مش بيتحقق منه | components/business-tabs.tsx |
-| orders_enabled | flag معرّف، fixed-cta مش بيتحقق منه | components/fixed-cta.tsx |
-
-**التأثير:** من /admin/studio لما الأدمن يوقف flag، مفيش تأثير.
-
----
-
 ## 🟠 متوسطة
 
-### 5. /suggest placeholder
+### 3. /suggest placeholder
 
 **الحالة:** الصفحة بتعرض "لسه محتاجين نعرفك أكتر" + زرار. مش بترشح أنشطة فعلاً.
 
@@ -81,7 +51,7 @@
 
 ---
 
-### 6. Branches CRUD للتاجر
+### 4. Branches CRUD للتاجر
 
 **الحالة:** جدول `business_branches` موجود في DB (id, business_id, name, area, address_text, latitude, longitude, working_hours, phone, whatsapp, is_primary, is_active, sort_order).
 
@@ -96,19 +66,19 @@
 
 ## 🟡 صغيرة
 
-### 7. Google Search Console
+### 5. Google Search Console
 
 - سجّل الموقع على https://search.google.com/search-console
 - Submit sitemap: https://eah-sq.vercel.app/sitemap.xml
 - الوقت: 20 دقيقة
 
-### 8. اختبار ميداني موبايل
+### 6. اختبار ميداني موبايل
 
 - افتح الموقع من موبايل حقيقي على شبكة تانية
 - اختبر: تسجيل، تفاعل، طلب، إشعارات
 - الوقت: 30 دقيقة
 
-### 9. /admin/insights — احتمال تكرار
+### 7. /admin/insights — احتمال تكرار
 
 - app/admin/insights/page.tsx (139 سطر)
 - app/merchant/insights/page.tsx (169 سطر)
@@ -121,6 +91,10 @@
 - إصلاح splash crash (display:none بدل el.remove)
 - GRANT على business_locations (يدوي في Supabase)
 - إنشاء app_settings table (يدوي في Supabase)
+- **migration موثّق**: `docs/migrations/2026-10-04-app-settings-and-locations-grant.sql`
+- تطبيق `reviews_enabled` في `business-tabs.tsx`
+- تطبيق `orders_enabled` في `fixed-cta.tsx`
+- شيل flag `announcements_enabled` (feature مفقودة — سُجلت في #1)
 - توثيق REVOKE issue في LESSONS.md §28
 
 ---
