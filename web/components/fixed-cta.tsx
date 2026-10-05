@@ -22,6 +22,8 @@ type Props = {
   ordersEnabled: boolean
   defaultName?: string
   defaultPhone?: string
+  menuImages?: string[]
+  offers?: { title: string; image: string | null }[]
 }
 
 export default function FixedCta({
@@ -35,6 +37,8 @@ export default function FixedCta({
   ordersEnabled,
   defaultName = '',
   defaultPhone = '',
+  menuImages = [],
+  offers = [],
 }: Props) {
   const lock = useSmartLock()
   const [orderOpen, setOrderOpen] = useState(false)
@@ -97,6 +101,8 @@ export default function FixedCta({
           businessName={businessName}
           defaultName={defaultName}
           defaultPhone={defaultPhone}
+          menuImages={menuImages}
+          offers={offers}
         />
       )}
     </>

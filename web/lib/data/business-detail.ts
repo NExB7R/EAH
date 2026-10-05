@@ -324,3 +324,33 @@ export async function getUserActivity(
     .maybeSingle()
   return !!data
 }
+
+// ═══════════════════════════════════════════════════════════
+// Business Offers (للـ OrderModal)
+// ═══════════════════════════════════════════════════════════
+
+export type BusinessOfferSimple = {
+  id: string
+  title: string
+  image_url: string | null
+}
+
+export async function getBusinessOffers(
+  businessId: string,
+  limit = 6,
+): Promise<BusinessOfferSimple[]> {
+  const supabase = createPublicClient()
+  const now = new Date().toISOString()
+
+  const { data, error } = await supabase
+    .from('offers')
+    .select('id, title, image_url')
+    .eq('business_id', businessId)
+    .eq('is_published', true)
+    .or(`ends_at.is.null,ends_at.gt.${now}`)
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (error) return []
+  return (data ?? []) as BusinessOfferSimple[]
+}

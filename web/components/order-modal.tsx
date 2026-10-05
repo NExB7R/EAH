@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState, useTransition } from 'react'
-import { CloseIcon, GiftIcon, CheckCircleIcon, AlertIcon } from './icons'
+import { CloseIcon, GiftIcon, CheckCircleIcon, AlertIcon, ImageIcon } from './icons'
+import MenuSlider from './menu-slider'
 import { submitOrder } from '@/app/businesses/[slug]/order-actions'
 import styles from './order-modal.module.css'
 
@@ -18,6 +19,8 @@ type Props = {
   businessName: string
   defaultName?: string
   defaultPhone?: string
+  menuImages?: string[]
+  offers?: { title: string; image: string | null }[]
 }
 
 export default function OrderModal({
@@ -28,10 +31,13 @@ export default function OrderModal({
   businessName,
   defaultName = '',
   defaultPhone = '',
+  menuImages = [],
+  offers = [],
 }: Props) {
   const [pending, startTransition] = useTransition()
   const [msg, setMsg] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
@@ -188,6 +194,13 @@ export default function OrderModal({
                 </div>
               )}
 
+              {(menuImages.length > 0 || offers.length > 0) && (
+                <button type="button" onClick={() => setMenuOpen(true)} className={styles.menuBtn}>
+                  <ImageIcon size={16} />
+                  <span>شوف المنيو</span>
+                </button>
+              )}
+
               <button type="submit" disabled={pending} className={styles.submitBtn}>
                 {pending ? 'جاري الإرسال…' : 'أكمل الطلب'}
               </button>
@@ -195,6 +208,14 @@ export default function OrderModal({
           </>
         )}
       </div>
+
+      <MenuSlider
+        open={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        images={menuImages}
+        offers={offers}
+        businessName={businessName}
+      />
     </>
   )
 }

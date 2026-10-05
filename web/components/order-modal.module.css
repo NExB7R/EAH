@@ -152,6 +152,31 @@
   font-weight: 700;
 }
 
+.menuBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(232, 199, 154, 0.35);
+  background: rgba(232, 199, 154, 0.08);
+  color: #e8c79a;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.menuBtn:hover {
+  transform: translateY(-1px);
+  background: rgba(232, 199, 154, 0.14);
+  border-color: rgba(232, 199, 154, 0.5);
+}
+
 .submitBtn {
   padding: 12px 20px;
   margin-top: 4px;

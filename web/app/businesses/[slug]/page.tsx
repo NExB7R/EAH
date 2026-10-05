@@ -7,6 +7,7 @@ import {
   getUserReview,
   getUserActivity,
   computeReviewStats,
+  getBusinessOffers,
   TYPE_LABEL,
 } from '@/lib/data/business-detail'
 import { isOpenNow } from '@/lib/data/businesses'
@@ -138,11 +139,12 @@ export default async function BusinessPage({ params }: Props) {
 
   const { business, contacts } = detail
 
-  const [reviews, similar, session, flags] = await Promise.all([
+  const [reviews, similar, session, flags, offers] = await Promise.all([
     getBusinessReviews(business.id, 50),
     getSimilarBusinesses(business.id, business.business_type, 8),
     getUserSession(),
     getFeatureFlags(),
+    getBusinessOffers(business.id, 6),
   ])
 
   const reviewStats = computeReviewStats(reviews)
@@ -170,6 +172,9 @@ export default async function BusinessPage({ params }: Props) {
 
   const hasWhatsapp = !!whatsapp && business.accepts_whatsapp_orders
 
+  const menuImages = detail.menu.map((m) => m.storage_path)
+  const offersList = offers.map((o) => ({ title: o.title, image: o.image_url }))
+
   return (
     <main className={styles.page}>
       <script
@@ -195,6 +200,8 @@ export default async function BusinessPage({ params }: Props) {
             acceptsWhatsapp={business.accepts_whatsapp_orders}
             isFavorite={isFavorite}
             isFollowing={isFollowing}
+            menuImages={menuImages}
+            offers={offersList}
           />
         </div>
 
@@ -245,6 +252,8 @@ export default async function BusinessPage({ params }: Props) {
         isOpen={isOpen}
         ordersEnabled={flags.orders_enabled}
         defaultName={session?.displayName ?? ''}
+        menuImages={menuImages}
+        offers={offersList}
       />
     </main>
   )

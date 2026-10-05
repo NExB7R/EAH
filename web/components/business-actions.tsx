@@ -32,6 +32,8 @@ type Props = {
   isFollowing?: boolean
   defaultName?: string
   defaultPhone?: string
+  menuImages?: string[]
+  offers?: { title: string; image: string | null }[]
 }
 
 export default function BusinessActions({
@@ -47,6 +49,8 @@ export default function BusinessActions({
   isFollowing = false,
   defaultName = '',
   defaultPhone = '',
+  menuImages = [],
+  offers = [],
 }: Props) {
   const lock = useSmartLock()
   const [fav, setFav] = useState(isFavorite)
@@ -226,6 +230,8 @@ export default function BusinessActions({
         businessName={businessName}
         defaultName={defaultName}
         defaultPhone={defaultPhone}
+        menuImages={menuImages}
+        offers={offers}
       />
     </>
   )
