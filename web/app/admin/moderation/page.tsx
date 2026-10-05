@@ -2,40 +2,51 @@ import { createClient } from '@/lib/supabase/server'
 import { CheckCircleIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
+import ModerationRow from './moderation-row'
+import type { ModerationReview } from './types'
 import styles from './moderation.module.css'
 
 export const dynamic = 'force-dynamic'
 
-type Row = {
-  id: string
-  comment: string | null
-  status: string
-  created_at: string
-  flagged_reason: string | null
-  user: { display_name: string } | null
-  business: { name: string; slug: string } | null
-}
-
-async function getPendingReviews(): Promise<Row[]> {
+async function getReviews(): Promise<ModerationReview[]> {
   const supabase = await createClient()
   const { data } = await supabase
     .from('business_reviews')
     .select(
       `
-      id, comment, status, created_at, flagged_reason,
+      id, comment, rating, status, created_at, flagged_reason,
       user:profiles(display_name),
       business:businesses(name, slug)
     `,
     )
     .in('status', ['pending', 'flagged'])
     .order('created_at', { ascending: false })
-    .limit(50)
+    .limit(100)
 
-  return (data ?? []) as unknown as Row[]
+  if (!data) return []
+
+  return data.map((r) => {
+    const u = r.user as unknown as { display_name: string }[] | { display_name: string } | null
+    const b = r.business as unknown as
+      { name: string; slug: string }[] | { name: string; slug: string } | null
+    const user = Array.isArray(u) ? (u[0] ?? null) : u
+    const biz = Array.isArray(b) ? (b[0] ?? null) : b
+    return {
+      id: r.id,
+      comment: r.comment,
+      rating: (r.rating as number) ?? 0,
+      status: r.status,
+      created_at: r.created_at,
+      flagged_reason: r.flagged_reason,
+      user_name: user?.display_name ?? null,
+      business_name: biz?.name ?? null,
+      business_slug: biz?.slug ?? null,
+    }
+  })
 }
 
 export default async function AdminModerationPage() {
-  const reviews = await getPendingReviews()
+  const reviews = await getReviews()
 
   return (
     <div>
@@ -49,45 +60,9 @@ export default async function AdminModerationPage() {
         />
       ) : (
         <div className={styles.list}>
-          {reviews.map((r) => {
-            const date = new Date(r.created_at).toLocaleDateString('ar-EG')
-            return (
-              <div key={r.id} className={styles.card}>
-                <div className={styles.head}>
-                  <div className={styles.from}>
-                    <span className={styles.user}>{r.user?.display_name ?? 'مستخدم'}</span>
-                    <span className={styles.dot}>·</span>
-                    <span className={styles.business}>{r.business?.name ?? 'نشاط'}</span>
-                  </div>
-                  <span
-                    className={`${styles.badge} ${r.status === 'flagged' ? styles.flagged : styles.pending}`}
-                  >
-                    {r.status === 'flagged' ? 'مبلَّغ عنه' : 'معلّق'}
-                  </span>
-                </div>
-
-                {r.flagged_reason && (
-                  <p className={styles.reason}>
-                    <strong>سبب الإبلاغ:</strong> {r.flagged_reason}
-                  </p>
-                )}
-
-                {r.comment && <p className={styles.comment}>{r.comment}</p>}
-
-                <div className={styles.foot}>
-                  <span className={styles.date}>{date}</span>
-                  <div className={styles.actions}>
-                    <button type="button" className={styles.approve}>
-                      موافقة
-                    </button>
-                    <button type="button" className={styles.reject}>
-                      رفض
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
+          {reviews.map((r) => (
+            <ModerationRow key={r.id} review={r} />
+          ))}
         </div>
       )}
     </div>
