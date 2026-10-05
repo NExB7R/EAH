@@ -3,191 +3,40 @@
 > **قاعدة المالك (2026-10-05):** أثناء أي تطوير — سجّل أي مشكلة/ملاحظة + أفكار للتحسين.
 > **التصنيفات:** 🔒 أمان | ⚡ سرعة | 🧠 وجيك | ✨ سلاسة | 🎨 تصميم
 
-**آخر تحديث:** 2026-10-05
+**آخر تحديث:** 2026-10-06
 
 ---
 
-## 🔴 ملاحظات مهمة (مرتبة حسب الخطورة)
+## ✅ تم حلها (Session 12 — 2026-10-05/06)
 
-### 🔴 #1 — بحث الأنواع يتجاهل الاسم (bug حرج)
-
-**الملف:** `lib/search/index.ts` سطر 60-72
-**المشكلة:**
-لو المستخدم كتب "صيدلية العزبي":
-- `types = ['pharmacy']` → يبدأ فلترة الأنواع
-- لكل صيدلية: `scoreMatch` بيدور "صيدليه العزبي" في الاسم → مش بيطابق
-- بيرجع `{ score: 50, matchedOn: 'type' }` → كل الصيدليات بنفس الترتيب!
-- **العزبي مش بيجي أول!**
-
-**الأثر:** المستخدم بيدور على صيدلية معينة → كل الصيدليات بترجع بدون ترتيب.
-
-**الحل:** لو فيه types → نفلتر بيها، **وبعدها** نعمل search داخل النتيجة بدل ما نتجاهل الاسم.
-
----
-
-### 🟠 #2 — مفيش word-level search
-
-**المشكلة:** البحث بـ `includes` على الجملة الكاملة:
-- "مطعم بيتزا" → لازم يجده كامل
-- "بيتزا حلوة في شبين" → يفشل (الجملة طويلة)
-
-**الحل:** تقسيم الـ query لكلمات (`split(' ')`) + حساب score لكل كلمة + جمع.
-
----
-
-### 🟠 #3 — مفيش Fuzzy matching (typos)
-
-**المشكلة:** "بيتزة" (زيادة) → مش بتلاقي "بيتزا"
-**الحل:** Levenshtein distance ≤ 2 → match بـ score أقل.
+| # | المشكلة | الحل |
+|---|---------|------|
+| 1 | بحث الأنواع يتجاهل الاسم | Search v2: filter بالـ type ثم rank بالاسم |
+| 2 | مفيش word-level search | tokenize + score لكل كلمة |
+| 3 | مفيش Fuzzy matching | Levenshtein ≤ 2 |
+| 4 | مفيش ترتيب ثانوي | is_open + trust + rating + distance |
+| 5 | أرقام عربية غير مدعومة | ٠-٩ → 0-9 في normalize |
+| 6 | مفيش limit parameter | Math.min(limit, 200) |
+| 7 | normalizeArabic يتكرر | cachedNormalize |
+| 8 | مفيش ترتيب حسب النية | detectIntent (quality/nearby/open_now) |
+| 9 | تعارض body.overflow | OrderModal وحده يتحكم |
+| 10 | cooldown logic خطير | regex دقيق (\\b429\\b + \\b5xx\\b + AbortError) |
+| 11 | onClose غير مستقر | useCallback |
+| 12 | limit في smartSearch | Math.min/max |
+| 13 | overscroll في MenuSlider | overscroll-behavior: contain |
+| 14 | admin/businesses زر موافقة ميت | Server Action + useTransition |
+| 15 | مفيش رفض | rejectBusiness + reason + إشعار |
+| 16 | مفيش إدارة المنشورين | Tabs (pending/published/rejected/all) |
+| 17 | مفيش bulk actions | — (مؤجل — لا ضرورة حالياً) |
+| 18 | description مقطوع | تفاصيل كاملة في الصفحة |
+| 19 | مفيش بحث/فلترة | Tabs + بحث |
+| 20 | <img> بدون optimization | (مؤجل — غير حرج) |
 
 ---
 
-### 🟠 #4 — مفيش ترتيب ثانوي (trust/rating)
+## 🔴 ملاحظات مفتوحة (مرتبة حسب الخطورة)
 
-**المشكلة:** لو 3 مطاعم بنفس score → الترتيب عشوائي.
-**الحل:** بعد score، ترتيب بـ:
-1. `is_open` (المفتوح أول)
-2. `trust_score` أعلى
-3. `rating_avg` أعلى
-4. `distance` أقرب (لو موقع المستخدم متاح)
-
----
-
-### 🟡 #5 — أرقام عربية غير مدعومة
-
-**المشكلة:** "شارع ١٢" → البحث يفشل.
-**الملف:** `lib/search/normalize.ts`
-**الحل:** `.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660))`
-
----
-
-### 🟡 #6 — مفيش limit parameter
-
-**المشكلة:** البحث يرجع كل حاجة → بطيء مع البيانات الكبيرة.
-**الحل:** `limit = 50` افتراضي، يمكن رفعه.
-
----
-
-### 🟡 #7 — `normalizeArabic` يتكرر لكل بحث
-
-**المشكلة:** عند كل بحث، بيتحسب من الأول لكل نشاط.
-**الحل:** تخزين مؤقت (cache) للـ normalized strings.
-
----
-
-### 🟡 #8 — مفيش "ترتيب حسب النية"
-
-**المشكلة:**
-- "مطعم قريب" → مفيش ترتيب بالمسافة
-- "أحسن مطعم" → مفيش ترتيب بالتقييم
-- "مفتوح دلوقتي" → مفيش ترتيب بالحالة
-
-**الحل:** كشف النية → ترتيب مختلف حسبها.
-
----
-
-### 🔴 #9 — تعارض body.overflow بين OrderModal + MenuSlider
-
-**الملفات:** components/order-modal.tsx + components/menu-slider.tsx
-**المشكلة:**
-1. المستخدم يفتح OrderModal → body.overflow = hidden
-2. المستخدم يفتح MenuSlider → body.overflow = hidden (نفس القيمة)
-3. المستخدم يقفل MenuSlider → body.overflow = '' ← BUG!
-4. OrderModal لسه مفتوح بس الصفحة بقت scrollable من ورا
-
-**الأثر:** تجربة مكسورة.
-
-**الحل:** MenuSlider ما يتحكمش بـ body.overflow. OrderModal هو المسؤول الوحيد.
-
----
-
-### 🔴 #10 — cooldown logic في providers.ts خطير
-
-**الملف:** lib/ai/providers.ts
-**المشكلة:**
-- msg.includes('5') — كتير أوي. أي error فيه رقم 5 → cooldown غلط
-- msg.includes('timeout') — AbortError ما فيهاش كلمة timeout
-
-**الأثر:** providers بتتحط في cooldown بدون سبب.
-
-**الحل:** regex دقيق + فحص AbortError.
-
----
-
-### 🟠 #11 — onClose غير مستقر في MenuSlider
-
-**الملف:** components/menu-slider.tsx
-**المشكلة:** onClose={() => setMenuOpen(false)} بتعمل function جديدة كل render.
-**الحل:** useCallback في OrderModal.
-
----
-
-### 🟠 #12 — مفيش حد للـ limit في smartSearch
-
-**الملف:** lib/search/index.ts
-**الحل:** Math.min(limit, 200)
-
----
-
-### 🟡 #13 — MenuSlider مش بيوقف الـ scroll
-
-**الحل:** overscroll-behavior: contain في CSS.
-
----
-
-
-### 🔴 #14 — admin/businesses — زر "موافقة" ميت
-
-**الملف:** app/admin/businesses/page.tsx سطر 85-88
-**المشكلة:** <button> بدون onClick أو form action. مش مربوط بأي server action.
-**الأثر:** الأدمن ما يقدرش يوافق على أي نشاط من الواجهة.
-**الحل:** server action + form + optimistic UI.
-
----
-
-### 🔴 #15 — admin/businesses — مفيش "رفض"
-
-**المشكلة:** بس "موافقة". لو النشاط وحش أو مش مطابق.
-**الحل:** زر "رفض" + سبب إلزامي + إشعار للتاجر.
-
----
-
-### 🟠 #16 — admin/businesses — مفيش إدارة المنشورين
-
-**المشكلة:** الصفحة تعرض pending بس. الأنشطة المنشورة مش ظاهرة.
-**الحل:** tabs (pending | published | archived) + بحث + فلترة.
-
----
-
-### 🟠 #17 — admin/businesses — مفيش bulk actions
-
-**المشكلة:** 20 نشاط = 20 ضغطة منفصلة.
-**الحل:** checkboxes + "وافق على المحدد" + "ارفض المحدد".
-
----
-
-### 🟠 #18 — admin/businesses — description مقطوع
-
-**المشكلة:** `.slice(0, 150)` — الأدمين مش شايف التفاصيل كاملة.
-**الحل:** صفحة تفاصيل منفصلة /admin/businesses/[id] + كل حاجة.
-
----
-
-### 🟡 #19 — admin/businesses — مفيش بحث/فلترة
-
-**المشكلة:** 100+ نشاط = توهان.
-**الحل:** بحث بالاسم + فلترة (نوع/منطقة/تاريخ) + ترتيب.
-
----
-
-### 🟡 #20 — admin/businesses — <img> بدون optimization
-
-**الحل:** WmImage أو next/image.
-
----
-
-
-_(يُحدَّث باستمرار)_
+_(يُحدَّث باستمرار أثناء التطوير)_
 
 ---
 
@@ -199,4 +48,4 @@ _(يُحدَّث باستمرار)_
 
 ---
 
-آخر تحديث: 2026-10-05
+آخر تحديث: 2026-10-06
