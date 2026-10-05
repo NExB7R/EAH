@@ -1,0 +1,154 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.card {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+}
+
+.cardDanger {
+  background: rgba(252, 165, 165, 0.08);
+  border-color: rgba(252, 165, 165, 0.3);
+}
+
+.cardWarn {
+  background: rgba(253, 186, 116, 0.08);
+  border-color: rgba(253, 186, 116, 0.3);
+}
+
+.cardLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  margin-bottom: 6px;
+}
+
+.cardValue {
+  font-size: 1.75rem;
+  font-weight: 900;
+  font-family: 'Tajawal', sans-serif;
+  color: var(--text-primary);
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.pathList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pathItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.12);
+}
+
+.pathCode {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  direction: ltr;
+}
+
+.pathCount {
+  font-weight: 800;
+  color: var(--purple-3, #c77dff);
+  font-size: 0.85rem;
+}
+
+.errorList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.errorItem {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  border-inline-start-width: 3px;
+}
+
+.sev_low {
+  border-inline-start-color: var(--text-tertiary, #a29db5);
+}
+.sev_medium {
+  border-inline-start-color: var(--purple-2, #a855f7);
+}
+.sev_high {
+  border-inline-start-color: var(--orange, #fdba74);
+}
+.sev_critical {
+  border-inline-start-color: var(--red, #fca5a5);
+}
+
+.errorHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.severity {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.12);
+  color: var(--text-primary);
+}
+
+.source {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+.errorPath {
+  font-family: ui-monospace, monospace;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  direction: ltr;
+}
+
+.time {
+  margin-inline-start: auto;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.errorMsg {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  word-break: break-word;
+}

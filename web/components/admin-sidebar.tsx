@@ -16,6 +16,7 @@ import {
   TargetIcon,
   TagIcon,
   SparklesIcon,
+  HeartIcon,
 } from './icons'
 import styles from './admin-sidebar.module.css'
 
@@ -92,6 +93,7 @@ const SECTIONS: Section[] = [
       { href: '/admin/announcements', label: 'الإعلانات الإدارية', Icon: BroadcastIcon },
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
+      { href: '/admin/health', label: 'صحة النظام', Icon: HeartIcon },
       { href: '/admin/settings', label: 'الإعدادات', Icon: SettingsIcon },
     ],
   },
