@@ -20,6 +20,7 @@
 - **Pages:** /help + /roadmap + /account/loyalty + /account/referral
 - **Merchant:** QR + Offers CRUD
 - **Polish Pass:** DistanceBadge + Trust tiers + Nav mobile + Featured gold
+- **System Health Monitor:** error logging + `/admin/health` + 90-day retention cron (2026-10-06)
 
 ### Changed
 - React: 19.3.0 → 19.2.8 (compat with Next 16.3.8)

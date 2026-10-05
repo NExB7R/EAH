@@ -554,3 +554,37 @@
 ### آخر commit
 - d00486a (users page)
 - 91c9d96 (moderation migration)
+
+
+## 2026-10-06 — Session 13: System Health Monitor
+
+### اللي اتحقق
+
+**Feature: System Health Monitor (commit `d465eca`)**
+- Migration: `system_errors` table + 4 indexes + RLS (admin-only)
+- `lib/logging/errors.ts` — server-side logger (service role)
+- `lib/logging/client.ts` — client reporter (fire-and-forget)
+- `app/api/log-error/route.ts` — client → server endpoint
+- `app/error.tsx` — route-level error boundary
+- `app/global-error.tsx` — root boundary (html/body)
+- `app/admin/health/page.tsx` + `health.module.css`
+- `lib/data/health.ts` — summary + recent errors
+- `app/api/cron/cleanup-errors/route.ts` — retention 90 يوم
+- `web/vercel.json` — cron مسجّل (3 صباحاً يومياً)
+- `components/admin-sidebar.tsx` — أضفنا رابط "صحة النظام"
+
+**الملفات الجديدة:** 11 · **معدّل:** 1
+
+### Docs Sync (§35)
+- NEXT_SESSION: شيل مهام خلصت + System Health Monitor
+- CODE_REVIEW_LOG: شطب كل #1-#20 (المُصلحة)
+- PROGRESS: شيل `featured-rotation.ts` (مش موجود)
+
+### Commits
+- `36c6312` docs sync (1818d73)
+- `fd7ca1e` docs sync (NEXT_SESSION + CODE_REVIEW_LOG)
+- `a3b9087` docs cleanup (stale refs)
+- `d465eca` feat: system error monitor
+
+### اللي معلق
+- كل المهام في `NEXT_SESSION.md` (حرجة + قريب)

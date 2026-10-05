@@ -7,7 +7,7 @@
 
 ## الحالة العامة
 
-**آخر commit كود:** `1818d73`
+**آخر commit كود:** `d465eca`
 **الفرع:** main
 **الإصدار:** v1.0.0
 
@@ -79,6 +79,8 @@
 | الملف | الحالة |
 |------|--------|
 | app/api/track-action/route.ts | ✅ |
+| app/api/log-error/route.ts | ✅ |
+| app/api/cron/cleanup-errors/route.ts | ✅ |
 
 ---
 
@@ -142,6 +144,7 @@
 | app/admin/reports/page.tsx | ✅ |
 | app/admin/settings/page.tsx | ✅ |
 | app/admin/insights/page.tsx | ✅ |
+| app/admin/health/page.tsx | ✅ |
 
 ---
 
@@ -234,6 +237,9 @@
 |------|--------|
 | lib/ai/business-advisor.ts | ✅ |
 | lib/ai/storage.ts | ✅ |
+| lib/logging/errors.ts | ✅ |
+| lib/logging/client.ts | ✅ |
+| lib/data/health.ts | ✅ |
 | lib/supabase/public.ts | ✅ |
 | lib/supabase/server.ts | ✅ |
 | lib/supabase/service.ts | ✅ |
