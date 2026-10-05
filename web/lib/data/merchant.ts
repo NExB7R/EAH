@@ -125,17 +125,17 @@ export async function getMerchantStats(businessId: string): Promise<MerchantStat
       .from('page_view_events')
       .select('*', { count: 'exact', head: true })
       .eq('business_id', businessId)
-      .gte('created_at', todayStart),
+      .gte('occurred_at', todayStart),
     supabase
       .from('page_view_events')
       .select('*', { count: 'exact', head: true })
       .eq('business_id', businessId)
-      .gte('created_at', weekStart),
+      .gte('occurred_at', weekStart),
     supabase
       .from('page_view_events')
       .select('*', { count: 'exact', head: true })
       .eq('business_id', businessId)
-      .gte('created_at', monthStart),
+      .gte('occurred_at', monthStart),
     supabase
       .from('order_requests')
       .select('*', { count: 'exact', head: true })
