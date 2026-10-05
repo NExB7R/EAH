@@ -289,6 +289,21 @@ upgrade-insecure-requests
 
 ---
 
+## 8. Known Dev-Only Vulnerabilities (مقبولة)
+
+### braces — Stack exhaustion DoS
+- **CVE:** GHSA-vfj7-8cjw-p6xm
+- **الخطورة:** High (لكن dev-only)
+- **المصدر:** `eslint-config-next` → `@next/eslint-plugin-next` → `fast-glob` → `micromatch` → `braces`
+- **التأثير:** ❌ صفر في production — المكتبة بتُستخدم فقط في eslint (dev tools)
+- **الحل:** انتظار تحديث من Next.js (مش عندنا)
+- **القرار:** مقبول مؤقتاً — مش بيأثر على الإنتاج
+- **التاريخ:** 2026-10-05
+
+**ملاحظة:** أي ثغرة جديدة → تُراجع أسبوعياً. لو الـ production affected → إصلاح فوري.
+
+---
+
 ## 8. المراجع
 
 - AI_CONTRACT.md — القواعد
