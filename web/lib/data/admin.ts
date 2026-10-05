@@ -22,8 +22,13 @@ export type PendingBusiness = {
   cover_image_url: string | null
   description: string | null
   created_at: string
+  is_published: boolean
+  rejection_reason: string | null
+  rejected_at: string | null
   owner: { display_name: string; phone: string | null } | null
 }
+
+export type BusinessStatus = 'pending' | 'published' | 'rejected' | 'all'
 
 export async function getAdminStats(): Promise<AdminStats> {
   const supabase = await createClient()
@@ -60,16 +65,29 @@ export async function getAdminStats(): Promise<AdminStats> {
   }
 }
 
-export async function getPendingBusinesses(limit = 50): Promise<PendingBusiness[]> {
+export async function getBusinessesByStatus(
+  status: BusinessStatus = 'pending',
+  limit = 100,
+): Promise<PendingBusiness[]> {
   const supabase = await createClient()
 
-  // 1. الأنشطة المعلقة (بدون owner phone)
-  const { data: businesses } = await supabase
+  let query = supabase
     .from('businesses')
-    .select('id, name, slug, business_type, area, cover_image_url, description, created_at')
-    .eq('is_published', false)
+    .select(
+      'id, name, slug, business_type, area, cover_image_url, description, created_at, is_published, rejection_reason, rejected_at',
+    )
     .order('created_at', { ascending: false })
     .limit(limit)
+
+  if (status === 'pending') {
+    query = query.eq('is_published', false).is('rejected_at', null)
+  } else if (status === 'published') {
+    query = query.eq('is_published', true)
+  } else if (status === 'rejected') {
+    query = query.not('rejected_at', 'is', null)
+  }
+
+  const { data: businesses } = await query
 
   if (!businesses || businesses.length === 0) return []
 
