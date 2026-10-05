@@ -1,4 +1,4 @@
-import { StoreIcon, CheckCircleIcon } from '@/components/icons'
+import { StoreIcon, CheckCircleIcon, PlusIcon } from '@/components/icons'
 import { getBusinessesByStatus, type BusinessStatus } from '@/lib/data/admin'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
@@ -34,6 +34,13 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
       />
 
       {/* Tabs */}
+      <div className={styles.topBar}>
+        <Link href="/admin/businesses/new" className={styles.newBtn}>
+          <PlusIcon size={14} />
+          <span>نشاط جديد</span>
+        </Link>
+      </div>
+
       <nav className={styles.tabs} aria-label="تصفية الأنشطة">
         {TABS.map((tab) => {
           const active = tab.key === validStatus

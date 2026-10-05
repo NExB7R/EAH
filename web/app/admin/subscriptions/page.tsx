@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { CrownGoldIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
+import SubscriptionRow from './subscription-row'
 import styles from './subscriptions.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -33,14 +34,6 @@ async function getSubscriptions(): Promise<Row[]> {
   return (data ?? []) as unknown as Row[]
 }
 
-const STATUS_LABEL: Record<string, { label: string; tone: string }> = {
-  pending: { label: 'معلّق', tone: 'pending' },
-  trial: { label: 'تجربة', tone: 'trial' },
-  active: { label: 'نشط', tone: 'active' },
-  expired: { label: 'منتهي', tone: 'expired' },
-  cancelled: { label: 'ملغي', tone: 'cancelled' },
-}
-
 export default async function AdminSubscriptionsPage() {
   const subs = await getSubscriptions()
 
@@ -52,31 +45,9 @@ export default async function AdminSubscriptionsPage() {
         <EmptyState Icon={CrownGoldIcon} title="مفيش اشتراكات" />
       ) : (
         <div className={styles.list}>
-          {subs.map((s) => {
-            const meta = STATUS_LABEL[s.status] ?? { label: s.status, tone: 'pending' }
-            const expires = s.expires_at ? new Date(s.expires_at).toLocaleDateString('ar-EG') : '—'
-            return (
-              <div key={s.id} className={styles.row}>
-                <div className={styles.icon}>
-                  <CrownGoldIcon size={20} />
-                </div>
-                <div className={styles.body}>
-                  <div className={styles.name}>{s.business?.name ?? '—'}</div>
-                  <div className={styles.meta}>
-                    <span>{s.plan?.name_ar ?? '—'}</span>
-                    <span className={styles.dot}>·</span>
-                    <span>{s.plan?.price_egp ?? 0} ج.م</span>
-                    <span className={styles.dot}>·</span>
-                    <span>ينتهي: {expires}</span>
-                  </div>
-                </div>
-                <span className={`${styles.status} ${styles[meta.tone]}`}>
-                  {s.is_trial && '✨ '}
-                  {meta.label}
-                </span>
-              </div>
-            )
-          })}
+          {subs.map((s) => (
+            <SubscriptionRow key={s.id} sub={s} />
+          ))}
         </div>
       )}
     </div>

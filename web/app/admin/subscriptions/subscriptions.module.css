@@ -81,3 +81,139 @@
   background: rgba(168, 85, 247, 0.06);
   border: 1px solid rgba(168, 85, 247, 0.2);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Actions + Forms
+   ═══════════════════════════════════════════════════════════ */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.approveForm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.checkLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.checkLabel input[type='checkbox'] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--purple-2, #a855f7);
+  cursor: pointer;
+}
+
+.daysInput {
+  width: 70px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  background: rgba(7, 2, 13, 0.4);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.okBtn,
+.dangerBtn,
+.cancelBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 180ms ease;
+}
+
+.okBtn {
+  background: rgba(37, 211, 102, 0.12);
+  border-color: rgba(37, 211, 102, 0.35);
+  color: #a8f0b8;
+}
+.okBtn:hover:not(:disabled) {
+  background: rgba(37, 211, 102, 0.2);
+}
+
+.dangerBtn {
+  background: rgba(252, 165, 165, 0.12);
+  border-color: rgba(252, 165, 165, 0.35);
+  color: #ffc8c8;
+}
+.dangerBtn:hover:not(:disabled) {
+  background: rgba(252, 165, 165, 0.2);
+}
+
+.cancelBtn {
+  background: transparent;
+  border-color: rgba(168, 85, 247, 0.25);
+  color: var(--text-tertiary);
+}
+.cancelBtn:hover:not(:disabled) {
+  color: var(--text-primary);
+}
+
+.okBtn:disabled,
+.dangerBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  color: #ffc8c8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.rejectForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.rejectInput {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  background: rgba(7, 2, 13, 0.4);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.78rem;
+  resize: vertical;
+  min-height: 50px;
+}
+
+.rejectInput:focus {
+  outline: none;
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+.rejectActions {
+  display: flex;
+  gap: 8px;
+}
