@@ -21,7 +21,7 @@
 - اقرأ قبل التعديل
 
 ## الحالة:
-v1.0.0 · commit cdb827d
+v1.0.0 · commit 1818d73
 
 ## التفاصيل الكاملة:
 docs/NEW_CHAT_MESSAGE.md
