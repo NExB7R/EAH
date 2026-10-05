@@ -2,8 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { requireAdmin } from '@/lib/auth/admin'
 
 type Result = { ok: true } | { ok: false; error: string }
 
@@ -16,25 +16,6 @@ const schema = z.object({
   new_signups_enabled: z.boolean(),
   featured_enabled: z.boolean(),
 })
-
-async function requireAdmin() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return { ok: false as const, error: 'غير مصرح' }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  if (profile?.role !== 'admin' && profile?.role !== 'super_admin') {
-    return { ok: false as const, error: 'غير مصرح' }
-  }
-  return { ok: true as const, supabase, userId: user.id }
-}
 
 export async function saveSettings(formData: FormData): Promise<Result> {
   const ctx = await requireAdmin()

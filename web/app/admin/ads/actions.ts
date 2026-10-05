@@ -2,7 +2,7 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
-import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/auth/admin'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Ads Actions
@@ -14,25 +14,6 @@ const approveSchema = z.object({
   startsAt: z.string().optional().or(z.literal('')),
   endsAt: z.string().optional().or(z.literal('')),
 })
-
-async function requireAdmin() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return { ok: false as const, error: 'غير مصرح' }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  if (profile?.role !== 'admin' && profile?.role !== 'super_admin') {
-    return { ok: false as const, error: 'غير مصرح' }
-  }
-  return { ok: true as const, supabase, userId: user.id }
-}
 
 export async function approveAd(id: string, formData: FormData): Promise<Result> {
   const ctx = await requireAdmin()

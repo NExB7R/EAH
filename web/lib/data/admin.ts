@@ -212,8 +212,8 @@ export async function getAudienceCounts(): Promise<AudienceCount[]> {
     { count: premium },
   ] = await Promise.all([
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'customer'),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('role', 'merchant'),
+    supabase.from('user_roles').select('*', { count: 'exact', head: true }).eq('role', 'customer'),
+    supabase.from('user_roles').select('*', { count: 'exact', head: true }).eq('role', 'merchant'),
     supabase
       .from('profiles')
       .select('*', { count: 'exact', head: true })
@@ -233,9 +233,13 @@ export async function getAudienceCounts(): Promise<AudienceCount[]> {
 export async function getUserIdsForAudience(type: AudienceType): Promise<string[]> {
   const supabase = await createClient()
 
+  if (type === 'customers' || type === 'merchants') {
+    const role = type === 'customers' ? 'customer' : 'merchant'
+    const { data } = await supabase.from('user_roles').select('user_id').eq('role', role)
+    return (data ?? []).map((r) => r.user_id as string)
+  }
+
   let q = supabase.from('profiles').select('id')
-  if (type === 'customers') q = q.eq('role', 'customer')
-  if (type === 'merchants') q = q.eq('role', 'merchant')
   if (type === 'verified') q = q.not('phone_verified_at', 'is', null)
   if (type === 'premium') q = q.eq('is_premium', true)
 

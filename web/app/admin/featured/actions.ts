@@ -1,32 +1,14 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { createClient } from '@/lib/supabase/server'
+import type { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/auth/admin'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Featured Actions
 // ═══════════════════════════════════════════════════════════
 
 type ActionResult = { ok: true } | { ok: false; error: string }
-
-async function requireAdmin() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return { supabase, ok: false as const, error: 'غير مصرح' }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  if (profile?.role !== 'admin' && profile?.role !== 'super_admin') {
-    return { supabase, ok: false as const, error: 'غير مصرح' }
-  }
-  return { supabase, ok: true as const }
-}
 
 async function logAudit(
   supabase: Awaited<ReturnType<typeof createClient>>,

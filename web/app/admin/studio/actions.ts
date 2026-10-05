@@ -1,30 +1,11 @@
 'use server'
 
 import { revalidatePath, updateTag } from 'next/cache'
-import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { DEFAULT_FLAGS, type FeatureFlags } from '@/lib/features'
+import { requireAdmin } from '@/lib/auth/admin'
 
 type Result = { ok: true } | { ok: false; error: string }
-
-async function requireAdmin() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return { ok: false as const, error: 'غير مصرح' }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  if (profile?.role !== 'admin' && profile?.role !== 'super_admin') {
-    return { ok: false as const, error: 'غير مصرح' }
-  }
-  return { ok: true as const, supabase, userId: user.id }
-}
 
 export async function saveFeatureFlags(flags: FeatureFlags): Promise<Result> {
   const ctx = await requireAdmin()
