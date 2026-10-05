@@ -134,7 +134,7 @@ export async function adjustTrust(userId: string, formData: FormData): Promise<R
 
   // سجل في audit
   await ctx.supabase.from('audit_logs').insert({
-    actor_id: ctx.userId,
+    actor_user_id: ctx.userId,
     action: 'adjust_trust',
     entity_type: 'profile',
     entity_id: userId,

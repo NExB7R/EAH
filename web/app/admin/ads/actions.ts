@@ -3,6 +3,7 @@
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
+import { logAudit } from '@/lib/logging/audit'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Ads Actions
@@ -41,6 +42,13 @@ export async function approveAd(id: string, formData: FormData): Promise<Result>
 
   if (error) return { ok: false, error: error.message }
 
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'ad.approve',
+    entityType: 'advertisement',
+    entityId: id,
+  })
+
   revalidatePath('/admin/ads')
   revalidateTag('ads', 'default')
   return { ok: true, id }
@@ -60,6 +68,14 @@ export async function rejectAd(id: string, reason: string): Promise<Result> {
 
   if (error) return { ok: false, error: error.message }
 
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'ad.reject',
+    entityType: 'advertisement',
+    entityId: id,
+    metadata: { reason: reason || null },
+  })
+
   revalidatePath('/admin/ads')
   revalidateTag('ads', 'default')
   return { ok: true, id }
@@ -75,6 +91,13 @@ export async function pauseAd(id: string): Promise<Result> {
     .eq('id', id)
 
   if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'ad.pause',
+    entityType: 'advertisement',
+    entityId: id,
+  })
 
   revalidatePath('/admin/ads')
   revalidateTag('ads', 'default')
@@ -92,6 +115,13 @@ export async function resumeAd(id: string): Promise<Result> {
 
   if (error) return { ok: false, error: error.message }
 
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'ad.resume',
+    entityType: 'advertisement',
+    entityId: id,
+  })
+
   revalidatePath('/admin/ads')
   revalidateTag('ads', 'default')
   return { ok: true, id }
@@ -104,6 +134,13 @@ export async function deleteAd(id: string): Promise<Result> {
   const { error } = await ctx.supabase.from('advertisements').delete().eq('id', id)
 
   if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'ad.delete',
+    entityType: 'advertisement',
+    entityId: id,
+  })
 
   revalidatePath('/admin/ads')
   revalidateTag('ads', 'default')

@@ -4,6 +4,7 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { createNotification } from '@/lib/notifications/server'
 import { requireAdmin } from '@/lib/auth/admin'
+import { logAudit } from '@/lib/logging/audit'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Moderation Actions
@@ -28,6 +29,13 @@ export async function approveReview(reviewId: string): Promise<Result> {
     .eq('id', reviewId)
 
   if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'review.approve',
+    entityType: 'business_review',
+    entityId: reviewId,
+  })
 
   revalidatePath('/admin/moderation')
   revalidateTag('admin-badges', 'default')
@@ -82,6 +90,14 @@ export async function rejectReview(reviewId: string, formData: FormData): Promis
     })
   }
 
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'review.reject',
+    entityType: 'business_review',
+    entityId: reviewId,
+    metadata: { reason: parsed.data.reason },
+  })
+
   revalidatePath('/admin/moderation')
   revalidateTag('admin-badges', 'default')
   return { ok: true }
@@ -96,6 +112,13 @@ export async function deleteReview(reviewId: string): Promise<Result> {
   const { error } = await ctx.supabase.from('business_reviews').delete().eq('id', reviewId)
 
   if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'review.delete',
+    entityType: 'business_review',
+    entityId: reviewId,
+  })
 
   revalidatePath('/admin/moderation')
   revalidateTag('admin-badges', 'default')

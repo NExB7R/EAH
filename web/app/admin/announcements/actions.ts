@@ -3,6 +3,7 @@
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
+import { logAudit } from '@/lib/logging/audit'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Announcements Actions
@@ -61,6 +62,14 @@ export async function createAnnouncement(formData: FormData): Promise<ActionResu
 
   if (error) return { ok: false, error: error.message }
 
+  await logAudit(auth.supabase, {
+    actorUserId: auth.userId,
+    action: 'announcement.create',
+    entityType: 'announcement',
+    entityId: data.id,
+    metadata: { title: d.title, theme: d.theme },
+  })
+
   revalidatePath('/admin/announcements')
   revalidateTag('announcements', 'default')
   return { ok: true, id: data.id }
@@ -77,6 +86,13 @@ export async function toggleAnnouncement(id: string, active: boolean): Promise<A
 
   if (error) return { ok: false, error: error.message }
 
+  await logAudit(auth.supabase, {
+    actorUserId: auth.userId,
+    action: active ? 'announcement.activate' : 'announcement.deactivate',
+    entityType: 'announcement',
+    entityId: id,
+  })
+
   revalidatePath('/admin/announcements')
   revalidateTag('announcements', 'default')
   return { ok: true, id }
@@ -89,6 +105,13 @@ export async function deleteAnnouncement(id: string): Promise<ActionResult> {
   const { error } = await auth.supabase.from('announcements').delete().eq('id', id)
 
   if (error) return { ok: false, error: error.message }
+
+  await logAudit(auth.supabase, {
+    actorUserId: auth.userId,
+    action: 'announcement.delete',
+    entityType: 'announcement',
+    entityId: id,
+  })
 
   revalidatePath('/admin/announcements')
   revalidateTag('announcements', 'default')

@@ -21,7 +21,7 @@ async function logAudit(
     data: { user },
   } = await supabase.auth.getUser()
   await supabase.from('audit_logs').insert({
-    actor_id: user?.id ?? null,
+    actor_user_id: user?.id ?? null,
     action,
     entity_type: 'business_subscription',
     entity_id: targetId,

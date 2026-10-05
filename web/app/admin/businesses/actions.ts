@@ -4,6 +4,7 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { createNotification } from '@/lib/notifications/server'
 import { requireAdmin } from '@/lib/auth/admin'
+import { logAudit } from '@/lib/logging/audit'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Businesses Actions
@@ -47,6 +48,14 @@ export async function approveBusiness(businessId: string): Promise<Result> {
       deepLink: `/businesses/${biz.slug}`,
     })
   }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.approve',
+    entityType: 'business',
+    entityId: businessId,
+    metadata: { name: biz.name },
+  })
 
   revalidatePath('/admin/businesses')
   revalidateTag('admin-badges', 'default')
@@ -103,6 +112,14 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
     })
   }
 
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.reject',
+    entityType: 'business',
+    entityId: businessId,
+    metadata: { name: biz.name, reason: parsed.data.reason },
+  })
+
   revalidatePath('/admin/businesses')
   revalidateTag('admin-badges', 'default')
   return { ok: true }
@@ -120,6 +137,13 @@ export async function archiveBusiness(businessId: string): Promise<Result> {
     .eq('id', businessId)
 
   if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.archive',
+    entityType: 'business',
+    entityId: businessId,
+  })
 
   revalidatePath('/admin/businesses')
   revalidateTag('admin-badges', 'default')
@@ -145,6 +169,13 @@ export async function republishBusiness(businessId: string): Promise<Result> {
 
   if (error) return { ok: false, error: error.message }
 
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.republish',
+    entityType: 'business',
+    entityId: businessId,
+  })
+
   revalidatePath('/admin/businesses')
   revalidateTag('admin-badges', 'default')
   revalidateTag('businesses', 'default')
@@ -157,9 +188,23 @@ export async function deleteBusiness(businessId: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const { data: biz } = await ctx.supabase
+    .from('businesses')
+    .select('name')
+    .eq('id', businessId)
+    .maybeSingle()
+
   const { error } = await ctx.supabase.from('businesses').delete().eq('id', businessId)
 
   if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.delete',
+    entityType: 'business',
+    entityId: businessId,
+    metadata: { name: biz?.name ?? null },
+  })
 
   revalidatePath('/admin/businesses')
   revalidateTag('admin-badges', 'default')
@@ -233,6 +278,14 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     return { ok: false, error: error?.message ?? 'فشل الإنشاء' }
   }
 
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.create',
+    entityType: 'business',
+    entityId: created.id,
+    metadata: { name: d.name, business_type: d.business_type },
+  })
+
   revalidatePath('/admin/businesses')
   revalidateTag('admin-badges', 'default')
   revalidateTag('businesses', 'default')
@@ -284,6 +337,14 @@ export async function updateBusiness(businessId: string, formData: FormData): Pr
     .eq('id', businessId)
 
   if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.update',
+    entityType: 'business',
+    entityId: businessId,
+    metadata: { name: d.name },
+  })
 
   revalidatePath('/admin/businesses')
   revalidatePath(`/admin/businesses/${businessId}`)
