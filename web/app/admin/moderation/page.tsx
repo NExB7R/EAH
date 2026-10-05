@@ -14,7 +14,7 @@ async function getReviews(): Promise<ModerationReview[]> {
     .from('business_reviews')
     .select(
       `
-      id, comment, rating, status, created_at, flagged_reason,
+      id, comment, taste, value_for_money, speed, experience, status, created_at, flagged_reason,
       user:profiles(display_name),
       business:businesses(name, slug)
     `,
@@ -31,10 +31,16 @@ async function getReviews(): Promise<ModerationReview[]> {
       { name: string; slug: string }[] | { name: string; slug: string } | null
     const user = Array.isArray(u) ? (u[0] ?? null) : u
     const biz = Array.isArray(b) ? (b[0] ?? null) : b
+    const parts = [r.taste, r.value_for_money, r.speed, r.experience].filter(
+      (v): v is number => typeof v === 'number' && v > 0,
+    )
+    const rating =
+      parts.length > 0 ? Math.round(parts.reduce((a, b) => a + b, 0) / parts.length) : 0
+
     return {
       id: r.id,
       comment: r.comment,
-      rating: (r.rating as number) ?? 0,
+      rating,
       status: r.status,
       created_at: r.created_at,
       flagged_reason: r.flagged_reason,

@@ -60,7 +60,11 @@ export const getLiveStats = unstable_cache(
         .from('page_view_events')
         .select('*', { count: 'exact', head: true })
         .gte('occurred_at', todayIso),
-      supabase.from('business_reviews').select('rating').eq('status', 'approved').limit(5000),
+      supabase
+        .from('business_reviews')
+        .select('taste, value_for_money, speed, experience')
+        .eq('status', 'approved')
+        .limit(5000),
       supabase.from('businesses').select('area').eq('is_published', true).not('area', 'is', null),
       supabase
         .from('page_view_events')
@@ -69,10 +73,23 @@ export const getLiveStats = unstable_cache(
         .limit(30000),
     ])
 
-    const ratings = (reviewsData ?? [])
-      .map((r) => (r as { rating: number | null }).rating)
-      .filter((r): r is number => typeof r === 'number' && r > 0)
-    const avgRating = ratings.length > 0 ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 0
+    type ReviewRow = {
+      taste: number | null
+      value_for_money: number | null
+      speed: number | null
+      experience: number | null
+    }
+    const allScores: number[] = []
+    for (const r of (reviewsData ?? []) as ReviewRow[]) {
+      const vals = [r.taste, r.value_for_money, r.speed, r.experience].filter(
+        (v): v is number => typeof v === 'number' && v > 0,
+      )
+      if (vals.length > 0) {
+        allScores.push(vals.reduce((a, b) => a + b, 0) / vals.length)
+      }
+    }
+    const avgRating =
+      allScores.length > 0 ? allScores.reduce((a, b) => a + b, 0) / allScores.length : 0
 
     const monthlyUsersSet = new Set(
       (monthVisitors ?? [])

@@ -95,7 +95,7 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
 
     supabase
       .from('business_reviews')
-      .select('rating: experience, comment, sentiment, created_at')
+      .select('taste, value_for_money, speed, experience, comment, sentiment, created_at')
       .eq('business_id', businessId)
       .gte('created_at', since)
       .order('created_at', { ascending: false })
@@ -167,7 +167,11 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
   const comments: BusinessMetrics['comments'] = []
 
   for (const r of reviews ?? []) {
-    const rating = (r.rating as number) ?? 0
+    const parts = [r.taste, r.value_for_money, r.speed, r.experience].filter(
+      (v): v is number => typeof v === 'number' && v > 0,
+    )
+    const rating =
+      parts.length > 0 ? Math.round(parts.reduce((a, b) => a + b, 0) / parts.length) : 0
     if (rating > 0 && rating <= 5) {
       ratingDist[String(rating)] = (ratingDist[String(rating)] ?? 0) + 1
     }
@@ -190,7 +194,12 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
   const avgRating =
     reviewsTotal > 0
       ? Math.round(
-          ((reviews ?? []).reduce((sum, r) => sum + ((r.rating as number) ?? 0), 0) /
+          ((reviews ?? []).reduce((sum, r) => {
+            const parts = [r.taste, r.value_for_money, r.speed, r.experience].filter(
+              (v): v is number => typeof v === 'number' && v > 0,
+            )
+            return sum + (parts.length > 0 ? parts.reduce((a, b) => a + b, 0) / parts.length : 0)
+          }, 0) /
             reviewsTotal) *
             10,
         ) / 10
