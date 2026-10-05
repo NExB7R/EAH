@@ -125,7 +125,7 @@ SET search_path = public
 AS $$
 BEGIN
   IF TG_OP = 'INSERT' THEN
-    INSERT INTO public.audit_logs (actor_id, action, entity_type, entity_id, metadata)
+    INSERT INTO public.audit_logs (actor_user_id, action, entity_type, entity_id, metadata)
     VALUES (
       NEW.user_id,
       'review.created',
@@ -138,7 +138,7 @@ BEGIN
       )
     );
   ELSIF TG_OP = 'UPDATE' AND OLD.status != NEW.status THEN
-    INSERT INTO public.audit_logs (actor_id, action, entity_type, entity_id, metadata)
+    INSERT INTO public.audit_logs (actor_user_id, action, entity_type, entity_id, metadata)
     VALUES (
       COALESCE(NEW.merchant_reply_by, NEW.user_id),
       'review.status_changed',
