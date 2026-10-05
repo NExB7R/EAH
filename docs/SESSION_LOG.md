@@ -474,3 +474,83 @@
 ### النتيجة
 - Splash يفضل في DOM بس مخفي — React يشتغل عادي
 - مفيش DOM reconciliation errors
+
+## 2026-10-05/06 — Session 12: Admin Panel Deep Cleanup
+
+### §26 — اتصحح
+- v1.0.0 + commit صحيح في PROGRESS.md
+- AI_HANDOFF + NEW_CHAT_MESSAGE يشاوروا على PROGRESS
+
+### Git نظيف
+- فرع v2 اتحذف (main بس)
+- 15 tag قديم + 13 فرع اتحذفوا
+- GitHub default = main
+- Vercel Production = main
+
+### OG Images (SEO)
+- app/opengraph-image.tsx + twitter-image.tsx
+- app/businesses/[slug]/opengraph-image.tsx
+- fonts محلية (Tajawal-Black + Bold)
+- metadataBase + openGraph + twitter في layout
+
+### Cleanup كبير
+- knip = صفر dead code
+- server-only مضاف
+- 19 دالة/type ميتة + 4 أيقونات + 2 ملفات
+- docs: SCHEMA.sql + migrations-archive + AI_AGENT.md + SECURITY_PLAN.md + TODO.md اتحذفوا
+- SECURITY.md اتدمج
+
+### Features جديدة (كاملة)
+1. **Announcements** — جدول + banner + admin UI + flag
+2. **Branches CRUD** للتاجر (add/edit/delete/setPrimary/toggle)
+3. **/suggest ديناميكي** — بناءً على تاريخ المستخدم
+4. **Ads system** — merchant request + admin approve + display
+5. **Live Stats Bar** — 8 عدادات فوق الفوتر (Swiss 2026)
+6. **Menu Slider + Screenshot** — في OrderModal
+7. **Multi-Provider AI** (Groq → Gemini → OpenRouter → Cerebras)
+8. **4 AI Tools جديدة** (offers/trending/categories/by-area)
+
+### Security Hardening
+- Prompt Injection protection
+- Input sanitization (SQL wildcards)
+- History validation
+- Security guard في system prompt
+
+### Search v2 (Smart Search)
+- Word-level matching
+- Fuzzy matching (typos)
+- Intent detection (open_now/quality/nearby)
+- Secondary ranking (is_open + trust + rating)
+- Cache + أرقام عربية
+
+### Admin Panel (4 صفحات نظيفة)
+- **dashboard** — كروت clickable
+- **businesses** — tabs (pending/published/rejected/all) + approve/reject/archive/republish
+- **users** — tabs + search + ban/unban/role/trust/premium
+- **moderation** — approve/reject/delete مع سبب
+- **layout** — cache 30s للأرقام
+
+### Migrations جديدة (3)
+- 2026-10-04-announcements
+- 2026-10-04-advertisements
+- 2026-10-05-business-rejection
+- 2026-10-06-review-moderation-fields
+
+### Docs جديدة
+- VISION.md (615+ سطر — كل الرؤية 2026-2027)
+- USER_PREFERENCES.md (تفضيلات المالك)
+- SECRETS_PLAN.md (خطة rotate)
+- CODE_REVIEW_LOG.md (20+ مشكلة موثقة)
+- NEXT_SESSION.md (المهام المتبقية)
+
+### قرارات مهمة (اتسجلت في VISION)
+- باقة العميل المميز = 100 ج.م/شهر
+- Verified ≠ مدفوع — مكتسب بالمعايير
+- العميل العادي بدون تحكم خصوصية
+- رؤية التوسع: 20+ نوع نشاط
+- Voice-First للعميل
+- Telegram Bot (مؤجل للأساس)
+
+### آخر commit
+- d00486a (users page)
+- 91c9d96 (moderation migration)
