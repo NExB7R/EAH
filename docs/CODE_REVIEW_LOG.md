@@ -86,6 +86,55 @@
 
 ---
 
+### 🔴 #9 — تعارض body.overflow بين OrderModal + MenuSlider
+
+**الملفات:** components/order-modal.tsx + components/menu-slider.tsx
+**المشكلة:**
+1. المستخدم يفتح OrderModal → body.overflow = hidden
+2. المستخدم يفتح MenuSlider → body.overflow = hidden (نفس القيمة)
+3. المستخدم يقفل MenuSlider → body.overflow = '' ← BUG!
+4. OrderModal لسه مفتوح بس الصفحة بقت scrollable من ورا
+
+**الأثر:** تجربة مكسورة.
+
+**الحل:** MenuSlider ما يتحكمش بـ body.overflow. OrderModal هو المسؤول الوحيد.
+
+---
+
+### 🔴 #10 — cooldown logic في providers.ts خطير
+
+**الملف:** lib/ai/providers.ts
+**المشكلة:**
+- msg.includes('5') — كتير أوي. أي error فيه رقم 5 → cooldown غلط
+- msg.includes('timeout') — AbortError ما فيهاش كلمة timeout
+
+**الأثر:** providers بتتحط في cooldown بدون سبب.
+
+**الحل:** regex دقيق + فحص AbortError.
+
+---
+
+### 🟠 #11 — onClose غير مستقر في MenuSlider
+
+**الملف:** components/menu-slider.tsx
+**المشكلة:** onClose={() => setMenuOpen(false)} بتعمل function جديدة كل render.
+**الحل:** useCallback في OrderModal.
+
+---
+
+### 🟠 #12 — مفيش حد للـ limit في smartSearch
+
+**الملف:** lib/search/index.ts
+**الحل:** Math.min(limit, 200)
+
+---
+
+### 🟡 #13 — MenuSlider مش بيوقف الـ scroll
+
+**الحل:** overscroll-behavior: contain في CSS.
+
+---
+
 _(يُحدَّث باستمرار)_
 
 ---

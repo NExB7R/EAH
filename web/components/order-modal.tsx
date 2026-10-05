@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useTransition } from 'react'
+import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import { CloseIcon, GiftIcon, CheckCircleIcon, AlertIcon, ImageIcon } from './icons'
 import MenuSlider from './menu-slider'
 import { submitOrder } from '@/app/businesses/[slug]/order-actions'
@@ -38,6 +38,7 @@ export default function OrderModal({
   const [msg, setMsg] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = useCallback(() => setMenuOpen(false), [])
   const formRef = useRef<HTMLFormElement>(null)
 
   useEffect(() => {
@@ -211,7 +212,7 @@ export default function OrderModal({
 
       <MenuSlider
         open={menuOpen}
-        onClose={() => setMenuOpen(false)}
+        onClose={closeMenu}
         images={menuImages}
         offers={offers}
         businessName={businessName}

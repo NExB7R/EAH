@@ -53,10 +53,8 @@ export default function MenuSlider({ open, onClose, images, offers = [], busines
       if (e.key === 'ArrowRight') prev()
     }
     window.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
     return () => {
       window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
     }
   }, [open, next, prev, onClose])
 

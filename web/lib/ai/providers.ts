@@ -163,8 +163,12 @@ export async function chatCompletion(
       errors.push(`${provider.name}: ${msg}`)
       console.warn(`[AI] ${provider.name} failed:`, msg)
 
-      // لو 429 (rate limit) أو 5xx → نعمل cooldown
-      if (msg.includes('429') || msg.includes('5') || msg.includes('timeout')) {
+      // cooldown دقيق: rate limit + server errors + abort
+      const isRateLimit = /\b429\b/.test(msg)
+      const isServerError = /\b(500|502|503|504)\b/.test(msg)
+      const isAbort = (err as Error).name === 'AbortError'
+
+      if (isRateLimit || isServerError || isAbort) {
         markFailure(provider)
       }
     }

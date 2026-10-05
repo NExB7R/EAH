@@ -180,6 +180,7 @@ function detectIntent(query: string): SearchIntent {
 // ─── الدالة الرئيسية ───
 
 export function smartSearch(businesses: Business[], rawQuery: string, limit = 100): SearchResult[] {
+  const safeLimit = Math.min(Math.max(1, limit), 200)
   const q = rawQuery.trim()
   if (!q) return []
 
@@ -259,5 +260,5 @@ export function smartSearch(businesses: Business[], rawQuery: string, limit = 10
     return b.score - a.score
   })
 
-  return results.slice(0, limit)
+  return results.slice(0, safeLimit)
 }
