@@ -62,8 +62,22 @@ export default async function AdminDashboard() {
       tone: 'purple',
       href: '/admin/users',
     },
-    { key: 'orders', label: 'الطلبات', value: stats.totalOrders, Icon: FileTextIcon, tone: 'gold' },
-    { key: 'reviews', label: 'التقييمات', value: stats.totalReviews, Icon: StarIcon, tone: 'gold' },
+    {
+      key: 'orders',
+      label: 'الطلبات',
+      value: stats.totalOrders,
+      Icon: FileTextIcon,
+      tone: 'gold',
+      href: '/admin/analytics',
+    },
+    {
+      key: 'reviews',
+      label: 'التقييمات',
+      value: stats.totalReviews,
+      Icon: StarIcon,
+      tone: 'gold',
+      href: '/admin/moderation',
+    },
   ]
 
   const QUICK_LINKS = [
@@ -140,7 +154,7 @@ export default async function AdminDashboard() {
         </header>
 
         <div className={styles.activityGrid}>
-          <div className={styles.activityCard}>
+          <Link href="/admin/businesses" className={styles.activityCard}>
             <span className={styles.activityIcon}>
               <StoreIcon size={20} />
             </span>
@@ -148,9 +162,10 @@ export default async function AdminDashboard() {
               <span className={styles.activityLabel}>أنشطة جديدة</span>
               <span className={styles.activityValue}>{recent.newBusinesses}</span>
             </div>
-          </div>
+            <ArrowLeftIcon size={14} className={styles.chev} />
+          </Link>
 
-          <div className={styles.activityCard}>
+          <Link href="/admin/users" className={styles.activityCard}>
             <span className={styles.activityIcon}>
               <UserIcon size={20} />
             </span>
@@ -158,9 +173,10 @@ export default async function AdminDashboard() {
               <span className={styles.activityLabel}>مستخدمين جداد</span>
               <span className={styles.activityValue}>{recent.newUsers}</span>
             </div>
-          </div>
+            <ArrowLeftIcon size={14} className={styles.chev} />
+          </Link>
 
-          <div className={styles.activityCard}>
+          <Link href="/admin/analytics" className={styles.activityCard}>
             <span className={styles.activityIcon}>
               <FileTextIcon size={20} />
             </span>
@@ -168,9 +184,10 @@ export default async function AdminDashboard() {
               <span className={styles.activityLabel}>طلبات</span>
               <span className={styles.activityValue}>{recent.newOrders}</span>
             </div>
-          </div>
+            <ArrowLeftIcon size={14} className={styles.chev} />
+          </Link>
 
-          <div className={styles.activityCard}>
+          <Link href="/admin/moderation" className={styles.activityCard}>
             <span className={styles.activityIcon}>
               <StarIcon size={20} />
             </span>
@@ -178,7 +195,8 @@ export default async function AdminDashboard() {
               <span className={styles.activityLabel}>تقييمات</span>
               <span className={styles.activityValue}>{recent.newReviews}</span>
             </div>
-          </div>
+            <ArrowLeftIcon size={14} className={styles.chev} />
+          </Link>
         </div>
       </section>
     </div>
