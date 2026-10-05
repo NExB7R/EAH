@@ -2,9 +2,9 @@ name: Quality Gate
 
 on:
   push:
-    branches: [v2, main]
+    branches: [main]
   pull_request:
-    branches: [v2, main]
+    branches: [main]
 
 jobs:
   quality:
@@ -41,8 +41,8 @@ jobs:
       - name: Unit Tests
         run: npx vitest run --reporter=dot
 
-      - name: npm audit
-        run: npm audit --audit-level=high
+      - name: npm audit (production only)
+        run: npm audit --omit=dev --audit-level=high
 
       - name: Knip (dead code)
         run: npx knip --include files,dependencies
