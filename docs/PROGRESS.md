@@ -244,7 +244,6 @@
 | الملف | الحالة |
 |------|--------|
 | lib/engagement.ts | ✅ |
-| lib/featured-rotation.ts | ⚠️ مش مستخدم |
 | lib/ranking.ts | ✅ |
 | lib/nav-items.ts | ✅ |
 | lib/hooks/use-fair-rotation.ts | ✅ |
