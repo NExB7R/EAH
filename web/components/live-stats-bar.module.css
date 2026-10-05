@@ -1,0 +1,247 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Live Stats Bar (2026 Swiss Style)
+   ═══════════════════════════════════════════════════════════ */
+
+.wrap {
+  position: relative;
+  width: 100%;
+  padding: 32px 20px;
+  background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.03) 50%, transparent);
+  border-top: 1px solid rgba(168, 85, 247, 0.08);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.08);
+}
+
+/* ─── Desktop Grid ─── */
+
+.desktopGrid {
+  display: none;
+  max-width: 1280px;
+  margin: 0 auto;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+/* ─── Counter ─── */
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(10, 5, 20, 0.55);
+  border: 1px solid rgba(168, 85, 247, 0.12);
+  transition:
+    border-color 200ms ease,
+    transform 200ms ease;
+}
+
+.counter:hover {
+  transform: translateY(-2px);
+  border-color: rgba(168, 85, 247, 0.28);
+}
+
+.iconWrap {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.1);
+  color: #c77dff;
+}
+
+.textWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.value {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #f4f2fa;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #a29db5;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sublabel {
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: #c77dff;
+  letter-spacing: 0.3px;
+}
+
+/* ─── Accents ─── */
+
+.purple .iconWrap {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c77dff;
+}
+
+.gold .iconWrap {
+  background: rgba(232, 199, 154, 0.12);
+  color: #e8c79a;
+}
+
+.gold .sublabel {
+  color: #e8c79a;
+}
+
+.teal .iconWrap {
+  background: rgba(85, 231, 209, 0.12);
+  color: #55e7d1;
+}
+
+.teal .sublabel {
+  color: #55e7d1;
+}
+
+.orange .iconWrap {
+  background: rgba(253, 186, 116, 0.12);
+  color: #fdba74;
+}
+
+.orange .sublabel {
+  color: #fdba74;
+}
+
+/* ─── Mobile Slider ─── */
+
+.mobileSlider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.mobileSlider .counter {
+  width: 100%;
+  justify-content: center;
+  padding: 20px 24px;
+  background: rgba(10, 5, 20, 0.7);
+  border-color: rgba(168, 85, 247, 0.2);
+  animation: slide-in 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobileSlider .counter .iconWrap {
+  width: 48px;
+  height: 48px;
+}
+
+.mobileSlider .counter .value {
+  font-size: 1.6rem;
+}
+
+.mobileSlider .counter .label {
+  font-size: 0.75rem;
+}
+
+/* ─── Dots ─── */
+
+.dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 280px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(168, 85, 247, 0.25);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    width 200ms ease,
+    background 200ms ease;
+}
+
+.dotActive {
+  width: 20px;
+  background: linear-gradient(90deg, #9d4edd, #c77dff);
+}
+
+/* ─── Animations ─── */
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Desktop (md+) ─── */
+
+@media (min-width: 768px) {
+  .desktopGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .mobileSlider {
+    display: none;
+  }
+
+  .wrap {
+    padding: 36px 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktopGrid {
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+  }
+
+  .counter {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px 12px;
+    gap: 10px;
+  }
+
+  .textWrap {
+    align-items: center;
+  }
+
+  .iconWrap {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+/* ─── Reduced motion ─── */
+
+@media (prefers-reduced-motion: reduce) {
+  .counter,
+  .dot,
+  .mobileSlider .counter {
+    transition: none;
+    animation: none;
+  }
+}
