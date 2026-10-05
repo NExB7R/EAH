@@ -282,3 +282,44 @@
     text-align: center;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Request states
+   ═══════════════════════════════════════════════════════════ */
+
+.requestOk {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(85, 231, 209, 0.1);
+  border: 1px solid rgba(85, 231, 209, 0.3);
+  color: var(--teal, #55e7d1);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.requestErr {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  color: #ffc8c8;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.planCta {
+  cursor: pointer;
+}
+
+.planCta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

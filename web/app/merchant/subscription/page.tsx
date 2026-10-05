@@ -13,6 +13,7 @@ import { getMyBusiness, getMySubscription } from '@/lib/data/merchant'
 import { getSubscriptionPlans, FEATURE_LABEL } from '@/lib/data/subscriptions'
 import type { PlanFeatureKey } from '@/lib/data/subscriptions'
 import AccountPageHeader from '@/components/account-page-header'
+import SubscribeButton from './subscribe-button'
 import styles from './subscription.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -139,9 +140,7 @@ export default async function MerchantSubscriptionPage() {
               </ul>
 
               {!isCurrent && (
-                <Link href="/pricing" className={styles.planCta}>
-                  {isFree ? 'ابدأ بالأساسية' : 'اشترك'}
-                </Link>
+                <SubscribeButton planCode={plan.code} planName={plan.name_ar} isFree={isFree} />
               )}
             </div>
           )
