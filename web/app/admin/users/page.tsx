@@ -1,33 +1,35 @@
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { UserIcon, StarIcon } from '@/components/icons'
+import { UserIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
-import Avatar from '@/components/avatar'
+import UserRow from './user-row'
+import type { AdminUser, UserFilter } from './types'
 import styles from './users.module.css'
 
 export const dynamic = 'force-dynamic'
 
-type Row = {
-  id: string
-  display_name: string
-  avatar_url: string | null
-  phone: string | null
-  phone_verified_at: string | null
-  trust_score: number
-  trust_tier: string
-  created_at: string
-  role: string | null
+type Props = {
+  searchParams: Promise<{ filter?: string; q?: string }>
 }
 
-async function getUsers(): Promise<Row[]> {
+const TABS: { key: UserFilter; label: string }[] = [
+  { key: 'all', label: 'الكل' },
+  { key: 'customers', label: 'عملاء' },
+  { key: 'merchants', label: 'تجار' },
+  { key: 'admins', label: 'أدمن' },
+  { key: 'premium', label: 'مميز' },
+  { key: 'banned', label: 'محظورين' },
+]
+
+async function getUsers(filter: UserFilter, q: string): Promise<AdminUser[]> {
   const supabase = await createClient()
 
-  // 1. profiles عبر RPC (يسمح للأدمن يشوف phone)
+  // 1) profiles عبر RPC (للأدمن)
   const { data: profiles } = await supabase.rpc('admin_get_profiles')
-
   if (!profiles) return []
 
-  // 2. الأدوار من user_roles
+  // 2) الأدوار
   const { data: roles } = await supabase
     .from('user_roles')
     .select('user_id, role')
@@ -41,78 +43,109 @@ async function getUsers(): Promise<Row[]> {
     rolesMap.set(r.user_id as string, r.role as string)
   }
 
-  return profiles.map((p: Record<string, unknown>) => ({
+  // 3) بناء القائمة
+  let users: AdminUser[] = profiles.map((p: Record<string, unknown>) => ({
     id: p.id as string,
-    display_name: p.display_name as string,
+    display_name: (p.display_name as string) ?? '—',
     avatar_url: p.avatar_url as string | null,
     phone: p.phone as string | null,
     phone_verified_at: p.phone_verified_at as string | null,
-    trust_score: p.trust_score as number,
-    trust_tier: p.trust_tier as string,
+    trust_score: (p.trust_score as number) ?? 0,
+    trust_tier: (p.trust_tier as string) ?? 'new',
     created_at: p.created_at as string,
     role: rolesMap.get(p.id as string) ?? null,
+    banned_until: (p.banned_until as string | null) ?? null,
+    ban_reason: (p.ban_reason as string | null) ?? null,
+    is_premium: (p.is_premium as boolean) ?? false,
+    verified_at: (p.verified_at as string | null) ?? null,
   }))
+
+  // 4) فلترة
+  const now = new Date()
+
+  if (filter === 'customers') users = users.filter((u) => !u.role || u.role === 'customer')
+  else if (filter === 'merchants') users = users.filter((u) => u.role === 'merchant')
+  else if (filter === 'admins')
+    users = users.filter((u) => u.role === 'admin' || u.role === 'super_admin')
+  else if (filter === 'premium') users = users.filter((u) => u.is_premium)
+  else if (filter === 'banned')
+    users = users.filter((u) => u.banned_until && new Date(u.banned_until) > now)
+
+  // 5) بحث
+  const query = q.trim().toLowerCase()
+  if (query) {
+    users = users.filter(
+      (u) => u.display_name.toLowerCase().includes(query) || (u.phone ?? '').includes(query),
+    )
+  }
+
+  // 6) limit
+  return users.slice(0, 200)
 }
 
-const TIER_LABEL: Record<string, string> = {
-  trusted: 'موثوق',
-  verified: 'موثّق',
-  new: 'جديد',
-}
+export default async function AdminUsersPage({ searchParams }: Props) {
+  const params = await searchParams
+  const filter = (params.filter as UserFilter) ?? 'all'
+  const q = params.q ?? ''
+  const validFilter = TABS.some((t) => t.key === filter) ? filter : 'all'
 
-const ROLE_LABEL: Record<string, string> = {
-  customer: 'عميل',
-  merchant: 'تاجر',
-  admin: 'أدمن',
-  super_admin: 'سوبر أدمن',
-}
-
-export default async function AdminUsersPage() {
-  const users = await getUsers()
+  const users = await getUsers(validFilter, q)
 
   return (
     <div>
       <AccountPageHeader title="المستخدمين" description={`${users.length} مستخدم`} />
 
+      {/* Tabs */}
+      <nav className={styles.tabs} aria-label="تصفية المستخدمين">
+        {TABS.map((tab) => {
+          const active = tab.key === validFilter
+          return (
+            <Link
+              key={tab.key}
+              href={`/admin/users?filter=${tab.key}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+              className={`${styles.tab} ${active ? styles.tabActive : ''}`}
+              aria-current={active ? 'page' : undefined}
+            >
+              {tab.label}
+            </Link>
+          )
+        })}
+      </nav>
+
+      {/* Search */}
+      <form action="/admin/users" method="get" className={styles.searchForm}>
+        <input type="hidden" name="filter" value={validFilter} />
+        <input
+          type="text"
+          name="q"
+          defaultValue={q}
+          placeholder="ابحث بالاسم أو الرقم..."
+          className={styles.searchInput}
+          dir="rtl"
+        />
+        {q && (
+          <Link href={`/admin/users?filter=${validFilter}`} className={styles.clearBtn}>
+            مسح
+          </Link>
+        )}
+      </form>
+
       {users.length === 0 ? (
-        <EmptyState Icon={UserIcon} title="مفيش مستخدمين" />
+        <EmptyState
+          Icon={UserIcon}
+          title={q ? 'مفيش نتائج' : 'مفيش مستخدمين'}
+          description={q ? `مفيش حد اسمه أو رقمه فيه "${q}"` : 'لسه محدش سجل'}
+        />
       ) : (
         <div className={styles.list}>
-          {users.map((u) => {
-            const date = new Date(u.created_at).toLocaleDateString('ar-EG')
-            const roleLabel = u.role ? (ROLE_LABEL[u.role] ?? u.role) : 'عميل'
-            return (
-              <div key={u.id} className={styles.row}>
-                <Avatar
-                  displayName={u.display_name}
-                  avatarUrl={u.avatar_url}
-                  role={(u.role as never) ?? 'customer'}
-                  phoneVerified={!!u.phone_verified_at}
-                  size="md"
-                />
-                <div className={styles.body}>
-                  <div className={styles.nameRow}>
-                    <span className={styles.name}>{u.display_name}</span>
-                    <span className={`${styles.role} ${styles['role_' + (u.role ?? 'customer')]}`}>
-                      {roleLabel}
-                    </span>
-                  </div>
-                  <div className={styles.meta}>
-                    {u.phone && <span>{u.phone}</span>}
-                    <span className={styles.dot}>·</span>
-                    <span>{TIER_LABEL[u.trust_tier] ?? u.trust_tier}</span>
-                    <span className={styles.dot}>·</span>
-                    <span>انضم {date}</span>
-                  </div>
-                </div>
-                <span className={styles.trust}>
-                  <StarIcon size={12} />
-                  {u.trust_score}
-                </span>
-              </div>
-            )
-          })}
+          {users.map((u) => (
+            <UserRow key={u.id} user={u} />
+          ))}
         </div>
+      )}
+
+      {users.length >= 200 && (
+        <p className={styles.limitHint}>بيظهر أول 200 فقط — استخدم البحث أو الفلتر للتضييق</p>
       )}
     </div>
   )

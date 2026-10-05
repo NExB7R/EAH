@@ -1,0 +1,193 @@
+'use server'
+
+import { revalidatePath, revalidateTag } from 'next/cache'
+import { z } from 'zod'
+import { createClient } from '@/lib/supabase/server'
+
+// ═══════════════════════════════════════════════════════════
+// EAH — Admin Users Actions
+// ═══════════════════════════════════════════════════════════
+
+type Result = { ok: true } | { ok: false; error: string }
+
+async function requireAdmin() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { ok: false as const, error: 'غير مصرح' }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  if (profile?.role !== 'admin' && profile?.role !== 'super_admin') {
+    return { ok: false as const, error: 'غير مصرح' }
+  }
+  return { ok: true as const, supabase, userId: user.id }
+}
+
+// ─── Ban / Unban ───
+
+const banSchema = z.object({
+  days: z.coerce.number().int().min(1).max(3650),
+  reason: z.string().min(5).max(300),
+})
+
+export async function banUser(userId: string, formData: FormData): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  if (userId === ctx.userId) return { ok: false, error: 'مش ممكن تحظر نفسك' }
+
+  const parsed = banSchema.safeParse({
+    days: Number(formData.get('days') ?? 0),
+    reason: String(formData.get('reason') ?? '').trim(),
+  })
+
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues[0]?.message ?? 'بيانات غير صحيحة' }
+  }
+
+  const until = new Date()
+  until.setDate(until.getDate() + parsed.data.days)
+
+  const { error } = await ctx.supabase
+    .from('profiles')
+    .update({
+      banned_until: until.toISOString(),
+      ban_reason: parsed.data.reason,
+    })
+    .eq('id', userId)
+
+  if (error) return { ok: false, error: error.message }
+
+  revalidatePath('/admin/users')
+  revalidateTag('admin-badges', 'default')
+  return { ok: true }
+}
+
+export async function unbanUser(userId: string): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const { error } = await ctx.supabase
+    .from('profiles')
+    .update({ banned_until: null, ban_reason: null })
+    .eq('id', userId)
+
+  if (error) return { ok: false, error: error.message }
+
+  revalidatePath('/admin/users')
+  revalidateTag('admin-badges', 'default')
+  return { ok: true }
+}
+
+// ─── Change Role ───
+
+const roleSchema = z.enum(['customer', 'merchant', 'admin', 'super_admin'])
+
+export async function changeUserRole(userId: string, role: string): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  if (userId === ctx.userId) return { ok: false, error: 'مش ممكن تغير دورك' }
+
+  const parsed = roleSchema.safeParse(role)
+  if (!parsed.success) return { ok: false, error: 'دور غير صحيح' }
+
+  // شيل الأدوار القديمة
+  await ctx.supabase.from('user_roles').delete().eq('user_id', userId)
+
+  // ضيف الدور الجديد
+  const { error } = await ctx.supabase
+    .from('user_roles')
+    .insert({ user_id: userId, role: parsed.data })
+
+  if (error) return { ok: false, error: error.message }
+
+  revalidatePath('/admin/users')
+  return { ok: true }
+}
+
+// ─── Adjust Trust ───
+
+const trustSchema = z.object({
+  delta: z.coerce.number().int().min(-100).max(100),
+  reason: z.string().min(3).max(200),
+})
+
+export async function adjustTrust(userId: string, formData: FormData): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const parsed = trustSchema.safeParse({
+    delta: Number(formData.get('delta') ?? 0),
+    reason: String(formData.get('reason') ?? '').trim(),
+  })
+
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues[0]?.message ?? 'بيانات غير صحيحة' }
+  }
+
+  // جيب القيمة الحالية
+  const { data: profile } = await ctx.supabase
+    .from('profiles')
+    .select('trust_score')
+    .eq('id', userId)
+    .maybeSingle()
+
+  if (!profile) return { ok: false, error: 'المستخدم مش موجود' }
+
+  const current = (profile.trust_score as number) ?? 0
+  const next = Math.max(0, Math.min(100, current + parsed.data.delta))
+
+  const { error } = await ctx.supabase
+    .from('profiles')
+    .update({ trust_score: next, trust_updated_at: new Date().toISOString() })
+    .eq('id', userId)
+
+  if (error) return { ok: false, error: error.message }
+
+  // سجل في audit
+  await ctx.supabase.from('audit_logs').insert({
+    actor_id: ctx.userId,
+    action: 'adjust_trust',
+    entity_type: 'profile',
+    entity_id: userId,
+    metadata: { delta: parsed.data.delta, from: current, to: next, reason: parsed.data.reason },
+  })
+
+  revalidatePath('/admin/users')
+  return { ok: true }
+}
+
+// ─── Premium Toggle ───
+
+export async function togglePremium(userId: string): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const { data: profile } = await ctx.supabase
+    .from('profiles')
+    .select('is_premium')
+    .eq('id', userId)
+    .maybeSingle()
+
+  if (!profile) return { ok: false, error: 'المستخدم مش موجود' }
+
+  const next = !profile.is_premium
+  const until = next ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() : null
+
+  const { error } = await ctx.supabase
+    .from('profiles')
+    .update({ is_premium: next, premium_until: until })
+    .eq('id', userId)
+
+  if (error) return { ok: false, error: error.message }
+
+  revalidatePath('/admin/users')
+  return { ok: true }
+}
