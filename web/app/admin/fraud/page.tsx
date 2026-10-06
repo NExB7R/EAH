@@ -6,6 +6,7 @@ import {
   getFlaggedReviews,
   getRecentTrustEvents,
   getWantedUsers,
+  getMultiAccountIps,
 } from '@/lib/data/fraud'
 import Link from 'next/link'
 import styles from './fraud.module.css'
@@ -35,11 +36,12 @@ const EVENT_LABEL: Record<string, string> = {
 }
 
 export default async function AdminFraudPage() {
-  const [stats, flagged, events, wanted] = await Promise.all([
+  const [stats, flagged, events, wanted, multiIps] = await Promise.all([
     getFraudStats(),
     getFlaggedReviews(),
     getRecentTrustEvents(30),
     getWantedUsers(20),
+    getMultiAccountIps(30),
   ])
 
   return (
@@ -128,6 +130,30 @@ export default async function AdminFraudPage() {
                 </li>
               )
             })}
+          </ul>
+        )}
+      </section>
+
+      {/* Multi-Account IPs */}
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>عناوين IP فيها 3+ حسابات (30 يوم)</h2>
+        {multiIps.length === 0 ? (
+          <EmptyState
+            Icon={ShieldCheckIcon}
+            title="مفيش عناوين مريبة"
+            description="مفيش عناوين IP فيها حسابات متعددة."
+          />
+        ) : (
+          <ul className={styles.list}>
+            {multiIps.map((m) => (
+              <li key={m.ip_hash_prefix} className={styles.item}>
+                <div className={styles.itemHead}>
+                  <code className={styles.ipHash}>{m.ip_hash_prefix}…</code>
+                  <span className={styles.countTag}>{m.accounts_count} حساب</span>
+                  <span className={styles.time}>{timeAgo(m.latest_signup)}</span>
+                </div>
+              </li>
+            ))}
           </ul>
         )}
       </section>

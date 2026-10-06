@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { getHashedIp } from '@/lib/auth/ip'
 import { signupSchema, loginSchema, recoverSchema, toE164 } from '@/lib/validations/auth'
 import { authLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
@@ -117,6 +118,9 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
     }
   }
 
+  // ─── IP hash (multi-account detection) ───
+  const signupIpHash = await getHashedIp()
+
   // ─── signUp ───
   const { error } = await supabase.auth.signUp({
     email: fakeEmail,
@@ -130,6 +134,7 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
         default_address: default_address || null,
         default_latitude: default_latitude ?? null,
         default_longitude: default_longitude ?? null,
+        signup_ip_hash: signupIpHash,
       },
     },
   })

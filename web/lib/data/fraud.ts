@@ -106,3 +106,17 @@ export async function getFraudStats(): Promise<FraudStats> {
     trustEvents24h: events.count ?? 0,
   }
 }
+
+// ─── IPs فيها 3+ حسابات (Multi-Account) ───
+export type MultiAccountIp = {
+  ip_hash_prefix: string
+  accounts_count: number
+  latest_signup: string
+}
+
+export async function getMultiAccountIps(days = 30): Promise<MultiAccountIp[]> {
+  const supabase = await createClient()
+  const { data, error } = await supabase.rpc('get_multi_account_ips', { p_days: days })
+  if (error) return []
+  return (data ?? []) as MultiAccountIp[]
+}

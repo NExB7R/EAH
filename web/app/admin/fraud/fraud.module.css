@@ -200,3 +200,23 @@
   font-size: 0.7rem;
   color: var(--text-muted);
 }
+
+.ipHash {
+  font-family: ui-monospace, monospace;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  background: rgba(168, 85, 247, 0.08);
+  padding: 2px 8px;
+  border-radius: 6px;
+  direction: ltr;
+}
+
+.countTag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(252, 165, 165, 0.15);
+  border: 1px solid rgba(252, 165, 165, 0.4);
+  color: #ffc8c8;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
