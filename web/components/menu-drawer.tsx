@@ -49,6 +49,7 @@ type MenuItem = {
   Icon: React.ComponentType<{ size?: number; className?: string }>
 }
 
+// ─── Public (للجميع) ───
 const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/', label: 'الرئيسية', Icon: HomeIcon },
   { href: '/explore', label: 'اكتشف', Icon: CompassIcon },
@@ -58,20 +59,37 @@ const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/new', label: 'الجديد', Icon: SparklesIcon },
   { href: '/nearby', label: 'قريب منك', Icon: LocationIcon },
   { href: '/suggest', label: 'رشحلى', Icon: TargetIcon },
-  { href: '/updates', label: 'التحديثات', Icon: SparklesIcon },
 ]
 
-const USER_ITEMS: MenuItem[] = [
+// ─── Customer (مسجل) ───
+const CUSTOMER_ITEMS: MenuItem[] = [
+  { href: '/account', label: 'حسابي', Icon: LayoutDashboardIcon },
+  { href: '/account/orders', label: 'طلباتي', Icon: FileTextIcon },
+  { href: '/account/favorites', label: 'المفضلات', Icon: StarIcon },
+  { href: '/account/following', label: 'المتابعات', Icon: StoreIcon },
+  { href: '/account/badges', label: 'الشارات', Icon: SparklesIcon },
+  { href: '/account/points', label: 'النقاط', Icon: GiftIcon },
+  { href: '/account/referral', label: 'دعوة أصحابك', Icon: ShareIcon },
   { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
 ]
 
-const MERCHANT_ITEMS: MenuItem[] = [
+// ─── Merchant (لو عنده نشاط) ───
+const MERCHANT_SECTION: MenuItem[] = [
+  { href: '/merchant', label: 'لوحة نشاطي', Icon: LayoutDashboardIcon },
+  { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon },
+  { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
+  { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon },
+  { href: '/merchant/qr', label: 'QR النشاط', Icon: TargetIcon },
+]
+
+// ─── Guest Merchant (مش مسجل نشاط) ───
+const MERCHANT_APPLY: MenuItem[] = [
   { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
   { href: '/pricing', label: 'الباقات', Icon: GiftIcon },
   { href: '/advertise', label: 'أعلن معانا', Icon: TrendingUpIcon },
-  { href: '/merchant', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
 ]
 
+// ─── Admin ───
 const ADMIN_ITEMS: MenuItem[] = [{ href: '/admin', label: 'لوحة الأدمن', Icon: ShieldCheckIcon }]
 
 const BOTTOM_ITEMS: MenuItem[] = [
@@ -112,6 +130,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
 
   const isLoggedIn = !!session
   const isAdmin = session?.role === 'admin' || session?.role === 'super_admin'
+  const isMerchant = session?.role === 'merchant'
 
   const handleShare = async () => {
     if (typeof navigator === 'undefined' || !navigator.share) return
@@ -202,12 +221,16 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             ))}
           </ul>
 
-          {/* User */}
+          {/* Customer — مسجل */}
           {isLoggedIn && (
             <>
               <div className={styles.divider} />
+              <div className={styles.sectionLabel}>
+                <LayoutDashboardIcon size={14} />
+                <span>حسابي</span>
+              </div>
               <ul className={styles.list}>
-                {USER_ITEMS.map(({ href, label, Icon }) => (
+                {CUSTOMER_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
                     <Link href={href} className={styles.item} onClick={onClose}>
                       <span className={styles.itemIcon}>
@@ -221,41 +244,83 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             </>
           )}
 
-          {/* Merchant section — للكل */}
-          <div className={styles.divider} />
-          <div className={styles.sectionLabel}>
-            <StoreIcon size={14} />
-            <span>للتجار</span>
-          </div>
-          <ul className={styles.list}>
-            {MERCHANT_ITEMS.slice(0, 3).map(({ href, label, Icon }) => (
-              <li key={href}>
-                <Link href={href} className={styles.item} onClick={onClose}>
-                  <span className={styles.itemIcon}>
-                    <Icon size={20} />
-                  </span>
-                  <span>{label}</span>
-                </Link>
-              </li>
-            ))}
-            {isLoggedIn &&
-              session?.role === 'merchant' &&
-              MERCHANT_ITEMS.slice(3).map(({ href, label, Icon }) => (
-                <li key={href}>
-                  <Link href={href} className={styles.item} onClick={onClose}>
-                    <span className={styles.itemIcon}>
-                      <Icon size={20} />
-                    </span>
-                    <span>{label}</span>
-                  </Link>
-                </li>
-              ))}
-          </ul>
+          {/* Merchant dashboard — لو عنده نشاط */}
+          {isMerchant && (
+            <>
+              <div className={styles.divider} />
+              <div className={styles.sectionLabel}>
+                <StoreIcon size={14} />
+                <span>نشاطي</span>
+              </div>
+              <ul className={styles.list}>
+                {MERCHANT_SECTION.map(({ href, label, Icon }) => (
+                  <li key={href}>
+                    <Link href={href} className={styles.item} onClick={onClose}>
+                      <span className={styles.itemIcon}>
+                        <Icon size={20} />
+                      </span>
+                      <span>{label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {/* Merchant apply — للمسجل بدون نشاط */}
+          {isLoggedIn && !isMerchant && (
+            <>
+              <div className={styles.divider} />
+              <div className={styles.sectionLabel}>
+                <StoreIcon size={14} />
+                <span>سجّل نشاطك</span>
+              </div>
+              <ul className={styles.list}>
+                {MERCHANT_APPLY.map(({ href, label, Icon }) => (
+                  <li key={href}>
+                    <Link href={href} className={styles.item} onClick={onClose}>
+                      <span className={styles.itemIcon}>
+                        <Icon size={20} />
+                      </span>
+                      <span>{label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+
+          {/* Guest — للزوار (بدون تسجيل) */}
+          {!isLoggedIn && (
+            <>
+              <div className={styles.divider} />
+              <div className={styles.sectionLabel}>
+                <StoreIcon size={14} />
+                <span>للتجار</span>
+              </div>
+              <ul className={styles.list}>
+                {MERCHANT_APPLY.map(({ href, label, Icon }) => (
+                  <li key={href}>
+                    <Link href={href} className={styles.item} onClick={onClose}>
+                      <span className={styles.itemIcon}>
+                        <Icon size={20} />
+                      </span>
+                      <span>{label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
 
           {/* Admin */}
           {isAdmin && (
             <>
               <div className={styles.divider} />
+              <div className={styles.sectionLabel}>
+                <ShieldCheckIcon size={14} />
+                <span>الإدارة</span>
+              </div>
               <ul className={styles.list}>
                 {ADMIN_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>

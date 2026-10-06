@@ -13,15 +13,17 @@ import Avatar from '@/components/avatar'
 import ImpactCard from '@/components/impact-card'
 import { getUserSession } from '@/lib/data/user'
 import { getAccountStats, getFullProfile } from '@/lib/data/account'
+import { getMyBusiness } from '@/lib/data/merchant'
 import styles from './page.module.css'
 
 export default async function AccountPage() {
   const session = await getUserSession()
   if (!session) redirect('/auth?next=/account')
 
-  const [profile, stats] = await Promise.all([
+  const [profile, stats, business] = await Promise.all([
     getFullProfile(session.userId),
     getAccountStats(session.userId),
+    getMyBusiness(session.userId),
   ])
 
   if (!profile) redirect('/auth?next=/account')
@@ -108,6 +110,31 @@ export default async function AccountPage() {
         wantedLevel={profile.wanted_level ?? 0}
         isPremium={profile.is_premium}
       />
+
+      {/* Merchant CTA — لو عنده نشاط */}
+      {business ? (
+        <Link href="/merchant" className={styles.merchantCard}>
+          <span className={styles.merchantIcon}>
+            <StoreIcon size={22} />
+          </span>
+          <div className={styles.merchantBody}>
+            <span className={styles.merchantLabel}>لوحة نشاطك</span>
+            <span className={styles.merchantName}>{business.name}</span>
+          </div>
+          <ArrowLeftIcon size={16} />
+        </Link>
+      ) : (
+        <Link href="/merchant/apply" className={styles.merchantApplyCard}>
+          <span className={styles.merchantIcon}>
+            <StoreIcon size={22} />
+          </span>
+          <div className={styles.merchantBody}>
+            <span className={styles.merchantLabel}>عندك نشاط؟</span>
+            <span className={styles.merchantName}>سجّله مجاناً — بدون عمولة</span>
+          </div>
+          <ArrowLeftIcon size={16} />
+        </Link>
+      )}
 
       <section className={styles.stats}>
         {STATS.map(({ key, label, value, href, Icon, tone }) => (
