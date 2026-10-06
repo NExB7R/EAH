@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import WmImage from './wm-image'
+import DistanceBadge from './distance-badge'
 import {
   TrendingUpIcon,
   ArrowLeftIcon,
@@ -38,9 +39,11 @@ const TYPE_META: Record<string, TypeMeta> = {
 }
 
 const TIER_LABEL: Record<string, string> = {
-  trusted: 'موثوق',
-  verified: 'مُوثَّق',
-  new: 'جديد',
+  bade2: 'لسه بادئ',
+  mashey: 'ماشي حاله',
+  fel: 'زي الفل',
+  harif: 'حريف',
+  ostora: 'الأسطورة',
 }
 
 function rankClass(rank: number, s: Record<string, string>): string {
@@ -112,6 +115,8 @@ export default function TrendingRow({ businesses, limit = 12 }: Props) {
                       {rating}
                     </span>
                   )}
+
+                  {b.location && <DistanceBadge lat={b.location.lat} lng={b.location.lng} />}
                 </div>
 
                 <div className={styles.body}>

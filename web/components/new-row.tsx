@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import WmImage from './wm-image'
+import DistanceBadge from './distance-badge'
 import {
-  SparkleStarIcon,
   SunriseIcon,
   ArrowLeftIcon,
   MapPinIcon,
@@ -11,6 +11,7 @@ import {
   CartIcon,
   BikeIcon,
   SparklesIcon,
+  ShieldCheckIcon,
 } from './icons'
 import RowCarousel from './row-carousel'
 import type { Business } from '@/lib/data'
@@ -91,8 +92,8 @@ export default function NewRow({ businesses, limit = 12 }: Props) {
                   <div className={styles.imageOverlay} aria-hidden />
 
                   <span className={styles.newBadge}>
-                    <SparkleStarIcon size={10} />
-                    جديد
+                    <SunriseIcon size={10} />
+                    بدايات
                   </span>
 
                   {rating && (
@@ -101,6 +102,8 @@ export default function NewRow({ businesses, limit = 12 }: Props) {
                       {rating}
                     </span>
                   )}
+
+                  {b.location && <DistanceBadge lat={b.location.lat} lng={b.location.lng} />}
                 </div>
 
                 <div className={styles.body}>
@@ -116,6 +119,17 @@ export default function NewRow({ businesses, limit = 12 }: Props) {
                       </>
                     )}
                   </p>
+
+                  {b.trust_tier && (
+                    <span className={styles.tier}>
+                      <ShieldCheckIcon size={11} />
+                      {b.trust_tier === 'bade2' && 'لسه بادئ'}
+                      {b.trust_tier === 'mashey' && 'ماشي حاله'}
+                      {b.trust_tier === 'fel' && 'زي الفل'}
+                      {b.trust_tier === 'harif' && 'حريف'}
+                      {b.trust_tier === 'ostora' && 'الأسطورة'}
+                    </span>
+                  )}
                 </div>
               </Link>
             )

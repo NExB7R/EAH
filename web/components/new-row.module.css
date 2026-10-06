@@ -269,3 +269,18 @@
   font-weight: 600;
   margin: 0;
 }
+
+.tier {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  color: var(--text-tertiary);
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: fit-content;
+}
