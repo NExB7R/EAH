@@ -12,7 +12,6 @@ type Props = {
 
 const STATUS_LABEL: Record<AdminAd['status'], string> = {
   pending: 'بانتظار الموافقة',
-  approved: 'معتمد',
   rejected: 'مرفوض',
   active: 'نشط',
   expired: 'منتهي',
@@ -21,7 +20,6 @@ const STATUS_LABEL: Record<AdminAd['status'], string> = {
 
 const STATUS_TONE: Record<AdminAd['status'], string> = {
   pending: 'warning',
-  approved: 'ok',
   rejected: 'danger',
   active: 'ok',
   expired: 'muted',

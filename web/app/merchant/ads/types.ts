@@ -6,7 +6,7 @@ export type AdRow = {
   title: string
   image_url: string | null
   link_url: string | null
-  status: 'pending' | 'approved' | 'rejected' | 'active' | 'expired' | 'paused'
+  status: 'pending' | 'active' | 'paused' | 'expired' | 'rejected'
   starts_at: string | null
   ends_at: string | null
   impressions: number

@@ -7,10 +7,10 @@ import styles from './reports.module.css'
 
 type Report = {
   id: string
-  target_type: string
-  target_id: string
+  entity_type: string
+  entity_id: string | null
   reason: string
-  details: string | null
+  note: string | null
   status: string
   created_at: string
   reporter: { display_name: string } | null

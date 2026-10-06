@@ -505,11 +505,11 @@ export async function getDevices(days = 7): Promise<DeviceStat[]> {
 
 export type ReportRow = {
   id: string
-  reporter_profile_id: string
-  target_type: string
-  target_id: string
+  reporter_id: string
+  entity_type: string
+  entity_id: string | null
   reason: string
-  details: string | null
+  note: string | null
   status: string
   created_at: string
   reporter: { display_name: string } | null
@@ -519,7 +519,7 @@ export async function getReports(status: string = 'open'): Promise<ReportRow[]> 
   const supabase = await createClient()
   let q = supabase
     .from('reports')
-    .select('id, reporter_profile_id, target_type, target_id, reason, details, status, created_at')
+    .select('id, reporter_id, entity_type, entity_id, reason, note, status, created_at')
     .order('created_at', { ascending: false })
     .limit(100)
 
@@ -528,7 +528,7 @@ export async function getReports(status: string = 'open'): Promise<ReportRow[]> 
   const { data: reports } = await q
   if (!reports || reports.length === 0) return []
 
-  const reporterIds = [...new Set(reports.map((r) => r.reporter_profile_id))]
+  const reporterIds = [...new Set(reports.map((r) => r.reporter_id))]
   const { data: profiles } = await supabase
     .from('profiles')
     .select('id, display_name')
@@ -538,6 +538,6 @@ export async function getReports(status: string = 'open'): Promise<ReportRow[]> 
 
   return reports.map((r) => ({
     ...r,
-    reporter: { display_name: namesMap.get(r.reporter_profile_id) ?? '—' },
+    reporter: { display_name: namesMap.get(r.reporter_id) ?? '—' },
   })) as ReportRow[]
 }

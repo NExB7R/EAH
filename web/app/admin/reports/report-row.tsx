@@ -7,10 +7,10 @@ import styles from './reports.module.css'
 
 type Report = {
   id: string
-  target_type: string
-  target_id: string
+  entity_type: string
+  entity_id: string | null
   reason: string
-  details: string | null
+  note: string | null
   status: string
   created_at: string
   reporter: { display_name: string } | null
@@ -67,7 +67,7 @@ export default function ReportRow({ report }: Props) {
       <div className={styles.rowHead}>
         <span className={styles.targetBadge}>
           <TargetIcon size={11} />
-          {TARGET_LABEL[report.target_type] ?? report.target_type}
+          {TARGET_LABEL[report.entity_type] ?? report.entity_type}
         </span>
         <time className={styles.date}>{date}</time>
       </div>
@@ -78,14 +78,14 @@ export default function ReportRow({ report }: Props) {
           <strong>{REASON_LABEL[report.reason] ?? report.reason}</strong>
         </div>
 
-        {report.details && <p className={styles.details}>{report.details}</p>}
+        {report.note && <p className={styles.details}>{report.note}</p>}
 
         <div className={styles.meta}>
           <span>
             بواسطة: <strong>{report.reporter?.display_name ?? '—'}</strong>
           </span>
           <span className={styles.sep}>·</span>
-          <code className={styles.targetId}>{report.target_id.slice(0, 8)}</code>
+          <code className={styles.targetId}>{report.entity_id?.slice(0, 8) ?? '—'}</code>
         </div>
       </div>
 

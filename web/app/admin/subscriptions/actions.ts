@@ -122,7 +122,7 @@ export async function rejectSubscription(id: string, formData: FormData): Promis
 
   const { error } = await ctx.supabase
     .from('business_subscriptions')
-    .update({ status: 'cancelled' })
+    .update({ status: 'rejected' })
     .eq('id', id)
 
   if (error) return { ok: false, error: error.message }
