@@ -4,6 +4,7 @@ import SecondaryHero from '@/components/secondary-hero'
 import BusinessCard from '@/components/business-card'
 import { getUserSession } from '@/lib/data/user'
 import { getSuggestedBusinesses } from '@/lib/data/suggest'
+import { fairOrder } from '@/lib/fair-ranking'
 import styles from './suggest.module.css'
 
 export const metadata: Metadata = {
@@ -27,7 +28,8 @@ const REASON_SUB: Record<string, string> = {
 
 export default async function SuggestPage() {
   const session = await getUserSession()
-  const { businesses, reason } = await getSuggestedBusinesses(session?.userId ?? null)
+  const { businesses: raw, reason } = await getSuggestedBusinesses(session?.userId ?? null)
+  const businesses = fairOrder(raw, 'suggest', {}, { topWindow: 10, maxPerType: 3 })
 
   return (
     <main className={styles.page}>

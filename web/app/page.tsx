@@ -12,8 +12,7 @@ import { getFeatureFlags } from '@/lib/features'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness } from '@/lib/data/merchant'
 import { getActiveAdsForSlot } from '@/lib/data/ads'
-import { sortByTrend } from '@/lib/ranking'
-import { fairRotateOffers } from '@/lib/offers-rotation'
+import { fairOrder, fairOrderOffers } from '@/lib/fair-ranking'
 import type { Business } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
@@ -41,23 +40,32 @@ async function HomeSections() {
     getActiveAdsForSlot('home_feed', 1),
   ])
 
-  const offers = fairRotateOffers(rawOffers, 8)
+  const offers = fairOrderOffers(rawOffers, 8)
 
-  const featured = all.filter((b) => b.is_featured).slice(0, 15)
-  const topTrust = all.slice(0, 15)
-  const newOnes = all.filter((b) => b.is_new_project).slice(0, 12)
-  const nearby = all.filter((b) => b.area === 'شبين القناطر').slice(0, 12)
-  const trending = sortByTrend(all).slice(0, 12)
+  const featured = fairOrder(
+    all.filter((b) => b.is_featured),
+    'featured',
+    {},
+    { topWindow: 8, maxPerType: 2 },
+  )
 
-  const seen = new Set<string>()
-  const featuredMerged: Business[] = []
-  for (const b of [...featured, ...topTrust]) {
-    if (!seen.has(b.id)) {
-      seen.add(b.id)
-      featuredMerged.push(b)
-    }
-    if (featuredMerged.length >= 15) break
-  }
+  const trending = fairOrder(all, 'trending', {}, { topWindow: 8, maxPerType: 2 })
+
+  const newOnes = fairOrder(
+    all.filter((b) => b.is_new_project),
+    'new',
+    {},
+    { topWindow: 8, maxPerType: 2 },
+  )
+
+  const nearby = fairOrder(
+    all.filter((b) => b.area === 'شبين القناطر'),
+    'nearby',
+    { area: 'شبين القناطر' },
+    { topWindow: 8, maxPerType: 2 },
+  )
+
+  const featuredMerged: Business[] = featured
 
   return (
     <>

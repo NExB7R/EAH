@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { getNearbyBusinesses } from '@/lib/data'
+import { fairOrder } from '@/lib/fair-ranking'
 import { MapPinIcon } from '@/components/icons'
 import SectionLayout from '@/components/section-layout'
 
@@ -11,7 +12,13 @@ export const metadata: Metadata = {
 }
 
 export default async function NearbyPage() {
-  const businesses = await getNearbyBusinesses('شبين القناطر', 200)
+  const raw = await getNearbyBusinesses('شبين القناطر', 500)
+  const businesses = fairOrder(
+    raw,
+    'nearby',
+    { area: 'شبين القناطر' },
+    { topWindow: 10, maxPerType: 3 },
+  )
 
   return (
     <SectionLayout

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { getTrendingBusinesses } from '@/lib/data'
+import { fairOrder } from '@/lib/fair-ranking'
 import { TrendingUpIcon } from '@/components/icons'
 import SectionLayout from '@/components/section-layout'
 import AdSlot from '@/components/ad-slot'
