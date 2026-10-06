@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import HomeHero from '@/components/home-hero'
 import FeaturedBento from '@/components/featured-bento'
 import TrendingRow from '@/components/trending-row'
@@ -18,13 +19,25 @@ export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   const session = await getUserSession()
-  const [all, offers, flags, homeBanner, homeFeed, business] = await Promise.all([
+  const business = session ? await getMyBusiness(session.userId) : null
+
+  return (
+    <main>
+      <HomeHero isLoggedIn={!!session} hasBusiness={!!business} />
+      <Suspense fallback={null}>
+        <HomeSections />
+      </Suspense>
+    </main>
+  )
+}
+
+async function HomeSections() {
+  const [all, offers, flags, homeBanner, homeFeed] = await Promise.all([
     getPublishedBusinesses(),
     getActiveOffers(8),
     getFeatureFlags(),
     getActiveAdsForSlot('home_banner', 1),
     getActiveAdsForSlot('home_feed', 1),
-    session ? getMyBusiness(session.userId) : Promise.resolve(null),
   ])
 
   const featured = all.filter((b) => b.is_featured).slice(0, 15)
@@ -44,8 +57,7 @@ export default async function Home() {
   }
 
   return (
-    <main>
-      <HomeHero isLoggedIn={!!session} hasBusiness={!!business} />
+    <>
       {flags.featured_enabled && <FeaturedBento businesses={featuredMerged} />}
       {homeBanner.length > 0 && (
         <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 20px' }}>
@@ -62,6 +74,6 @@ export default async function Home() {
       {flags.new_enabled && <NewRow businesses={newOnes} />}
       {flags.nearby_enabled && <NearbyGrid businesses={nearby} />}
       <SuggestedSection />
-    </main>
+    </>
   )
 }
