@@ -96,10 +96,10 @@ export default function AdsList({ ads }: Props) {
               </p>
             )}
 
-            {ad.rejection_reason && (
+            {ad.rejected_reason && (
               <p className={styles.rejection}>
                 <AlertIcon size={14} />
-                {ad.rejection_reason}
+                {ad.rejected_reason}
               </p>
             )}
 
@@ -111,10 +111,6 @@ export default function AdsList({ ads }: Props) {
               <span className={styles.stat}>
                 <span className={styles.statLabel}>نقرات</span>
                 <span className={styles.statValue}>{ad.clicks}</span>
-              </span>
-              <span className={styles.stat}>
-                <span className={styles.statLabel}>السعر</span>
-                <span className={styles.statValue}>{ad.price_paid_egp} ج.م</span>
               </span>
               <span className={styles.stat}>
                 <span className={styles.statLabel}>تاريخ</span>

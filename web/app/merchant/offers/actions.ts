@@ -80,7 +80,7 @@ export async function createOffer(formData: FormData): Promise<ActionResult> {
   // إشعار المتابعين (لو منشور)
   if (d.isPublished) {
     const { data: followers } = await ctx.supabase
-      .from('follows')
+      .from('business_follows')
       .select('user_id')
       .eq('business_id', ctx.biz.id)
 

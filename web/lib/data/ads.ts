@@ -28,12 +28,11 @@ export type MerchantAd = {
   image_url: string | null
   link_url: string | null
   status: 'pending' | 'approved' | 'rejected' | 'active' | 'expired' | 'paused'
-  price_paid_egp: number
   starts_at: string | null
   ends_at: string | null
   impressions: number
   clicks: number
-  rejection_reason: string | null
+  rejected_reason: string | null
   created_at: string
 }
 
@@ -60,7 +59,7 @@ export const getActiveAdsForSlot = unstable_cache(
 
     const now = new Date().toISOString()
     const { data, error } = await supabase
-      .from('advertisements')
+      .from('ads')
       .select(
         `
         id, title, image_url, link_url,
@@ -101,11 +100,11 @@ export const getActiveAdsForSlot = unstable_cache(
 export async function getMyAds(businessId: string): Promise<MerchantAd[]> {
   const supabase = await createClient()
   const { data } = await supabase
-    .from('advertisements')
+    .from('ads')
     .select(
       `
-      id, slot_id, title, image_url, link_url, status, price_paid_egp,
-      starts_at, ends_at, impressions, clicks, rejection_reason, created_at,
+      id, slot_id, title, image_url, link_url, status,
+      starts_at, ends_at, impressions, clicks, rejected_reason, created_at,
       slot:ad_slots(code, name_ar)
     `,
     )
@@ -125,12 +124,11 @@ export async function getMyAds(businessId: string): Promise<MerchantAd[]> {
       image_url: r.image_url,
       link_url: r.link_url,
       status: r.status as MerchantAd['status'],
-      price_paid_egp: Number(r.price_paid_egp),
       starts_at: r.starts_at,
       ends_at: r.ends_at,
       impressions: r.impressions,
       clicks: r.clicks,
-      rejection_reason: r.rejection_reason,
+      rejected_reason: r.rejected_reason,
       created_at: r.created_at,
     }
   })
@@ -141,11 +139,11 @@ export async function getMyAds(businessId: string): Promise<MerchantAd[]> {
 export async function getAllAds(): Promise<AdminAd[]> {
   const supabase = await createClient()
   const { data } = await supabase
-    .from('advertisements')
+    .from('ads')
     .select(
       `
-      id, slot_id, title, image_url, link_url, status, price_paid_egp,
-      starts_at, ends_at, impressions, clicks, rejection_reason, created_at,
+      id, slot_id, title, image_url, link_url, status,
+      starts_at, ends_at, impressions, clicks, rejected_reason, created_at,
       slot:ad_slots(code, name_ar),
       business:businesses(id, slug, name)
     `,
@@ -166,12 +164,11 @@ export async function getAllAds(): Promise<AdminAd[]> {
       image_url: r.image_url,
       link_url: r.link_url,
       status: r.status as AdminAd['status'],
-      price_paid_egp: Number(r.price_paid_egp),
       starts_at: r.starts_at,
       ends_at: r.ends_at,
       impressions: r.impressions,
       clicks: r.clicks,
-      rejection_reason: r.rejection_reason,
+      rejected_reason: r.rejected_reason,
       created_at: r.created_at,
       business_name: biz?.name ?? '—',
       business_slug: biz?.slug ?? '—',

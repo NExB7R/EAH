@@ -107,7 +107,7 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
       .eq('business_id', businessId),
 
     supabase
-      .from('follows')
+      .from('business_follows')
       .select('*', { count: 'exact', head: true })
       .eq('business_id', businessId),
 

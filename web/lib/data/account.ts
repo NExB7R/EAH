@@ -66,7 +66,10 @@ export async function getAccountStats(userId: string): Promise<AccountStats> {
     { count: unreadNotifs },
   ] = await Promise.all([
     supabase.from('favorites').select('*', { count: 'exact', head: true }).eq('user_id', userId),
-    supabase.from('follows').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+    supabase
+      .from('business_follows')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId),
     supabase
       .from('order_requests')
       .select('*', { count: 'exact', head: true })
@@ -122,7 +125,7 @@ export async function getFavorites(userId: string): Promise<FavoriteItem[]> {
 export async function getFollowing(userId: string): Promise<FollowItem[]> {
   const supabase = await createClient()
   const { data } = await supabase
-    .from('follows')
+    .from('business_follows')
     .select(
       `
       created_at,

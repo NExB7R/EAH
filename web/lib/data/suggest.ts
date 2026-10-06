@@ -96,7 +96,7 @@ async function getUserBusinessTypes(userId: string): Promise<{
       .eq('user_id', userId)
       .limit(50),
     supabase
-      .from('follows')
+      .from('business_follows')
       .select('business:businesses(business_type)')
       .eq('user_id', userId)
       .limit(50),
@@ -119,7 +119,7 @@ async function getUserBusinessTypes(userId: string): Promise<{
   // جيب IDs المفضلات والمتابعات نفسها
   const [favIds, followIds] = await Promise.all([
     supabase.from('favorites').select('business_id').eq('user_id', userId).limit(50),
-    supabase.from('follows').select('business_id').eq('user_id', userId).limit(50),
+    supabase.from('business_follows').select('business_id').eq('user_id', userId).limit(50),
   ])
 
   for (const r of favIds.data ?? []) {

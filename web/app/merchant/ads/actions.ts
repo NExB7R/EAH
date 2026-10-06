@@ -55,26 +55,18 @@ export async function requestAd(formData: FormData): Promise<Result> {
 
   const d = parsed.data
 
-  // جيب سعر الـ slot
-  const { data: slot } = await ctx.supabase
-    .from('ad_slots')
-    .select('base_price_egp')
-    .eq('id', d.slotId)
-    .maybeSingle()
-
   const { data, error } = await ctx.supabase
-    .from('advertisements')
+    .from('ads')
     .insert({
       slot_id: d.slotId,
       business_id: ctx.biz.id,
+      owner_profile_id: ctx.userId,
       title: d.title,
       image_url: d.imageUrl || null,
       link_url: d.linkUrl || null,
       starts_at: d.startsAt || null,
       ends_at: d.endsAt || null,
-      price_paid_egp: slot?.base_price_egp ?? 0,
       status: 'pending',
-      created_by: ctx.userId,
     })
     .select('id')
     .single()
@@ -91,7 +83,7 @@ export async function cancelMyAd(id: string): Promise<Result> {
 
   // يقدر يمسح بس pending أو rejected
   const { data: ad } = await ctx.supabase
-    .from('advertisements')
+    .from('ads')
     .select('status')
     .eq('id', id)
     .eq('business_id', ctx.biz.id)
@@ -103,7 +95,7 @@ export async function cancelMyAd(id: string): Promise<Result> {
   }
 
   const { error } = await ctx.supabase
-    .from('advertisements')
+    .from('ads')
     .delete()
     .eq('id', id)
     .eq('business_id', ctx.biz.id)

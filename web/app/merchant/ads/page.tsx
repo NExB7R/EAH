@@ -7,7 +7,6 @@ import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import RequestForm from './request-form'
 import AdsList from './ads-list'
-import type { AdRow } from './types'
 import styles from './ads.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -42,7 +41,7 @@ export default async function MerchantAdsPage() {
       {ads.length === 0 ? (
         <EmptyState Icon={TagIcon} title="مفيش إعلانات" description="اطلب أول إعلان وشوف الفرق" />
       ) : (
-        <AdsList ads={ads as AdRow[]} />
+        <AdsList ads={ads} />
       )}
     </div>
   )

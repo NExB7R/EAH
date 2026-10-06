@@ -29,14 +29,14 @@ export async function approveAd(id: string, formData: FormData): Promise<Result>
 
   const now = new Date().toISOString()
   const { error } = await ctx.supabase
-    .from('advertisements')
+    .from('ads')
     .update({
       status: 'active',
       starts_at: parsed.data.startsAt || now,
       ends_at: parsed.data.endsAt || null,
       approved_by: ctx.userId,
       approved_at: now,
-      rejection_reason: null,
+      rejected_reason: null,
     })
     .eq('id', id)
 
@@ -59,10 +59,10 @@ export async function rejectAd(id: string, reason: string): Promise<Result> {
   if (!ctx.ok) return ctx
 
   const { error } = await ctx.supabase
-    .from('advertisements')
+    .from('ads')
     .update({
       status: 'rejected',
-      rejection_reason: reason || 'بدون سبب محدد',
+      rejected_reason: reason || 'بدون سبب محدد',
     })
     .eq('id', id)
 
@@ -85,10 +85,7 @@ export async function pauseAd(id: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { error } = await ctx.supabase
-    .from('advertisements')
-    .update({ status: 'paused' })
-    .eq('id', id)
+  const { error } = await ctx.supabase.from('ads').update({ status: 'paused' }).eq('id', id)
 
   if (error) return { ok: false, error: error.message }
 
@@ -108,10 +105,7 @@ export async function resumeAd(id: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { error } = await ctx.supabase
-    .from('advertisements')
-    .update({ status: 'active' })
-    .eq('id', id)
+  const { error } = await ctx.supabase.from('ads').update({ status: 'active' }).eq('id', id)
 
   if (error) return { ok: false, error: error.message }
 
@@ -131,7 +125,7 @@ export async function deleteAd(id: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { error } = await ctx.supabase.from('advertisements').delete().eq('id', id)
+  const { error } = await ctx.supabase.from('ads').delete().eq('id', id)
 
   if (error) return { ok: false, error: error.message }
 

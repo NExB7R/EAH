@@ -88,7 +88,7 @@ export default function AdsManager({ ads }: Props) {
             <div className={styles.adHead}>
               <span className={styles.slotBadge}>{ad.slot_name}</span>
               <span className={`${styles.status} ${styles[tone]}`}>{STATUS_LABEL[ad.status]}</span>
-              <span className={styles.price}>{ad.price_paid_egp} ج.م</span>
+              <span className={styles.price}>{0} ج.م</span>
             </div>
 
             <h3 className={styles.adTitle}>{ad.title}</h3>
@@ -112,10 +112,10 @@ export default function AdsManager({ ads }: Props) {
               </p>
             )}
 
-            {ad.rejection_reason && (
+            {ad.rejected_reason && (
               <p className={styles.rejection}>
                 <AlertIcon size={14} />
-                {ad.rejection_reason}
+                {ad.rejected_reason}
               </p>
             )}
 

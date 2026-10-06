@@ -256,7 +256,10 @@ async function toolGetMyStats(): Promise<{
       .limit(1)
       .maybeSingle(),
     supabase.from('favorites').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
-    supabase.from('follows').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
+    supabase
+      .from('business_follows')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id),
     supabase
       .from('order_requests')
       .select('*', { count: 'exact', head: true })
