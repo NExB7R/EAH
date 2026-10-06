@@ -16,6 +16,7 @@ import AiWidget from '@/components/ai-widget'
 import AnnouncementsBanner from '@/components/announcements-banner'
 import { Analytics } from '@vercel/analytics/next'
 import { getUserSession } from '@/lib/data/user'
+import { GeoProvider } from '@/lib/contexts/geo-context'
 import { getFeatureFlags } from '@/lib/features'
 import { getActiveAnnouncements } from '@/lib/data/announcements'
 import { getAllLiveStats } from '@/lib/data/live-stats'
@@ -64,20 +65,22 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <body>
-        <Splash />
-        <FloatingCapsule session={session} />
-        {flags.announcements_enabled && announcements.length > 0 && (
-          <AnnouncementsBanner announcements={announcements} />
-        )}
-        {children}
-        <LiveStatsBar stats={liveStats} />
-        <SiteFooter />
-        <InstallPrompt />
-        <ReviewReminder />
-        {!session && <SignupPrompt />}
-        {flags.ai_agent_enabled && <AiWidget />}
-        <ScrollToTop />
-        <Analytics />
+        <GeoProvider>
+          <Splash />
+          <FloatingCapsule session={session} />
+          {flags.announcements_enabled && announcements.length > 0 && (
+            <AnnouncementsBanner announcements={announcements} />
+          )}
+          {children}
+          <LiveStatsBar stats={liveStats} />
+          <SiteFooter />
+          <InstallPrompt />
+          <ReviewReminder />
+          {!session && <SignupPrompt />}
+          {flags.ai_agent_enabled && <AiWidget />}
+          <ScrollToTop />
+          <Analytics />
+        </GeoProvider>
       </body>
     </html>
   )
