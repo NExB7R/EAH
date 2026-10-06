@@ -11,6 +11,8 @@ import {
 import SecondaryHero from '@/components/secondary-hero'
 import PlanCard from '@/components/plan-card'
 import { getSubscriptionPlans } from '@/lib/data/subscriptions'
+import { getUserSession } from '@/lib/data/user'
+import { getMyBusiness } from '@/lib/data/merchant'
 import styles from './pricing.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -21,7 +23,13 @@ export const metadata: Metadata = {
 }
 
 export default async function PricingPage() {
-  const plans = await getSubscriptionPlans()
+  const session = await getUserSession()
+  const [plans, business] = await Promise.all([
+    getSubscriptionPlans(),
+    session ? getMyBusiness(session.userId) : Promise.resolve(null),
+  ])
+
+  const isMerchant = !!business
 
   return (
     <main className={styles.page}>
@@ -96,15 +104,39 @@ export default async function PricingPage() {
         </div>
       </section>
 
-      {/* ─── CTA ─── */}
+      {/* ─── CTA (role-aware) ─── */}
       <section className={styles.ctaSection}>
-        <Link href="/merchant/apply" className={styles.ctaBtn}>
-          <CrownGoldIcon size={20} />
-          <span>سجّل نشاطك — ابدأ التجربة المجانية</span>
-        </Link>
-        <Link href="/advertise" className={styles.ctaSecondary}>
-          <span>أو أعلن معانا ←</span>
-        </Link>
+        {isMerchant ? (
+          <>
+            <Link href="/merchant/subscription" className={styles.ctaBtn}>
+              <CrownGoldIcon size={20} />
+              <span>ترقّي باقتك دلوقتي</span>
+            </Link>
+            <Link href="/merchant" className={styles.ctaSecondary}>
+              <span>أو افتح لوحة التحكم ←</span>
+            </Link>
+          </>
+        ) : session ? (
+          <>
+            <Link href="/merchant/apply" className={styles.ctaBtn}>
+              <CrownGoldIcon size={20} />
+              <span>سجّل نشاطك — ابدأ التجربة المجانية</span>
+            </Link>
+            <Link href="/advertise" className={styles.ctaSecondary}>
+              <span>أو أعلن معانا ←</span>
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link href="/auth?next=/merchant/apply" className={styles.ctaBtn}>
+              <CrownGoldIcon size={20} />
+              <span>سجّل حسابك — ابدأ مجاناً</span>
+            </Link>
+            <Link href="/advertise" className={styles.ctaSecondary}>
+              <span>أو أعلن معانا ←</span>
+            </Link>
+          </>
+        )}
       </section>
     </main>
   )
