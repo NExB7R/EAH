@@ -30,3 +30,8 @@ pre-push:
     typecheck:
       root: "web/"
       run: npx tsc --noEmit
+
+    # jscpd — منع تكرار الكود > 5%
+    dup:
+      root: "web/"
+      run: npx jscpd . --threshold 5

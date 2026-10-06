@@ -68,3 +68,13 @@ jobs:
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
         continue-on-error: true
+
+      - name: Setup PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+
+      - name: RLS Audit (comprehensive)
+        run: |
+          psql "$SUPABASE_DB_URL" -f web/supabase/tests/rls-audit.sql
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        continue-on-error: true
