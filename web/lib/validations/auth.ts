@@ -72,6 +72,7 @@ export const signupSchema = z
     default_address: addressSchema,
     default_latitude: latSchema,
     default_longitude: lngSchema,
+    referral_code: z.string().trim().max(20).optional().nullable(),
   })
   .refine((data) => data.password === data.confirm_password, {
     message: 'كلمتين السر مش متطابقتين',

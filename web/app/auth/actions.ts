@@ -68,6 +68,7 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
     password: str(formData, 'password'),
     confirm_password: str(formData, 'confirm_password'),
     gender: str(formData, 'gender') || null,
+    referral_code: str(formData, 'referral_code') || null,
   }
 
   const parsed = signupSchema.safeParse(raw)
@@ -135,6 +136,7 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
         default_latitude: default_latitude ?? null,
         default_longitude: default_longitude ?? null,
         signup_ip_hash: signupIpHash,
+        referral_code: parsed.data.referral_code ?? null,
       },
     },
   })

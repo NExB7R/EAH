@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState, useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Logo from '@/components/logo'
 import { AREAS } from '@/lib/data/areas'
 import {
@@ -66,7 +66,9 @@ const MERCHANT_HOOKS = [
 
 export default function AuthForm() {
   const router = useRouter()
-  const [tab, setTab] = useState<Tab>('login')
+  const searchParams = useSearchParams()
+  const refCode = searchParams.get('ref') ?? ''
+  const [tab, setTab] = useState<Tab>(refCode ? 'signup' : 'login')
   const [gender, setGender] = useState<Gender>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
@@ -167,6 +169,7 @@ export default function AuthForm() {
 
         <form action={dispatch} className={styles.form}>
           <input type="hidden" name="_mode" value={tab} />
+          {refCode && <input type="hidden" name="referral_code" value={refCode} />}
 
           {errorMsg && <div className={styles.error}>{errorMsg}</div>}
 
