@@ -80,7 +80,11 @@ export function applyFilters(businesses: Business[], filters: Filters): Business
       result = [...result].sort((a, b) => {
         const da = a.location ? distanceKm(loc, a.location) : Infinity
         const db = b.location ? distanceKm(loc, b.location) : Infinity
-        return da - db
+        // فرق > 0.5 متر → المسافة أولا (الحقيقة بالأمتار)
+        if (Math.abs(da - db) > 0.0005) return da - db
+        // "نفس المكان حرفياً" (< 50 سم) → trust يكسر التعادل
+        if (b.trust_score !== a.trust_score) return b.trust_score - a.trust_score
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       })
       break
     }
