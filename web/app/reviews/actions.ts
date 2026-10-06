@@ -54,16 +54,6 @@ export async function submitReview(
 
   const data = parsed.data
 
-  const { data: completedOrder } = await supabase
-    .from('order_requests')
-    .select('id')
-    .eq('business_id', businessId)
-    .eq('customer_profile_id', user.id)
-    .eq('status', 'delivered')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
-
   const { error } = await supabase.from('business_reviews').insert({
     business_id: businessId,
     user_id: user.id,
