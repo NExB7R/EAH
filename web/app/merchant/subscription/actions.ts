@@ -98,31 +98,3 @@ export async function requestSubscription(formData: FormData): Promise<Result> {
   revalidateTag('admin-badges', 'default')
   return { ok: true }
 }
-
-export async function cancelPendingRequest(): Promise<Result> {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
-
-  const { data: biz } = await supabase
-    .from('businesses')
-    .select('id')
-    .eq('owner_profile_id', user.id)
-    .maybeSingle()
-
-  if (!biz) return { ok: false, error: 'مفيش نشاط' }
-
-  const { error } = await supabase
-    .from('business_subscriptions')
-    .delete()
-    .eq('business_id', biz.id)
-    .eq('status', 'pending')
-
-  if (error) return { ok: false, error: error.message }
-
-  revalidatePath('/merchant/subscription')
-  revalidatePath('/admin/subscriptions')
-  return { ok: true }
-}

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
-import { logError } from '@/lib/logging/errors'
+import { logError, captureException } from '@/lib/logging/errors'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Cron: Trust Decay (يومي — 3 صباحاً)
@@ -29,10 +29,9 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ ok: true, result: data })
   } catch (err) {
-    await logError({
+    await captureException(err, {
       severity: 'high',
       source: 'cron',
-      message: err instanceof Error ? err.message : String(err),
       path: '/api/cron/trust-decay',
     })
     return NextResponse.json({ ok: false }, { status: 500 })

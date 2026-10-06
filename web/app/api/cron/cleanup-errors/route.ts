@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
-import { logError } from '@/lib/logging/errors'
+import { captureException } from '@/lib/logging/errors'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Cron: System Errors Retention (90 يوم)
@@ -23,10 +23,9 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ ok: true, deleted: count ?? 0 })
   } catch (err) {
-    await logError({
+    await captureException(err, {
       severity: 'medium',
       source: 'cron',
-      message: err instanceof Error ? err.message : String(err),
       path: '/api/cron/cleanup-errors',
     })
     return NextResponse.json({ ok: false }, { status: 500 })

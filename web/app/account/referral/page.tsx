@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { GiftIcon, SparklesIcon, ShareIcon } from '@/components/icons'
+import { GiftIcon, SparklesIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getFullProfile, getAccountStats } from '@/lib/data/account'
 import AccountPageHeader from '@/components/account-page-header'

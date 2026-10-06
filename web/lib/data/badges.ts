@@ -5,15 +5,6 @@ import { createServiceClient } from '@/lib/supabase/service'
 // EAH — Badges Data
 // ═══════════════════════════════════════════════════════════
 
-export type Badge = {
-  badge_key: string
-  label: string
-  description: string
-  icon: string
-  category: 'achievement' | 'quality' | 'consistency' | 'social' | 'special'
-  earned_at: string
-}
-
 export type BadgeCatalogItem = {
   key: string
   label: string
@@ -23,13 +14,6 @@ export type BadgeCatalogItem = {
   display_order: number
   earned: boolean
   earned_at: string | null
-}
-
-// ─── شارات المستخدم (المنجزة) ───
-export async function getUserBadges(userId: string): Promise<Badge[]> {
-  const supabase = await createClient()
-  const { data } = await supabase.rpc('get_user_badges', { p_user_id: userId })
-  return (data ?? []) as Badge[]
 }
 
 // ─── كل الكتالوج + حالة الإنجاز ───
