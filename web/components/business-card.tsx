@@ -48,9 +48,11 @@ const TYPE_META: Record<string, TypeMeta> = {
 
 type TierMeta = { label: string; cls: string; Icon: typeof ShieldCheckIcon }
 const TIER_META: Record<string, TierMeta> = {
-  verified: { label: 'مُوثَّق', cls: 'verified', Icon: BadgeCheckIcon },
-  trusted: { label: 'موثوق', cls: 'trusted', Icon: ShieldCheckIcon },
-  new: { label: 'جديد', cls: 'new', Icon: SparkleStarIcon },
+  bade2: { label: 'لسه بادئ', cls: 'bade2', Icon: SparkleStarIcon },
+  mashey: { label: 'ماشي حاله', cls: 'mashey', Icon: ShieldCheckIcon },
+  fel: { label: 'زي الفل', cls: 'fel', Icon: ShieldCheckIcon },
+  harif: { label: 'حريف', cls: 'harif', Icon: BadgeCheckIcon },
+  ostora: { label: 'الأسطورة', cls: 'ostora', Icon: BadgeCheckIcon },
 }
 
 function offersText(c: number): string {

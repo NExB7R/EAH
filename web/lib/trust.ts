@@ -1,47 +1,107 @@
 // ═══════════════════════════════════════════════════════════
-// EAH — Trust & Impact System
+// EAH — Trust System 2.0 (2026-10-06)
 // ═══════════════════════════════════════════════════════════
-// - Impact Score: 0-1000 (Reach + Influence + Trust + Consistency)
-// - Impact Levels: visitor / basic / member / regular
-// - Wanted Level: 0-5 (GTA Style)
-// - Trust Decay: half-life 69 days (ScienceDirect 2026)
+// 5 مستويات شعبية مصري:
+//   baraka (0-19)  → على البركة
+//   active (20-39) → شغّال
+//   mo3tabar (40-59) → معتبر
+//   kebeer (60-79) → كبير
+//   legend (80-100) → أسطورة
+//
+// Log scale: الصعوبة بتزيد كل ما تقرب من 100
+// Legend Points: بتتحسب بعد ما توصل 100 — للترتيب الداخلي
 // ═══════════════════════════════════════════════════════════
 
 // ─── ثوابت ───
-export const IMPACT_MIN = 0
-export const IMPACT_MAX = 1000
-export const DECAY_HALF_LIFE_DAYS = 69
-export const DECAY_FLOOR = 0.3
-export const WANTED_MIN = 0
-export const WANTED_MAX = 5
+export const TRUST_MIN = 0
+export const TRUST_MAX = 100
+export const TRUST_DEFAULT = 50
 
-// ─── أوزان الأثر (4 مصادر) ───
-export const IMPACT_WEIGHTS = {
-  reach: 0.25,
-  influence: 0.35,
-  trust: 0.25,
-  consistency: 0.15,
+// ─── 5 مستويات ───
+export const TRUST_TIERS = {
+  bade2: { min: 0, max: 19, label: 'لسه بادئ', emoji: '🌱', color: '#7B7490' },
+  mashey: { min: 20, max: 39, label: 'ماشي حاله', emoji: '🌿', color: '#55E7D1' },
+  fel: { min: 40, max: 59, label: 'زي الفل', emoji: '🌳', color: '#A855F7' },
+  harif: { min: 60, max: 79, label: 'حريف', emoji: '🏆', color: '#E8C79A' },
+  ostora: { min: 80, max: 100, label: 'الأسطورة', emoji: '👑', color: '#F5D9A7' },
 } as const
 
-// ─── أهداف القياس (normalization targets) ───
-export const IMPACT_TARGETS = {
-  reach: 10_000, // 10K مشاهدة = 100
-  influence: 500, // 500 تفاعل مؤثر = 100
-  trust: 100, // 100 مستخدم فريد = 100
-  consistency: 100, // 100 يوم streak = 100
+export type TrustTier = keyof typeof TRUST_TIERS
+
+export const TRUST_TIER_ORDER: TrustTier[] = ['bade2', 'mashey', 'fel', 'harif', 'ostora']
+
+// ─── Log scale factors (نفس اللي في DB) ───
+export const TRUST_FACTORS = [
+  { max: 30, factor: 1.5, label: 'سهل' },
+  { max: 50, factor: 1.0, label: 'عادي' },
+  { max: 70, factor: 0.7, label: 'متوسط' },
+  { max: 85, factor: 0.4, label: 'صعب' },
+  { max: 95, factor: 0.2, label: 'صعب جداً' },
+  { max: 100, factor: 0.1, label: 'أسطوري' },
+] as const
+
+// ─── الأحداث ───
+export const TRUST_EVENTS = {
+  // كسب
+  review_approved: { delta: 5, label: 'تقييم معتمد', icon: '✍️' },
+  review_received: { delta: 3, label: 'نشاطك أخد تقييم', icon: '⭐' },
+  order_completed: { delta: 8, label: 'طلب مكتمل', icon: '🛒' },
+  referral_signup: { delta: 5, label: 'صاحب سجّل بكودك', icon: '👥' },
+  referral_first_order: { delta: 15, label: 'صاحبك عمل أول طلب', icon: '🎉' },
+  daily_login: { delta: 1, label: 'تسجيل دخول يومي', icon: '📅' },
+  profile_completed: { delta: 3, label: 'أكملت بياناتك', icon: '✅' },
+  // خصم
+  review_rejected: { delta: -15, label: 'تقييم مرفوض', icon: '❌' },
+  report_valid: { delta: -25, label: 'بلاغ صحيح', icon: '🚨' },
+  order_cancelled: { delta: -5, label: 'طلب ملغي', icon: '❌' },
+  order_rejected: { delta: -3, label: 'طلب مرفوض', icon: '⚠️' },
+  decay: { delta: -1, label: 'خمول طويل', icon: '💤' },
 } as const
 
-// ─── المستويات ───
-export const IMPACT_LEVELS = {
-  visitor: { min: 0, max: 99, label: 'زائر' },
-  basic: { min: 100, max: 399, label: 'أساسي' },
-  member: { min: 400, max: 799, label: 'عضو' },
-  regular: { min: 800, max: 1000, label: 'منتظم' },
-} as const
+export type TrustEventType = keyof typeof TRUST_EVENTS
 
-export type ImpactLevel = keyof typeof IMPACT_LEVELS
+// ═══════════════════════════════════════════════════════════
+// Helpers
+// ═══════════════════════════════════════════════════════════
 
-// ─── أوزان التفاعل ───
+export function getTrustTier(score: number): TrustTier {
+  const s = Math.max(TRUST_MIN, Math.min(TRUST_MAX, Math.round(score)))
+  if (s < 20) return 'bade2'
+  if (s < 40) return 'mashey'
+  if (s < 60) return 'fel'
+  if (s < 80) return 'harif'
+  return 'ostora'
+}
+
+export function getTrustTierMeta(score: number) {
+  return TRUST_TIERS[getTrustTier(score)]
+}
+
+export function getTrustFactor(score: number): number {
+  const s = Math.max(TRUST_MIN, Math.min(TRUST_MAX, score))
+  for (const f of TRUST_FACTORS) {
+    if (s < f.max) return f.factor
+  }
+  return 0.1
+}
+
+// يحسب delta الفعلي بعد الـ scale
+export function effectiveDelta(currentScore: number, rawDelta: number): number {
+  if (rawDelta <= 0) return rawDelta
+  return Math.round(rawDelta * getTrustFactor(currentScore))
+}
+
+// المسافة للـ 100
+export function trustProgress(score: number) {
+  const s = Math.max(0, Math.min(100, score))
+  return {
+    score: s,
+    remaining: 100 - s,
+    percent: s,
+  }
+}
+
+// ─── أوزان التفاعل (للتقييم العام للأثر) ───
 export const ACTIVITY_WEIGHTS = {
   share: 25,
   reply: 15,
@@ -53,7 +113,7 @@ export const ACTIVITY_WEIGHTS = {
 
 export type ActivityType = keyof typeof ACTIVITY_WEIGHTS
 
-// ─── حدود التكرار (anti-spam) ───
+// ─── Rate limits ───
 export const RATE_LIMITS = {
   share: { max: 1, window: '24h', scope: 'business' },
   reply: { max: 5, window: '24h', scope: 'day' },
@@ -62,125 +122,3 @@ export const RATE_LIMITS = {
   follow: { max: 1, window: 'forever', scope: 'business' },
   favorite: { max: 1, window: 'forever', scope: 'business' },
 } as const
-
-// ─── Wanted Level Thresholds ───
-export const WANTED_THRESHOLDS = [
-  { min: 12, level: 5 },
-  { min: 8, level: 4 },
-  { min: 5, level: 3 },
-  { min: 3, level: 2 },
-  { min: 1, level: 1 },
-] as const
-
-// ═══════════════════════════════════════════════════════════
-// Helpers
-// ═══════════════════════════════════════════════════════════
-
-export function clampImpact(score: number): number {
-  return Math.max(IMPACT_MIN, Math.min(IMPACT_MAX, Math.round(score)))
-}
-
-export function getActivityWeight(type: ActivityType): number {
-  return ACTIVITY_WEIGHTS[type]
-}
-
-export function getLevelLabel(level: ImpactLevel): string {
-  return IMPACT_LEVELS[level].label
-}
-
-// ═══════════════════════════════════════════════════════════
-// Impact Computation
-// ═══════════════════════════════════════════════════════════
-
-export type ImpactInputs = {
-  reach: number
-  influence: number
-  trust: number
-  consistency: number
-}
-
-// Log scale — يمنع التلاعب (CRI 2026)
-function normalize(raw: number, target: number): number {
-  if (raw <= 0) return 0
-  const norm = Math.log10(raw + 1) / Math.log10(target + 1)
-  return Math.min(100, norm * 100)
-}
-
-export function computeImpact(inputs: ImpactInputs): number {
-  const reach = normalize(inputs.reach, IMPACT_TARGETS.reach)
-  const influence = normalize(inputs.influence, IMPACT_TARGETS.influence)
-  const trust = normalize(inputs.trust, IMPACT_TARGETS.trust)
-  const consistency = normalize(inputs.consistency, IMPACT_TARGETS.consistency)
-
-  const weighted =
-    reach * IMPACT_WEIGHTS.reach +
-    influence * IMPACT_WEIGHTS.influence +
-    trust * IMPACT_WEIGHTS.trust +
-    consistency * IMPACT_WEIGHTS.consistency
-
-  return clampImpact(weighted * 10)
-}
-
-export function levelFromImpact(score: number): ImpactLevel {
-  const s = clampImpact(score)
-  if (s >= IMPACT_LEVELS.regular.min) return 'regular'
-  if (s >= IMPACT_LEVELS.member.min) return 'member'
-  if (s >= IMPACT_LEVELS.basic.min) return 'basic'
-  return 'visitor'
-}
-
-// ═══════════════════════════════════════════════════════════
-// Trust Decay
-// ═══════════════════════════════════════════════════════════
-
-export function applyDecay(score: number, daysInactive: number): number {
-  if (daysInactive <= 0) return clampImpact(score)
-  const factor = Math.pow(0.5, daysInactive / DECAY_HALF_LIFE_DAYS)
-  const floored = Math.max(factor, DECAY_FLOOR)
-  return clampImpact(score * floored)
-}
-
-// ═══════════════════════════════════════════════════════════
-// Wanted Level
-// ═══════════════════════════════════════════════════════════
-
-export function computeWantedLevel(activeReports: number): number {
-  for (const t of WANTED_THRESHOLDS) {
-    if (activeReports >= t.min) return t.level
-  }
-  return 0
-}
-
-export function getWantedEmoji(level: number): string {
-  if (level >= 5) return '💀'
-  if (level === 0) return ''
-  return '⭐'.repeat(level)
-}
-
-// ═══════════════════════════════════════════════════════════
-// Impact Summary (للعرض)
-// ═══════════════════════════════════════════════════════════
-
-export type ImpactBreakdown = {
-  score: number
-  level: ImpactLevel
-  levelLabel: string
-  reach: number
-  influence: number
-  trust: number
-  consistency: number
-}
-
-export function getImpactBreakdown(inputs: ImpactInputs): ImpactBreakdown {
-  const score = computeImpact(inputs)
-  const level = levelFromImpact(score)
-  return {
-    score,
-    level,
-    levelLabel: getLevelLabel(level),
-    reach: Math.round(normalize(inputs.reach, IMPACT_TARGETS.reach)),
-    influence: Math.round(normalize(inputs.influence, IMPACT_TARGETS.influence)),
-    trust: Math.round(normalize(inputs.trust, IMPACT_TARGETS.trust)),
-    consistency: Math.round(normalize(inputs.consistency, IMPACT_TARGETS.consistency)),
-  }
-}

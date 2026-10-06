@@ -22,7 +22,6 @@ export async function saveFeatureFlags(flags: FeatureFlags): Promise<Result> {
       key: 'features',
       value: safe as unknown as Record<string, unknown>,
       updated_at: new Date().toISOString(),
-      updated_by: ctx.userId,
     },
     { onConflict: 'key' },
   )

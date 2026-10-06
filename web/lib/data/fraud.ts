@@ -27,7 +27,7 @@ export type TrustEvent = {
   created_at: string
 }
 
-export type WantedUser = {
+export type FlaggedUser = {
   id: string
   display_name: string
   phone: string | null
@@ -57,8 +57,8 @@ export async function getRecentTrustEvents(limit = 50): Promise<TrustEvent[]> {
   return (data ?? []) as TrustEvent[]
 }
 
-// ─── المستخدمين بـ wanted_level ───
-export async function getWantedUsers(limit = 30): Promise<WantedUser[]> {
+// ─── المستخدمين المبلغ عنهم (داخلي) ───
+export async function getFlaggedUsers(limit = 30): Promise<FlaggedUser[]> {
   const supabase = await createServiceClient()
   const { data } = await supabase
     .from('profiles')
@@ -67,7 +67,7 @@ export async function getWantedUsers(limit = 30): Promise<WantedUser[]> {
     .order('wanted_level', { ascending: false })
     .order('trust_score', { ascending: true })
     .limit(limit)
-  return (data ?? []) as WantedUser[]
+  return (data ?? []) as FlaggedUser[]
 }
 
 // ─── إحصائيات fraud ───

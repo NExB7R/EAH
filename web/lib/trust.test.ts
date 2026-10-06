@@ -1,189 +1,129 @@
 import { describe, it, expect } from 'vitest'
 import {
-  computeImpact,
-  levelFromImpact,
-  applyDecay,
-  computeWantedLevel,
-  clampImpact,
-  getActivityWeight,
-  getWantedEmoji,
-  getImpactBreakdown,
-  IMPACT_MIN,
-  IMPACT_MAX,
-  DECAY_HALF_LIFE_DAYS,
+  getTrustTier,
+  getTrustTierMeta,
+  getTrustFactor,
+  effectiveDelta,
+  trustProgress,
+  TRUST_TIERS,
+  TRUST_MIN,
+  TRUST_MAX,
+  TRUST_DEFAULT,
 } from './trust'
 
-describe('clampImpact', () => {
-  it('بيمنع القيم السالبة', () => {
-    expect(clampImpact(-100)).toBe(IMPACT_MIN)
+// ═══════════════════════════════════════════════════════════
+// Trust System 2.0 — Tests
+// ═══════════════════════════════════════════════════════════
+
+describe('getTrustTier', () => {
+  it('0-19 → baraka', () => {
+    expect(getTrustTier(0)).toBe('bade2')
+    expect(getTrustTier(19)).toBe('bade2')
   })
-  it('بيمنع القيم > 1000', () => {
-    expect(clampImpact(5000)).toBe(IMPACT_MAX)
+  it('20-39 → active', () => {
+    expect(getTrustTier(20)).toBe('mashey')
+    expect(getTrustTier(39)).toBe('mashey')
   })
-  it('بيقرّب الأرقام العشرية', () => {
-    expect(clampImpact(456.7)).toBe(457)
+  it('40-59 → mo3tabar', () => {
+    expect(getTrustTier(40)).toBe('fel')
+    expect(getTrustTier(59)).toBe('fel')
+  })
+  it('60-79 → kebeer', () => {
+    expect(getTrustTier(60)).toBe('harif')
+    expect(getTrustTier(79)).toBe('harif')
+  })
+  it('80-100 → legend', () => {
+    expect(getTrustTier(80)).toBe('ostora')
+    expect(getTrustTier(100)).toBe('ostora')
+  })
+  it('بيتعامل مع القيم بره المدى', () => {
+    expect(getTrustTier(-50)).toBe('bade2')
+    expect(getTrustTier(200)).toBe('ostora')
   })
 })
 
-describe('computeImpact', () => {
-  it('بيرجع 0 لو كل المدخلات صفر', () => {
-    const result = computeImpact({ reach: 0, influence: 0, trust: 0, consistency: 0 })
-    expect(result).toBe(0)
+describe('TRUST_TIERS', () => {
+  it('عندها 5 مستويات', () => {
+    expect(Object.keys(TRUST_TIERS)).toHaveLength(5)
   })
-
-  it('بيرجع قيمة عالية لو كل المدخلات في الحد الأقصى', () => {
-    const result = computeImpact({
-      reach: 10000,
-      influence: 500,
-      trust: 100,
-      consistency: 100,
-    })
-    expect(result).toBeGreaterThan(800)
-    expect(result).toBeLessThanOrEqual(IMPACT_MAX)
+  it('كل مستوى فيه label + emoji + color', () => {
+    for (const tier of Object.values(TRUST_TIERS)) {
+      expect(tier.label).toBeTruthy()
+      expect(tier.emoji).toBeTruthy()
+      expect(tier.color).toBeTruthy()
+    }
   })
-
-  it('الـ influence له وزن أكبر من الـ reach', () => {
-    const reachOnly = computeImpact({ reach: 5000, influence: 0, trust: 0, consistency: 0 })
-    const influenceOnly = computeImpact({ reach: 0, influence: 250, trust: 0, consistency: 0 })
-    expect(influenceOnly).toBeGreaterThan(reachOnly)
-  })
-
-  it('بيستخدم log scale — الزيادة الأولى أكبر من التالية', () => {
-    const step1 = computeImpact({ reach: 100, influence: 0, trust: 0, consistency: 0 })
-    const step2 = computeImpact({ reach: 200, influence: 0, trust: 0, consistency: 0 })
-    const step3 = computeImpact({ reach: 300, influence: 0, trust: 0, consistency: 0 })
-
-    const diff1 = step2 - step1
-    const diff2 = step3 - step2
-    expect(diff1).toBeGreaterThan(diff2)
+  it('المستويات بدون فراغات', () => {
+    expect(TRUST_TIERS.bade2.max + 1).toBe(TRUST_TIERS.mashey.min)
+    expect(TRUST_TIERS.mashey.max + 1).toBe(TRUST_TIERS.fel.min)
+    expect(TRUST_TIERS.fel.max + 1).toBe(TRUST_TIERS.harif.min)
+    expect(TRUST_TIERS.harif.max + 1).toBe(TRUST_TIERS.ostora.min)
   })
 })
 
-describe('levelFromImpact', () => {
-  it('visitor للقيم أقل من 100', () => {
-    expect(levelFromImpact(0)).toBe('visitor')
-    expect(levelFromImpact(50)).toBe('visitor')
-    expect(levelFromImpact(99)).toBe('visitor')
+describe('getTrustTierMeta', () => {
+  it('يرجع الاسم الصحيح', () => {
+    expect(getTrustTierMeta(50).label).toBe('زي الفل')
   })
-
-  it('basic من 100 لـ 399', () => {
-    expect(levelFromImpact(100)).toBe('basic')
-    expect(levelFromImpact(399)).toBe('basic')
-  })
-
-  it('member من 400 لـ 799', () => {
-    expect(levelFromImpact(400)).toBe('member')
-    expect(levelFromImpact(799)).toBe('member')
-  })
-
-  it('regular من 800 لـ 1000', () => {
-    expect(levelFromImpact(800)).toBe('regular')
-    expect(levelFromImpact(1000)).toBe('regular')
+  it('يرجع الـ emoji', () => {
+    expect(getTrustTierMeta(90).emoji).toBe('👑')
   })
 })
 
-describe('applyDecay', () => {
-  it('مفيش تغيير لو مفيش خمول', () => {
-    expect(applyDecay(500, 0)).toBe(500)
+describe('getTrustFactor (log scale)', () => {
+  it('سهل من 0-30 (×1.5)', () => {
+    expect(getTrustFactor(10)).toBe(1.5)
+    expect(getTrustFactor(29)).toBe(1.5)
   })
-
-  it('بينزل للنص بعد DECAY_HALF_LIFE_DAYS', () => {
-    const result = applyDecay(500, DECAY_HALF_LIFE_DAYS)
-    expect(result).toBe(250)
+  it('عادي من 30-50 (×1.0)', () => {
+    expect(getTrustFactor(30)).toBe(1.0)
+    expect(getTrustFactor(49)).toBe(1.0)
   })
-
-  it('بيوقف عند DECAY_FLOOR (30%) — مش بينزل أقل', () => {
-    // بعد 138 يوم (2× half-life) — القيمة النظرية 125، بس floor بيمنع
-    const at2x = applyDecay(500, DECAY_HALF_LIFE_DAYS * 2)
-    expect(at2x).toBe(150) // 500 × 0.3 (floor)
+  it('متوسط من 50-70 (×0.7)', () => {
+    expect(getTrustFactor(50)).toBe(0.7)
+    expect(getTrustFactor(69)).toBe(0.7)
   })
-
-  it('القيمة بتفضل عند الـ floor مهما طال الخمول', () => {
-    const at10x = applyDecay(500, DECAY_HALF_LIFE_DAYS * 10)
-    expect(at10x).toBe(150)
+  it('صعب من 70-85 (×0.4)', () => {
+    expect(getTrustFactor(70)).toBe(0.4)
+    expect(getTrustFactor(84)).toBe(0.4)
   })
-})
-
-describe('computeWantedLevel', () => {
-  it('0 لو مفيش بلاغات', () => {
-    expect(computeWantedLevel(0)).toBe(0)
+  it('صعب جداً من 85-95 (×0.2)', () => {
+    expect(getTrustFactor(85)).toBe(0.2)
+    expect(getTrustFactor(94)).toBe(0.2)
   })
-
-  it('1 نجمة لبلاغ واحد', () => {
-    expect(computeWantedLevel(1)).toBe(1)
-  })
-
-  it('2 نجوم لـ 3 بلاغات', () => {
-    expect(computeWantedLevel(3)).toBe(2)
-  })
-
-  it('5 نجوم لـ 12+ بلاغ', () => {
-    expect(computeWantedLevel(12)).toBe(5)
-    expect(computeWantedLevel(100)).toBe(5)
+  it('أسطوري من 95-100 (×0.1)', () => {
+    expect(getTrustFactor(95)).toBe(0.1)
+    expect(getTrustFactor(100)).toBe(0.1)
   })
 })
 
-describe('getActivityWeight', () => {
-  it('مشاركة = 25', () => {
-    expect(getActivityWeight('share')).toBe(25)
+describe('effectiveDelta', () => {
+  it('delta موجب بيتقلل مع الارتفاع', () => {
+    expect(effectiveDelta(10, 10)).toBe(15) // 10 × 1.5
+    expect(effectiveDelta(50, 10)).toBe(7) // 10 × 0.7
+    expect(effectiveDelta(90, 10)).toBe(2) // 10 × 0.2
+    expect(effectiveDelta(99, 10)).toBe(1) // 10 × 0.1
   })
-  it('رد = 15', () => {
-    expect(getActivityWeight('reply')).toBe(15)
-  })
-  it('تعليق = 10', () => {
-    expect(getActivityWeight('comment')).toBe(10)
-  })
-  it('متابعة = 8', () => {
-    expect(getActivityWeight('follow')).toBe(8)
-  })
-  it('مفضلة = 6', () => {
-    expect(getActivityWeight('favorite')).toBe(6)
-  })
-  it('لايك = 1', () => {
-    expect(getActivityWeight('like')).toBe(1)
+  it('delta سالب بيتطبق كامل', () => {
+    expect(effectiveDelta(50, -15)).toBe(-15)
+    expect(effectiveDelta(90, -25)).toBe(-25)
   })
 })
 
-describe('getWantedEmoji', () => {
-  it('فاضي لو 0', () => {
-    expect(getWantedEmoji(0)).toBe('')
+describe('trustProgress', () => {
+  it('50 → باقي 50', () => {
+    const p = trustProgress(50)
+    expect(p.remaining).toBe(50)
+    expect(p.percent).toBe(50)
   })
-  it('نجمة لـ 1', () => {
-    expect(getWantedEmoji(1)).toBe('⭐')
-  })
-  it('5 نجوم لـ 5+', () => {
-    expect(getWantedEmoji(5)).toContain('💀')
-    expect(getWantedEmoji(10)).toContain('💀')
+  it('clamp للقيم بره المدى', () => {
+    expect(trustProgress(-10).score).toBe(0)
+    expect(trustProgress(150).score).toBe(100)
   })
 })
 
-describe('getImpactBreakdown', () => {
-  it('بيرجع breakdown كامل', () => {
-    const result = getImpactBreakdown({
-      reach: 5000,
-      influence: 100,
-      trust: 50,
-      consistency: 30,
-    })
-    expect(result).toHaveProperty('score')
-    expect(result).toHaveProperty('level')
-    expect(result).toHaveProperty('levelLabel')
-    expect(result).toHaveProperty('reach')
-    expect(result).toHaveProperty('influence')
-    expect(result).toHaveProperty('trust')
-    expect(result).toHaveProperty('consistency')
-  })
-
-  it('القيم العادية تكون بين 0 و 100', () => {
-    const result = getImpactBreakdown({
-      reach: 5000,
-      influence: 100,
-      trust: 50,
-      consistency: 30,
-    })
-    expect(result.reach).toBeGreaterThanOrEqual(0)
-    expect(result.reach).toBeLessThanOrEqual(100)
-    expect(result.influence).toBeGreaterThanOrEqual(0)
-    expect(result.influence).toBeLessThanOrEqual(100)
-  })
+describe('الثوابت', () => {
+  it('TRUST_MIN = 0', () => expect(TRUST_MIN).toBe(0))
+  it('TRUST_MAX = 100', () => expect(TRUST_MAX).toBe(100))
+  it('TRUST_DEFAULT = 50', () => expect(TRUST_DEFAULT).toBe(50))
 })

@@ -8,7 +8,6 @@ import { createClient } from '@/lib/supabase/server'
 // ═══════════════════════════════════════════════════════════
 
 export type AppRole = 'customer' | 'merchant' | 'admin' | 'super_admin'
-export type ImpactLevel = 'visitor' | 'basic' | 'member' | 'regular'
 export type DisplayNameMode = 'real' | 'alias' | 'both' | 'anonymous'
 
 export type UserSession = {
@@ -23,10 +22,8 @@ export type UserSession = {
   trustScore: number
   trustTier: string
   // الأثر
-  impactScore: number
-  impactLevel: ImpactLevel
   streakDays: number
-  wantedLevel: number
+  legendPoints: number
   // Premium
   isPremium: boolean
   premiumUntil: string | null
@@ -52,7 +49,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     supabase
       .from('profiles')
       .select(
-        'display_name, avatar_url, phone_verified_at, trust_score, trust_tier, impact_score, impact_level, streak_days, wanted_level, is_premium, premium_until, display_name_mode, alias, hide_avatar, hide_favorites, hide_following',
+        'display_name, avatar_url, phone_verified_at, trust_score, trust_tier, streak_days, legend_points, is_premium, premium_until, display_name_mode, alias, hide_avatar, hide_favorites, hide_following',
       )
       .eq('id', user.id)
       .maybeSingle(),
@@ -74,11 +71,9 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     phoneVerified: !!profile?.phone_verified_at,
     emailVerified: !!user.email_confirmed_at,
     trustScore: profile?.trust_score ?? 50,
-    trustTier: profile?.trust_tier ?? 'trusted',
-    impactScore: profile?.impact_score ?? 0,
-    impactLevel: (profile?.impact_level as ImpactLevel) ?? 'visitor',
+    trustTier: profile?.trust_tier ?? 'fel',
     streakDays: profile?.streak_days ?? 0,
-    wantedLevel: profile?.wanted_level ?? 0,
+    legendPoints: profile?.legend_points ?? 0,
     isPremium: profile?.is_premium ?? false,
     premiumUntil: profile?.premium_until ?? null,
     displayNameMode: (profile?.display_name_mode as DisplayNameMode) ?? 'real',

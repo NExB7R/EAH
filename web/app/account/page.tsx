@@ -10,7 +10,7 @@ import {
   StarIcon,
 } from '@/components/icons'
 import Avatar from '@/components/avatar'
-import ImpactCard from '@/components/impact-card'
+import TrustCard from '@/components/trust-card'
 import { getUserSession } from '@/lib/data/user'
 import { getAccountStats, getFullProfile } from '@/lib/data/account'
 import { getMyBusiness } from '@/lib/data/merchant'
@@ -103,12 +103,10 @@ export default async function AccountPage() {
         </div>
       </section>
 
-      <ImpactCard
-        score={profile.impact_score}
-        level={profile.impact_level as 'visitor' | 'basic' | 'member' | 'regular'}
+      <TrustCard
+        score={profile.trust_score ?? 50}
         streakDays={profile.streak_days ?? 0}
-        wantedLevel={profile.wanted_level ?? 0}
-        isPremium={profile.is_premium}
+        legendPoints={profile.legend_points ?? 0}
       />
 
       {/* Merchant CTA — لو عنده نشاط */}

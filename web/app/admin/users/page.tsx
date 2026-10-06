@@ -51,7 +51,7 @@ async function getUsers(filter: UserFilter, q: string): Promise<AdminUser[]> {
     phone: p.phone as string | null,
     phone_verified_at: p.phone_verified_at as string | null,
     trust_score: (p.trust_score as number) ?? 0,
-    trust_tier: (p.trust_tier as string) ?? 'new',
+    trust_tier: (p.trust_tier as string) ?? 'fel',
     created_at: p.created_at as string,
     role: rolesMap.get(p.id as string) ?? null,
     banned_until: (p.banned_until as string | null) ?? null,

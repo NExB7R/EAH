@@ -28,11 +28,12 @@ const TARGET_LABEL: Record<string, string> = {
 }
 
 const REASON_LABEL: Record<string, string> = {
-  spam: 'سبام',
-  abuse: 'إساءة',
-  fake: 'محتوى مزيف',
-  inappropriate: 'محتوى غير لائق',
-  other: 'أخرى',
+  سبام: 'سبام',
+  'محتوى مسيء': 'محتوى مسيء',
+  'محتوى مزيّف': 'محتوى مزيّف',
+  'تحرش/إساءة': 'تحرش/إساءة',
+  'معلومات غلط': 'معلومات غلط',
+  'سبب آخر': 'سبب آخر',
 }
 
 export default function ReportRow({ report }: Props) {
@@ -60,7 +61,7 @@ export default function ReportRow({ report }: Props) {
     })
   }
 
-  const isOpen = status === 'open' || status === 'reviewing'
+  const isOpen = status === 'pending' || status === 'reviewing'
 
   return (
     <article className={`${styles.row} ${!isOpen ? styles.rowClosed : ''}`}>

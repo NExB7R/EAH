@@ -2,7 +2,7 @@ import WmImage from './wm-image'
 import { StarIcon, BadgeCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
 import DistanceBadge from './distance-badge'
 import type { BusinessDetail } from '@/lib/data/business-detail'
-import { TYPE_LABEL, TIER_LABEL } from '@/lib/data/business-detail'
+import { TYPE_LABEL, TIER_LABEL, TIER_EMOJI } from '@/lib/data/business-detail'
 import styles from './business-hero.module.css'
 
 type Props = {
@@ -20,6 +20,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
   const { business, cover, logo } = detail
   const typeLabel = TYPE_LABEL[business.business_type] ?? 'نشاط'
   const tierLabel = TIER_LABEL[business.trust_tier] ?? business.trust_tier
+  const tierEmoji = TIER_EMOJI[business.trust_tier] ?? ''
   const tierTone = TIER_TONE[business.trust_tier] ?? 'purple'
 
   const hasRating = business.rating_count > 0
@@ -74,7 +75,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
         <div className={styles.info}>
           <div className={styles.titleRow}>
             <h1 className={styles.name}>{business.name}</h1>
-            {business.trust_tier === 'trusted' && (
+            {(business.trust_tier === 'harif' || business.trust_tier === 'ostora') && (
               <span className={styles.verified} title="موثّق">
                 <BadgeCheckIcon size={18} />
               </span>
@@ -107,7 +108,9 @@ export default function BusinessHero({ detail, isOpen }: Props) {
           </div>
 
           <div className={styles.badges}>
-            <span className={`${styles.tier} ${styles['tier_' + tierTone]}`}>{tierLabel}</span>
+            <span className={`${styles.tier} ${styles['tier_' + tierTone]}`}>
+              {tierEmoji} {tierLabel}
+            </span>
             {business.trust_score > 0 && (
               <span className={styles.trust}>مصداقية {business.trust_score}</span>
             )}

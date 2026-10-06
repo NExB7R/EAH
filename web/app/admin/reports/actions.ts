@@ -7,7 +7,7 @@ import { requireAdmin } from '@/lib/auth/admin'
 type Result = { ok: true } | { ok: false; error: string }
 
 const schema = z.object({
-  status: z.enum(['open', 'reviewing', 'resolved', 'dismissed']),
+  status: z.enum(['pending', 'reviewing', 'resolved', 'dismissed']),
 })
 
 export async function updateReportStatus(reportId: string, status: string): Promise<Result> {

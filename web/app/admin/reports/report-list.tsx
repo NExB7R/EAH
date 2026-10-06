@@ -21,14 +21,14 @@ type Props = {
 }
 
 const FILTERS = [
-  { key: 'open', label: 'مفتوح' },
+  { key: 'pending', label: 'مفتوح' },
   { key: 'reviewing', label: 'قيد المراجعة' },
   { key: 'resolved', label: 'تم الحل' },
   { key: 'all', label: 'الكل' },
 ] as const
 
 export default function ReportList({ reports }: Props) {
-  const [filter, setFilter] = useState<string>('open')
+  const [filter, setFilter] = useState<string>('pending')
 
   const filtered = filter === 'all' ? reports : reports.filter((r) => r.status === filter)
 

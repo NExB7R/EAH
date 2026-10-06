@@ -86,7 +86,7 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     is_open: !!b.is_open,
     is_featured: !!b.is_featured,
     trust_score: (b.trust_score as number) ?? 50,
-    trust_tier: (b.trust_tier as string) ?? 'trusted',
+    trust_tier: (b.trust_tier as string) ?? 'fel',
     successful_orders: (b.successful_orders as number) ?? 0,
     rating_avg: (b.rating_avg as number) ?? 0,
     rating_count: (b.rating_count as number) ?? 0,

@@ -43,7 +43,6 @@ export async function saveSettings(formData: FormData): Promise<Result> {
       key: 'site',
       value: parsed.data as unknown as Record<string, unknown>,
       updated_at: new Date().toISOString(),
-      updated_by: ctx.userId,
     },
     { onConflict: 'key' },
   )

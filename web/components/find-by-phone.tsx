@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { SearchIcon, PhoneIcon, ShieldCheckIcon, StarIcon, AlertIcon } from './icons'
+import { getTrustTierMeta } from '@/lib/trust'
 import styles from './find-by-phone.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -14,11 +15,9 @@ type UserResult = {
   display_name: string
   alias: string | null
   avatar_url: string | null
-  impact_score: number
-  impact_level: string
   trust_score: number
   trust_tier: string
-  wanted_level: number
+  legend_points: number
   is_premium: boolean
   is_business: boolean
   business_slug: string | null
@@ -32,13 +31,6 @@ type State =
   | { type: 'found'; user: UserResult }
   | { type: 'not-found'; message: string }
   | { type: 'error'; message: string }
-
-const LEVEL_LABEL: Record<string, string> = {
-  visitor: 'زائر',
-  basic: 'أساسي',
-  member: 'عضو',
-  regular: 'منتظم',
-}
 
 export default function FindByPhone() {
   const [phone, setPhone] = useState('')
@@ -141,12 +133,19 @@ export default function FindByPhone() {
               </h3>
               <div className={styles.userMeta}>
                 <span className={styles.levelBadge}>
-                  {LEVEL_LABEL[state.user.impact_level] ?? state.user.impact_level}
+                  {getTrustTierMeta(state.user.trust_score).emoji}{' '}
+                  {getTrustTierMeta(state.user.trust_score).label}
                 </span>
-                {state.user.trust_tier === 'trusted' && (
+                {state.user.trust_tier === 'harif' && (
                   <span className={styles.verified}>
                     <ShieldCheckIcon size={12} />
-                    موثوق
+                    كبير
+                  </span>
+                )}
+                {state.user.trust_tier === 'ostora' && (
+                  <span className={styles.verified}>
+                    <ShieldCheckIcon size={12} />
+                    أسطورة
                   </span>
                 )}
               </div>
@@ -155,20 +154,16 @@ export default function FindByPhone() {
 
           <div className={styles.stats}>
             <div className={styles.stat}>
-              <span className={styles.statValue}>{state.user.impact_score}</span>
-              <span className={styles.statLabel}>الأثر</span>
-            </div>
-            <div className={styles.stat}>
               <span className={styles.statValue}>
                 <StarIcon size={14} />
                 {state.user.trust_score}
               </span>
-              <span className={styles.statLabel}>الثقة</span>
+              <span className={styles.statLabel}>المصداقية</span>
             </div>
-            {state.user.wanted_level > 0 && (
-              <div className={`${styles.stat} ${styles.statDanger}`}>
-                <span className={styles.statValue}>⚠️ {state.user.wanted_level}</span>
-                <span className={styles.statLabel}>تبليغات</span>
+            {state.user.legend_points > 0 && (
+              <div className={styles.stat}>
+                <span className={styles.statValue}>👑 {state.user.legend_points}</span>
+                <span className={styles.statLabel}>نقاط أسطورة</span>
               </div>
             )}
           </div>

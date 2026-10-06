@@ -236,8 +236,8 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
     followsCount: followsCount ?? 0,
 
     trustScore: business?.trust_score ?? 50,
-    trustTier: business?.trust_tier ?? 'new',
-    isVerified: business?.trust_tier === 'verified' || business?.trust_tier === 'trusted',
+    trustTier: business?.trust_tier ?? 'fel',
+    isVerified: business?.trust_tier === 'harif' || business?.trust_tier === 'ostora',
     hasWhatsapp: business?.accepts_whatsapp_orders ?? false,
     hasPhone: true, // placeholder
     hasMenu: mediaTotal > 0,

@@ -7,6 +7,15 @@ import type { Business } from '@/lib/data'
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
+// مكافأة المستويات في ترند
+const TRUST_TIER_BOOST: Record<string, number> = {
+  baraka: 0,
+  active: 0.05,
+  mo3tabar: 0.1,
+  kebeer: 0.2,
+  legend: 0.35,
+}
+
 // كم يوم من آخر نشاط؟
 function daysSince(iso: string | null): number {
   if (!iso) return 365
@@ -29,9 +38,9 @@ export function trendScore(b: Business): number {
   const orders = Math.log10(1 + b.successful_orders) / 2
   const recency = decay(daysSince(b.last_activity_at))
   const featuredBoost = b.is_featured ? 0.3 : 0
-  const verifiedBoost = b.trust_tier === 'trusted' ? 0.15 : 0
+  const tierBoost = TRUST_TIER_BOOST[b.trust_tier as keyof typeof TRUST_TIER_BOOST] ?? 0
 
-  return trust * 0.4 + orders * 0.3 + recency * 0.3 + featuredBoost + verifiedBoost
+  return trust * 0.4 + orders * 0.3 + recency * 0.3 + featuredBoost + tierBoost
 }
 
 // ═══════════════════════════════════════════════════════════

@@ -301,9 +301,19 @@ export const TYPE_LABEL: Record<string, string> = {
 }
 
 export const TIER_LABEL: Record<string, string> = {
-  trusted: 'موثوق',
-  verified: 'مُوثَّق',
-  new: 'جديد',
+  baraka: 'على البركة',
+  active: 'شغّال',
+  mo3tabar: 'معتبر',
+  kebeer: 'كبير',
+  legend: 'أسطورة',
+}
+
+export const TIER_EMOJI: Record<string, string> = {
+  baraka: '🌱',
+  active: '🌿',
+  mo3tabar: '🌳',
+  kebeer: '⭐',
+  legend: '👑',
 }
 
 // ═══════════════════════════════════════════════════════════

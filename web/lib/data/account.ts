@@ -208,9 +208,6 @@ export type FullProfile = {
   referral_code: string | null
   trust_score: number
   trust_tier: string
-  impact_score: number
-  impact_level: string
-  wanted_level: number
   is_premium: boolean
   premium_until: string | null
   display_name_mode: string
@@ -220,6 +217,7 @@ export type FullProfile = {
   hide_following: boolean
   streak_days: number
   streak_last_date: string | null
+  legend_points: number
   created_at: string
 }
 

@@ -5,7 +5,7 @@ import {
   getFraudStats,
   getFlaggedReviews,
   getRecentTrustEvents,
-  getWantedUsers,
+  getFlaggedUsers,
   getMultiAccountIps,
 } from '@/lib/data/fraud'
 import Link from 'next/link'
@@ -36,11 +36,11 @@ const EVENT_LABEL: Record<string, string> = {
 }
 
 export default async function AdminFraudPage() {
-  const [stats, flagged, events, wanted, multiIps] = await Promise.all([
+  const [stats, flaggedReviews, events, flaggedUsers, multiIps] = await Promise.all([
     getFraudStats(),
     getFlaggedReviews(),
     getRecentTrustEvents(30),
-    getWantedUsers(20),
+    getFlaggedUsers(20),
     getMultiAccountIps(30),
   ])
 
@@ -48,7 +48,7 @@ export default async function AdminFraudPage() {
     <div>
       <AccountPageHeader
         title="كشف التلاعب"
-        description={`${stats.flagged} تقييم معلّق · ${stats.wanted} مستخدم مطلوب · ${stats.trustEvents24h} حدث آخر 24 ساعة`}
+        description={`${stats.flagged} تقييم معلّق · ${stats.wanted} مستخدم مُبلَّغ · ${stats.trustEvents24h} حدث آخر 24 ساعة`}
       />
 
       <div className={styles.grid}>
@@ -57,7 +57,7 @@ export default async function AdminFraudPage() {
           <div className={styles.cardValue}>{stats.flagged}</div>
         </div>
         <div className={`${styles.card} ${stats.wanted > 0 ? styles.cardWarn : ''}`}>
-          <div className={styles.cardLabel}>مستخدمون مطلوبون</div>
+          <div className={styles.cardLabel}>مستخدمون مُبلَّغ عنهم</div>
           <div className={styles.cardValue}>{stats.wanted}</div>
         </div>
         <div className={`${styles.card} ${stats.banned > 0 ? styles.cardDanger : ''}`}>
@@ -73,7 +73,7 @@ export default async function AdminFraudPage() {
       {/* التقييمات المُعلّمة */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>تقييمات مُعلّمة (Velocity / Auto-flag)</h2>
-        {flagged.length === 0 ? (
+        {flaggedReviews.length === 0 ? (
           <EmptyState
             Icon={ShieldCheckIcon}
             title="مفيش تقييمات مُعلّمة"
@@ -81,7 +81,7 @@ export default async function AdminFraudPage() {
           />
         ) : (
           <ul className={styles.list}>
-            {flagged.map((r) => (
+            {flaggedReviews.map((r) => (
               <li key={r.id} className={styles.item}>
                 <div className={styles.itemHead}>
                   <span className={styles.badge}>
@@ -104,17 +104,21 @@ export default async function AdminFraudPage() {
 
       {/* Wanted Users */}
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>مستخدمون بمستوى مطلوب (Wanted)</h2>
-        {wanted.length === 0 ? (
-          <EmptyState Icon={UserIcon} title="مفيش مستخدمين مطلوبين" description="الجميع ملتزمون." />
+        <h2 className={styles.sectionTitle}>مستخدمون مُبلَّغ عنهم</h2>
+        {flaggedUsers.length === 0 ? (
+          <EmptyState
+            Icon={UserIcon}
+            title="مفيش مستخدمين مبلَّغ عنهم"
+            description="الجميع ملتزمون."
+          />
         ) : (
           <ul className={styles.list}>
-            {wanted.map((u) => {
+            {flaggedUsers.map((u) => {
               const isBanned = !!u.banned_until && new Date(u.banned_until) > new Date()
               return (
                 <li key={u.id} className={styles.item}>
                   <div className={styles.itemHead}>
-                    <span className={styles.wantedStars}>
+                    <span className={styles.flaggedStars}>
                       {'⭐'.repeat(Math.min(u.wanted_level, 5))}
                       {u.wanted_level >= 5 && '💀'}
                     </span>

@@ -232,7 +232,7 @@ async function toolGetBusinessDetails(args: { slug: string }) {
 
 async function toolGetMyStats(): Promise<{
   ok: boolean
-  stats?: { points: number; favorites: number; follows: number; orders: number; impact: number }
+  stats?: { points: number; favorites: number; follows: number; orders: number; trust: number }
   error?: string
 }> {
   const supabase = await createClient()
@@ -264,7 +264,7 @@ async function toolGetMyStats(): Promise<{
       .from('order_requests')
       .select('*', { count: 'exact', head: true })
       .eq('customer_profile_id', user.id),
-    supabase.from('profiles').select('impact_score').eq('id', user.id).maybeSingle(),
+    supabase.from('profiles').select('trust_score').eq('id', user.id).maybeSingle(),
   ])
 
   return {
@@ -274,7 +274,7 @@ async function toolGetMyStats(): Promise<{
       favorites: favorites ?? 0,
       follows: follows ?? 0,
       orders: orders ?? 0,
-      impact: profile?.impact_score ?? 0,
+      trust: profile?.trust_score ?? 50,
     },
   }
 }

@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 export default async function AdminReportsPage() {
   const reports = await getReports('all')
 
-  const open = reports.filter((r) => r.status === 'open' || r.status === 'reviewing').length
+  const open = reports.filter((r) => r.status === 'pending' || r.status === 'reviewing').length
 
   return (
     <div>
