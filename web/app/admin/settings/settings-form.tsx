@@ -146,7 +146,7 @@ export default function SettingsForm({ initial }: Props) {
           <span className={styles.toggleBody}>
             <StoreIcon size={14} />
             <span>
-              <strong>تسجيل الأنشطة الجديدة</strong>
+              <strong>تسجيل بدايات (المشاريع الجديدة)</strong>
               <small>السماح بتقديم أنشطة جديدة</small>
             </span>
           </span>

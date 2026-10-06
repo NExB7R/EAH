@@ -56,7 +56,7 @@ const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/featured', label: 'المميزون', Icon: StarIcon },
   { href: '/trends', label: 'الترند', Icon: TrendingUpIcon },
   { href: '/offers', label: 'العروض', Icon: TagIcon },
-  { href: '/new', label: 'الجديد', Icon: SparklesIcon },
+  { href: '/new', label: 'بدايات', Icon: SparklesIcon },
   { href: '/nearby', label: 'قريب منك', Icon: LocationIcon },
   { href: '/suggest', label: 'رشحلى', Icon: TargetIcon },
   { href: '/trust', label: 'المصداقية', Icon: ShieldCheckIcon },

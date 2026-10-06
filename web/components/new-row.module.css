@@ -256,3 +256,16 @@
     transform: none;
   }
 }
+
+.titleText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.subtitle {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  margin: 0;
+}

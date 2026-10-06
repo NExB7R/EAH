@@ -53,8 +53,8 @@ export const FEATURE_META: Record<
     group: 'home',
   },
   new_enabled: {
-    label: 'الأنشطة الجديدة',
-    desc: 'قسم الجديد في Home + صفحة /new',
+    label: 'بدايات',
+    desc: 'قسم بدايات في Home + صفحة /new',
     group: 'home',
   },
   nearby_enabled: {

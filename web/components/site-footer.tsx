@@ -45,7 +45,7 @@ const COLUMNS = [
       { href: '/featured', label: 'المميزون', Icon: CrownGoldIcon },
       { href: '/trends', label: 'الترند', Icon: TrendingUpIcon },
       { href: '/offers', label: 'العروض', Icon: GiftIcon },
-      { href: '/new', label: 'الجديد', Icon: LampIcon },
+      { href: '/new', label: 'بدايات', Icon: LampIcon },
       { href: '/nearby', label: 'قريب منك', Icon: MapPinIcon },
     ],
   },

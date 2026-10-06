@@ -194,7 +194,7 @@ export const getFeaturedBusinesses = unstable_cache(
 )
 
 // ═══════════════════════════════════════════════════════════
-// 3. الأنشطة الجديدة (New projects)
+// 3. بدايات (New projects — مشاريع لسه فاتحة)
 // ═══════════════════════════════════════════════════════════
 
 export const getNewBusinesses = unstable_cache(

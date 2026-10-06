@@ -2,6 +2,7 @@ import Link from 'next/link'
 import WmImage from './wm-image'
 import {
   SparkleStarIcon,
+  SunriseIcon,
   ArrowLeftIcon,
   MapPinIcon,
   StarIcon,
@@ -44,9 +45,12 @@ export default function NewRow({ businesses, limit = 12 }: Props) {
         <header className={styles.header}>
           <div className={styles.titleWrap}>
             <span className={styles.titleIcon}>
-              <SparkleStarIcon size={22} />
+              <SunriseIcon size={22} />
             </span>
-            <h2 className={styles.title}>الجديد</h2>
+            <div className={styles.titleText}>
+              <h2 className={styles.title}>بدايات</h2>
+              <p className={styles.subtitle}>مشاريع لسه فاتحة — ادعمهم</p>
+            </div>
           </div>
 
           <Link href="/new" className={styles.viewAll}>

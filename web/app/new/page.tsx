@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import { getNewBusinesses } from '@/lib/data'
-import { LampIcon } from '@/components/icons'
+import { SunriseIcon } from '@/components/icons'
 import SectionLayout from '@/components/section-layout'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'الجديد · EAH',
-  description: 'الأنشطة الجديدة في شبين القناطر والقرى حواليها',
+  title: 'بدايات · EAH',
+  description: 'مشاريع لسه فاتحة في شبين القناطر والقرى حواليها — ادعمهم',
 }
 
 export default async function NewPage() {
@@ -16,9 +16,9 @@ export default async function NewPage() {
   return (
     <SectionLayout
       activeKey="new"
-      title="الجديد"
-      Icon={LampIcon}
-      tone="pink"
+      title="بدايات"
+      Icon={SunriseIcon}
+      tone="gold"
       businesses={businesses}
     />
   )

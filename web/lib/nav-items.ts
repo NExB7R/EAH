@@ -6,7 +6,7 @@ import {
   TrendingUpIcon,
   GiftIcon,
   MapPinIcon,
-  LampIcon,
+  SunriseIcon,
   SparkleStarIcon,
 } from '@/components/icons'
 
@@ -71,9 +71,9 @@ export const NAV_ITEMS: NavItem[] = [
   {
     key: 'new',
     href: '/new',
-    label: 'الأنشطة الجديدة',
-    hint: 'اكتشف الجديد',
-    Icon: LampIcon,
+    label: 'بدايات',
+    hint: 'مشاريع لسه فاتحة',
+    Icon: SunriseIcon,
     enabled: true,
   },
   {
