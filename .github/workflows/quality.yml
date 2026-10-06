@@ -48,6 +48,9 @@ jobs:
         run: npx knip --include files,dependencies
         continue-on-error: true
 
+      - name: jscpd (duplicates)
+        run: npx jscpd . --threshold 5
+
   rls-tests:
     runs-on: ubuntu-latest
     timeout-minutes: 10
