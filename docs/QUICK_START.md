@@ -25,7 +25,7 @@
 - تزامن الوثائق دايماً (35)
 
 ## الحالة:
-- v1.0.0 · commit 512c11c
+- v1.0.0 · commit من PROGRESS.md
 - https://eah-sq.vercel.app
 
 ## التفاصيل الكاملة:
