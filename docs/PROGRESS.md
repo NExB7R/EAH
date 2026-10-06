@@ -7,7 +7,7 @@
 
 ## الحالة العامة
 
-**آخر commit كود:** `38ff16c`
+**آخر commit كود:** `6b190e1`
 **الفرع:** main
 **الإصدار:** v1.0.0
 
@@ -197,7 +197,7 @@
 |------|--------|
 | avatar.tsx | ✅ |
 | logo.tsx | ✅ |
-| splash.tsx | ✅ |
+| ~~splash.tsx~~ | 🗑️ (شال — LCP) |
 | signature.tsx | ✅ |
 | palestine-heart.tsx | ✅ |
 | watermark.tsx | ✅ |

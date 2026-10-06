@@ -1,4 +1,12 @@
 
+
+### perf(home) — 2026-10-07
+- **LCP Fix:** شالنا Splash (كان بيعمل overlay 1s — NO_LCP)
+- Suspense islands في layout (TopBar/BottomBar) + page (Hero/Sections)
+- body fade 250ms (prefers-reduced-motion مدعوم)
+- preconnect + dns-prefetch لـ Supabase
+- commit: `6b190e1`
+
 ## [Unreleased]
 
 ### Trust System 2.0 (2026-10-07)

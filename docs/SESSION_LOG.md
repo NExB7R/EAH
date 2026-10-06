@@ -771,3 +771,26 @@
 - راجع `docs/CRITERIA.md` (معايير كاملة)
 - راجع `docs/NEXT_SESSION.md` (المهام)
 - كل حاجة موثقة في migrations
+
+---
+
+## 2026-10-07 — Session 16: LCP Fix (Splash Removal)
+
+### اللي اتحقق
+- شالنا Splash (كان بيعمل overlay ~1s — NO_LCP على Mobile + Desktop)
+- layout.tsx: تقسيم لـ TopBar/BottomBar + Suspense islands
+- page.tsx: HomeHero يرسم فوراً + HomeSections في Suspense
+- globals.css: body fade 250ms (يحترم prefers-reduced-motion)
+- preconnect + dns-prefetch لـ Supabase
+- cookies page: شالنا مرجع splash
+
+### Commits
+- `6b190e1` perf(home): fix LCP — remove splash + Suspense islands + fade
+
+### الأثر المتوقع
+- LCP يتحول من NO_LCP → رقم حقيقي
+- FCP < 1.8s (كان 3.0s)
+- Mobile Performance: 84 → متوقع 90+
+
+### اللي معلق
+- Speed Insights يتحدّث خلال ساعة — لازم قياس جديد
