@@ -34,6 +34,7 @@ const ITEMS = [
   { key: 'points', href: '/account/points', label: 'النقاط', Icon: GiftIcon },
   { key: 'loyalty', href: '/account/loyalty', label: 'الولاء', Icon: CrownGoldIcon },
   { key: 'badges', href: '/account/badges', label: 'الشارات', Icon: SparkleStarIcon },
+  { key: 'trust', href: '/trust', label: 'المصداقية', Icon: ShieldCheckIcon },
   { key: 'referral', href: '/account/referral', label: 'دعوة أصدقاء', Icon: ShareIcon },
   {
     key: 'notifications',

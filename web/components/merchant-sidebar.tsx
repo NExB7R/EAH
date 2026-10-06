@@ -13,6 +13,7 @@ import {
   QrCodeIcon,
   MapPinIcon,
   TagIcon,
+  ShieldCheckIcon,
 } from './icons'
 import styles from './merchant-sidebar.module.css'
 
@@ -29,6 +30,7 @@ const ITEMS = [
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
   { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
   { href: '/merchant/qr', label: 'QR النشاط', Icon: QrCodeIcon },
+  { href: '/merchant/trust', label: 'المصداقية', Icon: ShieldCheckIcon },
   { href: '/merchant/subscription', label: 'الاشتراك', Icon: CrownGoldIcon },
   { href: '/merchant/settings', label: 'الإعدادات', Icon: SettingsIcon },
 ]
