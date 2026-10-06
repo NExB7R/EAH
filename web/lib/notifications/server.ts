@@ -39,8 +39,35 @@ export type CreateBulkInput = {
   pushTag?: string
 }
 
+// ─── أنواع "مقفلة" (مش قابلة للإطفاء) ───
+const LOCKED_TYPES: Set<NotificationType> = new Set(['system', 'admin', 'announcement'])
+
+// ─── فحص تفضيلات المستخدم ───
+async function isTypeEnabled(userId: string, type: NotificationType): Promise<boolean> {
+  if (LOCKED_TYPES.has(type)) return true
+
+  const supabase = createServiceClient()
+  const { data } = await supabase
+    .from('profiles')
+    .select('notif_prefs')
+    .eq('id', userId)
+    .maybeSingle()
+
+  const prefs = (data?.notif_prefs as Record<string, boolean> | null) ?? null
+
+  // مفيش تفضيلات محفوظة → كل حاجة مفعّلة
+  if (!prefs) return true
+
+  // لو المفتاح مش موجود → default true
+  return prefs[type] !== false
+}
+
 // ─── إشعار واحد ───
 export async function createNotification(input: CreateNotificationInput): Promise<{ ok: boolean }> {
+  // 1) فحص تفضيلات المستخدم
+  const enabled = await isTypeEnabled(input.userId, input.type)
+  if (!enabled) return { ok: true } // متجاهَل بصمت
+
   const supabase = createServiceClient()
 
   const { error } = await supabase.from('notifications').insert({
@@ -74,7 +101,27 @@ export async function createBulkNotifications(
 
   const supabase = createServiceClient()
 
-  const rows = input.userIds.map((uid) => ({
+  // فلترة حسب تفضيلات كل مستخدم (Locked types مش محتاجة فحص)
+  let targetIds = input.userIds
+  if (!LOCKED_TYPES.has(input.type)) {
+    const { data: prefsData } = await supabase
+      .from('profiles')
+      .select('id, notif_prefs')
+      .in('id', input.userIds)
+
+    const disabled = new Set<string>()
+    for (const row of prefsData ?? []) {
+      const prefs = (row.notif_prefs as Record<string, boolean> | null) ?? null
+      if (prefs && prefs[input.type] === false) {
+        disabled.add(row.id as string)
+      }
+    }
+    targetIds = input.userIds.filter((id) => !disabled.has(id))
+  }
+
+  if (targetIds.length === 0) return { inserted: 0, pushed: 0 }
+
+  const rows = targetIds.map((uid) => ({
     user_id: uid,
     notification_type: input.type,
     title: input.title,

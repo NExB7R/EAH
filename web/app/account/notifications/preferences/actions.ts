@@ -16,7 +16,7 @@ export async function savePreferences(prefs: Pref[]): Promise<Result> {
 
   const { error } = await supabase
     .from('profiles')
-    .update({ notification_preferences: Object.fromEntries(prefs.map((p) => [p.key, p.value])) })
+    .update({ notif_prefs: Object.fromEntries(prefs.map((p) => [p.key, p.value])) })
     .eq('id', user.id)
 
   if (error) return { ok: false, error: error.message }
