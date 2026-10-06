@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import WmImage from './wm-image'
+import BranchList from './branch-list'
 import {
   MapPinIcon,
   PhoneIcon,
@@ -224,22 +225,7 @@ export default function BusinessTabs({
           {branches.length > 0 && (
             <div className={styles.block}>
               <h3 className={styles.blockTitle}>الفروع ({branches.length})</h3>
-              <ul className={styles.branchList}>
-                {branches.map((b) => (
-                  <li key={b.id} className={styles.branchItem}>
-                    <StoreIcon size={14} />
-                    <div className={styles.branchBody}>
-                      <span className={styles.branchName}>
-                        {b.name}
-                        {b.is_primary && <span className={styles.primaryBadge}>رئيسي</span>}
-                      </span>
-                      {b.address_text && (
-                        <span className={styles.branchAddr}>{b.address_text}</span>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <BranchList branches={branches} />
             </div>
           )}
 
