@@ -7,7 +7,7 @@
 
 ## الحالة العامة
 
-**آخر commit كود:** `d465eca`
+**آخر commit كود:** `0476382`
 **الفرع:** main
 **الإصدار:** v1.0.0
 
@@ -238,8 +238,11 @@
 | lib/ai/business-advisor.ts | ✅ |
 | lib/ai/storage.ts | ✅ |
 | lib/logging/errors.ts | ✅ |
+| lib/logging/audit.ts | ✅ |
 | lib/logging/client.ts | ✅ |
 | lib/data/health.ts | ✅ |
+| lib/data/admin-business.ts | ✅ |
+| lib/auth/admin.ts | ✅ |
 | lib/supabase/public.ts | ✅ |
 | lib/supabase/server.ts | ✅ |
 | lib/supabase/service.ts | ✅ |

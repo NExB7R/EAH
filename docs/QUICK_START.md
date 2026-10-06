@@ -21,7 +21,7 @@
 - اقرأ قبل التعديل
 
 ## الحالة:
-v1.0.0 · commit d465eca
+v1.0.0 · commit 0476382
 
 ## التفاصيل الكاملة:
 docs/NEW_CHAT_MESSAGE.md

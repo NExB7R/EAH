@@ -588,3 +588,62 @@
 
 ### اللي معلق
 - كل المهام في `NEXT_SESSION.md` (حرجة + قريب)
+
+
+## 2026-10-06 — Session 14: Deep Audit + Critical Fixes
+
+### اللي اتحقق (18 commit)
+
+**الفحص كشف 15+ مشكلة حرجة (كلها كانت بتخلي المشروع مكسور فعلياً):**
+
+**DB Mismatches (أعمدة/جداول مش موجودة):**
+1. `profiles.role` مش موجود → helper `lib/auth/admin.ts` + 10 admin actions اتصلحت
+2. `advertisements` → `ads` (11 مرجع)
+3. `follows` → `business_follows` (7 مراجع)
+4. `businesses.whatsapp/phone` مش موجودين → من `business_branches`
+5. `order_requests.message` → `items` + `notes`
+6. `business_reviews.rating` → 4 أعمدة (taste/vfm/speed/experience)
+7. `business_reviews.source/order_id` → مش موجودين، اتشالوا
+8. `audit_logs.actor_id` → `actor_user_id` (في migration + code)
+9. `reports` 5 أعمدة غلط → الصحيحة
+10. `log_review_changes` trigger كان بيفشل بصمت
+
+**Admin Workflow كامل:**
+11. `/admin/businesses/[id]` (كان 404)
+12. `/admin/businesses/new` (إضافة يدوي)
+13. `deleteBusiness` + audit
+14. Admin → subscriptions workflow (approve/reject/extend/cancel)
+15. Merchant → subscription request (كان مستحيل)
+
+**Audit Logging:**
+16. helper `lib/logging/audit.ts`
+17. 4 ملفات admin كانت بدون audit → كلها اتضاف
+18. Fix: `actor_id` → `actor_user_id` في كل الأماكن
+
+**System Health Monitor (feature جديدة):**
+19. جدول `system_errors` + migration
+20. `lib/logging/errors.ts` + `lib/logging/client.ts`
+21. `app/error.tsx` + `app/global-error.tsx`
+22. `/admin/health` + `vercel.json` cron (retention 90 يوم)
+
+### Commits
+- `d465eca` feat: system error monitor
+- `eeb137d` fix: admin user_roles (كان كل admin معطّل)
+- `e41a460` feat: businesses CRUD + subscriptions workflow
+- `c299e6f` feat: merchant subscription request
+- `92ad687` feat: audit logging for all admin actions
+- `7188b37` fix: audit_logs column
+- `6748782` fix: reviews columns (taste/vfm/speed/experience)
+- `ca80114` fix: orders columns (items/notes + branch.whatsapp)
+- `72d0655` fix: table names (advertisements→ads, follows→business_follows)
+- `77fa136` fix: reports columns + ads status enum
+- `66fb638` + `0476382` fix: reviews insert
+
+### التأثير
+**قبل:** 8 أعمدة غلط + 2 جدول مش موجود + كل admin actions ميتة + الطلبات تفشل + التقييمات تفشل + الإعلانات مكسورة
+**بعد:** كل الـ workflows شغالة + logging للأخطاء المستقبلية + audit log كامل
+
+### اللي اتأكد سليم
+- 27 جدول مستخدمين في الكود — كلهم موجودين في DB ✅
+- كل الـ enums صح
+- كل الـ RLS policies صح
