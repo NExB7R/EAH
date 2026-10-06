@@ -32,7 +32,11 @@ export default async function NotificationsPage() {
         <EmptyState
           Icon={BellIcon}
           title="مفيش إشعارات لسه"
-          description="هتلاقي هنا كل الإشعارات الجديدة"
+          description={
+            session.role === 'merchant'
+              ? 'أول ما عميل يطلب، هيوصلك إشعار فوري هنا'
+              : 'تابع نشاط أو تفاعل، وهتلاقي إشعاراته هنا'
+          }
         />
       ) : (
         <ul className={styles.list}>
