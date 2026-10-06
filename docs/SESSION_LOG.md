@@ -709,3 +709,65 @@
 - `a97afe9` feat(roles)
 - `d1bc291` feat(roles): role-aware empty
 - `38ff16c` chore: cleanup
+
+
+## 2026-10-07 — Session 15: Trust 2.0 + Geo + Bدايات
+
+### اللي اتحقق
+
+**Trust System 2.0 (commit 9698996):**
+- 5 مستويات شعبية: لسه بادئ → ماشي حاله → زي الفل → حريف → الأسطورة
+- Log scale (نفس اللي في DB): factor من 1.5 → 0.1
+- Legend Points بعد الـ 100
+- Migration: `2026-10-06-trust-v2.sql` + `-v2-part2.sql`
+- /trust public page + /merchant/trust
+- TrustCard بدل ImpactCard
+- حذف: impact_score + impact_level + دوالهم
+
+**قسم "بدايات" (commit c36f382):**
+- من "الجديد" → "بدايات" (مشاريع لسه فاتحة — مش مسجلين جداد)
+- SunriseIcon جديد (2026 style — ذهبي)
+- subtitle "مشاريع لسه فاتحة — ادعمهم"
+
+**Geo System 2.0 (commit e2afe76 + 27d63b7):**
+- GeoProvider (Context) — قراءة واحدة للموقع لكل الصفحة
+- useDistance hook
+- DistanceBadge v2 (يعرض "إنت هنا" لو < 100م)
+- BranchList — كل فرع بمسافته + شارة "الأقرب ليك" تلقائية
+- Cache 1 ساعة (localStorage)
+
+**Cards Update (commit e9bcefc):**
+- trending-row: DistanceBadge
+- new-row (بدايات): Trust + DistanceBadge
+
+**Reports Fix (commit 9698996):**
+- status: open → pending (كان مش متوافق مع DB)
+- 3 ملفات اتصلحت
+
+**Impact/Wanted Cleanup:**
+- إزالة من DB + الكود
+- wanted_level اتحول لـ flagged (داخلي للأدمن)
+
+### Commits الرئيسية
+- `9698996` Trust 2.0 + Reports Fix
+- `bc70227` /trust + /merchant/trust pages
+- `c36f382` بدايات + SunriseIcon
+- `e2afe76` GeoProvider
+- `27d63b7` BranchList with distances
+- `e9bcefc` Cards update (distance + trust)
+
+### المتبقي
+- فلاتر متقدمة (مسافة/سعر/باقة/فرز قوي)
+- ترتيب العروض (5 معايير + Fair Rotation)
+- تقييمات حسب النشاط (محاور ديناميكية)
+- تعليقات منفصلة + صور
+- إشعار التقييم بعد ساعتين
+- المميزون — ميزة منفصلة بفلوس
+- التوثيق منفصل عن الباقات
+- ترند 7 معايير 2026
+- إحالة → trust score
+
+### ملاحظات مهمة للشات الجديد
+- راجع `docs/CRITERIA.md` (معايير كاملة)
+- راجع `docs/NEXT_SESSION.md` (المهام)
+- كل حاجة موثقة في migrations

@@ -1,5 +1,30 @@
 
-## [Unreleased] - 2026-10-02
+## [Unreleased]
+
+### Trust System 2.0 (2026-10-07)
+- 5 مستويات شعبية: لسه بادئ → ماشي حاله → زي الفل → حريف → الأسطورة
+- Log scale + Legend Points
+- /trust + /merchant/trust
+- TrustCard بدل ImpactCard
+- حذف Impact + Wanted
+
+### قسم "بدايات" (2026-10-07)
+- من "الجديد" → "بدايات" (مشاريع لسه فاتحة)
+- SunriseIcon جديد (2026 style)
+- subtitle "مشاريع لسه فاتحة — ادعمهم"
+
+### Geo System 2.0 (2026-10-07)
+- GeoProvider (Context) — قراءة واحدة
+- useDistance hook
+- DistanceBadge (إنت هنا)
+- BranchList بمسافات + الأقرب ليك
+
+### Reports Fix + Audit (2026-10-07)
+- status: open → pending (توافق DB)
+- Audit logging كامل
+- Notifications prefs
+
+ - 2026-10-02
 
 ### Added
 - **AI Agent:** OpenRouter + 3 أدوات + Floating widget + لهجة مصرية

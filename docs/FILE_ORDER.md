@@ -1,42 +1,54 @@
 # EAH — FILE_ORDER.md
 
 > ترتيب الملفات لرفعها للشات الجديد.
-> **المصدر الوحيد لـ reading order** — أي ملف تاني بيشاور هنا.
-> آخر تحديث: 2026-09-28
+> **المصدر الوحيد لـ reading order.**
+> آخر تحديث: 2026-10-07
 
 ---
 
-## القائمة (16 ملف)
+## ابدأ من هنا
 
-### 1. الأساس (7)
-1. MASTER_BRIEF.md
-2. AI_CONTRACT.md
-3. SACRED.md
-4. LESSONS.md
-5. STRUCTURE.md
-6. SECURITY.md
-7. CODE_STANDARDS.md
+**HANDOFF.md** — كل حاجة في صفحة واحدة. لو الوقت ضيق — اقرأ ده بس.
 
-### 2. المراجع (5)
-8. DEBUGGING.md
-9. PRODUCTION_CHECKLIST.md
-10. DATABASE_RULES.md
-11. AI_HANDOFF.md
-12. PROGRESS.md
+---
 
-### 3. الحالة (4)
-13. SESSION_LOG.md
-14. AUDIT_PLAN.md
-15. PERFORMANCE_SECURITY_PLAN.md
+## الترتيب الإجباري (12 ملف)
+
+### 1. الأساس
+1. `HANDOFF.md`         — الملف الشامل
+2. `QUICK_START.md`     — سريع
+3. `NEW_CHAT_MESSAGE.md` — رسالة الشات
+
+### 2. القواعد
+4. `AI_CONTRACT.md`     — القواعد الإجبارية
+5. `SACRED.md`          — الملفات المقدسة
+6. `USER_PREFERENCES.md` — تفضيلات المالك
+7. `LESSONS.md`         — الدروس + أخطاء AI
+
+### 3. الحالة
+8. `PROGRESS.md`        — حالة كل ملف
+9. `NEXT_SESSION.md`    — المهام المتبقية
+10. `SESSION_LOG.md`    — آخر جلسة
+
+### 4. الرؤية
+11. `VISION.md`         — الرؤية 2026-2027
+12. `CRITERIA.md`       — معايير المنصة
+
+---
+
+## ملفات إضافية
+
+- `WRITING_GUIDE.md` — دليل الكتابة + الأوامر
+- `CODE_REVIEW_LOG.md` — المشاكل المرصودة
+- `FUTURE.md` — التطويرات المستقبلية
+- `ARCHITECTURE.md` — البنية التقنية
+- `SECURITY.md` — الحمايات
+- `QUALITY.md` — نظام الجودة
 
 ---
 
 ## طريقة الرفع
 
-1. ارفع NEW_CHAT_MESSAGE.md أولاً (في الرسالة نفسها).
-2. بعدها ارفع الملفات الـ 16 في 3-4 أجزاء.
-3. كل جزء 4-6 ملفات.
-
----
-
-آخر تحديث: 2026-09-28
+1. ارفع HANDOFF.md أولاً.
+2. بعدها الـ 11 ملف في 3-4 أجزاء.
+3. كل جزء 3-4 ملفات.
