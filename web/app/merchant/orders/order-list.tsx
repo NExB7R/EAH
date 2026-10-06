@@ -9,7 +9,8 @@ type Order = {
   id: string
   order_code: string
   status: string
-  message: string | null
+  items: string | null
+  notes: string | null
   customer_name: string | null
   customer_phone: string | null
   created_at: string

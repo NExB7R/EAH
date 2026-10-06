@@ -41,15 +41,28 @@ export async function submitOrder(
 
   const { data: biz } = await supabase
     .from('businesses')
-    .select('id, name, owner_profile_id, whatsapp, phone')
+    .select('id, name, owner_profile_id')
     .eq('id', businessId)
     .maybeSingle()
 
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
-  if (!biz.whatsapp && !biz.phone) return { ok: false, error: 'النشاط مش بيستقبل طلبات' }
+
+  // الرقم من الفرع الأساسي
+  const { data: branch } = await supabase
+    .from('business_branches')
+    .select('phone, whatsapp')
+    .eq('business_id', businessId)
+    .eq('is_active', true)
+    .order('is_primary', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (!branch?.whatsapp && !branch?.phone) {
+    return { ok: false, error: 'النشاط مش بيستقبل طلبات' }
+  }
 
   const orderCode = genOrderCode()
-  const merchantPhone = biz.whatsapp || biz.phone || ''
+  const merchantPhone = branch.whatsapp || branch.phone || ''
 
   // رسالة واتساب كاملة
   const lines = [
@@ -75,9 +88,12 @@ export async function submitOrder(
     customer_profile_id: user.id,
     order_code: orderCode,
     status: 'sent',
-    message: d.items_summary,
+    items: d.items_summary,
+    notes: d.notes || null,
     customer_name: d.customer_name,
     customer_phone: d.customer_phone,
+    customer_area: d.customer_area || null,
+    customer_address: d.customer_address || null,
   })
 
   if (error) return { ok: false, error: error.message }

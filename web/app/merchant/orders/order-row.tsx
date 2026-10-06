@@ -9,7 +9,8 @@ type Order = {
   id: string
   order_code: string
   status: string
-  message: string | null
+  items: string | null
+  notes: string | null
   customer_name: string | null
   customer_phone: string | null
   created_at: string
@@ -116,7 +117,7 @@ export default function OrderRow({ order }: Props) {
             {order.customer_phone}
           </p>
         )}
-        {order.message && <p className={styles.message}>{order.message}</p>}
+        {order.items && <p className={styles.message}>{order.items}</p>}
       </div>
 
       <div className={styles.rowActions}>

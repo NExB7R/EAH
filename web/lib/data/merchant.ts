@@ -172,7 +172,8 @@ export type MerchantOrder = {
   id: string
   order_code: string
   status: string
-  message: string | null
+  items: string | null
+  notes: string | null
   customer_name: string | null
   customer_phone: string | null
   created_at: string
@@ -182,7 +183,7 @@ export async function getMerchantOrders(businessId: string, limit = 50): Promise
   const supabase = await createClient()
   const { data } = await supabase
     .from('order_requests')
-    .select('id, order_code, status, message, customer_name, customer_phone, created_at')
+    .select('id, order_code, status, items, notes, customer_name, customer_phone, created_at')
     .eq('business_id', businessId)
     .order('created_at', { ascending: false })
     .limit(limit)

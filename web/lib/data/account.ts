@@ -28,7 +28,10 @@ export type OrderItem = {
   id: string
   order_code: string
   status: string
-  message: string | null
+  items: string | null
+  notes: string | null
+  customer_name: string | null
+  customer_phone: string | null
   created_at: string
   business: { slug: string; name: string; area: string | null } | null
 }
@@ -146,7 +149,7 @@ export async function getOrders(userId: string): Promise<OrderItem[]> {
     .from('order_requests')
     .select(
       `
-      id, order_code, status, message, created_at,
+      id, order_code, status, items, notes, customer_name, customer_phone, created_at,
       business:businesses(slug, name, area)
     `,
     )
