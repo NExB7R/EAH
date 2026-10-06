@@ -1,0 +1,202 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.card {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+}
+
+.cardWarn {
+  background: rgba(253, 186, 116, 0.08);
+  border-color: rgba(253, 186, 116, 0.3);
+}
+
+.cardDanger {
+  background: rgba(252, 165, 165, 0.08);
+  border-color: rgba(252, 165, 165, 0.3);
+}
+
+.cardLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  margin-bottom: 6px;
+}
+
+.cardValue {
+  font-size: 1.75rem;
+  font-weight: 900;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+}
+
+.section {
+  margin-bottom: 28px;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+}
+
+.itemHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(253, 186, 116, 0.15);
+  border: 1px solid rgba(253, 186, 116, 0.4);
+  color: #ffd9a8;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.wantedStars {
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.bannedTag {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(252, 165, 165, 0.15);
+  border: 1px solid rgba(252, 165, 165, 0.4);
+  color: #ffc8c8;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.itemBody {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.comment {
+  margin: 0 0 6px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.bizLink {
+  color: var(--purple-3, #c77dff);
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.78rem;
+}
+
+.bizLink:hover {
+  text-decoration: underline;
+}
+
+.userRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.userName {
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.userMeta {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.eventList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eventItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.12);
+}
+
+.delta {
+  min-width: 42px;
+  text-align: center;
+  font-family: ui-monospace, monospace;
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+
+.deltaPlus {
+  color: #a8f0b8;
+  background: rgba(37, 211, 102, 0.12);
+}
+
+.deltaMinus {
+  color: #ffc8c8;
+  background: rgba(252, 165, 165, 0.12);
+}
+
+.eventBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.eventLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.eventMeta {
+  font-size: 0.68rem;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}

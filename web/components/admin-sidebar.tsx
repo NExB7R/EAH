@@ -93,6 +93,7 @@ const SECTIONS: Section[] = [
       { href: '/admin/announcements', label: 'الإعلانات الإدارية', Icon: BroadcastIcon },
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
+      { href: '/admin/fraud', label: 'كشف التلاعب', Icon: ShieldCheckIcon },
       { href: '/admin/health', label: 'صحة النظام', Icon: HeartIcon },
       { href: '/admin/settings', label: 'الإعدادات', Icon: SettingsIcon },
     ],
