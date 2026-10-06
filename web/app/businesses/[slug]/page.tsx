@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {
   getBusinessDetail,
@@ -19,7 +20,7 @@ import BusinessActions from '@/components/business-actions'
 import BusinessTabs from '@/components/business-tabs'
 import FixedCta from '@/components/fixed-cta'
 import BusinessCard from '@/components/business-card'
-import { CrownGoldIcon } from '@/components/icons'
+import { CrownGoldIcon, ArrowLeftIcon } from '@/components/icons'
 import styles from './business.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -184,6 +185,20 @@ export default async function BusinessPage({ params }: Props) {
         }}
       />
       <div className={styles.container}>
+        {/* ─── Owner Banner ─── */}
+        {isOwner && (
+          <div className={styles.ownerBanner}>
+            <span className={styles.ownerLabel}>إنت صاحب النشاط ده</span>
+            <Link href="/merchant/business" className={styles.ownerLink}>
+              <span>إدارة النشاط</span>
+              <ArrowLeftIcon size={14} />
+            </Link>
+            <Link href="/merchant" className={styles.ownerLinkGhost}>
+              <span>لوحة التحكم</span>
+            </Link>
+          </div>
+        )}
+
         {/* ─── Hero ─── */}
         <BusinessHero detail={detail} isOpen={isOpen} />
 
