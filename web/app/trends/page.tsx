@@ -14,10 +14,11 @@ export const metadata: Metadata = {
 }
 
 export default async function TrendsPage() {
-  const [businesses, ads] = await Promise.all([
+  const [raw, ads] = await Promise.all([
     getTrendingBusinesses(200),
     getActiveAdsForSlot('trend_pin', 1),
   ])
+  const businesses = fairOrder(raw, 'trending', {}, { topWindow: 10, maxPerType: 3 })
 
   return (
     <>
