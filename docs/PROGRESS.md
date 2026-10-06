@@ -7,7 +7,7 @@
 
 ## الحالة العامة
 
-**آخر commit كود:** `0476382`
+**آخر commit كود:** `6567795`
 **الفرع:** main
 **الإصدار:** v1.0.0
 
@@ -145,6 +145,7 @@
 | app/admin/settings/page.tsx | ✅ |
 | app/admin/insights/page.tsx | ✅ |
 | app/admin/health/page.tsx | ✅ |
+| app/admin/fraud/page.tsx | ✅ |
 
 ---
 
@@ -239,6 +240,11 @@
 | lib/ai/storage.ts | ✅ |
 | lib/logging/errors.ts | ✅ |
 | lib/logging/audit.ts | ✅ |
+| lib/auth/admin.ts | ✅ |
+| lib/auth/ip.ts | ✅ |
+| lib/data/fraud.ts | ✅ |
+| lib/data/health.ts | ✅ |
+| lib/data/admin-business.ts | ✅ |
 | lib/logging/client.ts | ✅ |
 | lib/data/health.ts | ✅ |
 | lib/data/admin-business.ts | ✅ |

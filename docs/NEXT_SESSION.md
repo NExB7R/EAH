@@ -41,7 +41,6 @@
 - [ ] Telegram Bot — Admin / Merchant / Client
 - [ ] Admin UI للبوت (/admin/telegram)
 - [ ] Voice Search ذكي (Whisper + فهم عامية)
-- [ ] Fraud Detection شامل
 - [ ] Business Insights AI (تقارير ذكية للتاجر)
 - [ ] Smart Notifications
 - [ ] Reputation Score 2.0

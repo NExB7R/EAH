@@ -647,3 +647,37 @@
 - 27 جدول مستخدمين في الكود — كلهم موجودين في DB ✅
 - كل الـ enums صح
 - كل الـ RLS policies صح
+
+
+## 2026-10-06 — Session 14 (تكملة): Fraud Detection
+
+### اللي اتحقق
+
+**Feature: Fraud Detection شامل (مبني على DB موجود)**
+- `/admin/fraud` — كشف التلاعب (مُعلّمة + wanted + trust events + multi-IP)
+- Report submission UI (`report-button.tsx`) على كل تقييم
+- `strictLimiter` (5/15min) على reviews + replies + orders + reports
+- `apiLimiter` على activities
+- wanted_level trigger (من البلاغات)
+- Multi-account detection (signup IP hash + trigger + /admin/fraud section)
+- Trust decay cron يومي
+- `lib/auth/ip.ts` — SHA-256 IP hash بـ salt
+- `lib/data/fraud.ts` — fraud data fetchers
+
+**Migrations جديدة (4):**
+- `2026-10-06-fraud-audit.sql`
+- `2026-10-06-wanted-level-triggers.sql`
+- `2026-10-06-multi-account-detection.sql`
+- `2026-10-06-handle-new-user-ip.sql`
+
+### Commits
+- `7e997af` feat(fraud): /admin/fraud + trust-decay cron
+- `23163ba` feat(fraud): report submission UI + strictLimiter
+- `e3a6216` feat(fraud): rate-limits + wanted_level triggers
+- `6567795` feat(fraud): multi-account detection
+
+### الميزات المبنية على DB موجود
+- `detect_review_velocity` (موجود) → مربوطة trigger
+- `auto_flag_review` (موجود) → مربوطة trigger
+- `apply_trust_decay` (موجود) → مربوطة cron
+- `on_review_trust_trigger` / `on_order_trust_trigger` (موجودين)
