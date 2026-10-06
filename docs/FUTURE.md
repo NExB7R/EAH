@@ -189,3 +189,13 @@
 - `docs/plans/POLISH_PASS.md` — خطة التحسين البصري
 - `docs/plans/ANNOUNCEMENTS.md` — إشعارات المسؤول
 - `CHANGELOG.md` — اللي خلص
+
+## 🔧 مؤجل — من Filter Phase (2026-10-07)
+
+| # | الميزة | السبب | الوقت |
+|---|--------|-------|-------|
+| 1 | `price_level` (فلتر السعر $ / $$ / $$$) | مش موجود في DB | migration + 3 س | 
+| 2 | Subcategories (مطاعم → مشويات/بيتزا/كشري) | محتاج DB migration | 4 س |
+| 3 | Auto-suggest subcategories | يعتمد على #2 | 2 س |
+
+**السبب:** التجاهل مؤقت — بعد ما نضيف بيانات حقيقية + migrations.

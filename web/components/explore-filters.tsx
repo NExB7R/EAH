@@ -200,15 +200,40 @@ export default function ExploreFilters({ area, counts }: Props) {
 
           <Section title="النوع">
             <div className={styles.chips}>
-              {TYPES.map((t) => (
-                <Chip
-                  key={t.value}
-                  active={currentType === t.value}
-                  onClick={() => updateParam('type', currentType === t.value ? null : t.value)}
-                >
-                  {t.label}
-                </Chip>
-              ))}
+              {TYPES.map((t) => {
+                const c = counts?.types[t.value]
+                return (
+                  <Chip
+                    key={t.value}
+                    active={currentType === t.value}
+                    onClick={() => updateParam('type', currentType === t.value ? null : t.value)}
+                  >
+                    {t.label}
+                    {c !== undefined && <span className={styles.count}>({c})</span>}
+                  </Chip>
+                )
+              })}
+            </div>
+          </Section>
+
+          <Section title="المصداقية">
+            <div className={styles.chips}>
+              {TIERS.map((t) => {
+                const c = counts?.tiers[t.value]
+                return (
+                  <Chip
+                    key={t.value}
+                    active={currentTier === t.value}
+                    onClick={() => updateParam('tier', currentTier === t.value ? null : t.value)}
+                  >
+                    <span className={styles.tierEmoji} aria-hidden="true">
+                      {t.icon}
+                    </span>
+                    {t.label}
+                    {c !== undefined && <span className={styles.count}>({c})</span>}
+                  </Chip>
+                )
+              })}
             </div>
           </Section>
 
