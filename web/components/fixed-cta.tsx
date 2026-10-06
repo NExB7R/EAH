@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { WhatsAppIcon, PhoneIcon, LockIcon } from './icons'
+import Link from 'next/link'
+import { WhatsAppIcon, PhoneIcon, LockIcon, StoreIcon } from './icons'
 import SmartLockModal, { useSmartLock } from './smart-lock-modal'
 import OrderModal from './order-modal'
 import styles from './fixed-cta.module.css'
@@ -24,6 +25,7 @@ type Props = {
   defaultPhone?: string
   menuImages?: string[]
   offers?: { title: string; image: string | null }[]
+  isOwner?: boolean
 }
 
 export default function FixedCta({
@@ -39,10 +41,23 @@ export default function FixedCta({
   defaultPhone = '',
   menuImages = [],
   offers = [],
+  isOwner = false,
 }: Props) {
   const lock = useSmartLock()
   const [orderOpen, setOrderOpen] = useState(false)
   const [orderKey, setOrderKey] = useState(0)
+
+  // صاحب النشاط: مفيش CTA طلب
+  if (isOwner) {
+    return (
+      <div className={styles.bar}>
+        <Link href="/merchant/business" className={styles.ownerCta}>
+          <StoreIcon size={18} />
+          <span>إدارة النشاط</span>
+        </Link>
+      </div>
+    )
+  }
 
   if (!whatsapp && !phone) return null
 

@@ -269,6 +269,7 @@ export default async function BusinessPage({ params }: Props) {
         defaultName={session?.displayName ?? ''}
         menuImages={menuImages}
         offers={offersList}
+        isOwner={isOwner}
       />
     </main>
   )
