@@ -1,13 +1,15 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import Link from 'next/link'
 import ExploreSearch from '@/components/explore-search'
+import ExploreFilters from '@/components/explore-filters'
 import SecondaryHero from '@/components/secondary-hero'
 import LoadMoreGrid from '@/components/load-more'
 import { TargetIcon } from '@/components/icons'
-import { getPublishedBusinesses, getBusinessesByType } from '@/lib/data/businesses'
+import { getPublishedBusinesses } from '@/lib/data/businesses'
 import type { BusinessType } from '@/lib/data/businesses'
 import { smartSearch } from '@/lib/search'
-import { sortByTrust, dailyShuffle } from '@/lib/ranking'
+import { parseFilters, applyFilters } from '@/lib/search/filters'
 import styles from './explore.module.css'
 
 export const metadata: Metadata = {
@@ -20,16 +22,16 @@ export const dynamic = 'force-dynamic'
 type SearchParams = {
   q?: string
   type?: string
+  area?: string
+  open?: string
+  offers?: string
+  rating?: string
+  distance?: string
+  lat?: string
+  lng?: string
+  sort?: string
   suggest?: string
 }
-
-const VALID_TYPES: BusinessType[] = [
-  'restaurant',
-  'pharmacy',
-  'supermarket',
-  'delivery_office',
-  'misc',
-]
 
 const TYPE_TITLES: Record<string, string> = {
   restaurant: 'مطاعم',
@@ -46,28 +48,28 @@ export default async function ExplorePage({
 }) {
   const params = await searchParams
   const q = params.q?.trim() ?? ''
-  const type = params.type?.trim() ?? ''
   const suggest = params.suggest === '1'
+  const filters = parseFilters(params as Record<string, string | undefined>)
 
   let businesses = await getPublishedBusinesses()
-  let title = 'اكتشف'
-
-  if (type && VALID_TYPES.includes(type as BusinessType)) {
-    businesses = await getBusinessesByType(type as BusinessType, 100)
-    title = TYPE_TITLES[type] ?? 'اكتشف'
-  }
-
-  if (suggest) {
-    businesses = dailyShuffle(businesses).slice(0, 20)
-    title = 'ترشيحات ليك'
-  }
 
   if (q) {
-    const results = smartSearch(businesses, q)
-    businesses = results.map((r) => r.business)
+    businesses = smartSearch(businesses, q).map((r) => r.business)
+    businesses = applyFilters(businesses, { ...filters, sort: 'relevance' })
+  } else {
+    businesses = applyFilters(businesses, filters)
+  }
+
+  // العنوان
+  let title = 'اكتشف'
+  if (suggest && !q) {
+    title = 'ترشيحات ليك'
+  } else if (q) {
     title = 'نتائج البحث'
-  } else if (!suggest && !type) {
-    businesses = sortByTrust(businesses)
+  } else if (filters.types.length === 1) {
+    title = TYPE_TITLES[filters.types[0]!] ?? 'اكتشف'
+  } else if (filters.userLocation) {
+    title = 'قريب منك'
   }
 
   const totalCount = businesses.length
@@ -87,6 +89,10 @@ export default async function ExplorePage({
           <ExploreSearch initialQuery={q} />
         </div>
 
+        <Suspense fallback={null}>
+          <ExploreFilters area={filters.area} />
+        </Suspense>
+
         {businesses.length > 0 ? (
           <LoadMoreGrid businesses={businesses} tone="purple" pageSize={10} />
         ) : (
@@ -95,7 +101,9 @@ export default async function ExplorePage({
               <TargetIcon size={44} />
             </div>
             <h2 className={styles.emptyTitle}>مفيش نتائج</h2>
-            <p className={styles.emptyText}>جرب تدور بكلمة تانية، أو اكتشف التصنيفات.</p>
+            <p className={styles.emptyText}>
+              جرب فلتر تاني، أو شيل بعض الفلاتر — يمكن لقينا حاجة أحسن.
+            </p>
             <Link href="/explore" className={styles.emptyBtn}>
               اكتشف كل حاجة
             </Link>

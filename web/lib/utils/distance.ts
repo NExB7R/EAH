@@ -23,15 +23,33 @@ export function distanceKm(a: LatLng, b: LatLng): number {
   return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(h))
 }
 
-// تنسيق عربي بسيط
+// تنسيق عربي بدقة 10 متر
 export function formatDistance(km: number): string {
-  if (km < 0.05) return 'هنا'
-  if (km < 1) {
-    const m = Math.round(km * 1000)
-    // قرّب لأقرب 50م
-    const rounded = Math.round(m / 50) * 50
-    return `${rounded} م`
+  const m = Math.round(km * 1000)
+
+  // أقل من 20م = إنت هنا
+  if (m < 20) return 'إنت هنا'
+
+  // 20-100م: دقة 5م
+  if (m < 100) {
+    const r = Math.round(m / 5) * 5
+    return `${r} م`
   }
-  if (km < 10) return `${km.toFixed(1)} كم`
-  return `${Math.round(km)} كم`
+
+  // 100م-1كم: دقة 10م
+  if (m < 1000) {
+    const r = Math.round(m / 10) * 10
+    return `${r} م`
+  }
+
+  // 1-10كم: دقة 10م (2 decimals)
+  if (km < 10) return `${km.toFixed(2)} كم`
+
+  // أكبر: دقة 100م (1 decimal)
+  return `${km.toFixed(1)} كم`
+}
+
+// المسافة بالمتر (للمقارنة الدقيقة)
+export function distanceMeters(a: LatLng, b: LatLng): number {
+  return distanceKm(a, b) * 1000
 }
