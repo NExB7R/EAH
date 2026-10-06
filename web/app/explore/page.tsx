@@ -74,6 +74,25 @@ export default async function ExplorePage({
 
   const totalCount = businesses.length
 
+  // Counts لكل فلتر (من المجموعة الكاملة قبل الفلترة — عشان يعرض "المتاح دلوقتي")
+  const allBusinesses = await getPublishedBusinesses()
+  const counts = {
+    types: {
+      restaurant: allBusinesses.filter((b) => b.business_type === 'restaurant').length,
+      pharmacy: allBusinesses.filter((b) => b.business_type === 'pharmacy').length,
+      supermarket: allBusinesses.filter((b) => b.business_type === 'supermarket').length,
+      delivery_office: allBusinesses.filter((b) => b.business_type === 'delivery_office').length,
+      misc: allBusinesses.filter((b) => b.business_type === 'misc').length,
+    },
+    tiers: {
+      bade2: allBusinesses.filter((b) => b.trust_score <= 19).length,
+      mashey: allBusinesses.filter((b) => b.trust_score >= 20 && b.trust_score <= 39).length,
+      fel: allBusinesses.filter((b) => b.trust_score >= 40 && b.trust_score <= 59).length,
+      harif: allBusinesses.filter((b) => b.trust_score >= 60 && b.trust_score <= 79).length,
+      ostora: allBusinesses.filter((b) => b.trust_score >= 80).length,
+    },
+  }
+
   return (
     <main className={styles.page}>
       <SecondaryHero
@@ -90,7 +109,7 @@ export default async function ExplorePage({
         </div>
 
         <Suspense fallback={null}>
-          <ExploreFilters area={filters.area} />
+          <ExploreFilters area={filters.area} counts={counts} />
         </Suspense>
 
         {businesses.length > 0 ? (

@@ -8,9 +8,11 @@ import { isOpenNow } from '@/lib/data/businesses'
 import { distanceKm, type LatLng } from '@/lib/utils/distance'
 
 export type SortOption = 'trust' | 'rating' | 'distance' | 'newest' | 'relevance'
+export type TrustTier = 'bade2' | 'mashey' | 'fel' | 'harif' | 'ostora'
 
 export type Filters = {
   types: BusinessType[]
+  tiers: TrustTier[]
   area: string | null
   openNow: boolean
   hasOffers: boolean
@@ -20,8 +22,18 @@ export type Filters = {
   sort: SortOption
 }
 
+// نطاق trust_score لكل مستوى (نفس المستخدم في CRITERIA §11)
+export const TIER_RANGES: Record<TrustTier, [number, number]> = {
+  bade2: [0, 19],
+  mashey: [20, 39],
+  fel: [40, 59],
+  harif: [60, 79],
+  ostora: [80, 100],
+}
+
 export const DEFAULT_FILTERS: Filters = {
   types: [],
+  tiers: [],
   area: null,
   openNow: false,
   hasOffers: false,
@@ -37,6 +49,17 @@ export function applyFilters(businesses: Business[], filters: Filters): Business
   // 1) النوع
   if (filters.types.length > 0) {
     result = result.filter((b) => filters.types.includes(b.business_type))
+  }
+
+  // 1b) المصداقية
+  if (filters.tiers.length > 0) {
+    result = result.filter((b) => {
+      const score = b.trust_score
+      return filters.tiers.some((t) => {
+        const [min, max] = TIER_RANGES[t]
+        return score >= min && score <= max
+      })
+    })
   }
 
   // 2) المنطقة
@@ -125,6 +148,12 @@ export function parseFilters(params: Record<string, string | undefined>): Filter
     types.push(params.type as BusinessType)
   }
 
+  const validTiers: TrustTier[] = ['bade2', 'mashey', 'fel', 'harif', 'ostora']
+  const tiers: TrustTier[] = []
+  if (params.tier && validTiers.includes(params.tier as TrustTier)) {
+    tiers.push(params.tier as TrustTier)
+  }
+
   const lat = params.lat ? parseFloat(params.lat) : null
   const lng = params.lng ? parseFloat(params.lng) : null
   const userLocation: LatLng | null =
@@ -139,6 +168,7 @@ export function parseFilters(params: Record<string, string | undefined>): Filter
 
   return {
     types,
+    tiers,
     area: params.area ?? null,
     openNow: params.open === '1',
     hasOffers: params.offers === '1',

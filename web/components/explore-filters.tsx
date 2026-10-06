@@ -43,6 +43,14 @@ const DISTANCES = [
   { value: '20000', label: '20 كم' },
 ] as const
 
+const TIERS = [
+  { value: 'bade2', label: 'لسه بادئ', icon: '🌱' },
+  { value: 'mashey', label: 'ماشي حاله', icon: '🌿' },
+  { value: 'fel', label: 'زي الفل', icon: '🌳' },
+  { value: 'harif', label: 'حريف', icon: '🏆' },
+  { value: 'ostora', label: 'الأسطورة', icon: '👑' },
+] as const
+
 const SORTS = [
   { value: 'distance', label: 'الأقرب', needsGeo: true },
   { value: 'trust', label: 'الأعلى مصداقية' },
@@ -50,11 +58,17 @@ const SORTS = [
   { value: 'newest', label: 'الأحدث' },
 ] as const
 
-type Props = {
-  area: string | null
+type Counts = {
+  types: Record<string, number>
+  tiers: Record<string, number>
 }
 
-export default function ExploreFilters({ area }: Props) {
+type Props = {
+  area: string | null
+  counts?: Counts
+}
+
+export default function ExploreFilters({ area, counts }: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -68,6 +82,7 @@ export default function ExploreFilters({ area }: Props) {
   const currentDistance = searchParams.get('distance')
   const currentSort = searchParams.get('sort') ?? 'trust'
   const currentArea = searchParams.get('area')
+  const currentTier = searchParams.get('tier')
   const openNow = searchParams.get('open') === '1'
   const hasOffers = searchParams.get('offers') === '1'
 
@@ -108,6 +123,7 @@ export default function ExploreFilters({ area }: Props) {
 
   const activeCount =
     (currentType ? 1 : 0) +
+    (currentTier ? 1 : 0) +
     (currentRating ? 1 : 0) +
     (currentDistance ? 1 : 0) +
     (openNow ? 1 : 0) +
