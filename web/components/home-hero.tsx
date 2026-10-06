@@ -52,7 +52,7 @@ export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
         </div>
 
         {/* الهوك — جملة واحدة */}
-        <h1 className={styles.hook}>
+        <h1 className={styles.hook} elementtiming="hero-h1">
           <span className={styles.hookAccent} data-text="شبيك لبيك">
             شبيك لبيك
           </span>
