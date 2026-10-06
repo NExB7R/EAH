@@ -292,11 +292,13 @@ export type Offer = {
   image_url: string | null
   starts_at: string | null
   ends_at: string | null
+  created_at: string
   business: {
     id: string
     slug: string
     name: string
     area: string | null
+    trust_score: number
   } | null
 }
 
@@ -308,8 +310,8 @@ export const getActiveOffers = unstable_cache(
       .from('offers')
       .select(
         `
-        id, title, description, price, image_url, starts_at, ends_at,
-        business:businesses(id, slug, name, area)
+        id, title, description, price, image_url, starts_at, ends_at, created_at,
+        business:businesses(id, slug, name, area, trust_score)
       `,
       )
       .eq('is_published', true)

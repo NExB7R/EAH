@@ -13,6 +13,7 @@ import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness } from '@/lib/data/merchant'
 import { getActiveAdsForSlot } from '@/lib/data/ads'
 import { sortByTrend } from '@/lib/ranking'
+import { fairRotateOffers } from '@/lib/offers-rotation'
 import type { Business } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
@@ -32,13 +33,15 @@ export default async function Home() {
 }
 
 async function HomeSections() {
-  const [all, offers, flags, homeBanner, homeFeed] = await Promise.all([
+  const [all, rawOffers, flags, homeBanner, homeFeed] = await Promise.all([
     getPublishedBusinesses(),
-    getActiveOffers(8),
+    getActiveOffers(30),
     getFeatureFlags(),
     getActiveAdsForSlot('home_banner', 1),
     getActiveAdsForSlot('home_feed', 1),
   ])
+
+  const offers = fairRotateOffers(rawOffers, 8)
 
   const featured = all.filter((b) => b.is_featured).slice(0, 15)
   const topTrust = all.slice(0, 15)

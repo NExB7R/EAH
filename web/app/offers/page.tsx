@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { getActiveOffers } from '@/lib/data'
+import { fairRotateOffers } from '@/lib/offers-rotation'
 import { GiftIcon } from '@/components/icons'
 import SectionLayout from '@/components/section-layout'
 import type { Business } from '@/lib/data'
@@ -12,8 +13,13 @@ export const metadata: Metadata = {
 }
 
 export default async function OffersPage() {
-  const offers = await getActiveOffers(200)
-  const businesses: Business[] = offers.map((o) => o.business).filter((b): b is Business => !!b)
+  const all = await getActiveOffers(200)
+  const rotated = fairRotateOffers(all, 8)
+  const rotatedIds = new Set(rotated.map((o) => o.id))
+  const rest = all.filter((o) => !rotatedIds.has(o.id))
+  const ordered = [...rotated, ...rest]
+
+  const businesses: Business[] = ordered.map((o) => o.business).filter((b): b is Business => !!b)
 
   return (
     <SectionLayout
