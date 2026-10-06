@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createNotification } from '@/lib/notifications/server'
+import { runBadgeChecks } from '@/lib/data/badges'
 import { apiLimiter, checkRateLimit } from '@/lib/rate-limit'
 
 // ═══════════════════════════════════════════════════════════
@@ -81,6 +82,10 @@ async function toggleActivity(
   }
 
   revalidatePath(`/businesses/${slug}`)
+
+  // فحص الشارات (fire-and-forget)
+  void runBadgeChecks(user.id).catch(() => {})
+
   return { ok: true, active: true }
 }
 

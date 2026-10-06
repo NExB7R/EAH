@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { reviewSchema, merchantReplySchema } from '@/lib/validations/review'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { createNotification } from '@/lib/notifications/server'
+import { runBadgeChecks } from '@/lib/data/badges'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Review Actions
@@ -99,6 +100,10 @@ export async function submitReview(
   }
 
   revalidatePath(`/businesses/${slug}`)
+
+  // فحص الشارات (fire-and-forget)
+  void runBadgeChecks(user.id).catch(() => {})
+
   return { ok: true }
 }
 

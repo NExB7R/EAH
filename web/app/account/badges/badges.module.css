@@ -1,0 +1,125 @@
+.progressCard {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(232, 199, 154, 0.06);
+  border: 1px solid rgba(232, 199, 154, 0.2);
+  margin-bottom: 24px;
+}
+
+.progressHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.progressLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+
+.progressPct {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--gold-light, #f5d9a7);
+}
+
+.progressBar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.1);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #e8c79a, #f5d9a7);
+  transition: width 400ms ease;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  transition: all 180ms ease;
+}
+
+.badgeEarned {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), rgba(232, 199, 154, 0.04));
+  border: 1px solid rgba(232, 199, 154, 0.35);
+}
+
+.badgeLocked {
+  background: rgba(168, 85, 247, 0.03);
+  border: 1px solid rgba(168, 85, 247, 0.12);
+  opacity: 0.55;
+}
+
+.badgeIcon {
+  font-size: 1.6rem;
+  line-height: 1;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(232, 199, 154, 0.1);
+  flex-shrink: 0;
+}
+
+.badgeLocked .badgeIcon {
+  background: rgba(168, 85, 247, 0.06);
+  filter: grayscale(1);
+}
+
+.badgeBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.badgeLabel {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.badgeDesc {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}
+
+.footer {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.05);
+  border: 1px dashed rgba(168, 85, 247, 0.2);
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  text-align: center;
+}
