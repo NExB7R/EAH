@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createNotification } from '@/lib/notifications/server'
+import { apiLimiter, checkRateLimit } from '@/lib/rate-limit'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Activity Actions (follow / favorite / like)
@@ -26,6 +27,10 @@ async function toggleActivity(
   } = await supabase.auth.getUser()
 
   if (!user) return { ok: false, error: 'لازم تسجل دخول الأول' }
+
+  // Rate limit — 60 تفاعل / دقيقة (خفيف)
+  const rl = await checkRateLimit(apiLimiter, `activity:${user.id}`)
+  if (!rl.ok) return { ok: false, error: rl.error }
 
   // فحص هل موجود
   const { data: existing } = await supabase

@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { reviewSchema, merchantReplySchema } from '@/lib/validations/review'
+import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { createNotification } from '@/lib/notifications/server'
 
 // ═══════════════════════════════════════════════════════════
@@ -23,6 +24,10 @@ export async function submitReview(
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'لازم تسجل دخول الأول' }
+
+  // Rate limit — 5 تقييمات / 15 دقيقة
+  const rl = await checkRateLimit(strictLimiter, `review:${user.id}`)
+  if (!rl.ok) return { ok: false, error: rl.error }
 
   const { data: existing } = await supabase
     .from('business_reviews')
@@ -109,6 +114,10 @@ export async function replyToReview(
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'لازم تسجل دخول الأول' }
+
+  // Rate limit — 5 ردود / 15 دقيقة
+  const rl = await checkRateLimit(strictLimiter, `reply:${user.id}`)
+  if (!rl.ok) return { ok: false, error: rl.error }
 
   const parsed = merchantReplySchema.safeParse({
     reply: formData.get('reply')?.toString() ?? '',

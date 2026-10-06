@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { orderSchema } from '@/lib/validations/order'
 import { createNotification } from '@/lib/notifications/server'
+import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 
 type Result = { ok: true; orderCode: string; whatsappUrl: string } | { ok: false; error: string }
 
@@ -23,6 +24,10 @@ export async function submitOrder(
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+
+  // Rate limit — 5 طلبات / 15 دقيقة
+  const rl = await checkRateLimit(strictLimiter, `order:${user.id}`)
+  if (!rl.ok) return { ok: false, error: rl.error }
 
   const parsed = orderSchema.safeParse({
     customer_name: String(formData.get('customer_name') ?? '').trim(),
