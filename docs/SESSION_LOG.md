@@ -681,3 +681,31 @@
 - `auto_flag_review` (موجود) → مربوطة trigger
 - `apply_trust_decay` (موجود) → مربوطة cron
 - `on_review_trust_trigger` / `on_order_trust_trigger` (موجودين)
+
+
+## 2026-10-06 — Session 14 (تكملة 2): Badges + Roles + Cleanup
+
+### اللي اتحقق
+
+**Badge System:**
+- جدول `badge_catalog` (18 شارة في 5 تصنيفات)
+- `/account/badges` — عرض كل الشارات + التقدم
+- Auto-award functions (streak/reviewer/social)
+- ربط مع submit review + toggle activity
+
+**Role-Based Polish:**
+- drawer menu بقى: Guest / Customer / Merchant / Admin
+- Merchant apply CTA في `/account` (لو مش عنده نشاط)
+- Role-aware notifications empty state
+
+**Cleanup:**
+- knip = صفر dead code
+- eslint = صفر warnings
+- source-map-js updated (vuln fixed)
+- sw.js مضاف للـ ignores
+
+### Commits
+- `4781f74` feat(badges)
+- `a97afe9` feat(roles)
+- `d1bc291` feat(roles): role-aware empty
+- `38ff16c` chore: cleanup

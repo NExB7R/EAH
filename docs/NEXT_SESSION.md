@@ -37,7 +37,7 @@
 
 ## 🟠 قريب (بعد الأساس)
 
-- [ ] Role-Based Polish (كل دور يشوف حاجته)
+- [x] Role-Based Polish ✓ (Session 14)
 - [ ] Telegram Bot — Admin / Merchant / Client
 - [ ] Admin UI للبوت (/admin/telegram)
 - [ ] Voice Search ذكي (Whisper + فهم عامية)

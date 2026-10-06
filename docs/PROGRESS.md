@@ -7,7 +7,7 @@
 
 ## الحالة العامة
 
-**آخر commit كود:** `6567795`
+**آخر commit كود:** `38ff16c`
 **الفرع:** main
 **الإصدار:** v1.0.0
 
@@ -100,6 +100,7 @@
 | app/account/security/page.tsx | ✅ |
 | app/account/security/change-password-form.tsx | ✅ |
 | app/account/verify/page.tsx | ✅ |
+| app/account/badges/page.tsx | ✅ |
 
 ---
 
@@ -146,6 +147,10 @@
 | app/admin/insights/page.tsx | ✅ |
 | app/admin/health/page.tsx | ✅ |
 | app/admin/fraud/page.tsx | ✅ |
+| app/reports/actions.ts | ✅ |
+| app/reports/report-button.tsx | ✅ |
+| app/merchant/subscription/actions.ts | ✅ |
+| app/merchant/subscription/subscribe-button.tsx | ✅ |
 
 ---
 
@@ -243,6 +248,7 @@
 | lib/auth/admin.ts | ✅ |
 | lib/auth/ip.ts | ✅ |
 | lib/data/fraud.ts | ✅ |
+| lib/data/badges.ts | ✅ |
 | lib/data/health.ts | ✅ |
 | lib/data/admin-business.ts | ✅ |
 | lib/logging/client.ts | ✅ |
