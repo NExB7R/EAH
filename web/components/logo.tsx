@@ -36,6 +36,8 @@ export default function Logo({
           priority
           fetchPriority="high"
           decoding="async"
+          sizes="(max-width: 640px) 280px, (max-width: 1024px) 340px, 380px"
+          {...(size === 'lg' ? { elementtiming: 'hero-logo' } : {})}
         />
       )}
 
