@@ -90,10 +90,16 @@
 
 .hookAccent {
   display: inline-block;
-  color: var(--purple-light);
-  text-shadow:
-    0 0 20px rgba(168, 85, 247, 0.45),
-    0 0 40px rgba(168, 85, 247, 0.2);
+  background: linear-gradient(
+    135deg,
+    var(--purple-light) 0%,
+    var(--gold-light) 50%,
+    var(--purple-light) 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* ─── Crown ─── */
