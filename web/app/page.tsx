@@ -8,6 +8,8 @@ import SuggestedSection from '@/components/suggested-section'
 import AdSlot from '@/components/ad-slot'
 import { getPublishedBusinesses, getActiveOffers } from '@/lib/data'
 import { getFeatureFlags } from '@/lib/features'
+import { getUserSession } from '@/lib/data/user'
+import { getMyBusiness } from '@/lib/data/merchant'
 import { getActiveAdsForSlot } from '@/lib/data/ads'
 import { sortByTrend } from '@/lib/ranking'
 import type { Business } from '@/lib/data'
@@ -15,12 +17,14 @@ import type { Business } from '@/lib/data'
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
-  const [all, offers, flags, homeBanner, homeFeed] = await Promise.all([
+  const session = await getUserSession()
+  const [all, offers, flags, homeBanner, homeFeed, business] = await Promise.all([
     getPublishedBusinesses(),
     getActiveOffers(8),
     getFeatureFlags(),
     getActiveAdsForSlot('home_banner', 1),
     getActiveAdsForSlot('home_feed', 1),
+    session ? getMyBusiness(session.userId) : Promise.resolve(null),
   ])
 
   const featured = all.filter((b) => b.is_featured).slice(0, 15)
@@ -41,7 +45,7 @@ export default async function Home() {
 
   return (
     <main>
-      <HomeHero />
+      <HomeHero isLoggedIn={!!session} hasBusiness={!!business} />
       {flags.featured_enabled && <FeaturedBento businesses={featuredMerged} />}
       {homeBanner.length > 0 && (
         <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 20px' }}>

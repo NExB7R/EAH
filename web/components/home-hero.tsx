@@ -26,7 +26,12 @@ const CATEGORIES = [
   { type: 'misc', label: 'أنشطة أخرى', Icon: SparklesIcon, count: 24 },
 ]
 
-export default function HomeHero() {
+type Props = {
+  isLoggedIn: boolean
+  hasBusiness: boolean
+}
+
+export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
   return (
     <section className={styles.hero}>
       <div className={styles.ambient} aria-hidden />
@@ -90,6 +95,40 @@ export default function HomeHero() {
             </Link>
           </div>
         </form>
+
+        {/* CTAs — حسب الدور */}
+        {!isLoggedIn && (
+          <div className={styles.ctaRow}>
+            <Link href="/auth" className={styles.ctaPrimary}>
+              سجّل عشان تقيّم وتطلب
+            </Link>
+            <Link href="/merchant/apply" className={styles.ctaSecondary}>
+              عندك نشاط؟ سجّله مجاناً
+            </Link>
+          </div>
+        )}
+
+        {isLoggedIn && !hasBusiness && (
+          <div className={styles.ctaRow}>
+            <Link href="/account/badges" className={styles.ctaPrimary}>
+              اكسب شاراتك الأولى
+            </Link>
+            <Link href="/merchant/apply" className={styles.ctaSecondary}>
+              سجّل نشاطك مجاناً
+            </Link>
+          </div>
+        )}
+
+        {isLoggedIn && hasBusiness && (
+          <div className={styles.ctaRow}>
+            <Link href="/merchant" className={styles.ctaGold}>
+              افتح لوحة نشاطك
+            </Link>
+            <Link href="/account/badges" className={styles.ctaSecondary}>
+              شاراتك
+            </Link>
+          </div>
+        )}
 
         {/* Categories */}
         <nav className={styles.categories} aria-label="التصنيفات">

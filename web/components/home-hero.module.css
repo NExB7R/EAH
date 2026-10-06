@@ -347,3 +347,59 @@
 .shibinSign {
   margin-top: 14px;
 }
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.ctaPrimary,
+.ctaSecondary,
+.ctaGold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 180ms ease;
+  white-space: nowrap;
+}
+
+.ctaPrimary {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: var(--text-primary);
+}
+
+.ctaPrimary:hover {
+  background: rgba(168, 85, 247, 0.25);
+  transform: translateY(-1px);
+}
+
+.ctaSecondary {
+  background: transparent;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  color: var(--text-secondary);
+}
+
+.ctaSecondary:hover {
+  border-color: rgba(168, 85, 247, 0.4);
+  color: var(--text-primary);
+}
+
+.ctaGold {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.18), rgba(232, 199, 154, 0.06));
+  border: 1px solid rgba(232, 199, 154, 0.4);
+  color: var(--gold-light, #f5d9a7);
+}
+
+.ctaGold:hover {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.28), rgba(232, 199, 154, 0.12));
+  transform: translateY(-1px);
+}
