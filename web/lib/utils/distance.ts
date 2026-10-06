@@ -35,17 +35,3 @@ export function formatDistance(km: number): string {
   if (km < 10) return `${km.toFixed(1)} كم`
   return `${Math.round(km)} كم`
 }
-
-// يتحقق إن الإحداثيات صحيحة
-export function isValidLatLng(v: { lat: number | null; lng: number | null }): v is LatLng {
-  return (
-    typeof v.lat === 'number' &&
-    typeof v.lng === 'number' &&
-    Number.isFinite(v.lat) &&
-    Number.isFinite(v.lng) &&
-    v.lat >= -90 &&
-    v.lat <= 90 &&
-    v.lng >= -180 &&
-    v.lng <= 180
-  )
-}
