@@ -53,6 +53,7 @@ export type Branch = {
 
 export type Review = {
   id: string
+  user_id: string
   taste: number | null
   value_for_money: number | null
   speed: number | null
@@ -180,7 +181,7 @@ export const getBusinessReviews = unstable_cache(
       .from('business_reviews')
       .select(
         `
-        id, taste, value_for_money, speed, experience,
+        id, user_id, taste, value_for_money, speed, experience,
         comment, status, created_at,
         merchant_reply, merchant_reply_at,
         reviewer:profiles(display_name, avatar_url)

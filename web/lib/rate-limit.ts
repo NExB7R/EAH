@@ -27,6 +27,14 @@ export const apiLimiter = new Ratelimit({
   prefix: 'ratelimit:api',
 })
 
+// ─── Strict: عمليات حساسة (report / review / reply) ───
+export const strictLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, '15 m'),
+  analytics: true,
+  prefix: 'ratelimit:strict',
+})
+
 // ─── Strict: operations حساسة (review / reply / reveal) ───
 export async function getClientIp(): Promise<string> {
   const h = await headers()

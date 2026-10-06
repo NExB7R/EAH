@@ -1,6 +1,7 @@
 'use client'
 
 import { StarIcon } from './icons'
+import ReportButton from '@/app/reports/report-button'
 import Avatar from './avatar'
 import type { Review } from '@/lib/data/business-detail'
 import styles from './review-card.module.css'
@@ -55,6 +56,11 @@ export default function ReviewCard({ review, isOwner, canReply, onReply }: Props
           <span className={styles.name}>{name}</span>
           <span className={styles.date}>{formatDate(review.created_at)}</span>
         </div>
+        {!isOwner && (
+          <div className={styles.reportWrap}>
+            <ReportButton entityType="review" entityId={review.id} variant="icon" />
+          </div>
+        )}
       </header>
 
       {review.comment && <p className={styles.comment}>{review.comment}</p>}
