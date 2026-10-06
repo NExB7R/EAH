@@ -53,11 +53,15 @@ export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
 
         {/* الهوك — جملة واحدة */}
         <h1 className={styles.hook}>
-          <span className={styles.hookAccent}>شبيك لبيك</span>
+          <span className={styles.hookAccent} data-text="شبيك لبيك">
+            شبيك لبيك
+          </span>
           <span className={styles.crownWrap} aria-hidden>
             <CrownIcon size={32} />
           </span>
-          <span className={styles.hookAccent}>كل حاجة حواليك</span>
+          <span className={styles.hookAccent} data-text="كل حاجة حواليك">
+            كل حاجة حواليك
+          </span>
         </h1>
 
         {/* Search */}

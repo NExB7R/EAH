@@ -90,6 +90,14 @@
 
 .hookAccent {
   display: inline-block;
+  position: relative;
+  color: var(--purple-light);
+}
+
+.hookAccent::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
   background: linear-gradient(
     135deg,
     var(--purple-light) 0%,
@@ -100,6 +108,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  pointer-events: none;
 }
 
 /* ─── Crown ─── */
