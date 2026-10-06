@@ -73,8 +73,6 @@ export async function submitReview(
     experience: data.experience ?? null,
     comment: data.comment,
     status: 'pending',
-    source: completedOrder ? 'post_order' : 'organic',
-    order_id: completedOrder?.id ?? null,
   })
 
   if (error) return { ok: false, error: error.message }
