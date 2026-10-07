@@ -886,3 +886,97 @@
 - Weather في الهيدر (Open-Meteo)
 - Stats bar responsive + المسافة الفاضية
 - AI widget icon + fix "حدث مشكلة"
+
+
+---
+
+## 2026-10-07 — Session 20: UI Polish + Safety Layers
+
+### اللي اتحقق
+
+**Auth cleanup:**
+- SiteChromeGate — إخفاء Footer + StatsBar في `/auth/*`
+- AreaDropdown — مكوّن جديد (2026 style، panel قابل للتمرير)
+- شيل قسم "ليه EAH؟" + CUSTOMER_HOOKS + MERCHANT_HOOKS
+
+**Home:**
+- Header دايم ظاهر على Home (مش مخفي في الأعلى)
+- شيل CTAs من Hero ("سجّل عشان تقيّم" + "عندك نشاط")
+- أيقونات التصنيفات: سلايدر أفقي على الموبايل + grid على التابلت
+
+**Voice Search:**
+- HomeSearchForm — client component يُملأ الـ input بالصوت
+- VoiceSearchButton يقبل `onResult` callback اختياري
+
+**Weather + Stats:**
+- HeaderWeather — يقرأ geolocation المستخدم (via GeoProvider)
+- Open-Meteo API (مجاني، بدون key) + cache 30 دقيقة
+- LiveStatsBar: scroll أفقي على الموبايل (6 كروت)
+
+**Footer:**
+- PageHeader `compact` prop (يتخطى 70px padding-top)
+- SiteFooter margin-top: 60px → 8px
+
+**AI Widget:**
+- أيقونة تاج ذهبية (CrownGoldIcon) بدل Sparkles
+- ثيم ذهبي كامل (FAB + header + avatar + send)
+
+### 🐛 Critical Bugs — Fixed
+
+**1. AI Models deprecated (2026-10-07):**
+- Groq: `llama-3.3-70b-versatile` → `openai/gpt-oss-120b`
+- Gemini: `gemini-2.0-flash` → `gemini-3.8-flash`
+- OpenRouter: default fallback → `google/gemini-2.5-flash`
+- السبب: كل المزودين شالوا الموديلات بدون إنذار
+- **الحماية:** `lib/ai/providers.test.ts` — يفشل لو الموديل القديم رجع
+
+**2. CSS Modules errors:**
+- `order-modal.module.css`: overflow conflict (hidden vs overflow-y auto)
+- `insight.module.css`: `body` selector → نقل لـ `globals.css`
+- **الحماية:** stylelint مع CSS Modules config
+
+**3. Vercel Deploy فشل:**
+- Serwist يطلب webpack، Next.js 16 بيستخدم Turbopack افتراضي
+- الحل: `build: next build --webpack`
+- lefthook `prepare` يفشل على Vercel (مفيش git) → `|| true`
+- Vercel Hobby: `review-reminder` كل ساعة ممنوع → 3× يومي
+
+**4. Vercel Git Integration:**
+- بعد التحقق: كان متصل، بس webhook تعطّل بعدين اشتغل
+- الحل: `npx vercel git connect` + commit فاضي للاختبار
+
+### 🛡️ طبقات الحماية — 13 (من 7)
+
+**جديد في الجلسة:**
+- **stylelint** — CSS فحص (CSS Modules aware)
+- **commitlint** — conventional commits
+- **CodeQL** — أمان عميق (GitHub native)
+- **Dependabot** — تحديثات أسبوعية تلقائية
+- **providers.test.ts** — حراسة ضد deprecation
+
+### Commits الرئيسية
+
+- `a259a9a` fix(auth): hide footer + stats bar on /auth
+- `cdab9ba` feat(ui): AreaDropdown component
+- `372f447` refactor(auth): remove hooks
+- `2523d9c` feat(home): header always visible + hero cleanup
+- `9934f78` feat(hero): voice fills input in place
+- `eb3cf3e` feat(header): weather chip + mobile stats scroll
+- `d0f75b9` fix(footer): kill empty gap
+- `9a47039` feat(ai): gold crown icon
+- `3e99a00` chore(ai): verbose error logging
+- `1f1e13e` fix(ai): update deprecated models
+- `adfc0da` fix(build): don't fail on Vercel
+- `3875b59` fix(build): use webpack
+- `d046136` fix(css): use :global(body)
+- `4821295` chore(quality): add stylelint + AI fixes
+- `44d18b9` chore(vercel): cron to 3x daily
+- `9ebadde` test: trigger vercel deploy
+- `1fa1f40` chore(quality): add commitlint + CodeQL + Dependabot
+
+### اللي معلق
+
+- Build check في CI (محتاج 4 GitHub secrets)
+- اختبار المساعد بعد تحديث الموديلات
+- `getActiveAdsForSlot` — علاقة FK مكررة في Supabase
+- `getActiveAnnouncements` — RLS permission denied
