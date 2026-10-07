@@ -8,12 +8,15 @@ type Props = {
   className?: string
   size?: number
   tooltip?: string
+  /** لو موجود → يستخدم callback بدل النقل لـ /explore */
+  onResult?: (text: string) => void
 }
 
 export default function VoiceSearchButton({
   className = '',
   size = 18,
   tooltip = 'بحث صوتي',
+  onResult,
 }: Props) {
   const [open, setOpen] = useState(false)
 
@@ -28,7 +31,7 @@ export default function VoiceSearchButton({
       >
         <MicIcon size={size} />
       </button>
-      <VoiceSearch open={open} onClose={() => setOpen(false)} />
+      <VoiceSearch open={open} onClose={() => setOpen(false)} onResult={onResult} />
     </>
   )
 }

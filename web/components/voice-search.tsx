@@ -14,15 +14,21 @@ import styles from './voice-search.module.css'
 type Props = {
   open: boolean
   onClose: () => void
+  /** لو موجود → يستخدم callback بدل النقل لـ /explore */
+  onResult?: (text: string) => void
 }
 
-export default function VoiceSearch({ open, onClose }: Props) {
+export default function VoiceSearch({ open, onClose, onResult }: Props) {
   const router = useRouter()
 
   const voice = useVoiceSearch({
     onResult: (text) => {
       onClose()
-      router.push(`/explore?q=${encodeURIComponent(text)}`)
+      if (onResult) {
+        onResult(text)
+      } else {
+        router.push(`/explore?q=${encodeURIComponent(text)}`)
+      }
     },
     onError: () => {
       /* التعامل داخل الـ modal عبر status */

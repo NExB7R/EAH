@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Logo from './logo'
+import HomeSearchForm from './home-search-form'
 import {
-  SearchIcon,
   UtensilsIcon,
   PillIcon,
   CartIcon,
@@ -9,9 +9,7 @@ import {
   SparklesIcon,
   CrownIcon,
   LocationIcon,
-  SparkleStarIcon,
 } from './icons'
-import VoiceSearchButton from './voice-search-button'
 import styles from './home-hero.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -65,32 +63,7 @@ export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
         </h1>
 
         {/* Search */}
-        <form action="/explore" method="get" className="eah-search-form" role="search">
-          <div className="eah-search-box">
-            <span className="eah-search-icon" aria-hidden>
-              <SearchIcon size={20} />
-            </span>
-            <input
-              type="search"
-              name="q"
-              className="eah-search-input"
-              placeholder="دور على مطعم، صيدلية، ماركت..."
-              aria-label="البحث"
-              autoComplete="off"
-              enterKeyHint="search"
-            />
-            <VoiceSearchButton className="eah-icon-action" size={18} />
-            <Link
-              href="/explore?suggest=1"
-              className="eah-icon-action eah-icon-gold"
-              aria-label="رشحلي"
-              prefetch={false}
-              data-tooltip="رشحلي"
-            >
-              <SparkleStarIcon size={18} />
-            </Link>
-          </div>
-        </form>
+        <HomeSearchForm />
 
         {/* Categories */}
         <nav className={styles.categories} aria-label="التصنيفات">
