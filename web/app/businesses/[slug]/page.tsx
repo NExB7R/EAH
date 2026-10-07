@@ -15,6 +15,7 @@ import { isOpenNow } from '@/lib/data/businesses'
 import { getFeatureFlags } from '@/lib/features'
 import type { BusinessDetail } from '@/lib/data/business-detail'
 import { getUserSession } from '@/lib/data/user'
+import { getComments } from '@/lib/data/comments'
 import BusinessHero from '@/components/business-hero'
 import BusinessActions from '@/components/business-actions'
 import BusinessTabs from '@/components/business-tabs'
@@ -140,12 +141,13 @@ export default async function BusinessPage({ params }: Props) {
 
   const { business, contacts } = detail
 
-  const [reviews, similar, session, flags, offers] = await Promise.all([
+  const [reviews, similar, session, flags, offers, comments] = await Promise.all([
     getBusinessReviews(business.id, 50),
     getSimilarBusinesses(business.id, business.business_type, 8),
     getUserSession(),
     getFeatureFlags(),
     getBusinessOffers(business.id, 6),
+    getComments(business.id),
   ])
 
   const reviewStats = computeReviewStats(reviews)
@@ -230,6 +232,8 @@ export default async function BusinessPage({ params }: Props) {
             hasReviewed={hasReviewed}
             isOwner={isOwner}
             reviewsEnabled={flags.reviews_enabled}
+            comments={comments}
+            currentUserId={session?.userId ?? null}
           />
         </div>
 

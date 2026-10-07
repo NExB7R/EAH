@@ -15,10 +15,12 @@ import {
   MessageCircleIcon,
 } from './icons'
 import ReviewsList from './reviews-list'
+import CommentsList from './comments-list'
 import type { BusinessDetail, Review, ReviewStats } from '@/lib/data/business-detail'
+import type { CommentNode } from '@/lib/data/comments'
 import styles from './business-tabs.module.css'
 
-type Tab = 'info' | 'menu' | 'reviews'
+type Tab = 'info' | 'menu' | 'reviews' | 'comments'
 
 type Props = {
   detail: BusinessDetail
@@ -28,6 +30,8 @@ type Props = {
   hasReviewed: boolean
   isOwner: boolean
   reviewsEnabled: boolean
+  comments: CommentNode[]
+  currentUserId: string | null
 }
 
 const DAY_LABEL: Record<string, string> = {
@@ -50,6 +54,8 @@ export default function BusinessTabs({
   hasReviewed,
   isOwner,
   reviewsEnabled,
+  comments,
+  currentUserId,
 }: Props) {
   const [tab, setTab] = useState<Tab>('info')
   const [lightbox, setLightbox] = useState<string | null>(null)
@@ -99,6 +105,17 @@ export default function BusinessTabs({
             {reviewStats.count > 0 && <span className={styles.tabCount}>{reviewStats.count}</span>}
           </button>
         )}
+        <button
+          role="tab"
+          aria-selected={tab === 'comments'}
+          className={`${styles.tab} ${tab === 'comments' ? styles.active : ''}`}
+          onClick={() => setTab('comments')}
+          id="comments-section"
+        >
+          <MessageCircleIcon size={15} />
+          <span>التعليقات</span>
+          {comments.length > 0 && <span className={styles.tabCount}>{comments.length}</span>}
+        </button>
       </div>
 
       {/* ─── Info Tab ─── */}
@@ -300,6 +317,19 @@ export default function BusinessTabs({
             isLoggedIn={isLoggedIn}
             hasReviewed={hasReviewed}
             isOwner={isOwner}
+          />
+        </div>
+      )}
+
+      {/* ─── Comments Tab ─── */}
+      {tab === 'comments' && (
+        <div className={styles.content}>
+          <CommentsList
+            businessId={business.id}
+            slug={business.slug}
+            comments={comments}
+            currentUserId={currentUserId}
+            isLoggedIn={isLoggedIn}
           />
         </div>
       )}

@@ -12,6 +12,8 @@ export type NotificationType =
   | 'admin'
   | 'review'
   | 'review_reply'
+  | 'comment'
+  | 'comment_reply'
   | 'order_new'
   | 'order_status'
   | 'offer_new'
