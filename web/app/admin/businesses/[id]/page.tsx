@@ -5,6 +5,7 @@ import { ArrowLeftIcon, AlertIcon, CheckCircleIcon, StoreIcon } from '@/componen
 import { getBusinessById } from '@/lib/data/admin-business'
 import BusinessForm from '../business-form'
 import DeleteBusinessButton from './delete-button'
+import TrialOwnerPanel from './trial-owner-panel'
 import styles from '../businesses.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -128,6 +129,15 @@ export default async function AdminBusinessDetailPage({ params }: Props) {
         </div>
 
         <div className={styles.formWrap}>
+          <TrialOwnerPanel
+            businessId={biz.id}
+            businessName={biz.name}
+            ownerProfileId={biz.owner_profile_id || null}
+            ownerDisplayName={biz.owner?.display_name ?? null}
+            ownerPhone={biz.owner?.phone ?? null}
+            source={biz.source}
+            trialUsed={biz.trial_used}
+          />
           <h2 className={styles.formTitle}>تعديل البيانات</h2>
           <BusinessForm business={biz} />
         </div>

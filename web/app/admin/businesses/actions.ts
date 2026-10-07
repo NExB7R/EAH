@@ -352,3 +352,229 @@ export async function updateBusiness(businessId: string, formData: FormData): Pr
   revalidateTag('businesses', 'default')
   return { ok: true }
 }
+
+// ═══════════════════════════════════════════════════════════
+// التجربة المجانية (Admin) — start_business_trial RPC
+// ═══════════════════════════════════════════════════════════
+
+export async function adminStartTrial(businessId: string, days = 30): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  if (!Number.isFinite(days) || days < 1 || days > 365) {
+    return { ok: false, error: 'عدد أيام غير صالح (1-365)' }
+  }
+
+  const { createServiceClient } = await import('@/lib/supabase/service')
+  const admin = createServiceClient()
+
+  const { data, error } = await admin.rpc('start_business_trial', {
+    p_business_id: businessId,
+    p_days: days,
+    p_actor_user_id: ctx.userId,
+  })
+
+  if (error) {
+    console.error('[adminStartTrial]', error.message)
+    return { ok: false, error: 'حصلت مشكلة — جرب تاني' }
+  }
+
+  const result = data as { ok: boolean; error?: string } | null
+  if (!result?.ok) return { ok: false, error: result?.error ?? 'فشل بدء التجربة' }
+
+  // إشعار لصاحب النشاط (لو موجود)
+  const { data: biz } = await ctx.supabase
+    .from('businesses')
+    .select('name, owner_profile_id')
+    .eq('id', businessId)
+    .maybeSingle()
+
+  if (biz?.owner_profile_id) {
+    await createNotification({
+      userId: biz.owner_profile_id,
+      type: 'admin',
+      title: '🎉 بدأنا لك تجربة مجانية',
+      body: `${days} يوم على الباقة المميزة — استفد من كل المزايا`,
+      deepLink: '/merchant/subscription',
+    })
+  }
+
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath('/admin/businesses')
+  revalidateTag('admin-badges', 'default')
+  return { ok: true }
+}
+
+// ═══════════════════════════════════════════════════════════
+// ربط نشاط بحساب مستخدم (Admin)
+// ═══════════════════════════════════════════════════════════
+
+const phoneLookupSchema = z.string().regex(/^01[0-9]{9}$/, 'رقم غير صحيح')
+
+export type UserLookup =
+  | {
+      ok: true
+      user: {
+        id: string
+        displayName: string
+        phone: string
+        role: string
+        businessesCount: number
+      }
+    }
+  | { ok: false; error: string }
+
+export async function findUserByPhone(phone: string): Promise<UserLookup> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return { ok: false, error: ctx.error }
+
+  const parsed = phoneLookupSchema.safeParse(phone.trim())
+  if (!parsed.success) return { ok: false, error: 'رقم غير صحيح (11 رقم يبدأ بـ 01)' }
+
+  const { createServiceClient } = await import('@/lib/supabase/service')
+  const admin = createServiceClient()
+
+  const { data: profile } = await admin
+    .from('profiles')
+    .select('id, display_name, phone')
+    .eq('phone', parsed.data)
+    .maybeSingle()
+
+  if (!profile) return { ok: false, error: 'مفيش مستخدم مسجل بالرقم ده' }
+
+  const [bizRes, roleRes] = await Promise.all([
+    admin
+      .from('businesses')
+      .select('*', { count: 'exact', head: true })
+      .eq('owner_profile_id', profile.id),
+    admin.from('user_roles').select('role').eq('user_id', profile.id).maybeSingle(),
+  ])
+
+  return {
+    ok: true,
+    user: {
+      id: profile.id as string,
+      displayName: (profile.display_name as string) ?? '',
+      phone: (profile.phone as string) ?? parsed.data,
+      role: (roleRes.data?.role as string) ?? 'customer',
+      businessesCount: bizRes.count ?? 0,
+    },
+  }
+}
+
+export async function linkBusinessToUser(businessId: string, userId: string): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const uuidSchema = z.string().uuid()
+  if (!uuidSchema.safeParse(userId).success) {
+    return { ok: false, error: 'معرّف المستخدم غير صحيح' }
+  }
+
+  const { data: profile } = await ctx.supabase
+    .from('profiles')
+    .select('id, display_name')
+    .eq('id', userId)
+    .maybeSingle()
+
+  if (!profile) return { ok: false, error: 'المستخدم مش موجود' }
+
+  const { data: biz } = await ctx.supabase
+    .from('businesses')
+    .select('id, name, owner_profile_id, source')
+    .eq('id', businessId)
+    .maybeSingle()
+
+  if (!biz) return { ok: false, error: 'النشاط مش موجود' }
+
+  if (biz.owner_profile_id === userId) {
+    return { ok: false, error: 'النشاط مرتبط بالفعل بالحساب ده' }
+  }
+
+  const { error } = await ctx.supabase
+    .from('businesses')
+    .update({
+      owner_profile_id: userId,
+      source: 'merchant',
+      claimed_at: new Date().toISOString(),
+      claimed_by_user_id: ctx.userId,
+    })
+    .eq('id', businessId)
+
+  if (error) return { ok: false, error: error.message }
+
+  // رفع المستخدم لـ merchant (لو مش admin/super_admin)
+  const { data: currentRole } = await ctx.supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  if (currentRole?.role === 'customer') {
+    await ctx.supabase.from('user_roles').update({ role: 'merchant' }).eq('user_id', userId)
+  }
+
+  await createNotification({
+    userId,
+    type: 'admin',
+    title: 'تم ربط نشاط بحسابك',
+    body: `نشاط "${biz.name}" بقى تحت حسابك — تقدر تديره من لوحة التحكم`,
+    deepLink: '/merchant',
+  })
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.link_owner',
+    entityType: 'business',
+    entityId: businessId,
+    metadata: {
+      new_owner: userId,
+      old_owner: biz.owner_profile_id,
+      business_name: biz.name,
+    },
+  })
+
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath('/admin/businesses')
+  revalidateTag('admin-badges', 'default')
+  return { ok: true }
+}
+
+export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const { data: biz } = await ctx.supabase
+    .from('businesses')
+    .select('id, name, owner_profile_id')
+    .eq('id', businessId)
+    .maybeSingle()
+
+  if (!biz) return { ok: false, error: 'النشاط مش موجود' }
+
+  if (!biz.owner_profile_id) return { ok: false, error: 'النشاط مش مربوط بأي حساب' }
+
+  const { error } = await ctx.supabase
+    .from('businesses')
+    .update({
+      owner_profile_id: null,
+      source: 'admin',
+      claimed_at: null,
+      claimed_by_user_id: null,
+    })
+    .eq('id', businessId)
+
+  if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.unlink_owner',
+    entityType: 'business',
+    entityId: businessId,
+    metadata: { old_owner: biz.owner_profile_id, business_name: biz.name },
+  })
+
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath('/admin/businesses')
+  return { ok: true }
+}

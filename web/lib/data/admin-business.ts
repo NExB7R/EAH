@@ -29,6 +29,10 @@ export type AdminBusiness = {
   rejected_at: string | null
   created_at: string
   updated_at: string
+  source: 'merchant' | 'admin'
+  trial_used: boolean
+  claimed_at: string | null
+  claimed_by_user_id: string | null
   owner: { id: string; display_name: string; phone: string | null } | null
   contacts: { method_type: string; value: string; is_primary: boolean }[]
   branches: { id: string; name: string; area: string | null; address_text: string | null }[]
@@ -91,6 +95,10 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     rating_avg: (b.rating_avg as number) ?? 0,
     rating_count: (b.rating_count as number) ?? 0,
     rejection_reason: (b.rejection_reason as string | null) ?? null,
+    source: ((b.source as string) ?? 'merchant') as 'merchant' | 'admin',
+    trial_used: (b.trial_used as boolean) ?? false,
+    claimed_at: (b.claimed_at as string | null) ?? null,
+    claimed_by_user_id: (b.claimed_by_user_id as string | null) ?? null,
     rejected_at: (b.rejected_at as string | null) ?? null,
     created_at: b.created_at as string,
     updated_at: b.updated_at as string,
