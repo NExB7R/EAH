@@ -57,6 +57,9 @@
     "knip": "^6.38.0",
     "lefthook": "^2.1.15",
     "prettier": "^3.9.9",
+    "stylelint": "^17.16.0",
+    "stylelint-config-css-modules": "^4.6.0",
+    "stylelint-config-standard": "^40.0.0",
     "typescript": "^5",
     "vitest": "^5.0.3"
   }

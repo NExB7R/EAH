@@ -38,6 +38,9 @@ jobs:
       - name: Prettier
         run: npx prettier --check "**/*.{ts,tsx,css,json}"
 
+      - name: Stylelint (CSS)
+        run: npx stylelint "app/**/*.module.css" "components/**/*.module.css"
+
       - name: Unit Tests
         run: npx vitest run --reporter=dot
 

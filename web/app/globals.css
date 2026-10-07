@@ -607,3 +607,13 @@ html:has(main[data-snap='true']) {
     scroll-snap-type: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Print Mode (used by /merchant/insights/[id])
+   ═══════════════════════════════════════════════════════════ */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}

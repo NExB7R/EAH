@@ -18,6 +18,12 @@ pre-commit:
       glob: "**/*.{ts,tsx,css,json}"
       run: npx prettier --check {staged_files}
 
+    # stylelint على ملفات CSS المعدلة
+    stylelint:
+      root: "web/"
+      glob: "**/*.module.css"
+      run: npx stylelint {staged_files}
+
     # eslint على الملفات المعدلة
     eslint:
       root: "web/"

@@ -1,0 +1,32 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-css-modules"],
+  "rules": {
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "no-descending-specificity": null,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "keyframes-name-pattern": null,
+    "color-function-notation": null,
+    "color-function-alias-notation": null,
+    "alpha-value-notation": null,
+    "property-no-vendor-prefix": null,
+    "shorthand-property-no-redundant-values": null,
+    "value-keyword-case": null,
+    "font-family-name-quotes": null,
+    "declaration-block-single-line-max-declarations": null,
+    "selector-not-notation": null,
+    "media-feature-range-notation": null,
+    "number-max-precision": 6,
+    "rule-empty-line-before": null,
+    "at-rule-empty-line-before": null,
+    "comment-empty-line-before": null,
+    "comment-whitespace-inside": null,
+    "declaration-empty-line-before": null,
+    "custom-property-empty-line-before": null,
+    "declaration-property-value-keyword-no-deprecated": null,
+    "no-duplicate-selectors": null,
+    "selector-pseudo-class-no-unknown": [true, { "ignorePseudoClasses": ["global", "local"] }],
+    "selector-pseudo-element-no-unknown": [true, { "ignorePseudoElements": ["global", "local"] }]
+  },
+  "ignoreFiles": ["node_modules/**", ".next/**", "public/**"]
+}

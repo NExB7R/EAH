@@ -546,10 +546,6 @@
   .section {
     break-inside: avoid;
   }
-  :global(body) {
-    background: white !important;
-    color: black !important;
-  }
 }
 
 /* ─── AI Narrative ─── */
