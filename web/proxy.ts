@@ -20,7 +20,7 @@ function buildCSP(nonce: string, isDev: boolean): string {
     // Scripts: <script src> + <script nonce>
     isDev
       ? `script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' https://${TURNSTILE_HOST}`
-      : `script-src-elem 'self' 'nonce-${nonce}' 'strict-dynamic' https://${TURNSTILE_HOST}`,
+      : `script-src-elem 'self' 'nonce-${nonce}' https://${TURNSTILE_HOST}`,
 
     // Inline event handlers ممنوعة
     "script-src-attr 'none'",
