@@ -9,7 +9,7 @@
 
 ---
 
-## Routes (90)
+## Routes (91)
 
 | Route | File |
 |-------|------|
@@ -54,6 +54,7 @@
 | `/api/ai/transcribe` | `app/api/ai/transcribe/route.ts` |
 | `/api/cron/cleanup-errors` | `app/api/cron/cleanup-errors/route.ts` |
 | `/api/cron/review-reminder` | `app/api/cron/review-reminder/route.ts` |
+| `/api/cron/trial-notifications` | `app/api/cron/trial-notifications/route.ts` |
 | `/api/cron/trust-decay` | `app/api/cron/trust-decay/route.ts` |
 | `/api/csp-report` | `app/api/csp-report/route.ts` |
 | `/api/find-by-phone` | `app/api/find-by-phone/route.ts` |
