@@ -20,6 +20,10 @@ import { Turnstile } from '@marsidev/react-turnstile'
 import { signupAction, loginAction, type AuthResult } from './actions'
 import styles from './auth.module.css'
 
+// Test Keys من Cloudflare — تبدأ بـ 1x000
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ''
+const IS_TEST_KEY = TURNSTILE_SITE_KEY.startsWith('1x000')
+
 type Tab = 'login' | 'signup'
 type Gender = 'male' | 'female' | null
 
@@ -339,11 +343,11 @@ export default function AuthForm() {
             </div>
           )}
 
-          {tab === 'signup' && (
+          {tab === 'signup' && !IS_TEST_KEY && (
             <div className={styles.turnstileWrap}>
               <Turnstile
                 key={turnstileKey}
-                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ''}
+                siteKey={TURNSTILE_SITE_KEY}
                 onSuccess={(token) => setTurnstileToken(token)}
                 onError={() => setTurnstileToken(null)}
                 onExpire={() => setTurnstileToken(null)}
@@ -358,7 +362,7 @@ export default function AuthForm() {
           <button
             type="submit"
             className={styles.submit}
-            disabled={isPending || (tab === 'signup' && !turnstileToken)}
+            disabled={isPending || (tab === 'signup' && !IS_TEST_KEY && !turnstileToken)}
           >
             <span>{isPending ? '...' : tab === 'login' ? 'دخول' : 'سجّل'}</span>
           </button>

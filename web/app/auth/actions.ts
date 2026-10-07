@@ -39,6 +39,12 @@ async function verifyTurnstile(token: string): Promise<boolean> {
     return process.env.NODE_ENV !== 'production'
   }
 
+  // Test Keys من Cloudflare — تبدأ بـ 1x000
+  // Skip verification لمنع false negatives في التجارب
+  if (secret.startsWith('1x000')) {
+    return true
+  }
+
   try {
     const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
       method: 'POST',
