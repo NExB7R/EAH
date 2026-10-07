@@ -13,6 +13,7 @@ export type CommentNode = {
   depth: number
   likes_count: number
   is_edited: boolean
+  image_urls: string[]
   created_at: string
   author: {
     display_name: string
@@ -23,7 +24,7 @@ export type CommentNode = {
 }
 
 const COMMENT_SELECT = `
-  id, business_id, user_id, parent_id, content, depth, likes_count, is_edited, created_at,
+  id, business_id, user_id, parent_id, content, depth, likes_count, is_edited, image_urls, created_at,
   author:profiles!business_comments_user_id_fkey(display_name, avatar_url)
 `
 
@@ -51,6 +52,7 @@ export async function getComments(businessId: string): Promise<CommentNode[]> {
     depth: number
     likes_count: number
     is_edited: boolean
+    image_urls: string[]
     created_at: string
     author: { display_name: string; avatar_url: string | null } | null
   }[]

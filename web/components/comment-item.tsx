@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import Image from 'next/image'
 import Avatar from './avatar'
 import { HeartIcon, MessageCircleIcon, CloseIcon } from './icons'
-import { likeComment, unlikeComment, deleteComment } from '@/app/comments/actions'
+import { likeComment, unlikeComment, deleteComment, editComment } from '@/app/comments/actions'
 import { createComment } from '@/app/comments/actions'
 import type { CommentNode } from '@/lib/data/comments'
 import styles from './comment-item.module.css'
@@ -42,10 +43,23 @@ export default function CommentItem({
   const [replyText, setReplyText] = useState('')
   const [showReplies, setShowReplies] = useState(comment.depth < 1)
   const [isPending, startTransition] = useTransition()
+  const [editMode, setEditMode] = useState(false)
+  const [editText, setEditText] = useState(comment.content)
+  const [lightbox, setLightbox] = useState<string | null>(null)
+  const [content, setContent] = useState(comment.content)
+  const [isEdited, setIsEdited] = useState(comment.is_edited)
 
   const name = comment.author?.display_name ?? 'مستخدم'
   const isMine = currentUserId === comment.user_id
   const isDeleted = comment.content === '[deleted]'
+  const images = comment.image_urls ?? []
+
+  // يمكن تعديل التعليق خلال 15 دقيقة — الوقت بيتحسب مرة واحدة عند mount
+  const [canEdit] = useState(() => {
+    if (!isMine || isDeleted) return false
+    const age = Date.now() - new Date(comment.created_at).getTime()
+    return age < 15 * 60 * 1000
+  })
 
   const handleLike = () => {
     if (!isLoggedIn) return
@@ -96,11 +110,100 @@ export default function CommentItem({
         <span className={styles.name}>{name}</span>
         <span className={styles.dot}>·</span>
         <span className={styles.date}>{formatDate(comment.created_at)}</span>
-        {comment.is_edited && <span className={styles.edited}>(معدّل)</span>}
+        {isEdited && <span className={styles.edited}>(معدّل)</span>}
       </div>
 
-      {!isDeleted && <p className={styles.content}>{comment.content}</p>}
+      {!isDeleted && !editMode && <p className={styles.content}>{content}</p>}
       {isDeleted && <p className={styles.deleted}>[تعليق محذوف]</p>}
+
+      {editMode && (
+        <form
+          className={styles.editForm}
+          onSubmit={(e) => {
+            e.preventDefault()
+            if (!editText.trim()) return
+            startTransition(async () => {
+              const fd = new FormData()
+              fd.set('content', editText)
+              const res = await editComment(comment.id, slug, fd)
+              if (res.ok) {
+                setContent(editText)
+                setIsEdited(true)
+                setEditMode(false)
+              }
+            })
+          }}
+        >
+          <textarea
+            className={styles.replyInput}
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            maxLength={500}
+            rows={3}
+          />
+          <div className={styles.replyActions}>
+            <button
+              type="button"
+              className={styles.cancelBtn}
+              onClick={() => {
+                setEditMode(false)
+                setEditText(content)
+              }}
+            >
+              إلغاء
+            </button>
+            <button
+              type="submit"
+              className={styles.sendBtn}
+              disabled={isPending || !editText.trim()}
+            >
+              حفظ
+            </button>
+          </div>
+        </form>
+      )}
+
+      {!isDeleted && images.length > 0 && (
+        <div className={styles.images}>
+          {images.map((url, i) => (
+            <button
+              key={url}
+              type="button"
+              className={styles.imageBtn}
+              onClick={() => setLightbox(url)}
+              aria-label={`صورة ${i + 1}`}
+            >
+              <Image src={url} alt={`صورة ${i + 1}`} fill sizes="88px" className={styles.image} />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {lightbox && (
+        <div
+          className={styles.lightbox}
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setLightbox(null)}
+        >
+          <Image
+            src={lightbox}
+            alt=""
+            width={1200}
+            height={900}
+            className={styles.lightboxImg}
+            style={{ width: 'auto', height: 'auto', maxWidth: '100%', maxHeight: '90vh' }}
+          />
+          <button
+            type="button"
+            className={styles.lightboxClose}
+            onClick={() => setLightbox(null)}
+            aria-label="إغلاق"
+          >
+            <CloseIcon size={20} />
+          </button>
+        </div>
+      )}
 
       <div className={styles.actions}>
         <button
@@ -118,6 +221,12 @@ export default function CommentItem({
           <button type="button" className={styles.action} onClick={() => setShowReply((v) => !v)}>
             <MessageCircleIcon size={13} />
             <span>رد</span>
+          </button>
+        )}
+
+        {canEdit && (
+          <button type="button" className={styles.action} onClick={() => setEditMode((v) => !v)}>
+            <span>تعديل</span>
           </button>
         )}
 

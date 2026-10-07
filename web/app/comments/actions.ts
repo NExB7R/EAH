@@ -24,6 +24,17 @@ export async function createComment(
   if (!rl.ok) return { ok: false, error: rl.error }
 
   const parentId = formData.get('parent_id')?.toString() || null
+  const imageUrlsRaw = formData.get('image_urls')?.toString() ?? '[]'
+  let imageUrls: string[] = []
+  try {
+    const parsedJson = JSON.parse(imageUrlsRaw)
+    if (Array.isArray(parsedJson)) {
+      imageUrls = parsedJson.filter((u): u is string => typeof u === 'string').slice(0, 3)
+    }
+  } catch {
+    imageUrls = []
+  }
+
   const parsed = commentSchema.safeParse({
     content: formData.get('content')?.toString() ?? '',
     parent_id: parentId,
@@ -39,6 +50,7 @@ export async function createComment(
       user_id: user.id,
       parent_id: parsed.data.parent_id ?? null,
       content: parsed.data.content,
+      image_urls: imageUrls,
     })
     .select('id')
     .single()
@@ -140,6 +152,56 @@ export async function deleteComment(commentId: string, slug: string): Promise<Ac
   const { error } = await supabase
     .from('business_comments')
     .update({ status: 'deleted' })
+    .eq('id', commentId)
+    .eq('user_id', user.id)
+
+  if (error) return { ok: false, error: error.message }
+
+  revalidatePath(`/businesses/${slug}`)
+  return { ok: true }
+}
+
+// ─── تعديل تعليق (خلال 15 دقيقة) ───
+export async function editComment(
+  commentId: string,
+  slug: string,
+  formData: FormData,
+): Promise<ActionResult> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+
+  const { data: existing } = await supabase
+    .from('business_comments')
+    .select('user_id, created_at')
+    .eq('id', commentId)
+    .maybeSingle()
+
+  if (!existing) return { ok: false, error: 'التعليق مش موجود' }
+  if (existing.user_id !== user.id) return { ok: false, error: 'مش تعليقك' }
+
+  const ageMs = Date.now() - new Date(existing.created_at).getTime()
+  if (ageMs > 15 * 60 * 1000) {
+    return { ok: false, error: 'التعديل مسموح خلال 15 دقيقة فقط' }
+  }
+
+  const parsed = commentSchema.safeParse({
+    content: formData.get('content')?.toString() ?? '',
+    parent_id: null,
+  })
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues[0]?.message ?? 'بيانات غلط' }
+  }
+
+  const { error } = await supabase
+    .from('business_comments')
+    .update({
+      content: parsed.data.content,
+      is_edited: true,
+      edited_at: new Date().toISOString(),
+    })
     .eq('id', commentId)
     .eq('user_id', user.id)
 

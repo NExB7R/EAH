@@ -207,3 +207,205 @@
     transition: none;
   }
 }
+
+/* ─── Images ─── */
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.imageBtn {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: var(--radius-base);
+  overflow: hidden;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  background: rgba(7, 2, 13, 0.5);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    border-color 180ms var(--ease),
+    transform 180ms var(--ease);
+}
+
+.imageBtn:hover {
+  border-color: var(--purple-neon);
+  transform: translateY(-1px);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─── Edit form ─── */
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* ─── Lightbox ─── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(7, 2, 13, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  cursor: zoom-out;
+  animation: lbIn 180ms var(--ease-out);
+}
+
+@keyframes lbIn {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.lightboxImg {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: var(--radius-base);
+  box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
+}
+
+.lightboxClose {
+  position: absolute;
+  top: 20px;
+  inset-inline-end: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(20, 14, 34, 0.9);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightboxClose:hover {
+  border-color: var(--purple-neon);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .imageBtn,
+  .lightbox {
+    transition: none;
+    animation: none;
+  }
+}
+
+/* ─── Images ─── */
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.imageBtn {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: var(--radius-base);
+  overflow: hidden;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  background: rgba(7, 2, 13, 0.5);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    border-color 180ms var(--ease),
+    transform 180ms var(--ease);
+}
+
+.imageBtn:hover {
+  border-color: var(--purple-neon);
+  transform: translateY(-1px);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ─── Edit form ─── */
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* ─── Lightbox ─── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(7, 2, 13, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  cursor: zoom-out;
+  animation: lbIn 180ms var(--ease-out);
+}
+
+@keyframes lbIn {
+  from {
+    opacity: 0.7;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.lightboxImg {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: var(--radius-base);
+  box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
+}
+
+.lightboxClose {
+  position: absolute;
+  top: 20px;
+  inset-inline-end: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(20, 14, 34, 0.9);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightboxClose:hover {
+  border-color: var(--purple-neon);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .imageBtn,
+  .lightbox {
+    transition: none;
+    animation: none;
+  }
+}
