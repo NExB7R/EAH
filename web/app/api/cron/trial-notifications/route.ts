@@ -65,6 +65,66 @@ function daysElapsed(startsAt: string | null, now: Date, fallback: number): numb
   return Math.floor((now.getTime() - start) / (24 * 60 * 60 * 1000))
 }
 
+// ─── Downgrade تجارب منتهية → basic ───
+async function downgradeExpiredTrials(
+  supabase: ReturnType<typeof createServiceClient>,
+  now: Date,
+): Promise<{ count: number; ids: string[] }> {
+  // 1) جيب التجارب المنتهية
+  const { data: expired } = await supabase
+    .from('business_subscriptions')
+    .select('id, business_id, business:businesses(name, owner_profile_id)')
+    .eq('status', 'trial')
+    .eq('is_trial', true)
+    .lt('expires_at', now.toISOString())
+
+  if (!expired || expired.length === 0) return { count: 0, ids: [] }
+
+  // 2) جيب باقة basic
+  const { data: basicPlan } = await supabase
+    .from('subscription_plans')
+    .select('id')
+    .eq('code', 'basic')
+    .eq('is_active', true)
+    .maybeSingle()
+
+  if (!basicPlan) return { count: 0, ids: [] }
+
+  const ids = expired.map((e) => e.id as string)
+
+  // 3) حدّث الاشتراكات → expired
+  await supabase
+    .from('business_subscriptions')
+    .update({ status: 'expired', updated_at: now.toISOString() })
+    .in('id', ids)
+
+  // 4) إشعار للتاجر + إنشاء اشتراك basic جديد
+  for (const sub of expired) {
+    const biz = sub.business as unknown as { name: string; owner_profile_id: string | null } | null
+    if (!biz?.owner_profile_id) continue
+
+    // اشتراك basic جديد (3650 يوم = 10 سنين — عملياً "دائم")
+    await supabase.from('business_subscriptions').insert({
+      business_id: sub.business_id,
+      plan_id: basicPlan.id,
+      status: 'active',
+      is_trial: false,
+      starts_at: now.toISOString(),
+      expires_at: new Date(now.getTime() + 3650 * 24 * 60 * 60 * 1000).toISOString(),
+    })
+
+    await createNotification({
+      userId: biz.owner_profile_id,
+      type: 'admin',
+      title: 'انتهت تجربتك المجانية',
+      body: `تجربة "${biz.name}" انتهت — رجعت للباقة الأساسية. اشترك دلوقتي واسترجع كل المزايا.`,
+      deepLink: '/merchant/subscription',
+    })
+  }
+
+  return { count: ids.length, ids }
+}
+
 export async function GET(req: Request) {
   const auth = req.headers.get('authorization')
   if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -75,6 +135,10 @@ export async function GET(req: Request) {
     const supabase = createServiceClient()
     const now = new Date()
 
+    // 1) Downgrade التجارب المنتهية أولاً
+    const downgraded = await downgradeExpiredTrials(supabase, now)
+
+    // 2) إشعارات الـ milestones للتجارب النشطة
     const { data: subs, error } = await supabase
       .from('business_subscriptions')
       .select(
@@ -148,6 +212,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       ok: true,
+      downgraded: downgraded.count,
       checked: rows.length,
       sent,
       summary,
