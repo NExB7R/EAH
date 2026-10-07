@@ -188,7 +188,11 @@ export default async function BusinessPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildJsonLd(business, contacts, whatsapp, phone)),
+          // escape < → \u003c يمنع XSS لو اسم النشاط فيه </script>
+          __html: JSON.stringify(buildJsonLd(business, contacts, whatsapp, phone)).replace(
+            /</g,
+            '\\u003c',
+          ),
         }}
       />
       <div className={styles.container}>
