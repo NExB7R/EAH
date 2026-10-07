@@ -14,6 +14,8 @@ import SiteFooter from '@/components/site-footer'
 import LiveStatsBar from '@/components/live-stats-bar'
 import AiWidget from '@/components/ai-widget'
 import AnnouncementsBanner from '@/components/announcements-banner'
+import OfflineBadge from '@/components/offline-badge'
+import SwRegister from '@/components/sw-register'
 import { Analytics } from '@vercel/analytics/next'
 import { getUserSession } from '@/lib/data/user'
 import { GeoProvider } from '@/lib/contexts/geo-context'
@@ -77,6 +79,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <InstallPrompt />
           <ReviewReminder />
           <ScrollToTop />
+          <OfflineBadge />
+          <SwRegister />
           <Analytics />
         </GeoProvider>
       </body>
