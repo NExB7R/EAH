@@ -6,10 +6,14 @@ import ReviewCard from './review-card'
 import ReviewForm from './review-form'
 import { replyToReview } from '@/app/reviews/actions'
 import type { Review, ReviewStats } from '@/lib/data/business-detail'
+import { DIMENSION_LABELS, type DimensionKey } from '@/lib/review-dimensions'
+import type { BusinessType } from '@/lib/data/businesses'
 import styles from './reviews-list.module.css'
 
 type Props = {
   businessId: string
+  businessType: BusinessType
+  subcategory: string | null
   slug: string
   reviews: Review[]
   stats: ReviewStats
@@ -20,6 +24,8 @@ type Props = {
 
 export default function ReviewsList({
   businessId,
+  businessType,
+  subcategory,
   slug,
   reviews,
   stats,
@@ -70,54 +76,18 @@ export default function ReviewsList({
           </div>
 
           <div className={styles.bars}>
-            {stats.taste !== null && (
-              <div className={styles.barRow}>
-                <span>الطعم</span>
-                <div className={styles.barTrack}>
-                  <div
-                    className={styles.barFill}
-                    style={{ width: `${(stats.taste / 5) * 100}%` }}
-                  />
+            {Object.entries(stats.breakdown).map(([key, value]) => {
+              const label = DIMENSION_LABELS[key as DimensionKey] ?? key
+              return (
+                <div key={key} className={styles.barRow}>
+                  <span>{label}</span>
+                  <div className={styles.barTrack}>
+                    <div className={styles.barFill} style={{ width: `${(value / 5) * 100}%` }} />
+                  </div>
+                  <span className={styles.barNum}>{value.toFixed(1)}</span>
                 </div>
-                <span className={styles.barNum}>{stats.taste.toFixed(1)}</span>
-              </div>
-            )}
-            {stats.value_for_money !== null && (
-              <div className={styles.barRow}>
-                <span>القيمة</span>
-                <div className={styles.barTrack}>
-                  <div
-                    className={styles.barFill}
-                    style={{ width: `${(stats.value_for_money / 5) * 100}%` }}
-                  />
-                </div>
-                <span className={styles.barNum}>{stats.value_for_money.toFixed(1)}</span>
-              </div>
-            )}
-            {stats.speed !== null && (
-              <div className={styles.barRow}>
-                <span>السرعة</span>
-                <div className={styles.barTrack}>
-                  <div
-                    className={styles.barFill}
-                    style={{ width: `${(stats.speed / 5) * 100}%` }}
-                  />
-                </div>
-                <span className={styles.barNum}>{stats.speed.toFixed(1)}</span>
-              </div>
-            )}
-            {stats.experience !== null && (
-              <div className={styles.barRow}>
-                <span>التجربة</span>
-                <div className={styles.barTrack}>
-                  <div
-                    className={styles.barFill}
-                    style={{ width: `${(stats.experience / 5) * 100}%` }}
-                  />
-                </div>
-                <span className={styles.barNum}>{stats.experience.toFixed(1)}</span>
-              </div>
-            )}
+              )
+            })}
           </div>
         </div>
       )}
@@ -144,7 +114,13 @@ export default function ReviewsList({
       )}
 
       {showForm && (
-        <ReviewForm businessId={businessId} slug={slug} onClose={() => setShowForm(false)} />
+        <ReviewForm
+          businessId={businessId}
+          businessType={businessType}
+          subcategory={subcategory}
+          slug={slug}
+          onClose={() => setShowForm(false)}
+        />
       )}
 
       {/* List */}

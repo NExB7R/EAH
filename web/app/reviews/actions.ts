@@ -6,6 +6,7 @@ import { reviewSchema, merchantReplySchema } from '@/lib/validations/review'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { createNotification } from '@/lib/notifications/server'
 import { runBadgeChecks } from '@/lib/data/badges'
+import { reviewQualityScore } from '@/lib/review-dimensions'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Review Actions
@@ -39,16 +40,19 @@ export async function submitReview(
 
   if (existing) return { ok: false, error: 'قيّمت النشاط ده قبل كده' }
 
-  const parseNum = (v: FormDataEntryValue | null) => {
-    const n = Number(v)
-    return v && v !== '' && !isNaN(n) ? n : null
+  const dimensionsRaw = formData.get('dimensions')?.toString() ?? '{}'
+  let dimensions: Record<string, number> = {}
+  try {
+    const parsedJson = JSON.parse(dimensionsRaw)
+    if (parsedJson && typeof parsedJson === 'object') {
+      dimensions = parsedJson as Record<string, number>
+    }
+  } catch {
+    return { ok: false, error: 'بيانات الأبعاد غلط' }
   }
 
   const raw = {
-    taste: parseNum(formData.get('taste')),
-    value_for_money: parseNum(formData.get('value_for_money')),
-    speed: parseNum(formData.get('speed')),
-    experience: parseNum(formData.get('experience')),
+    dimensions,
     comment: formData.get('comment')?.toString() ?? '',
   }
 
@@ -59,16 +63,15 @@ export async function submitReview(
   }
 
   const data = parsed.data
+  const quality = reviewQualityScore(data.comment, false)
 
   const { error } = await supabase.from('business_reviews').insert({
     business_id: businessId,
     user_id: user.id,
-    taste: data.taste ?? null,
-    value_for_money: data.value_for_money ?? null,
-    speed: data.speed ?? null,
-    experience: data.experience ?? null,
+    dimensions: data.dimensions,
     comment: data.comment,
     status: 'pending',
+    review_quality_score: quality,
   })
 
   if (error) return { ok: false, error: error.message }

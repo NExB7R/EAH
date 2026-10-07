@@ -1,15 +1,28 @@
 import { z } from 'zod'
 
+const dimensionKey = z.enum([
+  'taste',
+  'cleanliness',
+  'service',
+  'price',
+  'speed',
+  'freshness',
+  'variety',
+  'availability',
+  'quality',
+  'reliability',
+  'atmosphere',
+  'presentation',
+  'experience',
+])
+
 export const reviewSchema = z
   .object({
-    taste: z.number().int().min(1).max(5).optional().nullable(),
-    value_for_money: z.number().int().min(1).max(5).optional().nullable(),
-    speed: z.number().int().min(1).max(5).optional().nullable(),
-    experience: z.number().int().min(1).max(5).optional().nullable(),
+    dimensions: z.record(dimensionKey, z.number().int().min(1).max(5)),
     comment: z.string().trim().min(10, 'التعليق قصير — 10 حروف على الأقل').max(500, 'التعليق طويل'),
   })
-  .refine((d) => d.taste || d.value_for_money || d.speed || d.experience, {
-    message: 'لازم تقييم واحد على الأقل',
+  .refine((d) => Object.keys(d.dimensions).length >= 1, {
+    message: 'لازم تقييم بُعد واحد على الأقل',
   })
 
 export const merchantReplySchema = z.object({

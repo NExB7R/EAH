@@ -21,6 +21,7 @@ export type Business = {
   name: string
   owner_profile_id: string
   business_type: BusinessType
+  subcategory: string | null
   description: string | null
   hook: string | null
   area: string | null
@@ -99,7 +100,7 @@ export function isOpenNow(hours: WorkingHours | null): boolean {
 // ═══════════════════════════════════════════════════════════
 
 const BUSINESS_COLUMNS = `
-  id, slug, name, business_type, description, hook,
+  id, slug, name, business_type, subcategory, description, hook,
   area, city, address_text, map_url, cover_image_url,
   is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   trust_score, trust_tier, successful_orders,

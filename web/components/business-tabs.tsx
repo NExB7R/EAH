@@ -292,6 +292,8 @@ export default function BusinessTabs({
         <div className={styles.content}>
           <ReviewsList
             businessId={business.id}
+            businessType={business.business_type}
+            subcategory={business.subcategory}
             slug={business.slug}
             reviews={reviews}
             stats={reviewStats}

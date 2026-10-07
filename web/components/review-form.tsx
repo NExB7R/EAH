@@ -1,24 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { StarIcon, CloseIcon } from './icons'
 import { submitReview } from '@/app/reviews/actions'
+import { getReviewDimensions, type Dimension } from '@/lib/review-dimensions'
+import type { BusinessType } from '@/lib/data/businesses'
 import styles from './review-form.module.css'
 
 type Props = {
   businessId: string
+  businessType: BusinessType
+  subcategory: string | null
   slug: string
   onClose: () => void
 }
-
-const CATEGORIES = [
-  { key: 'experience', label: 'التجربة العامة' },
-  { key: 'taste', label: 'الطعم' },
-  { key: 'value_for_money', label: 'القيمة' },
-  { key: 'speed', label: 'السرعة' },
-] as const
-
-type CatKey = (typeof CATEGORIES)[number]['key']
 
 function StarPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
@@ -40,30 +35,46 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
   )
 }
 
-export default function ReviewForm({ businessId, slug, onClose }: Props) {
-  const [ratings, setRatings] = useState<Record<CatKey, number>>({
-    experience: 0,
-    taste: 0,
-    value_for_money: 0,
-    speed: 0,
-  })
+export default function ReviewForm({
+  businessId,
+  businessType,
+  subcategory,
+  slug,
+  onClose,
+}: Props) {
+  const dimensions = useMemo(
+    () => getReviewDimensions(businessType, subcategory),
+    [businessType, subcategory],
+  )
+
+  const [ratings, setRatings] = useState<Record<string, number>>({})
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
 
-  const setRating = (key: CatKey, v: number) =>
+  const setRating = (key: string, v: number) =>
     setRatings((r) => ({ ...r, [key]: v === r[key] ? 0 : v }))
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
+
+    const cleaned: Record<string, number> = {}
+    for (const d of dimensions) {
+      const v = ratings[d.key]
+      if (v && v > 0) cleaned[d.key] = v
+    }
+
+    if (Object.keys(cleaned).length === 0) {
+      setError('قيّم بُعد واحد على الأقل')
+      return
+    }
+
     setLoading(true)
 
     const fd = new FormData()
-    for (const k of Object.keys(ratings) as CatKey[]) {
-      if (ratings[k] > 0) fd.set(k, String(ratings[k]))
-    }
+    fd.set('dimensions', JSON.stringify(cleaned))
     fd.set('comment', comment)
 
     const res = await submitReview(businessId, slug, fd)
@@ -101,10 +112,10 @@ export default function ReviewForm({ businessId, slug, onClose }: Props) {
       </div>
 
       <div className={styles.categories}>
-        {CATEGORIES.map((c) => (
-          <div key={c.key} className={styles.category}>
-            <span className={styles.catLabel}>{c.label}</span>
-            <StarPicker value={ratings[c.key]} onChange={(v) => setRating(c.key, v)} />
+        {dimensions.map((d: Dimension) => (
+          <div key={d.key} className={styles.category}>
+            <span className={styles.catLabel}>{d.label}</span>
+            <StarPicker value={ratings[d.key] ?? 0} onChange={(v) => setRating(d.key, v)} />
           </div>
         ))}
       </div>

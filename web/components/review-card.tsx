@@ -3,6 +3,7 @@
 import { StarIcon } from './icons'
 import ReportButton from '@/app/reports/report-button'
 import Avatar from './avatar'
+import { DIMENSION_LABELS, type DimensionKey } from '@/lib/review-dimensions'
 import type { Review } from '@/lib/data/business-detail'
 import styles from './review-card.module.css'
 
@@ -13,8 +14,7 @@ type Props = {
   onReply: (reviewId: string) => void
 }
 
-function Stars({ value }: { value: number | null }) {
-  if (value === null) return null
+function Stars({ value }: { value: number }) {
   return (
     <span className={styles.stars}>
       {[1, 2, 3, 4, 5].map((i) => (
@@ -42,6 +42,8 @@ function formatDate(iso: string): string {
 
 export default function ReviewCard({ review, isOwner, canReply, onReply }: Props) {
   const name = review.reviewer?.display_name ?? 'مستخدم'
+  const dims = review.dimensions ?? {}
+  const entries = Object.entries(dims).filter(([, v]) => typeof v === 'number' && v > 0)
 
   return (
     <article className={styles.card}>
@@ -65,32 +67,19 @@ export default function ReviewCard({ review, isOwner, canReply, onReply }: Props
 
       {review.comment && <p className={styles.comment}>{review.comment}</p>}
 
-      <div className={styles.ratings}>
-        {review.taste !== null && (
-          <div className={styles.ratingRow}>
-            <span>الطعم</span>
-            <Stars value={review.taste} />
-          </div>
-        )}
-        {review.value_for_money !== null && (
-          <div className={styles.ratingRow}>
-            <span>القيمة</span>
-            <Stars value={review.value_for_money} />
-          </div>
-        )}
-        {review.speed !== null && (
-          <div className={styles.ratingRow}>
-            <span>السرعة</span>
-            <Stars value={review.speed} />
-          </div>
-        )}
-        {review.experience !== null && (
-          <div className={styles.ratingRow}>
-            <span>التجربة</span>
-            <Stars value={review.experience} />
-          </div>
-        )}
-      </div>
+      {entries.length > 0 && (
+        <div className={styles.ratings}>
+          {entries.map(([key, value]) => {
+            const label = DIMENSION_LABELS[key as DimensionKey] ?? key
+            return (
+              <div key={key} className={styles.ratingRow}>
+                <span>{label}</span>
+                <Stars value={value} />
+              </div>
+            )
+          })}
+        </div>
+      )}
 
       {review.merchant_reply ? (
         <div className={styles.reply}>

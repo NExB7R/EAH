@@ -54,15 +54,14 @@ export type Branch = {
 export type Review = {
   id: string
   user_id: string
-  taste: number | null
-  value_for_money: number | null
-  speed: number | null
-  experience: number | null
+  dimensions: Record<string, number> | null
   comment: string | null
   status: string
   created_at: string
   merchant_reply: string | null
   merchant_reply_at: string | null
+  review_quality_score: number
+  is_verified_transaction: boolean
   reviewer: {
     display_name: string
     avatar_url: string | null
@@ -201,43 +200,46 @@ export const getBusinessReviews = unstable_cache(
 export type ReviewStats = {
   count: number
   avg: number
-  taste: number | null
-  value_for_money: number | null
-  speed: number | null
-  experience: number | null
+  breakdown: Record<string, number>
 }
 
 export function computeReviewStats(reviews: Review[]): ReviewStats {
   if (reviews.length === 0) {
-    return { count: 0, avg: 0, taste: null, value_for_money: null, speed: null, experience: null }
+    return { count: 0, avg: 0, breakdown: {} }
   }
 
-  const avg = (arr: number[]) =>
-    arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : null
-  const collect = (key: keyof Review) =>
-    reviews.map((r) => r[key]).filter((v): v is number => typeof v === 'number')
+  const sum: Record<string, number> = {}
+  const cnt: Record<string, number> = {}
+  let overallTotal = 0
+  let overallCount = 0
 
-  const taste = avg(collect('taste'))
-  const vfm = avg(collect('value_for_money'))
-  const speed = avg(collect('speed'))
-  const exp = avg(collect('experience'))
+  for (const r of reviews) {
+    const dims = r.dimensions ?? {}
+    const values: number[] = []
+    for (const [key, v] of Object.entries(dims)) {
+      if (typeof v === 'number' && v >= 1 && v <= 5) {
+        sum[key] = (sum[key] ?? 0) + v
+        cnt[key] = (cnt[key] ?? 0) + 1
+        values.push(v)
+      }
+    }
+    if (values.length > 0) {
+      overallTotal += values.reduce((a, b) => a + b, 0) / values.length
+      overallCount += 1
+    }
+  }
 
-  const overall = reviews
-    .map((r) => {
-      const vals = [r.taste, r.value_for_money, r.speed, r.experience].filter(
-        (v): v is number => typeof v === 'number',
-      )
-      return vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : null
-    })
-    .filter((v): v is number => typeof v === 'number')
+  const breakdown: Record<string, number> = {}
+  for (const key of Object.keys(sum)) {
+    const s = sum[key] ?? 0
+    const c = cnt[key] ?? 0
+    if (c > 0) breakdown[key] = Math.round((s / c) * 10) / 10
+  }
 
   return {
     count: reviews.length,
-    avg: overall.length > 0 ? overall.reduce((a, b) => a + b, 0) / overall.length : 0,
-    taste,
-    value_for_money: vfm,
-    speed,
-    experience: exp,
+    avg: overallCount > 0 ? Math.round((overallTotal / overallCount) * 10) / 10 : 0,
+    breakdown,
   }
 }
 
