@@ -16,6 +16,7 @@ export type FeatureFlags = {
   reviews_enabled: boolean
   orders_enabled: boolean
   announcements_enabled: boolean
+  live_stats_enabled: boolean
 }
 
 export const DEFAULT_FLAGS: FeatureFlags = {
@@ -31,6 +32,8 @@ export const DEFAULT_FLAGS: FeatureFlags = {
   reviews_enabled: true,
   orders_enabled: true,
   announcements_enabled: true,
+  // مخفي حالياً — يفتح لما يبقى عندنا زوار ونشاط
+  live_stats_enabled: false,
 }
 
 export const FEATURE_META: Record<
@@ -95,6 +98,11 @@ export const FEATURE_META: Record<
   announcements_enabled: {
     label: 'إعلانات الإدارة',
     desc: 'بانر إعلاني في أعلى الموقع',
+    group: 'system',
+  },
+  live_stats_enabled: {
+    label: 'شريط الإحصائيات',
+    desc: '8 عدادات فوق الفوتر (نشاط/مستخدمين/تقييمات/طلبات...)',
     group: 'system',
   },
 }

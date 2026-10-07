@@ -116,6 +116,8 @@ async function AnnouncementsSlot() {
 }
 
 async function BottomBar() {
+  const flags = await getFeatureFlags()
+  if (!flags.live_stats_enabled) return null
   const stats = await getAllLiveStats()
   return <LiveStatsBar stats={stats} />
 }
