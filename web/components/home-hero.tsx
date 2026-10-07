@@ -19,11 +19,11 @@ import styles from './home-hero.module.css'
 // ═══════════════════════════════════════════════════════════
 
 const CATEGORIES = [
-  { type: 'restaurant', label: 'مطاعم', Icon: UtensilsIcon, count: 11 },
-  { type: 'pharmacy', label: 'صيدليات', Icon: PillIcon, count: 10 },
-  { type: 'supermarket', label: 'ماركت', Icon: CartIcon, count: 4 },
-  { type: 'delivery_office', label: 'توصيل', Icon: BikeIcon, count: 10 },
-  { type: 'misc', label: 'أنشطة أخرى', Icon: SparklesIcon, count: 24 },
+  { type: 'restaurant', label: 'مطاعم', Icon: UtensilsIcon },
+  { type: 'pharmacy', label: 'صيدليات', Icon: PillIcon },
+  { type: 'supermarket', label: 'ماركت', Icon: CartIcon },
+  { type: 'delivery_office', label: 'توصيل', Icon: BikeIcon },
+  { type: 'misc', label: 'أنشطة أخرى', Icon: SparklesIcon },
 ]
 
 type Props = {
@@ -33,7 +33,7 @@ type Props = {
 
 export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
   return (
-    <section className={styles.hero}>
+    <section className={styles.hero} data-logged={isLoggedIn} data-has-biz={hasBusiness}>
       <div className={styles.ambient} aria-hidden />
       <div className={styles.grid} aria-hidden />
 
@@ -92,49 +92,14 @@ export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
           </div>
         </form>
 
-        {/* CTAs — حسب الدور */}
-        {!isLoggedIn && (
-          <div className={styles.ctaRow}>
-            <Link href="/auth" className={styles.ctaPrimary}>
-              سجّل عشان تقيّم وتطلب
-            </Link>
-            <Link href="/merchant/apply" className={styles.ctaSecondary}>
-              عندك نشاط؟ سجّله مجاناً
-            </Link>
-          </div>
-        )}
-
-        {isLoggedIn && !hasBusiness && (
-          <div className={styles.ctaRow}>
-            <Link href="/account/badges" className={styles.ctaPrimary}>
-              اكسب شاراتك الأولى
-            </Link>
-            <Link href="/merchant/apply" className={styles.ctaSecondary}>
-              سجّل نشاطك مجاناً
-            </Link>
-          </div>
-        )}
-
-        {isLoggedIn && hasBusiness && (
-          <div className={styles.ctaRow}>
-            <Link href="/merchant" className={styles.ctaGold}>
-              افتح لوحة نشاطك
-            </Link>
-            <Link href="/account/badges" className={styles.ctaSecondary}>
-              شاراتك
-            </Link>
-          </div>
-        )}
-
         {/* Categories */}
         <nav className={styles.categories} aria-label="التصنيفات">
-          {CATEGORIES.map(({ type, label, Icon, count }) => (
+          {CATEGORIES.map(({ type, label, Icon }) => (
             <Link key={type} href={`/explore?type=${type}`} className={styles.category}>
               <span className={styles.categoryIcon} aria-hidden>
                 <Icon size={22} />
               </span>
               <span className={styles.categoryLabel}>{label}</span>
-              <span className={styles.categoryCount}>{count}</span>
             </Link>
           ))}
         </nav>

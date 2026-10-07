@@ -300,23 +300,9 @@
     opacity 400ms var(--ease-out);
 }
 
-/* في الرئيسية + لسه في الهيرو → الهيدر مخفي بالكامل */
-.capsule[data-home='true'][data-scrolled='false'] {
-  transform: translateY(-120%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.capsule[data-home='true'][data-scrolled='true'] {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-/* أي صفحة تانية → الهيدر دايماً ظاهر */
-.capsule[data-home='false'] {
-  transform: translateY(0);
-  opacity: 1;
-}
+/* في الرئيسية + فوق → الهيدر ظاهر بدون خلفية/حدود/لوجو
+   (اللوجو مخفي أعلاه عبر [data-scrolled='false'] .center)
+   الخلفية/الحدود بتظهر بس عند [data-scrolled='true'] .inner */
 
 /* توسيط اللوجو بالظبط */
 .inner {
