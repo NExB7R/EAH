@@ -1091,3 +1091,15 @@ Admin list:
 - **Admin يقدر يربط/يفك** من `/admin/businesses/[id]`
 - **Cron يعمل يومي 9ص** — يرجّع basic تلقائي
 - **live_stats_enabled = false** — يفتح يدوي من /admin/studio
+
+
+### إضافة بعد الـ session
+
+**Turnstile Fix (مؤقت):**
+- Vercel env: بدّلنا مفاتيح الإنتاج بـ Test Keys من Cloudflare
+- السبب: domain `eah-sq.vercel.app` مش مسجل في Cloudflare Turnstile
+- Test Site Key: `1x00000000000000000000AA`
+- Test Secret: `1x0000000000000000000000000000000AA`
+- النتيجة: التسجيل شغال ✅
+- **مؤجل:** تسجيل الـ domain في Cloudflare + رجوع المفاتيح الحقيقية
+- المرجع: `Desktop/X.txt` (المفاتيح الأصلية)

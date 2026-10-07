@@ -163,6 +163,7 @@ EAH/
 | announcements RLS | fixed |
 | Build (Turbopack/Serwist) | --webpack |
 | Service role على Vercel cron | يحتاج CRON_SECRET |
+| Turnstile على Production | ⚠️ Test Keys — يحتاج domain في Cloudflare |
 
 للقائمة الكاملة: docs/LESSONS.md
 

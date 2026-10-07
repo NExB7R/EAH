@@ -21,6 +21,15 @@
 
 ---
 
+## 🔴 حرجة — قبل الإطلاق
+
+- [ ] **Turnstile حقيقي** — حالياً Test Keys في Production
+  - السبب: `eah-sq.vercel.app` مش مسجل في Cloudflare Turnstile
+  - الحل: Cloudflare Dashboard → Turnstile → Widget → Add Hostname: `eah-sq.vercel.app` + `localhost`
+  - بعدها: نرجّع مفاتيح الإنتاج على Vercel (production + preview + development)
+  - المرجع: `Desktop/X.txt` — مفاتيح Turnstile الأصلية
+  - الأولوية: عالية — Test Keys = صفر حماية من البوتات
+
 ## 🔴 حرجة — قبل الاختبار الميداني
 
 - [ ] مسح البيانات الوهمية (53 نشاط + حسابات تجريبية)
