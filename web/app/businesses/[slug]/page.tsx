@@ -19,6 +19,7 @@ import { getComments, getMyFollowingRootIds } from '@/lib/data/comments'
 import BusinessHero from '@/components/business-hero'
 import BusinessActions from '@/components/business-actions'
 import BusinessTabs from '@/components/business-tabs'
+import BusinessCache from '@/components/business-cache'
 import FixedCta from '@/components/fixed-cta'
 import BusinessCard from '@/components/business-card'
 import { CrownGoldIcon, ArrowLeftIcon } from '@/components/icons'
@@ -183,6 +184,7 @@ export default async function BusinessPage({ params }: Props) {
 
   return (
     <main className={styles.page}>
+      <BusinessCache slug={business.slug} detail={detail} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
