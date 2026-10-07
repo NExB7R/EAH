@@ -818,3 +818,49 @@
 - Explore: subcategory filter
 - التقييم بعد ساعتين (CRITERIA §5)
 - ترند 7 معايير 2026
+
+---
+
+## 2026-10-07 — Session 18: Data Wipe + Production Ready
+
+### اللي اتحقق
+- **Nonce CSP** — per-request nonce via proxy.ts
+- **Bundle audit** — MenuSlider dynamic (وفرنا ~30KB)
+- **Contrast fix** — WCAG AA (14 مشكلة → صفر)
+- **Offline First (Serwist)** — SW + IndexedDB + queue + flush API + offline page + badge
+- **Offline-aware mutations** — review/comment/favorite/follow/like
+- **Business Insights AI** — peak hours + week-over-week + AI narrative (Groq)
+- **Comment thread follows** — YouTube-style notifications
+- **مشاكل أمان** — 10 مفاتيح rotate (مؤجل قبل الإطلاق)
+
+### 🎯 Data Wipe (100%)
+حذفنا كل الاختبار:
+- 59 نشاط وهمي
+- 9 عروض تجريبية
+- 9 صور unsplash
+- 1 تقييم تجريبي
+- 1 TEST user (01016701686)
+- 54 audit_logs
+- 1 notification
+
+**اللي فاضل:**
+- ✅ profile: NourEldin B7R (super_admin)
+- ✅ 4 subscription_plans
+- ✅ 4 ad_slots
+- ✅ 18 badge_catalog
+- ✅ 1 app_settings
+
+### Commits الرئيسية
+- `655b866` Nonce CSP
+- `a089642` Bundle + Contrast
+- `e2a8980` Offline mutations
+- `fa7d975` Offline infra
+- `cc45105` Thread follows + AI narrative
+- `7479f20` Business caching
+
+### اللي جاي
+- إضافة أنشطة حقيقية (بداية جديدة)
+- اختبار ميداني شامل
+- Telegram Bot
+- Vercel Pro + Domain
+- Rotate المفاتيح المكشوفة
