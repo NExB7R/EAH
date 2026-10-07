@@ -87,11 +87,18 @@ export default function BusinessRow({ business: b }: Props) {
       <div className={styles.body}>
         <div className={styles.bodyHead}>
           <h3 className={styles.name}>{b.name}</h3>
-          <span className={`${styles.status} ${styles[`status_${status}`]}`}>
-            {status === 'pending' && 'بانتظار'}
-            {status === 'published' && 'منشور'}
-            {status === 'rejected' && 'مرفوض'}
-          </span>
+          <div className={styles.badges}>
+            <span className={`${styles.status} ${styles[`status_${status}`]}`}>
+              {status === 'pending' && 'بانتظار'}
+              {status === 'published' && 'منشور'}
+              {status === 'rejected' && 'مرفوض'}
+            </span>
+            <span
+              className={`${styles.sourceChip} ${b.source === 'admin' ? styles.sourceAdmin : ''}`}
+            >
+              {b.source === 'admin' ? 'بإدارة الأدمن' : 'بإدارة التاجر'}
+            </span>
+          </div>
         </div>
 
         <div className={styles.meta}>

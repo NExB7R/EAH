@@ -16,6 +16,7 @@ const TABS: { key: BusinessStatus; label: string }[] = [
   { key: 'pending', label: 'بانتظار' },
   { key: 'published', label: 'منشورة' },
   { key: 'rejected', label: 'مرفوضة' },
+  { key: 'admin_owned', label: 'بإدارة الأدمن' },
   { key: 'all', label: 'الكل' },
 ]
 

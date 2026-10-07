@@ -25,10 +25,12 @@ export type PendingBusiness = {
   is_published: boolean
   rejection_reason: string | null
   rejected_at: string | null
+  source: 'merchant' | 'admin'
+  trial_used: boolean
   owner: { display_name: string; phone: string | null } | null
 }
 
-export type BusinessStatus = 'pending' | 'published' | 'rejected' | 'all'
+export type BusinessStatus = 'pending' | 'published' | 'rejected' | 'admin_owned' | 'all'
 
 export async function getAdminStats(): Promise<AdminStats> {
   const supabase = await createClient()
@@ -74,7 +76,7 @@ export async function getBusinessesByStatus(
   let query = supabase
     .from('businesses')
     .select(
-      'id, name, slug, business_type, area, cover_image_url, description, created_at, is_published, rejection_reason, rejected_at',
+      'id, name, slug, business_type, area, cover_image_url, description, created_at, is_published, rejection_reason, rejected_at, source, trial_used',
     )
     .order('created_at', { ascending: false })
     .limit(limit)
@@ -85,6 +87,8 @@ export async function getBusinessesByStatus(
     query = query.eq('is_published', true)
   } else if (status === 'rejected') {
     query = query.not('rejected_at', 'is', null)
+  } else if (status === 'admin_owned') {
+    query = query.eq('source', 'admin').eq('is_published', true)
   }
 
   const { data: businesses } = await query
