@@ -8,6 +8,7 @@ import {
   GiftIcon,
   TrendingUpIcon,
   MapPinIcon,
+  SparkleStarIcon,
 } from './icons'
 import type { LiveStats } from '@/lib/data/live-stats'
 import styles from './live-stats-bar.module.css'
@@ -144,7 +145,7 @@ export default function LiveStatsBar({ stats }: Props) {
       },
       {
         id: 'monthly',
-        Icon: UserIcon,
+        Icon: SparkleStarIcon,
         value: stats.monthlyUsers,
         label: 'مستخدم الشهر',
         accent: 'gold',

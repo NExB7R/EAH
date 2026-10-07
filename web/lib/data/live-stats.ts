@@ -54,11 +54,7 @@ export const getLiveStats = unstable_cache(
         .from('page_view_events')
         .select('*', { count: 'exact', head: true })
         .gte('occurred_at', todayIso),
-      supabase
-        .from('business_reviews')
-        .select('taste, value_for_money, speed, experience')
-        .eq('status', 'approved')
-        .limit(5000),
+      supabase.from('business_reviews').select('dimensions').eq('status', 'approved').limit(5000),
       supabase.from('businesses').select('area').eq('is_published', true).not('area', 'is', null),
       supabase
         .from('page_view_events')
@@ -67,17 +63,12 @@ export const getLiveStats = unstable_cache(
         .limit(30000),
     ])
 
-    type ReviewRow = {
-      taste: number | null
-      value_for_money: number | null
-      speed: number | null
-      experience: number | null
-    }
+    // Reviews 2.0: dimensions JSONB — { taste: 5, speed: 4, ... }
+    type ReviewRow = { dimensions: Record<string, number> | null }
     const allScores: number[] = []
     for (const r of (reviewsData ?? []) as ReviewRow[]) {
-      const vals = [r.taste, r.value_for_money, r.speed, r.experience].filter(
-        (v): v is number => typeof v === 'number' && v > 0,
-      )
+      const dims = r.dimensions ?? {}
+      const vals = Object.values(dims).filter((v) => typeof v === 'number' && v > 0 && v <= 5)
       if (vals.length > 0) {
         allScores.push(vals.reduce((a, b) => a + b, 0) / vals.length)
       }

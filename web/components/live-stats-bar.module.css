@@ -189,7 +189,7 @@
 
 @media (min-width: 1024px) {
   .desktopGrid {
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     gap: 10px;
   }
 
