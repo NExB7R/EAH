@@ -131,3 +131,8 @@
     transition: none;
   }
 }
+
+/* ─── Compact (في الفوتر) ─── */
+.compact {
+  padding-top: 8px;
+}

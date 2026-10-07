@@ -10,6 +10,8 @@ type Props = {
   title?: string
   count?: number
   logoSize?: LogoSize
+  /** تقليل الـ top padding (للاستخدام جوه الفوتر) */
+  compact?: boolean
   children?: React.ReactNode
 }
 
@@ -18,10 +20,11 @@ export default function PageHeader({
   title,
   count,
   logoSize = 'sm',
+  compact = false,
   children,
 }: Props) {
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${compact ? styles.compact : ''}`}>
       <div className={styles.topRow}>
         {showBack && (
           <Link href="/" className={styles.back} aria-label="الرئيسية">

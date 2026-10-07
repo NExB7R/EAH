@@ -19,6 +19,8 @@ type Props = {
   Icon?: IconComp
   tone?: SectionTone
   showNav?: boolean
+  /** تقليل الـ top padding (للاستخدام جوه الفوتر) */
+  compact?: boolean
   children?: ReactNode
 }
 
@@ -30,11 +32,12 @@ export default function SecondaryHero({
   tone = 'gold',
   countLabel,
   showNav = true,
+  compact = false,
   children,
 }: Props) {
   return (
     <>
-      <PageHeader showBack={false} logoSize="md">
+      <PageHeader showBack={false} logoSize="md" compact={compact}>
         {children}
       </PageHeader>
 

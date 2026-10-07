@@ -92,7 +92,7 @@ export default function SiteFooter() {
 
       {/* ─── Secondary Hero (بدون nav) ─── */}
       <div className={styles.heroWrap}>
-        <SecondaryHero showNav={false} />
+        <SecondaryHero showNav={false} compact />
       </div>
 
       <div className={styles.container}>
