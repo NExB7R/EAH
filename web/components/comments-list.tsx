@@ -14,6 +14,7 @@ type Props = {
   comments: CommentNode[]
   currentUserId: string | null
   isLoggedIn: boolean
+  followingRootIds?: string[]
 }
 
 export default function CommentsList({
@@ -22,7 +23,9 @@ export default function CommentsList({
   comments,
   currentUserId,
   isLoggedIn,
+  followingRootIds = [],
 }: Props) {
+  const followingSet = new Set(followingRootIds)
   const [text, setText] = useState('')
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -169,6 +172,7 @@ export default function CommentsList({
               slug={slug}
               currentUserId={currentUserId}
               isLoggedIn={isLoggedIn}
+              isFollowing={followingSet.has(c.id)}
             />
           ))}
         </div>

@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { commentSchema } from '@/lib/validations/comment'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { createNotification } from '@/lib/notifications/server'
+import { getRootCommentId, getThreadFollowers } from '@/lib/data/comments'
 
 type ActionResult = { ok: true } | { ok: false; error: string }
 
@@ -57,7 +58,48 @@ export async function createComment(
 
   if (error) return { ok: false, error: error.message }
 
-  // إشعار لصاحب التعليق الأصلي (لو رد)
+  // ─── Auto-subscribe: كاتب التعليق يتابع الـ thread تلقائياً ───
+  const rootId = parsed.data.parent_id
+    ? await getRootCommentId(parsed.data.parent_id)
+    : (created?.id ?? null)
+
+  if (rootId) {
+    await supabase.from('comment_thread_follows').upsert(
+      {
+        user_id: user.id,
+        root_comment_id: rootId,
+        business_id: businessId,
+      },
+      { onConflict: 'user_id,root_comment_id', ignoreDuplicates: true },
+    )
+  }
+
+  // ─── Notify كل متابعين الـ thread (ماعدا الكاتب) ───
+  if (rootId) {
+    const followers = await getThreadFollowers(rootId)
+    const toNotify = followers.filter((fid) => fid !== user.id)
+
+    // معلومات النشاط للـ deep link
+    const { data: bizInfo } = await supabase
+      .from('businesses')
+      .select('name')
+      .eq('id', businessId)
+      .maybeSingle()
+
+    for (const fid of toNotify) {
+      void createNotification({
+        userId: fid,
+        type: 'comment_reply',
+        title: 'رد جديد في نقاش متابعه',
+        body: `${bizInfo?.name ?? 'نشاط'}: حد رد في نقاش انت مشارك فيه`,
+        deepLink: `/businesses/${slug}#comments-section`,
+        push: true,
+        pushTag: `comment-thread-${rootId}`,
+      }).catch(() => {})
+    }
+  }
+
+  // ─── إشعار لصاحب التعليق الأصلي (لو مش في followers — للحالة القصوى) ───
   if (parsed.data.parent_id) {
     const { data: parent } = await supabase
       .from('business_comments')
@@ -65,7 +107,7 @@ export async function createComment(
       .eq('id', parsed.data.parent_id)
       .maybeSingle()
 
-    if (parent?.user_id && parent.user_id !== user.id) {
+    if (parent?.user_id && parent.user_id !== user.id && !rootId) {
       void createNotification({
         userId: parent.user_id,
         type: 'comment_reply',
@@ -209,4 +251,58 @@ export async function editComment(
 
   revalidatePath(`/businesses/${slug}`)
   return { ok: true }
+}
+
+// ─── متابعة/إلغاء متابعة الـ thread ───
+export async function toggleFollowThread(
+  commentId: string,
+  slug: string,
+): Promise<{ ok: true; following: boolean } | { ok: false; error: string }> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+
+  const rootId = await getRootCommentId(commentId)
+  if (!rootId) return { ok: false, error: 'التعليق مش موجود' }
+
+  // فحص إنه متابع حالياً
+  const { data: existing } = await supabase
+    .from('comment_thread_follows')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('root_comment_id', rootId)
+    .maybeSingle()
+
+  if (existing) {
+    await supabase
+      .from('comment_thread_follows')
+      .delete()
+      .eq('user_id', user.id)
+      .eq('root_comment_id', rootId)
+    revalidatePath(`/businesses/${slug}`)
+    return { ok: true, following: false }
+  }
+
+  const { data: comment } = await supabase
+    .from('business_comments')
+    .select('business_id')
+    .eq('id', rootId)
+    .maybeSingle()
+
+  if (!comment) return { ok: false, error: 'التعليق مش موجود' }
+
+  const { error } = await supabase.from('comment_thread_follows').insert({
+    user_id: user.id,
+    root_comment_id: rootId,
+    business_id: (comment as { business_id: string }).business_id,
+  })
+
+  if (error && !error.message.includes('duplicate')) {
+    return { ok: false, error: error.message }
+  }
+
+  revalidatePath(`/businesses/${slug}`)
+  return { ok: true, following: true }
 }

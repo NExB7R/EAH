@@ -409,3 +409,13 @@
     animation: none;
   }
 }
+.actionFollowing {
+  color: var(--gold-light);
+  background: rgba(232, 199, 154, 0.1);
+  border-color: rgba(232, 199, 154, 0.3) !important;
+}
+
+.actionFollowing:hover {
+  color: var(--gold-light) !important;
+  background: rgba(232, 199, 154, 0.18);
+}

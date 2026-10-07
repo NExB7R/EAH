@@ -15,7 +15,7 @@ import { isOpenNow } from '@/lib/data/businesses'
 import { getFeatureFlags } from '@/lib/features'
 import type { BusinessDetail } from '@/lib/data/business-detail'
 import { getUserSession } from '@/lib/data/user'
-import { getComments } from '@/lib/data/comments'
+import { getComments, getMyFollowingRootIds } from '@/lib/data/comments'
 import BusinessHero from '@/components/business-hero'
 import BusinessActions from '@/components/business-actions'
 import BusinessTabs from '@/components/business-tabs'
@@ -159,6 +159,9 @@ export default async function BusinessPage({ params }: Props) {
       ])
     : [false, false]
   const isOwner = session?.userId === business.owner_profile_id
+
+  const followingRootIds =
+    session && comments.length > 0 ? await getMyFollowingRootIds(business.id, session.userId) : []
   const userReview = session && isLoggedIn ? await getUserReview(business.id, session.userId) : null
   const hasReviewed = !!userReview
 
@@ -234,6 +237,7 @@ export default async function BusinessPage({ params }: Props) {
             reviewsEnabled={flags.reviews_enabled}
             comments={comments}
             currentUserId={session?.userId ?? null}
+            followingRootIds={followingRootIds}
           />
         </div>
 

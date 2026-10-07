@@ -32,6 +32,7 @@ type Props = {
   reviewsEnabled: boolean
   comments: CommentNode[]
   currentUserId: string | null
+  followingRootIds?: string[]
 }
 
 const DAY_LABEL: Record<string, string> = {
@@ -56,6 +57,7 @@ export default function BusinessTabs({
   reviewsEnabled,
   comments,
   currentUserId,
+  followingRootIds = [],
 }: Props) {
   const [tab, setTab] = useState<Tab>('info')
   const [lightbox, setLightbox] = useState<string | null>(null)
@@ -330,6 +332,7 @@ export default function BusinessTabs({
             comments={comments}
             currentUserId={currentUserId}
             isLoggedIn={isLoggedIn}
+            followingRootIds={followingRootIds}
           />
         </div>
       )}

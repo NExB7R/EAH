@@ -52,6 +52,7 @@ export type SaveInsightInput = {
   analysis: AnalysisResult
   comparison: ComparisonData | null
   generatedBy: string
+  aiNarrative: string | null
 }
 
 export async function saveInsight(
@@ -83,6 +84,7 @@ export async function saveInsight(
         .filter((i) => i.action)
         .map((i) => ({ id: i.id, action: i.action })),
       comparison: input.comparison as unknown as Record<string, unknown> | null,
+      ai_narrative: input.aiNarrative,
     })
     .select('id')
     .single()

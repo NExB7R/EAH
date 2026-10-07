@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Insights (AI Analysis Data Layer)
+// 2026: dimensions JSONB + Peak Hours + Week-over-Week
 // ═══════════════════════════════════════════════════════════
 
 export type BusinessMetrics = {
@@ -30,6 +31,7 @@ export type BusinessMetrics = {
   reviewsNegative: number
   avgRating: number
   ratingDistribution: Record<string, number>
+  dimensionAverages: Record<string, number>
   comments: Array<{
     rating: number
     comment: string | null
@@ -49,6 +51,42 @@ export type BusinessMetrics = {
   hasPhone: boolean
   hasMenu: boolean
   mediaCount: number
+
+  // ✨ New — Peak Hours
+  peakHour: number | null
+  peakDay: string | null
+  hourHistogram: number[] // 24 values (0-23)
+  dayHistogram: Record<string, number> // sun..sat
+
+  // ✨ New — Week-over-Week
+  prevPeriod: {
+    pageViews: number
+    ordersTotal: number
+    reviewsTotal: number
+    avgRating: number
+  }
+}
+
+// ─── Helper: حساب متوسط التقييم من dimensions JSONB ───
+function avgFromDimensions(dims: Record<string, number> | null): number {
+  if (!dims) return 0
+  const vals = Object.values(dims).filter((v) => typeof v === 'number' && v >= 1 && v <= 5)
+  if (vals.length === 0) return 0
+  return vals.reduce((a, b) => a + b, 0) / vals.length
+}
+
+const DAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
+
+// Cairo offset (UTC+2, DST مفعّل صيفاً — بنستخدم +2 كتقريب آمن)
+function cairoHour(iso: string): number {
+  const d = new Date(iso)
+  const hour = d.getUTCHours() + 2
+  return hour >= 24 ? hour - 24 : hour
+}
+
+function cairoDayKey(iso: string): string {
+  const d = new Date(iso)
+  return DAY_KEYS[d.getUTCDay()] ?? 'sun'
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -60,15 +98,20 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
 
   const periodEnd = new Date()
   const periodStart = new Date(periodEnd.getTime() - days * 24 * 60 * 60 * 1000)
+  const prevStart = new Date(periodStart.getTime() - days * 24 * 60 * 60 * 1000)
 
   const since = periodStart.toISOString()
+  const prevSince = prevStart.toISOString()
 
   // ─── Parallel fetch ───
   const [
     { data: business },
     { data: pageViews },
+    { data: prevPageViewsRaw },
     { data: orders },
+    { data: prevOrdersRaw },
     { data: reviews },
+    { data: prevReviewsRaw },
     { count: favoritesCount },
     { count: followsCount },
     { count: mediaCount },
@@ -88,18 +131,41 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
       .gte('created_at', since),
 
     supabase
+      .from('page_view_events')
+      .select('created_at', { count: 'exact', head: false })
+      .eq('business_id', businessId)
+      .gte('created_at', prevSince)
+      .lt('created_at', since),
+
+    supabase
       .from('order_requests')
       .select('status, response_time_avg_seconds, created_at')
       .eq('business_id', businessId)
       .gte('created_at', since),
 
     supabase
-      .from('business_reviews')
-      .select('taste, value_for_money, speed, experience, comment, sentiment, created_at')
+      .from('order_requests')
+      .select('id', { count: 'exact', head: true })
       .eq('business_id', businessId)
+      .gte('created_at', prevSince)
+      .lt('created_at', since),
+
+    supabase
+      .from('business_reviews')
+      .select('dimensions, comment, sentiment, created_at')
+      .eq('business_id', businessId)
+      .eq('status', 'approved')
       .gte('created_at', since)
       .order('created_at', { ascending: false })
       .limit(200),
+
+    supabase
+      .from('business_reviews')
+      .select('dimensions')
+      .eq('business_id', businessId)
+      .eq('status', 'approved')
+      .gte('created_at', prevSince)
+      .lt('created_at', since),
 
     supabase
       .from('favorites')
@@ -121,19 +187,54 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
   // ─── Process views ───
   const viewsByDayMap: Record<string, number> = {}
   const uniqueVisitorIds = new Set<string>()
+  const hourHistogram = new Array(24).fill(0) as number[]
+  const dayHistogram: Record<string, number> = {
+    sun: 0,
+    mon: 0,
+    tue: 0,
+    wed: 0,
+    thu: 0,
+    fri: 0,
+    sat: 0,
+  }
+
   for (const v of pageViews ?? []) {
     const day = v.created_at.slice(0, 10)
     viewsByDayMap[day] = (viewsByDayMap[day] ?? 0) + 1
     if (v.visitor_id) uniqueVisitorIds.add(v.visitor_id)
+    hourHistogram[cairoHour(v.created_at)]! += 1
+    dayHistogram[cairoDayKey(v.created_at)]! += 1
   }
+
   const viewsByDay = Object.entries(viewsByDayMap)
     .map(([date, count]) => ({ date, count }))
     .sort((a, b) => a.date.localeCompare(b.date))
 
+  // ─── Peak ───
+  let peakHour: number | null = null
+  let peakHourVal = 0
+  hourHistogram.forEach((c, h) => {
+    if (c > peakHourVal) {
+      peakHourVal = c
+      peakHour = h
+    }
+  })
+  if (peakHourVal === 0) peakHour = null
+
+  let peakDay: string | null = null
+  let peakDayVal = 0
+  for (const [k, v] of Object.entries(dayHistogram)) {
+    if (v > peakDayVal) {
+      peakDayVal = v
+      peakDay = k
+    }
+  }
+  if (peakDayVal === 0) peakDay = null
+
   // ─── Process orders ───
-  let confirmed = 0,
-    cancelled = 0,
-    pending = 0
+  let confirmed = 0
+  let cancelled = 0
+  let pending = 0
   const responseTimes: number[] = []
   const ordersByDayMap: Record<string, number> = {}
 
@@ -159,26 +260,40 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
       ? Math.round((responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length / 60) * 10) / 10
       : null
 
-  // ─── Process reviews ───
-  let positive = 0,
-    neutral = 0,
-    negative = 0
+  // ─── Process reviews (JSONB) ───
+  let positive = 0
+  let neutral = 0
+  let negative = 0
   const ratingDist: Record<string, number> = { '1': 0, '2': 0, '3': 0, '4': 0, '5': 0 }
+  const dimSum: Record<string, number> = {}
+  const dimCount: Record<string, number> = {}
   const comments: BusinessMetrics['comments'] = []
 
+  let ratingSum = 0
+  let ratingCount = 0
+
   for (const r of reviews ?? []) {
-    const parts = [r.taste, r.value_for_money, r.speed, r.experience].filter(
-      (v): v is number => typeof v === 'number' && v > 0,
-    )
-    const rating =
-      parts.length > 0 ? Math.round(parts.reduce((a, b) => a + b, 0) / parts.length) : 0
-    if (rating > 0 && rating <= 5) {
+    const dims = (r.dimensions ?? null) as Record<string, number> | null
+    const rating = Math.round(avgFromDimensions(dims))
+    if (rating > 0 && rating <= 5)
       ratingDist[String(rating)] = (ratingDist[String(rating)] ?? 0) + 1
+
+    if (rating > 0) {
+      ratingSum += avgFromDimensions(dims)
+      ratingCount++
+      if (rating >= 4) positive++
+      else if (rating === 3) neutral++
+      else negative++
     }
 
-    if (rating >= 4) positive++
-    else if (rating === 3) neutral++
-    else if (rating > 0) negative++
+    if (dims) {
+      for (const [key, v] of Object.entries(dims)) {
+        if (typeof v === 'number' && v >= 1 && v <= 5) {
+          dimSum[key] = (dimSum[key] ?? 0) + v
+          dimCount[key] = (dimCount[key] ?? 0) + 1
+        }
+      }
+    }
 
     if (r.comment) {
       comments.push({
@@ -191,21 +306,31 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
   }
 
   const reviewsTotal = reviews?.length ?? 0
-  const avgRating =
-    reviewsTotal > 0
-      ? Math.round(
-          ((reviews ?? []).reduce((sum, r) => {
-            const parts = [r.taste, r.value_for_money, r.speed, r.experience].filter(
-              (v): v is number => typeof v === 'number' && v > 0,
-            )
-            return sum + (parts.length > 0 ? parts.reduce((a, b) => a + b, 0) / parts.length : 0)
-          }, 0) /
-            reviewsTotal) *
-            10,
-        ) / 10
-      : 0
+  const avgRating = ratingCount > 0 ? Math.round((ratingSum / ratingCount) * 10) / 10 : 0
 
-  // ─── Media count ───
+  const dimensionAverages: Record<string, number> = {}
+  for (const key of Object.keys(dimSum)) {
+    const s = dimSum[key] ?? 0
+    const c = dimCount[key] ?? 0
+    if (c > 0) dimensionAverages[key] = Math.round((s / c) * 10) / 10
+  }
+
+  // ─── Prev period ───
+  const prevPageViews = prevPageViewsRaw?.length ?? 0
+  const prevOrdersTotal = prevOrdersRaw?.length ?? 0
+  const prevReviewsTotal = prevReviewsRaw?.length ?? 0
+  let prevRatingSum = 0
+  let prevRatingCount = 0
+  for (const r of prevReviewsRaw ?? []) {
+    const v = avgFromDimensions((r.dimensions ?? null) as Record<string, number> | null)
+    if (v > 0) {
+      prevRatingSum += v
+      prevRatingCount++
+    }
+  }
+  const prevAvgRating =
+    prevRatingCount > 0 ? Math.round((prevRatingSum / prevRatingCount) * 10) / 10 : 0
+
   const mediaTotal = mediaCount ?? 0
 
   return {
@@ -230,6 +355,7 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
     reviewsNegative: negative,
     avgRating,
     ratingDistribution: ratingDist,
+    dimensionAverages,
     comments,
 
     favoritesCount: favoritesCount ?? 0,
@@ -239,14 +365,26 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
     trustTier: business?.trust_tier ?? 'fel',
     isVerified: business?.trust_tier === 'harif' || business?.trust_tier === 'ostora',
     hasWhatsapp: business?.accepts_whatsapp_orders ?? false,
-    hasPhone: true, // placeholder
+    hasPhone: true,
     hasMenu: mediaTotal > 0,
     mediaCount: mediaTotal,
+
+    peakHour,
+    peakDay,
+    hourHistogram,
+    dayHistogram,
+
+    prevPeriod: {
+      pageViews: prevPageViews,
+      ordersTotal: prevOrdersTotal,
+      reviewsTotal: prevReviewsTotal,
+      avgRating: prevAvgRating,
+    },
   }
 }
 
 // ═══════════════════════════════════════════════════════════
-// Comparison: متوسط نفس التصنيف
+// Comparison
 // ═══════════════════════════════════════════════════════════
 
 export type ComparisonData = {
@@ -275,34 +413,27 @@ export async function getCategoryComparison(businessId: string): Promise<Compari
     .neq('id', businessId)
 
   if (!peers || peers.length === 0) {
-    return {
-      avgRating: 0,
-      avgPageViews: 0,
-      avgOrders: 0,
-      totalInCategory: 0,
-    }
+    return { avgRating: 0, avgPageViews: 0, avgOrders: 0, totalInCategory: 0 }
   }
 
-  const ratingsWithCount = peers.filter((p) => p.rating_count > 0)
+  const withRating = peers.filter((p) => p.rating_count > 0)
   const avgRating =
-    ratingsWithCount.length > 0
+    withRating.length > 0
       ? Math.round(
-          (ratingsWithCount.reduce((s, p) => s + Number(p.rating_avg), 0) /
-            ratingsWithCount.length) *
-            10,
+          (withRating.reduce((s, p) => s + Number(p.rating_avg), 0) / withRating.length) * 10,
         ) / 10
       : 0
 
   return {
     avgRating,
-    avgPageViews: 0, // ممكن نحسبها لاحقاً
+    avgPageViews: 0,
     avgOrders: 0,
     totalInCategory: peers.length,
   }
 }
 
 // ═══════════════════════════════════════════════════════════
-// Insights: Save / Retrieve
+// Stored Insights
 // ═══════════════════════════════════════════════════════════
 
 export type StoredInsight = {
@@ -313,6 +444,7 @@ export type StoredInsight = {
   data: BusinessMetrics
   score: number | null
   summary: string | null
+  ai_narrative: string | null
   top_points: unknown
   recommendations: unknown
   comparison: ComparisonData | null

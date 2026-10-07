@@ -12,6 +12,8 @@ import {
   AlertIcon,
   GiftIcon,
   CrownGoldIcon,
+  ClockIcon,
+  SunriseIcon,
 } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { createClient } from '@/lib/supabase/server'
@@ -38,9 +40,20 @@ type InsightRow = {
     avgRating?: number
     avgResponseTimeMin?: number | null
     mediaCount?: number
+    peakHour?: number | null
+    peakDay?: string | null
+    hourHistogram?: number[]
+    dayHistogram?: Record<string, number>
+    prevPeriod?: {
+      pageViews: number
+      ordersTotal: number
+      reviewsTotal: number
+      avgRating: number
+    }
   } | null
   score: number | null
   summary: string | null
+  ai_narrative: string | null
   top_points: {
     insights?: Array<{
       id: string
@@ -66,6 +79,36 @@ async function getInsight(id: string): Promise<InsightRow | null> {
   const { data } = await supabase.from('business_insights').select('*').eq('id', id).maybeSingle()
 
   return (data as InsightRow) ?? null
+}
+
+const DAY_LABEL: Record<string, string> = {
+  sun: 'الأحد',
+  mon: 'الاتنين',
+  tue: 'التلات',
+  wed: 'الأربع',
+  thu: 'الخميس',
+  fri: 'الجمعة',
+  sat: 'السبت',
+}
+
+function hourLabel(h: number): string {
+  if (h === 0) return '12 بالليل'
+  if (h < 12) return `${h} الصبح`
+  if (h === 12) return '12 الضهر'
+  if (h < 17) return `${h - 12} بعد الضهر`
+  if (h < 20) return `${h - 12} المغرب`
+  return `${h - 12} بالليل`
+}
+
+function pct(curr: number, prev: number): { text: string; tone: 'up' | 'down' | 'flat' } {
+  if (prev === 0 && curr === 0) return { text: '—', tone: 'flat' }
+  if (prev === 0) return { text: 'جديد', tone: 'up' }
+  const delta = ((curr - prev) / prev) * 100
+  const sign = delta >= 0 ? '+' : ''
+  return {
+    text: `${sign}${Math.round(delta)}%`,
+    tone: delta > 5 ? 'up' : delta < -5 ? 'down' : 'flat',
+  }
 }
 
 function getTone(score: number): 'teal' | 'gold' | 'orange' | 'red' {
@@ -114,6 +157,7 @@ export default async function InsightPage({ params }: Props) {
   const periodStart = new Date(insight.period_start).toLocaleDateString('ar-EG')
   const periodEnd = new Date(insight.period_end).toLocaleDateString('ar-EG')
 
+  const aiNarrative = insight.ai_narrative
   const insights = insight.top_points?.insights ?? []
   const strengths = insight.top_points?.strengths ?? []
   const weaknesses = insight.top_points?.weaknesses ?? []
@@ -166,6 +210,17 @@ export default async function InsightPage({ params }: Props) {
           </div>
         </div>
 
+        {/* AI Narrative */}
+        {aiNarrative && (
+          <div className={styles.narrative}>
+            <div className={styles.narrativeHead}>
+              <SparklesIcon size={16} />
+              <span>ملخص ذكي</span>
+            </div>
+            <p className={styles.narrativeText}>{aiNarrative}</p>
+          </div>
+        )}
+
         {/* KPIs Grid */}
         {data && (
           <div className={styles.kpiGrid}>
@@ -204,6 +259,69 @@ export default async function InsightPage({ params }: Props) {
           </div>
         )}
       </section>
+
+      {/* Peak Hours */}
+      {data?.peakHour !== null && data?.peakHour !== undefined && data?.peakDay && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>أوقات الذروة</h2>
+          <div className={styles.peakGrid}>
+            <div className={styles.peakCard}>
+              <span className={styles.peakIcon}>
+                <ClockIcon size={20} />
+              </span>
+              <span className={styles.peakLabel}>أكتر وقت</span>
+              <span className={styles.peakValue}>{hourLabel(data.peakHour)}</span>
+            </div>
+            <div className={styles.peakCard}>
+              <span className={styles.peakIcon}>
+                <SunriseIcon size={20} />
+              </span>
+              <span className={styles.peakLabel}>أكتر يوم</span>
+              <span className={styles.peakValue}>{DAY_LABEL[data.peakDay] ?? data.peakDay}</span>
+            </div>
+          </div>
+
+          {/* Hour histogram */}
+          {data.hourHistogram && data.hourHistogram.length === 24 && (
+            <div className={styles.histogram}>
+              {data.hourHistogram.map((c, h) => {
+                const max = Math.max(...data.hourHistogram!, 1)
+                const height = (c / max) * 100
+                const isPeak = h === data.peakHour
+                return (
+                  <div key={h} className={styles.barCol} title={`${hourLabel(h)}: ${c}`}>
+                    <div
+                      className={`${styles.bar} ${isPeak ? styles.barPeak : ''}`}
+                      style={{ height: `${Math.max(height, 4)}%` }}
+                    />
+                    {h % 3 === 0 && <span className={styles.barLabel}>{h}</span>}
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Week-over-Week */}
+      {data?.prevPeriod && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>مقارنة بالفترة السابقة</h2>
+          <div className={styles.wowGrid}>
+            <WowCard label="الزيارات" curr={data.pageViews ?? 0} prev={data.prevPeriod.pageViews} />
+            <WowCard
+              label="الطلبات"
+              curr={data.ordersTotal ?? 0}
+              prev={data.prevPeriod.ordersTotal}
+            />
+            <WowCard
+              label="التقييمات"
+              curr={data.reviewsTotal ?? 0}
+              prev={data.prevPeriod.reviewsTotal}
+            />
+          </div>
+        </section>
+      )}
 
       {/* Trends */}
       {trends && (
@@ -315,6 +433,20 @@ export default async function InsightPage({ params }: Props) {
         <p>تقرير EAH الذكي — {date}</p>
         <p>© 2026 EAH</p>
       </footer>
+    </div>
+  )
+}
+
+function WowCard({ label, curr, prev }: { label: string; curr: number; prev: number }) {
+  const d = pct(curr, prev)
+  return (
+    <div className={styles.wowCard}>
+      <span className={styles.wowLabel}>{label}</span>
+      <div className={styles.wowValues}>
+        <span className={styles.wowCurr}>{curr}</span>
+        <span className={`${styles.wowDelta} ${styles['wow_' + d.tone]}`}>{d.text}</span>
+      </div>
+      <span className={styles.wowPrev}>السابق: {prev}</span>
     </div>
   )
 }

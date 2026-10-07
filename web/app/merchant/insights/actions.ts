@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { getBusinessMetrics, getCategoryComparison } from '@/lib/data/insights'
 import { analyzeBusiness } from '@/lib/ai/business-advisor'
 import { saveInsight } from '@/lib/ai/storage'
+import { generateNarrative } from '@/lib/ai/narrative'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Insights Server Actions
@@ -51,13 +52,17 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
   // 2. حلّل
   const analysis = analyzeBusiness(metrics, comparison)
 
-  // 3. احفظ
+  // 3. اكتب ملخص AI (best-effort — لو فشل مش مشكلة)
+  const aiNarrative = await generateNarrative(metrics, analysis)
+
+  // 4. احفظ
   const result = await saveInsight({
     businessId,
     metrics,
     analysis,
     comparison,
     generatedBy: user.id,
+    aiNarrative,
   })
 
   if (!result.ok) {

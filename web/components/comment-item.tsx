@@ -3,8 +3,14 @@
 import { useState, useTransition } from 'react'
 import Image from 'next/image'
 import Avatar from './avatar'
-import { HeartIcon, MessageCircleIcon, CloseIcon } from './icons'
-import { likeComment, unlikeComment, deleteComment, editComment } from '@/app/comments/actions'
+import { HeartIcon, MessageCircleIcon, CloseIcon, BellIcon } from './icons'
+import {
+  likeComment,
+  unlikeComment,
+  deleteComment,
+  editComment,
+  toggleFollowThread,
+} from '@/app/comments/actions'
 import { createComment } from '@/app/comments/actions'
 import type { CommentNode } from '@/lib/data/comments'
 import styles from './comment-item.module.css'
@@ -15,6 +21,7 @@ type Props = {
   slug: string
   currentUserId: string | null
   isLoggedIn: boolean
+  isFollowing?: boolean
 }
 
 function formatDate(iso: string): string {
@@ -36,7 +43,9 @@ export default function CommentItem({
   slug,
   currentUserId,
   isLoggedIn,
+  isFollowing: initialFollowing = false,
 }: Props) {
+  const [following, setFollowing] = useState(initialFollowing)
   const [liked, setLiked] = useState(comment.liked_by_me)
   const [likesCount, setLikesCount] = useState(comment.likes_count)
   const [showReply, setShowReply] = useState(false)
@@ -71,6 +80,20 @@ export default function CommentItem({
       if (!res.ok) {
         setLiked(!next)
         setLikesCount((c) => c + (next ? -1 : 1))
+      }
+    })
+  }
+
+  const handleFollow = () => {
+    if (!isLoggedIn) return
+    const next = !following
+    setFollowing(next)
+    startTransition(async () => {
+      const res = await toggleFollowThread(comment.id, slug)
+      if (!res.ok) {
+        setFollowing(!next)
+      } else {
+        setFollowing(res.following)
       }
     })
   }
@@ -230,6 +253,20 @@ export default function CommentItem({
           </button>
         )}
 
+        {comment.depth === 0 && isLoggedIn && !isMine && (
+          <button
+            type="button"
+            className={`${styles.action} ${following ? styles.actionFollowing : ''}`}
+            onClick={handleFollow}
+            disabled={isPending}
+            aria-label={following ? 'إلغاء متابعة النقاش' : 'تابع النقاش'}
+            title={following ? 'إلغاء متابعة الردود' : 'تابع الردود الجديدة'}
+          >
+            <BellIcon size={13} />
+            <span>{following ? 'متابع' : 'تابع'}</span>
+          </button>
+        )}
+
         {isMine && (
           <button
             type="button"
@@ -289,6 +326,7 @@ export default function CommentItem({
                   slug={slug}
                   currentUserId={currentUserId}
                   isLoggedIn={isLoggedIn}
+                  isFollowing={following}
                 />
               ))}
             </div>

@@ -94,3 +94,59 @@ export async function getComments(businessId: string): Promise<CommentNode[]> {
 
   return roots
 }
+
+// ─── إيجاد التعليق الجذر (root) ───
+export async function getRootCommentId(commentId: string): Promise<string | null> {
+  const supabase = await createClient()
+  let currentId: string | null = commentId
+  let hops = 0
+
+  while (currentId && hops < 5) {
+    const result = await supabase
+      .from('business_comments')
+      .select('id, parent_id')
+      .eq('id', currentId)
+      .maybeSingle()
+
+    const data = result.data as { id: string; parent_id: string | null } | null
+
+    if (!data) return null
+    if (!data.parent_id) return data.id
+    currentId = data.parent_id
+    hops++
+  }
+  return currentId
+}
+
+// ─── هل المستخدم متابع الـ thread؟ ───
+export async function isFollowingThread(userId: string, rootCommentId: string): Promise<boolean> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('comment_thread_follows')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('root_comment_id', rootCommentId)
+    .maybeSingle()
+  return !!data
+}
+
+// ─── كل متابعين الـ thread ───
+export async function getThreadFollowers(rootCommentId: string): Promise<string[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('comment_thread_follows')
+    .select('user_id')
+    .eq('root_comment_id', rootCommentId)
+  return (data ?? []).map((r) => (r as { user_id: string }).user_id)
+}
+
+// ─── كل الـ root comments اللي المستخدم متابعها (لنشاط معين) ───
+export async function getMyFollowingRootIds(businessId: string, userId: string): Promise<string[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('comment_thread_follows')
+    .select('root_comment_id')
+    .eq('user_id', userId)
+    .eq('business_id', businessId)
+  return (data ?? []).map((r) => (r as { root_comment_id: string }).root_comment_id)
+}
