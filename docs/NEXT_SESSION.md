@@ -30,6 +30,12 @@
   - المرجع: `Desktop/X.txt` — مفاتيح Turnstile الأصلية
   - الأولوية: عالية — Test Keys = صفر حماية من البوتات
 
+## 🔴 فوري — اختبار بعد تصليح RLS
+
+- [ ] اختبار `/` `/account` `/merchant/subscription` `/admin/businesses` `/find` + صفحة نشاط
+- [ ] التأكد من عمل find-by-phone بعد إغلاق profiles للـ public
+- [ ] DevTools → Console: صفر أخطاء في الصفحات الأساسية
+
 ## 🔴 حرجة — قبل الاختبار الميداني
 
 - [ ] مسح البيانات الوهمية (53 نشاط + حسابات تجريبية)
