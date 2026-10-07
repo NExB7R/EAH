@@ -864,3 +864,25 @@
 - Telegram Bot
 - Vercel Pro + Domain
 - Rotate المفاتيح المكشوفة
+
+---
+
+## 2026-10-07 — Session 19: Auth Page Cleanup + AreaDropdown
+
+### اللي اتحقق
+- **SiteChromeGate** — إخفاء Footer + LiveStatsBar في `/auth/*`
+- **AreaDropdown** — مكوّن جديد (2026 style، panel قابل للتمرير، إغلاق بـ Escape + click outside)
+- **auth-form** — شيل قسم "ليه EAH؟" + CUSTOMER_HOOKS + MERCHANT_HOOKS
+- **auth.module.css** — شيل 188 سطر (hooks + select native)
+
+### Commits
+- `a259a9a` fix(auth): hide footer + stats bar on /auth
+- `cdab9ba` feat(ui): AreaDropdown component
+- `372f447` refactor(auth): remove hooks + use AreaDropdown
+
+### المتبقي (المرحلة 2)
+- Header Home: أيقونات فوق (بدون لوجو/حدود)
+- Hero: شيل "سجّل عشان تقيّم" + "عندك نشاط؟"
+- Weather في الهيدر (Open-Meteo)
+- Stats bar responsive + المسافة الفاضية
+- AI widget icon + fix "حدث مشكلة"
