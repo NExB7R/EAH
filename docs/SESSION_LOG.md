@@ -980,3 +980,114 @@
 - اختبار المساعد بعد تحديث الموديلات
 - `getActiveAdsForSlot` — علاقة FK مكررة في Supabase
 - `getActiveAnnouncements` — RLS permission denied
+
+
+---
+
+## 2026-10-08 — Session 21: Free Trial System + Safety Rails
+
+### اللي اتحقق
+
+**Free Trial System (كامل):**
+
+Migration (مطبقة في Supabase):
+- `businesses`: +source (merchant/admin) +trial_used +claimed_at +claimed_by_user_id
+- `business_subscriptions`: +notified_days int[]
+- RPC `start_business_trial(business_id, days, actor_user_id)` — آمن + idempotent
+- Indexes للـ cron
+
+Merchant side:
+- `startFreeTrial()` server action (service role RPC call)
+- `StartTrialButton` — ذهبي، مع تأكيد
+- `getMySubscription` يرجّع `trial_available`
+- الزر بيظهر بس لو: trial_used=false + source=merchant + owner موجود
+
+Admin side:
+- `adminStartTrial()` — يبدأ تجربة لأي نشاط بأيام مخصصة (1-365)
+- `findUserByPhone()` — بحث برقم → user card
+- `linkBusinessToUser()` — ربط + ترقية لـ merchant + audit
+- `unlinkBusinessOwner()` — فك + تحويل source لـ admin
+- `TrialOwnerPanel` — status bar + زر تجربة + ربط + فك
+
+Cron:
+- `/api/cron/trial-notifications` — يومي 9ص UTC
+- Milestones: 3, 7, 15, 21, 25, 28, 30
+- `notified_days[]` يمنع التكرار
+- `downgradeExpiredTrials()` — ترجيع basic بعد الانتهاء + إشعار
+
+Admin list:
+- تاب جديد "بإدارة الأدمن" (source=admin)
+- Badge على كل صف (بإدارة الأدمن ذهبي / بإدارة التاجر بنفسجي)
+
+**Vercel Fixes:**
+- `getActiveAdsForSlot`: FK صريح `!ads_business_id_fkey` (كانت 2 علاقات)
+- `getAllAds`: نفس الإصلاح
+- `announcements` RLS: GRANT SELECT لـ anon+authenticated (SQL editor)
+
+**Voice Search:**
+- Pre-check `navigator.permissions` قبل بدء التسجيل
+- حالة جديدة `denied` مع رسالة + زر retry
+- يفرّق `NotAllowedError` عن باقي الأخطاء
+
+**Live Stats Bar:**
+- avgRating: من `dimensions` JSONB (Reviews 2.0) بدل أعمدة قديمة
+- أيقونة "مستخدم الشهر" → SparkleStarIcon (كانت مكررة)
+- Grid: repeat(8) → repeat(7)
+- Flag جديد `live_stats_enabled` (افتراضي false) — مخفي حالياً
+
+**Safety Rails (13 طبقة — كانت 7):**
+- stylelint (CSS Modules)
+- commitlint (conventional commits)
+- CodeQL (weekly security)
+- Dependabot (weekly updates)
+- Build check (webpack) في CI
+- knip + jscpd + RLS: soft → hard fail
+- providers.test.ts: حراسة ضد AI model deprecation
+
+**Context Map:**
+- `scripts/gen-context-map.mjs` — يولد من الكود
+- GitHub Action يولّده + auto-commit
+- `docs/CONTEXT_MAP.md` — 90 route + 71 component + 72 lib
+- AI_CONTRACT §38 — إلزامي
+
+**AI Onboarding:**
+- `docs/AI_ONBOARDING.md` (237 سطر، 13 قسم)
+- FILE_ORDER + AI_CONTRACT §0 يشاورا عليه
+
+### Commits الرئيسية
+
+- `f51194b` feat(trial): merchant self-service
+- `0334aba` feat(admin): trial + owner management panel
+- `732bca4` feat(cron): daily trial notifications
+- `1458313` feat(cron): auto-downgrade expired trials
+- `8710613` fix(csp): allow api.open-meteo.com
+- `c8f6fcd` fix(stats-bar): correct avgRating + dedupe icon
+- `d6d4d03` feat(voice): smart mic permission check
+- `16df7bf` fix(ads): qualify businesses FK explicitly
+- `52e21e1` feat(admin): 'admin-owned' tab + source chip
+- `d711fc3` feat(trial): day 3 + 21 notifications
+- `5d04e92` docs(onboarding): AI_ONBOARDING.md
+- `0969aca` ci(quality): promote soft → hard fails
+- `1fa1f40` chore(quality): commitlint + CodeQL + Dependabot
+- `a07cbbd` feat(dx): auto-generated CONTEXT_MAP
+- `11ca296` feat(flags): hide live_stats until traffic
+
+### SQL Operations (مطبقة في Supabase)
+
+1. Migration: `start_business_trial` RPC + new columns
+2. `GRANT SELECT ON announcements TO anon, authenticated`
+
+### اللي معلق
+
+- اختبار ميداني للـ trial flow من أول لآخر
+- 4 GitHub Secrets للـ build check الكامل
+- إضافة أنشطة حقيقية (الأولوية الأولى دلوقتي)
+- التحقق الأمني الشامل
+
+### ملاحظات مهمة للشات الجديد
+
+- **التجربة مرة واحدة بس** — `trial_used` flag
+- **source** يحدد: merchant (لو مربوط بتاجر) أو admin
+- **Admin يقدر يربط/يفك** من `/admin/businesses/[id]`
+- **Cron يعمل يومي 9ص** — يرجّع basic تلقائي
+- **live_stats_enabled = false** — يفتح يدوي من /admin/studio
