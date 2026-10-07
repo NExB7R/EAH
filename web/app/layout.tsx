@@ -11,6 +11,7 @@ import ReviewReminder from '@/components/review-reminder'
 import SignupPrompt from '@/components/signup-prompt'
 import ScrollToTop from '@/components/scroll-to-top'
 import SiteFooter from '@/components/site-footer'
+import SiteChromeGate from '@/components/site-chrome-gate'
 import LiveStatsBar from '@/components/live-stats-bar'
 import AiWidget from '@/components/ai-widget'
 import AnnouncementsBanner from '@/components/announcements-banner'
@@ -73,9 +74,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </Suspense>
           {children}
           <Suspense fallback={null}>
-            <BottomBar />
+            <SiteChromeGate>
+              <BottomBar />
+            </SiteChromeGate>
           </Suspense>
-          <SiteFooter />
+          <SiteChromeGate>
+            <SiteFooter />
+          </SiteChromeGate>
           <InstallPrompt />
           <ReviewReminder />
           <ScrollToTop />
