@@ -546,7 +546,7 @@
   .section {
     break-inside: avoid;
   }
-  body {
+  :global(body) {
     background: white !important;
     color: black !important;
   }
