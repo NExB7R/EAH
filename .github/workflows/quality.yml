@@ -66,27 +66,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     if: github.event_name == 'push' || github.event_name == 'pull_request'
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
 
     steps:
+      - name: Skip warning if no DB URL
+        if: env.SUPABASE_DB_URL == ''
+        run: echo "::warning::SUPABASE_DB_URL not set — skipping RLS tests"
+
       - name: Checkout
+        if: env.SUPABASE_DB_URL != ''
         uses: actions/checkout@v4
 
       - name: Setup Supabase CLI
+        if: env.SUPABASE_DB_URL != ''
         uses: supabase/setup-cli@v1
         with:
           version: latest
 
       - name: Run RLS tests
-        run: |
-          supabase test db --db-url "${{ secrets.SUPABASE_DB_URL }}"
-        env:
-          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        if: env.SUPABASE_DB_URL != ''
+        run: supabase test db --db-url "$SUPABASE_DB_URL"
 
       - name: Setup PostgreSQL client
+        if: env.SUPABASE_DB_URL != ''
         run: sudo apt-get install -y postgresql-client
 
       - name: RLS Audit (comprehensive)
-        run: |
-          psql "$SUPABASE_DB_URL" -f web/supabase/tests/rls-audit.sql
-        env:
-          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        if: env.SUPABASE_DB_URL != ''
+        run: psql "$SUPABASE_DB_URL" -f web/supabase/tests/rls-audit.sql

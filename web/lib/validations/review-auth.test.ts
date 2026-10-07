@@ -93,10 +93,7 @@ describe('loginSchema', () => {
 describe('reviewSchema', () => {
   it('بيقبل تقييم كامل صحيح', () => {
     const result = reviewSchema.safeParse({
-      experience: 5,
-      taste: 4,
-      value_for_money: 5,
-      speed: 3,
+      dimensions: { experience: 5, taste: 4, price: 5, speed: 3 },
       comment: 'تجربة جميلة جداً والمكان نظيف',
     })
     expect(result.success).toBe(true)
@@ -104,7 +101,7 @@ describe('reviewSchema', () => {
 
   it('بيقبل تقييم بدون كل الفئات (يكفي واحد)', () => {
     const result = reviewSchema.safeParse({
-      experience: 4,
+      dimensions: { experience: 4 },
       comment: 'تجربة جميلة جداً',
     })
     expect(result.success).toBe(true)
@@ -112,6 +109,7 @@ describe('reviewSchema', () => {
 
   it('بيرفض تقييم بدون أي فئة', () => {
     const result = reviewSchema.safeParse({
+      dimensions: {},
       comment: 'تجربة جميلة جداً',
     })
     expect(result.success).toBe(false)
@@ -119,7 +117,7 @@ describe('reviewSchema', () => {
 
   it('بيرفض تعليق قصير', () => {
     const result = reviewSchema.safeParse({
-      experience: 5,
+      dimensions: { experience: 5 },
       comment: 'حلو',
     })
     expect(result.success).toBe(false)
@@ -127,15 +125,27 @@ describe('reviewSchema', () => {
 
   it('بيرفض تعليق طويل (> 500)', () => {
     const result = reviewSchema.safeParse({
-      experience: 5,
+      dimensions: { experience: 5 },
       comment: 'أ'.repeat(501),
     })
     expect(result.success).toBe(false)
   })
 
   it('بيرفض تقييم < 1 أو > 5', () => {
-    expect(reviewSchema.safeParse({ experience: 0, comment: 'test test test' }).success).toBe(false)
-    expect(reviewSchema.safeParse({ experience: 6, comment: 'test test test' }).success).toBe(false)
+    expect(
+      reviewSchema.safeParse({ dimensions: { experience: 0 }, comment: 'test test test' }).success,
+    ).toBe(false)
+    expect(
+      reviewSchema.safeParse({ dimensions: { experience: 6 }, comment: 'test test test' }).success,
+    ).toBe(false)
+  })
+
+  it('بيرفض بُعد غير معروف', () => {
+    const result = reviewSchema.safeParse({
+      dimensions: { unknown_dimension: 5 },
+      comment: 'test test test',
+    })
+    expect(result.success).toBe(false)
   })
 })
 

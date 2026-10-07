@@ -18,7 +18,8 @@ const dimensionKey = z.enum([
 
 export const reviewSchema = z
   .object({
-    dimensions: z.record(dimensionKey, z.number().int().min(1).max(5)),
+    // Zod 4: partialRecord يسمح بأي subset من الـ keys
+    dimensions: z.partialRecord(dimensionKey, z.number().int().min(1).max(5)),
     comment: z.string().trim().min(10, 'التعليق قصير — 10 حروف على الأقل').max(500, 'التعليق طويل'),
   })
   .refine((d) => Object.keys(d.dimensions).length >= 1, {
