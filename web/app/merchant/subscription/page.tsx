@@ -14,6 +14,7 @@ import { getSubscriptionPlans, FEATURE_LABEL } from '@/lib/data/subscriptions'
 import type { PlanFeatureKey } from '@/lib/data/subscriptions'
 import AccountPageHeader from '@/components/account-page-header'
 import SubscribeButton from './subscribe-button'
+import StartTrialButton from './start-trial-button'
 import styles from './subscription.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -80,6 +81,11 @@ export default async function MerchantSubscriptionPage() {
           )}
         </div>
       </div>
+
+      {/* زر بدء التجربة — لو النشاط مقدرش يبدأها قبل كده ولسه مش في تجربة */}
+      {subscription?.trial_available && !isTrial && business.name && (
+        <StartTrialButton businessName={business.name} />
+      )}
 
       {/* Trial message */}
       {isTrial && daysLeft <= 15 && (

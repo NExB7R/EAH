@@ -323,3 +323,110 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ─── Trial CTA (بدء التجربة المجانية) ─── */
+.trialCta {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  margin: 16px 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), rgba(168, 85, 247, 0.08));
+  border: 1px solid rgba(232, 199, 154, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(232, 199, 154, 0.08),
+    0 0 24px rgba(232, 199, 154, 0.12);
+}
+
+.trialCtaBody {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.trialCtaIcon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.25), rgba(232, 199, 154, 0.1));
+  border: 1px solid rgba(232, 199, 154, 0.4);
+  color: var(--gold-light);
+}
+
+.trialCtaTitle {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: var(--gold-light);
+  margin-bottom: 6px;
+}
+
+.trialCtaDesc {
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.trialCtaBtn {
+  align-self: stretch;
+  height: 46px;
+  border: none;
+  border-radius: var(--radius-base);
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+  color: #1a0f2e;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    transform var(--motion-fast) var(--ease),
+    box-shadow var(--motion-fast) var(--ease),
+    opacity var(--motion-fast) var(--ease);
+}
+
+.trialCtaBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(232, 199, 154, 0.35);
+}
+
+.trialCtaBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.trialCtaBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (min-width: 640px) {
+  .trialCta {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .trialCtaBody {
+    flex: 1;
+  }
+
+  .trialCtaBtn {
+    align-self: center;
+    width: auto;
+    padding: 0 24px;
+    flex-shrink: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trialCtaBtn {
+    transition: none;
+  }
+}

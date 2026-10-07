@@ -44,6 +44,8 @@ export type MerchantSubscription = {
     price_egp: number
     features: string[]
   } | null
+  /** التجربة متاحة لو النشاط لسه مستخدمهاش + النشاط بتاع التاجر مش admin */
+  trial_available?: boolean
 }
 
 export type MerchantStats = {
@@ -87,20 +89,51 @@ export async function getMyContacts(businessId: string): Promise<MerchantContact
 // ─── Subscription ───
 export async function getMySubscription(businessId: string): Promise<MerchantSubscription | null> {
   const supabase = await createClient()
-  const { data } = await supabase
-    .from('business_subscriptions')
-    .select(
-      `
-      id, status, is_trial, starts_at, expires_at,
-      plan:subscription_plans(code, name_ar, price_egp, features)
-    `,
-    )
-    .eq('business_id', businessId)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
 
-  return (data as unknown as MerchantSubscription) ?? null
+  const [{ data }, { data: biz }] = await Promise.all([
+    supabase
+      .from('business_subscriptions')
+      .select(
+        `
+        id, status, is_trial, starts_at, expires_at,
+        plan:subscription_plans(code, name_ar, price_egp, features)
+      `,
+      )
+      .eq('business_id', businessId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('businesses')
+      .select('trial_used, source, owner_profile_id')
+      .eq('id', businessId)
+      .maybeSingle(),
+  ])
+
+  const sub = (data as unknown as MerchantSubscription | null) ?? null
+  const bizRow = biz as {
+    trial_used: boolean
+    source: string
+    owner_profile_id: string | null
+  } | null
+
+  const trial_available =
+    !!bizRow && !bizRow.trial_used && bizRow.source === 'merchant' && !!bizRow.owner_profile_id
+
+  if (sub) {
+    return { ...sub, trial_available }
+  }
+
+  // مفيش اشتراك لسه — نرجّع object فاضي بس trial_available للزر
+  return {
+    id: '',
+    status: 'none',
+    is_trial: false,
+    starts_at: '',
+    expires_at: '',
+    plan: null,
+    trial_available,
+  }
 }
 
 // ─── Stats ───
