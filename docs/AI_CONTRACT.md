@@ -1231,3 +1231,37 @@ wc -l file && head -3 file && tail -3 file
 - `HANDOFF.md` — الملف الشامل
 - `CRITERIA.md` — المعايير
 - `QUALITY.md` — نظام الجودة
+
+
+---
+
+## 38. CONTEXT_MAP (إجباري — 2026-10-08)
+
+**قبل أي تعديل/إنشاء ملف جديد، اقرأ `docs/CONTEXT_MAP.md` أولاً.**
+
+### القاعدة:
+1. افتح `docs/CONTEXT_MAP.md`
+2. ابحث عن الملف/الدالة اللي هتكتبها
+3. **لو موجودة** → استخدمها (مفيش تكرار — §18.1)
+4. **لو مش موجودة** → تأكد بـ `grep -rn "name" components/ lib/`
+5. بعدها بس → اكتب كود جديد
+
+### الخريطة تتولّد آلياً:
+- **يدوي:** `cd web && npm run context-map`
+- **تلقائي:** GitHub Action بعد كل push
+- **الملف:** `docs/CONTEXT_MAP.md` (auto-generated — ممنوع تعديل يدوي)
+
+### المحتوى:
+- **90+ Route** — كل صفحة + ملفها
+- **70+ Component** — الاسم + export + الغرض
+- **70+ Lib File** — الـ exports + الغرض
+
+### ليه:
+- AI الجديد بيكرر كود لأنه مش عارف إيه موجود
+- CONTEXT_MAP يحل ده — يقرأها أول حاجة
+- تتحدّث تلقائياً — صفر صيانة
+
+### المراجع:
+- `docs/CONTEXT_MAP.md` — المصدر
+- AI_CONTRACT §18.1 — Zero Duplication
+- AI_CONTRACT §19 — Pre-Edit Protocol
