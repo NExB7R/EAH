@@ -5,53 +5,7 @@ import type { NextConfig } from 'next'
 const SUPABASE_HOST = 'npmpiivmdksdirrumbmt.supabase.co'
 const CLOUDINARY_HOST = 'res.cloudinary.com'
 
-const isDev = process.env.NODE_ENV === 'development'
-
-// ═══════════════════════════════════════════════════════════
-// CSP — 2026 (بدون Nonce، بدون Trusted Types)
-// - default-src 'self' — أساس آمن
-// - script-src-elem للـ <script src> — granular
-// - script-src-attr للـ inline handlers — صفر
-// - style-src-elem للـ CSS — granular
-// - report-uri → /api/csp-report (تسجيل في Vercel logs)
-// ═══════════════════════════════════════════════════════════
-
-const csp = [
-  "default-src 'self'",
-
-  // Scripts — عناصر <script>
-  isDev
-    ? "script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com"
-    : "script-src-elem 'self' 'unsafe-inline' https://challenges.cloudflare.com",
-  // Scripts — inline handlers (onclick=...) — ممنوع
-  "script-src-attr 'none'",
-
-  // Styles — عناصر <style> و <link>
-  "style-src-elem 'self' 'unsafe-inline'",
-  // Styles — inline (style="") — مسموح بـ React
-  "style-src-attr 'unsafe-inline'",
-
-  // Images
-  `img-src 'self' data: blob: https://${CLOUDINARY_HOST} https://${SUPABASE_HOST} https://images.unsplash.com https://scontent-iad3-2.xx.fbcdn.net`,
-
-  // Network
-  `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://api.cloudinary.com https://challenges.cloudflare.com https://openrouter.ai`,
-
-  // Fonts + Frames + Others
-  "font-src 'self' data:",
-  "frame-src 'self' https://challenges.cloudflare.com",
-  "frame-ancestors 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "object-src 'none'",
-  "manifest-src 'self'",
-  "worker-src 'self' blob:",
-  "media-src 'self'",
-  'upgrade-insecure-requests',
-
-  // Reporting (تقارير في Vercel logs)
-  'report-uri /api/csp-report',
-].join('; ')
+// CSP moved to proxy.ts (per-request nonce)
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -83,7 +37,6 @@ const nextConfig: NextConfig = {
       {
         source: '/(.*)',
         headers: [
-          { key: 'Content-Security-Policy', value: csp },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-XSS-Protection', value: '0' },
