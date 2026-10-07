@@ -109,7 +109,9 @@ export async function POST(request: Request) {
     const res = await runAgent(message, safeHistory)
 
     if (!res.ok) {
-      return NextResponse.json({ ok: false, error: res.error }, { status: 500 })
+      const isDev = process.env.NODE_ENV !== 'production'
+      const errMsg = isDev && res.error ? `[DEV] ${res.error}` : res.error
+      return NextResponse.json({ ok: false, error: errMsg }, { status: 500 })
     }
     return NextResponse.json(res)
   } catch (err) {

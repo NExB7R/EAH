@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useTransition } from 'react'
-import { SparklesIcon, CloseIcon, SendIcon, AlertIcon } from './icons'
+import { CrownGoldIcon, CloseIcon, SendIcon, AlertIcon } from './icons'
 import styles from './ai-widget.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -99,7 +99,7 @@ export default function AiWidget() {
         onClick={() => setOpen(true)}
         aria-label="مساعد EAH الذكي"
       >
-        <SparklesIcon size={22} />
+        <CrownGoldIcon size={22} />
         <span className={styles.fabLabel}>مساعد</span>
       </button>
 
@@ -110,7 +110,7 @@ export default function AiWidget() {
           <div className={styles.panel} role="dialog" aria-modal="true">
             <header className={styles.header}>
               <span className={styles.headerIcon}>
-                <SparklesIcon size={18} />
+                <CrownGoldIcon size={18} />
               </span>
               <div className={styles.headerText}>
                 <h3 className={styles.headerTitle}>مساعد EAH</h3>
@@ -130,7 +130,7 @@ export default function AiWidget() {
               {messages.length === 0 && (
                 <div className={styles.empty}>
                   <span className={styles.emptyIcon}>
-                    <SparklesIcon size={28} />
+                    <CrownGoldIcon size={28} />
                   </span>
                   <p className={styles.emptyText}>
                     اسألني أي حاجة عن EAH — مطاعم، صيدليات، نقاط، أو أي خدمة
@@ -157,7 +157,7 @@ export default function AiWidget() {
                 >
                   {m.role === 'assistant' && (
                     <span className={styles.msgAvatar}>
-                      <SparklesIcon size={12} />
+                      <CrownGoldIcon size={12} />
                     </span>
                   )}
                   <div className={styles.bubble}>{m.content}</div>
@@ -167,7 +167,7 @@ export default function AiWidget() {
               {pending && (
                 <div className={`${styles.msg} ${styles.msgAi}`}>
                   <span className={styles.msgAvatar}>
-                    <SparklesIcon size={12} />
+                    <CrownGoldIcon size={12} />
                   </span>
                   <div className={styles.bubble}>
                     <span className={styles.typing}>
