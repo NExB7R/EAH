@@ -1,20 +1,11 @@
 import type { Business } from '@/lib/data'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Ranking
-// ترتيب الأنشطة حسب التفاعل + الثقة + النشاط
+// EAH — Trend Score (2026) — 7 معايير
+// CRITERIA §2
 // ═══════════════════════════════════════════════════════════
 
 const DAY_MS = 24 * 60 * 60 * 1000
-
-// مكافأة المستويات في ترند
-const TRUST_TIER_BOOST: Record<string, number> = {
-  baraka: 0,
-  active: 0.05,
-  mo3tabar: 0.1,
-  kebeer: 0.2,
-  legend: 0.35,
-}
 
 // كم يوم من آخر نشاط؟
 function daysSince(iso: string | null): number {
@@ -30,22 +21,40 @@ function decay(days: number): number {
 }
 
 // ═══════════════════════════════════════════════════════════
-// Trend Score — للترند
+// Trend Score — 7 معايير (CRITERIA §2)
 // ═══════════════════════════════════════════════════════════
-
 export function trendScore(b: Business): number {
-  const trust = b.trust_score / 100
-  const orders = Math.log10(1 + b.successful_orders) / 2
+  // 1) Velocity (25%) — نشاط الأسبوع الأخير
+  const velocity = Math.min(1, (b.velocity_score ?? 0) / 50)
+
+  // 2) Trust (20%)
+  const trust = Math.min(1, b.trust_score / 100)
+
+  // 3) Recency (15%) — آخر نشاط
   const recency = decay(daysSince(b.last_activity_at))
-  const featuredBoost = b.is_featured ? 0.3 : 0
-  const tierBoost = TRUST_TIER_BOOST[b.trust_tier as keyof typeof TRUST_TIER_BOOST] ?? 0
 
-  return trust * 0.4 + orders * 0.3 + recency * 0.3 + featuredBoost + tierBoost
+  // 4) Diversity (15%) — عدد المستخدمين الفريدين
+  const diversity = Math.min(1, (b.diversity_score ?? 0) / 50)
+
+  // 5) Quality (10%) — التقييم
+  const quality = b.rating_count > 0 ? Math.min(1, b.rating_avg / 5) : 0.5
+
+  // 6) Engagement (10%) — تفاعل 30 يوم
+  const engagement = Math.min(1, (b.engagement_score ?? 0) / 100)
+
+  // 7) Response Rate (5%) — سرعة الاستجابة
+  const response = b.response_rate ?? 0.5
+
+  return (
+    velocity * 0.25 +
+    trust * 0.2 +
+    recency * 0.15 +
+    diversity * 0.15 +
+    quality * 0.1 +
+    engagement * 0.1 +
+    response * 0.05
+  )
 }
-
-// ═══════════════════════════════════════════════════════════
-// Sorting helpers
-// ═══════════════════════════════════════════════════════════
 
 export function sortByTrend(businesses: Business[]): Business[] {
   return [...businesses].sort((a, b) => trendScore(b) - trendScore(a))
@@ -56,10 +65,9 @@ export function sortByTrust(businesses: Business[]): Business[] {
 }
 
 // ═══════════════════════════════════════════════════════════
-// Roller — يعمل shuffle يومي مستقر
+// Daily shuffle (deterministic per-day)
 // ═══════════════════════════════════════════════════════════
 
-// hash بسيط للـ seed
 function hash(str: string): number {
   let h = 0
   for (let i = 0; i < str.length; i++) {
@@ -69,13 +77,11 @@ function hash(str: string): number {
   return Math.abs(h)
 }
 
-// seed = التاريخ الحالي (YYYY-MM-DD)
 function daySeed(): number {
   const d = new Date()
   return hash(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`)
 }
 
-// shuffle مستقر (نفس الترتيب في نفس اليوم)
 export function dailyShuffle<T extends { id: string }>(items: T[]): T[] {
   const seed = daySeed()
   return [...items].sort((a, b) => {

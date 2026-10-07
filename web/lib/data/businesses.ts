@@ -37,6 +37,9 @@ export type Business = {
   opportunity_note: string | null
   trust_score: number
   trust_tier: string
+  velocity_score: number
+  engagement_score: number
+  diversity_score: number
   successful_orders: number
   featured_order: number
   featured_until: string | null
@@ -103,7 +106,7 @@ const BUSINESS_COLUMNS = `
   id, slug, name, business_type, subcategory, description, hook,
   area, city, address_text, map_url, cover_image_url,
   is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
-  trust_score, trust_tier, successful_orders,
+  trust_score, trust_tier, velocity_score, engagement_score, diversity_score, successful_orders,
   featured_order, featured_until, featured_pin,
   new_until, working_hours, accepts_whatsapp_orders,
   response_time_avg_seconds, response_rate,
