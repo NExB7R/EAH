@@ -3,7 +3,7 @@
 import { useActionState, useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Logo from '@/components/logo'
-import { AREAS } from '@/lib/data/areas'
+import AreaDropdown from '@/components/area-dropdown'
 import {
   EyeIcon,
   EyeOffIcon,
@@ -12,7 +12,6 @@ import {
   UserIcon,
   MaleIcon,
   FemaleIcon,
-  CheckIcon,
   MapPinIcon,
   NavigationIcon,
   CheckCircleIcon,
@@ -32,38 +31,6 @@ async function formAction(_prev: FormState, formData: FormData): Promise<AuthRes
   return loginAction(formData)
 }
 
-// هوكات تسجيل الدخول — للعملاء
-const CUSTOMER_HOOKS = [
-  {
-    title: 'اكتشف أحسن الأماكن حواليك',
-    desc: 'مطاعم، كافيهات، صيدليات، وكل حاجة في شبين القناطر',
-  },
-  {
-    title: 'اطلب على واتساب مباشرة',
-    desc: 'من غير وسيط، ومن غير عمولة — كلمهم علطول',
-  },
-  {
-    title: 'اكسب نقاط ووفّر فلوس',
-    desc: 'مع كل طلب وتقييم — استبدلهم بعروض وكوبونات',
-  },
-]
-
-// هوكات التسجيل — لأصحاب الأنشطة
-const MERCHANT_HOOKS = [
-  {
-    title: 'سجّل نشاطك مجاناً',
-    desc: 'صفحة كاملة، وطلبات على واتساب، بدون عمولة خالص',
-  },
-  {
-    title: 'اعرف عملاءك وأرقامك',
-    desc: 'إحصائيات دقيقة، ومتابعين، وتقارير شهرية',
-  },
-  {
-    title: 'اظهر في المميزين',
-    desc: 'وصول أكتر لعملاء جدد حوالين نشاطك، من غير ما تدفع',
-  },
-]
-
 export default function AuthForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -72,7 +39,6 @@ export default function AuthForm() {
   const [gender, setGender] = useState<Gender>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
-  const [hooksMode, setHooksMode] = useState<'customer' | 'merchant'>('customer')
   const [area, setArea] = useState('')
   const [address, setAddress] = useState('')
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null)
@@ -109,8 +75,6 @@ export default function AuthForm() {
     setTurnstileToken(null)
     setTurnstileKey((k) => k + 1)
   }
-
-  const hooks = hooksMode === 'customer' ? CUSTOMER_HOOKS : MERCHANT_HOOKS
 
   const handleGPS = () => {
     if (typeof navigator === 'undefined' || !navigator.geolocation) {
@@ -322,29 +286,9 @@ export default function AuthForm() {
               <p className={styles.sectionHint}>عشان نعرضلك الأماكن القريبة منك</p>
 
               <div className={styles.field}>
-                <label className={styles.label} htmlFor="default_area">
-                  المنطقة
-                </label>
-                <div className={styles.inputWrap}>
-                  <span className={styles.inputIcon}>
-                    <MapPinIcon size={18} />
-                  </span>
-                  <select
-                    id="default_area"
-                    name="default_area"
-                    className={styles.input}
-                    value={area}
-                    onChange={(e) => setArea(e.target.value)}
-                    disabled={isPending}
-                  >
-                    <option value="">اختر منطقتك</option>
-                    {AREAS.map((a) => (
-                      <option key={a} value={a}>
-                        {a}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                <label className={styles.label}>المنطقة</label>
+                <AreaDropdown value={area} onChange={setArea} disabled={isPending} />
+                <input type="hidden" name="default_area" value={area} />
               </div>
 
               <div className={styles.field}>
@@ -424,41 +368,6 @@ export default function AuthForm() {
           <a href="/auth/recover" className={styles.link}>
             نسيت كلمة السر؟
           </a>
-        </div>
-
-        <div className={styles.hooks}>
-          <div className={styles.hooksTitle}>ليه EAH؟</div>
-
-          <div className={styles.tabs} style={{ marginBottom: 'var(--space-4)' }}>
-            <button
-              type="button"
-              className={`${styles.tab} ${hooksMode === 'customer' ? styles.tabActive : ''}`}
-              onClick={() => setHooksMode('customer')}
-            >
-              للعملاء
-            </button>
-            <button
-              type="button"
-              className={`${styles.tab} ${hooksMode === 'merchant' ? styles.tabActive : ''}`}
-              onClick={() => setHooksMode('merchant')}
-            >
-              لأصحاب الأنشطة
-            </button>
-          </div>
-
-          <div className={styles.hooksList}>
-            {hooks.map((hook) => (
-              <div key={hook.title} className={styles.hook}>
-                <span className={styles.hookIcon}>
-                  <CheckIcon size={16} />
-                </span>
-                <div className={styles.hookText}>
-                  <div className={styles.hookTitle}>{hook.title}</div>
-                  <div className={styles.hookDesc}>{hook.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
