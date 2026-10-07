@@ -63,7 +63,7 @@ export const getActiveAdsForSlot = unstable_cache(
       .select(
         `
         id, title, image_url, link_url,
-        business:businesses(slug, name)
+        business:businesses!ads_business_id_fkey(slug, name)
       `,
       )
       .eq('slot_id', slot.id)
@@ -145,7 +145,7 @@ export async function getAllAds(): Promise<AdminAd[]> {
       id, slot_id, title, image_url, link_url, status,
       starts_at, ends_at, impressions, clicks, rejected_reason, created_at,
       slot:ad_slots(code, name_ar),
-      business:businesses(id, slug, name)
+      business:businesses!ads_business_id_fkey(id, slug, name)
     `,
     )
     .order('created_at', { ascending: false })
