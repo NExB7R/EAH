@@ -102,7 +102,6 @@ function CounterItem({ counter, animate }: { counter: Counter; animate: boolean 
 // ─── Component ───
 
 export default function LiveStatsBar({ stats }: Props) {
-  const [index, setIndex] = useState(0)
   const mounted = useMounted()
 
   const counters: Counter[] = useMemo(() => {
@@ -152,21 +151,6 @@ export default function LiveStatsBar({ stats }: Props) {
       },
     ]
 
-    if (stats.weather) {
-      list.push({
-        id: 'weather',
-        Icon: ({ size }: { size?: number }) => (
-          <span style={{ fontSize: size ? size * 0.95 : 20, lineHeight: 1 }}>
-            {stats.weather!.icon}
-          </span>
-        ),
-        value: `${stats.weather.temp}°`,
-        label: stats.weather.label,
-        sublabel: 'شبين القناطر',
-        accent: 'teal',
-      })
-    }
-
     list.push({
       id: 'areas',
       Icon: MapPinIcon,
@@ -178,21 +162,7 @@ export default function LiveStatsBar({ stats }: Props) {
     return list
   }, [stats])
 
-  // Auto-rotate on mobile
-  useEffect(() => {
-    if (!mounted) return
-    if (typeof window === 'undefined') return
-    if (window.innerWidth >= 768) return
-
-    const t = setInterval(() => {
-      setIndex((i) => (i + 1) % counters.length)
-    }, 3500)
-    return () => clearInterval(t)
-  }, [mounted, counters.length])
-
   if (counters.length === 0) return null
-
-  const current = counters[index] ?? counters[0]!
 
   return (
     <section className={styles.wrap} aria-label="إحصائيات مباشرة">
@@ -203,20 +173,13 @@ export default function LiveStatsBar({ stats }: Props) {
         ))}
       </div>
 
-      {/* Mobile — عداد واحد بس + auto-rotate */}
+      {/* Mobile — scroll أفقي بكل العدادات */}
       <div className={styles.mobileSlider}>
-        <CounterItem counter={current} animate={mounted} />
-        <div className={styles.dots} role="tablist" aria-label="التنقل بين الإحصائيات">
-          {counters.map((c, i) => (
-            <button
-              key={c.id}
-              type="button"
-              role="tab"
-              aria-selected={i === index}
-              aria-label={c.label}
-              className={`${styles.dot} ${i === index ? styles.dotActive : ''}`}
-              onClick={() => setIndex(i)}
-            />
+        <div className={styles.mobileScroll}>
+          {counters.map((c) => (
+            <div key={c.id} className={styles.mobileItem}>
+              <CounterItem counter={c} animate={mounted} />
+            </div>
           ))}
         </div>
       </div>

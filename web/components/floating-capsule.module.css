@@ -321,3 +321,57 @@
   align-items: center;
   line-height: 1;
 }
+
+/* ─── Weather (Header) ─── */
+.weather {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--radius-full);
+  background: rgba(10, 5, 20, 0.55);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  cursor: default;
+  user-select: none;
+  transition: border-color var(--motion-fast) var(--ease);
+}
+
+.weather:hover {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.weatherIcon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.weatherTemp {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.2px;
+}
+
+@media (max-width: 480px) {
+  .weather {
+    height: 32px;
+    padding: 0 8px;
+    gap: 3px;
+  }
+  .weatherIcon {
+    font-size: 0.9rem;
+  }
+  .weatherTemp {
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .weather {
+    display: none;
+  }
+}

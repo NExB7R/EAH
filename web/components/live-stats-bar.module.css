@@ -121,78 +121,57 @@
   color: #fdba74;
 }
 
-/* ─── Mobile Slider ─── */
+/* ─── Mobile Slider — scroll أفقي ─── */
 
 .mobileSlider {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  max-width: 480px;
+  width: 100%;
   margin: 0 auto;
+  /* نمتد للأطراف عشان الـ scroll يبقى ناعم */
+  margin-inline: -20px;
+  padding-inline: 20px;
 }
 
-.mobileSlider .counter {
+.mobileScroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 20px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.mobileScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.mobileItem {
+  flex-shrink: 0;
+  width: 180px;
+  scroll-snap-align: start;
+}
+
+.mobileItem .counter {
   width: 100%;
   justify-content: center;
-  padding: 20px 24px;
+  padding: 16px 18px;
   background: rgba(10, 5, 20, 0.7);
   border-color: rgba(168, 85, 247, 0.2);
-  animation: slide-in 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.mobileSlider .counter .iconWrap {
-  width: 48px;
-  height: 48px;
+.mobileItem .counter .iconWrap {
+  width: 42px;
+  height: 42px;
 }
 
-.mobileSlider .counter .value {
-  font-size: 1.6rem;
+.mobileItem .counter .value {
+  font-size: 1.4rem;
 }
 
-.mobileSlider .counter .label {
-  font-size: 0.75rem;
-}
-
-/* ─── Dots ─── */
-
-.dots {
-  display: flex;
-  gap: 6px;
-  justify-content: center;
-  flex-wrap: wrap;
-  max-width: 280px;
-}
-
-.dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  border: none;
-  background: rgba(168, 85, 247, 0.25);
-  cursor: pointer;
-  padding: 0;
-  transition:
-    width 200ms ease,
-    background 200ms ease;
-}
-
-.dotActive {
-  width: 20px;
-  background: linear-gradient(90deg, #9d4edd, #c77dff);
-}
-
-/* ─── Animations ─── */
-
-@keyframes slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.mobileItem .counter .label {
+  font-size: 0.72rem;
 }
 
 /* ─── Desktop (md+) ─── */
@@ -201,10 +180,6 @@
   .desktopGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-  }
-
-  .mobileSlider {
-    display: none;
   }
 
   .wrap {
@@ -238,10 +213,10 @@
 /* ─── Reduced motion ─── */
 
 @media (prefers-reduced-motion: reduce) {
-  .counter,
-  .dot,
-  .mobileSlider .counter {
+  .counter {
     transition: none;
-    animation: none;
+  }
+  .mobileScroll {
+    scroll-behavior: auto;
   }
 }

@@ -15,16 +15,10 @@ export type LiveStats = {
   todayVisits: number
   monthlyUsers: number
   areasServed: number
-  weather: {
-    temp: number
-    code: number
-    label: string
-    icon: string
-  } | null
 }
 
 export const getLiveStats = unstable_cache(
-  async (): Promise<Omit<LiveStats, 'weather'>> => {
+  async (): Promise<LiveStats> => {
     const supabase = createPublicClient()
 
     const todayStart = new Date()
@@ -118,70 +112,6 @@ export const getLiveStats = unstable_cache(
   { revalidate: 300, tags: ['live-stats'] },
 )
 
-// ─── الطقس — Open-Meteo (مجاني، بدون API key) ───
-
-const WEATHER_CODES: Record<number, { label: string; icon: string }> = {
-  0: { label: 'صافي', icon: '☀️' },
-  1: { label: 'صافي أغلب الوقت', icon: '🌤️' },
-  2: { label: 'غائم جزئياً', icon: '⛅' },
-  3: { label: 'غائم', icon: '☁️' },
-  45: { label: 'ضباب', icon: '🌫️' },
-  48: { label: 'ضباب متجمد', icon: '🌫️' },
-  51: { label: 'رش خفيف', icon: '🌦️' },
-  53: { label: 'رش', icon: '🌦️' },
-  55: { label: 'رش غزير', icon: '🌧️' },
-  61: { label: 'مطر خفيف', icon: '🌧️' },
-  63: { label: 'مطر', icon: '🌧️' },
-  65: { label: 'مطر غزير', icon: '🌧️' },
-  71: { label: 'ثلج خفيف', icon: '🌨️' },
-  73: { label: 'ثلج', icon: '🌨️' },
-  75: { label: 'ثلج غزير', icon: '❄️' },
-  80: { label: 'زخات مطر', icon: '🌦️' },
-  81: { label: 'زخات غزيرة', icon: '🌧️' },
-  82: { label: 'زخات عنيفة', icon: '⛈️' },
-  95: { label: 'رعد', icon: '⛈️' },
-  96: { label: 'رعد + برد', icon: '⛈️' },
-  99: { label: 'رعد شديد', icon: '⛈️' },
-}
-
-const SHIBIN_LAT = 30.5541
-const SHIBIN_LNG = 31.0092
-
-export const getWeather = unstable_cache(
-  async (): Promise<LiveStats['weather']> => {
-    try {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${SHIBIN_LAT}&longitude=${SHIBIN_LNG}&current=temperature_2m,weather_code`
-      const res = await fetch(url, {
-        next: { revalidate: 1800 },
-      })
-      if (!res.ok) return null
-
-      const data = (await res.json()) as {
-        current?: { temperature_2m?: number; weather_code?: number }
-      }
-
-      const temp = data.current?.temperature_2m
-      const code = data.current?.weather_code
-
-      if (typeof temp !== 'number' || typeof code !== 'number') return null
-
-      const meta = WEATHER_CODES[code] ?? { label: 'غير معروف', icon: '🌡️' }
-
-      return {
-        temp: Math.round(temp),
-        code,
-        label: meta.label,
-        icon: meta.icon,
-      }
-    } catch {
-      return null
-    }
-  },
-  ['weather-shibin'],
-  { revalidate: 1800, tags: ['weather'] },
-)
-
 export async function getAllLiveStats(): Promise<LiveStats> {
-  const [stats, weather] = await Promise.all([getLiveStats(), getWeather()])
-  return { ...stats, weather }
+  return getLiveStats()
 }

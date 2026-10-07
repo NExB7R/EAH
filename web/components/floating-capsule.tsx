@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import Logo from './logo'
 import Avatar from './avatar'
 import MenuDrawer from './menu-drawer'
+import HeaderWeather from './header-weather'
 import { BellIcon, MenuIcon, InfoIcon, InstallIcon, LockIcon, TargetIcon } from './icons'
 import type { UserSession } from '@/lib/data/user'
 import styles from './floating-capsule.module.css'
@@ -80,6 +81,8 @@ export default function FloatingCapsule({ session }: Props) {
             >
               <InstallIcon size={20} />
             </button>
+
+            <HeaderWeather />
 
             <Link
               href="/explore"
