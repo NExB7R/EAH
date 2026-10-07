@@ -234,7 +234,8 @@ export async function runAgent(
     return { ok: false, error: 'المساعد تعب — جرب تاني' }
   } catch (err) {
     const msg = (err as Error).message
-    console.error('[AI Agent]', msg)
+    console.error('[AI Agent] error:', msg)
+    console.error('[AI Agent] stack:', (err as Error).stack)
     return { ok: false, error: 'حصلت مشكلة — جرب تاني' }
   }
 }
