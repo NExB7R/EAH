@@ -794,3 +794,27 @@
 
 ### اللي معلق
 - Speed Insights يتحدّث خلال ساعة — لازم قياس جديد
+
+---
+
+## 2026-10-07 — Session 17: Reviews + Fair Ranking + Filters
+
+### اللي اتحقق
+- **Advanced Filters:** type/area/rating/distance/open/offers/sort — URL-driven, stackable
+- **Distance precision:** 10م دقة + tie-breaker 0.5م
+- **Fair Ranking Engine:** `lib/fair-ranking.ts` — Relevance+Quality+Freshness+Fairness, diversity constraint, cold-start boost, deterministic daily seed
+- **Reviews 2.0:** dimensions JSONB لكل نوع نشاط + review_quality_score + verified_transaction
+- **Migration:** `2026-10-07-review-dimensions.sql` (نُفّذت في Supabase)
+- **LCP Fix:** شالنا Splash + Suspense islands
+
+### Commits الرئيسية
+- `188e88b` unified fair ranking engine
+- `ba0d044` reviews dynamic dimensions (JSONB)
+- `2fb7287`, `d981409`, `61ac92c` advanced filters
+- `6b190e1`, `2bcd89b`, `835c0d5` LCP
+
+### اللي معلق
+- Merchant apply: subcategory اختيار
+- Explore: subcategory filter
+- التقييم بعد ساعتين (CRITERIA §5)
+- ترند 7 معايير 2026

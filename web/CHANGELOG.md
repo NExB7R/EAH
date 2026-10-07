@@ -7,6 +7,13 @@
 - preconnect + dns-prefetch لـ Supabase
 - commit: `6b190e1`
 
+
+### feat — 2026-10-07
+- Fair Ranking Engine موحّد (كل الأقسام عادلة)
+- Advanced Filters (type/area/rating/distance/open/offers/sort)
+- Reviews Dimensions JSONB (لكل نوع نشاط أبعاد مخصصة)
+- LCP Fix (شالنا Splash)
+
 ## [Unreleased]
 
 ### Trust System 2.0 (2026-10-07)

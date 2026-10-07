@@ -199,3 +199,8 @@
 | 3 | Auto-suggest subcategories | يعتمد على #2 | 2 س |
 
 **السبب:** التجاهل مؤقت — بعد ما نضيف بيانات حقيقية + migrations.
+
+## ✅ منفّذ (2026-10-07)
+- Fair Ranking Engine موحّد
+- Advanced Filters (type/area/rating/distance/open/offers/sort)
+- Reviews Dimensions JSONB + subcategory
