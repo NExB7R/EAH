@@ -44,6 +44,8 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
     "@playwright/test": "^1.63.0",
     "@types/node": "^22.20.4",
     "@types/qrcode": "^1.5.6",

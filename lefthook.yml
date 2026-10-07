@@ -36,3 +36,13 @@ pre-push:
     typecheck:
       root: "web/"
       run: npx tsc --noEmit
+
+
+# ═══════════════════════════════════════════════════════════
+# Commit Message Convention
+# ═══════════════════════════════════════════════════════════
+commit-msg:
+  commands:
+    commitlint:
+      root: "web/"
+      run: npx commitlint --edit {1}
