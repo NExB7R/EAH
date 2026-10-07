@@ -67,7 +67,7 @@ function getProviders(): Provider[] {
     providers.push({
       name: 'groq',
       url: 'https://api.groq.com/openai/v1/chat/completions',
-      model: 'llama-3.3-70b-versatile',
+      model: 'openai/gpt-oss-120b',
       apiKey: process.env.GROQ_API_KEY,
       priority: 1,
       supportsTools: true,
@@ -79,7 +79,7 @@ function getProviders(): Provider[] {
     providers.push({
       name: 'gemini',
       url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3.8-flash',
       apiKey: process.env.GEMINI_API_KEY,
       priority: 2,
       supportsTools: true,
@@ -91,7 +91,7 @@ function getProviders(): Provider[] {
     providers.push({
       name: 'openrouter',
       url: 'https://openrouter.ai/api/v1/chat/completions',
-      model: process.env.OPENROUTER_MODEL ?? 'meta-llama/llama-3.3-70b-instruct:free',
+      model: process.env.OPENROUTER_MODEL ?? 'google/gemini-2.5-flash',
       apiKey: process.env.OPENROUTER_API_KEY,
       priority: 3,
       supportsTools: true,
