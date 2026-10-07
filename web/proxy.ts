@@ -33,7 +33,7 @@ function buildCSP(nonce: string, isDev: boolean): string {
     `img-src 'self' data: blob: https://${CLOUDINARY_HOST} https://${SUPABASE_HOST} https://images.unsplash.com https://scontent-iad3-2.xx.fbcdn.net`,
 
     // Network
-    `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://api.cloudinary.com https://${TURNSTILE_HOST} https://openrouter.ai https://api.groq.com`,
+    `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://api.cloudinary.com https://${TURNSTILE_HOST} https://openrouter.ai https://api.groq.com https://api.open-meteo.com`,
 
     // Fonts + Frames + Others
     "font-src 'self' data:",
