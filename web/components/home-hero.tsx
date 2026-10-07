@@ -2,7 +2,6 @@ import Link from 'next/link'
 import Logo from './logo'
 import {
   SearchIcon,
-  MicIcon,
   UtensilsIcon,
   PillIcon,
   CartIcon,
@@ -12,6 +11,7 @@ import {
   LocationIcon,
   SparkleStarIcon,
 } from './icons'
+import VoiceSearchButton from './voice-search-button'
 import styles from './home-hero.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -79,15 +79,7 @@ export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
               autoComplete="off"
               enterKeyHint="search"
             />
-            <Link
-              href="/explore?voice=1"
-              className="eah-icon-action"
-              aria-label="بحث صوتي"
-              prefetch={false}
-              data-tooltip="بحث صوتي"
-            >
-              <MicIcon size={18} />
-            </Link>
+            <VoiceSearchButton className="eah-icon-action" size={18} />
             <Link
               href="/explore?suggest=1"
               className="eah-icon-action eah-icon-gold"
