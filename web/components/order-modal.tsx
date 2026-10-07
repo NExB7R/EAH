@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import { CloseIcon, GiftIcon, CheckCircleIcon, AlertIcon, ImageIcon } from './icons'
 import MenuSlider from './menu-slider'
 import { submitOrder } from '@/app/businesses/[slug]/order-actions'
+import { addPendingReview } from '@/lib/engagement'
 import styles from './order-modal.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -64,6 +65,13 @@ export default function OrderModal({
         setSuccess(true)
         setMsg(`طلبك #${res.orderCode} اتحفظ ✓`)
         // افتح واتساب بعد ثانيتين
+        // تذكير تقييم بعد ساعتين
+        addPendingReview({
+          businessId,
+          businessSlug,
+          businessName,
+        })
+
         setTimeout(() => {
           window.open(res.whatsappUrl, '_blank')
           setTimeout(() => {

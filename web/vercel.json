@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/trust-decay",
       "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/review-reminder",
+      "schedule": "0 * * * *"
     }
   ]
 }

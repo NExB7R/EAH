@@ -2,31 +2,37 @@
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Engagement Tracking
-//   • تتبّع تفاعل (كشف رقم / واتساب / تقييم / تعليق)
-//   • جدولة تذكير تقييم بعد ساعتين
-//   • طلب تثبيت التطبيق (ذكي)
-//   • تسجيل الحدث في DB (تحليلات)
+// تذكير تقييم بعد ساعتين من طلب واتساب
 // ═══════════════════════════════════════════════════════════
 
-const KEY_INSTALL_ACCEPTED = 'eah-install-accepted'
 const KEY_PENDING_REVIEWS = 'eah-pending-reviews'
+const KEY_INSTALL_ACCEPTED = 'eah-install-accepted'
 
-export type EngagementAction = 'phone_reveal' | 'whatsapp' | 'review' | 'comment'
+const REVIEW_DELAY_MS = 2 * 60 * 60 * 1000 // ساعتين
 
 export type PendingReview = {
   businessId: string
   businessSlug: string
   businessName: string
-  action: EngagementAction
   dueAt: number
 }
 
-// ─── تتبّع حدث ───
-export function markInstallAccepted(): void {
-  localStorage.setItem(KEY_INSTALL_ACCEPTED, '1')
+// ─── تذكير التقييم ───
+export function addPendingReview(item: {
+  businessId: string
+  businessSlug: string
+  businessName: string
+}): void {
+  if (typeof window === 'undefined') return
+  const list = readPending().filter((r) => r.businessId !== item.businessId)
+  list.push({ ...item, dueAt: Date.now() + REVIEW_DELAY_MS })
+  try {
+    localStorage.setItem(KEY_PENDING_REVIEWS, JSON.stringify(list.slice(-10)))
+  } catch {
+    /* ignore */
+  }
 }
 
-// ─── تذكير التقييم ───
 export function getDueReview(): PendingReview | null {
   if (typeof window === 'undefined') return null
   const now = Date.now()
@@ -43,10 +49,19 @@ function readPending(): PendingReview[] {
     const raw = localStorage.getItem(KEY_PENDING_REVIEWS)
     if (!raw) return []
     const parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed : []
+    return Array.isArray(parsed) ? (parsed as PendingReview[]) : []
   } catch {
     return []
   }
 }
 
-// ─── تسجيل في DB (تحليلات) ───
+// ─── Install tracking ───
+export function markInstallAccepted(): void {
+  if (typeof window === 'undefined') return
+  localStorage.setItem(KEY_INSTALL_ACCEPTED, '1')
+}
+
+export function isInstallAccepted(): boolean {
+  if (typeof window === 'undefined') return false
+  return localStorage.getItem(KEY_INSTALL_ACCEPTED) === '1'
+}

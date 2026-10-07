@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { WhatsAppIcon, PhoneIcon, LockIcon, StoreIcon } from './icons'
 import SmartLockModal, { useSmartLock } from './smart-lock-modal'
 import OrderModal from './order-modal'
+import { addPendingReview } from '@/lib/engagement'
 import styles from './fixed-cta.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -75,6 +76,8 @@ export default function FixedCta({
         // واتساب مباشر بدون OrderModal
         const text = encodeURIComponent(`مرحبا، عايز أطلب من ${businessName}`)
         window.open(`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}?text=${text}`, '_blank')
+        // تذكير تقييم بعد ساعتين
+        addPendingReview({ businessId, businessSlug, businessName })
       }
     } else if (phone) {
       window.location.href = `tel:${phone}`
