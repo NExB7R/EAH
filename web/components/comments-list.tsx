@@ -5,6 +5,7 @@ import Image from 'next/image'
 import CommentItem from './comment-item'
 import { MessageCircleIcon, ImageIcon, CloseIcon } from './icons'
 import { createComment } from '@/app/comments/actions'
+import { offlineOrQueue } from '@/lib/offline/mutations'
 import type { CommentNode } from '@/lib/data/comments'
 import styles from './comments-list.module.css'
 
@@ -76,7 +77,12 @@ export default function CommentsList({
       const fd = new FormData()
       fd.set('content', text)
       fd.set('image_urls', JSON.stringify(images))
-      const res = await createComment(businessId, slug, fd)
+      const res = await offlineOrQueue(() => createComment(businessId, slug, fd), 'comment', {
+        businessId,
+        slug,
+        content: text,
+        parentId: null,
+      })
       if (!res.ok) {
         setError(res.error)
         return

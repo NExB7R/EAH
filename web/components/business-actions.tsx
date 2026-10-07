@@ -13,6 +13,7 @@ import {
 import SmartLockModal, { useSmartLock } from './smart-lock-modal'
 import OrderModal from './order-modal'
 import { toggleFollow, toggleFavorite } from '@/app/activities/actions'
+import { enqueue } from '@/lib/offline/queue'
 import styles from './business-actions.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -95,6 +96,18 @@ export default function BusinessActions({
     if (requireAuth('تحفظ النشاط في مفضلاتك', 'هتلاقيه في /account/favorites دايمًا')) return
     if (pending) return
     setPending(true)
+
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      const next = !fav
+      setFav(next)
+      await enqueue({
+        type: 'favorite',
+        payload: { businessId, action: next ? 'add' : 'remove' },
+      })
+      setPending(false)
+      return
+    }
+
     const res = await toggleFavorite(businessId, businessSlug)
     setPending(false)
     if (res.ok) setFav(res.active)
@@ -105,6 +118,18 @@ export default function BusinessActions({
     if (requireAuth('تتابع النشاط', 'أول ما ينزل عرض جديد هيوصلك إشعار فوري')) return
     if (pending) return
     setPending(true)
+
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      const next = !follow
+      setFollow(next)
+      await enqueue({
+        type: 'follow',
+        payload: { businessId, action: next ? 'add' : 'remove' },
+      })
+      setPending(false)
+      return
+    }
+
     const res = await toggleFollow(businessId, businessSlug)
     setPending(false)
     if (res.ok) setFollow(res.active)

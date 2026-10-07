@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { StarIcon, CloseIcon } from './icons'
 import { submitReview } from '@/app/reviews/actions'
+import { offlineOrQueue } from '@/lib/offline/mutations'
 import { getReviewDimensions, type Dimension } from '@/lib/review-dimensions'
 import type { BusinessType } from '@/lib/data/businesses'
 import styles from './review-form.module.css'
@@ -77,12 +78,26 @@ export default function ReviewForm({
     fd.set('dimensions', JSON.stringify(cleaned))
     fd.set('comment', comment)
 
-    const res = await submitReview(businessId, slug, fd)
+    const dimensionsObj: Record<string, number> = {}
+    for (const d of dimensions) {
+      const v = ratings[d.key]
+      if (v && v > 0) dimensionsObj[d.key] = v
+    }
+
+    const res = await offlineOrQueue(() => submitReview(businessId, slug, fd), 'review', {
+      businessId,
+      slug,
+      dimensions: dimensionsObj,
+      comment,
+    })
     setLoading(false)
 
     if (!res.ok) {
       setError(res.error)
       return
+    }
+    if (res.queued) {
+      setError('في انتظار النت — تقييمك هيتحفظ ولو النت قطع')
     }
     setDone(true)
   }

@@ -11,6 +11,7 @@ import {
   editComment,
   toggleFollowThread,
 } from '@/app/comments/actions'
+import { offlineOrQueue } from '@/lib/offline/mutations'
 import { createComment } from '@/app/comments/actions'
 import type { CommentNode } from '@/lib/data/comments'
 import styles from './comment-item.module.css'
@@ -76,7 +77,11 @@ export default function CommentItem({
     setLiked(next)
     setLikesCount((c) => c + (next ? 1 : -1))
     startTransition(async () => {
-      const res = next ? await likeComment(comment.id, slug) : await unlikeComment(comment.id, slug)
+      const res = await offlineOrQueue(
+        () => (next ? likeComment(comment.id, slug) : unlikeComment(comment.id, slug)),
+        'like',
+        { commentId: comment.id, action: next ? 'add' : 'remove' },
+      )
       if (!res.ok) {
         setLiked(!next)
         setLikesCount((c) => c + (next ? -1 : 1))
