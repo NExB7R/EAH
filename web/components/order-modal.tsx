@@ -1,11 +1,14 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
+import dynamic from 'next/dynamic'
 import { CloseIcon, GiftIcon, CheckCircleIcon, AlertIcon, ImageIcon } from './icons'
-import MenuSlider from './menu-slider'
 import { submitOrder } from '@/app/businesses/[slug]/order-actions'
 import { addPendingReview } from '@/lib/engagement'
 import styles from './order-modal.module.css'
+
+// Lazy: يُحمّل فقط عند فتح المنيو (توفير ~30KB من الحزمة الأساسية)
+const MenuSlider = dynamic(() => import('./menu-slider'), { ssr: false })
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Order Modal (Customer)
@@ -218,13 +221,15 @@ export default function OrderModal({
         )}
       </div>
 
-      <MenuSlider
-        open={menuOpen}
-        onClose={closeMenu}
-        images={menuImages}
-        offers={offers}
-        businessName={businessName}
-      />
+      {menuOpen && (
+        <MenuSlider
+          open={menuOpen}
+          onClose={closeMenu}
+          images={menuImages}
+          offers={offers}
+          businessName={businessName}
+        />
+      )}
     </>
   )
 }
