@@ -254,7 +254,7 @@
 | `validations/comment.ts` | commentSchema | — |
 | `validations/merchant.ts` | BUSINESS_TYPES, applySchema | EAH — Merchant Application Validation |
 | `validations/order.ts` | orderSchema | — |
-| `validations/review.ts` | reviewSchema, merchantReplySchema | — |
+| `validations/review.ts` | reviewSchema, merchantReplySchema | Zod 4: partialRecord يسمح بأي subset من الـ keys |
 | `version.ts` | APP_VERSION | §26 — Single Source of Truth for version |
 
 ---
