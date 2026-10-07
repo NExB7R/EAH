@@ -33,6 +33,9 @@ export default function VoiceSearch({ open, onClose, onResult }: Props) {
     onError: () => {
       /* التعامل داخل الـ modal عبر status */
     },
+    onPermissionDenied: () => {
+      /* status = 'denied' — الواجهة تتعامل معاها */
+    },
   })
 
   // فتح → ابدأ التسجيل
@@ -62,9 +65,11 @@ export default function VoiceSearch({ open, onClose, onResult }: Props) {
       ? 'بتكلم...'
       : voice.status === 'processing'
         ? 'بسمعك...'
-        : voice.status === 'error'
-          ? 'جرب تاني'
-          : 'جاهز'
+        : voice.status === 'denied'
+          ? 'المايك مرفوض'
+          : voice.status === 'error'
+            ? 'جرب تاني'
+            : 'جاهز'
 
   return (
     <div className={styles.overlay} onClick={onClose} role="dialog" aria-modal="true">
@@ -85,10 +90,12 @@ export default function VoiceSearch({ open, onClose, onResult }: Props) {
             ? 'اتكلم عادي — مثلاً "عايز مطعم بيتزا"'
             : voice.status === 'processing'
               ? 'ثانية واحدة...'
-              : 'اضغط وأعد المحاولة'}
+              : voice.status === 'denied'
+                ? 'لازم تسمح بالمايك من إعدادات المتصفح — اضغط على أيقونة القفل بجانب العنوان وسمح بالمايك'
+                : 'اضغط وأعد المحاولة'}
         </p>
 
-        {voice.status === 'error' && (
+        {(voice.status === 'error' || voice.status === 'denied') && (
           <button type="button" className={styles.retry} onClick={() => voice.start()}>
             جرب تاني
           </button>

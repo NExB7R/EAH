@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 // Web Speech API أولاً — Groq Whisper fallback
 // ═══════════════════════════════════════════════════════════
 
-type Status = 'idle' | 'listening' | 'processing' | 'error'
+type Status = 'idle' | 'listening' | 'processing' | 'error' | 'denied'
 
 type SpeechRecognitionLike = {
   lang: string
@@ -16,7 +16,7 @@ type SpeechRecognitionLike = {
   start: () => void
   stop: () => void
   onresult: ((e: { results: { 0: { 0: { transcript: string } } } }) => void) | null
-  onerror: (() => void) | null
+  onerror: ((e: { error?: string }) => void) | null
   onend: (() => void) | null
 }
 
@@ -32,9 +32,22 @@ function getSpeechRecognition(): (new () => SpeechRecognitionLike) | null {
 export type VoiceSearchOptions = {
   onResult: (text: string) => void
   onError?: (error: string) => void
+  onPermissionDenied?: () => void
 }
 
-export function useVoiceSearch({ onResult, onError }: VoiceSearchOptions) {
+// ─── فحص صلاحية المايك قبل البدء (يمنع بدء محاولة فاشلة) ───
+async function checkMicPermission(): Promise<'granted' | 'denied' | 'prompt' | 'unknown'> {
+  if (typeof navigator === 'undefined') return 'unknown'
+  if (!navigator.mediaDevices || !navigator.permissions) return 'unknown'
+  try {
+    const result = await navigator.permissions.query({ name: 'microphone' as PermissionName })
+    return result.state as 'granted' | 'denied' | 'prompt'
+  } catch {
+    return 'unknown'
+  }
+}
+
+export function useVoiceSearch({ onResult, onError, onPermissionDenied }: VoiceSearchOptions) {
   const [status, setStatus] = useState<Status>('idle')
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
@@ -121,15 +134,29 @@ export function useVoiceSearch({ onResult, onError }: VoiceSearchOptions) {
           mediaRecorderRef.current.stop()
         }
       }, 8000)
-    } catch {
-      setStatus('error')
-      onError?.('مش قادر أوصل للمايك')
-      setTimeout(() => setStatus('idle'), 1500)
+    } catch (err) {
+      const name = (err as Error).name
+      if (name === 'NotAllowedError' || name === 'PermissionDeniedError') {
+        setStatus('denied')
+        onPermissionDenied?.()
+      } else {
+        setStatus('error')
+        onError?.('مش قادر أوصل للمايك')
+        setTimeout(() => setStatus('idle'), 1500)
+      }
     }
-  }, [onResult, onError])
+  }, [onResult, onError, onPermissionDenied])
 
   // ─── Web Speech API ───
   const start = useCallback(async () => {
+    // فحص الصلاحيات قبل البدء
+    const perm = await checkMicPermission()
+    if (perm === 'denied') {
+      setStatus('denied')
+      onPermissionDenied?.()
+      return
+    }
+
     setStatus('listening')
 
     const SR = getSpeechRecognition()
@@ -145,8 +172,15 @@ export function useVoiceSearch({ onResult, onError }: VoiceSearchOptions) {
         onResult(transcript)
       }
 
-      recognition.onerror = () => {
-        // لو فشل — جرّب Whisper
+      recognition.onerror = (e) => {
+        // لو الرفض صريح → ما نروحش Whisper
+        const errName = (e as { error?: string } | null)?.error
+        if (errName === 'not-allowed' || errName === 'service-not-allowed') {
+          setStatus('denied')
+          onPermissionDenied?.()
+          return
+        }
+        // فشل تاني → Whisper
         setStatus('idle')
         void startWhisper()
       }
@@ -166,7 +200,7 @@ export function useVoiceSearch({ onResult, onError }: VoiceSearchOptions) {
 
     // مفيش Web Speech API → Whisper
     await startWhisper()
-  }, [onResult, startWhisper])
+  }, [onResult, startWhisper, onPermissionDenied])
 
   const stop = useCallback(() => {
     if (mediaRecorderRef.current?.state === 'recording') {
