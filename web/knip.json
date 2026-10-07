@@ -2,11 +2,12 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": [
     "app/**/{page,layout,loading,error,not-found,route,manifest,sitemap,robots,opengraph-image,icon,apple-icon}.{ts,tsx}",
-    "app/**/route.{ts,tsx}"
+    "app/**/route.{ts,tsx}",
+    "app/sw.ts"
   ],
   "project": ["**/*.{ts,tsx}"],
-  "ignore": ["lib/trust.ts"],
-  "ignoreBinaries": ["gitleaks"],
+  "ignore": [],
+  "ignoreDependencies": ["@commitlint/cli", "@types/serviceworker"],
   "ignoreExportsUsedInFile": true,
   "rules": {
     "exports": "warn",
