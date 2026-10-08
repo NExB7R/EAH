@@ -141,8 +141,10 @@
   box-shadow: var(--glow-gold-sm);
 }
 
+/* a11y: الأنيميشن المستمر بيكسر tap-targets + non-composited animation */
+/* بدل animation → hover/active states */
 .installBtn {
-  animation: installPulse 3s ease-in-out infinite;
+  /* animation: installPulse 3s ease-in-out infinite; */
 }
 
 @keyframes installPulse {
