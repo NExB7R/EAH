@@ -2,7 +2,7 @@
 
 > ⚠️ **مؤجل لبعد ما نخلص الميزات الأساسية — وقبل المدفوعات.**
 
-**آخر تحديث:** 2026-10-05
+**آخر تحديث:** 2026-10-08
 
 ---
 
@@ -10,14 +10,39 @@
 
 أثناء التطوير السريع (2026-10-04 → 2026-10-05) اتبعتت مفاتيح في الشات بشكل غير آمن:
 
-| المفتاح | التسرّب | الخطورة |
-|---------|---------|---------|
-| `GROQ_API_KEY` | 2026-10-05 | 🟠 متوسط |
-| `GEMINI_API_KEY` | 2026-10-05 | 🟡 منخفض |
-| `TURNSTILE_SECRET_KEY` | 2026-10-05 | 🔴 عالي |
-| `UPSTASH_REDIS_REST_TOKEN` | 2026-10-05 | 🔴 عالي |
+| المفتاح | التسرّب | الخطورة | الحالة |
+|---------|---------|---------|--------|
+| `GROQ_API_KEY` | 2026-10-05 | 🟠 متوسط | لسه |
+| `GEMINI_API_KEY` | 2026-10-05 | 🟡 منخفض | لسه |
+| `TURNSTILE_SECRET_KEY` | 2026-10-05 | 🔴 عالي | **2026-10-08 — اتكشف تاني** |
+| `UPSTASH_REDIS_REST_TOKEN` | 2026-10-05 | 🔴 عالي | لسه |
+| **`TURNSTILE_SITE_KEY`** | **2026-10-08** | **🟢 منخفض** | **public — بسيط** |
+| **`TURNSTILE_SECRET_KEY` (نسخة جديدة)** | **2026-10-08** | **🔴 عالي** | **لسه في الشات** |
 
 **الحالة الحالية:** مفيش ضرر عملي (الشات مش منشور)، بس لازم rotate قبل الإطلاق.
+
+---
+
+## 🔴 Turnstile — حالة طارئة (2026-10-08)
+
+**اللي حصل:**
+- مفاتيح Turnstile الجديدة (Production) اتكشفت في شات AI
+- Production شغال بالمفاتيح الجديدة (بعد fix CSP + nonce)
+- **خطر:** أي حد شاف الشات يقدر يستخدم الـ Secret للتلاعب
+
+**Turnstile Site Key vs Secret:**
+- **Site Key** (`0x4AAAAAAFKj0MmPWv_YfMRl`) — **public** ✅ (بيظهر في HTML)
+- **Secret Key** (`0x4AAAAAAFKj0MTzyprLAN...`) — **سري** 🔴
+
+**الإجراء الفوري (15 دقيقة):**
+1. Cloudflare Dashboard → Turnstile → EAH widget
+2. **Rotate Secret Key**
+3. تحديث Vercel: `TURNSTILE_SECRET_KEY` (Production + Preview + Development)
+4. تحديث `.env.local`
+5. Redeploy Vercel
+6. اختبار `/auth` — Signup لازم يشتغل
+
+**السبب:** تحذير §31 — المفتاح اتبعت في شات، حتى لو داخلي.
 
 ---
 
@@ -95,13 +120,14 @@
 
 ### المرحلة 2 — Rotate (ساعة)
 
+- [ ] **🔴 Turnstile: Rotate Secret فوراً** ← 2026-10-08 exposure
 - [ ] Groq: امسح القديم → جديد
 - [ ] Gemini: امسح القديم → جديد
 - [ ] OpenRouter: rotate
-- [ ] Turnstile: Rotate Secret
 - [ ] Upstash: Rotate Token
 - [ ] Supabase: rotate service_role (بحذر شديد)
 - [ ] Cloudinary: rotate (لو مستخدم)
+- [ ] GitHub PAT: rotate (إن وجد)
 
 ### المرحلة 3 — التوثيق
 
