@@ -21,8 +21,9 @@ import { signupAction, loginAction, type AuthResult } from './actions'
 import styles from './auth.module.css'
 
 // Test Keys من Cloudflare — تبدأ بـ 1x000
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAFKj0MmPWv_YfMRl'
-const IS_TEST_KEY = TURNSTILE_SITE_KEY.startsWith('1x000')
+// Site Key عام (بيظهر في HTML لأي زائر) — hardcoded لضمان عدم الاعتماد على env vars
+const TURNSTILE_SITE_KEY = '0x4AAAAAAFKj0MmPWv_YfMRl'
+const IS_TEST_KEY = false
 
 type Tab = 'login' | 'signup'
 type Gender = 'male' | 'female' | null
