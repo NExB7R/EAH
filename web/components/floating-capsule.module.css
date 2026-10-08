@@ -267,7 +267,8 @@
 
   .right,
   .left {
-    gap: 2px;
+    /* a11y: WCAG 2.2 target size spacing ≥ 8px */
+    gap: 8px;
   }
 }
 

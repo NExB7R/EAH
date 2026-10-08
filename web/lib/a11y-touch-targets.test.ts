@@ -51,4 +51,14 @@ describe('a11y — touch targets (floating-capsule)', () => {
         expect(size, 'loginBtn height/min-height').toBeGreaterThanOrEqual(MIN_TOUCH_TARGET)
     }
   })
+
+  it('mobile gap بين الأزرار ≥ 8px (WCAG 2.2 spacing)', () => {
+    // ابحث عن .right / .left داخل media query الموبايل
+    const mobileBlock = css.match(/@media[^{]*max-width:\s*640px[^{]*\{([\s\S]*?)\n\}/)
+    expect(mobileBlock, 'لازم يكون فيه mobile media query').toBeTruthy()
+    const body = mobileBlock?.[1] ?? ''
+    const gapMatch = body.match(/\.right[\s\S]*?\.left[\s\S]*?gap:\s*([\d.]+)px/)
+    const gap = gapMatch ? parseFloat(gapMatch[1] ?? '0') : null
+    expect(gap, 'mobile .right/.left gap').toBeGreaterThanOrEqual(8)
+  })
 })
