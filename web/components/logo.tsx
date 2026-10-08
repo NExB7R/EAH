@@ -48,6 +48,7 @@ export default function Logo({
         aria-hidden
         width={489}
         height={264}
+        sizes="(max-width: 640px) 140px, (max-width: 1024px) 160px, 180px"
         priority
         fetchPriority="high"
         decoding="async"
