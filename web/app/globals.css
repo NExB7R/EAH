@@ -37,8 +37,8 @@
   --text-disabled: #4a4555;
 
   /* Fonts */
-  --font-body: 'Cairo Variable', 'Cairo', system-ui, -apple-system, sans-serif;
-  --font-display: 'Tajawal', 'Cairo Variable', system-ui, -apple-system, sans-serif;
+  --font-body: var(--font-cairo), 'Cairo', system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-tajawal), var(--font-cairo), system-ui, -apple-system, sans-serif;
 
   /* Spacing */
   --space-1: 4px;

@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Suspense } from 'react'
-import '@fontsource-variable/cairo'
-import '@fontsource/great-vibes'
-import '@fontsource/tajawal/700.css'
-import '@fontsource/tajawal/800.css'
-import '@fontsource/tajawal/900.css'
+import { tajawal, cairo, greatVibes } from './_fonts'
 import FloatingCapsule from '@/components/floating-capsule'
 import InstallPrompt from '@/components/install-prompt'
 import ReviewReminder from '@/components/review-reminder'
@@ -60,7 +56,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
+    <html
+      lang="ar"
+      dir="rtl"
+      suppressHydrationWarning
+      className={`${tajawal.variable} ${cairo.variable} ${greatVibes.variable}`}
+    >
       <body>
         {SUPABASE_URL && (
           <>
