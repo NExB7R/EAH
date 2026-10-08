@@ -100,12 +100,12 @@ export default function SiteFooter() {
         <nav className={styles.columns} aria-label="روابط الفوتر">
           {COLUMNS.map(({ key, title, Icon, links }) => (
             <div key={key} className={styles.col}>
-              <h4 className={styles.colTitle}>
+              <h2 className={styles.colTitle}>
                 <span className={styles.colIcon}>
                   <Icon size={14} />
                 </span>
                 <span>{title}</span>
-              </h4>
+              </h2>
               <ul className={styles.colList}>
                 {links.map(({ href, label, Icon: LIcon }) => (
                   <li key={href}>

@@ -134,7 +134,7 @@ export default function FloatingCapsule({ session }: Props) {
                 </Link>
               </>
             ) : (
-              <Link href="/auth" className={styles.loginBtn}>
+              <Link href="/auth" className={styles.loginBtn} aria-label="ادخل بسرعة">
                 <LockIcon size={16} />
                 <span>ادخل بسرعة</span>
               </Link>

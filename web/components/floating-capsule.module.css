@@ -110,6 +110,14 @@
   transform: translateY(0);
 }
 
+/* Touch target expansion (a11y: ≥44px) */
+.iconBtn::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+}
+
 /* مميز — القائمة */
 .iconPrimary {
   color: var(--purple-neon);
@@ -202,6 +210,7 @@
 
 /* ─── Login Button ─── */
 .loginBtn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -222,6 +231,14 @@
   background: linear-gradient(135deg, rgba(157, 78, 221, 0.35), rgba(168, 85, 247, 0.25));
   box-shadow: var(--glow-purple-sm);
   transform: translateY(-1px);
+}
+
+/* Touch target expansion (a11y: ≥44px) */
+.loginBtn::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
 }
 
 /* ─── Avatar Link ─── */
@@ -266,6 +283,12 @@
   .right,
   .left {
     gap: 2px;
+  }
+
+  /* Touch target expansion أصغر حجم — inset أكبر */
+  .iconBtn::before,
+  .loginBtn::before {
+    inset: -6px;
   }
 }
 
