@@ -9,7 +9,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, it, expect } from 'vitest'
 
-const MIN_TOUCH_TARGET = 44
+const MIN_TOUCH_TARGET = 48
 const CSS_PATH = join(__dirname, '..', 'components', 'floating-capsule.module.css')
 
 function pxValue(body: string, prop: string): number | null {
@@ -59,6 +59,6 @@ describe('a11y — touch targets (floating-capsule)', () => {
     const body = mobileBlock?.[1] ?? ''
     const gapMatch = body.match(/\.right[\s\S]*?\.left[\s\S]*?gap:\s*([\d.]+)px/)
     const gap = gapMatch ? parseFloat(gapMatch[1] ?? '0') : null
-    expect(gap, 'mobile .right/.left gap').toBeGreaterThanOrEqual(8)
+    expect(gap, 'mobile .right/.left gap').toBeGreaterThanOrEqual(10)
   })
 })

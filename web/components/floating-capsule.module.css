@@ -86,9 +86,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* ⚠️ a11y: لا تقل عن 44px — Lighthouse touch targets (WCAG 2.2 AAA) */
-  width: 44px;
-  height: 44px;
+  /* ⚠️ a11y: Lighthouse tap-targets يطلب 48×48 (أعلى من WCAG 2.5.5 AAA) */
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-full);
   color: var(--text-secondary);
   background: transparent;
@@ -206,9 +206,9 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  /* ⚠️ a11y: لا تقل عن 44px — Lighthouse touch targets (WCAG 2.2 AAA) */
-  min-height: 44px;
-  padding: 0 12px;
+  /* ⚠️ a11y: Lighthouse tap-targets يطلب 48×48 */
+  min-height: 48px;
+  padding: 0 14px;
   border-radius: var(--radius-full);
   background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(168, 85, 247, 0.12));
   border: 1px solid rgba(168, 85, 247, 0.4);
@@ -251,12 +251,12 @@
   }
 
   .iconBtn {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
   }
 
   .loginBtn {
-    min-height: 44px;
+    min-height: 48px;
     padding: 0 14px;
     font-size: 0.7rem;
   }
@@ -267,8 +267,8 @@
 
   .right,
   .left {
-    /* a11y: WCAG 2.2 target size spacing ≥ 8px */
-    gap: 8px;
+    /* a11y: spacing ≥ 8px (Lighthouse tap-targets) */
+    gap: 10px;
   }
 }
 
