@@ -1155,3 +1155,40 @@ Admin list:
 - Mobile LCP 2.9s → < 2.5s
 - إضافة أنشطة حقيقية
 - Rotate المفاتيح المكشوفة (11)
+
+
+---
+
+## 2026-10-08 — Session 22 (تكملة): A11y 100%
+
+### اللي اتحقق (5 commit إضافية)
+
+**Root Cause لـ tap-targets:**
+- `installPulse` animation (infinite box-shadow) — كان بيصغّر الزر بصرياً
+- الحل: تعطيل الأنيميشن + `flex-shrink: 0` + min-width/height
+
+**Commits:**
+- `072e740` fix(a11y): tap-targets 48x48 + gap 10px
+- `951e126` fix(a11y): prevent flex-shrink on header buttons
+- `36081e7` fix(a11y): disable installPulse animation
+- `37951d6` perf(logo): add sizes to crown image
+- `33696d0` fix(a11y): WCAG 2.2 target spacing — gap 2px → 8px
+
+### النتيجة النهائية
+
+| المقياس | قبل | بعد |
+|---------|-----|-----|
+| **Mobile A11y** | 87 | **100** |
+| **Desktop A11y** | 95 | **100** |
+| Mobile Perf | 84 | **95** |
+| Mobile LCP | Error | **2.9s** |
+| Desktop TBT | 30ms | **0ms** |
+
+### الحمايات الجديدة
+- `a11y-touch-targets.test.ts` (4 tests)
+- `logo-image-sizes.test.ts` (1 test)
+
+### الدروس
+- LESSONS §29: installPulse animation
+- LESSONS §30: flex-shrink on header buttons
+- **القاعدة:** أي زر في هيدر → 48×48 + flex-shrink: 0 + مفيش animation مستمر

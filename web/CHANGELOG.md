@@ -16,6 +16,15 @@
 
 ## [Unreleased]
 
+### fix — 2026-10-08 (نهائي)
+- **A11y Mobile: 87 → 100** 🎯
+- **A11y Desktop: 95 → 100**
+- Turnstile Production شغال
+- Fonts: next/font/local (5 CSS → 1)
+- Crown image sizes (توفير 14.5 KB)
+- **Tap-targets:** 48×48 + flex-shrink: 0 + إلغاء installPulse
+- **Test guards:** a11y-touch-targets + logo-image-sizes
+
 ### fix — 2026-10-08
 - **CSP + Turnstile**: شيل `'strict-dynamic'` + تمرير nonce — Production شغال
 - **Fonts**: `@fontsource` → `next/font/local` (5 CSS → 1) + preload

@@ -942,3 +942,32 @@ TO anon, authenticated;
 - **القاعدة:** أي عنصر تفاعلي جديد → اختبار ≥ 44px
 
 **المراجع:** WCAG 2.2 AAA (2.5.5) · PageSpeed "Touch targets"
+
+
+---
+
+## 30. flex-shrink + animation على header buttons (2026-10-08)
+
+**الغلطة:** `installPulse` animation (infinite) على زر التثبيت.
+
+**الأثر:**
+- Lighthouse بيصوّر الزر أثناء الحركة → يبان صغير
+- Tap-targets audit يفشل حتى مع CSS 48×48
+- `non-composited animation` warning
+
+**الحل:**
+1. تعطيل `installPulse` animation
+2. `flex-shrink: 0` على كل الأزرار
+3. `min-width: 48px; min-height: 48px`
+4. gap ≥ 10px بين الأزرار
+
+**الحماية:** `lib/a11y-touch-targets.test.ts` (4 tests)
+
+**القاعدة الجديدة:**
+> أي زر تفاعلي في هيدر ثابت → 48×48 + flex-shrink: 0 + مفيش animation مستمر
+> أي animation مستمر → يمنع Lighthouse من قياس الحجم بدقة
+
+**المراجع:**
+- Lighthouse tap-targets (48×48)
+- WCAG 2.5.5 AAA (44×44)
+- WCAG 2.2 spacing (8px)
