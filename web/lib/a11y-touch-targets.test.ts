@@ -61,4 +61,18 @@ describe('a11y — touch targets (floating-capsule)', () => {
     const gap = gapMatch ? parseFloat(gapMatch[1] ?? '0') : null
     expect(gap, 'mobile .right/.left gap').toBeGreaterThanOrEqual(10)
   })
+
+  it('.iconBtn و .loginBtn عندهم flex-shrink: 0 (منع تصغير flex parent)', () => {
+    const iconDefs = blocks(css, '\\.iconBtn')
+    const loginDefs = blocks(css, '\\.loginBtn')
+    const hasShrinkZero = (body: string) => /flex-shrink:\s*0\b/.test(body)
+    expect(
+      iconDefs.some(hasShrinkZero),
+      '.iconBtn محتاج flex-shrink: 0 في تعريف واحد على الأقل',
+    ).toBe(true)
+    expect(
+      loginDefs.some(hasShrinkZero),
+      '.loginBtn محتاج flex-shrink: 0 في تعريف واحد على الأقل',
+    ).toBe(true)
+  })
 })
