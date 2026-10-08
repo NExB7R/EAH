@@ -1,75 +1,41 @@
 # EAH — NEXT_SESSION.md
 
-> قائمة المهام المتبقية. **مصدر واحد للحقيقة.**
-> آخر تحديث: 2026-10-06
+> قائمة المهام المتبقية. مصدر واحد للحقيقة.
+> آخر تحديث: 2026-10-08 (Session 23)
 
 ---
 
-## ✅ تم (Session 12 — 2026-10-05/06)
+## حرجة — قبل الإطلاق
 
-- Feature Announcements (جدول + banner + admin UI + flag)
-- Ads System (merchant request + admin approve + display)
-- /suggest ديناميكي (بناءً على تاريخ المستخدم)
-- Branches CRUD للتاجر (add/edit/delete/setPrimary)
-- Live Stats Bar (8 عدادات فوق الفوتر)
-- Menu Slider + Screenshot في OrderModal
-- Multi-Provider AI (Groq → Gemini → OpenRouter → Cerebras)
-- 4 AI Tools جديدة (offers/trending/categories/by-area)
-- Search v2 (Word-level + Fuzzy + Intent + Secondary sort)
-- Admin Panel (dashboard + businesses + users + moderation)
-- 4 Migrations موثّقة
+- [ ] اختبار /account/edit كامل (كأدمن) — بعد c4f0975
+- [ ] تأكيد /admin/users — permission denied اختفت
+- [ ] Rotate 11 مفتاح مكشوف — راجع SECRETS_PLAN.md
+- [ ] Turnstile Secret — rotate فوري (اتكشف في شات)
+- [ ] إضافة أنشطة حقيقية — الأولوية القصوى للقيمة
+- [ ] اختبار ميداني — موبايل حقيقي
 
----
+## قريب — تحسينات UI/UX
 
-## 🔴 حرجة — قبل الإطلاق
+- [ ] /account redesign — يوتيوب-style (زي edit)
+- [ ] Menu Drawer — فصل "الإدارة" عن "الحساب" للأدمن
+- [ ] /admin/businesses/new — redesign احترافي (زر ذهبي مش أخضر)
+- [ ] /admin/users — redesign (كروت بدل صفوف)
 
-- [ ] **Turnstile حقيقي** — حالياً Test Keys في Production
-  - السبب: `eah-sq.vercel.app` مش مسجل في Cloudflare Turnstile
-  - الحل: Cloudflare Dashboard → Turnstile → Widget → Add Hostname: `eah-sq.vercel.app` + `localhost`
-  - بعدها: نرجّع مفاتيح الإنتاج على Vercel (production + preview + development)
-  - المرجع: `Desktop/X.txt` — مفاتيح Turnstile الأصلية
-  - الأولوية: عالية — Test Keys = صفر حماية من البوتات
+## متوسط
 
-## 🔴 فوري — اختبار بعد تصليح RLS
+- [ ] /merchant للعميل — يشتغل صح بعد roles fix
+- [ ] اختبار roles matrix كامل — كل مسار
+- [ ] Business Insights AI — تقارير ذكية
 
-- [ ] اختبار `/` `/account` `/merchant/subscription` `/admin/businesses` `/find` + صفحة نشاط
-- [ ] التأكد من عمل find-by-phone بعد إغلاق profiles للـ public
-- [ ] DevTools → Console: صفر أخطاء في الصفحات الأساسية
+## مؤجل
 
-## 🔴 حرجة — قبل الاختبار الميداني
-
-- [ ] مسح البيانات الوهمية (53 نشاط + حسابات تجريبية)
-- [ ] إضافة أنشطة حقيقية في كل المجالات
-- [ ] صور حقيقية (بدل تجريبية)
-- [ ] تجربة حقيقية للطلب (إنشاء → تسليم)
-- [ ] حسابات حقيقية (تاجر + عميل + اختبار الأدوار)
-- [ ] اختبار الأمان (RLS + محاولات اختراق + تسريب)
-- [ ] اختبار السرعة (كل صفحة + كل API)
-- [ ] اختبار الترتيب (بحث + ترند + ترشيحات)
-- [ ] اختبار الجوال (موبايل حقيقي + شبكة مختلفة)
-
----
-
-## 🟠 قريب (بعد الأساس)
-
-- [x] Role-Based Polish ✓ (Session 14)
-- [ ] Telegram Bot — Admin / Merchant / Client
-- [ ] Admin UI للبوت (/admin/telegram)
-- [ ] Voice Search ذكي (Whisper + فهم عامية)
-- [ ] Business Insights AI (تقارير ذكية للتاجر)
-- [ ] Smart Notifications
-- [ ] Reputation Score 2.0
-- [ ] Growth & Marketing ذكي
-
----
-
-## 🟡 متوسط
-
+- [ ] Telegram Bot
 - [ ] Offline First 2027
-- [ ] Smart Pricing
+- [ ] تطبيق Native
 
 ---
 
 ## المراجع
-
-- VISION.md · CODE_REVIEW_LOG.md · USER_PREFERENCES.md · FUTURE.md
+- ROLES_MATRIX.md — مصفوفة الأدوار
+- PROGRESS.md — حالة الملفات
+- SESSION_LOG.md — آخر جلسة
