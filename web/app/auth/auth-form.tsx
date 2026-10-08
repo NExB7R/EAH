@@ -21,7 +21,7 @@ import { signupAction, loginAction, type AuthResult } from './actions'
 import styles from './auth.module.css'
 
 // Test Keys من Cloudflare — تبدأ بـ 1x000
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ''
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAFKj0MmPWv_YfMRl'
 const IS_TEST_KEY = TURNSTILE_SITE_KEY.startsWith('1x000')
 
 type Tab = 'login' | 'signup'
