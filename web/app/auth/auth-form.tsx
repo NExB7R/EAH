@@ -35,7 +35,7 @@ async function formAction(_prev: FormState, formData: FormData): Promise<AuthRes
   return loginAction(formData)
 }
 
-export default function AuthForm() {
+export default function AuthForm({ nonce }: { nonce: string }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const refCode = searchParams.get('ref') ?? ''
@@ -348,6 +348,7 @@ export default function AuthForm() {
               <Turnstile
                 key={turnstileKey}
                 siteKey={TURNSTILE_SITE_KEY}
+                scriptOptions={{ nonce }}
                 onSuccess={(token) => setTurnstileToken(token)}
                 onError={() => setTurnstileToken(null)}
                 onExpire={() => setTurnstileToken(null)}
