@@ -9,7 +9,7 @@
 
 ---
 
-## Routes (91)
+## Routes (92)
 
 | Route | File |
 |-------|------|
@@ -64,6 +64,7 @@
 | `/api/push/unsubscribe` | `app/api/push/unsubscribe/route.ts` |
 | `/api/track-action` | `app/api/track-action/route.ts` |
 | `/api/track-contact` | `app/api/track-contact/route.ts` |
+| `/api/upload/avatar` | `app/api/upload/avatar/route.ts` |
 | `/api/upload/comment-image` | `app/api/upload/comment-image/route.ts` |
 | `/auth` | `app/auth/page.tsx` |
 | `/auth/logout` | `app/auth/logout/route.ts` |
