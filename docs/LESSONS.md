@@ -923,3 +923,22 @@ TO anon, authenticated;
 ---
 
 آخر تحديث: 2026-10-01
+
+
+---
+
+## 29. Touch targets — Lighthouse regression (2026-10-08)
+
+**الغلطة:** أزرار الهيدر (`iconBtn`, `loginBtn`) كانت 36px/32px — أقل من 44px.
+
+**الأثر:** Accessibility 87 على Mobile.
+
+**محاولة فاشلة:** `::before { inset: -4px }` — Lighthouse ما بيعتبرهاش.
+
+**الحل:** تكبير الأزرار نفسها لـ 44px + شيل `::before`.
+
+**الحماية الدائمة:**
+- `lib/a11y-touch-targets.test.ts` — يفشل لو أي زر < 44px
+- **القاعدة:** أي عنصر تفاعلي جديد → اختبار ≥ 44px
+
+**المراجع:** WCAG 2.2 AAA (2.5.5) · PageSpeed "Touch targets"

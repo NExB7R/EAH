@@ -49,3 +49,21 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 ---
 
 آخر تحديث: 2026-10-06
+
+
+---
+
+## ✅ Session 22 (2026-10-08) — CSP + Fonts + A11y
+
+| # | المشكلة | الحل |
+|---|---------|------|
+| 1 | Turnstile widget مش بيظهر (CSP) | شيل `'strict-dynamic'` |
+| 2 | Script بدون nonce | تمرير nonce عبر props |
+| 3 | Site Key مش وصل للـ bundle | hardcode fallback |
+| 4 | 5 CSS fonts blocking | `next/font/local` + preload |
+| 5 | Contrast — footer version | `--text-secondary` |
+| 6 | Heading order — h4 بدون h2 | h4 → h2 |
+| 7 | Link بدون اسم — loginBtn | `aria-label` |
+| 8 | Touch targets < 44px | تكبير + test guard |
+
+**الأرقام:** Mobile A11y 87→100 · Desktop A11y 95→100 · Agent 1/2→2/2 · Desktop TBT 30ms→0ms

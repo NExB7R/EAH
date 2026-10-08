@@ -1103,3 +1103,55 @@ Admin list:
 - النتيجة: التسجيل شغال ✅
 - **مؤجل:** تسجيل الـ domain في Cloudflare + رجوع المفاتيح الحقيقية
 - المرجع: `Desktop/X.txt` (المفاتيح الأصلية)
+
+
+---
+
+## 2026-10-08 — Session 22: CSP + Fonts + A11y
+
+### اللي اتحقق (7 commits)
+
+**Turnstile Production (من Test Keys):**
+- CSP: شيلنا `'strict-dynamic'` من proxy.ts
+- auth: تمرير nonce عبر props (`x-nonce` من headers)
+- auth: hardcode fallback للـ Site Key
+- النتيجة: Turnstile Production شغال
+
+**Fonts Migration:**
+- `@fontsource` → `next/font/local`
+- 5 استيرادات CSS → 1 ملف `app/_fonts.ts`
+- preload للتاجوال + Cairo
+- التوفير: Desktop TBT 30ms → 0ms · Blocking 300ms → 140ms
+
+**A11y Fixes (87 → 96 → 100):**
+- contrast: `--text-muted` + opacity 0.6 → `--text-secondary`
+- heading order: footer `<h4>` → `<h2>`
+- aria-label لزر الدخول
+- touch targets: `iconBtn` + `loginBtn` → 44px
+
+**Regression Guard:**
+- `lib/a11y-touch-targets.test.ts`
+
+### PageSpeed Before/After
+
+| المقياس | قبل | بعد |
+|---------|-----|-----|
+| Mobile Performance | 95 | 95 |
+| Desktop Performance | 100 | 100 |
+| Mobile A11y | 87 | 100 |
+| Desktop A11y | 95 | 100 |
+| AI Agent | 1/2 | 2/2 |
+| Desktop TBT | 30ms | 0ms |
+| Mobile LCP | 3.0s | 2.9-3.0s |
+
+### Commits
+- `0c174c3` fix(csp): remove strict-dynamic
+- `c4a365d` fix(auth): pass CSP nonce
+- `c8ec03e` perf(fonts): next/font/local
+- `f744662` fix(a11y): contrast + heading + aria
+- `1053d21` fix(a11y): touch targets 44px + guard
+
+### اللي معلق
+- Mobile LCP 2.9s → < 2.5s
+- إضافة أنشطة حقيقية
+- Rotate المفاتيح المكشوفة (11)

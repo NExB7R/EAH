@@ -16,6 +16,14 @@
 
 ## [Unreleased]
 
+### fix — 2026-10-08
+- **CSP + Turnstile**: شيل `'strict-dynamic'` + تمرير nonce — Production شغال
+- **Fonts**: `@fontsource` → `next/font/local` (5 CSS → 1) + preload
+- **A11y**: contrast + heading order + aria-label + touch targets 44px
+- **Test guard**: `a11y-touch-targets.test.ts`
+- **PageSpeed**: A11y Mobile 87→100 · Desktop 95→100 · Agent 1/2→2/2
+
+
 ### Trust System 2.0 (2026-10-07)
 - 5 مستويات شعبية: لسه بادئ → ماشي حاله → زي الفل → حريف → الأسطورة
 - Log scale + Legend Points
