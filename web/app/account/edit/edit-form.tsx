@@ -1,81 +1,350 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import Avatar from '@/components/avatar'
+import { updateProfile, updatePrivacy } from './actions'
 import styles from './edit.module.css'
+
+// ═══════════════════════════════════════════════════════════
+// EAH — Edit Profile Form (Full Rewrite 2026-10-08)
+// ═══════════════════════════════════════════════════════════
+
+type Mode = 'real' | 'alias' | 'both' | 'anonymous'
 
 type Props = {
   initial: {
     displayName: string
+    alias: string | null
     gender: string | null
     bio: string | null
+    avatarUrl: string | null
+    displayNameMode: Mode
+    hideAvatar: boolean
+    hideFavorites: boolean
+    hideFollowing: boolean
+    role: 'customer' | 'merchant' | 'admin' | 'super_admin'
+    phoneVerified: boolean
   }
 }
 
+const MODES: { key: Mode; label: string; desc: string }[] = [
+  { key: 'real', label: 'اسمي الحقيقي', desc: 'يظهر اسمك في كل مكان' },
+  { key: 'alias', label: 'كنية بس', desc: 'يظهر بدل اسمك الحقيقي' },
+  { key: 'both', label: 'الاتنين', desc: 'الاسم (الكنية)' },
+  { key: 'anonymous', label: 'مجهول', desc: 'بدون اسم — "مستخدم EAH"' },
+]
+
 export default function EditProfileForm({ initial }: Props) {
+  const router = useRouter()
+  const [pendingProfile, startProfile] = useTransition()
+  const [pendingPrivacy, startPrivacy] = useTransition()
+
   const [displayName, setDisplayName] = useState(initial.displayName)
+  const [alias, setAlias] = useState(initial.alias ?? '')
   const [gender, setGender] = useState(initial.gender ?? '')
   const [bio, setBio] = useState(initial.bio ?? '')
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
+  const [mode, setMode] = useState<Mode>(initial.displayNameMode)
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const [hideAvatar, setHideAvatar] = useState(initial.hideAvatar)
+  const [hideFavorites, setHideFavorites] = useState(initial.hideFavorites)
+  const [hideFollowing, setHideFollowing] = useState(initial.hideFollowing)
+
+  const [avatarUrl, setAvatarUrl] = useState(initial.avatarUrl)
+  const [uploading, setUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+
+  const [profileMsg, setProfileMsg] = useState<string | null>(null)
+  const [privacyMsg, setPrivacyMsg] = useState<string | null>(null)
+
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  // ─── رفع الصورة ───
+  const handleAvatarPick = () => fileRef.current?.click()
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadError(null)
+    setUploading(true)
+
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+
+      const res = await fetch('/api/upload/avatar', { method: 'POST', body: fd })
+      const data = await res.json()
+
+      if (!res.ok) {
+        setUploadError(data.error ?? 'فشل رفع الصورة')
+      } else {
+        setAvatarUrl(data.url)
+        router.refresh()
+      }
+    } catch {
+      setUploadError('فشل الاتصال')
+    } finally {
+      setUploading(false)
+      if (fileRef.current) fileRef.current.value = ''
+    }
+  }
+
+  // ─── حفظ البيانات ───
+  const onProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setSaving(true)
-    await new Promise((r) => setTimeout(r, 800))
-    setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    setProfileMsg(null)
+
+    const fd = new FormData(e.currentTarget)
+    startProfile(async () => {
+      const res = await updateProfile(fd)
+      if (res.ok) {
+        setProfileMsg('✓ اتحفظ')
+        router.refresh()
+        setTimeout(() => setProfileMsg(null), 2500)
+      } else {
+        setProfileMsg(res.error)
+      }
+    })
+  }
+
+  // ─── حفظ الخصوصية ───
+  const onPrivacySubmit = () => {
+    setPrivacyMsg(null)
+
+    const fd = new FormData()
+    fd.append('hide_avatar', hideAvatar ? 'on' : '')
+    fd.append('hide_favorites', hideFavorites ? 'on' : '')
+    fd.append('hide_following', hideFollowing ? 'on' : '')
+
+    startPrivacy(async () => {
+      const res = await updatePrivacy(fd)
+      if (res.ok) {
+        setPrivacyMsg('✓ اتحفظ')
+        setTimeout(() => setPrivacyMsg(null), 2500)
+      } else {
+        setPrivacyMsg(res.error)
+      }
+    })
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
-      <label className={styles.field}>
-        <span className={styles.label}>الاسم</span>
-        <input
-          className={styles.input}
-          value={displayName}
-          onChange={(e) => setDisplayName(e.target.value)}
-          maxLength={50}
-          required
-        />
-      </label>
+    <div className={styles.wrap}>
+      {/* ═══ Card 1: الصورة ═══ */}
+      <section className={styles.card}>
+        <header className={styles.cardHeader}>
+          <h3 className={styles.cardTitle}>الصورة الشخصية</h3>
+          <p className={styles.cardDesc}>اضغط على الصورة لتغييرها — JPG أو PNG · حتى 3MB</p>
+        </header>
 
-      <label className={styles.field}>
-        <span className={styles.label}>النوع</span>
-        <div className={styles.radioRow}>
+        <div className={styles.avatarRow}>
           <button
             type="button"
-            onClick={() => setGender('male')}
-            className={`${styles.radio} ${gender === 'male' ? styles.radioActive : ''}`}
+            className={styles.avatarBtn}
+            onClick={handleAvatarPick}
+            disabled={uploading}
+            aria-label="تغيير الصورة"
           >
-            ذكر
+            <Avatar
+              displayName={displayName}
+              avatarUrl={avatarUrl}
+              role={initial.role}
+              phoneVerified={initial.phoneVerified}
+              size="lg"
+            />
+            <span className={styles.avatarOverlay}>{uploading ? '...' : 'تغيير'}</span>
           </button>
-          <button
-            type="button"
-            onClick={() => setGender('female')}
-            className={`${styles.radio} ${gender === 'female' ? styles.radioActive : ''}`}
-          >
-            أنثى
-          </button>
+
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            className={styles.hiddenInput}
+            aria-hidden
+            tabIndex={-1}
+          />
+
+          <div className={styles.avatarInfo}>
+            <div className={styles.avatarName}>{displayName}</div>
+            <div className={styles.avatarHint}>{avatarUrl ? 'في صورة حاليًا' : 'مفيش صورة'}</div>
+            {uploadError && <div className={styles.errorMsg}>{uploadError}</div>}
+          </div>
         </div>
-      </label>
+      </section>
 
-      <label className={styles.field}>
-        <span className={styles.label}>نبذة</span>
-        <textarea
-          className={styles.textarea}
-          value={bio}
-          onChange={(e) => setBio(e.target.value)}
-          maxLength={200}
-          rows={4}
-          placeholder="اكتب حاجة عنك..."
-        />
-        <span className={styles.counter}>{bio.length} / 200</span>
-      </label>
+      {/* ═══ Card 2: الهوية ═══ */}
+      <form className={styles.card} onSubmit={onProfileSubmit}>
+        <header className={styles.cardHeader}>
+          <h3 className={styles.cardTitle}>البيانات الأساسية</h3>
+          <p className={styles.cardDesc}>الاسم والكنية والنوع والنبذة</p>
+        </header>
 
-      <button type="submit" className={styles.submit} disabled={saving}>
-        {saving ? 'بيحفظ...' : saved ? '✓ اتحفظ' : 'حفظ التغييرات'}
-      </button>
-    </form>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="display_name">
+            الاسم
+          </label>
+          <input
+            id="display_name"
+            name="display_name"
+            className={styles.input}
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            maxLength={50}
+            required
+            placeholder="اسمك"
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="alias">
+            الكنية <span className={styles.optional}>(اختياري)</span>
+          </label>
+          <input
+            id="alias"
+            name="alias"
+            className={styles.input}
+            value={alias}
+            onChange={(e) => setAlias(e.target.value)}
+            maxLength={30}
+            placeholder="مثلاً: أبو حمزة"
+          />
+        </div>
+
+        <div className={styles.field}>
+          <span className={styles.label}>النوع</span>
+          <input type="hidden" name="gender" value={gender} />
+          <div className={styles.radioRow}>
+            <button
+              type="button"
+              onClick={() => setGender('male')}
+              className={`${styles.radio} ${gender === 'male' ? styles.radioActive : ''}`}
+            >
+              ذكر
+            </button>
+            <button
+              type="button"
+              onClick={() => setGender('female')}
+              className={`${styles.radio} ${gender === 'female' ? styles.radioActive : ''}`}
+            >
+              أنثى
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="bio">
+            نبذة
+          </label>
+          <textarea
+            id="bio"
+            name="bio"
+            className={styles.textarea}
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            maxLength={200}
+            rows={4}
+            placeholder="اكتب حاجة عنك..."
+          />
+          <span className={styles.counter}>{bio.length} / 200</span>
+        </div>
+
+        <div className={styles.field}>
+          <span className={styles.label}>وضع الظهور</span>
+          <input type="hidden" name="display_name_mode" value={mode} />
+          <div className={styles.modesGrid}>
+            {MODES.map((m) => (
+              <button
+                key={m.key}
+                type="button"
+                onClick={() => setMode(m.key)}
+                className={`${styles.modeCard} ${mode === m.key ? styles.modeCardActive : ''}`}
+              >
+                <span className={styles.modeLabel}>{m.label}</span>
+                <span className={styles.modeDesc}>{m.desc}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className={styles.actions}>
+          <button type="submit" className={styles.submit} disabled={pendingProfile}>
+            {pendingProfile ? 'بيحفظ...' : 'حفظ البيانات'}
+          </button>
+          {profileMsg && <span className={styles.msg}>{profileMsg}</span>}
+        </div>
+      </form>
+
+      {/* ═══ Card 3: الخصوصية ═══ */}
+      <section className={styles.card}>
+        <header className={styles.cardHeader}>
+          <h3 className={styles.cardTitle}>الخصوصية</h3>
+          <p className={styles.cardDesc}>تحكم في اللي يظهر للآخرين</p>
+        </header>
+
+        <div className={styles.toggleList}>
+          <ToggleRow
+            label="إخفاء الصورة الشخصية"
+            desc="مش هتظهر لغيرك"
+            checked={hideAvatar}
+            onChange={setHideAvatar}
+          />
+          <ToggleRow
+            label="إخفاء المفضلات"
+            desc="قائمة المفضلات مش هتظهر"
+            checked={hideFavorites}
+            onChange={setHideFavorites}
+          />
+          <ToggleRow
+            label="إخفاء المتابعات"
+            desc="قائمة المتابعات مش هتظهر"
+            checked={hideFollowing}
+            onChange={setHideFollowing}
+          />
+        </div>
+
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={styles.submit}
+            onClick={onPrivacySubmit}
+            disabled={pendingPrivacy}
+          >
+            {pendingPrivacy ? 'بيحفظ...' : 'حفظ الخصوصية'}
+          </button>
+          {privacyMsg && <span className={styles.msg}>{privacyMsg}</span>}
+        </div>
+      </section>
+    </div>
+  )
+}
+
+// ─── Toggle Row ───
+function ToggleRow({
+  label,
+  desc,
+  checked,
+  onChange,
+}: {
+  label: string
+  desc: string
+  checked: boolean
+  onChange: (v: boolean) => void
+}) {
+  return (
+    <button
+      type="button"
+      className={styles.toggleRow}
+      onClick={() => onChange(!checked)}
+      aria-pressed={checked}
+    >
+      <div className={styles.toggleInfo}>
+        <span className={styles.toggleLabel}>{label}</span>
+        <span className={styles.toggleDesc}>{desc}</span>
+      </div>
+      <span className={`${styles.toggleSwitch} ${checked ? styles.toggleSwitchOn : ''}`}>
+        <span className={styles.toggleKnob} />
+      </span>
+    </button>
   )
 }
