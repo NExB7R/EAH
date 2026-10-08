@@ -8,7 +8,7 @@ import Logo from './logo'
 import Avatar from './avatar'
 import MenuDrawer from './menu-drawer'
 import HeaderWeather from './header-weather'
-import { BellIcon, MenuIcon, InfoIcon, InstallIcon, LockIcon, TargetIcon } from './icons'
+import { BellIcon, MenuIcon, InstallIcon, LockIcon } from './icons'
 import type { UserSession } from '@/lib/data/user'
 import styles from './floating-capsule.module.css'
 
