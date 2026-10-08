@@ -105,7 +105,19 @@ export default function FloatingCapsule({ session }: Props) {
                   )}
                 </Link>
 
-                <Link href="/account" className={styles.avatarLink} aria-label="حسابي">
+                <Link
+                  href={
+                    session.role === 'admin' || session.role === 'super_admin'
+                      ? '/admin'
+                      : '/account'
+                  }
+                  className={styles.avatarLink}
+                  aria-label={
+                    session.role === 'admin' || session.role === 'super_admin'
+                      ? 'لوحة التحكم'
+                      : 'حسابي'
+                  }
+                >
                   <Avatar
                     displayName={session.displayName}
                     avatarUrl={session.avatarUrl}
