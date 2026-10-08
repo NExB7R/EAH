@@ -16,6 +16,15 @@
 
 ## [Unreleased]
 
+### feat — 2026-10-08 (Session 23)
+- Roles Authority: lib/auth/roles.ts + docs/ROLES_MATRIX.md
+- Admin Redirects: /account, /merchant -> /admin (ما عدا /account/edit)
+- Account Edit: rebuild كامل — رفع صورة + خصوصية + حفظ حقيقي
+- Avatar Upload API: /api/upload/avatar -> Cloudinary
+- Server Actions: updateProfile + updatePrivacy
+- SQL Fix: GRANT (legend_points) + GRANT UPDATE على 8 أعمدة
+
+
 ### fix — 2026-10-08 (نهائي)
 - **A11y Mobile: 87 → 100** 🎯
 - **A11y Desktop: 95 → 100**

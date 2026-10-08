@@ -971,3 +971,46 @@ TO anon, authenticated;
 - Lighthouse tap-targets (48×48)
 - WCAG 2.5.5 AAA (44×44)
 - WCAG 2.2 spacing (8px)
+
+---
+
+## 31. Column-level REVOKE بيكسر الـ query كله (2026-10-08)
+
+**الغلطة:** legend_points كانت ممنوعة على authenticated.
+
+**الأثر:**
+- getUserSession تطلب 14 عمود — Postgres رفض الاستعلام كله
+- profile = null → الأفاتار "م" (fallback)
+- /admin/users يقول permission denied
+
+**الحل:**
+GRANT SELECT (legend_points) ON public.profiles TO authenticated;
+GRANT UPDATE (display_name, gender, bio, alias, display_name_mode, hide_avatar, hide_favorites, hide_following) ON public.profiles TO authenticated;
+
+**القاعدة:**
+أي عمود جديد في profiles → لازم GRANT صريح على authenticated.
+Column-level REVOKE بتكسر الاستعلام كله.
+
+**الفحص الدوري:**
+SELECT column_name FROM information_schema.columns WHERE table_name = 'profiles'
+EXCEPT
+SELECT column_name FROM information_schema.column_privileges WHERE table_name = 'profiles' AND grantee = 'authenticated' AND privilege_type = 'SELECT';
+
+---
+
+## 32. setTimeout كـ fake save (2026-10-08)
+
+**الغلطة:** /account/edit القديم:
+await new Promise((r) => setTimeout(r, 800))
+setSaved(true)
+
+**الأثر:** بيدّي إيحاء بالحفظ — صفر تعديل في DB.
+
+**الحل:** Server Action حقيقي + useTransition + revalidatePath.
+
+**القاعدة:**
+أي زر حفظ → Server Action → DB → revalidate.
+ممنوع setTimeout كـ fake save.
+
+**الفحص:**
+grep -rn "setTimeout" app/ components/ | grep -i "sav|submit|updat"

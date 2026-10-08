@@ -1192,3 +1192,47 @@ Admin list:
 - LESSONS §29: installPulse animation
 - LESSONS §30: flex-shrink on header buttons
 - **القاعدة:** أي زر في هيدر → 48×48 + flex-shrink: 0 + مفيش animation مستمر
+
+---
+
+## 2026-10-08 — Session 23: Roles Fix + Account Edit Rebuild
+
+### اللي اتحقق (4 commits)
+
+**Roles System:**
+- `lib/auth/roles.ts` — `getRoleContext()` + `getRedirectForRole()`
+- `docs/ROLES_MATRIX.md` — مصفوفة الأدوار (97 سطر)
+- `proxy.ts` — إضافة `x-pathname` header
+- `account/layout.tsx` — admin → redirect `/admin`
+- `merchant/layout.tsx` — admin → `/admin`, customer → `/merchant/apply`
+
+**Account Edit Rebuild:**
+- `app/api/upload/avatar/route.ts` — رفع صورة → Cloudinary
+- `app/account/edit/actions.ts` — Server Actions حقيقية
+- `app/account/edit/edit-form.tsx` — إعادة كتابة كاملة (354 سطر)
+- `app/account/edit/edit.module.css` — تصميم يوتيوب-style (408 سطر)
+- `app/account/edit/page.tsx` — يمرر كل الحقول
+- **fix**: setTimeout وهمي كان موجود في الكود القديم — دلوقتي حفظ حقيقي
+
+**SQL Fixes (مطبقة في Supabase):**
+- `GRANT SELECT (legend_points) ON profiles TO authenticated`
+- `GRANT UPDATE (display_name, gender, bio, alias, display_name_mode, hide_avatar, hide_favorites, hide_following) ON profiles TO authenticated`
+
+### Root Cause
+- `legend_points` كانت ممنوعة → `getUserSession` ترجع null → الأفاتار "م" + `/admin/users` permission denied
+- `/account/edit` كان وهم (setTimeout 800ms)
+
+### Commits
+- `88b64ec` feat(roles): central roles authority
+- `3936d4f` fix(roles): allow admin /account/edit
+- `8a73e2e` chore(header): remove unused icons
+- `c4f0975` feat(account): full profile edit + avatar upload
+
+### اللي معلق (أولويات الشات الجديد)
+- اختبار `/account/edit` كامل
+- `/account` تصميم يوتيوب-style
+- Menu Drawer — فصل الأدوار
+- `/admin/users` — تأكيد اختفاء permission denied
+- `/admin/businesses/new` تصميم احترافي
+- إضافة أنشطة حقيقية
+- Rotate 11 مفتاح مكشوف
