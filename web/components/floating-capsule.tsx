@@ -83,24 +83,6 @@ export default function FloatingCapsule({ session }: Props) {
             </button>
 
             <HeaderWeather />
-
-            <Link
-              href="/explore"
-              className={styles.iconBtn}
-              aria-label="اكتشف"
-              data-tooltip="اكتشف"
-            >
-              <TargetIcon size={20} />
-            </Link>
-
-            <Link
-              href="/about"
-              className={styles.iconBtn}
-              aria-label="مين إحنا"
-              data-tooltip="مين إحنا"
-            >
-              <InfoIcon size={20} />
-            </Link>
           </div>
 
           {/* ─── النص: اللوجو ─── */}

@@ -62,6 +62,8 @@ export async function getRoleContext(): Promise<RoleContext> {
 
 export function getRedirectForRole(role: Role, pathname: string): string | null {
   if (role === 'admin') {
+    // استثناء: الأدمن يقدر يعدل بروفايله
+    if (pathname.startsWith('/account/edit')) return null
     if (pathname.startsWith('/account') || pathname.startsWith('/merchant')) {
       return '/admin'
     }
