@@ -181,7 +181,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (72)
+## Lib (73)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -195,6 +195,7 @@
 | `ai/whisper.ts` | transcribeAudio | EAH — Groq Whisper Client |
 | `auth/admin.ts` | requireAdmin | EAH — Admin Authorization |
 | `auth/ip.ts` | getHashedIp | EAH — IP Hashing (privacy-preserving) |
+| `auth/roles.ts` | getRoleContext, getRedirectForRole | EAH — Roles (Central Authority) — 2026-10-08 |
 | `cloudinary.ts` | uploadImage | — |
 | `data/account.ts` | getAccountStats, getFavorites, getFollowing, getOrders, getPointsLog, … | EAH — Account Data Fetchers |
 | `data/admin-business.ts` | getBusinessById, getBusinessOwnerCandidates | EAH — Admin Business Detail (Service Role — bypass RLS) |
