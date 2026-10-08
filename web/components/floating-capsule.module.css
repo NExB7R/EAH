@@ -86,8 +86,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  /* ⚠️ a11y: لا تقل عن 44px — Lighthouse touch targets (WCAG 2.2 AAA) */
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-full);
   color: var(--text-secondary);
   background: transparent;
@@ -108,14 +109,6 @@
 
 .iconBtn:active {
   transform: translateY(0);
-}
-
-/* Touch target expansion (a11y: ≥44px) */
-.iconBtn::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: inherit;
 }
 
 /* مميز — القائمة */
@@ -210,11 +203,11 @@
 
 /* ─── Login Button ─── */
 .loginBtn {
-  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 36px;
+  /* ⚠️ a11y: لا تقل عن 44px — Lighthouse touch targets (WCAG 2.2 AAA) */
+  min-height: 44px;
   padding: 0 12px;
   border-radius: var(--radius-full);
   background: linear-gradient(135deg, rgba(157, 78, 221, 0.2), rgba(168, 85, 247, 0.12));
@@ -231,14 +224,6 @@
   background: linear-gradient(135deg, rgba(157, 78, 221, 0.35), rgba(168, 85, 247, 0.25));
   box-shadow: var(--glow-purple-sm);
   transform: translateY(-1px);
-}
-
-/* Touch target expansion (a11y: ≥44px) */
-.loginBtn::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: inherit;
 }
 
 /* ─── Avatar Link ─── */
@@ -266,13 +251,13 @@
   }
 
   .iconBtn {
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
   }
 
   .loginBtn {
-    height: 32px;
-    padding: 0 10px;
+    min-height: 44px;
+    padding: 0 14px;
     font-size: 0.7rem;
   }
 
@@ -283,12 +268,6 @@
   .right,
   .left {
     gap: 2px;
-  }
-
-  /* Touch target expansion أصغر حجم — inset أكبر */
-  .iconBtn::before,
-  .loginBtn::before {
-    inset: -6px;
   }
 }
 
