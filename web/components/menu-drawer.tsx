@@ -178,7 +178,11 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
         </div>
 
         {session && (
-          <Link href="/account" className={styles.profileSection} onClick={onClose}>
+          <Link
+            href={isAdmin ? '/admin' : '/account'}
+            className={styles.profileSection}
+            onClick={onClose}
+          >
             <Avatar
               displayName={session.displayName}
               avatarUrl={session.avatarUrl}
@@ -195,11 +199,13 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                   </span>
                 )}
               </div>
-              <div className={styles.profileStats}>
-                <span>مصداقية {session.trustScore}</span>
-                <span className={styles.dot}>·</span>
-                <span>{session.trustTier}</span>
-              </div>
+              {!isAdmin && (
+                <div className={styles.profileStats}>
+                  <span>مصداقية {session.trustScore}</span>
+                  <span className={styles.dot}>·</span>
+                  <span>{session.trustTier}</span>
+                </div>
+              )}
             </div>
             <span className={styles.chevron}>
               <ArrowLeftIcon size={18} />
@@ -222,8 +228,8 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             ))}
           </ul>
 
-          {/* Customer — مسجل */}
-          {isLoggedIn && (
+          {/* Customer — مسجل (مش أدمن) */}
+          {isLoggedIn && !isAdmin && (
             <>
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
@@ -268,8 +274,8 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             </>
           )}
 
-          {/* Merchant apply — للمسجل بدون نشاط */}
-          {isLoggedIn && !isMerchant && (
+          {/* Merchant apply — للمسجل بدون نشاط (مش أدمن) */}
+          {isLoggedIn && !isMerchant && !isAdmin && (
             <>
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
