@@ -1,15 +1,22 @@
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 import SecondaryHero from '@/components/secondary-hero'
 import MerchantSidebar from '@/components/merchant-sidebar'
 import { CrownGoldIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness } from '@/lib/data/merchant'
 import { createClient } from '@/lib/supabase/server'
+import { getRoleContext, getRedirectForRole } from '@/lib/auth/roles'
 import styles from './merchant.module.css'
 
 export default async function MerchantLayout({ children }: { children: React.ReactNode }) {
   const session = await getUserSession()
   if (!session) redirect('/auth?next=/merchant')
+
+  const pathname = (await headers()).get('x-pathname') ?? '/merchant'
+  const { role } = await getRoleContext()
+  const redirectTo = getRedirectForRole(role, pathname)
+  if (redirectTo) redirect(redirectTo)
 
   const business = await getMyBusiness(session.userId)
 

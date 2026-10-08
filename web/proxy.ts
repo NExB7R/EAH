@@ -63,6 +63,7 @@ export async function proxy(request: NextRequest) {
   // ─── Request headers نمرر فيها الـ nonce ───
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-nonce', nonce)
+  requestHeaders.set('x-pathname', request.nextUrl.pathname)
 
   // ─── Helper: نبني response مع CSP ───
   const makeResponse = () => {
