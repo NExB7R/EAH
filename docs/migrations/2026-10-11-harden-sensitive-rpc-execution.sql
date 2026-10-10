@@ -72,7 +72,7 @@ returns void
 language plpgsql
 security definer
 set search_path = pg_catalog, public, pg_temp
-as $
+as $$
 declare
   v_streak integer;
 begin
@@ -95,14 +95,14 @@ begin
     perform public.award_trust_badge('user', p_user_id, 'streak_100');
   end if;
 end;
-$;
+$$;
 
 create or replace function public.check_reviewer_badges(p_user_id uuid)
 returns void
 language plpgsql
 security definer
 set search_path = pg_catalog, public, pg_temp
-as $
+as $$
 declare
   v_count integer;
 begin
@@ -129,14 +129,14 @@ begin
     perform public.award_trust_badge('user', p_user_id, 'reviewer_100');
   end if;
 end;
-$;
+$$;
 
 create or replace function public.check_social_badges(p_user_id uuid)
 returns void
 language plpgsql
 security definer
 set search_path = pg_catalog, public, pg_temp
-as $
+as $$
 declare
   v_follows integer;
 begin
@@ -156,7 +156,7 @@ begin
     perform public.award_trust_badge('user', p_user_id, 'follower_10');
   end if;
 end;
-$;
+$$;
 
 -- These SECURITY DEFINER functions are trigger-only, not client RPCs.
 -- PostgreSQL checks EXECUTE when a trigger is created; revoking it here keeps
