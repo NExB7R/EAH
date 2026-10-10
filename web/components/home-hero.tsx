@@ -49,12 +49,12 @@ export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
 
         {/* Search */}
         <HomeSearchForm />
-      </div>
 
-      {/* Chips */}
-      <Suspense fallback={null}>
-        <CategoryChips />
-      </Suspense>
+        {/* Chips */}
+        <Suspense fallback={null}>
+          <CategoryChips />
+        </Suspense>
+      </div>
     </section>
   )
 }
