@@ -9,22 +9,31 @@
   padding: 0 16px;
 }
 
+/* ─── Desktop: يلتف في سطرين ─── */
 .scroller {
   display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
   padding: 8px 4px 16px;
   transition: opacity 180ms var(--ease);
-  /* Desktop: رصّ في النص لو كفى */
-  justify-content: flex-start;
 }
 
-.scroller::-webkit-scrollbar {
-  display: none;
+/* ─── Mobile: scroll أفقي ─── */
+@media (max-width: 768px) {
+  .scroller {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scroller::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .scroller[data-pending='true'] {
