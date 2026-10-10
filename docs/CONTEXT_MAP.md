@@ -206,7 +206,7 @@
 | `data/admin.ts` | getAdminStats, getBusinessesByStatus, getAdminRecent, getFeaturedBusinesses, getAudienceCounts, … | EAH — Admin Data |
 | `data/ads.ts` | getActiveAdsForSlot, getMyAds, getAllAds, getAdSlots | EAH — Ads Data |
 | `data/announcements.ts` | getActiveAnnouncements | EAH — Announcements Data |
-| `data/areas.ts` | AREAS | EAH — Areas (قرى وعزب في نطاق 15 كم من شبين القناطر) |
+| `data/areas.ts` | AREAS, getActiveAreas | EAH — Areas (قرى وعزب في نطاق 15 كم من شبين القناطر) |
 | `data/badges.ts` | getBadgeCatalogWithStatus, runBadgeChecks | EAH — Badges Data |
 | `data/business-detail.ts` | getBusinessDetail, getBusinessReviews, computeReviewStats, getUserReview, getSimilarBusinesses, … | EAH — Business Detail (Full Page Data) |
 | `data/businesses.ts` | isOpenNow, getPublishedBusinesses, getFeaturedBusinesses, getNewBusinesses, getBusinessesByType, … | EAH — Data Fetching Layer |
