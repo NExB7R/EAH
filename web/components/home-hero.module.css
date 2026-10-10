@@ -8,7 +8,8 @@
   align-items: center;
   justify-content: center;
   padding: 100px 16px 48px;
-  padding-top: calc(90px + env(safe-area-inset-top));
+  /* مساحة علوية = ارتفاع الهيدر (~74px) + فراغ جمالي */
+  padding-top: calc(74px + 46px + env(safe-area-inset-top));
   overflow: hidden;
   isolation: isolate;
 }
@@ -16,7 +17,8 @@
 @media (min-width: 1024px) {
   .hero {
     padding: 130px 24px 70px;
-    padding-top: calc(120px + env(safe-area-inset-top));
+    /* Desktop: مساحة أوسع قليلاً */
+    padding-top: calc(74px + 56px + env(safe-area-inset-top));
   }
 }
 
