@@ -9,6 +9,7 @@ import { TargetIcon } from '@/components/icons'
 import { getPublishedBusinesses } from '@/lib/data/businesses'
 import { smartSearch } from '@/lib/search'
 import { parseFilters, applyFilters } from '@/lib/search/filters'
+import { getActiveAreas } from '@/lib/data/areas'
 import styles from './explore.module.css'
 
 export const metadata: Metadata = {
@@ -23,7 +24,9 @@ type SearchParams = {
   type?: string
   area?: string
   open?: string
+  online?: string
   offers?: string
+  new?: string
   rating?: string
   distance?: string
   lat?: string
@@ -75,6 +78,7 @@ export default async function ExplorePage({
 
   // Counts لكل فلتر (من المجموعة الكاملة قبل الفلترة — عشان يعرض "المتاح دلوقتي")
   const allBusinesses = await getPublishedBusinesses()
+  const activeAreas = await getActiveAreas()
   const counts = {
     types: {
       restaurant: allBusinesses.filter((b) => b.business_type === 'restaurant').length,
@@ -108,7 +112,7 @@ export default async function ExplorePage({
         </div>
 
         <Suspense fallback={null}>
-          <ExploreFilters area={filters.area} counts={counts} />
+          <ExploreFilters area={filters.area} counts={counts} activeAreas={activeAreas} />
         </Suspense>
 
         {businesses.length > 0 ? (

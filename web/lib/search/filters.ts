@@ -15,7 +15,9 @@ export type Filters = {
   tiers: TrustTier[]
   area: string | null
   openNow: boolean
+  online: boolean
   hasOffers: boolean
+  isNew: boolean
   minRating: number | null
   maxDistanceMeters: number | null
   userLocation: LatLng | null
@@ -36,7 +38,9 @@ export const DEFAULT_FILTERS: Filters = {
   tiers: [],
   area: null,
   openNow: false,
+  online: false,
   hasOffers: false,
+  isNew: false,
   minRating: null,
   maxDistanceMeters: null,
   userLocation: null,
@@ -72,9 +76,19 @@ export function applyFilters(businesses: Business[], filters: Filters): Business
     result = result.filter((b) => isOpenNow(b.working_hours))
   }
 
+  // 3b) واتساب
+  if (filters.online) {
+    result = result.filter((b) => b.accepts_whatsapp_orders === true)
+  }
+
   // 4) عنده عروض
   if (filters.hasOffers) {
     result = result.filter((b) => (b.offers_count ?? 0) > 0)
+  }
+
+  // 4b) جديد (بدايات)
+  if (filters.isNew) {
+    result = result.filter((b) => b.is_new_project === true)
   }
 
   // 5) أقل تقييم
@@ -171,7 +185,9 @@ export function parseFilters(params: Record<string, string | undefined>): Filter
     tiers,
     area: params.area ?? null,
     openNow: params.open === '1',
+    online: params.online === '1',
     hasOffers: params.offers === '1',
+    isNew: params.new === '1',
     minRating: minRating !== null && Number.isFinite(minRating) ? minRating : null,
     maxDistanceMeters:
       maxDistanceMeters !== null && Number.isFinite(maxDistanceMeters) && maxDistanceMeters > 0

@@ -130,3 +130,44 @@ export const AREAS = [
 // المنطقة الافتراضية
 
 // إحداثيات المناطق (مركز كل منطقة — تقديري)
+
+// ═══════════════════════════════════════════════════════════
+// المناطق النشطة — تتولّد من الأنشطة المنشورة
+// مرتبة بالأكثر أنشطة (بدون تكرار)
+// ═══════════════════════════════════════════════════════════
+
+import { unstable_cache } from 'next/cache'
+import { createPublicClient } from '@/lib/supabase/public'
+
+export type ActiveArea = {
+  area: string
+  count: number
+}
+
+export const getActiveAreas = unstable_cache(
+  async (): Promise<ActiveArea[]> => {
+    const supabase = createPublicClient()
+
+    const { data, error } = await supabase
+      .from('businesses')
+      .select('area')
+      .eq('is_published', true)
+      .not('area', 'is', null)
+
+    if (error || !data) return []
+
+    // تجميع يدوي (Postgres GROUP BY عبر PostgREST مش مدعوم مباشرة)
+    const map = new Map<string, number>()
+    for (const row of data) {
+      const a = (row.area ?? '').trim()
+      if (!a) continue
+      map.set(a, (map.get(a) ?? 0) + 1)
+    }
+
+    return Array.from(map.entries())
+      .map(([area, count]) => ({ area, count }))
+      .sort((a, b) => b.count - a.count || a.area.localeCompare(b.area, 'ar'))
+  },
+  ['active-areas'],
+  { revalidate: 300, tags: ['businesses'] },
+)

@@ -3,7 +3,7 @@
 import { useState, useEffect, useTransition } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useGeo } from '@/lib/contexts/geo-context'
-import { AREAS } from '@/lib/data/areas'
+import type { ActiveArea } from '@/lib/data/areas'
 import {
   TargetIcon,
   LocationIcon,
@@ -66,9 +66,10 @@ type Counts = {
 type Props = {
   area: string | null
   counts?: Counts
+  activeAreas: ActiveArea[]
 }
 
-export default function ExploreFilters({ area, counts }: Props) {
+export default function ExploreFilters({ area, counts, activeAreas }: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -84,7 +85,9 @@ export default function ExploreFilters({ area, counts }: Props) {
   const currentArea = searchParams.get('area')
   const currentTier = searchParams.get('tier')
   const openNow = searchParams.get('open') === '1'
+  const online = searchParams.get('online') === '1'
   const hasOffers = searchParams.get('offers') === '1'
+  const isNew = searchParams.get('new') === '1'
 
   // ─── Autosave user location into URL once geo granted ───
   useEffect(() => {
@@ -127,7 +130,9 @@ export default function ExploreFilters({ area, counts }: Props) {
     (currentRating ? 1 : 0) +
     (currentDistance ? 1 : 0) +
     (openNow ? 1 : 0) +
+    (online ? 1 : 0) +
     (hasOffers ? 1 : 0) +
+    (isNew ? 1 : 0) +
     (area ? 1 : 0)
 
   const hasActive = activeCount > 0
@@ -165,6 +170,22 @@ export default function ExploreFilters({ area, counts }: Props) {
           <span>عروض</span>
         </button>
 
+        <button
+          type="button"
+          className={`${styles.trigger} ${online ? styles.triggerActive : ''}`}
+          onClick={() => toggleBool('online')}
+        >
+          <span>واتساب</span>
+        </button>
+
+        <button
+          type="button"
+          className={`${styles.trigger} ${isNew ? styles.triggerActive : ''}`}
+          onClick={() => toggleBool('new')}
+        >
+          <span>جديد</span>
+        </button>
+
         {geo.status === 'idle' && (
           <button type="button" className={styles.trigger} onClick={() => geo.request()}>
             <LocationIcon size={14} />
@@ -188,11 +209,12 @@ export default function ExploreFilters({ area, counts }: Props) {
               value={currentArea ?? ''}
               onChange={(e) => updateParam('area', e.target.value || null)}
               className={styles.select}
+              disabled={activeAreas.length === 0}
             >
-              <option value="">كل المناطق</option>
-              {AREAS.map((a) => (
+              <option value="">{activeAreas.length === 0 ? 'مفيش مناطق لسه' : 'كل المناطق'}</option>
+              {activeAreas.map(({ area: a, count }) => (
                 <option key={a} value={a}>
-                  {a}
+                  {a} ({count})
                 </option>
               ))}
             </select>
