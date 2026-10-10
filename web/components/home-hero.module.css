@@ -7,18 +7,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 140px 16px 56px;
-  /* مساحة علوية = ارتفاع الهيدر (~74px) + فراغ جمالي (~66px) */
-  padding-top: calc(74px + 66px + env(safe-area-inset-top));
+  padding: 100px 16px 56px;
+  padding-top: calc(100px + env(safe-area-inset-top));
   overflow: hidden;
   isolation: isolate;
 }
 
 @media (min-width: 1024px) {
   .hero {
-    padding: 160px 24px 80px;
-    /* Desktop: مساحة أوسع */
-    padding-top: calc(74px + 86px + env(safe-area-inset-top));
+    padding: 120px 24px 80px;
+    padding-top: calc(120px + env(safe-area-inset-top));
   }
 }
 
