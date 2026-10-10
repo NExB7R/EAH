@@ -18,9 +18,13 @@ export default function CategoryChips() {
   const activeKey = searchParams.get('chip') ?? 'all'
 
   function handleChip(key: string, action: { type: string; value: string }) {
-    const params = new URLSearchParams(searchParams.toString())
+    // Double-tap على نفس الـ chip → Explore
+    if (activeKey === key && action.type === 'filter' && action.value !== 'all') {
+      router.push(`/explore?type=${action.value}`)
+      return
+    }
 
-    // نظّف scroll القديم دايماً
+    const params = new URLSearchParams(searchParams.toString())
     params.delete('scroll')
 
     if (key === 'all') {

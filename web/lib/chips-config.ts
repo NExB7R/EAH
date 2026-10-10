@@ -66,7 +66,7 @@ export const CHIPS: Chip[] = [
   },
   {
     key: 'online',
-    label: 'أونلاين',
+    label: 'واتساب',
     Icon: WhatsAppIcon,
     tone: 'teal',
     action: { type: 'filter', value: 'online' },

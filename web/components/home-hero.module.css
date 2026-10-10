@@ -7,10 +7,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 100px 16px 32px;
-  padding-top: calc(100px + env(safe-area-inset-top));
+  padding: 60px 16px 40px;
+  padding-top: calc(40px + env(safe-area-inset-top));
   overflow: hidden;
   isolation: isolate;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: 100px 24px 60px;
+    padding-top: calc(60px + env(safe-area-inset-top));
+  }
 }
 
 /* Ambient gradient */
