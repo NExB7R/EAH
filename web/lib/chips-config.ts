@@ -1,5 +1,4 @@
 import {
-  LayoutDashboardIcon,
   UtensilsIcon,
   PillIcon,
   BikeIcon,
@@ -29,13 +28,7 @@ export type Chip = {
 }
 
 export const CHIPS: Chip[] = [
-  {
-    key: 'all',
-    label: 'الكل',
-    Icon: LayoutDashboardIcon,
-    tone: 'purple',
-    action: { type: 'filter', value: 'all' },
-  },
+  // ─── الأنواع ───
   {
     key: 'restaurant',
     label: 'مطاعم',
@@ -57,6 +50,7 @@ export const CHIPS: Chip[] = [
     tone: 'purple',
     action: { type: 'filter', value: 'delivery_office' },
   },
+  // ─── الخصائص ───
   {
     key: 'open',
     label: 'مفتوح',
@@ -65,12 +59,13 @@ export const CHIPS: Chip[] = [
     action: { type: 'filter', value: 'open' },
   },
   {
-    key: 'online',
+    key: 'whatsapp',
     label: 'واتساب',
     Icon: WhatsAppIcon,
     tone: 'teal',
     action: { type: 'filter', value: 'online' },
   },
+  // ─── الاكتشاف ───
   {
     key: 'offers',
     label: 'العروض',

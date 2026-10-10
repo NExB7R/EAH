@@ -15,11 +15,11 @@ export default function CategoryChips() {
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
-  const activeKey = searchParams.get('chip') ?? 'all'
+  const activeKey = searchParams.get('chip') ?? ''
 
   function handleChip(key: string, action: { type: string; value: string }) {
     // Double-tap على نفس الـ chip → Explore
-    if (activeKey === key && action.type === 'filter' && action.value !== 'all') {
+    if (activeKey === key && action.type === 'filter') {
       router.push(`/explore?type=${action.value}`)
       return
     }
@@ -27,7 +27,8 @@ export default function CategoryChips() {
     const params = new URLSearchParams(searchParams.toString())
     params.delete('scroll')
 
-    if (key === 'all') {
+    // لو نفس الـ chip مفعّل → الغيه (يرجع للوضع الافتراضي)
+    if (activeKey === key) {
       params.delete('chip')
       params.delete('type')
     } else {

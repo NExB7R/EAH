@@ -7,16 +7,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 16px 40px;
-  padding-top: calc(40px + env(safe-area-inset-top));
+  padding: 100px 16px 48px;
+  padding-top: calc(90px + env(safe-area-inset-top));
   overflow: hidden;
   isolation: isolate;
 }
 
 @media (min-width: 1024px) {
   .hero {
-    padding: 100px 24px 60px;
-    padding-top: calc(60px + env(safe-area-inset-top));
+    padding: 130px 24px 70px;
+    padding-top: calc(120px + env(safe-area-inset-top));
   }
 }
 
