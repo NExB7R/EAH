@@ -5,7 +5,7 @@ import { headers } from 'next/headers'
 // ═══════════════════════════════════════════════════════════
 // EAH — Rate Limiting (Upstash Redis)
 // ═══════════════════════════════════════════════════════════
-// Vercel serverless مفيش shared state → Upstash Redis
+// Vercel serverless has no shared state → Upstash Redis
 // 3 limiters: auth / api / strict
 // ═══════════════════════════════════════════════════════════
 
@@ -35,7 +35,6 @@ export const strictLimiter = new Ratelimit({
   prefix: 'ratelimit:strict',
 })
 
-// ─── Strict: operations حساسة (review / reply / reveal) ───
 export async function getClientIp(): Promise<string> {
   const h = await headers()
   const forwarded = h.get('x-forwarded-for')
@@ -43,13 +42,14 @@ export async function getClientIp(): Promise<string> {
   return h.get('x-real-ip') ?? 'unknown'
 }
 
-// ─── Helper: rate limit check ───
 export type RateLimitResult =
-  { ok: true; remaining: number } | { ok: false; error: string; retryAfter: number }
+  | { ok: true; remaining: number }
+  | { ok: false; error: string; retryAfter: number; unavailable?: true }
 
 export async function checkRateLimit(
   limiter: Ratelimit,
   identifier: string,
+  failClosed = false,
 ): Promise<RateLimitResult> {
   try {
     const { success, remaining, reset } = await limiter.limit(identifier)
@@ -57,7 +57,17 @@ export async function checkRateLimit(
     const retryAfter = Math.max(0, Math.ceil((reset - Date.now()) / 1000))
     return { ok: false, error: 'محاولات كتير — جرب بعد شوية', retryAfter }
   } catch {
-    // لو Upstash واقع → نسمح (fail-open) عشان منعطلش المستخدمين
+    // Sensitive endpoints can fail closed when the shared limiter is unavailable.
+    if (failClosed) {
+      return {
+        ok: false,
+        error: 'خدمة الحماية غير متاحة مؤقتًا — حاول لاحقًا',
+        retryAfter: 30,
+        unavailable: true,
+      }
+    }
+
+    // Preserve the existing availability-first behavior for other endpoints.
     return { ok: true, remaining: 0 }
   }
 }

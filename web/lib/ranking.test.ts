@@ -50,16 +50,16 @@ describe('trendScore', () => {
     expect(trendScore(high)).toBeGreaterThan(trendScore(low))
   })
 
-  it('طلبات أكثر = score أعلى', () => {
-    const few = makeBusiness({ successful_orders: 1 })
-    const many = makeBusiness({ successful_orders: 100 })
-    expect(trendScore(many)).toBeGreaterThan(trendScore(few))
+  it('سرعة النشاط الأعلى = score أعلى', () => {
+    const slower = makeBusiness({ velocity_score: 10 })
+    const faster = makeBusiness({ velocity_score: 50 })
+    expect(trendScore(faster)).toBeGreaterThan(trendScore(slower))
   })
 
-  it('featured يدي دفعة', () => {
-    const normal = makeBusiness({ is_featured: false })
-    const featured = makeBusiness({ is_featured: true })
-    expect(trendScore(featured)).toBeGreaterThan(trendScore(normal))
+  it('تنوع المستخدمين الأعلى = score أعلى', () => {
+    const lowerDiversity = makeBusiness({ diversity_score: 10 })
+    const higherDiversity = makeBusiness({ diversity_score: 50 })
+    expect(trendScore(higherDiversity)).toBeGreaterThan(trendScore(lowerDiversity))
   })
 })
 

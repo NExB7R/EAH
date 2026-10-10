@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { getUserSession } from '@/lib/data/user'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Fraud Data
@@ -115,7 +116,10 @@ export type MultiAccountIp = {
 }
 
 export async function getMultiAccountIps(days = 30): Promise<MultiAccountIp[]> {
-  const supabase = await createClient()
+  const session = await getUserSession()
+  if (!session || (session.role !== 'admin' && session.role !== 'super_admin')) return []
+
+  const supabase = createServiceClient()
   const { data, error } = await supabase.rpc('get_multi_account_ips', { p_days: days })
   if (error) return []
   return (data ?? []) as MultiAccountIp[]

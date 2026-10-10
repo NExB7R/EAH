@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { getHashedIp } from '@/lib/auth/ip'
 import { signupSchema, loginSchema, recoverSchema, toE164 } from '@/lib/validations/auth'
 import { authLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
@@ -110,12 +111,24 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
   const phoneE164 = toE164(phone)
   const fakeEmail = phoneToEmail(phoneE164)
 
-  const supabase = await createClient()
-
-  // ─── تحقق يدوي: الرقم مسجل قبل كده؟ (عبر RPC) ───
-  const { data: isRegistered } = await supabase.rpc('is_phone_registered', {
-    p_phone_e164: phoneE164,
-  })
+  // Phone registration checks must never be callable with the public anon key.
+  // Keep this check server-side and fail closed so a DB lookup failure cannot create
+  // an auth user whose profile insert later fails on the unique phone index.
+  let isRegistered: boolean
+  try {
+    const serviceClient = createServiceClient()
+    const { data, error } = await serviceClient.rpc('is_phone_registered', {
+      p_phone_e164: phoneE164,
+    })
+    if (error) throw error
+    isRegistered = data === true
+  } catch (error) {
+    console.error('[Signup] phone registration check failed:', error)
+    return {
+      ok: false,
+      error: 'خدمة التسجيل غير متاحة مؤقتًا — حاول لاحقًا',
+    }
+  }
 
   if (isRegistered) {
     return {
@@ -124,6 +137,8 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
       field: 'phone',
     }
   }
+
+  const supabase = await createClient()
 
   // ─── IP hash (multi-account detection) ───
   const signupIpHash = await getHashedIp()

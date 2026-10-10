@@ -36,7 +36,35 @@ jobs:
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
 
+      # Always write SARIF locally first, so analysis findings remain inspectable
+      # even if GitHub Code Security is unavailable for this private repository.
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}"
+          output: sarif-results
+          upload: never
+
+      # Alert publishing is best-effort until Code Security is enabled for the repo.
+      # The upload failure must not discard the SARIF file produced above.
+      - name: Publish SARIF to GitHub Code Scanning
+        id: publish-sarif
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: sarif-results
+          category: "/language:${{ matrix.language }}"
+        continue-on-error: true
+
+      - name: Preserve CodeQL SARIF artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeql-sarif-${{ matrix.language }}
+          path: sarif-results/*.sarif
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Warn when GitHub Code Scanning upload is unavailable
+        if: steps.publish-sarif.outcome == 'failure'
+        run: |
+          echo "::warning::CodeQL analysis completed, but GitHub Code Scanning rejected the SARIF upload. The SARIF artifact is preserved for 14 days. See issue #21 to enable Code Security."
