@@ -1,28 +1,13 @@
-import Link from 'next/link'
+import { Suspense } from 'react'
 import Logo from './logo'
 import HomeSearchForm from './home-search-form'
-import {
-  UtensilsIcon,
-  PillIcon,
-  CartIcon,
-  BikeIcon,
-  SparklesIcon,
-  CrownIcon,
-  LocationIcon,
-} from './icons'
+import CategoryChips from './category-chips'
+import { CrownIcon, LocationIcon } from './icons'
 import styles from './home-hero.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Home Hero
 // ═══════════════════════════════════════════════════════════
-
-const CATEGORIES = [
-  { type: 'restaurant', label: 'مطاعم', Icon: UtensilsIcon },
-  { type: 'pharmacy', label: 'صيدليات', Icon: PillIcon },
-  { type: 'supermarket', label: 'ماركت', Icon: CartIcon },
-  { type: 'delivery_office', label: 'توصيل', Icon: BikeIcon },
-  { type: 'misc', label: 'أنشطة أخرى', Icon: SparklesIcon },
-]
 
 type Props = {
   isLoggedIn: boolean
@@ -64,19 +49,12 @@ export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
 
         {/* Search */}
         <HomeSearchForm />
-
-        {/* Categories */}
-        <nav className={styles.categories} aria-label="التصنيفات">
-          {CATEGORIES.map(({ type, label, Icon }) => (
-            <Link key={type} href={`/explore?type=${type}`} className={styles.category}>
-              <span className={styles.categoryIcon} aria-hidden>
-                <Icon size={22} />
-              </span>
-              <span className={styles.categoryLabel}>{label}</span>
-            </Link>
-          ))}
-        </nav>
       </div>
+
+      {/* Chips */}
+      <Suspense fallback={null}>
+        <CategoryChips />
+      </Suspense>
     </section>
   )
 }

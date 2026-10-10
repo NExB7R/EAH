@@ -153,126 +153,10 @@
   letter-spacing: 0.02em;
 }
 
-/* ─── Categories ─── */
-.categories {
-  width: 100%;
-  margin-top: 16px;
-  animation: eahHeroIn 320ms var(--ease-out) 160ms both;
-  /* Mobile: سلايدر أفقي */
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: 16px;
-  padding-bottom: 4px;
-  margin-inline: -16px;
-  padding-inline: 16px;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior-x: contain;
-}
-
-.categories::-webkit-scrollbar {
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .categories {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 10px;
-    overflow: visible;
-    margin-inline: 0;
-    padding-inline: 0;
-    padding-bottom: 0;
-    scroll-snap-type: none;
-  }
-}
-
-.category {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 14px 12px;
-  background: linear-gradient(160deg, rgba(20, 14, 34, 0.85), rgba(10, 7, 20, 0.92));
-  border: 1px solid rgba(168, 85, 247, 0.2);
-  border-radius: var(--radius-lg);
-  color: var(--text-secondary);
-  text-decoration: none;
-  overflow: hidden;
-  transition:
-    border-color var(--motion-fast) var(--ease),
-    transform var(--motion-fast) var(--ease),
-    box-shadow var(--motion-fast) var(--ease);
-  /* Mobile: عرض ثابت للسلايدر */
-  flex-shrink: 0;
-  width: 118px;
-  scroll-snap-align: start;
-}
-
-@media (min-width: 640px) {
-  .category {
-    width: auto;
-    flex-shrink: 1;
-    padding: 18px 12px;
-  }
-}
-
-.category::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.15), transparent 60%);
-  opacity: 0;
-  transition: opacity var(--motion-fast) var(--ease);
-  pointer-events: none;
-}
-
-.category:hover {
-  border-color: var(--purple-neon);
-  transform: translateY(-3px);
-  box-shadow: var(--glow-purple-sm);
-}
-
-.category:hover::before {
-  opacity: 1;
-}
-
-.categoryIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-base);
-  background: linear-gradient(135deg, rgba(157, 78, 221, 0.25), rgba(168, 85, 247, 0.12));
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  color: var(--purple-light);
-  flex-shrink: 0;
-  transition: all var(--motion-fast) var(--ease);
-}
-
-.category:hover .categoryIcon {
-  background: linear-gradient(135deg, rgba(157, 78, 221, 0.4), rgba(168, 85, 247, 0.25));
-  color: var(--purple-light);
-}
-
-.categoryLabel {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  text-align: center;
-}
-
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .logoWrap,
   .hook,
-  .category,
   .shibinSign {
     animation: none;
   }
@@ -324,8 +208,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shibinSign,
-  .categories {
+  .shibinSign {
     animation: none !important;
   }
 }

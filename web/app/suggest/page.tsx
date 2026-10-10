@@ -8,7 +8,7 @@ import { fairOrder } from '@/lib/fair-ranking'
 import styles from './suggest.module.css'
 
 export const metadata: Metadata = {
-  title: 'رشحلى · EAH',
+  title: 'ارشحلك · EAH',
   description: 'ترشيحات على مزاجك — من قلب شبين القناطر',
 }
 
@@ -33,7 +33,7 @@ export default async function SuggestPage() {
 
   return (
     <main className={styles.page}>
-      <SecondaryHero activeKey="suggest" title="رشحلى" Icon={SparkleStarIcon} tone="blue" />
+      <SecondaryHero activeKey="suggest" title="ارشحلك" Icon={SparkleStarIcon} tone="blue" />
 
       <section className={styles.section}>
         {businesses.length === 0 ? (

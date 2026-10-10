@@ -17,7 +17,7 @@ export default function SuggestedSection() {
             <span className={styles.titleIcon}>
               <SparkleStarIcon size={22} />
             </span>
-            <h2 className={styles.title}>رشحلى</h2>
+            <h2 className={styles.title}>ارشحلك</h2>
           </div>
         </header>
 

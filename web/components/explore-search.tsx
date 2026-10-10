@@ -98,8 +98,8 @@ export default function ExploreSearch({ initialQuery = '' }: Props) {
           <button
             type="submit"
             className="eah-icon-action eah-icon-gold"
-            data-tooltip="رشحلي"
-            aria-label="رشحلي"
+            data-tooltip="ارشحلك"
+            aria-label="ارشحلك"
             onClick={() => {
               setQuery('')
               router.push('/explore?suggest=1')

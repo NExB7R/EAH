@@ -1,8 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import Link from 'next/link'
-import { SearchIcon, SparkleStarIcon } from './icons'
+import { SearchIcon } from './icons'
 import VoiceSearchButton from './voice-search-button'
 
 export default function HomeSearchForm() {
@@ -22,7 +21,7 @@ export default function HomeSearchForm() {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           className="eah-search-input"
-          placeholder="دور على مطعم، صيدلية، ماركت..."
+          placeholder="اللي نفسك فيه... اكتبه واحنا نلاقيه"
           aria-label="البحث"
           autoComplete="off"
           enterKeyHint="search"
@@ -34,16 +33,7 @@ export default function HomeSearchForm() {
             setValue(text)
             inputRef.current?.focus()
           }}
-        />
-        <Link
-          href="/explore?suggest=1"
-          className="eah-icon-action eah-icon-gold"
-          aria-label="رشحلي"
-          prefetch={false}
-          data-tooltip="رشحلي"
-        >
-          <SparkleStarIcon size={18} />
-        </Link>
+        />{' '}
       </div>
     </form>
   )
