@@ -370,9 +370,19 @@
   letter-spacing: -0.2px;
 }
 
-/* على الموبايل: نخفي الطقس لتوفير مساحة */
+/* على الموبايل: طقس مصغّر (أيقونة + درجة، بدون خلفية/حدود) */
 @media (max-width: 640px) {
   .weather {
-    display: none;
+    height: auto;
+    padding: 0;
+    background: transparent;
+    border: none;
+    gap: 3px;
+  }
+  .weatherIcon {
+    font-size: 0.95rem;
+  }
+  .weatherTemp {
+    font-size: 0.72rem;
   }
 }

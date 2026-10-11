@@ -10,8 +10,8 @@
   justify-content: center;
   min-height: 100vh;
   min-height: 100svh;
-  padding: 88px 16px 40px;
-  padding-top: calc(88px + env(safe-area-inset-top));
+  padding: 72px 16px 72px;
+  padding-top: calc(72px + env(safe-area-inset-top));
   overflow: hidden;
   isolation: isolate;
 }
