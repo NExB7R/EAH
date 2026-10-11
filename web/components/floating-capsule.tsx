@@ -8,7 +8,6 @@ import Logo from './logo'
 import Avatar from './avatar'
 import MenuDrawer from './menu-drawer'
 import HeaderWeather from './header-weather'
-import ThemeSwitcher from './theme-switcher'
 import { BellIcon, MenuIcon, InstallIcon, LockIcon } from './icons'
 import type { UserSession } from '@/lib/data/user'
 import styles from './floating-capsule.module.css'
@@ -84,7 +83,6 @@ export default function FloatingCapsule({ session }: Props) {
             </button>
 
             <HeaderWeather />
-            <ThemeSwitcher />
           </div>
 
           {/* ─── النص: اللوجو ─── */}
