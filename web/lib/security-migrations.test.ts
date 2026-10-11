@@ -93,6 +93,37 @@ describe('security SQL migrations', () => {
     expect(source).toContain('createServiceClient()')
   })
 
+  it('authorizes fraud and health data helpers before sensitive reads', () => {
+    const fraudPath = join(__dirname, './data/fraud.ts')
+    const healthPath = join(__dirname, './data/health.ts')
+    const fraudSource = readFileSync(fraudPath, 'utf8')
+    const healthSource = readFileSync(healthPath, 'utf8')
+
+    const guardedFunctions = [
+      { source: fraudSource, name: 'getFlaggedReviews' },
+      { source: fraudSource, name: 'getRecentTrustEvents' },
+      { source: fraudSource, name: 'getFlaggedUsers' },
+      { source: fraudSource, name: 'getFraudStats' },
+      { source: fraudSource, name: 'getMultiAccountIps' },
+      { source: healthSource, name: 'getHealthSummary' },
+      { source: healthSource, name: 'getRecentErrors' },
+    ]
+
+    for (const { source, name } of guardedFunctions) {
+      const start = source.indexOf(`export async function ${name}(`)
+      expect(start, `missing data helper ${name}`).toBeGreaterThanOrEqual(0)
+      const next = source.indexOf('\\nexport async function ', start + 1)
+      const block = source.slice(start, next < 0 ? source.length : next)
+      const authIndex = block.indexOf('await requireAdmin()')
+      expect(authIndex, `${name} must authorize before reading`).toBeGreaterThanOrEqual(0)
+
+      const serviceIndex = block.indexOf('createServiceClient()')
+      if (serviceIndex >= 0) {
+        expect(serviceIndex, `${name} must authorize before service role`).toBeGreaterThan(authIndex)
+      }
+    }
+  })
+
   it('does not grant direct phone-lookup RPC access to public clients', () => {
     const sql = readMigration(phoneMigrationPath)
 
