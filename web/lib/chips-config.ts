@@ -28,6 +28,7 @@ export type Chip = {
   Icon: React.ComponentType<{ size?: number }>
   tone: ChipTone
   group: ChipGroup
+  iconColor: string
   action: ChipAction
 }
 
@@ -39,6 +40,7 @@ export const CHIPS: Chip[] = [
     Icon: UtensilsIcon,
     tone: 'purple',
     group: 'types',
+    iconColor: 'rgba(232, 199, 154, 0.75)',
     action: { type: 'filter', value: 'restaurant' },
   },
   {
@@ -47,6 +49,7 @@ export const CHIPS: Chip[] = [
     Icon: PillIcon,
     tone: 'purple',
     group: 'types',
+    iconColor: 'rgba(85, 231, 209, 0.7)',
     action: { type: 'filter', value: 'pharmacy' },
   },
   {
@@ -55,6 +58,7 @@ export const CHIPS: Chip[] = [
     Icon: BikeIcon,
     tone: 'purple',
     group: 'types',
+    iconColor: 'rgba(199, 125, 255, 0.85)',
     action: { type: 'filter', value: 'delivery_office' },
   },
   // ─── الاكتشاف ───
@@ -64,6 +68,7 @@ export const CHIPS: Chip[] = [
     Icon: GiftIcon,
     tone: 'purple',
     group: 'discovery',
+    iconColor: 'rgba(232, 199, 154, 0.75)',
     action: { type: 'scroll', value: 'offers' },
   },
   {
@@ -72,6 +77,7 @@ export const CHIPS: Chip[] = [
     Icon: TrendingUpIcon,
     tone: 'purple',
     group: 'discovery',
+    iconColor: 'rgba(253, 186, 116, 0.7)',
     action: { type: 'scroll', value: 'trending' },
   },
   {
@@ -80,6 +86,7 @@ export const CHIPS: Chip[] = [
     Icon: SparklesIcon,
     tone: 'purple',
     group: 'discovery',
+    iconColor: 'rgba(232, 199, 154, 0.75)',
     action: { type: 'scroll', value: 'suggested' },
   },
   // ─── الخصائص ───
@@ -89,6 +96,7 @@ export const CHIPS: Chip[] = [
     Icon: ClockIcon,
     tone: 'purple',
     group: 'features',
+    iconColor: 'rgba(85, 231, 209, 0.7)',
     action: { type: 'filter', value: 'open' },
   },
   {
@@ -97,6 +105,7 @@ export const CHIPS: Chip[] = [
     Icon: WhatsAppIcon,
     tone: 'purple',
     group: 'features',
+    iconColor: 'rgba(37, 211, 102, 0.7)',
     action: { type: 'filter', value: 'online' },
   },
   {
@@ -105,6 +114,7 @@ export const CHIPS: Chip[] = [
     Icon: MapPinIcon,
     tone: 'purple',
     group: 'features',
+    iconColor: 'rgba(168, 85, 247, 0.85)',
     action: { type: 'scroll', value: 'nearby' },
   },
 ]

@@ -70,7 +70,7 @@ export default function CategoryChips() {
                   onClick={() => handleChip(chip.key, chip.action)}
                   aria-pressed={active}
                 >
-                  <span className={styles.chipIcon}>
+                  <span className={styles.chipIcon} style={{ color: chip.iconColor }}>
                     <chip.Icon size={15} />
                   </span>
                   <span>{chip.label}</span>
