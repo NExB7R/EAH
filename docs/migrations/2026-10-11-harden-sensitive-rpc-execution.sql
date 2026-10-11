@@ -17,6 +17,13 @@ revoke all on function public.is_phone_registered(text) from public, anon, authe
 grant execute on function public.is_phone_registered(text) to service_role;
 alter function public.is_phone_registered(text) set search_path = pg_catalog, public, pg_temp;
 
+-- Contact-reveal tracking is reached through the authenticated server route, which
+-- derives the visitor hash from the verified user. Do not let direct RPC callers
+-- forge arbitrary hashes to inflate public contact counters.
+revoke all on function public.reveal_contact(uuid, text, text) from public, anon, authenticated;
+grant execute on function public.reveal_contact(uuid, text, text) to service_role;
+alter function public.reveal_contact(uuid, text, text) set search_path = pg_catalog, public, pg_temp;
+
 revoke all on function public.award_points(uuid, integer, text, uuid) from public, anon, authenticated;
 grant execute on function public.award_points(uuid, integer, text, uuid) to service_role;
 
