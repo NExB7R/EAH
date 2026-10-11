@@ -1,6 +1,5 @@
-import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
-import { getUserSession } from '@/lib/data/user'
+import { requireAdmin } from '@/lib/auth/admin'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Fraud Data
@@ -39,16 +38,20 @@ export type FlaggedUser = {
 
 // ─── التقييمات المُعلّمة (RPC) ───
 export async function getFlaggedReviews(): Promise<FlaggedReview[]> {
-  const supabase = await createClient()
-  const { data, error } = await supabase.rpc('get_flagged_reviews')
+  const admin = await requireAdmin()
+  if (!admin.ok) return []
+
+  const { data, error } = await admin.supabase.rpc('get_flagged_reviews')
   if (error) return []
   return (data ?? []) as FlaggedReview[]
 }
 
 // ─── أحداث trust الأخيرة ───
 export async function getRecentTrustEvents(limit = 50): Promise<TrustEvent[]> {
-  const supabase = await createClient()
-  const { data } = await supabase
+  const admin = await requireAdmin()
+  if (!admin.ok) return []
+
+  const { data } = await admin.supabase
     .from('trust_events')
     .select(
       'id, entity_type, entity_id, event_type, delta, score_before, score_after, metadata, created_at',
@@ -60,7 +63,10 @@ export async function getRecentTrustEvents(limit = 50): Promise<TrustEvent[]> {
 
 // ─── المستخدمين المبلغ عنهم (داخلي) ───
 export async function getFlaggedUsers(limit = 30): Promise<FlaggedUser[]> {
-  const supabase = await createServiceClient()
+  const admin = await requireAdmin()
+  if (!admin.ok) return []
+
+  const supabase = createServiceClient()
   const { data } = await supabase
     .from('profiles')
     .select('id, display_name, phone, wanted_level, trust_score, banned_until')
@@ -80,7 +86,12 @@ export type FraudStats = {
 }
 
 export async function getFraudStats(): Promise<FraudStats> {
-  const supabase = await createServiceClient()
+  const admin = await requireAdmin()
+  if (!admin.ok) {
+    return { flagged: 0, wanted: 0, banned: 0, trustEvents24h: 0 }
+  }
+
+  const supabase = createServiceClient()
   const day = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
 
   const [flagged, wanted, banned, events] = await Promise.all([
@@ -116,8 +127,8 @@ export type MultiAccountIp = {
 }
 
 export async function getMultiAccountIps(days = 30): Promise<MultiAccountIp[]> {
-  const session = await getUserSession()
-  if (!session || (session.role !== 'admin' && session.role !== 'super_admin')) return []
+  const admin = await requireAdmin()
+  if (!admin.ok) return []
 
   const supabase = createServiceClient()
   const { data, error } = await supabase.rpc('get_multi_account_ips', { p_days: days })
