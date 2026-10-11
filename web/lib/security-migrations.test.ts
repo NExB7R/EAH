@@ -112,7 +112,7 @@ describe('security SQL migrations', () => {
     for (const { source, name } of guardedFunctions) {
       const start = source.indexOf(`export async function ${name}(`)
       expect(start, `missing data helper ${name}`).toBeGreaterThanOrEqual(0)
-      const next = source.indexOf('\\nexport async function ', start + 1)
+      const next = source.indexOf('\nexport async function ', start + 1)
       const block = source.slice(start, next < 0 ? source.length : next)
       const authIndex = block.indexOf('await requireAdmin()')
       expect(authIndex, `${name} must authorize before reading`).toBeGreaterThanOrEqual(0)
