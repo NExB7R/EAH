@@ -75,8 +75,6 @@ describe('security SQL migrations', () => {
     expect(sql).toContain(
       'revoke all on function public.find_by_phone(text) from public, anon, authenticated',
     )
-    expect(sql).toContain(
-      'grant execute on function public.find_by_phone(text) to service_role',
-    )
+    expect(sql).toContain('grant execute on function public.find_by_phone(text) to service_role')
   })
 })
