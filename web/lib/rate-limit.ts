@@ -1,6 +1,7 @@
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 import { headers } from 'next/headers'
+import { getTrustedClientIp } from '@/lib/auth/client-ip'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Rate Limiting (Upstash Redis)
@@ -37,9 +38,7 @@ export const strictLimiter = new Ratelimit({
 
 export async function getClientIp(): Promise<string> {
   const h = await headers()
-  const forwarded = h.get('x-forwarded-for')
-  if (forwarded) return forwarded.split(',')[0]?.trim() ?? 'unknown'
-  return h.get('x-real-ip') ?? 'unknown'
+  return getTrustedClientIp(h)
 }
 
 export type RateLimitResult =
