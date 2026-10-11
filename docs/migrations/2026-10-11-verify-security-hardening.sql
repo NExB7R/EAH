@@ -9,6 +9,7 @@ declare
   v_function regprocedure;
   v_config text[];
   v_source text;
+  v_trigger_count integer;
 begin
   for v_check in
     select *
@@ -144,6 +145,48 @@ begin
       raise exception 'Unexpected search_path on %: %', v_check.signature, v_config;
     end if;
   end loop;
+  -- Confirm the existing database triggers still reference all reviewed trigger handlers.
+  for v_check in
+    select signature
+    from (values
+      ('public.apply_wanted_level_on_report()'),
+      ('public.assign_order_code_v2()'),
+      ('public.auto_flag_review()'),
+      ('public.auto_referral_code()'),
+      ('public.comment_rate_limit()'),
+      ('public.detect_multi_account_signup()'),
+      ('public.detect_review_velocity()'),
+      ('public.grant_trial_on_owner()'),
+      ('public.handle_referral_first_order()'),
+      ('public.handle_referral_signup()'),
+      ('public.lock_order_message()'),
+      ('public.log_review_changes()'),
+      ('public.notify_partner_invitation()'),
+      ('public.on_order_confirmed()'),
+      ('public.on_review_added()'),
+      ('public.on_trust_updated()'),
+      ('public.prevent_self_order()'),
+      ('public.prevent_self_review()'),
+      ('public.recalc_wanted_level_on_resolve()'),
+      ('public.refresh_business_counts()'),
+      ('public.refresh_business_scores()'),
+      ('public.refresh_comment_likes()'),
+      ('public.set_comment_depth()')
+    ) as expected(signature)
+  loop
+    v_function := pg_catalog.to_regprocedure(v_check.signature);
+
+    select count(*)::integer
+    into v_trigger_count
+    from pg_catalog.pg_trigger as t
+    where t.tgfoid = v_function::oid
+      and not t.tgisinternal;
+
+    if v_trigger_count < 1 then
+      raise exception 'Expected existing trigger binding is missing for %', v_check.signature;
+    end if;
+  end loop;
+
   -- Ensure badge-check RPCs enforce per-user authorization inside the definer body.
   for v_check in
     select signature
