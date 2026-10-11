@@ -436,8 +436,8 @@ html {
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 56px;
-  padding: 0 12px 0 16px;
+  height: 60px;
+  padding: 0 14px 0 18px;
   background: var(--surface-gradient-soft);
   border: 1px solid var(--border-purple);
   border-radius: var(--radius-full);

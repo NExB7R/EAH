@@ -72,20 +72,20 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 18px;
+  gap: 22px;
 }
 
 @media (min-width: 640px) {
   .content {
     max-width: 640px;
-    gap: 22px;
+    gap: 28px;
   }
 }
 
 @media (min-width: 1024px) {
   .content {
-    max-width: 720px;
-    gap: 26px;
+    max-width: 760px;
+    gap: 34px;
   }
 }
 
@@ -106,7 +106,7 @@
   justify-content: center;
   gap: 10px;
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 5.5vw, 2.75rem);
+  font-size: clamp(1.9rem, 6vw, 3.2rem);
   font-weight: 900;
   line-height: 1.25;
   color: var(--text-primary);
@@ -149,15 +149,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   color: var(--gold-light);
 }
 
 @media (min-width: 640px) {
   .crownWrap {
-    width: 40px;
-    height: 40px;
+    width: 52px;
+    height: 52px;
   }
 }
 
@@ -166,7 +166,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 18px;
+  padding: 9px 20px;
   border-radius: var(--radius-full);
   background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), rgba(168, 85, 247, 0.08));
   border: 1px solid rgba(232, 199, 154, 0.35);
@@ -185,7 +185,7 @@
 
 .signText {
   font-family: var(--font-body);
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   font-weight: 800;
   color: var(--gold-light);
   text-shadow: 0 0 8px rgba(232, 199, 154, 0.3);

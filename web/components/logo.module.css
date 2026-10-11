@@ -40,8 +40,8 @@
   --slogan-fs: 0.85rem;
 }
 .lg {
-  --logo-w: 380px;
-  --slogan-fs: 1.2rem;
+  --logo-w: 440px;
+  --slogan-fs: 1.3rem;
 }
 .xl {
   --logo-w: 520px;
@@ -172,8 +172,8 @@
     --slogan-fs: 1rem;
   }
   .lg {
-    --logo-w: 280px;
-    --slogan-fs: 0.9rem;
+    --logo-w: 320px;
+    --slogan-fs: 1rem;
   }
 }
 
