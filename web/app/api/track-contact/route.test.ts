@@ -60,7 +60,9 @@ beforeEach(() => {
 })
 
 describe('POST /api/track-contact', () => {
-  it('fails closed before auth or privileged access when the IP limiter is unavailable', async () => {
+  it(
+    'fails closed before auth or privileged access when the IP limiter is unavailable',
+    async () => {
     mockCheckRateLimit.mockResolvedValueOnce({
       ok: false,
       error: 'protection unavailable',
@@ -82,7 +84,9 @@ describe('POST /api/track-contact', () => {
     expect(mockCreateServiceClient).not.toHaveBeenCalled()
   })
 
-  it('rejects unauthenticated callers before creating the service client', async () => {
+  it(
+    'rejects unauthenticated callers before creating the service client',
+    async () => {
     const response = await POST(makeRequest(validBody))
 
     expect(response.status).toBe(401)
@@ -90,7 +94,9 @@ describe('POST /api/track-contact', () => {
     expect(mockCheckRateLimit).toHaveBeenCalledTimes(1)
   })
 
-  it('applies a per-account cap before calling the privileged RPC', async () => {
+  it(
+    'applies a per-account cap before calling the privileged RPC',
+    async () => {
     mockAuth({ id: 'user-1' })
     mockCheckRateLimit
       .mockResolvedValueOnce({ ok: true, remaining: 4 })
@@ -113,7 +119,9 @@ describe('POST /api/track-contact', () => {
     expect(mockCreateServiceClient).not.toHaveBeenCalled()
   })
 
-  it('derives the visitor hash server-side before calling the service-only RPC', async () => {
+  it(
+    'derives the visitor hash server-side before calling the service-only RPC',
+    async () => {
     mockAuth({ id: 'user-1' })
 
     const response = await POST(makeRequest(validBody))
