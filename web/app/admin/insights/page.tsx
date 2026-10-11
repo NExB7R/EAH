@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { getUserSession } from '@/lib/data/user'
 import { createServiceClient } from '@/lib/supabase/service'
 import { SparklesIcon, StoreIcon, FileTextIcon, AlertIcon, ArrowLeftIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
@@ -16,8 +18,8 @@ type Row = {
 }
 
 async function getStorageData(): Promise<Row[]> {
-  // This table intentionally has no client RLS policy. This query runs only inside
-  // the /admin route, whose parent layout verifies the signed-in admin role.
+  // The caller must authorize before this service-role query because the table is
+  // intentionally policy-free and service-role clients bypass RLS.
   const supabase = createServiceClient()
 
   // جيب كل الأنشطة اللي عندها تقارير
@@ -57,6 +59,12 @@ async function getStorageData(): Promise<Row[]> {
 }
 
 export default async function AdminInsightsStoragePage() {
+  // Do not rely only on the parent layout: layouts and pages may render in parallel.
+  const session = await getUserSession()
+  if (!session || (session.role !== 'admin' && session.role !== 'super_admin')) {
+    redirect('/')
+  }
+
   const rows = await getStorageData()
   const totalInsights = rows.reduce((s, r) => s + r.insights_count, 0)
   const estimatedSizeMb = (totalInsights * 100) / 1024
