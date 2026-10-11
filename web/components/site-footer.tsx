@@ -96,30 +96,6 @@ export default function SiteFooter() {
       </div>
 
       <div className={styles.container}>
-        {/* ─── Columns ─── */}
-        <nav className={styles.columns} aria-label="روابط الفوتر">
-          {COLUMNS.map(({ key, title, Icon, links }) => (
-            <div key={key} className={styles.col}>
-              <h2 className={styles.colTitle}>
-                <span className={styles.colIcon}>
-                  <Icon size={14} />
-                </span>
-                <span>{title}</span>
-              </h2>
-              <ul className={styles.colList}>
-                {links.map(({ href, label, Icon: LIcon }) => (
-                  <li key={href}>
-                    <Link href={href} className={styles.colLink}>
-                      <LIcon size={12} />
-                      <span>{label}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </nav>
-
         {/* ─── Contact Cards ─── */}
         <div className={styles.contacts}>
           <a
@@ -170,6 +146,30 @@ export default function SiteFooter() {
             <ArrowLeftIcon size={14} className={styles.cardArrow} />
           </a>
         </div>
+
+        {/* ─── Columns ─── */}
+        <nav className={styles.columns} aria-label="روابط الفوتر">
+          {COLUMNS.map(({ key, title, Icon, links }) => (
+            <div key={key} className={styles.col}>
+              <h2 className={styles.colTitle}>
+                <span className={styles.colIcon}>
+                  <Icon size={14} />
+                </span>
+                <span>{title}</span>
+              </h2>
+              <ul className={styles.colList}>
+                {links.map(({ href, label, Icon: LIcon }) => (
+                  <li key={href}>
+                    <Link href={href} className={styles.colLink}>
+                      <LIcon size={12} />
+                      <span>{label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
 
         {/* ─── Palestine ─── */}
         <div className={styles.palestine}>
