@@ -370,21 +370,8 @@
   letter-spacing: -0.2px;
 }
 
-@media (max-width: 480px) {
-  .weather {
-    height: 32px;
-    padding: 0 8px;
-    gap: 3px;
-  }
-  .weatherIcon {
-    font-size: 0.9rem;
-  }
-  .weatherTemp {
-    font-size: 0.72rem;
-  }
-}
-
-@media (max-width: 380px) {
+/* على الموبايل: نخفي الطقس لتوفير مساحة */
+@media (max-width: 640px) {
   .weather {
     display: none;
   }
