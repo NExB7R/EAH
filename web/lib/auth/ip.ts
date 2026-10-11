@@ -1,5 +1,6 @@
 import { createHash } from 'crypto'
 import { headers } from 'next/headers'
+import { getTrustedClientIp } from './client-ip'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — IP Hashing (privacy-preserving)
@@ -13,9 +14,8 @@ export async function getHashedIp(): Promise<string | null> {
   if (!salt) return null
 
   const h = await headers()
-  const forwarded = h.get('x-forwarded-for')
-  const ip = forwarded?.split(',')[0]?.trim() || h.get('x-real-ip')
-  if (!ip) return null
+  const ip = getTrustedClientIp(h)
+  if (ip === 'unknown') return null
 
   const hash = createHash('sha256').update(`${salt}:${ip}`).digest('hex')
   return hash.slice(0, 32)
