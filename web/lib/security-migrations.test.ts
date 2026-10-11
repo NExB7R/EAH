@@ -59,6 +59,18 @@ describe('security SQL migrations', () => {
     expect(sql).toContain(
       'grant execute on function public.reveal_contact(uuid, text, text) to service_role',
     )
+    expect(sql).toContain(
+      'revoke all on function public.count_accounts_from_ip(text, integer) from public, anon, authenticated',
+    )
+    expect(sql).toContain(
+      'grant execute on function public.count_accounts_from_ip(text, integer) to service_role',
+    )
+    expect(sql).toContain(
+      'revoke all on function public.check_social_badges(uuid) from public, anon',
+    )
+    expect(sql).toContain(
+      'grant execute on function public.check_social_badges(uuid) to authenticated, service_role',
+    )
   })
 
   it('validates ownership within SECURITY DEFINER badge checks', () => {
@@ -67,6 +79,18 @@ describe('security SQL migrations', () => {
     expect(sql.match(/auth\.uid\(\) = p_user_id/g)?.length ?? 0).toBeGreaterThanOrEqual(3)
     expect(sql.match(/not public\.is_admin\(\)/g)).toHaveLength(3)
     expect(sql.match(/auth\.jwt\(\) ->> 'role'/g)).toHaveLength(3)
+  })
+
+  it('authorizes the insights admin page before reading through service_role', () => {
+    const pagePath = join(__dirname, '../app/admin/insights/page.tsx')
+    const source = readFileSync(pagePath, 'utf8')
+    const authIndex = source.indexOf('const session = await getUserSession()')
+    const serviceQueryIndex = source.indexOf('const rows = await getStorageData()')
+
+    expect(authIndex).toBeGreaterThanOrEqual(0)
+    expect(serviceQueryIndex).toBeGreaterThan(authIndex)
+    expect(source).toContain("session.role !== 'admin' && session.role !== 'super_admin'")
+    expect(source).toContain('createServiceClient()')
   })
 
   it('does not grant direct phone-lookup RPC access to public clients', () => {
