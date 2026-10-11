@@ -44,33 +44,42 @@ export default function CategoryChips() {
     })
   }
 
+  const rows: (typeof CHIPS)[] = []
+  for (let i = 0; i < CHIPS.length; i += 3) {
+    rows.push(CHIPS.slice(i, i + 3))
+  }
+
   return (
     <div className={styles.wrap} data-pending={isPending} aria-label="تصفية سريعة">
-      <div className={styles.chips}>
-        {CHIPS.map((chip) => {
-          const active = activeKey === chip.key
-          return (
-            <button
-              key={chip.key}
-              type="button"
-              className={`${styles.chip} ${styles[chip.tone]} ${active ? styles.active : ''}`}
-              onClick={() => handleChip(chip.key, chip.action)}
-              aria-pressed={active}
-            >
-              <span className={styles.chipIcon}>
-                <chip.Icon size={15} />
-              </span>
-              <span>{chip.label}</span>
-            </button>
-          )
-        })}
-      </div>
       <Link href={EXPLORE_CHIP.href} className={`${styles.chip} ${styles.gold}`}>
         <span className={styles.chipIcon}>
           <EXPLORE_CHIP.Icon size={15} />
         </span>
         <span>{EXPLORE_CHIP.label}</span>
       </Link>
+      <div className={styles.rows}>
+        {rows.map((row, i) => (
+          <div key={i} className={styles.row}>
+            {row.map((chip) => {
+              const active = activeKey === chip.key
+              return (
+                <button
+                  key={chip.key}
+                  type="button"
+                  className={`${styles.chip} ${styles[chip.tone]} ${active ? styles.active : ''}`}
+                  onClick={() => handleChip(chip.key, chip.action)}
+                  aria-pressed={active}
+                >
+                  <span className={styles.chipIcon}>
+                    <chip.Icon size={15} />
+                  </span>
+                  <span>{chip.label}</span>
+                </button>
+              )
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
