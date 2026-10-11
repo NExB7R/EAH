@@ -63,77 +63,81 @@ describe('POST /api/track-contact', () => {
   it(
     'fails closed before auth or privileged access when the IP limiter is unavailable',
     async () => {
-    mockCheckRateLimit.mockResolvedValueOnce({
-      ok: false,
-      error: 'protection unavailable',
-      retryAfter: 30,
-      unavailable: true,
-    })
+      mockCheckRateLimit.mockResolvedValueOnce({
+        ok: false,
+        error: 'protection unavailable',
+        retryAfter: 30,
+        unavailable: true,
+      })
 
-    const response = await POST(makeRequest(validBody))
+      const response = await POST(makeRequest(validBody))
 
-    expect(response.status).toBe(503)
-    expect(response.headers.get('cache-control')).toBe('no-store')
-    expect(response.headers.get('retry-after')).toBe('30')
-    expect(mockCheckRateLimit).toHaveBeenCalledWith(
-      strictLimiter,
-      'track-contact:203.0.113.10',
-      true,
-    )
-    expect(mockCreateClient).not.toHaveBeenCalled()
-    expect(mockCreateServiceClient).not.toHaveBeenCalled()
-  })
+      expect(response.status).toBe(503)
+      expect(response.headers.get('cache-control')).toBe('no-store')
+      expect(response.headers.get('retry-after')).toBe('30')
+      expect(mockCheckRateLimit).toHaveBeenCalledWith(
+        strictLimiter,
+        'track-contact:203.0.113.10',
+        true,
+      )
+      expect(mockCreateClient).not.toHaveBeenCalled()
+      expect(mockCreateServiceClient).not.toHaveBeenCalled()
+    },
+  )
 
   it(
     'rejects unauthenticated callers before creating the service client',
     async () => {
-    const response = await POST(makeRequest(validBody))
+      const response = await POST(makeRequest(validBody))
 
-    expect(response.status).toBe(401)
-    expect(mockCreateServiceClient).not.toHaveBeenCalled()
-    expect(mockCheckRateLimit).toHaveBeenCalledTimes(1)
-  })
+      expect(response.status).toBe(401)
+      expect(mockCreateServiceClient).not.toHaveBeenCalled()
+      expect(mockCheckRateLimit).toHaveBeenCalledTimes(1)
+    },
+  )
 
   it(
     'applies a per-account cap before calling the privileged RPC',
     async () => {
-    mockAuth({ id: 'user-1' })
-    mockCheckRateLimit
-      .mockResolvedValueOnce({ ok: true, remaining: 4 })
-      .mockResolvedValueOnce({
-        ok: false,
-        error: 'too many lookups',
-        retryAfter: 60,
-      })
+      mockAuth({ id: 'user-1' })
+      mockCheckRateLimit
+        .mockResolvedValueOnce({ ok: true, remaining: 4 })
+        .mockResolvedValueOnce({
+          ok: false,
+          error: 'too many lookups',
+          retryAfter: 60,
+        })
 
-    const response = await POST(makeRequest(validBody))
+      const response = await POST(makeRequest(validBody))
 
-    expect(response.status).toBe(429)
-    expect(response.headers.get('retry-after')).toBe('60')
-    expect(mockCheckRateLimit).toHaveBeenNthCalledWith(
-      2,
-      strictLimiter,
-      'track-contact-user:user-1',
-      true,
-    )
-    expect(mockCreateServiceClient).not.toHaveBeenCalled()
-  })
+      expect(response.status).toBe(429)
+      expect(response.headers.get('retry-after')).toBe('60')
+      expect(mockCheckRateLimit).toHaveBeenNthCalledWith(
+        2,
+        strictLimiter,
+        'track-contact-user:user-1',
+        true,
+      )
+      expect(mockCreateServiceClient).not.toHaveBeenCalled()
+    },
+  )
 
   it(
     'derives the visitor hash server-side before calling the service-only RPC',
     async () => {
-    mockAuth({ id: 'user-1' })
+      mockAuth({ id: 'user-1' })
 
-    const response = await POST(makeRequest(validBody))
+      const response = await POST(makeRequest(validBody))
 
-    expect(response.status).toBe(200)
-    expect(response.headers.get('cache-control')).toBe('no-store')
-    expect(mockRpc).toHaveBeenCalledWith('reveal_contact', {
-      p_business_id: validBody.businessId,
-      p_method_type: 'phone',
-      p_visitor_hash: expect.stringMatching(/^[a-f0-9]{64}$/),
-    })
-  })
+      expect(response.status).toBe(200)
+      expect(response.headers.get('cache-control')).toBe('no-store')
+      expect(mockRpc).toHaveBeenCalledWith('reveal_contact', {
+        p_business_id: validBody.businessId,
+        p_method_type: 'phone',
+        p_visitor_hash: expect.stringMatching(/^[a-f0-9]{64}$/),
+      })
+    },
+  )
 
   it('does not expose database errors to the client', async () => {
     mockAuth({ id: 'user-1' })
