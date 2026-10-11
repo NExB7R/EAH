@@ -48,12 +48,16 @@ export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
         </h1>
 
         {/* Search */}
-        <HomeSearchForm />
+        <div className={styles.searchWrap}>
+          <HomeSearchForm />
+        </div>
 
         {/* Chips */}
-        <Suspense fallback={null}>
-          <CategoryChips />
-        </Suspense>
+        <div className={styles.chipsWrap}>
+          <Suspense fallback={null}>
+            <CategoryChips />
+          </Suspense>
+        </div>
       </div>
     </section>
   )

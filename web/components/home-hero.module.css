@@ -1,5 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
    EAH — Home Hero
+   Fills viewport, centered, responsive, staggered entrance
    ═══════════════════════════════════════════════════════════ */
 
 .hero {
@@ -7,20 +8,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 100px 16px 56px;
-  padding-top: calc(100px + env(safe-area-inset-top));
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 88px 16px 48px;
+  padding-top: calc(88px + env(safe-area-inset-top));
   overflow: hidden;
   isolation: isolate;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 640px) {
   .hero {
-    padding: 120px 24px 80px;
-    padding-top: calc(120px + env(safe-area-inset-top));
+    padding: 104px 24px 64px;
+    padding-top: calc(104px + env(safe-area-inset-top));
   }
 }
 
-/* Ambient gradient */
+@media (min-width: 1024px) {
+  .hero {
+    min-height: 100vh;
+    padding: 140px 24px 96px;
+    padding-top: calc(140px + env(safe-area-inset-top));
+  }
+}
+
+@media (min-width: 1440px) {
+  .hero {
+    padding: 152px 32px 104px;
+    padding-top: calc(152px + env(safe-area-inset-top));
+  }
+}
+
+/* ─── Ambient gradient (background aura) ─── */
 .ambient {
   position: absolute;
   inset: 0;
@@ -32,7 +50,7 @@
     radial-gradient(ellipse 60% 40% at 20% 100%, rgba(157, 78, 221, 0.1), transparent 60%);
 }
 
-/* Grid dots */
+/* ─── Grid dots ─── */
 .grid {
   position: absolute;
   inset: 0;
@@ -44,37 +62,40 @@
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 80%);
 }
 
+/* ─── Content column ─── */
 .content {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 640px;
+  max-width: 560px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
   text-align: center;
+  gap: 18px;
+}
+
+@media (min-width: 640px) {
+  .content {
+    max-width: 640px;
+    gap: 22px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .content {
+    max-width: 720px;
+    gap: 26px;
+  }
 }
 
 /* ─── Logo ─── */
 .logoWrap {
-  margin-bottom: 8px;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ─── Spacer ─── */
-.spacer {
-  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  animation: eahHeroIn 320ms var(--ease-out) 0ms both;
 }
 
 /* ─── Hook ─── */
@@ -83,14 +104,21 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 6vw, 2.75rem);
+  font-size: clamp(1.6rem, 5.5vw, 2.75rem);
   font-weight: 900;
   line-height: 1.25;
   color: var(--text-primary);
   letter-spacing: -0.02em;
   margin: 0;
+  animation: eahHeroIn 320ms var(--ease-out) 120ms both;
+}
+
+@media (min-width: 640px) {
+  .hook {
+    gap: 12px;
+  }
 }
 
 .hookAccent {
@@ -121,9 +149,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   color: var(--gold-light);
+}
+
+@media (min-width: 640px) {
+  .crownWrap {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 /* ─── Shibin Sign ─── */
@@ -132,7 +167,6 @@
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  margin-bottom: 4px;
   border-radius: var(--radius-full);
   background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), rgba(168, 85, 247, 0.08));
   border: 1px solid rgba(232, 199, 154, 0.35);
@@ -140,7 +174,7 @@
     0 0 0 1px rgba(232, 199, 154, 0.08),
     0 0 20px rgba(232, 199, 154, 0.15),
     inset 0 0 20px rgba(232, 199, 154, 0.05);
-  animation: eahHeroIn 320ms var(--ease-out) 40ms both;
+  animation: eahHeroIn 320ms var(--ease-out) 60ms both;
 }
 
 .signIcon {
@@ -158,47 +192,24 @@
   letter-spacing: 0.02em;
 }
 
-/* ─── Reduced Motion ─── */
-@media (prefers-reduced-motion: reduce) {
-  .logoWrap,
-  .hook,
-  .shibinSign {
-    animation: none;
-  }
+/* ─── Search wrapper ─── */
+.searchWrap {
+  width: 100%;
+  animation: eahHeroIn 320ms var(--ease-out) 180ms both;
+}
+
+/* ─── Chips wrapper ─── */
+.chipsWrap {
+  width: 100%;
+  animation: eahHeroIn 320ms var(--ease-out) 240ms both;
 }
 
 /* ═══════════════════════════════════════════════════════════
-   2026-09-27 — تحسين الهيرو
-   - مساحة أقل فوق اللوجو
-   - scroll-snap للـ home
-   ═══════════════════════════════════════════════════════════ */
-
-.logoWrap {
-  margin-bottom: 0;
-}
-
-.spacer {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .hero {
-    padding-top: calc(24px + env(safe-area-inset-top));
-  }
-}
-
-/* 2026-09-27 — فاصل بين اللوجو واللي تحته */
-.shibinSign {
-  margin-top: 14px;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   Hero Entrance — LCP-safe (elements visible from first frame)
-   Starts at opacity 0.7 — never 0 — so Lighthouse sees them
+   Entrance keyframe — LCP-safe (starts at 0.88, never 0)
    ═══════════════════════════════════════════════════════════ */
 @keyframes eahHeroIn {
   from {
-    opacity: 0.7;
+    opacity: 0.88;
     transform: translateY(6px);
   }
   to {
@@ -208,7 +219,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shibinSign {
-    animation: none !important;
+  .logoWrap,
+  .shibinSign,
+  .hook,
+  .searchWrap,
+  .chipsWrap {
+    animation: none;
   }
 }

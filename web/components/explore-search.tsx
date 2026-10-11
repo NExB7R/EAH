@@ -79,7 +79,7 @@ export default function ExploreSearch({ initialQuery = '' }: Props) {
               }
             }}
             className="eah-search-input"
-            placeholder="دور على مطعم، صيدلية، ماركت..."
+            placeholder="اللي نفسك فيه... اكتبه واحنا نلاقيه"
             aria-label="البحث"
             autoComplete="off"
             enterKeyHint="search"
