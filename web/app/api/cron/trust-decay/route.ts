@@ -9,7 +9,8 @@ import { logError, captureException } from '@/lib/logging/errors'
 
 export async function GET(req: Request) {
   const auth = req.headers.get('authorization')
-  if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
+  const secret = process.env.CRON_SECRET
+  if (!secret || auth !== `Bearer ${secret}`) {
     return NextResponse.json({ ok: false }, { status: 401 })
   }
 
