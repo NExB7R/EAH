@@ -119,7 +119,10 @@ describe('security SQL migrations', () => {
 
       const serviceIndex = block.indexOf('createServiceClient()')
       if (serviceIndex >= 0) {
-        expect(serviceIndex, `${name} must authorize before service role`).toBeGreaterThan(authIndex)
+        expect(
+          serviceIndex,
+          `${name} must authorize before service role`,
+        ).toBeGreaterThan(authIndex)
       }
     }
   })
