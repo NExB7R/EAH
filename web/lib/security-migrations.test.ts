@@ -142,6 +142,21 @@ describe('security SQL migrations', () => {
     }
   })
 
+  it('limits business-name validation to authorized callers and visible listings', () => {
+    const sql = readMigration(migrationPath)
+
+    expect(sql).toContain(
+      'revoke all on function public.check_business_name_unique(text, uuid) from public, anon',
+    )
+    expect(sql).toContain(
+      'grant execute on function public.check_business_name_unique(text, uuid) to authenticated, service_role',
+    )
+    expect(sql).toContain('where owned_business.id = p_exclude_id')
+    expect(sql.match(/b\.is_published = true/g)?.length ?? 0).toBeGreaterThanOrEqual(2)
+    expect(sql).toContain('or b.owner_profile_id = auth.uid()')
+    expect(sql).toContain('or private.is_admin()')
+  })
+
   it('does not grant direct phone-lookup RPC access to public clients', () => {
     const sql = readMigration(phoneMigrationPath)
 
