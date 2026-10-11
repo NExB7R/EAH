@@ -13,11 +13,12 @@ import {
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Chips Config (Single Source of Truth)
-// الترتيب: الأنواع → الخصائص → الاكتشاف → المميز
-// كل chip بنفسجي — الأيقونة بس ملونة حسب النوع
+// 3 groups: types / features / discovery
+// كل chip بنفسجي — الأيقونات بنفسجية (ترث لون الـ chip)
 // ═══════════════════════════════════════════════════════════
 
 export type ChipTone = 'purple' | 'gold'
+export type ChipGroup = 'types' | 'features' | 'discovery'
 
 export type ChipAction = { type: 'filter'; value: string } | { type: 'scroll'; value: string }
 
@@ -26,7 +27,7 @@ export type Chip = {
   label: string
   Icon: React.ComponentType<{ size?: number }>
   tone: ChipTone
-  iconColor: string
+  group: ChipGroup
   action: ChipAction
 }
 
@@ -37,7 +38,7 @@ export const CHIPS: Chip[] = [
     label: 'مطاعم',
     Icon: UtensilsIcon,
     tone: 'purple',
-    iconColor: 'var(--gold-light)',
+    group: 'types',
     action: { type: 'filter', value: 'restaurant' },
   },
   {
@@ -45,7 +46,7 @@ export const CHIPS: Chip[] = [
     label: 'صيدليات',
     Icon: PillIcon,
     tone: 'purple',
-    iconColor: 'var(--teal)',
+    group: 'types',
     action: { type: 'filter', value: 'pharmacy' },
   },
   {
@@ -53,7 +54,7 @@ export const CHIPS: Chip[] = [
     label: 'مكاتب التوصيل',
     Icon: BikeIcon,
     tone: 'purple',
-    iconColor: 'var(--purple-light)',
+    group: 'types',
     action: { type: 'filter', value: 'delivery_office' },
   },
   // ─── الخصائص ───
@@ -62,7 +63,7 @@ export const CHIPS: Chip[] = [
     label: 'مفتوح الان',
     Icon: ClockIcon,
     tone: 'purple',
-    iconColor: 'var(--teal)',
+    group: 'features',
     action: { type: 'filter', value: 'open' },
   },
   {
@@ -70,7 +71,7 @@ export const CHIPS: Chip[] = [
     label: 'اونلاين واتساب',
     Icon: WhatsAppIcon,
     tone: 'purple',
-    iconColor: '#25d366',
+    group: 'features',
     action: { type: 'filter', value: 'online' },
   },
   {
@@ -78,7 +79,7 @@ export const CHIPS: Chip[] = [
     label: 'قريب مني',
     Icon: MapPinIcon,
     tone: 'purple',
-    iconColor: 'var(--purple-neon)',
+    group: 'features',
     action: { type: 'scroll', value: 'nearby' },
   },
   // ─── الاكتشاف ───
@@ -87,7 +88,7 @@ export const CHIPS: Chip[] = [
     label: 'العروض',
     Icon: GiftIcon,
     tone: 'purple',
-    iconColor: 'var(--gold-light)',
+    group: 'discovery',
     action: { type: 'scroll', value: 'offers' },
   },
   {
@@ -95,7 +96,7 @@ export const CHIPS: Chip[] = [
     label: 'الترند',
     Icon: TrendingUpIcon,
     tone: 'purple',
-    iconColor: 'var(--orange)',
+    group: 'discovery',
     action: { type: 'scroll', value: 'trending' },
   },
   {
@@ -103,7 +104,7 @@ export const CHIPS: Chip[] = [
     label: 'ارشحلك',
     Icon: SparklesIcon,
     tone: 'purple',
-    iconColor: 'var(--gold-light)',
+    group: 'discovery',
     action: { type: 'scroll', value: 'suggested' },
   },
 ]
@@ -113,6 +114,6 @@ export const EXPLORE_CHIP = {
   label: 'استكشف الكل',
   Icon: ArrowLeftIcon,
   tone: 'gold' as ChipTone,
-  iconColor: 'var(--gold-light)',
+  group: 'discovery' as ChipGroup,
   href: '/explore',
 }

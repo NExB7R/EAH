@@ -1,43 +1,59 @@
 /* ═══════════════════════════════════════════════════════════
-   EAH — Category Chips (2026 Floating Pills)
-   Glass morphism — all visible, wraps responsively
+   EAH — Category Chips (Grouped, 2026)
+   3 groups: types / features / discovery
    ═══════════════════════════════════════════════════════════ */
 
 .wrap {
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 180ms var(--ease);
 }
 
-.scroller {
+.wrap[data-pending='true'] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.groupLabel {
+  font-family: var(--font-body);
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.groupChips {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
-  max-width: 520px;
-  margin: 0;
-  padding: 0;
-  transition: opacity 180ms var(--ease);
 }
 
 @media (min-width: 640px) {
-  .scroller {
-    max-width: 640px;
-    gap: 10px;
+  .wrap {
+    gap: 12px;
   }
-}
-
-@media (min-width: 1024px) {
-  .scroller {
-    max-width: 720px;
+  .groupChips {
+    gap: 8px;
   }
-}
-
-.scroller[data-pending='true'] {
-  opacity: 0.6;
-  pointer-events: none;
+  .groupLabel {
+    font-size: 0.68rem;
+  }
 }
 
 /* ─── Chip (pill) ─── */
@@ -45,12 +61,12 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 0 14px;
-  height: 40px;
+  gap: 5px;
+  padding: 0 12px;
+  height: 36px;
   border-radius: 999px;
   font-family: var(--font-body);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 800;
   cursor: pointer;
   border: 1px solid;
@@ -90,7 +106,6 @@
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(157, 78, 221, 0.04));
 }
 .purple:hover {
-  color: var(--purple-light);
   border-color: rgba(168, 85, 247, 0.45);
   background: linear-gradient(135deg, rgba(168, 85, 247, 0.16), rgba(157, 78, 221, 0.08));
   box-shadow: var(--glow-purple-sm);
@@ -113,41 +128,37 @@
 }
 
 /* ─── Tone: gold (Explore All) ─── */
-.gold,
-.special {
+.gold {
   color: var(--gold-light);
   border-color: rgba(232, 199, 154, 0.28);
   background: linear-gradient(135deg, rgba(232, 199, 154, 0.1), rgba(232, 199, 154, 0.04));
 }
-.gold:hover,
-.special:hover {
+.gold:hover {
   border-color: rgba(232, 199, 154, 0.55);
   background: linear-gradient(135deg, rgba(232, 199, 154, 0.2), rgba(232, 199, 154, 0.08));
   box-shadow: var(--glow-gold-sm);
-}
-.gold.active {
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.4), rgba(232, 199, 154, 0.2));
-  border-color: rgba(232, 199, 154, 0.7);
-  box-shadow: 0 0 18px rgba(232, 199, 154, 0.35);
 }
 
 /* ─── Mobile tweaks ─── */
 @media (max-width: 480px) {
   .chip {
-    padding: 0 12px;
-    height: 38px;
-    font-size: 0.78rem;
+    padding: 0 10px;
+    height: 34px;
+    font-size: 0.74rem;
+    gap: 4px;
+  }
+  .groupChips {
     gap: 5px;
   }
-  .scroller {
-    gap: 6px;
+  .wrap {
+    gap: 8px;
   }
 }
 
 /* ─── Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .chip,
-  .scroller {
+  .wrap {
     transition: none;
   }
   .chip:hover {
