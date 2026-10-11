@@ -35,11 +35,6 @@ jobs:
       - name: ESLint
         run: npx eslint .
 
-      - name: Prettier diagnostic (temporary)
-        run: |
-          npx prettier app/api/track-contact/route.test.ts > /tmp/prettier-track-contact.ts
-          diff -u app/api/track-contact/route.test.ts /tmp/prettier-track-contact.ts || true
-
       - name: Prettier
         run: npx prettier --check "**/*.{ts,tsx,css,json}"
 
