@@ -6,7 +6,7 @@ import { getTrustedClientIp } from './client-ip'
 // EAH — IP Hashing (privacy-preserving)
 //   • مش بنخزّن IP الخام
 //   • hash + salt من .env.local
-//   • 16 حرف (SHA-256 → hex → slice)
+//   • 32 حرف (أول 128 بت من SHA-256 بصيغة hex)
 // ═══════════════════════════════════════════════════════════
 
 export async function getHashedIp(): Promise<string | null> {
