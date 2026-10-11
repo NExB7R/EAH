@@ -13,6 +13,7 @@ import {
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Chips Config (Single Source of Truth)
+// الترتيب: الأنواع → الخصائص → الاكتشاف → المميز
 // كل chip بنفسجي — الأيقونة بس ملونة حسب النوع
 // ═══════════════════════════════════════════════════════════
 
@@ -30,6 +31,7 @@ export type Chip = {
 }
 
 export const CHIPS: Chip[] = [
+  // ─── الأنواع ───
   {
     key: 'restaurant',
     label: 'مطاعم',
@@ -48,15 +50,16 @@ export const CHIPS: Chip[] = [
   },
   {
     key: 'delivery',
-    label: 'توصيل',
+    label: 'مكاتب التوصيل',
     Icon: BikeIcon,
     tone: 'purple',
     iconColor: 'var(--purple-light)',
     action: { type: 'filter', value: 'delivery_office' },
   },
+  // ─── الخصائص ───
   {
     key: 'open',
-    label: 'مفتوح',
+    label: 'مفتوح الان',
     Icon: ClockIcon,
     tone: 'purple',
     iconColor: 'var(--teal)',
@@ -64,19 +67,11 @@ export const CHIPS: Chip[] = [
   },
   {
     key: 'whatsapp',
-    label: 'واتساب',
+    label: 'اونلاين واتساب',
     Icon: WhatsAppIcon,
     tone: 'purple',
     iconColor: '#25d366',
     action: { type: 'filter', value: 'online' },
-  },
-  {
-    key: 'offers',
-    label: 'العروض',
-    Icon: GiftIcon,
-    tone: 'purple',
-    iconColor: 'var(--gold-light)',
-    action: { type: 'scroll', value: 'offers' },
   },
   {
     key: 'nearby',
@@ -86,13 +81,14 @@ export const CHIPS: Chip[] = [
     iconColor: 'var(--purple-neon)',
     action: { type: 'scroll', value: 'nearby' },
   },
+  // ─── الاكتشاف ───
   {
-    key: 'recommend',
-    label: 'ارشحلك',
-    Icon: SparklesIcon,
+    key: 'offers',
+    label: 'العروض',
+    Icon: GiftIcon,
     tone: 'purple',
     iconColor: 'var(--gold-light)',
-    action: { type: 'scroll', value: 'suggested' },
+    action: { type: 'scroll', value: 'offers' },
   },
   {
     key: 'trending',
@@ -101,6 +97,14 @@ export const CHIPS: Chip[] = [
     tone: 'purple',
     iconColor: 'var(--orange)',
     action: { type: 'scroll', value: 'trending' },
+  },
+  {
+    key: 'recommend',
+    label: 'ارشحلك',
+    Icon: SparklesIcon,
+    tone: 'purple',
+    iconColor: 'var(--gold-light)',
+    action: { type: 'scroll', value: 'suggested' },
   },
 ]
 
