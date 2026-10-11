@@ -54,7 +54,9 @@ describe('POST /api/track-action', () => {
       unavailable: true,
     })
 
-    const response = await POST(makeRequest({ action: 'whatsapp', businessId: '6f4a1f8a-7e61-4b1f-a1c7-3a824f41bd9b' }))
+    const response = await POST(
+      makeRequest({ action: 'whatsapp', businessId: '6f4a1f8a-7e61-4b1f-a1c7-3a824f41bd9b' }),
+    )
 
     expect(response.status).toBe(503)
     expect(response.headers.get('cache-control')).toBe('no-store')
