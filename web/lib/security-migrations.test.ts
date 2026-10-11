@@ -10,6 +10,10 @@ const phoneMigrationPath = join(
   __dirname,
   '../../docs/migrations/2026-10-11-harden-phone-lookup.sql',
 )
+const verificationPath = join(
+  __dirname,
+  '../../docs/migrations/2026-10-11-verify-security-hardening.sql',
+)
 
 function readMigration(path: string): string {
   return readFileSync(path, 'utf8')
@@ -36,6 +40,7 @@ describe('security SQL migrations', () => {
   it('uses balanced PostgreSQL dollar-quote delimiters', () => {
     assertBalancedDollarQuotes(readMigration(migrationPath))
     assertBalancedDollarQuotes(readMigration(phoneMigrationPath))
+    assertBalancedDollarQuotes(readMigration(verificationPath))
   })
 
   it('keeps sensitive mutation RPCs away from public client roles', () => {
