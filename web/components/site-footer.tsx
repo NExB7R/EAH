@@ -183,7 +183,7 @@ export default function SiteFooter() {
 
         {/* ─── Bottom ─── */}
         <div className={styles.bottom}>
-          <p className={styles.copyright}>© 2026 EAH — كل الحقوق محفوظة</p>
+          <p className={styles.copyright}>حقوق النشر محفوظة © 2026 EAH</p>
           <span className={styles.version}>{APP_VERSION}</span>
         </div>
       </div>
