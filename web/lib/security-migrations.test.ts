@@ -124,6 +124,21 @@ describe('security SQL migrations', () => {
     }
   })
 
+  it('fails closed when the CRON_SECRET is missing', () => {
+    const cronPaths = [
+      '../app/api/cron/cleanup-errors/route.ts',
+      '../app/api/cron/review-reminder/route.ts',
+      '../app/api/cron/trial-notifications/route.ts',
+      '../app/api/cron/trust-decay/route.ts',
+    ]
+
+    for (const relativePath of cronPaths) {
+      const source = readFileSync(join(__dirname, relativePath), 'utf8')
+      expect(source).toContain('const secret = process.env.CRON_SECRET')
+      expect(source).toContain('if (!secret || auth !== `Bearer ${secret}`)')
+    }
+  })
+
   it('does not grant direct phone-lookup RPC access to public clients', () => {
     const sql = readMigration(phoneMigrationPath)
 
