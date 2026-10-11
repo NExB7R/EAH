@@ -10,8 +10,8 @@
   justify-content: center;
   min-height: 100vh;
   min-height: 100svh;
-  padding: 84px 16px 44px;
-  padding-top: calc(84px + env(safe-area-inset-top));
+  padding: 104px 16px 64px;
+  padding-top: calc(104px + env(safe-area-inset-top));
   overflow: hidden;
   isolation: isolate;
 }
@@ -72,7 +72,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 @media (min-width: 640px) {

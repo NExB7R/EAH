@@ -76,7 +76,7 @@ export default function ExploreFilters({ area, counts, activeAreas }: Props) {
   const [, startTransition] = useTransition()
   const geo = useGeo()
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(searchParams.get('filters') === '1')
 
   const currentType = searchParams.get('type')
   const currentRating = searchParams.get('rating')
