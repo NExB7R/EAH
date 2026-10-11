@@ -172,8 +172,8 @@
     --slogan-fs: 1rem;
   }
   .lg {
-    --logo-w: 320px;
-    --slogan-fs: 1rem;
+    --logo-w: 280px;
+    --slogan-fs: 0.92rem;
   }
 }
 

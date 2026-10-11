@@ -26,8 +26,8 @@
 @media (min-width: 1024px) {
   .hero {
     min-height: 100vh;
-    padding: 140px 24px 96px;
-    padding-top: calc(140px + env(safe-area-inset-top));
+    padding: 112px 24px 64px;
+    padding-top: calc(112px + env(safe-area-inset-top));
   }
 }
 
@@ -85,7 +85,7 @@
 @media (min-width: 1024px) {
   .content {
     max-width: 760px;
-    gap: 48px;
+    gap: 36px;
   }
 }
 
