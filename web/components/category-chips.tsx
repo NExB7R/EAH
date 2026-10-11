@@ -3,21 +3,13 @@
 import { useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { CHIPS, EXPLORE_CHIP, type ChipGroup } from '@/lib/chips-config'
+import { CHIPS, EXPLORE_CHIP } from '@/lib/chips-config'
 import styles from './category-chips.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Category Chips (Grouped, 2026)
-// 3 groups: types / features / discovery
+// EAH — Category Chips (Pyramid, 2026)
+// 9 chips في صفوف + استكشف الكل في القمة
 // ═══════════════════════════════════════════════════════════
-
-const GROUP_LABELS: Record<ChipGroup, string> = {
-  types: 'الأنواع',
-  features: 'الخصائص',
-  discovery: 'اكتشف',
-}
-
-const GROUP_ORDER: ChipGroup[] = ['types', 'features', 'discovery']
 
 export default function CategoryChips() {
   const router = useRouter()
@@ -54,42 +46,31 @@ export default function CategoryChips() {
 
   return (
     <div className={styles.wrap} data-pending={isPending} aria-label="تصفية سريعة">
-      {GROUP_ORDER.map((group) => {
-        const groupChips = CHIPS.filter((c) => c.group === group)
-        const isDiscovery = group === 'discovery'
-        return (
-          <div key={group} className={styles.group}>
-            <span className={styles.groupLabel}>{GROUP_LABELS[group]}</span>
-            <div className={styles.groupChips}>
-              {groupChips.map((chip) => {
-                const active = activeKey === chip.key
-                return (
-                  <button
-                    key={chip.key}
-                    type="button"
-                    className={`${styles.chip} ${styles[chip.tone]} ${active ? styles.active : ''}`}
-                    onClick={() => handleChip(chip.key, chip.action)}
-                    aria-pressed={active}
-                  >
-                    <span className={styles.chipIcon}>
-                      <chip.Icon size={15} />
-                    </span>
-                    <span>{chip.label}</span>
-                  </button>
-                )
-              })}
-              {isDiscovery && (
-                <Link href={EXPLORE_CHIP.href} className={`${styles.chip} ${styles.gold}`}>
-                  <span className={styles.chipIcon}>
-                    <EXPLORE_CHIP.Icon size={15} />
-                  </span>
-                  <span>{EXPLORE_CHIP.label}</span>
-                </Link>
-              )}
-            </div>
-          </div>
-        )
-      })}
+      <div className={styles.chips}>
+        {CHIPS.map((chip) => {
+          const active = activeKey === chip.key
+          return (
+            <button
+              key={chip.key}
+              type="button"
+              className={`${styles.chip} ${styles[chip.tone]} ${active ? styles.active : ''}`}
+              onClick={() => handleChip(chip.key, chip.action)}
+              aria-pressed={active}
+            >
+              <span className={styles.chipIcon}>
+                <chip.Icon size={15} />
+              </span>
+              <span>{chip.label}</span>
+            </button>
+          )
+        })}
+      </div>
+      <Link href={EXPLORE_CHIP.href} className={`${styles.chip} ${styles.gold}`}>
+        <span className={styles.chipIcon}>
+          <EXPLORE_CHIP.Icon size={15} />
+        </span>
+        <span>{EXPLORE_CHIP.label}</span>
+      </Link>
     </div>
   )
 }

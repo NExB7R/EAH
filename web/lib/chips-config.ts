@@ -57,31 +57,6 @@ export const CHIPS: Chip[] = [
     group: 'types',
     action: { type: 'filter', value: 'delivery_office' },
   },
-  // ─── الخصائص ───
-  {
-    key: 'open',
-    label: 'مفتوح الان',
-    Icon: ClockIcon,
-    tone: 'purple',
-    group: 'features',
-    action: { type: 'filter', value: 'open' },
-  },
-  {
-    key: 'whatsapp',
-    label: 'اونلاين واتساب',
-    Icon: WhatsAppIcon,
-    tone: 'purple',
-    group: 'features',
-    action: { type: 'filter', value: 'online' },
-  },
-  {
-    key: 'nearby',
-    label: 'قريب مني',
-    Icon: MapPinIcon,
-    tone: 'purple',
-    group: 'features',
-    action: { type: 'scroll', value: 'nearby' },
-  },
   // ─── الاكتشاف ───
   {
     key: 'offers',
@@ -106,6 +81,31 @@ export const CHIPS: Chip[] = [
     tone: 'purple',
     group: 'discovery',
     action: { type: 'scroll', value: 'suggested' },
+  },
+  // ─── الخصائص ───
+  {
+    key: 'open',
+    label: 'مفتوح الان',
+    Icon: ClockIcon,
+    tone: 'purple',
+    group: 'features',
+    action: { type: 'filter', value: 'open' },
+  },
+  {
+    key: 'whatsapp',
+    label: 'اونلاين واتساب',
+    Icon: WhatsAppIcon,
+    tone: 'purple',
+    group: 'features',
+    action: { type: 'filter', value: 'online' },
+  },
+  {
+    key: 'nearby',
+    label: 'قريب مني',
+    Icon: MapPinIcon,
+    tone: 'purple',
+    group: 'features',
+    action: { type: 'scroll', value: 'nearby' },
   },
 ]
 
