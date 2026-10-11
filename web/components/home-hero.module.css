@@ -10,8 +10,8 @@
   justify-content: center;
   min-height: 100vh;
   min-height: 100svh;
-  padding: 88px 16px 48px;
-  padding-top: calc(88px + env(safe-area-inset-top));
+  padding: 72px 16px 32px;
+  padding-top: calc(72px + env(safe-area-inset-top));
   overflow: hidden;
   isolation: isolate;
 }
@@ -72,7 +72,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 22px;
+  gap: 16px;
 }
 
 @media (min-width: 640px) {
@@ -95,7 +95,7 @@
   align-items: center;
   justify-content: center;
   margin: 0;
-  animation: eahHeroIn 320ms var(--ease-out) 0ms both;
+  animation: eahHeroIn 240ms var(--ease-out) 0ms both;
 }
 
 /* ─── Hook ─── */
@@ -112,7 +112,7 @@
   color: var(--text-primary);
   letter-spacing: -0.02em;
   margin: 0;
-  animation: eahHeroIn 320ms var(--ease-out) 120ms both;
+  animation: eahHeroIn 240ms var(--ease-out) 80ms both;
 }
 
 @media (min-width: 640px) {
@@ -174,7 +174,7 @@
     0 0 0 1px rgba(232, 199, 154, 0.08),
     0 0 20px rgba(232, 199, 154, 0.15),
     inset 0 0 20px rgba(232, 199, 154, 0.05);
-  animation: eahHeroIn 320ms var(--ease-out) 60ms both;
+  animation: eahHeroIn 240ms var(--ease-out) 40ms both;
 }
 
 .signIcon {
@@ -195,13 +195,13 @@
 /* ─── Search wrapper ─── */
 .searchWrap {
   width: 100%;
-  animation: eahHeroIn 320ms var(--ease-out) 180ms both;
+  animation: eahHeroIn 240ms var(--ease-out) 120ms both;
 }
 
 /* ─── Chips wrapper ─── */
 .chipsWrap {
   width: 100%;
-  animation: eahHeroIn 320ms var(--ease-out) 240ms both;
+  animation: eahHeroIn 240ms var(--ease-out) 160ms both;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -209,7 +209,7 @@
    ═══════════════════════════════════════════════════════════ */
 @keyframes eahHeroIn {
   from {
-    opacity: 0.88;
+    opacity: 0.92;
     transform: translateY(6px);
   }
   to {
