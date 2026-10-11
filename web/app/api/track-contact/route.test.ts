@@ -129,11 +129,16 @@ describe('POST /api/track-contact', () => {
 
   it('does not expose database errors to the client', async () => {
     mockAuth({ id: 'user-1' })
-    mockRpc.mockResolvedValueOnce({ error: new Error('internal database detail') })
+    mockRpc.mockResolvedValueOnce({
+      error: new Error('internal database detail'),
+    })
 
     const response = await POST(makeRequest(validBody))
 
     expect(response.status).toBe(503)
-    expect(await response.json()).toEqual({ ok: false, error: 'tracking_unavailable' })
+    expect(await response.json()).toEqual({
+      ok: false,
+      error: 'tracking_unavailable',
+    })
   })
 })
