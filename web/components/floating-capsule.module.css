@@ -36,8 +36,8 @@
 
 /* scrolled state */
 .capsule[data-scrolled='true'] .inner {
-  background: linear-gradient(160deg, rgba(20, 14, 34, 0.92), rgba(10, 7, 20, 0.96));
-  border-color: rgba(168, 85, 247, 0.3);
+  background: var(--surface-gradient-strong);
+  border-color: var(--border-purple);
   box-shadow:
     0 0 0 1px rgba(168, 85, 247, 0.08),
     0 4px 20px rgba(0, 0, 0, 0.4),
@@ -165,8 +165,8 @@
   left: 50%;
   transform: translateX(-50%) translateY(-4px);
   padding: 5px 10px;
-  background: linear-gradient(135deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.98));
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: var(--tooltip-bg);
+  border: 1px solid var(--border-purple);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
   font-family: var(--font-body);
@@ -344,8 +344,8 @@
   height: 36px;
   padding: 0 10px;
   border-radius: var(--radius-full);
-  background: rgba(10, 5, 20, 0.55);
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  background: var(--weather-bg);
+  border: 1px solid var(--border-purple-soft);
   color: var(--text-secondary);
   font-family: var(--font-body);
   cursor: default;
@@ -354,7 +354,7 @@
 }
 
 .weather:hover {
-  border-color: rgba(168, 85, 247, 0.3);
+  border-color: var(--border-purple);
 }
 
 .weatherIcon {

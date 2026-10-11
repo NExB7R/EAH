@@ -16,6 +16,7 @@ import SwRegister from '@/components/sw-register'
 import { Analytics } from '@vercel/analytics/next'
 import { getUserSession } from '@/lib/data/user'
 import { GeoProvider } from '@/lib/contexts/geo-context'
+import { ThemeProvider } from '@/lib/contexts/theme-context'
 import { getFeatureFlags } from '@/lib/features'
 import { getActiveAnnouncements } from '@/lib/data/announcements'
 import { getAllLiveStats } from '@/lib/data/live-stats'
@@ -23,6 +24,9 @@ import './globals.css'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+
+// منع flash — يشتغل قبل hydration
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('eah-theme')||'system';var r=t==='system'?(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):t;document.documentElement.setAttribute('data-theme',r)}catch(e){}})();`
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -62,6 +66,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
       className={`${tajawal.variable} ${cairo.variable} ${greatVibes.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
         {SUPABASE_URL && (
           <>
@@ -69,26 +76,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <link rel="dns-prefetch" href={SUPABASE_URL} />
           </>
         )}
-        <GeoProvider>
-          <Suspense fallback={null}>
-            <TopBar />
-          </Suspense>
-          {children}
-          <Suspense fallback={null}>
+        <ThemeProvider>
+          <GeoProvider>
+            <Suspense fallback={null}>
+              <TopBar />
+            </Suspense>
+            {children}
+            <Suspense fallback={null}>
+              <SiteChromeGate>
+                <BottomBar />
+              </SiteChromeGate>
+            </Suspense>
             <SiteChromeGate>
-              <BottomBar />
+              <SiteFooter />
             </SiteChromeGate>
-          </Suspense>
-          <SiteChromeGate>
-            <SiteFooter />
-          </SiteChromeGate>
-          <InstallPrompt />
-          <ReviewReminder />
-          <ScrollToTop />
-          <OfflineBadge />
-          <SwRegister />
-          <Analytics />
-        </GeoProvider>
+            <InstallPrompt />
+            <ReviewReminder />
+            <ScrollToTop />
+            <OfflineBadge />
+            <SwRegister />
+            <Analytics />
+          </GeoProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
