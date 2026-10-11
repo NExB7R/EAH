@@ -17,6 +17,100 @@ revoke all on function public.is_phone_registered(text) from public, anon, authe
 grant execute on function public.is_phone_registered(text) to service_role;
 alter function public.is_phone_registered(text) set search_path = pg_catalog, public, pg_temp;
 
+-- Business-name validation must not enumerate unpublished businesses to anonymous callers.
+-- When excluding an existing business ID, honour it only if the caller owns that
+-- business or is a super-admin. Publicly published matches remain discoverable.
+create or replace function public.check_business_name_unique(
+  p_name text,
+  p_exclude_id uuid default null
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = pg_catalog, public, private, extensions, pg_temp
+as $
+declare
+  v_normalized text;
+  v_exact_match record;
+  v_similar_match record;
+  v_exclude_id uuid := null;
+begin
+  if auth.uid() is null
+     and coalesce(auth.jwt() ->> 'role', '') <> 'service_role' then
+    raise exception 'not authorized' using errcode = '42501';
+  end if;
+
+  v_normalized := public.normalize_business_name(p_name);
+
+  if v_normalized = '' then
+    return jsonb_build_object('ok', true);
+  end if;
+
+  if p_exclude_id is not null and (
+    coalesce(auth.jwt() ->> 'role', '') = 'service_role'
+    or exists (
+      select 1
+      from public.businesses as owned_business
+      where owned_business.id = p_exclude_id
+        and (
+          owned_business.owner_profile_id = auth.uid()
+          or private.is_admin()
+        )
+    )
+  ) then
+    v_exclude_id := p_exclude_id;
+  end if;
+
+  select b.id, b.name
+  into v_exact_match
+  from public.businesses as b
+  where public.normalize_business_name(b.name) = v_normalized
+    and (b.is_published = true
+         or b.owner_profile_id = auth.uid()
+         or private.is_admin()
+         or coalesce(auth.jwt() ->> 'role', '') = 'service_role')
+    and (v_exclude_id is null or b.id <> v_exclude_id)
+  limit 1;
+
+  if found then
+    return jsonb_build_object(
+      'ok', false,
+      'reason', 'exact_match',
+      'matched_name', v_exact_match.name,
+      'matched_id', v_exact_match.id,
+      'message', 'في نشاط بنفس الاسم — جرّب اسم مختلف أو أضف كلمة تمييز'
+    );
+  end if;
+
+  select b.id, b.name
+  into v_similar_match
+  from public.businesses as b
+  where extensions.levenshtein(public.normalize_business_name(b.name), v_normalized) <= 2
+    and length(public.normalize_business_name(b.name)) >= 4
+    and (b.is_published = true
+         or b.owner_profile_id = auth.uid()
+         or private.is_admin()
+         or coalesce(auth.jwt() ->> 'role', '') = 'service_role')
+    and (v_exclude_id is null or b.id <> v_exclude_id)
+  limit 1;
+
+  if found then
+    return jsonb_build_object(
+      'ok', false,
+      'reason', 'similar',
+      'matched_name', v_similar_match.name,
+      'message', 'في نشاط قريب جداً في الاسم — جرّب اسم أوضح'
+    );
+  end if;
+
+  return jsonb_build_object('ok', true, 'normalized', v_normalized);
+end;
+$;
+
+revoke all on function public.check_business_name_unique(text, uuid) from public, anon;
+grant execute on function public.check_business_name_unique(text, uuid) to authenticated, service_role;
+alter function public.check_business_name_unique(text, uuid) set search_path = pg_catalog, public, private, extensions, pg_temp;
+
 -- Contact-reveal tracking is reached through the authenticated server route, which
 -- derives the visitor hash from the verified user. Do not let direct RPC callers
 -- forge arbitrary hashes to inflate public contact counters.
