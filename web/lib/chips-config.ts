@@ -13,9 +13,10 @@ import {
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Chips Config (Single Source of Truth)
+// كل chip بنفسجي — الأيقونة بس ملونة حسب النوع
 // ═══════════════════════════════════════════════════════════
 
-export type ChipTone = 'purple' | 'orange' | 'teal' | 'gold' | 'special'
+export type ChipTone = 'purple' | 'gold'
 
 export type ChipAction = { type: 'filter'; value: string } | { type: 'scroll'; value: string }
 
@@ -24,23 +25,25 @@ export type Chip = {
   label: string
   Icon: React.ComponentType<{ size?: number }>
   tone: ChipTone
+  iconColor: string
   action: ChipAction
 }
 
 export const CHIPS: Chip[] = [
-  // ─── الأنواع ───
   {
     key: 'restaurant',
     label: 'مطاعم',
     Icon: UtensilsIcon,
-    tone: 'orange',
+    tone: 'purple',
+    iconColor: 'var(--gold-light)',
     action: { type: 'filter', value: 'restaurant' },
   },
   {
     key: 'pharmacy',
     label: 'صيدليات',
     Icon: PillIcon,
-    tone: 'teal',
+    tone: 'purple',
+    iconColor: 'var(--teal)',
     action: { type: 'filter', value: 'pharmacy' },
   },
   {
@@ -48,29 +51,31 @@ export const CHIPS: Chip[] = [
     label: 'توصيل',
     Icon: BikeIcon,
     tone: 'purple',
+    iconColor: 'var(--purple-light)',
     action: { type: 'filter', value: 'delivery_office' },
   },
-  // ─── الخصائص ───
   {
     key: 'open',
     label: 'مفتوح',
     Icon: ClockIcon,
-    tone: 'teal',
+    tone: 'purple',
+    iconColor: 'var(--teal)',
     action: { type: 'filter', value: 'open' },
   },
   {
     key: 'whatsapp',
     label: 'واتساب',
     Icon: WhatsAppIcon,
-    tone: 'teal',
+    tone: 'purple',
+    iconColor: '#25d366',
     action: { type: 'filter', value: 'online' },
   },
-  // ─── الاكتشاف ───
   {
     key: 'offers',
     label: 'العروض',
     Icon: GiftIcon,
-    tone: 'gold',
+    tone: 'purple',
+    iconColor: 'var(--gold-light)',
     action: { type: 'scroll', value: 'offers' },
   },
   {
@@ -78,20 +83,23 @@ export const CHIPS: Chip[] = [
     label: 'قريب مني',
     Icon: MapPinIcon,
     tone: 'purple',
+    iconColor: 'var(--purple-neon)',
     action: { type: 'scroll', value: 'nearby' },
   },
   {
     key: 'recommend',
     label: 'ارشحلك',
     Icon: SparklesIcon,
-    tone: 'gold',
+    tone: 'purple',
+    iconColor: 'var(--gold-light)',
     action: { type: 'scroll', value: 'suggested' },
   },
   {
     key: 'trending',
     label: 'الترند',
     Icon: TrendingUpIcon,
-    tone: 'orange',
+    tone: 'purple',
+    iconColor: 'var(--orange)',
     action: { type: 'scroll', value: 'trending' },
   },
 ]
@@ -100,6 +108,7 @@ export const EXPLORE_CHIP = {
   key: 'explore',
   label: 'استكشف الكل',
   Icon: ArrowLeftIcon,
-  tone: 'special' as ChipTone,
+  tone: 'gold' as ChipTone,
+  iconColor: 'var(--gold-light)',
   href: '/explore',
 }

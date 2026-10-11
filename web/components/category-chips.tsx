@@ -58,14 +58,18 @@ export default function CategoryChips() {
               onClick={() => handleChip(chip.key, chip.action)}
               aria-pressed={active}
             >
-              <chip.Icon size={16} />
+              <span className={styles.chipIcon} style={{ color: chip.iconColor }}>
+                <chip.Icon size={16} />
+              </span>
               <span>{chip.label}</span>
             </button>
           )
         })}
 
         <Link href={EXPLORE_CHIP.href} className={`${styles.chip} ${styles.special}`}>
-          <EXPLORE_CHIP.Icon size={16} />
+          <span className={styles.chipIcon} style={{ color: EXPLORE_CHIP.iconColor }}>
+            <EXPLORE_CHIP.Icon size={16} />
+          </span>
           <span>{EXPLORE_CHIP.label}</span>
         </Link>
       </div>
