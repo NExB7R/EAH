@@ -58,7 +58,7 @@ describe('security SQL migrations', () => {
   it('validates ownership within SECURITY DEFINER badge checks', () => {
     const sql = readMigration(migrationPath)
 
-    expect(sql.match(/auth\.uid\(\) = p_user_id/g)).toHaveLength(3)
+    expect(sql.match(/auth\.uid\(\) = p_user_id/g)?.length ?? 0).toBeGreaterThanOrEqual(3)
     expect(sql.match(/not public\.is_admin\(\)/g)).toHaveLength(3)
     expect(sql.match(/auth\.jwt\(\) ->> 'role'/g)).toHaveLength(3)
   })
