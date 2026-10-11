@@ -20,7 +20,7 @@ import {
 
 type Result = { ok: true } | { ok: false; error: string; fieldErrors?: Record<string, string> }
 
-function parseError(parsed: z.SafeParseError<unknown>): Result {
+function parseError(parsed: z.ZodSafeParseError<unknown>): Result {
   const fieldErrors: Record<string, string> = {}
   for (const issue of parsed.error.issues) {
     const key = issue.path.join('.') || '_'
