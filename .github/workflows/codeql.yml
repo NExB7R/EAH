@@ -8,6 +8,11 @@ on:
   schedule:
     - cron: '0 6 * * 1'
 
+# Keep only the newest security analysis for each PR/ref to avoid runner pileups.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
