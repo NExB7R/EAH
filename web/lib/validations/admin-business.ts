@@ -100,21 +100,19 @@ export const contactsSchema = z.object({
 })
 
 // ─── 4. الموقع ───
-export const locationSchema = z
-  .object({
-    latitude: z.coerce.number().min(-90).max(90).optional().nullable(),
-    longitude: z.coerce.number().min(-180).max(180).optional().nullable(),
-    address_text: z.string().trim().max(200).optional().nullable(),
-    map_url: optionalUrl,
-  })
-  .refine(
-    (d) => {
-      const hasLat = d.latitude !== null && d.latitude !== undefined
-      const hasLng = d.longitude !== null && d.longitude !== undefined
-      return hasLat === hasLng
-    },
-    { message: 'لازم الإحداثيين مع بعض (أو الاتنين فاضيين)' },
-  )
+export const locationSchema = z.object({
+  latitude: z.coerce.number().min(-90).max(90).optional().nullable(),
+  longitude: z.coerce.number().min(-180).max(180).optional().nullable(),
+  address_text: z.string().trim().max(200).optional().nullable(),
+  map_url: optionalUrl,
+})
+
+// ─── 4b. تحقق الإحداثيات ───
+export function checkCoords(d: { latitude?: number | null; longitude?: number | null }): boolean {
+  const hasLat = d.latitude !== null && d.latitude !== undefined
+  const hasLng = d.longitude !== null && d.longitude !== undefined
+  return hasLat === hasLng
+}
 
 // ─── 5. ساعات العمل ───
 const dayHoursSchema = z
@@ -187,8 +185,11 @@ export type OwnerInput = z.infer<typeof ownerSchema>
 // ─── كامل (للإنشاء النهائي) ───
 export const fullBusinessSchema = basicsSchema
   .merge(contactsSchema)
-  .merge(locationSchema.innerType())
+  .merge(locationSchema)
   .merge(settingsSchema)
   .merge(ownerSchema)
+  .refine((d) => checkCoords(d), {
+    message: 'لازم الإحداثيين مع بعض (أو الاتنين فاضيين)',
+  })
 
 export type FullBusinessInput = z.infer<typeof fullBusinessSchema>
