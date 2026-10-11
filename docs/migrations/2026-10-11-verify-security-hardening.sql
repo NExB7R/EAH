@@ -98,7 +98,6 @@ begin
       ('public.find_by_phone(text)'),
       ('public.is_phone_registered(text)'),
       ('public.reveal_contact(uuid, text, text)'),
-      ('public.check_business_name_unique(text, uuid)'),
       ('public.admin_get_profiles()'),
       ('public.admin_get_business_owners()'),
       ('public.get_referral_list(uuid, integer)'),
@@ -147,6 +146,25 @@ begin
       raise exception 'Unexpected search_path on %: %', v_check.signature, v_config;
     end if;
   end loop;
+  -- check_business_name_unique also uses the trusted private and extensions schemas.
+  v_function := pg_catalog.to_regprocedure('public.check_business_name_unique(text, uuid)');
+
+  if v_function is null then
+    raise exception 'Expected function is missing while verifying search_path: %',
+      'public.check_business_name_unique(text, uuid)';
+  end if;
+
+  select p.proconfig
+  into v_config
+  from pg_catalog.pg_proc as p
+  where p.oid = v_function::oid;
+
+  if not coalesce(v_config, array[]::text[])
+     @> array['search_path=pg_catalog, public, private, extensions, pg_temp'] then
+    raise exception 'Unexpected search_path on %: %',
+      'public.check_business_name_unique(text, uuid)', v_config;
+  end if;
+
   -- Confirm the existing database triggers still reference all reviewed trigger handlers.
   for v_check in
     select signature
