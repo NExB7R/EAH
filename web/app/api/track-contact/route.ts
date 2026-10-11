@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { createHash } from 'crypto'
 
 const schema = z.object({
@@ -30,7 +31,10 @@ export async function POST(request: Request) {
     .update(`${user.id}:${parsed.data.businessId}:${parsed.data.method}`)
     .digest('hex')
 
-  const { error } = await supabase.rpc('reveal_contact', {
+  // Only the authenticated server route can submit the derived hash; the database
+  // RPC is restricted to service_role so clients cannot forge arbitrary visitor hashes.
+  const serviceClient = createServiceClient()
+  const { error } = await serviceClient.rpc('reveal_contact', {
     p_business_id: parsed.data.businessId,
     p_method_type: parsed.data.method,
     p_visitor_hash: visitorHash,
