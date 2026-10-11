@@ -53,6 +53,12 @@ describe('security SQL migrations', () => {
     expect(sql).toContain(
       'grant execute on function public.is_phone_registered(text) to service_role',
     )
+    expect(sql).toContain(
+      'revoke all on function public.reveal_contact(uuid, text, text) from public, anon, authenticated',
+    )
+    expect(sql).toContain(
+      'grant execute on function public.reveal_contact(uuid, text, text) to service_role',
+    )
   })
 
   it('validates ownership within SECURITY DEFINER badge checks', () => {
