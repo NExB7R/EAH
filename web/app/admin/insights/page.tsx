@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { SparklesIcon, StoreIcon, FileTextIcon, AlertIcon, ArrowLeftIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
@@ -16,7 +16,9 @@ type Row = {
 }
 
 async function getStorageData(): Promise<Row[]> {
-  const supabase = await createClient()
+  // This table intentionally has no client RLS policy. This query runs only inside
+  // the /admin route, whose parent layout verifies the signed-in admin role.
+  const supabase = createServiceClient()
 
   // جيب كل الأنشطة اللي عندها تقارير
   const { data } = await supabase
