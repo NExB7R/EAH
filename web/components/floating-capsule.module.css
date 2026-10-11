@@ -350,7 +350,10 @@
   font-family: var(--font-body);
   cursor: default;
   user-select: none;
-  transition: border-color var(--motion-fast) var(--ease);
+  transition:
+    border-color var(--motion-fast) var(--ease),
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out);
 }
 
 .weather:hover {
@@ -370,19 +373,11 @@
   letter-spacing: -0.2px;
 }
 
-/* على الموبايل: طقس مصغّر (أيقونة + درجة، بدون خلفية/حدود) */
+/* على الموبايل: نفس شكل الديسكتوب، يختفي بنعومة عند السكرول */
 @media (max-width: 640px) {
-  .weather {
-    height: auto;
-    padding: 0;
-    background: transparent;
-    border: none;
-    gap: 3px;
-  }
-  .weatherIcon {
-    font-size: 0.95rem;
-  }
-  .weatherTemp {
-    font-size: 0.72rem;
+  .capsule[data-scrolled='true'] .weather {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
   }
 }
