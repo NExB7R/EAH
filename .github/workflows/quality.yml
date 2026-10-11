@@ -35,6 +35,11 @@ jobs:
       - name: ESLint
         run: npx eslint .
 
+      - name: Prettier diagnostic (temporary)
+        run: |
+          npx prettier lib/security-migrations.test.ts > /tmp/prettier-security-migrations.ts
+          diff -u lib/security-migrations.test.ts /tmp/prettier-security-migrations.ts || true
+
       - name: Prettier
         run: npx prettier --check "**/*.{ts,tsx,css,json}"
 
