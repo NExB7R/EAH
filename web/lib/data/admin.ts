@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 
 // ═══════════════════════════════════════════════════════════
@@ -545,3 +546,50 @@ export async function getReports(status: string = 'open'): Promise<ReportRow[]> 
     reporter: { display_name: namesMap.get(r.reporter_id) ?? '—' },
   })) as ReportRow[]
 }
+
+// ═══════════════════════════════════════════════════════════
+// Admin — Badges (counts للـ sidebar + dashboard)
+// ═══════════════════════════════════════════════════════════
+
+export type AdminBadges = {
+  pendingBusinesses: number
+  flaggedReviews: number
+  openReports: number
+  pendingSubscriptions: number
+}
+
+export const getAdminBadges = unstable_cache(
+  async (): Promise<AdminBadges> => {
+    const { createServiceClient } = await import('@/lib/supabase/service')
+    const supabase = createServiceClient()
+    const [
+      { count: pendingBusinesses },
+      { count: flaggedReviews },
+      { count: openReports },
+      { count: pendingSubscriptions },
+    ] = await Promise.all([
+      supabase
+        .from('businesses')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_published', false)
+        .is('rejected_at', null),
+      supabase
+        .from('business_reviews')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending'),
+      supabase.from('reports').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+      supabase
+        .from('business_subscriptions')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending'),
+    ])
+    return {
+      pendingBusinesses: pendingBusinesses ?? 0,
+      flaggedReviews: flaggedReviews ?? 0,
+      openReports: openReports ?? 0,
+      pendingSubscriptions: pendingSubscriptions ?? 0,
+    }
+  },
+  ['admin-badges'],
+  { revalidate: 30, tags: ['admin-badges'] },
+)
