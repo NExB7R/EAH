@@ -12,7 +12,6 @@ import {
   FileTextIcon,
   SettingsIcon,
   BellIcon,
-  TargetIcon,
   TagIcon,
   SparklesIcon,
   HeartIcon,
@@ -79,12 +78,10 @@ const SECTIONS: Section[] = [
     items: [
       {
         href: '/admin/moderation',
-        label: 'المراجعة',
+        label: 'المراجعة والأمان',
         Icon: ShieldCheckIcon,
         badgeKey: 'flaggedReviews',
       },
-      { href: '/admin/reports', label: 'الإبلاغات', Icon: TargetIcon, badgeKey: 'openReports' },
-      { href: '/admin/fraud', label: 'كشف التلاعب', Icon: ShieldCheckIcon },
     ],
   },
   {

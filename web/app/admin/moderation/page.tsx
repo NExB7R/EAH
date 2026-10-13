@@ -2,11 +2,17 @@ import { createClient } from '@/lib/supabase/server'
 import { CheckCircleIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
+import { getReports, getAdminBadges } from '@/lib/data/admin'
 import ModerationRow from './moderation-row'
+import ModerationTabs from './moderation-tabs'
+import FraudView from './fraud-view'
+import ReportList from '../reports/report-list'
 import type { ModerationReview } from './types'
 import styles from './moderation.module.css'
 
 export const dynamic = 'force-dynamic'
+
+type SearchParams = { tab?: string }
 
 async function getReviews(): Promise<ModerationReview[]> {
   const supabase = await createClient()
@@ -51,26 +57,78 @@ async function getReviews(): Promise<ModerationReview[]> {
   })
 }
 
-export default async function AdminModerationPage() {
-  const reviews = await getReviews()
+export default async function AdminModerationPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>
+}) {
+  const params = await searchParams
+  const tab = params.tab === 'reports' ? 'reports' : params.tab === 'fraud' ? 'fraud' : 'reviews'
 
+  const badges = await getAdminBadges()
+  const reviewsCount = tab === 'reviews' ? (await getReviews()).length : badges.flaggedReviews
+
+  // ─── Tab: Reviews (default) ───
+  if (tab === 'reviews') {
+    const reviews = await getReviews()
+    return (
+      <div>
+        <AccountPageHeader
+          title="المراجعة والأمان"
+          description={`${reviews.length} تقييم بحاجة مراجعة`}
+        />
+        <ModerationTabs
+          reviewsCount={reviews.length}
+          reportsCount={badges.openReports}
+          fraudCount={badges.flaggedReviews}
+        />
+        {reviews.length === 0 ? (
+          <EmptyState
+            Icon={CheckCircleIcon}
+            title="مفيش حاجة بحاجة مراجعة"
+            description="كل التقييمات تمام!"
+          />
+        ) : (
+          <div className={styles.list}>
+            {reviews.map((r) => (
+              <ModerationRow key={r.id} review={r} />
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // ─── Tab: Reports ───
+  if (tab === 'reports') {
+    const reports = await getReports('all')
+    const open = reports.filter((r) => r.status === 'pending' || r.status === 'reviewing').length
+    return (
+      <div>
+        <AccountPageHeader
+          title="المراجعة والأمان"
+          description={`${open} إبلاغ بحاجة مراجعة من ${reports.length}`}
+        />
+        <ModerationTabs
+          reviewsCount={badges.flaggedReviews}
+          reportsCount={open}
+          fraudCount={badges.flaggedReviews}
+        />
+        <ReportList reports={reports} />
+      </div>
+    )
+  }
+
+  // ─── Tab: Fraud ───
   return (
     <div>
-      <AccountPageHeader title="المراجعة" description={`${reviews.length} تقييم بحاجة مراجعة`} />
-
-      {reviews.length === 0 ? (
-        <EmptyState
-          Icon={CheckCircleIcon}
-          title="مفيش حاجة بحاجة مراجعة"
-          description="كل التقييمات تمام!"
-        />
-      ) : (
-        <div className={styles.list}>
-          {reviews.map((r) => (
-            <ModerationRow key={r.id} review={r} />
-          ))}
-        </div>
-      )}
+      <AccountPageHeader title="المراجعة والأمان" description="كشف التلاعب والاحتيال" />
+      <ModerationTabs
+        reviewsCount={reviewsCount}
+        reportsCount={badges.openReports}
+        fraudCount={badges.flaggedReviews}
+      />
+      <FraudView />
     </div>
   )
 }
