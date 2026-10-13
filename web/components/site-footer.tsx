@@ -22,6 +22,7 @@ import {
 } from './icons'
 import styles from './site-footer.module.css'
 import { APP_VERSION } from '@/lib/version'
+import { getAppTexts } from '@/lib/data/app-texts'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Site Footer (Premium 2026 — Final)
@@ -85,7 +86,8 @@ const COLUMNS = [
   },
 ]
 
-export default function SiteFooter() {
+export default async function SiteFooter() {
+  const texts = await getAppTexts()
   return (
     <footer className={styles.footer}>
       <div className={styles.glow} aria-hidden />
@@ -183,7 +185,7 @@ export default function SiteFooter() {
 
         {/* ─── Bottom ─── */}
         <div className={styles.bottom}>
-          <p className={styles.copyright}>حقوق النشر محفوظة © 2026 EAH</p>
+          <p className={styles.copyright}>{texts.footer_copyright}</p>
           <span className={styles.version}>{APP_VERSION}</span>
         </div>
       </div>

@@ -3,6 +3,7 @@ import Logo from './logo'
 import HomeSearchForm from './home-search-form'
 import CategoryChips from './category-chips'
 import { CrownIcon, LocationIcon } from './icons'
+import { getAppTexts } from '@/lib/data/app-texts'
 import styles from './home-hero.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -14,7 +15,8 @@ type Props = {
   hasBusiness: boolean
 }
 
-export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
+export default async function HomeHero({ isLoggedIn, hasBusiness }: Props) {
+  const texts = await getAppTexts()
   return (
     <section className={styles.hero} data-logged={isLoggedIn} data-has-biz={hasBusiness}>
       <div className={styles.ambient} aria-hidden />
@@ -31,19 +33,19 @@ export default function HomeHero({ isLoggedIn, hasBusiness }: Props) {
           <span className={styles.signIcon} aria-hidden>
             <LocationIcon size={14} />
           </span>
-          <span className={styles.signText}>دولة شبين القناطر تتحدث</span>
+          <span className={styles.signText}>{texts.hero_sign}</span>
         </div>
 
         {/* الهوك — جملة واحدة */}
         <h1 className={styles.hook} elementtiming="hero-h1">
-          <span className={styles.hookAccent} data-text="شبيك لبيك">
-            شبيك لبيك
+          <span className={styles.hookAccent} data-text={texts.hero_hook_line_1}>
+            {texts.hero_hook_line_1}
           </span>
           <span className={styles.crownWrap} aria-hidden>
             <CrownIcon size={32} />
           </span>
-          <span className={styles.hookAccent} data-text="كل حاجة حواليك">
-            كل حاجة حواليك
+          <span className={styles.hookAccent} data-text={texts.hero_hook_line_2}>
+            {texts.hero_hook_line_2}
           </span>
         </h1>
 
