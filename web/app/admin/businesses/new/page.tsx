@@ -19,7 +19,7 @@ export default async function NewBusinessPage() {
         <span>رجوع للقائمة</span>
       </Link>
 
-      <BusinessForm owners={owners} />
+      <BusinessForm mode="create" owners={owners} />
     </div>
   )
 }

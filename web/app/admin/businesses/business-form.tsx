@@ -139,19 +139,6 @@ function getContact(b: AdminBusiness | null, type: string): string {
   return c?.value ?? ''
 }
 
-function getPrimaryBranchLocation(b: AdminBusiness | null): {
-  lat: string
-  lng: string
-  address: string
-} {
-  if (!b) return { lat: '', lng: '', address: '' }
-  return {
-    lat: '',
-    lng: '',
-    address: b.address_text ?? '',
-  }
-}
-
 export default function BusinessForm(props: Props) {
   const router = useRouter()
   const isCreate = props.mode === 'create'

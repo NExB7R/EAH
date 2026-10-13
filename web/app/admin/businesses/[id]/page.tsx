@@ -139,7 +139,7 @@ export default async function AdminBusinessDetailPage({ params }: Props) {
             trialUsed={biz.trial_used}
           />
           <h2 className={styles.formTitle}>تعديل البيانات</h2>
-          <BusinessForm business={biz} />
+          <BusinessForm mode="edit" business={biz} />
         </div>
       </div>
     </div>
