@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import AccountPageHeader from '@/components/account-page-header'
-import { ArrowLeftIcon, AlertIcon, CheckCircleIcon, StoreIcon } from '@/components/icons'
+import { AlertIcon, StoreIcon } from '@/components/icons'
 import { getBusinessById } from '@/lib/data/admin-business'
 import BusinessForm from '../business-form'
 import DeleteBusinessButton from './delete-button'
 import TrialOwnerPanel from './trial-owner-panel'
+import BusinessActionsBar from './business-actions-bar'
 import styles from '../businesses.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -34,10 +34,13 @@ export default async function AdminBusinessDetailPage({ params }: Props) {
         description={`${TYPE_LABEL[biz.business_type] ?? biz.business_type} · ${biz.area ?? 'بدون منطقة'}`}
       />
 
-      <Link href="/admin/businesses" className={styles.backLink}>
-        <ArrowLeftIcon size={14} />
-        <span>رجوع للقائمة</span>
-      </Link>
+      <BusinessActionsBar
+        businessId={biz.id}
+        businessName={biz.name}
+        businessSlug={biz.slug}
+        isPublished={biz.is_published}
+        isRejected={!!biz.rejected_at}
+      />
 
       <div className={styles.detailGrid}>
         <div className={`${styles.card} ${styles.detailCard}`}>
@@ -118,11 +121,6 @@ export default async function AdminBusinessDetailPage({ params }: Props) {
             </div>
 
             <div className={styles.actions}>
-              {!biz.is_published && !biz.rejected_at && (
-                <span className={styles.hint}>
-                  <CheckCircleIcon size={14} /> استخدم زر «موافقة» في القائمة
-                </span>
-              )}
               <DeleteBusinessButton id={biz.id} name={biz.name} />
             </div>
           </div>
