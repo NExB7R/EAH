@@ -593,3 +593,116 @@ export const getAdminBadges = unstable_cache(
   ['admin-badges'],
   { revalidate: 30, tags: ['admin-badges'] },
 )
+
+// ═══════════════════════════════════════════════════════════
+// Admin — Daily Views (للـ chart)
+// ═══════════════════════════════════════════════════════════
+
+export type DailyView = {
+  date: string // YYYY-MM-DD
+  count: number
+  uniques: number
+}
+
+export async function getDailyViews(days: number = 30): Promise<DailyView[]> {
+  const supabase = await createClient()
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
+
+  const { data } = await supabase
+    .from('page_view_events')
+    .select('occurred_at, visitor_id')
+    .gte('occurred_at', since)
+    .limit(50000)
+
+  // تجميع حسب اليوم
+  const byDay = new Map<string, { count: number; visitors: Set<string> }>()
+  for (const row of data ?? []) {
+    const day = row.occurred_at.slice(0, 10)
+    let entry = byDay.get(day)
+    if (!entry) {
+      entry = { count: 0, visitors: new Set() }
+      byDay.set(day, entry)
+    }
+    entry.count += 1
+    entry.visitors.add(row.visitor_id)
+  }
+
+  // نبني المصفوفة كاملة (نملأ الفجوات بصفر)
+  const result: DailyView[] = []
+  const today = new Date()
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(today.getTime() - i * 24 * 60 * 60 * 1000)
+    const key = d.toISOString().slice(0, 10)
+    const entry = byDay.get(key)
+    result.push({
+      date: key,
+      count: entry?.count ?? 0,
+      uniques: entry?.visitors.size ?? 0,
+    })
+  }
+  return result
+}
+
+// ═══════════════════════════════════════════════════════════
+// Admin — Period Delta (مقارنة بالفترة السابقة)
+// ═══════════════════════════════════════════════════════════
+
+export type PeriodDelta = {
+  viewsCurrent: number
+  viewsPrev: number
+  uniquesCurrent: number
+  uniquesPrev: number
+  deltaPct: number
+  uniquesDeltaPct: number
+}
+
+export async function getPeriodDelta(days: number = 7): Promise<PeriodDelta> {
+  const supabase = await createClient()
+  const now = Date.now()
+  const currentStart = new Date(now - days * 24 * 60 * 60 * 1000).toISOString()
+  const prevStart = new Date(now - 2 * days * 24 * 60 * 60 * 1000).toISOString()
+
+  const [{ count: viewsCurrent }, { count: viewsPrev }, { data: currentRaw }, { data: prevRaw }] =
+    await Promise.all([
+      supabase
+        .from('page_view_events')
+        .select('*', { count: 'exact', head: true })
+        .gte('occurred_at', currentStart),
+      supabase
+        .from('page_view_events')
+        .select('*', { count: 'exact', head: true })
+        .gte('occurred_at', prevStart)
+        .lt('occurred_at', currentStart),
+      supabase
+        .from('page_view_events')
+        .select('visitor_id')
+        .gte('occurred_at', currentStart)
+        .limit(20000),
+      supabase
+        .from('page_view_events')
+        .select('visitor_id')
+        .gte('occurred_at', prevStart)
+        .lt('occurred_at', currentStart)
+        .limit(20000),
+    ])
+
+  const uniq = (rows: { visitor_id: string }[] | null) =>
+    new Set((rows ?? []).map((r) => r.visitor_id)).size
+
+  const c = viewsCurrent ?? 0
+  const p = viewsPrev ?? 0
+  const uc = uniq(currentRaw)
+  const up = uniq(prevRaw)
+
+  const deltaPct = p === 0 ? (c > 0 ? 100 : 0) : Math.round(((c - p) / p) * 100)
+  const uniquesDeltaPct = up === 0 ? (uc > 0 ? 100 : 0) : Math.round(((uc - up) / up) * 100)
+
+  return {
+    viewsCurrent: c,
+    viewsPrev: p,
+    uniquesCurrent: uc,
+    uniquesPrev: up,
+    deltaPct,
+    uniquesDeltaPct,
+  }
+}
