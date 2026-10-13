@@ -706,3 +706,55 @@ export async function getPeriodDelta(days: number = 7): Promise<PeriodDelta> {
     uniquesDeltaPct,
   }
 }
+
+// ═══════════════════════════════════════════════════════════
+// Admin — Audit Stats
+// ═══════════════════════════════════════════════════════════
+
+export type AuditStats = {
+  total: number
+  today: number
+  thisWeek: number
+  uniqueActions: number
+  uniqueActors: number
+}
+
+export async function getAuditStats(): Promise<AuditStats> {
+  const supabase = await createClient()
+  const now = new Date()
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
+  const weekStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
+
+  const [{ count: total }, { count: today }, { count: thisWeek }, { data: uniqueData }] =
+    await Promise.all([
+      supabase.from('audit_logs').select('*', { count: 'exact', head: true }),
+      supabase
+        .from('audit_logs')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', todayStart),
+      supabase
+        .from('audit_logs')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', weekStart),
+      supabase
+        .from('audit_logs')
+        .select('action, actor_user_id')
+        .gte('created_at', weekStart)
+        .limit(2000),
+    ])
+
+  const actionsSet = new Set<string>()
+  const actorsSet = new Set<string>()
+  for (const row of uniqueData ?? []) {
+    actionsSet.add(row.action)
+    if (row.actor_user_id) actorsSet.add(row.actor_user_id)
+  }
+
+  return {
+    total: total ?? 0,
+    today: today ?? 0,
+    thisWeek: thisWeek ?? 0,
+    uniqueActions: actionsSet.size,
+    uniqueActors: actorsSet.size,
+  }
+}

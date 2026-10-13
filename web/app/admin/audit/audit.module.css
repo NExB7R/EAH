@@ -133,3 +133,233 @@
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Stats Grid
+   ═══════════════════════════════════════════════════════════ */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
+  border: 1px solid rgba(168, 85, 247, 0.18);
+}
+
+.statWarn {
+  border-color: rgba(253, 186, 116, 0.4);
+  background: linear-gradient(160deg, rgba(253, 186, 116, 0.08), rgba(10, 7, 20, 0.75));
+}
+.statWarn .statValue {
+  color: #ffd9a8;
+}
+
+.statOk {
+  border-color: rgba(85, 231, 209, 0.3);
+}
+.statOk .statValue {
+  color: #55e7d1;
+}
+
+.statGold {
+  border-color: rgba(232, 199, 154, 0.3);
+  background: linear-gradient(160deg, rgba(232, 199, 154, 0.06), rgba(10, 7, 20, 0.75));
+}
+.statGold .statValue {
+  color: var(--gold-light);
+}
+
+.statIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--purple-light);
+  flex-shrink: 0;
+}
+
+.iconWarn {
+  background: rgba(253, 186, 116, 0.12);
+  color: #fdba74;
+}
+
+.iconOk {
+  background: rgba(85, 231, 209, 0.12);
+  color: #55e7d1;
+}
+
+.iconGold {
+  background: rgba(232, 199, 154, 0.12);
+  color: var(--gold-light);
+}
+
+.statValue {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.statLabel {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Filters
+   ═══════════════════════════════════════════════════════════ */
+
+.filterWrap {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .filterWrap {
+    flex-direction: column;
+  }
+}
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  height: 42px;
+  flex: 1;
+  min-width: 200px;
+  border-radius: 12px;
+  background: rgba(20, 14, 34, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  transition: border-color 180ms var(--ease);
+}
+
+.searchWrap:focus-within {
+  border-color: rgba(168, 85, 247, 0.45);
+}
+
+.searchIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  min-width: 0;
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.searchClear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--text-secondary);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 180ms var(--ease);
+}
+
+.searchClear:hover {
+  background: rgba(168, 85, 247, 0.2);
+  color: var(--text-primary);
+}
+
+.select {
+  padding: 0 14px;
+  height: 42px;
+  min-width: 140px;
+  border-radius: 12px;
+  background: rgba(20, 14, 34, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 180ms var(--ease);
+}
+
+.select:focus {
+  border-color: rgba(168, 85, 247, 0.45);
+}
+
+.select option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.clearAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(252, 165, 165, 0.08);
+  border: 1px solid rgba(252, 165, 165, 0.28);
+  color: #fca5a5;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.clearAll:hover {
+  background: rgba(252, 165, 165, 0.15);
+  border-color: rgba(252, 165, 165, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .searchWrap,
+  .searchClear,
+  .select,
+  .clearAll {
+    transition: none;
+  }
+}

@@ -1,7 +1,8 @@
-import { FileTextIcon, ClockIcon } from '@/components/icons'
+import { FileTextIcon, ClockIcon, UserIcon, TrendingUpIcon, AlertIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
-import { getAuditLogs } from '@/lib/data/admin'
+import { getAuditLogs, getAuditStats } from '@/lib/data/admin'
+import AuditFilters from './audit-filters'
 import styles from './audit.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -19,42 +20,146 @@ const ACTION_LABEL: Record<string, { label: string; tone: string }> = {
   'user.unban': { label: 'إلغاء حظر', tone: 'teal' },
   'business.approve': { label: 'موافقة نشاط', tone: 'teal' },
   'business.reject': { label: 'رفض نشاط', tone: 'red' },
+  'business.archive': { label: 'إخفاء نشاط', tone: 'red' },
+  'business.republish': { label: 'إعادة نشر', tone: 'teal' },
+  'business.delete': { label: 'حذف نشاط', tone: 'red' },
+  'subscription.approve': { label: 'موافقة اشتراك', tone: 'teal' },
+  'subscription.reject': { label: 'رفض اشتراك', tone: 'red' },
+  'subscription.extend': { label: 'تمديد اشتراك', tone: 'teal' },
+  'subscription.cancel': { label: 'إلغاء اشتراك', tone: 'red' },
+  'ad.approve': { label: 'موافقة إعلان', tone: 'teal' },
+  'ad.reject': { label: 'رفض إعلان', tone: 'red' },
+  'ad.pause': { label: 'إيقاف إعلان', tone: 'gold' },
+  'ad.resume': { label: 'استئناف إعلان', tone: 'teal' },
+  'ad.delete': { label: 'حذف إعلان', tone: 'red' },
+  'features.update': { label: 'تحديث الميزات', tone: 'purple' },
+  'texts.update': { label: 'تحديث النصوص', tone: 'purple' },
 }
 
-export default async function AdminAuditPage() {
-  const logs = await getAuditLogs(150)
+function fmtDate(iso: string): string {
+  return new Date(iso).toLocaleString('ar-EG', {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+type SearchParams = { q?: string; action?: string; actor?: string }
+
+export default async function AdminAuditPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>
+}) {
+  const params = await searchParams
+  const q = (params.q ?? '').trim().toLowerCase()
+  const actionFilter = params.action ?? ''
+  const actorFilter = params.actor ?? ''
+
+  const [logs, stats] = await Promise.all([getAuditLogs(300), getAuditStats()])
+
+  let filtered = logs
+  if (actionFilter) filtered = filtered.filter((l) => l.action === actionFilter)
+  if (actorFilter) filtered = filtered.filter((l) => l.actor_user_id === actorFilter)
+  if (q) {
+    filtered = filtered.filter(
+      (l) =>
+        l.action.toLowerCase().includes(q) ||
+        (l.actor?.display_name ?? '').toLowerCase().includes(q) ||
+        (l.entity_type ?? '').toLowerCase().includes(q),
+    )
+  }
+
+  // قائمة unique actions للأدمن
+  const uniqueActions = Array.from(new Set(logs.map((l) => l.action))).sort()
+
+  // قائمة unique actors
+  const actorsMap = new Map<string, string>()
+  for (const l of logs) {
+    if (l.actor_user_id && l.actor?.display_name) {
+      actorsMap.set(l.actor_user_id, l.actor.display_name)
+    }
+  }
+  const uniqueActors = Array.from(actorsMap.entries())
+    .map(([id, name]) => ({ id, name }))
+    .sort((a, b) => a.name.localeCompare(b.name, 'ar'))
 
   return (
     <div>
-      <AccountPageHeader title="سجل التدقيق" description={`${logs.length} عملية إدارية`} />
+      <AccountPageHeader
+        title="سجل التدقيق"
+        description={`${logs.length} عملية — ${filtered.length} معروض`}
+      />
 
-      {logs.length === 0 ? (
+      {/* Stats */}
+      <section className={styles.statsGrid}>
+        <div className={styles.statCard}>
+          <span className={styles.statIcon}>
+            <FileTextIcon size={20} />
+          </span>
+          <div>
+            <span className={styles.statValue}>{stats.total.toLocaleString('ar-EG')}</span>
+            <span className={styles.statLabel}>إجمالي</span>
+          </div>
+        </div>
+        <div className={`${styles.statCard} ${stats.today > 0 ? styles.statWarn : ''}`}>
+          <span className={`${styles.statIcon} ${styles.iconWarn}`}>
+            <ClockIcon size={20} />
+          </span>
+          <div>
+            <span className={styles.statValue}>{stats.today}</span>
+            <span className={styles.statLabel}>اليوم</span>
+          </div>
+        </div>
+        <div className={`${styles.statCard} ${styles.statOk}`}>
+          <span className={`${styles.statIcon} ${styles.iconOk}`}>
+            <TrendingUpIcon size={20} />
+          </span>
+          <div>
+            <span className={styles.statValue}>{stats.thisWeek}</span>
+            <span className={styles.statLabel}>آخر 7 أيام</span>
+          </div>
+        </div>
+        <div className={`${styles.statCard} ${styles.statGold}`}>
+          <span className={`${styles.statIcon} ${styles.iconGold}`}>
+            <UserIcon size={20} />
+          </span>
+          <div>
+            <span className={styles.statValue}>{stats.uniqueActors}</span>
+            <span className={styles.statLabel}>أدمن نشط</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Filters */}
+      <AuditFilters actions={uniqueActions} actors={uniqueActors} />
+
+      {/* List */}
+      {filtered.length === 0 ? (
         <EmptyState
-          Icon={FileTextIcon}
-          title="مفيش عمليات لسه"
-          description="أي عملية إدارية هتتسجل هنا تلقائياً"
+          Icon={q || actionFilter || actorFilter ? AlertIcon : FileTextIcon}
+          title={logs.length === 0 ? 'مفيش عمليات لسه' : 'مفيش نتائج للفلتر'}
+          description={
+            logs.length === 0
+              ? 'أي عملية إدارية هتتسجل هنا تلقائياً'
+              : 'جرّب فلتر تاني أو امسح البحث'
+          }
         />
       ) : (
         <div className={styles.list}>
-          {logs.map((log) => {
+          {filtered.map((log) => {
             const meta = ACTION_LABEL[log.action] ?? {
               label: log.action,
               tone: 'neutral',
             }
-            const date = new Date(log.created_at).toLocaleString('ar-EG', {
-              day: '2-digit',
-              month: 'short',
-              hour: '2-digit',
-              minute: '2-digit',
-            })
-
             return (
               <article key={log.id} className={styles.row}>
                 <div className={styles.rowHead}>
                   <span className={`${styles.badge} ${styles[meta.tone]}`}>{meta.label}</span>
                   <time className={styles.date}>
                     <ClockIcon size={11} />
-                    {date}
+                    {fmtDate(log.created_at)}
                   </time>
                 </div>
 
