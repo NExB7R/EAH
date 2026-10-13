@@ -12,7 +12,7 @@ import {
   GiftIcon,
   ShieldCheckIcon,
 } from '@/components/icons'
-import { getAdminStats, getAdminRecent } from '@/lib/data/admin'
+import { getAdminStats, getAdminRecent, getAdminBadges } from '@/lib/data/admin'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -27,8 +27,22 @@ type Card = {
   hint?: string
 }
 
+type Alert = {
+  key: string
+  count: number
+  label: string
+  desc: string
+  href: string
+  tone: 'orange' | 'gold' | 'teal' | 'purple'
+  Icon: React.ComponentType<{ size?: number }>
+}
+
 export default async function AdminDashboard() {
-  const [stats, recent] = await Promise.all([getAdminStats(), getAdminRecent()])
+  const [stats, recent, badges] = await Promise.all([
+    getAdminStats(),
+    getAdminRecent(),
+    getAdminBadges(),
+  ])
 
   const CARDS: Card[] = [
     {
@@ -45,7 +59,6 @@ export default async function AdminDashboard() {
       Icon: AlertIcon,
       tone: 'orange',
       href: '/admin/businesses',
-      hint: 'راجعهم',
     },
     {
       key: 'published',
@@ -80,32 +93,74 @@ export default async function AdminDashboard() {
     },
   ]
 
-  const QUICK_LINKS = [
-    { href: '/admin/businesses', label: 'إدارة الأنشطة', Icon: StoreIcon },
-    { href: '/admin/users', label: 'إدارة المستخدمين', Icon: UserIcon },
-    { href: '/admin/subscriptions', label: 'الاشتراكات', Icon: CrownGoldIcon },
-    { href: '/admin/ads', label: 'الإعلانات', Icon: GiftIcon },
-    { href: '/admin/moderation', label: 'المراجعة', Icon: ShieldCheckIcon },
-    { href: '/admin/analytics', label: 'التحليلات', Icon: TrendingUpIcon },
+  const ALERTS: Alert[] = [
+    {
+      key: 'pendingBusinesses',
+      count: badges.pendingBusinesses,
+      label: 'نشاط بحاجة موافقة',
+      desc: 'راجعهم بسرعة — كل تأخير بيأثر على التجربة',
+      href: '/admin/businesses?status=pending',
+      tone: 'orange',
+      Icon: StoreIcon,
+    },
+    {
+      key: 'flaggedReviews',
+      count: badges.flaggedReviews,
+      label: 'تقييم بحاجة مراجعة',
+      desc: 'تقييمات معلّمة من النظام — راجعها',
+      href: '/admin/moderation',
+      tone: 'gold',
+      Icon: StarIcon,
+    },
+    {
+      key: 'openReports',
+      count: badges.openReports,
+      label: 'إبلاغ مفتوح',
+      desc: 'بلاغات من المستخدمين بانتظار قرار',
+      href: '/admin/reports',
+      tone: 'purple',
+      Icon: ShieldCheckIcon,
+    },
+    {
+      key: 'pendingSubscriptions',
+      count: badges.pendingSubscriptions,
+      label: 'اشتراك بحاجة موافقة',
+      desc: 'طلبات ترقية من التجار',
+      href: '/admin/subscriptions',
+      tone: 'teal',
+      Icon: CrownGoldIcon,
+    },
   ]
+
+  const activeAlerts = ALERTS.filter((a) => a.count > 0)
 
   return (
     <div className={styles.wrap}>
-      {/* Alerts */}
-      {stats.pendingBusinesses > 0 && (
-        <Link href="/admin/businesses" className={styles.alert}>
-          <span className={styles.alertIcon}>
-            <AlertIcon size={22} />
-          </span>
-          <div className={styles.alertBody}>
-            <strong>عندك {stats.pendingBusinesses} نشاط بحاجة موافقة</strong>
-            <span>راجعهم فوراً — كل تأخير بيأثر على التجربة</span>
-          </div>
-          <ArrowLeftIcon size={16} className={styles.alertArrow} />
-        </Link>
+      {/* ─── Alerts (كل التنبيهات) ─── */}
+      {activeAlerts.length > 0 && (
+        <section className={styles.alertsGrid}>
+          {activeAlerts.map((alert) => (
+            <Link
+              key={alert.key}
+              href={alert.href}
+              className={`${styles.alert} ${styles[`alert_${alert.tone}`]}`}
+            >
+              <span className={styles.alertIcon}>
+                <alert.Icon size={22} />
+              </span>
+              <div className={styles.alertBody}>
+                <strong>
+                  {alert.count} {alert.label}
+                </strong>
+                <span>{alert.desc}</span>
+              </div>
+              <ArrowLeftIcon size={16} className={styles.alertArrow} />
+            </Link>
+          ))}
+        </section>
       )}
 
-      {/* Stats Grid */}
+      {/* ─── Stats Grid ─── */}
       <section className={styles.grid}>
         {CARDS.map(({ key, label, value, Icon, tone, href, hint }) => {
           const content = (
@@ -133,20 +188,7 @@ export default async function AdminDashboard() {
         })}
       </section>
 
-      {/* Quick Links */}
-      <section className={styles.quickLinks}>
-        {QUICK_LINKS.map(({ href, label, Icon }) => (
-          <Link key={href} href={href} className={styles.quickCard}>
-            <span className={styles.quickIcon}>
-              <Icon size={20} />
-            </span>
-            <span className={styles.quickLabel}>{label}</span>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
-        ))}
-      </section>
-
-      {/* Recent Activity */}
+      {/* ─── Recent Activity (آخر 24 ساعة) ─── */}
       <section className={styles.section}>
         <header className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>آخر النشاطات</h2>
@@ -195,6 +237,39 @@ export default async function AdminDashboard() {
               <span className={styles.activityLabel}>تقييمات</span>
               <span className={styles.activityValue}>{recent.newReviews}</span>
             </div>
+            <ArrowLeftIcon size={14} className={styles.chev} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ─── Quick Actions ─── */}
+      <section className={styles.section}>
+        <header className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>إجراءات سريعة</h2>
+        </header>
+
+        <div className={styles.quickLinks}>
+          <Link href="/admin/studio" className={styles.quickCard}>
+            <span className={styles.quickIcon}>
+              <TrendingUpIcon size={20} />
+            </span>
+            <span className={styles.quickLabel}>الاستوديو (الميزات)</span>
+            <ArrowLeftIcon size={14} className={styles.chev} />
+          </Link>
+
+          <Link href="/admin/notifications" className={styles.quickCard}>
+            <span className={styles.quickIcon}>
+              <GiftIcon size={20} />
+            </span>
+            <span className={styles.quickLabel}>إرسال إشعار</span>
+            <ArrowLeftIcon size={14} className={styles.chev} />
+          </Link>
+
+          <Link href="/admin/analytics" className={styles.quickCard}>
+            <span className={styles.quickIcon}>
+              <TrendingUpIcon size={20} />
+            </span>
+            <span className={styles.quickLabel}>التقارير</span>
             <ArrowLeftIcon size={14} className={styles.chev} />
           </Link>
         </div>

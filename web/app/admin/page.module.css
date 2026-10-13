@@ -8,61 +8,6 @@
   gap: 20px;
 }
 
-/* ─── Alert ─── */
-.alert {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 20px;
-  border-radius: 16px;
-  background: linear-gradient(160deg, rgba(253, 186, 116, 0.1), rgba(20, 14, 34, 0.6));
-  border: 1.5px dashed rgba(253, 186, 116, 0.5);
-  text-decoration: none;
-  color: inherit;
-  transition: all 200ms var(--ease);
-}
-
-.alert:hover {
-  border-style: solid;
-  transform: translateY(-1px);
-}
-
-.alertIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  background: rgba(253, 186, 116, 0.12);
-  color: #fdba74;
-  flex-shrink: 0;
-  box-shadow: 0 0 16px rgba(253, 186, 116, 0.3);
-}
-
-.alertBody {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.alertBody strong {
-  font-family: var(--font-display);
-  font-size: 0.92rem;
-  font-weight: 900;
-  color: #ffd9a8;
-}
-.alertBody span {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-tertiary);
-}
-.alertArrow {
-  color: #fdba74;
-  flex-shrink: 0;
-}
-
 /* ─── Stats Grid ─── */
 .grid {
   display: grid;
@@ -357,4 +302,117 @@
   .activityGrid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Alerts Grid (4 alerts)
+   ═══════════════════════════════════════════════════════════ */
+
+.alertsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .alertsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 200ms var(--ease);
+  border: 1.5px dashed;
+}
+
+.alert:hover {
+  border-style: solid;
+  transform: translateY(-1px);
+}
+
+.alert_orange {
+  background: linear-gradient(160deg, rgba(253, 186, 116, 0.1), rgba(20, 14, 34, 0.6));
+  border-color: rgba(253, 186, 116, 0.5);
+}
+.alert_orange .alertIcon {
+  background: rgba(253, 186, 116, 0.12);
+  color: #fdba74;
+  box-shadow: 0 0 16px rgba(253, 186, 116, 0.3);
+}
+.alert_orange .alertBody strong {
+  color: #ffd9a8;
+}
+.alert_orange .alertArrow {
+  color: #fdba74;
+}
+
+.alert_gold {
+  background: linear-gradient(160deg, rgba(232, 199, 154, 0.1), rgba(20, 14, 34, 0.6));
+  border-color: rgba(232, 199, 154, 0.5);
+}
+.alert_gold .alertIcon {
+  background: rgba(232, 199, 154, 0.12);
+  color: var(--gold-light);
+  box-shadow: 0 0 16px rgba(232, 199, 154, 0.3);
+}
+.alert_gold .alertBody strong {
+  color: var(--gold-light);
+}
+.alert_gold .alertArrow {
+  color: var(--gold-light);
+}
+
+.alert_teal {
+  background: linear-gradient(160deg, rgba(85, 231, 209, 0.1), rgba(20, 14, 34, 0.6));
+  border-color: rgba(85, 231, 209, 0.5);
+}
+.alert_teal .alertIcon {
+  background: rgba(85, 231, 209, 0.12);
+  color: #55e7d1;
+  box-shadow: 0 0 16px rgba(85, 231, 209, 0.3);
+}
+.alert_teal .alertBody strong {
+  color: #55e7d1;
+}
+.alert_teal .alertArrow {
+  color: #55e7d1;
+}
+
+.alert_purple {
+  background: linear-gradient(160deg, rgba(168, 85, 247, 0.1), rgba(20, 14, 34, 0.6));
+  border-color: rgba(168, 85, 247, 0.5);
+}
+.alert_purple .alertIcon {
+  background: rgba(168, 85, 247, 0.12);
+  color: var(--purple-light);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.3);
+}
+.alert_purple .alertBody strong {
+  color: var(--purple-light);
+}
+.alert_purple .alertArrow {
+  color: var(--purple-light);
+}
+
+/* ─── Override .alert from old styles ─── */
+.alert .alertBody strong {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+.alert .alertBody span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+.alert .alertArrow {
+  flex-shrink: 0;
+  margin-inline-start: auto;
 }

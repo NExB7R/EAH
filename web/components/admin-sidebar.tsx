@@ -12,7 +12,6 @@ import {
   FileTextIcon,
   SettingsIcon,
   BellIcon,
-  BroadcastIcon,
   TargetIcon,
   TagIcon,
   SparklesIcon,
@@ -21,7 +20,8 @@ import {
 import styles from './admin-sidebar.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Admin Sidebar (Full Control 2026)
+// EAH — Admin Sidebar (2026)
+// 4 sections: نظرة عامة / الإدارة / المراجعة والأمان / النظام
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -50,8 +50,8 @@ const SECTIONS: Section[] = [
     title: 'نظرة عامة',
     items: [
       { href: '/admin', label: 'الرئيسية', Icon: LayoutDashboardIcon },
-      { href: '/admin/analytics', label: 'التحليلات', Icon: TrendingUpIcon },
-      { href: '/admin/insights', label: 'تخزين التقارير', Icon: SparklesIcon },
+      { href: '/admin/analytics', label: 'التحليلات والتقارير', Icon: TrendingUpIcon },
+      { href: '/admin/health', label: 'صحة النظام', Icon: HeartIcon },
     ],
   },
   {
@@ -75,7 +75,7 @@ const SECTIONS: Section[] = [
     ],
   },
   {
-    title: 'المراجعة',
+    title: 'المراجعة والأمان',
     items: [
       {
         href: '/admin/moderation',
@@ -84,17 +84,15 @@ const SECTIONS: Section[] = [
         badgeKey: 'flaggedReviews',
       },
       { href: '/admin/reports', label: 'الإبلاغات', Icon: TargetIcon, badgeKey: 'openReports' },
+      { href: '/admin/fraud', label: 'كشف التلاعب', Icon: ShieldCheckIcon },
     ],
   },
   {
     title: 'النظام',
     items: [
-      { href: '/admin/notifications', label: 'الإشعارات', Icon: BellIcon },
-      { href: '/admin/announcements', label: 'الإعلانات الإدارية', Icon: BroadcastIcon },
+      { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
-      { href: '/admin/fraud', label: 'كشف التلاعب', Icon: ShieldCheckIcon },
-      { href: '/admin/health', label: 'صحة النظام', Icon: HeartIcon },
       { href: '/admin/settings', label: 'الإعدادات', Icon: SettingsIcon },
     ],
   },
