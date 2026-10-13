@@ -217,3 +217,186 @@
   display: flex;
   gap: 8px;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Stats Grid
+   ═══════════════════════════════════════════════════════════ */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.statCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
+  border: 1px solid rgba(168, 85, 247, 0.18);
+}
+
+.statWarn {
+  border-color: rgba(253, 186, 116, 0.4);
+  background: linear-gradient(160deg, rgba(253, 186, 116, 0.08), rgba(10, 7, 20, 0.75));
+}
+
+.statWarn .statValue {
+  color: #ffd9a8;
+}
+
+.statGold {
+  border-color: rgba(232, 199, 154, 0.3);
+}
+
+.statGold .statValue {
+  color: var(--gold-light);
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Filters (tabs + search)
+   ═══════════════════════════════════════════════════════════ */
+
+.filterWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 12px;
+  background: rgba(10, 5, 20, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.12);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  flex: 1;
+  min-width: 70px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  white-space: nowrap;
+  transition: all 180ms var(--ease);
+}
+
+.tab:hover {
+  background: rgba(168, 85, 247, 0.08);
+  color: var(--text-primary);
+}
+
+.tabActive {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.25), rgba(168, 85, 247, 0.15));
+  border-color: rgba(199, 125, 255, 0.4);
+  color: var(--text-primary);
+  box-shadow: var(--glow-purple-sm);
+}
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(20, 14, 34, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  transition: border-color 180ms var(--ease);
+}
+
+.searchWrap:focus-within {
+  border-color: rgba(168, 85, 247, 0.45);
+}
+
+.searchIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  min-width: 0;
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.searchClear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--text-secondary);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 180ms var(--ease);
+}
+
+.searchClear:hover {
+  background: rgba(168, 85, 247, 0.2);
+  color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab,
+  .searchWrap,
+  .searchClear {
+    transition: none;
+  }
+}

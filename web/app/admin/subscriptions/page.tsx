@@ -3,6 +3,7 @@ import { CrownGoldIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import SubscriptionRow from './subscription-row'
+import SubscriptionFilters from './subscription-filters'
 import styles from './subscriptions.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -29,23 +30,97 @@ async function getSubscriptions(): Promise<Row[]> {
     `,
     )
     .order('created_at', { ascending: false })
-    .limit(100)
+    .limit(200)
 
   return (data ?? []) as unknown as Row[]
 }
 
-export default async function AdminSubscriptionsPage() {
-  const subs = await getSubscriptions()
+type SearchParams = { status?: string; q?: string }
+
+type Stats = {
+  active: number
+  pending: number
+  trial: number
+  expiringSoon: number
+}
+
+function computeStats(subs: Row[]): Stats {
+  const now = Date.now()
+  const weekFromNow = now + 7 * 24 * 60 * 60 * 1000
+  return {
+    active: subs.filter((s) => s.status === 'active').length,
+    pending: subs.filter((s) => s.status === 'pending').length,
+    trial: subs.filter((s) => s.status === 'trial' || s.is_trial).length,
+    expiringSoon: subs.filter((s) => {
+      if (s.status !== 'active' && s.status !== 'trial') return false
+      if (!s.expires_at) return false
+      const exp = new Date(s.expires_at).getTime()
+      return exp > now && exp <= weekFromNow
+    }).length,
+  }
+}
+
+export default async function AdminSubscriptionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>
+}) {
+  const params = await searchParams
+  const statusFilter = params.status ?? 'all'
+  const q = (params.q ?? '').trim().toLowerCase()
+
+  const all = await getSubscriptions()
+
+  // ─── Stats ───
+  const stats = computeStats(all)
+
+  // ─── Filter ───
+  let filtered = all
+  if (statusFilter !== 'all') {
+    filtered = filtered.filter((s) => s.status === statusFilter)
+  }
+  if (q) {
+    filtered = filtered.filter((s) => (s.business?.name ?? '').toLowerCase().includes(q))
+  }
 
   return (
     <div>
-      <AccountPageHeader title="الاشتراكات" description={`${subs.length} اشتراك`} />
+      <AccountPageHeader
+        title="الاشتراكات"
+        description={`${all.length} اشتراك — ${filtered.length} معروض`}
+      />
 
-      {subs.length === 0 ? (
-        <EmptyState Icon={CrownGoldIcon} title="مفيش اشتراكات" />
+      {/* Stats */}
+      <section className={styles.statsGrid}>
+        <div className={styles.statCard}>
+          <span className={styles.statValue}>{stats.active}</span>
+          <span className={styles.statLabel}>نشط</span>
+        </div>
+        <div className={`${styles.statCard} ${stats.pending > 0 ? styles.statWarn : ''}`}>
+          <span className={styles.statValue}>{stats.pending}</span>
+          <span className={styles.statLabel}>بانتظار موافقة</span>
+        </div>
+        <div className={`${styles.statCard} ${styles.statGold}`}>
+          <span className={styles.statValue}>{stats.trial}</span>
+          <span className={styles.statLabel}>تجربة مجانية</span>
+        </div>
+        <div className={`${styles.statCard} ${stats.expiringSoon > 0 ? styles.statWarn : ''}`}>
+          <span className={styles.statValue}>{stats.expiringSoon}</span>
+          <span className={styles.statLabel}>تنتهي خلال 7 أيام</span>
+        </div>
+      </section>
+
+      <SubscriptionFilters />
+
+      {filtered.length === 0 ? (
+        <EmptyState
+          Icon={CrownGoldIcon}
+          title={all.length === 0 ? 'مفيش اشتراكات' : 'مفيش نتائج للفلتر'}
+          description={q ? 'جرّب بحث تاني' : 'لما يجي اشتراك جديد هيظهر هنا'}
+        />
       ) : (
         <div className={styles.list}>
-          {subs.map((s) => (
+          {filtered.map((s) => (
             <SubscriptionRow key={s.id} sub={s} />
           ))}
         </div>
