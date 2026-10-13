@@ -1,12 +1,5 @@
 import AccountPageHeader from '@/components/account-page-header'
-import {
-  EyeIcon,
-  TrendingUpIcon,
-  TargetIcon,
-  GlobeIcon,
-  StoreIcon,
-  ArrowLeftIcon,
-} from '@/components/icons'
+import { EyeIcon, TrendingUpIcon, TargetIcon, GlobeIcon, StoreIcon } from '@/components/icons'
 import {
   getAnalyticsSummary,
   getTopPages,
@@ -16,11 +9,8 @@ import {
   getDailyViews,
   getPeriodDelta,
 } from '@/lib/data/admin'
-import { getAdminBadges } from '@/lib/data/admin'
 import AnalyticsTabs from './analytics-tabs'
 import ViewChart from './view-chart'
-import ReportList from '../reports/report-list'
-import { getReports } from '@/lib/data/admin'
 import styles from './analytics.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -38,62 +28,14 @@ function fmt(n: number): string {
   return n.toLocaleString('ar-EG')
 }
 
-type SearchParams = {
-  tab?: string
-  days?: string
-}
-
 export default async function AdminAnalyticsPage({
   searchParams,
 }: {
-  searchParams: Promise<SearchParams>
+  searchParams: Promise<{ days?: string }>
 }) {
   const params = await searchParams
-  const tab = params.tab ?? 'overview'
   const days = Math.min(90, Math.max(1, parseInt(params.days ?? '30', 10) || 30))
 
-  const badges = await getAdminBadges()
-
-  // ─── Reports tab ───
-  if (tab === 'reports') {
-    const reports = await getReports('all')
-    const open = reports.filter((r) => r.status === 'pending' || r.status === 'reviewing').length
-    return (
-      <div>
-        <AccountPageHeader
-          title="التحليلات والتقارير"
-          description={`${open} إبلاغ بحاجة مراجعة من ${reports.length}`}
-        />
-        <AnalyticsTabs reportsCount={open} moderationCount={badges.flaggedReviews} />
-        <ReportList reports={reports} />
-      </div>
-    )
-  }
-
-  // ─── Moderation tab ───
-  if (tab === 'moderation') {
-    return (
-      <div>
-        <AccountPageHeader title="التحليلات والتقارير" description="مراجعة التقييمات المعلّمة" />
-        <AnalyticsTabs reportsCount={badges.openReports} moderationCount={badges.flaggedReviews} />
-        <div className={styles.moderationNotice}>
-          <span className={styles.noticeIcon}>
-            <TargetIcon size={24} />
-          </span>
-          <div className={styles.noticeBody}>
-            <strong>{badges.flaggedReviews} تقييم بحاجة مراجعة</strong>
-            <span>افتح صفحة المراجعة الكاملة لقبول/رفض التقييمات</span>
-          </div>
-          <a href="/admin/moderation" className={styles.noticeBtn}>
-            <span>افتح المراجعة</span>
-            <ArrowLeftIcon size={14} />
-          </a>
-        </div>
-      </div>
-    )
-  }
-
-  // ─── Overview tab (default) ───
   const [summary, daily, delta, topPages, topBiz, referrers, devices] = await Promise.all([
     getAnalyticsSummary(),
     getDailyViews(days),
@@ -109,9 +51,12 @@ export default async function AdminAnalyticsPage({
 
   return (
     <div>
-      <AccountPageHeader title="التحليلات والتقارير" description={`نظرة شاملة — آخر ${days} يوم`} />
+      <AccountPageHeader
+        title="التحليلات"
+        description={`نظرة شاملة على زوار المنصة — آخر ${days} يوم`}
+      />
 
-      <AnalyticsTabs reportsCount={badges.openReports} moderationCount={badges.flaggedReviews} />
+      <AnalyticsTabs />
 
       {/* ─── Stats ─── */}
       <section className={styles.statsGrid}>
