@@ -1,0 +1,210 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Confirm Modal
+   ═══════════════════════════════════════════════════════════ */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(7, 2, 13, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: fadeIn 200ms var(--ease-out);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 24px 24px;
+  border-radius: 20px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
+  border: 1.5px solid rgba(168, 85, 247, 0.3);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(168, 85, 247, 0.15);
+  text-align: center;
+  animation: modalIn 260ms var(--ease-out);
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal.danger {
+  border-color: rgba(252, 165, 165, 0.4);
+}
+
+.modal.warn {
+  border-color: rgba(253, 186, 116, 0.4);
+}
+
+.closeBtn {
+  position: absolute;
+  top: 12px;
+  inset-inline-end: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.closeBtn:hover {
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--text-primary);
+}
+
+.closeBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.iconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--purple-light);
+}
+
+.modal.danger .iconWrap {
+  background: rgba(252, 165, 165, 0.12);
+  color: #fca5a5;
+  box-shadow: 0 0 20px rgba(252, 165, 165, 0.25);
+}
+
+.modal.warn .iconWrap {
+  background: rgba(253, 186, 116, 0.12);
+  color: #fdba74;
+  box-shadow: 0 0 20px rgba(253, 186, 116, 0.25);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+}
+
+.message {
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0 0 22px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.cancelBtn {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.cancelBtn:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: rgba(168, 85, 247, 0.45);
+  background: rgba(168, 85, 247, 0.06);
+}
+
+.confirmBtn {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: none;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.confirm_danger {
+  background: linear-gradient(135deg, #dc2626, #f87171);
+  box-shadow: 0 0 16px rgba(252, 165, 165, 0.3);
+}
+
+.confirm_warn {
+  background: linear-gradient(135deg, #ea580c, #fdba74);
+  box-shadow: 0 0 16px rgba(253, 186, 116, 0.3);
+}
+
+.confirm_default {
+  background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
+  box-shadow: var(--glow-purple-sm);
+}
+
+.confirmBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.confirmBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .actions {
+    grid-template-columns: 1fr;
+  }
+  .modal {
+    padding: 24px 20px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .modal {
+    animation: none;
+  }
+  .closeBtn,
+  .cancelBtn,
+  .confirmBtn {
+    transition: none;
+  }
+}
