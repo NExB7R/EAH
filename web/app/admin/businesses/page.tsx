@@ -10,7 +10,7 @@ import { getBusinessesByStatus, type BusinessStatus } from '@/lib/data/admin'
 import { getActiveAreas } from '@/lib/data/areas'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
-import BusinessRow from './business-row'
+import BusinessList from './business-list'
 import BusinessFilters from './business-filters'
 import Link from 'next/link'
 import styles from './businesses.module.css'
@@ -166,11 +166,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
           }
         />
       ) : (
-        <div className={styles.list}>
-          {businesses.map((b) => (
-            <BusinessRow key={b.id} business={b} />
-          ))}
-        </div>
+        <BusinessList businesses={businesses} status={validStatus} />
       )}
     </div>
   )

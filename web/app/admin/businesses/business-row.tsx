@@ -13,6 +13,9 @@ import styles from './businesses.module.css'
 
 type Props = {
   business: PendingBusiness
+  selected?: boolean
+  onToggleSelect?: () => void
+  showCheckbox?: boolean
 }
 
 const TYPE_LABEL: Record<string, string> = {
@@ -35,7 +38,12 @@ function formatDate(iso: string): string {
   }
 }
 
-export default function BusinessRow({ business: b }: Props) {
+export default function BusinessRow({
+  business: b,
+  selected = false,
+  onToggleSelect,
+  showCheckbox = false,
+}: Props) {
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [showReject, setShowReject] = useState(false)
@@ -72,7 +80,19 @@ export default function BusinessRow({ business: b }: Props) {
   const status = b.is_published ? 'published' : isRejected ? 'rejected' : 'pending'
 
   return (
-    <div className={`${styles.card} ${pending ? styles.pending : ''}`}>
+    <div
+      className={`${styles.card} ${pending ? styles.pending : ''} ${selected ? styles.cardSelected : ''}`}
+    >
+      {showCheckbox && (
+        <label className={styles.cardCheckbox}>
+          <input
+            type="checkbox"
+            checked={selected}
+            onChange={onToggleSelect}
+            aria-label={`تحديد ${b.name}`}
+          />
+        </label>
+      )}
       <div className={styles.imageWrap}>
         {b.cover_image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
