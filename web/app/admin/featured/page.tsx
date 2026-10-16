@@ -3,7 +3,7 @@ import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import { CrownGoldIcon, PlusIcon, ClockIcon, SparklesIcon } from '@/components/icons'
 import { getFeaturedBusinesses } from '@/lib/data/admin'
-import FeaturedRow from './featured-row'
+import FeaturedList from './featured-list'
 import FeaturedFilters from './featured-filters'
 import styles from './featured.module.css'
 
@@ -108,24 +108,7 @@ export default async function AdminFeaturedPage({
           description={q ? 'جرّب بحث تاني' : 'اختار نشاط من قائمة الأنشطة وحدده كمميز'}
         />
       ) : (
-        <div className={styles.list}>
-          {filtered.map((b) => (
-            <FeaturedRow
-              key={b.id}
-              business={{
-                id: b.id,
-                name: b.name,
-                slug: b.slug,
-                business_type: b.business_type,
-                area: b.area,
-                cover_image_url: b.cover_image_url,
-                featured_pin: b.featured_pin,
-                featured_order: b.featured_order,
-                featured_until: b.featured_until,
-              }}
-            />
-          ))}
-        </div>
+        <FeaturedList businesses={filtered} />
       )}
     </div>
   )

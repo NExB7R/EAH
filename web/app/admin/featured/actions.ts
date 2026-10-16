@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
 import type { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/auth/admin'
 
@@ -117,5 +118,43 @@ export async function extendFeaturedUntil(businessId: string, days: number): Pro
 
   await logAudit(supabase, 'featured.extend', businessId, { days: safeDays })
   revalidatePath('/admin/featured')
+  return { ok: true }
+}
+
+// ═══════════════════════════════════════════════════════════
+// Bulk Reorder (Drag & Drop)
+// ═══════════════════════════════════════════════════════════
+
+const reorderSchema = z.object({
+  ids: z.array(z.string().uuid()).min(1).max(200),
+})
+
+export async function reorderFeatured(ids: string[]): Promise<ActionResult> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const parsed = reorderSchema.safeParse({ ids })
+  if (!parsed.success) return { ok: false, error: 'قائمة غير صالحة' }
+
+  // تحديث featured_order لكل نشاط حسب ترتيبه في المصفوفة
+  // نستخدم Promise.all بدل bulk update (أسرع من loop مع await)
+  const updates = parsed.data.ids.map((id, index) =>
+    ctx.supabase
+      .from('businesses')
+      .update({ featured_order: index + 1 })
+      .eq('id', id),
+  )
+
+  const results = await Promise.all(updates)
+  const failed = results.find((r) => r.error)
+  if (failed?.error) return { ok: false, error: failed.error.message }
+
+  await logAudit(ctx.supabase, 'featured.reorder_bulk', '', {
+    count: parsed.data.ids.length,
+    ids: parsed.data.ids,
+  })
+
+  revalidatePath('/admin/featured')
+  revalidatePath('/')
   return { ok: true }
 }

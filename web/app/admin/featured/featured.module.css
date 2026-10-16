@@ -431,3 +431,196 @@
     transition: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Drag & Drop Reorder
+   ═══════════════════════════════════════════════════════════ */
+
+.dragWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dragToolbar {
+  position: sticky;
+  top: 12px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.95), rgba(10, 7, 20, 0.98));
+  border: 1px solid rgba(232, 199, 154, 0.4);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.4),
+    0 0 24px rgba(232, 199, 154, 0.12);
+  flex-wrap: wrap;
+  animation: dragToolbarIn 220ms var(--ease-out);
+}
+
+@keyframes dragToolbarIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dragToolbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dragDirty {
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.15);
+  color: var(--gold-light);
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.dragToolbarRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dragMsg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.msgOk {
+  background: rgba(85, 231, 209, 0.1);
+  border: 1px solid rgba(85, 231, 209, 0.3);
+  color: var(--teal);
+}
+
+.msgErr {
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  color: #fca5a5;
+}
+
+.dragHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.05);
+  border: 1px dashed rgba(168, 85, 247, 0.2);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.dragItem {
+  display: grid;
+  grid-template-columns: 24px 32px 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 8px 8px;
+  border-radius: 16px;
+  background: rgba(20, 14, 34, 0.4);
+  border: 1px solid rgba(168, 85, 247, 0.1);
+  transition: all 180ms var(--ease);
+  cursor: grab;
+}
+
+.dragItem:active {
+  cursor: grabbing;
+}
+
+.dragItemActive {
+  opacity: 0.5;
+  border-color: rgba(199, 125, 255, 0.5);
+}
+
+.dragItemOver {
+  border-color: rgba(199, 125, 255, 0.6);
+  background: rgba(168, 85, 247, 0.1);
+  box-shadow: 0 0 0 1px rgba(199, 125, 255, 0.2);
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 32px;
+  color: var(--text-muted);
+}
+
+.dragDots {
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  background-image: radial-gradient(circle, currentColor 1.5px, transparent 1.5px);
+  background-size: 4px 6px;
+  background-position: center;
+  background-repeat: repeat-y;
+}
+
+.dragPosition {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.15), rgba(232, 199, 154, 0.06));
+  border: 1px solid rgba(232, 199, 154, 0.3);
+  color: var(--gold-light);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.dragBody {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .dragItem {
+    grid-template-columns: 20px 28px 1fr;
+    gap: 8px;
+    padding: 6px 8px 6px 6px;
+  }
+  .dragToolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dragToolbarRight {
+    flex-direction: column;
+  }
+  .dragToolbarRight button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dragItem {
+    transition: none;
+  }
+  .dragToolbar {
+    animation: none;
+  }
+}
