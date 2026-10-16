@@ -3,7 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { UserIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
-import UserRow from './user-row'
+import UsersList from './users-list'
+import ExportButton from '@/components/ui/export-button'
 import type { AdminUser, UserFilter } from './types'
 import styles from './users.module.css'
 
@@ -137,11 +138,12 @@ export default async function AdminUsersPage({ searchParams }: Props) {
           description={q ? `مفيش حد اسمه أو رقمه فيه "${q}"` : 'لسه محدش سجل'}
         />
       ) : (
-        <div className={styles.list}>
-          {users.map((u) => (
-            <UserRow key={u.id} user={u} />
-          ))}
-        </div>
+        <>
+          <div className={styles.topBar}>
+            <ExportButton type="users" />
+          </div>
+          <UsersList users={users} filter={validFilter} />
+        </>
       )}
 
       {users.length >= 200 && (

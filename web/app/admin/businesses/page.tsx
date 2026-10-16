@@ -12,6 +12,7 @@ import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import BusinessList from './business-list'
 import BusinessFilters from './business-filters'
+import ExportButton from '@/components/ui/export-button'
 import Link from 'next/link'
 import styles from './businesses.module.css'
 
@@ -124,6 +125,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
 
       {/* Action Bar */}
       <div className={styles.topBar}>
+        <ExportButton type="businesses" />
         <Link href="/admin/businesses/new" className={styles.newBtn}>
           <PlusIcon size={14} />
           <span>نشاط جديد</span>
