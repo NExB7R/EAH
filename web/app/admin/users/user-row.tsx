@@ -17,6 +17,9 @@ import styles from './users.module.css'
 
 type Props = {
   user: AdminUser
+  selected?: boolean
+  onToggleSelect?: () => void
+  showCheckbox?: boolean
 }
 
 const TIER_LABEL: Record<string, string> = {
@@ -34,7 +37,12 @@ const ROLE_LABEL: Record<string, string> = {
 
 const ROLES = ['customer', 'merchant', 'admin', 'super_admin'] as const
 
-export default function UserRow({ user: u }: Props) {
+export default function UserRow({
+  user: u,
+  selected = false,
+  onToggleSelect,
+  showCheckbox = false,
+}: Props) {
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [modal, setModal] = useState<null | 'ban' | 'trust' | 'role'>(null)
@@ -93,8 +101,18 @@ export default function UserRow({ user: u }: Props) {
 
   return (
     <div
-      className={`${styles.card} ${pending ? styles.pending : ''} ${isBanned ? styles.banned : ''}`}
+      className={`${styles.card} ${pending ? styles.pending : ''} ${isBanned ? styles.banned : ''} ${selected ? styles.cardSelected : ''}`}
     >
+      {showCheckbox && (
+        <label className={styles.cardCheckbox}>
+          <input
+            type="checkbox"
+            checked={selected}
+            onChange={onToggleSelect}
+            aria-label={`تحديد ${u.display_name}`}
+          />
+        </label>
+      )}
       <div className={styles.head}>
         <Avatar
           displayName={u.display_name}

@@ -649,3 +649,383 @@
   color: var(--text-tertiary);
   margin-top: 4px;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Bulk Selection Toolbar
+   ═══════════════════════════════════════════════════════════ */
+
+.bulkToolbar {
+  position: sticky;
+  top: 12px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.95), rgba(10, 7, 20, 0.98));
+  border: 1px solid rgba(199, 125, 255, 0.35);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.4),
+    0 0 24px rgba(168, 85, 247, 0.15);
+  flex-wrap: wrap;
+  animation: toolbarIn 220ms var(--ease-out);
+}
+
+@keyframes toolbarIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bulkToolbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bulkCount {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(199, 125, 255, 0.25), rgba(168, 85, 247, 0.15));
+  color: var(--purple-light);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.bulkToggleAll {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.bulkToggleAll:hover {
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--text-primary);
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+.bulkClear {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: color 180ms var(--ease);
+}
+
+.bulkClear:hover {
+  color: #fca5a5;
+}
+
+.bulkToolbarRight {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bulkToolbarRight button {
+  padding: 7px 12px;
+  font-size: 0.74rem;
+}
+
+.goldBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-weight: 900;
+  cursor: pointer;
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.2), rgba(232, 199, 154, 0.08));
+  border: 1px solid rgba(232, 199, 154, 0.4);
+  color: var(--gold-light);
+  transition: all 180ms var(--ease);
+}
+
+.goldBtn:hover {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.3), rgba(232, 199, 154, 0.15));
+}
+
+.bulkError {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  color: #fca5a5;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Select All Row
+   ═══════════════════════════════════════════════════════════ */
+
+.selectAllRow {
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.1);
+}
+
+.selectAllLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--purple-neon);
+  cursor: pointer;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Card — Checkbox + Selected state
+   ═══════════════════════════════════════════════════════════ */
+
+.cardCheckbox {
+  position: absolute;
+  top: 12px;
+  inset-inline-end: 12px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(10, 7, 20, 0.8);
+  border: 1.5px solid rgba(168, 85, 247, 0.3);
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.cardCheckbox:hover {
+  border-color: rgba(199, 125, 255, 0.6);
+  background: rgba(20, 14, 34, 0.9);
+}
+
+.cardCheckbox input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--purple-neon);
+  cursor: pointer;
+  margin: 0;
+}
+
+.cardSelected {
+  border-color: rgba(199, 125, 255, 0.6) !important;
+  background: linear-gradient(160deg, rgba(168, 85, 247, 0.12), rgba(10, 7, 20, 0.85)) !important;
+  box-shadow:
+    0 0 0 1px rgba(199, 125, 255, 0.15),
+    0 0 24px rgba(168, 85, 247, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Bulk Modals
+   ═══════════════════════════════════════════════════════════ */
+
+.bulkModalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(7, 2, 13, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: fadeIn 200ms var(--ease-out);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.bulkModal {
+  width: 100%;
+  max-width: 400px;
+  padding: 22px;
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
+  border: 1.5px solid rgba(168, 85, 247, 0.3);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(168, 85, 247, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: modalIn 260ms var(--ease-out);
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.bulkModalTitle {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+.bulkModalText {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+}
+
+.input,
+.textarea {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  background: rgba(7, 2, 13, 0.4);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 180ms var(--ease);
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 70px;
+  line-height: 1.6;
+}
+
+.bulkModalActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.roleGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.roleBtn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+}
+
+.roleBtn:hover:not(:disabled) {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.45);
+}
+
+.roleBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .bulkToolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .bulkToolbarRight {
+    flex-direction: column;
+  }
+  .bulkToolbarRight button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bulkToolbar,
+  .bulkModalBackdrop,
+  .bulkModal {
+    animation: none;
+  }
+  .cardCheckbox,
+  .bulkToggleAll,
+  .bulkClear,
+  .roleBtn {
+    transition: none;
+  }
+}
