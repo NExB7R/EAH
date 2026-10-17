@@ -1,0 +1,259 @@
+'use client'
+
+import { Fragment, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { ArrowLeftIcon, AlertIcon, CheckCircleIcon } from '@/components/icons'
+import { useDraft } from '@/lib/hooks/use-draft'
+import { createBusiness } from '../actions'
+import BasicsStep from './basics-step'
+import LocationStep from './location-step'
+import OptionsStep from './options-step'
+import ReviewStep from './review-step'
+import styles from './wizard.module.css'
+
+// ═══════════════════════════════════════════════════════════
+// EAH — New Business Wizard (4 steps + review)
+// Glass around, solid inside. Draft persistence. Inline validation.
+// ═══════════════════════════════════════════════════════════
+
+export type WizardData = {
+  business_type: string
+  name: string
+  hook: string
+  description: string
+  area: string
+  address_text: string
+  phone: string
+  whatsapp: string
+  is_open: boolean
+  accepts_whatsapp_orders: boolean
+  owner_user_id: string
+}
+
+export type OwnerOption = {
+  id: string
+  display_name: string
+}
+
+const INITIAL: WizardData = {
+  business_type: 'restaurant',
+  name: '',
+  hook: '',
+  description: '',
+  area: '',
+  address_text: '',
+  phone: '',
+  whatsapp: '',
+  is_open: true,
+  accepts_whatsapp_orders: true,
+  owner_user_id: '',
+}
+
+const STEPS = [
+  { key: 'basics', label: 'الأساسيات' },
+  { key: 'location', label: 'الموقع والتواصل' },
+  { key: 'options', label: 'الخيارات' },
+  { key: 'review', label: 'المراجعة' },
+]
+
+const DRAFT_KEY = 'eah-admin-new-business'
+const DRAFT_VERSION = 1
+
+export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] }) {
+  const router = useRouter()
+  const [step, setStep] = useState(0)
+  const { data, setData, hasDraft, savedAt, clear } = useDraft<WizardData>(
+    DRAFT_KEY,
+    DRAFT_VERSION,
+    INITIAL,
+  )
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  const update = (patch: Partial<WizardData>) => {
+    setData((d) => ({ ...d, ...patch }))
+    const next = { ...errors }
+    for (const k of Object.keys(patch)) delete next[k]
+    setErrors(next)
+  }
+
+  const validateStep = (index: number): boolean => {
+    const errs: Record<string, string> = {}
+    if (index === 0) {
+      if (!data.business_type) errs.business_type = 'اختر نوع النشاط'
+      const name = data.name.trim()
+      if (name.length < 2) errs.name = 'الاسم قصير (حرفين على الأقل)'
+      else if (name.length > 80) errs.name = 'الاسم طويل (80 حرف كحد أقصى)'
+    }
+    if (index === 1) {
+      const phone = data.phone.trim()
+      const wa = data.whatsapp.trim()
+      if (phone && !/^0\d{9,10}$/.test(phone)) errs.phone = 'رقم غير صحيح (11 رقم يبدأ بـ 0)'
+      if (wa && !/^0\d{9,10}$/.test(wa)) errs.whatsapp = 'رقم غير صحيح (11 رقم يبدأ بـ 0)'
+    }
+    setErrors(errs)
+    return Object.keys(errs).length === 0
+  }
+
+  const next = () => {
+    if (!validateStep(step)) return
+    setStep((s) => Math.min(s + 1, STEPS.length - 1))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const back = () => {
+    setStep((s) => Math.max(0, s - 1))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const jumpTo = (index: number) => {
+    if (index < step) {
+      setStep(index)
+      return
+    }
+    for (let i = step; i < index; i++) {
+      if (!validateStep(i)) return
+    }
+    setStep(index)
+  }
+
+  const resetDraft = () => {
+    clear()
+    setData(INITIAL)
+    setStep(0)
+    setErrors({})
+    setSubmitError(null)
+  }
+
+  const submit = async () => {
+    if (!validateStep(0) || !validateStep(1)) {
+      setStep(0)
+      return
+    }
+    setSubmitting(true)
+    setSubmitError(null)
+    try {
+      const fd = new FormData()
+      fd.set('name', data.name.trim())
+      fd.set('business_type', data.business_type)
+      fd.set('hook', data.hook.trim())
+      fd.set('description', data.description.trim())
+      fd.set('area', data.area.trim())
+      fd.set('address_text', data.address_text.trim())
+      fd.set('phone', data.phone.trim())
+      fd.set('whatsapp', data.whatsapp.trim())
+      if (data.is_open) fd.set('is_open', 'on')
+      if (data.accepts_whatsapp_orders) fd.set('accepts_whatsapp_orders', 'on')
+      if (data.owner_user_id) fd.set('owner_user_id', data.owner_user_id)
+
+      const res = await createBusiness(fd)
+      if (res.ok) {
+        clear()
+        router.push('/admin/businesses')
+        router.refresh()
+      } else {
+        setSubmitError(res.error)
+      }
+    } catch {
+      setSubmitError('حدث خطأ غير متوقع — حاول تاني')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const progress = ((step + 1) / STEPS.length) * 100
+
+  return (
+    <div className={styles.wrap}>
+      <div className={styles.main}>
+        {hasDraft && savedAt && (
+          <div className={styles.draftBar}>
+            <CheckCircleIcon size={14} />
+            <span>رجّعنا مسودتك السابقة</span>
+            <button type="button" onClick={resetDraft}>
+              ابدأ من جديد
+            </button>
+          </div>
+        )}
+
+        <div className={styles.stepper}>
+          {STEPS.map((s, i) => (
+            <Fragment key={s.key}>
+              <button
+                type="button"
+                onClick={() => jumpTo(i)}
+                className={`${styles.step} ${i === step ? styles.stepActive : ''} ${i < step ? styles.stepDone : ''}`}
+                disabled={i > step}
+                aria-current={i === step ? 'step' : undefined}
+              >
+                <span className={styles.stepDot}>{i < step ? '✓' : i + 1}</span>
+                <span>{s.label}</span>
+              </button>
+              {i < STEPS.length - 1 && (
+                <span
+                  className={`${styles.stepSep} ${i < step ? styles.stepSepDone : ''}`}
+                  aria-hidden
+                />
+              )}
+            </Fragment>
+          ))}
+        </div>
+
+        <div className={styles.progressBar} aria-hidden>
+          <div className={styles.progressFill} style={{ width: `${progress}%` }} />
+        </div>
+
+        <div className={styles.card} key={step}>
+          {step === 0 && <BasicsStep data={data} errors={errors} update={update} />}
+          {step === 1 && <LocationStep data={data} errors={errors} update={update} />}
+          {step === 2 && <OptionsStep data={data} owners={owners} update={update} />}
+          {step === 3 && <ReviewStep data={data} owners={owners} goTo={jumpTo} />}
+        </div>
+
+        {submitError && (
+          <div className={styles.errorBanner}>
+            <AlertIcon size={14} />
+            <span>{submitError}</span>
+          </div>
+        )}
+
+        <div className={styles.nav}>
+          <button
+            type="button"
+            onClick={back}
+            disabled={step === 0 || submitting}
+            className={styles.btnBack}
+          >
+            <ArrowLeftIcon size={14} />
+            <span>رجوع</span>
+          </button>
+          <div className={styles.navRight}>
+            {step < STEPS.length - 1 ? (
+              <button type="button" onClick={next} className={styles.btnNext}>
+                التالي
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={submit}
+                disabled={submitting}
+                className={styles.btnCreate}
+              >
+                {submitting ? 'بيتحفظ…' : 'إنشاء النشاط'}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {step === STEPS.length - 1 && (
+        <div className={styles.mobileSubmit}>
+          <button type="button" onClick={submit} disabled={submitting} className={styles.btnCreate}>
+            {submitting ? 'بيتحفظ…' : 'إنشاء النشاط'}
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
