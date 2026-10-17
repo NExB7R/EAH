@@ -10,7 +10,7 @@ import styles from './export-button.module.css'
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
-  type: 'businesses' | 'users' | 'subscriptions' | 'featured' | 'ads' | 'audit'
+  type: 'businesses' | 'users' | 'subscriptions' | 'featured' | 'ads' | 'audit' | 'health'
   label?: string
 }
 

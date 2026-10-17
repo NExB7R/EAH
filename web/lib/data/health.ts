@@ -88,3 +88,45 @@ export async function getRecentErrors(limit = 50, onlyUnresolved = false): Promi
   const { data } = await q
   return (data ?? []) as SystemError[]
 }
+
+export type HealthFilter = {
+  severity?: string
+  resolved?: 'all' | 'unresolved' | 'resolved'
+  q?: string
+  limit?: number
+}
+
+export async function getErrorsWithFilters(filter: HealthFilter): Promise<SystemError[]> {
+  const supabase = createServiceClient()
+  const limit = filter.limit ?? 100
+  const q = (filter.q ?? '').trim().toLowerCase()
+
+  let query = supabase
+    .from('system_errors')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(q ? Math.max(limit, 300) : limit)
+
+  if (filter.severity && filter.severity !== 'all') {
+    query = query.eq('severity', filter.severity)
+  }
+  if (filter.resolved === 'unresolved') {
+    query = query.is('resolved_at', null)
+  } else if (filter.resolved === 'resolved') {
+    query = query.not('resolved_at', 'is', null)
+  }
+
+  const { data } = await query
+  let rows = (data ?? []) as SystemError[]
+
+  if (q) {
+    rows = rows.filter(
+      (e) =>
+        e.message.toLowerCase().includes(q) ||
+        e.source.toLowerCase().includes(q) ||
+        (e.path ?? '').toLowerCase().includes(q),
+    )
+  }
+
+  return rows.slice(0, limit)
+}

@@ -283,5 +283,42 @@ export async function GET(req: NextRequest) {
     return csvResponse(buildCsv(rows, columns), `audit-${timestamp}`)
   }
 
+  // ─── Health (system_errors) ───
+  if (type === 'health') {
+    let qb = supabase
+      .from('system_errors')
+      .select('id, severity, source, path, message, resolved_at, created_at')
+      .order('created_at', { ascending: false })
+      .limit(5000)
+
+    if (status && status !== 'all') {
+      if (status === 'unresolved') qb = qb.is('resolved_at', null)
+      else if (status === 'resolved') qb = qb.not('resolved_at', 'is', null)
+      else qb = qb.eq('severity', status)
+    }
+    const { data } = await qb
+    let rows = (data ?? []) as Row[]
+    if (q) {
+      rows = rows.filter(
+        (r) =>
+          String(r.message).toLowerCase().includes(q) ||
+          String(r.source).toLowerCase().includes(q) ||
+          String(r.path ?? '')
+            .toLowerCase()
+            .includes(q),
+      )
+    }
+
+    const columns: CsvColumn<Row>[] = [
+      { key: 'severity', label: 'الخطورة' },
+      { key: 'source', label: 'المصدر' },
+      { key: 'path', label: 'المسار' },
+      { key: 'message', label: 'الرسالة' },
+      { key: 'resolved_at', label: 'محلول في' },
+      { key: 'created_at', label: 'التاريخ' },
+    ]
+    return csvResponse(buildCsv(rows, columns), `health-${status || 'all'}-${timestamp}`)
+  }
+
   return new Response('Unknown export type', { status: 400 })
 }
