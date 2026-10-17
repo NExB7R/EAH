@@ -1,0 +1,112 @@
+'use client'
+
+import type { WizardData, OwnerOption } from './new-business-wizard'
+import styles from './wizard.module.css'
+
+const TYPE_LABEL: Record<string, string> = {
+  restaurant: 'مطعم',
+  pharmacy: 'صيدلية',
+  supermarket: 'ماركت',
+  delivery_office: 'توصيل',
+  misc: 'أخرى',
+}
+
+type Props = {
+  data: WizardData
+  owners: OwnerOption[]
+  goTo: (index: number) => void
+}
+
+function Item({
+  label,
+  value,
+  empty,
+  step,
+  goTo,
+}: {
+  label: string
+  value: string | null | undefined
+  empty?: boolean
+  step: number
+  goTo: (i: number) => void
+}) {
+  return (
+    <div className={styles.reviewItem}>
+      <span className={styles.reviewLabel}>{label}</span>
+      <span className={`${styles.reviewValue} ${empty ? styles.reviewEmpty : ''}`}>
+        {empty ? '— غير محدد —' : value}
+      </span>
+      <button type="button" onClick={() => goTo(step)} className={styles.reviewEdit}>
+        تعديل
+      </button>
+    </div>
+  )
+}
+
+export default function ReviewStep({ data, owners, goTo }: Props) {
+  const owner = owners.find((o) => o.id === data.owner_user_id)
+
+  return (
+    <div>
+      <div className={styles.cardHead}>
+        <h2 className={styles.cardTitle}>مراجعة نهائية</h2>
+        <p className={styles.cardHint}>
+          راجع البيانات كويس قبل الإنشاء — تقدر تعدّل أي حقل من الزر جنبه
+        </p>
+      </div>
+
+      <div className={styles.reviewGrid}>
+        <Item
+          label="النوع"
+          value={TYPE_LABEL[data.business_type] ?? data.business_type}
+          step={0}
+          goTo={goTo}
+        />
+        <Item label="الاسم" value={data.name} step={0} goTo={goTo} />
+        <Item label="الهوك" value={data.hook} empty={!data.hook} step={0} goTo={goTo} />
+        <Item label="المنطقة" value={data.area} empty={!data.area} step={1} goTo={goTo} />
+        <Item
+          label="العنوان"
+          value={data.address_text}
+          empty={!data.address_text}
+          step={1}
+          goTo={goTo}
+        />
+        <Item label="التليفون" value={data.phone} empty={!data.phone} step={1} goTo={goTo} />
+        <Item label="الواتساب" value={data.whatsapp} empty={!data.whatsapp} step={1} goTo={goTo} />
+        <Item
+          label="صاحب النشاط"
+          value={owner?.display_name ?? null}
+          empty={!owner}
+          step={2}
+          goTo={goTo}
+        />
+        <Item label="الحالة" value={data.is_open ? 'مفتوح الآن' : 'مغلق'} step={2} goTo={goTo} />
+        <Item
+          label="واتساب أوردرز"
+          value={data.accepts_whatsapp_orders ? 'يستقبل' : 'لا يستقبل'}
+          step={2}
+          goTo={goTo}
+        />
+      </div>
+
+      {data.description && (
+        <div style={{ marginTop: '16px' }}>
+          <div className={styles.reviewItem}>
+            <span className={styles.reviewLabel}>الوصف</span>
+            <span className={styles.reviewValue} style={{ fontWeight: 600, lineHeight: 1.6 }}>
+              {data.description}
+            </span>
+            <button type="button" onClick={() => goTo(0)} className={styles.reviewEdit}>
+              تعديل
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div style={{ marginTop: '20px' }} className={styles.draftBar}>
+        <span>✅ البيانات جاهزة — اضغط &quot;إنشاء النشاط&quot; تحت</span>
+      </div>
+    </div>
+  )
+}
