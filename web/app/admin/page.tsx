@@ -13,6 +13,8 @@ import {
   ShieldCheckIcon,
 } from '@/components/icons'
 import { getAdminStats, getAdminRecent, getAdminBadges } from '@/lib/data/admin'
+import ActivityFeed from '@/components/admin/activity-feed'
+import ErrorPulse from '@/components/admin/error-pulse'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -274,6 +276,14 @@ export default async function AdminDashboard() {
           </Link>
         </div>
       </section>
+
+      {/* ─── Live Activity Feed ─── */}
+      <section className={styles.section}>
+        <ActivityFeed />
+      </section>
+
+      {/* ─── Critical Error Toast ─── */}
+      <ErrorPulse />
     </div>
   )
 }
