@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import AccountPageHeader from '@/components/account-page-header'
 import Avatar from '@/components/avatar'
 import {
-  AlertIcon,
   ArrowLeftIcon,
   CloseIcon,
   CheckCircleIcon,
@@ -11,7 +10,6 @@ import {
   CrownGoldIcon,
   StarIcon,
   StoreIcon,
-  UserIcon,
 } from '@/components/icons'
 import { getAdminUserDetail } from '@/lib/data/admin-user-detail'
 import UserDetailActions from './user-detail-actions'
