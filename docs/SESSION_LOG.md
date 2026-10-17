@@ -1276,3 +1276,50 @@ Admin list:
 - اختبار ميداني على https://eah-sq.vercel.app/admin
 - تحديث PROGRESS (تم في نفس الجلسة)
 - Optimistic UI (لاحقاً)
+
+
+---
+
+## 2026-10-17 (Part 2) — Real-time + User Detail + Merchant Panel
+
+### اللي اتحقق (7 commits)
+
+**Real-time Dashboard** (`2c3d37a`)
+- `/api/admin/live-feed`: آخر 20 حدث من `audit_logs` (poll 15s)
+- `/api/admin/critical-pulse`: عدّاد أخطاء critical غير محلولة (poll 30s)
+- `ActivityFeed`: قائمة حيّة + LIVE badge + auto-refresh
+- `ErrorPulse`: toast لما فيه أخطاء critical (dismiss 5min sessionStorage)
+
+**Admin User Detail** (`2f1caad` + `e59f5a0`)
+- `/admin/users/[id]`: بروفايل كامل + role + badges + trust
+- يعرض: businesses (owner) + reviews + audit logs (30)
+- Actions: ban (modal) / role / adjust trust / toggle premium
+- `lib/data/admin-user-detail.ts`: parallel fetch 4 tables
+
+**Merchant Panel** (4 صفحات)
+- Orders (`58ee803`): search + date tabs + 10min countdown (pulse <2min) + CSV export
+- Offers (`0898add`): 4 stats + search + 4 filter tabs + optimistic delete
+- Branches (`f7218d5`): 4 stats + search + 3 filter tabs + optimistic delete
+- Ads (`f57722a`): 4 stats + 5 filter tabs + optimistic cancel
+
+### النمط الموحد
+
+- Stats: 4 بطاقات (total + success + warn + neutral)
+- Search: debounced inline (client-side)
+- Filter: tabs مع counts + active state
+- Optimistic: row يختفي فوراً + rollback على error
+- `Date.now` في lazy `useState(() => ...)` — React 19 strict
+
+### Lessons Learned
+
+- **React 19 strict**: `Date.now()` لازم lazy initializer، حتى في `useState(Date.now())`
+- **regex markers**: لما `str.replace()` يفشل بسبب whitespace، استخدم `re.sub()` مع `// ─── X ───`
+- **verify + inject**: قبل أي replace، اطبع `grep -c pattern` — لو صفر، ابعتلي `sed -n 'X,Yp'`
+
+### إجمالي الجلسة
+
+- **16 commit** — Admin (12) + Dashboard (1) + User Detail (2) + Merchant (4)
+- **~6,500 سطر** — 45+ ملف
+- **TS: 0 errors / ESLint: 0 errors**
+- **كل الفلاتر URL-driven** — bookmarkable + shareable
+- **كل server actions** — `{ ok, error?, affected? }`
