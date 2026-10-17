@@ -5,6 +5,7 @@ import EmptyState from '@/components/empty-state'
 import { getReports, getAdminBadges } from '@/lib/data/admin'
 import ModerationRow from './moderation-row'
 import ModerationTabs from './moderation-tabs'
+import ModerationFilters from './moderation-filters'
 import FraudView from './fraud-view'
 import ReportList from '../reports/report-list'
 import type { ModerationReview } from './types'
@@ -12,7 +13,7 @@ import styles from './moderation.module.css'
 
 export const dynamic = 'force-dynamic'
 
-type SearchParams = { tab?: string }
+type SearchParams = { tab?: string; filter?: string; q?: string }
 
 async function getReviews(): Promise<ModerationReview[]> {
   const supabase = await createClient()
@@ -64,29 +65,49 @@ export default async function AdminModerationPage({
 }) {
   const params = await searchParams
   const tab = params.tab === 'reports' ? 'reports' : params.tab === 'fraud' ? 'fraud' : 'reviews'
+  const filter = params.filter ?? 'all'
+  const q = (params.q ?? '').trim().toLowerCase()
 
   const badges = await getAdminBadges()
   const reviewsCount = tab === 'reviews' ? (await getReviews()).length : badges.flaggedReviews
 
   // ─── Tab: Reviews (default) ───
   if (tab === 'reviews') {
-    const reviews = await getReviews()
+    const allReviews = await getReviews()
+
+    let reviews = allReviews
+    if (filter === 'pending') reviews = reviews.filter((r) => r.status === 'pending')
+    else if (filter === 'flagged') reviews = reviews.filter((r) => r.status === 'flagged')
+    else if (filter === 'low_rating') reviews = reviews.filter((r) => r.rating <= 2)
+
+    if (q) {
+      reviews = reviews.filter(
+        (r) =>
+          (r.comment ?? '').toLowerCase().includes(q) ||
+          (r.business_name ?? '').toLowerCase().includes(q) ||
+          (r.user_name ?? '').toLowerCase().includes(q),
+      )
+    }
+
     return (
       <div>
         <AccountPageHeader
           title="المراجعة والأمان"
-          description={`${reviews.length} تقييم بحاجة مراجعة`}
+          description={`${allReviews.length} تقييم بحاجة مراجعة — ${reviews.length} معروض`}
         />
         <ModerationTabs
-          reviewsCount={reviews.length}
+          reviewsCount={allReviews.length}
           reportsCount={badges.openReports}
           fraudCount={badges.flaggedReviews}
         />
+
+        <ModerationFilters />
+
         {reviews.length === 0 ? (
           <EmptyState
             Icon={CheckCircleIcon}
-            title="مفيش حاجة بحاجة مراجعة"
-            description="كل التقييمات تمام!"
+            title={allReviews.length === 0 ? 'مفيش حاجة بحاجة مراجعة' : 'مفيش نتائج للفلتر'}
+            description={q ? 'جرّب بحث تاني' : 'كل التقييمات تمام!'}
           />
         ) : (
           <div className={styles.list}>
