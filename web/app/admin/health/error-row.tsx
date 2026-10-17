@@ -39,20 +39,30 @@ export default function ErrorRow({ error: e }: { error: SystemError }) {
   const [pending, startTransition] = useTransition()
   const [expanded, setExpanded] = useState(false)
   const [err, setErr] = useState<string | null>(null)
-  const resolved = !!e.resolved_at
+  const [hidden, setHidden] = useState(false)
+  const [resolvedOptimistic, setResolvedOptimistic] = useState(!!e.resolved_at)
+  const resolved = resolvedOptimistic
 
-  const run = (fn: () => Promise<{ ok: boolean; error?: string }>) => {
+  const run = (fn: () => Promise<{ ok: boolean; error?: string }>, optimisticFlip: boolean) => {
     setErr(null)
+    setResolvedOptimistic(optimisticFlip)
     startTransition(async () => {
       const res = await fn()
-      if (res.ok) router.refresh()
-      else setErr(res.error ?? 'فشل')
+      if (res.ok) {
+        if (optimisticFlip) setHidden(true)
+        router.refresh()
+      } else {
+        setResolvedOptimistic(!optimisticFlip)
+        setErr(res.error ?? 'فشل')
+      }
     })
   }
 
   const handleToggle = () => {
-    run(() => (resolved ? unresolveError(e.id) : resolveError(e.id)))
+    run(() => (resolved ? unresolveError(e.id) : resolveError(e.id)), !resolved)
   }
+
+  if (hidden) return null
 
   return (
     <li
