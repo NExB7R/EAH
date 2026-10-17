@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { CheckCircleIcon, AlertIcon, PhoneIcon, WhatsAppIcon, ClockIcon } from '@/components/icons'
 import { updateOrderStatus } from './actions'
 import styles from './orders.module.css'
@@ -14,6 +14,46 @@ type Order = {
   customer_name: string | null
   customer_phone: string | null
   created_at: string
+}
+
+// ═══════════════════════════════════════════════════════════
+// Countdown — 10 دقايق للتأكيد (sent/seen فقط)
+// ═══════════════════════════════════════════════════════════
+
+const COUNTDOWN_MS = 10 * 60 * 1000
+
+function Countdown({ createdAt }: { createdAt: string }) {
+  const deadline = new Date(createdAt).getTime() + COUNTDOWN_MS
+  const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(t)
+  }, [])
+
+  const remaining = deadline - now
+  if (remaining <= 0) {
+    return (
+      <span className={styles.countdownExpired}>
+        <ClockIcon size={11} />
+        <span>فات الوقت</span>
+      </span>
+    )
+  }
+
+  const totalSec = Math.floor(remaining / 1000)
+  const min = Math.floor(totalSec / 60)
+  const sec = totalSec % 60
+  const urgent = totalSec < 120
+
+  return (
+    <span className={urgent ? styles.countdownUrgent : styles.countdown}>
+      <ClockIcon size={11} />
+      <span>
+        {min}:{String(sec).padStart(2, '0')}
+      </span>
+    </span>
+  )
 }
 
 type Props = {
@@ -104,6 +144,7 @@ export default function OrderRow({ order }: Props) {
             {STATUS_LABEL[status] ?? status}
           </span>
           <code className={styles.orderCode}>#{order.order_code}</code>
+          {(status === 'sent' || status === 'seen') && <Countdown createdAt={order.created_at} />}
         </div>
         <time className={styles.rowDate}>
           <ClockIcon size={11} /> {date}
