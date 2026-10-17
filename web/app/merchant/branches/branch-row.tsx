@@ -16,9 +16,11 @@ import styles from './branches.module.css'
 
 type Props = {
   branch: BranchRowType
+  onDeleteStart?: (id: string) => void
+  onDeleteFail?: (id: string) => void
 }
 
-export default function BranchRow({ branch }: Props) {
+export default function BranchRow({ branch, onDeleteStart, onDeleteFail }: Props) {
   const [editing, setEditing] = useState(false)
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -26,9 +28,13 @@ export default function BranchRow({ branch }: Props) {
   const handleDelete = () => {
     if (!confirm(`تأكيد حذف فرع "${branch.name}"؟`)) return
     setError(null)
+    onDeleteStart?.(branch.id)
     startTransition(async () => {
       const res = await deleteBranch(branch.id)
-      if (!res.ok) setError(res.error)
+      if (!res.ok) {
+        setError(res.error)
+        onDeleteFail?.(branch.id)
+      }
     })
   }
 

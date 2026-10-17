@@ -345,3 +345,184 @@
     transition: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Stats + Search + Filter (branches)
+   ═══════════════════════════════════════════════════════════ */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.statCard {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statOk {
+  border-color: rgba(20, 184, 166, 0.3);
+}
+
+.statWarn {
+  border-color: rgba(253, 186, 116, 0.4);
+}
+
+.statGold {
+  border-color: rgba(232, 199, 154, 0.3);
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.statOk .statValue {
+  color: #5eead4;
+}
+
+.statWarn .statValue {
+  color: #fdba74;
+}
+
+.statGold .statValue {
+  color: var(--gold-light);
+}
+
+.statLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+
+.searchWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  height: 40px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: rgba(20, 14, 34, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.18);
+}
+
+.searchWrap:focus-within {
+  border-color: rgba(168, 85, 247, 0.45);
+}
+
+.searchIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  min-width: 0;
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.searchClear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--text-secondary);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.filterTabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 14px;
+  padding: 4px;
+  border-radius: 10px;
+  background: rgba(10, 5, 20, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.1);
+  flex-wrap: wrap;
+}
+
+.filterTab {
+  padding: 6px 12px;
+  border-radius: 7px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 150ms var(--ease);
+}
+
+.filterTab:hover {
+  background: rgba(168, 85, 247, 0.08);
+  color: var(--text-primary);
+}
+
+.filterTabActive {
+  background: linear-gradient(135deg, rgba(199, 125, 255, 0.22), rgba(168, 85, 247, 0.1));
+  color: var(--purple-light);
+}
+
+.filterCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-inline-start: 4px;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.15);
+  font-size: 0.62rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.emptyFiltered {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filterTab {
+    transition: none;
+  }
+}

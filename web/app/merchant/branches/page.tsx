@@ -5,8 +5,7 @@ import { getMyBusiness, getMyBranches } from '@/lib/data/merchant'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import BranchForm from './branch-form'
-import BranchRow from './branch-row'
-import styles from './branches.module.css'
+import BranchesList from './branches-list'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,11 +34,7 @@ export default async function MerchantBranchesPage() {
           description="ضيف فرع الأول — لو عندك أكتر من مكان"
         />
       ) : (
-        <div className={styles.list}>
-          {branches.map((b) => (
-            <BranchRow key={b.id} branch={b} />
-          ))}
-        </div>
+        <BranchesList branches={branches} />
       )}
     </div>
   )
