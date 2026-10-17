@@ -145,7 +145,8 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
       fd.set('whatsapp', data.whatsapp.trim())
       if (data.is_open) fd.set('is_open', 'on')
       if (data.accepts_whatsapp_orders) fd.set('accepts_whatsapp_orders', 'on')
-      if (data.owner_user_id) fd.set('owner_user_id', data.owner_user_id)
+      if (data.owner_user_id) fd.set('owner_profile_id', data.owner_user_id)
+      fd.set('is_published', 'on')
 
       const res = await createBusiness(fd)
       if (res.ok) {

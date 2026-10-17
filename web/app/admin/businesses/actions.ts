@@ -222,16 +222,34 @@ const createSchema = z.object({
     .string()
     .min(2)
     .max(80)
-    .regex(/^[a-z0-9-]+$/, 'الحروف الصغيرة والأرقام والشرطة فقط'),
+    .regex(/^[a-z0-9-]+$/, 'الحروف الصغيرة والأرقام والشرطة فقط')
+    .optional(),
   business_type: z.enum(['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc']),
-  owner_profile_id: z.string().uuid('اختر صاحب نشاط'),
-  area: z.string().max(60).or(z.literal('')),
-  city: z.string().max(60).or(z.literal('')),
-  address_text: z.string().max(200).or(z.literal('')),
-  description: z.string().max(1000).or(z.literal('')),
-  hook: z.string().max(120).or(z.literal('')),
-  is_published: z.boolean(),
+  owner_profile_id: z.string().uuid().optional().or(z.literal('')),
+  area: z.string().max(60).or(z.literal('')).optional(),
+  city: z.string().max(60).or(z.literal('')).optional(),
+  address_text: z.string().max(200).or(z.literal('')).optional(),
+  description: z.string().max(1000).or(z.literal('')).optional(),
+  hook: z.string().max(120).or(z.literal('')).optional(),
+  phone: z.string().max(20).or(z.literal('')).optional(),
+  whatsapp: z.string().max(20).or(z.literal('')).optional(),
+  is_open: z.boolean().optional(),
+  accepts_whatsapp_orders: z.boolean().optional(),
+  is_published: z.boolean().optional(),
 })
+
+function slugify(name: string): string {
+  return (
+    name
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9\u0600-\u06FF\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 60) || `biz-${Date.now().toString(36)}`
+  )
+}
 
 export async function createBusiness(formData: FormData): Promise<Result> {
   const ctx = await requireAdmin()
@@ -239,16 +257,24 @@ export async function createBusiness(formData: FormData): Promise<Result> {
 
   const parsed = createSchema.safeParse({
     name: String(formData.get('name') ?? '').trim(),
-    slug: String(formData.get('slug') ?? '')
-      .trim()
-      .toLowerCase(),
+    slug:
+      String(formData.get('slug') ?? '')
+        .trim()
+        .toLowerCase() || undefined,
     business_type: String(formData.get('business_type') ?? ''),
-    owner_profile_id: String(formData.get('owner_profile_id') ?? ''),
+    owner_profile_id:
+      String(formData.get('owner_profile_id') ?? '').trim() ||
+      String(formData.get('owner_user_id') ?? '').trim() ||
+      '',
     area: String(formData.get('area') ?? '').trim(),
     city: String(formData.get('city') ?? '').trim(),
     address_text: String(formData.get('address_text') ?? '').trim(),
     description: String(formData.get('description') ?? '').trim(),
     hook: String(formData.get('hook') ?? '').trim(),
+    phone: String(formData.get('phone') ?? '').trim(),
+    whatsapp: String(formData.get('whatsapp') ?? '').trim(),
+    is_open: formData.get('is_open') === 'on',
+    accepts_whatsapp_orders: formData.get('accepts_whatsapp_orders') === 'on',
     is_published: formData.get('is_published') === 'on',
   })
 
@@ -257,25 +283,59 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   }
 
   const d = parsed.data
+  const finalSlug = d.slug ?? slugify(d.name)
+
   const { data: created, error } = await ctx.supabase
     .from('businesses')
     .insert({
       name: d.name,
-      slug: d.slug,
+      slug: finalSlug,
       business_type: d.business_type,
-      owner_profile_id: d.owner_profile_id,
+      owner_profile_id: d.owner_profile_id || null,
       area: d.area || null,
       city: d.city || null,
       address_text: d.address_text || null,
       description: d.description || null,
       hook: d.hook || null,
-      is_published: d.is_published,
+      is_open: d.is_open ?? true,
+      accepts_whatsapp_orders: d.accepts_whatsapp_orders ?? true,
+      is_published: d.is_published ?? true,
     })
     .select('id')
     .single()
 
   if (error || !created) {
     return { ok: false, error: error?.message ?? 'فشل الإنشاء' }
+  }
+
+  // حفظ جهات الاتصال
+  const contacts: {
+    business_id: string
+    method_type: string
+    value: string
+    is_public: boolean
+    is_primary: boolean
+  }[] = []
+  if (d.phone) {
+    contacts.push({
+      business_id: created.id,
+      method_type: 'phone',
+      value: d.phone,
+      is_public: true,
+      is_primary: true,
+    })
+  }
+  if (d.whatsapp) {
+    contacts.push({
+      business_id: created.id,
+      method_type: 'whatsapp',
+      value: d.whatsapp,
+      is_public: true,
+      is_primary: true,
+    })
+  }
+  if (contacts.length > 0) {
+    await ctx.supabase.from('business_contact_methods').insert(contacts)
   }
 
   await logAudit(ctx.supabase, {
