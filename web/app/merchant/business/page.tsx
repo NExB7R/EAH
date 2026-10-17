@@ -42,6 +42,12 @@ export default async function MerchantBusinessPage() {
           acceptsWhatsapp: business.accepts_whatsapp_orders,
           phone: contacts.phone ?? '',
           whatsapp: contacts.whatsapp ?? '',
+          businessType: (business as unknown as { business_type?: string }).business_type ?? 'misc',
+          latitude: (business as unknown as { latitude?: number | null }).latitude ?? null,
+          longitude: (business as unknown as { longitude?: number | null }).longitude ?? null,
+          logoUrl: (business as unknown as { logo_url?: string | null }).logo_url ?? null,
+          coverUrl:
+            (business as unknown as { cover_image_url?: string | null }).cover_image_url ?? null,
         }}
       />
     </div>

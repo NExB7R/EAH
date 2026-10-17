@@ -16,6 +16,9 @@ const schema = z.object({
   whatsapp: z.string().max(20).optional().or(z.literal('')),
   is_open: z.boolean(),
   accepts_whatsapp_orders: z.boolean(),
+  business_type: z.enum(['restaurant', 'pharmacy', 'delivery_office', 'misc']).optional(),
+  latitude: z.coerce.number().min(-90).max(90).nullable().optional(),
+  longitude: z.coerce.number().min(-180).max(180).nullable().optional(),
 })
 
 async function myBiz() {
@@ -39,6 +42,13 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
   const ctx = await myBiz()
   if (!ctx.ok) return { ok: false, error: ctx.error }
 
+  const parseCoord = (raw: string): number | null => {
+    const v = raw.trim()
+    if (!v) return null
+    const n = Number(v)
+    return Number.isFinite(n) ? n : null
+  }
+
   const parsed = schema.safeParse({
     name: String(formData.get('name') ?? '').trim(),
     area: String(formData.get('area') ?? '').trim(),
@@ -49,6 +59,9 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
     whatsapp: String(formData.get('whatsapp') ?? '').trim(),
     is_open: formData.get('is_open') === 'on',
     accepts_whatsapp_orders: formData.get('accepts_whatsapp_orders') === 'on',
+    business_type: String(formData.get('business_type') ?? '').trim() || undefined,
+    latitude: parseCoord(String(formData.get('latitude') ?? '')),
+    longitude: parseCoord(String(formData.get('longitude') ?? '')),
   })
 
   if (!parsed.success) {
@@ -57,18 +70,20 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
 
   const d = parsed.data
 
-  const { error } = await ctx.supabase
-    .from('businesses')
-    .update({
-      name: d.name,
-      area: d.area || null,
-      description: d.description || null,
-      hook: d.hook || null,
-      address_text: d.address_text || null,
-      is_open: d.is_open,
-      accepts_whatsapp_orders: d.accepts_whatsapp_orders,
-    })
-    .eq('id', ctx.biz.id)
+  const patch: Record<string, unknown> = {
+    name: d.name,
+    area: d.area || null,
+    description: d.description || null,
+    hook: d.hook || null,
+    address_text: d.address_text || null,
+    is_open: d.is_open,
+    accepts_whatsapp_orders: d.accepts_whatsapp_orders,
+  }
+  if (d.business_type) patch.business_type = d.business_type
+  if (d.latitude !== undefined) patch.latitude = d.latitude
+  if (d.longitude !== undefined) patch.longitude = d.longitude
+
+  const { error } = await ctx.supabase.from('businesses').update(patch).eq('id', ctx.biz.id)
 
   if (error) return { ok: false, error: error.message }
 

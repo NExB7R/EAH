@@ -7,9 +7,11 @@ import {
   StoreIcon,
   PhoneIcon,
   WhatsAppIcon,
+  MapPinIcon,
   FileTextIcon,
 } from '@/components/icons'
 import { updateMyBusiness } from './actions'
+import ImageUploader from './image-uploader'
 import styles from './edit.module.css'
 
 type Props = {
@@ -23,8 +25,20 @@ type Props = {
     acceptsWhatsapp: boolean
     phone: string
     whatsapp: string
+    businessType: string
+    latitude: number | null
+    longitude: number | null
+    logoUrl: string | null
+    coverUrl: string | null
   }
 }
+
+const TYPES: { value: string; label: string }[] = [
+  { value: 'restaurant', label: 'مطعم / كافيه' },
+  { value: 'pharmacy', label: 'صيدلية' },
+  { value: 'delivery_office', label: 'مكتب توصيل' },
+  { value: 'misc', label: 'نشاط آخر' },
+]
 
 export default function BusinessEditForm({ initial }: Props) {
   const [pending, startTransition] = useTransition()
@@ -46,12 +60,50 @@ export default function BusinessEditForm({ initial }: Props) {
     })
   }
 
+  const useMyLocation = () => {
+    if (!navigator.geolocation) {
+      alert('المتصفح مش بيدعم تحديد الموقع')
+      return
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const latInput = document.querySelector<HTMLInputElement>('input[name="latitude"]')
+        const lngInput = document.querySelector<HTMLInputElement>('input[name="longitude"]')
+        if (latInput) latInput.value = pos.coords.latitude.toFixed(6)
+        if (lngInput) lngInput.value = pos.coords.longitude.toFixed(6)
+      },
+      () => alert('مقدرناش نجيب موقعك — اكتبه يدوي'),
+    )
+  }
+
   return (
     <form className={styles.form} onSubmit={onSubmit}>
-      {/* ═══ القسم الأساسي ═══ */}
+      {/* ═══ الصور ═══ */}
       <fieldset className={styles.section}>
         <legend className={styles.legend}>
           <StoreIcon size={14} />
+          <span>صور النشاط</span>
+        </legend>
+
+        <ImageUploader
+          category="cover"
+          initialUrl={initial.coverUrl}
+          label="صورة الغلاف (Cover)"
+          aspect="wide"
+        />
+
+        <ImageUploader
+          category="logo"
+          initialUrl={initial.logoUrl}
+          label="اللوجو"
+          aspect="square"
+        />
+      </fieldset>
+
+      {/* ═══ الأساسي ═══ */}
+      <fieldset className={styles.section}>
+        <legend className={styles.legend}>
+          <FileTextIcon size={14} />
           <span>الأساسي</span>
         </legend>
 
@@ -65,6 +117,21 @@ export default function BusinessEditForm({ initial }: Props) {
             required
             dir="rtl"
           />
+        </label>
+
+        <label className={styles.field}>
+          <span className={styles.label}>نوع النشاط</span>
+          <select
+            className={styles.select}
+            name="business_type"
+            defaultValue={initial.businessType}
+          >
+            {TYPES.map((t) => (
+              <option key={t.value} value={t.value}>
+                {t.label}
+              </option>
+            ))}
+          </select>
         </label>
 
         <div className={styles.row}>
@@ -119,6 +186,51 @@ export default function BusinessEditForm({ initial }: Props) {
             dir="rtl"
           />
         </label>
+      </fieldset>
+
+      {/* ═══ الموقع ═══ */}
+      <fieldset className={styles.section}>
+        <legend className={styles.legend}>
+          <MapPinIcon size={14} />
+          <span>الموقع الجغرافي</span>
+        </legend>
+
+        <div className={styles.row}>
+          <label className={styles.field}>
+            <span className={styles.label}>خط العرض (Latitude)</span>
+            <input
+              className={styles.input}
+              name="latitude"
+              type="number"
+              step="0.000001"
+              defaultValue={initial.latitude ?? ''}
+              placeholder="30.123"
+              dir="ltr"
+            />
+          </label>
+
+          <label className={styles.field}>
+            <span className={styles.label}>خط الطول (Longitude)</span>
+            <input
+              className={styles.input}
+              name="longitude"
+              type="number"
+              step="0.000001"
+              defaultValue={initial.longitude ?? ''}
+              placeholder="31.123"
+              dir="ltr"
+            />
+          </label>
+        </div>
+
+        <button type="button" onClick={useMyLocation} className={styles.gpsBtn}>
+          <MapPinIcon size={14} />
+          <span>استخدم موقعي الحالي</span>
+        </button>
+
+        <p className={styles.gpsHint}>
+          الإحداثيات بتساعد العملاء يلاقوك على الخريطة وفي قسم &quot;قريب مني&quot;.
+        </p>
       </fieldset>
 
       {/* ═══ التواصل ═══ */}
@@ -187,14 +299,6 @@ export default function BusinessEditForm({ initial }: Props) {
           </span>
         </label>
       </fieldset>
-
-      {/* ═══ معلومات إضافية ═══ */}
-      <div className={styles.info}>
-        <FileTextIcon size={14} />
-        <span>
-          رفع الصور والمنيو — قريب هيكون من هنا كمان. دلوقتي كل حاجة تتعدّل من الفوتر أو كلمنا.
-        </span>
-      </div>
 
       {msg && (
         <div className={`${styles.msg} ${msg.type === 'ok' ? styles.msgOk : styles.msgErr}`}>

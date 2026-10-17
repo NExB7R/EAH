@@ -229,3 +229,159 @@
     width: 100%;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Image Uploader
+   ═══════════════════════════════════════════════════════════ */
+
+.imageUploader {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.imageLabel {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+}
+
+.imageSlot {
+  position: relative;
+  border-radius: 12px;
+  border: 1.5px dashed rgba(168, 85, 247, 0.35);
+  background: rgba(10, 7, 20, 0.4);
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 180ms var(--ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageSlot:hover {
+  border-color: rgba(199, 125, 255, 0.6);
+  background: rgba(168, 85, 247, 0.06);
+}
+
+.imageSquare {
+  aspect-ratio: 1;
+  max-width: 200px;
+}
+
+.imageWide {
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+}
+
+.imageHasUrl {
+  border-style: solid;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 2, 13, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.imagePlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.imagePlaceholder small {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.imageInput {
+  display: none;
+}
+
+.imageError {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #fca5a5;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Select + GPS
+   ═══════════════════════════════════════════════════════════ */
+
+.select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  background: rgba(7, 2, 13, 0.4);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  outline: none;
+}
+
+.select:focus {
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+.gpsBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: var(--purple-light);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 180ms var(--ease);
+  width: fit-content;
+}
+
+.gpsBtn:hover {
+  background: rgba(168, 85, 247, 0.15);
+}
+
+.gpsHint {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .imageSlot,
+  .gpsBtn {
+    transition: none;
+  }
+}
