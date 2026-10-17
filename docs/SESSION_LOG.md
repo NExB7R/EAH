@@ -1236,3 +1236,43 @@ Admin list:
 - `/admin/businesses/new` تصميم احترافي
 - إضافة أنشطة حقيقية
 - Rotate 11 مفتاح مكشوف
+
+
+---
+
+## 2026-10-17 — Admin Panel Overhaul (9 مهام)
+
+### اللي اتحقق (9 commits)
+
+**1. Business Quick Actions** (`c5a7792`) — approve/reject/unpublish/schedule من صفحة النشاط
+**2. Business Bulk Actions** (`1e57926`) — تحديد جماعي + toolbar (موافقة/رفض/أرشفة)
+**3. Featured Drag & Drop** (`8740e3e`) — HTML5 native DnD + `reorderFeatured()` action
+**4. Settings Confirmation** (`588031c`) — ConfirmModal لعمليات danger (maintenance + signups)
+**5. Users Bulk Actions** (`01d4f60`) — ban/unban/role/premium جماعي
+**6. CSV Export** (`9e11e59` + `1681c1f`) — 7 أنواع (businesses/users/subscriptions/featured/ads/audit/health)
+**7. Moderation Search + Filters** (`3cf1761`) — 4 تبويبات + بحث في 3 حقول
+**8. Broadcast History** (`44f453e`) — تبويب السجل يقرأ من `audit_logs`
+**9. Health Page** (`1681c1f`) — 3 actions (resolve/unresolve/resolveAll) + فلاتر + expandable metadata
+**10. ⌘K Command Palette** (`b70f99e`) — 21 أمر، keyboard-driven، Cmd/Ctrl+K
+
+### النمط المشترك
+
+- كل الفلاتر URL-driven (`?filter=X&q=Y&status=Z`)
+- كل server actions ترجع `{ ok, error?, affected? }`
+- كل القوائم تحترم الفلتر الحالي في CSV export
+- CSS module منفصل لكل صفحة
+- Reduced-motion في كل animations جديدة
+- `prettier + eslint + tsc + commitlint` على كل commit
+
+### Lessons Learned (Critical)
+
+- **heredoc + عربي = كوارث**: كل ما نستخدم `python3 << PYEOF` مع نصوص عربية طويلة، الـ marker يتلخبط. الحل: `python3 << 'PYEOF'` مع quotes، أو `cat >> file << 'EOFX'`
+- **regex markers**: لما `str.replace()` يفشل بسبب whitespace، نستخدم `re.sub()` مع markers واضحة (`// ─── Tab: X ───`)
+- **types mismatch**: قبل ما نستخدم `r.field`، لازم نقرأ `types.ts` — `ModerationReview` عنده `rating` (مش الأبعاد)
+- **React 19 strict**: ممنوع `setState` متزامن في `useEffect` — ننقل الـ reset لـ event handler
+
+### المعلق
+
+- اختبار ميداني على https://eah-sq.vercel.app/admin
+- تحديث PROGRESS (تم في نفس الجلسة)
+- Optimistic UI (لاحقاً)

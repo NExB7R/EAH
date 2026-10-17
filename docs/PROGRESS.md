@@ -379,3 +379,34 @@
 - §3 فخامة المميزين (gold + shimmer)
 - §4 Nav (mobile labels + purple active)
 - §5 المصداقية (trust badges)
+
+
+---
+
+## 🎛️ Admin Panel Overhaul (جديد 2026-10-17)
+
+| الميزة | الملف | الحالة |
+|--------|-------|--------|
+| Business Quick Actions | `admin/businesses/[id]/business-actions-bar.tsx` | ✅ |
+| Business Bulk Actions | `admin/businesses/business-list.tsx` + `bulk-actions.ts` | ✅ |
+| Featured Drag & Drop | `admin/featured/featured-list.tsx` + `reorderFeatured` | ✅ |
+| Settings Confirm Modals | `components/ui/confirm-modal.tsx` | ✅ |
+| Users Bulk Actions | `admin/users/users-list.tsx` + `bulk-actions.ts` | ✅ |
+| CSV Export (7 أنواع) | `api/admin/export/route.ts` + `lib/utils/csv.ts` | ✅ |
+| Moderation Search | `admin/moderation/moderation-filters.tsx` | ✅ |
+| Broadcast History | `admin/notifications/history-list.tsx` | ✅ |
+| Health Actions + Filters | `admin/health/actions.ts` + `health-filters.tsx` | ✅ |
+| ⌘K Command Palette | `components/ui/command-palette.tsx` | ✅ |
+
+**عدد commits:** 10
+**أسطر مضافة:** ~3,500
+**ملفات جديدة:** ~20
+**TypeScript errors:** 0
+**ESLint errors:** 0
+
+### النمط المعماري
+
+- كل server action: `requireAdmin` → `zod.validate` → `supabase` → `logAudit` → `revalidatePath`
+- كل filter state في URL: bookmarkable + shareable + يعمل مع back/forward
+- كل CSV export يحترم الفلتر الحالي
+- كل المكونات الجديدة `'use client'` — عدا الصفحات (Server Components)

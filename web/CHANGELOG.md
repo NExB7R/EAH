@@ -118,6 +118,56 @@
 
 ---
 
+### feat — 2026-10-17 (Admin Panel Overhaul)
+
+**Business Actions:**
+- Business Quick Actions: approve/reject/unpublish/schedule من صفحة النشاط
+- Business Bulk Actions: تحديد جماعي + toolbar (موافقة/رفض/أرشفة) — max 100
+- Bulk reject مع سبب مشترك + notifications تلقائية لكل صاحب نشاط
+
+**Featured & Drag:**
+- Featured Drag & Drop (HTML5 native) + `reorderFeatured()` server action
+- Featured filters: all/pinned/expiring + search
+- Featured stats: total/pinned/expiring (7 أيام)
+
+**Users:**
+- Users Bulk Actions: ban (modal مع أيام/سبب) / unban / role / premium
+- Users filters: all/customers/merchants/admins/premium/banned + search
+
+**Moderation & Notifications:**
+- Moderation filters: 4 tabs (all/pending/flagged/low_rating) + search
+- Broadcast History: تبويب ثالث يقرأ من `audit_logs` (action=notifications.broadcast)
+- يعرض: title/audience/actor/date/sent/targeted/push
+
+**Health:**
+- Health actions: `resolveError` / `unresolveError` / `resolveAllBySeverity`
+- Health filters: severity tabs (critical/high/medium/low) + resolved tabs + search
+- Error rows: expandable metadata + user_id
+- Health CSV export
+
+**Settings:**
+- ConfirmModal component — accessible (Escape + focus trap + body-lock)
+- 3 tones: danger/warn/default
+- Maintenance + signups تحتاج confirmation
+
+**CSV Export (7 أنواع):**
+- `lib/utils/csv.ts` — buildCsv + csvResponse (UTF-8 BOM for Excel Arabic)
+- `/api/admin/export?type=X&status=Y&q=Z` — businesses/users/subscriptions/featured/ads/audit/health
+- ExportButton component يحترم الفلتر الحالي
+
+**Command Palette (⌘K):**
+- 21 أمر: 16 navigation + 5 actions (CSV)
+- Cmd/Ctrl+K toggle، ESC close، Arrow keys + Enter
+- بحث في label/description/keywords (عربي + إنجليزي)
+- mounted فقط في `/admin/*`
+
+**Infra:**
+- 10 commits, ~3,500 سطر, ~20 ملف جديد
+- TypeScript: 0 errors / ESLint: 0 errors
+- كل القوائم URL-driven: `?filter=X&q=Y&status=Z`
+- كل server actions ترجع `{ ok, error?, affected? }`
+- Reduced-motion في كل animations جديدة
+
 ## [v1.0.0] — الإطلاق العام (TBD)
 
 ### Planned
