@@ -2,19 +2,20 @@
 
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { BellIcon, BroadcastIcon } from '@/components/icons'
+import { BellIcon, BroadcastIcon, ClockIcon } from '@/components/icons'
 import styles from './notifications.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Notifications Tabs
-// إرسال / إعلانات
+// إرسال / إعلانات / السجل
 // ═══════════════════════════════════════════════════════════
 
-type TabKey = 'send' | 'announcements'
+type TabKey = 'send' | 'announcements' | 'history'
 
 const TABS: { key: TabKey; label: string; Icon: typeof BellIcon }[] = [
   { key: 'send', label: 'إرسال إشعار', Icon: BellIcon },
   { key: 'announcements', label: 'الإعلانات الإدارية', Icon: BroadcastIcon },
+  { key: 'history', label: 'السجل', Icon: ClockIcon },
 ]
 
 export default function NotificationsTabs() {
@@ -25,8 +26,7 @@ export default function NotificationsTabs() {
     <nav className={styles.tabs} aria-label="أقسام الإشعارات">
       {TABS.map((t) => {
         const active = t.key === current
-        const href =
-          t.key === 'send' ? '/admin/notifications' : '/admin/notifications?tab=announcements'
+        const href = t.key === 'send' ? '/admin/notifications' : `/admin/notifications?tab=${t.key}`
         return (
           <Link
             key={t.key}

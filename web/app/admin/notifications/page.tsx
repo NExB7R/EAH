@@ -8,6 +8,7 @@ import AnnouncementForm from '../announcements/announcement-form'
 import AnnouncementRow from '../announcements/announcement-row'
 import Composer from './composer'
 import NotificationsTabs from './notifications-tabs'
+import HistoryList, { type HistoryItem } from './history-list'
 import notifStyles from './notifications.module.css'
 import annStyles from '../announcements/announcements.module.css'
 
@@ -28,13 +29,48 @@ async function getAnnouncements(): Promise<Row[]> {
   return (data ?? []) as Row[]
 }
 
+async function getBroadcastHistory(): Promise<HistoryItem[]> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('audit_logs')
+    .select('id, created_at, metadata, actor_user_id')
+    .eq('action', 'notifications.broadcast')
+    .order('created_at', { ascending: false })
+    .limit(100)
+
+  if (error || !data || data.length === 0) return []
+
+  const actorIds = Array.from(
+    new Set(data.map((l) => l.actor_user_id).filter((x): x is string => !!x)),
+  )
+  const { data: profiles } = actorIds.length
+    ? await supabase.from('profiles').select('id, display_name').in('id', actorIds)
+    : { data: [] as { id: string; display_name: string }[] }
+  const names = new Map((profiles ?? []).map((p) => [p.id, p.display_name]))
+
+  return data.map((l) => {
+    const m = (l.metadata ?? {}) as Record<string, unknown>
+    return {
+      id: l.id as string,
+      created_at: l.created_at as string,
+      actor_name: l.actor_user_id ? (names.get(l.actor_user_id as string) ?? '—') : 'نظام',
+      audience: String(m.audience ?? '—'),
+      title: String(m.title ?? '—'),
+      inserted: Number(m.inserted ?? 0),
+      pushed: Number(m.pushed ?? 0),
+      total: Number(m.total_target ?? 0),
+    }
+  })
+}
+
 export default async function AdminNotificationsPage({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>
 }) {
   const params = await searchParams
-  const tab = params.tab === 'announcements' ? 'announcements' : 'send'
+  const tab =
+    params.tab === 'announcements' ? 'announcements' : params.tab === 'history' ? 'history' : 'send'
 
   // ─── Tab: Send notification ───
   if (tab === 'send') {
@@ -58,6 +94,18 @@ export default async function AdminNotificationsPage({
         </section>
 
         <Composer audiences={audiences} />
+      </div>
+    )
+  }
+
+  // ─── Tab: History ───
+  if (tab === 'history') {
+    const items = await getBroadcastHistory()
+    return (
+      <div>
+        <AccountPageHeader title="الإشعارات والرسائل" description={`${items.length} إشعار مرسل`} />
+        <NotificationsTabs />
+        <HistoryList items={items} />
       </div>
     )
   }
