@@ -23,8 +23,11 @@ export default function BusinessList({ businesses, status }: Props) {
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [showReject, setShowReject] = useState(false)
+  const [removedIds, setRemovedIds] = useState<Set<string>>(new Set())
 
-  const allSelected = businesses.length > 0 && selected.size === businesses.length
+  const visibleBusinesses = businesses.filter((b) => !removedIds.has(b.id))
+
+  const allSelected = visibleBusinesses.length > 0 && selected.size === visibleBusinesses.length
   const someSelected = selected.size > 0
 
   const toggle = (id: string) => {
@@ -38,19 +41,32 @@ export default function BusinessList({ businesses, status }: Props) {
 
   const toggleAll = () => {
     if (allSelected) setSelected(new Set())
-    else setSelected(new Set(businesses.map((b) => b.id)))
+    else setSelected(new Set(visibleBusinesses.map((b) => b.id)))
   }
 
   const clearSelection = () => setSelected(new Set())
 
-  const run = (fn: () => Promise<{ ok: boolean; error?: string; affected?: number }>) => {
+  const run = (
+    fn: () => Promise<{ ok: boolean; error?: string; affected?: number }>,
+    optimisticIds?: string[],
+  ) => {
     setError(null)
+    if (optimisticIds && optimisticIds.length > 0) {
+      setRemovedIds((prev) => new Set([...prev, ...optimisticIds]))
+    }
     startTransition(async () => {
       const res = await fn()
       if (res.ok) {
         clearSelection()
         router.refresh()
       } else {
+        if (optimisticIds) {
+          setRemovedIds((prev) => {
+            const next = new Set(prev)
+            for (const id of optimisticIds) next.delete(id)
+            return next
+          })
+        }
         setError(res.error ?? 'فشل')
       }
     })
@@ -58,25 +74,32 @@ export default function BusinessList({ businesses, status }: Props) {
 
   const handleBulkApprove = () => {
     if (!confirm(`موافقة على ${selected.size} نشاط؟`)) return
-    run(() => bulkApproveBusinesses(Array.from(selected)))
+    run(() => bulkApproveBusinesses(Array.from(selected)), Array.from(selected))
   }
 
   const handleBulkArchive = () => {
     if (!confirm(`إخفاء ${selected.size} نشاط من المنصة؟`)) return
-    run(() => bulkArchiveBusinesses(Array.from(selected)))
+    run(() => bulkArchiveBusinesses(Array.from(selected)), Array.from(selected))
   }
 
   const handleBulkReject = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const fd = new FormData(e.currentTarget)
     const reason = String(fd.get('reason') ?? '')
+    const ids = Array.from(selected)
+    setRemovedIds((prev) => new Set([...prev, ...ids]))
     startTransition(async () => {
-      const res = await bulkRejectBusinesses(Array.from(selected), reason)
+      const res = await bulkRejectBusinesses(ids, reason)
       if (res.ok) {
         setShowReject(false)
         clearSelection()
         router.refresh()
       } else {
+        setRemovedIds((prev) => {
+          const next = new Set(prev)
+          for (const id of ids) next.delete(id)
+          return next
+        })
         setError(res.error)
       }
     })
@@ -183,7 +206,7 @@ export default function BusinessList({ businesses, status }: Props) {
       )}
 
       {/* Select All header */}
-      {businesses.length > 1 && (
+      {visibleBusinesses.length > 1 && (
         <div className={styles.selectAllRow}>
           <label className={styles.selectAllLabel}>
             <input
@@ -192,14 +215,14 @@ export default function BusinessList({ businesses, status }: Props) {
               onChange={toggleAll}
               className={styles.checkbox}
             />
-            <span>تحديد الكل ({businesses.length})</span>
+            <span>تحديد الكل ({visibleBusinesses.length})</span>
           </label>
         </div>
       )}
 
       {/* List */}
       <div className={styles.list}>
-        {businesses.map((b) => (
+        {visibleBusinesses.map((b) => (
           <BusinessRow
             key={b.id}
             business={b}

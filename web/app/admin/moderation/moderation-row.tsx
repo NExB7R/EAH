@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   StarIcon,
@@ -22,6 +23,8 @@ export default function ModerationRow({ review: r }: Props) {
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [modal, setModal] = useState<null | 'reject' | 'delete'>(null)
+  const [hidden, setHidden] = useState(false)
+  const router = useRouter()
 
   const date = new Date(r.created_at).toLocaleDateString('ar-EG', {
     year: 'numeric',
@@ -33,8 +36,13 @@ export default function ModerationRow({ review: r }: Props) {
     setError(null)
     startTransition(async () => {
       const res = await fn()
-      if (res.ok) onDone?.()
-      else setError(res.error ?? 'فشل')
+      if (res.ok) {
+        setHidden(true)
+        onDone?.()
+        router.refresh()
+      } else {
+        setError(res.error ?? 'فشل')
+      }
     })
   }
 
@@ -54,6 +62,8 @@ export default function ModerationRow({ review: r }: Props) {
       () => deleteReview(r.id),
       () => setModal(null),
     )
+
+  if (hidden) return null
 
   return (
     <div className={`${styles.card} ${pending ? styles.pending : ''}`}>
