@@ -1,16 +1,15 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { captureException } from '@/lib/logging/errors'
+import { verifyCron } from '@/lib/auth/cron'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Cron: System Errors Retention (90 يوم)
 // ═══════════════════════════════════════════════════════════
 
 export async function GET(req: Request) {
-  const auth = req.headers.get('authorization')
-  if (auth !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ ok: false }, { status: 401 })
-  }
+  const denied = verifyCron(req)
+  if (denied) return denied
 
   try {
     const supabase = createServiceClient()

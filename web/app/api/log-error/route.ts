@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { logError } from '@/lib/logging/errors'
 import { createClient } from '@/lib/supabase/server'
 import { headers } from 'next/headers'
+import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Client Error Logging Endpoint
@@ -18,6 +19,13 @@ type Body = {
 
 export async function POST(req: Request) {
   try {
+    const h = await headers()
+    const ip = h.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+    const rl = await checkRateLimit(strictLimiter, `log-error:${ip}`)
+    if (!rl.ok) {
+      return NextResponse.json({ ok: false, error: rl.error }, { status: 429 })
+    }
+
     const body = (await req.json()) as Body
     if (!body.message || typeof body.message !== 'string') {
       return NextResponse.json({ ok: false }, { status: 400 })
@@ -33,7 +41,6 @@ export async function POST(req: Request) {
       // مش مشكلة — زائر
     }
 
-    const h = await headers()
     const userAgent = h.get('user-agent') ?? undefined
 
     await logError({

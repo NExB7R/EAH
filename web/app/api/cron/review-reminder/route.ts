@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { createNotification } from '@/lib/notifications/server'
+import { verifyCron } from '@/lib/auth/cron'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -12,11 +13,8 @@ export const dynamic = 'force-dynamic'
 // ═══════════════════════════════════════════════════════════
 
 export async function GET(req: NextRequest) {
-  const auth = req.headers.get('authorization')
-  const secret = process.env.CRON_SECRET
-  if (secret && auth !== `Bearer ${secret}`) {
-    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
-  }
+  const denied = verifyCron(req)
+  if (denied) return denied
 
   const supabase = createServiceClient()
 

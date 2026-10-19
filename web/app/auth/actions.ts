@@ -17,7 +17,7 @@ export type AuthResult =
 // Helper: توليد الإيميل الوهمي من الرقم
 // ═══════════════════════════════════════════════════════════
 function phoneToEmail(phoneE164: string): string {
-  return `${phoneE164}@auth.eah.app`
+  return `${phoneE164}@auth.eah.invalid`
 }
 
 // ═══════════════════════════════════════════════════════════

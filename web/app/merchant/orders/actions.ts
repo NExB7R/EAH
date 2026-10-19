@@ -56,6 +56,17 @@ async function requireMerchant() {
   return { ok: true as const, supabase, biz }
 }
 
+const VALID_TRANSITIONS: Record<string, string[]> = {
+  sent: ['seen', 'accepted', 'rejected', 'cancelled'],
+  seen: ['accepted', 'rejected', 'cancelled'],
+  accepted: ['preparing', 'cancelled'],
+  preparing: ['on_way', 'cancelled'],
+  on_way: ['delivered', 'cancelled'],
+  delivered: [],
+  rejected: [],
+  cancelled: [],
+}
+
 export async function updateOrderStatus(
   orderId: string,
   status: string,
@@ -69,12 +80,21 @@ export async function updateOrderStatus(
   // تأكد إن الطلب لنشاطه
   const { data: order } = await ctx.supabase
     .from('order_requests')
-    .select('id, customer_profile_id, order_code, business_id')
+    .select('id, customer_profile_id, order_code, business_id, status')
     .eq('id', orderId)
     .eq('business_id', ctx.biz.id)
     .maybeSingle()
 
   if (!order) return { ok: false, error: 'الطلب مش موجود' }
+
+  const currentStatus = order.status as string
+  const allowed = VALID_TRANSITIONS[currentStatus] ?? []
+  if (!allowed.includes(parsed.data)) {
+    return {
+      ok: false,
+      error: `مش ممكن تروح من "${currentStatus}" لـ "${parsed.data}"`,
+    }
+  }
 
   const { error } = await ctx.supabase
     .from('order_requests')
