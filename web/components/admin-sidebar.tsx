@@ -71,6 +71,7 @@ const SECTIONS: Section[] = [
         badgeKey: 'pendingSubscriptions',
       },
       { href: '/admin/ads', label: 'الإعلانات', Icon: TagIcon },
+      { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
     ],
   },
   {

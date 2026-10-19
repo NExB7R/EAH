@@ -1,0 +1,228 @@
+.wrap {
+  padding-bottom: 60px;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(252, 165, 165, 0.08);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  color: #fca5a5;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
+  border: 1px solid rgba(168, 85, 247, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.typeBadge {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(232, 199, 154, 0.12);
+  border: 1px solid rgba(232, 199, 154, 0.35);
+  color: var(--gold-light);
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.bizName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+.date {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.area {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.cardActions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-top: 1px solid rgba(168, 85, 247, 0.1);
+}
+
+.viewBtn,
+.rejectBtn,
+.approveBtn,
+.cancelBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: 9px;
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 900;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 150ms var(--ease);
+  text-decoration: none;
+}
+
+.viewBtn {
+  background: transparent;
+  border-color: rgba(168, 85, 247, 0.25);
+  color: var(--text-secondary);
+}
+
+.viewBtn:hover {
+  color: var(--text-primary);
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+.rejectBtn {
+  background: rgba(252, 165, 165, 0.08);
+  border-color: rgba(252, 165, 165, 0.3);
+  color: #fca5a5;
+  margin-inline-start: auto;
+}
+
+.rejectBtn:hover:not(:disabled) {
+  background: rgba(252, 165, 165, 0.15);
+}
+
+.approveBtn {
+  background: rgba(20, 184, 166, 0.1);
+  border-color: rgba(20, 184, 166, 0.35);
+  color: #5eead4;
+}
+
+.approveBtn:hover:not(:disabled) {
+  background: rgba(20, 184, 166, 0.2);
+}
+
+.viewBtn:disabled,
+.rejectBtn:disabled,
+.approveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(7, 2, 13, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modal {
+  width: 100%;
+  max-width: 400px;
+  padding: 22px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
+  border: 1.5px solid rgba(168, 85, 247, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modalTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  background: rgba(7, 2, 13, 0.4);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  resize: vertical;
+  min-height: 70px;
+  outline: none;
+}
+
+.textarea:focus {
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+.modalActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.cancelBtn {
+  background: transparent;
+  border-color: rgba(168, 85, 247, 0.25);
+  color: var(--text-secondary);
+}
+
+.cancelBtn:hover {
+  color: var(--text-primary);
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewBtn,
+  .rejectBtn,
+  .approveBtn,
+  .cancelBtn {
+    transition: none;
+  }
+}
