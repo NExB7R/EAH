@@ -28,6 +28,7 @@ export type WizardData = {
   is_open: boolean
   accepts_whatsapp_orders: boolean
   owner_user_id: string
+  custom_business_type: string
 }
 
 export type OwnerOption = {
@@ -47,6 +48,7 @@ const INITIAL: WizardData = {
   is_open: true,
   accepts_whatsapp_orders: true,
   owner_user_id: '',
+  custom_business_type: '',
 }
 
 const STEPS = [
@@ -82,6 +84,11 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
     const errs: Record<string, string> = {}
     if (index === 0) {
       if (!data.business_type) errs.business_type = 'اختر نوع النشاط'
+      if (data.business_type === 'misc') {
+        const custom = data.custom_business_type.trim()
+        if (custom.length < 2) errs.custom_business_type = 'اكتب نوع النشاط (حرفين على الأقل)'
+        else if (custom.length > 50) errs.custom_business_type = 'النوع طويل (50 حرف كحد أقصى)'
+      }
       const name = data.name.trim()
       if (name.length < 2) errs.name = 'الاسم قصير (حرفين على الأقل)'
       else if (name.length > 80) errs.name = 'الاسم طويل (80 حرف كحد أقصى)'
@@ -137,6 +144,9 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
       const fd = new FormData()
       fd.set('name', data.name.trim())
       fd.set('business_type', data.business_type)
+      if (data.business_type === 'misc' && data.custom_business_type.trim()) {
+        fd.set('custom_business_type', data.custom_business_type.trim())
+      }
       fd.set('hook', data.hook.trim())
       fd.set('description', data.description.trim())
       fd.set('area', data.area.trim())

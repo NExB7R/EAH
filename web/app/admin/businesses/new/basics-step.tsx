@@ -1,13 +1,12 @@
 'use client'
 
-import { GiftIcon, StoreIcon, CheckCircleIcon, MapPinIcon, CrownGoldIcon } from '@/components/icons'
+import { GiftIcon, CheckCircleIcon, MapPinIcon, CrownGoldIcon } from '@/components/icons'
 import type { WizardData } from './new-business-wizard'
 import styles from './wizard.module.css'
 
 const TYPES = [
   { value: 'restaurant', label: 'مطعم', Icon: GiftIcon },
   { value: 'pharmacy', label: 'صيدلية', Icon: CheckCircleIcon },
-  { value: 'supermarket', label: 'ماركت', Icon: StoreIcon },
   { value: 'delivery_office', label: 'توصيل', Icon: MapPinIcon },
   { value: 'misc', label: 'أخرى', Icon: CrownGoldIcon },
 ] as const
@@ -55,6 +54,28 @@ export default function BasicsStep({ data, errors, update }: Props) {
             <span className={styles.fieldError}>{errors.business_type}</span>
           )}
         </div>
+
+        {data.business_type === 'misc' && (
+          <label className={styles.field}>
+            <span className={styles.label}>
+              اكتب نوع النشاط <span className={styles.labelReq}>*</span>
+            </span>
+            <input
+              type="text"
+              value={data.custom_business_type ?? ''}
+              onChange={(e) => update({ custom_business_type: e.target.value.slice(0, 50) })}
+              className={`${styles.input} ${errors.custom_business_type ? styles.inputError : ''}`}
+              placeholder="مثال: ماركت، حلاق، ورشة، جيم..."
+              maxLength={50}
+              dir="rtl"
+            />
+            {errors.custom_business_type ? (
+              <span className={styles.fieldError}>{errors.custom_business_type}</span>
+            ) : (
+              <span className={styles.hint}>النوع ده محتاج موافقة الأدمن قبل ما النشاط يظهر</span>
+            )}
+          </label>
+        )}
 
         <label className={styles.field}>
           <span className={styles.label}>
