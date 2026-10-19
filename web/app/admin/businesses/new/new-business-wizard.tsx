@@ -16,6 +16,16 @@ import styles from './wizard.module.css'
 // Glass around, solid inside. Draft persistence. Inline validation.
 // ═══════════════════════════════════════════════════════════
 
+export type ContactKind =
+  'phone' | 'whatsapp' | 'complaints' | 'manager' | 'shift_morning' | 'shift_evening' | 'additional'
+
+export type Contact = {
+  tempId: string
+  kind: ContactKind
+  value: string
+  is_primary: boolean
+}
+
 export type WizardData = {
   business_type: string
   name: string
@@ -23,8 +33,7 @@ export type WizardData = {
   description: string
   area: string
   address_text: string
-  phone: string
-  whatsapp: string
+  contacts: Contact[]
   is_open: boolean
   accepts_whatsapp_orders: boolean
   owner_user_id: string
@@ -43,8 +52,7 @@ const INITIAL: WizardData = {
   description: '',
   area: '',
   address_text: '',
-  phone: '',
-  whatsapp: '',
+  contacts: [{ tempId: 'c1', kind: 'phone', value: '', is_primary: true }],
   is_open: true,
   accepts_whatsapp_orders: true,
   owner_user_id: '',
@@ -94,10 +102,26 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
       else if (name.length > 80) errs.name = 'الاسم طويل (80 حرف كحد أقصى)'
     }
     if (index === 1) {
-      const phone = data.phone.trim()
-      const wa = data.whatsapp.trim()
-      if (phone && !/^0\d{9,10}$/.test(phone)) errs.phone = 'رقم غير صحيح (11 رقم يبدأ بـ 0)'
-      if (wa && !/^0\d{9,10}$/.test(wa)) errs.whatsapp = 'رقم غير صحيح (11 رقم يبدأ بـ 0)'
+      const primary = data.contacts.find((c) => c.kind === 'phone' && c.is_primary)
+      if (!primary || !primary.value.trim()) {
+        errs.contacts = 'لازم رقم هاتف أساسي واحد على الأقل'
+      } else if (!/^0\d{9,12}$/.test(primary.value.trim())) {
+        errs.contacts = 'رقم الهاتف الأساسي غير صحيح'
+      }
+      const seen = new Set<string>()
+      for (const c of data.contacts) {
+        const v = c.value.trim()
+        if (!v) continue
+        if (!/^0\d{9,12}$/.test(v)) {
+          errs.contacts = 'رقم غير صحيح (يبدأ بـ 0 و10-13 رقم)'
+          break
+        }
+        if (seen.has(v)) {
+          errs.contacts = 'فيه رقم متكرر'
+          break
+        }
+        seen.add(v)
+      }
     }
     setErrors(errs)
     return Object.keys(errs).length === 0
@@ -151,8 +175,18 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
       fd.set('description', data.description.trim())
       fd.set('area', data.area.trim())
       fd.set('address_text', data.address_text.trim())
-      fd.set('phone', data.phone.trim())
-      fd.set('whatsapp', data.whatsapp.trim())
+      fd.set(
+        'contacts_json',
+        JSON.stringify(
+          data.contacts
+            .filter((c) => c.value.trim())
+            .map((c) => ({
+              kind: c.kind,
+              value: c.value.trim(),
+              is_primary: c.is_primary,
+            })),
+        ),
+      )
       if (data.is_open) fd.set('is_open', 'on')
       if (data.accepts_whatsapp_orders) fd.set('accepts_whatsapp_orders', 'on')
       if (data.owner_user_id) fd.set('owner_profile_id', data.owner_user_id)

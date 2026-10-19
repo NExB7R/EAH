@@ -232,8 +232,24 @@ const createSchema = z.object({
   address_text: z.string().max(200).or(z.literal('')).optional(),
   description: z.string().max(1000).or(z.literal('')).optional(),
   hook: z.string().max(120).or(z.literal('')).optional(),
-  phone: z.string().max(20).or(z.literal('')).optional(),
-  whatsapp: z.string().max(20).or(z.literal('')).optional(),
+  contacts: z
+    .array(
+      z.object({
+        kind: z.enum([
+          'phone',
+          'whatsapp',
+          'complaints',
+          'manager',
+          'shift_morning',
+          'shift_evening',
+          'additional',
+        ]),
+        value: z.string().regex(/^0\d{9,12}$/),
+        is_primary: z.boolean().optional().default(false),
+      }),
+    )
+    .max(15)
+    .optional(),
   is_open: z.boolean().optional(),
   accepts_whatsapp_orders: z.boolean().optional(),
   is_published: z.boolean().optional(),
@@ -273,8 +289,15 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     address_text: String(formData.get('address_text') ?? '').trim(),
     description: String(formData.get('description') ?? '').trim(),
     hook: String(formData.get('hook') ?? '').trim(),
-    phone: String(formData.get('phone') ?? '').trim(),
-    whatsapp: String(formData.get('whatsapp') ?? '').trim(),
+    contacts: (() => {
+      try {
+        const raw = String(formData.get('contacts_json') ?? '[]')
+        const arr = JSON.parse(raw) as unknown
+        return Array.isArray(arr) ? arr : []
+      } catch {
+        return []
+      }
+    })(),
     is_open: formData.get('is_open') === 'on',
     accepts_whatsapp_orders: formData.get('accepts_whatsapp_orders') === 'on',
     is_published: formData.get('is_published') === 'on',
@@ -315,33 +338,16 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   }
 
   // حفظ جهات الاتصال
-  const contacts: {
-    business_id: string
-    method_type: string
-    value: string
-    is_public: boolean
-    is_primary: boolean
-  }[] = []
-  if (d.phone) {
-    contacts.push({
+  if (d.contacts && d.contacts.length > 0) {
+    const rows = d.contacts.map((c, idx) => ({
       business_id: created.id,
-      method_type: 'phone',
-      value: d.phone,
+      method_type: c.kind,
+      value: c.value,
       is_public: true,
-      is_primary: true,
-    })
-  }
-  if (d.whatsapp) {
-    contacts.push({
-      business_id: created.id,
-      method_type: 'whatsapp',
-      value: d.whatsapp,
-      is_public: true,
-      is_primary: true,
-    })
-  }
-  if (contacts.length > 0) {
-    await ctx.supabase.from('business_contact_methods').insert(contacts)
+      is_primary: c.is_primary ?? false,
+      sort_order: idx,
+    }))
+    await ctx.supabase.from('business_contact_methods').insert(rows)
   }
 
   await logAudit(ctx.supabase, {

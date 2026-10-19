@@ -72,8 +72,13 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
           step={1}
           goTo={goTo}
         />
-        <Item label="التليفون" value={data.phone} empty={!data.phone} step={1} goTo={goTo} />
-        <Item label="الواتساب" value={data.whatsapp} empty={!data.whatsapp} step={1} goTo={goTo} />
+        <Item
+          label="أرقام التواصل"
+          value={`${data.contacts.filter((c) => c.value.trim()).length} رقم`}
+          empty={data.contacts.filter((c) => c.value.trim()).length === 0}
+          step={1}
+          goTo={goTo}
+        />
         <Item
           label="صاحب النشاط"
           value={owner?.display_name ?? null}

@@ -675,7 +675,7 @@
 }
 
 .nav {
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 
 @media (max-width: 640px) {
@@ -708,4 +708,137 @@
   width: 28px;
   height: 28px;
   font-size: 0.75rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Contacts Repeater
+   ═══════════════════════════════════════════════════════════ */
+
+.contactsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.12);
+}
+
+.contactsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.contactsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contactRow {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+@media (max-width: 640px) {
+  .contactRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.contactKind {
+  padding: 10px 12px;
+  border-radius: 9px;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  background: rgba(7, 2, 13, 0.65);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+}
+
+.contactKind:focus {
+  border-color: rgba(199, 125, 255, 0.55);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+.contactInput {
+  padding: 10px 12px;
+  border-radius: 9px;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  background: rgba(7, 2, 13, 0.65);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  outline: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.contactInput:focus {
+  border-color: rgba(199, 125, 255, 0.55);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+.contactRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(252, 165, 165, 0.08);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  color: #fca5a5;
+  cursor: pointer;
+  transition: all 150ms var(--ease-out);
+}
+
+.contactRemove:hover {
+  background: rgba(252, 165, 165, 0.15);
+}
+
+.primaryBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(20, 184, 166, 0.12);
+  border: 1px solid rgba(20, 184, 166, 0.35);
+  color: #5eead4;
+  font-size: 0.66rem;
+  font-weight: 900;
+}
+
+.addContactBtn {
+  align-self: flex-start;
+  padding: 8px 14px;
+  border-radius: 9px;
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px dashed rgba(168, 85, 247, 0.35);
+  color: var(--purple-light);
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 150ms var(--ease-out);
+}
+
+.addContactBtn:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-style: solid;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contactRemove,
+  .addContactBtn {
+    transition: none;
+  }
 }
