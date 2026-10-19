@@ -1,5 +1,62 @@
 # EAH — BRAIN.md
 
+> اقرأ ده الأول. الملف ده هو العقل.
+> آخر تحديث: 2026-10-19
+
+---
+
+## 0. ليه الملف ده؟
+
+BRAIN.md خلاصة SACRED + AI_CONTRACT + LESSONS. ممنوع تكتب كود قبل ما تقرأه + docs/CONTEXT_MAP.md.
+
+---
+
+## 1. الهوية
+
+- الاسم: EAH
+- السلوغان: شبيك لبيك — كل حاجة حواليك
+- الجمهور: شبين القناطر والقرى حواليها
+- الألوان: بنفسجي #9D4EDD / نيون #A855F7 / ذهبي #E8C79A / Teal #55E7D1 / Orange #FDBA74 / Red #FCA5A5 / خلفية #07020D
+- الخطوط: Cairo + Tajawal فقط
+- الستايل: Dark-only + نيون ناعم + بدون animations مستمرة + transitions 180-240ms
+
+---
+
+## 2. المبادئ
+
+1. مجاني 100% للعميل
+2. صفر عمولة على التاجر
+3. رقم الموبايل ما يظهرش أبداً
+4. Verified != مدفوع
+5. بدون تتبع تسويقي
+6. صفر بيانات وهمية
+
+---
+
+## 3. الستاك
+
+- Next.js 16 + React 19 + TypeScript strict
+- Supabase (Postgres + RLS + Realtime)
+- Cloudinary + Upstash Redis
+- Vercel (iad1) + Serwist PWA
+
+---
+
+## 4. بنية المجلدات
+
+```
+web/
+├── app/         # Routes (admin, merchant, account, api)
+├── components/  # 200+ (ui/, admin/)
+├── lib/         # data, validations, auth, supabase, hooks
+└── docs/migrations/
+```
+
+**القاعدة:** lib/data بترجع بيانات فقط. components مش بتلمس DB.
+
+---
+# EAH — BRAIN.md
+
 > **اقرأ ده الأول.** لو انت شات جديد أو مطور جديد، الملف ده هو "العقل".
 > **آخر تحديث:** 2026-10-19
 > **الإصدار:** 1.0
