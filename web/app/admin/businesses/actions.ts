@@ -225,6 +225,7 @@ const createSchema = z.object({
     .regex(/^[a-z0-9-]+$/, 'الحروف الصغيرة والأرقام والشرطة فقط')
     .optional(),
   business_type: z.enum(['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc']),
+  custom_business_type: z.string().max(50).or(z.literal('')).optional(),
   owner_profile_id: z.string().uuid().optional().or(z.literal('')),
   area: z.string().max(60).or(z.literal('')).optional(),
   city: z.string().max(60).or(z.literal('')).optional(),
@@ -262,6 +263,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         .trim()
         .toLowerCase() || undefined,
     business_type: String(formData.get('business_type') ?? ''),
+    custom_business_type: String(formData.get('custom_business_type') ?? '').trim(),
     owner_profile_id:
       String(formData.get('owner_profile_id') ?? '').trim() ||
       String(formData.get('owner_user_id') ?? '').trim() ||
@@ -291,6 +293,9 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       name: d.name,
       slug: finalSlug,
       business_type: d.business_type,
+      custom_business_type: d.custom_business_type || null,
+      business_type_status:
+        d.business_type === 'misc' && d.custom_business_type ? 'pending' : 'approved',
       owner_profile_id: d.owner_profile_id || null,
       area: d.area || null,
       city: d.city || null,
@@ -299,7 +304,8 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       hook: d.hook || null,
       is_open: d.is_open ?? true,
       accepts_whatsapp_orders: d.accepts_whatsapp_orders ?? true,
-      is_published: d.is_published ?? true,
+      is_published:
+        d.business_type === 'misc' && d.custom_business_type ? false : (d.is_published ?? true),
     })
     .select('id')
     .single()
