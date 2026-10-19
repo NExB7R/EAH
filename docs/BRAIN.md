@@ -11,66 +11,6 @@ BRAIN.md خلاصة SACRED + AI_CONTRACT + LESSONS. ممنوع تكتب كود �
 
 ---
 
-## 1. الهوية
-
-- الاسم: EAH
-- السلوغان: شبيك لبيك — كل حاجة حواليك
-- الجمهور: شبين القناطر والقرى حواليها
-- الألوان: بنفسجي #9D4EDD / نيون #A855F7 / ذهبي #E8C79A / Teal #55E7D1 / Orange #FDBA74 / Red #FCA5A5 / خلفية #07020D
-- الخطوط: Cairo + Tajawal فقط
-- الستايل: Dark-only + نيون ناعم + بدون animations مستمرة + transitions 180-240ms
-
----
-
-## 2. المبادئ
-
-1. مجاني 100% للعميل
-2. صفر عمولة على التاجر
-3. رقم الموبايل ما يظهرش أبداً
-4. Verified != مدفوع
-5. بدون تتبع تسويقي
-6. صفر بيانات وهمية
-
----
-
-## 3. الستاك
-
-- Next.js 16 + React 19 + TypeScript strict
-- Supabase (Postgres + RLS + Realtime)
-- Cloudinary + Upstash Redis
-- Vercel (iad1) + Serwist PWA
-
----
-
-## 4. بنية المجلدات
-
-```
-web/
-├── app/         # Routes (admin, merchant, account, api)
-├── components/  # 200+ (ui/, admin/)
-├── lib/         # data, validations, auth, supabase, hooks
-└── docs/migrations/
-```
-
-**القاعدة:** lib/data بترجع بيانات فقط. components مش بتلمس DB.
-
----
-# EAH — BRAIN.md
-
-> **اقرأ ده الأول.** لو انت شات جديد أو مطور جديد، الملف ده هو "العقل".
-> **آخر تحديث:** 2026-10-19
-> **الإصدار:** 1.0
-
----
-
-## 0. ليه الملف ده؟
-
-المشروع كبير (50+ صفحة، 200+ ملف). التناثر بين SACRED + AI_CONTRACT + LESSONS + MASTER_BRIEF بيخلي أي شات جديد ياخد وقت طويل. **BRAIN.md** هو الخلاصة — التفاصيل في الملفات الأصلية.
-
-**القاعدة الذهبية:** ممنوع تكتب كود قبل ما تقرأ الملف ده + `docs/CONTEXT_MAP.md`.
-
----
-
 ## 1. الهوية (مقدسة)
 
 ### 1.1 الاسم والسلوغان
@@ -133,22 +73,17 @@ web/
 
 ---
 
-## 7. ممنوعات Vibe Coding 2026-2027
+## 4. بنية المجلدات
 
-أخطاء شائعة في مشاريع الـ AI — **ممنوع تقع فيها:**
+```
+web/
+├── app/         # Routes (admin, merchant, account, api)
+├── components/  # 200+ (ui/, admin/)
+├── lib/         # data, validations, auth, supabase, hooks
+└── docs/migrations/
+```
 
-1. **`any` كوسيلة للنجاة** — استخدم `zod.safeParse`
-2. **God Components (300+ سطر)** — قسّم
-3. **Copy-Paste Duplication** — نسختين = 3 أسطر، 3 نسخ = helper
-4. **Magic Strings** — const enums
-5. **Server Data كله للـ client** — ابعت IDs فقط
-6. **"It Works" بدون Testing** — اختبر يدوياً على 320/768/1440
-7. **Fire and Forget** — `{ error } = await supabase`، شوفه
-8. **No Error Boundaries** — `error.tsx` لكل route معقد
-9. **AI-Driven Sprawl** — helpers في `lib/utils/`، مش الجذر
-10. **No Caching Strategy** — `revalidateTag` معروف لكل tag
-11. **Hardcoded Values** — const في `lib/config`
-12. **"It'll Work" Migrations** — backup → test → deploy → verify
+**القاعدة:** lib/data ترجع بيانات فقط. components مش بتلمس DB.
 
 ---
 
