@@ -31,7 +31,7 @@ export async function approveBusiness(businessId: string): Promise<Result> {
     .from('businesses')
     .update({
       is_published: true,
-      rejected_reason: null,
+      rejection_reason: null,
       rejected_at: null,
       rejected_by: null,
     })
@@ -162,7 +162,7 @@ export async function republishBusiness(businessId: string): Promise<Result> {
     .from('businesses')
     .update({
       is_published: true,
-      rejected_reason: null,
+      rejection_reason: null,
       rejected_at: null,
       rejected_by: null,
     })
