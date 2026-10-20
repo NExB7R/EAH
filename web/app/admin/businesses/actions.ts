@@ -332,7 +332,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     selectedOwnerRole = roleRow.role
   }
 
-  let privileged
+  let privileged: ReturnType<typeof createServiceClient>
   try {
     // This action is admin-gated above. The contact-method table intentionally
     // has no authenticated write policy, so use service role only after admin auth.
