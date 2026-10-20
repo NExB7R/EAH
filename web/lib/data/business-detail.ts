@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createPublicClient } from '@/lib/supabase/public'
-import type { Business } from './businesses'
+import { isOpenNow, type Business } from './businesses'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Detail (Full Page Data)
@@ -68,6 +68,20 @@ export type Review = {
   } | null
 }
 
+export type BusinessNoticeData = {
+  text: string
+  severity: 'info' | 'warning' | 'critical'
+  expiresAt: string | null
+}
+
+export function computeIsOpenNow(
+  override: boolean | null | undefined,
+  hours: Parameters<typeof isOpenNow>[0],
+): boolean {
+  if (override !== null && override !== undefined) return override
+  return isOpenNow(hours)
+}
+
 export type BusinessDetail = {
   business: Business
   contacts: ContactMethod[]
@@ -77,6 +91,8 @@ export type BusinessDetail = {
   gallery: MediaItem[]
   logo: MediaItem | null
   cover: MediaItem | null
+  notice: BusinessNoticeData | null
+  openNowOverride: boolean | null
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -101,6 +117,7 @@ export const getBusinessDetail = unstable_cache(
         response_time_avg_seconds, response_rate,
         last_activity_at, created_at, updated_at,
         branches_count, offers_count, rating_avg, rating_count,
+        important_notice, notice_expires_at, notice_severity, open_now_override,
         business_locations(latitude, longitude, is_primary)
       `,
       )
@@ -122,6 +139,20 @@ export const getBusinessDetail = unstable_cache(
         : null
     delete rawBiz.business_locations
     const business = { ...(rawBiz as unknown as Business), location }
+
+    const noticeText = ((rawBiz.important_notice as string | null) ?? '').trim()
+    const noticeExpiresAt = (rawBiz.notice_expires_at as string | null) ?? null
+    const noticeSeverityRaw = (rawBiz.notice_severity as string | null) ?? 'info'
+    const noticeSeverity: 'info' | 'warning' | 'critical' =
+      noticeSeverityRaw === 'warning' || noticeSeverityRaw === 'critical'
+        ? noticeSeverityRaw
+        : 'info'
+    const openNowOverride = (rawBiz.open_now_override as boolean | null) ?? null
+    const noticeExpired = noticeExpiresAt !== null && new Date(noticeExpiresAt) <= new Date()
+    const notice: BusinessNoticeData | null =
+      noticeText && !noticeExpired
+        ? { text: noticeText, severity: noticeSeverity, expiresAt: noticeExpiresAt }
+        : null
 
     // 2. Parallel: contacts + media + branches
     const [contactsRes, mediaRes, branchesRes] = await Promise.all([
@@ -163,6 +194,8 @@ export const getBusinessDetail = unstable_cache(
       gallery,
       logo,
       cover,
+      notice,
+      openNowOverride,
     }
   },
   ['business-detail-v1'],

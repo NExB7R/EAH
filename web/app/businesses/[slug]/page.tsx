@@ -11,7 +11,8 @@ import {
   getBusinessOffers,
   TYPE_LABEL,
 } from '@/lib/data/business-detail'
-import { isOpenNow } from '@/lib/data/businesses'
+import { computeIsOpenNow } from '@/lib/data/business-detail'
+import BusinessNotice from '@/components/business-notice'
 import { getFeatureFlags } from '@/lib/features'
 import type { BusinessDetail } from '@/lib/data/business-detail'
 import { getUserSession } from '@/lib/data/user'
@@ -173,7 +174,7 @@ export default async function BusinessPage({ params }: Props) {
     return h1 - h2
   })
 
-  const isOpen = isOpenNow(business.working_hours)
+  const isOpen = computeIsOpenNow(detail.openNowOverride, business.working_hours)
   const whatsapp = contacts.find((c) => c.method_type === 'whatsapp')?.value ?? null
   const phone = contacts.find((c) => c.method_type === 'phone')?.value ?? null
 
@@ -209,6 +210,9 @@ export default async function BusinessPage({ params }: Props) {
             </Link>
           </div>
         )}
+
+        {/* ─── Notice Banner ─── */}
+        {detail.notice && <BusinessNotice notice={detail.notice} />}
 
         {/* ─── Hero ─── */}
         <BusinessHero detail={detail} isOpen={isOpen} />
