@@ -74,12 +74,10 @@ export default function BusinessCard({ business, tone = 'purple', variant = 'def
   const TypeIcon = meta.Icon
   const tier = TIER_META[business.trust_tier] ?? null
 
+  // Never display a trust score as a star rating. Only show a rating when
+  // real approved review data exists for this business.
   const hasRealRating = business.rating_count > 0
-  const ratingValue = hasRealRating
-    ? business.rating_avg.toFixed(1)
-    : business.trust_score
-      ? (business.trust_score / 20).toFixed(1)
-      : null
+  const ratingValue = hasRealRating ? business.rating_avg.toFixed(1) : null
 
   const hasImage = !!business.cover_image_url
 
