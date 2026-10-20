@@ -27,6 +27,11 @@ import {
   TargetIcon,
   LayoutDashboardIcon,
   ShieldCheckIcon,
+  UserIcon,
+  LockIcon,
+  CrownGoldIcon,
+  MapPinIcon,
+  SettingsIcon,
   LocationIcon,
   StoreIcon,
   GiftIcon,
@@ -52,38 +57,48 @@ type MenuItem = {
 // ─── Public (للجميع) ───
 const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/', label: 'الرئيسية', Icon: HomeIcon },
-  { href: '/explore', label: 'اكتشف', Icon: CompassIcon },
+  { href: '/explore', label: 'اكتشف الأماكن والأنشطة', Icon: CompassIcon },
+  { href: '/nearby', label: 'قريب منك', Icon: LocationIcon },
+  { href: '/offers', label: 'العروض', Icon: TagIcon },
   { href: '/featured', label: 'المميزون', Icon: StarIcon },
   { href: '/trends', label: 'الترند', Icon: TrendingUpIcon },
-  { href: '/offers', label: 'العروض', Icon: TagIcon },
-  { href: '/new', label: 'بدايات', Icon: SparklesIcon },
-  { href: '/nearby', label: 'قريب منك', Icon: LocationIcon },
+  { href: '/new', label: 'بدايات جديدة', Icon: SparklesIcon },
   { href: '/suggest', label: 'ارشحلك', Icon: TargetIcon },
   { href: '/trust', label: 'المصداقية', Icon: ShieldCheckIcon },
 ]
 
-// ─── Customer (مسجل) ───
+// ─── Customer account (لكل مستخدم مسجل غير الأدمن) ───
 const CUSTOMER_ITEMS: MenuItem[] = [
-  { href: '/account', label: 'حسابي', Icon: LayoutDashboardIcon },
+  { href: '/account', label: 'نظرة عامة على حسابي', Icon: LayoutDashboardIcon },
+  { href: '/account/edit', label: 'بياناتي الشخصية', Icon: UserIcon },
+  { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
   { href: '/account/orders', label: 'طلباتي', Icon: FileTextIcon },
   { href: '/account/favorites', label: 'المفضلات', Icon: StarIcon },
   { href: '/account/following', label: 'المتابعات', Icon: StoreIcon },
-  { href: '/account/badges', label: 'الشارات', Icon: SparklesIcon },
   { href: '/account/points', label: 'النقاط', Icon: GiftIcon },
+  { href: '/account/loyalty', label: 'برنامج الولاء', Icon: CrownGoldIcon },
+  { href: '/account/badges', label: 'الشارات', Icon: SparklesIcon },
   { href: '/account/referral', label: 'دعوة أصحابك', Icon: ShareIcon },
-  { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
+  { href: '/account/verify', label: 'توثيق الحساب', Icon: ShieldCheckIcon },
+  { href: '/account/security', label: 'الأمان وكلمة المرور', Icon: LockIcon },
 ]
 
-// ─── Merchant (لو عنده نشاط) ───
+// ─── Merchant dashboard (للتاجر المرتبط بنشاط) ───
 const MERCHANT_SECTION: MenuItem[] = [
   { href: '/merchant', label: 'لوحة نشاطي', Icon: LayoutDashboardIcon },
+  { href: '/merchant/business', label: 'بيانات النشاط والصور', Icon: StoreIcon },
+  { href: '/merchant/branches', label: 'الفروع', Icon: MapPinIcon },
   { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon },
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
-  { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon },
+  { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
   { href: '/merchant/qr', label: 'QR النشاط', Icon: TargetIcon },
+  { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon },
+  { href: '/merchant/trust', label: 'المصداقية', Icon: ShieldCheckIcon },
+  { href: '/merchant/subscription', label: 'الباقة والاشتراك', Icon: CrownGoldIcon },
+  { href: '/merchant/settings', label: 'إعدادات النشاط', Icon: SettingsIcon },
 ]
 
-// ─── Guest Merchant (مش مسجل نشاط) ───
+// ─── Merchant onboarding (للزائر أو العميل الذي ليس لديه نشاط) ───
 const MERCHANT_APPLY: MenuItem[] = [
   { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
   { href: '/pricing', label: 'الباقات', Icon: GiftIcon },
@@ -91,7 +106,7 @@ const MERCHANT_APPLY: MenuItem[] = [
 ]
 
 // ─── Admin ───
-const ADMIN_ITEMS: MenuItem[] = [{ href: '/admin', label: 'لوحة الأدمن', Icon: ShieldCheckIcon }]
+const ADMIN_ITEMS: MenuItem[] = [{ href: '/admin', label: 'لوحة تحكم الإدارة', Icon: ShieldCheckIcon }]
 
 const BOTTOM_ITEMS: MenuItem[] = [
   { href: '/about', label: 'مين إحنا', Icon: InfoIcon },
