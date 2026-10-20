@@ -69,33 +69,22 @@ const PUBLIC_ITEMS: MenuItem[] = [
 
 // ─── Customer account (لكل مستخدم مسجل غير الأدمن) ───
 const CUSTOMER_ITEMS: MenuItem[] = [
-  { href: '/account', label: 'نظرة عامة على حسابي', Icon: LayoutDashboardIcon },
-  { href: '/account/edit', label: 'بياناتي الشخصية', Icon: UserIcon },
-  { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
+  { href: '/account', label: 'حسابي', Icon: LayoutDashboardIcon },
   { href: '/account/orders', label: 'طلباتي', Icon: FileTextIcon },
   { href: '/account/favorites', label: 'المفضلات', Icon: StarIcon },
   { href: '/account/following', label: 'المتابعات', Icon: StoreIcon },
+  { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
   { href: '/account/points', label: 'النقاط', Icon: GiftIcon },
-  { href: '/account/loyalty', label: 'برنامج الولاء', Icon: CrownGoldIcon },
-  { href: '/account/badges', label: 'الشارات', Icon: SparklesIcon },
-  { href: '/account/referral', label: 'دعوة أصحابك', Icon: ShareIcon },
-  { href: '/account/verify', label: 'توثيق الحساب', Icon: ShieldCheckIcon },
-  { href: '/account/security', label: 'الأمان وكلمة المرور', Icon: LockIcon },
 ]
 
 // ─── Merchant dashboard (للتاجر المرتبط بنشاط) ───
 const MERCHANT_SECTION: MenuItem[] = [
   { href: '/merchant', label: 'لوحة نشاطي', Icon: LayoutDashboardIcon },
-  { href: '/merchant/business', label: 'بيانات النشاط والصور', Icon: StoreIcon },
-  { href: '/merchant/branches', label: 'الفروع', Icon: MapPinIcon },
+  { href: '/merchant/business', label: 'بيانات النشاط', Icon: StoreIcon },
   { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon },
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
-  { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
-  { href: '/merchant/qr', label: 'QR النشاط', Icon: TargetIcon },
   { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon },
-  { href: '/merchant/trust', label: 'المصداقية', Icon: ShieldCheckIcon },
   { href: '/merchant/subscription', label: 'الباقة والاشتراك', Icon: CrownGoldIcon },
-  { href: '/merchant/settings', label: 'إعدادات النشاط', Icon: SettingsIcon },
 ]
 
 // ─── Merchant onboarding (للزائر أو العميل الذي ليس لديه نشاط) ───
