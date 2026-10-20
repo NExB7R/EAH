@@ -96,7 +96,7 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
     return { ok: false, error: parsed.error.issues[0]?.message ?? 'بيانات غير صحيحة' }
   }
 
-  let admin
+  let admin: ReturnType<typeof createServiceClient>
   try {
     // Privileged writes are scoped to the business discovered from the authenticated
     // user's own owner_profile_id above. The form cannot choose a business ID or owner.
