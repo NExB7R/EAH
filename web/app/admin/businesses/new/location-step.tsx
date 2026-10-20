@@ -37,7 +37,7 @@ export default function LocationStep({ data, errors, update }: Props) {
       <div className={styles.cardHead}>
         <h2 className={styles.cardTitle}>الموقع والتواصل</h2>
         <p className={styles.cardHint}>
-          كل الحقول هنا اختيارية — لكن كل ما تكمل، العملاء يلاقوك أسرع
+          المنطقة والعنوان والأرقام الإضافية اختيارية. مطلوب رقم تواصل للنشاط نفسه، ومش محتاج رقمًا شخصيًا لصاحب النشاط.
         </p>
       </div>
 
