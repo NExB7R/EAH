@@ -7,7 +7,7 @@
 - Last reviewed app-code commit: da965d4 (server-only phone RPC callers)
 - Branch: main
 - Invariants/typecheck: not re-verified after the latest code changes
-- Deploy: Vercel succeeded for phone-RPC app-code commit da965d4; the newer admin image-route change `2f3ce30` was still pending at last check; production runtime/smoke tests are not yet verified
+- Deploy: Vercel succeeded for phone-RPC app-code commit da965d4; Vercel reported `failure` for admin image-route commit `2f3ce30`. Build logs cannot be read through the current Vercel connection (403); production runtime/smoke tests are not verified
 
 ## Working
 - Business wizard fullscreen (UI-02)
@@ -29,7 +29,7 @@
 
 - **AP-04:** phone lookup now verifies Turnstile, uses strict fail-closed rate limiting, returns an allowlisted response without `user_id`, and its two data RPCs are service-role-only; Vercel succeeded for code commit `da965d4`, but production CAPTCHA/429 smoke testing is still pending.
 - **Image upload:** merchant route writes logo/cover through `business_media`, synchronizes `cover_image_url`, checks database write errors, and reads the logo from media. The app-code commit passed Vercel; a production upload/refresh smoke test is still pending.
-- **Admin image removal:** UI no longer clears local state after a failed DELETE; the API now checks media writes and clears the mirrored cover URL. Latest Vercel status for this change was pending; production upload/remove/refresh smoke test is still pending.
+- **Admin image removal:** UI no longer clears local state after a failed DELETE; the API now checks media writes and clears the mirrored cover URL. Vercel failed for the API-route commit `2f3ce30`; inspect the build logs (requires access to team `eah-74a0`), repair and get a green build before production smoke tests.
 - **DB-10/11/12:** storage policy/path problems remain open.
 - **SEC-01:** rotate 11 previously exposed keys and verify current Vercel values without copying secrets into chat.
 - **SEC-02b:** VERCEL_OIDC_TOKEN in git history.
@@ -38,7 +38,7 @@
 - **Offers:** verify the `starts_at` filter after the previous fix; do not rely on this old note without checking runtime.
 
 ## Next Priorities (in order)
-1. Verify the latest Vercel deployment completes; the current status was still pending at the last check, and the Vercel log API returned 403 for this connection.
+1. Resolve Vercel build failure for `2f3ce30`. The connector cannot read build logs while team access is 403; grant Vercel connection access to `eah-74a0` or inspect the linked deployment logs directly, then fix and rebuild.
 2. Run `web/supabase/tests/rls.test.sql` against the intended test DB with pgTAP; it now includes 22 assertions covering grants for sensitive RPCs, including the two phone lookup functions.
 3. Test phone lookup with the real production Turnstile key and verify 429 throttling plus a response that contains no `user_id`.
 4. Test merchant logo/cover upload on production: upload, refresh, confirm logo/cover still show, and verify a non-owner receives 403. The code change is committed but runtime test is pending.
