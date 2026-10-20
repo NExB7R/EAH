@@ -50,6 +50,7 @@ export type RateLimitResult =
 export async function checkRateLimit(
   limiter: Ratelimit,
   identifier: string,
+  options: { failClosed?: boolean } = {},
 ): Promise<RateLimitResult> {
   try {
     const { success, remaining, reset } = await limiter.limit(identifier)
@@ -57,7 +58,15 @@ export async function checkRateLimit(
     const retryAfter = Math.max(0, Math.ceil((reset - Date.now()) / 1000))
     return { ok: false, error: 'محاولات كتير — جرب بعد شوية', retryAfter }
   } catch {
-    // لو Upstash واقع → نسمح (fail-open) عشان منعطلش المستخدمين
+    // Sensitive endpoints can opt out of fail-open behavior. Keep the
+    // legacy default for non-critical flows until each caller is reviewed.
+    if (options.failClosed) {
+      return {
+        ok: false,
+        error: 'تعذر التحقق الأمني مؤقتًا — جرب كمان دقيقة',
+        retryAfter: 60,
+      }
+    }
     return { ok: true, remaining: 0 }
   }
 }
