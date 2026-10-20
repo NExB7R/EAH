@@ -22,16 +22,31 @@ export async function bulkApproveBusinesses(ids: string[]): Promise<Result> {
   const parsed = idsSchema.safeParse(ids)
   if (!parsed.success) return { ok: false, error: 'قائمة غير صالحة' }
 
-  const { data: businesses } = await ctx.supabase
+  const { data: businesses, error: lookupError } = await ctx.supabase
     .from('businesses')
-    .select('id, name, slug, owner_profile_id')
+    .select('id, name, slug, owner_profile_id, business_type_status')
     .in('id', parsed.data)
+
+  if (lookupError) return { ok: false, error: 'تعذر تحميل الأنشطة المحددة — حاول تاني' }
+  const selectedBusinesses = businesses ?? []
+  if (selectedBusinesses.length !== parsed.data.length) {
+    return { ok: false, error: 'بعض الأنشطة المحددة غير موجود أو غير متاح للمراجعة' }
+  }
+  const blockedType = selectedBusinesses.find(
+    (business) => business.business_type_status === 'pending' || business.business_type_status === 'rejected',
+  )
+  if (blockedType) {
+    return {
+      ok: false,
+      error: 'فيه نشاط نوعه المخصص لسه محتاج قرار. راجع «أنواع الأنشطة الجديدة» الأول، وبعد الموافقة انشره.',
+    }
+  }
 
   const { error } = await ctx.supabase
     .from('businesses')
     .update({
       is_published: true,
-      rejected_reason: null,
+      rejection_reason: null,
       rejected_at: null,
       rejected_by: null,
     })
