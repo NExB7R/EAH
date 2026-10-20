@@ -1,3 +1,36 @@
+## 2026-10-20 — Admin + Public UX Overhaul
+
+**Commits:** `787cbbc` → `d230dfd` + final (17 commits)
+
+**Done:**
+- Wizard fullscreen overlay (UI-02)
+- Contact types 6→10 (complaints/manager/shift_*)
+- Notice system + open-override
+- Location picker (geolocation + OSM iframe)
+- Business detail: 3 tabs (overview/edit/preview) UI-01
+- Admin mobile drawer (fixes sidebar squeeze)
+- Admin profile + bell routing
+- Images: file + URL paste (logo/cover/menu/gallery)
+- Menu + Gallery sections in admin
+- Offers CRUD (admin) + public tab
+- Share modal (5 platforms + QR) with copy feedback
+- WhatsApp orders gate (server-side)
+- God Components split (business-form 1179→19 + hooks 380→3)
+- Invariants CI gate + 3 migrations
+
+**Deferred:**
+- SEC-01 rotate (owner decision)
+- SEC-02b git history
+- Offers starts_at filter
+- DB-04/05, AP-05
+- B2 select('*') = 5
+
+**Next session:**
+1. **Add first real business** (primary)
+2. Test offers + images end-to-end
+3. Fix starts_at filter
+4. Mobile QA
+
 ## 2026-10-20 — Admin Business Redesign
 
 **Commits:** `787cbbc` → `4638dba` (14 commits, ~4h)

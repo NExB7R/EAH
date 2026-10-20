@@ -342,40 +342,38 @@ BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> �
 
 ## 16. Current State (2026-10-20)
 
-**آخر commit:** `ee4abe7`
+**آخر commit:** will be updated
 **الفرع:** `main` (clean)
 
 ### ✅ شغال
-- Business wizard fullscreen (4 خطوات + custom types + approval)
-- Contact types موسّعة (10): phone/whatsapp/complaints/manager/shift_*/facebook/instagram/website/additional
-- Notice system (info/warning/critical + expiry)
-- Open-now override (auto/open/closed)
-- Location picker (geolocation 📍 + OSM preview)
-- Admin business detail — **3 تبويبات** (نظرة عامة/تعديل/معاينة)
-- Admin profile accessible from sidebar + avatar
-- Bell routing صح للأدمن
-- WhatsApp orders gate (server-side)
-- Invariants CI gate (B1=0, B6=34, X1-X4=0)
-- 64/64 tests passing
+- Business wizard fullscreen + 10 contact types
+- Notice + open-override + location picker (📍+OSM)
+- Images: file upload + URL paste (logo/cover/menu/gallery)
+- Menu + Gallery sections (admin)
+- Offers CRUD (admin) + public offers tab
+- Share modal (WhatsApp/Twitter/FB/Telegram/copy/QR)
+- Admin mobile drawer + profile + bell routing
+- WhatsApp orders gate
+- God Components ≤300 lines
+- Invariants CI gate
 
 ### ❌ مشاكل معروفة
-- SEC-01: 11 مفتاح (DEFERRED)
-- SEC-02b: VERCEL_OIDC_TOKEN في git history
-- `hooks.ts` 380 سطر (tech debt)
-- B2: 5 select('*')
+- SEC-01: 11 مفتاح
+- SEC-02b: OIDC token in git history
 - DB-04/05, AP-05
+- B2: 5 select('*')
+- Offers: starts_at not filtered
 
 ### 🎯 الأولويات
 1. **أول نشاط حقيقي**
-2. اختبار end-to-end (notice + override + 📍)
-3. split hooks.ts
-4. B2 select('*')
-5. SEC-01 rotate
+2. اختبار offers end-to-end
+3. starts_at filter
+4. SEC-01 rotate
 
 ### 🚫 ممنوع
 - Puck/designtools/Surface
 - Branches جديدة قبل الإطلاق
-- DB بدون migration في docs/migrations/
+- DB بدون migration
 - commit .env.local
 
 **راجع `docs/NEXT_SESSION.md` للتفاصيل الكاملة.**
