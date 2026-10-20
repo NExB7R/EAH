@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
@@ -111,6 +111,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
   const router = useRouter()
 
   const onCloseRef = useRef(onClose)
+  const [shareCopied, setShareCopied] = useState(false)
 
   useEffect(() => {
     onCloseRef.current = onClose
@@ -134,7 +135,10 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
   const isMerchant = session?.role === 'merchant'
 
   const handleShare = async () => {
-    const url = typeof window !== 'undefined' ? window.location.origin : 'https://eah-sq.vercel.app'
+    const url =
+      typeof window !== 'undefined'
+        ? window.location.origin
+        : (process.env.NEXT_PUBLIC_SITE_URL ?? '')
     const title = 'EAH — اللي نفسك فيه ؟'
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
@@ -146,8 +150,9 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
     }
     try {
       await navigator.clipboard.writeText(url)
+      setShareCopied(true)
+      setTimeout(() => setShareCopied(false), 2000)
     } catch {
-      // clipboard blocked
       window.prompt('انسخ الرابط:', url)
     }
   }
