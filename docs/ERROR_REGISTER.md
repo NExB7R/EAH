@@ -91,7 +91,7 @@
 | الفحص | العدد الحالي | المطلوب |
 |---|---|---|
 | B1 owner_profile_id + maybeSingle | 0 | ✅ مُصلح (fix-b1.mjs v2) |
-| B2 select('*') | 62 | تحديد أعمدة |
+| B2 select('*') | 5 | tech debt — admin/service context فقط (low risk) |
 | B3 <img> خام | 9 | WmImage |
 | B4 animation: infinite | 16 | SACRED يمنعها |
 | B5 ألوان محظورة | 47 | متغيرات الهوية |

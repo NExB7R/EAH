@@ -1,3 +1,33 @@
+## 2026-10-20 — Admin Business Redesign
+
+**Commits:** `787cbbc` → `4638dba` (14 commits, ~4h)
+
+**Done:**
+- GOD-01: `business-form.tsx` 1179 → 14 ملف (كلهم ≤300)
+- Contact types: 6 → 10 (complaints/manager/shift_morning/shift_evening)
+- Notice system (info/warning/critical + expiry auto-hide)
+- Open-now override (auto/open/closed)
+- Location picker (geolocation 📍 + OSM iframe)
+- UI-01: business detail → 3 تبويبات (نظرة عامة/تعديل/معاينة)
+- UI-02: wizard fullscreen overlay (مش محشور)
+- Admin profile: sidebar link + avatar routing
+- Bell routing (admin → /admin/notifications)
+- WhatsApp orders gate (server-side block)
+- Split `business-form-hooks` 380 → 3 ملفات (tech debt)
+- Invariants CI gate (CI-07 closed)
+- 2 migrations مطبقتين
+
+**Deferred:**
+- B2 `select('*')` = 5 sites — low risk (admin/service/RLS), documented
+- SEC-01 rotate (owner decision)
+- SEC-02b git history (pre-launch)
+- UI-01 polish + wizard polish after real business test
+
+**Next session:**
+1. **Add first real business** (primary)
+2. Test notice + override + 📍 end-to-end
+3. Review UX feedback
+
 # EAH — SESSION_LOG.md
 
 > سجل الجلسات. كل جلسة تبدأ من حيث انتهت اللي قبلها.
