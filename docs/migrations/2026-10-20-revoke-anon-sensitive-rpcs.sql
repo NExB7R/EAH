@@ -1,5 +1,8 @@
 -- EAH — Close anonymous EXECUTE grants on user/admin RPCs
 -- Date: 2026-10-20
+-- Applied to Supabase project EAH as migration version 20261020203655.
+-- Verified: anon EXECUTE=false; authenticated/service_role EXECUTE=true
+-- for all eight functions below.
 --
 -- PostgreSQL grants EXECUTE to PUBLIC on new functions by default.
 -- These functions are intended for authenticated app flows and already
