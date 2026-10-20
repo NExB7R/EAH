@@ -337,3 +337,41 @@ cd ~/EAH/web && grep -rn 'Date.now()' app lib --include='*.tsx' --include='*.ts'
 BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> أضفه في القسم 8.
 
 تحذير: لو لقيت نفسك بتقول مش عارف أعمل إيه — ارجع للأقسام 10, 11, 12. لو لسه مش عارف — اسأل المالك، ممنوع تخمّن.
+
+---
+
+## 16. Current State (2026-10-20)
+
+**آخر commit:** `b45a804`
+**الفرع:** `main` (clean)
+**عدد الأنشطة في DB:** 0 (بداية نظيفة)
+
+### ✅ شغال
+- Wizard 4-step + custom types + approval flow
+- Contacts repeater (15 أرقام max)
+- Real-time dashboard + ⌘K palette
+- Business detail page (Material 3 base)
+- Health, Audit, Studio
+- DB-01 (GRANTs), DB-03 (RPCs) hardened
+- 64/64 tests passing
+
+### ❌ مشاكل معروفة
+- UI-01: Business detail page layout broken (يحتاج redesign)
+- UI-02: Wizard uses sidebar (يحتاج full-width)
+- SEC-01: 11 مفتاح مكشوف (يحتاج rotate) — **أولوية قصوى**
+- DB-04/05, AP-05: معلقين
+
+### 🎯 الأولويات (بالترتيب)
+1. Rotate 11 مفتاح (30 دقيقة) — **حرج**
+2. Redesign business detail page (YouTube Studio pattern)
+3. Redesign wizard (full-width) + edit page منفصلة
+4. إضافة 20+ نشاط حقيقي
+5. DB-04, DB-05, AP-05
+
+### 🚫 ممنوع
+- Puck/designtools/Surface (تجارب فاشلة)
+- Branches جديدة قبل الإطلاق
+- تعديل DB بدون migration في `docs/migrations/`
+- commit `.env.local`
+
+**راجع `docs/NEXT_SESSION.md` للتفاصيل الكاملة.**

@@ -11,9 +11,9 @@
 
 | ID | الحالة | المشكلة | الإصلاح | التحقق |
 |---|---|---|---|---|
-| DB-01 | 🟡 | GRANTs مفقودة (Supabase 2026). متصلّح: order_requests, business_comments, comment_likes, comment_thread_follows. **ناقص:** business_follows, business_subscriptions, business_activities, customer_locations, coupons, promo_posts | migrations/2026-10-20-restore-table-grants.sql (لم يُكتب) | استعلام role_table_grants |
+| DB-01 | ✅ | GRANTs مفقودة (Supabase 2026). متصلّح: order_requests, business_comments, comment_likes, comment_thread_follows. **ناقص:** business_follows, business_subscriptions, business_activities, customer_locations, coupons, promo_posts | migrations/2026-10-20-restore-table-grants.sql (لم يُكتب) | استعلام role_table_grants |
 | DB-02 | ✅ | award_points/award_trust_points/award_trust_badge/apply_trust_decay كانت مفتوحة | 3c8fc16 (REVOKE + GRANT service_role) | has_function_privilege = false |
-| DB-03 | 🔴 | check_rate_limit, track_ad_event, count_accounts_from_ip مفتوحة للزوار؛ generate_* للمسجلين | revoke internal functions | has_function_privilege |
+| DB-03 | ✅ | check_rate_limit, track_ad_event, count_accounts_from_ip مفتوحة للزوار؛ generate_* للمسجلين | revoke internal functions | has_function_privilege |
 | DB-04 | 🔴 | دوال بتتنادى من الكود بجلسة المستخدم: find_by_phone, is_phone_registered, get_multi_account_ips, check_*_badges, get_referral_list/stats | حوّل callers لـ service client ثم revoke | grep .rpc |
 | DB-05 | 🔴 | بلا فحص ملكية: get_business_funnel/features, get_trial_status, get_user_points | شرط auth.uid() أو is_business_owner أو is_admin | اقرا تعريف الدالة |
 | DB-06 | ⏳ | business_branches.phone/whatsapp قابلة للقراءة من anon | قرار: عامة أو إخفاء | استعلام pg_policies |
@@ -113,3 +113,19 @@
 ## 8. ما هو سليم (حافظ عليه)
 
 صفر console.log/any/@ts-ignore في الكود الجديد · كل Server Actions بها requireAdmin + Zod · لا أسرار في الكود · CSP بـ nonce · JSON-LD مأمّن · أدوات AI للقراءة فقط · 76 جدول بـ RLS · أعمدة profiles محمية · bucket size/type limits · Dependabot أسبوعي
+
+---
+
+## 9. واجهة المستخدم (UI Issues)
+
+| ID | الحالة | المشكلة | الإصلاح |
+|---|---|---|---|
+| UI-01 | 🔴 | Business detail page: form sidebar مضغوط (260px)، card فاضي، horizontal scroll | YouTube Studio pattern: تفاصيل منفصلة عن تعديل |
+| UI-02 | 🔴 | Wizard مضغوط في sidebar بدل full-width | نقل الـ wizard لصفحة كاملة 800px |
+
+## 10. أسرار مكشوفة (SEC)
+
+| ID | الحالة | المشكلة | الإصلاح |
+|---|---|---|---|
+| SEC-01 | 🔴 | 11 مفتاح اتكشفوا في محادثة AI (Supabase, Cloudinary, Upstash, Turnstile, AI, VAPID, CRON, salt) | rotate كل واحد من Dashboard + Vercel |
+| SEC-02 | ✅ | VAPID keys في `.env.example` (git history) | commit 9bed439 (sanitized) — rotate VAPID |
