@@ -310,6 +310,12 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   const d = parsed.data
   const finalSlug = d.slug ?? slugify(d.name)
 
+  // WhatsApp gate: auto-disable orders if no whatsapp contact provided
+  const hasWhatsappContact = (d.contacts ?? []).some(
+    (c) => c.kind === 'whatsapp' && c.value.trim().length > 0,
+  )
+  const effectiveAcceptsWhatsapp = hasWhatsappContact ? (d.accepts_whatsapp_orders ?? true) : false
+
   const { data: created, error } = await ctx.supabase
     .from('businesses')
     .insert({
@@ -326,7 +332,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       description: d.description || null,
       hook: d.hook || null,
       is_open: d.is_open ?? true,
-      accepts_whatsapp_orders: d.accepts_whatsapp_orders ?? true,
+      accepts_whatsapp_orders: effectiveAcceptsWhatsapp,
       is_published:
         d.business_type === 'misc' && d.custom_business_type ? false : (d.is_published ?? true),
     })
