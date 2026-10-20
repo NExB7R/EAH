@@ -164,12 +164,15 @@ export async function archiveBusiness(businessId: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { error } = await ctx.supabase
+  const { data: archived, error } = await ctx.supabase
     .from('businesses')
     .update({ is_published: false })
     .eq('id', businessId)
+    .select('id')
+    .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
+  if (!archived) return { ok: false, error: 'النشاط مش موجود أو تم تحديثه بالفعل' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
@@ -203,7 +206,7 @@ export async function republishBusiness(businessId: string): Promise<Result> {
     }
   }
 
-  const { error } = await ctx.supabase
+  const { data: republished, error } = await ctx.supabase
     .from('businesses')
     .update({
       is_published: true,
@@ -212,8 +215,11 @@ export async function republishBusiness(businessId: string): Promise<Result> {
       rejected_by: null,
     })
     .eq('id', businessId)
+    .select('id')
+    .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
+  if (!republished) return { ok: false, error: 'تعذر إعادة نشر النشاط — حدّث القائمة وحاول تاني' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
@@ -239,10 +245,17 @@ export async function deleteBusiness(businessId: string): Promise<Result> {
     .select('name')
     .eq('id', businessId)
     .maybeSingle()
+  if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
-  const { error } = await ctx.supabase.from('businesses').delete().eq('id', businessId)
+  const { data: deleted, error } = await ctx.supabase
+    .from('businesses')
+    .delete()
+    .eq('id', businessId)
+    .select('id')
+    .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
+  if (!deleted) return { ok: false, error: 'تعذر حذف النشاط — حدّث القائمة وحاول تاني' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
