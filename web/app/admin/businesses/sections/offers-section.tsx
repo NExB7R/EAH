@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { AlertIcon, CheckCircleIcon, CloseIcon, GiftIcon, PlusIcon } from '@/components/icons'
+import { AlertIcon, CloseIcon, PlusIcon } from '@/components/icons'
 import { useBusinessForm } from '../business-form-context'
 import { saveOffer, deleteOffer, toggleOfferPublished } from '../edit-actions'
 import styles from '../business-form.module.css'
