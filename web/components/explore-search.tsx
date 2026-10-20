@@ -96,7 +96,7 @@ export default function ExploreSearch({ initialQuery = '' }: Props) {
           </button>
 
           <button
-            type="submit"
+            type="button"
             className="eah-icon-action eah-icon-gold"
             data-tooltip="ارشحلك"
             aria-label="ارشحلك"
