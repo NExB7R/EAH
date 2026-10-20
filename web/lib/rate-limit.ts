@@ -35,6 +35,14 @@ export const strictLimiter = new Ratelimit({
   prefix: 'ratelimit:strict',
 })
 
+// ─── Admin media uploads (bounded bandwidth/cost) ───
+export const adminUploadLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(20, '15 m'),
+  analytics: true,
+  prefix: 'ratelimit:admin-upload',
+})
+
 // ─── Strict: operations حساسة (review / reply / reveal) ───
 export async function getClientIp(): Promise<string> {
   const h = await headers()
