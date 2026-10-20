@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { strictLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 // ═══════════════════════════════════════════════════════════
@@ -94,7 +94,8 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const supabase = await createClient()
+  // The RPC is service-role-only; public callers must pass the checks above.
+  const supabase = createServiceClient()
   const { data, error } = await supabase.rpc('find_by_phone', { p_phone: phone })
 
   if (error) {
