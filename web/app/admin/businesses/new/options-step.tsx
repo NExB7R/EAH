@@ -26,7 +26,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
             onChange={(e) => update({ owner_user_id: e.target.value })}
             className={styles.input}
           >
-            <option value="">— بدون مالك (نشاط إداري) —</option>
+            <option value="">— بدون مالك مرتبط —</option>
             {owners.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.display_name}
@@ -36,7 +36,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
             ))}
           </select>
           <span className={styles.hint}>
-            <UserIcon size={11} /> لو سبت المالك فاضي، النشاط هيتحفظ كمسودة غير منشورة لحد ما تربطه بمالكه
+            <UserIcon size={11} /> اختيار المالك اختياري: النشاط هيتنشر حتى لو مفيش حساب مالك مرتبط، وتقدر تربطه لاحقًا من الإدارة.
           </span>
         </label>
 
