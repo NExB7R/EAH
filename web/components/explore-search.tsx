@@ -41,7 +41,7 @@ export default function ExploreSearch({ initialQuery = '' }: Props) {
     if (nextQuery) params.set('q', nextQuery)
     else params.delete('q')
     const search = params.toString()
-    router.push(search ? \`/explore?\${search}\` : '/explore')
+    router.push(search ? `/explore?${search}` : '/explore')
   }
 
   const handleSubmit = (e: React.FormEvent) => {
