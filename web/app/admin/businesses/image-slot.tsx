@@ -101,16 +101,30 @@ export default function ImageSlot({
   }
 
   const handleRemove = async () => {
-    if (mediaId) {
-      try {
-        await fetch(`/api/admin/upload-business-image?mediaId=${mediaId}`, { method: 'DELETE' })
-      } catch {
-        // silent — still clear local state
+    setError(null)
+    setPending(true)
+    try {
+      const params = new URLSearchParams({
+        businessId,
+        category,
+        ...(mediaId ? { mediaId } : {}),
+      })
+      const res = await fetch(`/api/admin/upload-business-image?${params.toString()}`, {
+        method: 'DELETE',
+      })
+      const json = (await res.json()) as { ok?: boolean; error?: string }
+      if (!res.ok || !json.ok) {
+        setError(json.error ?? 'فشل حذف الصورة')
+        return
       }
+      setUrl(null)
+      setMediaId(null)
+      onChange?.(null)
+    } catch {
+      setError('فشل الاتصال أثناء حذف الصورة')
+    } finally {
+      setPending(false)
     }
-    setUrl(null)
-    setMediaId(null)
-    onChange?.(null)
   }
 
   return (
