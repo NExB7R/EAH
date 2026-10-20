@@ -5,7 +5,7 @@
 -- ============================================================
 
 begin;
-select plan(31);
+select plan(37);
 
 -- ============================================================
 -- 1. profiles — anon
@@ -208,6 +208,39 @@ select is(
   has_function_privilege('authenticated', 'public.get_my_profile()', 'EXECUTE'),
   true,
   'authenticated can execute self-only get_my_profile'
+);
+
+-- Phone enumeration RPCs are server-only; the API routes now use service_role.
+select is(
+  has_function_privilege('anon', 'public.find_by_phone(text)', 'EXECUTE'),
+  false,
+  'anon cannot directly execute find_by_phone'
+);
+select is(
+  has_function_privilege('authenticated', 'public.find_by_phone(text)', 'EXECUTE'),
+  false,
+  'authenticated cannot directly execute find_by_phone'
+);
+select is(
+  has_function_privilege('service_role', 'public.find_by_phone(text)', 'EXECUTE'),
+  true,
+  'service_role can execute find_by_phone through guarded server route'
+);
+
+select is(
+  has_function_privilege('anon', 'public.is_phone_registered(text)', 'EXECUTE'),
+  false,
+  'anon cannot directly execute is_phone_registered'
+);
+select is(
+  has_function_privilege('authenticated', 'public.is_phone_registered(text)', 'EXECUTE'),
+  false,
+  'authenticated cannot directly execute is_phone_registered'
+);
+select is(
+  has_function_privilege('service_role', 'public.is_phone_registered(text)', 'EXECUTE'),
+  true,
+  'service_role can execute is_phone_registered from signupAction'
 );
 
 -- ============================================================
