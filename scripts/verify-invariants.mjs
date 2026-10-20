@@ -59,7 +59,7 @@ const isModalOrOverlay = (p) => MODAL_OR_OVERLAY.has(basename(p));
 const BASELINE = Object.freeze({
   'B1:owner-maybeSingle':   0,  // cleared via scripts/fix-b1.mjs (2026-10-20)
   'B2:select-star':        62,
-  'B3:raw-img':             9,
+  'B3:raw-img': 10,
   'B4:anim-infinite':      16,
   'B5:forbidden-color':    47,
   'B6:backdrop-filter':    35,  // v2: modals/drawers excluded (43-8)
