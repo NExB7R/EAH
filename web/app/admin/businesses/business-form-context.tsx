@@ -87,6 +87,21 @@ export type BusinessFormCtx = {
   saveSettings: () => void
   saveOwner: () => void
   saveBranch: (idx: number) => void
+  // Notice
+  importantNotice: string
+  setImportantNotice: Setter<string>
+  noticeExpiresAt: string
+  setNoticeExpiresAt: Setter<string>
+  noticeSeverity: 'info' | 'warning' | 'critical'
+  setNoticeSeverity: Setter<'info' | 'warning' | 'critical'>
+
+  // Open-now override
+  openNowOverride: 'auto' | 'open' | 'closed'
+  setOpenNowOverride: Setter<'auto' | 'open' | 'closed'>
+
+  // New handlers
+  saveNotice: () => void
+  saveOpenOverride: () => void
 }
 
 const BusinessFormContext = createContext<BusinessFormCtx | null>(null)

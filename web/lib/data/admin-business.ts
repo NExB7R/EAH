@@ -33,6 +33,10 @@ export type AdminBusiness = {
   trial_used: boolean
   claimed_at: string | null
   claimed_by_user_id: string | null
+  open_now_override: boolean | null
+  important_notice: string | null
+  notice_expires_at: string | null
+  notice_severity: 'info' | 'warning' | 'critical'
   owner: { id: string; display_name: string; phone: string | null } | null
   contacts: { method_type: string; value: string; is_primary: boolean }[]
   branches: { id: string; name: string; area: string | null; address_text: string | null }[]
@@ -98,6 +102,10 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     source: ((b.source as string) ?? 'merchant') as 'merchant' | 'admin',
     trial_used: (b.trial_used as boolean) ?? false,
     claimed_at: (b.claimed_at as string | null) ?? null,
+    open_now_override: (b.open_now_override as boolean | null) ?? null,
+    important_notice: (b.important_notice as string | null) ?? null,
+    notice_expires_at: (b.notice_expires_at as string | null) ?? null,
+    notice_severity: ((b.notice_severity as string) ?? 'info') as 'info' | 'warning' | 'critical',
     claimed_by_user_id: (b.claimed_by_user_id as string | null) ?? null,
     rejected_at: (b.rejected_at as string | null) ?? null,
     created_at: b.created_at as string,

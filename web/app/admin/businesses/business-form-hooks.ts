@@ -10,6 +10,8 @@ import {
   saveBranch as saveBranchAction,
   deleteBranch,
   saveOwner as saveOwnerAction,
+  saveNotice as saveNoticeAction,
+  saveOpenOverride as saveOpenOverrideAction,
 } from './edit-actions'
 import { createBusiness } from './actions'
 import {
@@ -83,6 +85,26 @@ export function useBusinessFormState(business: AdminBusiness | null) {
 
   // Owner
   const [ownerId, setOwnerId] = useState(business?.owner_profile_id ?? '')
+
+  // Notice
+  const [importantNotice, setImportantNotice] = useState(business?.important_notice ?? '')
+  const [noticeExpiresAt, setNoticeExpiresAt] = useState(
+    business?.notice_expires_at
+      ? new Date(business.notice_expires_at).toISOString().slice(0, 16)
+      : '',
+  )
+  const [noticeSeverity, setNoticeSeverity] = useState<'info' | 'warning' | 'critical'>(
+    business?.notice_severity ?? 'info',
+  )
+
+  // Open-now override
+  const [openNowOverride, setOpenNowOverride] = useState<'auto' | 'open' | 'closed'>(
+    business?.open_now_override === null || business?.open_now_override === undefined
+      ? 'auto'
+      : business.open_now_override
+        ? 'open'
+        : 'closed',
+  )
 
   const toggleSection = (key: SectionKey) => {
     setOpenSections((prev) => {
@@ -239,6 +261,22 @@ export function useBusinessFormState(business: AdminBusiness | null) {
     handleSaveSection('branches', () => saveBranchAction(business.id, fd, branch.id))
   }
 
+  const saveNotice = () => {
+    if (!business) return
+    const fd = new FormData()
+    fd.set('important_notice', importantNotice)
+    fd.set('notice_severity', noticeSeverity)
+    if (noticeExpiresAt) {
+      fd.set('notice_expires_at', new Date(noticeExpiresAt).toISOString())
+    }
+    handleSaveSection('notice', () => saveNoticeAction(business.id, fd))
+  }
+
+  const saveOpenOverride = () => {
+    if (!business) return
+    handleSaveSection('status', () => saveOpenOverrideAction(business.id, openNowOverride))
+  }
+
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)
@@ -317,5 +355,15 @@ export function useBusinessFormState(business: AdminBusiness | null) {
     saveOwner,
     saveBranch,
     handleCreate,
+    importantNotice,
+    setImportantNotice,
+    noticeExpiresAt,
+    setNoticeExpiresAt,
+    noticeSeverity,
+    setNoticeSeverity,
+    openNowOverride,
+    setOpenNowOverride,
+    saveNotice,
+    saveOpenOverride,
   }
 }

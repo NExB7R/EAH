@@ -10,6 +10,7 @@ import {
   ClockIcon,
   UserIcon,
   ImageIcon,
+  AlertIcon,
 } from '@/components/icons'
 import type { AdminBusiness, BusinessOwnerOption } from '@/lib/data/admin-business'
 
@@ -64,7 +65,16 @@ export type Props =
   | { mode: 'edit'; business: AdminBusiness; owners?: never }
 
 export type SectionKey =
-  'basics' | 'images' | 'contacts' | 'location' | 'hours' | 'branches' | 'settings' | 'owner'
+  | 'basics'
+  | 'images'
+  | 'contacts'
+  | 'location'
+  | 'hours'
+  | 'branches'
+  | 'settings'
+  | 'notice'
+  | 'status'
+  | 'owner'
 
 export const SECTION_META: Record<SectionKey, { title: string; Icon: typeof StoreIcon }> = {
   basics: { title: 'الأساسيات', Icon: StoreIcon },
@@ -74,6 +84,8 @@ export const SECTION_META: Record<SectionKey, { title: string; Icon: typeof Stor
   hours: { title: 'أوقات العمل', Icon: ClockIcon },
   branches: { title: 'الفروع', Icon: MapPinIcon },
   settings: { title: 'الإعدادات والمميزات', Icon: CrownGoldIcon },
+  notice: { title: 'ملحوظة هامة', Icon: AlertIcon },
+  status: { title: 'حالة الفتح الآن', Icon: ClockIcon },
   owner: { title: 'صاحب النشاط', Icon: UserIcon },
 }
 
@@ -85,6 +97,8 @@ export const EDIT_ORDER: SectionKey[] = [
   'hours',
   'branches',
   'settings',
+  'notice',
+  'status',
   'owner',
 ]
 
