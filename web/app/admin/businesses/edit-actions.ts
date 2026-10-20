@@ -287,6 +287,23 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
   })
   if (!parsed.success) return parseError(parsed)
 
+  // WhatsApp gate: لا يمكن تفعيل استلام الأوردرات بدون رقم واتساب
+  if (parsed.data.accepts_whatsapp_orders) {
+    const { data: wa } = await ctx.supabase
+      .from('business_contact_methods')
+      .select('value')
+      .eq('business_id', businessId)
+      .eq('method_type', 'whatsapp')
+      .limit(1)
+    if (!wa || wa.length === 0) {
+      return {
+        ok: false,
+        error:
+          'مينفعش تفعّل استلام أوردرات واتساب قبل إضافة رقم واتساب. ضيف الرقم من قسم التواصل الأول.',
+      }
+    }
+  }
+
   const { error } = await ctx.supabase.from('businesses').update(parsed.data).eq('id', businessId)
   if (error) return { ok: false, error: error.message }
 
