@@ -152,13 +152,14 @@
 ## 12. Pre-Launch Checklist (8h work)
 
 ### Security (35 min)
-- [ ] SEC-01: rotate 11 keys
-- [ ] gitleaks clean
+- [ ] SEC-01: rotate 11 keys (DEFERRED — owner call)
+- [ ] gitleaks clean (blocked by SEC-02b: ***REMOVED*** in a322552)
 
 ### Code Quality (6h)
 - [ ] GOD-01: split business-form.tsx
 - [ ] SPRAWL-01: merge monitoring pages
 - [ ] CI-01 + CI-02: E2E on main
+- [x] CI-07: invariants verifier in CI (ab55bce)
 
 ### Data (45 min)
 - [ ] EMPTY-01: delete 9 empty tables
@@ -167,6 +168,7 @@
 ### Docs (10 min)
 - [ ] CONSISTENCY-01: SACRED to 4 types
 - [ ] NEXT_SESSION.md updated
+- [x] BRAIN.md §16 + ERROR_REGISTER §6 synced (b43e770)
 
 ### Post-Launch Week 1
 - [ ] UI-01: redesign business detail
