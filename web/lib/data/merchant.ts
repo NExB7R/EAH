@@ -13,6 +13,7 @@ export type MerchantBusiness = {
   description: string | null
   hook: string | null
   address_text: string | null
+  logo_url: string | null
   cover_image_url: string | null
   is_published: boolean
   is_open: boolean
@@ -61,7 +62,7 @@ export type MerchantStats = {
 // ─── Business (ملك التاجر) ───
 export async function getMyBusiness(userId: string): Promise<MerchantBusiness | null> {
   const supabase = await createClient()
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('businesses')
     .select(
       'id, slug, name, business_type, area, description, hook, address_text, cover_image_url, is_published, is_open, accepts_whatsapp_orders, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at',
@@ -70,7 +71,22 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
     .limit(1)
     .maybeSingle()
 
-  return (data as MerchantBusiness) ?? null
+  if (error || !data) return null
+
+  const { data: logo } = await supabase
+    .from('business_media')
+    .select('storage_path')
+    .eq('business_id', data.id)
+    .eq('media_type', 'logo')
+    .eq('is_published', true)
+    .order('sort_order', { ascending: true })
+    .limit(1)
+    .maybeSingle()
+
+  return {
+    ...(data as Omit<MerchantBusiness, 'logo_url'>),
+    logo_url: logo?.storage_path ?? null,
+  }
 }
 
 // ─── Contacts ───
