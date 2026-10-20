@@ -141,19 +141,17 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
         <select
           id="owner_profile_id"
           name="owner_profile_id"
-          required
           className={styles.select}
           defaultValue=""
         >
-          <option value="" disabled>
-            اختر...
-          </option>
+          <option value="">بدون مالك مرتبط</option>
           {owners.map((o) => (
             <option key={o.id} value={o.id}>
               {o.display_name} {o.phone ? `— ${o.phone}` : ''}
             </option>
           ))}
         </select>
+        <span className={styles.hint}>اختيار المالك اختياري. تقدر تنشر النشاط بدون حساب مالك وتربطه لاحقًا من الإدارة.</span>
       </div>
 
       <div className={styles.checkRow}>
