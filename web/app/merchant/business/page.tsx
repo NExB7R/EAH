@@ -42,12 +42,11 @@ export default async function MerchantBusinessPage() {
           acceptsWhatsapp: business.accepts_whatsapp_orders,
           phone: contacts.phone ?? '',
           whatsapp: contacts.whatsapp ?? '',
-          businessType: (business as unknown as { business_type?: string }).business_type ?? 'misc',
-          latitude: (business as unknown as { latitude?: number | null }).latitude ?? null,
-          longitude: (business as unknown as { longitude?: number | null }).longitude ?? null,
+          businessType: business.business_type,
+          latitude: business.location?.lat ?? null,
+          longitude: business.location?.lng ?? null,
           logoUrl: business.logo_url,
-          coverUrl:
-            (business as unknown as { cover_image_url?: string | null }).cover_image_url ?? null,
+          coverUrl: business.cover_image_url,
         }}
       />
     </div>
