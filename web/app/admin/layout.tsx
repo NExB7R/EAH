@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import SecondaryHero from '@/components/secondary-hero'
 import AdminSidebar from '@/components/admin-sidebar'
 import CommandPalette from '@/components/ui/command-palette'
+import AdminMobileNav from './admin-mobile-nav'
 import { ShieldCheckIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getAdminBadges } from '@/lib/data/admin'
@@ -25,7 +26,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         showNav={false}
       />
       <div className={styles.wrap}>
-        <AdminSidebar counts={counts} />
+        <AdminMobileNav counts={counts} />
+        <div className={styles.desktopSidebar}>
+          <AdminSidebar counts={counts} />
+        </div>
         <div className={styles.content}>{children}</div>
         <CommandPalette />
       </div>

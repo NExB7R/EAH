@@ -1,0 +1,93 @@
+/* EAH — Admin Mobile Nav */
+
+.toggle {
+  display: none;
+  position: sticky;
+  top: 8px;
+  z-index: 40;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 0 12px 0;
+  padding: 0;
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.85), rgba(10, 7, 20, 0.95));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  color: var(--purple-light);
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(7, 2, 13, 0.75);
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  inset-inline-end: 0;
+  bottom: 0;
+  z-index: 201;
+  width: min(320px, 85vw);
+  padding: 16px 12px;
+  background: #07020d;
+  border-inline-start: 1px solid rgba(168, 85, 247, 0.25);
+  overflow-y: auto;
+}
+
+.drawer :global(aside) {
+  position: static;
+  max-height: none;
+  overflow: visible;
+}
+
+.drawer :global(nav) {
+  flex-direction: column;
+  overflow-x: visible;
+}
+
+.drawer :global(.section) {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.drawer :global(.sectionTitle) {
+  display: block;
+}
+
+.drawer :global(.list) {
+  flex-direction: column;
+}
+
+.drawer :global(.item) {
+  flex-shrink: initial;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+}
+
+.close {
+  position: sticky;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 12px;
+  padding: 0;
+  border-radius: 8px;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .toggle {
+    display: inline-flex;
+  }
+}
