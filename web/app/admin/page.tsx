@@ -14,7 +14,6 @@ import {
 } from '@/components/icons'
 import { getAdminStats, getAdminRecent, getAdminBadges } from '@/lib/data/admin'
 import ActivityFeed from '@/components/admin/activity-feed'
-import ErrorPulse from '@/components/admin/error-pulse'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -283,7 +282,6 @@ export default async function AdminDashboard() {
       </section>
 
       {/* ─── Critical Error Toast ─── */}
-      <ErrorPulse />
     </div>
   )
 }
