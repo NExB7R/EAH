@@ -25,7 +25,6 @@ type UserResult = {
   is_business: boolean
   business_slug: string | null
   business_name: string | null
-  member_since: string
 }
 
 type State =
