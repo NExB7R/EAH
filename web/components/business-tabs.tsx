@@ -13,14 +13,20 @@ import {
   StoreIcon,
   ImageIcon,
   MessageCircleIcon,
+  GiftIcon,
 } from './icons'
 import ReviewsList from './reviews-list'
 import CommentsList from './comments-list'
-import type { BusinessDetail, Review, ReviewStats } from '@/lib/data/business-detail'
+import type {
+  BusinessDetail,
+  BusinessOfferSimple,
+  Review,
+  ReviewStats,
+} from '@/lib/data/business-detail'
 import type { CommentNode } from '@/lib/data/comments'
 import styles from './business-tabs.module.css'
 
-type Tab = 'info' | 'menu' | 'reviews' | 'comments'
+type Tab = 'info' | 'offers' | 'menu' | 'reviews' | 'comments'
 
 type Props = {
   detail: BusinessDetail
@@ -33,6 +39,7 @@ type Props = {
   comments: CommentNode[]
   currentUserId: string | null
   followingRootIds?: string[]
+  offers?: BusinessOfferSimple[]
 }
 
 const DAY_LABEL: Record<string, string> = {
@@ -58,6 +65,7 @@ export default function BusinessTabs({
   comments,
   currentUserId,
   followingRootIds = [],
+  offers = [],
 }: Props) {
   const [tab, setTab] = useState<Tab>('info')
   const [lightbox, setLightbox] = useState<string | null>(null)
@@ -88,6 +96,16 @@ export default function BusinessTabs({
           <StoreIcon size={15} />
           <span>معلومات</span>
         </button>
+        <button
+          role="tab"
+          aria-selected={tab === 'offers'}
+          className={`${styles.tab} ${tab === 'offers' ? styles.active : ''}`}
+          onClick={() => setTab('offers')}
+        >
+          <span>العروض</span>
+          {offers.length > 0 && <span className={styles.tabCount}>{offers.length}</span>}
+        </button>
+
         <button
           role="tab"
           aria-selected={tab === 'menu'}

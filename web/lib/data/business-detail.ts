@@ -389,7 +389,11 @@ export async function getUserActivity(
 export type BusinessOfferSimple = {
   id: string
   title: string
+  description: string | null
+  price: number | null
   image_url: string | null
+  teaser_image_url: string | null
+  ends_at: string | null
 }
 
 export async function getBusinessOffers(
@@ -401,7 +405,7 @@ export async function getBusinessOffers(
 
   const { data, error } = await supabase
     .from('offers')
-    .select('id, title, image_url')
+    .select('id, title, description, price, image_url, teaser_image_url, ends_at')
     .eq('business_id', businessId)
     .eq('is_published', true)
     .or(`ends_at.is.null,ends_at.gt.${now}`)

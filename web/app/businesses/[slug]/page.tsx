@@ -248,6 +248,7 @@ export default async function BusinessPage({ params }: Props) {
             comments={comments}
             currentUserId={session?.userId ?? null}
             followingRootIds={followingRootIds}
+            offers={offers}
           />
         </div>
 
