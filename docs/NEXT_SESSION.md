@@ -33,37 +33,10 @@
 ## Next Priorities (in order)
 1. **Add first real business** (primary goal)
 2. Test offers + images + share + mobile drawer end-to-end
-3. **Dedicated session: DB-04/05** (security RPCs — needs migration + testing)
-4. SEC-01 rotate (when owner ready)
+3. SEC-01 rotate (when owner ready)
+4. SEC-02b: git history (pre-launch)
 5. Mobile QA polish
-
-## DB-04/05 — Session Blockers (not quick fixes)
-
-**DB-04:** RPCs called from user client must be converted OR revoked:
-- `check_*_badges` in `lib/data/badges.ts` → **needs ownership check inside RPC** (not simple service swap; would allow self-award if naively converted)
-- `get_multi_account_ips` in `lib/data/fraud.ts` → convert to service client (admin-only)
-- `find_by_phone` in `/api/find-by-phone` → convert to service client + rate limit
-- `is_phone_registered` in `auth/actions.ts` → convert to service client
-- `get_referral_*` in `lib/data/referrals.ts` → convert to service client OR verify RPC checks p_user_id = auth.uid()
-
-**DB-05:** `get_business_funnel/features/trial_status/user_points` — NO callers in code, but SQL check pending:
-- Run SQL to check triggers + RPC dependencies
-- If no triggers: REVOKE authenticated
-- If triggers: add ownership check + keep user access
-
-**Before starting DB-04/05 session:**
-1. Backup Supabase
-2. Run `pg_get_functiondef` on all RPCs
-3. Run trigger dependency SQL (I sent above)
-4. Plan migrations + rollback
-5. Test each step
-
-## B2 remaining (1)
-
-`admin-business.ts` keeps `select('*')` with documented exception:
-- 32+ columns used across form/hooks (including working_hours cast)
-- Adding explicit columns risks silent breakage on new fields
-- Documented in code + §6
+6. CONSISTENCY-01: SACRED → 4 types
 
 ## Forbidden
 - No Puck/designtools/Surface (failed experiments)
