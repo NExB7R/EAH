@@ -33,7 +33,7 @@ export async function approveBusiness(businessId: string): Promise<Result> {
     }
   }
 
-  const { error } = await ctx.supabase
+  const { data: updated, error } = await ctx.supabase
     .from('businesses')
     .update({
       is_published: true,
@@ -42,18 +42,31 @@ export async function approveBusiness(businessId: string): Promise<Result> {
       rejected_by: null,
     })
     .eq('id', businessId)
+    .select('id')
+    .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
+  if (!updated) return { ok: false, error: 'تعذر نشر النشاط — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
 
-  // إشعار لصاحب النشاط
+  // إشعار المالك لا يجب أن يحوّل عملية نشر ناجحة إلى فشل ظاهر.
   if (biz.owner_profile_id) {
-    await createNotification({
-      userId: biz.owner_profile_id,
-      type: 'admin',
-      title: 'تم قبول نشاطك ✓',
-      body: `نشاط "${biz.name}" اتنشر — هيظهر للزوار خلال دقائق`,
-      deepLink: `/businesses/${biz.slug}`,
-    })
+    try {
+      await createNotification({
+        userId: biz.owner_profile_id,
+        type: 'admin',
+        title: 'تم قبول نشاطك ✓',
+        body: `نشاط "${biz.name}" اتنشر — هيظهر للزوار خلال دقائق`,
+        deepLink: `/businesses/${biz.slug}`,
+      })
+    } catch {
+      await logAudit(ctx.supabase, {
+        actorUserId: ctx.userId,
+        action: 'business.approve.notification_failed',
+        entityType: 'business',
+        entityId: businessId,
+        metadata: { owner_profile_id: biz.owner_profile_id },
+      })
+    }
   }
 
   await logAudit(ctx.supabase, {
@@ -96,7 +109,7 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
 
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
-  const { error } = await ctx.supabase
+  const { data: updated, error } = await ctx.supabase
     .from('businesses')
     .update({
       is_published: false,
@@ -105,18 +118,31 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
       rejected_by: ctx.userId,
     })
     .eq('id', businessId)
+    .select('id')
+    .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
+  if (!updated) return { ok: false, error: 'تعذر حفظ قرار الرفض — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
 
-  // إشعار لصاحب النشاط
+  // إشعار المالك لا يجب أن يحوّل قرارًا محفوظًا إلى فشل ظاهر.
   if (biz.owner_profile_id) {
-    await createNotification({
-      userId: biz.owner_profile_id,
-      type: 'admin',
-      title: 'نشاطك محتاج تعديل',
-      body: `السبب: ${parsed.data.reason}`,
-      deepLink: `/merchant/business`,
-    })
+    try {
+      await createNotification({
+        userId: biz.owner_profile_id,
+        type: 'admin',
+        title: 'نشاطك محتاج تعديل',
+        body: `السبب: ${parsed.data.reason}`,
+        deepLink: `/merchant/business`,
+      })
+    } catch {
+      await logAudit(ctx.supabase, {
+        actorUserId: ctx.userId,
+        action: 'business.reject.notification_failed',
+        entityType: 'business',
+        entityId: businessId,
+        metadata: { owner_profile_id: biz.owner_profile_id },
+      })
+    }
   }
 
   await logAudit(ctx.supabase, {
