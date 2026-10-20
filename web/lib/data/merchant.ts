@@ -13,6 +13,7 @@ export type MerchantBusiness = {
   description: string | null
   hook: string | null
   address_text: string | null
+  location: { lat: number; lng: number } | null
   logo_url: string | null
   cover_image_url: string | null
   is_published: boolean
@@ -65,7 +66,7 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
   const { data, error } = await supabase
     .from('businesses')
     .select(
-      'id, slug, name, business_type, area, description, hook, address_text, cover_image_url, is_published, is_open, accepts_whatsapp_orders, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at',
+      'id, slug, name, business_type, area, description, hook, address_text, cover_image_url, is_published, is_open, accepts_whatsapp_orders, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at, business_locations(latitude, longitude, is_primary)',
     )
     .eq('owner_profile_id', userId)
     .limit(1)
@@ -83,8 +84,26 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
     .limit(1)
     .maybeSingle()
 
+  const rawLocations = (data as typeof data & {
+    business_locations?: { latitude: number | null; longitude: number | null; is_primary: boolean }[] | null
+  }).business_locations ?? []
+  const primaryLocation = rawLocations.find((item) => item.is_primary) ?? rawLocations[0]
+  const location =
+    primaryLocation &&
+    typeof primaryLocation.latitude === 'number' &&
+    typeof primaryLocation.longitude === 'number' &&
+    Number.isFinite(primaryLocation.latitude) &&
+    Number.isFinite(primaryLocation.longitude)
+      ? { lat: primaryLocation.latitude, lng: primaryLocation.longitude }
+      : null
+
+  const { business_locations: _locations, ...business } = data as typeof data & {
+    business_locations?: unknown
+  }
+
   return {
-    ...(data as Omit<MerchantBusiness, 'logo_url'>),
+    ...(business as Omit<MerchantBusiness, 'logo_url' | 'location'>),
+    location,
     logo_url: logo?.storage_path ?? null,
   }
 }
