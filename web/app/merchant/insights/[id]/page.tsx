@@ -76,7 +76,13 @@ type InsightRow = {
 
 async function getInsight(id: string): Promise<InsightRow | null> {
   const supabase = await createClient()
-  const { data } = await supabase.from('business_insights').select('*').eq('id', id).maybeSingle()
+  const { data } = await supabase
+    .from('business_insights')
+    .select(
+      'id, business_id, period_start, period_end, data, score, summary, ai_narrative, top_points, comparison, created_at',
+    )
+    .eq('id', id)
+    .maybeSingle()
 
   return (data as InsightRow) ?? null
 }

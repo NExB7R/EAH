@@ -21,7 +21,10 @@ export async function getBadgeCatalogWithStatus(userId: string): Promise<BadgeCa
   const supabase = await createServiceClient()
 
   const [{ data: catalog }, { data: earned }] = await Promise.all([
-    supabase.from('badge_catalog').select('*').order('display_order', { ascending: true }),
+    supabase
+      .from('badge_catalog')
+      .select('key, label, description, icon, category, display_order')
+      .order('display_order', { ascending: true }),
     supabase
       .from('trust_badges')
       .select('badge_key, earned_at')
