@@ -88,6 +88,7 @@ const SECTIONS: Section[] = [
   {
     title: 'النظام',
     items: [
+      { href: '/admin/profile', label: 'بروفايلي', Icon: UserIcon },
       { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
