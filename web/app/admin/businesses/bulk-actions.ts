@@ -108,12 +108,17 @@ export async function bulkRejectBusinesses(ids: string[], reason: string): Promi
     return { ok: false, error: parsed.error.issues[0]?.message ?? 'بيانات غير صحيحة' }
   }
 
-  const { data: businesses } = await ctx.supabase
+  const { data: businesses, error: lookupError } = await ctx.supabase
     .from('businesses')
     .select('id, name, owner_profile_id')
     .in('id', parsed.data.ids)
 
-  const { error } = await ctx.supabase
+  if (lookupError) return { ok: false, error: 'تعذر تحميل الأنشطة المحددة — حاول تاني' }
+  if (!businesses || businesses.length !== parsed.data.ids.length) {
+    return { ok: false, error: 'بعض الأنشطة المحددة غير موجود أو غير متاح للمراجعة' }
+  }
+
+  const { data: updated, error } = await ctx.supabase
     .from('businesses')
     .update({
       is_published: false,
@@ -122,17 +127,30 @@ export async function bulkRejectBusinesses(ids: string[], reason: string): Promi
       rejected_by: ctx.userId,
     })
     .in('id', parsed.data.ids)
+    .select('id')
 
   if (error) return { ok: false, error: error.message }
+  if (!updated || updated.length !== businesses.length) {
+    return { ok: false, error: 'لم يتم رفض كل الأنشطة المحددة. حدّث القائمة وتحقق من الحالة قبل المحاولة مجددًا' }
+  }
 
-  for (const biz of businesses ?? []) {
-    if (biz.owner_profile_id) {
+  for (const biz of businesses) {
+    if (!biz.owner_profile_id) continue
+    try {
       await createNotification({
         userId: biz.owner_profile_id,
         type: 'admin',
         title: 'نشاطك محتاج تعديل',
         body: `السبب: ${parsed.data.reason}`,
         deepLink: '/merchant/business',
+      })
+    } catch {
+      await logAudit(ctx.supabase, {
+        actorUserId: ctx.userId,
+        action: 'business.bulk_reject.notification_failed',
+        entityType: 'business',
+        entityId: biz.id,
+        metadata: { owner_profile_id: biz.owner_profile_id },
       })
     }
   }
@@ -146,7 +164,8 @@ export async function bulkRejectBusinesses(ids: string[], reason: string): Promi
 
   revalidatePath('/admin/businesses')
   revalidateTag('admin-badges', 'default')
-  return { ok: true, affected: businesses?.length ?? 0 }
+  revalidateTag('businesses', 'default')
+  return { ok: true, affected: updated?.length ?? 0 }
 }
 
 // ─── أرشفة جماعية ───
