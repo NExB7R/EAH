@@ -127,3 +127,55 @@
     transition: none;
   }
 }
+
+
+/* Clear account groups reduce scanning time, especially on long mobile pages. */
+.nav {
+  gap: 16px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sectionTitle {
+  margin: 0;
+  padding: 4px 12px;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .nav {
+    gap: 5px;
+  }
+
+  .section {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .sectionTitle {
+    display: none;
+  }
+
+  .list {
+    flex-direction: row;
+    gap: 3px;
+  }
+}
