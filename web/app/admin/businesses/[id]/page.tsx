@@ -28,105 +28,109 @@ export default async function AdminBusinessDetailPage({ params }: Props) {
   const status = biz.is_published ? 'published' : biz.rejected_at ? 'rejected' : 'pending'
 
   return (
-    <div>
+    <div className={styles.detailPage}>
       <AccountPageHeader
         title={biz.name}
         description={`${TYPE_LABEL[biz.business_type] ?? biz.business_type} · ${biz.area ?? 'بدون منطقة'}`}
       />
 
-      <BusinessActionsBar
-        businessId={biz.id}
-        businessName={biz.name}
-        businessSlug={biz.slug}
-        isPublished={biz.is_published}
-        isRejected={!!biz.rejected_at}
-      />
+      <div className={styles.detailActions}>
+        <BusinessActionsBar
+          businessId={biz.id}
+          businessName={biz.name}
+          businessSlug={biz.slug}
+          isPublished={biz.is_published}
+          isRejected={!!biz.rejected_at}
+        />
+      </div>
 
       <div className={styles.detailGrid}>
-        <div className={`${styles.card} ${styles.detailCard}`}>
-          <div className={styles.imageWrap}>
-            {biz.cover_image_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={biz.cover_image_url} alt={biz.name} className={styles.image} />
-            ) : (
-              <div className={styles.imageFallback}>
-                <StoreIcon size={32} />
-              </div>
-            )}
-          </div>
-          <div className={styles.body}>
-            <span className={`${styles.status} ${styles[`status_${status}`]}`}>
-              {status === 'pending' && 'بانتظار'}
-              {status === 'published' && 'منشور'}
-              {status === 'rejected' && 'مرفوض'}
-            </span>
-
-            {biz.owner && (
-              <div className={styles.owner}>
-                <span>👤 {biz.owner.display_name}</span>
-                {biz.owner.phone && <span className={styles.phone}>· {biz.owner.phone}</span>}
-              </div>
-            )}
-
-            <div className={styles.meta}>
-              <span>Trust: {biz.trust_score}</span>
-              <span className={styles.dot}>·</span>
-              <span>
-                ⭐ {biz.rating_avg.toFixed(1)} ({biz.rating_count})
+        <div className={styles.detailMain}>
+          <div className={`${styles.card} ${styles.detailCard}`}>
+            <div className={styles.imageWrap}>
+              {biz.cover_image_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={biz.cover_image_url} alt={biz.name} className={styles.image} />
+              ) : (
+                <div className={styles.imageFallback}>
+                  <StoreIcon size={32} />
+                </div>
+              )}
+            </div>
+            <div className={styles.body}>
+              <span className={`${styles.status} ${styles[`status_${status}`]}`}>
+                {status === 'pending' && 'بانتظار'}
+                {status === 'published' && 'منشور'}
+                {status === 'rejected' && 'مرفوض'}
               </span>
-              <span className={styles.dot}>·</span>
-              <span>{biz.successful_orders} طلب</span>
-            </div>
 
-            {biz.rejected_at && biz.rejection_reason && (
-              <div className={styles.rejectionBox}>
-                <AlertIcon size={14} />
-                <span>سبب الرفض: {biz.rejection_reason}</span>
+              {biz.owner && (
+                <div className={styles.owner}>
+                  <span>👤 {biz.owner.display_name}</span>
+                  {biz.owner.phone && <span className={styles.phone}>· {biz.owner.phone}</span>}
+                </div>
+              )}
+
+              <div className={styles.meta}>
+                <span>Trust: {biz.trust_score}</span>
+                <span className={styles.dot}>·</span>
+                <span>
+                  ⭐ {biz.rating_avg.toFixed(1)} ({biz.rating_count})
+                </span>
+                <span className={styles.dot}>·</span>
+                <span>{biz.successful_orders} طلب</span>
               </div>
-            )}
 
-            <div className={styles.metaSection}>
-              <strong>جهات الاتصال:</strong>
-              {biz.contacts.length === 0 ? (
-                <span className={styles.muted}>لا يوجد</span>
-              ) : (
-                <ul className={styles.simpleList}>
-                  {biz.contacts.map((c, i) => (
-                    <li key={i}>
-                      {c.method_type}: {c.value}
-                      {c.is_primary && ' (أساسي)'}
-                    </li>
-                  ))}
-                </ul>
+              {biz.rejected_at && biz.rejection_reason && (
+                <div className={styles.rejectionBox}>
+                  <AlertIcon size={14} />
+                  <span>سبب الرفض: {biz.rejection_reason}</span>
+                </div>
               )}
-            </div>
 
-            <div className={styles.metaSection}>
-              <strong>الفروع:</strong>
-              {biz.branches.length === 0 ? (
-                <span className={styles.muted}>لا يوجد</span>
-              ) : (
-                <ul className={styles.simpleList}>
-                  {biz.branches.map((br) => (
-                    <li key={br.id}>
-                      {br.name} — {br.area ?? 'بدون منطقة'}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+              <div className={styles.metaSection}>
+                <strong>جهات الاتصال:</strong>
+                {biz.contacts.length === 0 ? (
+                  <span className={styles.muted}>لا يوجد</span>
+                ) : (
+                  <ul className={styles.simpleList}>
+                    {biz.contacts.map((c, i) => (
+                      <li key={i}>
+                        {c.method_type}: {c.value}
+                        {c.is_primary && ' (أساسي)'}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
 
-            <div className={styles.metaSection}>
-              <strong>الصور:</strong> {biz.media.length}
-            </div>
+              <div className={styles.metaSection}>
+                <strong>الفروع:</strong>
+                {biz.branches.length === 0 ? (
+                  <span className={styles.muted}>لا يوجد</span>
+                ) : (
+                  <ul className={styles.simpleList}>
+                    {biz.branches.map((br) => (
+                      <li key={br.id}>
+                        {br.name} — {br.area ?? 'بدون منطقة'}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
 
-            <div className={styles.actions}>
-              <DeleteBusinessButton id={biz.id} name={biz.name} />
+              <div className={styles.metaSection}>
+                <strong>الصور:</strong> {biz.media.length}
+              </div>
+
+              <div className={styles.actions}>
+                <DeleteBusinessButton id={biz.id} name={biz.name} />
+              </div>
             </div>
           </div>
         </div>
 
-        <div className={styles.formWrap}>
+        <aside className={styles.formWrap}>
           <TrialOwnerPanel
             businessId={biz.id}
             businessName={biz.name}
@@ -138,7 +142,7 @@ export default async function AdminBusinessDetailPage({ params }: Props) {
           />
           <h2 className={styles.formTitle}>تعديل البيانات</h2>
           <BusinessForm mode="edit" business={biz} />
-        </div>
+        </aside>
       </div>
     </div>
   )
