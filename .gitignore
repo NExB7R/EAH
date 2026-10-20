@@ -9,3 +9,4 @@ v2
 *.swp
 *~
 .vercel
+web/next-env.d.ts
