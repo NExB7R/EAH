@@ -97,12 +97,11 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
       ? { lat: primaryLocation.latitude, lng: primaryLocation.longitude }
       : null
 
-  const { business_locations: _locations, ...business } = data as typeof data & {
-    business_locations?: unknown
-  }
+  const business = { ...(data as unknown as Record<string, unknown>) }
+  delete business.business_locations
 
   return {
-    ...(business as Omit<MerchantBusiness, 'logo_url' | 'location'>),
+    ...(business as unknown as Omit<MerchantBusiness, 'logo_url' | 'location'>),
     location,
     logo_url: logo?.storage_path ?? null,
   }
