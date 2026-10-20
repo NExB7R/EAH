@@ -408,6 +408,7 @@ export async function getBusinessOffers(
     .select('id, title, description, price, image_url, teaser_image_url, ends_at')
     .eq('business_id', businessId)
     .eq('is_published', true)
+    .or(`starts_at.is.null,starts_at.lte.${now}`)
     .or(`ends_at.is.null,ends_at.gt.${now}`)
     .order('created_at', { ascending: false })
     .limit(limit)
