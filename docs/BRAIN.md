@@ -258,7 +258,7 @@ git push origin main
 
 ## 11. أول 5 خطوات لأي شات جديد
 
-1. اقرأ BRAIN.md (ده) — 5 دقائق
+1. اقرأ AI_PLAYBOOK.md + BRAIN.md + ERROR_REGISTER.md — 15 دقيقة
 2. اقرأ docs/CONTEXT_MAP.md
 3. اسأل المالك: إيه آخر commit؟ + إيه المهمة؟
 4. شغّل git log --oneline -10

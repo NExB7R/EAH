@@ -1,0 +1,115 @@
+# EAH — ERROR_REGISTER.md
+
+> سجل الأخطاء الحي. آخر فحص: 2026-10-20 (يُحدّث يدوياً بعد التحقق الفعلي).
+> **اقرأه بعد `AI_PLAYBOOK.md`.** أي خطأ جديد = ID جديد فوراً.
+
+**الحالة:** ✅ متصلّح ومتحقق منه · 🟡 جزئي · 🔴 مفتوح · ⏳ ينتظر قرار المالك
+
+---
+
+## 1. قاعدة البيانات
+
+| ID | الحالة | المشكلة | الإصلاح | التحقق |
+|---|---|---|---|---|
+| DB-01 | 🟡 | GRANTs مفقودة (Supabase 2026). متصلّح: order_requests, business_comments, comment_likes, comment_thread_follows. **ناقص:** business_follows, business_subscriptions, business_activities, customer_locations, coupons, promo_posts | migrations/2026-10-20-restore-table-grants.sql (لم يُكتب) | استعلام role_table_grants |
+| DB-02 | ✅ | award_points/award_trust_points/award_trust_badge/apply_trust_decay كانت مفتوحة | 3c8fc16 (REVOKE + GRANT service_role) | has_function_privilege = false |
+| DB-03 | 🔴 | check_rate_limit, track_ad_event, count_accounts_from_ip مفتوحة للزوار؛ generate_* للمسجلين | revoke internal functions | has_function_privilege |
+| DB-04 | 🔴 | دوال بتتنادى من الكود بجلسة المستخدم: find_by_phone, is_phone_registered, get_multi_account_ips, check_*_badges, get_referral_list/stats | حوّل callers لـ service client ثم revoke | grep .rpc |
+| DB-05 | 🔴 | بلا فحص ملكية: get_business_funnel/features, get_trial_status, get_user_points | شرط auth.uid() أو is_business_owner أو is_admin | اقرا تعريف الدالة |
+| DB-06 | ⏳ | business_branches.phone/whatsapp قابلة للقراءة من anon | قرار: عامة أو إخفاء | استعلام pg_policies |
+| DB-07 | 🟡 | business_contact_methods: owner_select تسمح لأي مسجل بالقراءة | قصّرها على المالك + reveal_contact | pg_policies |
+| DB-08 | ✅ | contact_reveals + audit_logs self insert | 3c8fc16 (حُذفت) | pg_policies |
+| DB-09 | ✅ | دالتان بدون search_path | تصلّحت | pg_proc.proconfig |
+| DB-10 | 🔴 | business-media storage policy مكسورة (foldername) | policy جديدة بـ objects.name | رفع صورة كتاجر |
+| DB-11 | 🔴 | order-voice: رفع لأي مسار، تاجر ما بيسمعش | قيّد المسار + قراءة للمالك | اختبار الدورين |
+| DB-12 | 🔴 | bucket order-images غير موجود | أنشئه أو شيل المسار | storage.buckets |
+| DB-13 | 🔴 | أداء: 12 policy بدون (select auth.uid())، 10 FK بدون index | تقرير الأداء | get_advisors |
+| DB-14 | 🔴 | migrations: 43 مسجّلة، DB اتغيرت بعدها | supabase db pull | supabase migration list |
+| DB-15 | 🔴 | apply_trust_decay بدون حارس أسبوعي | last_decay_at | اختبار SQL |
+| DB-16 | 🔴 | admin_adjust_points تقرا trust_score كرصيد؛ check_and_award_badges مفاتيح عربية | مراجعة وتوحيد | اقرا الدالة |
+| DB-17 | ⏳ | set_business_commission ضد مبدأ صفر عمولة | احذف أو وثّق | قرار |
+| DB-18 | 🟡 | تفريق بين super_admin وadmin في policies + is_admin() | وحّد | اختبار بحساب admin |
+| DB-19 | ⏳ | Leaked Password Protection مقفول | Pro | Dashboard |
+
+## 2. الدخول والحسابات
+
+| ID | الحالة | المشكلة | الإصلاح |
+|---|---|---|---|
+| AU-01 | 🔴 | Turnstile في Server Action فقط. /auth/v1/signup مفتوح بالـ anon key | فعّل CAPTCHA في Supabase Auth |
+| AU-02 | 🔴 | phone_e164/signup_ip_hash من user_metadata | احسبها في السيرفر/trigger |
+| AU-03 | ✅ | @auth.eah.app → @auth.eah.invalid | 2a0b135 |
+| AU-04 | 🔴 | حد IP فقط، 3 محاولات، بلا CAPTCHA، recoverAction وهمي | OTP + حد لكل رقم |
+| AU-05 | 🔴 | limiters fail-open (AI chat كمان) | fail-closed + تنبيه |
+| AU-06 | 🔴 | 11 مفتاح مكشوف + Turnstile Secret + Desktop/X.txt | rotate + Bitwarden + gitleaks |
+
+## 3. الـ API والـ Server Actions
+
+| ID | الحالة | المشكلة | الإصلاح |
+|---|---|---|---|
+| AP-01 | ✅ | 4 cron routes تفتح لو CRON_SECRET ناقص | 2a0b135 (verifyCron fail-closed) |
+| AP-02 | ✅ | /api/track-action: IP خام + rate limit مفقود | 2a0b135 (hashIp + rate limit) |
+| AP-03 | ✅ | /api/log-error و csp-report بلا حد | 2a0b135 (rate limit) |
+| AP-04 | 🟡 | /api/find-by-phone: apiLimiter + يرجّع user_id | strictLimiter + Turnstile + شيل user_id |
+| AP-05 | 🔴 | requestSubscription: إشعار الأدمن ما بيوصلش | service client لجلب الأدمن |
+| AP-06 | 🔴 | .maybeSingle() على owner_profile_id في 12 موضع | .order + .limit(1) |
+| AP-07 | ✅ | حالة الطلب بدون state machine | 2a0b135 (VALID_TRANSITIONS) |
+| AP-08 | 🟡 | rate limit مفقود في 6 مسارات كتابة | إضافة |
+| AP-09 | 🔴 | getBusinessDetail يقرا phone/whatsapp بـ anon | DB-06 قرار ثم عدّل |
+| AP-10 | 🟡 | proxy.ts auth.getUser() على كل request | قصّره للمحمية |
+| AP-11 | 🟡 | logAudit بيبلع الأخطاء | سجّل في system_errors |
+| AP-12 | 🟡 | تذكير التقييم بعد ساعتين (فعلياً 3 مرات) | اضبط الوعد |
+
+## 4. الـ CI والاختبارات
+
+| ID | الحالة | المشكلة | الإصلاح |
+|---|---|---|---|
+| CI-01 | 🔴 | e2e.yml على v2 فقط | انقله main + Preview + DB اختبار |
+| CI-02 | 🔴 | business-order.spec يعدّي فاضي | seed + تدفق كامل |
+| CI-03 | 🔴 | rls-tests تتخطى بصمت | فاشلة عند الغياب + DB اختبار |
+| CI-04 | 🔴 | 6 اختبارات فقط | اختبار لكل action |
+| CI-05 | 🟡 | .gitignore يستثني .env.local فقط | .env* + !.env.example |
+| CI-06 | 🟡 | package.json بدون engines | إضافة |
+| CI-07 | 🔴 | مفيش verify-invariants في CI | كتابة السكربت أولاً |
+| CI-08 | ⏳ | Vercel Hobby + Supabase Free | Pro قبل الإطلاق |
+
+## 5. المبادئ والوثائق (قرارات مطلوبة)
+
+| ID | التناقض | القرار |
+|---|---|---|
+| DOC-01 | Verified != مدفوع مقابل توثيق بـ100 ج/سنة | ⏳ |
+| DOC-02 | الموبايل ما يظهرش مقابل DB-06/07 | ⏳ |
+| DOC-03 | بدون تتبع مقابل page_view_events | ⏳ |
+| DOC-04 | صفر عمولة مقابل set_business_commission | ⏳ |
+| DOC-05 | ARCHITECTURE cron ساعة؛ فعلياً 3 مرات/يوم | ✅ مُصلح (B-7) |
+| DOC-06 | SECURITY.md قديم | 🟡 |
+| DOC-07 | 4 ترتيبات قراءة | ✅ (AI_PLAYBOOK + BRAIN) |
+| DOC-08 | Turnstile Test vs Production | ⏳ |
+| DOC-09 | 9 روابط مكسورة | 🔴 |
+
+## 6. ديون فنية (invariants-baseline)
+
+| الفحص | العدد الحالي | المطلوب |
+|---|---|---|
+| B1 owner_profile_id + maybeSingle | 12 | AP-06 |
+| B2 select('*') | 62 | تحديد أعمدة |
+| B3 <img> خام | 9 | WmImage |
+| B4 animation: infinite | 16 | SACRED يمنعها |
+| B5 ألوان محظورة | 47 | متغيرات الهوية |
+| B6 backdrop-filter | 37 | SACRED يمنعها على كروت |
+| B7 الدومين يدوي | 8 | NEXT_PUBLIC_SITE_URL |
+| B8 eslint-disable | 20 | سبب أو إزالة |
+| B9 إيموجي | 146 | SVG |
+
+## 7. ما تم إنجازه مؤخراً (للتوثيق)
+
+**جلسة 2026-10-17/19/20 (Admin Overhaul + Security):**
+- 22 commit: Admin panel (Quick/Bulk/Drag/CSV/⌘K) + Real-time + User Detail + Merchant Panel
+- Security: cron guard + state machine + rate limits + GRANTs (order_requests et al) + revoke RPCs
+- Wizard: 4-step new business (basics/location/options/review)
+- Custom business types + pending approval (`/admin/business-types`)
+- Contacts repeater (multiple phone numbers with labels)
+- BRAIN.md + AI_PLAYBOOK + ERROR_REGISTER
+
+## 8. ما هو سليم (حافظ عليه)
+
+صفر console.log/any/@ts-ignore في الكود الجديد · كل Server Actions بها requireAdmin + Zod · لا أسرار في الكود · CSP بـ nonce · JSON-LD مأمّن · أدوات AI للقراءة فقط · 76 جدول بـ RLS · أعمدة profiles محمية · bucket size/type limits · Dependabot أسبوعي
