@@ -121,10 +121,17 @@ export default async function MerchantDashboard() {
             </div>
           </div>
 
-          <Link href={`/businesses/${business.slug}`} className={styles.viewBtn}>
-            <span>شوف صفحتي</span>
-            <ArrowLeftIcon size={14} />
-          </Link>
+          {business.is_published ? (
+            <Link href={`/businesses/${business.slug}`} className={styles.viewBtn}>
+              <span>شوف صفحتي</span>
+              <ArrowLeftIcon size={14} />
+            </Link>
+          ) : (
+            <span className={styles.viewBtn} aria-label="الصفحة العامة غير متاحة حتى النشر">
+              <AlertIcon size={14} />
+              <span>قيد المراجعة</span>
+            </span>
+          )}
         </div>
       </section>
 
