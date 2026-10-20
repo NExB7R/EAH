@@ -13,7 +13,6 @@ import {
   StoreIcon,
   ImageIcon,
   MessageCircleIcon,
-  GiftIcon,
 } from './icons'
 import ReviewsList from './reviews-list'
 import CommentsList from './comments-list'
