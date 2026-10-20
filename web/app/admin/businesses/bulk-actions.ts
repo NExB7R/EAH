@@ -42,7 +42,7 @@ export async function bulkApproveBusinesses(ids: string[]): Promise<Result> {
     }
   }
 
-  const { error } = await ctx.supabase
+  const { data: updated, error } = await ctx.supabase
     .from('businesses')
     .update({
       is_published: true,
@@ -51,18 +51,31 @@ export async function bulkApproveBusinesses(ids: string[]): Promise<Result> {
       rejected_by: null,
     })
     .in('id', parsed.data)
+    .select('id')
 
   if (error) return { ok: false, error: error.message }
+  if (!updated || updated.length !== selectedBusinesses.length) {
+    return { ok: false, error: 'لم يتم تحديث كل الأنشطة المحددة. حدّث القائمة وتحقق من حالتها قبل المحاولة مجددًا' }
+  }
 
-  // إشعارات أصحاب الأنشطة
-  for (const biz of businesses ?? []) {
-    if (biz.owner_profile_id) {
+  // A failed notification must not make a completed bulk publish look like a failure.
+  for (const biz of selectedBusinesses) {
+    if (!biz.owner_profile_id) continue
+    try {
       await createNotification({
         userId: biz.owner_profile_id,
         type: 'admin',
         title: 'تم قبول نشاطك ✓',
         body: `نشاط "${biz.name}" اتنشر`,
         deepLink: `/businesses/${biz.slug}`,
+      })
+    } catch {
+      await logAudit(ctx.supabase, {
+        actorUserId: ctx.userId,
+        action: 'business.bulk_approve.notification_failed',
+        entityType: 'business',
+        entityId: biz.id,
+        metadata: { owner_profile_id: biz.owner_profile_id },
       })
     }
   }
@@ -77,7 +90,7 @@ export async function bulkApproveBusinesses(ids: string[]): Promise<Result> {
   revalidatePath('/admin/businesses')
   revalidateTag('admin-badges', 'default')
   revalidateTag('businesses', 'default')
-  return { ok: true, affected: businesses?.length ?? 0 }
+  return { ok: true, affected: updated?.length ?? 0 }
 }
 
 // ─── رفض جماعي ───
@@ -144,12 +157,16 @@ export async function bulkArchiveBusinesses(ids: string[]): Promise<Result> {
   const parsed = idsSchema.safeParse(ids)
   if (!parsed.success) return { ok: false, error: 'قائمة غير صالحة' }
 
-  const { error } = await ctx.supabase
+  const { data: archived, error } = await ctx.supabase
     .from('businesses')
     .update({ is_published: false })
     .in('id', parsed.data)
+    .select('id')
 
   if (error) return { ok: false, error: error.message }
+  if (!archived || archived.length !== parsed.data.length) {
+    return { ok: false, error: 'لم يتم إخفاء كل الأنشطة المحددة. حدّث القائمة وحاول تاني' }
+  }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
@@ -161,5 +178,5 @@ export async function bulkArchiveBusinesses(ids: string[]): Promise<Result> {
   revalidatePath('/admin/businesses')
   revalidateTag('admin-badges', 'default')
   revalidateTag('businesses', 'default')
-  return { ok: true, affected: parsed.data.length }
+  return { ok: true, affected: archived?.length ?? 0 }
 }
