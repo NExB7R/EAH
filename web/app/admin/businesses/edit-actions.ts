@@ -4,6 +4,7 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
+import { createServiceClient } from '@/lib/supabase/service'
 import {
   basicsSchema,
   contactsSchema,
@@ -84,6 +85,22 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
   })
   if (!parsed.success) return parseError(parsed)
 
+  const { data: business } = await ctx.supabase
+    .from('businesses')
+    .select('id, slug')
+    .eq('id', businessId)
+    .maybeSingle()
+  if (!business) return { ok: false, error: 'النشاط مش موجود' }
+
+  let privileged
+  try {
+    // This server action requires an authenticated admin. The contacts table
+    // allows owner/admin reads but has no authenticated write policy.
+    privileged = createServiceClient()
+  } catch {
+    return { ok: false, error: 'حفظ جهات الاتصال غير متاح مؤقتًا' }
+  }
+
   const extendedTypes = ['complaints', 'manager', 'shift_morning', 'shift_evening'] as const
   const extendedValues: Record<string, string> = {}
   for (const type of extendedTypes) {
@@ -94,7 +111,7 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
     extendedValues[type] = value
   }
 
-  const MANAGED_TYPES = [
+  const managedTypes = [
     'phone',
     'whatsapp',
     'complaints',
@@ -106,66 +123,38 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
     'shift_evening',
   ]
 
-  // Delete only managed types (preserve 'additional' and any future types)
-  const { error: delError } = await ctx.supabase
+  // Keep "additional" and future contact types untouched.
+  const { error: deleteError } = await privileged
     .from('business_contact_methods')
     .delete()
     .eq('business_id', businessId)
-    .in('method_type', MANAGED_TYPES)
-  if (delError) return { ok: false, error: delError.message }
+    .in('method_type', managedTypes)
+  if (deleteError) return { ok: false, error: 'تعذر حذف جهات الاتصال القديمة' }
 
-  const rows: { business_id: string; method_type: string; value: string; is_primary: boolean }[] =
-    []
+  const rows: { business_id: string; method_type: string; value: string; is_primary: boolean; is_public: boolean }[] = []
   if (parsed.data.phone) {
-    rows.push({
-      business_id: businessId,
-      method_type: 'phone',
-      value: parsed.data.phone,
-      is_primary: true,
-    })
+    rows.push({ business_id: businessId, method_type: 'phone', value: parsed.data.phone, is_primary: true, is_public: true })
   }
   if (parsed.data.whatsapp) {
-    rows.push({
-      business_id: businessId,
-      method_type: 'whatsapp',
-      value: parsed.data.whatsapp,
-      is_primary: false,
-    })
+    rows.push({ business_id: businessId, method_type: 'whatsapp', value: parsed.data.whatsapp, is_primary: false, is_public: true })
   }
   if (parsed.data.facebook) {
-    rows.push({
-      business_id: businessId,
-      method_type: 'facebook',
-      value: parsed.data.facebook,
-      is_primary: false,
-    })
+    rows.push({ business_id: businessId, method_type: 'facebook', value: parsed.data.facebook, is_primary: false, is_public: true })
   }
   if (parsed.data.instagram) {
-    rows.push({
-      business_id: businessId,
-      method_type: 'instagram',
-      value: parsed.data.instagram,
-      is_primary: false,
-    })
+    rows.push({ business_id: businessId, method_type: 'instagram', value: parsed.data.instagram, is_primary: false, is_public: true })
   }
   if (parsed.data.website) {
-    rows.push({
-      business_id: businessId,
-      method_type: 'website',
-      value: parsed.data.website,
-      is_primary: false,
-    })
+    rows.push({ business_id: businessId, method_type: 'website', value: parsed.data.website, is_primary: false, is_public: true })
   }
   for (const type of extendedTypes) {
     const value = extendedValues[type]
-    if (value) {
-      rows.push({ business_id: businessId, method_type: type, value, is_primary: false })
-    }
+    if (value) rows.push({ business_id: businessId, method_type: type, value, is_primary: false, is_public: true })
   }
 
   if (rows.length > 0) {
-    const { error } = await ctx.supabase.from('business_contact_methods').insert(rows)
-    if (error) return { ok: false, error: error.message }
+    const { error } = await privileged.from('business_contact_methods').insert(rows)
+    if (error) return { ok: false, error: 'تعذر حفظ جهات الاتصال. البيانات القديمة تم حذفها؛ راجع الأرقام وحاول تاني' }
   }
 
   await logAudit(ctx.supabase, {
@@ -174,7 +163,9 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
     entityType: 'business',
     entityId: businessId,
   })
-  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath(\`/admin/businesses/\${businessId}\`)
+  revalidatePath(\`/businesses/\${business.slug}\`)
+  revalidateTag('businesses', 'default')
   return { ok: true }
 }
 
@@ -198,33 +189,76 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
   const hasLng = parsed.data.longitude !== null && parsed.data.longitude !== undefined
   if (hasLat !== hasLng) return { ok: false, error: 'لازم الإحداثيين مع بعض أو الاتنين فاضيين' }
 
-  // حذف الموقع الأساسي القديم
-  await ctx.supabase
-    .from('business_locations')
-    .delete()
-    .eq('business_id', businessId)
-    .eq('is_primary', true)
+  const { data: business } = await ctx.supabase
+    .from('businesses')
+    .select('id, slug')
+    .eq('id', businessId)
+    .maybeSingle()
+  if (!business) return { ok: false, error: 'النشاط مش موجود' }
 
-  // إضافة موقع جديد
-  if (hasLat && hasLng) {
-    const { error } = await ctx.supabase.from('business_locations').insert({
-      business_id: businessId,
-      latitude: parsed.data.latitude,
-      longitude: parsed.data.longitude,
-      address_text: parsed.data.address_text ?? null,
-      is_primary: true,
-    })
-    if (error) return { ok: false, error: error.message }
+  let privileged
+  try {
+    privileged = createServiceClient()
+  } catch {
+    return { ok: false, error: 'حفظ الموقع غير متاح مؤقتًا' }
   }
 
-  // تحديث address_text و map_url على business
-  await ctx.supabase
+  const { data: currentLocations, error: lookupError } = await privileged
+    .from('business_locations')
+    .select('id')
+    .eq('business_id', businessId)
+    .eq('is_primary', true)
+    .order('created_at', { ascending: true })
+    .limit(10)
+  if (lookupError) return { ok: false, error: 'تعذر قراءة الموقع الحالي' }
+
+  if (hasLat && hasLng) {
+    const existing = currentLocations?.[0]
+    if (existing) {
+      const { error } = await privileged
+        .from('business_locations')
+        .update({
+          latitude: parsed.data.latitude,
+          longitude: parsed.data.longitude,
+          address_text: parsed.data.address_text ?? null,
+          is_primary: true,
+        })
+        .eq('id', existing.id)
+        .eq('business_id', businessId)
+      if (error) return { ok: false, error: 'تعذر تحديث موقع النشاط' }
+    } else {
+      const { error } = await privileged.from('business_locations').insert({
+        business_id: businessId,
+        latitude: parsed.data.latitude,
+        longitude: parsed.data.longitude,
+        address_text: parsed.data.address_text ?? null,
+        is_primary: true,
+      })
+      if (error) return { ok: false, error: 'تعذر إضافة موقع النشاط' }
+    }
+
+    const duplicates = (currentLocations ?? []).slice(existing ? 1 : 0).map((item) => item.id)
+    if (duplicates.length > 0) {
+      const { error } = await privileged.from('business_locations').delete().in('id', duplicates)
+      if (error) return { ok: false, error: 'الموقع اتحفظ لكن تعذر تنظيف المواقع المكررة' }
+    }
+  } else if ((currentLocations ?? []).length > 0) {
+    const { error } = await privileged
+      .from('business_locations')
+      .delete()
+      .eq('business_id', businessId)
+      .eq('is_primary', true)
+    if (error) return { ok: false, error: 'تعذر مسح الموقع القديم' }
+  }
+
+  const { error: addressError } = await ctx.supabase
     .from('businesses')
     .update({
       address_text: parsed.data.address_text ?? null,
       map_url: parsed.data.map_url ?? null,
     })
     .eq('id', businessId)
+  if (addressError) return { ok: false, error: 'الموقع اتحفظ لكن تعذر حفظ العنوان أو رابط الخريطة' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
@@ -232,7 +266,8 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
     entityType: 'business',
     entityId: businessId,
   })
-  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath(\`/admin/businesses/\${businessId}\`)
+  revalidatePath(\`/businesses/\${business.slug}\`)
   revalidateTag('businesses', 'default')
   return { ok: true }
 }
