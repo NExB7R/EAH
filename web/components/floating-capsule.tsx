@@ -96,7 +96,15 @@ export default function FloatingCapsule({ session }: Props) {
           <div className={styles.left}>
             {isLoggedIn ? (
               <>
-                <Link href="/notifications" className={styles.iconBtn} aria-label="الإشعارات">
+                <Link
+                  href={
+                    session.role === 'admin' || session.role === 'super_admin'
+                      ? '/admin/notifications'
+                      : '/notifications'
+                  }
+                  className={styles.iconBtn}
+                  aria-label="الإشعارات"
+                >
                   <BellIcon size={20} />
                   {session.notifCount > 0 && (
                     <span className={styles.badge}>
@@ -108,13 +116,13 @@ export default function FloatingCapsule({ session }: Props) {
                 <Link
                   href={
                     session.role === 'admin' || session.role === 'super_admin'
-                      ? '/admin'
+                      ? '/admin/profile'
                       : '/account'
                   }
                   className={styles.avatarLink}
                   aria-label={
                     session.role === 'admin' || session.role === 'super_admin'
-                      ? 'لوحة التحكم'
+                      ? 'بروفايلي'
                       : 'حسابي'
                   }
                 >
