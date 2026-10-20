@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
-import { StoreIcon, CheckCircleIcon, CloseIcon, ArrowLeftIcon, AlertIcon } from '@/components/icons'
+import { StoreIcon, CheckCircleIcon, CloseIcon, ArrowLeftIcon, AlertIcon, SparklesIcon } from '@/components/icons'
 import { approveBusiness, rejectBusiness, archiveBusiness, republishBusiness } from './actions'
 import type { PendingBusiness } from '@/lib/data/admin'
 import styles from './businesses.module.css'
@@ -113,6 +113,12 @@ export default function BusinessRow({
               {status === 'published' && 'منشور'}
               {status === 'rejected' && 'مرفوض'}
             </span>
+            {b.business_type_status === 'pending' && (
+              <span className={styles.status + ' ' + styles.status_pending}>نوع النشاط بحاجة موافقة</span>
+            )}
+            {b.business_type_status === 'rejected' && (
+              <span className={styles.status + ' ' + styles.status_rejected}>نوع النشاط مرفوض</span>
+            )}
             <span
               className={`${styles.sourceChip} ${b.source === 'admin' ? styles.sourceAdmin : ''}`}
             >
@@ -181,15 +187,22 @@ export default function BusinessRow({
           <div className={styles.actions}>
             {status === 'pending' && (
               <>
-                <button
-                  type="button"
-                  onClick={handleApprove}
-                  disabled={pending}
-                  className={styles.approveBtn}
-                >
-                  <CheckCircleIcon size={14} />
-                  <span>موافقة</span>
-                </button>
+                {b.business_type_status === 'pending' ? (
+                  <Link href="/admin/business-types" className={styles.viewBtn}>
+                    <SparklesIcon size={14} />
+                    <span>مراجعة نوع النشاط</span>
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleApprove}
+                    disabled={pending}
+                    className={styles.approveBtn}
+                  >
+                    <CheckCircleIcon size={14} />
+                    <span>موافقة</span>
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => setShowReject(true)}
@@ -215,15 +228,22 @@ export default function BusinessRow({
             )}
 
             {status === 'rejected' && (
-              <button
-                type="button"
-                onClick={handleRepublish}
-                disabled={pending}
-                className={styles.approveBtn}
-              >
-                <CheckCircleIcon size={14} />
-                <span>إعادة نشر</span>
-              </button>
+              b.business_type_status === 'rejected' ? (
+                <Link href={'/admin/businesses/' + b.id + '?tab=edit'} className={styles.viewBtn}>
+                  <SparklesIcon size={14} />
+                  <span>تصحيح نوع النشاط</span>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleRepublish}
+                  disabled={pending}
+                  className={styles.approveBtn}
+                >
+                  <CheckCircleIcon size={14} />
+                  <span>إعادة نشر</span>
+                </button>
+              )
             )}
 
             <Link href={`/admin/businesses/${b.id}`} className={styles.viewBtn}>
