@@ -383,7 +383,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                 <span className={styles.itemIcon}>
                   <ShareIcon size={20} />
                 </span>
-                <span>{'شارك المنصة'}</span>
+                <span>{shareCopied ? 'اتنسخ الرابط ✓' : 'شارك المنصة'}</span>
               </button>
             </li>
           </ul>
