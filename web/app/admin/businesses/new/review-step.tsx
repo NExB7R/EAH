@@ -49,8 +49,8 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
   const publishStatus = needsTypeApproval
     ? 'مسودة — نوع النشاط محتاج موافقة'
     : owner
-      ? 'جاهز للنشر المباشر'
-      : 'مسودة — اربط المالك قبل النشر'
+      ? 'جاهز للنشر — مع مالك مرتبط'
+      : 'جاهز للنشر — بدون مالك مرتبط'
 
   return (
     <div>
@@ -118,9 +118,11 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
 
       <div style={{ marginTop: '20px' }} className={styles.draftBar}>
         <span>
-          {owner
-            ? 'البيانات جاهزة — اضغط «إنشاء النشاط» تحت'
-            : 'بدون مالك، النشاط هيتحفظ كمسودة غير منشورة. اربط المالك ثم انشره بعد المراجعة.'}
+          {needsTypeApproval
+            ? 'نوع النشاط المخصص محتاج موافقة؛ وده منفصل عن اختيار المالك.'
+            : owner
+              ? 'البيانات جاهزة — النشاط هيتنشر والمالك المختار هيتربط به.'
+              : 'النشاط هيتنشر على المنصة بدون مالك مرتبط، وتقدر تربطه بحساب مسجل لاحقًا من الإدارة.'}
         </span>
       </div>
     </div>
