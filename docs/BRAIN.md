@@ -342,7 +342,7 @@ BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> �
 
 ## 16. Current State (2026-10-20)
 
-**آخر commit:** `b45a804`
+**آخر commit:** `b43e770`
 **الفرع:** `main` (clean)
 **عدد الأنشطة في DB:** 0 (بداية نظيفة)
 
@@ -353,20 +353,26 @@ BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> �
 - Business detail page (Material 3 base)
 - Health, Audit, Studio
 - DB-01 (GRANTs), DB-03 (RPCs) hardened
+- AP-06 (B1 owner_profile_id) مُصلح — 15 patch + `.limit(1)` في 14 ملف
+- Invariants CI gate: `.github/workflows/invariants.yml` (CI-07 مغلق)
 - 64/64 tests passing
 
 ### ❌ مشاكل معروفة
+- GOD-01: `business-form.tsx` = 1179 سطر (Pre-Launch RED)
 - UI-01: Business detail page layout broken (يحتاج redesign)
 - UI-02: Wizard uses sidebar (يحتاج full-width)
-- SEC-01: 11 مفتاح مكشوف (يحتاج rotate) — **أولوية قصوى**
+- SEC-01: 11 مفتاح مكشوف (DEFERRED — قرار المالك)
+- SEC-02b: `VERCEL_OIDC_TOKEN` في git history (`a322552`) — قبل الإطلاق
 - DB-04/05, AP-05: معلقين
 
 ### 🎯 الأولويات (بالترتيب)
-1. Rotate 11 مفتاح (30 دقيقة) — **حرج**
-2. Redesign business detail page (YouTube Studio pattern)
-3. Redesign wizard (full-width) + edit page منفصلة
-4. إضافة 20+ نشاط حقيقي
-5. DB-04, DB-05, AP-05
+1. GOD-01: تقسيم `business-form.tsx`
+2. EMPTY-01 + CONFLICT-01: migration حذف الجداول الفاضية
+3. CONSISTENCY-01: SACRED → 4 أنواع
+4. SPRAWL-01: دمج monitoring pages
+5. CI-01 + CI-02: E2E على main
+6. UI-01 + UI-02: redesign
+7. DB-04, DB-05, AP-05
 
 ### 🚫 ممنوع
 - Puck/designtools/Surface (تجارب فاشلة)
