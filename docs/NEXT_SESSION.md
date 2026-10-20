@@ -4,10 +4,10 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last reviewed app-code commit: da965d4 (server-only phone RPC callers)
+- Last reviewed app-code commit: 450400a (safe remote image import + fail-closed admin upload limiter)
 - Branch: main
-- Invariants/typecheck: not re-verified after the latest code changes
-- Deploy: Vercel succeeded for phone-RPC app-code commit da965d4; Vercel reported `failure` for admin image-route commit `2f3ce30`. Build logs cannot be read through the current Vercel connection (403); production runtime/smoke tests are not verified
+- Vercel build/TypeScript: success on main commit `450400a`; local ESLint/Prettier/Vitest were not run in this session
+- Deploy: Vercel build/deployment succeeded for `450400a`, superseding the earlier failed check for `2f3ce30`. Production runtime behavior is not yet smoke-tested
 
 ## Working
 - Business wizard fullscreen (UI-02)
@@ -29,8 +29,8 @@
 
 - **AP-04:** phone lookup now verifies Turnstile, uses strict fail-closed rate limiting, returns an allowlisted response without `user_id`, and its two data RPCs are service-role-only; Vercel succeeded for code commit `da965d4`, but production CAPTCHA/429 smoke testing is still pending.
 - **Image upload:** merchant route writes logo/cover through `business_media`, synchronizes `cover_image_url`, checks database write errors, and reads the logo from media. The app-code commit passed Vercel; a production upload/refresh smoke test is still pending.
-- **Admin image removal:** UI no longer clears local state after a failed DELETE; the API now checks media writes and clears the mirrored cover URL. Vercel failed for the API-route commit `2f3ce30`; inspect its build logs (requires access to team `eah-74a0`), repair and get a green build before production smoke tests.
-- **AP-15 URL paste:** URL paste currently stores arbitrary external URLs, while CSP only allows a small image-host list. After the Vercel blocker is resolved, import remote HTTPS images into Cloudinary and persist only the resulting `secure_url`; enforce URL validation and size/format limits.
+- **Admin image removal:** UI preserves the preview on API failure; API validates DB writes and synchronizes the legacy cover URL. Vercel build/TypeScript succeeded on `450400a`; production DELETE behavior and rollback behavior still need a smoke test.
+- **AP-15 URL paste:** external images are now downloaded only from validated public HTTPS hosts (DNS-pinned), redirects are revalidated, downloads are capped at 5MB and checked for JPEG/PNG/WebP/AVIF signatures, then uploaded to Cloudinary. Only the resulting Cloudinary URL is stored, and the endpoint has fail-closed admin upload/delete rate limiting. Vercel build succeeded; runtime edge-case testing remains.
 - **DB-10/11/12:** storage policy/path problems remain open.
 - **SEC-01:** rotate 11 previously exposed keys and verify current Vercel values without copying secrets into chat.
 - **SEC-02b:** ***REMOVED*** in git history.
@@ -39,14 +39,13 @@
 - **Offers:** verify the `starts_at` filter after the previous fix; do not rely on this old note without checking runtime.
 
 ## Next Priorities (in order)
-1. Resolve Vercel build failure for `2f3ce30`. The connector cannot read build logs while team access is 403; grant Vercel connection access to `eah-74a0` or inspect the linked deployment logs directly, then fix and rebuild.
-2. Fix AP-15: convert URL-pasted images into Cloudinary assets (strict HTTPS/public-host validation, limits, and provider error handling) rather than widening CSP.
-3. Run `web/supabase/tests/rls.test.sql` against the intended test DB with pgTAP; it now includes 22 assertions covering grants for sensitive RPCs, including the two phone lookup functions.
-3. Test phone lookup with the real production Turnstile key and verify 429 throttling plus a response that contains no `user_id`.
-4. Test merchant logo/cover upload on production: upload, refresh, confirm logo/cover still show, and verify a non-owner receives 403. The code change is committed but runtime test is pending.
-5. Resolve remaining storage findings DB-10/11/12 and reconcile migration history before any more schema changes.
-6. Rotate previously exposed keys and verify E2E on the actual release branch.
-7. Run the add-business flow (create, owner association, images, pending/review/publish, public page, search, mobile) before launch.
+1. Smoke-test admin image upload/removal on the current deployment: valid HTTPS image, reject HTTP/private DNS/unsafe redirects/non-image/over-5MB, refresh persistence, logo and cover deletion, and `cover_image_url` rollback on DB failure where testable.
+2. Run the real add-business flow end-to-end: create a real activity, associate the owner, upload logo/cover/menu/gallery, verify pending/review/publish states, then confirm the public page, search, and mobile view. Do not create fake activity data.
+3. Run `web/supabase/tests/rls.test.sql` against the intended test DB with pgTAP; the file now has `plan(37)` / 37 assertions, but they have not been run.
+4. Test phone lookup with the real production Turnstile key and verify 429 throttling plus a response that contains no `user_id`.
+5. Test merchant logo/cover upload on production: upload, refresh, confirm logo/cover still show, and verify a non-owner receives 403.
+6. Resolve remaining storage findings DB-10/11/12 and reconcile migration history before any more schema changes.
+7. Rotate previously exposed keys and verify E2E on the actual release branch.
 
 ## Forbidden
 - No Puck/designtools/Surface (failed experiments)
