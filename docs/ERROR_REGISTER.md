@@ -185,7 +185,9 @@
 
 | File | Lines | Limit | Status |
 |---|---|---|---|
-| business-form.tsx | 1179 | 300 | RED |
+| business-form.tsx | 19 | 300 | ✅ (split → 14 files) |
+| business-form-state.ts | 257 | 300 | ✅ |
+| business-form-handlers.ts | 219 | 300 | ✅ |
 | new-business-wizard.tsx | 260 | 300 | YEL |
 | edit-form.tsx | 313 | 300 | YEL |
 | lib/data/merchant.ts | 288 | n/a | OK |
