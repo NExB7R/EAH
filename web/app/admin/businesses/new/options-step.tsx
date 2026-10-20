@@ -30,6 +30,8 @@ export default function OptionsStep({ data, owners, update }: Props) {
             {owners.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.display_name}
+                {o.phone ? ` — ${o.phone}` : ''}
+                {o.role === 'merchant' ? ' — تاجر' : ' — حساب مسجل'}
               </option>
             ))}
           </select>

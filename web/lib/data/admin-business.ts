@@ -171,13 +171,20 @@ export type BusinessOwnerOption = {
 export async function getBusinessOwnerCandidates(): Promise<BusinessOwnerOption[]> {
   const supabase = createServiceClient()
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('user_roles')
     .select('user_id, role, profiles:user_id(id, display_name, phone)')
-    .eq('role', 'merchant')
+    .in('role', ['customer', 'merchant'])
+    .order('role', { ascending: true })
+
+  if (error) {
+    console.error('[admin-business] failed to load owner candidates:', error.message)
+    return []
+  }
 
   type Row = {
     user_id: string
+    role: 'customer' | 'merchant'
     profiles: { id: string; display_name: string; phone: string | null } | null
   }
   const rows = (data ?? []) as unknown as Row[]
@@ -188,5 +195,6 @@ export async function getBusinessOwnerCandidates(): Promise<BusinessOwnerOption[
       id: r.user_id,
       display_name: r.profiles!.display_name,
       phone: r.profiles!.phone,
+      role: r.role,
     }))
 }

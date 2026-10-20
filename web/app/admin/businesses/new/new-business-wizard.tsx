@@ -43,6 +43,8 @@ export type WizardData = {
 export type OwnerOption = {
   id: string
   display_name: string
+  phone: string | null
+  role: 'customer' | 'merchant'
 }
 
 const INITIAL: WizardData = {
