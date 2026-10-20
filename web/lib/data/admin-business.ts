@@ -42,6 +42,18 @@ export type AdminBusiness = {
   contacts: { method_type: string; value: string; is_primary: boolean }[]
   branches: { id: string; name: string; area: string | null; address_text: string | null }[]
   media: { id: string; media_type: string; storage_path: string }[]
+  offers: {
+    id: string
+    title: string
+    description: string | null
+    price: number | null
+    image_url: string | null
+    teaser_image_url: string | null
+    starts_at: string | null
+    ends_at: string | null
+    is_published: boolean
+    created_at: string
+  }[]
 }
 
 export async function getBusinessById(id: string): Promise<AdminBusiness | null> {
@@ -53,7 +65,7 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
 
   const b = biz as Record<string, unknown>
 
-  const [ownerRes, contactsRes, branchesRes, mediaRes, locationRes] = await Promise.all([
+  const [ownerRes, contactsRes, branchesRes, mediaRes, locationRes, offersRes] = await Promise.all([
     b.owner_profile_id
       ? supabase
           .from('profiles')
@@ -82,6 +94,13 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
       .eq('business_id', id)
       .order('is_primary', { ascending: false })
       .limit(1),
+    supabase
+      .from('offers')
+      .select(
+        'id, title, description, price, image_url, teaser_image_url, starts_at, ends_at, is_published, created_at',
+      )
+      .eq('business_id', id)
+      .order('created_at', { ascending: false }),
   ])
 
   return {

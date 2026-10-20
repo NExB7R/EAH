@@ -497,3 +497,131 @@ export async function saveOpenOverride(
   revalidateTag('businesses', 'default')
   return { ok: true }
 }
+
+// ═══ 11. عرض (add/update) ═══
+const offerSchema = z.object({
+  title: z.string().min(2, 'العنوان قصير').max(120, 'العنوان طويل'),
+  description: z.string().max(500).optional().nullable(),
+  price: z
+    .string()
+    .regex(/^\d+(\.\d{1,2})?$/)
+    .optional()
+    .or(z.literal('')),
+  image_url: z.string().url().max(500).optional().or(z.literal('')),
+  starts_at: z.string().optional(),
+  ends_at: z.string().optional(),
+  is_published: z.boolean().optional(),
+})
+
+export async function saveOffer(
+  businessId: string,
+  formData: FormData,
+  offerId?: string,
+): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const parsed = offerSchema.safeParse({
+    title: fd(formData, 'title'),
+    description: fd(formData, 'description') || null,
+    price: fd(formData, 'price') || undefined,
+    image_url: fd(formData, 'image_url') || '',
+    starts_at: fd(formData, 'starts_at') || undefined,
+    ends_at: fd(formData, 'ends_at') || undefined,
+    is_published: fdBool(formData, 'is_published'),
+  })
+  if (!parsed.success) return parseError(parsed)
+
+  const startsAt = parsed.data.starts_at ? new Date(parsed.data.starts_at).toISOString() : null
+  const endsAt = parsed.data.ends_at ? new Date(parsed.data.ends_at).toISOString() : null
+  if (startsAt && endsAt && new Date(endsAt) <= new Date(startsAt)) {
+    return { ok: false, error: 'تاريخ الانتهاء لازم يكون بعد البداية' }
+  }
+
+  const payload = {
+    title: parsed.data.title,
+    description: parsed.data.description,
+    price: parsed.data.price ? parseFloat(parsed.data.price) : null,
+    image_url: parsed.data.image_url || null,
+    starts_at: startsAt,
+    ends_at: endsAt,
+    is_published: parsed.data.is_published ?? false,
+  }
+
+  if (offerId) {
+    const { error } = await ctx.supabase
+      .from('offers')
+      .update(payload)
+      .eq('id', offerId)
+      .eq('business_id', businessId)
+    if (error) return { ok: false, error: error.message }
+  } else {
+    const { error } = await ctx.supabase
+      .from('offers')
+      .insert({ ...payload, business_id: businessId })
+    if (error) return { ok: false, error: error.message }
+  }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: offerId ? 'offer.update' : 'offer.create',
+    entityType: 'offer',
+    entityId: offerId ?? businessId,
+    metadata: { business_id: businessId, title: payload.title },
+  })
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidateTag('businesses', 'default')
+  return { ok: true }
+}
+
+// ═══ 12. حذف عرض ═══
+export async function deleteOffer(offerId: string, businessId: string): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const { error } = await ctx.supabase
+    .from('offers')
+    .delete()
+    .eq('id', offerId)
+    .eq('business_id', businessId)
+  if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'offer.delete',
+    entityType: 'offer',
+    entityId: offerId,
+    metadata: { business_id: businessId },
+  })
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidateTag('businesses', 'default')
+  return { ok: true }
+}
+
+// ═══ 13. نشر/إخفاء عرض ═══
+export async function toggleOfferPublished(
+  offerId: string,
+  businessId: string,
+  next: boolean,
+): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const { error } = await ctx.supabase
+    .from('offers')
+    .update({ is_published: next })
+    .eq('id', offerId)
+    .eq('business_id', businessId)
+  if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: next ? 'offer.publish' : 'offer.unpublish',
+    entityType: 'offer',
+    entityId: offerId,
+    metadata: { business_id: businessId },
+  })
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidateTag('businesses', 'default')
+  return { ok: true }
+}
