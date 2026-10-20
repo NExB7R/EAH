@@ -4,6 +4,7 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
+import { createNotification } from '@/lib/notifications/server'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Business Types Approval
@@ -20,7 +21,7 @@ export async function approveBusinessType(businessId: string): Promise<Result> {
   const parsed = idSchema.safeParse(businessId)
   if (!parsed.success) return { ok: false, error: 'معرّف غير صالح' }
 
-  const { error } = await ctx.supabase
+  const { data: business, error } = await ctx.supabase
     .from('businesses')
     .update({
       business_type_status: 'approved',
@@ -29,14 +30,32 @@ export async function approveBusinessType(businessId: string): Promise<Result> {
     })
     .eq('id', parsed.data)
     .eq('business_type_status', 'pending')
+    .select('id, name, slug, owner_profile_id')
+    .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
+  if (!business) return { ok: false, error: 'الطلب لم يعد بانتظار الموافقة، حدّث القائمة وحاول تاني' }
+
+  if (business.owner_profile_id) {
+    try {
+      await createNotification({
+        userId: business.owner_profile_id,
+        type: 'admin',
+        title: 'تمت الموافقة على نوع نشاطك ✓',
+        body: `نوع النشاط المخصص لنشاط "${business.name}" اتوافق عليه ونشاطك بقى منشور على EAH.`,
+        deepLink: `/businesses/${business.slug}`,
+      })
+    } catch {
+      // Notification delivery must not turn a successful approval into a failed action.
+    }
+  }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
     action: 'business_type.approve',
     entityType: 'business',
     entityId: parsed.data,
+    metadata: { published: true },
   })
 
   revalidatePath('/admin/business-types')
@@ -56,7 +75,7 @@ export async function rejectBusinessType(businessId: string, reason: string): Pr
 
   const cleanReason = reason.trim().slice(0, 300)
 
-  const { error } = await ctx.supabase
+  const { data: business, error } = await ctx.supabase
     .from('businesses')
     .update({
       business_type_status: 'rejected',
@@ -67,8 +86,25 @@ export async function rejectBusinessType(businessId: string, reason: string): Pr
     })
     .eq('id', parsed.data)
     .eq('business_type_status', 'pending')
+    .select('id, name, owner_profile_id')
+    .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
+  if (!business) return { ok: false, error: 'الطلب لم يعد بانتظار الموافقة، حدّث القائمة وحاول تاني' }
+
+  if (business.owner_profile_id) {
+    try {
+      await createNotification({
+        userId: business.owner_profile_id,
+        type: 'admin',
+        title: 'نوع النشاط محتاج تعديل',
+        body: cleanReason || 'نوع النشاط المخصص غير مقبول؛ تواصل مع الإدارة لتعديله.',
+        deepLink: '/merchant/business',
+      })
+    } catch {
+      // Notification delivery must not turn a successful rejection into a failed action.
+    }
+  }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
