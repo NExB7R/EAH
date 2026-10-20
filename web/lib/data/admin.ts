@@ -26,6 +26,7 @@ export type PendingBusiness = {
   is_published: boolean
   rejection_reason: string | null
   rejected_at: string | null
+  business_type_status: 'pending' | 'approved' | 'rejected' | null
   source: 'merchant' | 'admin'
   trial_used: boolean
   owner: { display_name: string; phone: string | null } | null
@@ -77,7 +78,7 @@ export async function getBusinessesByStatus(
   let query = supabase
     .from('businesses')
     .select(
-      'id, name, slug, business_type, area, cover_image_url, description, created_at, is_published, rejection_reason, rejected_at, source, trial_used',
+      'id, name, slug, business_type, area, cover_image_url, description, created_at, is_published, rejection_reason, rejected_at, business_type_status, source, trial_used',
     )
     .order('created_at', { ascending: false })
     .limit(limit)
