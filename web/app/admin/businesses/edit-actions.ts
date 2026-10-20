@@ -4,7 +4,6 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
-import { linkBusinessToUser } from './actions'
 import {
   basicsSchema,
   contactsSchema,
@@ -403,8 +402,142 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
 
 // ═══ 8. ربط المالك ═══
 export async function saveOwner(businessId: string, ownerProfileId: string): Promise<Result> {
-  const result = await linkBusinessToUser(businessId, ownerProfileId)
-  if (!result.ok) return { ok: false, error: result.error }
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return { ok: false, error: ctx.error }
+
+  const uuidSchema = z.string().uuid()
+  if (!uuidSchema.safeParse(businessId).success || !uuidSchema.safeParse(ownerProfileId).success) {
+    return { ok: false, error: 'معرّف النشاط أو المستخدم غير صحيح' }
+  }
+
+  const [profileRes, roleRes, businessRes] = await Promise.all([
+    ctx.supabase.from('profiles').select('id, display_name').eq('id', ownerProfileId).maybeSingle(),
+    ctx.supabase.from('user_roles').select('role').eq('user_id', ownerProfileId).maybeSingle(),
+    ctx.supabase
+      .from('businesses')
+      .select('id, name, owner_profile_id, source, claimed_at, claimed_by_user_id')
+      .eq('id', businessId)
+      .maybeSingle(),
+  ])
+
+  if (profileRes.error || roleRes.error || businessRes.error) {
+    return { ok: false, error: 'تعذر التحقق من بيانات النشاط أو المالك — حاول تاني' }
+  }
+  if (!profileRes.data) return { ok: false, error: 'المستخدم مش موجود' }
+  if (!roleRes.data) return { ok: false, error: 'حساب المستخدم غير مهيأ لدور داخل النظام' }
+  if (roleRes.data.role !== 'customer' && roleRes.data.role !== 'merchant') {
+    return { ok: false, error: 'لا يمكن ربط نشاط بحساب إداري' }
+  }
+
+  const business = businessRes.data
+  if (!business) return { ok: false, error: 'النشاط مش موجود' }
+
+  const alreadyLinked = business.owner_profile_id === ownerProfileId
+  if (alreadyLinked && roleRes.data.role === 'merchant') return { ok: true }
+
+  if (!alreadyLinked) {
+    const { error } = await ctx.supabase
+      .from('businesses')
+      .update({
+        owner_profile_id: ownerProfileId,
+        source: 'merchant',
+        claimed_at: new Date().toISOString(),
+        claimed_by_user_id: ctx.userId,
+      })
+      .eq('id', businessId)
+
+    if (error) return { ok: false, error: error.message }
+  }
+
+  if (roleRes.data.role === 'customer') {
+    const { data: promoted, error: promotionError } = await ctx.supabase
+      .from('user_roles')
+      .update({ role: 'merchant' })
+      .eq('user_id', ownerProfileId)
+      .eq('role', 'customer')
+      .select('role')
+      .maybeSingle()
+
+    let isMerchant = promoted?.role === 'merchant'
+    if (!isMerchant) {
+      const { data: latestRole, error: latestRoleError } = await ctx.supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', ownerProfileId)
+        .maybeSingle()
+      isMerchant = !latestRoleError && latestRole?.role === 'merchant'
+    }
+
+    if (!isMerchant) {
+      if (alreadyLinked) {
+        await logAudit(ctx.supabase, {
+          actorUserId: ctx.userId,
+          action: 'business.link_owner_role_failure',
+          entityType: 'business',
+          entityId: businessId,
+          metadata: {
+            owner_profile_id: ownerProfileId,
+            promotion_error: promotionError?.message ?? 'role promotion did not take effect',
+            already_linked: true,
+          },
+        })
+        return {
+          ok: false,
+          error: 'النشاط مربوط بالحساب بالفعل، لكن تعذّر تفعيل دور التاجر. لم نغيّر الربط الحالي.',
+        }
+      }
+
+      const { error: rollbackError } = await ctx.supabase
+        .from('businesses')
+        .update({
+          owner_profile_id: business.owner_profile_id,
+          source: business.source,
+          claimed_at: business.claimed_at,
+          claimed_by_user_id: business.claimed_by_user_id,
+        })
+        .eq('id', businessId)
+
+      if (rollbackError) {
+        await logAudit(ctx.supabase, {
+          actorUserId: ctx.userId,
+          action: 'business.link_owner_partial_failure',
+          entityType: 'business',
+          entityId: businessId,
+          metadata: {
+            owner_profile_id: ownerProfileId,
+            previous_owner_profile_id: business.owner_profile_id,
+            promotion_error: promotionError?.message ?? 'role promotion did not take effect',
+            rollback_error: rollbackError.message,
+          },
+        })
+        return {
+          ok: false,
+          error: 'تعذّر تفعيل حساب المالك وتعذّر التراجع عن الربط. راجع النشاط قبل إعادة المحاولة.',
+        }
+      }
+
+      return {
+        ok: false,
+        error: 'تعذّر تفعيل حساب المالك كتاجر، وتم التراجع عن الربط. حاول تاني.',
+      }
+    }
+  }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.update.owner',
+    entityType: 'business',
+    entityId: businessId,
+    metadata: {
+      owner_profile_id: ownerProfileId,
+      previous_owner_profile_id: business.owner_profile_id,
+    },
+  })
+
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath('/admin/businesses')
+  revalidateTag('businesses', 'default')
+  revalidateTag('admin-badges', 'default')
   return { ok: true }
 }
 
