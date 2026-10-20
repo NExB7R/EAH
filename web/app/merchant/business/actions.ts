@@ -63,7 +63,7 @@ function invalidateBusiness(slug: string) {
   revalidatePath('/merchant')
   revalidatePath('/merchant/business')
   revalidatePath('/explore')
-  revalidatePath(\`/businesses/\${slug}\`)
+  revalidatePath(`/businesses/${slug}`)
   revalidateTag('businesses', 'default')
 }
 
