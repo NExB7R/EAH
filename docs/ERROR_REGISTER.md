@@ -90,12 +90,12 @@
 
 | الفحص | العدد الحالي | المطلوب |
 |---|---|---|
-| B1 owner_profile_id + maybeSingle | 0 | ✅ مُصلح (fix-b1.mjs) |
+| B1 owner_profile_id + maybeSingle | 0 | ✅ مُصلح (fix-b1.mjs v2) |
 | B2 select('*') | 62 | تحديد أعمدة |
 | B3 <img> خام | 9 | WmImage |
 | B4 animation: infinite | 16 | SACRED يمنعها |
 | B5 ألوان محظورة | 47 | متغيرات الهوية |
-| B6 backdrop-filter | 35 | SACRED يمنعها على كروت فقط (modals مسموحة) |
+| B6 backdrop-filter | 34 | SACRED يمنعها على كروت فقط (modals مسموحة) |
 | B7 الدومين يدوي | 8 | NEXT_PUBLIC_SITE_URL |
 | B8 eslint-disable | 20 | سبب أو إزالة |
 | B9 إيموجي | 146 | SVG |
