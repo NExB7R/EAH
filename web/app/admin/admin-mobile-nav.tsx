@@ -45,7 +45,7 @@ export default function AdminMobileNav({ counts }: Props) {
             >
               <CloseIcon size={18} />
             </button>
-            <AdminSidebar counts={counts} />
+            <AdminSidebar counts={counts} onNavigate={() => setOpen(false)} />
           </div>
         </>
       )}
