@@ -126,7 +126,7 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
   // Snapshot current values first, so failed writes can restore the public contacts.
   const { data: previousRows, error: previousError } = await privileged
     .from('business_contact_methods')
-    .select('business_id, method_type, value, is_primary, is_public')
+    .select('business_id, method_type, value, is_primary, is_public, label, sort_order')
     .eq('business_id', businessId)
     .in('method_type', managedTypes)
   if (previousError) return { ok: false, error: 'تعذر قراءة جهات الاتصال الحالية' }
