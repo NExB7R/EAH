@@ -26,7 +26,7 @@
 ## Known Issues
 - **DB-04/05:** migration `docs/migrations/2026-10-20-revoke-anon-sensitive-rpcs.sql` committed but NOT applied or verified on the production database.
 - **AP-04:** phone lookup now sends/verifies Turnstile, uses strict fail-closed rate limiting, and returns an allowlisted response without `user_id`; production verification is pending.
-- **Image upload:** merchant upload route still needs repair (it references nonexistent `businesses.logo_url` and ignores the database update error); do not call it fixed.
+- **Image upload:** merchant route now writes logo/cover through `business_media`, synchronizes `cover_image_url`, checks database write errors, and reads the logo from media. Code is committed; Vercel build and a production upload/refresh smoke test are still pending.
 - **DB-10/11/12:** storage policy/path problems remain open.
 - **SEC-01:** rotate 11 previously exposed keys and verify current Vercel values without copying secrets into chat.
 - **SEC-02b:** ***REMOVED*** in git history.
