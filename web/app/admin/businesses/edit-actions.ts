@@ -84,45 +84,84 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
   })
   if (!parsed.success) return parseError(parsed)
 
-  await ctx.supabase.from('business_contact_methods').delete().eq('business_id', businessId)
+  const extendedTypes = ['complaints', 'manager', 'shift_morning', 'shift_evening'] as const
+  const extendedValues: Record<string, string> = {}
+  for (const type of extendedTypes) {
+    const value = fd(formData, type)
+    if (value && !/^0\d{9,12}$/.test(value)) {
+      return { ok: false, error: 'رقم غير صحيح — لازم يبدأ بـ 0 ويكون 10-13 رقم' }
+    }
+    extendedValues[type] = value
+  }
+
+  const MANAGED_TYPES = [
+    'phone',
+    'whatsapp',
+    'complaints',
+    'facebook',
+    'instagram',
+    'website',
+    'manager',
+    'shift_morning',
+    'shift_evening',
+  ]
+
+  // Delete only managed types (preserve 'additional' and any future types)
+  const { error: delError } = await ctx.supabase
+    .from('business_contact_methods')
+    .delete()
+    .eq('business_id', businessId)
+    .in('method_type', MANAGED_TYPES)
+  if (delError) return { ok: false, error: delError.message }
 
   const rows: { business_id: string; method_type: string; value: string; is_primary: boolean }[] =
     []
-  if (parsed.data.phone)
+  if (parsed.data.phone) {
     rows.push({
       business_id: businessId,
       method_type: 'phone',
       value: parsed.data.phone,
       is_primary: true,
     })
-  if (parsed.data.whatsapp)
+  }
+  if (parsed.data.whatsapp) {
     rows.push({
       business_id: businessId,
       method_type: 'whatsapp',
       value: parsed.data.whatsapp,
       is_primary: false,
     })
-  if (parsed.data.facebook)
+  }
+  if (parsed.data.facebook) {
     rows.push({
       business_id: businessId,
       method_type: 'facebook',
       value: parsed.data.facebook,
       is_primary: false,
     })
-  if (parsed.data.instagram)
+  }
+  if (parsed.data.instagram) {
     rows.push({
       business_id: businessId,
       method_type: 'instagram',
       value: parsed.data.instagram,
       is_primary: false,
     })
-  if (parsed.data.website)
+  }
+  if (parsed.data.website) {
     rows.push({
       business_id: businessId,
       method_type: 'website',
       value: parsed.data.website,
       is_primary: false,
     })
+  }
+  for (const type of extendedTypes) {
+    const value = extendedValues[type]
+    if (value) {
+      rows.push({ business_id: businessId, method_type: type, value, is_primary: false })
+    }
+  }
 
   if (rows.length > 0) {
     const { error } = await ctx.supabase.from('business_contact_methods').insert(rows)
@@ -376,5 +415,68 @@ export async function saveOwner(businessId: string, ownerProfileId: string): Pro
     metadata: { owner_profile_id: ownerProfileId },
   })
   revalidatePath(`/admin/businesses/${businessId}`)
+  return { ok: true }
+}
+
+// ═══ 9. ملحوظة هامة ═══
+export async function saveNotice(businessId: string, formData: FormData): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const notice = fd(formData, 'important_notice')
+  const expiresAt = fd(formData, 'notice_expires_at')
+  const severity = fd(formData, 'notice_severity') || 'info'
+
+  if (notice.length > 500) return { ok: false, error: 'النص طويل (500 حرف كحد أقصى)' }
+  if (!['info', 'warning', 'critical'].includes(severity)) {
+    return { ok: false, error: 'مستوى التنبيه غير صحيح' }
+  }
+
+  const { error } = await ctx.supabase
+    .from('businesses')
+    .update({
+      important_notice: notice || null,
+      notice_expires_at: expiresAt || null,
+      notice_severity: severity,
+    })
+    .eq('id', businessId)
+  if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.update.notice',
+    entityType: 'business',
+    entityId: businessId,
+  })
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidateTag('businesses', 'default')
+  return { ok: true }
+}
+
+// ═══ 10. حالة الفتح (auto/open/closed) ═══
+export async function saveOpenOverride(
+  businessId: string,
+  override: 'auto' | 'open' | 'closed',
+): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const value = override === 'auto' ? null : override === 'open'
+
+  const { error } = await ctx.supabase
+    .from('businesses')
+    .update({ open_now_override: value })
+    .eq('id', businessId)
+  if (error) return { ok: false, error: error.message }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business.update.open_override',
+    entityType: 'business',
+    entityId: businessId,
+    metadata: { override },
+  })
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidateTag('businesses', 'default')
   return { ok: true }
 }
