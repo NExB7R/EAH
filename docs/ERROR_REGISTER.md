@@ -24,7 +24,7 @@
 | DB-11 | 🔴 | order-voice: رفع لأي مسار، تاجر ما بيسمعش | قيّد المسار + قراءة للمالك | اختبار الدورين |
 | DB-12 | 🔴 | bucket order-images غير موجود | أنشئه أو شيل المسار | storage.buckets |
 | DB-13 | 🔴 | أداء: 12 policy بدون (select auth.uid())، 10 FK بدون index | تقرير الأداء | get_advisors |
-| DB-14 | 🔴 | migrations: 43 مسجّلة، DB اتغيرت بعدها | supabase db pull | supabase migration list |
+| DB-14 | 🔴 | migrations: 45 مسجّلة، وDB اتغيرت بعدها وخارج سجل migrations المعتاد | `supabase db pull` ثم مصالحة التاريخ بدون تعديل migrations مطبّقة | `supabase migration list` + مقارنة schema |
 | DB-15 | 🔴 | apply_trust_decay بدون حارس أسبوعي | last_decay_at | اختبار SQL |
 | DB-16 | 🔴 | admin_adjust_points تقرا trust_score كرصيد؛ check_and_award_badges مفاتيح عربية | مراجعة وتوحيد | اقرا الدالة |
 | DB-17 | ⏳ | set_business_commission ضد مبدأ صفر عمولة | احذف أو وثّق | قرار |
@@ -60,8 +60,8 @@
 | AP-11 | 🟡 | logAudit بيبلع الأخطاء | سجّل في system_errors |
 | AP-12 | 🟡 | تذكير التقييم بعد ساعتين (فعلياً 3 مرات) | اضبط الوعد |
 | AP-13 | 🟡 | رفع صور التاجر كان يكتب في `businesses.logo_url` غير الموجود ويتجاهل أخطاء الحفظ | استخدام `business_media`، تحديث `cover_image_url` مع التحقق، تحميل الشعار من `business_media`، rate limit fail-closed | كود التاجر ضمن commit `da965d4` ذي Vercel success؛ اختبار upload/refresh على production ما زال مطلوبًا |
-| AP-14 | 🔴 | حذف صورة الإدارة يمسح المعاينة حتى لو فشل API، وغلاف النشاط قد يظل في `cover_image_url` بعد حذف سجل الوسائط | DELETE يتحقق من كتابة DB ويزامن الغلاف؛ UI يحتفظ بالصورة ويعرض الخطأ عند فشل الطلب | Vercel أعاد failure للـ commit `2f3ce30`; سجلات البناء غير متاحة من اتصال Vercel الحالي (403)، والإصلاح غير معتمد حتى نعرف سبب الفشل ونجتاز البناء |
-| AP-15 | 🟡 | حقل لصق رابط الصورة يقبل أي host، لكن CSP `img-src` لا يسمح إلا بعدد محدود من hosts؛ بعض الصور المحفوظة لن تُعرض | استيراد الرابط إلى Cloudinary بخادم الإدارة، ثم حفظ `secure_url` بدل رابط خارجي. Cloudinary يدعم الرفع من remote HTTP(S) URL وفق [Upload API](https://cloudinary.com/documentation/image_upload_api_reference) | لم يُنفّذ؛ ينتظر إصلاح Vercel build blocker واختبار قيود الرابط/حجم الصورة |
+| AP-14 | 🟡 | حذف صورة الإدارة يمسح المعاينة حتى لو فشل API، وغلاف النشاط قد يظل في `cover_image_url` بعد حذف سجل الوسائط | DELETE يتحقق من كتابة DB ويزامن الغلاف؛ UI يحتفظ بالصورة ويعرض الخطأ عند فشل الطلب | Vercel build/TypeScript نجح على main commit `450400a` (يتضمن مسار الإدارة المعدّل)؛ اختبار DELETE على deployment والتحقق من تزامن `cover_image_url` عند النجاح والفشل ما زال مطلوبًا |
+| AP-15 | 🟡 | حقل لصق رابط الصورة كان يحفظ رابطًا خارجيًا قد تمنعه CSP، مع مخاطر روابط داخلية/تحويلات/ملفات ضخمة | الخادم يقبل HTTPS فقط، يتحقق من DNS العام ويثبّت عنوان الاتصال، يعيد التحقق من كل redirect، يحد الحجم إلى 5MB ويتحقق من بصمة JPEG/PNG/WebP/AVIF ثم يرفع الملف إلى Cloudinary ويحفظ رابط Cloudinary. أُضيف rate limit fail-closed لمسارات الرفع والحذف | Vercel build/TypeScript نجح على main commit `450400a`. اختبار رفع حقيقي ما زال مطلوبًا: صورة صالحة، رابط غير HTTPS، host داخلي/خاص، redirect غير آمن، محتوى غير صورة، تجاوز 5MB، ثم refresh والتحقق أن المحفوظ `res.cloudinary.com` |
 
 ## 4. الـ CI والاختبارات
 
