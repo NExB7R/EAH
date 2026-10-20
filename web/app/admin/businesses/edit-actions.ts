@@ -207,8 +207,8 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
     entityType: 'business',
     entityId: businessId,
   })
-  revalidatePath(\`/admin/businesses/\${businessId}\`)
-  revalidatePath(\`/businesses/\${business.slug}\`)
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath(`/businesses/${business.slug}`)
   revalidateTag('businesses', 'default')
   return { ok: true }
 }
@@ -310,8 +310,8 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
     entityType: 'business',
     entityId: businessId,
   })
-  revalidatePath(\`/admin/businesses/\${businessId}\`)
-  revalidatePath(\`/businesses/\${business.slug}\`)
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath(`/businesses/${business.slug}`)
   revalidateTag('businesses', 'default')
   return { ok: true }
 }
