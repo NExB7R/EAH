@@ -50,7 +50,7 @@
 | AP-02 | ✅ | /api/track-action: IP خام + rate limit مفقود | 2a0b135 (hashIp + rate limit) |
 | AP-03 | ✅ | /api/log-error و csp-report بلا حد | 2a0b135 (rate limit) |
 | AP-04 | 🟡 | /api/find-by-phone: apiLimiter + يرجّع user_id | strictLimiter + Turnstile + شيل user_id |
-| AP-05 | 🔴 | requestSubscription: إشعار الأدمن ما بيوصلش | service client لجلب الأدمن |
+| AP-05 | ✅ | requestSubscription: إشعار الأدمن ما بيوصلش | service client (f690db4+) |
 | AP-06 | 🔴 | .maybeSingle() على owner_profile_id في 12 موضع | .order + .limit(1) |
 | AP-07 | ✅ | حالة الطلب بدون state machine | 2a0b135 (VALID_TRANSITIONS) |
 | AP-08 | 🟡 | rate limit مفقود في 6 مسارات كتابة | إضافة |
@@ -91,7 +91,7 @@
 | الفحص | العدد الحالي | المطلوب |
 |---|---|---|
 | B1 owner_profile_id + maybeSingle | 0 | ✅ مُصلح (fix-b1.mjs v2) |
-| B2 select('*') | 5 | tech debt — admin/service context فقط (low risk) |
+| B2 select('*') | 1 | admin-business — 32+ columns (documented exception) |
 | B3 <img> خام | 10 | WmImage — admin previews + share modal مقبولة |
 | B4 animation: infinite | 16 | SACRED يمنعها |
 | B5 ألوان محظورة | 47 | متغيرات الهوية |

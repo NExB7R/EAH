@@ -81,7 +81,7 @@ export async function getRecentErrors(limit = 50, onlyUnresolved = false): Promi
   const supabase = createServiceClient()
   let q = supabase
     .from('system_errors')
-    .select('*')
+    .select('id, severity, source, path, message, user_id, metadata, resolved_at, created_at')
     .order('created_at', { ascending: false })
     .limit(limit)
   if (onlyUnresolved) q = q.is('resolved_at', null)
@@ -103,7 +103,7 @@ export async function getErrorsWithFilters(filter: HealthFilter): Promise<System
 
   let query = supabase
     .from('system_errors')
-    .select('*')
+    .select('id, severity, source, path, message, user_id, metadata, resolved_at, created_at')
     .order('created_at', { ascending: false })
     .limit(q ? Math.max(limit, 300) : limit)
 

@@ -74,8 +74,10 @@ export async function requestSubscription(formData: FormData): Promise<Result> {
 
   if (error) return { ok: false, error: error.message }
 
-  // إشعار لكل الأدمن
-  const { data: admins } = await supabase
+  // إشعار لكل الأدمن — service client (user RLS on user_roles ≠ admins visible)
+  const { createServiceClient } = await import('@/lib/supabase/service')
+  const service = createServiceClient()
+  const { data: admins } = await service
     .from('user_roles')
     .select('user_id')
     .in('role', ['admin', 'super_admin'])

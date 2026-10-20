@@ -59,6 +59,9 @@ export type AdminBusiness = {
 export async function getBusinessById(id: string): Promise<AdminBusiness | null> {
   const supabase = createServiceClient()
 
+  // B2 exception (ERROR_REGISTER §6): 32+ columns required across
+  // form/hooks (incl. working_hours cast in business-form-hooks.ts).
+  // Retaining select('*') to prevent breakage when new columns are added.
   const { data: biz } = await supabase.from('businesses').select('*').eq('id', id).maybeSingle()
 
   if (!biz) return null
