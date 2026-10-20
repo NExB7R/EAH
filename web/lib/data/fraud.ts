@@ -115,7 +115,10 @@ export type MultiAccountIp = {
 }
 
 export async function getMultiAccountIps(days = 30): Promise<MultiAccountIp[]> {
-  const supabase = await createClient()
+  // Service role required: get_multi_account_ips was REVOKE'd from authenticated
+  // (DB-04 security fix — exposes fraud IP data). Admin-only surface.
+  const { createServiceClient } = await import('@/lib/supabase/service')
+  const supabase = createServiceClient()
   const { data, error } = await supabase.rpc('get_multi_account_ips', { p_days: days })
   if (error) return []
   return (data ?? []) as MultiAccountIp[]
