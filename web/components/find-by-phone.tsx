@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { Turnstile } from '@marsidev/react-turnstile'
 import { SearchIcon, PhoneIcon, ShieldCheckIcon, StarIcon, AlertIcon } from './icons'
 import { getTrustTierMeta } from '@/lib/trust'
 import styles from './find-by-phone.module.css'
@@ -10,8 +11,10 @@ import styles from './find-by-phone.module.css'
 // EAH — Find by Phone (Truecaller Style)
 // ═══════════════════════════════════════════════════════════
 
+const TURNSTILE_SITE_KEY =
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '0x4AAAAAAFKj0MmPWv_YfMRl'
+
 type UserResult = {
-  user_id: string
   display_name: string
   alias: string | null
   avatar_url: string | null
@@ -35,16 +38,23 @@ type State =
 export default function FindByPhone() {
   const [phone, setPhone] = useState('')
   const [state, setState] = useState<State>({ type: 'idle' })
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileKey, setTurnstileKey] = useState(0)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!turnstileToken) {
+      setState({ type: 'error', message: 'أكمل التحقق الأمني من فضلك' })
+      return
+    }
+
     setState({ type: 'loading' })
 
     try {
       const res = await fetch('/api/find-by-phone', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: phone.trim() }),
+        body: JSON.stringify({ phone: phone.trim(), turnstileToken }),
       })
 
       const data = await res.json()
@@ -62,6 +72,9 @@ export default function FindByPhone() {
       setState({ type: 'found', user: data.user })
     } catch {
       setState({ type: 'error', message: 'مش قادرين نبحث دلوقتي' })
+    } finally {
+      setTurnstileToken(null)
+      setTurnstileKey((current) => current + 1)
     }
   }
 
@@ -86,7 +99,7 @@ export default function FindByPhone() {
           <button
             type="submit"
             className={styles.submit}
-            disabled={state.type === 'loading' || phone.length !== 11}
+            disabled={state.type === 'loading' || phone.length !== 11 || !turnstileToken}
           >
             {state.type === 'loading' ? (
               <span className={styles.spinner} />
@@ -96,6 +109,17 @@ export default function FindByPhone() {
           </button>
         </div>
         <p className={styles.hint}>الرقم الكامل (11 رقم) — يبدأ بـ 010/011/012/015</p>
+        <div className={styles.turnstile}>
+          <Turnstile
+            key={turnstileKey}
+            siteKey={TURNSTILE_SITE_KEY}
+            onSuccess={(token) => setTurnstileToken(token)}
+            onError={() => setTurnstileToken(null)}
+            onExpire={() => setTurnstileToken(null)}
+            options={{ theme: 'dark', size: 'flexible' }}
+          />
+          {!turnstileToken && <p className={styles.hint}>أكمل التحقق الأمني قبل البحث</p>}
+        </div>
       </form>
 
       {state.type === 'error' && (
