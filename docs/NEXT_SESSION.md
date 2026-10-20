@@ -7,7 +7,7 @@
 - Last reviewed app-code commit: da965d4 (server-only phone RPC callers)
 - Branch: main
 - Invariants/typecheck: not re-verified after the latest code changes
-- Deploy: Vercel reported success for app-code commit da965d4; production runtime/smoke tests not yet verified
+- Deploy: Vercel succeeded for phone-RPC app-code commit da965d4; the newer admin image-route change `2f3ce30` was still pending at last check; production runtime/smoke tests are not yet verified
 
 ## Working
 - Business wizard fullscreen (UI-02)
