@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { createNotification } from '@/lib/notifications/server'
 import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
+import { createServiceClient } from '@/lib/supabase/service'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Businesses Actions
@@ -331,6 +332,15 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     selectedOwnerRole = roleRow.role
   }
 
+  let privileged
+  try {
+    // This action is admin-gated above. The contact-method table intentionally
+    // has no authenticated write policy, so use service role only after admin auth.
+    privileged = createServiceClient()
+  } catch {
+    return { ok: false, error: 'إنشاء النشاط غير متاح مؤقتًا — تعذر تجهيز خدمة الحفظ' }
+  }
+
   const finalSlug = d.slug ?? slugify(d.name)
 
   // WhatsApp gate: auto-disable orders if no whatsapp contact provided
@@ -377,12 +387,12 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       is_primary: c.is_primary ?? false,
       sort_order: idx,
     }))
-    const { error: contactsError } = await ctx.supabase
+    const { error: contactsError } = await privileged
       .from('business_contact_methods')
       .insert(rows)
 
     if (contactsError) {
-      const { error: rollbackError } = await ctx.supabase
+      const { error: rollbackError } = await privileged
         .from('businesses')
         .delete()
         .eq('id', created.id)
@@ -434,11 +444,11 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     }
 
     if (!ownerIsMerchant) {
-      const { error: contactsRollbackError } = await ctx.supabase
+      const { error: contactsRollbackError } = await privileged
         .from('business_contact_methods')
         .delete()
         .eq('business_id', created.id)
-      const { error: businessRollbackError } = await ctx.supabase
+      const { error: businessRollbackError } = await privileged
         .from('businesses')
         .delete()
         .eq('id', created.id)
