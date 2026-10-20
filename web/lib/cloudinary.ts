@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import { lookup as dnsLookup } from 'node:dns/promises'
 import { Buffer } from 'node:buffer'
 import { request as httpsRequest } from 'node:https'
-import { isIP, type LookupFunction } from 'node:net'
+import { isIP } from 'node:net'
 
 const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME
 const API_KEY = process.env.CLOUDINARY_API_KEY
@@ -245,7 +245,7 @@ async function downloadRemoteImage(
     // Pin the connection to the public DNS answers we already validated.
     if (options?.all) callback(null, addresses)
     else callback(null, addresses[0]!.address, addresses[0]!.family)
-  }) as unknown as LookupFunction
+  }) as unknown as NonNullable<import('node:https').RequestOptions['lookup']>
 
   const response = await new Promise<import('node:http').IncomingMessage>((resolve, reject) => {
     const request = httpsRequest(
