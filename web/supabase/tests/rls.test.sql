@@ -5,7 +5,7 @@
 -- ============================================================
 
 begin;
-select plan(15);
+select plan(31);
 
 -- ============================================================
 -- 1. profiles — anon
@@ -116,6 +116,98 @@ select has_function(
   'public',
   'admin_get_profiles',
   'admin_get_profiles موجودة'
+);
+
+-- ============================================================
+-- 4.5 Sensitive RPC grants (requires revoke-anon-sensitive-rpcs migration)
+-- ============================================================
+
+select is(
+  has_function_privilege('anon', 'public.admin_get_business_owners()', 'EXECUTE'),
+  false,
+  'anon cannot execute admin_get_business_owners'
+);
+select is(
+  has_function_privilege('authenticated', 'public.admin_get_business_owners()', 'EXECUTE'),
+  true,
+  'authenticated can execute guarded admin_get_business_owners'
+);
+
+select is(
+  has_function_privilege('anon', 'public.admin_get_profiles()', 'EXECUTE'),
+  false,
+  'anon cannot execute admin_get_profiles'
+);
+select is(
+  has_function_privilege('authenticated', 'public.admin_get_profiles()', 'EXECUTE'),
+  true,
+  'authenticated can execute guarded admin_get_profiles'
+);
+
+select is(
+  has_function_privilege('anon', 'public.check_reviewer_badges(uuid)', 'EXECUTE'),
+  false,
+  'anon cannot execute check_reviewer_badges'
+);
+select is(
+  has_function_privilege('authenticated', 'public.check_reviewer_badges(uuid)', 'EXECUTE'),
+  true,
+  'authenticated can execute guarded check_reviewer_badges'
+);
+
+select is(
+  has_function_privilege('anon', 'public.check_social_badges(uuid)', 'EXECUTE'),
+  false,
+  'anon cannot execute check_social_badges'
+);
+select is(
+  has_function_privilege('authenticated', 'public.check_social_badges(uuid)', 'EXECUTE'),
+  true,
+  'authenticated can execute guarded check_social_badges'
+);
+
+select is(
+  has_function_privilege('anon', 'public.check_streak_badges(uuid)', 'EXECUTE'),
+  false,
+  'anon cannot execute check_streak_badges'
+);
+select is(
+  has_function_privilege('authenticated', 'public.check_streak_badges(uuid)', 'EXECUTE'),
+  true,
+  'authenticated can execute guarded check_streak_badges'
+);
+
+select is(
+  has_function_privilege('anon', 'public.get_referral_list(uuid, integer)', 'EXECUTE'),
+  false,
+  'anon cannot execute get_referral_list'
+);
+select is(
+  has_function_privilege('authenticated', 'public.get_referral_list(uuid, integer)', 'EXECUTE'),
+  true,
+  'authenticated can execute guarded get_referral_list'
+);
+
+select is(
+  has_function_privilege('anon', 'public.get_referral_stats(uuid)', 'EXECUTE'),
+  false,
+  'anon cannot execute get_referral_stats'
+);
+select is(
+  has_function_privilege('authenticated', 'public.get_referral_stats(uuid)', 'EXECUTE'),
+  true,
+  'authenticated can execute guarded get_referral_stats'
+);
+
+select is(
+  has_function_privilege('anon', 'public.get_my_profile()', 'EXECUTE'),
+  false,
+  'anon cannot execute get_my_profile'
+);
+select is(
+  has_function_privilege('authenticated', 'public.get_my_profile()', 'EXECUTE'),
+  true,
+  'authenticated can execute self-only get_my_profile'
 );
 
 -- ============================================================
