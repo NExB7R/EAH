@@ -4,38 +4,39 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last commit: b43e770
+- Last commit: ee4abe7
 - Branch: main (clean)
-- Businesses in DB: 0 (fresh start)
-- Invariants: all OK (B1=0, B6=34, X1-X4=0) — CI gate active (`.github/workflows/invariants.yml`)
+- Invariants: all OK (B1=0, B6=34, X1-X4=0) — CI gate active
+- Deploy: Vercel (auto)
 
 ## Working
-- Wizard 4-step + custom types + approval
-- Contacts repeater (15 max)
-- Real-time dashboard + ⌘K palette
-- Business detail page (Material 3 base)
-- Health, Audit, Studio
-- DB-01 (GRANTs), DB-03 (RPCs) hardened
+- Wizard 4-step fullscreen overlay (UI-02) — no sidebar squeeze
+- Contact types (10): phone, whatsapp, complaints, facebook, instagram, website, manager, shift_morning, shift_evening, additional
+- Notice system (info/warning/critical + expiry auto-hide)
+- Open-now override (auto / open / closed)
+- Location picker (geolocation 📍 + OSM iframe preview)
+- Admin business detail — 3 tabs (نظرة عامة / تعديل / معاينة) (UI-01)
+- Admin profile link in sidebar + avatar routing
+- Bell → /admin/notifications for admins
+- WhatsApp orders gate (server-side: block if no whatsapp contact)
 - 64/64 tests passing
 
 ## Known Issues
-- UI-01: Business detail page layout broken (needs redesign)
-- UI-02: Wizard uses sidebar (needs full-width)
 - SEC-01: 11 keys rotate (DEFERRED — owner call)
 - SEC-02b: ***REMOVED*** in git history (a322552) — needs filter-repo before launch
-- GOD-01: business-form.tsx = 1179 lines (Pre-Launch RED)
 - DB-04/05, AP-05: pending
+- hooks.ts = 380 lines (over 300) — split in next session
+- B2: 5 select('*') instances — low priority
+- GOD-02: new-business-wizard.tsx = 260 lines (YEL, acceptable)
 
 ## Next Priorities (in order)
-1. GOD-01: split business-form.tsx (1179 → ≤300) — Pre-Launch RED
-2. EMPTY-01 + CONFLICT-01: delete empty tables + business_commissions (migration)
-3. CONSISTENCY-01: SACRED to 4 types
-4. SPRAWL-01: merge monitoring pages
-5. CI-01 + CI-02: E2E on main
-6. UI redesign: business detail page (YouTube Studio pattern)
-7. UI redesign: wizard full-width + edit page separated
-8. Add 20+ real businesses
-9. DB-04, DB-05, AP-05 fixes
+1. **Add first real business** (primary goal)
+2. Test notice + open-override + location picker end-to-end
+3. Split `business-form-hooks.ts` (380 lines → 2 files)
+4. B2: replace 5 select('*') with explicit columns
+5. UI-01 polish: notice display in Overview tab if needed
+6. SEC-01 rotate (when owner ready)
+7. DB-04/05, AP-05
 
 ## Forbidden
 - No Puck/designtools/Surface (failed experiments)

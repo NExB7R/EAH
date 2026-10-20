@@ -342,42 +342,40 @@ BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> �
 
 ## 16. Current State (2026-10-20)
 
-**آخر commit:** `b43e770`
+**آخر commit:** `ee4abe7`
 **الفرع:** `main` (clean)
-**عدد الأنشطة في DB:** 0 (بداية نظيفة)
 
 ### ✅ شغال
-- Wizard 4-step + custom types + approval flow
-- Contacts repeater (15 أرقام max)
-- Real-time dashboard + ⌘K palette
-- Business detail page (Material 3 base)
-- Health, Audit, Studio
-- DB-01 (GRANTs), DB-03 (RPCs) hardened
-- AP-06 (B1 owner_profile_id) مُصلح — 15 patch + `.limit(1)` في 14 ملف
-- Invariants CI gate: `.github/workflows/invariants.yml` (CI-07 مغلق)
+- Business wizard fullscreen (4 خطوات + custom types + approval)
+- Contact types موسّعة (10): phone/whatsapp/complaints/manager/shift_*/facebook/instagram/website/additional
+- Notice system (info/warning/critical + expiry)
+- Open-now override (auto/open/closed)
+- Location picker (geolocation 📍 + OSM preview)
+- Admin business detail — **3 تبويبات** (نظرة عامة/تعديل/معاينة)
+- Admin profile accessible from sidebar + avatar
+- Bell routing صح للأدمن
+- WhatsApp orders gate (server-side)
+- Invariants CI gate (B1=0, B6=34, X1-X4=0)
 - 64/64 tests passing
 
 ### ❌ مشاكل معروفة
-- GOD-01: `business-form.tsx` = 1179 سطر (Pre-Launch RED)
-- UI-01: Business detail page layout broken (يحتاج redesign)
-- UI-02: Wizard uses sidebar (يحتاج full-width)
-- SEC-01: 11 مفتاح مكشوف (DEFERRED — قرار المالك)
-- SEC-02b: `***REMOVED***` في git history (`a322552`) — قبل الإطلاق
-- DB-04/05, AP-05: معلقين
+- SEC-01: 11 مفتاح (DEFERRED)
+- SEC-02b: ***REMOVED*** في git history
+- `hooks.ts` 380 سطر (tech debt)
+- B2: 5 select('*')
+- DB-04/05, AP-05
 
-### 🎯 الأولويات (بالترتيب)
-1. GOD-01: تقسيم `business-form.tsx`
-2. EMPTY-01 + CONFLICT-01: migration حذف الجداول الفاضية
-3. CONSISTENCY-01: SACRED → 4 أنواع
-4. SPRAWL-01: دمج monitoring pages
-5. CI-01 + CI-02: E2E على main
-6. UI-01 + UI-02: redesign
-7. DB-04, DB-05, AP-05
+### 🎯 الأولويات
+1. **أول نشاط حقيقي**
+2. اختبار end-to-end (notice + override + 📍)
+3. split hooks.ts
+4. B2 select('*')
+5. SEC-01 rotate
 
 ### 🚫 ممنوع
-- Puck/designtools/Surface (تجارب فاشلة)
+- Puck/designtools/Surface
 - Branches جديدة قبل الإطلاق
-- تعديل DB بدون migration في `docs/migrations/`
-- commit `.env.local`
+- DB بدون migration في docs/migrations/
+- commit .env.local
 
 **راجع `docs/NEXT_SESSION.md` للتفاصيل الكاملة.**
