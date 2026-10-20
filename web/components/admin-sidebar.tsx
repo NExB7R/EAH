@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import {
   LayoutDashboardIcon,
   AlertIcon,
@@ -88,6 +88,12 @@ const SECTIONS: Section[] = [
         Icon: ShieldCheckIcon,
         badgeKey: 'flaggedReviews',
       },
+      {
+        href: '/admin/moderation?tab=reports',
+        label: 'بلاغات المستخدمين',
+        Icon: FileTextIcon,
+        badgeKey: 'openReports',
+      },
       { href: '/admin/fraud', label: 'مراجعة الأنشطة المشبوهة', Icon: AlertIcon },
     ],
   },
@@ -112,6 +118,7 @@ const SECTIONS: Section[] = [
 
 export default function AdminSidebar({ counts, onNavigate }: Props) {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   return (
     <aside className={onNavigate ? styles.drawerSidebar : styles.sidebar}>
@@ -121,7 +128,14 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
             <h4 className={styles.sectionTitle}>{section.title}</h4>
             <ul className={styles.list}>
               {section.items.map(({ href, label, Icon, badgeKey }) => {
-                const active = href === '/admin' ? pathname === '/admin' : pathname.startsWith(href)
+                const [baseHref, queryString] = href.split('?')
+                const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null
+                const isModerationPage = baseHref === '/admin/moderation'
+                const active = baseHref === '/admin'
+                  ? pathname === '/admin'
+                  : pathname.startsWith(baseHref) && (targetTab
+                    ? searchParams.get('tab') === targetTab
+                    : !(isModerationPage && searchParams.has('tab')))
                 const badgeValue = badgeKey ? counts?.[badgeKey] : undefined
                 const showBadge = typeof badgeValue === 'number' && badgeValue > 0
 
