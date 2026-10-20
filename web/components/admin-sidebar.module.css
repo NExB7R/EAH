@@ -187,3 +187,68 @@
     transition: none;
   }
 }
+
+
+/* Mobile drawer variant: keep links grouped vertically instead of inheriting
+   the compact horizontal navigation used by the page layout. */
+.drawerSidebar {
+  position: static;
+  top: auto;
+  max-height: none;
+  overflow: visible;
+  margin-bottom: 0;
+}
+
+.drawerSidebar .nav {
+  flex-direction: column;
+  gap: 14px;
+  overflow: visible;
+  padding: 4px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.drawerSidebar .section {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.drawerSidebar .sectionTitle {
+  display: block;
+}
+
+.drawerSidebar .list {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.drawerSidebar .item {
+  flex-shrink: initial;
+  padding: 10px 12px;
+  font-size: 0.86rem;
+}
+
+.drawerSidebar .active::before {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .drawerSidebar .nav {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .drawerSidebar .section {
+    flex-direction: column;
+  }
+
+  .drawerSidebar .list {
+    flex-direction: column;
+  }
+
+  .drawerSidebar .sectionTitle {
+    display: block;
+  }
+}
