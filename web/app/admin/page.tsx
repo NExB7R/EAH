@@ -8,7 +8,6 @@ import {
   AlertIcon,
   CheckCircleIcon,
   ArrowLeftIcon,
-  TrendingUpIcon,
   GiftIcon,
   ShieldCheckIcon,
 } from '@/components/icons'
