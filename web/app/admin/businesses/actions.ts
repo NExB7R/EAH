@@ -519,7 +519,7 @@ export async function findUserByPhone(phone: string): Promise<UserLookup> {
       .from('businesses')
       .select('*', { count: 'exact', head: true })
       .eq('owner_profile_id', profile.id),
-    admin.from('user_roles').select('role').eq('user_id', profile.id).maybeSingle(),
+    admin.from('user_roles').select('role').eq('user_id', profile.id).limit(1).maybeSingle(),
   ])
 
   return {

@@ -23,6 +23,7 @@ export default async function QrPage() {
     .from('businesses')
     .select('id, slug, name')
     .eq('owner_profile_id', session.userId)
+    .limit(1)
     .maybeSingle()
 
   if (!business) {

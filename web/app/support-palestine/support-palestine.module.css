@@ -324,7 +324,7 @@
   background: var(--gold-soft);
   color: var(--gold-light);
   box-shadow: 0 0 32px rgba(232, 199, 154, 0.3);
-  animation: heartPulse 2.4s ease-in-out infinite;
+  animation: heartPulse 2.4s ease-in-out 3;
 }
 
 @keyframes heartPulse {

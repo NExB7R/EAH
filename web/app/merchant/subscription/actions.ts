@@ -28,6 +28,7 @@ export async function requestSubscription(formData: FormData): Promise<Result> {
     .from('businesses')
     .select('id, name')
     .eq('owner_profile_id', user.id)
+    .limit(1)
     .maybeSingle()
 
   if (!biz) return { ok: false, error: 'مفيش نشاط مرتبط بحسابك' }
@@ -115,6 +116,7 @@ export async function startFreeTrial(): Promise<Result> {
     .from('businesses')
     .select('id, name, trial_used, source')
     .eq('owner_profile_id', user.id)
+    .limit(1)
     .maybeSingle()
 
   if (!biz) return { ok: false, error: 'مفيش نشاط مرتبط بحسابك' }

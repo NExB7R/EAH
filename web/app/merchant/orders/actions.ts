@@ -50,6 +50,7 @@ async function requireMerchant() {
     .from('businesses')
     .select('id, slug, name')
     .eq('owner_profile_id', user.id)
+    .limit(1)
     .maybeSingle()
 
   if (!biz) return { ok: false as const, error: 'مفيش نشاط مرتبط بحسابك' }

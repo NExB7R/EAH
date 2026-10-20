@@ -67,6 +67,7 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
       'id, slug, name, business_type, area, description, hook, address_text, cover_image_url, is_published, is_open, accepts_whatsapp_orders, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at',
     )
     .eq('owner_profile_id', userId)
+    .limit(1)
     .maybeSingle()
 
   return (data as MerchantBusiness) ?? null

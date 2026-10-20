@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
     .from('businesses')
     .select('id, slug')
     .eq('owner_profile_id', user.id)
+    .limit(1)
     .maybeSingle()
 
   if (!biz) {

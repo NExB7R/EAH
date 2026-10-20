@@ -35,6 +35,7 @@ async function myBusiness() {
     .from('businesses')
     .select('id, slug, name, owner_profile_id')
     .eq('owner_profile_id', user.id)
+    .limit(1)
     .maybeSingle()
 
   if (!biz) return { ok: false as const, error: 'مفيش نشاط مرتبط بحسابك' }

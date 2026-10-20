@@ -37,6 +37,7 @@ export async function GET(req: Request) {
     .from('businesses')
     .select('id, name')
     .eq('owner_profile_id', user.id)
+    .limit(1)
     .maybeSingle()
 
   if (!biz) {

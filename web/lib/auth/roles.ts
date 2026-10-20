@@ -39,6 +39,7 @@ export async function getRoleContext(): Promise<RoleContext> {
     .from('businesses')
     .select('id')
     .eq('owner_profile_id', user.id)
+    .limit(1)
     .maybeSingle()
 
   if (biz) {
