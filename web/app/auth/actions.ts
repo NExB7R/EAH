@@ -33,16 +33,14 @@ function str(formData: FormData, key: string): string {
 // ═══════════════════════════════════════════════════════════
 async function verifyTurnstile(token: string): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY
-  if (!secret) {
-    // في dev محلي — لو مفيش secret، نقبل (عشان التطوير)
-    // في production — Secret مفعّل دايماً
-    return process.env.NODE_ENV !== 'production'
-  }
 
-  // Test Keys من Cloudflare — تبدأ بـ 1x000
-  // Skip verification لمنع false negatives في التجارب
-  if (secret.startsWith('1x000')) {
+  // Local development can run without Turnstile credentials. Production must
+  // never accept a missing or test secret as proof of a human challenge.
+  if (process.env.NODE_ENV !== 'production' && (!secret || secret.startsWith('1x000'))) {
     return true
+  }
+  if (!secret || secret.startsWith('1x000')) {
+    return false
   }
 
   try {
@@ -65,7 +63,7 @@ async function verifyTurnstile(token: string): Promise<boolean> {
 export async function signupAction(formData: FormData): Promise<AuthResult> {
   // ─── Rate Limit ───
   const ip = await getClientIp()
-  const rl = await checkRateLimit(authLimiter, `signup:${ip}`)
+  const rl = await checkRateLimit(authLimiter, `signup:${ip}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
 
   const raw = {
@@ -176,7 +174,7 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
 export async function loginAction(formData: FormData): Promise<AuthResult> {
   // ─── Rate Limit ───
   const ip = await getClientIp()
-  const rl = await checkRateLimit(authLimiter, `login:${ip}`)
+  const rl = await checkRateLimit(authLimiter, `login:${ip}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
 
   const raw = {
@@ -240,7 +238,7 @@ export async function loginAction(formData: FormData): Promise<AuthResult> {
 export async function recoverAction(formData: FormData): Promise<AuthResult> {
   // ─── Rate Limit ───
   const ip = await getClientIp()
-  const rl = await checkRateLimit(authLimiter, `recover:${ip}`)
+  const rl = await checkRateLimit(authLimiter, `recover:${ip}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
 
   const raw = { phone: str(formData, 'phone') }
@@ -255,7 +253,9 @@ export async function recoverAction(formData: FormData): Promise<AuthResult> {
     }
   }
 
-  // MVP: مفيش إرسال فعلي — Admin يعمل reset يدوي.
-  // privacy: مانقولش لو الرقم موجود ولا لأ.
-  return { ok: true }
+  // Do not report success when no recovery message or password reset was sent.
+  return {
+    ok: false,
+    error: 'استعادة الحساب غير متاحة آليًا حاليًا؛ لم يتم تغيير كلمة السر.',
+  }
 }
