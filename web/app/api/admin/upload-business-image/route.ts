@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/auth/admin'
-import { uploadImage } from '@/lib/cloudinary'
+import { uploadImage, uploadRemoteImage } from '@/lib/cloudinary'
+import { adminUploadLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { logAudit } from '@/lib/logging/audit'
 import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath, revalidateTag } from 'next/cache'
@@ -21,6 +22,16 @@ type Category = (typeof ALLOWED_CATEGORIES)[number]
 export async function POST(req: NextRequest) {
   const ctx = await requireAdmin()
   if (!ctx.ok) return NextResponse.json({ error: ctx.error }, { status: 401 })
+
+  const rateLimit = await checkRateLimit(adminUploadLimiter, `admin:${ctx.userId}`, {
+    failClosed: true,
+  })
+  if (!rateLimit.ok) {
+    return NextResponse.json(
+      { error: rateLimit.error },
+      { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } },
+    )
+  }
 
   const admin = createServiceClient()
   const formData = await req.formData()
@@ -43,6 +54,7 @@ export async function POST(req: NextRequest) {
     .maybeSingle()
   if (!biz) return NextResponse.json({ error: 'النشاط مش موجود' }, { status: 404 })
 
+  const folder = `eah/businesses/${businessId}/${category}`
   let finalUrl: string
 
   if (fileRaw instanceof File) {
@@ -52,20 +64,18 @@ export async function POST(req: NextRequest) {
     if (fileRaw.size <= 0 || fileRaw.size > MAX_SIZE) {
       return NextResponse.json({ error: 'الحجم لازم يكون أكبر من صفر وأقل من 5MB' }, { status: 400 })
     }
-    const folder = `eah/businesses/${businessId}/${category}`
     const result = await uploadImage(fileRaw, folder, MAX_SIZE)
     if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 })
     finalUrl = result.url
   } else if (typeof urlRaw === 'string' && urlRaw.trim()) {
     const url = urlRaw.trim()
     if (url.length > 500) return NextResponse.json({ error: 'الرابط طويل جداً' }, { status: 400 })
-    if (!url.startsWith('https://') && !url.startsWith('http://')) {
-      return NextResponse.json(
-        { error: 'الرابط لازم يبدأ بـ http:// أو https://' },
-        { status: 400 },
-      )
+    if (!url.toLowerCase().startsWith('https://')) {
+      return NextResponse.json({ error: 'الرابط لازم يكون HTTPS آمن' }, { status: 400 })
     }
-    finalUrl = url
+    const result = await uploadRemoteImage(url, folder, MAX_SIZE)
+    if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 })
+    finalUrl = result.url
   } else {
     return NextResponse.json({ error: 'محتاج ملف أو رابط' }, { status: 400 })
   }
@@ -188,6 +198,16 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const ctx = await requireAdmin()
   if (!ctx.ok) return NextResponse.json({ error: ctx.error }, { status: 401 })
+
+  const rateLimit = await checkRateLimit(adminUploadLimiter, `admin:${ctx.userId}`, {
+    failClosed: true,
+  })
+  if (!rateLimit.ok) {
+    return NextResponse.json(
+      { error: rateLimit.error },
+      { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } },
+    )
+  }
 
   const admin = createServiceClient()
   const params = new URL(req.url).searchParams
