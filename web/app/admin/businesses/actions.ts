@@ -300,7 +300,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     })(),
     is_open: formData.get('is_open') === 'on',
     accepts_whatsapp_orders: formData.get('accepts_whatsapp_orders') === 'on',
-    is_published: formData.get('is_published') === 'on',
+    is_published: formData.has('is_published') ? formData.get('is_published') === 'on' : true,
   })
 
   if (!parsed.success) {
@@ -309,11 +309,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
 
   const d = parsed.data
 
-  // Public listings must be linked to an owner before immediate publication.
-  // An unassigned activity can be saved as a private draft and linked later.
-  if (d.is_published && !d.owner_profile_id) {
-    return { ok: false, error: 'اربط النشاط بحساب مالكه قبل النشر المباشر' }
-  }
+  // Owner assignment controls who manages the business; it does not control public visibility.
 
   let selectedOwnerRole: 'customer' | 'merchant' | null = null
   if (d.owner_profile_id) {
