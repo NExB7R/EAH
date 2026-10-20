@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { uploadImage } from '@/lib/cloudinary'
@@ -164,6 +165,13 @@ export async function POST(req: NextRequest) {
       return jsonError('الصورة اتحفظت لكن فشل تحديث غلاف النشاط', 500)
     }
   }
+
+  // Refresh public cards and the business page immediately after the canonical
+  // media row (and legacy cover column when applicable) has been saved.
+  revalidatePath('/merchant/business')
+  revalidatePath(`/businesses/${business.slug}`)
+  revalidatePath('/explore')
+  revalidateTag('businesses', 'default')
 
   return NextResponse.json({ ok: true, url: upload.url, mediaId, category })
 }
