@@ -102,6 +102,15 @@
   text-align: center;
 }
 
+.turnstile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding-top: 4px;
+}
+
 /* ─── Result ─── */
 .result {
   display: flex;
