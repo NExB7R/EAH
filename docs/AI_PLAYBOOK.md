@@ -201,3 +201,21 @@ gitleaks detect --log-opts="--all"
 - merge لـ main بعد الموافقة
 
 **الفرع `ui-onlook` على الريموت:** إرث قديم. مش مستخدم. لا تحاول دمجه.
+
+---
+
+## 14. Python write_text — قاعدة صارمة (2026-10-20)
+
+**السياق:** في جلسة واحدة، تعبير `r` + backslash في بداية سلسلة Python أنتج `\` حرفياً في السطر الأول من 4 دفعات كود. كل مرة احتاجت إصلاح يدوي + 10 دقايق ضايعة.
+
+**القاعدة:**
+- **ممنوع** استخدام raw string + backslash-newline في بداية write_text
+- **استخدم** `.lstrip()` على المحتوى
+- **التحقق بعد أي write:** `head -1 file` — لو مطلع `\` = خطأ
+
+**البديل الآمن:**
+    Path('file.ts').write_text(content.lstrip(), encoding='utf-8')
+
+**السبب:** raw string + backslash قبل newline = backslash حرف literal في النص، مش escape.
+
+---

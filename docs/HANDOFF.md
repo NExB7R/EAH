@@ -305,3 +305,40 @@
 ---
 
 **المالك:** NourEldin B7R — فلسطين في القلب
+
+---
+
+## حالة التسليم — 2026-10-20 (Admin Redesign)
+
+**آخر commit:** `6b682be`
+**Invariants:** OK (B1=0, B2=5, B6=34, X1-X4=0)
+**Deploy:** Vercel auto
+
+### شغال
+- Business wizard fullscreen (4 steps)
+- Contact types (10): phone/whatsapp/complaints/manager/shift_*/facebook/instagram/website/additional
+- Notice (info/warning/critical + expiry)
+- Open-now override (auto/open/closed)
+- Location picker (📍 + OSM iframe)
+- Admin detail: 3 tabs (نظرة عامة/تعديل/معاينة)
+- Admin profile: sidebar + avatar routing
+- Bell → /admin/notifications
+- WhatsApp orders gate (server-side)
+- 5 God Components split (كلها ≤300 سطر)
+
+### مختبرش لسه
+- 🟡 Mobile UX على 320px (يحتاج QA بعد أول نشاط)
+- 🟡 Notice/override/📍 end-to-end (نظرياً شغال)
+- 🟡 وizard على أجهزة مختلفة
+
+### أولويات الجلسة القادمة
+1. **أول نشاط حقيقي** (الأولوية #1)
+2. Mobile QA بعد اختبار
+3. UI polish حسب الملاحظات
+4. SEC-01 rotate (قرار المالك)
+
+### تحذيرات
+- `hooks.ts` أصبح 3 ملفات — لا تعدّل واحد بدون التانيين
+- `business-form-hooks.ts` = combiner — التعديل الحقيقي في state/handlers
+- الملفات المقدّسة: SACRED.md §4
+
