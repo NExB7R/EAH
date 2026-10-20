@@ -21,11 +21,17 @@ export async function approveBusiness(businessId: string): Promise<Result> {
 
   const { data: biz } = await ctx.supabase
     .from('businesses')
-    .select('id, name, owner_profile_id, slug')
+    .select('id, name, owner_profile_id, slug, business_type_status')
     .eq('id', businessId)
     .maybeSingle()
 
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
+  if (biz.business_type_status === 'pending' || biz.business_type_status === 'rejected') {
+    return {
+      ok: false,
+      error: 'نوع النشاط المخصص لسه محتاج قرار. راجع «أنواع الأنشطة الجديدة» الأول، وبعد الموافقة انشر النشاط.',
+    }
+  }
 
   const { error } = await ctx.supabase
     .from('businesses')
@@ -157,6 +163,19 @@ export async function archiveBusiness(businessId: string): Promise<Result> {
 export async function republishBusiness(businessId: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
+
+  const { data: biz } = await ctx.supabase
+    .from('businesses')
+    .select('id, business_type_status')
+    .eq('id', businessId)
+    .maybeSingle()
+  if (!biz) return { ok: false, error: 'النشاط مش موجود' }
+  if (biz.business_type_status === 'pending' || biz.business_type_status === 'rejected') {
+    return {
+      ok: false,
+      error: 'لا يمكن إعادة نشر النشاط قبل تسوية حالة النوع المخصص من صفحة «أنواع الأنشطة الجديدة».',
+    }
+  }
 
   const { error } = await ctx.supabase
     .from('businesses')
