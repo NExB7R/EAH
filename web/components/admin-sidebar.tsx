@@ -135,7 +135,7 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
                   ? pathname === '/admin'
                   : pathname.startsWith(baseHref) && (targetTab
                     ? searchParams.get('tab') === targetTab
-                    : !(isModerationPage && searchParams.get('tab') === 'reports')))
+                    : !(isModerationPage && searchParams.get('tab') === 'reports'))
                 const badgeValue = badgeKey ? counts?.[badgeKey] : undefined
                 const showBadge = typeof badgeValue === 'number' && badgeValue > 0
 
