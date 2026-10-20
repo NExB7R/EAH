@@ -11,6 +11,7 @@ import {
   UserIcon,
   ImageIcon,
   AlertIcon,
+  FileTextIcon,
 } from '@/components/icons'
 import type { AdminBusiness, BusinessOwnerOption } from '@/lib/data/admin-business'
 
