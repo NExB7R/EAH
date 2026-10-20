@@ -57,8 +57,26 @@ export async function saveBasics(businessId: string, formData: FormData): Promis
   })
   if (!parsed.success) return parseError(parsed)
 
-  const { error } = await ctx.supabase.from('businesses').update(parsed.data).eq('id', businessId)
+  // Switching to a built-in type resolves a previously pending/rejected custom
+  // type request, so the business can be republished after the admin saves.
+  const updateData =
+    parsed.data.business_type === 'misc'
+      ? parsed.data
+      : {
+          ...parsed.data,
+          custom_business_type: null,
+          business_type_status: 'approved' as const,
+          business_type_approved_at: null,
+        }
+
+  const { data: updated, error } = await ctx.supabase
+    .from('businesses')
+    .update(updateData)
+    .eq('id', businessId)
+    .select('id')
+    .maybeSingle()
   if (error) return { ok: false, error: error.message }
+  if (!updated) return { ok: false, error: 'تعذر حفظ بيانات النشاط — حدّث الصفحة وحاول تاني' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
