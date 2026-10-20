@@ -134,14 +134,23 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
   const isMerchant = session?.role === 'merchant'
 
   const handleShare = async () => {
-    if (typeof navigator === 'undefined' || !navigator.share) return
+    const url = typeof window !== 'undefined' ? window.location.origin : 'https://eah-sq.vercel.app'
+    const title = 'EAH — اللي نفسك فيه ؟'
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({ title, url })
+        return
+      } catch {
+        // cancelled — fall through to copy
+      }
+    }
     try {
-      await navigator.share({
-        title: 'EAH — اللي نفسك فيه ؟',
-        url: window.location.origin,
-      })
+      await navigator.clipboard.writeText(url)
+      setShareCopied(true)
+      setTimeout(() => setShareCopied(false), 2000)
     } catch {
-      // closed
+      // clipboard blocked
+      window.prompt('انسخ الرابط:', url)
     }
   }
 
@@ -371,7 +380,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                 <span className={styles.itemIcon}>
                   <ShareIcon size={20} />
                 </span>
-                <span>شارك المنصة</span>
+                <span>{shareCopied ? 'اتنسخ الرابط ✓' : 'شارك المنصة'}</span>
               </button>
             </li>
           </ul>
