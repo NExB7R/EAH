@@ -50,16 +50,22 @@ describe('trendScore', () => {
     expect(trendScore(high)).toBeGreaterThan(trendScore(low))
   })
 
-  it('طلبات أكثر = score أعلى', () => {
-    const few = makeBusiness({ successful_orders: 1 })
-    const many = makeBusiness({ successful_orders: 100 })
-    expect(trendScore(many)).toBeGreaterThan(trendScore(few))
+  it('velocity أعلى = score أعلى', () => {
+    const low = makeBusiness({ velocity_score: 5 })
+    const high = makeBusiness({ velocity_score: 40 })
+    expect(trendScore(high)).toBeGreaterThan(trendScore(low))
   })
 
-  it('featured يدي دفعة', () => {
-    const normal = makeBusiness({ is_featured: false })
-    const featured = makeBusiness({ is_featured: true })
-    expect(trendScore(featured)).toBeGreaterThan(trendScore(normal))
+  it('engagement أعلى = score أعلى', () => {
+    const low = makeBusiness({ engagement_score: 10 })
+    const high = makeBusiness({ engagement_score: 90 })
+    expect(trendScore(high)).toBeGreaterThan(trendScore(low))
+  })
+
+  it('diversity أعلى = score أعلى', () => {
+    const low = makeBusiness({ diversity_score: 5 })
+    const high = makeBusiness({ diversity_score: 45 })
+    expect(trendScore(high)).toBeGreaterThan(trendScore(low))
   })
 })
 
