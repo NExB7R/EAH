@@ -129,3 +129,87 @@
 |---|---|---|---|
 | SEC-01 | 🔴 | 11 مفتاح اتكشفوا في محادثة AI (Supabase, Cloudinary, Upstash, Turnstile, AI, VAPID, CRON, salt) | rotate كل واحد من Dashboard + Vercel |
 | SEC-02 | ✅ | VAPID keys في `.env.example` (git history) | commit 9bed439 (sanitized) — rotate VAPID |
+
+## 11. Tech Debt — Pre-Launch Blockers
+
+| ID | Status | Issue | Priority | Time |
+|---|---|---|---|---|
+| GOD-01 | RED | business-form.tsx = 1179 lines | Pre-Launch | 2h |
+| GOD-02 | YEL | new-business-wizard.tsx = 260 lines | Post-Launch | 30m |
+| SPRAWL-01 | RED | 20+ admin pages, 3 monitoring | Pre-Launch | 1h |
+| SPRAWL-02 | YEL | 3 moderation pages | Post-Launch | 1h |
+| EMPTY-01 | RED | 9 empty tables (0 rows) | Pre-Launch | 30m |
+| CONFLICT-01 | RED | business_commissions vs zero-commission | Pre-Launch | 15m |
+| CONSISTENCY-01 | RED | SACRED says 5 types, actual 4 | Pre-Launch | 5m |
+| CONSISTENCY-02 | YEL | PROGRESS.md duplicate rows | Post-Launch | 30m |
+| CONSISTENCY-03 | YEL | ARCHITECTURE.md cron hourly vs 3/day | Post-Launch | 5m |
+| CI-01 | RED | e2e.yml on v2 only, not main | Pre-Launch | 2h |
+| CI-02 | RED | business-order.spec passes empty | Pre-Launch | 1h |
+| DESIGN-01 | YEL | Design System not applied | Post-Launch | 3h |
+
+## 12. Pre-Launch Checklist (8h work)
+
+### Security (35 min)
+- [ ] SEC-01: rotate 11 keys
+- [ ] gitleaks clean
+
+### Code Quality (6h)
+- [ ] GOD-01: split business-form.tsx
+- [ ] SPRAWL-01: merge monitoring pages
+- [ ] CI-01 + CI-02: E2E on main
+
+### Data (45 min)
+- [ ] EMPTY-01: delete 9 empty tables
+- [ ] CONFLICT-01: delete business_commissions
+
+### Docs (10 min)
+- [ ] CONSISTENCY-01: SACRED to 4 types
+- [ ] NEXT_SESSION.md updated
+
+### Post-Launch Week 1
+- [ ] UI-01: redesign business detail
+- [ ] UI-02: wizard full-width
+- [ ] CONSISTENCY-02/03: docs sync
+- [ ] DESIGN-01: unified design system
+
+### Post-Launch Month 1
+- [ ] DB-04/05, AP-05
+- [ ] SPRAWL-02: merge moderation
+- [ ] GOD-02: split wizard
+
+## 13. God Components Inventory
+
+| File | Lines | Limit | Status |
+|---|---|---|---|
+| business-form.tsx | 1179 | 300 | RED |
+| new-business-wizard.tsx | 260 | 300 | YEL |
+| edit-form.tsx | 313 | 300 | YEL |
+| lib/data/merchant.ts | 288 | n/a | OK |
+
+Rule: component > 300 lines must split before adding features.
+
+## 14. Empty Tables Inventory
+
+| Table | Decision |
+|---|---|
+| site_designs | DELETE |
+| business_commissions | DELETE (CONFLICT-01) |
+| live_page_sessions | REVIEW |
+| ads | DELETE (superseded) |
+| ad_campaigns | KEEP |
+| ad_creatives | KEEP |
+| ad_events | KEEP |
+| ad_stats_daily | KEEP |
+| rate_limits | DELETE (Upstash) |
+
+Action: delete 5 tables.
+
+## 15. Before Any Feature Work
+
+Read in order:
+1. NEXT_SESSION.md
+2. BRAIN.md
+3. AI_PLAYBOOK.md
+4. ERROR_REGISTER.md (this file)
+
+If any Pre-Launch blocker is open, fix it before adding features.
