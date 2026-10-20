@@ -250,11 +250,35 @@ export default async function AdminDashboard() {
         </header>
 
         <div className={styles.quickLinks}>
-          <Link href="/admin/studio" className={styles.quickCard}>
+          <Link href="/admin/businesses/new" className={styles.quickCard}>
             <span className={styles.quickIcon}>
-              <TrendingUpIcon size={20} />
+              <StoreIcon size={20} />
             </span>
-            <span className={styles.quickLabel}>الاستوديو (الميزات)</span>
+            <span className={styles.quickLabel}>إضافة نشاط جديد</span>
+            <ArrowLeftIcon size={14} className={styles.chev} />
+          </Link>
+
+          <Link href="/admin/businesses" className={styles.quickCard}>
+            <span className={styles.quickIcon}>
+              <CheckCircleIcon size={20} />
+            </span>
+            <span className={styles.quickLabel}>إدارة الأنشطة</span>
+            <ArrowLeftIcon size={14} className={styles.chev} />
+          </Link>
+
+          <Link href="/admin/moderation?tab=reports" className={styles.quickCard}>
+            <span className={styles.quickIcon}>
+              <ShieldCheckIcon size={20} />
+            </span>
+            <span className={styles.quickLabel}>مراجعة البلاغات</span>
+            <ArrowLeftIcon size={14} className={styles.chev} />
+          </Link>
+
+          <Link href="/admin/users" className={styles.quickCard}>
+            <span className={styles.quickIcon}>
+              <UserIcon size={20} />
+            </span>
+            <span className={styles.quickLabel}>إدارة المستخدمين</span>
             <ArrowLeftIcon size={14} className={styles.chev} />
           </Link>
 
@@ -263,14 +287,6 @@ export default async function AdminDashboard() {
               <GiftIcon size={20} />
             </span>
             <span className={styles.quickLabel}>إرسال إشعار</span>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
-
-          <Link href="/admin/analytics" className={styles.quickCard}>
-            <span className={styles.quickIcon}>
-              <TrendingUpIcon size={20} />
-            </span>
-            <span className={styles.quickLabel}>التقارير</span>
             <ArrowLeftIcon size={14} className={styles.chev} />
           </Link>
         </div>
