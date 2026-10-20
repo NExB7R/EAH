@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboardIcon,
+  AlertIcon,
   StoreIcon,
   UserIcon,
   CrownGoldIcon,
@@ -14,7 +15,6 @@ import {
   BellIcon,
   TagIcon,
   SparklesIcon,
-  HeartIcon,
 } from './icons'
 import styles from './admin-sidebar.module.css'
 
@@ -24,6 +24,7 @@ import styles from './admin-sidebar.module.css'
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
+  onNavigate?: () => void
   counts?: {
     pendingBusinesses?: number
     flaggedReviews?: number
@@ -46,15 +47,14 @@ type Section = {
 
 const SECTIONS: Section[] = [
   {
-    title: 'نظرة عامة',
+    title: 'الرئيسية',
     items: [
-      { href: '/admin', label: 'الرئيسية', Icon: LayoutDashboardIcon },
+      { href: '/admin', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
       { href: '/admin/analytics', label: 'التحليلات والتقارير', Icon: TrendingUpIcon },
-      { href: '/admin/health', label: 'صحة النظام', Icon: HeartIcon },
     ],
   },
   {
-    title: 'الإدارة',
+    title: 'إدارة المنصة',
     items: [
       {
         href: '/admin/businesses',
@@ -62,8 +62,13 @@ const SECTIONS: Section[] = [
         Icon: StoreIcon,
         badgeKey: 'pendingBusinesses',
       },
-      { href: '/admin/featured', label: 'المميزون', Icon: CrownGoldIcon },
       { href: '/admin/users', label: 'المستخدمين', Icon: UserIcon },
+      { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
+    ],
+  },
+  {
+    title: 'النمو والإيرادات',
+    items: [
       {
         href: '/admin/subscriptions',
         label: 'الاشتراكات',
@@ -71,11 +76,11 @@ const SECTIONS: Section[] = [
         badgeKey: 'pendingSubscriptions',
       },
       { href: '/admin/ads', label: 'الإعلانات', Icon: TagIcon },
-      { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
+      { href: '/admin/featured', label: 'المميزون', Icon: CrownGoldIcon },
     ],
   },
   {
-    title: 'المراجعة والأمان',
+    title: 'المحتوى والثقة',
     items: [
       {
         href: '/admin/moderation',
@@ -83,25 +88,33 @@ const SECTIONS: Section[] = [
         Icon: ShieldCheckIcon,
         badgeKey: 'flaggedReviews',
       },
+      { href: '/admin/fraud', label: 'مراجعة الأنشطة المشبوهة', Icon: AlertIcon },
     ],
   },
   {
-    title: 'النظام',
+    title: 'التواصل والرؤى',
     items: [
-      { href: '/admin/profile', label: 'بروفايلي', Icon: UserIcon },
+      { href: '/admin/announcements', label: 'الإعلانات والتنبيهات', Icon: BellIcon },
       { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
+      { href: '/admin/insights', label: 'الرؤى الذكية', Icon: SparklesIcon },
+    ],
+  },
+  {
+    title: 'النظام والإعدادات',
+    items: [
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
+      { href: '/admin/profile', label: 'بروفايلي', Icon: UserIcon },
       { href: '/admin/settings', label: 'الإعدادات', Icon: SettingsIcon },
     ],
   },
 ]
 
-export default function AdminSidebar({ counts }: Props) {
+export default function AdminSidebar({ counts, onNavigate }: Props) {
   const pathname = usePathname()
 
   return (
-    <aside className={styles.sidebar}>
+    <aside className={onNavigate ? styles.drawerSidebar : styles.sidebar}>
       <nav className={styles.nav} aria-label="لوحة الأدمن">
         {SECTIONS.map((section) => (
           <div key={section.title} className={styles.section}>
@@ -118,6 +131,7 @@ export default function AdminSidebar({ counts }: Props) {
                       href={href}
                       className={`${styles.item} ${active ? styles.active : ''}`}
                       aria-current={active ? 'page' : undefined}
+                      onClick={onNavigate}
                     >
                       <span className={styles.iconWrap}>
                         <Icon size={16} />
