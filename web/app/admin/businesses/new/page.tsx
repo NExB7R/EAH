@@ -15,9 +15,12 @@ export const dynamic = 'force-dynamic'
 export default async function NewBusinessPage() {
   const owners = await getBusinessOwnerCandidates()
 
-  const ownerOptions: OwnerOption[] = (
-    owners as unknown as { id: string; display_name: string }[]
-  ).map((o) => ({ id: o.id, display_name: o.display_name }))
+  const ownerOptions: OwnerOption[] = owners.map((owner) => ({
+    id: owner.id,
+    display_name: owner.display_name,
+    phone: owner.phone,
+    role: owner.role,
+  }))
 
   return (
     <div className={fsStyles.overlay}>

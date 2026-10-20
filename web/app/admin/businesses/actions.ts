@@ -315,6 +315,26 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     return { ok: false, error: 'اربط النشاط بحساب مالكه قبل النشر المباشر' }
   }
 
+  let selectedOwnerRole: 'customer' | 'merchant' | null = null
+  if (d.owner_profile_id) {
+    const { data: roleRow, error: roleLookupError } = await ctx.supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', d.owner_profile_id)
+      .maybeSingle()
+
+    if (roleLookupError) {
+      return { ok: false, error: 'تعذر التحقق من دور حساب المالك — حاول تاني' }
+    }
+    if (!roleRow) {
+      return { ok: false, error: 'حساب المالك غير مهيأ داخل النظام — راجع حسابه قبل الربط' }
+    }
+    if (roleRow.role !== 'customer' && roleRow.role !== 'merchant') {
+      return { ok: false, error: 'اختر حساب عميل أو تاجر، ولا تربط النشاط بحساب إداري' }
+    }
+    selectedOwnerRole = roleRow.role
+  }
+
   const finalSlug = d.slug ?? slugify(d.name)
 
   // WhatsApp gate: auto-disable orders if no whatsapp contact provided
@@ -393,6 +413,83 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         ok: false,
         error: 'فشل حفظ أرقام التواصل، وتم إلغاء إنشاء النشاط. راجع الأرقام وحاول تاني.',
       }
+    }
+  }
+
+  // A newly registered owner normally starts as a customer. Promote only after
+  // business + contacts are saved, and roll back the business if the role cannot be changed.
+  if (d.owner_profile_id && selectedOwnerRole === 'customer') {
+    const { data: promotedRole, error: promoteError } = await ctx.supabase
+      .from('user_roles')
+      .update({ role: 'merchant' })
+      .eq('user_id', d.owner_profile_id)
+      .eq('role', 'customer')
+      .select('role')
+      .maybeSingle()
+
+    let ownerIsMerchant = promotedRole?.role === 'merchant'
+    if (!ownerIsMerchant) {
+      const { data: latestRole, error: latestRoleError } = await ctx.supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', d.owner_profile_id)
+        .maybeSingle()
+      ownerIsMerchant = !latestRoleError && latestRole?.role === 'merchant'
+    }
+
+    if (!ownerIsMerchant) {
+      const { error: contactsRollbackError } = await ctx.supabase
+        .from('business_contact_methods')
+        .delete()
+        .eq('business_id', created.id)
+      const { error: businessRollbackError } = await ctx.supabase
+        .from('businesses')
+        .delete()
+        .eq('id', created.id)
+
+      if (contactsRollbackError || businessRollbackError) {
+        await logAudit(ctx.supabase, {
+          actorUserId: ctx.userId,
+          action: 'business.create_owner_role_failure',
+          entityType: 'business',
+          entityId: created.id,
+          metadata: {
+            name: d.name,
+            promote_error: promoteError?.message ?? 'owner role was not promoted',
+            contacts_rollback_error: contactsRollbackError?.message ?? null,
+            business_rollback_error: businessRollbackError?.message ?? null,
+          },
+        })
+        return {
+          ok: false,
+          error: 'تعذّر تفعيل حساب المالك وتعذّر إلغاء الإنشاء بالكامل. راجع النشاط في لوحة الإدارة قبل إعادة المحاولة.',
+        }
+      }
+
+      return {
+        ok: false,
+        error: 'تعذّر تفعيل حساب المالك كتاجر، وتم إلغاء إنشاء النشاط. حاول مرة أخرى أو راجع صلاحيات النظام.',
+      }
+    }
+  }
+
+  if (d.owner_profile_id) {
+    try {
+      await createNotification({
+        userId: d.owner_profile_id,
+        type: 'admin',
+        title: 'تم ربط نشاط بحسابك',
+        body: `نشاط "${d.name}" اتربط بحسابك — تقدر تديره من لوحة التاجر`,
+        deepLink: '/merchant',
+      })
+    } catch {
+      await logAudit(ctx.supabase, {
+        actorUserId: ctx.userId,
+        action: 'business.create.owner_notification_failed',
+        entityType: 'business',
+        entityId: created.id,
+        metadata: { owner_profile_id: d.owner_profile_id },
+      })
     }
   }
 
@@ -599,11 +696,24 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
 
   const { data: biz } = await ctx.supabase
     .from('businesses')
-    .select('id, name, owner_profile_id, source')
+    .select('id, name, owner_profile_id, source, claimed_at, claimed_by_user_id')
     .eq('id', businessId)
     .maybeSingle()
 
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
+
+  const { data: currentRole, error: roleLookupError } = await ctx.supabase
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  if (roleLookupError || !currentRole) {
+    return { ok: false, error: 'حساب المستخدم غير مهيأ لدور داخل النظام — راجع الحساب قبل الربط' }
+  }
+  if (currentRole.role !== 'customer' && currentRole.role !== 'merchant') {
+    return { ok: false, error: 'لا يمكن ربط نشاط بحساب إداري' }
+  }
 
   if (biz.owner_profile_id === userId) {
     return { ok: false, error: 'النشاط مرتبط بالفعل بالحساب ده' }
@@ -621,15 +731,62 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
 
   if (error) return { ok: false, error: error.message }
 
-  // رفع المستخدم لـ merchant (لو مش admin/super_admin)
-  const { data: currentRole } = await ctx.supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', userId)
-    .maybeSingle()
+  // Newly registered users start as customers; promote only after the business
+  // owner link is saved. If promotion fails, restore the previous owner fields.
+  if (currentRole.role === 'customer') {
+    const { data: promotedRole, error: promoteError } = await ctx.supabase
+      .from('user_roles')
+      .update({ role: 'merchant' })
+      .eq('user_id', userId)
+      .eq('role', 'customer')
+      .select('role')
+      .maybeSingle()
 
-  if (currentRole?.role === 'customer') {
-    await ctx.supabase.from('user_roles').update({ role: 'merchant' }).eq('user_id', userId)
+    let ownerIsMerchant = promotedRole?.role === 'merchant'
+    if (!ownerIsMerchant) {
+      const { data: latestRole, error: latestRoleError } = await ctx.supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .maybeSingle()
+      ownerIsMerchant = !latestRoleError && latestRole?.role === 'merchant'
+    }
+
+    if (!ownerIsMerchant) {
+      const { error: rollbackError } = await ctx.supabase
+        .from('businesses')
+        .update({
+          owner_profile_id: biz.owner_profile_id,
+          source: biz.source,
+          claimed_at: biz.claimed_at,
+          claimed_by_user_id: biz.claimed_by_user_id,
+        })
+        .eq('id', businessId)
+
+      if (rollbackError) {
+        await logAudit(ctx.supabase, {
+          actorUserId: ctx.userId,
+          action: 'business.link_owner_partial_failure',
+          entityType: 'business',
+          entityId: businessId,
+          metadata: {
+            new_owner: userId,
+            old_owner: biz.owner_profile_id,
+            promote_error: promoteError?.message ?? 'owner role was not promoted',
+            rollback_error: rollbackError.message,
+          },
+        })
+        return {
+          ok: false,
+          error: 'تعذّر تفعيل حساب المالك وتعذّر التراجع عن الربط. راجع النشاط قبل إعادة المحاولة.',
+        }
+      }
+
+      return {
+        ok: false,
+        error: 'تعذّر تفعيل حساب المالك كتاجر، وتم التراجع عن الربط. حاول تاني.',
+      }
+    }
   }
 
   await createNotification({

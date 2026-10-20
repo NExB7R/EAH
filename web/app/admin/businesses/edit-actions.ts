@@ -4,6 +4,7 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
+import { linkBusinessToUser } from './actions'
 import {
   basicsSchema,
   contactsSchema,
@@ -402,36 +403,8 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
 
 // ═══ 8. ربط المالك ═══
 export async function saveOwner(businessId: string, ownerProfileId: string): Promise<Result> {
-  const ctx = await requireAdmin()
-  if (!ctx.ok) return ctx
-
-  if (!ownerProfileId) return { ok: false, error: 'اختر صاحب النشاط' }
-
-  const { error } = await ctx.supabase
-    .from('businesses')
-    .update({ owner_profile_id: ownerProfileId })
-    .eq('id', businessId)
-  if (error) return { ok: false, error: error.message }
-
-  // تأكد من role=merchant
-  const { data: existing } = await ctx.supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', ownerProfileId)
-    .maybeSingle()
-
-  if (!existing) {
-    await ctx.supabase.from('user_roles').insert({ user_id: ownerProfileId, role: 'merchant' })
-  }
-
-  await logAudit(ctx.supabase, {
-    actorUserId: ctx.userId,
-    action: 'business.update.owner',
-    entityType: 'business',
-    entityId: businessId,
-    metadata: { owner_profile_id: ownerProfileId },
-  })
-  revalidatePath(`/admin/businesses/${businessId}`)
+  const result = await linkBusinessToUser(businessId, ownerProfileId)
+  if (!result.ok) return { ok: false, error: result.error }
   return { ok: true }
 }
 
