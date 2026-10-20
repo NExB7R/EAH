@@ -30,6 +30,7 @@
 | DB-17 | ⏳ | set_business_commission ضد مبدأ صفر عمولة | احذف أو وثّق | قرار |
 | DB-18 | 🟡 | تفريق بين super_admin وadmin في policies + is_admin() | وحّد | اختبار بحساب admin |
 | DB-19 | ⏳ | Leaked Password Protection مقفول | Pro | Dashboard |
+| DB-20 | ✅ | `find_by_phone` و`is_phone_registered` كانتا قابلتين للاستدعاء مباشرة من anon/authenticated، ما يسهل تعداد الأرقام | migration `20261020203959`; routes moved to service client after server-side checks | تحقق حي: anon=false، authenticated=false، service_role=true للدالتين |
 
 ## 2. الدخول والحسابات
 
@@ -49,7 +50,7 @@
 | AP-01 | ✅ | 4 cron routes تفتح لو CRON_SECRET ناقص | 2a0b135 (verifyCron fail-closed) |
 | AP-02 | ✅ | /api/track-action: IP خام + rate limit مفقود | 2a0b135 (hashIp + rate limit) |
 | AP-03 | ✅ | /api/log-error و csp-report بلا حد | 2a0b135 (rate limit) |
-| AP-04 | 🟡 | /api/find-by-phone: البحث قابل للتعداد، وAPI كان يعيد user_id وبيانات RPC كاملة | strictLimiter fail-closed + Turnstile server verification + response allowlist بلا user_id | الكود committed؛ انتظار نجاح Vercel ثم اختبار حقيقي بالـ CAPTCHA والـ rate limit |
+| AP-04 | 🟡 | /api/find-by-phone: البحث قابل للتعداد، وAPI كان يعيد user_id وبيانات RPC كاملة | strictLimiter fail-closed + Turnstile server verification + response allowlist بلا user_id + service-only RPC | كود الخادم ضمن commit `da965d4` اجتاز Vercel؛ المنطق والـ grants اتفحصوا، لكن اختبار CAPTCHA/429 على production ما زال مطلوبًا |
 | AP-05 | ✅ | requestSubscription: إشعار الأدمن ما بيوصلش | service client (f690db4+) |
 | AP-06 | 🔴 | .maybeSingle() على owner_profile_id في 12 موضع | .order + .limit(1) |
 | AP-07 | ✅ | حالة الطلب بدون state machine | 2a0b135 (VALID_TRANSITIONS) |
@@ -58,7 +59,7 @@
 | AP-10 | 🟡 | proxy.ts auth.getUser() على كل request | قصّره للمحمية |
 | AP-11 | 🟡 | logAudit بيبلع الأخطاء | سجّل في system_errors |
 | AP-12 | 🟡 | تذكير التقييم بعد ساعتين (فعلياً 3 مرات) | اضبط الوعد |
-| AP-13 | 🟡 | رفع صور التاجر كان يكتب في `businesses.logo_url` غير الموجود ويتجاهل أخطاء الحفظ | استخدام `business_media`، تحديث `cover_image_url` مع التحقق، تحميل الشعار من `business_media`، rate limit fail-closed | كود مُسجّل على main؛ Vercel pending، واختبار الإنتاج لم يُنفذ بعد |
+| AP-13 | 🟡 | رفع صور التاجر كان يكتب في `businesses.logo_url` غير الموجود ويتجاهل أخطاء الحفظ | استخدام `business_media`، تحديث `cover_image_url` مع التحقق، تحميل الشعار من `business_media`، rate limit fail-closed | كود التاجر موجود ضمن commit `da965d4` ذي Vercel success؛ اختبار upload/refresh على production ما زال مطلوبًا |
 
 ## 4. الـ CI والاختبارات
 
