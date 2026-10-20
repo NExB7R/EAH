@@ -1,17 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  WhatsAppIcon,
-  PhoneIcon,
-  HeartIcon,
-  EyeIcon,
-  ShareIcon,
-  MessageCircleIcon,
-  CheckCircleIcon,
-} from './icons'
+import { WhatsAppIcon, PhoneIcon, HeartIcon, EyeIcon, ShareIcon, MessageCircleIcon } from './icons'
 import SmartLockModal, { useSmartLock } from './smart-lock-modal'
 import OrderModal from './order-modal'
+import BusinessShareModal from './business-share-modal'
 import { toggleFollow, toggleFavorite } from '@/app/activities/actions'
 import { enqueue } from '@/lib/offline/queue'
 import styles from './business-actions.module.css'
@@ -56,10 +49,11 @@ export default function BusinessActions({
   const lock = useSmartLock()
   const [fav, setFav] = useState(isFavorite)
   const [follow, setFollow] = useState(isFollowing)
-  const [copied, setCopied] = useState(false)
   const [pending, setPending] = useState(false)
   const [orderOpen, setOrderOpen] = useState(false)
   const [orderKey, setOrderKey] = useState(0)
+  const [shareOpen, setShareOpen] = useState(false)
+  const [shareUrl, setShareUrl] = useState('')
 
   const requireAuth = (action: string, hint?: string) => {
     if (isLoggedIn) return false
@@ -143,24 +137,11 @@ export default function BusinessActions({
     el?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  // ─── Share (مفتوح للكل) ───
-  const handleShare = async () => {
-    const url = typeof window !== 'undefined' ? window.location.href : ''
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      try {
-        await navigator.share({ title: businessName, url })
-        return
-      } catch {
-        // close
-      }
-    }
-    // fallback: copy
-    try {
-      await navigator.clipboard.writeText(url)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      // ignore
+  // ─── Share (opens modal — all platforms + QR) ───
+  const handleShare = () => {
+    if (typeof window !== 'undefined') {
+      setShareUrl(window.location.href)
+      setShareOpen(true)
     }
   }
 
@@ -235,16 +216,23 @@ export default function BusinessActions({
           <span className={styles.actionLabel}>قيّم</span>
         </button>
 
-        {/* Share — مفتوح للكل */}
+        {/* Share — opens modal */}
         <button type="button" onClick={handleShare} className={`${styles.action} ${styles.share}`}>
           <span className={styles.actionIcon}>
-            {copied ? <CheckCircleIcon size={20} /> : <ShareIcon size={20} />}
+            <ShareIcon size={20} />
           </span>
-          <span className={styles.actionLabel}>{copied ? 'اتنسخ' : 'شارك'}</span>
+          <span className={styles.actionLabel}>شارك</span>
         </button>
       </div>
 
       <SmartLockModal open={lock.open} onClose={lock.close} action={lock.action} hint={lock.hint} />
+
+      <BusinessShareModal
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        url={shareUrl}
+        title={businessName}
+      />
 
       <OrderModal
         key={orderKey}
