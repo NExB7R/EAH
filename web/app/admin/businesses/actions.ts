@@ -715,21 +715,24 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     return { ok: false, error: 'لا يمكن ربط نشاط بحساب إداري' }
   }
 
-  if (biz.owner_profile_id === userId) {
-    return { ok: false, error: 'النشاط مرتبط بالفعل بالحساب ده' }
+  const alreadyLinked = biz.owner_profile_id === userId
+  if (alreadyLinked && currentRole.role === 'merchant') {
+    return { ok: true }
   }
 
-  const { error } = await ctx.supabase
-    .from('businesses')
-    .update({
-      owner_profile_id: userId,
-      source: 'merchant',
-      claimed_at: new Date().toISOString(),
-      claimed_by_user_id: ctx.userId,
-    })
-    .eq('id', businessId)
+  if (!alreadyLinked) {
+    const { error } = await ctx.supabase
+      .from('businesses')
+      .update({
+        owner_profile_id: userId,
+        source: 'merchant',
+        claimed_at: new Date().toISOString(),
+        claimed_by_user_id: ctx.userId,
+      })
+      .eq('id', businessId)
 
-  if (error) return { ok: false, error: error.message }
+    if (error) return { ok: false, error: error.message }
+  }
 
   // Newly registered users start as customers; promote only after the business
   // owner link is saved. If promotion fails, restore the previous owner fields.
@@ -753,6 +756,24 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     }
 
     if (!ownerIsMerchant) {
+      if (alreadyLinked) {
+        await logAudit(ctx.supabase, {
+          actorUserId: ctx.userId,
+          action: 'business.link_owner_role_failure',
+          entityType: 'business',
+          entityId: businessId,
+          metadata: {
+            new_owner: userId,
+            promote_error: promoteError?.message ?? 'owner role was not promoted',
+            already_linked: true,
+          },
+        })
+        return {
+          ok: false,
+          error: 'النشاط مربوط بالحساب بالفعل، لكن تعذّر تفعيل دور التاجر. لم نغيّر الربط الحالي.',
+        }
+      }
+
       const { error: rollbackError } = await ctx.supabase
         .from('businesses')
         .update({

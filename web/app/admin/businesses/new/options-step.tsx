@@ -40,6 +40,12 @@ export default function OptionsStep({ data, owners, update }: Props) {
           </span>
         </label>
 
+        {owners.length === 0 && (
+          <p className={styles.gpsHint}>
+            مفيش حساب مسجل ينفع نربطه حاليًا. خلي صاحب النشاط يسجل من صفحة إنشاء الحساب، وبعدها حدّث الصفحة؛ هيظهر هنا حتى لو حسابه لسه بدور عميل.
+          </p>
+        )}
+
         <div className={styles.field}>
           <span className={styles.label}>الحالة الافتراضية</span>
           <div className={styles.row}>
