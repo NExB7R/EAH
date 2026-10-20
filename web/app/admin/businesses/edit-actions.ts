@@ -92,7 +92,7 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
     .maybeSingle()
   if (!business) return { ok: false, error: 'النشاط مش موجود' }
 
-  let privileged
+  let privileged: ReturnType<typeof createServiceClient>
   try {
     // This server action requires an authenticated admin. The contacts table
     // allows owner/admin reads but has no authenticated write policy.
@@ -122,6 +122,14 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
     'shift_morning',
     'shift_evening',
   ]
+
+  // Snapshot current values first, so failed writes can restore the public contacts.
+  const { data: previousRows, error: previousError } = await privileged
+    .from('business_contact_methods')
+    .select('business_id, method_type, value, is_primary, is_public')
+    .eq('business_id', businessId)
+    .in('method_type', managedTypes)
+  if (previousError) return { ok: false, error: 'تعذر قراءة جهات الاتصال الحالية' }
 
   // Keep "additional" and future contact types untouched.
   const { error: deleteError } = await privileged
@@ -154,7 +162,25 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
 
   if (rows.length > 0) {
     const { error } = await privileged.from('business_contact_methods').insert(rows)
-    if (error) return { ok: false, error: 'تعذر حفظ جهات الاتصال. البيانات القديمة تم حذفها؛ راجع الأرقام وحاول تاني' }
+    if (error) {
+      const { error: clearError } = await privileged
+        .from('business_contact_methods')
+        .delete()
+        .eq('business_id', businessId)
+        .in('method_type', managedTypes)
+      const { error: restoreError } =
+        previousRows && previousRows.length > 0
+          ? await privileged.from('business_contact_methods').insert(previousRows)
+          : { error: null }
+
+      if (clearError || restoreError) {
+        return {
+          ok: false,
+          error: 'تعذر حفظ جهات الاتصال ولم يكتمل الاسترجاع التلقائي. راجع النشاط قبل إعادة المحاولة',
+        }
+      }
+      return { ok: false, error: 'تعذر حفظ جهات الاتصال، وتمت استعادة الأرقام السابقة' }
+    }
   }
 
   await logAudit(ctx.supabase, {
@@ -196,7 +222,7 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
     .maybeSingle()
   if (!business) return { ok: false, error: 'النشاط مش موجود' }
 
-  let privileged
+  let privileged: ReturnType<typeof createServiceClient>
   try {
     privileged = createServiceClient()
   } catch {
