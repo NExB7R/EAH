@@ -58,6 +58,7 @@
 | AP-10 | 🟡 | proxy.ts auth.getUser() على كل request | قصّره للمحمية |
 | AP-11 | 🟡 | logAudit بيبلع الأخطاء | سجّل في system_errors |
 | AP-12 | 🟡 | تذكير التقييم بعد ساعتين (فعلياً 3 مرات) | اضبط الوعد |
+| AP-13 | 🟡 | رفع صور التاجر كان يكتب في `businesses.logo_url` غير الموجود ويتجاهل أخطاء الحفظ | استخدام `business_media`، تحديث `cover_image_url` مع التحقق، تحميل الشعار من `business_media`، rate limit fail-closed | كود مُسجّل على main؛ Vercel pending، واختبار الإنتاج لم يُنفذ بعد |
 
 ## 4. الـ CI والاختبارات
 
