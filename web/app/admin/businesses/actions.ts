@@ -308,6 +308,13 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   }
 
   const d = parsed.data
+
+  // Public listings must be linked to an owner before immediate publication.
+  // An unassigned activity can be saved as a private draft and linked later.
+  if (d.is_published && !d.owner_profile_id) {
+    return { ok: false, error: 'اربط النشاط بحساب مالكه قبل النشر المباشر' }
+  }
+
   const finalSlug = d.slug ?? slugify(d.name)
 
   // WhatsApp gate: auto-disable orders if no whatsapp contact provided
@@ -326,6 +333,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       business_type_status:
         d.business_type === 'misc' && d.custom_business_type ? 'pending' : 'approved',
       owner_profile_id: d.owner_profile_id || null,
+      source: d.owner_profile_id ? 'merchant' : 'admin',
       area: d.area || null,
       city: d.city || null,
       address_text: d.address_text || null,
@@ -353,7 +361,39 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       is_primary: c.is_primary ?? false,
       sort_order: idx,
     }))
-    await ctx.supabase.from('business_contact_methods').insert(rows)
+    const { error: contactsError } = await ctx.supabase
+      .from('business_contact_methods')
+      .insert(rows)
+
+    if (contactsError) {
+      const { error: rollbackError } = await ctx.supabase
+        .from('businesses')
+        .delete()
+        .eq('id', created.id)
+
+      if (rollbackError) {
+        await logAudit(ctx.supabase, {
+          actorUserId: ctx.userId,
+          action: 'business.create_partial_failure',
+          entityType: 'business',
+          entityId: created.id,
+          metadata: {
+            name: d.name,
+            contact_error: contactsError.message,
+            rollback_error: rollbackError.message,
+          },
+        })
+        return {
+          ok: false,
+          error: 'فشل حفظ أرقام التواصل وتعذّر التراجع التلقائي. افتح قائمة الأنشطة وتحقق من السجل قبل إعادة المحاولة.',
+        }
+      }
+
+      return {
+        ok: false,
+        error: 'فشل حفظ أرقام التواصل، وتم إلغاء إنشاء النشاط. راجع الأرقام وحاول تاني.',
+      }
+    }
   }
 
   await logAudit(ctx.supabase, {

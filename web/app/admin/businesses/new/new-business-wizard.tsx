@@ -189,8 +189,11 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
       )
       if (data.is_open) fd.set('is_open', 'on')
       if (data.accepts_whatsapp_orders) fd.set('accepts_whatsapp_orders', 'on')
-      if (data.owner_user_id) fd.set('owner_profile_id', data.owner_user_id)
-      fd.set('is_published', 'on')
+      if (data.owner_user_id) {
+        fd.set('owner_profile_id', data.owner_user_id)
+        fd.set('is_published', 'on')
+      }
+      // Without a selected owner, save an unpublished draft instead of a public orphan.
 
       const res = await createBusiness(fd)
       if (res.ok) {

@@ -34,7 +34,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
             ))}
           </select>
           <span className={styles.hint}>
-            <UserIcon size={11} /> لو مش موجود في القائمة، اتركه فاضي وأضفه بعدين
+            <UserIcon size={11} /> لو سبت المالك فاضي، النشاط هيتحفظ كمسودة غير منشورة لحد ما تربطه بمالكه
           </span>
         </label>
 

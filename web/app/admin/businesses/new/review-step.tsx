@@ -45,6 +45,12 @@ function Item({
 
 export default function ReviewStep({ data, owners, goTo }: Props) {
   const owner = owners.find((o) => o.id === data.owner_user_id)
+  const needsTypeApproval = data.business_type === 'misc' && data.custom_business_type.trim().length > 0
+  const publishStatus = needsTypeApproval
+    ? 'مسودة — نوع النشاط محتاج موافقة'
+    : owner
+      ? 'جاهز للنشر المباشر'
+      : 'مسودة — اربط المالك قبل النشر'
 
   return (
     <div>
@@ -86,6 +92,7 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
           step={2}
           goTo={goTo}
         />
+        <Item label="حالة النشر" value={publishStatus} step={2} goTo={goTo} />
         <Item label="الحالة" value={data.is_open ? 'مفتوح الآن' : 'مغلق'} step={2} goTo={goTo} />
         <Item
           label="واتساب أوردرز"
@@ -110,7 +117,11 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
       )}
 
       <div style={{ marginTop: '20px' }} className={styles.draftBar}>
-        <span>✅ البيانات جاهزة — اضغط &quot;إنشاء النشاط&quot; تحت</span>
+        <span>
+          {owner
+            ? 'البيانات جاهزة — اضغط «إنشاء النشاط» تحت'
+            : 'بدون مالك، النشاط هيتحفظ كمسودة غير منشورة. اربط المالك ثم انشره بعد المراجعة.'}
+        </span>
       </div>
     </div>
   )
