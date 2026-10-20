@@ -26,7 +26,18 @@ function normalizeBusinessRows(data: unknown[] | null): Business[] {
 }
 
 export type ContactMethod = {
-  method_type: 'phone' | 'whatsapp' | 'facebook' | 'instagram' | 'website' | 'email'
+  method_type:
+    | 'phone'
+    | 'whatsapp'
+    | 'complaints'
+    | 'facebook'
+    | 'instagram'
+    | 'website'
+    | 'email'
+    | 'manager'
+    | 'shift_morning'
+    | 'shift_evening'
+    | 'additional'
   value: string
   is_primary: boolean
 }

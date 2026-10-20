@@ -16,6 +16,7 @@ export type AdminBusiness = {
   city: string | null
   address_text: string | null
   map_url: string | null
+  location: { lat: number; lng: number } | null
   cover_image_url: string | null
   is_published: boolean
   is_open: boolean
@@ -52,7 +53,7 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
 
   const b = biz as Record<string, unknown>
 
-  const [ownerRes, contactsRes, branchesRes, mediaRes] = await Promise.all([
+  const [ownerRes, contactsRes, branchesRes, mediaRes, locationRes] = await Promise.all([
     b.owner_profile_id
       ? supabase
           .from('profiles')
@@ -75,6 +76,12 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
       .select('id, media_type, storage_path')
       .eq('business_id', id)
       .order('sort_order', { ascending: true }),
+    supabase
+      .from('business_locations')
+      .select('latitude, longitude, is_primary')
+      .eq('business_id', id)
+      .order('is_primary', { ascending: false })
+      .limit(1),
   ])
 
   return {
@@ -120,6 +127,13 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     contacts: (contactsRes.data ?? []) as AdminBusiness['contacts'],
     branches: (branchesRes.data ?? []) as AdminBusiness['branches'],
     media: (mediaRes.data ?? []) as AdminBusiness['media'],
+    location: (() => {
+      const loc = (locationRes.data ?? [])[0] as { latitude: number; longitude: number } | undefined
+      if (loc && Number.isFinite(loc.latitude) && Number.isFinite(loc.longitude)) {
+        return { lat: loc.latitude, lng: loc.longitude }
+      }
+      return null
+    })(),
   }
 }
 
