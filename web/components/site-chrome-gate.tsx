@@ -3,8 +3,16 @@
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 
-// إخفاء عناصر الموقع العامة (فوتر + شريط إحصائيات) في صفحات الدخول
-const HIDDEN_PREFIXES = ['/auth']
+// ═══════════════════════════════════════════════════════════
+// EAH — Site Chrome Gate
+// Hide public chrome (footer, live stats, floating capsule)
+// on routes that have their own navigation:
+//   - /auth/*  — auth flow
+//   - /admin/* — admin dashboard (has sidebar)
+//   - /merchant/* — merchant panel (has its own nav)
+// ═══════════════════════════════════════════════════════════
+
+const HIDDEN_PREFIXES = ['/auth', '/admin', '/merchant']
 
 export default function SiteChromeGate({ children }: { children: ReactNode }) {
   const pathname = usePathname()
