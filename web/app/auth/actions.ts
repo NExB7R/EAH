@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { getHashedIp } from '@/lib/auth/ip'
 import { signupSchema, loginSchema, recoverSchema, toE164 } from '@/lib/validations/auth'
 import { authLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
@@ -108,13 +109,15 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
   const phoneE164 = toE164(phone)
   const fakeEmail = phoneToEmail(phoneE164)
 
-  const supabase = await createClient()
-
-  // ─── تحقق يدوي: الرقم مسجل قبل كده؟ (عبر RPC) ───
-  const { data: isRegistered } = await supabase.rpc('is_phone_registered', {
+  // This RPC is service-role-only to prevent direct phone enumeration.
+  const admin = createServiceClient()
+  const { data: isRegistered, error: lookupError } = await admin.rpc('is_phone_registered', {
     p_phone_e164: phoneE164,
   })
 
+  if (lookupError) {
+    return { ok: false, error: 'مش قادرين نتحقق من الرقم دلوقتي — جرب تاني' }
+  }
   if (isRegistered) {
     return {
       ok: false,
@@ -122,6 +125,8 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
       field: 'phone',
     }
   }
+
+  const supabase = await createClient()
 
   // ─── IP hash (multi-account detection) ───
   const signupIpHash = await getHashedIp()
