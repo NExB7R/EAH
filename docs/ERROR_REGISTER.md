@@ -61,6 +61,7 @@
 | AP-12 | 🟡 | تذكير التقييم بعد ساعتين (فعلياً 3 مرات) | اضبط الوعد |
 | AP-13 | 🟡 | رفع صور التاجر كان يكتب في `businesses.logo_url` غير الموجود ويتجاهل أخطاء الحفظ | استخدام `business_media`، تحديث `cover_image_url` مع التحقق، تحميل الشعار من `business_media`، rate limit fail-closed | كود التاجر ضمن commit `da965d4` ذي Vercel success؛ اختبار upload/refresh على production ما زال مطلوبًا |
 | AP-14 | 🔴 | حذف صورة الإدارة يمسح المعاينة حتى لو فشل API، وغلاف النشاط قد يظل في `cover_image_url` بعد حذف سجل الوسائط | DELETE يتحقق من كتابة DB ويزامن الغلاف؛ UI يحتفظ بالصورة ويعرض الخطأ عند فشل الطلب | Vercel أعاد failure للـ commit `2f3ce30`; سجلات البناء غير متاحة من اتصال Vercel الحالي (403)، والإصلاح غير معتمد حتى نعرف سبب الفشل ونجتاز البناء |
+| AP-15 | 🟡 | حقل لصق رابط الصورة يقبل أي host، لكن CSP `img-src` لا يسمح إلا بعدد محدود من hosts؛ بعض الصور المحفوظة لن تُعرض | استيراد الرابط إلى Cloudinary بخادم الإدارة، ثم حفظ `secure_url` بدل رابط خارجي. Cloudinary يدعم الرفع من remote HTTP(S) URL وفق [Upload API](https://cloudinary.com/documentation/image_upload_api_reference) | لم يُنفّذ؛ ينتظر إصلاح Vercel build blocker واختبار قيود الرابط/حجم الصورة |
 
 ## 4. الـ CI والاختبارات
 
