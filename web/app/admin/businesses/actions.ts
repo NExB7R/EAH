@@ -600,7 +600,24 @@ export async function updateBusiness(businessId: string, formData: FormData): Pr
   }
 
   const d = parsed.data
-  const { error } = await ctx.supabase
+
+  if (d.is_published) {
+    const { data: current, error: lookupError } = await ctx.supabase
+      .from('businesses')
+      .select('id, business_type_status')
+      .eq('id', businessId)
+      .maybeSingle()
+    if (lookupError) return { ok: false, error: 'تعذر التحقق من حالة نوع النشاط' }
+    if (!current) return { ok: false, error: 'النشاط مش موجود' }
+    if (current.business_type_status === 'pending' || current.business_type_status === 'rejected') {
+      return {
+        ok: false,
+        error: 'لا يمكن نشر النشاط قبل اعتماد نوعه المخصص من صفحة «أنواع الأنشطة الجديدة».',
+      }
+    }
+  }
+
+  const { data: updated, error } = await ctx.supabase
     .from('businesses')
     .update({
       name: d.name,
@@ -614,8 +631,11 @@ export async function updateBusiness(businessId: string, formData: FormData): Pr
       is_published: d.is_published,
     })
     .eq('id', businessId)
+    .select('id')
+    .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
+  if (!updated) return { ok: false, error: 'تعذر حفظ النشاط — حدّث الصفحة وحاول تاني' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
