@@ -158,14 +158,22 @@ export default function BusinessActionsBar({
             </button>
           )}
 
-          <Link
-            href={`/businesses/${businessSlug}`}
-            target="_blank"
-            className={styles.secondaryBtn}
-          >
-            <ExternalLinkIcon size={14} />
-            <span>معاينة على الموقع</span>
-          </Link>
+          {isPublished ? (
+            <Link
+              href={`/businesses/${businessSlug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.secondaryBtn}
+            >
+              <ExternalLinkIcon size={14} />
+              <span>معاينة على الموقع</span>
+            </Link>
+          ) : (
+            <span className={styles.secondaryBtn} aria-label="النشاط غير منشور بعد">
+              <AlertIcon size={14} />
+              <span>الصفحة العامة تظهر بعد النشر</span>
+            </span>
+          )}
 
           <Link href="/admin/businesses" className={styles.secondaryBtn}>
             <ArrowLeftIcon size={14} />
