@@ -146,6 +146,7 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     contacts: (contactsRes.data ?? []) as AdminBusiness['contacts'],
     branches: (branchesRes.data ?? []) as AdminBusiness['branches'],
     media: (mediaRes.data ?? []) as AdminBusiness['media'],
+    offers: (offersRes.data ?? []) as AdminBusiness['offers'],
     location: (() => {
       const loc = (locationRes.data ?? [])[0] as { latitude: number; longitude: number } | undefined
       if (loc && Number.isFinite(loc.latitude) && Number.isFinite(loc.longitude)) {
