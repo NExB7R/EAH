@@ -49,8 +49,8 @@ export async function POST(req: NextRequest) {
     if (!ALLOWED_TYPES.includes(fileRaw.type)) {
       return NextResponse.json({ error: 'الصيغة مش مدعومة' }, { status: 400 })
     }
-    if (fileRaw.size > MAX_SIZE) {
-      return NextResponse.json({ error: 'الحجم أكبر من 5MB' }, { status: 400 })
+    if (fileRaw.size <= 0 || fileRaw.size > MAX_SIZE) {
+      return NextResponse.json({ error: 'الحجم لازم يكون أكبر من صفر وأقل من 5MB' }, { status: 400 })
     }
     const folder = `eah/businesses/${businessId}/${category}`
     const result = await uploadImage(fileRaw, folder, MAX_SIZE)
@@ -73,38 +73,85 @@ export async function POST(req: NextRequest) {
   let mediaId: string
 
   if (category === 'logo' || category === 'cover') {
-    await admin
+    const { data: existingMedia, error: lookupError } = await admin
       .from('business_media')
-      .delete()
+      .select('id')
       .eq('business_id', businessId)
       .eq('media_type', category)
+      .order('sort_order', { ascending: true })
+      .limit(20)
 
-    const { data: inserted, error } = await admin
-      .from('business_media')
-      .insert({
-        business_id: businessId,
-        media_type: category,
-        storage_path: finalUrl,
-        is_published: true,
-        sort_order: 0,
-      })
-      .select('id')
-      .single()
-
-    if (error || !inserted) {
-      return NextResponse.json({ error: error?.message ?? 'فشل الحفظ' }, { status: 500 })
+    if (lookupError) {
+      return NextResponse.json({ error: 'فشل التحقق من الصورة الحالية' }, { status: 500 })
     }
-    mediaId = inserted.id
+
+    const current = existingMedia?.[0]
+    const duplicateIds = (existingMedia ?? []).slice(1).map((item) => item.id)
+
+    if (duplicateIds.length > 0) {
+      const { error: cleanupError } = await admin
+        .from('business_media')
+        .delete()
+        .in('id', duplicateIds)
+
+      if (cleanupError) {
+        return NextResponse.json({ error: 'فشل تنظيف سجلات الصور المكررة' }, { status: 500 })
+      }
+    }
+
+    if (current) {
+      const { data: updated, error } = await admin
+        .from('business_media')
+        .update({ storage_path: finalUrl, is_published: true, sort_order: 0 })
+        .eq('id', current.id)
+        .select('id')
+        .single()
+
+      if (error || !updated) {
+        return NextResponse.json({ error: error?.message ?? 'فشل الحفظ' }, { status: 500 })
+      }
+      mediaId = updated.id
+    } else {
+      const { data: inserted, error } = await admin
+        .from('business_media')
+        .insert({
+          business_id: businessId,
+          media_type: category,
+          storage_path: finalUrl,
+          is_published: true,
+          sort_order: 0,
+        })
+        .select('id')
+        .single()
+
+      if (error || !inserted) {
+        return NextResponse.json({ error: error?.message ?? 'فشل الحفظ' }, { status: 500 })
+      }
+      mediaId = inserted.id
+    }
 
     if (category === 'cover') {
-      await admin.from('businesses').update({ cover_image_url: finalUrl }).eq('id', businessId)
+      const { data: updatedBusiness, error: coverError } = await admin
+        .from('businesses')
+        .update({ cover_image_url: finalUrl })
+        .eq('id', businessId)
+        .select('id')
+        .single()
+
+      if (coverError || !updatedBusiness) {
+        return NextResponse.json({ error: 'الصورة اتحفظت لكن فشل تحديث غلاف النشاط' }, { status: 500 })
+      }
     }
   } else {
-    const { count } = await admin
+    const { count, error: countError } = await admin
       .from('business_media')
       .select('*', { count: 'exact', head: true })
       .eq('business_id', businessId)
       .eq('media_type', category)
+
+    if (countError) {
+      return NextResponse.json({ error: 'فشل حساب ترتيب الصورة' }, { status: 500 })
+    }
 
     const { data: inserted, error } = await admin
       .from('business_media')
@@ -143,23 +190,118 @@ export async function DELETE(req: NextRequest) {
   if (!ctx.ok) return NextResponse.json({ error: ctx.error }, { status: 401 })
 
   const admin = createServiceClient()
-  const url = new URL(req.url)
-  const mediaId = url.searchParams.get('mediaId')
+  const params = new URL(req.url).searchParams
+  const mediaId = params.get('mediaId')
+  const businessId = params.get('businessId')
+  const categoryRaw = params.get('category')
+  const category = categoryRaw as Category | null
+
+  // Preferred path: remove a business logo/cover as a resource. This also clears
+  // legacy cover_image_url when no business_media row exists.
+  if (businessId && category && (category === 'logo' || category === 'cover')) {
+    const { data: business, error: businessError } = await admin
+      .from('businesses')
+      .select('id, cover_image_url')
+      .eq('id', businessId)
+      .maybeSingle()
+
+    if (businessError) {
+      return NextResponse.json({ error: 'فشل التحقق من النشاط' }, { status: 500 })
+    }
+    if (!business) return NextResponse.json({ error: 'النشاط مش موجود' }, { status: 404 })
+
+    const { data: mediaRows, error: mediaLookupError } = await admin
+      .from('business_media')
+      .select('id, storage_path')
+      .eq('business_id', businessId)
+      .eq('media_type', category)
+      .order('sort_order', { ascending: true })
+      .limit(20)
+
+    if (mediaLookupError) {
+      return NextResponse.json({ error: 'فشل التحقق من الصورة الحالية' }, { status: 500 })
+    }
+    if (category === 'logo' && (!mediaRows || mediaRows.length === 0)) {
+      return NextResponse.json({ error: 'الصورة مش موجودة' }, { status: 404 })
+    }
+
+    if (category === 'cover') {
+      const { data: updatedBusiness, error: coverError } = await admin
+        .from('businesses')
+        .update({ cover_image_url: null })
+        .eq('id', businessId)
+        .select('id')
+        .single()
+
+      if (coverError || !updatedBusiness) {
+        return NextResponse.json({ error: 'فشل حذف غلاف النشاط' }, { status: 500 })
+      }
+    }
+
+    const mediaIds = (mediaRows ?? []).map((item) => item.id)
+    if (mediaIds.length > 0) {
+      const { error: deleteError } = await admin.from('business_media').delete().in('id', mediaIds)
+
+      if (deleteError) {
+        if (category === 'cover') {
+          await admin
+            .from('businesses')
+            .update({ cover_image_url: business.cover_image_url ?? mediaRows?.[0]?.storage_path ?? null })
+            .eq('id', businessId)
+        }
+        return NextResponse.json({ error: 'فشل حذف الصورة من سجلات النشاط' }, { status: 500 })
+      }
+    }
+
+    revalidatePath(`/admin/businesses/${businessId}`)
+    revalidateTag('businesses', 'default')
+    return NextResponse.json({ ok: true })
+  }
+
+  // Backward compatibility for callers that provide only mediaId.
   if (!mediaId) return NextResponse.json({ error: 'mediaId مطلوب' }, { status: 400 })
 
-  const { data: media } = await admin
+  const { data: media, error: mediaLookupError } = await admin
     .from('business_media')
-    .select('id, business_id')
+    .select('id, business_id, media_type, storage_path')
     .eq('id', mediaId)
     .maybeSingle()
 
+  if (mediaLookupError) {
+    return NextResponse.json({ error: 'فشل التحقق من الصورة' }, { status: 500 })
+  }
   if (!media) return NextResponse.json({ error: 'الصورة مش موجودة' }, { status: 404 })
 
-  const { error } = await admin.from('business_media').delete().eq('id', mediaId)
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  let oldCover: string | null = null
+  if (media.media_type === 'cover') {
+    const { data: business, error: businessError } = await admin
+      .from('businesses')
+      .select('cover_image_url')
+      .eq('id', media.business_id)
+      .maybeSingle()
+
+    if (businessError || !business) {
+      return NextResponse.json({ error: 'فشل التحقق من غلاف النشاط' }, { status: 500 })
+    }
+    oldCover = business.cover_image_url ?? media.storage_path
+
+    const { error: coverError } = await admin
+      .from('businesses')
+      .update({ cover_image_url: null })
+      .eq('id', media.business_id)
+
+    if (coverError) return NextResponse.json({ error: 'فشل حذف غلاف النشاط' }, { status: 500 })
+  }
+
+  const { error: deleteError } = await admin.from('business_media').delete().eq('id', mediaId)
+  if (deleteError) {
+    if (media.media_type === 'cover') {
+      await admin.from('businesses').update({ cover_image_url: oldCover }).eq('id', media.business_id)
+    }
+    return NextResponse.json({ error: deleteError.message }, { status: 500 })
+  }
 
   revalidatePath(`/admin/businesses/${media.business_id}`)
   revalidateTag('businesses', 'default')
-
   return NextResponse.json({ ok: true })
 }
