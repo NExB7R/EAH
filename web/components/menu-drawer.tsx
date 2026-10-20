@@ -146,8 +146,6 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
     }
     try {
       await navigator.clipboard.writeText(url)
-      setShareCopied(true)
-      setTimeout(() => setShareCopied(false), 2000)
     } catch {
       // clipboard blocked
       window.prompt('انسخ الرابط:', url)
@@ -380,7 +378,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
                 <span className={styles.itemIcon}>
                   <ShareIcon size={20} />
                 </span>
-                <span>{shareCopied ? 'اتنسخ الرابط ✓' : 'شارك المنصة'}</span>
+                <span>{'شارك المنصة'}</span>
               </button>
             </li>
           </ul>
