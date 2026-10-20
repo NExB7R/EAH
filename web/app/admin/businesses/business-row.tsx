@@ -228,7 +228,12 @@ export default function BusinessRow({
             )}
 
             {status === 'rejected' && (
-              b.business_type_status === 'rejected' ? (
+              b.business_type_status === 'pending' ? (
+                <Link href="/admin/business-types" className={styles.viewBtn}>
+                  <SparklesIcon size={14} />
+                  <span>مراجعة نوع النشاط</span>
+                </Link>
+              ) : b.business_type_status === 'rejected' ? (
                 <Link href={'/admin/businesses/' + b.id + '?tab=edit'} className={styles.viewBtn}>
                   <SparklesIcon size={14} />
                   <span>تصحيح نوع النشاط</span>
