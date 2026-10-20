@@ -1,0 +1,202 @@
+/* EAH — Admin Business Detail: Tabs + Overview layout */
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: rgba(157, 78, 221, 0.06);
+  border: 1px solid rgba(157, 78, 221, 0.12);
+  margin-bottom: 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  flex: 1;
+  min-width: fit-content;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9a8fb8;
+  text-decoration: none;
+  text-align: center;
+  transition:
+    background 180ms ease-out,
+    color 180ms ease-out;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: #c77dff;
+}
+
+.tabActive,
+.tabActive:hover {
+  background: rgba(157, 78, 221, 0.15);
+  color: #f5f5f5;
+}
+
+/* ── Edit tab ── */
+.editWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ── Preview tab ── */
+.previewWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 480px;
+}
+
+.previewLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: rgba(157, 78, 221, 0.15);
+  color: #c77dff;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 180ms ease-out;
+  align-self: flex-start;
+}
+
+.previewLink:hover,
+.previewLink:focus-visible {
+  background: rgba(157, 78, 221, 0.25);
+}
+
+.previewHint {
+  color: #9a8fb8;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ── Overview ── */
+.overviewWrap {
+  display: grid;
+  gap: 16px;
+}
+
+.cardGroup {
+  background: rgba(157, 78, 221, 0.04);
+  border: 1px solid rgba(157, 78, 221, 0.12);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.cardGroupTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #c77dff;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.statCell {
+  padding: 12px;
+  border-radius: 10px;
+  background: rgba(157, 78, 221, 0.06);
+  border: 1px solid rgba(157, 78, 221, 0.12);
+  text-align: center;
+}
+
+.statLabel {
+  display: block;
+  font-size: 11px;
+  color: #9a8fb8;
+  margin-bottom: 4px;
+}
+
+.statValue {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: #f5f5f5;
+}
+
+.statValueSmall {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f5f5f5;
+}
+
+.contactRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(157, 78, 221, 0.08);
+  font-size: 13px;
+}
+
+.contactRow:last-child {
+  border-bottom: none;
+}
+
+.contactType {
+  font-size: 11px;
+  color: #9a8fb8;
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
+.contactValue {
+  color: #f5f5f5;
+  word-break: break-all;
+}
+
+.primaryChip {
+  margin-inline-start: auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  background: rgba(85, 231, 209, 0.15);
+  color: #55e7d1;
+}
+
+.dot {
+  color: #6b6080;
+}
+
+.muted {
+  color: #6b6080;
+  font-size: 13px;
+  margin: 0;
+}
+
+.rejectionGroup {
+  border-color: rgba(252, 165, 165, 0.3);
+}
+
+.rejectionTitle {
+  color: #fca5a5;
+}
+
+.rejectionBody {
+  color: #fca5a5;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.6;
+}
