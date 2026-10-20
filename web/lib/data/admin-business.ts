@@ -166,6 +166,7 @@ export type BusinessOwnerOption = {
   id: string
   display_name: string
   phone: string | null
+  role: 'customer' | 'merchant'
 }
 
 export async function getBusinessOwnerCandidates(): Promise<BusinessOwnerOption[]> {
