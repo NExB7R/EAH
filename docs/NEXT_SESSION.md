@@ -4,10 +4,10 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last reviewed code commit: 435d40f (service client marked server-only)
+- Last reviewed app-code commit: da965d4 (server-only phone RPC callers)
 - Branch: main
 - Invariants/typecheck: not re-verified after the latest code changes
-- Deploy: Vercel check pending; production runtime not yet verified
+- Deploy: Vercel reported success for app-code commit da965d4; production runtime/smoke tests not yet verified
 
 ## Working
 - Business wizard fullscreen (UI-02)
@@ -24,9 +24,11 @@
 - God Components all split (≤300 lines each)
 
 ## Known Issues
-- **DB-04/05:** migration `docs/migrations/2026-10-20-revoke-anon-sensitive-rpcs.sql` applied to Supabase as `20261020203655`; direct grant verification passed for all 8 targeted RPCs (anon denied, authenticated/service_role allowed).
-- **AP-04:** phone lookup now sends/verifies Turnstile, uses strict fail-closed rate limiting, and returns an allowlisted response without `user_id`; production verification is pending.
-- **Image upload:** merchant route now writes logo/cover through `business_media`, synchronizes `cover_image_url`, checks database write errors, and reads the logo from media. Code is committed; Vercel build and a production upload/refresh smoke test are still pending.
+- **DB-04/05:** migration `docs/migrations/2026-10-20-revoke-anon-sensitive-rpcs.sql` applied as `20261020203655`; all 8 grants verified (anon denied, authenticated/service_role allowed).
+- **DB-20:** migration `docs/migrations/2026-10-20-restrict-phone-lookup-rpcs.sql` applied as `20261020203959`; direct grant verification passed for `find_by_phone` and `is_phone_registered` (only service_role can execute).
+
+- **AP-04:** phone lookup now verifies Turnstile, uses strict fail-closed rate limiting, returns an allowlisted response without `user_id`, and its two data RPCs are service-role-only; Vercel succeeded for code commit `da965d4`, but production CAPTCHA/429 smoke testing is still pending.
+- **Image upload:** merchant route writes logo/cover through `business_media`, synchronizes `cover_image_url`, checks database write errors, and reads the logo from media. The Vercel-success app-code commit includes this change; a production upload/refresh smoke test is still pending.
 - **DB-10/11/12:** storage policy/path problems remain open.
 - **SEC-01:** rotate 11 previously exposed keys and verify current Vercel values without copying secrets into chat.
 - **SEC-02b:** VERCEL_OIDC_TOKEN in git history.
@@ -36,7 +38,7 @@
 
 ## Next Priorities (in order)
 1. Verify the latest Vercel deployment completes; the current status was still pending at the last check, and the Vercel log API returned 403 for this connection.
-2. Run `web/supabase/tests/rls.test.sql` against the intended test DB with pgTAP; it now includes 16 assertions for the sensitive RPC grants.
+2. Run `web/supabase/tests/rls.test.sql` against the intended test DB with pgTAP; it now includes 22 assertions covering grants for sensitive RPCs, including the two phone lookup functions.
 3. Test phone lookup with the real production Turnstile key and verify 429 throttling plus a response that contains no `user_id`.
 4. Test merchant logo/cover upload on production: upload, refresh, confirm logo/cover still show, and verify a non-owner receives 403. The code change is committed but runtime test is pending.
 5. Resolve remaining storage findings DB-10/11/12 and reconcile migration history before any more schema changes.
