@@ -21,18 +21,52 @@ type Props = {
   newOrders?: number
 }
 
-const ITEMS = [
-  { href: '/merchant', label: 'نظرة عامة', Icon: LayoutDashboardIcon },
-  { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon, tone: 'gold' },
-  { href: '/merchant/business', label: 'نشاطي', Icon: StoreIcon },
-  { href: '/merchant/branches', label: 'الفروع', Icon: MapPinIcon },
-  { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon, badge: 'orders' },
-  { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
-  { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
-  { href: '/merchant/qr', label: 'QR النشاط', Icon: QrCodeIcon },
-  { href: '/merchant/trust', label: 'المصداقية', Icon: ShieldCheckIcon },
-  { href: '/merchant/subscription', label: 'الاشتراك', Icon: CrownGoldIcon },
-  { href: '/merchant/settings', label: 'الإعدادات', Icon: SettingsIcon },
+type Item = {
+  href: string
+  label: string
+  Icon: React.ComponentType<{ size?: number }>
+  badge?: 'orders'
+  tone?: 'gold'
+}
+
+type Section = {
+  title: string
+  items: Item[]
+}
+
+const SECTIONS: Section[] = [
+  {
+    title: 'الرئيسية',
+    items: [{ href: '/merchant', label: 'نظرة عامة', Icon: LayoutDashboardIcon }],
+  },
+  {
+    title: 'إدارة النشاط',
+    items: [
+      { href: '/merchant/business', label: 'بيانات النشاط', Icon: StoreIcon },
+      { href: '/merchant/branches', label: 'الفروع', Icon: MapPinIcon },
+    ],
+  },
+  {
+    title: 'الطلبات والتسويق',
+    items: [
+      { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon, badge: 'orders' },
+      { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
+      { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
+      { href: '/merchant/qr', label: 'QR النشاط', Icon: QrCodeIcon },
+    ],
+  },
+  {
+    title: 'النمو والثقة',
+    items: [
+      { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon, tone: 'gold' },
+      { href: '/merchant/trust', label: 'المصداقية', Icon: ShieldCheckIcon },
+      { href: '/merchant/subscription', label: 'الباقة والاشتراك', Icon: CrownGoldIcon },
+    ],
+  },
+  {
+    title: 'الإعدادات',
+    items: [{ href: '/merchant/settings', label: 'إعدادات النشاط', Icon: SettingsIcon }],
+  },
 ]
 
 export default function MerchantSidebar({ newOrders = 0 }: Props) {
@@ -40,27 +74,35 @@ export default function MerchantSidebar({ newOrders = 0 }: Props) {
 
   return (
     <aside className={styles.sidebar}>
-      <nav className={styles.nav} aria-label="تنقل التاجر">
-        {ITEMS.map(({ href, label, Icon, badge, tone }) => {
-          const active = href === '/merchant' ? pathname === '/merchant' : pathname.startsWith(href)
+      <nav className={styles.nav} aria-label="إدارة نشاطك">
+        {SECTIONS.map((section) => (
+          <div key={section.title} className={styles.section}>
+            <h4 className={styles.sectionTitle}>{section.title}</h4>
+            <ul className={styles.list}>
+              {section.items.map(({ href, label, Icon, badge, tone }) => {
+                const active = href === '/merchant' ? pathname === '/merchant' : pathname.startsWith(href)
 
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={`${styles.item} ${active ? styles.active : ''} ${tone === 'gold' ? styles.itemGold : ''}`}
-              aria-current={active ? 'page' : undefined}
-            >
-              <span className={styles.iconWrap}>
-                <Icon size={18} />
-              </span>
-              <span className={styles.label}>{label}</span>
-              {badge === 'orders' && newOrders > 0 && (
-                <span className={styles.badge}>{newOrders > 9 ? '9+' : newOrders}</span>
-              )}
-            </Link>
-          )
-        })}
+                return (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      className={[styles.item, active && styles.active, tone === 'gold' && styles.itemGold].filter(Boolean).join(' ')}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      <span className={styles.iconWrap}>
+                        <Icon size={18} />
+                      </span>
+                      <span className={styles.label}>{label}</span>
+                      {badge === 'orders' && newOrders > 0 && (
+                        <span className={styles.badge}>{newOrders > 9 ? '9+' : newOrders}</span>
+                      )}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
     </aside>
   )
