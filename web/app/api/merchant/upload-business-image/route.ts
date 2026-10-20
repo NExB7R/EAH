@@ -77,13 +77,21 @@ export async function POST(req: NextRequest) {
     return jsonError('الحجم لازم يكون أكبر من صفر وأقل من 5MB', 400)
   }
 
+  // Resolve server credentials before uploading so a missing service-role key
+  // does not leave an orphaned Cloudinary asset.
+  let admin: ReturnType<typeof createServiceClient>
+  try {
+    admin = createServiceClient()
+  } catch {
+    return jsonError('رفع الصور غير متاح مؤقتًا', 503)
+  }
+
   const folder = `eah/businesses/${business.id}/${category}`
   const upload = await uploadImage(file, folder, MAX_SIZE)
   if (!upload.ok) return jsonError(upload.error, 502)
 
   // The regular user client cannot write business_media under the current RLS
   // policies. Use the service client only after the user and ownership checks above.
-  const admin = createServiceClient()
   const { data: currentMedia, error: lookupError } = await admin
     .from('business_media')
     .select('id')
@@ -106,6 +114,8 @@ export async function POST(req: NextRequest) {
         sort_order: 0,
       })
       .eq('id', existing.id)
+      .select('id')
+      .single()
 
     if (updateMediaError) {
       return jsonError('الصورة اترفعت لكن فشل حفظها في النشاط', 500)
@@ -142,13 +152,17 @@ export async function POST(req: NextRequest) {
   }
 
   if (category === 'cover') {
-    const { error: coverError } = await admin
+    const { data: updatedBusiness, error: coverError } = await admin
       .from('businesses')
       .update({ cover_image_url: upload.url })
       .eq('id', business.id)
       .eq('owner_profile_id', user.id)
+      .select('id')
+      .single()
 
-    if (coverError) return jsonError('الصورة اتحفظت لكن فشل تحديث غلاف النشاط', 500)
+    if (coverError || !updatedBusiness) {
+      return jsonError('الصورة اتحفظت لكن فشل تحديث غلاف النشاط', 500)
+    }
   }
 
   return NextResponse.json({ ok: true, url: upload.url, mediaId, category })
