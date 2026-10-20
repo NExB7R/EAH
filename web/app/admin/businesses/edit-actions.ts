@@ -383,8 +383,30 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
     }
   }
 
-  const { error } = await ctx.supabase.from('businesses').update(parsed.data).eq('id', businessId)
+  if (parsed.data.is_published) {
+    const { data: current, error: lookupError } = await ctx.supabase
+      .from('businesses')
+      .select('id, business_type_status')
+      .eq('id', businessId)
+      .maybeSingle()
+    if (lookupError) return { ok: false, error: 'تعذر التحقق من حالة نوع النشاط' }
+    if (!current) return { ok: false, error: 'النشاط مش موجود' }
+    if (current.business_type_status === 'pending' || current.business_type_status === 'rejected') {
+      return {
+        ok: false,
+        error: 'لا يمكن نشر النشاط قبل اعتماد نوعه المخصص من صفحة «أنواع الأنشطة الجديدة».',
+      }
+    }
+  }
+
+  const { data: updated, error } = await ctx.supabase
+    .from('businesses')
+    .update(parsed.data)
+    .eq('id', businessId)
+    .select('id')
+    .maybeSingle()
   if (error) return { ok: false, error: error.message }
+  if (!updated) return { ok: false, error: 'تعذر حفظ الإعدادات — حدّث الصفحة وحاول تاني' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
