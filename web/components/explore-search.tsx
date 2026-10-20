@@ -29,20 +29,38 @@ export default function ExploreSearch({ initialQuery = '' }: Props) {
     setHistory(getHistory())
   }, [])
 
+  useEffect(() => {
+    // Keep the input aligned with URL-driven search, including browser back/forward.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setQuery(initialQuery)
+  }, [initialQuery])
+
+  const navigateToQuery = (nextQuery: string | null) => {
+    const params = new URLSearchParams(window.location.search)
+    params.delete('suggest')
+    if (nextQuery) params.set('q', nextQuery)
+    else params.delete('q')
+    const search = params.toString()
+    router.push(search ? \`/explore?\${search}\` : '/explore')
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const q = query.trim()
-    if (!q) return
-    setHistory(addToHistory(q))
     setShowHistory(false)
-    router.push(`/explore?q=${encodeURIComponent(q)}`)
+    if (!q) {
+      navigateToQuery(null)
+      return
+    }
+    setHistory(addToHistory(q))
+    navigateToQuery(q)
   }
 
   const handleHistoryClick = (item: string) => {
     setQuery(item)
     setShowHistory(false)
     setHistory(addToHistory(item))
-    router.push(`/explore?q=${encodeURIComponent(item)}`)
+    navigateToQuery(item)
   }
 
   const handleRemove = (e: React.MouseEvent, item: string) => {
