@@ -28,7 +28,8 @@
 - **DB-20:** migration `docs/migrations/2026-10-20-restrict-phone-lookup-rpcs.sql` applied as `20261020203959`; direct grant verification passed for `find_by_phone` and `is_phone_registered` (only service_role can execute).
 
 - **AP-04:** phone lookup now verifies Turnstile, uses strict fail-closed rate limiting, returns an allowlisted response without `user_id`, and its two data RPCs are service-role-only; Vercel succeeded for code commit `da965d4`, but production CAPTCHA/429 smoke testing is still pending.
-- **Image upload:** merchant route writes logo/cover through `business_media`, synchronizes `cover_image_url`, checks database write errors, and reads the logo from media. The Vercel-success app-code commit includes this change; a production upload/refresh smoke test is still pending.
+- **Image upload:** merchant route writes logo/cover through `business_media`, synchronizes `cover_image_url`, checks database write errors, and reads the logo from media. The app-code commit passed Vercel; a production upload/refresh smoke test is still pending.
+- **Admin image removal:** UI no longer clears local state after a failed DELETE; the API now checks media writes and clears the mirrored cover URL. Latest Vercel status for this change was pending; production upload/remove/refresh smoke test is still pending.
 - **DB-10/11/12:** storage policy/path problems remain open.
 - **SEC-01:** rotate 11 previously exposed keys and verify current Vercel values without copying secrets into chat.
 - **SEC-02b:** VERCEL_OIDC_TOKEN in git history.
