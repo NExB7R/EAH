@@ -199,12 +199,14 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
       fd.set('is_published', 'on')
 
       const res = await createBusiness(fd)
-      if (res.ok) {
+      if (res.ok && res.id) {
         clear()
-        router.push('/admin/businesses')
+        // Continue straight to the created record so admin can verify visibility
+        // and finish media/owner details without searching the list again.
+        router.push(`/admin/businesses/${res.id}?tab=edit`)
         router.refresh()
       } else {
-        setSubmitError(res.error)
+        setSubmitError(res.ok ? 'النشاط اتعمل لكن تعذر فتح صفحته — افتح قائمة الأنشطة' : res.error)
       }
     } catch {
       setSubmitError('حدث خطأ غير متوقع — حاول تاني')
