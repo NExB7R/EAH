@@ -14,6 +14,7 @@ import HoursSection from './sections/hours-section'
 import BranchesSection from './sections/branches-section'
 import MenuSection from './sections/menu-section'
 import GallerySection from './sections/gallery-section'
+import OffersSection from './sections/offers-section'
 import SettingsSection from './sections/settings-section'
 import OwnerSection from './sections/owner-section'
 import NoticeSection from './sections/notice-section'
@@ -35,6 +36,8 @@ function renderSection(key: SectionKey): React.ReactNode {
       return <MenuSection />
     case 'gallery':
       return <GallerySection />
+    case 'offers':
+      return <OffersSection />
     case 'contacts':
       return <ContactsSection />
     case 'location':
