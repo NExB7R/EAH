@@ -175,3 +175,29 @@ git log --oneline -10
 grep -rn "اسم_الدالة" web/app web/lib web/components
 gitleaks detect --log-opts="--all"
 ```
+
+---
+
+## 13. Git workflow (مرحلة البناء — بدون مستخدمين)
+
+**القاعدة:** اشتغل على `main` مباشرة. مفيش فروع دلوقتي.
+
+**ليه؟**
+- مفيش مستخدمين = مفيش خطر من deploy خاطئ
+- lefthook (typecheck + eslint + secrets + commitlint) بيمنع الكود المكسور
+- dev server محلي (`npm run dev`) = معاينة فورية قبل أي push
+- revert سريع لو حصلت مشكلة
+
+**الخطوات:**
+1. عدّل محلياً (`npm run dev` شغال)
+2. `git add` + `git commit` + `git push` لما تكون راضي
+3. Vercel بينشر تلقائياً (2-3 دقايق)
+4. لو حصل خطأ: `git revert HEAD` + push
+
+**متى نضيف فرع؟**
+لما يبقى فيه مستخدمين حقيقيين (أو قبل الإطلاق). ساعتها:
+- فرع واحد `preview` للتصميم
+- Vercel Preview URL للمعاينة
+- merge لـ main بعد الموافقة
+
+**الفرع `ui-onlook` على الريموت:** إرث قديم. مش مستخدم. لا تحاول دمجه.
