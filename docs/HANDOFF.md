@@ -342,3 +342,62 @@
 - `business-form-hooks.ts` = combiner — التعديل الحقيقي في state/handlers
 - الملفات المقدّسة: SACRED.md §4
 
+---
+
+## Session Close — 2026-10-20 (Admin + Security Overhaul)
+
+**آخر commit:** `be1f199`  
+**Invariants:** all OK  
+**Deploy:** Vercel auto
+
+### اللي اتحل (مؤكد بالاختبار)
+
+**Admin UX:**
+- Wizard fullscreen + 3 tabs تفاصيل النشاط + mobile drawer
+- Admin profile + bell routing
+- 10 contact types + notice + open-override
+- 📍 location picker (geolocation + OSM)
+
+**Media:**
+- File upload + URL paste (logo/cover/menu/gallery)
+- Menu + Gallery sections
+- Offers CRUD + public display
+
+**Public Page:**
+- Notice banner + open-override
+- Offers tab + share modal + QR (5 منصات)
+
+**Security — DB-04/05 ✅ (verified by test):**
+- `check_*_badges`: self-award guard (verified: 42501)
+- `get_referral_*`: self-only filter
+- `get_user_points`: self-only
+- `get_business_funnel/features/trial_status`: ownership guard
+- `get_multi_account_ips`: REVOKE PUBLIC + authenticated + anon
+- AP-05: service client for admin notifications
+
+**Tech Debt:**
+- business-form.tsx: 1179 → 19 سطر
+- business-form-hooks.ts: 380 → 3 ملفات
+- B2 select('*'): 5 → 1 (documented exception)
+- B3 baseline accurate
+
+### اللي مؤجل
+
+- **SEC-01**: rotate 11 keys (قرارك — قبل الإطلاق)
+- **SEC-02b**: VERCEL_OIDC_TOKEN in git history (history rewrite)
+- CONSISTENCY-01: SACRED → 4 أنواع
+- Mobile QA polish بعد أول نشاط
+
+### أولويات الجلسة القادمة
+
+1. **أضف أول نشاط حقيقي** (الهدف الأساسي)
+2. اختبر end-to-end (offers + images + share + mobile)
+3. SEC-01 rotate
+4. Mobile QA polish
+
+### تحذيرات
+
+- `business-form-hooks.ts` = combiner — التعديل في `-state.ts` / `-handlers.ts`
+- `get_multi_account_ips` — REVOKE PUBLIC/anon/authenticated — استخدمه بـ service client بس
+- قواعد §14 في AI_PLAYBOOK (Python write_text — ممنوع `r + backslash`)
+

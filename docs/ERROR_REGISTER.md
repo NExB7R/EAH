@@ -14,7 +14,7 @@
 | DB-01 | ✅ | GRANTs مفقودة (Supabase 2026). متصلّح: order_requests, business_comments, comment_likes, comment_thread_follows. **ناقص:** business_follows, business_subscriptions, business_activities, customer_locations, coupons, promo_posts | migrations/2026-10-20-restore-table-grants.sql (لم يُكتب) | استعلام role_table_grants |
 | DB-02 | ✅ | award_points/award_trust_points/award_trust_badge/apply_trust_decay كانت مفتوحة | 3c8fc16 (REVOKE + GRANT service_role) | has_function_privilege = false |
 | DB-03 | ✅ | check_rate_limit, track_ad_event, count_accounts_from_ip مفتوحة للزوار؛ generate_* للمسجلين | revoke internal functions | has_function_privilege |
-| DB-04 | ✅ | دوال SECURITY DEFINER مفتوحة (auth.uid guards + REVOKE multi_account_ips) | migration 2026-10-20-db04-05-security.sql (96e8c2d) | ✅ verified |
+| DB-04 | ✅ | دوال SECURITY DEFINER مفتوحة (auth.uid guards + REVOKE multi_account_ips) | migrations 96e8c2d + be1f199 (PUBLIC grant closed) | ✅ verified (42501 confirmed) |
 | DB-05 | ✅ | ownership guards (owner_profile_id = auth.uid() OR is_admin) | migration 2026-10-20-db04-05-security.sql | ✅ verified |
 | DB-06 | ⏳ | business_branches.phone/whatsapp قابلة للقراءة من anon | قرار: عامة أو إخفاء | استعلام pg_policies |
 | DB-07 | 🟡 | business_contact_methods: owner_select تسمح لأي مسجل بالقراءة | قصّرها على المالك + reveal_contact | pg_policies |
