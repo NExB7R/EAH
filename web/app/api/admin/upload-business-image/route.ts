@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/auth/admin'
 import { uploadImage } from '@/lib/cloudinary'
 import { logAudit } from '@/lib/logging/audit'
+import { createServiceClient } from '@/lib/supabase/service'
 import { revalidatePath, revalidateTag } from 'next/cache'
 
 export const runtime = 'nodejs'
@@ -21,6 +22,7 @@ export async function POST(req: NextRequest) {
   const ctx = await requireAdmin()
   if (!ctx.ok) return NextResponse.json({ error: ctx.error }, { status: 401 })
 
+  const admin = createServiceClient()
   const formData = await req.formData()
   const fileRaw = formData.get('file')
   const urlRaw = formData.get('url')
@@ -34,7 +36,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'businessId ناقص' }, { status: 400 })
   }
 
-  const { data: biz } = await ctx.supabase
+  const { data: biz } = await admin
     .from('businesses')
     .select('id, slug')
     .eq('id', businessId)
@@ -71,13 +73,13 @@ export async function POST(req: NextRequest) {
   let mediaId: string
 
   if (category === 'logo' || category === 'cover') {
-    await ctx.supabase
+    await admin
       .from('business_media')
       .delete()
       .eq('business_id', businessId)
       .eq('media_type', category)
 
-    const { data: inserted, error } = await ctx.supabase
+    const { data: inserted, error } = await admin
       .from('business_media')
       .insert({
         business_id: businessId,
@@ -95,19 +97,16 @@ export async function POST(req: NextRequest) {
     mediaId = inserted.id
 
     if (category === 'cover') {
-      await ctx.supabase
-        .from('businesses')
-        .update({ cover_image_url: finalUrl })
-        .eq('id', businessId)
+      await admin.from('businesses').update({ cover_image_url: finalUrl }).eq('id', businessId)
     }
   } else {
-    const { count } = await ctx.supabase
+    const { count } = await admin
       .from('business_media')
       .select('*', { count: 'exact', head: true })
       .eq('business_id', businessId)
       .eq('media_type', category)
 
-    const { data: inserted, error } = await ctx.supabase
+    const { data: inserted, error } = await admin
       .from('business_media')
       .insert({
         business_id: businessId,
@@ -125,7 +124,7 @@ export async function POST(req: NextRequest) {
     mediaId = inserted.id
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(admin, {
     actorUserId: ctx.userId,
     action: 'business.upload_media',
     entityType: 'business',
@@ -143,11 +142,12 @@ export async function DELETE(req: NextRequest) {
   const ctx = await requireAdmin()
   if (!ctx.ok) return NextResponse.json({ error: ctx.error }, { status: 401 })
 
+  const admin = createServiceClient()
   const url = new URL(req.url)
   const mediaId = url.searchParams.get('mediaId')
   if (!mediaId) return NextResponse.json({ error: 'mediaId مطلوب' }, { status: 400 })
 
-  const { data: media } = await ctx.supabase
+  const { data: media } = await admin
     .from('business_media')
     .select('id, business_id')
     .eq('id', mediaId)
@@ -155,7 +155,7 @@ export async function DELETE(req: NextRequest) {
 
   if (!media) return NextResponse.json({ error: 'الصورة مش موجودة' }, { status: 404 })
 
-  const { error } = await ctx.supabase.from('business_media').delete().eq('id', mediaId)
+  const { error } = await admin.from('business_media').delete().eq('id', mediaId)
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
   revalidatePath(`/admin/businesses/${media.business_id}`)
