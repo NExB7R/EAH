@@ -6,13 +6,14 @@ import { BusinessFormProvider, type BusinessFormCtx } from './business-form-cont
 import { useBusinessFormState } from './business-form-hooks'
 import { EDIT_ORDER, SECTION_META, type SectionKey } from './business-form-config'
 import { Section } from './business-form-shared'
-import BusinessPreview from './business-preview'
 import BasicsSection from './sections/basics-section'
 import ImagesSection from './sections/images-section'
 import ContactsSection from './sections/contacts-section'
 import LocationSection from './sections/location-section'
 import HoursSection from './sections/hours-section'
 import BranchesSection from './sections/branches-section'
+import MenuSection from './sections/menu-section'
+import GallerySection from './sections/gallery-section'
 import SettingsSection from './sections/settings-section'
 import OwnerSection from './sections/owner-section'
 import NoticeSection from './sections/notice-section'
@@ -30,6 +31,10 @@ function renderSection(key: SectionKey): React.ReactNode {
       return <BasicsSection />
     case 'images':
       return <ImagesSection />
+    case 'menu':
+      return <MenuSection />
+    case 'gallery':
+      return <GallerySection />
     case 'contacts':
       return <ContactsSection />
     case 'location':
@@ -55,42 +60,29 @@ export default function EditForm({ business }: { business: AdminBusiness }) {
 
   return (
     <BusinessFormProvider value={ctx}>
-      <div className={styles.wrap}>
-        <div className={styles.sections}>
-          {state.error && (
-            <div className={styles.errMsg}>
-              <AlertIcon size={14} /> {state.error}
-            </div>
-          )}
+      <div className={styles.sections}>
+        {state.error && (
+          <div className={styles.errMsg}>
+            <AlertIcon size={14} /> {state.error}
+          </div>
+        )}
 
-          {EDIT_ORDER.map((key) => {
-            const meta = SECTION_META[key]
-            return (
-              <Section
-                key={key}
-                sectionKey={key}
-                title={meta.title}
-                Icon={meta.Icon}
-                open={state.openSections.has(key)}
-                onToggle={() => state.toggleSection(key)}
-                saved={state.savedSection === key}
-              >
-                {renderSection(key)}
-              </Section>
-            )
-          })}
-        </div>
-
-        <BusinessPreview
-          name={state.name}
-          type={state.businessType}
-          area={state.area || null}
-          hook={state.hook || null}
-          logoUrl={state.logoUrl}
-          coverUrl={state.coverUrl}
-          isFeatured={state.isFeatured}
-          isNew={state.isNewProject}
-        />
+        {EDIT_ORDER.map((key) => {
+          const meta = SECTION_META[key]
+          return (
+            <Section
+              key={key}
+              sectionKey={key}
+              title={meta.title}
+              Icon={meta.Icon}
+              open={state.openSections.has(key)}
+              onToggle={() => state.toggleSection(key)}
+              saved={state.savedSection === key}
+            >
+              {renderSection(key)}
+            </Section>
+          )
+        })}
       </div>
     </BusinessFormProvider>
   )
