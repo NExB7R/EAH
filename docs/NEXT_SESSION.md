@@ -4,10 +4,11 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last reviewed app-code commit: 450400a (safe remote image import + fail-closed admin upload limiter)
+- Last app-code commit: d541ea2 (ownerless activities stay unpublished; contact-save failures trigger rollback)
+- Last E2E test commit: 57fd91b (search + public detail no longer silently pass when no business cards exist; workflow also triggers on main push)
 - Branch: main
-- Vercel build/TypeScript: success on main commit `450400a`; local ESLint/Prettier/Vitest were not run in this session
-- Deploy: Vercel build/deployment succeeded for `450400a`, superseding the earlier failed check for `2f3ce30`. Production runtime behavior is not yet smoke-tested
+- Vercel build/TypeScript: success on code commit `450400a`; status for the latest code commit `d541ea2` and E2E commit `57fd91b` was pending at last check. Local ESLint/Prettier/Vitest/Playwright were not run in this session.
+- Deploy: remote-image code succeeded in Vercel build; latest business-flow changes still need a green Vercel check and runtime/E2E results
 
 ## Working
 - Business wizard fullscreen (UI-02)
@@ -30,7 +31,10 @@
 - **AP-04:** phone lookup now verifies Turnstile, uses strict fail-closed rate limiting, returns an allowlisted response without `user_id`, and its two data RPCs are service-role-only; Vercel succeeded for code commit `da965d4`, but production CAPTCHA/429 smoke testing is still pending.
 - **Image upload:** merchant route writes logo/cover through `business_media`, synchronizes `cover_image_url`, checks database write errors, and reads the logo from media. The app-code commit passed Vercel; a production upload/refresh smoke test is still pending.
 - **Admin image removal:** UI preserves the preview on API failure; API validates DB writes and synchronizes the legacy cover URL. Vercel build/TypeScript succeeded on `450400a`; production DELETE behavior and rollback behavior still need a smoke test.
-- **AP-15 URL paste:** external images are now downloaded only from validated public HTTPS hosts (DNS-pinned), redirects are revalidated, downloads are capped at 5MB and checked for JPEG/PNG/WebP/AVIF signatures, then uploaded to Cloudinary. Only the resulting Cloudinary URL is stored, and the endpoint has fail-closed admin upload/delete rate limiting. Vercel build succeeded; runtime edge-case testing remains.
+- **AP-15 URL paste:** external images are now downloaded only from validated public HTTPS hosts (DNS-pinned), redirects are revalidated, downloads are capped at 5MB and checked for JPEG/PNG/WebP/AVIF signatures, then uploaded to Cloudinary. Only the resulting Cloudinary URL is stored, and the endpoint has fail-closed admin upload/delete rate limiting. Vercel build succeeded on `450400a`; runtime edge-case testing remains.
+- **AP-16 business creation:** the wizard no longer submits `is_published=on` without a selected owner; the server rejects direct publishing without an owner, stores unassigned businesses as admin drafts, and checks/rolls back contact insert failures. A preview of the real DB showed no merchant-role account exists yet, so a real owner must register before end-to-end owner-link testing.
+- **Live data baseline (read-only check):** one published business, no `owner_profile_id`, no `business_media` rows, no `business_contact_methods` rows; one profile with admin role and zero merchant-role rows. No live business data was mutated.
+- **E2E public discovery:** the test now searches for a published business and opens its public page; it fails instead of silently returning when no card is present. Workflow now runs on `main` pushes, but result not yet observed.
 - **DB-10/11/12:** storage policy/path problems remain open.
 - **SEC-01:** rotate 11 previously exposed keys and verify current Vercel values without copying secrets into chat.
 - **SEC-02b:** ***REMOVED*** in git history.
@@ -39,13 +43,14 @@
 - **Offers:** verify the `starts_at` filter after the previous fix; do not rely on this old note without checking runtime.
 
 ## Next Priorities (in order)
-1. Smoke-test admin image upload/removal on the current deployment: valid HTTPS image, reject HTTP/private DNS/unsafe redirects/non-image/over-5MB, refresh persistence, logo and cover deletion, and `cover_image_url` rollback on DB failure where testable.
-2. Run the real add-business flow end-to-end: create a real activity, associate the owner, upload logo/cover/menu/gallery, verify pending/review/publish states, then confirm the public page, search, and mobile view. Do not create fake activity data.
-3. Run `web/supabase/tests/rls.test.sql` against the intended test DB with pgTAP; the file now has `plan(37)` / 37 assertions, but they have not been run.
-4. Test phone lookup with the real production Turnstile key and verify 429 throttling plus a response that contains no `user_id`.
-5. Test merchant logo/cover upload on production: upload, refresh, confirm logo/cover still show, and verify a non-owner receives 403.
-6. Resolve remaining storage findings DB-10/11/12 and reconcile migration history before any more schema changes.
-7. Rotate previously exposed keys and verify E2E on the actual release branch.
+1. Check Vercel for code commit `d541ea2` and E2E commit `57fd91b`; read failure logs if either is red.
+2. Smoke-test admin image upload/removal on the current deployment: valid HTTPS image, reject HTTP/private DNS/unsafe redirects/non-image/over-5MB, refresh persistence, logo and cover deletion, and `cover_image_url` rollback on DB failure where testable.
+3. Complete the real add-business flow only when the real owner's account exists: create an unpublished draft, link the correct owner, upload logo/cover/menu/gallery, approve/publish, then confirm public page, search, and mobile view. Do not attach the existing activity to an arbitrary account or create fake business data.
+4. Run `web/supabase/tests/rls.test.sql` against the intended test DB with pgTAP; the file now has `plan(37)` / 37 assertions, but they have not been run.
+5. Test phone lookup with the real production Turnstile key and verify 429 throttling plus a response that contains no `user_id`.
+6. Test merchant logo/cover upload on production: upload, refresh, confirm logo/cover still show, and verify a non-owner receives 403.
+7. Resolve remaining storage findings DB-10/11/12 and reconcile migration history before any more schema changes.
+8. Rotate previously exposed keys and verify E2E on the actual release branch.
 
 ## Forbidden
 - No Puck/designtools/Surface (failed experiments)
