@@ -1169,9 +1169,8 @@
    ═══════════════════════════════════════════════════════════ */
 
 .detailPage {
-  max-width: 1280px;
-  margin: 0 auto;
   padding-bottom: 80px;
+  overflow-x: hidden;
 }
 
 .detailActions {
@@ -1202,7 +1201,7 @@
   min-width: 0;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .detailGrid {
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   }
@@ -1218,12 +1217,14 @@
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.8));
   border: 1px solid rgba(168, 85, 247, 0.18);
   overflow: hidden;
+  min-width: 0;
+  width: 100%;
 }
 
 .detailPage .imageWrap {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  max-height: 280px;
+  aspect-ratio: 21 / 9;
+  max-height: 220px;
   overflow: hidden;
   background: rgba(7, 2, 13, 0.6);
 }
@@ -1244,10 +1245,17 @@
 }
 
 .detailPage .body {
-  padding: 20px 22px;
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .detailPage .body {
+    padding: 14px 16px;
+  }
 }
 
 /* Status badge */
@@ -1349,9 +1357,10 @@
   flex-direction: column;
   gap: 16px;
   min-width: 0;
+  overflow-x: hidden;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .formWrap {
     position: sticky;
     top: 88px;
@@ -1385,7 +1394,7 @@
 }
 
 /* Mobile: form تحت */
-@media (max-width: 1023px) {
+@media (max-width: 1279px) {
   .formWrap {
     order: 2;
   }
