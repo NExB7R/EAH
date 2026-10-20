@@ -14,8 +14,8 @@
 | DB-01 | ✅ | GRANTs مفقودة (Supabase 2026). متصلّح: order_requests, business_comments, comment_likes, comment_thread_follows. **ناقص:** business_follows, business_subscriptions, business_activities, customer_locations, coupons, promo_posts | migrations/2026-10-20-restore-table-grants.sql (لم يُكتب) | استعلام role_table_grants |
 | DB-02 | ✅ | award_points/award_trust_points/award_trust_badge/apply_trust_decay كانت مفتوحة | 3c8fc16 (REVOKE + GRANT service_role) | has_function_privilege = false |
 | DB-03 | ✅ | check_rate_limit, track_ad_event, count_accounts_from_ip مفتوحة للزوار؛ generate_* للمسجلين | revoke internal functions | has_function_privilege |
-| DB-04 | ✅ | دوال SECURITY DEFINER مفتوحة (auth.uid guards + REVOKE multi_account_ips) | migrations 96e8c2d + be1f199 (PUBLIC grant closed) | ✅ verified (42501 confirmed) |
-| DB-05 | ✅ | ownership guards (owner_profile_id = auth.uid() OR is_admin) | migration 2026-10-20-db04-05-security.sql | ✅ verified |
+| DB-04 | 🟡 | دوال SECURITY DEFINER كانت متاحة لـ anon رغم حراس auth.uid؛ multi_account_ips اتقفل لكن باقي الدوال احتاجت REVOKE صريح | migrations 96e8c2d + be1f199 + 2026-10-20-revoke-anon-sensitive-rpcs.sql | migration جديدة في المستودع؛ لم تُطبق/تُتحقق على الإنتاج بعد |
+| DB-05 | 🟡 | صلاحيات referral/profile RPCs كانت تشمل anon افتراضياً، رغم فلاتر SQL | migrations 2026-10-20-db04-05-security.sql + 2026-10-20-revoke-anon-sensitive-rpcs.sql | انتظار تطبيق migration والتحقق بصفة anon/authenticated |
 | DB-06 | ⏳ | business_branches.phone/whatsapp قابلة للقراءة من anon | قرار: عامة أو إخفاء | استعلام pg_policies |
 | DB-07 | 🟡 | business_contact_methods: owner_select تسمح لأي مسجل بالقراءة | قصّرها على المالك + reveal_contact | pg_policies |
 | DB-08 | ✅ | contact_reveals + audit_logs self insert | 3c8fc16 (حُذفت) | pg_policies |
@@ -49,7 +49,7 @@
 | AP-01 | ✅ | 4 cron routes تفتح لو CRON_SECRET ناقص | 2a0b135 (verifyCron fail-closed) |
 | AP-02 | ✅ | /api/track-action: IP خام + rate limit مفقود | 2a0b135 (hashIp + rate limit) |
 | AP-03 | ✅ | /api/log-error و csp-report بلا حد | 2a0b135 (rate limit) |
-| AP-04 | 🟡 | /api/find-by-phone: apiLimiter + يرجّع user_id | strictLimiter + Turnstile + شيل user_id |
+| AP-04 | 🟡 | /api/find-by-phone: البحث قابل للتعداد، وAPI كان يعيد user_id وبيانات RPC كاملة | strictLimiter fail-closed + Turnstile server verification + response allowlist بلا user_id | الكود committed؛ انتظار نجاح Vercel ثم اختبار حقيقي بالـ CAPTCHA والـ rate limit |
 | AP-05 | ✅ | requestSubscription: إشعار الأدمن ما بيوصلش | service client (f690db4+) |
 | AP-06 | 🔴 | .maybeSingle() على owner_profile_id في 12 موضع | .order + .limit(1) |
 | AP-07 | ✅ | حالة الطلب بدون state machine | 2a0b135 (VALID_TRANSITIONS) |
