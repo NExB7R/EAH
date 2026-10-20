@@ -72,6 +72,8 @@ export type SectionKey =
   | 'hours'
   | 'branches'
   | 'settings'
+  | 'menu'
+  | 'gallery'
   | 'notice'
   | 'status'
   | 'owner'
@@ -79,6 +81,8 @@ export type SectionKey =
 export const SECTION_META: Record<SectionKey, { title: string; Icon: typeof StoreIcon }> = {
   basics: { title: 'الأساسيات', Icon: StoreIcon },
   images: { title: 'الصور', Icon: ImageIcon },
+  menu: { title: 'المنيو', Icon: FileTextIcon },
+  gallery: { title: 'معرض الصور', Icon: ImageIcon },
   contacts: { title: 'التواصل', Icon: PhoneIcon },
   location: { title: 'الموقع', Icon: MapPinIcon },
   hours: { title: 'أوقات العمل', Icon: ClockIcon },
@@ -92,6 +96,8 @@ export const SECTION_META: Record<SectionKey, { title: string; Icon: typeof Stor
 export const EDIT_ORDER: SectionKey[] = [
   'basics',
   'images',
+  'menu',
+  'gallery',
   'contacts',
   'location',
   'hours',
