@@ -70,6 +70,10 @@ export default function BusinessTabs({
   const facebook = contacts.find((c) => c.method_type === 'facebook')
   const instagram = contacts.find((c) => c.method_type === 'instagram')
   const website = contacts.find((c) => c.method_type === 'website')
+  const complaints = contacts.find((c) => c.method_type === 'complaints')
+  const manager = contacts.find((c) => c.method_type === 'manager')
+  const shiftMorning = contacts.find((c) => c.method_type === 'shift_morning')
+  const shiftEvening = contacts.find((c) => c.method_type === 'shift_evening')
 
   return (
     <div className={`${styles.wrap} ${featured ? styles.wrapFeatured : ''}`}>
@@ -124,7 +128,15 @@ export default function BusinessTabs({
       {tab === 'info' && (
         <div className={styles.content}>
           {/* Contacts */}
-          {(phone || whatsapp || facebook || instagram || website) && (
+          {(phone ||
+            whatsapp ||
+            complaints ||
+            manager ||
+            shiftMorning ||
+            shiftEvening ||
+            facebook ||
+            instagram ||
+            website) && (
             <div className={styles.block}>
               <h3 className={styles.blockTitle}>التواصل</h3>
               <div className={styles.contactList}>
@@ -179,6 +191,30 @@ export default function BusinessTabs({
                   >
                     <GlobeIcon size={16} />
                     <span>الموقع الرسمي</span>
+                  </a>
+                )}
+                {manager && (
+                  <a href={`tel:${manager.value}`} className={styles.contactItem}>
+                    <PhoneIcon size={16} />
+                    <span>مسئول النشاط: {manager.value}</span>
+                  </a>
+                )}
+                {shiftMorning && (
+                  <a href={`tel:${shiftMorning.value}`} className={styles.contactItem}>
+                    <ClockIcon size={16} />
+                    <span>شفت صباحي: {shiftMorning.value}</span>
+                  </a>
+                )}
+                {shiftEvening && (
+                  <a href={`tel:${shiftEvening.value}`} className={styles.contactItem}>
+                    <ClockIcon size={16} />
+                    <span>شفت مسائي: {shiftEvening.value}</span>
+                  </a>
+                )}
+                {complaints && (
+                  <a href={`tel:${complaints.value}`} className={styles.contactItem}>
+                    <MessageCircleIcon size={16} />
+                    <span>شكاوى واقتراحات: {complaints.value}</span>
                   </a>
                 )}
               </div>
