@@ -4,10 +4,10 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last security-code commit: 7a42f2b (phone lookup hardening)
+- Last reviewed code commit: 435d40f (service client marked server-only)
 - Branch: main
-- Invariants: not re-verified after the latest code changes
-- Deploy: Vercel status was pending at last check; production runtime not yet verified
+- Invariants/typecheck: not re-verified after the latest code changes
+- Deploy: Vercel check pending; production runtime not yet verified
 
 ## Working
 - Business wizard fullscreen (UI-02)
@@ -24,7 +24,7 @@
 - God Components all split (≤300 lines each)
 
 ## Known Issues
-- **DB-04/05:** migration `docs/migrations/2026-10-20-revoke-anon-sensitive-rpcs.sql` committed but NOT applied or verified on the production database.
+- **DB-04/05:** migration `docs/migrations/2026-10-20-revoke-anon-sensitive-rpcs.sql` applied to Supabase as `20261020203655`; direct grant verification passed for all 8 targeted RPCs (anon denied, authenticated/service_role allowed).
 - **AP-04:** phone lookup now sends/verifies Turnstile, uses strict fail-closed rate limiting, and returns an allowlisted response without `user_id`; production verification is pending.
 - **Image upload:** merchant route now writes logo/cover through `business_media`, synchronizes `cover_image_url`, checks database write errors, and reads the logo from media. Code is committed; Vercel build and a production upload/refresh smoke test are still pending.
 - **DB-10/11/12:** storage policy/path problems remain open.
@@ -35,13 +35,13 @@
 - **Offers:** verify the `starts_at` filter after the previous fix; do not rely on this old note without checking runtime.
 
 ## Next Priorities (in order)
-1. Take/confirm a recoverable database backup, then apply `docs/migrations/2026-10-20-revoke-anon-sensitive-rpcs.sql` and verify every targeted function grants as anon/authenticated/service_role. Do not mark DB-04/05 closed until verified.
-2. Wait for the current Vercel check to finish; run phone lookup with a real production Turnstile key, then verify 429 throttling and that the response contains no `user_id`.
-3. Fix merchant image persistence using `business_media` as the canonical source; check every DB write result and retain the cover URL sync.
-4. Run the whole add-business flow (create, owner association, images, pending/review/publish, public page, search, mobile).
-5. Resolve the storage-policy findings DB-10/11/12 and reconcile migration history before any further SQL changes.
-6. Rotate previously exposed keys and verify build/E2E on the actual release branch.
-7. Address the remaining launch checklist only after the blocking flows have test evidence.
+1. Verify the latest Vercel deployment completes; the current status was still pending at the last check, and the Vercel log API returned 403 for this connection.
+2. Run `web/supabase/tests/rls.test.sql` against the intended test DB with pgTAP; it now includes 16 assertions for the sensitive RPC grants.
+3. Test phone lookup with the real production Turnstile key and verify 429 throttling plus a response that contains no `user_id`.
+4. Test merchant logo/cover upload on production: upload, refresh, confirm logo/cover still show, and verify a non-owner receives 403. The code change is committed but runtime test is pending.
+5. Resolve remaining storage findings DB-10/11/12 and reconcile migration history before any more schema changes.
+6. Rotate previously exposed keys and verify E2E on the actual release branch.
+7. Run the add-business flow (create, owner association, images, pending/review/publish, public page, search, mobile) before launch.
 
 ## Forbidden
 - No Puck/designtools/Surface (failed experiments)
