@@ -67,7 +67,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -327,4 +327,65 @@ a.card:hover {
   .chev,
   .activityCard,
   .alert { transition: none; }
+}
+
+
+/* Stronger EAH brand contrast: saturated accents on the existing dark-violet base. */
+.intro {
+  border-color: rgba(199, 125, 255, 0.38);
+  background: linear-gradient(112deg, rgba(168, 85, 247, 0.19), rgba(20, 14, 34, 0.97) 62%, rgba(85, 231, 209, 0.075));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035), 0 12px 34px rgba(0, 0, 0, 0.24);
+}
+.kicker { color: #e1b7ff; }
+.primaryAction {
+  border-color: rgba(199, 125, 255, 0.7);
+  background: linear-gradient(135deg, #9d4edd, #a855f7);
+  color: #fff;
+  box-shadow: 0 7px 22px rgba(168, 85, 247, 0.23);
+}
+.primaryAction:hover { background: linear-gradient(135deg, #a855f7, #c77dff); }
+.card {
+  border-color: rgba(168, 85, 247, 0.35);
+  background: linear-gradient(150deg, rgba(29, 16, 48, 0.98), rgba(13, 7, 24, 0.99));
+  box-shadow: inset 0 1px 0 rgba(199, 125, 255, 0.055), 0 8px 22px rgba(0, 0, 0, 0.18);
+}
+a.card:hover {
+  border-color: rgba(199, 125, 255, 0.68);
+  background: linear-gradient(145deg, rgba(39, 19, 63, 0.99), rgba(16, 8, 29, 1));
+  box-shadow: 0 8px 25px rgba(168, 85, 247, 0.14);
+}
+.icon { border-color: rgba(199, 125, 255, 0.28); }
+.purple .icon { background: rgba(168, 85, 247, 0.22); color: #d9a2ff; }
+.purple .value, .pink .value { color: #d9a2ff; }
+.teal { border-color: rgba(85, 231, 209, 0.35); }
+.teal .icon { border-color: rgba(85, 231, 209, 0.42); background: rgba(85, 231, 209, 0.16); color: #55e7d1; }
+.teal .value { color: #55e7d1; }
+.gold { border-color: rgba(232, 199, 154, 0.38); }
+.gold .icon { border-color: rgba(232, 199, 154, 0.4); background: rgba(232, 199, 154, 0.16); color: #f3d19f; }
+.gold .value { color: #f3d19f; }
+.orange { border-color: rgba(253, 186, 116, 0.36); }
+.orange .icon { border-color: rgba(253, 186, 116, 0.46); background: rgba(253, 186, 116, 0.17); color: #fdba74; }
+.orange .value { color: #fdba74; }
+.alert {
+  border-color: rgba(168, 85, 247, 0.24);
+  background: linear-gradient(120deg, rgba(28, 15, 47, 0.97), rgba(13, 7, 24, 0.99));
+}
+.alert:hover { border-color: rgba(199, 125, 255, 0.58); background: rgba(32, 17, 52, 0.99); }
+.alert_orange { border-inline-start-color: #fdba74; }
+.alert_gold { border-inline-start-color: #f3d19f; }
+.alert_teal { border-inline-start-color: #55e7d1; }
+.alert_purple { border-inline-start-color: #c77dff; }
+.alert_orange .alertIcon { background: rgba(253, 186, 116, 0.18); color: #fdba74; }
+.alert_gold .alertIcon { background: rgba(232, 199, 154, 0.18); color: #f3d19f; }
+.alert_teal .alertIcon { background: rgba(85, 231, 209, 0.16); color: #55e7d1; }
+.alert_purple .alertIcon { background: rgba(168, 85, 247, 0.2); color: #d9a2ff; }
+.alertArrow { color: #d3c0e8; }
+.allClear {
+  border-color: rgba(85, 231, 209, 0.42);
+  background: linear-gradient(110deg, rgba(85, 231, 209, 0.11), rgba(13, 7, 24, 0.92));
+}
+.allClearIcon { color: #55e7d1; }
+
+@media (max-width: 1100px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
