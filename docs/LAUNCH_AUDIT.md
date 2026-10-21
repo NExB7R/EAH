@@ -4,6 +4,12 @@
 **Scope:** source-tree inventory, admin/customer/merchant route structure, selected auth/API flows, GitHub workflow configuration, and read-only Supabase inspection.  
 **Status:** **NOT READY TO LAUNCH** — this is an initial engineering audit, not a certification that every route or production integration has been tested.
 
+## Deployment visibility / why production has not changed
+
+- Review preview for the current branch: https://eah-git-redesign-admin-control-center-eah-74a0.vercel.app
+- The public production URL referenced by the project workflows is https://eah-sq.vercel.app. It is intentionally unchanged because PR #27 is still a draft and is stacked on PR #26; neither PR has been merged to `main`.
+- A Vercel preview URL is a separate deployment and does not change the production hostname. Do not merge the platform changes until current-head quality and role-specific workflow tests have actual results.
+
 ## Inventory observed
 
 - 76 Next.js page routes and 23 API route handlers in the tracked tree.
