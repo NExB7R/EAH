@@ -26,7 +26,7 @@ export async function submitOrder(
   if (!user) return { ok: false, error: 'لازم تسجل دخول' }
 
   // Rate limit — 5 طلبات / 15 دقيقة
-  const rl = await checkRateLimit(strictLimiter, `order:${user.id}`)
+  const rl = await checkRateLimit(strictLimiter, `order:${user.id}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
 
   const parsed = orderSchema.safeParse({

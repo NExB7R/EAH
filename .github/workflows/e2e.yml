@@ -3,8 +3,12 @@ name: E2E
 on:
   push:
     branches: [main, v2]
-  pull_request:
-    branches: [v2]
+  workflow_dispatch:
+    inputs:
+      preview_url:
+        description: 'URL of the Vercel Preview built from the commit under test (not Production)'
+        required: true
+        type: string
 
 jobs:
   e2e:
@@ -17,6 +21,24 @@ jobs:
           node-version: '22'
           cache: 'npm'
           cache-dependency-path: web/package-lock.json
+      - name: Validate preview target
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          PREVIEW_URL: ${{ inputs.preview_url }}
+        run: |
+          node <<'NODE'
+          const url = new URL(process.env.PREVIEW_URL)
+          if (
+            url.protocol !== 'https:' ||
+            !url.hostname.endsWith('.vercel.app') ||
+            url.hostname === 'eah-sq.vercel.app' ||
+            url.username ||
+            url.password
+          ) {
+            console.error('Enter an HTTPS Vercel Preview URL, not the production site.')
+            process.exit(1)
+          }
+          NODE
       - name: Install
         working-directory: web
         run: npm ci
@@ -27,7 +49,7 @@ jobs:
         working-directory: web
         env:
           PLAYWRIGHT_SKIP_SERVER: '1'
-          PLAYWRIGHT_BASE_URL: 'https://eah-sq.vercel.app'
+          PLAYWRIGHT_BASE_URL: ${{ github.event_name == 'workflow_dispatch' && inputs.preview_url || 'https://eah-sq.vercel.app' }}
         run: npx playwright test
       - uses: actions/upload-artifact@v4
         if: failure()

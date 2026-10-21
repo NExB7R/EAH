@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { transcribeAudio } from '@/lib/ai/whisper'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
+import { getClientIp } from '@/lib/rate-limit'
 
 export const runtime = 'nodejs'
 export const maxDuration = 30
@@ -28,16 +29,33 @@ export async function POST(req: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
 
-    const rl = getLimiter()
-    if (rl) {
-      const key = user?.id ?? req.headers.get('x-forwarded-for') ?? 'anon'
+    let rl: Ratelimit | null
+    try {
+      rl = getLimiter()
+    } catch {
+      return NextResponse.json({ error: 'خدمة تحويل الصوت غير متاحة مؤقتًا' }, { status: 503 })
+    }
+    if (!rl) {
+      return NextResponse.json({ error: 'خدمة تحويل الصوت غير متاحة مؤقتًا' }, { status: 503 })
+    }
+
+    const key = user?.id ?? (await getClientIp())
+    try {
       const { success } = await rl.limit(key)
       if (!success) {
         return NextResponse.json({ error: 'كثير شوية — استنى شوية' }, { status: 429 })
       }
+    } catch {
+      return NextResponse.json({ error: 'خدمة تحويل الصوت غير متاحة مؤقتًا' }, { status: 503 })
     }
 
-    const form = await req.formData()
+    const contentLength = Number(req.headers.get('content-length') ?? '0')
+    if (Number.isFinite(contentLength) && contentLength > 11 * 1024 * 1024) {
+      return NextResponse.json({ error: 'حجم الطلب أكبر من المسموح' }, { status: 413 })
+    }
+
+    const form = await req.formData().catch(() => null)
+    if (!form) return NextResponse.json({ error: 'بيانات الصوت غير صحيحة' }, { status: 400 })
     const file = form.get('audio')
     if (!(file instanceof Blob)) {
       return NextResponse.json({ error: 'مفيش صوت' }, { status: 400 })

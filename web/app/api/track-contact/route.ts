@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { createHash } from 'crypto'
+import { getClientIp, strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 
 const schema = z.object({
   businessId: z.string().uuid(),
@@ -18,7 +19,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 })
   }
 
-  const body = await request.json()
+  const ip = await getClientIp()
+  const rateLimit = await checkRateLimit(
+    strictLimiter,
+    `track-contact:${user.id}:${ip}`,
+    { failClosed: true },
+  )
+  if (!rateLimit.ok) {
+    const unavailable = rateLimit.error.startsWith('تعذر')
+    return NextResponse.json(
+      { ok: false, error: rateLimit.error },
+      {
+        status: unavailable ? 503 : 429,
+        headers: unavailable ? { 'Retry-After': '60' } : {},
+      },
+    )
+  }
+
+  const contentLength = Number(request.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > 8192) {
+    return NextResponse.json({ ok: false, error: 'payload_too_large' }, { status: 413 })
+  }
+
+  const body = await request.json().catch(() => null)
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
     return NextResponse.json({ ok: false, error: 'invalid' }, { status: 400 })
@@ -37,7 +60,8 @@ export async function POST(request: Request) {
   })
 
   if (error) {
-    return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
+    console.error('[track-contact] contact event failed:', error.message)
+    return NextResponse.json({ ok: false, error: 'تعذر تسجيل العملية' }, { status: 500 })
   }
 
   return NextResponse.json({ ok: true })

@@ -12,6 +12,7 @@ import {
   ShieldCheckIcon,
 } from '@/components/icons'
 import { getAdminStats, getAdminRecent, getAdminBadges } from '@/lib/data/admin'
+import { getUserSession } from '@/lib/data/user'
 import ActivityFeed from '@/components/admin/activity-feed'
 import styles from './page.module.css'
 
@@ -38,10 +39,11 @@ type Alert = {
 }
 
 export default async function AdminDashboard() {
-  const [stats, recent, badges] = await Promise.all([
+  const [stats, recent, badges, session] = await Promise.all([
     getAdminStats(),
     getAdminRecent(),
     getAdminBadges(),
+    getUserSession(),
   ])
 
   const CARDS: Card[] = [
@@ -58,7 +60,7 @@ export default async function AdminDashboard() {
       value: stats.pendingBusinesses,
       Icon: AlertIcon,
       tone: 'orange',
-      href: '/admin/businesses',
+      href: '/admin/businesses?status=pending',
     },
     {
       key: 'published',
@@ -136,6 +138,18 @@ export default async function AdminDashboard() {
 
   return (
     <div className={styles.wrap}>
+      <section className={styles.intro}>
+        <div className={styles.introCopy}>
+          <span className={styles.kicker}>مركز العمليات · EAH</span>
+          <h2 className={styles.introTitle}>أهلاً، {session?.displayName || 'مدير المنصة'}</h2>
+          <p className={styles.introText}>دي نظرة سريعة على حالة المنصة، وأهم المهام اللي محتاجة متابعتك دلوقتي.</p>
+        </div>
+        <Link href="/admin/businesses/new" className={styles.primaryAction}>
+          <StoreIcon size={17} />
+          <span>إضافة نشاط جديد</span>
+          <ArrowLeftIcon size={15} />
+        </Link>
+      </section>
       {/* ─── Alerts (كل التنبيهات) ─── */}
       {activeAlerts.length > 0 && (
         <section className={styles.alertsGrid}>
@@ -158,6 +172,16 @@ export default async function AdminDashboard() {
             </Link>
           ))}
         </section>
+      )}
+
+      {activeAlerts.length === 0 && (
+        <div className={styles.allClear} role="status">
+          <span className={styles.allClearIcon}><CheckCircleIcon size={19} /></span>
+          <div>
+            <strong>لا توجد مهام ظاهرة للمراجعة حاليًا</strong>
+            <span>لا تظهر حاليًا طلبات مراجعة ضمن التنبيهات. يمكنك متابعة بقية مؤشرات المنصة من هنا.</span>
+          </div>
+        </div>
       )}
 
       {/* ─── Stats Grid ─── */}

@@ -536,6 +536,15 @@ export async function saveOwner(businessId: string, ownerProfileId: string): Pro
   const alreadyLinked = business.owner_profile_id === ownerProfileId
   if (alreadyLinked && roleRes.data.role === 'merchant') return { ok: true }
 
+  let privileged: ReturnType<typeof createServiceClient>
+  try {
+    // The authenticated session may read owner roles as admin, but RLS only
+    // permits super-admins to change them. The caller has passed requireAdmin.
+    privileged = createServiceClient()
+  } catch {
+    return { ok: false, error: 'تعذر تجهيز خدمة ربط المالك — حاول تاني' }
+  }
+
   if (!alreadyLinked) {
     const { error } = await ctx.supabase
       .from('businesses')
@@ -551,7 +560,7 @@ export async function saveOwner(businessId: string, ownerProfileId: string): Pro
   }
 
   if (roleRes.data.role === 'customer') {
-    const { data: promoted, error: promotionError } = await ctx.supabase
+    const { data: promoted, error: promotionError } = await privileged
       .from('user_roles')
       .update({ role: 'merchant' })
       .eq('user_id', ownerProfileId)
@@ -561,7 +570,7 @@ export async function saveOwner(businessId: string, ownerProfileId: string): Pro
 
     let isMerchant = promoted?.role === 'merchant'
     if (!isMerchant) {
-      const { data: latestRole, error: latestRoleError } = await ctx.supabase
+      const { data: latestRole, error: latestRoleError } = await privileged
         .from('user_roles')
         .select('role')
         .eq('user_id', ownerProfileId)

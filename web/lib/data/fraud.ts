@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { requireAdmin } from '@/lib/auth/admin'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Fraud Data
@@ -38,7 +39,10 @@ export type FlaggedUser = {
 
 // ─── التقييمات المُعلّمة (RPC) ───
 export async function getFlaggedReviews(): Promise<FlaggedReview[]> {
-  const supabase = await createClient()
+  const access = await requireAdmin()
+  if (!access.ok) return []
+
+  const supabase = access.supabase
   const { data, error } = await supabase.rpc('get_flagged_reviews')
   if (error) return []
   return (data ?? []) as FlaggedReview[]
@@ -46,27 +50,33 @@ export async function getFlaggedReviews(): Promise<FlaggedReview[]> {
 
 // ─── أحداث trust الأخيرة ───
 export async function getRecentTrustEvents(limit = 50): Promise<TrustEvent[]> {
-  const supabase = await createClient()
+  const access = await requireAdmin()
+  if (!access.ok) return []
+
+  const supabase = access.supabase
   const { data } = await supabase
     .from('trust_events')
     .select(
       'id, entity_type, entity_id, event_type, delta, score_before, score_after, metadata, created_at',
     )
     .order('created_at', { ascending: false })
-    .limit(limit)
+    .limit(Math.max(1, Math.min(100, Math.trunc(limit) || 50)))
   return (data ?? []) as TrustEvent[]
 }
 
 // ─── المستخدمين المبلغ عنهم (داخلي) ───
 export async function getFlaggedUsers(limit = 30): Promise<FlaggedUser[]> {
-  const supabase = await createServiceClient()
+  const access = await requireAdmin()
+  if (!access.ok) return []
+
+  const supabase = createServiceClient()
   const { data } = await supabase
     .from('profiles')
     .select('id, display_name, phone, wanted_level, trust_score, banned_until')
     .gt('wanted_level', 0)
     .order('wanted_level', { ascending: false })
     .order('trust_score', { ascending: true })
-    .limit(limit)
+    .limit(Math.max(1, Math.min(100, Math.trunc(limit) || 30)))
   return (data ?? []) as FlaggedUser[]
 }
 
@@ -79,7 +89,10 @@ export type FraudStats = {
 }
 
 export async function getFraudStats(): Promise<FraudStats> {
-  const supabase = await createServiceClient()
+  const access = await requireAdmin()
+  if (!access.ok) return { flagged: 0, wanted: 0, banned: 0, trustEvents24h: 0 }
+
+  const supabase = createServiceClient()
   const day = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
 
   const [flagged, wanted, banned, events] = await Promise.all([
@@ -116,10 +129,13 @@ export type MultiAccountIp = {
 
 export async function getMultiAccountIps(days = 30): Promise<MultiAccountIp[]> {
   // Service role required: get_multi_account_ips was REVOKE'd from authenticated
-  // (DB-04 security fix — exposes fraud IP data). Admin-only surface.
-  const { createServiceClient } = await import('@/lib/supabase/service')
+  // (DB-04 security fix — exposes fraud IP data). Authorize at the data boundary.
+  const access = await requireAdmin()
+  if (!access.ok) return []
+
   const supabase = createServiceClient()
-  const { data, error } = await supabase.rpc('get_multi_account_ips', { p_days: days })
+  const safeDays = Math.max(1, Math.min(90, Math.trunc(days) || 30))
+  const { data, error } = await supabase.rpc('get_multi_account_ips', { p_days: safeDays })
   if (error) return []
   return (data ?? []) as MultiAccountIp[]
 }

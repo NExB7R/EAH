@@ -1,0 +1,246 @@
+/* EAH admin topbar — compact, keyboard-friendly and RTL-first. */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 88px;
+  padding: 16px clamp(16px, 2.2vw, 30px);
+  border: 1px solid var(--admin-border);
+  border-radius: 20px;
+  background: var(--admin-surface);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.pageHeading {
+  min-width: 0;
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--admin-text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.title {
+  margin: 0;
+  color: var(--admin-text);
+  font-size: clamp(1.18rem, 1.8vw, 1.55rem);
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.searchButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: clamp(220px, 26vw, 360px);
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  background: var(--admin-canvas);
+  color: var(--admin-text-muted);
+  text-align: start;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.searchButton:hover {
+  border-color: var(--admin-accent-line);
+  background: var(--admin-accent-soft);
+  color: var(--admin-text);
+}
+
+.searchButton span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.78rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.searchButton kbd {
+  flex-shrink: 0;
+  padding: 3px 6px;
+  border: 1px solid var(--admin-border);
+  border-radius: 6px;
+  background: var(--admin-surface);
+  color: var(--admin-text-subtle);
+  direction: ltr;
+  font: 600 0.65rem/1.2 var(--font-body);
+}
+
+.iconButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  background: var(--admin-canvas);
+  color: var(--admin-text-muted);
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+
+.iconButton:hover {
+  border-color: var(--admin-accent-line);
+  background: var(--admin-accent-soft);
+  color: var(--admin-accent);
+}
+
+.notificationDot {
+  position: absolute;
+  top: 9px;
+  inset-inline-end: 9px;
+  width: 7px;
+  height: 7px;
+  border: 1.5px solid var(--admin-surface);
+  border-radius: 50%;
+  background: var(--admin-warning);
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding-inline-start: 12px;
+  color: var(--admin-text);
+  text-decoration: none;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: 1px solid var(--admin-accent-line);
+  border-radius: 12px;
+  background: var(--admin-accent-soft);
+  color: var(--admin-accent);
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 150px;
+  min-width: 0;
+}
+
+.profileText strong {
+  overflow: hidden;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profileText small {
+  color: var(--admin-text-muted);
+  font-size: 0.67rem;
+  font-weight: 600;
+}
+
+.profileIcon {
+  color: var(--admin-text-subtle);
+}
+
+.mobileMenu {
+  display: none;
+}
+
+@media (max-width: 1100px) {
+  .topbar {
+    gap: 14px;
+  }
+
+  .profileText,
+  .profileIcon {
+    display: none;
+  }
+
+  .profile {
+    padding-inline-start: 0;
+  }
+}
+
+@media (max-width: 1080px) {
+  .topbar {
+    min-height: 72px;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 13px 14px;
+    border-radius: 16px;
+  }
+
+  .mobileMenu {
+    display: block;
+    order: 0;
+  }
+
+  .pageHeading {
+    flex: 1;
+    order: 1;
+  }
+
+  .eyebrow {
+    font-size: 0.64rem;
+  }
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .actions {
+    order: 2;
+    gap: 7px;
+  }
+
+  .searchButton {
+    width: 44px;
+    min-width: 44px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .searchButton span,
+  .searchButton kbd {
+    display: none;
+  }
+
+  .profile {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .topbar {
+    padding: 10px;
+  }
+
+  .iconButton,
+  .searchButton {
+    width: 40px;
+    min-height: 40px;
+    height: 40px;
+  }
+}

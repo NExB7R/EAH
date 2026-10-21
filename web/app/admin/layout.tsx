@@ -1,11 +1,10 @@
 import { redirect } from 'next/navigation'
-import SecondaryHero from '@/components/secondary-hero'
+import Link from 'next/link'
 import AdminSidebar from '@/components/admin-sidebar'
 import CommandPalette from '@/components/ui/command-palette'
-import AdminMobileNav from './admin-mobile-nav'
-import { ShieldCheckIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getAdminBadges } from '@/lib/data/admin'
+import AdminTopbar from './admin-topbar'
 import styles from './admin.module.css'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -18,19 +17,33 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <main className={styles.page}>
-      <SecondaryHero
-        activeKey="admin"
-        title="لوحة التحكم"
-        Icon={ShieldCheckIcon}
-        tone="purple"
-        showNav={false}
-      />
-      <div className={styles.wrap}>
-        <AdminMobileNav counts={counts} />
-        <div className={styles.desktopSidebar}>
+      <Link href="#admin-content" className={styles.skipLink}>تخطي إلى المحتوى الرئيسي</Link>
+      <div className={styles.shell}>
+        <aside className={styles.sidebarRail} aria-label="التنقل الرئيسي">
+          <Link href="/admin" className={styles.brand} aria-label="EAH — لوحة الإدارة">
+            <span className={styles.brandMark}>EAH</span>
+            <span className={styles.brandText}>
+              <strong>EAH</strong>
+              <small>إدارة المنصة</small>
+            </span>
+          </Link>
+          <div className={styles.sidebarDivider} />
           <AdminSidebar counts={counts} />
+          <div className={styles.sidebarBottom}>
+            <span className={styles.statusDot} aria-hidden="true" />
+            <span>مساحة الإدارة</span>
+            <span className={styles.version}>EAH</span>
+          </div>
+        </aside>
+
+        <div className={styles.workspace}>
+          <AdminTopbar
+            displayName={session.displayName}
+            notificationCount={session.notifCount}
+            counts={counts}
+          />
+          <div id="admin-content" className={styles.content} tabIndex={-1}>{children}</div>
         </div>
-        <div className={styles.content}>{children}</div>
         <CommandPalette />
       </div>
     </main>

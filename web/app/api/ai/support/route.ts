@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { runSupport } from '@/lib/ai/support'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
+import { getClientIp } from '@/lib/rate-limit'
 
 const schema = z.object({
   message: z.string().min(1).max(500),
@@ -41,9 +42,18 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const rl = getLimiter()
-  if (rl) {
-    const key = user?.id ?? request.headers.get('x-forwarded-for') ?? 'anon'
+  let rl: Ratelimit | null
+  try {
+    rl = getLimiter()
+  } catch {
+    return NextResponse.json({ ok: false, error: 'خدمة الدعم غير متاحة مؤقتًا' }, { status: 503 })
+  }
+  if (!rl) {
+    return NextResponse.json({ ok: false, error: 'خدمة الدعم غير متاحة مؤقتًا' }, { status: 503 })
+  }
+
+  const key = user?.id ?? (await getClientIp())
+  try {
     const { success } = await rl.limit(key)
     if (!success) {
       return NextResponse.json(
@@ -51,6 +61,13 @@ export async function POST(request: Request) {
         { status: 429 },
       )
     }
+  } catch {
+    return NextResponse.json({ ok: false, error: 'خدمة الدعم غير متاحة مؤقتًا' }, { status: 503 })
+  }
+
+  const contentLength = Number(request.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > 16_384) {
+    return NextResponse.json({ ok: false, error: 'payload_too_large' }, { status: 413 })
   }
 
   const body = await request.json().catch(() => ({}))

@@ -1,4 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
+import { requireAdmin } from '@/lib/auth/admin'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Business Detail (Service Role — bypass RLS)
@@ -8,7 +9,7 @@ export type AdminBusiness = {
   id: string
   slug: string
   name: string
-  owner_profile_id: string
+  owner_profile_id: string | null
   business_type: string
   description: string | null
   hook: string | null
@@ -57,6 +58,11 @@ export type AdminBusiness = {
 }
 
 export async function getBusinessById(id: string): Promise<AdminBusiness | null> {
+  // Protect the service-role query at the data boundary; a parent layout is
+  // not sufficient because Server Components may be evaluated independently.
+  const access = await requireAdmin()
+  if (!access.ok) return null
+
   const supabase = createServiceClient()
 
   // B2 exception (ERROR_REGISTER §6): 32+ columns required across
@@ -110,7 +116,7 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     id: b.id as string,
     slug: b.slug as string,
     name: b.name as string,
-    owner_profile_id: b.owner_profile_id as string,
+    owner_profile_id: (b.owner_profile_id as string | null) ?? null,
     business_type: b.business_type as string,
     description: (b.description as string | null) ?? null,
     hook: (b.hook as string | null) ?? null,
@@ -170,6 +176,11 @@ export type BusinessOwnerOption = {
 }
 
 export async function getBusinessOwnerCandidates(): Promise<BusinessOwnerOption[]> {
+  // This query returns profile names and phone numbers; authorize immediately
+  // before constructing the service-role client.
+  const access = await requireAdmin()
+  if (!access.ok) return []
+
   const supabase = createServiceClient()
 
   const { data, error } = await supabase

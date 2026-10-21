@@ -49,7 +49,8 @@ export async function getAdminStats(): Promise<AdminStats> {
     supabase
       .from('businesses')
       .select('*', { count: 'exact', head: true })
-      .eq('is_published', false),
+      .eq('is_published', false)
+      .is('rejected_at', null),
     supabase
       .from('businesses')
       .select('*', { count: 'exact', head: true })

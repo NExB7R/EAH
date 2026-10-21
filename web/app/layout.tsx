@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Suspense } from 'react'
+import { shouldRenderPublicChrome } from '@/lib/navigation/public-chrome'
 import { tajawal, cairo, greatVibes } from './_fonts'
 import FloatingCapsule from '@/components/floating-capsule'
 import InstallPrompt from '@/components/install-prompt'
@@ -82,9 +83,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SiteChromeGate>
             <SiteFooter />
           </SiteChromeGate>
-          <InstallPrompt />
-          <ReviewReminder />
-          <ScrollToTop />
+          <SiteChromeGate>
+            <InstallPrompt />
+          </SiteChromeGate>
+          <SiteChromeGate>
+            <ReviewReminder />
+          </SiteChromeGate>
+          <SiteChromeGate>
+            <ScrollToTop />
+          </SiteChromeGate>
           <OfflineBadge />
           <SwRegister />
           <Analytics />
@@ -95,9 +102,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 
 async function TopBar() {
+  if (!(await shouldRenderPublicChrome())) return null
+
   const [session, flags] = await Promise.all([getUserSession(), getFeatureFlags()])
   return (
-    <>
+    <SiteChromeGate>
       <FloatingCapsule session={session} />
       {flags.announcements_enabled && (
         <Suspense fallback={null}>
@@ -106,7 +115,7 @@ async function TopBar() {
       )}
       {!session && <SignupPrompt />}
       {flags.ai_agent_enabled && <AiWidget />}
-    </>
+    </SiteChromeGate>
   )
 }
 
@@ -117,6 +126,8 @@ async function AnnouncementsSlot() {
 }
 
 async function BottomBar() {
+  if (!(await shouldRenderPublicChrome())) return null
+
   const flags = await getFeatureFlags()
   if (!flags.live_stats_enabled) return null
   const stats = await getAllLiveStats()

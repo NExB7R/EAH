@@ -57,6 +57,11 @@ export async function POST(request: NextRequest) {
     )
   }
 
+  const contentLength = Number(request.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > 8192) {
+    return NextResponse.json({ error: 'حجم الطلب أكبر من المسموح' }, { status: 413 })
+  }
+
   const body: unknown = await request.json().catch(() => null)
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     return NextResponse.json({ error: 'بيانات الطلب غير صحيحة' }, { status: 400 })
@@ -95,10 +100,17 @@ export async function POST(request: NextRequest) {
   }
 
   // The RPC is service-role-only; public callers must pass the checks above.
-  const supabase = createServiceClient()
+  let supabase: ReturnType<typeof createServiceClient>
+  try {
+    supabase = createServiceClient()
+  } catch {
+    return NextResponse.json({ error: 'البحث غير متاح مؤقتًا' }, { status: 503 })
+  }
+
   const { data, error } = await supabase.rpc('find_by_phone', { p_phone: phone })
 
   if (error) {
+    console.error('[find-by-phone] lookup failed:', error.message)
     return NextResponse.json({ error: 'حصل خطأ في البحث' }, { status: 500 })
   }
 

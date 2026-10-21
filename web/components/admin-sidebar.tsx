@@ -47,7 +47,7 @@ type Section = {
 
 const SECTIONS: Section[] = [
   {
-    title: 'الرئيسية',
+    title: 'نظرة عامة',
     items: [
       { href: '/admin', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
       { href: '/admin/analytics', label: 'التحليلات والتقارير', Icon: TrendingUpIcon },
@@ -56,59 +56,35 @@ const SECTIONS: Section[] = [
   {
     title: 'إدارة المنصة',
     items: [
-      {
-        href: '/admin/businesses',
-        label: 'الأنشطة',
-        Icon: StoreIcon,
-        badgeKey: 'pendingBusinesses',
-      },
-      { href: '/admin/users', label: 'المستخدمين', Icon: UserIcon },
+      { href: '/admin/businesses', label: 'الأنشطة', Icon: StoreIcon, badgeKey: 'pendingBusinesses' },
       { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
+      { href: '/admin/users', label: 'المستخدمين', Icon: UserIcon },
     ],
   },
   {
-    title: 'النمو والإيرادات',
+    title: 'المراجعة والثقة',
     items: [
-      {
-        href: '/admin/subscriptions',
-        label: 'الاشتراكات',
-        Icon: CrownGoldIcon,
-        badgeKey: 'pendingSubscriptions',
-      },
-      { href: '/admin/ads', label: 'الإعلانات', Icon: TagIcon },
-      { href: '/admin/featured', label: 'المميزون', Icon: CrownGoldIcon },
-    ],
-  },
-  {
-    title: 'المحتوى والثقة',
-    items: [
-      {
-        href: '/admin/moderation',
-        label: 'المراجعة والأمان',
-        Icon: ShieldCheckIcon,
-        badgeKey: 'flaggedReviews',
-      },
-      {
-        href: '/admin/moderation?tab=reports',
-        label: 'بلاغات المستخدمين',
-        Icon: FileTextIcon,
-        badgeKey: 'openReports',
-      },
+      { href: '/admin/moderation', label: 'المراجعة والأمان', Icon: ShieldCheckIcon, badgeKey: 'flaggedReviews' },
+      { href: '/admin/moderation?tab=reports', label: 'بلاغات المستخدمين', Icon: FileTextIcon, badgeKey: 'openReports' },
       { href: '/admin/fraud', label: 'مراجعة الأنشطة المشبوهة', Icon: AlertIcon },
     ],
   },
   {
-    title: 'التواصل والرؤى',
+    title: 'النمو التجاري',
     items: [
-      { href: '/admin/announcements', label: 'الإعلانات والتنبيهات', Icon: BellIcon },
-      { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
+      { href: '/admin/subscriptions', label: 'الاشتراكات', Icon: CrownGoldIcon, badgeKey: 'pendingSubscriptions' },
+      { href: '/admin/ads', label: 'الإعلانات', Icon: TagIcon },
+      { href: '/admin/featured', label: 'الأنشطة المميزة', Icon: CrownGoldIcon },
       { href: '/admin/insights', label: 'الرؤى الذكية', Icon: SparklesIcon },
     ],
   },
   {
-    title: 'النظام والإعدادات',
+    title: 'التواصل والنظام',
     items: [
+      { href: '/admin/announcements', label: 'الإعلانات والتنبيهات', Icon: BellIcon },
+      { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
+      { href: '/admin/health', label: 'صحة النظام والأخطاء', Icon: AlertIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
       { href: '/admin/profile', label: 'بروفايلي', Icon: UserIcon },
       { href: '/admin/settings', label: 'الإعدادات', Icon: SettingsIcon },

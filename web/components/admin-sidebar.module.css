@@ -1,36 +1,20 @@
-/* ═══════════════════════════════════════════════════════════
-   EAH — Admin Sidebar (2026)
-   ═══════════════════════════════════════════════════════════ */
+/* EAH admin navigation — restrained contrast and predictable active states. */
+.sidebar,
+.drawerSidebar {
+  width: 100%;
+  min-width: 0;
+}
 
 .sidebar {
-  position: sticky;
-  top: 100px;
-  align-self: start;
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(168, 85, 247, 0.3) transparent;
-}
-
-.sidebar::-webkit-scrollbar {
-  width: 4px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-  background: rgba(168, 85, 247, 0.3);
-  border-radius: 2px;
+  flex: 1;
+  overflow: hidden;
 }
 
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 14px 12px;
-  border-radius: 18px;
-  background: linear-gradient(160deg, rgba(20, 14, 34, 0.75), rgba(10, 7, 20, 0.9));
-  border: 1px solid rgba(168, 85, 247, 0.18);
-  box-shadow:
-    0 0 0 1px rgba(168, 85, 247, 0.04),
-    0 0 30px rgba(168, 85, 247, 0.08);
+  gap: 15px;
+  padding: 2px 0 8px;
 }
 
 .section {
@@ -40,24 +24,21 @@
 }
 
 .sectionTitle {
-  margin: 0 0 4px;
+  margin: 0 0 5px;
   padding: 0 10px;
-  font-family: var(--font-body);
-  font-size: 0.6rem;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  opacity: 0.7;
+  color: var(--admin-text-subtle, var(--text-muted));
+  font-size: 0.65rem;
+  font-weight: 850;
+  letter-spacing: 0.035em;
 }
 
 .list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .item {
@@ -65,190 +46,98 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  min-height: 42px;
   padding: 8px 10px;
-  border-radius: 10px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  color: var(--admin-text-muted, var(--text-tertiary));
+  font-size: 0.79rem;
   font-weight: 700;
-  transition:
-    background 160ms var(--ease),
-    color 160ms var(--ease);
+  line-height: 1.45;
+  text-decoration: none;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
 }
 
 .item:hover {
-  background: rgba(168, 85, 247, 0.08);
-  color: var(--purple-light);
+  border-color: var(--admin-border, var(--border-purple-soft));
+  background: var(--bg-surface);
+  color: var(--admin-text, var(--text-primary));
 }
 
 .active {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(199, 125, 255, 0.12));
-  color: var(--purple-light);
-  box-shadow: inset 0 0 0 1px rgba(199, 125, 255, 0.35);
+  border-color: var(--admin-accent-line, rgba(168, 85, 247, 0.36));
+  background: var(--admin-accent-soft, rgba(168, 85, 247, 0.13));
+  color: var(--admin-accent, var(--purple-light));
 }
 
 .active::before {
-  content: '';
   position: absolute;
-  inset-inline-start: -12px;
-  inset-block: 25%;
+  inset-block: 9px;
+  inset-inline-start: -1px;
   width: 3px;
-  border-radius: 2px;
-  background: linear-gradient(180deg, var(--purple-light), var(--purple-primary));
-  box-shadow: 0 0 10px rgba(199, 125, 255, 0.7);
+  border-radius: 4px;
+  background: var(--admin-accent-strong, var(--purple-primary));
+  content: '';
 }
 
 .iconWrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 8px;
-  background: rgba(168, 85, 247, 0.06);
-  color: currentColor;
+  width: 29px;
+  height: 29px;
   flex-shrink: 0;
+  border-radius: 9px;
+  background: var(--bg-surface);
+  color: currentColor;
 }
 
 .active .iconWrap {
-  background: rgba(199, 125, 255, 0.15);
+  background: rgba(168, 85, 247, 0.15);
 }
 
 .label {
   flex: 1;
   min-width: 0;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 20px;
-  height: 18px;
+  min-width: 22px;
+  height: 20px;
   padding: 0 6px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #fdba74, #f5d9a7);
-  color: var(--bg-base);
-  font-size: 0.6rem;
-  font-weight: 900;
-  flex-shrink: 0;
-  box-shadow: 0 0 8px rgba(253, 186, 116, 0.45);
+  border: 1px solid rgba(232, 199, 154, 0.25);
+  border-radius: 7px;
+  background: rgba(232, 199, 154, 0.12);
+  color: var(--gold-primary);
+  font-size: 0.64rem;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
 }
 
-/* ─── Mobile ─── */
-@media (max-width: 1024px) {
-  .sidebar {
-    position: static;
-    max-height: none;
-    overflow: visible;
-    margin-bottom: 12px;
-  }
-  .nav {
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 8px;
-    gap: 4px;
-    scrollbar-width: none;
-  }
-  .nav::-webkit-scrollbar {
-    display: none;
-  }
-  .section {
-    flex-direction: row;
-    gap: 2px;
-    flex-shrink: 0;
-  }
-  .sectionTitle {
-    display: none;
-  }
-  .list {
-    flex-direction: row;
-    gap: 2px;
-  }
-  .item {
-    flex-shrink: 0;
-    padding: 7px 10px;
-    font-size: 0.72rem;
-  }
-  .active::before {
-    display: none;
-  }
-  .label {
-    white-space: nowrap;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .item {
-    transition: none;
-  }
-}
-
-
-/* Mobile drawer variant: keep links grouped vertically instead of inheriting
-   the compact horizontal navigation used by the page layout. */
-.drawerSidebar {
-  position: static;
-  top: auto;
-  max-height: none;
-  overflow: visible;
-  margin-bottom: 0;
-}
-
+/* The drawer keeps the same vertical navigation on narrow screens. */
 .drawerSidebar .nav {
-  flex-direction: column;
-  gap: 14px;
-  overflow: visible;
+  gap: 15px;
   padding: 4px 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.drawerSidebar .section {
-  flex-direction: column;
-  gap: 4px;
 }
 
 .drawerSidebar .sectionTitle {
   display: block;
 }
 
-.drawerSidebar .list {
-  flex-direction: column;
-  gap: 2px;
+@media (max-width: 1080px) {
+  .sidebar:not(.drawerSidebar) {
+    display: none;
+  }
 }
 
-.drawerSidebar .item {
-  flex-shrink: initial;
-  padding: 10px 12px;
-  font-size: 0.86rem;
-}
-
-.drawerSidebar .active::before {
-  display: none;
-}
-
-@media (max-width: 1024px) {
-  .drawerSidebar .nav {
-    flex-direction: column;
-    overflow: visible;
-  }
-
-  .drawerSidebar .section {
-    flex-direction: column;
-  }
-
-  .drawerSidebar .list {
-    flex-direction: column;
-  }
-
-  .drawerSidebar .sectionTitle {
-    display: block;
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    transition: none;
   }
 }

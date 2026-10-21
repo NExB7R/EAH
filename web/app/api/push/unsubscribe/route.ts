@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
+import { apiLimiter, checkRateLimit } from '@/lib/rate-limit'
 
-const schema = z.object({ endpoint: z.string().url() })
+const schema = z.object({ endpoint: z.string().url().max(4096) })
 
 export async function POST(request: Request) {
   const supabase = await createClient()
@@ -14,17 +15,41 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 })
   }
 
-  const body = await request.json()
+  const rateLimit = await checkRateLimit(apiLimiter, `push-unsubscribe:${user.id}`, {
+    failClosed: true,
+  })
+  if (!rateLimit.ok) {
+    const unavailable = rateLimit.error.startsWith('تعذر')
+    return NextResponse.json(
+      { ok: false, error: rateLimit.error },
+      {
+        status: unavailable ? 503 : 429,
+        headers: unavailable ? { 'Retry-After': '60' } : {},
+      },
+    )
+  }
+
+  const contentLength = Number(request.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > 8192) {
+    return NextResponse.json({ ok: false, error: 'payload_too_large' }, { status: 413 })
+  }
+
+  const body = await request.json().catch(() => null)
   const parsed = schema.safeParse(body)
   if (!parsed.success) {
     return NextResponse.json({ ok: false, error: 'invalid' }, { status: 400 })
   }
 
-  await supabase
+  const { error } = await supabase
     .from('push_subscriptions')
     .delete()
     .eq('endpoint', parsed.data.endpoint)
     .eq('user_id', user.id)
+
+  if (error) {
+    console.error('[push/unsubscribe] database write failed:', error.message)
+    return NextResponse.json({ ok: false, error: 'تعذر إلغاء الاشتراك في الإشعارات' }, { status: 500 })
+  }
 
   return NextResponse.json({ ok: true })
 }
