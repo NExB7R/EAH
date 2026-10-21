@@ -8,8 +8,8 @@
   padding: 16px clamp(16px, 2.2vw, 30px);
   border: 1px solid var(--admin-border);
   border-radius: 20px;
-  background: var(--admin-surface);
-  box-shadow: var(--admin-shadow-sm);
+  background: linear-gradient(115deg, rgba(24, 13, 41, 0.98), rgba(12, 6, 23, 0.99));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28), 0 0 24px rgba(168, 85, 247, 0.07);
 }
 
 .pageHeading {
@@ -19,7 +19,7 @@
 .eyebrow {
   display: block;
   margin-bottom: 4px;
-  color: var(--admin-text-muted);
+  color: #d7b0fb;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -48,17 +48,17 @@
   padding: 0 12px;
   border: 1px solid var(--admin-border);
   border-radius: 12px;
-  background: var(--admin-canvas);
-  color: var(--admin-text-muted);
+  background: rgba(7, 2, 13, 0.72);
+  color: var(--text-secondary);
   text-align: start;
   cursor: pointer;
   transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
 }
 
 .searchButton:hover {
-  border-color: var(--admin-accent-line);
-  background: var(--admin-accent-soft);
-  color: var(--admin-text);
+  border-color: rgba(199, 125, 255, 0.62);
+  background: rgba(168, 85, 247, 0.17);
+  color: var(--text-primary);
 }
 
 .searchButton span {
@@ -98,8 +98,8 @@
 
 .iconButton:hover {
   border-color: var(--admin-accent-line);
-  background: var(--admin-accent-soft);
-  color: var(--admin-accent);
+  background: linear-gradient(145deg, rgba(168, 85, 247, 0.25), rgba(157, 78, 221, 0.13));
+  color: #e1b7ff;
 }
 
 .notificationDot {
