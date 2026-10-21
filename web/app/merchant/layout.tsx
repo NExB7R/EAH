@@ -45,7 +45,7 @@ export default async function MerchantLayout({ children }: { children: React.Rea
       />
 
       <div className={styles.wrap}>
-        <MerchantSidebar newOrders={newOrders} />
+        <MerchantSidebar newOrders={newOrders} hasBusiness={!!business} />
         <div className={styles.content}>{children}</div>
       </div>
     </main>
