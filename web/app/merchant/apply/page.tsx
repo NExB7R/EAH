@@ -16,9 +16,11 @@ export const metadata: Metadata = {
 
 export default async function MerchantApplyPage() {
   const session = await getUserSession()
+  if (!session) redirect('/auth?next=%2Fmerchant%2Fapply')
 
-  // لو مسجل → نشوف لو عنده نشاط بالفعل
-  if (session) {
+  // A business must be linked to the authenticated user who submits it.
+  // Never present a form that can only fail after an anonymous submission.
+  {
     const supabase = await createClient()
     const { data } = await supabase
       .from('businesses')
