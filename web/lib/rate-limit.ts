@@ -6,7 +6,7 @@ import { headers } from 'next/headers'
 // EAH — Rate Limiting (Upstash Redis)
 // ═══════════════════════════════════════════════════════════
 // Vercel serverless مفيش shared state → Upstash Redis
-// 3 limiters: auth / api / strict
+// Limiters: auth / api / strict / admin upload / export
 // ═══════════════════════════════════════════════════════════
 
 const redis = Redis.fromEnv()
