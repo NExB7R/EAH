@@ -719,15 +719,20 @@ export async function findUserByPhone(phone: string): Promise<UserLookup> {
   const parsed = phoneLookupSchema.safeParse(phone.trim())
   if (!parsed.success) return { ok: false, error: 'رقم غير صحيح (11 رقم يبدأ بـ 01)' }
 
-  const { createServiceClient } = await import('@/lib/supabase/service')
-  const admin = createServiceClient()
+  let admin: ReturnType<typeof createServiceClient>
+  try {
+    admin = createServiceClient()
+  } catch {
+    return { ok: false, error: 'البحث عن حساب المالك غير متاح مؤقتًا — حاول تاني' }
+  }
 
-  const { data: profile } = await admin
+  const { data: profile, error: profileError } = await admin
     .from('profiles')
     .select('id, display_name, phone')
     .eq('phone', parsed.data)
     .maybeSingle()
 
+  if (profileError) return { ok: false, error: 'تعذر البحث عن الحساب — حاول تاني' }
   if (!profile) return { ok: false, error: 'مفيش مستخدم مسجل بالرقم ده' }
 
   const [bizRes, roleRes] = await Promise.all([
@@ -735,8 +740,15 @@ export async function findUserByPhone(phone: string): Promise<UserLookup> {
       .from('businesses')
       .select('*', { count: 'exact', head: true })
       .eq('owner_profile_id', profile.id),
-    admin.from('user_roles').select('role').eq('user_id', profile.id).limit(1).maybeSingle(),
+    admin.from('user_roles').select('role').eq('user_id', profile.id).maybeSingle(),
   ])
+
+  if (bizRes.error || roleRes.error) {
+    return { ok: false, error: 'تعذر تحميل بيانات حساب المالك — حاول تاني' }
+  }
+  if (!roleRes.data || (roleRes.data.role !== 'customer' && roleRes.data.role !== 'merchant')) {
+    return { ok: false, error: 'حساب المستخدم غير مهيأ لدور عميل أو تاجر' }
+  }
 
   return {
     ok: true,
@@ -744,7 +756,7 @@ export async function findUserByPhone(phone: string): Promise<UserLookup> {
       id: profile.id as string,
       displayName: (profile.display_name as string) ?? '',
       phone: (profile.phone as string) ?? parsed.data,
-      role: (roleRes.data?.role as string) ?? 'customer',
+      role: roleRes.data.role,
       businessesCount: bizRes.count ?? 0,
     },
   }
@@ -755,24 +767,26 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
   if (!ctx.ok) return ctx
 
   const uuidSchema = z.string().uuid()
-  if (!uuidSchema.safeParse(userId).success) {
-    return { ok: false, error: 'معرّف المستخدم غير صحيح' }
+  if (!uuidSchema.safeParse(userId).success || !uuidSchema.safeParse(businessId).success) {
+    return { ok: false, error: 'معرّف النشاط أو المستخدم غير صحيح' }
   }
 
-  const { data: profile } = await ctx.supabase
+  const { data: profile, error: profileError } = await ctx.supabase
     .from('profiles')
     .select('id, display_name')
     .eq('id', userId)
     .maybeSingle()
 
+  if (profileError) return { ok: false, error: 'تعذر التحقق من بيانات المستخدم' }
   if (!profile) return { ok: false, error: 'المستخدم مش موجود' }
 
-  const { data: biz } = await ctx.supabase
+  const { data: biz, error: businessError } = await ctx.supabase
     .from('businesses')
     .select('id, name, owner_profile_id, source, claimed_at, claimed_by_user_id')
     .eq('id', businessId)
     .maybeSingle()
 
+  if (businessError) return { ok: false, error: 'تعذر التحقق من بيانات النشاط' }
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
   let privileged: ReturnType<typeof createServiceClient>
@@ -892,13 +906,24 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     }
   }
 
-  await createNotification({
-    userId,
-    type: 'admin',
-    title: 'تم ربط نشاط بحسابك',
-    body: `نشاط "${biz.name}" بقى تحت حسابك — تقدر تديره من لوحة التحكم`,
-    deepLink: '/merchant',
-  })
+  try {
+    await createNotification({
+      userId,
+      type: 'admin',
+      title: 'تم ربط نشاط بحسابك',
+      body: `نشاط "${biz.name}" بقى تحت حسابك — تقدر تديره من لوحة التحكم`,
+      deepLink: '/merchant',
+    })
+  } catch {
+    // A notification outage must not turn a successful ownership change into an apparent failure.
+    await logAudit(ctx.supabase, {
+      actorUserId: ctx.userId,
+      action: 'business.link_owner.notification_failed',
+      entityType: 'business',
+      entityId: businessId,
+      metadata: { owner_profile_id: userId },
+    })
+  }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
