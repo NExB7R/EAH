@@ -61,7 +61,9 @@
 - Activity owner management is now unified in the activity edit tab: the duplicate owner accordion that asked admins to paste a raw User ID and invoked a second save-owner server action was removed. The phone-search panel remains the single path and checks account roles before linking. Owner lookup distinguishes query/service failures from a missing account; notification failures are audited without reporting a successfully saved owner link as failed.
 - Push subscription endpoints validate malformed JSON, cap inputs, and return generic error messages instead of exposing raw database errors.
 - AI insight generation is rate-limited after ownership/admin authorization and caps its requested metric window at 90 days.
-- Admin system health is now linked from the primary navigation and command search.
+- The `/admin/health` redirect-only placeholder was replaced with a real admin-only error log page: summary metrics for the last 24 hours/seven days, critical/unresolved counts, top error paths, filters/search, and resolve/reopen actions. Resolution actions now verify an actual row update and return safe errors instead of falsely reporting success.
+- `/admin/profile` now renders the shared profile form inside the admin shell instead of redirecting into the customer account shell.
+- Merchant and customer dashboards no longer duplicate sidebar destinations as quick-link/stat-card navigation. Merchant application is standalone (no duplicate merchant dashboard chrome), requires a signed-in customer/merchant account before showing the form, redirects admins to the admin flow, and fails closed if the existing-owner check returns a database error. Merchant accounts without an activity see only the overview and registration entry in their sidebar.
 - Public-shell data work is skipped server-side on `/auth`, `/admin`, and `/merchant`; the client-side display gate remains as an additional layer.
 
 ## Findings still requiring targeted tests or decisions
