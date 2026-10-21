@@ -141,7 +141,7 @@ export const getBusinessDetail = unstable_cache(
       .from('businesses')
       .select(
         `
-        id, slug, name, business_type, description, hook,
+        id, slug, name, business_type, custom_business_type, business_type_status, description, hook,
         area, city, address_text, map_url, cover_image_url,
         is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         trust_score, trust_tier, successful_orders,
