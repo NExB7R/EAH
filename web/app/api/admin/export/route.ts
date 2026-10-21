@@ -39,11 +39,16 @@ export async function GET(req: NextRequest) {
   const type = sp.get('type') ?? ''
   const q = (sp.get('q') ?? '').trim().toLowerCase()
   const status = sp.get('status') ?? ''
-  if (
-    !['businesses', 'users', 'subscriptions', 'featured', 'ads', 'audit', 'health'].includes(type) ||
-    q.length > 200 ||
-    status.length > 50
-  ) {
+  const validTypes = [
+    'businesses',
+    'users',
+    'subscriptions',
+    'featured',
+    'ads',
+    'audit',
+    'health',
+  ]
+  if (!validTypes.includes(type) || q.length > 200 || status.length > 50) {
     return NextResponse.json({ error: 'فلتر التصدير غير صالح' }, { status: 400 })
   }
 
