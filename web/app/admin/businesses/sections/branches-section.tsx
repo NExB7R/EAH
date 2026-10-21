@@ -21,6 +21,7 @@ export default function BranchesSection() {
                 <button
                   type="button"
                   className={`${styles.branchIconBtn} ${styles.branchDelete}`}
+                  disabled={ctx.pending}
                   onClick={() => ctx.removeBranch(idx)}
                   aria-label="حذف"
                 >
@@ -109,7 +110,7 @@ export default function BranchesSection() {
           </div>
         ))}
       </div>
-      <button type="button" className={styles.addBtn} onClick={ctx.addBranch}>
+      <button type="button" className={styles.addBtn} onClick={ctx.addBranch} disabled={ctx.pending}>
         <PlusIcon size={14} /> إضافة فرع
       </button>
     </>
