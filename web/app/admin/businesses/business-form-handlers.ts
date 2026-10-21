@@ -9,7 +9,6 @@ import {
   saveSettings as saveSettingsAction,
   saveBranch as saveBranchAction,
   deleteBranch,
-  saveOwner as saveOwnerAction,
   saveNotice as saveNoticeAction,
   saveOpenOverride as saveOpenOverrideAction,
 } from './edit-actions'
@@ -32,7 +31,6 @@ export type SaveHandlers = {
   addBranch: () => void
   removeBranch: (idx: number) => void
   updateBranch: (idx: number, field: keyof BranchState, value: string | boolean) => void
-  saveOwner: () => void
   saveNotice: () => void
   saveOpenOverride: () => void
   handleCreate: (e: React.FormEvent<HTMLFormElement>) => void
@@ -101,11 +99,6 @@ export function useSaveHandlers(state: FormState, business: AdminBusiness | null
     fd.set('is_new_project', String(s.isNewProject))
     fd.set('new_until', s.newUntil)
     s.handleSaveSection('settings', () => saveSettingsAction(business.id, fd))
-  }
-
-  const saveOwner = () => {
-    if (!business) return
-    s.handleSaveSection('owner', () => saveOwnerAction(business.id, s.ownerId))
   }
 
   const saveNotice = () => {
@@ -222,7 +215,6 @@ export function useSaveHandlers(state: FormState, business: AdminBusiness | null
     addBranch,
     removeBranch,
     updateBranch,
-    saveOwner,
     saveNotice,
     saveOpenOverride,
     handleCreate,

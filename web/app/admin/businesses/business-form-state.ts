@@ -87,10 +87,6 @@ export type FormState = {
   branches: BranchState[]
   setBranches: Setter<BranchState[]>
 
-  // Owner
-  ownerId: string
-  setOwnerId: Setter<string>
-
   // Notice
   importantNotice: string
   setImportantNotice: Setter<string>
@@ -153,8 +149,6 @@ export function useFormState(business: AdminBusiness | null): FormState {
       is_active: x.is_active,
     })),
   )
-
-  const [ownerId, setOwnerId] = useState(business?.owner_profile_id ?? '')
 
   const [importantNotice, setImportantNotice] = useState(business?.important_notice ?? '')
   const [noticeExpiresAt, setNoticeExpiresAt] = useState(
@@ -255,8 +249,6 @@ export function useFormState(business: AdminBusiness | null): FormState {
     setHours,
     branches,
     setBranches,
-    ownerId,
-    setOwnerId,
     importantNotice,
     setImportantNotice,
     noticeExpiresAt,

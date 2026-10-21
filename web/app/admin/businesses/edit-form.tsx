@@ -16,7 +16,6 @@ import MenuSection from './sections/menu-section'
 import GallerySection from './sections/gallery-section'
 import OffersSection from './sections/offers-section'
 import SettingsSection from './sections/settings-section'
-import OwnerSection from './sections/owner-section'
 import NoticeSection from './sections/notice-section'
 import StatusSection from './sections/status-section'
 import styles from './business-form.module.css'
@@ -52,8 +51,6 @@ function renderSection(key: SectionKey): React.ReactNode {
       return <NoticeSection />
     case 'status':
       return <StatusSection />
-    case 'owner':
-      return <OwnerSection />
   }
 }
 
