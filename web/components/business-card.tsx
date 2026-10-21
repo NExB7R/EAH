@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import WmImage from './wm-image'
 import DistanceBadge from './distance-badge'
-import type { Business } from '@/lib/data/businesses'
+import { getBusinessTypeLabel, type Business } from '@/lib/data/businesses'
 import {
   StarIcon,
   CrownGoldIcon,
@@ -43,7 +43,7 @@ const TYPE_META: Record<string, TypeMeta> = {
   pharmacy: { label: 'صيدلية', Icon: PillIcon },
   supermarket: { label: 'ماركت', Icon: CartIcon },
   delivery_office: { label: 'توصيل', Icon: BikeIcon },
-  misc: { label: 'نشاط', Icon: SparklesIcon },
+  misc: { label: 'أخرى', Icon: SparklesIcon },
 }
 
 type TierMeta = { label: string; cls: string; Icon: typeof ShieldCheckIcon }
@@ -72,6 +72,7 @@ function branchesText(c: number): string {
 export default function BusinessCard({ business, tone = 'purple', variant = 'default' }: Props) {
   const meta = TYPE_META[business.business_type] ?? TYPE_META.misc!
   const TypeIcon = meta.Icon
+  const typeLabel = getBusinessTypeLabel(business)
   const tier = TIER_META[business.trust_tier] ?? null
 
   // Never display a trust score as a star rating. Only show a rating when
@@ -138,7 +139,7 @@ export default function BusinessCard({ business, tone = 'purple', variant = 'def
         <div className={styles.chips}>
           <span className={styles.chip}>
             <TypeIcon size={12} />
-            {meta.label}
+            {typeLabel}
           </span>
 
           {business.area && (
