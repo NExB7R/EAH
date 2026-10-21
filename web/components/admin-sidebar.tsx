@@ -64,7 +64,7 @@ const SECTIONS: Section[] = [
     title: 'نظرة عامة',
     items: [
       { href: '/admin', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
-      { href: '/admin/analytics', label: 'التحليلات والتقارير', Icon: TrendingUpIcon },
+      { href: '/admin/analytics', label: 'التحليلات', Icon: TrendingUpIcon },
     ],
   },
   {
@@ -72,7 +72,7 @@ const SECTIONS: Section[] = [
     title: 'إدارة المنصة',
     items: [
       { href: '/admin/businesses', label: 'الأنشطة', Icon: StoreIcon, badgeKey: 'pendingBusinesses' },
-      { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
+      { href: '/admin/business-types', label: 'أنواع الأنشطة المقترحة', Icon: SparklesIcon },
       { href: '/admin/users', label: 'المستخدمين', Icon: UserIcon },
     ],
   },
@@ -96,7 +96,7 @@ const SECTIONS: Section[] = [
     key: 'communication',
     title: 'التواصل',
     items: [
-      { href: '/admin/notifications', label: 'التواصل والإشعارات', Icon: BellIcon },
+      { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
     ],
   },
   {
@@ -104,7 +104,7 @@ const SECTIONS: Section[] = [
     title: 'النظام والأدوات',
     defaultOpen: false,
     items: [
-      { href: '/admin/studio', label: 'الاستوديو والميزات', Icon: SparklesIcon },
+      { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
       { href: '/admin/health', label: 'صحة النظام والأخطاء', Icon: AlertIcon },
       { href: '/admin/insights', label: 'تخزين التقارير الذكية', Icon: SparklesIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
