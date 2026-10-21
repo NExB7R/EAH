@@ -57,7 +57,7 @@
 - Upload tests must verify MIME/content signatures and storage ownership, not only browser-supplied `Content-Type`; server-side upload helper checks should be retained.
 - The global rate-limit outage policy is not finalized for every action. Costly generation and high-impact writes are fail-closed; lower-risk telemetry and read paths need deliberate availability/abuse tradeoffs.
 - Public phone/contact visibility (especially phone lookup results), identity/trust badge semantics, recovery channel, analytics consent/retention, commission artifacts, and operating budget still require explicit product decisions.
-- No feature branch build or E2E run has validated the latest source yet. Treat code edits as unverified until the actual Vercel build/test outputs are available.
+- The latest Vercel preview deployment for commit `0e45229fe6d0cdee71f0e0d558d591aaf4e7688e` reports `READY`, and deployment metadata matches the source branch commit. This is a successful deploy/build signal, but no GitHub Actions quality run, Playwright, or RLS result has been collected; role-specific app flows remain unverified, and build logs are blocked by a Vercel team-scope 403.
 
 ## Live Supabase advisory snapshot (read-only)
 
@@ -93,4 +93,4 @@ A read-only inspection previously found only one business and no linked business
 - Run realistic load tests for expected peak request rate and concurrency—not just 500k registered accounts—and measure p95 latency, error rate, DB connection saturation, cache behavior, and upload/CDN performance.
 - Confirm backups and a restore drill, monitoring/alerts, scheduled jobs, domain/SSL, SEO, accessibility, mobile breakpoints, rate limits, abuse response, and rollback procedures.
 
-**Validation note:** the last observed Vercel check reported `build-rate-limit`, and the connected Vercel integration returns a team-scope 403 for direct deployment/log access. The GitHub Actions runner issue is also open. No claim of a passing build or complete test suite is made until a fresh build of the latest commit and the relevant runtime tests finish.
+**Validation note:** Vercel now reports the exact feature-branch commit `0e45229fe6d0cdee71f0e0d558d591aaf4e7688e` as `READY`, and the GitHub Vercel status is `success`. Direct build-log access still returns a team-scope 403; the GitHub Actions pull-request run lookup found no run for the current head. TypeScript/ESLint/Vitest/Playwright/RLS checks and live customer/merchant/admin journeys remain unverified. A READY deployment is not a substitute for those test results.
