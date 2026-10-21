@@ -1,6 +1,6 @@
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
-import { AlertIcon, CheckCircleIcon, ClockIcon, TrendingUpIcon } from '@/components/icons'
+import { AlertIcon, CheckCircleIcon } from '@/components/icons'
 import { getErrorsWithFilters, getHealthSummary } from '@/lib/data/health'
 import ErrorRow from './error-row'
 import HealthFilters from './health-filters'
