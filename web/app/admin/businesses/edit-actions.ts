@@ -532,7 +532,7 @@ export async function saveBranch(
 
   let existingBranchWasPrimary = false
   if (branchId) {
-    const { data: existingBranch, error: branchLookupError = await ctx.supabase
+    const { data: existingBranch, error: branchLookupError } = await ctx.supabase
       .from('business_branches')
       .select('id, is_primary')
       .eq('id', branchId)
