@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   LayoutDashboardIcon,
   AlertIcon,
@@ -109,8 +109,34 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [openSections, setOpenSections] = useState<Set<string>>(
-    () => new Set(SECTIONS.filter((section) => section.defaultOpen !== false).map((section) => section.key)),
+    () =>
+      new Set(
+        SECTIONS.filter(
+          (section) =>
+            section.defaultOpen !== false ||
+            section.items.some(({ href }) => {
+              const baseHref = href.split('?')[0] ?? href
+              return pathname === baseHref || pathname.startsWith(`${baseHref}/`)
+            }),
+        ).map((section) => section.key),
+      ),
   )
+
+  useEffect(() => {
+    const activeSection = SECTIONS.find((section) =>
+      section.items.some(({ href }) => {
+        const baseHref = href.split('?')[0] ?? href
+        return pathname === baseHref || pathname.startsWith(`${baseHref}/`)
+      }),
+    )
+    if (!activeSection) return
+    setOpenSections((previous) => {
+      if (previous.has(activeSection.key)) return previous
+      const next = new Set(previous)
+      next.add(activeSection.key)
+      return next
+    })
+  }, [pathname])
 
   const toggleSection = (key: string) => {
     setOpenSections((previous) => {
