@@ -34,9 +34,9 @@ export default function AdminTopbar({ displayName, notificationCount, counts }: 
         </button>
 
         <Link
-          href="/admin/notifications"
+          href="/admin/notifications?tab=inbox"
           className={styles.iconButton}
-          aria-label={notificationCount > 0 ? `الإشعارات، ${notificationCount} غير مقروء` : 'الإشعارات'}
+          aria-label={notificationCount > 0 ? `الوارد، ${notificationCount} غير مقروء` : 'الوارد'}
         >
           <BellIcon size={19} />
           {notificationCount > 0 && (
