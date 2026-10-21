@@ -139,12 +139,12 @@ export function useFormState(business: AdminBusiness | null): FormState {
       name: x.name,
       area: x.area ?? '',
       address_text: x.address_text ?? '',
-      latitude: '',
-      longitude: '',
-      phone: '',
-      whatsapp: '',
-      is_primary: false,
-      is_active: true,
+      latitude: x.latitude === null ? '' : String(x.latitude),
+      longitude: x.longitude === null ? '' : String(x.longitude),
+      phone: x.phone ?? '',
+      whatsapp: x.whatsapp ?? '',
+      is_primary: x.is_primary,
+      is_active: x.is_active,
     })),
   )
 
