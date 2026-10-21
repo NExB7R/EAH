@@ -576,15 +576,84 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { error } = await ctx.supabase.from('business_branches').delete().eq('id', branchId)
-  if (error) return { ok: false, error: error.message }
+  const uuidSchema = z.string().uuid()
+  if (!uuidSchema.safeParse(branchId).success || !uuidSchema.safeParse(businessId).success) {
+    return { ok: false, error: 'معرّف النشاط أو الفرع غير صحيح' }
+  }
+
+  const { data: branch, error: branchLookupError } = await ctx.supabase
+    .from('business_branches')
+    .select('id, is_primary')
+    .eq('id', branchId)
+    .eq('business_id', businessId)
+    .maybeSingle()
+  if (branchLookupError) return { ok: false, error: 'تعذر التحقق من الفرع' }
+  if (!branch) return { ok: false, error: 'الفرع غير تابع للنشاط المحدد أو تم حذفه بالفعل' }
+
+  const { data: deleted, error } = await ctx.supabase
+    .from('business_branches')
+    .delete()
+    .eq('id', branchId)
+    .eq('business_id', businessId)
+    .select('id')
+    .maybeSingle()
+  if (error) return { ok: false, error: 'تعذر حذف الفرع — حاول تاني' }
+  if (!deleted) return { ok: false, error: 'الفرع غير موجود أو لم يتم حذفه' }
+
+  if (branch.is_primary) {
+    const { data: nextPrimary, error: candidateError } = await ctx.supabase
+      .from('business_branches')
+      .select('id')
+      .eq('business_id', businessId)
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true })
+      .order('id', { ascending: true })
+      .limit(1)
+      .maybeSingle()
+
+    if (candidateError) {
+      await logAudit(ctx.supabase, {
+        actorUserId: ctx.userId,
+        action: 'branch.delete.primary_reassignment_failed',
+        entityType: 'business',
+        entityId: businessId,
+        metadata: { deleted_branch_id: branchId, stage: 'lookup' },
+      })
+      return { ok: false, error: 'تم حذف الفرع الأساسي، لكن تعذر اختيار فرع بديل. راجع إعدادات الفروع.' }
+    }
+
+    if (nextPrimary) {
+      const { data: promoted, error: promoteError } = await ctx.supabase
+        .from('business_branches')
+        .update({ is_primary: true })
+        .eq('id', nextPrimary.id)
+        .eq('business_id', businessId)
+        .select('id')
+        .maybeSingle()
+
+      if (promoteError || !promoted) {
+        await logAudit(ctx.supabase, {
+          actorUserId: ctx.userId,
+          action: 'branch.delete.primary_reassignment_failed',
+          entityType: 'business',
+          entityId: businessId,
+          metadata: {
+            deleted_branch_id: branchId,
+            candidate_branch_id: nextPrimary.id,
+            error: promoteError?.message ?? 'no row updated',
+          },
+        })
+        return { ok: false, error: 'تم حذف الفرع الأساسي، لكن تعذر تعيين فرع بديل. راجع إعدادات الفروع.' }
+      }
+    }
+  }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
     action: 'branch.delete',
     entityType: 'business_branch',
     entityId: branchId,
-    metadata: { business_id: businessId },
+    metadata: { business_id: businessId, reassigned_primary: branch.is_primary },
   })
   revalidatePath(`/admin/businesses/${businessId}`)
   revalidateTag('businesses', 'default')
