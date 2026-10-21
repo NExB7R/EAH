@@ -3,7 +3,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import type { BusinessStatus, PendingBusiness } from '@/lib/data/admin'
 
 const BUSINESS_LIST_COLUMNS =
-  'id, name, slug, business_type, area, cover_image_url, description, created_at, is_published, rejection_reason, rejected_at, business_type_status, source, trial_used, owner_profile_id'
+  'id, name, slug, business_type, custom_business_type, area, cover_image_url, description, created_at, is_published, rejection_reason, rejected_at, business_type_status, source, trial_used, owner_profile_id'
 
 const PAGE_SIZE = 25
 const MAX_OWNER_MATCHES_PER_SEARCH = 250
