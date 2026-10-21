@@ -44,14 +44,14 @@ export default function AdminTopbar({ displayName, notificationCount, counts }: 
           )}
         </Link>
 
-        <Link href="/admin/profile" className={styles.profile} aria-label="الملف الشخصي">
+        <div className={styles.profile} role="group" aria-label="الحساب الحالي">
           <span className={styles.avatar} aria-hidden="true">{initials}</span>
           <span className={styles.profileText}>
             <strong>{displayName}</strong>
             <small>مدير المنصة</small>
           </span>
           <UserIcon size={15} className={styles.profileIcon} />
-        </Link>
+        </div>
       </div>
     </header>
   )
