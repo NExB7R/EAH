@@ -27,7 +27,7 @@ export default function AdminTopbar({ displayName, notificationCount, counts }: 
       </div>
 
       <div className={styles.actions}>
-        <button type="button" className={styles.searchButton} onClick={openSearch}>
+        <button type="button" className={styles.searchButton} onClick={openSearch} aria-label="ابحث عن صفحة أو إجراء">
           <SearchIcon size={17} />
           <span>ابحث عن صفحة أو إجراء</span>
           <kbd>Ctrl K</kbd>
