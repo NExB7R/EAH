@@ -173,35 +173,35 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
                 className={styles.list}
               >
                 {section.items.map(({ href, label, Icon, badgeKey }) => {
-                    const [baseHref = href, queryString] = href.split('?')
-                    const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null
-                    const active = baseHref === '/admin'
-                      ? pathname === '/admin'
-                      : pathname.startsWith(baseHref) &&
-                        (targetTab ? searchParams.get('tab') === targetTab : true)
-                    const badgeValue = badgeKey === 'moderationWork'
-                      ? (counts?.flaggedReviews ?? 0) + (counts?.openReports ?? 0)
-                      : badgeKey ? counts?.[badgeKey] : undefined
-                    const showBadge = typeof badgeValue === 'number' && badgeValue > 0
+                  const [baseHref = href, queryString] = href.split('?')
+                  const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null
+                  const active = baseHref === '/admin'
+                    ? pathname === '/admin'
+                    : pathname.startsWith(baseHref) &&
+                      (targetTab ? searchParams.get('tab') === targetTab : true)
+                  const badgeValue = badgeKey === 'moderationWork'
+                    ? (counts?.flaggedReviews ?? 0) + (counts?.openReports ?? 0)
+                    : badgeKey ? counts?.[badgeKey] : undefined
+                  const showBadge = typeof badgeValue === 'number' && badgeValue > 0
 
-                    return (
-                      <li key={href}>
-                        <Link
-                          href={href}
-                          className={`${styles.item} ${active ? styles.active : ''}`}
-                          aria-current={active ? 'page' : undefined}
-                          onClick={onNavigate}
-                        >
-                          <span className={styles.iconWrap}>
-                            <Icon size={16} />
-                          </span>
-                          <span className={styles.label}>{label}</span>
-                          {showBadge && (
-                            <span className={styles.badge}>{badgeValue > 99 ? '99+' : badgeValue}</span>
-                          )}
-                        </Link>
-                      </li>
-                    )
+                  return (
+                    <li key={href}>
+                      <Link
+                        href={href}
+                        className={`${styles.item} ${active ? styles.active : ''}`}
+                        aria-current={active ? 'page' : undefined}
+                        onClick={onNavigate}
+                      >
+                        <span className={styles.iconWrap}>
+                          <Icon size={16} />
+                        </span>
+                        <span className={styles.label}>{label}</span>
+                        {showBadge && (
+                          <span className={styles.badge}>{badgeValue > 99 ? '99+' : badgeValue}</span>
+                        )}
+                      </Link>
+                    </li>
+                  )
                 })}
               </ul>
             </div>
