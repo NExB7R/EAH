@@ -121,7 +121,7 @@ export default async function AdminDashboard() {
               <Link
                 key={alert.key}
                 href={alert.href}
-                className={\`${styles.alert} ${styles[`alert_${alert.tone}`]}\`}
+                className={`${styles.alert} ${styles[`alert_${alert.tone}`]}`}
               >
                 <span className={styles.alertIcon}>
                   <alert.Icon size={22} />
@@ -165,7 +165,7 @@ export default async function AdminDashboard() {
               </>
             )
             return (
-              <Link key={key} href={href ?? '/admin'} className={\`${styles.card} ${styles[tone]}\`}>
+              <Link key={key} href={href ?? '/admin'} className={`${styles.card} ${styles[tone]}`}>
                 {content}
               </Link>
             )
