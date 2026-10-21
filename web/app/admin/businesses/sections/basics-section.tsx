@@ -84,13 +84,15 @@ export default function BasicsSection() {
             placeholder="مثال: مغسلة ملابس"
           />
           <span className={styles.hint}>
-            الحالة الحالية: {customTypeStatus}. تعديل الاسم يعيده للمراجعة، لكن النشاط نفسه يظل ظاهرًا على المنصة.
+            {ctx.business.business_type !== 'misc'
+              ? 'احفظ اختيار «أخرى» من زر حفظ الأساسيات أولًا، وبعدها أرسل الاسم المخصص للمراجعة.'
+              : `الحالة الحالية: ${customTypeStatus}. تعديل الاسم يعيده للمراجعة، لكن النشاط نفسه يظل ظاهرًا على المنصة.`}
           </span>
           {customTypeError && <p className={styles.errMsg} role="alert">{customTypeError}</p>}
           <button
             type="button"
             onClick={submitCustomType}
-            disabled={typePending || customType.trim().length < 2}
+            disabled={typePending || ctx.business.business_type !== 'misc' || customType.trim().length < 2}
             className={styles.saveBtn}
           >
             {typePending ? 'جاري الإرسال…' : 'حفظ وإرسال النوع للمراجعة'}
