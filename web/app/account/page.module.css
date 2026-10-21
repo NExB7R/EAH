@@ -127,19 +127,6 @@
   border-radius: 18px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
   border: 1px solid rgba(168, 85, 247, 0.18);
-  text-decoration: none;
-  transition: all 220ms var(--ease);
-}
-
-.statCard:hover {
-  transform: translateY(-3px);
-  border-color: rgba(199, 125, 255, 0.5);
-  box-shadow: 0 0 24px rgba(168, 85, 247, 0.18);
-}
-
-.gold:hover {
-  border-color: rgba(232, 199, 154, 0.6);
-  box-shadow: 0 0 24px rgba(232, 199, 154, 0.2);
 }
 
 .statIcon {
