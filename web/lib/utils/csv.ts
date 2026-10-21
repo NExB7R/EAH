@@ -38,8 +38,8 @@ function escapeCsv(value: string, untrustedText = false): string {
   // remain numeric so legitimate negative numbers are not altered.
   const safeValue =
     untrustedText &&
-    (/^[\\t\\r\\n]/.test(value) || /^[\\u0000-\\u0020\\uFEFF]*[=+\\-@]/.test(value))
-      ? `'${value}`
+    (/^[\t\r\n]/.test(value) || /^[\u0000-\u0020\uFEFF]*[=+\-@]/.test(value))
+      ? "'" + value
       : value
 
   if (
@@ -48,7 +48,7 @@ function escapeCsv(value: string, untrustedText = false): string {
     safeValue.includes('\n') ||
     safeValue.includes('\r')
   ) {
-    return `"${safeValue.replace(/"/g, '""')}"`
+    return '"' + safeValue.replace(/"/g, '""') + '"'
   }
   return safeValue
 }
@@ -65,12 +65,12 @@ function formatValue(value: unknown): string {
  * يبني Response لتنزيل CSV
  */
 export function csvResponse(csv: string, filename: string): Response {
-  const safeName = filename.replace(/[^\\w.-]/g, '_')
+  const safeName = filename.replace(/[^\w.-]/g, '_')
   return new Response(csv, {
     status: 200,
     headers: {
       'Content-Type': 'text/csv; charset=utf-8',
-      'Content-Disposition': `attachment; filename="${safeName}.csv"`,
+      'Content-Disposition': 'attachment; filename="' + safeName + '.csv"',
       'Cache-Control': 'no-store',
     },
   })
