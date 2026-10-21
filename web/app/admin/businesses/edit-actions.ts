@@ -929,9 +929,12 @@ export async function saveOffer(
   })
   if (!parsed.success) return parseError(parsed)
 
-  const startsAt = parsed.data.starts_at ? new Date(parsed.data.starts_at).toISOString() : null
-  const endsAt = parsed.data.ends_at ? new Date(parsed.data.ends_at).toISOString() : null
-  if (startsAt && endsAt && new Date(endsAt) <= new Date(startsAt)) {
+  const startsAt = toOptionalIsoDate(parsed.data.starts_at)
+  const endsAt = toOptionalIsoDate(parsed.data.ends_at)
+  if (startsAt === undefined || endsAt === undefined) {
+    return { ok: false, error: 'تاريخ بداية أو انتهاء العرض غير صحيح' }
+  }
+  if (startsAt && endsAt && new Date(endsAt).getTime() <= new Date(startsAt).getTime()) {
     return { ok: false, error: 'تاريخ الانتهاء لازم يكون بعد البداية' }
   }
 
@@ -946,17 +949,23 @@ export async function saveOffer(
   }
 
   if (offerId) {
-    const { error } = await ctx.supabase
+    const { data: updated, error } = await ctx.supabase
       .from('offers')
       .update(payload)
       .eq('id', offerId)
       .eq('business_id', businessId)
-    if (error) return { ok: false, error: error.message }
+      .select('id')
+      .maybeSingle()
+    if (error) return { ok: false, error: 'تعذر حفظ العرض — راجع البيانات وحاول تاني' }
+    if (!updated) return { ok: false, error: 'العرض مش موجود داخل النشاط المحدد' }
   } else {
-    const { error } = await ctx.supabase
+    const { data: created, error } = await ctx.supabase
       .from('offers')
       .insert({ ...payload, business_id: businessId })
-    if (error) return { ok: false, error: error.message }
+      .select('id')
+      .maybeSingle()
+    if (error) return { ok: false, error: 'تعذر إضافة العرض — راجع البيانات وحاول تاني' }
+    if (!created) return { ok: false, error: 'تعذر إضافة العرض — حاول تاني' }
   }
 
   await logAudit(ctx.supabase, {
@@ -976,12 +985,15 @@ export async function deleteOffer(offerId: string, businessId: string): Promise<
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { error } = await ctx.supabase
+  const { data: deleted, error } = await ctx.supabase
     .from('offers')
     .delete()
     .eq('id', offerId)
     .eq('business_id', businessId)
-  if (error) return { ok: false, error: error.message }
+    .select('id')
+    .maybeSingle()
+  if (error) return { ok: false, error: 'تعذر حذف العرض' }
+  if (!deleted) return { ok: false, error: 'العرض مش موجود داخل النشاط المحدد' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
@@ -1004,12 +1016,15 @@ export async function toggleOfferPublished(
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { error } = await ctx.supabase
+  const { data: updated, error } = await ctx.supabase
     .from('offers')
     .update({ is_published: next })
     .eq('id', offerId)
     .eq('business_id', businessId)
-  if (error) return { ok: false, error: error.message }
+    .select('id')
+    .maybeSingle()
+  if (error) return { ok: false, error: 'تعذر تغيير حالة العرض' }
+  if (!updated) return { ok: false, error: 'العرض مش موجود داخل النشاط المحدد' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
