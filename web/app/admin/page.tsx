@@ -42,13 +42,41 @@ export default async function AdminDashboard() {
     getUserSession(),
   ])
 
-  // Metrics describe the platform; the separate action queue below describes
+  // Metrics describe the platform; the separate action queue describes
   // work that needs a decision. Avoid displaying the same pending count twice.
   const cards: Card[] = [
-    { key: 'total', label: 'كل الأنشطة', value: stats.totalBusinesses, Icon: StoreIcon, tone: 'purple', href: '/admin/businesses' },
-    { key: 'published', label: 'نشاط منشور', value: stats.publishedBusinesses, Icon: CheckCircleIcon, tone: 'teal', href: '/admin/businesses?status=published' },
-    { key: 'users', label: 'المستخدمون', value: stats.totalUsers, Icon: UserIcon, tone: 'purple', href: '/admin/users' },
-    { key: 'orders', label: 'الطلبات', value: stats.totalOrders, Icon: FileTextIcon, tone: 'gold', href: '/admin/analytics' },
+    {
+      key: 'total',
+      label: 'كل الأنشطة',
+      value: stats.totalBusinesses,
+      Icon: StoreIcon,
+      tone: 'purple',
+      href: '/admin/businesses',
+    },
+    {
+      key: 'published',
+      label: 'نشاط منشور',
+      value: stats.publishedBusinesses,
+      Icon: CheckCircleIcon,
+      tone: 'teal',
+      href: '/admin/businesses?status=published',
+    },
+    {
+      key: 'users',
+      label: 'المستخدمون',
+      value: stats.totalUsers,
+      Icon: UserIcon,
+      tone: 'purple',
+      href: '/admin/users',
+    },
+    {
+      key: 'orders',
+      label: 'الطلبات',
+      value: stats.totalOrders,
+      Icon: FileTextIcon,
+      tone: 'gold',
+      href: '/admin/analytics',
+    },
   ]
 
   const alerts: Alert[] = [
@@ -97,7 +125,9 @@ export default async function AdminDashboard() {
       <section className={styles.intro}>
         <div className={styles.introCopy}>
           <span className={styles.kicker}>مركز العمليات · EAH</span>
-          <h2 className={styles.introTitle}>أهلاً، {session?.displayName || 'مدير المنصة'}</h2>
+          <h2 className={styles.introTitle}>
+            أهلاً، {session?.displayName || 'مدير المنصة'}
+          </h2>
           <p className={styles.introText}>
             المؤشرات الأساسية والمهام التي تحتاج قرارك — من غير تكرار روابط التنقل الموجودة في القائمة.
           </p>
@@ -111,7 +141,9 @@ export default async function AdminDashboard() {
 
       <section className={styles.section} aria-labelledby="admin-work-queue">
         <header className={styles.sectionHeader}>
-          <h2 id="admin-work-queue" className={styles.sectionTitle}>المهام التي تحتاج متابعة</h2>
+          <h2 id="admin-work-queue" className={styles.sectionTitle}>
+            المهام التي تحتاج متابعة
+          </h2>
           <span className={styles.sectionHint}>تظهر المهام التي لها عناصر معلّقة فقط</span>
         </header>
         {activeAlerts.length > 0 ? (
@@ -120,7 +152,7 @@ export default async function AdminDashboard() {
               <Link
                 key={alert.key}
                 href={alert.href}
-                className={`${styles.alert} ${styles[`alert_${alert.tone}`]}`}
+                className={`${styles.alert} ${styles[`alert_${alert.tone}`]} `}
               >
                 <span className={styles.alertIcon}>
                   <alert.Icon size={22} />
@@ -137,7 +169,9 @@ export default async function AdminDashboard() {
           </div>
         ) : (
           <div className={styles.allClear} role="status">
-            <span className={styles.allClearIcon}><CheckCircleIcon size={19} /></span>
+            <span className={styles.allClearIcon}>
+              <CheckCircleIcon size={19} />
+            </span>
             <div>
               <strong>لا توجد مهام مراجعة معلّقة حاليًا</strong>
               <span>يمكنك متابعة المؤشرات الأساسية والنشاط الحي من هذه الصفحة.</span>
@@ -148,7 +182,9 @@ export default async function AdminDashboard() {
 
       <section className={styles.section} aria-labelledby="admin-platform-metrics">
         <header className={styles.sectionHeader}>
-          <h2 id="admin-platform-metrics" className={styles.sectionTitle}>مؤشرات المنصة</h2>
+          <h2 id="admin-platform-metrics" className={styles.sectionTitle}>
+            مؤشرات المنصة
+          </h2>
           <span className={styles.sectionHint}>إجماليات حالية</span>
         </header>
         <div className={styles.grid}>
@@ -156,7 +192,9 @@ export default async function AdminDashboard() {
             const content = (
               <>
                 <div className={styles.cardTop}>
-                  <span className={styles.icon}><Icon size={20} /></span>
+                  <span className={styles.icon}>
+                    <Icon size={20} />
+                  </span>
                   <ArrowLeftIcon size={14} className={styles.chev} />
                 </div>
                 <span className={styles.value}>{value.toLocaleString('ar-EG')}</span>
@@ -164,7 +202,11 @@ export default async function AdminDashboard() {
               </>
             )
             return (
-              <Link key={key} href={href ?? '/admin'} className={`${styles.card} ${styles[tone]}`}>
+              <Link
+                key={key}
+                href={href ?? '/admin'}
+                className={`${styles.card} ${styles[tone]}`}
+              >
                 {content}
               </Link>
             )
