@@ -18,6 +18,8 @@ type Setter<T> = Dispatch<SetStateAction<T>>
 // All useState lives here. Handlers live in business-form-handlers.ts.
 // ═══════════════════════════════════════════════════════════
 
+export type FormActionResult = { ok: boolean; error?: string; id?: string }
+
 export type FormState = {
   pending: boolean
   error: string | null
@@ -25,7 +27,7 @@ export type FormState = {
   savedSection: SectionKey | null
   openSections: Set<SectionKey>
   toggleSection: (key: SectionKey) => void
-  handleSaveSection: (key: SectionKey, fn: () => Promise<{ ok: boolean; error?: string }>) => void
+  handleSaveSection: (\n    key: SectionKey,\n    fn: () => Promise<FormActionResult>,\n    onSuccess?: (result: FormActionResult) => void,\n  ) => void
   startTransition: ReturnType<typeof useTransition>[1]
   router: ReturnType<typeof useRouter>
 
@@ -179,13 +181,15 @@ export function useFormState(business: AdminBusiness | null): FormState {
 
   const handleSaveSection = (
     key: SectionKey,
-    fn: () => Promise<{ ok: boolean; error?: string }>,
+    fn: () => Promise<FormActionResult>,
+    onSuccess?: (result: FormActionResult) => void,
   ) => {
     if (!business) return
     setError(null)
     startTransition(async () => {
       const res = await fn()
       if (res.ok) {
+        onSuccess?.(res)
         setSavedSection(key)
         setTimeout(() => setSavedSection(null), 2000)
         router.refresh()
