@@ -19,7 +19,7 @@ import {
 // حفظ لكل قسم — بدون reload للصفحة
 // ═══════════════════════════════════════════════════════════
 
-type Result = { ok: true } | { ok: false; error: string; fieldErrors?: Record<string, string> }
+type Result = { ok: true; id?: string } | { ok: false; error: string; fieldErrors?: Record<string, string> }
 
 function parseError(parsed: z.ZodSafeParseError<unknown>): Result {
   const fieldErrors: Record<string, string> = {}
@@ -689,7 +689,7 @@ export async function saveBranch(
   })
   revalidatePath(`/admin/businesses/${businessId}`)
   revalidateTag('businesses', 'default')
-  return { ok: true }
+  return { ok: true, id: savedBranchId }
 }
 
 // ═══ 7. حذف فرع ═══
