@@ -79,7 +79,7 @@ export default function BusinessRow({
   const isRejected = !!b.rejected_at
   const status = b.is_published ? 'published' : isRejected ? 'rejected' : 'pending'
   const customType = b.custom_business_type?.trim()
-  const typeLabel = customType && b.business_type_status === 'approved'
+  const typeLabel = customType && b.business_type === 'misc' && b.business_type_status === 'approved'
     ? customType
     : TYPE_LABEL[b.business_type] ?? b.business_type
 
