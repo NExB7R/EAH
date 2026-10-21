@@ -38,7 +38,7 @@ export default async function BusinessTypesPage() {
   return (
     <div>
       <AccountPageHeader
-        title="أنواع الأنشطة الجديدة"
+        title="أنواع الأنشطة المقترحة"
         description={`${pending.length} نوع بحاجة موافقة`}
       />
 
