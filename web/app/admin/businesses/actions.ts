@@ -27,13 +27,6 @@ export async function approveBusiness(businessId: string): Promise<Result> {
     .maybeSingle()
 
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
-  if (biz.business_type_status === 'pending' || biz.business_type_status === 'rejected') {
-    return {
-      ok: false,
-      error: 'نوع النشاط المخصص لسه محتاج قرار. راجع «أنواع الأنشطة الجديدة» الأول، وبعد الموافقة انشر النشاط.',
-    }
-  }
-
   const { data: updated, error } = await ctx.supabase
     .from('businesses')
     .update({
@@ -196,17 +189,10 @@ export async function republishBusiness(businessId: string): Promise<Result> {
 
   const { data: biz } = await ctx.supabase
     .from('businesses')
-    .select('id, business_type_status')
+    .select('id')
     .eq('id', businessId)
     .maybeSingle()
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
-  if (biz.business_type_status === 'pending' || biz.business_type_status === 'rejected') {
-    return {
-      ok: false,
-      error: 'لا يمكن إعادة نشر النشاط قبل تسوية حالة النوع المخصص من صفحة «أنواع الأنشطة الجديدة».',
-    }
-  }
-
   const { data: republished, error } = await ctx.supabase
     .from('businesses')
     .update({
@@ -368,6 +354,17 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   }
 
   const d = parsed.data
+  const contacts = d.contacts ?? []
+  const primaryPhones = contacts.filter((contact) => contact.kind === 'phone' && contact.is_primary)
+  const primaryCount = contacts.filter((contact) => contact.is_primary).length
+  const contactValues = contacts.map((contact) => contact.value.trim())
+
+  if (primaryPhones.length !== 1 || primaryCount !== 1) {
+    return { ok: false, error: 'لازم تحدد رقم اتصال أساسي واحد فقط للنشاط' }
+  }
+  if (new Set(contactValues).size !== contactValues.length) {
+    return { ok: false, error: 'فيه أرقام تواصل مكررة — راجعها قبل الحفظ' }
+  }
 
   // Owner assignment controls who manages the business; it does not control public visibility.
   // user_roles RLS limits ordinary session reads to the signed-in user's own row,
@@ -425,8 +422,9 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       hook: d.hook || null,
       is_open: d.is_open ?? true,
       accepts_whatsapp_orders: effectiveAcceptsWhatsapp,
-      is_published:
-        d.business_type === 'misc' && d.custom_business_type ? false : (d.is_published ?? true),
+      // Publication is independent from owner assignment and custom-type review.
+      // Unapproved custom types use the public fallback category "أخرى".
+      is_published: d.is_published ?? true,
     })
     .select('id')
     .single()
@@ -607,22 +605,6 @@ export async function updateBusiness(businessId: string, formData: FormData): Pr
   }
 
   const d = parsed.data
-
-  if (d.is_published) {
-    const { data: current, error: lookupError } = await ctx.supabase
-      .from('businesses')
-      .select('id, business_type_status')
-      .eq('id', businessId)
-      .maybeSingle()
-    if (lookupError) return { ok: false, error: 'تعذر التحقق من حالة نوع النشاط' }
-    if (!current) return { ok: false, error: 'النشاط مش موجود' }
-    if (current.business_type_status === 'pending' || current.business_type_status === 'rejected') {
-      return {
-        ok: false,
-        error: 'لا يمكن نشر النشاط قبل اعتماد نوعه المخصص من صفحة «أنواع الأنشطة الجديدة».',
-      }
-    }
-  }
 
   const { data: updated, error } = await ctx.supabase
     .from('businesses')
