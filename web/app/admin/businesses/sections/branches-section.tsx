@@ -82,9 +82,23 @@ export default function BranchesSection() {
                 type="checkbox"
                 id={`br-primary-${idx}`}
                 checked={br.is_primary}
+                disabled={!br.is_active}
                 onChange={(e) => ctx.updateBranch(idx, 'is_primary', e.target.checked)}
               />
               <label htmlFor={`br-primary-${idx}`}>الفرع الرئيسي</label>
+            </div>
+            <div className={styles.checkRow}>
+              <input
+                type="checkbox"
+                id={`br-active-${idx}`}
+                checked={br.is_active}
+                onChange={(e) => {
+                  const active = e.target.checked
+                  ctx.updateBranch(idx, 'is_active', active)
+                  if (!active && br.is_primary) ctx.updateBranch(idx, 'is_primary', false)
+                }}
+              />
+              <label htmlFor={`br-active-${idx}`}>فرع نشط على المنصة</label>
             </div>
             <SaveBar
               onClick={() => ctx.saveBranch(idx)}
