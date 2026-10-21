@@ -219,3 +219,75 @@ gitleaks detect --log-opts="--all"
 **السبب:** raw string + backslash قبل newline = backslash حرف literal في النص، مش escape.
 
 ---
+
+---
+
+## 15. Vercel Deployment Rules (2026-10-21)
+
+> **السبب:** Vercel Hobby = 100 deployments / 24 ساعة. تعدينا الحد في جلسة واحدة بعد ~100 push لـ branch redesign/admin-control-center (preview deployments) + ~20 push لـ main (production). النتيجة: production اتقفل 24 ساعة.
+
+### 15.1 القاعدة الذهبية — اجمع الـ commits
+
+- **ممنوع** push لـ main أكتر من 3 مرات في الساعة.
+- **ممنوع** push لـ branch فيه auto-deploy أكتر من 5 مرات في اليوم.
+- **الإجراء:** كل تعديلات الجلسة (حتى 20 ملف) = commit واحد في الآخر.
+
+### 15.2 Vercel Hobby = 100 deployment / 24h
+
+- **الحد:** 100 deployments في أي 24 ساعة (متجددة، مش تقويمية).
+- **بيتحسب:** production + preview + redeploy + CLI + GitHub webhook — كلهم من نفس الـ quota.
+- **الإجراء:** vercel --prod مش بديل — هو كمان بيخصم.
+
+### 15.3 الـ preview deployments بتاكل الـ quota
+
+- كل branch → preview deployment. 10 branches = 10 deployments.
+- **الإجراء:** في Vercel Settings → Git → Ignored Build Step، ضيف الشرط اللي يمنع preview لأي branch غير main.
+
+### 15.4 ممنوع auto-deploy لأكتر من branch
+
+- Vercel Settings → Git → Production Branch = main بس.
+- باقي الـ branches = Ignored (أو امسحها بعد الـ merge).
+- **السبب:** branch قديم زي redesign/admin-control-center لسه موجود — كل push عليه = preview deployment جديد.
+
+### 15.5 GitHub Outage ≠ Vercel
+
+- لو Vercel Dashboard بيقول GitHub Outage — auto-deploy هيتأخر.
+- **الإجراء:** استنى، أو Create Deployment يدوي من Vercel Dashboard.
+- **ممنوع** vercel --prod من CLI في الحالة دي — بيستهلك من نفس الـ quota.
+
+### 15.6 تحقق قبل الـ push
+
+- كام deployment في آخر 24 ساعة؟ (vercel ls --meta githubCommitRef=main)
+- لو > 80 → استنى.
+
+### 15.7 الحل البديل — vercel dev
+
+- قبل أي push، جرّب محلياً: cd web && npx vercel dev --listen 3000
+- **السبب:** vercel dev مش بيخصم من الـ quota (بيعمل build محلي).
+
+### 15.8 لو الحد اتعدى
+
+- **مفيش حل فوري.** الـ quota بتتجدد بعد 24 ساعة من أول deployment في الـ نافذة.
+- **البدائل:**
+  - استنى 24 ساعة.
+  - رقّي لـ Pro (6000 deployment/شهر + preview unlimited).
+  - اشتغل على vercel dev محلياً لحد ما الحد يتجدد.
+
+### 15.9 ممنوعات مطلقة (Vercel)
+
+| ممنوع | السبب |
+|-------|-------|
+| git push بعد كل تعديل صغير | بيستهلك deployment |
+| vercel --prod كبديل سريع | نفس الـ quota |
+| auto-deploy لكل branch | previews بتستهلك |
+| redeploy لـ preview بعد كل commit | بلاش داعي |
+| تجاهل GitHub Outage banner | auto-deploy مش شغال |
+
+### 15.10 Checklist قبل أي push
+
+- [ ] كل تعديلات الجلسة في commit واحد.
+- [ ] الـ message واضح (feat/fix/refactor/docs/style).
+- [ ] git diff --stat أقل من 30 ملف (إلا لو refactor مقصود).
+- [ ] الـ branch = main (مش branch قديم).
+- [ ] Vercel Dashboard → مفيش deployment الـ 24 ساعة قرب 100.
+- [ ] لو قرب 100 → استنى أو vercel dev.
