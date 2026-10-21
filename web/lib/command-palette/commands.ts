@@ -127,6 +127,15 @@ export const COMMANDS: Command[] = [
     keywords: ['notifications', 'push', 'broadcast', 'messages', 'إشعارات', 'رسائل', 'تواصل'],
   },
   {
+    id: 'admin-inbox',
+    label: 'الوارد',
+    description: 'الإشعارات والرسائل اللي وصلت لحسابك',
+    href: '/admin/notifications?tab=inbox',
+    icon: BellIcon,
+    group: 'navigation',
+    keywords: ['inbox', 'unread', 'received', 'الوارد', 'رسائل واردة', 'غير مقروء'],
+  },
+  {
     id: 'admin-announcements-tab',
     label: 'إدارة التنبيهات',
     description: 'فتح بانرات الإعلانات من قسم التواصل والإشعارات',
