@@ -240,9 +240,6 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
   const hasLat = parsed.data.latitude !== null && parsed.data.latitude !== undefined
   const hasLng = parsed.data.longitude !== null && parsed.data.longitude !== undefined
   if (hasLat !== hasLng) return { ok: false, error: 'لازم الإحداثيين مع بعض أو الاتنين فاضيين' }
-  if (parsed.data.is_primary && !parsed.data.is_active) {
-    return { ok: false, error: 'لا يمكن تعيين فرع غير نشط كفرع أساسي' }
-  }
 
   const { data: business } = await ctx.supabase
     .from('businesses')
@@ -464,6 +461,9 @@ export async function saveBranch(
   const hasLat = parsed.data.latitude !== null && parsed.data.latitude !== undefined
   const hasLng = parsed.data.longitude !== null && parsed.data.longitude !== undefined
   if (hasLat !== hasLng) return { ok: false, error: 'لازم الإحداثيين مع بعض أو الاتنين فاضيين' }
+  if (parsed.data.is_primary && !parsed.data.is_active) {
+    return { ok: false, error: 'لا يمكن تعيين فرع غير نشط كفرع أساسي' }
+  }
 
   const { data: business, error: businessLookupError } = await ctx.supabase
     .from('businesses')
@@ -473,8 +473,9 @@ export async function saveBranch(
   if (businessLookupError) return { ok: false, error: 'تعذر التحقق من النشاط' }
   if (!business) return { ok: false, error: 'النشاط مش موجود' }
 
+  let existingBranchWasPrimary = false
   if (branchId) {
-    const { data: existingBranch, error: branchLookupError } = await ctx.supabase
+    const { data: existingBranch, error: branchLookupError = await ctx.supabase
       .from('business_branches')
       .select('id, is_primary')
       .eq('id', branchId)
@@ -482,11 +483,12 @@ export async function saveBranch(
       .maybeSingle()
     if (branchLookupError) return { ok: false, error: 'تعذر التحقق من الفرع' }
     if (!existingBranch) return { ok: false, error: 'الفرع غير تابع للنشاط المحدد' }
+    existingBranchWasPrimary = existingBranch.is_primary
   }
 
   // Save the current primary state so a failed branch write does not leave the
   // activity without its previous primary branch.
-  const { data: previousBranches, error: previousError } = parsed.data.is_primary
+  const { data: previousBranches, error: previousError } = (parsed.data.is_primary || !!branchId)
     ? await ctx.supabase
         .from('business_branches')
         .select('id, is_primary')
@@ -572,9 +574,6 @@ export async function saveBranch(
 
   // If the current primary branch was demoted or disabled, select another
   // active branch as primary so an activity does not silently lose its main branch.
-  const existingBranchWasPrimary = branchId
-    ? (previousBranches ?? []).some((item) => item.id === branchId && item.is_primary)
-    : false
   if (existingBranchWasPrimary && (!parsed.data.is_primary || !parsed.data.is_active)) {
     const { data: candidate, error: candidateError } = await ctx.supabase
       .from('business_branches')
