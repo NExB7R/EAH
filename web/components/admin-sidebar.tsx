@@ -49,6 +49,15 @@ type Section = {
   defaultOpen?: boolean
 }
 
+function sectionContainsPath(section: Section, pathname: string): boolean {
+  return section.items.some(({ href }) => {
+    const baseHref = href.split('?')[0] ?? href
+    return baseHref === '/admin'
+      ? pathname === '/admin'
+      : pathname === baseHref || pathname.startsWith(`${baseHref}/`)
+  })
+}
+
 const SECTIONS: Section[] = [
   {
     key: 'overview',
@@ -112,23 +121,13 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
     () =>
       new Set(
         SECTIONS.filter(
-          (section) =>
-            section.defaultOpen !== false ||
-            section.items.some(({ href }) => {
-              const baseHref = href.split('?')[0] ?? href
-              return pathname === baseHref || pathname.startsWith(`${baseHref}/`)
-            }),
+          (section) => section.defaultOpen !== false || sectionContainsPath(section, pathname),
         ).map((section) => section.key),
       ),
   )
 
   useEffect(() => {
-    const activeSection = SECTIONS.find((section) =>
-      section.items.some(({ href }) => {
-        const baseHref = href.split('?')[0] ?? href
-        return pathname === baseHref || pathname.startsWith(`${baseHref}/`)
-      }),
-    )
+    const activeSection = SECTIONS.find((section) => sectionContainsPath(section, pathname))
     if (!activeSection) return
     setOpenSections((previous) => {
       if (previous.has(activeSection.key)) return previous
