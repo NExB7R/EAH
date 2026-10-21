@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { getUserIdsForAudience, type AudienceType } from '@/lib/data/admin'
 import { createBulkNotifications } from '@/lib/notifications/server'
 import { requireAdmin } from '@/lib/auth/admin'
+import { createServiceClient } from '@/lib/supabase/service'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Notifications Actions
@@ -29,6 +30,48 @@ export type SendResult =
       ok: false
       error: string
     }
+
+export async function markOwnNotificationRead(notificationId: string): Promise<{ ok: true } | { ok: false; error: string }> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  const parsedId = z.string().uuid().safeParse(notificationId)
+  if (!parsedId.success) return { ok: false, error: 'معرّف الإشعار غير صالح' }
+
+  let privileged: ReturnType<typeof createServiceClient>
+  try {
+    privileged = createServiceClient()
+  } catch {
+    return { ok: false, error: 'تعذر تحديث الإشعار مؤقتًا — حاول تاني' }
+  }
+
+  const { data: updated, error } = await privileged
+    .from('notifications')
+    .update({ read_at: new Date().toISOString() })
+    .eq('id', parsedId.data)
+    .eq('user_id', ctx.userId)
+    .is('read_at', null)
+    .select('id')
+    .maybeSingle()
+
+  if (error) return { ok: false, error: 'تعذر تحديث الإشعار — حاول تاني' }
+
+  if (!updated) {
+    const { data: existing, error: lookupError } = await privileged
+      .from('notifications')
+      .select('id, read_at')
+      .eq('id', parsedId.data)
+      .eq('user_id', ctx.userId)
+      .maybeSingle()
+
+    if (lookupError) return { ok: false, error: 'تعذر التحقق من حالة الإشعار' }
+    if (!existing) return { ok: false, error: 'الإشعار غير موجود' }
+  }
+
+  revalidatePath('/admin/notifications')
+  revalidatePath('/admin')
+  return { ok: true }
+}
 
 export async function sendBroadcast(formData: FormData): Promise<SendResult> {
   const ctx = await requireAdmin()
