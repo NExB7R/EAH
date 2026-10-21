@@ -9,14 +9,6 @@ import { sortByTrend } from '@/lib/ranking'
 export type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
 export type BusinessTypeStatus = 'pending' | 'approved' | 'rejected' | null
 
-const BUSINESS_TYPE_LABELS: Record<BusinessType, string> = {
-  restaurant: 'مطعم',
-  pharmacy: 'صيدلية',
-  supermarket: 'ماركت',
-  delivery_office: 'توصيل',
-  misc: 'أخرى',
-}
-
 export type WorkingDay = {
   open: string
   close: string
@@ -74,16 +66,7 @@ export type Business = {
 // Helpers
 // ═══════════════════════════════════════════════════════════
 
-/** Show custom labels only after an admin approves the requested type. */
-export function getBusinessTypeLabel(
-  business: Pick<Business, 'business_type' | 'custom_business_type' | 'business_type_status'>,
-): string {
-  const customType = business.custom_business_type?.trim()
-  if (business.business_type === 'misc' && business.business_type_status === 'approved' && customType) {
-    return customType
-  }
-  return BUSINESS_TYPE_LABELS[business.business_type] ?? BUSINESS_TYPE_LABELS.misc
-}
+export { getBusinessTypeLabel } from '../business-type-label'
 
 // تحديد يوم الأسبوع بالإنجليزي
 const DAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
