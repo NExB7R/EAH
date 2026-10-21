@@ -43,7 +43,7 @@
 - IP fingerprints in engagement telemetry now omit the fingerprint when `EAH_VISITOR_SALT` is not configured instead of using a known static fallback; the live column permits null.
 - CSP violation telemetry is now rate-limited, request-size bounded, parsed defensively, and logs only truncated fields.
 - Shared Cloudinary upload logic now checks the actual image signature and re-labels the uploaded part from detected bytes; SVG/unknown raster formats are not accepted as images.
-- The quality workflow now listens for pull requests targeting `ux/role-aware-navigation-cleanup` as well as `main`, because PR #27 is stacked on the former. This makes the quality gate eligible to run on this draft PR; actual run results still need confirmation.
+- The quality workflow file in this feature branch includes `ux/role-aware-navigation-cleanup` in its pull-request branch filter. GitHub evaluates pull-request workflows from the base branch, so this edit alone does not activate CI for PR #27 while the base branch still has the older workflow. A run result is not available; the repository's existing runner-provisioning issue #22 remains a blocker.
 - Admin CSV exports now have a dedicated fail-closed limiter (10 requests per 15 minutes per admin/IP key), validates export types and bounds filter lengths before querying.
 - Admin and merchant business-image endpoints cap declared multipart request size, handle malformed forms, and validate the admin business UUID before privileged operations.
 - Offline queue writes now enforce an 8 KiB body cap, bound review dimensions/slugs, avoid raw DB error disclosure, and check favorite/follow/like write results before returning success.
