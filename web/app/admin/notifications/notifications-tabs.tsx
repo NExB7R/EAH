@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { BellIcon, BroadcastIcon, ClockIcon } from '@/components/icons'
+import { BellIcon, BroadcastIcon, ClockIcon, CheckCircleIcon } from '@/components/icons'
 import styles from './notifications.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -10,12 +10,13 @@ import styles from './notifications.module.css'
 // إرسال / إعلانات / السجل
 // ═══════════════════════════════════════════════════════════
 
-type TabKey = 'send' | 'announcements' | 'history'
+type TabKey = 'send' | 'announcements' | 'history' | 'inbox'
 
 const TABS: { key: TabKey; label: string; Icon: typeof BellIcon }[] = [
   { key: 'send', label: 'إرسال إشعار', Icon: BellIcon },
   { key: 'announcements', label: 'الإعلانات الإدارية', Icon: BroadcastIcon },
   { key: 'history', label: 'السجل', Icon: ClockIcon },
+  { key: 'inbox', label: 'الوارد', Icon: CheckCircleIcon },
 ]
 
 export default function NotificationsTabs() {
