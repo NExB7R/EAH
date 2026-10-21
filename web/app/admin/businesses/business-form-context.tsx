@@ -75,17 +75,12 @@ export type BusinessFormCtx = {
   newUntil: string
   setNewUntil: Setter<string>
 
-  // Owner
-  ownerId: string
-  setOwnerId: Setter<string>
-
   // Save handlers
   saveBasics: () => void
   saveContacts: () => void
   saveLocation: () => void
   saveHours: () => void
   saveSettings: () => void
-  saveOwner: () => void
   saveBranch: (idx: number) => void
   // Notice
   importantNotice: string

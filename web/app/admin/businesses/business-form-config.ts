@@ -8,7 +8,6 @@ import {
   CrownGoldIcon,
   PhoneIcon,
   ClockIcon,
-  UserIcon,
   ImageIcon,
   AlertIcon,
   FileTextIcon,
@@ -78,7 +77,6 @@ export type SectionKey =
   | 'offers'
   | 'notice'
   | 'status'
-  | 'owner'
 
 export const SECTION_META: Record<SectionKey, { title: string; Icon: typeof StoreIcon }> = {
   basics: { title: 'الأساسيات', Icon: StoreIcon },
@@ -93,7 +91,6 @@ export const SECTION_META: Record<SectionKey, { title: string; Icon: typeof Stor
   settings: { title: 'الإعدادات والمميزات', Icon: CrownGoldIcon },
   notice: { title: 'ملحوظة هامة', Icon: AlertIcon },
   status: { title: 'حالة الفتح الآن', Icon: ClockIcon },
-  owner: { title: 'صاحب النشاط', Icon: UserIcon },
 }
 
 export const EDIT_ORDER: SectionKey[] = [
@@ -109,7 +106,6 @@ export const EDIT_ORDER: SectionKey[] = [
   'settings',
   'notice',
   'status',
-  'owner',
 ]
 
 export function readFileAsHours(raw: unknown): Record<DayKey, DayHours> {
