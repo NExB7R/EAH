@@ -43,6 +43,14 @@ export const adminUploadLimiter = new Ratelimit({
   prefix: 'ratelimit:admin-upload',
 })
 
+ // ─── Exports (bounded high-volume and personal-data downloads) ───
+export const exportLimiter = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(10, '15 m'),
+  analytics: true,
+  prefix: 'ratelimit:export',
+})
+
 // ─── Strict: operations حساسة (review / reply / reveal) ───
 export async function getClientIp(): Promise<string> {
   const h = await headers()
