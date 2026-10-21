@@ -20,7 +20,7 @@ import styles from './admin-sidebar.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Sidebar (2026)
-// 4 sections: نظرة عامة / الإدارة / المراجعة والأمان / النظام
+// Navigation follows the platform workflow; redirect aliases are not duplicated here.
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -37,7 +37,7 @@ type Item = {
   href: string
   label: string
   Icon: React.ComponentType<{ size?: number }>
-  badgeKey?: keyof NonNullable<Props['counts']>
+  badgeKey?: keyof NonNullable<Props['counts']> | 'moderationWork'
 }
 
 type Section = {
@@ -64,9 +64,7 @@ const SECTIONS: Section[] = [
   {
     title: 'المراجعة والثقة',
     items: [
-      { href: '/admin/moderation', label: 'المراجعة والأمان', Icon: ShieldCheckIcon, badgeKey: 'flaggedReviews' },
-      { href: '/admin/moderation?tab=reports', label: 'بلاغات المستخدمين', Icon: FileTextIcon, badgeKey: 'openReports' },
-      { href: '/admin/fraud', label: 'مراجعة الأنشطة المشبوهة', Icon: AlertIcon },
+      { href: '/admin/moderation', label: 'المراجعة والأمان', Icon: ShieldCheckIcon, badgeKey: 'moderationWork' },
     ],
   },
   {
@@ -75,14 +73,13 @@ const SECTIONS: Section[] = [
       { href: '/admin/subscriptions', label: 'الاشتراكات', Icon: CrownGoldIcon, badgeKey: 'pendingSubscriptions' },
       { href: '/admin/ads', label: 'الإعلانات', Icon: TagIcon },
       { href: '/admin/featured', label: 'الأنشطة المميزة', Icon: CrownGoldIcon },
-      { href: '/admin/insights', label: 'الرؤى الذكية', Icon: SparklesIcon },
+      { href: '/admin/insights', label: 'تخزين التقارير الذكية', Icon: SparklesIcon },
     ],
   },
   {
     title: 'التواصل والنظام',
     items: [
-      { href: '/admin/announcements', label: 'الإعلانات والتنبيهات', Icon: BellIcon },
-      { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
+      { href: '/admin/notifications', label: 'التواصل والإشعارات', Icon: BellIcon },
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
       { href: '/admin/health', label: 'صحة النظام والأخطاء', Icon: AlertIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
@@ -112,7 +109,9 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
                   : pathname.startsWith(baseHref) && (targetTab
                     ? searchParams.get('tab') === targetTab
                     : !(isModerationPage && searchParams.get('tab') === 'reports'))
-                const badgeValue = badgeKey ? counts?.[badgeKey] : undefined
+                const badgeValue = badgeKey === 'moderationWork'
+                  ? (counts?.flaggedReviews ?? 0) + (counts?.openReports ?? 0)
+                  : badgeKey ? counts?.[badgeKey] : undefined
                 const showBadge = typeof badgeValue === 'number' && badgeValue > 0
 
                 return (
