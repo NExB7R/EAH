@@ -11,7 +11,6 @@ import {
 } from '@/components/icons'
 import { getAdminStats, getAdminBadges } from '@/lib/data/admin'
 import { getUserSession } from '@/lib/data/user'
-import ActivityFeed from '@/components/admin/activity-feed'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -125,11 +124,10 @@ export default async function AdminDashboard() {
       <section className={styles.intro}>
         <div className={styles.introCopy}>
           <span className={styles.kicker}>مركز العمليات · EAH</span>
-          <h2 className={styles.introTitle}>
-            أهلاً، {session?.displayName || 'مدير المنصة'}
-          </h2>
+          <h2 className={styles.introTitle}>أهلاً، {session?.displayName || 'مدير المنصة'}</h2>
           <p className={styles.introText}>
-            المؤشرات الأساسية والمهام التي تحتاج قرارك — من غير تكرار روابط التنقل الموجودة في القائمة.
+            المؤشرات الأساسية والمهام التي تحتاج قرارك — من غير تكرار روابط التنقل الموجودة في
+            القائمة.
           </p>
         </div>
         <Link href="/admin/businesses/new" className={styles.primaryAction}>
@@ -202,20 +200,12 @@ export default async function AdminDashboard() {
               </>
             )
             return (
-              <Link
-                key={key}
-                href={href ?? '/admin'}
-                className={`${styles.card} ${styles[tone]}`}
-              >
+              <Link key={key} href={href ?? '/admin'} className={`${styles.card} ${styles[tone]}`}>
                 {content}
               </Link>
             )
           })}
         </div>
-      </section>
-
-      <section className={styles.section} aria-label="النشاط الحي للإدارة">
-        <ActivityFeed />
       </section>
     </div>
   )

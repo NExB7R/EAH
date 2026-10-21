@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import AdminSidebar from '@/components/admin-sidebar'
 import CommandPalette from '@/components/ui/command-palette'
 import { getUserSession } from '@/lib/data/user'
@@ -17,13 +18,22 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <main className={styles.page}>
-      <Link href="#admin-content" className={styles.skipLink}>تخطي إلى المحتوى الرئيسي</Link>
+      <Link href="#admin-content" className={styles.skipLink}>
+        تخطي إلى المحتوى الرئيسي
+      </Link>
       <div className={styles.shell}>
         <aside className={styles.sidebarRail} aria-label="التنقل الرئيسي">
           <Link href="/admin" className={styles.brand} aria-label="EAH — لوحة الإدارة">
-            <span className={styles.brandMark}>EAH</span>
+            <Image
+              src="/icon-192.png"
+              alt=""
+              width={36}
+              height={36}
+              className={styles.brandLogo}
+              priority
+            />
             <span className={styles.brandText}>
-              <strong>EAH</strong>
+              <strong className={styles.brandScript}>EAH</strong>
               <small>إدارة المنصة</small>
             </span>
           </Link>
@@ -42,7 +52,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             notificationCount={session.notifCount}
             counts={counts}
           />
-          <div id="admin-content" className={styles.content} tabIndex={-1}>{children}</div>
+          <div id="admin-content" className={styles.content} tabIndex={-1}>
+            {children}
+          </div>
         </div>
         <CommandPalette />
       </div>
