@@ -432,14 +432,21 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
   })
   if (!parsed.success) return parseError(parsed)
 
+  const featuredUntil = toOptionalIsoDate(parsed.data.featured_until ?? undefined)
+  const newUntil = toOptionalIsoDate(parsed.data.new_until ?? undefined)
+  if (featuredUntil === undefined || newUntil === undefined) {
+    return { ok: false, error: 'تاريخ انتهاء التمييز أو علامة «جديد» غير صحيح' }
+  }
+
   // WhatsApp gate: لا يمكن تفعيل استلام الأوردرات بدون رقم واتساب
   if (parsed.data.accepts_whatsapp_orders) {
-    const { data: wa } = await ctx.supabase
+    const { data: wa, error: waError } = await ctx.supabase
       .from('business_contact_methods')
       .select('value')
       .eq('business_id', businessId)
       .eq('method_type', 'whatsapp')
       .limit(1)
+    if (waError) return { ok: false, error: 'تعذر التحقق من رقم واتساب للنشاط' }
     if (!wa || wa.length === 0) {
       return {
         ok: false,
@@ -451,10 +458,15 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
 
   // Publication is controlled by the admin's explicit visibility setting.
   // Custom-type approval affects the label only, never whether a business can be listed.
+  const settings = {
+    ...parsed.data,
+    featured_until: featuredUntil,
+    new_until: newUntil,
+  }
 
   const { data: updated, error } = await ctx.supabase
     .from('businesses')
-    .update(parsed.data)
+    .update(settings)
     .eq('id', businessId)
     .select('id')
     .maybeSingle()
@@ -466,7 +478,7 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
     action: 'business.update.settings',
     entityType: 'business',
     entityId: businessId,
-    metadata: parsed.data as Record<string, unknown>,
+    metadata: settings as Record<string, unknown>,
   })
   revalidatePath(`/admin/businesses/${businessId}`)
   revalidateTag('businesses', 'default')
