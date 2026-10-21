@@ -370,10 +370,18 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   const d = parsed.data
 
   // Owner assignment controls who manages the business; it does not control public visibility.
+  // user_roles RLS limits ordinary session reads to the signed-in user's own row,
+  // so read the selected target only after requireAdmin() has succeeded.
+  let privileged: ReturnType<typeof createServiceClient>
+  try {
+    privileged = createServiceClient()
+  } catch {
+    return { ok: false, error: 'إنشاء النشاط غير متاح مؤقتًا — تعذر تجهيز خدمة الحفظ' }
+  }
 
   let selectedOwnerRole: 'customer' | 'merchant' | null = null
   if (d.owner_profile_id) {
-    const { data: roleRow, error: roleLookupError } = await ctx.supabase
+    const { data: roleRow, error: roleLookupError } = await privileged
       .from('user_roles')
       .select('role')
       .eq('user_id', d.owner_profile_id)
@@ -389,15 +397,6 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       return { ok: false, error: 'اختر حساب عميل أو تاجر، ولا تربط النشاط بحساب إداري' }
     }
     selectedOwnerRole = roleRow.role
-  }
-
-  let privileged: ReturnType<typeof createServiceClient>
-  try {
-    // This action is admin-gated above. The contact-method table intentionally
-    // has no authenticated write policy, so use service role only after admin auth.
-    privileged = createServiceClient()
-  } catch {
-    return { ok: false, error: 'إنشاء النشاط غير متاح مؤقتًا — تعذر تجهيز خدمة الحفظ' }
   }
 
   const finalSlug = d.slug ?? `${slugify(d.name)}-${randomBytes(8).toString('hex')}`
@@ -794,7 +793,16 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
 
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
-  const { data: currentRole, error: roleLookupError } = await ctx.supabase
+  let privileged: ReturnType<typeof createServiceClient>
+  try {
+    // This action is admin-gated; the target role is not readable through the
+    // ordinary session because user_roles RLS is self-only.
+    privileged = createServiceClient()
+  } catch {
+    return { ok: false, error: 'تعذر تجهيز خدمة ربط المالك — حاول تاني' }
+  }
+
+  const { data: currentRole, error: roleLookupError } = await privileged
     .from('user_roles')
     .select('role')
     .eq('user_id', userId)
@@ -810,16 +818,6 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
   const alreadyLinked = biz.owner_profile_id === userId
   if (alreadyLinked && currentRole.role === 'merchant') {
     return { ok: true }
-  }
-
-  let privileged: ReturnType<typeof createServiceClient>
-  try {
-    // A regular admin has authority to assign a business owner, but user_roles
-    // intentionally only permits super-admin writes via the session client.
-    // Service role is used only after requireAdmin and role eligibility checks.
-    privileged = createServiceClient()
-  } catch {
-    return { ok: false, error: 'تعذر تجهيز خدمة ربط المالك — حاول تاني' }
   }
 
   if (!alreadyLinked) {
