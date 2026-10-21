@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import WmImage from './wm-image'
 import DistanceBadge from './distance-badge'
-import { getBusinessTypeLabel, type Business } from '@/lib/data/businesses'
+import type { Business } from '@/lib/data/businesses'
+import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import {
   StarIcon,
   CrownGoldIcon,
