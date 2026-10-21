@@ -225,15 +225,29 @@ export default function BusinessRow({
             )}
 
             {status === 'published' && (
-              <button
-                type="button"
-                onClick={handleArchive}
-                disabled={pending}
-                className={styles.secondaryBtn}
-              >
-                <CloseIcon size={14} />
-                <span>إخفاء مؤقت</span>
-              </button>
+              <>
+                {b.business_type_status === 'pending' && (
+                  <Link href="/admin/business-types" className={styles.viewBtn}>
+                    <SparklesIcon size={14} />
+                    <span>مراجعة نوع النشاط</span>
+                  </Link>
+                )}
+                {b.business_type_status === 'rejected' && (
+                  <Link href={'/admin/businesses/' + b.id + '?tab=edit'} className={styles.viewBtn}>
+                    <SparklesIcon size={14} />
+                    <span>تصحيح نوع النشاط</span>
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={handleArchive}
+                  disabled={pending}
+                  className={styles.secondaryBtn}
+                >
+                  <CloseIcon size={14} />
+                  <span>إخفاء مؤقت</span>
+                </button>
+              </>
             )}
 
             {status === 'rejected' && (
