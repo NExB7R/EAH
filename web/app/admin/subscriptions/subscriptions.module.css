@@ -57,22 +57,22 @@
   flex-shrink: 0;
 }
 .pending {
-  color: #ffd9a8;
+  color: var(--gold-bright);
   background: rgba(253, 186, 116, 0.12);
   border: 1px solid rgba(253, 186, 116, 0.4);
 }
 .trial {
-  color: #c9a9ff;
+  color: var(--purple-bright);
   background: rgba(168, 85, 247, 0.1);
   border: 1px solid rgba(168, 85, 247, 0.4);
 }
 .active {
-  color: #a8f0b8;
+  color: var(--green);
   background: rgba(37, 211, 102, 0.1);
   border: 1px solid rgba(37, 211, 102, 0.35);
 }
 .expired {
-  color: #ffc8c8;
+  color: var(--red-bright);
   background: rgba(252, 165, 165, 0.12);
   border: 1px solid rgba(252, 165, 165, 0.4);
 }
@@ -147,7 +147,7 @@
 .okBtn {
   background: rgba(37, 211, 102, 0.12);
   border-color: rgba(37, 211, 102, 0.35);
-  color: #a8f0b8;
+  color: var(--green);
 }
 .okBtn:hover:not(:disabled) {
   background: rgba(37, 211, 102, 0.2);
@@ -156,7 +156,7 @@
 .dangerBtn {
   background: rgba(252, 165, 165, 0.12);
   border-color: rgba(252, 165, 165, 0.35);
-  color: #ffc8c8;
+  color: var(--red-bright);
 }
 .dangerBtn:hover:not(:disabled) {
   background: rgba(252, 165, 165, 0.2);
@@ -183,7 +183,7 @@
   border-radius: 8px;
   background: rgba(252, 165, 165, 0.1);
   border: 1px solid rgba(252, 165, 165, 0.3);
-  color: #ffc8c8;
+  color: var(--red-bright);
   font-size: 0.72rem;
   font-weight: 700;
   margin-top: 6px;
@@ -251,7 +251,7 @@
 }
 
 .statWarn .statValue {
-  color: #ffd9a8;
+  color: var(--gold-bright);
 }
 
 .statGold {

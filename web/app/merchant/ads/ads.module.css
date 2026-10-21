@@ -91,7 +91,7 @@
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: #7b7490;
+  color: var(--text-muted);
   cursor: pointer;
   transition:
     background 180ms ease,
@@ -149,7 +149,7 @@
 .hint {
   margin: 0;
   font-size: 0.72rem;
-  color: #7b7490;
+  color: var(--text-muted);
   font-weight: 600;
   line-height: 1.6;
 }
@@ -281,7 +281,7 @@
 
 .status.muted {
   background: rgba(122, 116, 144, 0.12);
-  color: #a29db5;
+  color: var(--text-tertiary);
 }
 
 .cardTitle {
@@ -338,7 +338,7 @@
 
 .statLabel {
   font-size: 0.62rem;
-  color: #7b7490;
+  color: var(--text-muted);
   font-weight: 800;
   letter-spacing: 0.3px;
 }
@@ -352,7 +352,7 @@
 .dates {
   margin: 10px 0 0;
   font-size: 0.7rem;
-  color: #a29db5;
+  color: var(--text-tertiary);
   font-weight: 700;
 }
 
@@ -431,7 +431,7 @@
 }
 
 .statOk .statValue {
-  color: #5eead4;
+  color: var(--teal-bright);
 }
 
 .statWarn {

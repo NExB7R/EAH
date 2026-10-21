@@ -78,7 +78,7 @@
   border-radius: 999px;
   background: rgba(253, 186, 116, 0.15);
   border: 1px solid rgba(253, 186, 116, 0.4);
-  color: #ffd9a8;
+  color: var(--gold-bright);
   font-size: 0.68rem;
   font-weight: 800;
 }
@@ -93,7 +93,7 @@
   border-radius: 999px;
   background: rgba(252, 165, 165, 0.15);
   border: 1px solid rgba(252, 165, 165, 0.4);
-  color: #ffc8c8;
+  color: var(--red-bright);
   font-size: 0.65rem;
   font-weight: 800;
 }
@@ -168,12 +168,12 @@
 }
 
 .deltaPlus {
-  color: #a8f0b8;
+  color: var(--green);
   background: rgba(37, 211, 102, 0.12);
 }
 
 .deltaMinus {
-  color: #ffc8c8;
+  color: var(--red-bright);
   background: rgba(252, 165, 165, 0.12);
 }
 
@@ -216,7 +216,7 @@
   border-radius: 999px;
   background: rgba(252, 165, 165, 0.15);
   border: 1px solid rgba(252, 165, 165, 0.4);
-  color: #ffc8c8;
+  color: var(--red-bright);
   font-size: 0.68rem;
   font-weight: 800;
 }

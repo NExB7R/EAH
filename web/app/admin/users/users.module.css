@@ -32,7 +32,7 @@
   padding: 9px 14px;
   border-radius: 8px;
   text-decoration: none;
-  color: #a29db5;
+  color: var(--text-tertiary);
   font-size: 0.78rem;
   font-weight: 800;
   text-align: center;
@@ -228,7 +228,7 @@
   gap: 6px;
   flex-wrap: wrap;
   font-size: 0.72rem;
-  color: #a29db5;
+  color: var(--text-tertiary);
   font-weight: 700;
 }
 
@@ -362,7 +362,7 @@
 
 .cancelBtn {
   background: transparent;
-  color: #a29db5;
+  color: var(--text-tertiary);
   border-color: rgba(168, 85, 247, 0.2);
 }
 

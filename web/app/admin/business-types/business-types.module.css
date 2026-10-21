@@ -132,7 +132,7 @@
 .approveBtn {
   background: rgba(20, 184, 166, 0.1);
   border-color: rgba(20, 184, 166, 0.35);
-  color: #5eead4;
+  color: var(--teal-bright);
 }
 
 .approveBtn:hover:not(:disabled) {
