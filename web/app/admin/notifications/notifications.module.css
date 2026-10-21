@@ -210,13 +210,19 @@
 
 .tabs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   margin-bottom: 20px;
   padding: 6px;
   border-radius: var(--radius-lg);
   background: rgba(10, 5, 20, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.12);
+}
+
+@media (max-width: 900px) {
+  .tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 640px) {
@@ -359,5 +365,134 @@
   }
   .historyStats {
     gap: 8px;
+  }
+}
+
+
+/* Personal inbox — part of the same communication workspace. */
+.inboxList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.inboxItem {
+  margin: 0;
+}
+
+.inboxCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: 14px;
+  background: linear-gradient(150deg, rgba(26, 15, 43, 0.88), rgba(11, 6, 20, 0.94));
+}
+
+.inboxUnread {
+  border-color: rgba(232, 199, 154, 0.52);
+  background: linear-gradient(125deg, rgba(74, 48, 18, 0.26), rgba(20, 12, 33, 0.95));
+}
+
+.inboxIndicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  min-width: 24px;
+  height: 28px;
+  color: var(--teal);
+}
+
+.inboxDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--gold-light);
+  box-shadow: 0 0 10px rgba(232, 199, 154, 0.55);
+}
+
+.inboxBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.inboxTitle {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  font-weight: 850;
+  line-height: 1.5;
+}
+
+.inboxText {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.inboxDate {
+  color: var(--text-tertiary);
+  font-size: 0.68rem;
+  font-weight: 650;
+}
+
+.inboxLink {
+  align-self: flex-start;
+  color: var(--purple-light);
+  font-size: 0.73rem;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.inboxReadButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 7px 10px;
+  border: 1px solid rgba(85, 231, 209, 0.32);
+  border-radius: 9px;
+  background: rgba(85, 231, 209, 0.08);
+  color: var(--teal);
+  font-size: 0.7rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.inboxReadButton:hover:not(:disabled) {
+  border-color: rgba(85, 231, 209, 0.66);
+  background: rgba(85, 231, 209, 0.14);
+}
+
+.inboxReadButton:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+@media (max-width: 640px) {
+  .inboxCard {
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+
+  .inboxBody {
+    flex-basis: calc(100% - 40px);
+  }
+
+  .inboxReadButton {
+    margin-inline-start: 36px;
   }
 }
