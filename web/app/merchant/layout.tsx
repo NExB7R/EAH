@@ -10,10 +10,16 @@ import { getRoleContext, getRedirectForRole } from '@/lib/auth/roles'
 import styles from './merchant.module.css'
 
 export default async function MerchantLayout({ children }: { children: React.ReactNode }) {
-  const session = await getUserSession()
-  if (!session) redirect('/auth?next=/merchant')
-
   const pathname = (await headers()).get('x-pathname') ?? '/merchant'
+
+  // The application wizard owns its public shell and deliberately supports
+  // signed-out visitors. Do not wrap it in the merchant dashboard or redirect
+  // it to merchant sign-in before the form can render.
+  if (pathname.startsWith('/merchant/apply')) return children
+
+  const session = await getUserSession()
+  if (!session) redirect(`/auth?next=${encodeURIComponent(pathname)}`)
+
   const { role } = await getRoleContext()
   const redirectTo = getRedirectForRole(role, pathname)
   if (redirectTo) redirect(redirectTo)
