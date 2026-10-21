@@ -365,7 +365,7 @@ export const TYPE_LABEL: Record<string, string> = {
   pharmacy: 'صيدلية',
   supermarket: 'ماركت',
   delivery_office: 'توصيل',
-  misc: 'نشاط',
+  misc: 'أخرى',
 }
 
 export const TIER_LABEL: Record<string, string> = {
