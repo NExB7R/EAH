@@ -73,7 +73,6 @@ const SECTIONS: Section[] = [
       { href: '/admin/subscriptions', label: 'الاشتراكات', Icon: CrownGoldIcon, badgeKey: 'pendingSubscriptions' },
       { href: '/admin/ads', label: 'الإعلانات', Icon: TagIcon },
       { href: '/admin/featured', label: 'الأنشطة المميزة', Icon: CrownGoldIcon },
-      { href: '/admin/insights', label: 'تخزين التقارير الذكية', Icon: SparklesIcon },
     ],
   },
   {
@@ -82,6 +81,7 @@ const SECTIONS: Section[] = [
       { href: '/admin/notifications', label: 'التواصل والإشعارات', Icon: BellIcon },
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
       { href: '/admin/health', label: 'صحة النظام والأخطاء', Icon: AlertIcon },
+      { href: '/admin/insights', label: 'تخزين التقارير الذكية', Icon: SparklesIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
       { href: '/admin/profile', label: 'بروفايلي', Icon: UserIcon },
       { href: '/admin/settings', label: 'الإعدادات', Icon: SettingsIcon },
