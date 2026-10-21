@@ -39,6 +39,14 @@ function fdBool(formData: FormData, key: string): boolean {
   return formData.get(key) === 'on' || formData.get(key) === 'true' || formData.get(key) === '1'
 }
 
+/** Convert an optional date input to ISO without throwing on malformed user input. */
+function toOptionalIsoDate(value: string | undefined): string | null | undefined {
+  if (!value?.trim()) return null
+  const date = new Date(value)
+  if (!Number.isFinite(date.getTime())) return undefined
+  return date.toISOString()
+}
+
 // ═══ 1. الأساسيات ═══
 export async function saveBasics(businessId: string, formData: FormData): Promise<Result> {
   const ctx = await requireAdmin()
@@ -818,21 +826,28 @@ export async function saveNotice(businessId: string, formData: FormData): Promis
   const notice = fd(formData, 'important_notice')
   const expiresAt = fd(formData, 'notice_expires_at')
   const severity = fd(formData, 'notice_severity') || 'info'
+  const expiresAtIso = toOptionalIsoDate(expiresAt)
 
   if (notice.length > 500) return { ok: false, error: 'النص طويل (500 حرف كحد أقصى)' }
   if (!['info', 'warning', 'critical'].includes(severity)) {
     return { ok: false, error: 'مستوى التنبيه غير صحيح' }
   }
+  if (expiresAtIso === undefined) {
+    return { ok: false, error: 'تاريخ انتهاء التنبيه غير صحيح' }
+  }
 
-  const { error } = await ctx.supabase
+  const { data: updated, error } = await ctx.supabase
     .from('businesses')
     .update({
       important_notice: notice || null,
-      notice_expires_at: expiresAt || null,
+      notice_expires_at: expiresAtIso,
       notice_severity: severity,
     })
     .eq('id', businessId)
-  if (error) return { ok: false, error: error.message }
+    .select('id')
+    .maybeSingle()
+  if (error) return { ok: false, error: 'تعذر حفظ التنبيه — راجع البيانات وحاول تاني' }
+  if (!updated) return { ok: false, error: 'النشاط مش موجود' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
@@ -853,13 +868,20 @@ export async function saveOpenOverride(
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  if (!['auto', 'open', 'closed'].includes(override)) {
+    return { ok: false, error: 'حالة الفتح غير صحيحة' }
+  }
+
   const value = override === 'auto' ? null : override === 'open'
 
-  const { error } = await ctx.supabase
+  const { data: updated, error } = await ctx.supabase
     .from('businesses')
     .update({ open_now_override: value })
     .eq('id', businessId)
-  if (error) return { ok: false, error: error.message }
+    .select('id')
+    .maybeSingle()
+  if (error) return { ok: false, error: 'تعذر حفظ حالة الفتح' }
+  if (!updated) return { ok: false, error: 'النشاط مش موجود' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
