@@ -10,8 +10,8 @@ import {
   getUserActivity,
   computeReviewStats,
   getBusinessOffers,
-  TYPE_LABEL,
 } from '@/lib/data/business-detail'
+import { getBusinessTypeLabel } from '@/lib/data/businesses'
 import { computeIsOpenNow } from '@/lib/data/business-detail'
 import BusinessNotice from '@/components/business-notice'
 import { getFeatureFlags } from '@/lib/features'
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description:
       business.description ??
       business.hook ??
-      `${business.name} — ${TYPE_LABEL[business.business_type]} في ${business.area ?? 'شبين القناطر'}`,
+      `${business.name} — ${getBusinessTypeLabel(business)} في ${business.area ?? 'شبين القناطر'}`,
   }
 }
 
@@ -262,7 +262,7 @@ export default async function BusinessPage({ params }: Props) {
                   <CrownGoldIcon size={18} />
                 </span>
                 <h2 className={styles.similarTitle}>
-                  {TYPE_LABEL[business.business_type]} تانية قريبة
+                  {getBusinessTypeLabel(business)} تانية قريبة
                 </h2>
               </div>
             </header>
