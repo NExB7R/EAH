@@ -21,7 +21,8 @@ const TABS: { key: TabKey; label: string; Icon: typeof BellIcon }[] = [
 
 export default function NotificationsTabs() {
   const searchParams = useSearchParams()
-  const current = (searchParams.get('tab') ?? 'send') as TabKey
+  const requested = searchParams.get('tab')
+  const current: TabKey = TABS.some((tab) => tab.key === requested) ? (requested as TabKey) : 'send'
 
   return (
     <nav className={styles.tabs} aria-label="أقسام الإشعارات">
