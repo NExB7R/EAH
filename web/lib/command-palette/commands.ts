@@ -99,9 +99,6 @@ export const COMMANDS: Command[] = [
     group: 'navigation',
     keywords: ['moderation', 'reviews', 'reports', 'مراجعة', 'تقييمات', 'إبلاغات'],
   },
-
-
-
   {
     id: 'admin-notifications',
     label: 'الإشعارات',
