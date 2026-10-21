@@ -87,13 +87,16 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
   }
 
   // 2. فحص إنه مش عنده نشاط بالفعل
-  const { data: existing } = await supabase
+  const { data: existing, error: existingLookupError } = await supabase
     .from('businesses')
     .select('id')
     .eq('owner_profile_id', user.id)
     .limit(1)
     .maybeSingle()
 
+  if (existingLookupError) {
+    return { ok: false, error: 'تعذر التحقق من الأنشطة المرتبطة بحسابك — حاول تاني' }
+  }
   if (existing) {
     return { ok: false, error: 'عندك نشاط مسجّل بالفعل' }
   }
