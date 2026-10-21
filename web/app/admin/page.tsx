@@ -5,7 +5,6 @@ import {
   FileTextIcon,
   StarIcon,
   UserIcon,
-  AlertIcon,
   CheckCircleIcon,
   ArrowLeftIcon,
   ShieldCheckIcon,
