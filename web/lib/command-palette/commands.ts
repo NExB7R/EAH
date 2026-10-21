@@ -47,8 +47,8 @@ export const COMMANDS: Command[] = [
   },
   {
     id: 'admin-business-types',
-    label: 'أنواع الأنشطة',
-    description: 'إدارة التصنيفات المتاحة على المنصة',
+    label: 'أنواع الأنشطة المقترحة',
+    description: 'مراجعة أسماء أنواع الأنشطة المقدمة من التجار',
     href: '/admin/business-types',
     icon: SparklesIcon,
     group: 'navigation',
@@ -119,8 +119,8 @@ export const COMMANDS: Command[] = [
   },
   {
     id: 'admin-notifications',
-    label: 'التواصل والإشعارات',
-    description: 'إرسال إشعارات وسجل الإرسال',
+    label: 'الإشعارات والرسائل',
+    description: 'إرسال إشعارات، إدارة التنبيهات، ومراجعة سجل الإرسال',
     href: '/admin/notifications',
     icon: BellIcon,
     group: 'navigation',
@@ -138,7 +138,7 @@ export const COMMANDS: Command[] = [
   {
     id: 'admin-studio',
     label: 'الاستوديو',
-    description: 'الميزات والنصوص',
+    description: 'إدارة الميزات والنصوص',
     href: '/admin/studio',
     icon: SparklesIcon,
     group: 'navigation',
