@@ -24,7 +24,7 @@ export async function bulkApproveBusinesses(ids: string[]): Promise<Result> {
 
   const { data: businesses, error: lookupError } = await ctx.supabase
     .from('businesses')
-    .select('id, name, slug, owner_profile_id, business_type_status')
+    .select('id, name, slug, owner_profile_id')
     .in('id', parsed.data)
 
   if (lookupError) return { ok: false, error: 'تعذر تحميل الأنشطة المحددة — حاول تاني' }
@@ -32,16 +32,6 @@ export async function bulkApproveBusinesses(ids: string[]): Promise<Result> {
   if (selectedBusinesses.length !== parsed.data.length) {
     return { ok: false, error: 'بعض الأنشطة المحددة غير موجود أو غير متاح للمراجعة' }
   }
-  const blockedType = selectedBusinesses.find(
-    (business) => business.business_type_status === 'pending' || business.business_type_status === 'rejected',
-  )
-  if (blockedType) {
-    return {
-      ok: false,
-      error: 'فيه نشاط نوعه المخصص لسه محتاج قرار. راجع «أنواع الأنشطة الجديدة» الأول، وبعد الموافقة انشره.',
-    }
-  }
-
   const { data: updated, error } = await ctx.supabase
     .from('businesses')
     .update({
