@@ -78,6 +78,10 @@ export default function BusinessRow({
 
   const isRejected = !!b.rejected_at
   const status = b.is_published ? 'published' : isRejected ? 'rejected' : 'pending'
+  const customType = b.custom_business_type?.trim()
+  const typeLabel = customType && b.business_type_status === 'approved'
+    ? customType
+    : TYPE_LABEL[b.business_type] ?? b.business_type
 
   return (
     <div
@@ -128,7 +132,13 @@ export default function BusinessRow({
         </div>
 
         <div className={styles.meta}>
-          <span>{TYPE_LABEL[b.business_type] ?? b.business_type}</span>
+          <span>{typeLabel}</span>
+          {customType && b.business_type_status !== 'approved' && (
+            <>
+              <span className={styles.dot}>·</span>
+              <span>النوع المقترح: {customType}</span>
+            </>
+          )}
           {b.area && (
             <>
               <span className={styles.dot}>·</span>
@@ -187,21 +197,20 @@ export default function BusinessRow({
           <div className={styles.actions}>
             {status === 'pending' && (
               <>
-                {b.business_type_status === 'pending' ? (
+                <button
+                  type="button"
+                  onClick={handleApprove}
+                  disabled={pending}
+                  className={styles.approveBtn}
+                >
+                  <CheckCircleIcon size={14} />
+                  <span>موافقة ونشر</span>
+                </button>
+                {b.business_type_status === 'pending' && (
                   <Link href="/admin/business-types" className={styles.viewBtn}>
                     <SparklesIcon size={14} />
                     <span>مراجعة نوع النشاط</span>
                   </Link>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleApprove}
-                    disabled={pending}
-                    className={styles.approveBtn}
-                  >
-                    <CheckCircleIcon size={14} />
-                    <span>موافقة</span>
-                  </button>
                 )}
                 <button
                   type="button"
@@ -228,17 +237,7 @@ export default function BusinessRow({
             )}
 
             {status === 'rejected' && (
-              b.business_type_status === 'pending' ? (
-                <Link href="/admin/business-types" className={styles.viewBtn}>
-                  <SparklesIcon size={14} />
-                  <span>مراجعة نوع النشاط</span>
-                </Link>
-              ) : b.business_type_status === 'rejected' ? (
-                <Link href={'/admin/businesses/' + b.id + '?tab=edit'} className={styles.viewBtn}>
-                  <SparklesIcon size={14} />
-                  <span>تصحيح نوع النشاط</span>
-                </Link>
-              ) : (
+              <>
                 <button
                   type="button"
                   onClick={handleRepublish}
@@ -248,7 +247,19 @@ export default function BusinessRow({
                   <CheckCircleIcon size={14} />
                   <span>إعادة نشر</span>
                 </button>
-              )
+                {b.business_type_status === 'pending' && (
+                  <Link href="/admin/business-types" className={styles.viewBtn}>
+                    <SparklesIcon size={14} />
+                    <span>مراجعة نوع النشاط</span>
+                  </Link>
+                )}
+                {b.business_type_status === 'rejected' && (
+                  <Link href={'/admin/businesses/' + b.id + '?tab=edit'} className={styles.viewBtn}>
+                    <SparklesIcon size={14} />
+                    <span>تصحيح نوع النشاط</span>
+                  </Link>
+                )}
+              </>
             )}
 
             <Link href={`/admin/businesses/${b.id}`} className={styles.viewBtn}>
