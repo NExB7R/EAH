@@ -41,7 +41,19 @@ export type AdminBusiness = {
   notice_severity: 'info' | 'warning' | 'critical'
   owner: { id: string; display_name: string; phone: string | null } | null
   contacts: { method_type: string; value: string; is_primary: boolean }[]
-  branches: { id: string; name: string; area: string | null; address_text: string | null }[]
+  branches: {
+    id: string
+    name: string
+    area: string | null
+    address_text: string | null
+    latitude: number | null
+    longitude: number | null
+    phone: string | null
+    whatsapp: string | null
+    is_primary: boolean
+    is_active: boolean
+    sort_order: number
+  }[]
   media: { id: string; media_type: string; storage_path: string }[]
   offers: {
     id: string
@@ -88,10 +100,10 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
       .eq('business_id', id),
     supabase
       .from('business_branches')
-      .select('id, name, area, address_text')
+      .select('id, name, area, address_text, latitude, longitude, phone, whatsapp, is_primary, is_active, sort_order')
       .eq('business_id', id)
-      .eq('is_active', true)
-      .order('is_primary', { ascending: false }),
+      .order('is_primary', { ascending: false })
+      .order('sort_order', { ascending: true }),
     supabase
       .from('business_media')
       .select('id, media_type, storage_path')
