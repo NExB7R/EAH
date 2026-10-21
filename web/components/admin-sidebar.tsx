@@ -128,7 +128,7 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
             <h4 className={styles.sectionTitle}>{section.title}</h4>
             <ul className={styles.list}>
               {section.items.map(({ href, label, Icon, badgeKey }) => {
-                const [baseHref, queryString] = href.split('?')
+                const [baseHref = href, queryString] = href.split('?')
                 const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null
                 const isModerationPage = baseHref === '/admin/moderation'
                 const active = baseHref === '/admin'
