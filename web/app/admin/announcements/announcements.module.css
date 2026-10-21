@@ -270,7 +270,7 @@
 .date {
   margin-left: auto;
   font-size: 0.68rem;
-  color: #7b7490;
+  color: var(--text-muted);
   font-weight: 700;
 }
 
@@ -292,7 +292,7 @@
 .rowSchedule {
   margin: 0 0 6px;
   font-size: 0.72rem;
-  color: #a29db5;
+  color: var(--text-tertiary);
   font-weight: 700;
 }
 

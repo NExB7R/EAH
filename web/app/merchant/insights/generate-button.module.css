@@ -33,5 +33,5 @@
 .error {
   font-size: 0.72rem;
   font-weight: 800;
-  color: #ffc8c8;
+  color: var(--red-bright);
 }

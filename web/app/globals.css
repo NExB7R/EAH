@@ -24,6 +24,13 @@
   --gold-soft: rgba(232, 199, 154, 0.12);
   --gold-line: rgba(232, 199, 154, 0.28);
 
+  /* ── Status colors (from admin/merchant panels) ─────── */
+  --gold-bright: #ffd9a8;
+  --red-bright: #ffc8c8;
+  --green: #a8f0b8;
+  --purple-bright: #c9a9ff;
+  --teal-bright: #5eead4;
+
   /* Status */
   --teal: #55e7d1;
   --orange: #fdba74;

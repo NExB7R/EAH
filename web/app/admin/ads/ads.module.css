@@ -73,7 +73,7 @@
 .slotDesc {
   margin: 0 0 12px;
   font-size: 0.75rem;
-  color: #a29db5;
+  color: var(--text-tertiary);
   line-height: 1.5;
 }
 
@@ -94,7 +94,7 @@
 
 .priceUnit {
   font-size: 0.7rem;
-  color: #7b7490;
+  color: var(--text-muted);
   font-weight: 700;
 }
 
@@ -112,7 +112,7 @@
   text-align: center;
   font-size: 0.85rem;
   font-weight: 700;
-  color: #7b7490;
+  color: var(--text-muted);
 }
 
 .adCard {
@@ -176,7 +176,7 @@
 
 .status.muted {
   background: rgba(122, 116, 144, 0.12);
-  color: #a29db5;
+  color: var(--text-tertiary);
 }
 
 .price {
@@ -196,7 +196,7 @@
 .adBiz {
   margin: 0 0 8px;
   font-size: 0.75rem;
-  color: #a29db5;
+  color: var(--text-tertiary);
   font-weight: 700;
 }
 
@@ -238,7 +238,7 @@
   margin-top: 10px;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #a29db5;
+  color: var(--text-tertiary);
 }
 
 .adActions {
@@ -279,7 +279,7 @@
 
 .mutedBtn {
   background: rgba(122, 116, 144, 0.1);
-  color: #a29db5;
+  color: var(--text-tertiary);
   border-color: rgba(122, 116, 144, 0.2);
 }
 
@@ -343,7 +343,7 @@
 }
 
 .statWarn .statValue {
-  color: #ffd9a8;
+  color: var(--gold-bright);
 }
 
 .statOk {

@@ -259,7 +259,7 @@
 }
 
 .statWarn .statValue {
-  color: #ffd9a8;
+  color: var(--gold-bright);
 }
 
 .statLabel {

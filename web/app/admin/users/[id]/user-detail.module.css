@@ -79,7 +79,7 @@
 .badgeTeal {
   background: rgba(20, 184, 166, 0.12);
   border-color: rgba(20, 184, 166, 0.35);
-  color: #5eead4;
+  color: var(--teal-bright);
 }
 
 .badgeDanger {
@@ -187,7 +187,7 @@
 .btnTeal {
   background: rgba(20, 184, 166, 0.08);
   border-color: rgba(20, 184, 166, 0.3);
-  color: #5eead4;
+  color: var(--teal-bright);
 }
 
 .btnTeal:hover:not(:disabled) {
@@ -393,7 +393,7 @@
   border-radius: 999px;
   background: rgba(20, 184, 166, 0.12);
   border: 1px solid rgba(20, 184, 166, 0.3);
-  color: #5eead4;
+  color: var(--teal-bright);
   font-size: 0.62rem;
   font-weight: 900;
 }

@@ -60,7 +60,7 @@
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: #7b7490;
+  color: var(--text-muted);
   cursor: pointer;
   transition:
     background 180ms ease,
@@ -246,7 +246,7 @@
   flex-wrap: wrap;
   margin-bottom: 12px;
   font-size: 0.75rem;
-  color: #a29db5;
+  color: var(--text-tertiary);
   font-weight: 700;
 }
 
@@ -254,7 +254,7 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: #a29db5;
+  color: var(--text-tertiary);
   text-decoration: none;
   transition: color 180ms ease;
 }
@@ -270,7 +270,7 @@
 .coords {
   font-family: ui-monospace, monospace;
   font-size: 0.7rem;
-  color: #7b7490;
+  color: var(--text-muted);
   padding: 2px 8px;
   border-radius: 6px;
   background: rgba(168, 85, 247, 0.06);
@@ -389,7 +389,7 @@
 }
 
 .statOk .statValue {
-  color: #5eead4;
+  color: var(--teal-bright);
 }
 
 .statWarn .statValue {

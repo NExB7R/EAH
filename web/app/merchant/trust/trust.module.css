@@ -85,12 +85,12 @@
 }
 
 .eventDeltaPlus {
-  color: #a8f0b8;
+  color: var(--green);
   background: rgba(37, 211, 102, 0.12);
 }
 
 .eventDeltaMinus {
-  color: #ffc8c8;
+  color: var(--red-bright);
   background: rgba(252, 165, 165, 0.12);
 }
 

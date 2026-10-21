@@ -370,7 +370,7 @@
 }
 
 .statOk .statValue {
-  color: #5eead4;
+  color: var(--teal-bright);
 }
 
 .statWarn .statValue {

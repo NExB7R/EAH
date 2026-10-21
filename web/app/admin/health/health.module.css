@@ -97,7 +97,7 @@
 }
 
 .sev_low {
-  border-inline-start-color: var(--text-tertiary, #a29db5);
+  border-inline-start-color: var(--text-tertiary, var(--text-tertiary));
 }
 .sev_medium {
   border-inline-start-color: var(--purple-2, #a855f7);
@@ -264,7 +264,7 @@
   border-radius: 7px;
   background: rgba(20, 184, 166, 0.1);
   border: 1px solid rgba(20, 184, 166, 0.3);
-  color: #5eead4;
+  color: var(--teal-bright);
   font-family: var(--font-body);
   font-size: 0.7rem;
   font-weight: 800;
