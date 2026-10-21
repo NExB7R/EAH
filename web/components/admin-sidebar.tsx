@@ -172,12 +172,10 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
                   {section.items.map(({ href, label, Icon, badgeKey }) => {
                     const [baseHref = href, queryString] = href.split('?')
                     const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null
-                    const isModerationPage = baseHref === '/admin/moderation'
                     const active = baseHref === '/admin'
                       ? pathname === '/admin'
-                      : pathname.startsWith(baseHref) && (targetTab
-                        ? searchParams.get('tab') === targetTab
-                        : !(isModerationPage && searchParams.get('tab') === 'reports'))
+                      : pathname.startsWith(baseHref) &&
+                        (targetTab ? searchParams.get('tab') === targetTab : true)
                     const badgeValue = badgeKey === 'moderationWork'
                       ? (counts?.flaggedReviews ?? 0) + (counts?.openReports ?? 0)
                       : badgeKey ? counts?.[badgeKey] : undefined
