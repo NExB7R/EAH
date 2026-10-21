@@ -11,7 +11,7 @@ import {
   computeReviewStats,
   getBusinessOffers,
 } from '@/lib/data/business-detail'
-import { getBusinessTypeLabel } from '@/lib/data/businesses'
+import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import { computeIsOpenNow } from '@/lib/data/business-detail'
 import BusinessNotice from '@/components/business-notice'
 import { getFeatureFlags } from '@/lib/features'
