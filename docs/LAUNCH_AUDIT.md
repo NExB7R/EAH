@@ -37,6 +37,7 @@
 - IP fingerprints in engagement telemetry now omit the fingerprint when `EAH_VISITOR_SALT` is not configured instead of using a known static fallback; the live column permits null.
 - CSP violation telemetry is now rate-limited, request-size bounded, parsed defensively, and logs only truncated fields.
 - Shared Cloudinary upload logic now checks the actual image signature and re-labels the uploaded part from detected bytes; SVG/unknown raster formats are not accepted as images.
+- Admin CSV exports now have a dedicated fail-closed limiter (10 requests per 15 minutes per admin/IP key), validates export types and bounds filter lengths before querying.
 - Admin and merchant business-image endpoints cap declared multipart request size, handle malformed forms, and validate the admin business UUID before privileged operations.
 - Offline queue writes now enforce an 8 KiB body cap, bound review dimensions/slugs, avoid raw DB error disclosure, and check favorite/follow/like write results before returning success.
 - Anonymous AI rate-limit keys now use the shared proxy-aware IP helper rather than trusting the first client-supplied `X-Forwarded-For` token.
