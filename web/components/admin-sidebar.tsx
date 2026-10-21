@@ -167,9 +167,12 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
                   className={`${styles.sectionChevron} ${sectionOpen ? styles.sectionChevronOpen : ''}`}
                 />
               </button>
-              {sectionOpen && (
-                <ul id={`admin-section-${section.key}`} className={styles.list}>
-                  {section.items.map(({ href, label, Icon, badgeKey }) => {
+              <ul
+                id={`admin-section-${section.key}`}
+                hidden={!sectionOpen}
+                className={styles.list}
+              >
+                {section.items.map(({ href, label, Icon, badgeKey }) => {
                     const [baseHref = href, queryString] = href.split('?')
                     const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null
                     const active = baseHref === '/admin'
@@ -199,9 +202,8 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
                         </Link>
                       </li>
                     )
-                  })}
-                </ul>
-              )}
+                })}
+              </ul>
             </div>
           )
         })}
