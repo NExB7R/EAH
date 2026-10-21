@@ -39,7 +39,6 @@ export default function ErrorRow({ error: e }: { error: SystemError }) {
   const [pending, startTransition] = useTransition()
   const [expanded, setExpanded] = useState(false)
   const [err, setErr] = useState<string | null>(null)
-  const [hidden, setHidden] = useState(false)
   const [resolvedOptimistic, setResolvedOptimistic] = useState(!!e.resolved_at)
   const resolved = resolvedOptimistic
 
@@ -49,7 +48,6 @@ export default function ErrorRow({ error: e }: { error: SystemError }) {
     startTransition(async () => {
       const res = await fn()
       if (res.ok) {
-        if (optimisticFlip) setHidden(true)
         router.refresh()
       } else {
         setResolvedOptimistic(!optimisticFlip)
@@ -61,8 +59,6 @@ export default function ErrorRow({ error: e }: { error: SystemError }) {
   const handleToggle = () => {
     run(() => (resolved ? unresolveError(e.id) : resolveError(e.id)), !resolved)
   }
-
-  if (hidden) return null
 
   return (
     <li
