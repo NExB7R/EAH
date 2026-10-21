@@ -26,7 +26,7 @@
 .sectionTitle {
   margin: 0 0 5px;
   padding: 0 10px;
-  color: var(--admin-text-subtle, var(--text-muted));
+  color: #b7a8ce;
   font-size: 0.65rem;
   font-weight: 850;
   letter-spacing: 0.035em;
@@ -50,7 +50,7 @@
   padding: 8px 10px;
   border: 1px solid transparent;
   border-radius: 11px;
-  color: var(--admin-text-muted, var(--text-tertiary));
+  color: var(--text-secondary);
   font-size: 0.79rem;
   font-weight: 700;
   line-height: 1.45;
@@ -59,15 +59,16 @@
 }
 
 .item:hover {
-  border-color: var(--admin-border, var(--border-purple-soft));
-  background: var(--bg-surface);
-  color: var(--admin-text, var(--text-primary));
+  border-color: rgba(199, 125, 255, 0.25);
+  background: rgba(168, 85, 247, 0.11);
+  color: var(--text-primary);
 }
 
 .active {
-  border-color: var(--admin-accent-line, rgba(168, 85, 247, 0.36));
-  background: var(--admin-accent-soft, rgba(168, 85, 247, 0.13));
-  color: var(--admin-accent, var(--purple-light));
+  border-color: rgba(199, 125, 255, 0.48);
+  background: linear-gradient(115deg, rgba(168, 85, 247, 0.29), rgba(157, 78, 221, 0.17));
+  color: #e5c5ff;
+  box-shadow: inset 0 0 0 1px rgba(199, 125, 255, 0.09), 0 0 18px rgba(168, 85, 247, 0.11);
 }
 
 .active::before {
@@ -76,7 +77,8 @@
   inset-inline-start: -1px;
   width: 3px;
   border-radius: 4px;
-  background: var(--admin-accent-strong, var(--purple-primary));
+  background: linear-gradient(180deg, var(--purple-light), var(--purple-neon));
+  box-shadow: 0 0 12px rgba(199, 125, 255, 0.55);
   content: '';
 }
 
@@ -88,7 +90,7 @@
   height: 29px;
   flex-shrink: 0;
   border-radius: 9px;
-  background: var(--bg-surface);
+  background: rgba(168, 85, 247, 0.10);
   color: currentColor;
 }
 
@@ -111,10 +113,11 @@
   min-width: 22px;
   height: 20px;
   padding: 0 6px;
-  border: 1px solid rgba(232, 199, 154, 0.25);
+  border: 1px solid rgba(253, 186, 116, 0.62);
   border-radius: 7px;
-  background: rgba(232, 199, 154, 0.12);
-  color: var(--gold-primary);
+  background: linear-gradient(135deg, #fdba74, #e8c79a);
+  color: #1b1026;
+  box-shadow: 0 0 9px rgba(253, 186, 116, 0.2);
   font-size: 0.64rem;
   font-weight: 850;
   font-variant-numeric: tabular-nums;
