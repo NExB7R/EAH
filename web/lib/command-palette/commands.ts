@@ -99,33 +99,9 @@ export const COMMANDS: Command[] = [
     group: 'navigation',
     keywords: ['moderation', 'reviews', 'reports', 'مراجعة', 'تقييمات', 'إبلاغات'],
   },
-  {
-    id: 'admin-reports',
-    label: 'بلاغات المستخدمين',
-    description: 'متابعة البلاغات الواردة من المستخدمين',
-    href: '/admin/reports',
-    icon: AlertIcon,
-    group: 'navigation',
-    keywords: ['reports', 'تقارير'],
-  },
-  {
-    id: 'admin-fraud',
-    label: 'كشف الاحتيال',
-    description: 'التقييمات المشتبه فيها',
-    href: '/admin/fraud',
-    icon: AlertIcon,
-    group: 'navigation',
-    keywords: ['fraud', 'abuse', 'احتيال'],
-  },
-  {
-    id: 'admin-announcements',
-    label: 'الإعلانات والتنبيهات',
-    description: 'إدارة الرسائل الظاهرة للمستخدمين',
-    href: '/admin/announcements',
-    icon: BellIcon,
-    group: 'navigation',
-    keywords: ['announcements', 'banner', 'تنبيهات', 'إعلانات المنصة'],
-  },
+
+
+
   {
     id: 'admin-notifications',
     label: 'الإشعارات',
@@ -173,12 +149,12 @@ export const COMMANDS: Command[] = [
   },
   {
     id: 'admin-insights',
-    label: 'الرؤى الذكية',
-    description: 'ملخصات تساعدك على فهم أداء المنصة',
+    label: 'تخزين التقارير الذكية',
+    description: 'عرض محفوظات الرؤى الذكية حسب النشاط',
     href: '/admin/insights',
     icon: SparklesIcon,
     group: 'navigation',
-    keywords: ['insights', 'ai', 'رؤى'],
+    keywords: ['insights', 'storage', 'reports', 'ai', 'تخزين', 'تقارير', 'رؤى'],
   },
   {
     id: 'admin-health',
