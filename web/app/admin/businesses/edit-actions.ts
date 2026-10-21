@@ -97,6 +97,64 @@ export async function saveBasics(businessId: string, formData: FormData): Promis
   return { ok: true }
 }
 
+// ═══ 1b. تصحيح اسم النوع المخصص وإعادة إرساله للمراجعة ═══
+export async function saveCustomBusinessType(
+  businessId: string,
+  customBusinessType: string,
+): Promise<Result> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  if (!z.string().uuid().safeParse(businessId).success) {
+    return { ok: false, error: 'معرّف النشاط غير صحيح' }
+  }
+
+  const cleanType = customBusinessType.trim()
+  if (cleanType.length < 2 || cleanType.length > 50) {
+    return { ok: false, error: 'اسم النوع لازم يكون من حرفين إلى 50 حرفًا' }
+  }
+
+  const { data: business, error: lookupError } = await ctx.supabase
+    .from('businesses')
+    .select('id, business_type')
+    .eq('id', businessId)
+    .maybeSingle()
+  if (lookupError) return { ok: false, error: 'تعذر التحقق من النشاط' }
+  if (!business) return { ok: false, error: 'النشاط مش موجود' }
+  if (business.business_type !== 'misc') {
+    return { ok: false, error: 'اختار «أخرى» كنوع أساسي قبل تعديل الاسم المخصص' }
+  }
+
+  const { data: updated, error } = await ctx.supabase
+    .from('businesses')
+    .update({
+      custom_business_type: cleanType,
+      business_type_status: 'pending',
+      business_type_approved_at: null,
+    })
+    .eq('id', businessId)
+    .select('id')
+    .maybeSingle()
+
+  if (error) return { ok: false, error: 'تعذر حفظ النوع المخصص لإعادة المراجعة' }
+  if (!updated) return { ok: false, error: 'النشاط مش موجود أو لم يتم تحديثه' }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'business_type.resubmit',
+    entityType: 'business',
+    entityId: businessId,
+    metadata: { business_type_status: 'pending' },
+  })
+
+  revalidatePath('/admin/business-types')
+  revalidatePath('/admin/businesses')
+  revalidatePath(`/admin/businesses/${businessId}`)
+  revalidateTag('businesses', 'default')
+  revalidateTag('admin-badges', 'default')
+  return { ok: true }
+}
+
 // ═══ 2. التواصل ═══
 export async function saveContacts(businessId: string, formData: FormData): Promise<Result> {
   const ctx = await requireAdmin()
