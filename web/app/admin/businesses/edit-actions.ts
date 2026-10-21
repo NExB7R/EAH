@@ -240,6 +240,9 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
   const hasLat = parsed.data.latitude !== null && parsed.data.latitude !== undefined
   const hasLng = parsed.data.longitude !== null && parsed.data.longitude !== undefined
   if (hasLat !== hasLng) return { ok: false, error: 'لازم الإحداثيين مع بعض أو الاتنين فاضيين' }
+  if (parsed.data.is_primary && !parsed.data.is_active) {
+    return { ok: false, error: 'لا يمكن تعيين فرع غير نشط كفرع أساسي' }
+  }
 
   const { data: business } = await ctx.supabase
     .from('businesses')
@@ -473,7 +476,7 @@ export async function saveBranch(
   if (branchId) {
     const { data: existingBranch, error: branchLookupError } = await ctx.supabase
       .from('business_branches')
-      .select('id')
+      .select('id, is_primary')
       .eq('id', branchId)
       .eq('business_id', businessId)
       .maybeSingle()
@@ -565,6 +568,60 @@ export async function saveBranch(
       }
     }
     return { ok: false, error: 'تعذر حفظ بيانات الفرع — راجع البيانات وحاول تاني' }
+  }
+
+  // If the current primary branch was demoted or disabled, select another
+  // active branch as primary so an activity does not silently lose its main branch.
+  const existingBranchWasPrimary = branchId
+    ? (previousBranches ?? []).some((item) => item.id === branchId && item.is_primary)
+    : false
+  if (existingBranchWasPrimary && (!parsed.data.is_primary || !parsed.data.is_active)) {
+    const { data: candidate, error: candidateError } = await ctx.supabase
+      .from('business_branches')
+      .select('id')
+      .eq('business_id', businessId)
+      .eq('is_active', true)
+      .neq('id', branchId!)
+      .order('sort_order', { ascending: true })
+      .order('id', { ascending: true })
+      .limit(1)
+      .maybeSingle()
+
+    if (candidateError) {
+      await logAudit(ctx.supabase, {
+        actorUserId: ctx.userId,
+        action: 'branch.primary_reassignment_failed',
+        entityType: 'business',
+        entityId: businessId,
+        metadata: { branch_id: branchId, stage: 'lookup' },
+      })
+      return { ok: false, error: 'تم حفظ الفرع، لكن تعذر اختيار فرع أساسي بديل. راجع إعدادات الفروع.' }
+    }
+
+    if (candidate) {
+      const { data: promoted, error: promotionError } = await ctx.supabase
+        .from('business_branches')
+        .update({ is_primary: true })
+        .eq('id', candidate.id)
+        .eq('business_id', businessId)
+        .select('id')
+        .maybeSingle()
+
+      if (promotionError || !promoted) {
+        await logAudit(ctx.supabase, {
+          actorUserId: ctx.userId,
+          action: 'branch.primary_reassignment_failed',
+          entityType: 'business',
+          entityId: businessId,
+          metadata: {
+            branch_id: branchId,
+            candidate_branch_id: candidate.id,
+            error: promotionError?.message ?? 'no row updated',
+          },
+        })
+        return { ok: false, error: 'تم حفظ الفرع، لكن تعذر اختيار فرع أساسي بديل. راجع إعدادات الفروع.' }
+      }
+    }
   }
 
   await logAudit(ctx.supabase, {
