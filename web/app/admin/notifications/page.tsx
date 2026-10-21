@@ -1,14 +1,18 @@
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { BellIcon, BroadcastIcon } from '@/components/icons'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import { getAudienceCounts } from '@/lib/data/admin'
+import { getNotifications } from '@/lib/data/account'
+import { getUserSession } from '@/lib/data/user'
 import type { AnnouncementRow as Row } from '../announcements/types'
 import AnnouncementForm from '../announcements/announcement-form'
 import AnnouncementRow from '../announcements/announcement-row'
 import Composer from './composer'
 import NotificationsTabs from './notifications-tabs'
 import HistoryList, { type HistoryItem } from './history-list'
+import InboxList from './inbox-list'
 import notifStyles from './notifications.module.css'
 import annStyles from '../announcements/announcements.module.css'
 
@@ -70,7 +74,38 @@ export default async function AdminNotificationsPage({
 }) {
   const params = await searchParams
   const tab =
-    params.tab === 'announcements' ? 'announcements' : params.tab === 'history' ? 'history' : 'send'
+    params.tab === 'announcements'
+      ? 'announcements'
+      : params.tab === 'history'
+        ? 'history'
+        : params.tab === 'inbox'
+          ? 'inbox'
+          : 'send'
+
+  // ─── Tab: Personal inbox ───
+  if (tab === 'inbox') {
+    const session = await getUserSession()
+    if (!session) redirect('/auth?next=/admin/notifications%3Ftab%3Dinbox')
+    const notifications = await getNotifications(session.userId, 100)
+    return (
+      <div>
+        <AccountPageHeader
+          title="الإشعارات والرسائل"
+          description={`${session.notifCount.toLocaleString('ar-EG')} إشعار غير مقروء في وارد حسابك`}
+        />
+        <NotificationsTabs />
+        <section className={notifStyles.intro}>
+          <span className={notifStyles.introIcon}>
+            <BellIcon size={20} />
+          </span>
+          <p className={notifStyles.introText}>
+            دي الرسائل والتنبيهات اللي وصلتك أنت كمدير. إرسال الرسائل للمستخدمين وإدارة الإعلانات موجودين في التبويبات المجاورة.
+          </p>
+        </section>
+        <InboxList initialItems={notifications} />
+      </div>
+    )
+  }
 
   // ─── Tab: Send notification ───
   if (tab === 'send') {
