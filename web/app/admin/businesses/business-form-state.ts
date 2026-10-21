@@ -27,7 +27,11 @@ export type FormState = {
   savedSection: SectionKey | null
   openSections: Set<SectionKey>
   toggleSection: (key: SectionKey) => void
-  handleSaveSection: (\n    key: SectionKey,\n    fn: () => Promise<FormActionResult>,\n    onSuccess?: (result: FormActionResult) => void,\n  ) => void
+  handleSaveSection: (
+    key: SectionKey,
+    fn: () => Promise<FormActionResult>,
+    onSuccess?: (result: FormActionResult) => void,
+  ) => void
   startTransition: ReturnType<typeof useTransition>[1]
   router: ReturnType<typeof useRouter>
 
