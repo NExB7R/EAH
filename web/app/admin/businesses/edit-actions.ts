@@ -430,6 +430,11 @@ export async function saveBranch(
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const uuidSchema = z.string().uuid()
+  if (!uuidSchema.safeParse(businessId).success || (branchId && !uuidSchema.safeParse(branchId).success)) {
+    return { ok: false, error: 'معرّف النشاط أو الفرع غير صحيح' }
+  }
+
   const parsed = branchSchema.safeParse({
     name: fd(formData, 'name'),
     area: fd(formData, 'area'),
@@ -439,7 +444,8 @@ export async function saveBranch(
     phone: fd(formData, 'phone'),
     whatsapp: fd(formData, 'whatsapp'),
     is_primary: fdBool(formData, 'is_primary'),
-    is_active: fdBool(formData, 'is_active') || true,
+    // An unchecked checkbox must stay false; "|| true" re-enabled every branch.
+    is_active: fdBool(formData, 'is_active'),
     sort_order: fd(formData, 'sort_order') || '0',
   })
   if (!parsed.success) return parseError(parsed)
@@ -448,33 +454,117 @@ export async function saveBranch(
   const hasLng = parsed.data.longitude !== null && parsed.data.longitude !== undefined
   if (hasLat !== hasLng) return { ok: false, error: 'لازم الإحداثيين مع بعض أو الاتنين فاضيين' }
 
-  // لو is_primary=true، نشيل الأساسي من الباقي
-  if (parsed.data.is_primary) {
-    await ctx.supabase
+  const { data: business, error: businessLookupError } = await ctx.supabase
+    .from('businesses')
+    .select('id')
+    .eq('id', businessId)
+    .maybeSingle()
+  if (businessLookupError) return { ok: false, error: 'تعذر التحقق من النشاط' }
+  if (!business) return { ok: false, error: 'النشاط مش موجود' }
+
+  if (branchId) {
+    const { data: existingBranch, error: branchLookupError } = await ctx.supabase
+      .from('business_branches')
+      .select('id')
+      .eq('id', branchId)
+      .eq('business_id', businessId)
+      .maybeSingle()
+    if (branchLookupError) return { ok: false, error: 'تعذر التحقق من الفرع' }
+    if (!existingBranch) return { ok: false, error: 'الفرع غير تابع للنشاط المحدد' }
+  }
+
+  // Save the current primary state so a failed branch write does not leave the
+  // activity without its previous primary branch.
+  const { data: previousBranches, error: previousError } = parsed.data.is_primary
+    ? await ctx.supabase
+        .from('business_branches')
+        .select('id, is_primary')
+        .eq('business_id', businessId)
+    : { data: [], error: null }
+
+  if (previousError) return { ok: false, error: 'تعذر قراءة حالة الفروع الحالية' }
+
+  const restorePreviousPrimary = async (): Promise<boolean> => {
+    const { error: resetError } = await ctx.supabase
       .from('business_branches')
       .update({ is_primary: false })
       .eq('business_id', businessId)
+    if (resetError) return false
+
+    for (const oldBranch of previousBranches ?? []) {
+      if (!oldBranch.is_primary) continue
+      const { error } = await ctx.supabase
+        .from('business_branches')
+        .update({ is_primary: true })
+        .eq('id', oldBranch.id)
+        .eq('business_id', businessId)
+      if (error) return false
+    }
+    return true
   }
 
+  // If the new branch is to become primary, do not continue when the reset fails.
+  if (parsed.data.is_primary) {
+    const { error: clearPrimaryError } = await ctx.supabase
+      .from('business_branches')
+      .update({ is_primary: false })
+      .eq('business_id', businessId)
+    if (clearPrimaryError) {
+      return { ok: false, error: 'تعذر تحديث الفرع الأساسي — لم يتم حفظ التعديلات' }
+    }
+  }
+
+  let savedBranchId = branchId
+  let saveError: { message: string } | null = null
+
   if (branchId) {
-    const { error } = await ctx.supabase
+    const { data, error } = await ctx.supabase
       .from('business_branches')
       .update(parsed.data)
       .eq('id', branchId)
-    if (error) return { ok: false, error: error.message }
+      .eq('business_id', businessId)
+      .select('id')
+      .maybeSingle()
+    saveError = error
+    if (!error && !data) saveError = { message: 'الفرع غير موجود أو لم يتم تحديثه' }
   } else {
-    const { error } = await ctx.supabase
+    const { data, error } = await ctx.supabase
       .from('business_branches')
       .insert({ ...parsed.data, business_id: businessId })
-    if (error) return { ok: false, error: error.message }
+      .select('id')
+      .single()
+    saveError = error
+    if (!error && !data) saveError = { message: 'لم يتم إنشاء الفرع' }
+    if (data) savedBranchId = data.id
+  }
+
+  if (saveError) {
+    if (parsed.data.is_primary) {
+      const restored = await restorePreviousPrimary()
+      if (!restored) {
+        await logAudit(ctx.supabase, {
+          actorUserId: ctx.userId,
+          action: 'branch.save_primary_partial_failure',
+          entityType: 'business',
+          entityId: businessId,
+          metadata: {
+            branch_id: branchId ?? null,
+            save_error: saveError.message,
+            restore_failed: true,
+          },
+        })
+        return { ok: false, error: 'فشل حفظ الفرع وتعذّر استرجاع الفرع الأساسي السابق. راجع الفروع قبل المحاولة مرة أخرى.' }
+      }
+    }
+    return { ok: false, error: 'تعذر حفظ بيانات الفرع — راجع البيانات وحاول تاني' }
   }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
     action: branchId ? 'branch.update' : 'branch.create',
     entityType: 'business_branch',
-    entityId: branchId ?? businessId,
-    metadata: { business_id: businessId },
+    entityId: savedBranchId ?? businessId,
+    metadata: { business_id: businessId, is_primary: parsed.data.is_primary },
   })
   revalidatePath(`/admin/businesses/${businessId}`)
   revalidateTag('businesses', 'default')
