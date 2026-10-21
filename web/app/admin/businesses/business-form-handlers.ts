@@ -125,8 +125,8 @@ export function useSaveHandlers(state: FormState, business: AdminBusiness | null
   }
 
   const addBranch = () => {
-    s.setBranches([
-      ...s.branches,
+    s.setBranches((previous) => [
+      ...previous,
       {
         name: '',
         area: '',
@@ -135,7 +135,7 @@ export function useSaveHandlers(state: FormState, business: AdminBusiness | null
         longitude: '',
         phone: '',
         whatsapp: '',
-        is_primary: s.branches.length === 0,
+        is_primary: previous.length === 0,
         is_active: true,
       },
     ])
@@ -149,19 +149,25 @@ export function useSaveHandlers(state: FormState, business: AdminBusiness | null
       s.startTransition(async () => {
         const res = await deleteBranch(branch.id!, business.id)
         if (res.ok) {
-          s.setBranches(s.branches.filter((_, i) => i !== idx))
+          s.setBranches((previous) =>
+            branch.id
+              ? previous.filter((item) => item.id !== branch.id)
+              : previous.filter((_, i) => i !== idx),
+          )
           s.router.refresh()
         } else {
           s.setError(res.error)
         }
       })
     } else {
-      s.setBranches(s.branches.filter((_, i) => i !== idx))
+      s.setBranches((previous) => previous.filter((_, i) => i !== idx))
     }
   }
 
   const updateBranch = (idx: number, field: keyof BranchState, value: string | boolean) => {
-    s.setBranches(s.branches.map((br, i) => (i === idx ? { ...br, [field]: value } : br)))
+    s.setBranches((previous) =>
+      previous.map((br, i) => (i === idx ? { ...br, [field]: value } : br)),
+    )
   }
 
   const saveBranch = (idx: number) => {
@@ -178,7 +184,16 @@ export function useSaveHandlers(state: FormState, business: AdminBusiness | null
     fd.set('whatsapp', branch.whatsapp)
     fd.set('is_primary', String(branch.is_primary))
     fd.set('is_active', String(branch.is_active))
-    s.handleSaveSection('branches', () => saveBranchAction(business.id, fd, branch.id))
+    s.handleSaveSection(
+      'branches',
+      () => saveBranchAction(business.id, fd, branch.id),
+      (result) => {
+        if (!result.id) return
+        s.setBranches((previous) =>
+          previous.map((item, i) => (i === idx ? { ...item, id: result.id } : item)),
+        )
+      },
+    )
   }
 
   const handleCreate = (e: React.FormEvent<HTMLFormElement>) => {
