@@ -66,6 +66,7 @@ export async function markOwnNotificationRead(notificationId: string): Promise<{
 
     if (lookupError) return { ok: false, error: 'تعذر التحقق من حالة الإشعار' }
     if (!existing) return { ok: false, error: 'الإشعار غير موجود' }
+    if (!existing.read_at) return { ok: false, error: 'تعذر حفظ حالة القراءة — حاول تاني' }
   }
 
   revalidatePath('/admin/notifications')
