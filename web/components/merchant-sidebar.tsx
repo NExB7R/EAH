@@ -73,7 +73,7 @@ const SECTIONS: Section[] = [
 export default function MerchantSidebar({ newOrders = 0, hasBusiness = true }: Props) {
   const pathname = usePathname()
 
-  const sections = hasBusiness
+  const sections: Section[] = hasBusiness
     ? SECTIONS
     : [
         {
