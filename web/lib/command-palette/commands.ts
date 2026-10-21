@@ -154,6 +154,15 @@ export const COMMANDS: Command[] = [
     keywords: ['settings', 'config', 'إعدادات'],
   },
   {
+    id: 'admin-profile',
+    label: 'بروفايل الأدمن',
+    description: 'عرض الملف الشخصي لمدير المنصة',
+    href: '/admin/profile',
+    icon: UserIcon,
+    group: 'navigation',
+    keywords: ['profile', 'account', 'me', 'بروفايل', 'ملفي', 'حسابي'],
+  },
+  {
     id: 'admin-analytics',
     label: 'التحليلات',
     description: 'إحصائيات المنصة',
