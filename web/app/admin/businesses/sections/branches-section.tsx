@@ -29,6 +29,7 @@ export default function BranchesSection() {
                 </button>
               </div>
             </div>
+            <fieldset disabled={ctx.pending} className={styles.branchFieldset}>
             <div className={styles.fieldRow}>
               <div className={styles.field}>
                 <label className={styles.label}>اسم الفرع</label>
@@ -101,6 +102,7 @@ export default function BranchesSection() {
               />
               <label htmlFor={`br-active-${idx}`}>فرع نشط على المنصة</label>
             </div>
+            </fieldset>
             <SaveBar
               onClick={() => ctx.saveBranch(idx)}
               pending={ctx.pending}
