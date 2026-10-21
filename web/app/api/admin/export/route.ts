@@ -1,5 +1,6 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/auth/admin'
+import { checkRateLimit, exportLimiter, getClientIp } from '@/lib/rate-limit'
 import { buildCsv, csvResponse, type CsvColumn } from '@/lib/utils/csv'
 
 export const runtime = 'nodejs'
@@ -18,10 +19,34 @@ export async function GET(req: NextRequest) {
     return new Response('Unauthorized', { status: 403 })
   }
 
+  const rateLimit = await checkRateLimit(
+    exportLimiter,
+    `admin-export:${ctx.userId}:${await getClientIp()}`,
+    { failClosed: true },
+  )
+  if (!rateLimit.ok) {
+    const unavailable = rateLimit.error.startsWith('تعذر')
+    return NextResponse.json(
+      { error: unavailable ? 'التصدير غير متاح مؤقتًا' : 'طلبات تصدير كثيرة، حاول لاحقًا' },
+      {
+        status: unavailable ? 503 : 429,
+        headers: { 'Retry-After': String(rateLimit.retryAfter) },
+      },
+    )
+  }
+
   const sp = req.nextUrl.searchParams
   const type = sp.get('type') ?? ''
   const q = (sp.get('q') ?? '').trim().toLowerCase()
   const status = sp.get('status') ?? ''
+  if (
+    !['businesses', 'users', 'subscriptions', 'featured', 'ads', 'audit', 'health'].includes(type) ||
+    q.length > 200 ||
+    status.length > 50
+  ) {
+    return NextResponse.json({ error: 'فلتر التصدير غير صالح' }, { status: 400 })
+  }
+
   const supabase = ctx.supabase
 
   const timestamp = new Date().toISOString().slice(0, 10)
