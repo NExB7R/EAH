@@ -1014,3 +1014,27 @@ setSaved(true)
 
 **الفحص:**
 grep -rn "setTimeout" app/ components/ | grep -i "sav|submit|updat"
+
+---
+
+## 2026-10-21 — Vercel Hobby quota exceeded (100 deployments/24h)
+
+**الموقف:** في جلسة واحدة، عملنا ~100 push على branch redesign/admin-control-center (preview deployments) + ~20 push على main (production). النتيجة: Resource is limited - try again in 24 hours (more than 100, code: api-deployments-free-per-day).
+
+**الأثر:** production اتقفل 24 ساعة. التعديلات على main (commit 99f318e5) مش قادرة توصل.
+
+**الدرس:**
+- Vercel Hobby = 100 deployment / 24 ساعة (متجددة، مش تقويمية).
+- preview + production + CLI + webhook = كلهم من نفس الـ quota.
+- branch قديم (زي redesign/admin-control-center) لسه بيعمل preview deployments.
+- vercel --prod مش بديل — هو كمان بيخصم.
+
+**الإجراء الوقائي:**
+- commit واحد لكل جلسة (مش commit لكل ملف).
+- اقفل auto-deploy لأي branch غير main (Vercel Settings → Git → Ignored Build Step).
+- vercel dev محلياً قبل الـ push.
+- راجع §15 في AI_PLAYBOOK.md — Checklist قبل أي push.
+
+**الإجراء لو حصل:**
+- استنى 24 ساعة (مفيش حل تاني).
+- أو رقّي لـ Pro (6000 deployment/شهر).
