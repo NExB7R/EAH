@@ -1,5 +1,8 @@
 'use client'
 
+import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { saveCustomBusinessType } from '../edit-actions'
 import { useBusinessForm } from '../business-form-context'
 import { TYPES } from '../business-form-config'
 import { SaveBar } from '../business-form-shared'
@@ -7,6 +10,32 @@ import styles from '../business-form.module.css'
 
 export default function BasicsSection() {
   const ctx = useBusinessForm()
+  const router = useRouter()
+  const [customType, setCustomType] = useState(ctx.business.custom_business_type ?? '')
+  const [customTypeError, setCustomTypeError] = useState<string | null>(null)
+  const [typePending, startTypeTransition] = useTransition()
+
+  const submitCustomType = () => {
+    setCustomTypeError(null)
+    startTypeTransition(async () => {
+      const result = await saveCustomBusinessType(ctx.business.id, customType)
+      if (!result.ok) {
+        setCustomTypeError(result.error)
+        return
+      }
+      router.refresh()
+    })
+  }
+
+  const customTypeStatus =
+    ctx.business.business_type_status === 'approved'
+      ? 'معتمد'
+      : ctx.business.business_type_status === 'rejected'
+        ? 'مرفوض — عدّل الاسم وأرسله للمراجعة'
+        : ctx.business.business_type_status === 'pending'
+          ? 'بانتظار مراجعة الإدارة'
+          : 'لا يوجد اسم مخصص'
+
   return (
     <>
       <div className={styles.field}>
@@ -43,6 +72,31 @@ export default function BasicsSection() {
           ))}
         </div>
       </div>
+      {ctx.businessType === 'misc' && (
+        <div className={styles.field}>
+          <label className={styles.label}>اسم النوع المخصص (من 2 إلى 50 حرف)</label>
+          <input
+            value={customType}
+            onChange={(e) => setCustomType(e.target.value.slice(0, 50))}
+            maxLength={50}
+            className={styles.input}
+            dir="rtl"
+            placeholder="مثال: مغسلة ملابس"
+          />
+          <span className={styles.hint}>
+            الحالة الحالية: {customTypeStatus}. تعديل الاسم يعيده للمراجعة، لكن النشاط نفسه يظل ظاهرًا على المنصة.
+          </span>
+          {customTypeError && <p className={styles.errMsg} role="alert">{customTypeError}</p>}
+          <button
+            type="button"
+            onClick={submitCustomType}
+            disabled={typePending || customType.trim().length < 2}
+            className={styles.saveBtn}
+          >
+            {typePending ? 'جاري الإرسال…' : 'حفظ وإرسال النوع للمراجعة'}
+          </button>
+        </div>
+      )}
       <div className={styles.fieldRow}>
         <div className={styles.field}>
           <label className={styles.label}>المنطقة</label>
