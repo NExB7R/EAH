@@ -35,7 +35,7 @@ export async function submitReport(formData: FormData): Promise<Result> {
 
   // Rate limit — 5 بلاغات / 15 دقيقة
   const ip = await getClientIp()
-  const rl = await checkRateLimit(strictLimiter, `report:${user.id}:${ip}`)
+  const rl = await checkRateLimit(strictLimiter, `report:${user.id}:${ip}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
 
   const parsed = schema.safeParse({

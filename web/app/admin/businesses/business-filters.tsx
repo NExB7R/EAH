@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { SearchIcon, CloseIcon, LocationIcon } from '@/components/icons'
 import styles from './businesses.module.css'
 
@@ -18,17 +18,31 @@ export default function BusinessFilters({ areas }: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const [q, setQ] = useState(searchParams.get('q') ?? '')
+  const previousQuery = useRef(q)
   const area = searchParams.get('area') ?? ''
 
+  const isEditingQuery = useRef(false)
+
   useEffect(() => {
+    const urlQuery = searchParams.get('q') ?? ''
+    if (!isEditingQuery.current && urlQuery !== q) {
+      previousQuery.current = urlQuery
+      setQ(urlQuery)
+      return
+    }
+
+    const queryChanged = previousQuery.current !== q
+    previousQuery.current = q
     const t = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString())
       if (q.trim()) params.set('q', q.trim())
       else params.delete('q')
+      if (queryChanged) params.set('page', '1')
       const next = params.toString()
       if (next !== searchParams.toString()) {
         router.replace(`${pathname}?${next}`, { scroll: false })
       }
+      isEditingQuery.current = false
     }, 350)
     return () => clearTimeout(t)
   }, [q, router, searchParams, pathname])
@@ -37,6 +51,7 @@ export default function BusinessFilters({ areas }: Props) {
     const params = new URLSearchParams(searchParams.toString())
     if (value) params.set('area', value)
     else params.delete('area')
+    params.set('page', '1')
     router.replace(`${pathname}?${params.toString()}`, { scroll: false })
   }
 
@@ -47,7 +62,10 @@ export default function BusinessFilters({ areas }: Props) {
         <input
           type="text"
           value={q}
-          onChange={(e) => setQ(e.target.value)}
+          onChange={(e) => {
+            isEditingQuery.current = true
+            setQ(e.target.value)
+          }}
           placeholder="ابحث بالاسم، المنطقة، صاحب النشاط أو الرقم..."
           className={styles.searchInput}
           dir="rtl"

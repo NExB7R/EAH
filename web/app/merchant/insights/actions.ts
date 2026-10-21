@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { createClient } from '@/lib/supabase/server'
 import { getBusinessMetrics, getCategoryComparison } from '@/lib/data/insights'
 import { analyzeBusiness } from '@/lib/ai/business-advisor'
@@ -43,9 +44,20 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
     return { ok: false, error: 'مش مسموحلك' }
   }
 
+  // Generating a narrative can trigger paid AI work. Do not allow unlimited
+  // requests when the shared rate-limit provider is unavailable.
+  const rateLimit = await checkRateLimit(strictLimiter, `merchant-insight:${user.id}`, {
+    failClosed: true,
+  })
+  if (!rateLimit.ok) {
+    return { ok: false, error: rateLimit.error }
+  }
+
+  const safeDays = Math.max(1, Math.min(90, Math.trunc(Number.isFinite(days) ? days : 30)))
+
   // 1. اجمع البيانات
   const [metrics, comparison] = await Promise.all([
-    getBusinessMetrics(businessId, days),
+    getBusinessMetrics(businessId, safeDays),
     getCategoryComparison(businessId),
   ])
 

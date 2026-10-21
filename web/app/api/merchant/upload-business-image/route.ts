@@ -59,6 +59,11 @@ export async function POST(req: NextRequest) {
   if (businessError) return jsonError('مش قادرين نتحقق من النشاط دلوقتي', 500)
   if (!business) return jsonError('مفيش نشاط مرتبط بحسابك', 403)
 
+  const contentLength = Number(req.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > MAX_SIZE + 512 * 1024) {
+    return jsonError('حجم الطلب أكبر من المسموح', 413)
+  }
+
   let formData: FormData
   try {
     formData = await req.formData()

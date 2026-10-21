@@ -46,9 +46,21 @@ export const adminUploadLimiter = new Ratelimit({
 // ─── Strict: operations حساسة (review / reply / reveal) ───
 export async function getClientIp(): Promise<string> {
   const h = await headers()
+
+  // Prefer the single-address header supplied by the hosting proxy. The first
+  // X-Forwarded-For item may be user-supplied when requests pass through
+  // multiple proxies, so only use the final proxy-appended item as fallback.
+  const realIp = h.get('x-real-ip')?.trim()
+  if (realIp) return realIp
+
   const forwarded = h.get('x-forwarded-for')
-  if (forwarded) return forwarded.split(',')[0]?.trim() ?? 'unknown'
-  return h.get('x-real-ip') ?? 'unknown'
+  if (forwarded) {
+    const addresses = forwarded.split(',').map((value) => value.trim()).filter(Boolean)
+    const lastAddress = addresses.at(-1)
+    if (lastAddress) return lastAddress
+  }
+
+  return 'unknown'
 }
 
 // ─── Helper: rate limit check ───

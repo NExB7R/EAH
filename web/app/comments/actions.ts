@@ -21,7 +21,7 @@ export async function createComment(
   } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'لازم تسجل دخول' }
 
-  const rl = await checkRateLimit(strictLimiter, `comment:${user.id}`)
+  const rl = await checkRateLimit(strictLimiter, `comment:${user.id}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
 
   const parentId = formData.get('parent_id')?.toString() || null

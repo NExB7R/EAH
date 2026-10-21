@@ -2,6 +2,7 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
+import { randomBytes } from 'crypto'
 import { createNotification } from '@/lib/notifications/server'
 import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
@@ -399,7 +400,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     return { ok: false, error: 'إنشاء النشاط غير متاح مؤقتًا — تعذر تجهيز خدمة الحفظ' }
   }
 
-  const finalSlug = d.slug ?? slugify(d.name)
+  const finalSlug = d.slug ?? `${slugify(d.name)}-${randomBytes(8).toString('hex')}`
 
   // WhatsApp gate: auto-disable orders if no whatsapp contact provided
   const hasWhatsappContact = (d.contacts ?? []).some(
@@ -432,7 +433,14 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     .single()
 
   if (error || !created) {
-    return { ok: false, error: error?.message ?? 'فشل الإنشاء' }
+    console.error('[admin-business-create] insert failed:', error?.message ?? 'No row returned')
+    return {
+      ok: false,
+      error:
+        error?.code === '23505'
+          ? 'اسم النشاط أو رابطه مستخدم بالفعل — غيّر الرابط المختصر وحاول تاني'
+          : 'تعذر إنشاء النشاط. راجع البيانات وحاول تاني',
+    }
   }
 
   // حفظ جهات الاتصال
@@ -483,7 +491,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   // A newly registered owner normally starts as a customer. Promote only after
   // business + contacts are saved, and roll back the business if the role cannot be changed.
   if (d.owner_profile_id && selectedOwnerRole === 'customer') {
-    const { data: promotedRole, error: promoteError } = await ctx.supabase
+    const { data: promotedRole, error: promoteError } = await privileged
       .from('user_roles')
       .update({ role: 'merchant' })
       .eq('user_id', d.owner_profile_id)
@@ -493,7 +501,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
 
     let ownerIsMerchant = promotedRole?.role === 'merchant'
     if (!ownerIsMerchant) {
-      const { data: latestRole, error: latestRoleError } = await ctx.supabase
+      const { data: latestRole, error: latestRoleError } = await privileged
         .from('user_roles')
         .select('role')
         .eq('user_id', d.owner_profile_id)
@@ -804,6 +812,16 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     return { ok: true }
   }
 
+  let privileged: ReturnType<typeof createServiceClient>
+  try {
+    // A regular admin has authority to assign a business owner, but user_roles
+    // intentionally only permits super-admin writes via the session client.
+    // Service role is used only after requireAdmin and role eligibility checks.
+    privileged = createServiceClient()
+  } catch {
+    return { ok: false, error: 'تعذر تجهيز خدمة ربط المالك — حاول تاني' }
+  }
+
   if (!alreadyLinked) {
     const { error } = await ctx.supabase
       .from('businesses')
@@ -821,7 +839,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
   // Newly registered users start as customers; promote only after the business
   // owner link is saved. If promotion fails, restore the previous owner fields.
   if (currentRole.role === 'customer') {
-    const { data: promotedRole, error: promoteError } = await ctx.supabase
+    const { data: promotedRole, error: promoteError } = await privileged
       .from('user_roles')
       .update({ role: 'merchant' })
       .eq('user_id', userId)
@@ -831,7 +849,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
 
     let ownerIsMerchant = promotedRole?.role === 'merchant'
     if (!ownerIsMerchant) {
-      const { data: latestRole, error: latestRoleError } = await ctx.supabase
+      const { data: latestRole, error: latestRoleError } = await privileged
         .from('user_roles')
         .select('role')
         .eq('user_id', userId)

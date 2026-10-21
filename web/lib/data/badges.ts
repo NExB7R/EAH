@@ -18,7 +18,24 @@ export type BadgeCatalogItem = {
 
 // ─── كل الكتالوج + حالة الإنجاز ───
 export async function getBadgeCatalogWithStatus(userId: string): Promise<BadgeCatalogItem[]> {
-  const supabase = await createServiceClient()
+  // The catalog table is intentionally server-read; never let a caller use
+  // the service role to inspect another customer's earned badges.
+  const authClient = await createClient()
+  const {
+    data: { user },
+  } = await authClient.auth.getUser()
+  if (!user) return []
+
+  if (user.id !== userId) {
+    const { data: roleRow } = await authClient
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .maybeSingle()
+    if (roleRow?.role !== 'admin' && roleRow?.role !== 'super_admin') return []
+  }
+
+  const supabase = createServiceClient()
 
   const [{ data: catalog }, { data: earned }] = await Promise.all([
     supabase

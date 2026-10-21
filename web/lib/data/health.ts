@@ -1,4 +1,5 @@
 import { createServiceClient } from '@/lib/supabase/service'
+import { requireAdmin } from '@/lib/auth/admin'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — System Health data
@@ -25,6 +26,11 @@ export type HealthSummary = {
 }
 
 export async function getHealthSummary(): Promise<HealthSummary> {
+  const access = await requireAdmin()
+  if (!access.ok) {
+    return { last24h: 0, last7d: 0, unresolved: 0, critical24h: 0, topPaths: [] }
+  }
+
   const supabase = createServiceClient()
   const now = Date.now()
   const d1 = new Date(now - 24 * 60 * 60 * 1000).toISOString()
@@ -78,12 +84,16 @@ export async function getHealthSummary(): Promise<HealthSummary> {
 }
 
 export async function getRecentErrors(limit = 50, onlyUnresolved = false): Promise<SystemError[]> {
+  const access = await requireAdmin()
+  if (!access.ok) return []
+
   const supabase = createServiceClient()
+  const safeLimit = Math.max(1, Math.min(100, Math.trunc(limit) || 50))
   let q = supabase
     .from('system_errors')
     .select('id, severity, source, path, message, user_id, metadata, resolved_at, created_at')
     .order('created_at', { ascending: false })
-    .limit(limit)
+    .limit(safeLimit)
   if (onlyUnresolved) q = q.is('resolved_at', null)
   const { data } = await q
   return (data ?? []) as SystemError[]
@@ -97,9 +107,12 @@ export type HealthFilter = {
 }
 
 export async function getErrorsWithFilters(filter: HealthFilter): Promise<SystemError[]> {
+  const access = await requireAdmin()
+  if (!access.ok) return []
+
   const supabase = createServiceClient()
-  const limit = filter.limit ?? 100
-  const q = (filter.q ?? '').trim().toLowerCase()
+  const limit = Math.max(1, Math.min(200, Math.trunc(filter.limit ?? 100) || 100))
+  const q = (filter.q ?? '').trim().toLowerCase().slice(0, 100)
 
   let query = supabase
     .from('system_errors')

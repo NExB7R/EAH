@@ -30,7 +30,7 @@ async function toggleActivity(
   if (!user) return { ok: false, error: 'لازم تسجل دخول الأول' }
 
   // Rate limit — 60 تفاعل / دقيقة (خفيف)
-  const rl = await checkRateLimit(apiLimiter, `activity:${user.id}`)
+  const rl = await checkRateLimit(apiLimiter, `activity:${user.id}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
 
   // فحص هل موجود

@@ -181,6 +181,15 @@ export const COMMANDS: Command[] = [
     keywords: ['insights', 'ai', 'رؤى'],
   },
   {
+    id: 'admin-health',
+    label: 'صحة النظام والأخطاء',
+    description: 'متابعة الأعطال والسجلات غير المحلولة',
+    href: '/admin/health',
+    icon: AlertIcon,
+    group: 'navigation',
+    keywords: ['health', 'errors', 'system', 'صحة', 'أخطاء', 'النظام'],
+  },
+  {
     id: 'action-new-business',
     label: 'نشاط جديد',
     description: 'إضافة نشاط من لوحة الأدمن',

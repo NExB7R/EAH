@@ -31,12 +31,22 @@ export async function uploadImage(
     return { ok: false, error: 'Cloudinary مش مضبوط' }
   }
 
-  if (!file.type.startsWith('image/')) {
-    return { ok: false, error: 'الملف مش صورة' }
+  if (file.size <= 0 || file.size > maxSizeBytes) {
+    return { ok: false, error: 'حجم الصورة غير صالح أو أكبر من المسموح' }
   }
 
-  if (file.size > maxSizeBytes) {
-    return { ok: false, error: 'حجم الصورة كبير' }
+  // Never trust browser-provided MIME type. Inspect the file signature and
+  // re-encode its part metadata before forwarding it to the image provider.
+  // Only safe raster formats used by EAH uploads are accepted (no SVG/HTML).
+  let bytes: Buffer
+  try {
+    bytes = Buffer.from(await file.arrayBuffer())
+  } catch {
+    return { ok: false, error: 'تعذر قراءة ملف الصورة' }
+  }
+  const detectedType = detectRemoteImageType(bytes)
+  if (!detectedType) {
+    return { ok: false, error: 'محتوى الملف ليس صورة JPEG أو PNG أو WebP أو AVIF صالحة' }
   }
 
   const timestamp = Math.floor(Date.now() / 1000)
@@ -44,7 +54,11 @@ export async function uploadImage(
   const signature = sign(params, API_SECRET)
 
   const formData = new FormData()
-  formData.append('file', file)
+  formData.append(
+    'file',
+    new Blob([new Uint8Array(bytes)], { type: detectedType.mimeType }),
+    `upload.${detectedType.extension}`,
+  )
   formData.append('api_key', API_KEY)
   formData.append('timestamp', String(timestamp))
   formData.append('folder', folder)

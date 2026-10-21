@@ -40,8 +40,17 @@ export default function CommandPalette() {
         setOpen(false)
       }
     }
+    const openPalette = () => {
+      setQuery('')
+      setSelected(0)
+      setOpen(true)
+    }
     window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
+    window.addEventListener('eah:open-command-palette', openPalette)
+    return () => {
+      window.removeEventListener('keydown', handler)
+      window.removeEventListener('eah:open-command-palette', openPalette)
+    }
   }, [open])
 
   useEffect(() => {

@@ -1,35 +1,188 @@
 .page {
+  /* Reuse EAH's canonical design tokens; the admin gets layout hierarchy, not a new palette. */
+  --admin-canvas: var(--bg-base);
+  --admin-surface: var(--bg-elevated);
+  --admin-surface-raised: var(--bg-surface);
+  --admin-border: var(--border-purple-soft);
+  --admin-border-strong: var(--border-purple-strong);
+  --admin-text: var(--text-primary);
+  --admin-text-muted: var(--text-tertiary);
+  --admin-text-subtle: var(--text-muted);
+  --admin-accent: var(--purple-light);
+  --admin-accent-strong: var(--purple-primary);
+  --admin-accent-soft: var(--purple-soft);
+  --admin-accent-line: var(--purple-line);
+  --admin-success: var(--teal);
+  --admin-warning: var(--gold-primary);
+  --admin-danger: var(--red);
+  --admin-shadow-sm: var(--shadow-sm);
   min-height: 100vh;
-  padding-bottom: 80px;
+  padding: 22px;
+  color: var(--admin-text);
+  background: var(--admin-canvas);
 }
 
-.wrap {
-  max-width: 1320px;
-  margin: 24px auto 0;
-  padding: 0 24px;
+.shell {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 24px;
+  grid-template-columns: 252px minmax(0, 1fr);
   align-items: start;
+  gap: 18px;
+  width: min(100%, 1760px);
+  margin: 0 auto;
+}
+
+.sidebarRail {
+  position: sticky;
+  top: 22px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: calc(100vh - 44px);
+  max-height: 1040px;
+  padding: 18px 12px 12px;
+  border: 1px solid var(--admin-border);
+  border-radius: 20px;
+  background: var(--admin-surface);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 2px 8px 14px;
+  color: var(--admin-text);
+  text-decoration: none;
+}
+
+.brandMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  border: 1px solid var(--admin-accent-line);
+  border-radius: 14px;
+  background: var(--admin-accent-soft);
+  color: var(--admin-accent);
+  font-size: 0.95rem;
+  font-weight: 950;
+  letter-spacing: -0.05em;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.brandText strong {
+  font-size: 0.94rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.brandText small {
+  color: var(--admin-text-muted);
+  font-size: 0.7rem;
+  font-weight: 650;
+}
+
+.sidebarDivider {
+  height: 1px;
+  margin: 0 8px 12px;
+  background: var(--admin-border);
+}
+
+.sidebarRail > aside {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sidebarRail nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--admin-border-strong) transparent;
+}
+
+.sidebarBottom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px 9px 2px;
+  border-top: 1px solid var(--admin-border);
+  color: var(--admin-text-muted);
+  font-size: 0.68rem;
+  font-weight: 650;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--admin-success);
+  box-shadow: 0 0 0 3px rgba(97, 199, 165, 0.1);
+}
+
+.version {
+  margin-inline-start: auto;
+  color: var(--admin-text-subtle);
+  direction: ltr;
+  font-size: 0.62rem;
+}
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
 }
 
 .content {
   min-width: 0;
+  padding: clamp(18px, 2vw, 30px);
+  border: 1px solid var(--admin-border);
+  border-radius: 20px;
+  background: rgba(18, 26, 43, 0.78);
+  box-shadow: var(--admin-shadow-sm);
 }
 
-.desktopSidebar {
-  display: contents;
-}
-
-@media (max-width: 1024px) {
-  .wrap {
-    grid-template-columns: 1fr;
-    padding: 0 12px;
-    margin-top: 8px;
-    gap: 8px;
+@media (max-width: 1080px) {
+  .page {
+    padding: 12px;
   }
 
-  .desktopSidebar {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .sidebarRail {
     display: none;
+  }
+
+  .workspace {
+    gap: 12px;
+  }
+
+  .content {
+    padding: 18px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 520px) {
+  .page {
+    padding: 8px;
+  }
+
+  .content {
+    padding: 14px 12px;
   }
 }

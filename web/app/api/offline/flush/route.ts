@@ -18,8 +18,11 @@ const schema = z.discriminatedUnion('type', [
     type: z.literal('review'),
     payload: z.object({
       businessId: z.string().uuid(),
-      slug: z.string(),
-      dimensions: z.record(z.string(), z.number().int().min(1).max(5)),
+      slug: z.string().min(1).max(120).regex(/^[a-zA-Z0-9\u0600-\u06FF-]+$/),
+      dimensions: z.record(z.string(), z.number().int().min(1).max(5)).refine(
+        (dimensions) => Object.keys(dimensions).length <= 12,
+        'عدد أبعاد التقييم أكبر من المسموح',
+      ),
       comment: z.string().min(10).max(500),
     }),
   }),
@@ -27,7 +30,7 @@ const schema = z.discriminatedUnion('type', [
     type: z.literal('comment'),
     payload: z.object({
       businessId: z.string().uuid(),
-      slug: z.string(),
+      slug: z.string().min(1).max(120).regex(/^[a-zA-Z0-9\u0600-\u06FF-]+$/),
       content: z.string().min(1).max(500),
       parentId: z.string().uuid().nullable().optional(),
     }),
@@ -59,12 +62,35 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
     }
 
-    const rl = await checkRateLimit(strictLimiter, `flush:${user.id}`)
+    const rl = await checkRateLimit(strictLimiter, `flush:${user.id}`, { failClosed: true })
     if (!rl.ok) {
-      return NextResponse.json({ error: rl.error }, { status: 429 })
+      const unavailable = rl.error.startsWith('تعذر')
+      return NextResponse.json(
+        { error: rl.error },
+        {
+          status: unavailable ? 503 : 429,
+          headers: unavailable ? { 'Retry-After': '60' } : {},
+        },
+      )
     }
 
-    const body = await req.json().catch(() => null)
+    const declaredLength = Number(req.headers.get('content-length') ?? '0')
+    if (Number.isFinite(declaredLength) && declaredLength > 8192) {
+      return NextResponse.json({ error: 'حجم الطلب أكبر من المسموح' }, { status: 413 })
+    }
+
+    const rawBody = await req.text()
+    if (Buffer.byteLength(rawBody, 'utf8') > 8192) {
+      return NextResponse.json({ error: 'حجم الطلب أكبر من المسموح' }, { status: 413 })
+    }
+
+    let body: unknown = null
+    try {
+      body = JSON.parse(rawBody)
+    } catch {
+      return NextResponse.json({ error: 'بيانات الطلب غير صحيحة' }, { status: 400 })
+    }
+
     const parsed = schema.safeParse(body)
     if (!parsed.success) {
       return NextResponse.json({ error: 'invalid payload' }, { status: 400 })
@@ -74,13 +100,17 @@ export async function POST(req: NextRequest) {
 
     // ─── Review ───
     if (type === 'review') {
-      const { data: existing } = await supabase
+      const { data: existing, error: existingError } = await supabase
         .from('business_reviews')
         .select('id')
         .eq('business_id', payload.businessId)
         .eq('user_id', user.id)
         .maybeSingle()
 
+      if (existingError) {
+        console.error('[offline/flush] review lookup failed:', existingError.message)
+        return NextResponse.json({ error: 'تعذر التحقق من التقييم السابق' }, { status: 500 })
+      }
       if (existing) return NextResponse.json({ ok: true, skipped: 'already_reviewed' })
 
       const quality = reviewQualityScore(payload.comment, false)
@@ -92,7 +122,10 @@ export async function POST(req: NextRequest) {
         status: 'pending',
         review_quality_score: quality,
       })
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      if (error) {
+        console.error('[offline/flush] review insert failed:', error.message)
+        return NextResponse.json({ error: 'تعذر حفظ التقييم' }, { status: 500 })
+      }
 
       await supabase.from('business_activities').insert({
         business_id: payload.businessId,
@@ -128,7 +161,10 @@ export async function POST(req: NextRequest) {
         parent_id: payload.parentId ?? null,
         content: payload.content,
       })
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      if (error) {
+        console.error('[offline/flush] comment insert failed:', error.message)
+        return NextResponse.json({ error: 'تعذر حفظ التعليق' }, { status: 500 })
+      }
 
       await supabase.from('business_activities').insert({
         business_id: payload.businessId,
@@ -142,12 +178,16 @@ export async function POST(req: NextRequest) {
     // ─── Favorite ───
     if (type === 'favorite') {
       if (payload.action === 'add') {
-        await supabase
+        const { error } = await supabase
           .from('favorites')
           .upsert(
             { business_id: payload.businessId, user_id: user.id },
             { onConflict: 'business_id,user_id', ignoreDuplicates: true },
           )
+        if (error) {
+          console.error('[offline/flush] favorite insert failed:', error.message)
+          return NextResponse.json({ error: 'تعذر حفظ المفضلة' }, { status: 500 })
+        }
         await supabase.from('business_activities').insert({
           business_id: payload.businessId,
           user_id: user.id,
@@ -155,11 +195,15 @@ export async function POST(req: NextRequest) {
           metadata: { source: 'offline_flush' },
         })
       } else {
-        await supabase
+        const { error } = await supabase
           .from('favorites')
           .delete()
           .eq('business_id', payload.businessId)
           .eq('user_id', user.id)
+        if (error) {
+          console.error('[offline/flush] favorite removal failed:', error.message)
+          return NextResponse.json({ error: 'تعذر إزالة المفضلة' }, { status: 500 })
+        }
       }
       return NextResponse.json({ ok: true })
     }
@@ -167,12 +211,16 @@ export async function POST(req: NextRequest) {
     // ─── Follow ───
     if (type === 'follow') {
       if (payload.action === 'add') {
-        await supabase
+        const { error } = await supabase
           .from('business_follows')
           .upsert(
             { business_id: payload.businessId, user_id: user.id },
             { onConflict: 'business_id,user_id', ignoreDuplicates: true },
           )
+        if (error) {
+          console.error('[offline/flush] follow insert failed:', error.message)
+          return NextResponse.json({ error: 'تعذر متابعة النشاط' }, { status: 500 })
+        }
         await supabase.from('business_activities').insert({
           business_id: payload.businessId,
           user_id: user.id,
@@ -180,11 +228,15 @@ export async function POST(req: NextRequest) {
           metadata: { source: 'offline_flush' },
         })
       } else {
-        await supabase
+        const { error } = await supabase
           .from('business_follows')
           .delete()
           .eq('business_id', payload.businessId)
           .eq('user_id', user.id)
+        if (error) {
+          console.error('[offline/flush] unfollow failed:', error.message)
+          return NextResponse.json({ error: 'تعذر إلغاء متابعة النشاط' }, { status: 500 })
+        }
       }
       return NextResponse.json({ ok: true })
     }
@@ -192,18 +244,26 @@ export async function POST(req: NextRequest) {
     // ─── Like ───
     if (type === 'like') {
       if (payload.action === 'add') {
-        await supabase
+        const { error } = await supabase
           .from('comment_likes')
           .upsert(
             { comment_id: payload.commentId, user_id: user.id },
             { onConflict: 'comment_id,user_id', ignoreDuplicates: true },
           )
+        if (error) {
+          console.error('[offline/flush] like insert failed:', error.message)
+          return NextResponse.json({ error: 'تعذر تسجيل الإعجاب' }, { status: 500 })
+        }
       } else {
-        await supabase
+        const { error } = await supabase
           .from('comment_likes')
           .delete()
           .eq('comment_id', payload.commentId)
           .eq('user_id', user.id)
+        if (error) {
+          console.error('[offline/flush] like removal failed:', error.message)
+          return NextResponse.json({ error: 'تعذر إزالة الإعجاب' }, { status: 500 })
+        }
       }
       return NextResponse.json({ ok: true })
     }

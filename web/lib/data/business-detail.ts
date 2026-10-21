@@ -94,7 +94,7 @@ export function computeIsOpenNow(
 }
 
 export type BusinessDetail = {
-  business: Business
+  business: Omit<Business, 'owner_profile_id'>
   contacts: ContactMethod[]
   media: MediaItem[]
   branches: Branch[]
@@ -110,6 +110,28 @@ export type BusinessDetail = {
 // 1. Full Business Detail (slug)
 // ═══════════════════════════════════════════════════════════
 
+/**
+ * Check ownership for the signed-in user without exposing owner_profile_id
+ * through the anonymous public business-detail payload.
+ *
+ * Call from a server component after authenticating the user. RLS remains the
+ * authority: this query returns a row only when the signed-in user can read
+ * the published business and its owner_profile_id matches their own ID.
+ */
+export async function isBusinessOwner(businessId: string, userId: string): Promise<boolean> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('businesses')
+    .select('id')
+    .eq('id', businessId)
+    .eq('owner_profile_id', userId)
+    .eq('is_published', true)
+    .maybeSingle()
+
+  if (error) return false
+  return !!data
+}
+
 export const getBusinessDetail = unstable_cache(
   async (slug: string): Promise<BusinessDetail | null> => {
     const supabase = createPublicClient()
@@ -119,7 +141,7 @@ export const getBusinessDetail = unstable_cache(
       .from('businesses')
       .select(
         `
-        id, slug, name, owner_profile_id, business_type, description, hook,
+        id, slug, name, business_type, description, hook,
         area, city, address_text, map_url, cover_image_url,
         is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         trust_score, trust_tier, successful_orders,
@@ -149,7 +171,7 @@ export const getBusinessDetail = unstable_cache(
         ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
         : null
     delete rawBiz.business_locations
-    const business = { ...(rawBiz as unknown as Business), location }
+    const business = { ...(rawBiz as unknown as Omit<Business, 'owner_profile_id'>), location }
 
     const noticeText = ((rawBiz.important_notice as string | null) ?? '').trim()
     const noticeExpiresAt = (rawBiz.notice_expires_at as string | null) ?? null

@@ -27,14 +27,26 @@ export async function POST(req: NextRequest) {
     failClosed: true,
   })
   if (!rateLimit.ok) {
+    const unavailable = rateLimit.error.startsWith('تعذر')
     return NextResponse.json(
       { error: rateLimit.error },
-      { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } },
+      {
+        status: unavailable ? 503 : 429,
+        headers: { 'Retry-After': String(rateLimit.retryAfter ?? 60) },
+      },
     )
   }
 
+  const declaredLength = Number(req.headers.get('content-length') ?? '0')
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_SIZE + 512 * 1024) {
+    return NextResponse.json({ error: 'حجم الطلب أكبر من المسموح' }, { status: 413 })
+  }
+
   const admin = createServiceClient()
-  const formData = await req.formData()
+  const formData = await req.formData().catch(() => null)
+  if (!formData) {
+    return NextResponse.json({ error: 'بيانات الرفع غير صحيحة' }, { status: 400 })
+  }
   const fileRaw = formData.get('file')
   const urlRaw = formData.get('url')
   const category = String(formData.get('category') ?? '')
@@ -43,15 +55,16 @@ export async function POST(req: NextRequest) {
   if (!ALLOWED_CATEGORIES.includes(category as Category)) {
     return NextResponse.json({ error: 'نوع الصورة غلط' }, { status: 400 })
   }
-  if (!businessId) {
-    return NextResponse.json({ error: 'businessId ناقص' }, { status: 400 })
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(businessId)) {
+    return NextResponse.json({ error: 'معرّف النشاط غير صحيح' }, { status: 400 })
   }
 
-  const { data: biz } = await admin
+  const { data: biz, error: bizError } = await admin
     .from('businesses')
     .select('id, slug')
     .eq('id', businessId)
     .maybeSingle()
+  if (bizError) return NextResponse.json({ error: 'تعذر التحقق من النشاط' }, { status: 500 })
   if (!biz) return NextResponse.json({ error: 'النشاط مش موجود' }, { status: 404 })
 
   const folder = `eah/businesses/${businessId}/${category}`
@@ -203,9 +216,13 @@ export async function DELETE(req: NextRequest) {
     failClosed: true,
   })
   if (!rateLimit.ok) {
+    const unavailable = rateLimit.error.startsWith('تعذر')
     return NextResponse.json(
       { error: rateLimit.error },
-      { status: 429, headers: { 'Retry-After': String(rateLimit.retryAfter) } },
+      {
+        status: unavailable ? 503 : 429,
+        headers: { 'Retry-After': String(rateLimit.retryAfter ?? 60) },
+      },
     )
   }
 

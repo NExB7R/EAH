@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {
   getBusinessDetail,
+  isBusinessOwner,
   getBusinessReviews,
   getSimilarBusinesses,
   getUserReview,
@@ -154,13 +155,13 @@ export default async function BusinessPage({ params }: Props) {
 
   const reviewStats = computeReviewStats(reviews)
   const isLoggedIn = !!session
-  const [isFavorite, isFollowing] = session
+  const [isOwner, isFavorite, isFollowing] = session
     ? await Promise.all([
+        isBusinessOwner(business.id, session.userId),
         getUserActivity(business.id, session.userId, 'favorite'),
         getUserActivity(business.id, session.userId, 'follow'),
       ])
-    : [false, false]
-  const isOwner = session?.userId === business.owner_profile_id
+    : [false, false, false]
 
   const followingRootIds =
     session && comments.length > 0 ? await getMyFollowingRootIds(business.id, session.userId) : []

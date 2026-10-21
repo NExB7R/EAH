@@ -6,7 +6,8 @@ import {
   CrownGoldIcon,
   CloseIcon,
 } from '@/components/icons'
-import { getBusinessesByStatus, type BusinessStatus } from '@/lib/data/admin'
+import { type BusinessStatus } from '@/lib/data/admin'
+import { getAdminBusinessesPage } from '@/lib/data/admin-business-list'
 import { getActiveAreas } from '@/lib/data/areas'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
@@ -19,7 +20,7 @@ import styles from './businesses.module.css'
 export const dynamic = 'force-dynamic'
 
 type Props = {
-  searchParams: Promise<{ status?: string; q?: string; area?: string }>
+  searchParams: Promise<{ status?: string; q?: string; area?: string; page?: string }>
 }
 
 const TABS: { key: BusinessStatus; label: string }[] = [
@@ -30,67 +31,48 @@ const TABS: { key: BusinessStatus; label: string }[] = [
   { key: 'all', label: 'الكل' },
 ]
 
-type Stats = {
-  pending: number
-  published: number
-  rejected: number
-  adminOwned: number
-}
-
-function computeStats(all: Awaited<ReturnType<typeof getBusinessesByStatus>>): Stats {
-  return {
-    pending: all.filter((b) => !b.is_published && !b.rejected_at).length,
-    published: all.filter((b) => b.is_published).length,
-    rejected: all.filter((b) => !!b.rejected_at).length,
-    adminOwned: all.filter((b) => b.source === 'admin' && b.is_published).length,
-  }
+function buildBusinessListHref(status: BusinessStatus, query: string, area: string, page: number): string {
+  const params = new URLSearchParams({ status, page: String(page) })
+  if (query) params.set('q', query)
+  if (area) params.set('area', area)
+  return `/admin/businesses?${params.toString()}`
 }
 
 export default async function AdminBusinessesPage({ searchParams }: Props) {
   const params = await searchParams
   const status = (params.status as BusinessStatus) ?? 'pending'
   const validStatus = TABS.some((t) => t.key === status) ? status : 'pending'
-  const q = (params.q ?? '').trim().toLowerCase()
+  const q = (params.q ?? '').trim().slice(0, 100)
   const areaFilter = params.area ?? ''
+  const requestedPage = Number.parseInt(params.page ?? '1', 10)
+  const page = Number.isFinite(requestedPage) && requestedPage > 0 ? requestedPage : 1
 
-  // Admin badges من كل الحالات
-  const [allForStats, activeAreas] = await Promise.all([
-    getBusinessesByStatus('all'),
+  const [businessPage, activeAreas] = await Promise.all([
+    getAdminBusinessesPage({
+      status: validStatus,
+      query: q,
+      area: areaFilter,
+      page,
+    }),
     getActiveAreas(),
   ])
-  const stats = computeStats(allForStats)
-
-  let businesses = await getBusinessesByStatus(validStatus)
-
-  // فلترة إضافية
-  if (q) {
-    businesses = businesses.filter(
-      (b) =>
-        b.name.toLowerCase().includes(q) ||
-        (b.area ?? '').toLowerCase().includes(q) ||
-        (b.owner?.display_name ?? '').toLowerCase().includes(q) ||
-        (b.owner?.phone ?? '').includes(q),
-    )
-  }
-  if (areaFilter) {
-    businesses = businesses.filter((b) => b.area === areaFilter)
-  }
+  const { businesses, counts, total, ownerSearchLimited } = businessPage
 
   return (
     <div>
       <AccountPageHeader
         title="إدارة الأنشطة"
-        description={`${allForStats.length} نشاط — ${businesses.length} معروض`}
+        description={`${counts.all.toLocaleString('ar-EG')} نشاط إجمالي — ${total.toLocaleString('ar-EG')} نتيجة`}
       />
 
       {/* Stats */}
       <section className={styles.statsGrid}>
-        <div className={`${styles.statCard} ${stats.pending > 0 ? styles.statWarn : ''}`}>
+        <div className={`${styles.statCard} ${counts.pending > 0 ? styles.statWarn : ''}`}>
           <span className={styles.statIcon}>
             <AlertIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{stats.pending}</span>
+            <span className={styles.statValue}>{counts.pending.toLocaleString('ar-EG')}</span>
             <span className={styles.statLabel}>بانتظار موافقة</span>
           </div>
         </div>
@@ -99,7 +81,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <CheckCircleIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{stats.published}</span>
+            <span className={styles.statValue}>{counts.published.toLocaleString('ar-EG')}</span>
             <span className={styles.statLabel}>منشور</span>
           </div>
         </div>
@@ -108,7 +90,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <CloseIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{stats.rejected}</span>
+            <span className={styles.statValue}>{counts.rejected.toLocaleString('ar-EG')}</span>
             <span className={styles.statLabel}>مرفوض</span>
           </div>
         </div>
@@ -117,7 +99,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <CrownGoldIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{stats.adminOwned}</span>
+            <span className={styles.statValue}>{counts.adminOwned.toLocaleString('ar-EG')}</span>
             <span className={styles.statLabel}>بإدارة الأدمن</span>
           </div>
         </div>
@@ -137,7 +119,15 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
         {TABS.map((tab) => {
           const active = tab.key === validStatus
           const count =
-            tab.key === 'all' ? allForStats.length : (stats[tab.key as keyof Stats] ?? 0)
+            tab.key === 'all'
+              ? counts.all
+              : tab.key === 'pending'
+                ? counts.pending
+                : tab.key === 'published'
+                  ? counts.published
+                  : tab.key === 'rejected'
+                    ? counts.rejected
+                    : counts.adminOwned
           return (
             <Link
               key={tab.key}
@@ -155,20 +145,55 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
       {/* Filters */}
       <BusinessFilters areas={activeAreas.map((a) => a.area)} />
 
+      {ownerSearchLimited && q && (
+        <p className={styles.searchNotice} role="status">
+          البحث عن المالكين واسع أو غير متاح مؤقتًا. ضيّق اسم المالك أو رقم الهاتف لتحصل على نتائج أدق.
+        </p>
+      )}
+
       {businesses.length === 0 ? (
         <EmptyState
           Icon={validStatus === 'pending' ? CheckCircleIcon : StoreIcon}
           title={validStatus === 'pending' ? 'مفيش أنشطة معلقة' : 'مفيش نتائج'}
           description={
             validStatus === 'pending'
-              ? 'كل الأنشطة اتأكدت — تمام!'
+              ? 'لا توجد أنشطة غير منشورة بانتظار المراجعة في النتائج الحالية.'
               : q || areaFilter
                 ? 'جرّب بحث أو فلتر تاني'
-                : 'جرب تاب تاني أو استنى أنشطة جديدة'
+                : 'جرّب حالة أخرى أو أضف نشاطًا جديدًا'
           }
         />
       ) : (
-        <BusinessList businesses={businesses} status={validStatus} />
+        <>
+          <BusinessList businesses={businesses} status={validStatus} />
+          {total > businessPage.pageSize && (
+            <nav className={styles.pagination} aria-label="صفحات الأنشطة">
+              <span className={styles.pageSummary}>
+                صفحة {businessPage.page.toLocaleString('ar-EG')} من {Math.ceil(total / businessPage.pageSize).toLocaleString('ar-EG')}
+              </span>
+              <div className={styles.pageActions}>
+                {businessPage.page > 1 && (
+                  <Link
+                    className={styles.pageLink}
+                    href={buildBusinessListHref(validStatus, q, areaFilter, businessPage.page - 1)}
+                    rel="prev"
+                  >
+                    السابق
+                  </Link>
+                )}
+                {businessPage.page < Math.ceil(total / businessPage.pageSize) && (
+                  <Link
+                    className={styles.pageLink}
+                    href={buildBusinessListHref(validStatus, q, areaFilter, businessPage.page + 1)}
+                    rel="next"
+                  >
+                    التالي
+                  </Link>
+                )}
+              </div>
+            </nav>
+          )}
+        </>
       )}
     </div>
   )

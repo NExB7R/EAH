@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { shouldRenderPublicChrome } from '@/lib/navigation/public-chrome'
 import SecondaryHero from './secondary-hero'
 import Signature from './signature'
 import PalestineHeart from './palestine-heart'
@@ -87,6 +88,8 @@ const COLUMNS = [
 ]
 
 export default async function SiteFooter() {
+  if (!(await shouldRenderPublicChrome())) return null
+
   const texts = await getAppTexts()
   return (
     <footer className={styles.footer}>

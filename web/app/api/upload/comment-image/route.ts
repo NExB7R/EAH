@@ -15,12 +15,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'لازم تسجل دخول' }, { status: 401 })
   }
 
-  const rl = await checkRateLimit(strictLimiter, `upload:${user.id}`)
+  const rl = await checkRateLimit(strictLimiter, `upload:${user.id}`, { failClosed: true })
   if (!rl.ok) {
-    return NextResponse.json({ error: rl.error }, { status: 429 })
+    const unavailable = rl.error.startsWith('تعذر')
+    return NextResponse.json(
+      { error: rl.error },
+      {
+        status: unavailable ? 503 : 429,
+        headers: unavailable ? { 'Retry-After': '60' } : {},
+      },
+    )
   }
 
-  const formData = await req.formData()
+  const contentLength = Number(req.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > 5.2 * 1024 * 1024) {
+    return NextResponse.json({ error: 'حجم الطلب أكبر من المسموح' }, { status: 413 })
+  }
+
+  const formData = await req.formData().catch(() => null)
+  if (!formData) return NextResponse.json({ error: 'بيانات الملف غير صحيحة' }, { status: 400 })
   const file = formData.get('file')
   if (!(file instanceof File)) {
     return NextResponse.json({ error: 'مفيش ملف' }, { status: 400 })

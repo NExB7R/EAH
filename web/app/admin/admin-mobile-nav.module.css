@@ -1,93 +1,88 @@
-/* EAH — Admin Mobile Nav */
-
+/* Admin mobile navigation drawer. */
 .toggle {
   display: none;
-  position: sticky;
-  top: 8px;
-  z-index: 40;
   align-items: center;
   justify-content: center;
   width: 44px;
   height: 44px;
-  margin: 0 0 12px 0;
   padding: 0;
+  border: 1px solid var(--admin-border, var(--border-purple-soft));
   border-radius: 12px;
-  background: linear-gradient(160deg, rgba(20, 14, 34, 0.85), rgba(10, 7, 20, 0.95));
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  color: var(--purple-light);
+  background: var(--admin-canvas, var(--bg-base));
+  color: var(--admin-text, var(--text-primary));
   cursor: pointer;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
 .backdrop {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(7, 2, 13, 0.75);
+  background: var(--backdrop-heavy);
+  backdrop-filter: blur(3px);
 }
 
 .drawer {
   position: fixed;
-  top: 0;
+  inset-block: 0;
   inset-inline-end: 0;
-  bottom: 0;
   z-index: 201;
-  width: min(320px, 85vw);
-  padding: 16px 12px;
-  background: #07020d;
-  border-inline-start: 1px solid rgba(168, 85, 247, 0.25);
+  width: min(340px, 88vw);
+  padding: 18px 16px;
   overflow-y: auto;
+  border-inline-start: 1px solid var(--admin-border, var(--border-purple-soft));
+  background: var(--admin-surface, var(--bg-elevated));
+  box-shadow: var(--shadow-md);
+  animation: drawerIn 180ms ease-out;
 }
 
 .drawer :global(aside) {
   position: static;
+  width: 100%;
   max-height: none;
   overflow: visible;
 }
 
-.drawer :global(nav) {
-  flex-direction: column;
-  overflow-x: visible;
-}
-
-.drawer :global(.section) {
-  flex-direction: column;
-  gap: 4px;
-}
-
-.drawer :global(.sectionTitle) {
-  display: block;
-}
-
-.drawer :global(.list) {
-  flex-direction: column;
-}
-
-.drawer :global(.item) {
-  flex-shrink: initial;
-  padding: 10px 12px;
-  font-size: 0.9rem;
+.drawerTitle {
+  margin: 0 0 14px;
+  color: var(--admin-text, var(--text-primary));
+  font-size: 1rem;
+  font-weight: 850;
 }
 
 .close {
-  position: sticky;
-  top: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  margin-bottom: 12px;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 14px;
   padding: 0;
-  border-radius: 8px;
-  background: rgba(168, 85, 247, 0.1);
-  border: 1px solid rgba(168, 85, 247, 0.25);
-  color: var(--text-secondary);
+  border: 1px solid var(--admin-border, var(--border-purple-soft));
+  border-radius: 11px;
+  background: var(--bg-surface);
+  color: var(--admin-text, var(--text-primary));
   cursor: pointer;
 }
 
-@media (max-width: 1024px) {
+@keyframes drawerIn {
+  from {
+    opacity: 0.7;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 1080px) {
   .toggle {
     display: inline-flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer {
+    animation: none;
   }
 }
