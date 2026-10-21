@@ -6,9 +6,10 @@
 
 ## Deployment visibility / why production has not changed
 
-- Review preview for the current branch: https://eah-git-redesign-admin-control-center-eah-74a0.vercel.app
 - The public production URL referenced by the project workflows is https://eah-sq.vercel.app. It is intentionally unchanged because PR #27 is still a draft and is stacked on PR #26; neither PR has been merged to `main`.
-- A Vercel preview URL is a separate deployment and does not change the production hostname. Do not merge the platform changes until current-head quality and role-specific workflow tests have actual results.
+- **Current preview validation is blocked:** Vercel returns the project/team `build-rate-limit` gate instead of running a fresh build. The supplied failed log was for commit `be756e2`; its syntax error in `edit-actions.ts` was corrected in a later source commit, but that later source has not yet produced a successful build.
+- GitHub Actions `Quality Gate` jobs finish in about two seconds with `runner_id: 0`, no runner name, and an empty `steps` array; their logs return `BlobNotFound`. This matches issue #22 (runner infrastructure) and is not evidence that TypeScript/build/tests passed.
+- Do not merge the platform changes until a fresh current-head build and role-specific workflow tests have actual results.
 
 ## Inventory observed
 
@@ -52,7 +53,10 @@
 - Service-role reads for business detail and owner candidates now authorize at the data boundary; fraud intelligence and system-health reads also call `requireAdmin()` before privileged queries.
 - Admin create, link, and edit owner flows read the selected user's role through a guarded server-side query scoped to the supplied user ID; they no longer depend on the admin session being able to read another user's role under self-only RLS.
 - Customer badge data now checks the authenticated user and refuses cross-user earned-badge lookups unless the caller is an admin.
-- Admin-created activities support `owner_profile_id = null` in their source type, preserving the required owner-optional workflow.
+- Admin-created activities support `owner_profile_id = null`; visibility is now controlled independently from whether an owner account is linked, as required for admin-created businesses.
+- Custom business type review no longer controls public visibility. A pending/rejected custom label falls back to the built-in `أخرى` category; approval shows the approved label, while rejecting or resubmitting the label does not hide the activity. Admin details now include a custom-label correction/resubmission control. Public visibility/approval still require an end-to-end test.
+- The admin branch editor now loads inactive branches and stored primary/activity state, lets admins toggle branch activity, keeps edits/deletes scoped to the parent activity, and attempts to restore/reassign the primary branch when a mutation fails or the primary branch is disabled/deleted. The editor logic has not yet been run against database-backed regression tests.
+- The admin overview now separates the action queue from four global metrics and the live activity feed; redundant quick links and duplicate 24-hour metric cards were removed. The global topbar no longer repeats the page heading, redirect-only navigation entries were removed, and admin accent contrast was strengthened using EAH's existing purple/gold/teal palette. Desktop/mobile visual review is still required.
 - Push subscription endpoints validate malformed JSON, cap inputs, and return generic error messages instead of exposing raw database errors.
 - AI insight generation is rate-limited after ownership/admin authorization and caps its requested metric window at 90 days.
 - Admin system health is now linked from the primary navigation and command search.
@@ -64,7 +68,7 @@
 - Upload tests must verify MIME/content signatures and storage ownership, not only browser-supplied `Content-Type`; server-side upload helper checks should be retained.
 - The global rate-limit outage policy is not finalized for every action. Costly generation and high-impact writes are fail-closed; lower-risk telemetry and read paths need deliberate availability/abuse tradeoffs.
 - Public phone/contact visibility (especially phone lookup results), identity/trust badge semantics, recovery channel, analytics consent/retention, commission artifacts, and operating budget still require explicit product decisions.
-- The latest Vercel preview deployment for commit `0e45229fe6d0cdee71f0e0d558d591aaf4e7688e` reports `READY`, and deployment metadata matches the source branch commit. This is a successful deploy/build signal, but no GitHub Actions quality run, Playwright, or RLS result has been collected; role-specific app flows remain unverified, and build logs are blocked by a Vercel team-scope 403.
+- Vercel status for the current feature head is blocked by `build-rate-limit`; the latest user-supplied build log was for an earlier commit and failed at a syntax error that has since been corrected in source. No successful build for the corrected head has been observed.
 
 ## Live Supabase advisory snapshot (read-only)
 
@@ -100,4 +104,4 @@ A read-only inspection previously found only one business and no linked business
 - Run realistic load tests for expected peak request rate and concurrency—not just 500k registered accounts—and measure p95 latency, error rate, DB connection saturation, cache behavior, and upload/CDN performance.
 - Confirm backups and a restore drill, monitoring/alerts, scheduled jobs, domain/SSL, SEO, accessibility, mobile breakpoints, rate limits, abuse response, and rollback procedures.
 
-**Validation note:** Vercel now reports the exact feature-branch commit `0e45229fe6d0cdee71f0e0d558d591aaf4e7688e` as `READY`, and the GitHub Vercel status is `success`. Direct build-log access still returns a team-scope 403; the GitHub Actions pull-request run lookup found no run for the current head. TypeScript/ESLint/Vitest/Playwright/RLS checks and live customer/merchant/admin journeys remain unverified. A READY deployment is not a substitute for those test results.
+**Validation note (updated 2026-10-21):** PR #27 remains open/draft. The syntax error reported by the supplied Vercel log has been corrected in a later source commit, but the current head has no successful build due Vercel `build-rate-limit`. The newest GitHub Actions quality jobs fail before any step starts (`runner_id: 0`, `steps: []`); their logs cannot be retrieved. TypeScript, ESLint, Prettier, Stylelint, Vitest, Playwright, RLS tests, and live customer/merchant/admin journeys therefore remain unverified. No merge, Production deploy, or database change was performed.
