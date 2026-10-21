@@ -47,7 +47,9 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
   const owner = owners.find((o) => o.id === data.owner_user_id)
   const needsTypeApproval = data.business_type === 'misc' && data.custom_business_type.trim().length > 0
   const publishStatus = needsTypeApproval
-    ? 'مسودة — نوع النشاط محتاج موافقة'
+    ? owner
+      ? 'سينشر تحت «أخرى» — النوع المخصص قيد المراجعة'
+      : 'سينشر تحت «أخرى» — بدون مالك، والنوع قيد المراجعة'
     : owner
       ? 'جاهز للنشر — مع مالك مرتبط'
       : 'جاهز للنشر — بدون مالك مرتبط'
@@ -119,7 +121,7 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
       <div style={{ marginTop: '20px' }} className={styles.draftBar}>
         <span>
           {needsTypeApproval
-            ? 'نوع النشاط المخصص محتاج موافقة؛ وده منفصل عن اختيار المالك.'
+            ? 'النشاط هيتنشر على المنصة ضمن فئة «أخرى» حتى يتم اعتماد الاسم المخصص. موافقة النوع لا تتحكم في ظهور النشاط، والمالك يظل هو الحساب المختار.'
             : owner
               ? 'البيانات جاهزة — النشاط هيتنشر والمالك المختار هيتربط به.'
               : 'النشاط هيتنشر على المنصة بدون مالك مرتبط، وتقدر تربطه بحساب مسجل لاحقًا من الإدارة.'}
