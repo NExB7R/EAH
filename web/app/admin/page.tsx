@@ -8,10 +8,9 @@ import {
   AlertIcon,
   CheckCircleIcon,
   ArrowLeftIcon,
-  GiftIcon,
   ShieldCheckIcon,
 } from '@/components/icons'
-import { getAdminStats, getAdminRecent, getAdminBadges } from '@/lib/data/admin'
+import { getAdminStats, getAdminBadges } from '@/lib/data/admin'
 import { getUserSession } from '@/lib/data/user'
 import ActivityFeed from '@/components/admin/activity-feed'
 import styles from './page.module.css'
@@ -21,11 +20,10 @@ export const dynamic = 'force-dynamic'
 type Card = {
   key: string
   label: string
-  value: number | string
+  value: number
   Icon: React.ComponentType<{ size?: number }>
-  tone: 'purple' | 'orange' | 'teal' | 'gold' | 'pink'
+  tone: 'purple' | 'teal' | 'gold'
   href?: string
-  hint?: string
 }
 
 type Alert = {
@@ -39,68 +37,27 @@ type Alert = {
 }
 
 export default async function AdminDashboard() {
-  const [stats, recent, badges, session] = await Promise.all([
+  const [stats, badges, session] = await Promise.all([
     getAdminStats(),
-    getAdminRecent(),
     getAdminBadges(),
     getUserSession(),
   ])
 
-  const CARDS: Card[] = [
-    {
-      key: 'total',
-      label: 'كل الأنشطة',
-      value: stats.totalBusinesses,
-      Icon: StoreIcon,
-      tone: 'purple',
-    },
-    {
-      key: 'pending',
-      label: 'بحاجة موافقة',
-      value: stats.pendingBusinesses,
-      Icon: AlertIcon,
-      tone: 'orange',
-      href: '/admin/businesses?status=pending',
-    },
-    {
-      key: 'published',
-      label: 'منشور',
-      value: stats.publishedBusinesses,
-      Icon: CheckCircleIcon,
-      tone: 'teal',
-    },
-    {
-      key: 'users',
-      label: 'المستخدمين',
-      value: stats.totalUsers,
-      Icon: UserIcon,
-      tone: 'purple',
-      href: '/admin/users',
-    },
-    {
-      key: 'orders',
-      label: 'الطلبات',
-      value: stats.totalOrders,
-      Icon: FileTextIcon,
-      tone: 'gold',
-      href: '/admin/analytics',
-    },
-    {
-      key: 'reviews',
-      label: 'التقييمات',
-      value: stats.totalReviews,
-      Icon: StarIcon,
-      tone: 'gold',
-      href: '/admin/moderation',
-    },
+  // Metrics describe the platform; the separate action queue below describes
+  // work that needs a decision. Avoid displaying the same pending count twice.
+  const cards: Card[] = [
+    { key: 'total', label: 'كل الأنشطة', value: stats.totalBusinesses, Icon: StoreIcon, tone: 'purple', href: '/admin/businesses' },
+    { key: 'published', label: 'نشاط منشور', value: stats.publishedBusinesses, Icon: CheckCircleIcon, tone: 'teal', href: '/admin/businesses?status=published' },
+    { key: 'users', label: 'المستخدمون', value: stats.totalUsers, Icon: UserIcon, tone: 'purple', href: '/admin/users' },
+    { key: 'orders', label: 'الطلبات', value: stats.totalOrders, Icon: FileTextIcon, tone: 'gold', href: '/admin/analytics' },
   ]
 
-  const ALERTS: Alert[] = [
+  const alerts: Alert[] = [
     {
       key: 'pendingBusinesses',
       count: badges.pendingBusinesses,
-      label: 'نشاط بحاجة موافقة',
-      desc: 'راجعهم بسرعة — كل تأخير بيأثر على التجربة',
+      label: 'نشاط بانتظار المراجعة',
+      desc: 'راجع البيانات وقرار النشر من قائمة الأنشطة',
       href: '/admin/businesses?status=pending',
       tone: 'orange',
       Icon: StoreIcon,
@@ -109,7 +66,7 @@ export default async function AdminDashboard() {
       key: 'flaggedReviews',
       count: badges.flaggedReviews,
       label: 'تقييم بحاجة مراجعة',
-      desc: 'تقييمات معلّمة من النظام — راجعها',
+      desc: 'راجع التقييمات المعلّمة قبل اتخاذ القرار',
       href: '/admin/moderation',
       tone: 'gold',
       Icon: StarIcon,
@@ -117,24 +74,24 @@ export default async function AdminDashboard() {
     {
       key: 'openReports',
       count: badges.openReports,
-      label: 'إبلاغ مفتوح',
-      desc: 'بلاغات من المستخدمين بانتظار قرار',
-      href: '/admin/reports',
+      label: 'بلاغ مفتوح',
+      desc: 'تابع بلاغات المستخدمين من قسم المراجعة',
+      href: '/admin/moderation?tab=reports',
       tone: 'purple',
       Icon: ShieldCheckIcon,
     },
     {
       key: 'pendingSubscriptions',
       count: badges.pendingSubscriptions,
-      label: 'اشتراك بحاجة موافقة',
-      desc: 'طلبات ترقية من التجار',
+      label: 'طلب اشتراك بانتظار القرار',
+      desc: 'راجع طلبات الاشتراك قبل اعتمادها',
       href: '/admin/subscriptions',
       tone: 'teal',
       Icon: CrownGoldIcon,
     },
   ]
 
-  const activeAlerts = ALERTS.filter((a) => a.count > 0)
+  const activeAlerts = alerts.filter((alert) => alert.count > 0)
 
   return (
     <div className={styles.wrap}>
@@ -142,7 +99,9 @@ export default async function AdminDashboard() {
         <div className={styles.introCopy}>
           <span className={styles.kicker}>مركز العمليات · EAH</span>
           <h2 className={styles.introTitle}>أهلاً، {session?.displayName || 'مدير المنصة'}</h2>
-          <p className={styles.introText}>دي نظرة سريعة على حالة المنصة، وأهم المهام اللي محتاجة متابعتك دلوقتي.</p>
+          <p className={styles.introText}>
+            المؤشرات الأساسية والمهام التي تحتاج قرارك — من غير تكرار روابط التنقل الموجودة في القائمة.
+          </p>
         </div>
         <Link href="/admin/businesses/new" className={styles.primaryAction}>
           <StoreIcon size={17} />
@@ -150,177 +109,73 @@ export default async function AdminDashboard() {
           <ArrowLeftIcon size={15} />
         </Link>
       </section>
-      {/* ─── Alerts (كل التنبيهات) ─── */}
-      {activeAlerts.length > 0 && (
-        <section className={styles.alertsGrid}>
-          {activeAlerts.map((alert) => (
-            <Link
-              key={alert.key}
-              href={alert.href}
-              className={`${styles.alert} ${styles[`alert_${alert.tone}`]}`}
-            >
-              <span className={styles.alertIcon}>
-                <alert.Icon size={22} />
-              </span>
-              <div className={styles.alertBody}>
-                <strong>
-                  {alert.count} {alert.label}
-                </strong>
-                <span>{alert.desc}</span>
-              </div>
-              <ArrowLeftIcon size={16} className={styles.alertArrow} />
-            </Link>
-          ))}
-        </section>
-      )}
 
-      {activeAlerts.length === 0 && (
-        <div className={styles.allClear} role="status">
-          <span className={styles.allClearIcon}><CheckCircleIcon size={19} /></span>
-          <div>
-            <strong>لا توجد مهام ظاهرة للمراجعة حاليًا</strong>
-            <span>لا تظهر حاليًا طلبات مراجعة ضمن التنبيهات. يمكنك متابعة بقية مؤشرات المنصة من هنا.</span>
-          </div>
-        </div>
-      )}
-
-      {/* ─── Stats Grid ─── */}
-      <section className={styles.grid}>
-        {CARDS.map(({ key, label, value, Icon, tone, href, hint }) => {
-          const content = (
-            <>
-              <div className={styles.cardTop}>
-                <span className={styles.icon}>
-                  <Icon size={20} />
+      <section className={styles.section} aria-labelledby="admin-work-queue">
+        <header className={styles.sectionHeader}>
+          <h2 id="admin-work-queue" className={styles.sectionTitle}>المهام التي تحتاج متابعة</h2>
+          <span className={styles.sectionHint}>تظهر المهام التي لها عناصر معلّقة فقط</span>
+        </header>
+        {activeAlerts.length > 0 ? (
+          <div className={styles.alertsGrid}>
+            {activeAlerts.map((alert) => (
+              <Link
+                key={alert.key}
+                href={alert.href}
+                className={\`${styles.alert} ${styles[`alert_${alert.tone}`]}\`}
+              >
+                <span className={styles.alertIcon}>
+                  <alert.Icon size={22} />
                 </span>
-                {hint && <span className={styles.hint}>{hint}</span>}
-              </div>
-              <span className={styles.value}>{value}</span>
-              <span className={styles.label}>{label}</span>
-            </>
-          )
-          const className = `${styles.card} ${styles[tone]}`
-          return href ? (
-            <Link key={key} href={href} className={className}>
-              {content}
-            </Link>
-          ) : (
-            <div key={key} className={className}>
-              {content}
+                <div className={styles.alertBody}>
+                  <strong>
+                    {alert.count.toLocaleString('ar-EG')} {alert.label}
+                  </strong>
+                  <span>{alert.desc}</span>
+                </div>
+                <ArrowLeftIcon size={16} className={styles.alertArrow} />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.allClear} role="status">
+            <span className={styles.allClearIcon}><CheckCircleIcon size={19} /></span>
+            <div>
+              <strong>لا توجد مهام مراجعة معلّقة حاليًا</strong>
+              <span>يمكنك متابعة المؤشرات الأساسية والنشاط الحي من هذه الصفحة.</span>
             </div>
-          )
-        })}
+          </div>
+        )}
       </section>
 
-      {/* ─── Recent Activity (آخر 24 ساعة) ─── */}
-      <section className={styles.section}>
+      <section className={styles.section} aria-labelledby="admin-platform-metrics">
         <header className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>آخر النشاطات</h2>
-          <span className={styles.sectionHint}>آخر 24 ساعة</span>
+          <h2 id="admin-platform-metrics" className={styles.sectionTitle}>مؤشرات المنصة</h2>
+          <span className={styles.sectionHint}>إجماليات حالية</span>
         </header>
-
-        <div className={styles.activityGrid}>
-          <Link href="/admin/businesses" className={styles.activityCard}>
-            <span className={styles.activityIcon}>
-              <StoreIcon size={20} />
-            </span>
-            <div className={styles.activityBody}>
-              <span className={styles.activityLabel}>أنشطة جديدة</span>
-              <span className={styles.activityValue}>{recent.newBusinesses}</span>
-            </div>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
-
-          <Link href="/admin/users" className={styles.activityCard}>
-            <span className={styles.activityIcon}>
-              <UserIcon size={20} />
-            </span>
-            <div className={styles.activityBody}>
-              <span className={styles.activityLabel}>مستخدمين جداد</span>
-              <span className={styles.activityValue}>{recent.newUsers}</span>
-            </div>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
-
-          <Link href="/admin/analytics" className={styles.activityCard}>
-            <span className={styles.activityIcon}>
-              <FileTextIcon size={20} />
-            </span>
-            <div className={styles.activityBody}>
-              <span className={styles.activityLabel}>طلبات</span>
-              <span className={styles.activityValue}>{recent.newOrders}</span>
-            </div>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
-
-          <Link href="/admin/moderation" className={styles.activityCard}>
-            <span className={styles.activityIcon}>
-              <StarIcon size={20} />
-            </span>
-            <div className={styles.activityBody}>
-              <span className={styles.activityLabel}>تقييمات</span>
-              <span className={styles.activityValue}>{recent.newReviews}</span>
-            </div>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
+        <div className={styles.grid}>
+          {cards.map(({ key, label, value, Icon, tone, href }) => {
+            const content = (
+              <>
+                <div className={styles.cardTop}>
+                  <span className={styles.icon}><Icon size={20} /></span>
+                  <ArrowLeftIcon size={14} className={styles.chev} />
+                </div>
+                <span className={styles.value}>{value.toLocaleString('ar-EG')}</span>
+                <span className={styles.label}>{label}</span>
+              </>
+            )
+            return (
+              <Link key={key} href={href ?? '/admin'} className={\`${styles.card} ${styles[tone]}\`}>
+                {content}
+              </Link>
+            )
+          })}
         </div>
       </section>
 
-      {/* ─── Quick Actions ─── */}
-      <section className={styles.section}>
-        <header className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>إجراءات سريعة</h2>
-        </header>
-
-        <div className={styles.quickLinks}>
-          <Link href="/admin/businesses/new" className={styles.quickCard}>
-            <span className={styles.quickIcon}>
-              <StoreIcon size={20} />
-            </span>
-            <span className={styles.quickLabel}>إضافة نشاط جديد</span>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
-
-          <Link href="/admin/businesses" className={styles.quickCard}>
-            <span className={styles.quickIcon}>
-              <CheckCircleIcon size={20} />
-            </span>
-            <span className={styles.quickLabel}>إدارة الأنشطة</span>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
-
-          <Link href="/admin/moderation?tab=reports" className={styles.quickCard}>
-            <span className={styles.quickIcon}>
-              <ShieldCheckIcon size={20} />
-            </span>
-            <span className={styles.quickLabel}>مراجعة البلاغات</span>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
-
-          <Link href="/admin/users" className={styles.quickCard}>
-            <span className={styles.quickIcon}>
-              <UserIcon size={20} />
-            </span>
-            <span className={styles.quickLabel}>إدارة المستخدمين</span>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
-
-          <Link href="/admin/notifications" className={styles.quickCard}>
-            <span className={styles.quickIcon}>
-              <GiftIcon size={20} />
-            </span>
-            <span className={styles.quickLabel}>إرسال إشعار</span>
-            <ArrowLeftIcon size={14} className={styles.chev} />
-          </Link>
-        </div>
-      </section>
-
-      {/* ─── Live Activity Feed ─── */}
-      <section className={styles.section}>
+      <section className={styles.section} aria-label="النشاط الحي للإدارة">
         <ActivityFeed />
       </section>
-
-      {/* ─── Critical Error Toast ─── */}
     </div>
   )
 }
