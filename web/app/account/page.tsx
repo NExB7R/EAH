@@ -35,7 +35,6 @@ export default async function AccountPage() {
       key: 'points',
       label: 'النقاط',
       value: stats.pointsBalance,
-      href: '/account/points',
       Icon: GiftIcon,
       tone: 'gold',
     },
@@ -43,7 +42,6 @@ export default async function AccountPage() {
       key: 'favorites',
       label: 'المفضلات',
       value: stats.favoritesCount,
-      href: '/account/favorites',
       Icon: CrownGoldIcon,
       tone: 'purple',
     },
@@ -51,7 +49,6 @@ export default async function AccountPage() {
       key: 'following',
       label: 'المتابعات',
       value: stats.followsCount,
-      href: '/account/following',
       Icon: StoreIcon,
       tone: 'purple',
     },
@@ -59,7 +56,6 @@ export default async function AccountPage() {
       key: 'orders',
       label: 'الطلبات',
       value: stats.ordersCount,
-      href: '/account/orders',
       Icon: FileTextIcon,
       tone: 'purple',
     },
@@ -135,14 +131,14 @@ export default async function AccountPage() {
       )}
 
       <section className={styles.stats}>
-        {STATS.map(({ key, label, value, href, Icon, tone }) => (
-          <Link key={key} href={href} className={`${styles.statCard} ${styles[tone]}`}>
+        {STATS.map(({ key, label, value, Icon, tone }) => (
+          <div key={key} className={`${styles.statCard} ${styles[tone]}`}>
             <span className={styles.statIcon}>
               <Icon size={20} />
             </span>
             <span className={styles.statValue}>{value}</span>
             <span className={styles.statLabel}>{label}</span>
-          </Link>
+          </div>
         ))}
       </section>
     </div>
