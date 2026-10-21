@@ -11,6 +11,7 @@ export type CsvColumn<T> = {
  * يبني ملف CSV جاهز للتنزيل
  * - BOM في الأول عشان Excel يقرأ العربي صح
  * - escape للفواصل والاقتباسات والأسطر
+ * - حماية النصوص غير الموثوقة من Spreadsheet Formula Injection
  */
 export function buildCsv<T extends Record<string, unknown>>(
   rows: T[],
@@ -18,18 +19,38 @@ export function buildCsv<T extends Record<string, unknown>>(
 ): string {
   const header = columns.map((c) => escapeCsv(c.label)).join(',')
   const lines = rows.map((row) =>
-    columns.map((c) => escapeCsv(formatValue(row[c.key as keyof T]))).join(','),
+    columns
+      .map((c) => {
+        const raw = row[c.key as keyof T]
+        return escapeCsv(formatValue(raw), typeof raw === 'string')
+      })
+      .join(','),
   )
-  return '﻿' + [header, ...lines].join('\r\n')
+  return '\uFEFF' + [header, ...lines].join('\r\n')
 }
 
-function escapeCsv(value: string): string {
+function escapeCsv(value: string, untrustedText = false): string {
   if (value === '') return ''
-  // لو فيه فاصلة أو اقتباس أو سطر جديد → نلفّه بين اقتباسات
-  if (value.includes(',') || value.includes('"') || value.includes('\n') || value.includes('\r')) {
-    return `"${value.replace(/"/g, '""')}"`
+
+  // Spreadsheet apps may execute cells beginning with formula operators.
+  // Prefix an apostrophe for untrusted string cells, including those with
+  // leading spaces/control characters before the operator. Numeric values
+  // remain numeric so legitimate negative numbers are not altered.
+  const safeValue =
+    untrustedText &&
+    (/^[\\t\\r\\n]/.test(value) || /^[\\u0000-\\u0020\\uFEFF]*[=+\\-@]/.test(value))
+      ? `'${value}`
+      : value
+
+  if (
+    safeValue.includes(',') ||
+    safeValue.includes('"') ||
+    safeValue.includes('\n') ||
+    safeValue.includes('\r')
+  ) {
+    return `"${safeValue.replace(/"/g, '""')}"`
   }
-  return value
+  return safeValue
 }
 
 function formatValue(value: unknown): string {
@@ -44,7 +65,7 @@ function formatValue(value: unknown): string {
  * يبني Response لتنزيل CSV
  */
 export function csvResponse(csv: string, filename: string): Response {
-  const safeName = filename.replace(/[^\w.-]/g, '_')
+  const safeName = filename.replace(/[^\\w.-]/g, '_')
   return new Response(csv, {
     status: 200,
     headers: {
