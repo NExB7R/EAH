@@ -19,6 +19,7 @@ import styles from './merchant-sidebar.module.css'
 
 type Props = {
   newOrders?: number
+  hasBusiness?: boolean
 }
 
 type Item = {
@@ -69,13 +70,25 @@ const SECTIONS: Section[] = [
   },
 ]
 
-export default function MerchantSidebar({ newOrders = 0 }: Props) {
+export default function MerchantSidebar({ newOrders = 0, hasBusiness = true }: Props) {
   const pathname = usePathname()
+
+  const sections = hasBusiness
+    ? SECTIONS
+    : [
+        {
+          title: 'البداية',
+          items: [
+            { href: '/merchant', label: 'نظرة عامة', Icon: LayoutDashboardIcon },
+            { href: '/merchant/apply', label: 'تسجيل نشاط', Icon: StoreIcon },
+          ],
+        },
+      ]
 
   return (
     <aside className={styles.sidebar}>
       <nav className={styles.nav} aria-label="إدارة نشاطك">
-        {SECTIONS.map((section) => (
+        {sections.map((section) => (
           <div key={section.title} className={styles.section}>
             <h4 className={styles.sectionTitle}>{section.title}</h4>
             <ul className={styles.list}>
