@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { logError } from '@/lib/logging/errors'
 import { createClient } from '@/lib/supabase/server'
 import { headers } from 'next/headers'
-import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
+import { strictLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -18,7 +18,7 @@ const bodySchema = z.object({
 export async function POST(req: Request) {
   try {
     const h = await headers()
-    const ip = h.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+    const ip = await getClientIp()
     const rateLimit = await checkRateLimit(strictLimiter, `log-error:${ip}`, {
       failClosed: true,
     })
