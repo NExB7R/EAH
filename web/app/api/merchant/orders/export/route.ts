@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { buildCsv, csvResponse, type CsvColumn } from '@/lib/utils/csv'
+import { apiLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -33,6 +34,15 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const rateLimit = await checkRateLimit(apiLimiter, `merchant-orders-export:${user.id}:${await getClientIp()}`, { failClosed: true })
+  if (!rateLimit.ok) {
+    const unavailable = rateLimit.error.startsWith('تعذر')
+    return NextResponse.json({ error: unavailable ? 'الخدمة غير متاحة مؤقتًا' : 'طلبات كثيرة، حاول لاحقًا' }, {
+      status: unavailable ? 503 : 429,
+      headers: unavailable ? { 'Retry-After': '60' } : {},
+    })
+  }
+
   const { data: biz } = await supabase
     .from('businesses')
     .select('id, name')
@@ -47,6 +57,11 @@ export async function GET(req: Request) {
   const url = new URL(req.url)
   const status = url.searchParams.get('status') ?? 'all'
   const from = url.searchParams.get('from') ?? 'all'
+  const validStatuses = new Set(['all', ...Object.keys(STATUS_LABEL)])
+  const validRanges = new Set(['all', 'today', 'week', 'month'])
+  if (!validStatuses.has(status) || !validRanges.has(from)) {
+    return NextResponse.json({ error: 'فلتر التصدير غير صالح' }, { status: 400 })
+  }
 
   let q = supabase
     .from('order_requests')
@@ -55,7 +70,7 @@ export async function GET(req: Request) {
     )
     .eq('business_id', biz.id)
     .order('created_at', { ascending: false })
-    .limit(10000)
+    .limit(2001)
 
   if (status && status !== 'all') q = q.eq('status', status)
 
@@ -73,7 +88,14 @@ export async function GET(req: Request) {
 
   const { data, error } = await q
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('[merchant-orders-export] query failed:', error.message)
+    return NextResponse.json({ error: 'تعذر تصدير الطلبات مؤقتًا' }, { status: 500 })
+  }
+  if ((data ?? []).length > 2000) {
+    return NextResponse.json(
+      { error: 'نتائج التصدير أكبر من الحد الآمن (2000 طلب). حدّد فترة زمنية أضيق ثم أعد المحاولة.' },
+      { status: 413 },
+    )
   }
 
   const rows: Row[] = (data ?? []).map((r) => ({
