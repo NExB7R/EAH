@@ -511,9 +511,18 @@ export async function saveOwner(businessId: string, ownerProfileId: string): Pro
     return { ok: false, error: 'معرّف النشاط أو المستخدم غير صحيح' }
   }
 
+  let privileged: ReturnType<typeof createServiceClient>
+  try {
+    // requireAdmin() succeeded above. The target role cannot be read through
+    // the session client under the live self-only user_roles RLS policy.
+    privileged = createServiceClient()
+  } catch {
+    return { ok: false, error: 'تعذر تجهيز خدمة ربط المالك — حاول تاني' }
+  }
+
   const [profileRes, roleRes, businessRes] = await Promise.all([
     ctx.supabase.from('profiles').select('id, display_name').eq('id', ownerProfileId).maybeSingle(),
-    ctx.supabase.from('user_roles').select('role').eq('user_id', ownerProfileId).maybeSingle(),
+    privileged.from('user_roles').select('role').eq('user_id', ownerProfileId).maybeSingle(),
     ctx.supabase
       .from('businesses')
       .select('id, name, owner_profile_id, source, claimed_at, claimed_by_user_id')
@@ -535,15 +544,6 @@ export async function saveOwner(businessId: string, ownerProfileId: string): Pro
 
   const alreadyLinked = business.owner_profile_id === ownerProfileId
   if (alreadyLinked && roleRes.data.role === 'merchant') return { ok: true }
-
-  let privileged: ReturnType<typeof createServiceClient>
-  try {
-    // The authenticated session may read owner roles as admin, but RLS only
-    // permits super-admins to change them. The caller has passed requireAdmin.
-    privileged = createServiceClient()
-  } catch {
-    return { ok: false, error: 'تعذر تجهيز خدمة ربط المالك — حاول تاني' }
-  }
 
   if (!alreadyLinked) {
     const { error } = await ctx.supabase
