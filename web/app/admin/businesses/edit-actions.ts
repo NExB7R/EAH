@@ -449,21 +449,8 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
     }
   }
 
-  if (parsed.data.is_published) {
-    const { data: current, error: lookupError } = await ctx.supabase
-      .from('businesses')
-      .select('id, business_type_status')
-      .eq('id', businessId)
-      .maybeSingle()
-    if (lookupError) return { ok: false, error: 'تعذر التحقق من حالة نوع النشاط' }
-    if (!current) return { ok: false, error: 'النشاط مش موجود' }
-    if (current.business_type_status === 'pending' || current.business_type_status === 'rejected') {
-      return {
-        ok: false,
-        error: 'لا يمكن نشر النشاط قبل اعتماد نوعه المخصص من صفحة «أنواع الأنشطة الجديدة».',
-      }
-    }
-  }
+  // Publication is controlled by the admin's explicit visibility setting.
+  // Custom-type approval affects the label only, never whether a business can be listed.
 
   const { data: updated, error } = await ctx.supabase
     .from('businesses')
