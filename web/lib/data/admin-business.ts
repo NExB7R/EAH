@@ -11,6 +11,8 @@ export type AdminBusiness = {
   name: string
   owner_profile_id: string | null
   business_type: string
+  custom_business_type: string | null
+  business_type_status: 'pending' | 'approved' | 'rejected' | null
   description: string | null
   hook: string | null
   area: string | null
@@ -130,6 +132,8 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     name: b.name as string,
     owner_profile_id: (b.owner_profile_id as string | null) ?? null,
     business_type: b.business_type as string,
+    custom_business_type: (b.custom_business_type as string | null) ?? null,
+    business_type_status: (b.business_type_status as AdminBusiness['business_type_status']) ?? null,
     description: (b.description as string | null) ?? null,
     hook: (b.hook as string | null) ?? null,
     area: (b.area as string | null) ?? null,
