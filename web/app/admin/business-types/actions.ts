@@ -26,7 +26,6 @@ export async function approveBusinessType(businessId: string): Promise<Result> {
     .update({
       business_type_status: 'approved',
       business_type_approved_at: new Date().toISOString(),
-      is_published: true,
     })
     .eq('id', parsed.data)
     .eq('business_type_status', 'pending')
@@ -42,7 +41,7 @@ export async function approveBusinessType(businessId: string): Promise<Result> {
         userId: business.owner_profile_id,
         type: 'admin',
         title: 'تمت الموافقة على نوع نشاطك ✓',
-        body: `نوع النشاط المخصص لنشاط "${business.name}" اتوافق عليه ونشاطك بقى منشور على EAH.`,
+        body: `نوع النشاط المخصص لنشاط "${business.name}" اتوافق عليه. حالة نشر النشاط نفسها لم تتغير.`,
         deepLink: `/businesses/${business.slug}`,
       })
     } catch {
@@ -55,7 +54,7 @@ export async function approveBusinessType(businessId: string): Promise<Result> {
     action: 'business_type.approve',
     entityType: 'business',
     entityId: parsed.data,
-    metadata: { published: true },
+    metadata: { business_type_status: 'approved' },
   })
 
   revalidatePath('/admin/business-types')
@@ -79,10 +78,7 @@ export async function rejectBusinessType(businessId: string, reason: string): Pr
     .from('businesses')
     .update({
       business_type_status: 'rejected',
-      business_type_approved_at: new Date().toISOString(),
-      is_published: false,
-      rejection_reason: cleanReason || 'نوع النشاط غير مقبول',
-      rejected_at: new Date().toISOString(),
+      business_type_approved_at: null,
     })
     .eq('id', parsed.data)
     .eq('business_type_status', 'pending')
@@ -98,7 +94,7 @@ export async function rejectBusinessType(businessId: string, reason: string): Pr
         userId: business.owner_profile_id,
         type: 'admin',
         title: 'نوع النشاط محتاج تعديل',
-        body: cleanReason || 'نوع النشاط المخصص غير مقبول؛ تواصل مع الإدارة لتعديله.',
+        body: `نوع النشاط المخصص لم يتم اعتماده: ${cleanReason || 'راجع الإدارة لتعديله'}. سيظل النشاط منشورًا تحت فئة «أخرى» حتى لو تم رفض اسمه المخصص.`,
         deepLink: '/merchant/business',
       })
     } catch {
