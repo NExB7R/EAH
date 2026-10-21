@@ -164,52 +164,6 @@ export default async function MerchantDashboard() {
         ))}
       </section>
 
-      {/* Quick links */}
-      <section className={styles.quickLinks}>
-        <Link href="/merchant/business" className={styles.quickCard}>
-          <span className={styles.quickIcon}>
-            <StoreIcon size={22} />
-          </span>
-          <span className={styles.quickText}>
-            <strong>نشاطي</strong>
-            <small>عدّل البيانات والصور والمنيو</small>
-          </span>
-          <ArrowLeftIcon size={14} className={styles.quickArrow} />
-        </Link>
-
-        <Link href="/merchant/orders" className={styles.quickCard}>
-          <span className={styles.quickIcon}>
-            <FileTextIcon size={22} />
-          </span>
-          <span className={styles.quickText}>
-            <strong>الطلبات</strong>
-            <small>شوف الطلبات الواردة</small>
-          </span>
-          <ArrowLeftIcon size={14} className={styles.quickArrow} />
-        </Link>
-
-        <Link href="/merchant/offers" className={styles.quickCard}>
-          <span className={styles.quickIcon}>
-            <GiftIcon size={22} />
-          </span>
-          <span className={styles.quickText}>
-            <strong>العروض</strong>
-            <small>اعمل عروض لجذب العملاء</small>
-          </span>
-          <ArrowLeftIcon size={14} className={styles.quickArrow} />
-        </Link>
-
-        <Link href="/merchant/subscription" className={styles.quickCard}>
-          <span className={styles.quickIcon}>
-            <CrownGoldIcon size={22} />
-          </span>
-          <span className={styles.quickText}>
-            <strong>الاشتراك</strong>
-            <small>شوف باقتك وترقّى</small>
-          </span>
-          <ArrowLeftIcon size={14} className={styles.quickArrow} />
-        </Link>
-      </section>
     </div>
   )
 }
