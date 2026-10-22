@@ -207,3 +207,28 @@
     padding: 14px 12px;
   }
 }
+
+/* ─── Skip link — يظهر فقط عند keyboard focus ─── */
+.skipLink {
+  position: fixed;
+  top: -100px;
+  left: 8px;
+  z-index: 9999;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: var(--purple-primary);
+  color: rgb(255, 255, 255);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: top 150ms ease;
+  box-shadow: 0 4px 20px rgba(157, 78, 221, 0.4);
+}
+
+.skipLink:focus,
+.skipLink:focus-visible {
+  top: 8px;
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
+}
