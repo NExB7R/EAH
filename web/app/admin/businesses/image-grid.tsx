@@ -35,10 +35,22 @@ export default function ImageGrid({
 
   const add = (newItem: GridItem) => setItems((prev) => [...prev, newItem])
 
-  const remove = async (id: string) => {
+  const remove = async (item: GridItem) => {
     try {
-      await fetch(`/api/admin/upload-business-image?mediaId=${id}`, { method: 'DELETE' })
-      setItems((prev) => prev.filter((i) => i.id !== id))
+      const params = new URLSearchParams({
+        businessId,
+        category,
+        url: item.url,
+      })
+      const res = await fetch(`/api/admin/upload-business-image?${params.toString()}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) {
+        const json = (await res.json()) as { error?: string }
+        setError(json.error ?? 'فشل الحذف')
+        return
+      }
+      setItems((prev) => prev.filter((i) => i.id !== item.id))
     } catch {
       setError('فشل الحذف')
     }
@@ -137,7 +149,7 @@ export default function ImageGrid({
             <button
               type="button"
               className={styles.imageGridRemove}
-              onClick={() => remove(item.id)}
+              onClick={() => remove(item)}
               aria-label="حذف"
             >
               <CloseIcon size={12} />

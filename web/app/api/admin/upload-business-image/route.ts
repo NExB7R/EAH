@@ -313,6 +313,25 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ ok: true })
   }
 
+  // Resource-based for menu/gallery — delete by storage_path.
+  const urlParam = params.get('url')
+  if (businessId && category && (category === 'menu' || category === 'gallery') && urlParam) {
+    const { error: deleteError } = await admin
+      .from('business_media')
+      .delete()
+      .eq('business_id', businessId)
+      .eq('media_type', category)
+      .eq('storage_path', urlParam)
+
+    if (deleteError) {
+      return NextResponse.json({ error: 'فشل حذف الصورة' }, { status: 500 })
+    }
+
+    revalidatePath(`/admin/businesses/${businessId}`)
+    revalidateTag('businesses', 'default')
+    return NextResponse.json({ ok: true })
+  }
+
   // Backward compatibility for callers that provide only mediaId.
   if (!mediaId) return NextResponse.json({ error: 'mediaId مطلوب' }, { status: 400 })
 
