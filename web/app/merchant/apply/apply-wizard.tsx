@@ -10,7 +10,6 @@ import {
   ArrowLeftIcon,
   UtensilsIcon,
   PillIcon,
-  CartIcon,
   BikeIcon,
   SparklesIcon,
 } from '@/components/icons'
@@ -25,7 +24,7 @@ type Props = {
   areas: readonly string[]
 }
 
-type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
+type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office' | 'misc'
 
 const STEPS = [
   { key: 'basic', label: 'الأساسيات', Icon: StoreIcon },
@@ -37,7 +36,6 @@ const STEPS = [
 const TYPES: Array<{ value: BusinessType; label: string; Icon: typeof UtensilsIcon }> = [
   { value: 'restaurant', label: 'مطعم', Icon: UtensilsIcon },
   { value: 'pharmacy', label: 'صيدلية', Icon: PillIcon },
-  { value: 'supermarket', label: 'ماركت', Icon: CartIcon },
   { value: 'delivery_office', label: 'توصيل', Icon: BikeIcon },
   { value: 'misc', label: 'أنشطة أخرى', Icon: SparklesIcon },
 ]

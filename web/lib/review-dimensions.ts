@@ -186,7 +186,6 @@ export function getReviewDimensions(
       case 'delivery_office':
         group = 'delivery'
         break
-      case 'supermarket':
         group = 'grocery'
         break
       default:

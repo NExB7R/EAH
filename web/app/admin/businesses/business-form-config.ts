@@ -22,7 +22,6 @@ import type { AdminBusiness, BusinessOwnerOption } from '@/lib/data/admin-busine
 export const TYPES = [
   { value: 'restaurant', label: 'مطعم', Icon: GiftIcon },
   { value: 'pharmacy', label: 'صيدلية', Icon: CheckCircleIcon },
-  { value: 'supermarket', label: 'ماركت', Icon: StoreIcon },
   { value: 'delivery_office', label: 'توصيل', Icon: MapPinIcon },
   { value: 'misc', label: 'أخرى', Icon: CrownGoldIcon },
 ] as const

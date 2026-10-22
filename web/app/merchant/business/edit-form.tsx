@@ -36,7 +36,6 @@ type Props = {
 const TYPES: { value: string; label: string }[] = [
   { value: 'restaurant', label: 'مطعم / كافيه' },
   { value: 'pharmacy', label: 'صيدلية' },
-  { value: 'supermarket', label: 'ماركت' },
   { value: 'delivery_office', label: 'مكتب توصيل' },
   { value: 'misc', label: 'نشاط آخر' },
 ]

@@ -272,7 +272,7 @@ const createSchema = z.object({
     .max(80)
     .regex(/^[a-z0-9-]+$/, 'الحروف الصغيرة والأرقام والشرطة فقط')
     .optional(),
-  business_type: z.enum(['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc']),
+  business_type: z.enum(['restaurant', 'pharmacy', 'delivery_office', 'misc']),
   custom_business_type: z.string().max(50).or(z.literal('')).optional(),
   owner_profile_id: z.string().uuid().optional().or(z.literal('')),
   area: z.string().max(60).or(z.literal('')).optional(),
