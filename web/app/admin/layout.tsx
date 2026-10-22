@@ -1,8 +1,10 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import SecondaryHero from '@/components/secondary-hero'
 import AdminSidebar from '@/components/admin-sidebar'
 import CommandPalette from '@/components/ui/command-palette'
+import { ShieldCheckIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getAdminBadges } from '@/lib/data/admin'
 import AdminTopbar from './admin-topbar'
@@ -21,6 +23,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <Link href="#admin-content" className={styles.skipLink}>
         تخطي إلى المحتوى الرئيسي
       </Link>
+      <SecondaryHero
+        activeKey="admin"
+        title="لوحة التحكم"
+        Icon={ShieldCheckIcon}
+        tone="purple"
+        showNav={false}
+      />
       <div className={styles.shell}>
         <aside className={styles.sidebarRail} aria-label="التنقل الرئيسي">
           <Link href="/admin" className={styles.brand} aria-label="EAH — لوحة الإدارة">
