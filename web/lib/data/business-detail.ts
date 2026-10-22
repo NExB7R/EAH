@@ -126,6 +126,7 @@ export async function isBusinessOwner(businessId: string, userId: string): Promi
     .eq('id', businessId)
     .eq('owner_profile_id', userId)
     .eq('is_published', true)
+    .limit(1)
     .maybeSingle()
 
   if (error) return false

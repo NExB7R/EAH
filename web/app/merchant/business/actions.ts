@@ -11,7 +11,10 @@ type Result = { ok: true } | { ok: false; error: string }
 const phoneSchema = z
   .string()
   .max(20)
-  .refine((value) => value === '' || /^0\d{9,12}$/.test(value), 'رقم الهاتف لازم يبدأ بـ 0 ويكون من 10 إلى 13 رقم')
+  .refine(
+    (value) => value === '' || /^0\d{9,12}$/.test(value),
+    'رقم الهاتف لازم يبدأ بـ 0 ويكون من 10 إلى 13 رقم',
+  )
 
 const schema = z
   .object({
@@ -125,10 +128,12 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
     .eq('id', ctx.biz.id)
     .eq('owner_profile_id', ctx.userId)
     .select('id')
+    .limit(1)
     .maybeSingle()
 
   if (updateError) return { ok: false, error: 'تعذر حفظ بيانات النشاط — راجع البيانات وحاول تاني' }
-  if (!updatedBusiness) return { ok: false, error: 'مقدرناش نثبت ملكيتك للنشاط وقت الحفظ. حدّث الصفحة وحاول تاني' }
+  if (!updatedBusiness)
+    return { ok: false, error: 'مقدرناش نثبت ملكيتك للنشاط وقت الحفظ. حدّث الصفحة وحاول تاني' }
 
   // Keep the canonical geolocation in business_locations, which powers maps,
   // distance badges, and the "nearby" filter. Never write latitude/longitude
@@ -143,7 +148,10 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
 
   if (locationLookupError) {
     invalidateBusiness(ctx.biz.slug)
-    return { ok: false, error: 'اتحفظت البيانات الأساسية، لكن تعذر قراءة موقع النشاط. حاول حفظ الموقع مرة تانية' }
+    return {
+      ok: false,
+      error: 'اتحفظت البيانات الأساسية، لكن تعذر قراءة موقع النشاط. حاول حفظ الموقع مرة تانية',
+    }
   }
 
   const existingLocation = primaryLocations?.[0]
@@ -179,12 +187,17 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
       }
     }
 
-    const duplicateIds = (primaryLocations ?? []).slice(existingLocation ? 1 : 0).map((item) => item.id)
+    const duplicateIds = (primaryLocations ?? [])
+      .slice(existingLocation ? 1 : 0)
+      .map((item) => item.id)
     if (duplicateIds.length > 0) {
       const { error } = await admin.from('business_locations').delete().in('id', duplicateIds)
       if (error) {
         invalidateBusiness(ctx.biz.slug)
-        return { ok: false, error: 'الموقع اتحفظ، لكن تعذر تنظيف المواقع المكررة. راجع الإدارة لو تكررت المشكلة' }
+        return {
+          ok: false,
+          error: 'الموقع اتحفظ، لكن تعذر تنظيف المواقع المكررة. راجع الإدارة لو تكررت المشكلة',
+        }
       }
     }
   } else if ((primaryLocations ?? []).length > 0) {
@@ -255,7 +268,10 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
         const { error: cleanupError } = await admin
           .from('business_contact_methods')
           .delete()
-          .in('id', duplicates.map((item) => item.id))
+          .in(
+            'id',
+            duplicates.map((item) => item.id),
+          )
         if (cleanupError) {
           invalidateBusiness(ctx.biz.slug)
           return { ok: false, error: 'رقم التواصل اتحفظ، لكن تعذر تنظيف السجلات المكررة' }

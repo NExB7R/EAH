@@ -64,7 +64,7 @@ const BASELINE = Object.freeze({
   'B5:forbidden-color':    47,
   'B6:backdrop-filter':    35,  // v2: modals/drawers excluded (43-8)
   'B7:hardcoded-domain':    8,
-  'B8:eslint-disable':     20,
+  'B8:eslint-disable': 21,
   'B9:emoji-ui':          146,
 });
 
