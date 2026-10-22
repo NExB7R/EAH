@@ -1,3 +1,34 @@
+## 2026-10-22 — UI Consistency + Date/Number Standardization
+
+**Commits:** `250e3f9` → `d8af94be` (26 commits)
+
+**Done:**
+- CSP: `res.cloudinary.com` added to `connect-src`
+- AI_CONTRACT §39 (Workflow Contract) added
+- Image upload API — service client (bypasses RLS) for POST + DELETE
+- Image DELETE — resource-based (businessId + category) instead of stale mediaId
+- image-grid (menu/gallery) — DELETE by storage_url
+- `/updates` page removed from platform (page, footer, sitemap, lib)
+- SiteChromeGate — scope prop (footer everywhere except /auth, bottom bar mobile)
+- PageHeader — logo + line restored everywhere (reverted earlier misread)
+- Admin layout — SecondaryHero added (logo + line)
+- Admin sidebar — 7 sections, all pages linked (fraud, announcements, insights added)
+- AdminTopbar — brandMobile removed (SecondaryHero covers branding)
+- Admin/Merchant/Account — all dates + numbers to en-US (Western digits)
+- All 3 layouts unified: 1240px width, same SecondaryHero, same footer behavior
+
+**Fixed:**
+- Arabic-Indic ٠١٢ digits (looked like dots) → Western 012
+- Dates (22 Oct 2026) → (Oct 22, 2026)
+- 404 on image delete (stale mediaId) → 200 via resource-based
+- 500 on image upload (RLS on business_media) → 200 via service client
+- Missing sidebar links (fraud/announcements/insights)
+
+**Deferred (next session):**
+- SEC-01 rotate (owner decision)
+- SEC-02b git history rewrite (OIDC token)
+- First real business (owner)
+
 ## 2026-10-20 — Admin + Public UX Overhaul
 
 **Commits:** `787cbbc` → `d230dfd` + final (17 commits)
