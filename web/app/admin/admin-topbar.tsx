@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { BellIcon, SearchIcon, UserIcon } from '@/components/icons'
 import AdminMobileNav from './admin-mobile-nav'
 import styles from './admin-topbar.module.css'
