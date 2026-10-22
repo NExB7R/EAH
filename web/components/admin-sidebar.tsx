@@ -106,8 +106,13 @@ const SECTIONS: Section[] = [
         Icon: ShieldCheckIcon,
         badgeKey: 'flaggedReviews',
       },
-      { href: '/admin/reports', label: 'البلاغات', Icon: FileTextIcon, badgeKey: 'openReports' },
-      { href: '/admin/fraud', label: 'كشف الاحتيال', Icon: ShieldCheckIcon },
+      {
+        href: '/admin/moderation?tab=reports',
+        label: 'البلاغات',
+        Icon: FileTextIcon,
+        badgeKey: 'openReports',
+      },
+      { href: '/admin/moderation?tab=fraud', label: 'كشف الاحتيال', Icon: ShieldCheckIcon },
     ],
   },
   {
@@ -115,7 +120,7 @@ const SECTIONS: Section[] = [
     title: 'التواصل',
     items: [
       { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
-      { href: '/admin/announcements', label: 'الإعلانات العامة', Icon: BellIcon },
+      { href: '/admin/notifications?tab=announcements', label: 'الإعلانات العامة', Icon: BellIcon },
     ],
   },
   {
