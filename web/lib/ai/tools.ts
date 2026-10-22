@@ -40,7 +40,7 @@ export const TOOL_DEFS: ToolDefinition[] = [
           area: { type: 'string', description: 'المنطقة (اختياري)' },
           type: {
             type: 'string',
-            enum: ['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc'],
+            enum: ['restaurant', 'pharmacy', 'delivery_office', 'misc'],
             description: 'نوع النشاط',
           },
           limit: { type: 'number', description: 'أقصى عدد نتائج (1-10)' },
@@ -151,7 +151,7 @@ async function toolSearchBusinesses(args: {
   const area = sanitizeSearchInput(args.area)
   const type = sanitizeSearchInput(args.type)
 
-  const VALID_TYPES = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc']
+  const VALID_TYPES = ['restaurant', 'pharmacy', 'delivery_office', 'misc']
 
   let q = supabase
     .from('businesses')

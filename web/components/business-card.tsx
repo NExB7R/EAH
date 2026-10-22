@@ -17,7 +17,6 @@ import {
   MapPinIcon,
   UtensilsIcon,
   PillIcon,
-  CartIcon,
   BikeIcon,
   SparklesIcon,
 } from './icons'
@@ -42,7 +41,6 @@ type TypeMeta = { label: string; Icon: typeof UtensilsIcon }
 const TYPE_META: Record<string, TypeMeta> = {
   restaurant: { label: 'مطعم', Icon: UtensilsIcon },
   pharmacy: { label: 'صيدلية', Icon: PillIcon },
-  supermarket: { label: 'ماركت', Icon: CartIcon },
   delivery_office: { label: 'توصيل', Icon: BikeIcon },
   misc: { label: 'أخرى', Icon: SparklesIcon },
 }

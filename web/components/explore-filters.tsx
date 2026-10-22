@@ -23,7 +23,6 @@ import styles from './explore-filters.module.css'
 const TYPES = [
   { value: 'restaurant', label: 'مطاعم' },
   { value: 'pharmacy', label: 'صيدليات' },
-  { value: 'supermarket', label: 'ماركت' },
   { value: 'delivery_office', label: 'توصيل' },
   { value: 'misc', label: 'أنشطة أخرى' },
 ] as const
