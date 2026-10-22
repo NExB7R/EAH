@@ -9,7 +9,7 @@
   right: 0;
   z-index: 100;
   padding: 8px 12px;
-  padding-top: calc(10px + env(safe-area-inset-top));
+  padding-top: calc(18px + env(safe-area-inset-top));
   display: flex;
   justify-content: center;
   pointer-events: none;

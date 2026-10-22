@@ -94,7 +94,7 @@
 /* ─── Card ─── */
 .card {
   flex-shrink: 0;
-  width: 220px;
+  width: 280px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -280,6 +280,9 @@
 }
 
 @media (max-width: 640px) {
+  .card {
+    width: 240px;
+  }
   .section {
     padding: 36px 0;
   }

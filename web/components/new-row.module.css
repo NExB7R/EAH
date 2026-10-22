@@ -93,7 +93,7 @@
 
 .card {
   flex-shrink: 0;
-  width: 220px;
+  width: 280px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
