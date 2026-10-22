@@ -42,7 +42,7 @@ export default function NearbyCta() {
           <span className={styles.title}>قريب منك؟</span>
           <span className={styles.sub}>
             <MapPinIcon size={12} />
-            <span>فعّل الموقع لعرض الأنشطة القريبة</span>
+            <span>فعّل الموقع لهنعرضلك الأنشطة الأقرب بمسافاتها الفعلية</span>
           </span>
         </div>
       </div>
