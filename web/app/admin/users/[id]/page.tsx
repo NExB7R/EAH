@@ -118,7 +118,11 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
             <div className={styles.metaItem}>
               <span className={styles.metaLabel}>Premium حتى</span>
               <span className={styles.metaValue}>
-                {new Date(u.premium_until).toLocaleDateString('ar-EG')}
+                {new Date(u.premium_until).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
               </span>
             </div>
           )}
@@ -126,7 +130,11 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
             <div className={styles.metaItem}>
               <span className={styles.metaLabel}>محظور حتى</span>
               <span className={styles.metaValue}>
-                {new Date(u.banned_until).toLocaleDateString('ar-EG')}
+                {new Date(u.banned_until).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
               </span>
             </div>
           )}

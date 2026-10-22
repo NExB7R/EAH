@@ -69,7 +69,9 @@ export default function AdminMobileNav({ counts }: Props) {
             >
               <CloseIcon size={18} />
             </button>
-            <h2 id="admin-mobile-nav-title" className={styles.drawerTitle}>التنقل في لوحة الإدارة</h2>
+            <h2 id="admin-mobile-nav-title" className={styles.drawerTitle}>
+              التنقل في لوحة الإدارة
+            </h2>
             <AdminSidebar counts={counts} onNavigate={() => setOpen(false)} />
           </div>
         </>

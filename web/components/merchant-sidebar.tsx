@@ -93,13 +93,20 @@ export default function MerchantSidebar({ newOrders = 0, hasBusiness = true }: P
             <h4 className={styles.sectionTitle}>{section.title}</h4>
             <ul className={styles.list}>
               {section.items.map(({ href, label, Icon, badge, tone }) => {
-                const active = href === '/merchant' ? pathname === '/merchant' : pathname.startsWith(href)
+                const active =
+                  href === '/merchant' ? pathname === '/merchant' : pathname.startsWith(href)
 
                 return (
                   <li key={href}>
                     <Link
                       href={href}
-                      className={[styles.item, active && styles.active, tone === 'gold' && styles.itemGold].filter(Boolean).join(' ')}
+                      className={[
+                        styles.item,
+                        active && styles.active,
+                        tone === 'gold' && styles.itemGold,
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
                       aria-current={active ? 'page' : undefined}
                     >
                       <span className={styles.iconWrap}>

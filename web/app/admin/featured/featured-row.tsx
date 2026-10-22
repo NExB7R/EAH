@@ -56,7 +56,11 @@ export default function FeaturedRow({ business }: Props) {
   }
 
   const until = business.featured_until
-    ? new Date(business.featured_until).toLocaleDateString('ar-EG')
+    ? new Date(business.featured_until).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
     : 'بدون تاريخ'
 
   return (

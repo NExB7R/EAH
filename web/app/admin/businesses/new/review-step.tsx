@@ -45,7 +45,8 @@ function Item({
 
 export default function ReviewStep({ data, owners, goTo }: Props) {
   const owner = owners.find((o) => o.id === data.owner_user_id)
-  const needsTypeApproval = data.business_type === 'misc' && data.custom_business_type.trim().length > 0
+  const needsTypeApproval =
+    data.business_type === 'misc' && data.custom_business_type.trim().length > 0
   const publishStatus = needsTypeApproval
     ? owner
       ? 'سينشر تحت «أخرى» — النوع المخصص قيد المراجعة'

@@ -19,7 +19,8 @@ import {
 // حفظ لكل قسم — بدون reload للصفحة
 // ═══════════════════════════════════════════════════════════
 
-type Result = { ok: true; id?: string } | { ok: false; error: string; fieldErrors?: Record<string, string> }
+type Result =
+  { ok: true; id?: string } | { ok: false; error: string; fieldErrors?: Record<string, string> }
 
 function parseError(parsed: z.ZodSafeParseError<unknown>): Result {
   const fieldErrors: Record<string, string> = {}
@@ -223,25 +224,68 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
     .in('method_type', managedTypes)
   if (deleteError) return { ok: false, error: 'تعذر حذف جهات الاتصال القديمة' }
 
-  const rows: { business_id: string; method_type: string; value: string; is_primary: boolean; is_public: boolean }[] = []
+  const rows: {
+    business_id: string
+    method_type: string
+    value: string
+    is_primary: boolean
+    is_public: boolean
+  }[] = []
   if (parsed.data.phone) {
-    rows.push({ business_id: businessId, method_type: 'phone', value: parsed.data.phone, is_primary: true, is_public: true })
+    rows.push({
+      business_id: businessId,
+      method_type: 'phone',
+      value: parsed.data.phone,
+      is_primary: true,
+      is_public: true,
+    })
   }
   if (parsed.data.whatsapp) {
-    rows.push({ business_id: businessId, method_type: 'whatsapp', value: parsed.data.whatsapp, is_primary: false, is_public: true })
+    rows.push({
+      business_id: businessId,
+      method_type: 'whatsapp',
+      value: parsed.data.whatsapp,
+      is_primary: false,
+      is_public: true,
+    })
   }
   if (parsed.data.facebook) {
-    rows.push({ business_id: businessId, method_type: 'facebook', value: parsed.data.facebook, is_primary: false, is_public: true })
+    rows.push({
+      business_id: businessId,
+      method_type: 'facebook',
+      value: parsed.data.facebook,
+      is_primary: false,
+      is_public: true,
+    })
   }
   if (parsed.data.instagram) {
-    rows.push({ business_id: businessId, method_type: 'instagram', value: parsed.data.instagram, is_primary: false, is_public: true })
+    rows.push({
+      business_id: businessId,
+      method_type: 'instagram',
+      value: parsed.data.instagram,
+      is_primary: false,
+      is_public: true,
+    })
   }
   if (parsed.data.website) {
-    rows.push({ business_id: businessId, method_type: 'website', value: parsed.data.website, is_primary: false, is_public: true })
+    rows.push({
+      business_id: businessId,
+      method_type: 'website',
+      value: parsed.data.website,
+      is_primary: false,
+      is_public: true,
+    })
   }
   for (const type of extendedTypes) {
     const value = extendedValues[type]
-    if (value) rows.push({ business_id: businessId, method_type: type, value, is_primary: false, is_public: true })
+    if (value)
+      rows.push({
+        business_id: businessId,
+        method_type: type,
+        value,
+        is_primary: false,
+        is_public: true,
+      })
   }
 
   if (rows.length > 0) {
@@ -260,7 +304,8 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
       if (clearError || restoreError) {
         return {
           ok: false,
-          error: 'تعذر حفظ جهات الاتصال ولم يكتمل الاسترجاع التلقائي. راجع النشاط قبل إعادة المحاولة',
+          error:
+            'تعذر حفظ جهات الاتصال ولم يكتمل الاسترجاع التلقائي. راجع النشاط قبل إعادة المحاولة',
         }
       }
       return { ok: false, error: 'تعذر حفظ جهات الاتصال، وتمت استعادة الأرقام السابقة' }
@@ -496,7 +541,10 @@ export async function saveBranch(
   if (!ctx.ok) return ctx
 
   const uuidSchema = z.string().uuid()
-  if (!uuidSchema.safeParse(businessId).success || (branchId && !uuidSchema.safeParse(branchId).success)) {
+  if (
+    !uuidSchema.safeParse(businessId).success ||
+    (branchId && !uuidSchema.safeParse(branchId).success)
+  ) {
     return { ok: false, error: 'معرّف النشاط أو الفرع غير صحيح' }
   }
 
@@ -545,12 +593,13 @@ export async function saveBranch(
 
   // Save the current primary state so a failed branch write does not leave the
   // activity without its previous primary branch.
-  const { data: previousBranches, error: previousError } = (parsed.data.is_primary || !!branchId)
-    ? await ctx.supabase
-        .from('business_branches')
-        .select('id, is_primary')
-        .eq('business_id', businessId)
-    : { data: [], error: null }
+  const { data: previousBranches, error: previousError } =
+    parsed.data.is_primary || !!branchId
+      ? await ctx.supabase
+          .from('business_branches')
+          .select('id, is_primary')
+          .eq('business_id', businessId)
+      : { data: [], error: null }
 
   if (previousError) return { ok: false, error: 'تعذر قراءة حالة الفروع الحالية' }
 
@@ -623,7 +672,11 @@ export async function saveBranch(
             restore_failed: true,
           },
         })
-        return { ok: false, error: 'فشل حفظ الفرع وتعذّر استرجاع الفرع الأساسي السابق. راجع الفروع قبل المحاولة مرة أخرى.' }
+        return {
+          ok: false,
+          error:
+            'فشل حفظ الفرع وتعذّر استرجاع الفرع الأساسي السابق. راجع الفروع قبل المحاولة مرة أخرى.',
+        }
       }
     }
     return { ok: false, error: 'تعذر حفظ بيانات الفرع — راجع البيانات وحاول تاني' }
@@ -651,7 +704,10 @@ export async function saveBranch(
         entityId: businessId,
         metadata: { branch_id: branchId, stage: 'lookup' },
       })
-      return { ok: false, error: 'تم حفظ الفرع، لكن تعذر اختيار فرع أساسي بديل. راجع إعدادات الفروع.' }
+      return {
+        ok: false,
+        error: 'تم حفظ الفرع، لكن تعذر اختيار فرع أساسي بديل. راجع إعدادات الفروع.',
+      }
     }
 
     if (candidate) {
@@ -675,7 +731,10 @@ export async function saveBranch(
             error: promotionError?.message ?? 'no row updated',
           },
         })
-        return { ok: false, error: 'تم حفظ الفرع، لكن تعذر اختيار فرع أساسي بديل. راجع إعدادات الفروع.' }
+        return {
+          ok: false,
+          error: 'تم حفظ الفرع، لكن تعذر اختيار فرع أساسي بديل. راجع إعدادات الفروع.',
+        }
       }
     }
   }
@@ -740,7 +799,10 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
         entityId: businessId,
         metadata: { deleted_branch_id: branchId, stage: 'lookup' },
       })
-      return { ok: false, error: 'تم حذف الفرع الأساسي، لكن تعذر اختيار فرع بديل. راجع إعدادات الفروع.' }
+      return {
+        ok: false,
+        error: 'تم حذف الفرع الأساسي، لكن تعذر اختيار فرع بديل. راجع إعدادات الفروع.',
+      }
     }
 
     if (nextPrimary) {
@@ -764,7 +826,10 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
             error: promoteError?.message ?? 'no row updated',
           },
         })
-        return { ok: false, error: 'تم حذف الفرع الأساسي، لكن تعذر تعيين فرع بديل. راجع إعدادات الفروع.' }
+        return {
+          ok: false,
+          error: 'تم حذف الفرع الأساسي، لكن تعذر تعيين فرع بديل. راجع إعدادات الفروع.',
+        }
       }
     }
   }

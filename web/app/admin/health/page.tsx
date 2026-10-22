@@ -51,19 +51,23 @@ export default async function AdminHealthPage({
       <section className={styles.grid} aria-label="ملخص صحة النظام">
         <article className={styles.card}>
           <div className={styles.cardLabel}>أخطاء آخر 24 ساعة</div>
-          <div className={styles.cardValue}>{summary.last24h.toLocaleString('ar-EG')}</div>
+          <div className={styles.cardValue}>{summary.last24h.toLocaleString('en-US')}</div>
         </article>
         <article className={styles.card}>
           <div className={styles.cardLabel}>أخطاء آخر 7 أيام</div>
-          <div className={styles.cardValue}>{summary.last7d.toLocaleString('ar-EG')}</div>
+          <div className={styles.cardValue}>{summary.last7d.toLocaleString('en-US')}</div>
         </article>
-        <article className={summary.unresolved > 0 ? `${styles.card} ${styles.cardWarn}` : styles.card}>
+        <article
+          className={summary.unresolved > 0 ? `${styles.card} ${styles.cardWarn}` : styles.card}
+        >
           <div className={styles.cardLabel}>غير محلولة</div>
-          <div className={styles.cardValue}>{summary.unresolved.toLocaleString('ar-EG')}</div>
+          <div className={styles.cardValue}>{summary.unresolved.toLocaleString('en-US')}</div>
         </article>
-        <article className={summary.critical24h > 0 ? `${styles.card} ${styles.cardDanger}` : styles.card}>
+        <article
+          className={summary.critical24h > 0 ? `${styles.card} ${styles.cardDanger}` : styles.card}
+        >
           <div className={styles.cardLabel}>حرجة خلال 24 ساعة</div>
-          <div className={styles.cardValue}>{summary.critical24h.toLocaleString('ar-EG')}</div>
+          <div className={styles.cardValue}>{summary.critical24h.toLocaleString('en-US')}</div>
         </article>
       </section>
 
@@ -76,7 +80,7 @@ export default async function AdminHealthPage({
             {summary.topPaths.map((item) => (
               <li key={item.path} className={styles.pathItem}>
                 <code className={styles.pathCode}>{item.path}</code>
-                <span className={styles.pathCount}>{item.count.toLocaleString('ar-EG')}</span>
+                <span className={styles.pathCount}>{item.count.toLocaleString('en-US')}</span>
               </li>
             ))}
           </ul>
@@ -84,7 +88,9 @@ export default async function AdminHealthPage({
       )}
 
       <section className={styles.section} aria-labelledby="health-error-list">
-        <h2 id="health-error-list" className={styles.sectionTitle}>سجل الأخطاء</h2>
+        <h2 id="health-error-list" className={styles.sectionTitle}>
+          سجل الأخطاء
+        </h2>
         <HealthFilters />
 
         {errors.length > 0 ? (
@@ -96,7 +102,11 @@ export default async function AdminHealthPage({
         ) : (
           <EmptyState
             Icon={query || severity !== 'all' || resolved !== 'all' ? AlertIcon : CheckCircleIcon}
-            title={query || severity !== 'all' || resolved !== 'all' ? 'مفيش نتائج للفلاتر دي' : 'مفيش أخطاء مطابقة'}
+            title={
+              query || severity !== 'all' || resolved !== 'all'
+                ? 'مفيش نتائج للفلاتر دي'
+                : 'مفيش أخطاء مطابقة'
+            }
             description={
               query || severity !== 'all' || resolved !== 'all'
                 ? 'غيّر مستوى الخطورة أو الحالة أو نص البحث.'

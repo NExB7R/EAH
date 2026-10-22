@@ -25,7 +25,7 @@ const DEVICE_LABEL: Record<string, string> = {
 function fmt(n: number): string {
   if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`
   if (n >= 1000) return `${(n / 1000).toFixed(1)}K`
-  return n.toLocaleString('ar-EG')
+  return n.toLocaleString('en-US')
 }
 
 export default async function AdminAnalyticsPage({

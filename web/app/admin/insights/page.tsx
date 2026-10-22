@@ -108,7 +108,13 @@ export default async function AdminInsightsStoragePage() {
       ) : (
         <div className={styles.list}>
           {rows.map((r) => {
-            const date = r.latest_at ? new Date(r.latest_at).toLocaleDateString('ar-EG') : '—'
+            const date = r.latest_at
+              ? new Date(r.latest_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })
+              : '—'
             const sizeKb = r.insights_count * 100
 
             return (

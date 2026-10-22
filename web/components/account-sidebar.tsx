@@ -85,7 +85,8 @@ export default function AccountSidebar({ unreadNotifs = 0 }: Props) {
             <h4 className={styles.sectionTitle}>{section.title}</h4>
             <ul className={styles.list}>
               {section.items.map(({ key, href, label, Icon, badge }) => {
-                const active = href === '/account' ? pathname === '/account' : pathname.startsWith(href)
+                const active =
+                  href === '/account' ? pathname === '/account' : pathname.startsWith(href)
 
                 return (
                   <li key={key}>
@@ -99,7 +100,9 @@ export default function AccountSidebar({ unreadNotifs = 0 }: Props) {
                       </span>
                       <span className={styles.label}>{label}</span>
                       {badge === 'notifs' && unreadNotifs > 0 && (
-                        <span className={styles.badge}>{unreadNotifs > 9 ? '9+' : unreadNotifs}</span>
+                        <span className={styles.badge}>
+                          {unreadNotifs > 9 ? '9+' : unreadNotifs}
+                        </span>
                       )}
                     </Link>
                   </li>

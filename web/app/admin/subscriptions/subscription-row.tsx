@@ -65,7 +65,13 @@ export default function SubscriptionRow({ sub }: { sub: Row }) {
   }
 
   const meta = STATUS_LABEL[sub.status] ?? { label: sub.status, tone: 'pending' }
-  const expires = sub.expires_at ? new Date(sub.expires_at).toLocaleDateString('ar-EG') : '—'
+  const expires = sub.expires_at
+    ? new Date(sub.expires_at).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+    : '—'
   const isPending = sub.status === 'pending'
 
   return (

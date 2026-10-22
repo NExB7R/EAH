@@ -97,7 +97,7 @@ export default function Composer({ audiences }: Props) {
                 className={styles.radio}
               />
               <span className={styles.audienceLabel}>{a.label}</span>
-              <span className={styles.audienceCount}>{a.count.toLocaleString('ar-EG')}</span>
+              <span className={styles.audienceCount}>{a.count.toLocaleString('en-US')}</span>
             </label>
           ))}
         </div>

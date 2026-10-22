@@ -91,7 +91,9 @@ export default function InboxList({ initialItems }: { initialItems: Notification
                 <div className={styles.inboxBody}>
                   <h3 className={styles.inboxTitle}>{item.title}</h3>
                   {item.body && <p className={styles.inboxText}>{item.body}</p>}
-                  <time className={styles.inboxDate} dateTime={item.created_at}>{date}</time>
+                  <time className={styles.inboxDate} dateTime={item.created_at}>
+                    {date}
+                  </time>
                   {href && (
                     <Link href={href} className={styles.inboxLink}>
                       فتح التفاصيل

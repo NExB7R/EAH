@@ -45,7 +45,10 @@ export async function bulkApproveBusinesses(ids: string[]): Promise<Result> {
 
   if (error) return { ok: false, error: error.message }
   if (!updated || updated.length !== selectedBusinesses.length) {
-    return { ok: false, error: 'لم يتم تحديث كل الأنشطة المحددة. حدّث القائمة وتحقق من حالتها قبل المحاولة مجددًا' }
+    return {
+      ok: false,
+      error: 'لم يتم تحديث كل الأنشطة المحددة. حدّث القائمة وتحقق من حالتها قبل المحاولة مجددًا',
+    }
   }
 
   // A failed notification must not make a completed bulk publish look like a failure.
@@ -121,7 +124,10 @@ export async function bulkRejectBusinesses(ids: string[], reason: string): Promi
 
   if (error) return { ok: false, error: error.message }
   if (!updated || updated.length !== businesses.length) {
-    return { ok: false, error: 'لم يتم رفض كل الأنشطة المحددة. حدّث القائمة وتحقق من الحالة قبل المحاولة مجددًا' }
+    return {
+      ok: false,
+      error: 'لم يتم رفض كل الأنشطة المحددة. حدّث القائمة وتحقق من الحالة قبل المحاولة مجددًا',
+    }
   }
 
   for (const biz of businesses) {

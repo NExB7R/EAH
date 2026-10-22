@@ -31,7 +31,12 @@ const TABS: { key: BusinessStatus; label: string }[] = [
   { key: 'all', label: 'الكل' },
 ]
 
-function buildBusinessListHref(status: BusinessStatus, query: string, area: string, page: number): string {
+function buildBusinessListHref(
+  status: BusinessStatus,
+  query: string,
+  area: string,
+  page: number,
+): string {
   const params = new URLSearchParams({ status, page: String(page) })
   if (query) params.set('q', query)
   if (area) params.set('area', area)
@@ -62,7 +67,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
     <div>
       <AccountPageHeader
         title="إدارة الأنشطة"
-        description={`${counts.all.toLocaleString('ar-EG')} نشاط إجمالي — ${total.toLocaleString('ar-EG')} نتيجة`}
+        description={`${counts.all.toLocaleString('en-US')} نشاط إجمالي — ${total.toLocaleString('en-US')} نتيجة`}
       />
 
       {/* Stats */}
@@ -72,7 +77,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <AlertIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{counts.pending.toLocaleString('ar-EG')}</span>
+            <span className={styles.statValue}>{counts.pending.toLocaleString('en-US')}</span>
             <span className={styles.statLabel}>بانتظار موافقة</span>
           </div>
         </div>
@@ -81,7 +86,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <CheckCircleIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{counts.published.toLocaleString('ar-EG')}</span>
+            <span className={styles.statValue}>{counts.published.toLocaleString('en-US')}</span>
             <span className={styles.statLabel}>منشور</span>
           </div>
         </div>
@@ -90,7 +95,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <CloseIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{counts.rejected.toLocaleString('ar-EG')}</span>
+            <span className={styles.statValue}>{counts.rejected.toLocaleString('en-US')}</span>
             <span className={styles.statLabel}>مرفوض</span>
           </div>
         </div>
@@ -99,7 +104,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <CrownGoldIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{counts.adminOwned.toLocaleString('ar-EG')}</span>
+            <span className={styles.statValue}>{counts.adminOwned.toLocaleString('en-US')}</span>
             <span className={styles.statLabel}>بإدارة الأدمن</span>
           </div>
         </div>
@@ -147,7 +152,8 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
 
       {ownerSearchLimited && q && (
         <p className={styles.searchNotice} role="status">
-          البحث عن المالكين واسع أو غير متاح مؤقتًا. ضيّق اسم المالك أو رقم الهاتف لتحصل على نتائج أدق.
+          البحث عن المالكين واسع أو غير متاح مؤقتًا. ضيّق اسم المالك أو رقم الهاتف لتحصل على نتائج
+          أدق.
         </p>
       )}
 
@@ -169,7 +175,8 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
           {total > businessPage.pageSize && (
             <nav className={styles.pagination} aria-label="صفحات الأنشطة">
               <span className={styles.pageSummary}>
-                صفحة {businessPage.page.toLocaleString('ar-EG')} من {Math.ceil(total / businessPage.pageSize).toLocaleString('ar-EG')}
+                صفحة {businessPage.page.toLocaleString('en-US')} من{' '}
+                {Math.ceil(total / businessPage.pageSize).toLocaleString('en-US')}
               </span>
               <div className={styles.pageActions}>
                 {businessPage.page > 1 && (

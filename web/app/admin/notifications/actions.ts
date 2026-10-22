@@ -31,7 +31,9 @@ export type SendResult =
       error: string
     }
 
-export async function markOwnNotificationRead(notificationId: string): Promise<{ ok: true } | { ok: false; error: string }> {
+export async function markOwnNotificationRead(
+  notificationId: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 

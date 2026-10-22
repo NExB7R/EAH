@@ -91,7 +91,9 @@ const MERCHANT_APPLY: MenuItem[] = [
 ]
 
 // ─── Admin ───
-const ADMIN_ITEMS: MenuItem[] = [{ href: '/admin', label: 'لوحة تحكم الإدارة', Icon: ShieldCheckIcon }]
+const ADMIN_ITEMS: MenuItem[] = [
+  { href: '/admin', label: 'لوحة تحكم الإدارة', Icon: ShieldCheckIcon },
+]
 
 const BOTTOM_ITEMS: MenuItem[] = [
   { href: '/about', label: 'مين إحنا', Icon: InfoIcon },

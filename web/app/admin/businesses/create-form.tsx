@@ -151,7 +151,9 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
             </option>
           ))}
         </select>
-        <span className={styles.hint}>اختيار المالك اختياري. تقدر تنشر النشاط بدون حساب مالك وتربطه لاحقًا من الإدارة.</span>
+        <span className={styles.hint}>
+          اختيار المالك اختياري. تقدر تنشر النشاط بدون حساب مالك وتربطه لاحقًا من الإدارة.
+        </span>
       </div>
 
       <div className={styles.checkRow}>

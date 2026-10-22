@@ -33,7 +33,8 @@ export async function approveBusinessType(businessId: string): Promise<Result> {
     .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
-  if (!business) return { ok: false, error: 'الطلب لم يعد بانتظار الموافقة، حدّث القائمة وحاول تاني' }
+  if (!business)
+    return { ok: false, error: 'الطلب لم يعد بانتظار الموافقة، حدّث القائمة وحاول تاني' }
 
   if (business.owner_profile_id) {
     try {
@@ -86,7 +87,8 @@ export async function rejectBusinessType(businessId: string, reason: string): Pr
     .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
-  if (!business) return { ok: false, error: 'الطلب لم يعد بانتظار الموافقة، حدّث القائمة وحاول تاني' }
+  if (!business)
+    return { ok: false, error: 'الطلب لم يعد بانتظار الموافقة، حدّث القائمة وحاول تاني' }
 
   if (business.owner_profile_id) {
     try {

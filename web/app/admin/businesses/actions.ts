@@ -40,7 +40,8 @@ export async function approveBusiness(businessId: string): Promise<Result> {
     .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
-  if (!updated) return { ok: false, error: 'تعذر نشر النشاط — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
+  if (!updated)
+    return { ok: false, error: 'تعذر نشر النشاط — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
 
   // إشعار المالك لا يجب أن يحوّل عملية نشر ناجحة إلى فشل ظاهر.
   if (biz.owner_profile_id) {
@@ -116,7 +117,8 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
     .maybeSingle()
 
   if (error) return { ok: false, error: error.message }
-  if (!updated) return { ok: false, error: 'تعذر حفظ قرار الرفض — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
+  if (!updated)
+    return { ok: false, error: 'تعذر حفظ قرار الرفض — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
 
   // إشعار المالك لا يجب أن يحوّل قرارًا محفوظًا إلى فشل ظاهر.
   if (biz.owner_profile_id) {
@@ -450,9 +452,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       is_primary: c.is_primary ?? false,
       sort_order: idx,
     }))
-    const { error: contactsError } = await privileged
-      .from('business_contact_methods')
-      .insert(rows)
+    const { error: contactsError } = await privileged.from('business_contact_methods').insert(rows)
 
     if (contactsError) {
       const { error: rollbackError } = await privileged
@@ -474,7 +474,8 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         })
         return {
           ok: false,
-          error: 'فشل حفظ أرقام التواصل وتعذّر التراجع التلقائي. افتح قائمة الأنشطة وتحقق من السجل قبل إعادة المحاولة.',
+          error:
+            'فشل حفظ أرقام التواصل وتعذّر التراجع التلقائي. افتح قائمة الأنشطة وتحقق من السجل قبل إعادة المحاولة.',
         }
       }
 
@@ -531,13 +532,15 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         })
         return {
           ok: false,
-          error: 'تعذّر تفعيل حساب المالك وتعذّر إلغاء الإنشاء بالكامل. راجع النشاط في لوحة الإدارة قبل إعادة المحاولة.',
+          error:
+            'تعذّر تفعيل حساب المالك وتعذّر إلغاء الإنشاء بالكامل. راجع النشاط في لوحة الإدارة قبل إعادة المحاولة.',
         }
       }
 
       return {
         ok: false,
-        error: 'تعذّر تفعيل حساب المالك كتاجر، وتم إلغاء إنشاء النشاط. حاول مرة أخرى أو راجع صلاحيات النظام.',
+        error:
+          'تعذّر تفعيل حساب المالك كتاجر، وتم إلغاء إنشاء النشاط. حاول مرة أخرى أو راجع صلاحيات النظام.',
       }
     }
   }

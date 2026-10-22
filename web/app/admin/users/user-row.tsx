@@ -335,7 +335,14 @@ export default function UserRow({
       {u.verified_at && (
         <div className={styles.verifiedNote}>
           <ShieldCheckIcon size={12} />
-          <span>موثّق منذ {new Date(u.verified_at).toLocaleDateString('ar-EG')}</span>
+          <span>
+            موثّق منذ{' '}
+            {new Date(u.verified_at).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
+          </span>
         </div>
       )}
     </div>

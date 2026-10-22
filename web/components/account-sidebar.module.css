@@ -128,7 +128,6 @@
   }
 }
 
-
 /* Clear account groups reduce scanning time, especially on long mobile pages. */
 .nav {
   gap: 16px;
