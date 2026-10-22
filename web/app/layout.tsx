@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </Suspense>
           {children}
           <Suspense fallback={null}>
-            <SiteChromeGate>
+            <SiteChromeGate scope="mobile">
               <BottomBar />
             </SiteChromeGate>
           </Suspense>

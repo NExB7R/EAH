@@ -3,11 +3,25 @@
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 
-const HIDDEN_PREFIXES = ['/auth', '/admin', '/merchant']
+// ═══════════════════════════════════════════════════════════
+// EAH — Site Chrome Gate
+//   scope="footer" → مخفي فقط في /auth — الفوتر في كل صفحة
+//   scope="mobile" → مخفي في /auth /admin /merchant — الـ bottom bar
+// ═══════════════════════════════════════════════════════════
 
-export default function SiteChromeGate({ children }: { children: ReactNode }) {
+const HIDDEN: Record<string, string[]> = {
+  footer: ['/auth'],
+  mobile: ['/auth', '/admin', '/merchant'],
+}
+
+type Props = {
+  children: ReactNode
+  scope?: 'footer' | 'mobile'
+}
+
+export default function SiteChromeGate({ children, scope = 'footer' }: Props) {
   const pathname = usePathname()
-  const hidden = HIDDEN_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
+  const hidden = HIDDEN[scope].some((p) => pathname === p || pathname.startsWith(`${p}/`))
   if (hidden) return null
   return <>{children}</>
 }
