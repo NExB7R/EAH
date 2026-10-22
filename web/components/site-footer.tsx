@@ -19,7 +19,6 @@ import {
   CookieIcon,
   PhoneIcon,
   ArrowLeftIcon,
-  SparkleStarIcon,
 } from './icons'
 import styles from './site-footer.module.css'
 import { APP_VERSION } from '@/lib/version'
@@ -72,7 +71,6 @@ const COLUMNS = [
       { href: '/contact', label: 'تواصل معانا', Icon: PhoneIcon },
       { href: '/support-palestine', label: 'دعم فلسطين', Icon: MapPinIcon },
       { href: '/help', label: 'المساعدة', Icon: ShieldCheckIcon },
-      { href: '/updates', label: 'التحديثات', Icon: SparkleStarIcon },
     ],
   },
   {
