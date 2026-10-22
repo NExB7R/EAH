@@ -1,12 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { BellIcon, SearchIcon } from '@/components/icons'
+import { SearchIcon, UserIcon } from '@/components/icons'
 import AdminMobileNav from './admin-mobile-nav'
 import styles from './admin-topbar.module.css'
 
 type Props = {
-  notificationCount: number
   counts?: {
     pendingBusinesses?: number
     flaggedReviews?: number
@@ -15,7 +14,7 @@ type Props = {
   }
 }
 
-export default function AdminTopbar({ notificationCount, counts }: Props) {
+export default function AdminTopbar({ counts }: Props) {
   const openSearch = () => window.dispatchEvent(new Event('eah:open-command-palette'))
 
   return (
@@ -37,12 +36,12 @@ export default function AdminTopbar({ notificationCount, counts }: Props) {
         </button>
 
         <Link
-          href="/admin/notifications?tab=inbox"
-          className={styles.iconButton}
-          aria-label={notificationCount > 0 ? `الوارد، ${notificationCount} غير مقروء` : 'الوارد'}
+          href="/admin/profile"
+          className={styles.profileButton}
+          aria-label="بروفايلي"
+          title="بروفايلي"
         >
-          <BellIcon size={19} />
-          {notificationCount > 0 && <span className={styles.notificationDot} aria-hidden="true" />}
+          <UserIcon size={17} />
         </Link>
       </div>
     </header>

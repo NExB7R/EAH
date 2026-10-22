@@ -20,20 +20,20 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .sectionTitle {
   display: block;
-  margin: 0 0 6px;
-  padding: 8px 10px 4px;
+  margin: 0 0 3px;
+  padding: 6px 10px 2px;
   font-family: var(--font-body);
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-muted);
-  opacity: 0.85;
+  opacity: 0.8;
 }
 
 .list {
@@ -51,7 +51,7 @@
   align-items: center;
   gap: 10px;
   min-height: 42px;
-  padding: 8px 10px;
+  padding: 6px 10px;
   border: 1px solid transparent;
   border-radius: 11px;
   color: var(--text-secondary);
