@@ -29,7 +29,6 @@ export default function ImageSlot({
   onChange,
 }: Props) {
   const [url, setUrl] = useState<string | null>(initialUrl)
-  const [mediaId, setMediaId] = useState<string | null>(initialMediaId)
   const [mode, setMode] = useState<'file' | 'url'>('file')
   const [urlInput, setUrlInput] = useState('')
   const [pending, setPending] = useState(false)
@@ -38,7 +37,6 @@ export default function ImageSlot({
 
   const apply = (newUrl: string, newMediaId: string) => {
     setUrl(newUrl)
-    setMediaId(newMediaId)
     onChange?.(newUrl)
   }
 
@@ -114,7 +112,6 @@ export default function ImageSlot({
         return
       }
       setUrl(null)
-      setMediaId(null)
       onChange?.(null)
     } catch {
       setError('فشل الاتصال أثناء حذف الصورة')
