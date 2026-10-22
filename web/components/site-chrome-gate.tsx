@@ -21,7 +21,7 @@ type Props = {
 
 export default function SiteChromeGate({ children, scope = 'footer' }: Props) {
   const pathname = usePathname()
-  const hidden = HIDDEN[scope].some((p) => pathname === p || pathname.startsWith(`${p}/`))
+  const hidden = (HIDDEN[scope] ?? []).some((p) => pathname === p || pathname.startsWith(`${p}/`))
   if (hidden) return null
   return <>{children}</>
 }
