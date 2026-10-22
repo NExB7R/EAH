@@ -8,82 +8,59 @@ import {
   CheckCircleIcon,
   ArrowLeftIcon,
   ShieldCheckIcon,
+  SparklesIcon,
+  BellIcon,
+  AlertIcon,
 } from '@/components/icons'
-import { getAdminStats, getAdminBadges } from '@/lib/data/admin'
+import { getAdminStats, getAdminRecent, getAdminBadges } from '@/lib/data/admin'
 import { getUserSession } from '@/lib/data/user'
+import ActivityFeed from '@/components/admin/activity-feed'
+import StatCard from '@/components/admin/stat-card'
+import Panel from '@/components/admin/panel'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
-
-type Card = {
-  key: string
-  label: string
-  value: number
-  Icon: React.ComponentType<{ size?: number }>
-  tone: 'purple' | 'teal' | 'gold'
-  href?: string
-}
 
 type Alert = {
   key: string
   count: number
   label: string
-  desc: string
   href: string
   tone: 'orange' | 'gold' | 'teal' | 'purple'
   Icon: React.ComponentType<{ size?: number }>
 }
 
+const QUICK_ACTIONS = [
+  { href: '/admin/businesses/new', label: 'إضافة نشاط', desc: 'أضف نشاط يدوي', Icon: StoreIcon },
+  {
+    href: '/admin/businesses?status=pending',
+    label: 'مراجعة الأنشطة',
+    desc: 'قرارات معلقة',
+    Icon: CheckCircleIcon,
+  },
+  {
+    href: '/admin/notifications',
+    label: 'إرسال إشعار',
+    desc: 'بث للمستخدمين',
+    Icon: BellIcon,
+  },
+  { href: '/admin/studio', label: 'الاستوديو', desc: 'إدارة الميزات', Icon: SparklesIcon },
+  { href: '/admin/health', label: 'صحة النظام', desc: 'مراقبة الأخطاء', Icon: AlertIcon },
+]
+
 export default async function AdminDashboard() {
-  const [stats, badges, session] = await Promise.all([
+  const [stats, recent, badges, session] = await Promise.all([
     getAdminStats(),
+    getAdminRecent(),
     getAdminBadges(),
     getUserSession(),
   ])
 
-  // Metrics describe the platform; the separate action queue describes
-  // work that needs a decision. Avoid displaying the same pending count twice.
-  const cards: Card[] = [
-    {
-      key: 'total',
-      label: 'كل الأنشطة',
-      value: stats.totalBusinesses,
-      Icon: StoreIcon,
-      tone: 'purple',
-      href: '/admin/businesses',
-    },
-    {
-      key: 'published',
-      label: 'نشاط منشور',
-      value: stats.publishedBusinesses,
-      Icon: CheckCircleIcon,
-      tone: 'teal',
-      href: '/admin/businesses?status=published',
-    },
-    {
-      key: 'users',
-      label: 'المستخدمون',
-      value: stats.totalUsers,
-      Icon: UserIcon,
-      tone: 'purple',
-      href: '/admin/users',
-    },
-    {
-      key: 'orders',
-      label: 'الطلبات',
-      value: stats.totalOrders,
-      Icon: FileTextIcon,
-      tone: 'gold',
-      href: '/admin/analytics',
-    },
-  ]
-
-  const alerts: Alert[] = [
+  const allAlerts: Alert[] = [
     {
       key: 'pendingBusinesses',
       count: badges.pendingBusinesses,
       label: 'نشاط بانتظار المراجعة',
-      desc: 'راجع البيانات وقرار النشر من قائمة الأنشطة',
       href: '/admin/businesses?status=pending',
       tone: 'orange',
       Icon: StoreIcon,
@@ -92,7 +69,6 @@ export default async function AdminDashboard() {
       key: 'flaggedReviews',
       count: badges.flaggedReviews,
       label: 'تقييم بحاجة مراجعة',
-      desc: 'راجع التقييمات المعلّمة قبل اتخاذ القرار',
       href: '/admin/moderation',
       tone: 'gold',
       Icon: StarIcon,
@@ -101,7 +77,6 @@ export default async function AdminDashboard() {
       key: 'openReports',
       count: badges.openReports,
       label: 'بلاغ مفتوح',
-      desc: 'تابع بلاغات المستخدمين من قسم المراجعة',
       href: '/admin/moderation?tab=reports',
       tone: 'purple',
       Icon: ShieldCheckIcon,
@@ -109,106 +84,128 @@ export default async function AdminDashboard() {
     {
       key: 'pendingSubscriptions',
       count: badges.pendingSubscriptions,
-      label: 'طلب اشتراك بانتظار القرار',
-      desc: 'راجع طلبات الاشتراك قبل اعتمادها',
+      label: 'طلب اشتراك معلق',
       href: '/admin/subscriptions',
       tone: 'teal',
       Icon: CrownGoldIcon,
     },
   ]
+  const alerts = allAlerts.filter((a) => a.count > 0)
 
-  const activeAlerts = alerts.filter((alert) => alert.count > 0)
+  const today = new Date().toLocaleDateString('ar-EG', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
 
   return (
     <div className={styles.wrap}>
-      <section className={styles.intro}>
-        <div className={styles.introCopy}>
-          <span className={styles.kicker}>مركز العمليات · EAH</span>
-          <h2 className={styles.introTitle}>أهلاً، {session?.displayName || 'مدير المنصة'}</h2>
-          <p className={styles.introText}>
-            المؤشرات الأساسية والمهام التي تحتاج قرارك — من غير تكرار روابط التنقل الموجودة في
-            القائمة.
-          </p>
+      {/* Welcome */}
+      <section className={styles.welcome}>
+        <div className={styles.welcomeText}>
+          <span className={styles.kicker}>مركز العمليات</span>
+          <h1 className={styles.welcomeTitle}>أهلاً، {session?.displayName || 'مدير المنصة'}</h1>
+          <p className={styles.welcomeSub}>{today}</p>
         </div>
         <Link href="/admin/businesses/new" className={styles.primaryAction}>
-          <StoreIcon size={17} />
-          <span>إضافة نشاط جديد</span>
-          <ArrowLeftIcon size={15} />
+          <StoreIcon size={16} />
+          <span>إضافة نشاط</span>
+          <ArrowLeftIcon size={14} />
         </Link>
       </section>
 
-      <section className={styles.section} aria-labelledby="admin-work-queue">
-        <header className={styles.sectionHeader}>
-          <h2 id="admin-work-queue" className={styles.sectionTitle}>
-            المهام التي تحتاج متابعة
-          </h2>
-          <span className={styles.sectionHint}>تظهر المهام التي لها عناصر معلّقة فقط</span>
-        </header>
-        {activeAlerts.length > 0 ? (
+      {/* Alerts */}
+      {alerts.length > 0 && (
+        <section>
+          <header className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>يحتاج انتباهك</h2>
+            <span className={styles.sectionHint}>{alerts.length} مهمة</span>
+          </header>
           <div className={styles.alertsGrid}>
-            {activeAlerts.map((alert) => (
-              <Link
-                key={alert.key}
-                href={alert.href}
-                className={`${styles.alert} ${styles[`alert_${alert.tone}`]}`}
-              >
+            {alerts.map(({ key, count, label, href, tone, Icon }) => (
+              <Link key={key} href={href} className={`${styles.alert} ${styles[`alert_${tone}`]}`}>
                 <span className={styles.alertIcon}>
-                  <alert.Icon size={22} />
+                  <Icon size={18} />
                 </span>
                 <div className={styles.alertBody}>
-                  <strong>
-                    {alert.count.toLocaleString('en-US')} {alert.label}
-                  </strong>
-                  <span>{alert.desc}</span>
+                  <strong>{count.toLocaleString('en-US')}</strong>
+                  <span>{label}</span>
                 </div>
-                <ArrowLeftIcon size={16} className={styles.alertArrow} />
+                <ArrowLeftIcon size={14} className={styles.alertArrow} />
               </Link>
             ))}
           </div>
-        ) : (
-          <div className={styles.allClear} role="status">
-            <span className={styles.allClearIcon}>
-              <CheckCircleIcon size={19} />
-            </span>
-            <div>
-              <strong>لا توجد مهام مراجعة معلّقة حاليًا</strong>
-              <span>يمكنك متابعة المؤشرات الأساسية والنشاط الحي من هذه الصفحة.</span>
-            </div>
-          </div>
-        )}
-      </section>
+        </section>
+      )}
 
-      <section className={styles.section} aria-labelledby="admin-platform-metrics">
+      {/* KPIs */}
+      <section>
         <header className={styles.sectionHeader}>
-          <h2 id="admin-platform-metrics" className={styles.sectionTitle}>
-            مؤشرات المنصة
-          </h2>
+          <h2 className={styles.sectionTitle}>مؤشرات المنصة</h2>
           <span className={styles.sectionHint}>إجماليات حالية</span>
         </header>
-        <div className={styles.grid}>
-          {cards.map(({ key, label, value, Icon, tone, href }) => {
-            const content = (
-              <>
-                <div className={styles.cardTop}>
-                  <span className={styles.icon}>
-                    <Icon size={20} />
-                  </span>
-                  <ArrowLeftIcon size={14} className={styles.chev} />
-                </div>
-                <span className={styles.value}>
-                  {typeof value === 'number' ? value.toLocaleString('en-US') : value}
-                </span>
-                <span className={styles.label}>{label}</span>
-              </>
-            )
-            return (
-              <Link key={key} href={href ?? '/admin'} className={`${styles.card} ${styles[tone]}`}>
-                {content}
-              </Link>
-            )
-          })}
+        <div className={styles.kpiGrid}>
+          <StatCard
+            icon={StoreIcon}
+            label="كل الأنشطة"
+            value={stats.totalBusinesses}
+            hint={recent.newBusinesses > 0 ? `+${recent.newBusinesses} اليوم` : undefined}
+            href="/admin/businesses"
+            tone="purple"
+          />
+          <StatCard
+            icon={CheckCircleIcon}
+            label="منشور"
+            value={stats.publishedBusinesses}
+            href="/admin/businesses?status=published"
+            tone="teal"
+          />
+          <StatCard
+            icon={UserIcon}
+            label="المستخدمون"
+            value={stats.totalUsers}
+            hint={recent.newUsers > 0 ? `+${recent.newUsers} اليوم` : undefined}
+            href="/admin/users"
+            tone="purple"
+          />
+          <StatCard
+            icon={FileTextIcon}
+            label="الطلبات"
+            value={stats.totalOrders}
+            hint={recent.newOrders > 0 ? `+${recent.newOrders} اليوم` : undefined}
+            href="/admin/analytics"
+            tone="gold"
+          />
         </div>
       </section>
+
+      {/* Two column: Activity + Quick Actions */}
+      <div className={styles.twoCol}>
+        <div className={styles.colMain}>
+          <ActivityFeed />
+        </div>
+        <aside className={styles.colSide}>
+          <Panel title="إجراءات سريعة">
+            <ul className={styles.quickList}>
+              {QUICK_ACTIONS.map(({ href, label, desc, Icon }) => (
+                <li key={href}>
+                  <Link href={href} className={styles.quickLink}>
+                    <span className={styles.quickIcon}>
+                      <Icon size={16} />
+                    </span>
+                    <div className={styles.quickText}>
+                      <span className={styles.quickLabel}>{label}</span>
+                      <span className={styles.quickDesc}>{desc}</span>
+                    </div>
+                    <ArrowLeftIcon size={12} className={styles.quickArrow} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Panel>
+        </aside>
+      </div>
     </div>
   )
 }
