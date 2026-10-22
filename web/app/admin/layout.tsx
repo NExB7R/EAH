@@ -56,11 +56,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </aside>
 
         <div className={styles.workspace}>
-          <AdminTopbar
-            displayName={session.displayName}
-            notificationCount={session.notifCount}
-            counts={counts}
-          />
+          <AdminTopbar notificationCount={session.notifCount} counts={counts} />
           <div id="admin-content" className={styles.content} tabIndex={-1}>
             {children}
           </div>

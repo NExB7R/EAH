@@ -2,13 +2,11 @@
 
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useMemo, useState } from 'react'
 import {
   LayoutDashboardIcon,
   StoreIcon,
   UserIcon,
   CrownGoldIcon,
-  ChevronLeftIcon,
   ShieldCheckIcon,
   TrendingUpIcon,
   AlertIcon,
@@ -46,16 +44,6 @@ type Section = {
   key: string
   title: string
   items: Item[]
-  defaultOpen?: boolean
-}
-
-function sectionContainsPath(section: Section, pathname: string): boolean {
-  return section.items.some(({ href }) => {
-    const baseHref = href.split('?')[0] ?? href
-    return baseHref === '/admin'
-      ? pathname === '/admin'
-      : pathname === baseHref || pathname.startsWith(`${baseHref}/`)
-  })
 }
 
 const SECTIONS: Section[] = [
@@ -143,54 +131,15 @@ const SECTIONS: Section[] = [
 export default function AdminSidebar({ counts, onNavigate }: Props) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [manualOverrides, setManualOverrides] = useState<Map<string, boolean>>(() => new Map())
-
-  const openSections = useMemo(() => {
-    const active = SECTIONS.find((section) => sectionContainsPath(section, pathname))
-    const result = new Set<string>()
-    for (const section of SECTIONS) {
-      const override = manualOverrides.get(section.key)
-      if (override !== undefined) {
-        if (override) result.add(section.key)
-        continue
-      }
-      const defaultOpen = section.defaultOpen !== false
-      const isActive = active?.key === section.key
-      if (defaultOpen || isActive) result.add(section.key)
-    }
-    return result
-  }, [pathname, manualOverrides])
-
-  const toggleSection = (key: string) => {
-    setManualOverrides((previous) => {
-      const next = new Map(previous)
-      const isCurrentlyOpen = openSections.has(key)
-      next.set(key, !isCurrentlyOpen)
-      return next
-    })
-  }
 
   return (
     <aside className={onNavigate ? styles.drawerSidebar : styles.sidebar}>
       <nav className={styles.nav} aria-label="لوحة الأدمن">
         {SECTIONS.map((section) => {
-          const sectionOpen = openSections.has(section.key)
           return (
             <div key={section.key} className={styles.section}>
-              <button
-                type="button"
-                className={styles.sectionToggle}
-                onClick={() => toggleSection(section.key)}
-                aria-expanded={sectionOpen}
-                aria-controls={`admin-section-${section.key}`}
-              >
-                <span className={styles.sectionTitle}>{section.title}</span>
-                <ChevronLeftIcon
-                  size={13}
-                  className={`${styles.sectionChevron} ${sectionOpen ? styles.sectionChevronOpen : ''}`}
-                />
-              </button>
-              <ul id={`admin-section-${section.key}`} hidden={!sectionOpen} className={styles.list}>
+              <span className={styles.sectionTitle}>{section.title}</span>
+              <ul className={styles.list}>
                 {section.items.map(({ href, label, Icon, badgeKey }) => {
                   const [baseHref = href, queryString] = href.split('?')
                   const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null

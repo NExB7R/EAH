@@ -1,12 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { BellIcon, SearchIcon, UserIcon } from '@/components/icons'
+import { BellIcon, SearchIcon } from '@/components/icons'
 import AdminMobileNav from './admin-mobile-nav'
 import styles from './admin-topbar.module.css'
 
 type Props = {
-  displayName: string
   notificationCount: number
   counts?: {
     pendingBusinesses?: number
@@ -16,8 +15,7 @@ type Props = {
   }
 }
 
-export default function AdminTopbar({ displayName, notificationCount, counts }: Props) {
-  const initials = displayName.trim().slice(0, 1) || 'م'
+export default function AdminTopbar({ notificationCount, counts }: Props) {
   const openSearch = () => window.dispatchEvent(new Event('eah:open-command-palette'))
 
   return (
@@ -46,17 +44,6 @@ export default function AdminTopbar({ displayName, notificationCount, counts }: 
           <BellIcon size={19} />
           {notificationCount > 0 && <span className={styles.notificationDot} aria-hidden="true" />}
         </Link>
-
-        <div className={styles.profile} role="group" aria-label="الحساب الحالي">
-          <span className={styles.avatar} aria-hidden="true">
-            {initials}
-          </span>
-          <span className={styles.profileText}>
-            <strong>{displayName}</strong>
-            <small>مدير المنصة</small>
-          </span>
-          <UserIcon size={15} className={styles.profileIcon} />
-        </div>
       </div>
     </header>
   )
