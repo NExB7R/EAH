@@ -107,18 +107,23 @@ const SECTIONS: Section[] = [
         badgeKey: 'flaggedReviews',
       },
       { href: '/admin/reports', label: 'البلاغات', Icon: FileTextIcon, badgeKey: 'openReports' },
+      { href: '/admin/fraud', label: 'كشف الاحتيال', Icon: ShieldCheckIcon },
     ],
   },
   {
     key: 'تواصل',
     title: 'التواصل',
-    items: [{ href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon }],
+    items: [
+      { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
+      { href: '/admin/announcements', label: 'الإعلانات العامة', Icon: BellIcon },
+    ],
   },
   {
     key: 'نظام',
     title: 'النظام',
     items: [
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
+      { href: '/admin/insights', label: 'التقارير الذكية المحفوظة', Icon: FileTextIcon },
       { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
       { href: '/admin/settings', label: 'الإعدادات', Icon: SettingsIcon },
     ],
