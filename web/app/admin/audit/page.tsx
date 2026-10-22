@@ -99,7 +99,7 @@ export default async function AdminAuditPage({
             <FileTextIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{stats.total.toLocaleString('ar-EG')}</span>
+            <span className={styles.statValue}>{stats.total.toLocaleString('en-US')}</span>
             <span className={styles.statLabel}>إجمالي</span>
           </div>
         </div>

@@ -2,7 +2,14 @@
 
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
-import { StoreIcon, CheckCircleIcon, CloseIcon, ArrowLeftIcon, AlertIcon, SparklesIcon } from '@/components/icons'
+import {
+  StoreIcon,
+  CheckCircleIcon,
+  CloseIcon,
+  ArrowLeftIcon,
+  AlertIcon,
+  SparklesIcon,
+} from '@/components/icons'
 import { approveBusiness, rejectBusiness, archiveBusiness, republishBusiness } from './actions'
 import type { PendingBusiness } from '@/lib/data/admin'
 import styles from './businesses.module.css'
@@ -79,9 +86,10 @@ export default function BusinessRow({
   const isRejected = !!b.rejected_at
   const status = b.is_published ? 'published' : isRejected ? 'rejected' : 'pending'
   const customType = b.custom_business_type?.trim()
-  const typeLabel = customType && b.business_type === 'misc' && b.business_type_status === 'approved'
-    ? customType
-    : TYPE_LABEL[b.business_type] ?? b.business_type
+  const typeLabel =
+    customType && b.business_type === 'misc' && b.business_type_status === 'approved'
+      ? customType
+      : (TYPE_LABEL[b.business_type] ?? b.business_type)
 
   return (
     <div
@@ -118,7 +126,9 @@ export default function BusinessRow({
               {status === 'rejected' && 'مرفوض'}
             </span>
             {b.business_type_status === 'pending' && (
-              <span className={styles.status + ' ' + styles.status_pending}>نوع النشاط بحاجة موافقة</span>
+              <span className={styles.status + ' ' + styles.status_pending}>
+                نوع النشاط بحاجة موافقة
+              </span>
             )}
             {b.business_type_status === 'rejected' && (
               <span className={styles.status + ' ' + styles.status_rejected}>نوع النشاط مرفوض</span>

@@ -81,7 +81,7 @@ export async function approveSubscription(id: string, formData: FormData): Promi
       title: parsed.data.is_trial ? 'بدأت تجربتك ✓' : 'اشتراكك اتفعّل ✓',
       body: parsed.data.is_trial
         ? `عندك ${parsed.data.days} يوم تجربة مجانية على "${biz.name}"`
-        : `اشتراك "${biz.name}" شغّال لحد ${expires.toLocaleDateString('ar-EG')}`,
+        : `اشتراك "${biz.name}" شغّال لحد ${expires.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}`,
       deepLink: '/merchant/subscription',
     })
   }

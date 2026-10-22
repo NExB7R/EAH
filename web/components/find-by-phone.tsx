@@ -11,8 +11,7 @@ import styles from './find-by-phone.module.css'
 // EAH — Find by Phone (Truecaller Style)
 // ═══════════════════════════════════════════════════════════
 
-const TURNSTILE_SITE_KEY =
-  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '0x4AAAAAAFKj0MmPWv_YfMRl'
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '0x4AAAAAAFKj0MmPWv_YfMRl'
 
 type UserResult = {
   display_name: string

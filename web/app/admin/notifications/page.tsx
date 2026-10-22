@@ -91,7 +91,7 @@ export default async function AdminNotificationsPage({
       <div>
         <AccountPageHeader
           title="الإشعارات والرسائل"
-          description={`${session.notifCount.toLocaleString('ar-EG')} إشعار غير مقروء في وارد حسابك`}
+          description={`${session.notifCount.toLocaleString('en-US')} إشعار غير مقروء في وارد حسابك`}
         />
         <NotificationsTabs />
         <section className={notifStyles.intro}>
@@ -99,7 +99,8 @@ export default async function AdminNotificationsPage({
             <BellIcon size={20} />
           </span>
           <p className={notifStyles.introText}>
-            دي الرسائل والتنبيهات اللي وصلتك أنت كمدير. إرسال الرسائل للمستخدمين وإدارة الإعلانات موجودين في التبويبات المجاورة.
+            دي الرسائل والتنبيهات اللي وصلتك أنت كمدير. إرسال الرسائل للمستخدمين وإدارة الإعلانات
+            موجودين في التبويبات المجاورة.
           </p>
         </section>
         <InboxList initialItems={notifications} />

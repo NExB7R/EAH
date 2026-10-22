@@ -30,78 +30,78 @@ export default function BranchesSection() {
               </div>
             </div>
             <fieldset disabled={ctx.pending} className={styles.branchFieldset}>
-            <div className={styles.fieldRow}>
+              <div className={styles.fieldRow}>
+                <div className={styles.field}>
+                  <label className={styles.label}>اسم الفرع</label>
+                  <input
+                    value={br.name}
+                    onChange={(e) => ctx.updateBranch(idx, 'name', e.target.value)}
+                    className={styles.input}
+                    dir="rtl"
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>المنطقة</label>
+                  <input
+                    value={br.area}
+                    onChange={(e) => ctx.updateBranch(idx, 'area', e.target.value)}
+                    className={styles.input}
+                    dir="rtl"
+                  />
+                </div>
+              </div>
               <div className={styles.field}>
-                <label className={styles.label}>اسم الفرع</label>
+                <label className={styles.label}>العنوان</label>
                 <input
-                  value={br.name}
-                  onChange={(e) => ctx.updateBranch(idx, 'name', e.target.value)}
+                  value={br.address_text}
+                  onChange={(e) => ctx.updateBranch(idx, 'address_text', e.target.value)}
                   className={styles.input}
                   dir="rtl"
                 />
               </div>
-              <div className={styles.field}>
-                <label className={styles.label}>المنطقة</label>
-                <input
-                  value={br.area}
-                  onChange={(e) => ctx.updateBranch(idx, 'area', e.target.value)}
-                  className={styles.input}
-                  dir="rtl"
-                />
+              <div className={styles.fieldRow}>
+                <div className={styles.field}>
+                  <label className={styles.label}>هاتف</label>
+                  <input
+                    value={br.phone}
+                    onChange={(e) => ctx.updateBranch(idx, 'phone', e.target.value)}
+                    className={styles.input}
+                    dir="ltr"
+                  />
+                </div>
+                <div className={styles.field}>
+                  <label className={styles.label}>واتساب</label>
+                  <input
+                    value={br.whatsapp}
+                    onChange={(e) => ctx.updateBranch(idx, 'whatsapp', e.target.value)}
+                    className={styles.input}
+                    dir="ltr"
+                  />
+                </div>
               </div>
-            </div>
-            <div className={styles.field}>
-              <label className={styles.label}>العنوان</label>
-              <input
-                value={br.address_text}
-                onChange={(e) => ctx.updateBranch(idx, 'address_text', e.target.value)}
-                className={styles.input}
-                dir="rtl"
-              />
-            </div>
-            <div className={styles.fieldRow}>
-              <div className={styles.field}>
-                <label className={styles.label}>هاتف</label>
+              <div className={styles.checkRow}>
                 <input
-                  value={br.phone}
-                  onChange={(e) => ctx.updateBranch(idx, 'phone', e.target.value)}
-                  className={styles.input}
-                  dir="ltr"
+                  type="checkbox"
+                  id={`br-primary-${idx}`}
+                  checked={br.is_primary}
+                  disabled={!br.is_active}
+                  onChange={(e) => ctx.updateBranch(idx, 'is_primary', e.target.checked)}
                 />
+                <label htmlFor={`br-primary-${idx}`}>الفرع الرئيسي</label>
               </div>
-              <div className={styles.field}>
-                <label className={styles.label}>واتساب</label>
+              <div className={styles.checkRow}>
                 <input
-                  value={br.whatsapp}
-                  onChange={(e) => ctx.updateBranch(idx, 'whatsapp', e.target.value)}
-                  className={styles.input}
-                  dir="ltr"
+                  type="checkbox"
+                  id={`br-active-${idx}`}
+                  checked={br.is_active}
+                  onChange={(e) => {
+                    const active = e.target.checked
+                    ctx.updateBranch(idx, 'is_active', active)
+                    if (!active && br.is_primary) ctx.updateBranch(idx, 'is_primary', false)
+                  }}
                 />
+                <label htmlFor={`br-active-${idx}`}>فرع نشط على المنصة</label>
               </div>
-            </div>
-            <div className={styles.checkRow}>
-              <input
-                type="checkbox"
-                id={`br-primary-${idx}`}
-                checked={br.is_primary}
-                disabled={!br.is_active}
-                onChange={(e) => ctx.updateBranch(idx, 'is_primary', e.target.checked)}
-              />
-              <label htmlFor={`br-primary-${idx}`}>الفرع الرئيسي</label>
-            </div>
-            <div className={styles.checkRow}>
-              <input
-                type="checkbox"
-                id={`br-active-${idx}`}
-                checked={br.is_active}
-                onChange={(e) => {
-                  const active = e.target.checked
-                  ctx.updateBranch(idx, 'is_active', active)
-                  if (!active && br.is_primary) ctx.updateBranch(idx, 'is_primary', false)
-                }}
-              />
-              <label htmlFor={`br-active-${idx}`}>فرع نشط على المنصة</label>
-            </div>
             </fieldset>
             <SaveBar
               onClick={() => ctx.saveBranch(idx)}
@@ -112,7 +112,12 @@ export default function BranchesSection() {
           </div>
         ))}
       </div>
-      <button type="button" className={styles.addBtn} onClick={ctx.addBranch} disabled={ctx.pending}>
+      <button
+        type="button"
+        className={styles.addBtn}
+        onClick={ctx.addBranch}
+        disabled={ctx.pending}
+      >
         <PlusIcon size={14} /> إضافة فرع
       </button>
     </>
