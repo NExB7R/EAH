@@ -340,35 +340,34 @@ BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> �
 
 ---
 
-## 16. Current State (2026-10-20)
+## 16. Current State (2026-10-22)
 
-**آخر commit:** will be updated
+**آخر commit:** `d8af94be`
 **الفرع:** `main` (clean)
 
 ### ✅ شغال
 - Business wizard fullscreen + 10 contact types
 - Notice + open-override + location picker (📍+OSM)
-- Images: file upload + URL paste (logo/cover/menu/gallery)
-- Menu + Gallery sections (admin)
+- Images: upload (file + URL) + delete (logo/cover/menu/gallery) — 200 على كل عمليات
 - Offers CRUD (admin) + public offers tab
-- Share modal (WhatsApp/Twitter/FB/Telegram/copy/QR)
+- Share modal (5 منصات + QR)
 - Admin mobile drawer + profile + bell routing
-- WhatsApp orders gate
-- God Components ≤300 lines
-- Invariants CI gate
+- 3 layouts (admin/merchant/account) موحّدة: SecondaryHero + 1240px + footer
+- كل التواريخ والأرقام Western (en-US)
+- `/updates` اتشالت
+- Security DB-04/05 + AP-05
+- God Components ≤300 سطر
 
 ### ❌ مشاكل معروفة
-- SEC-01: 11 مفتاح
-- SEC-02b: OIDC token in git history
-- DB-04/05, AP-05
-- B2: 5 select('*')
-- Offers: starts_at not filtered
+- SEC-01: 11 مفتاح rotate
+- SEC-02b: OIDC token في git history
+- B2: 1 select('*') — admin-business (exception موثّق)
 
 ### 🎯 الأولويات
 1. **أول نشاط حقيقي**
-2. اختبار offers end-to-end
-3. starts_at filter
-4. SEC-01 rotate
+2. اختبار end-to-end
+3. SEC-01 rotate
+4. SEC-02b git history
 
 ### 🚫 ممنوع
 - Puck/designtools/Surface

@@ -177,7 +177,7 @@
 - [x] BRAIN.md §16 + ERROR_REGISTER §6 synced (b43e770)
 
 ### Post-Launch Week 1
-- [x] UI-01: business detail tabs (ee4abe7)
+- [x] UI-01: business detail tabs + 3 layouts unified (d8af94be)
 - [x] UI-02: wizard fullscreen overlay (567496d)
 - [ ] CONSISTENCY-02/03: docs sync
 - [ ] DESIGN-01: unified design system
