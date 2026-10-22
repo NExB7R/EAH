@@ -23,18 +23,6 @@ export default function AdminTopbar({ displayName, notificationCount, counts }: 
 
   return (
     <header className={styles.topbar}>
-      <Link href="/admin" className={styles.brandMobile} aria-label="EAH — لوحة الإدارة">
-        <Image
-          src="/icon-192.png"
-          alt=""
-          width={28}
-          height={28}
-          className={styles.brandLogo}
-          priority
-        />
-        <span className={styles.brandScript}>EAH</span>
-      </Link>
-
       <div className={styles.mobileMenu}>
         <AdminMobileNav counts={counts} />
       </div>
