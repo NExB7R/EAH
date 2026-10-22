@@ -11,17 +11,12 @@ import {
   TrendingUpIcon,
   AlertIcon,
   FileTextIcon,
-  SettingsIcon,
   BellIcon,
+  BroadcastIcon,
   TagIcon,
   SparklesIcon,
 } from './icons'
 import styles from './admin-sidebar.module.css'
-
-// ═══════════════════════════════════════════════════════════
-// EAH — Admin Sidebar (2026)
-// Navigation follows the platform workflow; redirect aliases are not duplicated here.
-// ═══════════════════════════════════════════════════════════
 
 type Props = {
   onNavigate?: () => void
@@ -37,7 +32,7 @@ type Item = {
   href: string
   label: string
   Icon: React.ComponentType<{ size?: number }>
-  badgeKey?: keyof NonNullable<Props['counts']> | 'moderationWork'
+  badgeKey?: keyof NonNullable<Props['counts']>
 }
 
 type Section = {
@@ -48,21 +43,21 @@ type Section = {
 
 const SECTIONS: Section[] = [
   {
-    key: 'نظرة_عامة',
+    key: 'overview',
     title: 'نظرة عامة',
     items: [
       { href: '/admin', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
-      { href: '/admin/analytics', label: 'التحليلات والتقارير', Icon: TrendingUpIcon },
+      { href: '/admin/analytics', label: 'التحليلات', Icon: TrendingUpIcon },
       { href: '/admin/health', label: 'صحة النظام', Icon: AlertIcon },
     ],
   },
   {
-    key: 'أنشطة',
+    key: 'businesses',
     title: 'الأنشطة',
     items: [
       {
         href: '/admin/businesses',
-        label: 'الأنشطة',
+        label: 'كل الأنشطة',
         Icon: StoreIcon,
         badgeKey: 'pendingBusinesses',
       },
@@ -71,7 +66,7 @@ const SECTIONS: Section[] = [
     ],
   },
   {
-    key: 'مستخدمون',
+    key: 'users',
     title: 'المستخدمون',
     items: [
       { href: '/admin/users', label: 'المستخدمين', Icon: UserIcon },
@@ -85,12 +80,12 @@ const SECTIONS: Section[] = [
     ],
   },
   {
-    key: 'مراجعة_وأمان',
-    title: 'المراجعة والأمان',
+    key: 'moderation',
+    title: 'المراجعة',
     items: [
       {
         href: '/admin/moderation',
-        label: 'المراجعة والأمان',
+        label: 'التقييمات',
         Icon: ShieldCheckIcon,
         badgeKey: 'flaggedReviews',
       },
@@ -100,29 +95,35 @@ const SECTIONS: Section[] = [
         Icon: FileTextIcon,
         badgeKey: 'openReports',
       },
-      { href: '/admin/moderation?tab=fraud', label: 'كشف الاحتيال', Icon: ShieldCheckIcon },
+      {
+        href: '/admin/moderation?tab=fraud',
+        label: 'كشف الاحتيال',
+        Icon: AlertIcon,
+      },
     ],
   },
   {
-    key: 'تواصل',
+    key: 'comms',
     title: 'التواصل',
     items: [
       { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
-      { href: '/admin/notifications?tab=announcements', label: 'الإعلانات العامة', Icon: BellIcon },
+      {
+        href: '/admin/notifications?tab=announcements',
+        label: 'الإعلانات العامة',
+        Icon: BroadcastIcon,
+      },
     ],
   },
   {
-    key: 'نظام',
-    title: 'النظام',
+    key: 'tools',
+    title: 'أدوات',
     items: [
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
-      { href: '/admin/insights', label: 'التقارير الذكية المحفوظة', Icon: FileTextIcon },
-      { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
-      { href: '/admin/settings', label: 'الإعدادات', Icon: SettingsIcon },
+      { href: '/admin/insights', label: 'تقارير الأنشطة', Icon: FileTextIcon },
     ],
   },
   {
-    key: 'حسابي',
+    key: 'account',
     title: 'حسابي',
     items: [{ href: '/admin/profile', label: 'بروفايلي', Icon: UserIcon }],
   },
@@ -131,56 +132,58 @@ const SECTIONS: Section[] = [
 export default function AdminSidebar({ counts, onNavigate }: Props) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const currentTab = searchParams.get('tab')
 
   return (
     <aside className={onNavigate ? styles.drawerSidebar : styles.sidebar}>
       <nav className={styles.nav} aria-label="لوحة الأدمن">
-        {SECTIONS.map((section) => {
-          return (
-            <div key={section.key} className={styles.section}>
-              <span className={styles.sectionTitle}>{section.title}</span>
-              <ul className={styles.list}>
-                {section.items.map(({ href, label, Icon, badgeKey }) => {
-                  const [baseHref = href, queryString] = href.split('?')
-                  const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null
-                  const active =
-                    baseHref === '/admin'
-                      ? pathname === '/admin'
-                      : pathname.startsWith(baseHref) &&
-                        (targetTab ? searchParams.get('tab') === targetTab : true)
-                  const badgeValue =
-                    badgeKey === 'moderationWork'
-                      ? (counts?.flaggedReviews ?? 0) + (counts?.openReports ?? 0)
-                      : badgeKey
-                        ? counts?.[badgeKey]
-                        : undefined
-                  const showBadge = typeof badgeValue === 'number' && badgeValue > 0
+        {SECTIONS.map((section) => (
+          <div key={section.key} className={styles.section}>
+            <h4 className={styles.sectionTitle}>{section.title}</h4>
+            <ul className={styles.list}>
+              {section.items.map(({ href, label, Icon, badgeKey }) => {
+                const [baseHref = href, queryString] = href.split('?')
+                const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null
 
-                  return (
-                    <li key={href}>
-                      <Link
-                        href={href}
-                        className={`${styles.item} ${active ? styles.active : ''}`}
-                        aria-current={active ? 'page' : undefined}
-                        onClick={onNavigate}
-                      >
-                        <span className={styles.iconWrap}>
-                          <Icon size={16} />
-                        </span>
-                        <span className={styles.label}>{label}</span>
-                        {showBadge && (
-                          <span className={styles.badge}>
-                            {badgeValue > 99 ? '99+' : badgeValue}
-                          </span>
-                        )}
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          )
-        })}
+                // Active logic:
+                // - Base item (no tab): active on /admin exact, or when no tab on URL, or on sub-paths
+                // - Tab item: active only when pathname matches base AND tab matches
+                let active = false
+                if (baseHref === '/admin') {
+                  active = pathname === '/admin' && !currentTab
+                } else if (pathname === baseHref || pathname.startsWith(`${baseHref}/`)) {
+                  if (targetTab) {
+                    active = pathname === baseHref && currentTab === targetTab
+                  } else {
+                    active = !currentTab || pathname !== baseHref
+                  }
+                }
+
+                const badgeValue = badgeKey ? counts?.[badgeKey] : undefined
+                const showBadge = typeof badgeValue === 'number' && badgeValue > 0
+
+                return (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      className={`${styles.item} ${active ? styles.active : ''}`}
+                      aria-current={active ? 'page' : undefined}
+                      onClick={onNavigate}
+                    >
+                      <span className={styles.iconWrap}>
+                        <Icon size={16} />
+                      </span>
+                      <span className={styles.label}>{label}</span>
+                      {showBadge && (
+                        <span className={styles.badge}>{badgeValue > 99 ? '99+' : badgeValue}</span>
+                      )}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
     </aside>
   )
