@@ -5,7 +5,6 @@ import {
   AlertIcon,
   CrownGoldIcon,
   CloseIcon,
-  ArrowLeftIcon,
 } from '@/components/icons'
 import { type BusinessStatus } from '@/lib/data/admin'
 import { getAdminBusinessesPage } from '@/lib/data/admin-business-list'
