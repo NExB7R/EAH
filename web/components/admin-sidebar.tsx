@@ -5,13 +5,15 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import {
   LayoutDashboardIcon,
-  AlertIcon,
   StoreIcon,
   UserIcon,
   CrownGoldIcon,
   ChevronLeftIcon,
   ShieldCheckIcon,
   TrendingUpIcon,
+  AlertIcon,
+  FileTextIcon,
+  SettingsIcon,
   BellIcon,
   TagIcon,
   SparklesIcon,
@@ -58,16 +60,17 @@ function sectionContainsPath(section: Section, pathname: string): boolean {
 
 const SECTIONS: Section[] = [
   {
-    key: 'overview',
+    key: 'نظرة_عامة',
     title: 'نظرة عامة',
     items: [
       { href: '/admin', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
-      { href: '/admin/analytics', label: 'التحليلات', Icon: TrendingUpIcon },
+      { href: '/admin/analytics', label: 'التحليلات والتقارير', Icon: TrendingUpIcon },
+      { href: '/admin/health', label: 'صحة النظام', Icon: AlertIcon },
     ],
   },
   {
-    key: 'platform',
-    title: 'إدارة المنصة',
+    key: 'أنشطة',
+    title: 'الأنشطة',
     items: [
       {
         href: '/admin/businesses',
@@ -75,25 +78,15 @@ const SECTIONS: Section[] = [
         Icon: StoreIcon,
         badgeKey: 'pendingBusinesses',
       },
+      { href: '/admin/featured', label: 'الأنشطة المميزة', Icon: CrownGoldIcon },
+      { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
+    ],
+  },
+  {
+    key: 'مستخدمون',
+    title: 'المستخدمون',
+    items: [
       { href: '/admin/users', label: 'المستخدمين', Icon: UserIcon },
-    ],
-  },
-  {
-    key: 'trust',
-    title: 'المراجعة والثقة',
-    items: [
-      {
-        href: '/admin/moderation',
-        label: 'المراجعة والأمان',
-        Icon: ShieldCheckIcon,
-        badgeKey: 'moderationWork',
-      },
-    ],
-  },
-  {
-    key: 'growth',
-    title: 'النمو التجاري',
-    items: [
       {
         href: '/admin/subscriptions',
         label: 'الاشتراكات',
@@ -101,24 +94,39 @@ const SECTIONS: Section[] = [
         badgeKey: 'pendingSubscriptions',
       },
       { href: '/admin/ads', label: 'الإعلانات', Icon: TagIcon },
-      { href: '/admin/featured', label: 'الأنشطة المميزة', Icon: CrownGoldIcon },
     ],
   },
   {
-    key: 'communication',
+    key: 'مراجعة_وأمان',
+    title: 'المراجعة والأمان',
+    items: [
+      {
+        href: '/admin/moderation',
+        label: 'المراجعة والأمان',
+        Icon: ShieldCheckIcon,
+        badgeKey: 'flaggedReviews',
+      },
+      { href: '/admin/reports', label: 'البلاغات', Icon: FileTextIcon, badgeKey: 'openReports' },
+    ],
+  },
+  {
+    key: 'تواصل',
     title: 'التواصل',
     items: [{ href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon }],
   },
   {
-    key: 'system',
-    title: 'النظام والأدوات',
-    defaultOpen: false,
+    key: 'نظام',
+    title: 'النظام',
     items: [
       { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
-      { href: '/admin/health', label: 'صحة النظام والأخطاء', Icon: AlertIcon },
-      { href: '/admin/insights', label: 'تخزين التقارير الذكية', Icon: SparklesIcon },
-      { href: '/admin/profile', label: 'بروفايلي', Icon: UserIcon },
+      { href: '/admin/audit', label: 'سجل التدقيق', Icon: FileTextIcon },
+      { href: '/admin/settings', label: 'الإعدادات', Icon: SettingsIcon },
     ],
+  },
+  {
+    key: 'حسابي',
+    title: 'حسابي',
+    items: [{ href: '/admin/profile', label: 'بروفايلي', Icon: UserIcon }],
   },
 ]
 

@@ -1,5 +1,7 @@
 'use client'
 
+import Link from 'next/link'
+
 import { useEffect } from 'react'
 
 export default function GlobalError({
@@ -47,7 +49,10 @@ export default function GlobalError({
             boxShadow: '0 24px 80px rgba(0, 0, 0, .3)',
           }}
         >
-          <div aria-hidden="true" style={{ fontSize: 28, fontWeight: 900, color: '#d8b4fe', marginBottom: 18 }}>
+          <div
+            aria-hidden="true"
+            style={{ fontSize: 28, fontWeight: 900, color: '#d8b4fe', marginBottom: 18 }}
+          >
             EAH
           </div>
           <h1 style={{ fontSize: '1.45rem', fontWeight: 900, margin: '0 0 10px' }}>
@@ -72,7 +77,7 @@ export default function GlobalError({
             >
               حاول تاني
             </button>
-            <a
+            <Link
               href="/"
               style={{
                 display: 'inline-flex',
@@ -88,7 +93,7 @@ export default function GlobalError({
               }}
             >
               الرجوع للرئيسية
-            </a>
+            </Link>
           </div>
         </main>
       </body>

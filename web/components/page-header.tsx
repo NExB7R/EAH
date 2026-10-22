@@ -10,7 +10,6 @@ type Props = {
   title?: string
   count?: number
   logoSize?: LogoSize
-  /** تقليل الـ top padding (للاستخدام جوه الفوتر) */
   compact?: boolean
   children?: React.ReactNode
 }

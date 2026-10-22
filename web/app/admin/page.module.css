@@ -524,7 +524,7 @@ a.card:hover {
 .primaryAction {
   border-color: rgba(199, 125, 255, 0.7);
   background: linear-gradient(135deg, #9d4edd, #a855f7);
-  color: #fff;
+  color: rgb(255, 255, 255);
   box-shadow: 0 7px 22px rgba(168, 85, 247, 0.23);
 }
 .primaryAction:hover {
