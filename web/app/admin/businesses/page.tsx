@@ -5,6 +5,7 @@ import {
   AlertIcon,
   CrownGoldIcon,
   CloseIcon,
+  ArrowLeftIcon,
 } from '@/components/icons'
 import { type BusinessStatus } from '@/lib/data/admin'
 import { getAdminBusinessesPage } from '@/lib/data/admin-business-list'
@@ -67,7 +68,11 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
     <div>
       <AccountPageHeader
         title="إدارة الأنشطة"
-        description={`${counts.all.toLocaleString('en-US')} نشاط إجمالي — ${total.toLocaleString('en-US')} نتيجة`}
+        description={
+          total === counts.all
+            ? `${counts.all.toLocaleString('en-US')} نشاط إجمالي`
+            : `${counts.all.toLocaleString('en-US')} نشاط إجمالي — ${total.toLocaleString('en-US')} في الحالة الحالية`
+        }
       />
 
       {/* Stats */}

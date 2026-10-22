@@ -416,7 +416,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       business_type_status:
         d.business_type === 'misc' && d.custom_business_type ? 'pending' : 'approved',
       owner_profile_id: d.owner_profile_id || null,
-      source: d.owner_profile_id ? 'merchant' : 'admin',
+      source: 'admin', // Admin-created regardless of assigned owner (owner can be linked later)
       area: d.area || null,
       city: d.city || null,
       address_text: d.address_text || null,
