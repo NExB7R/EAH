@@ -20,11 +20,9 @@ export async function POST(request: Request) {
   }
 
   const ip = await getClientIp()
-  const rateLimit = await checkRateLimit(
-    strictLimiter,
-    `track-contact:${user.id}:${ip}`,
-    { failClosed: true },
-  )
+  const rateLimit = await checkRateLimit(strictLimiter, `track-contact:${user.id}:${ip}`, {
+    failClosed: true,
+  })
   if (!rateLimit.ok) {
     const unavailable = rateLimit.error.startsWith('تعذر')
     return NextResponse.json(

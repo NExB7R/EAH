@@ -34,13 +34,20 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const rateLimit = await checkRateLimit(apiLimiter, `merchant-orders-export:${user.id}:${await getClientIp()}`, { failClosed: true })
+  const rateLimit = await checkRateLimit(
+    apiLimiter,
+    `merchant-orders-export:${user.id}:${await getClientIp()}`,
+    { failClosed: true },
+  )
   if (!rateLimit.ok) {
     const unavailable = rateLimit.error.startsWith('تعذر')
-    return NextResponse.json({ error: unavailable ? 'الخدمة غير متاحة مؤقتًا' : 'طلبات كثيرة، حاول لاحقًا' }, {
-      status: unavailable ? 503 : 429,
-      headers: unavailable ? { 'Retry-After': '60' } : {},
-    })
+    return NextResponse.json(
+      { error: unavailable ? 'الخدمة غير متاحة مؤقتًا' : 'طلبات كثيرة، حاول لاحقًا' },
+      {
+        status: unavailable ? 503 : 429,
+        headers: unavailable ? { 'Retry-After': '60' } : {},
+      },
+    )
   }
 
   const { data: biz } = await supabase
@@ -93,7 +100,9 @@ export async function GET(req: Request) {
   }
   if ((data ?? []).length > 2000) {
     return NextResponse.json(
-      { error: 'نتائج التصدير أكبر من الحد الآمن (2000 طلب). حدّد فترة زمنية أضيق ثم أعد المحاولة.' },
+      {
+        error: 'نتائج التصدير أكبر من الحد الآمن (2000 طلب). حدّد فترة زمنية أضيق ثم أعد المحاولة.',
+      },
       { status: 413 },
     )
   }
