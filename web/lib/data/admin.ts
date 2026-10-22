@@ -92,7 +92,7 @@ export async function getBusinessesByStatus(
   } else if (status === 'rejected') {
     query = query.not('rejected_at', 'is', null)
   } else if (status === 'admin_owned') {
-    query = query.eq('source', 'admin').eq('is_published', true)
+    query = query.eq('source', 'admin')
   }
 
   const { data: businesses } = await query

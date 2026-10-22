@@ -83,7 +83,9 @@ export async function getAdminBusinessesPage({
     } else if (target === 'rejected') {
       countQuery = countQuery.not('rejected_at', 'is', null)
     } else if (target === 'admin_owned') {
-      countQuery = countQuery.eq('source', 'admin').eq('is_published', true)
+      // Source-only dimension: admin-created, regardless of publish state.
+      // Publishing state is a separate axis ('منشور' / 'بانتظار').
+      countQuery = countQuery.eq('source', 'admin')
     }
 
     const { count, error } = await countQuery
@@ -122,7 +124,7 @@ export async function getAdminBusinessesPage({
     } else if (status === 'rejected') {
       scopedQuery = scopedQuery.not('rejected_at', 'is', null)
     } else if (status === 'admin_owned') {
-      scopedQuery = scopedQuery.eq('source', 'admin').eq('is_published', true)
+      scopedQuery = scopedQuery.eq('source', 'admin')
     }
 
     if (area) scopedQuery = scopedQuery.eq('area', area)
@@ -154,7 +156,10 @@ export async function getAdminBusinessesPage({
 
       if (error) {
         ownerSearchLimited = true
-      } else if ((count ?? 0) > MAX_OWNER_MATCHES_PER_SEARCH || (data?.length ?? 0) > MAX_OWNER_MATCHES_PER_SEARCH) {
+      } else if (
+        (count ?? 0) > MAX_OWNER_MATCHES_PER_SEARCH ||
+        (data?.length ?? 0) > MAX_OWNER_MATCHES_PER_SEARCH
+      ) {
         ownerSearchLimited = true
       } else {
         for (const profile of data ?? []) {
@@ -221,12 +226,11 @@ export async function getAdminBusinessesPage({
   }
 
   const businesses = rows.map((row) => {
-    const ownerProfileId =
-      typeof row.owner_profile_id === 'string' ? row.owner_profile_id : null
+    const ownerProfileId = typeof row.owner_profile_id === 'string' ? row.owner_profile_id : null
     const { owner_profile_id: _ownerProfileId, ...business } = row
     return {
       ...business,
-      owner: ownerProfileId ? ownerProfiles.get(ownerProfileId) ?? null : null,
+      owner: ownerProfileId ? (ownerProfiles.get(ownerProfileId) ?? null) : null,
     }
   }) as unknown as PendingBusiness[]
 
