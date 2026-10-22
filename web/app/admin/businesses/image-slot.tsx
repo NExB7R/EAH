@@ -13,7 +13,6 @@ type Props = {
   businessId: string
   category: 'logo' | 'cover'
   initialUrl: string | null
-  initialMediaId?: string | null
   label: string
   aspect?: 'video' | 'square'
   onChange?: (url: string | null) => void
@@ -23,7 +22,6 @@ export default function ImageSlot({
   businessId,
   category,
   initialUrl,
-  initialMediaId = null,
   label,
   aspect = 'video',
   onChange,
@@ -35,7 +33,7 @@ export default function ImageSlot({
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const apply = (newUrl: string, newMediaId: string) => {
+  const apply = (newUrl: string) => {
     setUrl(newUrl)
     onChange?.(newUrl)
   }
@@ -58,7 +56,7 @@ export default function ImageSlot({
       if (!res.ok || !json.url || !json.mediaId) {
         setError(json.error ?? 'فشل الرفع')
       } else {
-        apply(json.url, json.mediaId)
+        apply(json.url)
       }
     } catch {
       setError('فشل الاتصال')
@@ -87,7 +85,7 @@ export default function ImageSlot({
       if (!res.ok || !json.url || !json.mediaId) {
         setError(json.error ?? 'فشل الحفظ')
       } else {
-        apply(json.url, json.mediaId)
+        apply(json.url)
         setUrlInput('')
         setMode('file')
       }
