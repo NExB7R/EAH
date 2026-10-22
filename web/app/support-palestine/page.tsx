@@ -161,11 +161,7 @@ export default function SupportPalestinePage() {
           </ul>
 
           <p className={styles.destNote}>
-            * يتم اختيار الجهات بالتنسيق مع مؤسسات فلسطينية موثوقة. التقارير الربع سنوية بتنشر على{' '}
-            <Link href="/updates" className={styles.inlineLink}>
-              صفحة التحديثات
-            </Link>
-            .
+            * يتم اختيار الجهات بالتنسيق مع مؤسسات فلسطينية موثوقة. التقارير الربع سنوية بتنشر على .
           </p>
         </section>
 

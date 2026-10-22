@@ -24,7 +24,6 @@ export default function ImagesSection() {
         businessId={ctx.business.id}
         category="logo"
         initialUrl={existingLogo?.storage_path ?? null}
-        initialMediaId={existingLogo?.id ?? null}
         label="اللوجو"
         aspect="square"
         onChange={(u) => ctx.setLogoUrl(u)}
@@ -33,7 +32,6 @@ export default function ImagesSection() {
         businessId={ctx.business.id}
         category="cover"
         initialUrl={existingCover?.storage_path ?? fallbackCover ?? null}
-        initialMediaId={existingCover?.id ?? null}
         label="الغلاف"
         onChange={(u) => ctx.setCoverUrl(u)}
       />
