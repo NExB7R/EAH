@@ -33,9 +33,7 @@ async function verifyTurnstile(token: string): Promise<TurnstileResult> {
 
     if (!response.ok) return { ok: false, unavailable: true }
     const result = (await response.json()) as { success?: boolean }
-    return result.success === true
-      ? { ok: true }
-      : { ok: false, unavailable: false }
+    return result.success === true ? { ok: true } : { ok: false, unavailable: false }
   } catch {
     return { ok: false, unavailable: true }
   }

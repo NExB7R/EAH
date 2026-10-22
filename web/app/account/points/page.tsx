@@ -47,7 +47,7 @@ export default async function PointsPage() {
           <span className={styles.balanceIcon}>
             <GiftIcon size={28} />
           </span>
-          <span className={styles.balanceValue}>{stats.pointsBalance.toLocaleString('ar-EG')}</span>
+          <span className={styles.balanceValue}>{stats.pointsBalance.toLocaleString('en-US')}</span>
           <span className={styles.balanceLabel}>رصيد النقاط</span>
         </div>
 
@@ -74,7 +74,11 @@ export default async function PointsPage() {
         <ul className={styles.list}>
           {logs.map((log) => {
             const label = REASON_LABEL[log.reason] ?? log.reason
-            const date = new Date(log.created_at).toLocaleDateString('ar-EG')
+            const date = new Date(log.created_at).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })
             const positive = log.delta > 0
             return (
               <li key={log.id} className={styles.row}>

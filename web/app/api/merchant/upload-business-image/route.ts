@@ -33,11 +33,9 @@ export async function POST(req: NextRequest) {
   if (!user) return jsonError('Unauthorized', 401)
 
   const ip = await getClientIp()
-  const rateLimit = await checkRateLimit(
-    strictLimiter,
-    `merchant-image:${user.id}:${ip}`,
-    { failClosed: true },
-  )
+  const rateLimit = await checkRateLimit(strictLimiter, `merchant-image:${user.id}:${ip}`, {
+    failClosed: true,
+  })
   if (!rateLimit.ok) {
     const unavailable = rateLimit.error.startsWith('تعذر')
     return NextResponse.json(

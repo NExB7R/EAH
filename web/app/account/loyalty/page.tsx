@@ -55,7 +55,7 @@ export default async function LoyaltyPage() {
         </span>
         <h2 className={styles.heroTitle}>{current.label}</h2>
         <p className={styles.heroPoints}>
-          <strong>{stats.pointsBalance.toLocaleString('ar-EG')}</strong> نقطة
+          <strong>{stats.pointsBalance.toLocaleString('en-US')}</strong> نقطة
         </p>
 
         {next && (
@@ -64,7 +64,7 @@ export default async function LoyaltyPage() {
               <div className={styles.progressBar} style={{ width: `${progress}%` }} />
             </div>
             <p className={styles.progressText}>
-              باقي <strong>{remaining.toLocaleString('ar-EG')}</strong> نقطة للوصول لمستوى{' '}
+              باقي <strong>{remaining.toLocaleString('en-US')}</strong> نقطة للوصول لمستوى{' '}
               <strong>{next.label}</strong>
             </p>
           </>
@@ -90,8 +90,8 @@ export default async function LoyaltyPage() {
                 )}
                 <h4 className={styles.tierName}>{tier.label}</h4>
                 <p className={styles.tierRange}>
-                  {tier.min.toLocaleString('ar-EG')}
-                  {tier.max === Infinity ? '+' : ` - ${tier.max.toLocaleString('ar-EG')}`}
+                  {tier.min.toLocaleString('en-US')}
+                  {tier.max === Infinity ? '+' : ` - ${tier.max.toLocaleString('en-US')}`}
                 </p>
                 <ul className={styles.tierPerks}>
                   <li>

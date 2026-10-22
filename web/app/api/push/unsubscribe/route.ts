@@ -48,7 +48,10 @@ export async function POST(request: Request) {
 
   if (error) {
     console.error('[push/unsubscribe] database write failed:', error.message)
-    return NextResponse.json({ ok: false, error: 'تعذر إلغاء الاشتراك في الإشعارات' }, { status: 500 })
+    return NextResponse.json(
+      { ok: false, error: 'تعذر إلغاء الاشتراك في الإشعارات' },
+      { status: 500 },
+    )
   }
 
   return NextResponse.json({ ok: true })

@@ -18,11 +18,17 @@ const schema = z.discriminatedUnion('type', [
     type: z.literal('review'),
     payload: z.object({
       businessId: z.string().uuid(),
-      slug: z.string().min(1).max(120).regex(/^[a-zA-Z0-9\u0600-\u06FF-]+$/),
-      dimensions: z.record(z.string(), z.number().int().min(1).max(5)).refine(
-        (dimensions) => Object.keys(dimensions).length <= 12,
-        'عدد أبعاد التقييم أكبر من المسموح',
-      ),
+      slug: z
+        .string()
+        .min(1)
+        .max(120)
+        .regex(/^[a-zA-Z0-9\u0600-\u06FF-]+$/),
+      dimensions: z
+        .record(z.string(), z.number().int().min(1).max(5))
+        .refine(
+          (dimensions) => Object.keys(dimensions).length <= 12,
+          'عدد أبعاد التقييم أكبر من المسموح',
+        ),
       comment: z.string().min(10).max(500),
     }),
   }),
@@ -30,7 +36,11 @@ const schema = z.discriminatedUnion('type', [
     type: z.literal('comment'),
     payload: z.object({
       businessId: z.string().uuid(),
-      slug: z.string().min(1).max(120).regex(/^[a-zA-Z0-9\u0600-\u06FF-]+$/),
+      slug: z
+        .string()
+        .min(1)
+        .max(120)
+        .regex(/^[a-zA-Z0-9\u0600-\u06FF-]+$/),
       content: z.string().min(1).max(500),
       parentId: z.string().uuid().nullable().optional(),
     }),

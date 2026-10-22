@@ -61,7 +61,14 @@ export default function GlobalRouteError({
         <h1 style={{ fontSize: '1.45rem', fontWeight: 900, margin: '0 0 10px' }}>
           الصفحة دي مش متاحة دلوقتي
         </h1>
-        <p style={{ color: 'var(--text-tertiary)', fontSize: '.95rem', lineHeight: 1.9, margin: '0 0 24px' }}>
+        <p
+          style={{
+            color: 'var(--text-tertiary)',
+            fontSize: '.95rem',
+            lineHeight: 1.9,
+            margin: '0 0 24px',
+          }}
+        >
           حصلت مشكلة مؤقتة، لكن تقدر تحاول تاني أو ترجع للرئيسية وتكمل استخدام المنصة.
         </p>
         <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 10 }}>

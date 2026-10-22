@@ -41,7 +41,11 @@ export default async function NotificationsPage() {
       ) : (
         <ul className={styles.list}>
           {notifications.map((n) => {
-            const date = new Date(n.created_at).toLocaleDateString('ar-EG')
+            const date = new Date(n.created_at).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })
             const unread = !n.read_at
             const isAnnouncement = n.notification_type === 'announcement'
             const cls = `${styles.card} ${unread ? styles.unread : ''} ${isAnnouncement ? styles.announcement : ''}`

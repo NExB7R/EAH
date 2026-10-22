@@ -108,7 +108,11 @@ export default async function ReferralPage() {
                   <span className={styles.friendMeta}>
                     {r.first_order_at
                       ? '✓ أول طلب'
-                      : new Date(r.signup_at).toLocaleDateString('ar-EG')}
+                      : new Date(r.signup_at).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                        })}
                   </span>
                 </div>
                 <span className={styles.friendPoints}>+{r.points_awarded}</span>
