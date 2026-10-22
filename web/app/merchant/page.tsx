@@ -163,7 +163,6 @@ export default async function MerchantDashboard() {
           </div>
         ))}
       </section>
-
     </div>
   )
 }
