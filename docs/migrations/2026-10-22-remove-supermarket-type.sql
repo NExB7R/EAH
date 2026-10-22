@@ -3,13 +3,9 @@
 --
 -- New core types: restaurant · pharmacy · delivery_office · misc
 -- supermarket merged into misc (custom_business_type describes it).
---
--- Rollback: see comments — old constraint can be restored + data re-tagged.
 
--- 1) Migrate existing rows
 UPDATE businesses SET business_type = 'misc' WHERE business_type = 'supermarket';
 
--- 2) Update CHECK constraint
 ALTER TABLE businesses DROP CONSTRAINT IF EXISTS businesses_business_type_check;
 ALTER TABLE businesses ADD CONSTRAINT businesses_business_type_check
   CHECK (business_type IN ('restaurant', 'pharmacy', 'delivery_office', 'misc'));
