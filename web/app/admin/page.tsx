@@ -195,7 +195,9 @@ export default async function AdminDashboard() {
                   </span>
                   <ArrowLeftIcon size={14} className={styles.chev} />
                 </div>
-                <span className={styles.value}>{value.toLocaleString('ar-EG')}</span>
+                <span className={styles.value}>
+                  {typeof value === 'number' ? value.toLocaleString('en-US') : value}
+                </span>
                 <span className={styles.label}>{label}</span>
               </>
             )
