@@ -55,7 +55,9 @@ export async function POST(req: NextRequest) {
   if (!ALLOWED_CATEGORIES.includes(category as Category)) {
     return NextResponse.json({ error: 'نوع الصورة غلط' }, { status: 400 })
   }
-  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(businessId)) {
+  if (
+    !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(businessId)
+  ) {
     return NextResponse.json({ error: 'معرّف النشاط غير صحيح' }, { status: 400 })
   }
 
@@ -75,7 +77,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'الصيغة مش مدعومة' }, { status: 400 })
     }
     if (fileRaw.size <= 0 || fileRaw.size > MAX_SIZE) {
-      return NextResponse.json({ error: 'الحجم لازم يكون أكبر من صفر وأقل من 5MB' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'الحجم لازم يكون أكبر من صفر وأقل من 5MB' },
+        { status: 400 },
+      )
     }
     const result = await uploadImage(fileRaw, folder, MAX_SIZE)
     if (!result.ok) return NextResponse.json({ error: result.error }, { status: 400 })
@@ -162,7 +167,10 @@ export async function POST(req: NextRequest) {
         .single()
 
       if (coverError || !updatedBusiness) {
-        return NextResponse.json({ error: 'الصورة اتحفظت لكن فشل تحديث غلاف النشاط' }, { status: 500 })
+        return NextResponse.json(
+          { error: 'الصورة اتحفظت لكن فشل تحديث غلاف النشاط' },
+          { status: 500 },
+        )
       }
     }
   } else {
@@ -233,9 +241,17 @@ export async function DELETE(req: NextRequest) {
   const categoryRaw = params.get('category')
   const category = categoryRaw as Category | null
 
+  // Resource-based path takes precedence. When businessId+category present,
+  // mediaId is ignored (prevents stale client-side IDs from causing 404s).
+  const hasResourcePath = !!(
+    businessId &&
+    category &&
+    (category === 'logo' || category === 'cover')
+  )
+
   // Preferred path: remove a business logo/cover as a resource. This also clears
   // legacy cover_image_url when no business_media row exists.
-  if (businessId && category && (category === 'logo' || category === 'cover')) {
+  if (hasResourcePath) {
     const { data: business, error: businessError } = await admin
       .from('businesses')
       .select('id, cover_image_url')
@@ -283,7 +299,9 @@ export async function DELETE(req: NextRequest) {
         if (category === 'cover') {
           await admin
             .from('businesses')
-            .update({ cover_image_url: business.cover_image_url ?? mediaRows?.[0]?.storage_path ?? null })
+            .update({
+              cover_image_url: business.cover_image_url ?? mediaRows?.[0]?.storage_path ?? null,
+            })
             .eq('id', businessId)
         }
         return NextResponse.json({ error: 'فشل حذف الصورة من سجلات النشاط' }, { status: 500 })
@@ -333,7 +351,10 @@ export async function DELETE(req: NextRequest) {
   const { error: deleteError } = await admin.from('business_media').delete().eq('id', mediaId)
   if (deleteError) {
     if (media.media_type === 'cover') {
-      await admin.from('businesses').update({ cover_image_url: oldCover }).eq('id', media.business_id)
+      await admin
+        .from('businesses')
+        .update({ cover_image_url: oldCover })
+        .eq('id', media.business_id)
     }
     return NextResponse.json({ error: deleteError.message }, { status: 500 })
   }

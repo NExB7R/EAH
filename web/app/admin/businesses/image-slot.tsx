@@ -104,11 +104,7 @@ export default function ImageSlot({
     setError(null)
     setPending(true)
     try {
-      const params = new URLSearchParams({
-        businessId,
-        category,
-        ...(mediaId ? { mediaId } : {}),
-      })
+      const params = new URLSearchParams({ businessId, category })
       const res = await fetch(`/api/admin/upload-business-image?${params.toString()}`, {
         method: 'DELETE',
       })
