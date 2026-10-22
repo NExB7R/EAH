@@ -157,7 +157,7 @@ export default async function AdminDashboard() {
                 </span>
                 <div className={styles.alertBody}>
                   <strong>
-                    {alert.count.toLocaleString('ar-EG')} {alert.label}
+                    {alert.count.toLocaleString('en-US')} {alert.label}
                   </strong>
                   <span>{alert.desc}</span>
                 </div>
