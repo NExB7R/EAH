@@ -49,6 +49,7 @@ const SECTIONS: Section[] = [
       { href: '/admin', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
       { href: '/admin/analytics', label: 'التحليلات', Icon: TrendingUpIcon },
       { href: '/admin/health', label: 'صحة النظام', Icon: AlertIcon },
+      { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
     ],
   },
   {
@@ -63,6 +64,7 @@ const SECTIONS: Section[] = [
       },
       { href: '/admin/featured', label: 'الأنشطة المميزة', Icon: CrownGoldIcon },
       { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
+      { href: '/admin/insights', label: 'تقارير الأنشطة', Icon: FileTextIcon },
     ],
   },
   {
@@ -112,14 +114,6 @@ const SECTIONS: Section[] = [
         label: 'الإعلانات العامة',
         Icon: BroadcastIcon,
       },
-    ],
-  },
-  {
-    key: 'tools',
-    title: 'أدوات',
-    items: [
-      { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
-      { href: '/admin/insights', label: 'تقارير الأنشطة', Icon: FileTextIcon },
     ],
   },
   {

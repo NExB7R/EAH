@@ -10,7 +10,7 @@ import type { ReactNode } from 'react'
 // ═══════════════════════════════════════════════════════════
 
 const HIDDEN: Record<string, string[]> = {
-  footer: ['/auth'],
+  footer: ['/auth', '/admin'],
   mobile: ['/auth', '/admin', '/merchant'],
 }
 

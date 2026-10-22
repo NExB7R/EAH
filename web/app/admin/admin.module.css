@@ -17,7 +17,7 @@
   --admin-danger: var(--red);
   --admin-shadow-sm: var(--shadow-sm);
   min-height: 100vh;
-  padding: 0 24px 80px;
+  padding: 0 24px 96px;
   color: var(--admin-text);
   background: var(--admin-canvas);
 }
