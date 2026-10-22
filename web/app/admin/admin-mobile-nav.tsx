@@ -20,6 +20,8 @@ export default function AdminMobileNav({ counts }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
+    const toggle = toggleRef.current
+
     if (!open) return
     const previousOverflow = document.body.style.overflow
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -32,7 +34,7 @@ export default function AdminMobileNav({ counts }: Props) {
     return () => {
       document.body.style.overflow = previousOverflow
       window.removeEventListener('keydown', closeOnEscape)
-      toggleRef.current?.focus()
+      toggle?.focus()
     }
   }, [open])
 
