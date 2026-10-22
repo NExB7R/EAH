@@ -168,7 +168,13 @@ export default function OfferList({ offers }: Props) {
       ) : (
         <div className={styles.list}>
           {filtered.map((o) => {
-            const ends = o.ends_at ? new Date(o.ends_at).toLocaleDateString('ar-EG') : '—'
+            const ends = o.ends_at
+              ? new Date(o.ends_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })
+              : '—'
             const expired = o.ends_at ? new Date(o.ends_at).getTime() < now : false
             return (
               <article

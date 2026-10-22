@@ -159,9 +159,21 @@ export default async function InsightPage({ params }: Props) {
   const score = insight.score ?? 0
   const tone = getTone(score)
   const grade = getGrade(score)
-  const date = new Date(insight.created_at).toLocaleDateString('ar-EG')
-  const periodStart = new Date(insight.period_start).toLocaleDateString('ar-EG')
-  const periodEnd = new Date(insight.period_end).toLocaleDateString('ar-EG')
+  const date = new Date(insight.created_at).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+  const periodStart = new Date(insight.period_start).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+  const periodEnd = new Date(insight.period_end).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
 
   const aiNarrative = insight.ai_narrative
   const insights = insight.top_points?.insights ?? []

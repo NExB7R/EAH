@@ -90,7 +90,12 @@ export default async function MerchantInsightsPage() {
               <GenerateButton businessId={business.id} />
               {insights.length > 0 && (
                 <span className={styles.lastGenerated}>
-                  آخر تقرير: {new Date(insights[0]!.created_at).toLocaleDateString('ar-EG')}
+                  آخر تقرير:{' '}
+                  {new Date(insights[0]!.created_at).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
                 </span>
               )}
             </div>
@@ -127,7 +132,11 @@ export default async function MerchantInsightsPage() {
             ) : (
               <div className={styles.historyList}>
                 {insights.map((ins) => {
-                  const date = new Date(ins.created_at).toLocaleDateString('ar-EG')
+                  const date = new Date(ins.created_at).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })
                   return (
                     <Link
                       key={ins.id}
