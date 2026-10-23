@@ -30,7 +30,7 @@ export default async function InsightDetailPage({ params }: { params: Promise<{ 
   const { data } = await supabase
     .from('business_insights')
     .select(
-      'id, period_start, period_end, score, summary, top_points, recommendations, ai_narrative, created_at, business:businesses(name)',
+      'id, period_start, period_end, score, summary, top_points, recommendations, ai_narrative, created_at, data, business:businesses(name)',
     )
     .eq('id', id)
     .maybeSingle()
