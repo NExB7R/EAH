@@ -69,7 +69,7 @@
 
 .btnPrimary {
   background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
-  color: #fff;
+  color: rgb(255, 255, 255);
   border-color: var(--purple-primary);
 }
 
@@ -185,7 +185,7 @@
   flex-shrink: 0;
   border-radius: 50%;
   background: var(--purple-primary);
-  color: #fff;
+  color: rgb(255, 255, 255);
   font-weight: 900;
   font-size: 0.85rem;
 }

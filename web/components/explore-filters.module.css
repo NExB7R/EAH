@@ -49,7 +49,7 @@
   padding: 0 5px;
   border-radius: 999px;
   background: var(--purple-neon);
-  color: #fff;
+  color: rgb(255, 255, 255);
   font-size: 0.7rem;
   font-weight: 900;
 }
@@ -152,7 +152,7 @@
 .chipActive {
   background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
   border-color: var(--purple-light);
-  color: #fff;
+  color: rgb(255, 255, 255);
   box-shadow: 0 0 12px rgba(168, 85, 247, 0.35);
 }
 

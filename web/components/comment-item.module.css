@@ -166,7 +166,7 @@
 .sendBtn {
   background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
   border: none;
-  color: #fff;
+  color: rgb(255, 255, 255);
 }
 
 .sendBtn:hover:not(:disabled) {

@@ -67,7 +67,7 @@
   border-radius: var(--radius-md);
   border: 1px solid var(--purple-primary);
   background: var(--purple-primary);
-  color: #fff;
+  color: rgb(255, 255, 255);
   font-size: 0.75rem;
   font-weight: 800;
   cursor: pointer;
