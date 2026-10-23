@@ -1,31 +1,22 @@
 import type { AdminBusiness } from '@/lib/data/admin-business'
 import BusinessNotice from '@/components/business-notice'
+import StatCard from '@/components/admin/stat-card'
+import Panel from '@/components/admin/panel'
+import { ShieldCheckIcon, StarIcon, CrownGoldIcon, FileTextIcon } from '@/components/icons'
+import DeleteBusinessButton from './delete-button'
 import styles from './detail-tabs.module.css'
-
-// ═══════════════════════════════════════════════════════════
-// EAH — Admin Business: Overview Panel
-// Read-only summary. Editing lives in the "تعديل" tab.
-// ═══════════════════════════════════════════════════════════
-
-const TYPE_LABEL: Record<string, string> = {
-  restaurant: 'مطعم',
-  pharmacy: 'صيدلية',
-  supermarket: 'ماركت',
-  delivery_office: 'توصيل',
-  misc: 'أخرى',
-}
 
 const CONTACT_LABEL: Record<string, string> = {
   phone: 'هاتف',
   whatsapp: 'واتساب',
-  complaints: 'شكاوى واقتراحات',
+  complaints: 'شكاوى',
   facebook: 'فيسبوك',
   instagram: 'إنستجرام',
   website: 'موقع',
-  manager: 'مسئول النشاط',
+  manager: 'مسئول',
   shift_morning: 'شفت صباحي',
   shift_evening: 'شفت مسائي',
-  additional: 'رقم إضافي',
+  additional: 'إضافي',
 }
 
 export default function OverviewPanel({ biz }: { biz: AdminBusiness }) {
@@ -37,125 +28,98 @@ export default function OverviewPanel({ biz }: { biz: AdminBusiness }) {
       }
     : null
 
-  const openMode =
-    biz.open_now_override === true
-      ? 'مفتوح (يدوي)'
-      : biz.open_now_override === false
-        ? 'مغلق مؤقتاً (يدوي)'
-        : 'تلقائي حسب الساعات'
-
-  const publishState = biz.is_published ? 'منشور' : biz.rejected_at ? 'مرفوض' : 'معلّق'
-
   return (
-    <div className={styles.overviewWrap}>
-      {notice && <BusinessNotice notice={notice} />}
-
-      <div className={styles.cardGroup}>
-        <h3 className={styles.cardGroupTitle}>الحالة</h3>
-        <div className={styles.statRow}>
-          <div className={styles.statCell}>
-            <span className={styles.statLabel}>الفتح</span>
-            <span className={styles.statValueSmall}>{openMode}</span>
-          </div>
-          <div className={styles.statCell}>
-            <span className={styles.statLabel}>النشر</span>
-            <span className={styles.statValueSmall}>{publishState}</span>
-          </div>
-          <div className={styles.statCell}>
-            <span className={styles.statLabel}>النوع</span>
-            <span className={styles.statValueSmall}>
-              {TYPE_LABEL[biz.business_type] ?? biz.business_type}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.cardGroup}>
-        <h3 className={styles.cardGroupTitle}>الإحصائيات</h3>
-        <div className={styles.statRow}>
-          <div className={styles.statCell}>
-            <span className={styles.statLabel}>المصداقية</span>
-            <span className={styles.statValue}>{biz.trust_score}</span>
-          </div>
-          <div className={styles.statCell}>
-            <span className={styles.statLabel}>التقييم</span>
-            <span className={styles.statValue}>{biz.rating_avg.toFixed(1)}</span>
-          </div>
-          <div className={styles.statCell}>
-            <span className={styles.statLabel}>عدد التقييمات</span>
-            <span className={styles.statValue}>{biz.rating_count}</span>
-          </div>
-          <div className={styles.statCell}>
-            <span className={styles.statLabel}>الطلبات</span>
-            <span className={styles.statValue}>{biz.successful_orders}</span>
-          </div>
-        </div>
-      </div>
-
-      {biz.owner && (
-        <div className={styles.cardGroup}>
-          <h3 className={styles.cardGroupTitle}>صاحب النشاط</h3>
-          <div className={styles.contactRow}>
-            <span className={styles.contactValue}>{biz.owner.display_name}</span>
-            {biz.owner.phone && (
-              <>
-                <span className={styles.dot}>·</span>
-                <span className={styles.contactValue}>{biz.owner.phone}</span>
-              </>
-            )}
-          </div>
+    <div className={styles.overviewGrid}>
+      {notice && (
+        <div className={styles.overviewFull}>
+          <BusinessNotice notice={notice} />
         </div>
       )}
 
-      <div className={styles.cardGroup}>
-        <h3 className={styles.cardGroupTitle}>جهات الاتصال ({biz.contacts.length})</h3>
+      <section className={styles.overviewStats}>
+        <StatCard icon={ShieldCheckIcon} label="المصداقية" value={biz.trust_score} tone="teal" />
+        <StatCard
+          icon={StarIcon}
+          label="التقييم"
+          value={biz.rating_avg.toFixed(1)}
+          hint={biz.rating_count > 0 ? `${biz.rating_count} تقييم` : undefined}
+          tone="gold"
+        />
+        <StatCard
+          icon={CrownGoldIcon}
+          label="الطلبات الناجحة"
+          value={biz.successful_orders}
+          tone="purple"
+        />
+        <StatCard
+          icon={FileTextIcon}
+          label="جهات الاتصال"
+          value={biz.contacts.length}
+          tone="orange"
+        />
+      </section>
+
+      {biz.owner && (
+        <Panel title="صاحب النشاط">
+          <div className={styles.ownerRow}>
+            <span className={styles.ownerName}>{biz.owner.display_name}</span>
+            {biz.owner.phone && <span className={styles.ownerPhone}>{biz.owner.phone}</span>}
+          </div>
+        </Panel>
+      )}
+
+      <Panel title={`جهات الاتصال (${biz.contacts.length})`}>
         {biz.contacts.length === 0 ? (
           <p className={styles.muted}>لا يوجد — أضفها من تبويب التعديل</p>
         ) : (
-          biz.contacts.map((c, i) => (
-            <div key={`${c.method_type}-${i}`} className={styles.contactRow}>
-              <span className={styles.contactType}>
-                {CONTACT_LABEL[c.method_type] ?? c.method_type}
-              </span>
-              <span className={styles.contactValue}>{c.value}</span>
-              {c.is_primary && <span className={styles.primaryChip}>أساسي</span>}
-            </div>
-          ))
+          <ul className={styles.contactList}>
+            {biz.contacts.map((c, i) => (
+              <li key={`${c.method_type}-${i}`} className={styles.contactRow}>
+                <span className={styles.contactType}>
+                  {CONTACT_LABEL[c.method_type] ?? c.method_type}
+                </span>
+                <span className={styles.contactValue}>{c.value}</span>
+                {c.is_primary && <span className={styles.primaryChip}>أساسي</span>}
+              </li>
+            ))}
+          </ul>
         )}
-      </div>
+      </Panel>
 
-      <div className={styles.cardGroup}>
-        <h3 className={styles.cardGroupTitle}>الفروع ({biz.branches.length})</h3>
+      <Panel title={`الفروع (${biz.branches.length})`}>
         {biz.branches.length === 0 ? (
           <p className={styles.muted}>لا يوجد فروع</p>
         ) : (
-          biz.branches.map((br) => (
-            <div key={br.id} className={styles.contactRow}>
-              <span className={styles.contactValue}>{br.name}</span>
-              {br.area && (
-                <>
-                  <span className={styles.dot}>·</span>
-                  <span className={styles.contactType}>{br.area}</span>
-                </>
-              )}
-            </div>
-          ))
+          <ul className={styles.contactList}>
+            {biz.branches.map((br) => (
+              <li key={br.id} className={styles.contactRow}>
+                <span className={styles.contactValue}>{br.name}</span>
+                {br.area && <span className={styles.contactType}>{br.area}</span>}
+              </li>
+            ))}
+          </ul>
         )}
-      </div>
-
-      <div className={styles.cardGroup}>
-        <h3 className={styles.cardGroupTitle}>الصور ({biz.media.length})</h3>
-        <p className={styles.muted}>
-          {biz.media.length === 0 ? 'لا يوجد — أضف من تبويب التعديل' : 'محفوظة'}
-        </p>
-      </div>
+      </Panel>
 
       {biz.rejected_at && biz.rejection_reason && (
-        <div className={`${styles.cardGroup} ${styles.rejectionGroup}`}>
-          <h3 className={`${styles.cardGroupTitle} ${styles.rejectionTitle}`}>سبب الرفض</h3>
-          <p className={styles.rejectionBody}>{biz.rejection_reason}</p>
+        <div className={styles.overviewFull}>
+          <Panel title="سبب الرفض">
+            <p className={styles.rejectionBody}>{biz.rejection_reason}</p>
+          </Panel>
         </div>
       )}
+
+      <div className={styles.overviewFull}>
+        <div className={styles.dangerZone}>
+          <div className={styles.dangerHead}>
+            <h3 className={styles.dangerTitle}>منطقة الخطر</h3>
+            <p className={styles.dangerText}>
+              حذف النشاط نهائياً — لا يمكن التراجع. كل البيانات (تقييمات، طلبات، فروع) هتتمسح.
+            </p>
+          </div>
+          <DeleteBusinessButton id={biz.id} name={biz.name} />
+        </div>
+      </div>
     </div>
   )
 }

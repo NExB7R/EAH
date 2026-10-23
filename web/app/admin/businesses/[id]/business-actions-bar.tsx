@@ -13,10 +13,6 @@ import {
 import { approveBusiness, rejectBusiness, archiveBusiness, republishBusiness } from '../actions'
 import styles from '../businesses.module.css'
 
-// ═══════════════════════════════════════════════════════════
-// EAH — Business Quick Actions (Detail Page)
-// ═══════════════════════════════════════════════════════════
-
 type Props = {
   businessId: string
   businessName: string
@@ -158,27 +154,29 @@ export default function BusinessActionsBar({
             </button>
           )}
 
-          {isPublished ? (
-            <Link
-              href={`/businesses/${businessSlug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.secondaryBtn}
-            >
-              <ExternalLinkIcon size={14} />
-              <span>معاينة على الموقع</span>
-            </Link>
-          ) : (
-            <span className={styles.secondaryBtn} aria-label="النشاط غير منشور بعد">
-              <AlertIcon size={14} />
-              <span>الصفحة العامة تظهر بعد النشر</span>
-            </span>
-          )}
-
-          <Link href="/admin/businesses" className={styles.secondaryBtn}>
-            <ArrowLeftIcon size={14} />
-            <span>رجوع للقائمة</span>
-          </Link>
+          <details className={styles.moreWrap}>
+            <summary className={styles.moreBtn}>
+              <span>المزيد</span>
+              <span className={styles.moreChevron}>▾</span>
+            </summary>
+            <div className={styles.moreMenu}>
+              {isPublished && (
+                <Link
+                  href={`/businesses/${businessSlug}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.moreItem}
+                >
+                  <ExternalLinkIcon size={13} />
+                  <span>معاينة على الموقع</span>
+                </Link>
+              )}
+              <Link href="/admin/businesses" className={styles.moreItem}>
+                <ArrowLeftIcon size={13} />
+                <span>رجوع للقائمة</span>
+              </Link>
+            </div>
+          </details>
         </div>
       )}
     </div>

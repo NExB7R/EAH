@@ -1526,3 +1526,78 @@
 .emptyCtaBtn:hover {
   background: rgba(168, 85, 247, 0.22);
 }
+
+/* ─── More dropdown ─── */
+.moreWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.moreBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.moreBtn::-webkit-details-marker {
+  display: none;
+}
+
+.moreBtn:hover {
+  background: rgba(168, 85, 247, 0.12);
+}
+
+.moreChevron {
+  font-size: 0.65rem;
+  opacity: 0.7;
+}
+
+.moreMenu {
+  position: absolute;
+  top: calc(100% + 4px);
+  inset-inline-end: 0;
+  min-width: 200px;
+  padding: 4px;
+  border-radius: 10px;
+  background: rgba(15, 10, 25, 0.98);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.moreItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: start;
+  font-family: inherit;
+}
+
+.moreItem:hover {
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--text-primary);
+}

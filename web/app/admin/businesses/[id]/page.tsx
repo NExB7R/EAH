@@ -1,26 +1,16 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import AccountPageHeader from '@/components/account-page-header'
 import { ArrowLeftIcon } from '@/components/icons'
 import { getBusinessById } from '@/lib/data/admin-business'
 import BusinessForm from '../business-form'
 import BusinessPreview from '../business-preview'
-import DeleteBusinessButton from './delete-button'
-import TrialOwnerPanel from './trial-owner-panel'
+import BusinessHero from './business-hero'
 import BusinessActionsBar from './business-actions-bar'
 import OverviewPanel from './overview-panel'
+import TrialOwnerPanel from './trial-owner-panel'
 import tabsStyles from './detail-tabs.module.css'
-import styles from '../businesses.module.css'
 
 export const dynamic = 'force-dynamic'
-
-const TYPE_LABEL: Record<string, string> = {
-  restaurant: 'مطعم',
-  pharmacy: 'صيدلية',
-  supermarket: 'ماركت',
-  delivery_office: 'توصيل',
-  misc: 'أخرى',
-}
 
 const TABS = [
   { key: 'overview', label: 'نظرة عامة' },
@@ -51,13 +41,15 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
     biz.cover_image_url ?? biz.media.find((m) => m.media_type === 'cover')?.storage_path ?? null
 
   return (
-    <div className={styles.detailPage}>
-      <AccountPageHeader
-        title={biz.name}
-        description={`${TYPE_LABEL[biz.business_type] ?? biz.business_type} · ${biz.area ?? 'بدون منطقة'}`}
-      />
+    <div className={tabsStyles.page}>
+      <Link href="/admin/businesses" className={tabsStyles.backLink}>
+        <ArrowLeftIcon size={13} />
+        <span>الأنشطة</span>
+      </Link>
 
-      <div className={styles.detailActions}>
+      <BusinessHero biz={biz} />
+
+      <div className={tabsStyles.actionsRow}>
         <BusinessActionsBar
           businessId={biz.id}
           businessName={biz.name}
@@ -80,14 +72,7 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
         ))}
       </nav>
 
-      {activeTab === 'overview' && (
-        <>
-          <OverviewPanel biz={biz} />
-          <div className={styles.actions}>
-            <DeleteBusinessButton id={biz.id} name={biz.name} />
-          </div>
-        </>
-      )}
+      {activeTab === 'overview' && <OverviewPanel biz={biz} />}
 
       {activeTab === 'edit' && (
         <div className={tabsStyles.editWrap}>
@@ -101,9 +86,6 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
             trialUsed={biz.trial_used}
           />
           <BusinessForm mode="edit" business={biz} />
-          <div className={styles.actions}>
-            <DeleteBusinessButton id={biz.id} name={biz.name} />
-          </div>
         </div>
       )}
 
@@ -134,9 +116,6 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
               النشاط مش منشور — انشره عشان تفتح الصفحة العامة.
             </p>
           )}
-          <div className={styles.actions}>
-            <DeleteBusinessButton id={biz.id} name={biz.name} />
-          </div>
         </div>
       )}
     </div>

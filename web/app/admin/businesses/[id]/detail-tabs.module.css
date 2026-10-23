@@ -1,13 +1,44 @@
-/* EAH — Admin Business Detail: Tabs + Overview layout */
+/* EAH — Admin Business Detail: page, tabs, overview, edit, preview */
 
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  background: transparent;
+  text-decoration: none;
+  align-self: flex-start;
+  transition: background 160ms ease;
+}
+
+.backLink:hover {
+  background: rgba(168, 85, 247, 0.08);
+  color: var(--text-secondary);
+}
+
+.actionsRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+/* ─── Tabs (YouTube underline style) ─── */
 .tabs {
   display: flex;
-  gap: 4px;
-  padding: 4px;
-  border-radius: 12px;
-  background: rgba(157, 78, 221, 0.06);
-  border: 1px solid rgba(157, 78, 221, 0.12);
+  gap: 0;
   margin-bottom: 20px;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.12);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -17,45 +48,34 @@
 }
 
 .tab {
-  flex: 1;
-  min-width: fit-content;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #b8aed0;
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-muted);
   text-decoration: none;
-  text-align: center;
+  border-bottom: 2px solid transparent;
   transition:
-    background 180ms ease-out,
-    color 180ms ease-out;
+    color 160ms ease,
+    border-color 160ms ease;
   white-space: nowrap;
 }
 
 .tab:hover {
-  color: #c77dff;
+  color: var(--text-secondary);
 }
 
 .tabActive,
 .tabActive:hover {
-  background: rgba(157, 78, 221, 0.15);
-  color: #f5f5f5;
+  color: var(--text-primary);
+  border-bottom-color: var(--purple-light);
 }
 
-/* ── Edit tab ── */
-.editWrap {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  max-width: 100%;
-}
-
-/* ── Preview tab ── */
+/* ─── Edit / Preview wrappers ─── */
+.editWrap,
 .previewWrap {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   width: 100%;
   max-width: 100%;
 }
@@ -66,81 +86,78 @@
   gap: 6px;
   padding: 10px 16px;
   border-radius: 8px;
-  background: rgba(157, 78, 221, 0.15);
-  color: #c77dff;
-  font-size: 13px;
-  font-weight: 500;
+  background: rgba(168, 85, 247, 0.15);
+  color: var(--purple-light);
+  font-size: 0.82rem;
+  font-weight: 800;
   text-decoration: none;
-  transition: background 180ms ease-out;
+  transition: background 180ms ease;
   align-self: flex-start;
 }
 
-.previewLink:hover,
-.previewLink:focus-visible {
-  background: rgba(157, 78, 221, 0.25);
+.previewLink:hover {
+  background: rgba(168, 85, 247, 0.25);
 }
 
 .previewHint {
-  color: #9a8fb8;
-  font-size: 13px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
   margin: 0;
 }
 
-/* ── Overview ── */
-.overviewWrap {
+/* ─── Overview grid ─── */
+.overviewGrid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
-.cardGroup {
-  background: rgba(157, 78, 221, 0.04);
-  border: 1px solid rgba(157, 78, 221, 0.12);
-  border-radius: 12px;
-  padding: 16px;
+.overviewFull {
+  grid-column: 1 / -1;
 }
 
-.cardGroupTitle {
-  font-size: 12px;
-  font-weight: 600;
-  color: #c77dff;
-  margin: 0 0 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.statRow {
+.overviewStats {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
-.statCell {
-  padding: 12px;
-  border-radius: 10px;
-  background: rgba(157, 78, 221, 0.06);
-  border: 1px solid rgba(157, 78, 221, 0.12);
-  text-align: center;
+@media (max-width: 900px) {
+  .overviewGrid {
+    grid-template-columns: 1fr;
+  }
+  .overviewStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-.statLabel {
-  display: block;
-  font-size: 11px;
-  color: #9a8fb8;
-  margin-bottom: 4px;
+/* ─── Owner row ─── */
+.ownerRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
 }
 
-.statValue {
-  display: block;
-  font-size: 20px;
-  font-weight: 700;
-  color: #f5f5f5;
+.ownerName {
+  font-weight: 800;
+  color: var(--text-primary);
 }
 
-.statValueSmall {
-  display: block;
-  font-size: 14px;
+.ownerPhone {
   font-weight: 600;
-  color: #f5f5f5;
+  color: var(--text-muted);
+}
+
+/* ─── Contact / branch rows ─── */
+.contactList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .contactRow {
@@ -148,8 +165,8 @@
   align-items: center;
   gap: 8px;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(157, 78, 221, 0.08);
-  font-size: 13px;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.06);
+  font-size: 0.82rem;
 }
 
 .contactRow:last-child {
@@ -157,14 +174,15 @@
 }
 
 .contactType {
-  font-size: 11px;
-  color: #9a8fb8;
-  min-width: 100px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  min-width: 90px;
   flex-shrink: 0;
 }
 
 .contactValue {
-  color: #f5f5f5;
+  color: var(--text-primary);
   word-break: break-all;
 }
 
@@ -172,32 +190,59 @@
   margin-inline-start: auto;
   padding: 2px 8px;
   border-radius: 999px;
-  font-size: 10px;
+  font-size: 0.62rem;
+  font-weight: 900;
   background: rgba(85, 231, 209, 0.15);
   color: #55e7d1;
 }
 
-.dot {
-  color: #6b6080;
-}
-
 .muted {
-  color: #9a8fb8;
-  font-size: 13px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
   margin: 0;
-}
-
-.rejectionGroup {
-  border-color: rgba(252, 165, 165, 0.3);
-}
-
-.rejectionTitle {
-  color: #fca5a5;
 }
 
 .rejectionBody {
   color: #fca5a5;
-  font-size: 13px;
+  font-size: 0.85rem;
   margin: 0;
   line-height: 1.6;
+}
+
+/* ─── Danger zone ─── */
+.dangerZone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(252, 165, 165, 0.04);
+  border: 1px solid rgba(252, 165, 165, 0.25);
+}
+
+.dangerHead {
+  min-width: 0;
+}
+
+.dangerTitle {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: #fca5a5;
+}
+
+.dangerText {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .dangerZone {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
