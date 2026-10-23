@@ -13,6 +13,7 @@ import { getMyBusiness, getMySubscription } from '@/lib/data/merchant'
 import { getSubscriptionPlans, FEATURE_LABEL } from '@/lib/data/subscriptions'
 import type { PlanFeatureKey } from '@/lib/data/subscriptions'
 import AccountPageHeader from '@/components/account-page-header'
+import EmptyState from '@/components/empty-state'
 import SubscribeButton from './subscribe-button'
 import StartTrialButton from './start-trial-button'
 import styles from './subscription.module.css'
@@ -110,48 +111,56 @@ export default async function MerchantSubscriptionPage() {
 
       {/* Plans comparison */}
       <h2 className={styles.plansTitle}>الباقات المتاحة</h2>
-      <div className={styles.plansGrid}>
-        {plans.map((plan) => {
-          const isCurrent = plan.code === currentCode
-          const isFree = plan.price_egp === 0
+      {plans.length === 0 ? (
+        <EmptyState
+          Icon={CrownGoldIcon}
+          title="الباقات لسه مش متاحة"
+          description="الباقات هتظهر هنا أول ما يتم تفعيلها من الإدارة"
+        />
+      ) : (
+        <div className={styles.plansGrid}>
+          {plans.map((plan) => {
+            const isCurrent = plan.code === currentCode
+            const isFree = plan.price_egp === 0
 
-          return (
-            <div
-              key={plan.id}
-              className={`${styles.planCard} ${isCurrent ? styles.planCurrent : ''} ${isFree ? styles.planFree : ''}`}
-            >
-              <div className={styles.planHead}>
-                <h3 className={styles.planName}>{plan.name_ar}</h3>
-                {isCurrent && <span className={styles.planBadge}>باقتك الحالية</span>}
-              </div>
+            return (
+              <div
+                key={plan.id}
+                className={`${styles.planCard} ${isCurrent ? styles.planCurrent : ''} ${isFree ? styles.planFree : ''}`}
+              >
+                <div className={styles.planHead}>
+                  <h3 className={styles.planName}>{plan.name_ar}</h3>
+                  {isCurrent && <span className={styles.planBadge}>باقتك الحالية</span>}
+                </div>
 
-              <div className={styles.planPrice}>
-                {isFree ? (
-                  <span className={styles.freeText}>مجاناً</span>
-                ) : (
-                  <>
-                    <span className={styles.price}>{plan.price_egp}</span>
-                    <span className={styles.currency}>ج.م / شهر</span>
-                  </>
+                <div className={styles.planPrice}>
+                  {isFree ? (
+                    <span className={styles.freeText}>مجاناً</span>
+                  ) : (
+                    <>
+                      <span className={styles.price}>{plan.price_egp}</span>
+                      <span className={styles.currency}>ج.م / شهر</span>
+                    </>
+                  )}
+                </div>
+
+                <ul className={styles.planFeatures}>
+                  {plan.features.slice(0, 5).map((f: PlanFeatureKey) => (
+                    <li key={f}>
+                      <CheckCircleIcon size={14} />
+                      <span>{FEATURE_LABEL[f]}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {!isCurrent && (
+                  <SubscribeButton planCode={plan.code} planName={plan.name_ar} isFree={isFree} />
                 )}
               </div>
-
-              <ul className={styles.planFeatures}>
-                {plan.features.slice(0, 5).map((f: PlanFeatureKey) => (
-                  <li key={f}>
-                    <CheckCircleIcon size={14} />
-                    <span>{FEATURE_LABEL[f]}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {!isCurrent && (
-                <SubscribeButton planCode={plan.code} planName={plan.name_ar} isFree={isFree} />
-              )}
-            </div>
-          )
-        })}
-      </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
