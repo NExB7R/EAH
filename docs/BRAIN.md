@@ -353,10 +353,15 @@ BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> �
 
 ## 16. Current State (2026-10-22)
 
-**آخر commit:** `d6252543`
+**آخر commit:** `4e1f9e64`
 **الفرع:** `main` (clean)
 
 ### ✅ شغال
+- **Orders v2 (2026-10-23)** — DB + Admin + Merchant + Customer + Auto + Rating trigger — مكتمل 100%
+- **Notifications** — admin bell + merchant sidebar + Push infra
+- **Reports** — order metrics integration + SendToMerchant
+- **Merchant pages** — audit clean (0 issues)
+
 
 - **نظام الطلبات v2**: ETA إجباري + auto-deliver + feedback + reminder + admin control
 

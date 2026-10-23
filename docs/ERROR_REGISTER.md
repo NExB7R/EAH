@@ -185,6 +185,16 @@
 - [x] CI-02: PR → Vercel preview URL (auto via wait-for-vercel-preview)
 - [x] Merchant newOrders count fix (sent/seen not pending) — 2026-10-23
 - [x] Orders v2 — trigger rating sync (2026-10-23)
+- [x] Orders v2 — full DB + Admin + Merchant + Customer + Auto (2026-10-23)
+- [x] Business rating trigger (2026-10-23)
+- [x] Admin bell + merchant notifications (2026-10-23)
+- [x] Dashboards order flow sections (2026-10-23)
+- [x] Reports order metrics integration (2026-10-23)
+- [x] Merchant pages audit — 0 issues (2026-10-23)
+- [x] Merchant layout newOrders fix (sent/seen) (2026-10-23)
+- [x] Auto-deliver/expire service client (2026-10-23)
+- [x] Expiry: no drift counters + suspension + notifications (2026-10-23)
+- [x] Feedback: gate + audit + rating trigger (2026-10-23)
 - [x] Orders System v2 (2026-10-23) — DB + admin/merchant/customer flow + auto-deliver + feedback
 - [x] CI-07: invariants verifier in CI (ab55bce)
 
