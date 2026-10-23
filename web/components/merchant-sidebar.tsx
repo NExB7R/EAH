@@ -14,6 +14,7 @@ import {
   MapPinIcon,
   TagIcon,
   ShieldCheckIcon,
+  BellIcon,
 } from './icons'
 import styles from './merchant-sidebar.module.css'
 
