@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useTransition } from 'react'
+import { useEffect, useRef, useState, useTransition } from 'react'
 import { CheckCircleIcon, AlertIcon, PhoneIcon, WhatsAppIcon, ClockIcon } from '@/components/icons'
 import { updateOrderStatus } from './actions'
 import styles from './orders.module.css'
@@ -15,10 +15,6 @@ type Order = {
   customer_phone: string | null
   created_at: string
 }
-
-// ═══════════════════════════════════════════════════════════
-// Countdown — 10 دقايق للتأكيد (sent/seen فقط)
-// ═══════════════════════════════════════════════════════════
 
 const COUNTDOWN_MS = 10 * 60 * 1000
 
@@ -35,7 +31,7 @@ function Countdown({ createdAt }: { createdAt: string }) {
   if (remaining <= 0) {
     return (
       <span className={styles.countdownExpired}>
-        <ClockIcon size={11} />
+        <ClockIcon size={12} />
         <span>فات الوقت</span>
       </span>
     )
@@ -48,7 +44,7 @@ function Countdown({ createdAt }: { createdAt: string }) {
 
   return (
     <span className={urgent ? styles.countdownUrgent : styles.countdown}>
-      <ClockIcon size={11} />
+      <ClockIcon size={12} />
       <span>
         {min}:{String(sec).padStart(2, '0')}
       </span>
@@ -56,25 +52,43 @@ function Countdown({ createdAt }: { createdAt: string }) {
   )
 }
 
+function Elapsed({ since }: { since: string }) {
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 60_000)
+    return () => clearInterval(t)
+  }, [])
+  const sec = Math.max(0, Math.floor((now - new Date(since).getTime()) / 1000))
+  const min = Math.floor(sec / 60)
+  const label = min < 60 ? `${min} د` : `${Math.floor(min / 60)} س`
+  return (
+    <span className={styles.elapsed}>
+      <ClockIcon size={12} />
+      <span>{label}</span>
+    </span>
+  )
+}
+
 type Props = {
   order: Order
+  isHighlighted?: boolean
 }
 
 const NEXT_ACTIONS: Record<
   string,
-  { status: string; label: string; tone: 'ok' | 'warn' | 'go' }[]
+  { status: string; label: string; tone: 'ok' | 'warn' | 'go'; confirm?: boolean }[]
 > = {
   sent: [
-    { status: 'accepted', label: 'وافق', tone: 'ok' },
-    { status: 'rejected', label: 'ارفض', tone: 'warn' },
+    { status: 'accepted', label: 'موافق', tone: 'ok' },
+    { status: 'rejected', label: 'رفض', tone: 'warn', confirm: true },
   ],
   seen: [
-    { status: 'accepted', label: 'وافق', tone: 'ok' },
-    { status: 'rejected', label: 'ارفض', tone: 'warn' },
+    { status: 'accepted', label: 'موافق', tone: 'ok' },
+    { status: 'rejected', label: 'رفض', tone: 'warn', confirm: true },
   ],
   accepted: [
     { status: 'preparing', label: 'بيتحضّر', tone: 'go' },
-    { status: 'cancelled', label: 'ألغي', tone: 'warn' },
+    { status: 'cancelled', label: 'إلغاء', tone: 'warn', confirm: true },
   ],
   preparing: [{ status: 'on_way', label: 'في الطريق', tone: 'go' }],
   on_way: [{ status: 'delivered', label: 'اتسلّم', tone: 'ok' }],
@@ -89,6 +103,7 @@ const STATUS_LABEL: Record<string, string> = {
   on_way: 'في الطريق',
   delivered: 'اتسلّم',
   cancelled: 'اتلغى',
+  expired: 'فات الوقت',
 }
 
 const STATUS_TONE: Record<string, string> = {
@@ -100,12 +115,20 @@ const STATUS_TONE: Record<string, string> = {
   on_way: 'go',
   delivered: 'ok',
   cancelled: 'warn',
+  expired: 'muted',
 }
 
-export default function OrderRow({ order }: Props) {
+export default function OrderRow({ order, isHighlighted = false }: Props) {
   const [status, setStatus] = useState(order.status)
   const [pending, startTransition] = useTransition()
   const [msg, setMsg] = useState<string | null>(null)
+  const ref = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (isHighlighted && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [isHighlighted])
 
   const date = new Date(order.created_at).toLocaleString('ar-EG', {
     day: '2-digit',
@@ -116,8 +139,11 @@ export default function OrderRow({ order }: Props) {
 
   const actions = NEXT_ACTIONS[status] ?? []
   const currentTone = STATUS_TONE[status] ?? 'pending'
+  const isUrgent = status === 'sent' || status === 'seen'
+  const isInProgress = ['accepted', 'preparing', 'on_way'].includes(status)
 
-  const handleAction = (next: string) => {
+  const handleAction = (next: string, needsConfirm: boolean, label: string) => {
+    if (needsConfirm && !confirm(`${label} الطلب #${order.order_code}؟`)) return
     startTransition(async () => {
       const res = await updateOrderStatus(order.id, next)
       if (res.ok) {
@@ -137,58 +163,76 @@ export default function OrderRow({ order }: Props) {
   }
 
   return (
-    <article className={styles.row}>
+    <article
+      ref={ref}
+      className={`${styles.row} ${isHighlighted ? styles.rowHighlight : ''}`}
+      aria-current={isHighlighted ? 'true' : undefined}
+    >
       <div className={styles.rowHead}>
-        <div className={styles.rowHeadInfo}>
+        <div className={styles.rowHeadLeft}>
           <span className={`${styles.statusBadge} ${styles[currentTone]}`}>
             {STATUS_LABEL[status] ?? status}
           </span>
           <code className={styles.orderCode}>#{order.order_code}</code>
-          {(status === 'sent' || status === 'seen') && <Countdown createdAt={order.created_at} />}
         </div>
-        <time className={styles.rowDate}>
-          <ClockIcon size={11} /> {date}
-        </time>
+        <div className={styles.rowHeadRight}>
+          {isUrgent && <Countdown createdAt={order.created_at} />}
+          {isInProgress && order.created_at && <Elapsed since={order.created_at} />}
+          <time className={styles.rowDate}>{date}</time>
+        </div>
       </div>
 
       <div className={styles.rowBody}>
         <p className={styles.customerName}>{order.customer_name ?? '—'}</p>
         {order.customer_phone && (
-          <p className={styles.customerPhone} dir="ltr">
+          <a href={`tel:${order.customer_phone}`} className={styles.customerPhone} dir="ltr">
             {order.customer_phone}
-          </p>
+          </a>
         )}
         {order.items && <p className={styles.message}>{order.items}</p>}
+        {order.notes && <p className={styles.notes}>📝 {order.notes}</p>}
       </div>
 
       <div className={styles.rowActions}>
         {order.customer_phone && (
           <>
-            <button type="button" onClick={handleWhatsapp} className={styles.actionBtn}>
-              <WhatsAppIcon size={12} />
+            <button
+              type="button"
+              onClick={handleWhatsapp}
+              className={`${styles.actionBtn} ${styles.actionContact}`}
+              aria-label="واتساب"
+            >
+              <WhatsAppIcon size={16} />
               <span>واتساب</span>
             </button>
-            <a href={`tel:${order.customer_phone}`} className={styles.actionBtn}>
-              <PhoneIcon size={12} />
+            <a
+              href={`tel:${order.customer_phone}`}
+              className={`${styles.actionBtn} ${styles.actionContact}`}
+            >
+              <PhoneIcon size={16} />
               <span>اتصال</span>
             </a>
           </>
         )}
-
-        {actions.map((a) => (
-          <button
-            key={a.status}
-            type="button"
-            onClick={() => handleAction(a.status)}
-            disabled={pending}
-            className={`${styles.actionBtn} ${styles[`action_${a.tone}`]}`}
-          >
-            {a.tone === 'ok' && <CheckCircleIcon size={12} />}
-            {a.tone === 'warn' && <AlertIcon size={12} />}
-            <span>{a.label}</span>
-          </button>
-        ))}
       </div>
+
+      {actions.length > 0 && (
+        <div className={styles.rowPrimaryActions}>
+          {actions.map((a) => (
+            <button
+              key={a.status}
+              type="button"
+              onClick={() => handleAction(a.status, !!a.confirm, a.label)}
+              disabled={pending}
+              className={`${styles.primaryAction} ${styles[`action_${a.tone}`]}`}
+            >
+              {a.tone === 'ok' && <CheckCircleIcon size={18} />}
+              {a.tone === 'warn' && <AlertIcon size={18} />}
+              <span>{pending ? '…' : a.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       {msg && <p className={styles.rowMsg}>{msg}</p>}
     </article>
