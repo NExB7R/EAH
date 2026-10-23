@@ -66,7 +66,10 @@ const SECTIONS: Section[] = [
   },
   {
     title: 'الإعدادات',
-    items: [{ href: '/merchant/settings', label: 'إعدادات النشاط', Icon: SettingsIcon }],
+    items: [
+      { href: '/merchant/settings', label: 'إعدادات النشاط', Icon: SettingsIcon },
+      { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
+    ],
   },
 ]
 
