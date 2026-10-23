@@ -227,7 +227,11 @@ export async function getAdminBusinessesPage({
 
   const businesses = rows.map((row) => {
     const ownerProfileId = typeof row.owner_profile_id === 'string' ? row.owner_profile_id : null
-    const { owner_profile_id: _ownerProfileId, ...business } = row
+    const business: Record<string, unknown> = {}
+    for (const [key, value] of Object.entries(row)) {
+      if (key === 'owner_profile_id') continue
+      business[key] = value
+    }
     return {
       ...business,
       owner: ownerProfileId ? (ownerProfiles.get(ownerProfileId) ?? null) : null,
