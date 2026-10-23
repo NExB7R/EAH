@@ -26,10 +26,26 @@ export default async function MerchantTrustPage() {
 
       <TrustCard
         score={business.trust_score ?? 50}
-        streakDays={0}
-        legendPoints={0}
+        streakDays={session.streakDays ?? 0}
+        legendPoints={session.legendPoints ?? 0}
         label="مصداقية النشاط"
       />
+
+      <p
+        style={{
+          margin: '-8px 0 16px',
+          padding: '10px 14px',
+          borderRadius: 10,
+          background: 'rgba(168, 85, 247, 0.06)',
+          border: '1px solid rgba(168, 85, 247, 0.15)',
+          fontSize: '0.75rem',
+          color: 'var(--text-muted)',
+          lineHeight: 1.5,
+          textAlign: 'center',
+        }}
+      >
+        🔥 {session.streakDays ?? 0} يوم نشاط متواصل · ⭐ {session.legendPoints ?? 0} نقطة
+      </p>
 
       <section className={styles.section}>
         <div className={styles.helpCard}>
