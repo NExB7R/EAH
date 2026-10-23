@@ -22,6 +22,7 @@ type Props = {
   phone: string | null
   isOpen: boolean
   acceptsWhatsapp: boolean
+  ordersEnabled: boolean
   isFavorite?: boolean
   isFollowing?: boolean
   defaultName?: string
@@ -39,6 +40,7 @@ export default function BusinessActions({
   phone,
   isOpen,
   acceptsWhatsapp,
+  ordersEnabled,
   isFavorite = false,
   isFollowing = false,
   defaultName = '',
@@ -152,18 +154,18 @@ export default function BusinessActions({
         <button
           type="button"
           onClick={handleWhatsapp}
-          disabled={!whatsapp || !acceptsWhatsapp}
+          disabled={!ordersEnabled || !whatsapp}
           className={`${styles.action} ${styles.whatsapp}`}
         >
           <span className={styles.actionIcon}>
             <WhatsAppIcon size={20} />
           </span>
           <span className={styles.actionLabel}>
-            {whatsapp && acceptsWhatsapp
+            {ordersEnabled && whatsapp
               ? isOpen
-                ? 'اطلب على واتساب'
-                : 'واتساب — مغلق حالياً'
-              : 'واتساب — غير متاح'}
+                ? 'اطلب الآن'
+                : 'اطلب — مغلق حالياً'
+              : 'مش بيستقبل طلبات'}
           </span>
         </button>
 
