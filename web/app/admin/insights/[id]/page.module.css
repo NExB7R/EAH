@@ -231,32 +231,6 @@
   }
 }
 
-/* ─── Send to merchant button ─── */
-:global(.sendToMerchantBtn) {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-family: var(--font-body);
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: var(--purple-light);
-  background: rgba(168, 85, 247, 0.12);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  cursor: pointer;
-  transition: background 160ms ease;
-}
-
-:global(.sendToMerchantBtn:hover:not(:disabled)) {
-  background: rgba(168, 85, 247, 0.22);
-}
-
-:global(.sendToMerchantBtn:disabled) {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 @media print {
   :global(.sendToMerchantBtn) {
     display: none !important;
