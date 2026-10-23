@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { SearchIcon, UserIcon } from '@/components/icons'
+import { SearchIcon, UserIcon, BellIcon } from '@/components/icons'
 import AdminMobileNav from './admin-mobile-nav'
 import styles from './admin-topbar.module.css'
 
@@ -34,6 +34,15 @@ export default function AdminTopbar({ counts }: Props) {
           <span>ابحث عن صفحة أو إجراء</span>
           <kbd>Ctrl K</kbd>
         </button>
+
+        <Link
+          href="/admin/notifications"
+          className={styles.iconButton}
+          aria-label="الإشعارات"
+          title="الإشعارات"
+        >
+          <BellIcon size={18} />
+        </Link>
 
         <Link
           href="/admin/profile"
