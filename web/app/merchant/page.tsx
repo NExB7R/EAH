@@ -10,10 +10,33 @@ import {
   CheckCircleIcon,
   AlertIcon,
   GiftIcon,
+  TagIcon,
+  SettingsIcon,
+  ShareIcon,
+  SparklesIcon,
 } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness, getMerchantStats, getMySubscription } from '@/lib/data/merchant'
+import StatCard from '@/components/dashboard/stat-card'
 import styles from './merchant-page.module.css'
+
+type Alert = {
+  key: string
+  title: string
+  description: string
+  href: string
+  Icon: React.ComponentType<{ size?: number }>
+  tone: 'orange' | 'gold' | 'purple' | 'teal'
+}
+
+const QUICK_ACTIONS = [
+  { href: '/merchant/orders', label: 'الطلبات', desc: 'إدارة الطلبات', Icon: FileTextIcon },
+  { href: '/merchant/offers', label: 'العروض', desc: 'خصوماتك', Icon: TagIcon },
+  { href: '/merchant/qr', label: 'QR Code', desc: 'كود نشاطك', Icon: ShareIcon },
+  { href: '/merchant/insights', label: 'التحليلات', desc: 'تقارير ذكية', Icon: SparklesIcon },
+  { href: '/merchant/settings', label: 'الإعدادات', desc: 'تخصيص النشاط', Icon: SettingsIcon },
+  { href: '/merchant/subscription', label: 'الاشتراك', desc: 'الباقة', Icon: CrownGoldIcon },
+]
 
 export default async function MerchantDashboard() {
   const session = await getUserSession()
@@ -21,7 +44,6 @@ export default async function MerchantDashboard() {
 
   const business = await getMyBusiness(session.userId)
 
-  // لو مش عنده نشاط
   if (!business) {
     return (
       <div className={styles.empty}>
@@ -46,39 +68,7 @@ export default async function MerchantDashboard() {
   const statusBadge = business.is_published
     ? { label: 'منشور', tone: 'ok', Icon: CheckCircleIcon }
     : { label: 'تحت المراجعة', tone: 'pending', Icon: AlertIcon }
-
   const StatusIcon = statusBadge.Icon
-
-  const STATS = [
-    {
-      key: 'viewsToday',
-      label: 'مشاهدات النهاردة',
-      value: stats.viewsToday,
-      Icon: EyeIcon,
-      tone: 'purple',
-    },
-    {
-      key: 'viewsWeek',
-      label: 'مشاهدات الأسبوع',
-      value: stats.viewsWeek,
-      Icon: EyeIcon,
-      tone: 'purple',
-    },
-    {
-      key: 'ordersToday',
-      label: 'طلبات النهاردة',
-      value: stats.ordersToday,
-      Icon: FileTextIcon,
-      tone: 'gold',
-    },
-    {
-      key: 'ordersWeek',
-      label: 'طلبات الأسبوع',
-      value: stats.ordersWeek,
-      Icon: FileTextIcon,
-      tone: 'gold',
-    },
-  ] as const
 
   const trial = subscription?.is_trial
   const expiresAt = subscription ? new Date(subscription.expires_at) : null
@@ -88,17 +78,51 @@ export default async function MerchantDashboard() {
     ? Math.max(0, Math.ceil((expiresAt.getTime() - nowMs) / (24 * 60 * 60 * 1000)))
     : 0
 
+  // ═══════════════════════════════════════════════════════════════
+  // Alerts — only show what actually needs attention
+  // ═══════════════════════════════════════════════════════════════
+  const alerts: Alert[] = []
+
+  if (!business.is_published) {
+    alerts.push({
+      key: 'pending',
+      title: 'نشاطك تحت المراجعة',
+      description: 'هنراجعه خلال 24 ساعة. اكمل بياناتك عشان يعدي بسرعة.',
+      href: '/merchant/business',
+      Icon: AlertIcon,
+      tone: 'orange',
+    })
+  }
+
+  if (trial && daysLeft > 0 && daysLeft <= 15) {
+    alerts.push({
+      key: 'trial',
+      title: `التجربة تنتهي بعد ${daysLeft} يوم`,
+      description: 'رقّي لباقة مدفوعة عشان متفقدش الوصول.',
+      href: '/merchant/subscription',
+      Icon: GiftIcon,
+      tone: 'gold',
+    })
+  } else if (subscription && daysLeft === 0) {
+    alerts.push({
+      key: 'expired',
+      title: 'الاشتراك انتهى',
+      description: 'جدد اشتراكك عشان تستمر في استقبال الطلبات.',
+      href: '/merchant/subscription',
+      Icon: CrownGoldIcon,
+      tone: 'orange',
+    })
+  }
+
   return (
     <div className={styles.wrap}>
       {/* Hero */}
       <section className={styles.hero}>
         <div className={styles.heroGlow} aria-hidden />
-
         <div className={styles.heroBody}>
           <span className={styles.heroIcon}>
             <StoreIcon size={28} />
           </span>
-
           <div className={styles.info}>
             <h1 className={styles.name}>{business.name}</h1>
             <div className={styles.chips}>
@@ -120,7 +144,6 @@ export default async function MerchantDashboard() {
               )}
             </div>
           </div>
-
           {business.is_published ? (
             <Link href={`/businesses/${business.slug}`} className={styles.viewBtn}>
               <span>شوف صفحتي</span>
@@ -135,33 +158,78 @@ export default async function MerchantDashboard() {
         </div>
       </section>
 
-      {/* Trial warning */}
-      {trial && daysLeft <= 15 && daysLeft > 0 && (
-        <section className={styles.trialWarn}>
-          <span className={styles.trialIcon}>
-            <GiftIcon size={22} />
-          </span>
-          <div className={styles.trialBody}>
-            <strong>التجربة المجانية بتخلص بعد {daysLeft} يوم</strong>
-            <span>عايز تكمّل؟ ادعمنا ببوست — أو اشترك في باقة مدفوعة</span>
+      {/* Alerts */}
+      {alerts.length > 0 && (
+        <section>
+          <header className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>يحتاج انتباهك</h2>
+            <span className={styles.sectionHint}>{alerts.length} مهمة</span>
+          </header>
+          <div className={styles.alertsGrid}>
+            {alerts.map(({ key, title, description, href, Icon, tone }) => (
+              <Link key={key} href={href} className={`${styles.alert} ${styles[`alert_${tone}`]}`}>
+                <span className={styles.alertIcon}>
+                  <Icon size={16} />
+                </span>
+                <div className={styles.alertBody}>
+                  <strong>{title}</strong>
+                  <span>{description}</span>
+                </div>
+                <ArrowLeftIcon size={13} className={styles.alertArrow} />
+              </Link>
+            ))}
           </div>
-          <Link href="/merchant/subscription" className={styles.trialBtn}>
-            اعرف أكتر
-          </Link>
         </section>
       )}
 
-      {/* Stats */}
-      <section className={styles.stats}>
-        {STATS.map(({ key, label, value, Icon, tone }) => (
-          <div key={key} className={`${styles.statCard} ${styles[tone]}`}>
-            <span className={styles.statIcon}>
-              <Icon size={18} />
-            </span>
-            <span className={styles.statValue}>{value}</span>
-            <span className={styles.statLabel}>{label}</span>
-          </div>
-        ))}
+      {/* KPIs */}
+      <section>
+        <header className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>أداء نشاطك</h2>
+          <span className={styles.sectionHint}>آخر 7 أيام</span>
+        </header>
+        <div className={styles.kpiGrid}>
+          <StatCard
+            icon={EyeIcon}
+            label="مشاهدات النهاردة"
+            value={stats.viewsToday}
+            tone="purple"
+          />
+          <StatCard icon={EyeIcon} label="مشاهدات الأسبوع" value={stats.viewsWeek} tone="purple" />
+          <StatCard
+            icon={FileTextIcon}
+            label="طلبات النهاردة"
+            value={stats.ordersToday}
+            tone="gold"
+          />
+          <StatCard
+            icon={FileTextIcon}
+            label="طلبات الأسبوع"
+            value={stats.ordersWeek}
+            tone="gold"
+          />
+        </div>
+      </section>
+
+      {/* Quick actions */}
+      <section>
+        <header className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>إجراءات سريعة</h2>
+        </header>
+        <div className={styles.quickGrid}>
+          {QUICK_ACTIONS.map(({ href, label, desc, Icon }) => (
+            <Link key={href} href={href} className={styles.quickCard}>
+              <span className={styles.quickIcon}>
+                <Icon size={20} />
+              </span>
+              <div className={styles.quickBody}>
+                <span className={styles.quickLabel}>{label}</span>
+                <span className={styles.quickDesc}>{desc}</span>
+              </div>
+              <ArrowLeftIcon size={13} className={styles.quickArrow} />
+            </Link>
+          ))}
+        </div>
       </section>
     </div>
   )
