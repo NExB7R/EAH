@@ -1,22 +1,14 @@
 -- ═══════════════════════════════════════════════════════════════════
--- EAH — EMPTY-01 + CONFLICT-01: drop confirmed-empty tables
+-- EAH — EMPTY-01 + CONFLICT-01 (v3 — SAFE FINAL)
 -- Date: 2026-10-23
--- Reviewer: owner (run manually after backup)
--- ═══════════════════════════════════════════════════════════════════
 --
--- Tables targeted (must be empty at run time — otherwise aborts):
---   site_designs         — EMPTY-01 (experimental puck residue)
---   business_commissions — CONFLICT-01 (duplicate of commission model)
---   live_page_sessions   — EMPTY-01 (unused live sessions)
---   ads                  — EMPTY-01 (ads moved to platform_announcements)
---   rate_limits          — EMPTY-01 (replaced by Redis Upstash)
+-- v3 drops only 3 confirmed-dead tables. Excludes:
+--   - site_designs (LIVE home page — has 1 row key=home)
+--   - ads           (still referenced in 12+ code locations — needs feature removal first)
+--   - ad_stats_daily (0 rows, orphaned — harmless, drop later with ads)
 --
--- Safety: each table is verified empty before DROP. If ANY row exists,
--- the whole block raises an exception and rolls back — no partial drop.
---
--- Rollback: not required — DROP on empty tables is reversible only via
---           re-creation from schema (see docs/migrations/ for CREATE history).
---           Backup DB before running: `supabase db dump > backup-$(date).sql`
+-- Deferred: removing `ads` + `ad_stats_daily` requires code cleanup in
+-- merchant/ads, admin/ads, api/admin/export, lib/data/ads. See §12.
 -- ═══════════════════════════════════════════════════════════════════
 
 DO $$
@@ -25,39 +17,42 @@ DECLARE
   cnt   BIGINT;
   total BIGINT := 0;
   tables_to_drop TEXT[] := ARRAY[
-    'site_designs',
     'business_commissions',
     'live_page_sessions',
-    'ads',
     'rate_limits'
   ];
 BEGIN
-  FOREACH tbl IN ARRAY tables_to_drop
-  LOOP
-    IF EXISTS (
-      SELECT 1
-      FROM information_schema.tables
-      WHERE table_schema = 'public' AND table_name = tbl
+  FOREACH tbl IN ARRAY tables_to_drop LOOP
+    IF NOT EXISTS (
+      SELECT 1 FROM information_schema.tables
+      WHERE table_schema='public' AND table_name=tbl
     ) THEN
-      EXECUTE format('SELECT COUNT(*) FROM public.%I', tbl) INTO cnt;
-      IF cnt > 0 THEN
-        RAISE EXCEPTION 'ABORT: table % contains % rows (must be empty)', tbl, cnt;
-      END IF;
-      EXECUTE format('DROP TABLE public.%I CASCADE', tbl);
-      RAISE NOTICE '✓ Dropped %', tbl;
-      total := total + 1;
-    ELSE
-      RAISE NOTICE '– Skipped % (does not exist)', tbl;
+      RAISE NOTICE 'Skipped % (does not exist)', tbl;
+      CONTINUE;
     END IF;
+
+    EXECUTE format('SELECT COUNT(*) FROM public.%I', tbl) INTO cnt;
+    IF cnt > 0 THEN
+      RAISE EXCEPTION 'ABORT: % has % rows (must be empty)', tbl, cnt;
+    END IF;
+
+    EXECUTE format('DROP TABLE public.%I', tbl);
+    RAISE NOTICE 'Dropped %', tbl;
+    total := total + 1;
   END LOOP;
 
-  RAISE NOTICE '════════════════════════════════════════';
+  RAISE NOTICE '----------------------------------------';
   RAISE NOTICE 'Migration complete: % table(s) dropped', total;
-  RAISE NOTICE '════════════════════════════════════════';
+  RAISE NOTICE 'SKIPPED: site_designs (live), ads (in code), ad_stats_daily (orphan)';
+  RAISE NOTICE '----------------------------------------';
 END $$;
 
--- Verification queries (run after migration):
+-- Verification (run after):
 -- SELECT table_name FROM information_schema.tables
 --   WHERE table_schema = 'public'
---     AND table_name IN ('site_designs','business_commissions','live_page_sessions','ads','rate_limits');
+--     AND table_name IN ('business_commissions','live_page_sessions','rate_limits');
 -- Expected: 0 rows.
+--
+-- SELECT key FROM site_designs;                          -- home
+-- SELECT COUNT(*) FROM ads;                              -- 0 (kept, in code)
+-- SELECT COUNT(*) FROM ad_stats_daily;                   -- 0 (orphan, kept)
