@@ -81,7 +81,7 @@ export async function updateOrderStatus(
   // تأكد إن الطلب لنشاطه
   const { data: order } = await ctx.supabase
     .from('order_requests')
-    .select('id, customer_profile_id, order_code, business_id, status')
+    .select('id, customer_profile_id, order_code, business_id, status, accepted_at')
     .eq('id', orderId)
     .eq('business_id', ctx.biz.id)
     .maybeSingle()
@@ -100,24 +100,25 @@ export async function updateOrderStatus(
   const now = new Date()
   const nowIso = now.toISOString()
 
-  // When transitioning to delivered → set feedback timestamps
-  const deliveredFields =
-    parsed.data === 'delivered' && currentStatus !== 'delivered'
-      ? {
-          delivered_at: nowIso,
-          feedback_due_at: new Date(now.getTime() + 60 * 60 * 1000).toISOString(),
-          feedback_reminder_at: new Date(
-            now.getTime() + 60 * 60 * 1000 + 30 * 60 * 1000,
-          ).toISOString(),
-        }
-      : {}
+  // Timestamps based on transition
+  const transitionFields: Record<string, string> = {}
+  if (parsed.data === 'accepted' && !order.accepted_at) {
+    transitionFields.accepted_at = nowIso
+  }
+  if (parsed.data === 'delivered' && currentStatus !== 'delivered') {
+    transitionFields.delivered_at = nowIso
+    transitionFields.feedback_due_at = new Date(now.getTime() + 60 * 60 * 1000).toISOString()
+    transitionFields.feedback_reminder_at = new Date(
+      now.getTime() + 60 * 60 * 1000 + 30 * 60 * 1000,
+    ).toISOString()
+  }
 
   const { error } = await ctx.supabase
     .from('order_requests')
     .update({
       status: parsed.data,
       updated_at: nowIso,
-      ...deliveredFields,
+      ...transitionFields,
     })
     .eq('id', orderId)
 
@@ -146,5 +147,8 @@ export async function updateOrderStatus(
 
   revalidatePath('/merchant/orders')
   revalidatePath('/account/orders')
+  revalidatePath('/admin/orders')
+  revalidatePath('/admin')
+  revalidatePath('/merchant')
   return { ok: true }
 }
