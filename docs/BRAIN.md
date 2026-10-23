@@ -342,10 +342,12 @@ BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> �
 
 ## 16. Current State (2026-10-22)
 
-**آخر commit:** `55fa25ef`
+**آخر commit:** `d92f0532`
 **الفرع:** `main` (clean)
 
 ### ✅ شغال
+- **نظام الطلبات v2**: ETA إجباري + auto-deliver + feedback + reminder + admin control
+
 - **تقارير الأنشطة** (`/admin/insights`): يدوي، اختيار نشاط + فترة + سيكشنات + طباعة + حذف
 
 - Business wizard fullscreen + 10 contact types

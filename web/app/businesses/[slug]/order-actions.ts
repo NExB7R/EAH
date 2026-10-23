@@ -204,6 +204,19 @@ export async function submitOrder(
 
   const orderId = inserted.id
 
+  // Audit: record the customer creation action
+  await supabase.from('order_reactions').insert({
+    order_id: orderId,
+    actor_type: 'customer',
+    actor_id: user.id,
+    action: 'created',
+    metadata: {
+      order_code: orderCode,
+      has_attachments: attachments.length > 0,
+      payment_method: d.payment_method ?? null,
+    },
+  })
+
   // ═══════════════════════════════════════════════════════════════════
   // 5. WhatsApp link (client opens it)
   // ═══════════════════════════════════════════════════════════════════

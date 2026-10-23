@@ -34,6 +34,9 @@ export function isOrderAcceptanceActive(settings: MerchantOrderSettings | null):
   if (!settings.orders_enabled) {
     return { active: false, reason: 'استلام الطلبات موقوف من الإدارة' }
   }
+  if (!settings.delivery_eta_minutes) {
+    return { active: false, reason: 'مدة التسليم مش محددة' }
+  }
   if (settings.offline_mode) {
     const until = settings.offline_until
     if (until && new Date(until).getTime() > Date.now()) {

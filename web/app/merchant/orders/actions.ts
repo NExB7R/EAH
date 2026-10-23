@@ -54,7 +54,7 @@ async function requireMerchant() {
     .maybeSingle()
 
   if (!biz) return { ok: false as const, error: 'مفيش نشاط مرتبط بحسابك' }
-  return { ok: true as const, supabase, biz }
+  return { ok: true as const, supabase, biz, userId: user.id }
 }
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
@@ -97,12 +97,40 @@ export async function updateOrderStatus(
     }
   }
 
+  const now = new Date()
+  const nowIso = now.toISOString()
+
+  // When transitioning to delivered → set feedback timestamps
+  const deliveredFields =
+    parsed.data === 'delivered' && currentStatus !== 'delivered'
+      ? {
+          delivered_at: nowIso,
+          feedback_due_at: new Date(now.getTime() + 60 * 60 * 1000).toISOString(),
+          feedback_reminder_at: new Date(
+            now.getTime() + 60 * 60 * 1000 + 30 * 60 * 1000,
+          ).toISOString(),
+        }
+      : {}
+
   const { error } = await ctx.supabase
     .from('order_requests')
-    .update({ status: parsed.data, updated_at: new Date().toISOString() })
+    .update({
+      status: parsed.data,
+      updated_at: nowIso,
+      ...deliveredFields,
+    })
     .eq('id', orderId)
 
   if (error) return { ok: false, error: error.message }
+
+  // Audit reaction
+  await ctx.supabase.from('order_reactions').insert({
+    order_id: orderId,
+    actor_type: 'merchant',
+    actor_id: ctx.userId,
+    action: parsed.data,
+    metadata: { from: currentStatus, to: parsed.data },
+  })
 
   // إشعار للعميل (لو مسجل)
   if (order.customer_profile_id && STATUS_BODY[parsed.data]) {
