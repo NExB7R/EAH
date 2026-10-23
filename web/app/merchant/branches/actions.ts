@@ -158,6 +158,22 @@ export async function deleteBranch(id: string): Promise<Result> {
 
   if (error) return { ok: false, error: error.message }
 
+  // Re-number sort_order (best-effort)
+  const { data: remaining } = await ctx.supabase
+    .from('business_branches')
+    .select('id')
+    .eq('business_id', ctx.biz.id)
+    .order('sort_order', { ascending: true })
+
+  if (remaining) {
+    for (let i = 0; i < remaining.length; i++) {
+      await ctx.supabase
+        .from('business_branches')
+        .update({ sort_order: i })
+        .eq('id', remaining[i].id)
+    }
+  }
+
   revalidatePath('/merchant/branches')
   revalidateTag('businesses', 'default')
   return { ok: true }
@@ -167,22 +183,38 @@ export async function setPrimaryBranch(id: string): Promise<Result> {
   const ctx = await myBiz()
   if (!ctx.ok) return { ok: false, error: ctx.error }
 
-  // صفّر كل الفروع
-  const { error: resetErr } = await ctx.supabase
+  // Verify target branch belongs to this business
+  const { data: target } = await ctx.supabase
     .from('business_branches')
-    .update({ is_primary: false })
+    .select('id, is_primary')
+    .eq('id', id)
     .eq('business_id', ctx.biz.id)
+    .maybeSingle()
 
-  if (resetErr) return { ok: false, error: resetErr.message }
+  if (!target) return { ok: false, error: 'الفرع مش موجود' }
+  if (target.is_primary) return { ok: true, id } // already primary — no-op
 
-  // عيّن الفرع الجديد
-  const { error } = await ctx.supabase
+  // Set target primary FIRST — if unique constraint exists it protects us;
+  // else we still can recover by unsetting others
+  const { error: setErr } = await ctx.supabase
     .from('business_branches')
     .update({ is_primary: true })
     .eq('id', id)
     .eq('business_id', ctx.biz.id)
 
-  if (error) return { ok: false, error: error.message }
+  if (setErr) return { ok: false, error: setErr.message }
+
+  // Unset all OTHER branches (not target — keeps target primary)
+  const { error: resetErr } = await ctx.supabase
+    .from('business_branches')
+    .update({ is_primary: false })
+    .eq('business_id', ctx.biz.id)
+    .neq('id', id)
+
+  if (resetErr) {
+    // Best-effort — DB still consistent (2 primaries is less harmful than 0)
+    return { ok: false, error: 'حدث خطأ — قد يوجد أكثر من فرع أساسي' }
+  }
 
   revalidatePath('/merchant/branches')
   revalidateTag('businesses', 'default')

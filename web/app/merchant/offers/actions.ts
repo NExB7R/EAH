@@ -11,18 +11,26 @@ import { createBulkNotifications } from '@/lib/notifications/server'
 
 type ActionResult = { ok: true; id?: string } | { ok: false; error: string }
 
-const offerSchema = z.object({
-  title: z.string().min(3).max(80),
-  description: z.string().max(400).optional().or(z.literal('')),
-  price: z
-    .string()
-    .optional()
-    .transform((v) => (v && v.trim() !== '' ? Number(v) : null))
-    .refine((v) => v === null || (v >= 0 && Number.isFinite(v)), 'سعر غير صحيح'),
-  startsAt: z.string().optional().or(z.literal('')),
-  endsAt: z.string().optional().or(z.literal('')),
-  isPublished: z.boolean().default(true),
-})
+const offerSchema = z
+  .object({
+    title: z.string().min(3).max(80),
+    description: z.string().max(400).optional().or(z.literal('')),
+    price: z
+      .string()
+      .optional()
+      .transform((v) => (v && v.trim() !== '' ? Number(v) : null))
+      .refine((v) => v === null || (v >= 0 && Number.isFinite(v)), 'سعر غير صحيح'),
+    startsAt: z.string().optional().or(z.literal('')),
+    endsAt: z.string().optional().or(z.literal('')),
+    isPublished: z.boolean().default(true),
+  })
+  .refine(
+    (v) => {
+      if (!v.startsAt || !v.endsAt) return true
+      return new Date(v.endsAt) >= new Date(v.startsAt)
+    },
+    { message: 'تاريخ الانتهاء لازم يكون بعد البداية' },
+  )
 
 async function myBusiness() {
   const supabase = await createClient()
@@ -132,7 +140,7 @@ export async function toggleOfferPublish(offerId: string, publish: boolean): Pro
 
   const { error } = await ctx.supabase
     .from('offers')
-    .update({ is_published: !publish })
+    .update({ is_published: publish })
     .eq('id', offerId)
     .eq('business_id', ctx.biz.id)
 
