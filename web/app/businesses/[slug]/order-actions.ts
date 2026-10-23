@@ -39,8 +39,7 @@ export async function submitOrder(
     customer_address: String(formData.get('customer_address') ?? '').trim(),
     items_summary: String(formData.get('items_summary') ?? '').trim(),
     notes: String(formData.get('notes') ?? '').trim(),
-    payment_method: (String(formData.get('payment_method') ?? '').trim() || null) as
-      'cash' | 'instapay' | 'wallet' | null,
+    payment_method: String(formData.get('payment_method') ?? '').trim() || null,
     attachments_json: String(formData.get('attachments_json') ?? '').trim(),
   })
 
@@ -65,7 +64,9 @@ export async function submitOrder(
   // ═══════════════════════════════════════════════════════════════════
   const { data: settings } = await supabase
     .from('merchant_order_settings')
-    .select('orders_enabled, deadline_minutes, offline_mode, offline_until, suspended_until')
+    .select(
+      'orders_enabled, deadline_minutes, delivery_eta_minutes, offline_mode, offline_until, suspended_until',
+    )
     .eq('business_id', businessId)
     .maybeSingle()
 
@@ -82,21 +83,12 @@ export async function submitOrder(
     return { ok: false, error: 'النشاط مش متاح حالياً — جرّب تاني بعدين' }
   }
 
-  const deadlineAt = new Date(nowMs + settings.deadline_minutes * 60 * 1000).toISOString()
-  const { data: etaData } = await supabase
-    .from('merchant_order_settings')
-    .select('delivery_eta_minutes')
-    .eq('business_id', businessId)
-    .maybeSingle()
-
-  const etaMinutes = etaData?.delivery_eta_minutes ?? null
+  const etaMinutes = settings.delivery_eta_minutes
   if (!etaMinutes) {
-    return {
-      ok: false,
-      error: 'التاجر مش محدد مدة التسليم — كلمه مباشرة',
-    }
+    return { ok: false, error: 'التاجر مش محدد مدة التسليم — كلمه مباشرة' }
   }
 
+  const deadlineAt = new Date(nowMs + settings.deadline_minutes * 60 * 1000).toISOString()
   const expectedDeliveryAt = new Date(nowMs + etaMinutes * 60 * 1000).toISOString()
 
   // ═══════════════════════════════════════════════════════════════════
@@ -204,8 +196,8 @@ export async function submitOrder(
 
   const orderId = inserted.id
 
-  // Audit: record the customer creation action
-  await supabase.from('order_reactions').insert({
+  // Audit: record the customer creation action (non-fatal)
+  const { error: reactionErr } = await supabase.from('order_reactions').insert({
     order_id: orderId,
     actor_type: 'customer',
     actor_id: user.id,
@@ -216,6 +208,10 @@ export async function submitOrder(
       payment_method: d.payment_method ?? null,
     },
   })
+  if (reactionErr) {
+    // Order succeeded — don't block on audit failure
+    console.warn('[order_reactions] insert failed:', reactionErr.message)
+  }
 
   // ═══════════════════════════════════════════════════════════════════
   // 5. WhatsApp link (client opens it)
@@ -237,7 +233,18 @@ export async function submitOrder(
     .filter(Boolean)
     .join('\n')
 
-  const whatsappUrl = `https://wa.me/2${merchantPhone.replace(/^0/, '').replace(/^20/, '')}?text=${encodeURIComponent(lines)}`
+  // Robust normalization for Egyptian numbers:
+  //   "01012345678"     → "201012345678"
+  //   "201012345678"    → "201012345678"
+  //   "+201012345678"   → "201012345678"
+  const cleaned = merchantPhone.replace(/[\s+\-]/g, '')
+  const normalized = cleaned.startsWith('20')
+    ? cleaned
+    : cleaned.startsWith('0')
+      ? '20' + cleaned.slice(1)
+      : '20' + cleaned
+
+  const whatsappUrl = `https://wa.me/${normalized}?text=${encodeURIComponent(lines)}`
 
   // ═══════════════════════════════════════════════════════════════════
   // 6. Notify merchant — deep link straight to the order
