@@ -6,6 +6,7 @@ import {
   StarIcon,
   UserIcon,
   CheckCircleIcon,
+  ClockIcon,
   ArrowLeftIcon,
   ShieldCheckIcon,
   SparklesIcon,
@@ -13,6 +14,7 @@ import {
   AlertIcon,
 } from '@/components/icons'
 import { getAdminStats, getAdminRecent, getAdminBadges } from '@/lib/data/admin'
+import { getAdminOrderFlowStats } from '@/lib/data/admin-orders'
 import { getUserSession } from '@/lib/data/user'
 import ActivityFeed from '@/components/admin/activity-feed'
 import StatCard from '@/components/dashboard/stat-card'
@@ -49,11 +51,12 @@ const QUICK_ACTIONS = [
 ]
 
 export default async function AdminDashboard() {
-  const [stats, recent, badges, session] = await Promise.all([
+  const [stats, recent, badges, session, orderFlow] = await Promise.all([
     getAdminStats(),
     getAdminRecent(),
     getAdminBadges(),
     getUserSession(),
+    getAdminOrderFlowStats(),
   ])
 
   const allAlerts: Alert[] = [
@@ -176,6 +179,46 @@ export default async function AdminDashboard() {
             hint={recent.newOrders > 0 ? `+${recent.newOrders} اليوم` : undefined}
             href="/admin/analytics"
             tone="gold"
+          />
+        </div>
+      </section>
+
+      {/* Order Flow */}
+      <section>
+        <header className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>تدفق الطلبات</h2>
+          <Link href="/admin/orders" className={styles.sectionHint}>
+            عرض الكل ←
+          </Link>
+        </header>
+        <div className={styles.kpiGrid}>
+          <StatCard
+            icon={FileTextIcon}
+            label="طلبات النهاردة"
+            value={orderFlow.today}
+            href="/admin/orders"
+            tone="purple"
+          />
+          <StatCard
+            icon={AlertIcon}
+            label="معلقة"
+            value={orderFlow.pending}
+            href="/admin/orders"
+            tone="orange"
+          />
+          <StatCard
+            icon={ClockIcon}
+            label="نشطة"
+            value={orderFlow.in_progress}
+            href="/admin/orders"
+            tone="gold"
+          />
+          <StatCard
+            icon={CheckCircleIcon}
+            label="اتسلّمت النهاردة"
+            value={orderFlow.delivered_today}
+            href="/admin/orders"
+            tone="teal"
           />
         </div>
       </section>
