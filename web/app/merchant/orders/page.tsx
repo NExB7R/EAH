@@ -4,6 +4,7 @@ import { SettingsIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness, getMerchantOrders } from '@/lib/data/merchant'
 import { getMerchantOrderSettings } from '@/lib/data/orders-settings'
+import { expireStaleOrders } from '@/lib/data/orders-expire'
 import OrderList from './order-list'
 import styles from './orders.module.css'
 
@@ -15,6 +16,8 @@ export default async function MerchantOrdersPage() {
 
   const business = await getMyBusiness(session.userId)
   if (!business) redirect('/merchant')
+
+  await expireStaleOrders(business.id)
 
   const [orders, settings] = await Promise.all([
     getMerchantOrders(business.id),

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FileTextIcon, SearchIcon, CloseIcon } from '@/components/icons'
 import OrderRow from './order-row'
