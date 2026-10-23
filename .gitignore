@@ -10,3 +10,8 @@ v2
 *~
 .vercel
 web/next-env.d.ts
+
+# Database backups — never commit
+backup-*.sql
+*.dump
+*.sql.gz
