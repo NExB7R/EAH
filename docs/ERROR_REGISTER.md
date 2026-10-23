@@ -176,7 +176,8 @@
 - [x] Admin sidebar restructured to 6 sections
 - [x] Reports hub live (generate/section-toggle/print/delete/filter)
 - [x] Admin dashboard rebuilt (StatCard + Panel + alerts)
-- [ ] CI-01 + CI-02: E2E on main
+- [x] CI-01: E2E on push:main + pull_request (2026-10-23)
+- [x] CI-02: PR → Vercel preview URL (auto via wait-for-vercel-preview)
 - [x] CI-07: invariants verifier in CI (ab55bce)
 
 ### Data (45 min)
