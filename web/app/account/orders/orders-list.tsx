@@ -236,6 +236,8 @@ export default function OrdersList({ orders }: Props) {
 
                 {order.status === 'delivered' &&
                   order.feedback_rating === null &&
+                  order.feedback_due_at &&
+                  new Date(order.feedback_due_at).getTime() <= nowMs &&
                   order.business && (
                     <div className={styles.feedbackRow}>
                       <FeedbackForm orderId={order.id} businessName={order.business.name} />
