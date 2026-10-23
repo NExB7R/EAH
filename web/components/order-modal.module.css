@@ -336,9 +336,11 @@
 .attachmentThumb {
   width: 56px;
   height: 56px;
-  object-fit: cover;
   border-radius: 8px;
   display: block;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .attachmentVoice {
