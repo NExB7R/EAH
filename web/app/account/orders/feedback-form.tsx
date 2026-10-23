@@ -23,6 +23,21 @@ export default function FeedbackForm({ orderId, businessName }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
+  const resetAll = () => {
+    setRating(0)
+    setHover(0)
+    setIssue(null)
+    setText('')
+    setError(null)
+    setSuccess(false)
+  }
+
+  const handleClose = () => {
+    if (pending) return
+    resetAll()
+    setOpen(false)
+  }
+
   const submit = () => {
     if (rating < 1) {
       setError('اختار تقييم من 1 لـ 5')
@@ -39,6 +54,7 @@ export default function FeedbackForm({ orderId, businessName }: Props) {
       if (res.ok) {
         setSuccess(true)
         setTimeout(() => {
+          resetAll()
           setOpen(false)
           router.refresh()
         }, 900)
@@ -56,14 +72,9 @@ export default function FeedbackForm({ orderId, businessName }: Props) {
       </button>
 
       {open && (
-        <div className={styles.backdrop} onClick={() => !pending && setOpen(false)}>
+        <div className={styles.backdrop} onClick={handleClose}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <button
-              type="button"
-              onClick={() => !pending && setOpen(false)}
-              className={styles.close}
-              aria-label="إغلاق"
-            >
+            <button type="button" onClick={handleClose} className={styles.close} aria-label="إغلاق">
               <CloseIcon size={16} />
             </button>
 
@@ -172,7 +183,7 @@ export default function FeedbackForm({ orderId, businessName }: Props) {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setOpen(false)}
+                    onClick={handleClose}
                     disabled={pending}
                     className={styles.cancelBtn}
                   >
