@@ -3,57 +3,135 @@ name: E2E
 on:
   push:
     branches: [main, v2]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - 'LICENSE'
+      - '.gitignore'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - 'LICENSE'
+      - '.gitignore'
   workflow_dispatch:
     inputs:
       preview_url:
-        description: 'URL of the Vercel Preview built from the commit under test (not Production)'
-        required: true
+        description: 'Manual URL override (optional, HTTPS .vercel.app, not production)'
+        required: false
         type: string
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      checks: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
           cache-dependency-path: web/package-lock.json
-      - name: Validate preview target
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          PREVIEW_URL: ${{ inputs.preview_url }}
-        run: |
-          node <<'NODE'
-          const url = new URL(process.env.PREVIEW_URL)
-          if (
-            url.protocol !== 'https:' ||
-            !url.hostname.endsWith('.vercel.app') ||
-            url.hostname === 'eah-sq.vercel.app' ||
-            url.username ||
-            url.password
-          ) {
-            console.error('Enter an HTTPS Vercel Preview URL, not the production site.')
-            process.exit(1)
-          }
-          NODE
-      - name: Install
+
+      # ── Cache Playwright browsers (~150MB) ──
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-chrome-${{ runner.os }}-${{ hashFiles('web/package-lock.json') }}
+          restore-keys: |
+            pw-chrome-${{ runner.os }}-
+
+      - name: Install deps
         working-directory: web
         run: npm ci
-      - name: Install Playwright (chromium only)
+
+      - name: Install Chrome for Playwright
+        if: steps.pw-cache.outputs.cache-hit != 'true'
         working-directory: web
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chrome
+
+      - name: Install Chrome system deps (cache hit)
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        working-directory: web
+        run: npx playwright install-deps chrome
+
+      # ═══════════════════════════════════════════════════════
+      # Resolve target URL:
+      #   workflow_dispatch + input → manual URL
+      #   pull_request             → Vercel preview (CI-02)
+      #   push to main/v2          → production     (CI-01)
+      # ═══════════════════════════════════════════════════════
+      - name: Validate manual URL
+        if: github.event_name == 'workflow_dispatch' && inputs.preview_url != ''
+        id: manual
+        env:
+          INPUT_URL: ${{ inputs.preview_url }}
+        run: |
+          node <<'NODE'
+          const u = new URL(process.env.INPUT_URL);
+          if (u.protocol !== 'https:' || !u.hostname.endsWith('.vercel.app') || u.hostname === 'eah-sq.vercel.app') {
+            console.error('::error::Manual URL must be HTTPS Vercel Preview (not production)');
+            process.exit(1);
+          }
+          console.log('Manual URL OK: ' + u.toString());
+          NODE
+          echo "url=$INPUT_URL" >> $GITHUB_OUTPUT
+
+      - name: Wait for Vercel preview (PR only)
+        if: github.event_name == 'pull_request'
+        id: vercel
+        uses: patrickedqvist/wait-for-vercel-preview@v1.3.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          max_timeout: 300
+          check_interval: 10
+
+      - name: Set production URL (push)
+        if: github.event_name == 'push'
+        id: prod
+        run: echo "url=https://eah-sq.vercel.app" >> $GITHUB_OUTPUT
+
+      - name: Compute target URL
+        id: target
+        env:
+          MANUAL_URL: ${{ steps.manual.outputs.url }}
+          VERCEL_URL: ${{ steps.vercel.outputs.url }}
+          PROD_URL: ${{ steps.prod.outputs.url }}
+        run: |
+          URL="${MANUAL_URL:-${VERCEL_URL:-${PROD_URL:-}}}"
+          if [ -z "$URL" ]; then
+            echo "::error::No target URL — Vercel preview not ready or unavailable"
+            exit 1
+          fi
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "::notice::E2E target = $URL"
+
       - name: Run E2E
         working-directory: web
         env:
           PLAYWRIGHT_SKIP_SERVER: '1'
-          PLAYWRIGHT_BASE_URL: ${{ github.event_name == 'workflow_dispatch' && inputs.preview_url || 'https://eah-sq.vercel.app' }}
-        run: npx playwright test
-      - uses: actions/upload-artifact@v4
-        if: failure()
+          PLAYWRIGHT_BASE_URL: ${{ steps.target.outputs.url }}
+        run: npx playwright test --reporter=list,github
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
-          path: web/test-results/
+          name: e2e-report-${{ github.run_id }}
+          path: |
+            web/test-results/
+            web/playwright-report/
           retention-days: 7
+          if-no-files-found: ignore
