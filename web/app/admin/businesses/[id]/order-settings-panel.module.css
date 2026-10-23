@@ -1,0 +1,205 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(20, 14, 34, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  margin-bottom: 16px;
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panelIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--purple-light);
+  flex-shrink: 0;
+}
+
+.panelInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+.panelSub {
+  margin: 1px 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.badgeOn {
+  background: rgba(85, 231, 209, 0.15);
+  color: #55e7d1;
+}
+
+.badgeOff {
+  background: rgba(157, 145, 180, 0.15);
+  color: var(--text-muted);
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+  color: #fca5a5;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.primaryBtn,
+.dangerBtn,
+.cancelBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+}
+
+.primaryBtn {
+  color: rgb(255, 255, 255);
+  background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
+}
+
+.dangerBtn {
+  color: #fca5a5;
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid rgba(252, 165, 165, 0.3);
+}
+
+.cancelBtn {
+  color: var(--text-muted);
+  background: transparent;
+}
+
+.primaryBtn:disabled,
+.dangerBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(7, 2, 13, 0.85);
+}
+
+.modal {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.modalTitle {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+.modalText {
+  margin: 0 0 12px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.modalList {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modalList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.modalList li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--purple-light);
+}
+
+.deadlineLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.deadlineInput {
+  width: 70px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  background: rgba(7, 2, 13, 0.5);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+
+.modalActions {
+  display: flex;
+  gap: 8px;
+}
