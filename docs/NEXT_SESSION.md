@@ -4,10 +4,17 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last commit: e3fc78e6
+- Last commit: `c8930db8` (+ this commit)
 - Branch: main (clean)
 - Invariants: all OK
-- **Reports hub live** (`/admin/insights`): generate on-demand (business + days + sections) + print + delete + filter by business
+- **Today's wins (2026-10-23):**
+  - Admin dashboard 2026 rebuild (StatCard + Panel + alerts + quick actions)
+  - 6-section sidebar, no audit/settings, التقارير as own section
+  - 4 business types only (restaurant/pharmacy/delivery_office/misc) — DB + code + UI
+  - Reports hub: generate (sections toggle) + print + delete + filter
+  - GOD-01 done — business-form.tsx 1179 → 18 lines dispatcher + 14 files
+  - CI-07 live — invariants verifier in CI
+  - Migration file for EMPTY-01/CONFLICT-01 prepared (not executed)
 
 ## Working
 - Business wizard fullscreen + 10 contact types

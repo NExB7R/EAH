@@ -173,6 +173,9 @@
 ### Code Quality (6h)
 - [ ] GOD-01: split business-form.tsx
 - [ ] SPRAWL-01: merge monitoring pages
+- [x] Admin sidebar restructured to 6 sections
+- [x] Reports hub live (generate/section-toggle/print/delete/filter)
+- [x] Admin dashboard rebuilt (StatCard + Panel + alerts)
 - [ ] CI-01 + CI-02: E2E on main
 - [x] CI-07: invariants verifier in CI (ab55bce)
 
