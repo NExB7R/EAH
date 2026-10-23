@@ -4,13 +4,10 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last commit: d8af94be
+- Last commit: e3fc78e6
 - Branch: main (clean)
-- Invariants: OK
-- Deploy: Vercel auto
-- UI: 3 layouts unified (admin/merchant/account) — same hero, width, footer
-- All dates + numbers: Western (en-US)
-- Images: upload (file + URL) + delete working for all categories
+- Invariants: all OK
+- **Reports hub live** (`/admin/insights`): generate on-demand (business + days + sections) + print + delete + filter by business
 
 ## Working
 - Business wizard fullscreen + 10 contact types

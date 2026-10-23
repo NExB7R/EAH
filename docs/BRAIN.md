@@ -346,6 +346,8 @@ BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> �
 **الفرع:** `main` (clean)
 
 ### ✅ شغال
+- **تقارير الأنشطة** (`/admin/insights`): يدوي، اختيار نشاط + فترة + سيكشنات + طباعة + حذف
+
 - Business wizard fullscreen + 10 contact types
 - Notice + open-override + location picker (📍+OSM)
 - Images: upload (file + URL) + delete (logo/cover/menu/gallery) — 200 على كل عمليات
