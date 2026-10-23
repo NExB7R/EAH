@@ -4,27 +4,29 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last commit: `d92f0532`
+- Last commit: `ce4e6537`
 - Branch: main (clean)
 - Invariants: all OK
 
-**Orders System v2 (شغّال 95%):**
-- DB: `merchant_order_settings`, `order_reactions`, `customer_order_stats` + 20 عمود في `order_requests`
-- Admin: enable/disable + ETA modal (إجباري) + auto summary report عند الإيقاف
-- Merchant: settings + ETA editor (15-240 د) + offline toggle
-- Customer: modal (text/audio/images) + payment + review + submit
-- **Auto-flow:** ETA → auto-delivered → +1h feedback → +30m reminder (once)
-- Merchant orders: mobile-first + deep link (`?order=X`) + auto-refresh
-- Admin orders: `/admin/orders` (stats + filters + extend/cancel)
-- Customer tracking: filters + search + ETA badge + feedback form
+**Orders System v2 — مكتمل:**
+- DB: 3 جداول + 20 عمود (migration v2-recovery)
+- RLS: mos_select_authenticated + branches_select_authenticated
+- profiles.phone added
+- Admin: enable/disable + ETA modal + summary report
+- Merchant: settings + ETA editor + offline toggle + newOrders fix
+- Customer: modal (text/audio/images) + payment + review
+- Auto: ETA → auto-deliver → feedback +1h → reminder +30m
+- Admin orders: /admin/orders (stats + filters + extend/cancel)
+- Merchant orders: mobile + deep link + auto-refresh + settings
 - Reports: order metrics (accept rate, on-time, feedback, issues)
-- Dashboard: order flow sections (admin + merchant)
+- Dashboards: order flow (admin + merchant)
+- Push: VAPID + SW + push_subscriptions + toggle + deep-link
+- Notifications: /account/notifications (unified) + /merchant/notifications redirect + admin bell
 
-**Remaining orders items (minor):**
-- Live customer test full flow (blocked on rate limit / bug fixes)
-- Push notification deep-link E2E verify
-- Snooze (once/order — designed, not built)
-- Canned responses (designed, not built)
+**Remaining (minor):**
+- Test data cleanup: TEST01 order
+- إضافة 20 نشاط (آخر خطوة)
+- Merchant polish (offers/ads/qr/branches/trust/settings)
 
 ## Working
 - Business wizard fullscreen + 10 contact types
