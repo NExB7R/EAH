@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { ArrowLeftIcon } from '@/components/icons'
 import PrintButton from './print-button'
+import SendToMerchant from './send-to-merchant'
 import styles from './page.module.css'
 
 type OrderMetricsView = {
@@ -65,6 +66,7 @@ export default async function InsightDetailPage({ params }: { params: Promise<{ 
           <ArrowLeftIcon size={14} />
           <span>رجوع للتقارير</span>
         </Link>
+        <SendToMerchant insightId={data.id} />
         <PrintButton />
       </div>
 
