@@ -184,6 +184,7 @@
 - [x] CI-01: E2E on push:main + pull_request (2026-10-23)
 - [x] CI-02: PR → Vercel preview URL (auto via wait-for-vercel-preview)
 - [x] Merchant newOrders count fix (sent/seen not pending) — 2026-10-23
+- [x] Orders v2 — trigger rating sync (2026-10-23)
 - [x] Orders System v2 (2026-10-23) — DB + admin/merchant/customer flow + auto-deliver + feedback
 - [x] CI-07: invariants verifier in CI (ab55bce)
 

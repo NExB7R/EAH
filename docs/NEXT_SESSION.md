@@ -4,32 +4,25 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-
-- Last commit: `ce4e6537`
+- Last commit: `d6252543`
 - Branch: main (clean)
 - Invariants: all OK
 
-**Orders System v2 — مكتمل:**
+**Orders v2 — مكتمل 100%:**
+- DB: merchant_order_settings + order_reactions + customer_order_stats + 20 column + trigger rating
+- Admin: enable/disable + ETA + orders list + extend/cancel + housekeeping
+- Merchant: settings + ETA editor + orders + offline + expiry suspension
+- Customer: modal (text/audio/images) + payment + tracking + feedback + rating trigger
+- Auto: deliver + expire + reminder
+- Suspension: 10/week → 24h auto
+- Notifications: merchant + customer + admin
+- Reports: order metrics in business_insights
+- Dashboards: order flow sections
 
-- DB: 3 جداول + 20 عمود (migration v2-recovery)
-- RLS: mos_select_authenticated + branches_select_authenticated
-- profiles.phone added
-- Admin: enable/disable + ETA modal + summary report
-- Merchant: settings + ETA editor + offline toggle + newOrders fix
-- Customer: modal (text/audio/images) + payment + review
-- Auto: ETA → auto-deliver → feedback +1h → reminder +30m
-- Admin orders: /admin/orders (stats + filters + extend/cancel)
-- Merchant orders: mobile + deep link + auto-refresh + settings
-- Reports: order metrics (accept rate, on-time, feedback, issues)
-- Dashboards: order flow (admin + merchant)
-- Push: VAPID + SW + push_subscriptions + toggle + deep-link
-- Notifications: /account/notifications (unified) + /merchant/notifications redirect + admin bell
-
-**Remaining (minor):**
-
-- Test data cleanup: TEST01 order
-- إضافة 20 نشاط (آخر خطوة)
-- Merchant polish (offers/ads/qr/branches/trust/settings)
+**Remaining (outside orders):**
+- Push E2E verification (subscription must be created from browser)
+- Merchant small pages polish (offers/ads/qr/branches/trust/settings)
+- إضافة 20 نشاط
 
 ## Working
 

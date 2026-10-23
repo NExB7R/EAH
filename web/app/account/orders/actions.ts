@@ -10,7 +10,8 @@ import { FEEDBACK_ISSUE_TYPES } from '@/lib/data/orders'
 // - Idempotent (1 rating per order)
 // - Gated by feedback_due_at
 // - Inserts audit reaction
-// - Updates business rating aggregate
+// - Business rating aggregate updated by DB trigger
+//   (trg_update_business_rating — see docs/migrations/2026-10-23-business-rating-trigger.sql)
 // ═══════════════════════════════════════════════════════════════════
 
 type Result = { ok: true } | { ok: false; error: string }
@@ -53,18 +54,16 @@ export async function submitOrderFeedback(input: {
   if (order.feedback_rating !== null) {
     return { ok: false, error: 'سبق وقيّمت الطلب ده' }
   }
-  // Gate on feedback_due_at (customer can't rate before window opens)
   if (order.feedback_due_at && new Date(order.feedback_due_at).getTime() > Date.now()) {
     return { ok: false, error: 'التقييم متاح بعد فترة قصيرة من التسليم' }
   }
 
-  // Issue type only relevant with low rating (server-side check — UI gates too)
+  // Issue type only relevant with low rating
   const issueType =
     parsed.data.rating <= 3 && parsed.data.issue_type ? parsed.data.issue_type : null
 
   const nowIso = new Date().toISOString()
 
-  // Update order — with status guard (race-safe)
   const { data: updated, error: updErr } = await supabase
     .from('order_requests')
     .update({
@@ -76,14 +75,14 @@ export async function submitOrderFeedback(input: {
     })
     .eq('id', parsed.data.orderId)
     .eq('status', 'delivered')
-    .is('feedback_rating', null) // idempotency guard
+    .is('feedback_rating', null)
     .select('id, business_id')
     .maybeSingle()
 
   if (updErr) return { ok: false, error: 'فشل حفظ التقييم' }
   if (!updated) return { ok: false, error: 'التقييم اتسجل بالفعل' }
 
-  // Audit reaction (non-fatal)
+  // Audit reaction (non-fatal) — trigger will handle business rating
   const { error: reactionErr } = await supabase.from('order_reactions').insert({
     order_id: parsed.data.orderId,
     actor_type: 'customer',
@@ -97,34 +96,6 @@ export async function submitOrderFeedback(input: {
   })
   if (reactionErr) {
     console.warn('[order_reactions] feedback insert failed:', reactionErr.message)
-  }
-
-  // Update business rating aggregate
-  // Recompute from delivered orders with feedback (source of truth)
-  const { data: ratings } = await supabase
-    .from('order_requests')
-    .select('feedback_rating')
-    .eq('business_id', order.business_id)
-    .eq('status', 'delivered')
-    .not('feedback_rating', 'is', null)
-
-  if (ratings && ratings.length > 0) {
-    const count = ratings.length
-    const sum = ratings.reduce((acc, r) => acc + (r.feedback_rating ?? 0), 0)
-    const avg = Math.round((sum / count) * 100) / 100
-
-    // Use service-role-adjacent update via supabase (RLS allows? — this is a user client)
-    // Fallback: use upsert-safe approach. The businesses table likely has an
-    // owner_write policy that blocks this. We update anyway — if RLS denies,
-    // the next page load will show stale aggregate but the source is intact.
-    await supabase
-      .from('businesses')
-      .update({
-        rating_avg: avg,
-        rating_count: count,
-        updated_at: nowIso,
-      })
-      .eq('id', order.business_id)
   }
 
   revalidatePath('/account/orders')
