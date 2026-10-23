@@ -14,6 +14,7 @@ export type UserSession = {
   userId: string
   email: string | null
   displayName: string
+  phone: string | null
   avatarUrl: string | null
   role: AppRole
   notifCount: number
@@ -49,7 +50,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     supabase
       .from('profiles')
       .select(
-        'display_name, avatar_url, phone_verified_at, trust_score, trust_tier, streak_days, legend_points, is_premium, premium_until, display_name_mode, alias, hide_avatar, hide_favorites, hide_following',
+        'display_name, phone, avatar_url, phone_verified_at, trust_score, trust_tier, streak_days, legend_points, is_premium, premium_until, display_name_mode, alias, hide_avatar, hide_favorites, hide_following',
       )
       .eq('id', user.id)
       .maybeSingle(),
@@ -68,6 +69,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     avatarUrl: profile?.avatar_url ?? null,
     role: (roleRow?.role as AppRole) ?? 'customer',
     notifCount: count ?? 0,
+    phone: (profile?.phone as string | null) ?? null,
     phoneVerified: !!profile?.phone_verified_at,
     emailVerified: !!user.email_confirmed_at,
     trustScore: profile?.trust_score ?? 50,
