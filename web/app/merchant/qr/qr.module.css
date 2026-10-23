@@ -93,3 +93,83 @@
     height: 220px;
   }
 }
+
+/* ─── Share section ─── */
+.qrUrl {
+  margin: 8px auto 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(7, 2, 13, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+  color: var(--text-muted);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  text-align: center;
+  word-break: break-all;
+  max-width: 380px;
+}
+
+.shareSection {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(168, 85, 247, 0.1);
+}
+
+.shareTitle {
+  margin: 0 0 10px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.shareGrid {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.shareBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  cursor: pointer;
+  min-height: 40px;
+  transition: all 160ms ease;
+}
+
+.shareBtn:hover {
+  background: rgba(168, 85, 247, 0.14);
+  color: var(--text-primary);
+}
+
+.shareWhatsapp {
+  color: #25d366;
+  border-color: rgba(37, 211, 102, 0.35);
+}
+
+.shareWhatsapp:hover {
+  background: rgba(37, 211, 102, 0.12);
+  color: #25d366;
+}
+
+/* Update qrImg — now div with background */
+.qrImg {
+  width: 100%;
+  aspect-ratio: 1;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 12px;
+}
