@@ -15,8 +15,8 @@ import {
 import { getAdminStats, getAdminRecent, getAdminBadges } from '@/lib/data/admin'
 import { getUserSession } from '@/lib/data/user'
 import ActivityFeed from '@/components/admin/activity-feed'
-import StatCard from '@/components/admin/stat-card'
-import Panel from '@/components/admin/panel'
+import StatCard from '@/components/dashboard/stat-card'
+import Panel from '@/components/dashboard/panel'
 import styles from './page.module.css'
 
 export const dynamic = 'force-dynamic'
