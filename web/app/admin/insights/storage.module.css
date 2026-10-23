@@ -177,3 +177,39 @@
 .printBtn:hover {
   background: rgba(168, 85, 247, 0.16);
 }
+
+.filterForm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filterSelect {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  background: rgba(7, 2, 13, 0.5);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.82rem;
+  min-width: 200px;
+}
+
+.filterBtn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--purple-light);
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  cursor: pointer;
+}
+
+.filterClear {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-decoration: underline;
+}

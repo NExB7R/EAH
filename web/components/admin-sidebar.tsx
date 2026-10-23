@@ -64,8 +64,12 @@ const SECTIONS: Section[] = [
       },
       { href: '/admin/featured', label: 'الأنشطة المميزة', Icon: CrownGoldIcon },
       { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
-      { href: '/admin/insights', label: 'تقارير الأنشطة', Icon: FileTextIcon },
     ],
+  },
+  {
+    key: 'reports',
+    title: 'التقارير',
+    items: [{ href: '/admin/insights', label: 'تقارير الأنشطة', Icon: FileTextIcon }],
   },
   {
     key: 'users',

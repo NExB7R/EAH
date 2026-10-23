@@ -27,6 +27,11 @@ export default function GenerateForm({ businesses }: Props) {
   const [businessId, setBusinessId] = useState(businesses[0]?.id ?? '')
   const [days, setDays] = useState(30)
   const [notify, setNotify] = useState(true)
+  const [sections, setSections] = useState({
+    top_points: true,
+    recommendations: true,
+    ai_narrative: true,
+  })
 
   const submit = () => {
     if (!businessId) {
@@ -35,7 +40,7 @@ export default function GenerateForm({ businesses }: Props) {
     }
     setError(null)
     startTransition(async () => {
-      const res = await generateAdminInsight(businessId, days, notify)
+      const res = await generateAdminInsight(businessId, days, notify, sections)
       if (res.ok) {
         setSuccess('تم توليد التقرير')
         setTimeout(() => {
@@ -108,6 +113,43 @@ export default function GenerateForm({ businesses }: Props) {
                       {opt.label}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              <div className={styles.field}>
+                <span className={styles.label}>محتوى التقرير</span>
+                <div className={styles.toggles}>
+                  <label className={styles.toggleRow}>
+                    <input
+                      type="checkbox"
+                      checked={sections.top_points}
+                      onChange={(e) => setSections((p) => ({ ...p, top_points: e.target.checked }))}
+                      disabled={pending}
+                    />
+                    <span>أهم الملاحظات</span>
+                  </label>
+                  <label className={styles.toggleRow}>
+                    <input
+                      type="checkbox"
+                      checked={sections.recommendations}
+                      onChange={(e) =>
+                        setSections((p) => ({ ...p, recommendations: e.target.checked }))
+                      }
+                      disabled={pending}
+                    />
+                    <span>التوصيات</span>
+                  </label>
+                  <label className={styles.toggleRow}>
+                    <input
+                      type="checkbox"
+                      checked={sections.ai_narrative}
+                      onChange={(e) =>
+                        setSections((p) => ({ ...p, ai_narrative: e.target.checked }))
+                      }
+                      disabled={pending}
+                    />
+                    <span>تحليل مفصل (AI)</span>
+                  </label>
                 </div>
               </div>
 
