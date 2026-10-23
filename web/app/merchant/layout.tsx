@@ -32,9 +32,9 @@ export default async function MerchantLayout({ children }: { children: React.Rea
     const supabase = await createClient()
     const { count } = await supabase
       .from('order_requests')
-      .select('*', { count: 'exact', head: true })
+      .select('id', { count: 'exact', head: true })
       .eq('business_id', business.id)
-      .eq('status', 'pending')
+      .in('status', ['sent', 'seen'])
     newOrders = count ?? 0
   }
 
