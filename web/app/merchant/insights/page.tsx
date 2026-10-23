@@ -88,6 +88,9 @@ export default async function MerchantInsightsPage() {
 
             <div className={styles.scoreActions}>
               <GenerateButton businessId={business.id} />
+              <Link href="/merchant/insights/archive" className={styles.archiveLink}>
+                الأرشيف
+              </Link>
               {insights.length > 0 && (
                 <span className={styles.lastGenerated}>
                   آخر تقرير:{' '}
