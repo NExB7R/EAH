@@ -184,7 +184,7 @@ export const COMMANDS: Command[] = [
     id: 'admin-audit',
     label: 'سجل التدقيق',
     description: 'كل إجراءات الأدمن',
-    href: '/admin/audit',
+    href: '/admin/health?tab=audit',
     icon: ClockIcon,
     group: 'navigation',
     keywords: ['audit', 'log', 'تدقيق', 'سجل'],

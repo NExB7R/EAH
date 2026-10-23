@@ -1,17 +1,22 @@
+import Link from 'next/link'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import { AlertIcon, CheckCircleIcon } from '@/components/icons'
 import { getErrorsWithFilters, getHealthSummary } from '@/lib/data/health'
 import ErrorRow from './error-row'
 import HealthFilters from './health-filters'
+import AuditSection from './audit-section'
 import styles from './health.module.css'
 
 export const dynamic = 'force-dynamic'
 
 type SearchParams = {
+  tab?: string
   severity?: string
   resolved?: string
   q?: string
+  action?: string
+  actor?: string
 }
 
 const SEVERITIES = ['low', 'medium', 'high', 'critical'] as const
@@ -23,6 +28,55 @@ export default async function AdminHealthPage({
   searchParams: Promise<SearchParams>
 }) {
   const params = await searchParams
+  const tab: 'errors' | 'audit' = params.tab === 'audit' ? 'audit' : 'errors'
+
+  // Fetch summary always (used in tab badge + errors tab)
+  const summary = await getHealthSummary()
+
+  return (
+    <div>
+      <AccountPageHeader
+        title="صحة النظام والتدقيق"
+        description="مراقبة الأخطاء + سجل التدقيق في مكان واحد."
+      />
+
+      {/* Tabs */}
+      <nav className={styles.tabs} aria-label="تبويبات صحة النظام">
+        <Link
+          href="/admin/health"
+          className={`${styles.tab} ${tab === 'errors' ? styles.tabActive : ''}`}
+          aria-current={tab === 'errors' ? 'page' : undefined}
+        >
+          <span>الأخطاء</span>
+          {summary.unresolved > 0 && (
+            <span className={styles.tabBadge}>{summary.unresolved.toLocaleString('en-US')}</span>
+          )}
+        </Link>
+        <Link
+          href="/admin/health?tab=audit"
+          className={`${styles.tab} ${tab === 'audit' ? styles.tabActive : ''}`}
+          aria-current={tab === 'audit' ? 'page' : undefined}
+        >
+          <span>سجل التدقيق</span>
+        </Link>
+      </nav>
+
+      {tab === 'audit' ? (
+        <AuditSection q={params.q} action={params.action} actor={params.actor} />
+      ) : (
+        <ErrorsTab params={params} summary={summary} />
+      )}
+    </div>
+  )
+}
+
+async function ErrorsTab({
+  params,
+  summary,
+}: {
+  params: SearchParams
+  summary: Awaited<ReturnType<typeof getHealthSummary>>
+}) {
   const severity = SEVERITIES.includes(params.severity as (typeof SEVERITIES)[number])
     ? params.severity
     : 'all'
@@ -31,23 +85,15 @@ export default async function AdminHealthPage({
     : 'all'
   const query = (params.q ?? '').trim().slice(0, 100)
 
-  const [summary, errors] = await Promise.all([
-    getHealthSummary(),
-    getErrorsWithFilters({
-      severity,
-      resolved,
-      q: query,
-      limit: 100,
-    }),
-  ])
+  const errors = await getErrorsWithFilters({
+    severity,
+    resolved,
+    q: query,
+    limit: 100,
+  })
 
   return (
-    <div>
-      <AccountPageHeader
-        title="صحة النظام والأخطاء"
-        description="راقب أخطاء المنصة، حدّد الأعلى خطورة، وسجّل ما تم حله."
-      />
-
+    <>
       <section className={styles.grid} aria-label="ملخص صحة النظام">
         <article className={styles.card}>
           <div className={styles.cardLabel}>أخطاء آخر 24 ساعة</div>
@@ -115,6 +161,6 @@ export default async function AdminHealthPage({
           />
         )}
       </section>
-    </div>
+    </>
   )
 }
