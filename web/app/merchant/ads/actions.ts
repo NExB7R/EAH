@@ -10,14 +10,22 @@ import { createClient } from '@/lib/supabase/server'
 
 type Result = { ok: true; id?: string } | { ok: false; error: string }
 
-const schema = z.object({
-  slotId: z.string().uuid('اختر مكان الإعلان'),
-  title: z.string().min(2, 'العنوان قصير').max(80),
-  imageUrl: z.string().max(500).optional().or(z.literal('')),
-  linkUrl: z.string().max(500).optional().or(z.literal('')),
-  startsAt: z.string().optional().or(z.literal('')),
-  endsAt: z.string().optional().or(z.literal('')),
-})
+const schema = z
+  .object({
+    slotId: z.string().uuid('اختر مكان الإعلان'),
+    title: z.string().min(2, 'العنوان قصير').max(80),
+    imageUrl: z.string().max(500).optional().or(z.literal('')),
+    linkUrl: z.string().max(500).optional().or(z.literal('')),
+    startsAt: z.string().optional().or(z.literal('')),
+    endsAt: z.string().optional().or(z.literal('')),
+  })
+  .refine(
+    (v) => {
+      if (!v.startsAt || !v.endsAt) return true
+      return new Date(v.endsAt) >= new Date(v.startsAt)
+    },
+    { message: 'تاريخ الانتهاء لازم يكون بعد البداية' },
+  )
 
 async function myBiz() {
   const supabase = await createClient()
@@ -74,7 +82,28 @@ export async function requestAd(formData: FormData): Promise<Result> {
 
   if (error) return { ok: false, error: error.message }
 
+  // Notify admins about new ad request
+  const { createNotification } = await import('@/lib/notifications/server')
+  const { data: admins } = await ctx.supabase
+    .from('user_roles')
+    .select('user_id')
+    .in('role', ['admin', 'super_admin'])
+
+  if (admins && admins.length > 0) {
+    for (const admin of admins) {
+      void createNotification({
+        userId: admin.user_id,
+        type: 'admin',
+        title: 'إعلان جديد بانتظار المراجعة',
+        body: `من نشاط — "${d.title}"`,
+        deepLink: '/admin/ads',
+        pushTag: `ad-request-${data.id}`,
+      }).catch(() => {})
+    }
+  }
+
   revalidatePath('/merchant/ads')
+  revalidatePath('/admin/ads')
   return { ok: true, id: data.id }
 }
 
