@@ -5,6 +5,7 @@ import { requireAdmin } from '@/lib/auth/admin'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { logAudit } from '@/lib/logging/audit'
 import { getBusinessMetrics, getCategoryComparison } from '@/lib/data/insights'
+import { getOrderMetricsForBusiness } from '@/lib/data/reports-orders'
 import { analyzeBusiness } from '@/lib/ai/business-advisor'
 import { saveInsight } from '@/lib/ai/storage'
 import { generateNarrative } from '@/lib/ai/narrative'
@@ -56,6 +57,13 @@ export async function generateAdminInsight(
     getCategoryComparison(businessId),
   ])
 
+  const orderMetrics = await getOrderMetricsForBusiness(
+    businessId,
+    new Date(Date.now() - safeDays * 24 * 60 * 60 * 1000).toISOString(),
+    new Date().toISOString(),
+    ctx.supabase,
+  )
+
   const analysis = analyzeBusiness(metrics, comparison)
   const aiNarrative = sections.ai_narrative ? await generateNarrative(metrics, analysis) : null
 
@@ -77,6 +85,63 @@ export async function generateAdminInsight(
   if (!sections.ai_narrative) updates.ai_narrative = null
   if (Object.keys(updates).length > 0) {
     await ctx.supabase.from('business_insights').update(updates).eq('id', saveResult.insightId)
+  }
+
+  // Enrich top_points + summary with order metrics
+  if (orderMetrics.total > 0) {
+    const orderPoints: string[] = []
+    if (orderMetrics.total > 0) {
+      orderPoints.push(`📊 ${orderMetrics.total} طلب في الفترة`)
+    }
+    if (orderMetrics.accept_rate > 0) {
+      orderPoints.push(`✅ نسبة القبول ${orderMetrics.accept_rate}%`)
+    }
+    if (orderMetrics.avg_response_min !== null) {
+      orderPoints.push(`⚡ متوسط الرد ${orderMetrics.avg_response_min} دقيقة`)
+    }
+    if (orderMetrics.on_time_delivery_rate !== null) {
+      orderPoints.push(`⏱️ التسليم في الوقت ${orderMetrics.on_time_delivery_rate}%`)
+    }
+    if (orderMetrics.feedback_count > 0 && orderMetrics.avg_feedback_rating !== null) {
+      orderPoints.push(
+        `⭐ رضا العملاء ${orderMetrics.avg_feedback_rating}/5 (${orderMetrics.feedback_count} تقييم)`,
+      )
+    }
+    const issues = Object.entries(orderMetrics.issue_breakdown)
+    if (issues.length > 0) {
+      const top = issues.sort((a, b) => b[1] - a[1])[0]
+      if (top) {
+        const labels: Record<string, string> = {
+          late: 'التأخير',
+          missing: 'النقص',
+          quality: 'الجودة',
+          payment: 'الدفع',
+          other: 'مشاكل أخرى',
+        }
+        orderPoints.push(`🔍 أبرز مشكلة: ${labels[top[0]] ?? top[0]} (${top[1]})`)
+      }
+    }
+
+    const { data: existing } = await ctx.supabase
+      .from('business_insights')
+      .select('top_points, data')
+      .eq('id', saveResult.insightId)
+      .maybeSingle()
+
+    if (existing) {
+      const existingPoints = Array.isArray(existing.top_points)
+        ? (existing.top_points as string[])
+        : []
+      const existingData = (existing.data as Record<string, unknown> | null) ?? {}
+
+      await ctx.supabase
+        .from('business_insights')
+        .update({
+          top_points: [...orderPoints, ...existingPoints],
+          data: { ...existingData, order_metrics: orderMetrics },
+        })
+        .eq('id', saveResult.insightId)
+    }
   }
 
   // Optionally notify business owner

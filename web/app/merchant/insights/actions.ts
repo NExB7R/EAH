@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { createClient } from '@/lib/supabase/server'
 import { getBusinessMetrics, getCategoryComparison } from '@/lib/data/insights'
+import { getOrderMetricsForBusiness } from '@/lib/data/reports-orders'
 import { analyzeBusiness } from '@/lib/ai/business-advisor'
 import { saveInsight } from '@/lib/ai/storage'
 import { generateNarrative } from '@/lib/ai/narrative'
@@ -62,6 +63,12 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
   ])
 
   // 2. حلّل
+  const orderMetrics = await getOrderMetricsForBusiness(
+    businessId,
+    new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString(),
+    new Date().toISOString(),
+  )
+
   const analysis = analyzeBusiness(metrics, comparison)
 
   // 3. اكتب ملخص AI (best-effort — لو فشل مش مشكلة)
@@ -79,6 +86,39 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
 
   if (!result.ok) {
     return { ok: false, error: result.error }
+  }
+
+  // Enrich with order metrics
+  if (orderMetrics.total > 0 && saveResult.ok) {
+    const orderPoints: string[] = []
+    if (orderMetrics.total > 0) orderPoints.push(`📊 ${orderMetrics.total} طلب`)
+    if (orderMetrics.accept_rate > 0) orderPoints.push(`✅ قبول ${orderMetrics.accept_rate}%`)
+    if (orderMetrics.avg_response_min !== null)
+      orderPoints.push(`⚡ رد ${orderMetrics.avg_response_min} د`)
+    if (orderMetrics.on_time_delivery_rate !== null)
+      orderPoints.push(`⏱️ تسليم في الوقت ${orderMetrics.on_time_delivery_rate}%`)
+    if (orderMetrics.feedback_count > 0 && orderMetrics.avg_feedback_rating !== null)
+      orderPoints.push(`⭐ ${orderMetrics.avg_feedback_rating}/5`)
+
+    const { data: existing } = await supabase
+      .from('business_insights')
+      .select('top_points, data')
+      .eq('id', saveResult.insightId)
+      .maybeSingle()
+
+    if (existing) {
+      const existingPoints = Array.isArray(existing.top_points)
+        ? (existing.top_points as string[])
+        : []
+      const existingData = (existing.data as Record<string, unknown> | null) ?? {}
+      await supabase
+        .from('business_insights')
+        .update({
+          top_points: [...orderPoints, ...existingPoints],
+          data: { ...existingData, order_metrics: orderMetrics },
+        })
+        .eq('id', saveResult.insightId)
+    }
   }
 
   revalidatePath('/merchant/insights')
