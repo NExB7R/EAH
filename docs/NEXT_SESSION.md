@@ -4,21 +4,27 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last commit: `55fa25ef`
+- Last commit: `d92f0532`
 - Branch: main (clean)
 - Invariants: all OK
 
-**Live (2026-10-23):**
-- Admin dashboard 2026 — StatCard + Panel + alerts + quick actions
-- Admin sidebar — 6 sections, التقارير مستقل
-- Admin business detail — Hero + underline tabs + StatCards (YouTube style)
-- **Merchant dashboard — Hero + alerts + KPI + quick actions (YouTube Creator Studio)**
-- Reports hub (admin) — generate + print + delete + filter + sections
-- Merchant archive — browse all past reports by month
-- CI-01 + CI-02 — E2E on PR + auto Vercel preview URL
-- Types: 4 only (restaurant/pharmacy/delivery_office/misc)
-- GOD-01 split — business-form 1179 → 14 files
-- SPRAWL-01 — audit merged into health (tabs)
+**Orders System v2 (شغّال 95%):**
+- DB: `merchant_order_settings`, `order_reactions`, `customer_order_stats` + 20 عمود في `order_requests`
+- Admin: enable/disable + ETA modal (إجباري) + auto summary report عند الإيقاف
+- Merchant: settings + ETA editor (15-240 د) + offline toggle
+- Customer: modal (text/audio/images) + payment + review + submit
+- **Auto-flow:** ETA → auto-delivered → +1h feedback → +30m reminder (once)
+- Merchant orders: mobile-first + deep link (`?order=X`) + auto-refresh
+- Admin orders: `/admin/orders` (stats + filters + extend/cancel)
+- Customer tracking: filters + search + ETA badge + feedback form
+- Reports: order metrics (accept rate, on-time, feedback, issues)
+- Dashboard: order flow sections (admin + merchant)
+
+**Remaining orders items (minor):**
+- Live customer test full flow (blocked on rate limit / bug fixes)
+- Push notification deep-link E2E verify
+- Snooze (once/order — designed, not built)
+- Canned responses (designed, not built)
 
 ## Working
 - Business wizard fullscreen + 10 contact types
