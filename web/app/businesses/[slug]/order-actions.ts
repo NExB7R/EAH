@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { orderSchema } from '@/lib/validations/order'
+import { orderSchema, orderHasContent } from '@/lib/validations/order'
 import { createNotification } from '@/lib/notifications/server'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 
@@ -34,10 +34,14 @@ export async function submitOrder(
   const parsed = orderSchema.safeParse({
     customer_name: String(formData.get('customer_name') ?? '').trim(),
     customer_phone: String(formData.get('customer_phone') ?? '').trim(),
+    secondary_phone: String(formData.get('secondary_phone') ?? '').trim(),
     customer_area: String(formData.get('customer_area') ?? '').trim(),
     customer_address: String(formData.get('customer_address') ?? '').trim(),
     items_summary: String(formData.get('items_summary') ?? '').trim(),
     notes: String(formData.get('notes') ?? '').trim(),
+    payment_method: (String(formData.get('payment_method') ?? '').trim() || null) as
+      'cash' | 'instapay' | 'wallet' | null,
+    attachments_json: String(formData.get('attachments_json') ?? '').trim(),
   })
 
   if (!parsed.success) {
@@ -45,6 +49,16 @@ export async function submitOrder(
   }
 
   const d = parsed.data
+
+  // Custom: at least one content source (text OR attachments)
+  if (
+    !orderHasContent({
+      items_summary: d.items_summary ?? '',
+      attachments_json: d.attachments_json ?? '',
+    })
+  ) {
+    return { ok: false, error: 'لازم تكتب طلبك أو ترفع صورة/صوت' }
+  }
 
   // ═══════════════════════════════════════════════════════════════════
   // 1. Gate: is order acceptance enabled for this business?
@@ -100,24 +114,49 @@ export async function submitOrder(
   // ═══════════════════════════════════════════════════════════════════
   // 3. Optional new fields (v2)
   // ═══════════════════════════════════════════════════════════════════
-  const paymentMethod = String(formData.get('payment_method') ?? '').trim()
-  const secondaryPhone = String(formData.get('secondary_phone') ?? '').trim()
-  const attachmentsJson = String(formData.get('attachments') ?? '').trim()
-
-  let attachments: unknown = []
-  if (attachmentsJson) {
+  type Attachment = {
+    type: 'image' | 'voice'
+    url: string
+    size: number
+    duration_sec?: number
+    mime?: string
+  }
+  const attachments: Attachment[] = []
+  if (d.attachments_json) {
     try {
-      const parsed = JSON.parse(attachmentsJson)
-      if (Array.isArray(parsed)) attachments = parsed.slice(0, 5)
+      const parsedAtt = JSON.parse(d.attachments_json)
+      if (Array.isArray(parsedAtt)) {
+        for (const a of parsedAtt.slice(0, 5)) {
+          if (!a || typeof a !== 'object') continue
+          const obj = a as {
+            type?: unknown
+            url?: unknown
+            size?: unknown
+            duration_sec?: unknown
+            mime?: unknown
+          }
+          if (
+            (obj.type === 'image' || obj.type === 'voice') &&
+            typeof obj.url === 'string' &&
+            obj.url.startsWith('https://') &&
+            typeof obj.size === 'number' &&
+            obj.size > 0 &&
+            obj.size <= 5_000_000
+          ) {
+            attachments.push({
+              type: obj.type,
+              url: obj.url,
+              size: obj.size,
+              duration_sec: typeof obj.duration_sec === 'number' ? obj.duration_sec : undefined,
+              mime: typeof obj.mime === 'string' ? obj.mime : undefined,
+            })
+          }
+        }
+      }
     } catch {
       // ignore malformed
     }
   }
-
-  const safePayment =
-    paymentMethod === 'cash' || paymentMethod === 'instapay' || paymentMethod === 'wallet'
-      ? paymentMethod
-      : null
 
   // ═══════════════════════════════════════════════════════════════════
   // 4. Insert order (get id back for deep link)
@@ -129,7 +168,7 @@ export async function submitOrder(
       customer_profile_id: user.id,
       order_code: orderCode,
       status: 'sent',
-      items: d.items_summary,
+      items: (d.items_summary ?? '').trim() || null,
       notes: d.notes || null,
       customer_name: d.customer_name,
       customer_phone: d.customer_phone,
@@ -137,8 +176,8 @@ export async function submitOrder(
       customer_address: d.customer_address || null,
       // v2 fields
       delivery_address: d.customer_address || null,
-      secondary_phone: secondaryPhone || null,
-      payment_method: safePayment,
+      secondary_phone: d.secondary_phone || null,
+      payment_method: d.payment_method ?? null,
       attachments,
       deadline_at: deadlineAt,
     })
@@ -160,7 +199,8 @@ export async function submitOrder(
     d.customer_address ? `عنوان: ${d.customer_address}` : '',
     '',
     'الطلب:',
-    d.items_summary,
+    (d.items_summary ?? '').trim() || '(شوف المرفقات)',
+    attachments.length > 0 ? `📎 ${attachments.length} مرفق` : '',
     d.notes ? `\nملاحظات: ${d.notes}` : '',
     '',
     '— مرسل من EAH',
@@ -178,7 +218,7 @@ export async function submitOrder(
       userId: biz.owner_profile_id,
       type: 'order_new',
       title: `🔔 طلب جديد #${orderCode}`,
-      body: `${d.customer_name}: ${d.items_summary.slice(0, 80)}`,
+      body: `${d.customer_name}: ${(d.items_summary ?? '').slice(0, 80) || '(مرفق)'}`,
       deepLink: `/merchant/orders?order=${orderId}`,
       pushTag: `order-${orderId}`,
     }).catch(() => {})
