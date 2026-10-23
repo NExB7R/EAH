@@ -288,3 +288,64 @@
   flex: 1;
   justify-content: center;
 }
+
+.etaEditor {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(85, 231, 209, 0.06);
+  border: 1px solid rgba(85, 231, 209, 0.2);
+  margin-bottom: 12px;
+}
+
+.etaLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.etaLabel strong {
+  color: var(--text-primary);
+  font-weight: 900;
+}
+
+.etaInput {
+  width: 80px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(85, 231, 209, 0.35);
+  background: rgba(7, 2, 13, 0.5);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-align: center;
+  min-height: 36px;
+}
+
+.etaInput:focus {
+  outline: none;
+  border-color: rgba(85, 231, 209, 0.7);
+}
+
+.etaSaveBtn {
+  margin-inline-start: auto;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgb(7, 2, 13);
+  background: rgba(85, 231, 209, 0.9);
+  border: none;
+  cursor: pointer;
+  min-height: 36px;
+}
+
+.etaSaveBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

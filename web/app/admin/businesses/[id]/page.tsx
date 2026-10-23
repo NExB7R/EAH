@@ -61,6 +61,7 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
             ? {
                 orders_enabled: orderSettings.orders_enabled,
                 deadline_minutes: orderSettings.deadline_minutes,
+                delivery_eta_minutes: orderSettings.delivery_eta_minutes,
                 orders_enabled_at:
                   (orderSettings as unknown as { orders_enabled_at?: string | null })
                     .orders_enabled_at ?? null,

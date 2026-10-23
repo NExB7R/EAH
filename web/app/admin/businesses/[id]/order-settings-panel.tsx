@@ -9,6 +9,7 @@ import styles from './order-settings-panel.module.css'
 type Settings = {
   orders_enabled: boolean
   deadline_minutes: number
+  delivery_eta_minutes: number | null
   orders_enabled_at: string | null
   suspended_until: string | null
 } | null
@@ -26,13 +27,14 @@ export default function OrderSettingsPanel({
   const [showEnable, setShowEnable] = useState(false)
   const [showDisable, setShowDisable] = useState(false)
   const [deadline, setDeadline] = useState(settings?.deadline_minutes ?? 10)
+  const [eta, setEta] = useState(settings?.delivery_eta_minutes ?? 45)
 
   const isEnabled = !!settings?.orders_enabled
 
   const doEnable = () => {
     setError(null)
     startTransition(async () => {
-      const res = await enableOrders(businessId, deadline)
+      const res = await enableOrders(businessId, deadline, eta)
       if (res.ok) {
         setShowEnable(false)
         router.refresh()
@@ -131,6 +133,17 @@ export default function OrderSettingsPanel({
               max={60}
               value={deadline}
               onChange={(e) => setDeadline(Math.max(5, Math.min(60, +e.target.value || 10)))}
+              className={styles.deadlineInput}
+            />
+          </label>
+          <label className={styles.deadlineLabel}>
+            مدة التسليم (دقايق)
+            <input
+              type="number"
+              min={15}
+              max={240}
+              value={eta}
+              onChange={(e) => setEta(Math.max(15, Math.min(240, +e.target.value || 45)))}
               className={styles.deadlineInput}
             />
           </label>

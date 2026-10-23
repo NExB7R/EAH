@@ -25,6 +25,8 @@ type Order = {
   delivered_at: string | null
   feedback_rating: number | null
   feedback_issue_type: string | null
+  feedback_due_at: string | null
+  expected_delivery_at: string | null
 }
 
 type Props = { orders: Order[] }
@@ -64,6 +66,8 @@ const FILTERS = [
 type FilterKey = (typeof FILTERS)[number]['key']
 
 export default function OrdersList({ orders }: Props) {
+  // Computed once at mount — safe from React purity rule
+  const [nowMs] = useState(() => Date.now())
   const [filter, setFilter] = useState<FilterKey>('all')
   const [q, setQ] = useState('')
 
@@ -180,6 +184,21 @@ export default function OrdersList({ orders }: Props) {
                       </>
                     )}
                   </Link>
+                )}
+
+                {order.status === 'accepted' && order.expected_delivery_at && (
+                  <div className={styles.etaBadge}>
+                    <ClockIcon size={12} />
+                    <span>
+                      هيوصلك خلال{' '}
+                      <strong>
+                        {new Date(order.expected_delivery_at).toLocaleTimeString('ar-EG', {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </strong>
+                    </span>
+                  </div>
                 )}
 
                 {!isCancelled && meta.step > 0 && (

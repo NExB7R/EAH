@@ -12,7 +12,7 @@ export async function getMerchantOrderSettings(
   const { data } = await supabase
     .from('merchant_order_settings')
     .select(
-      'business_id, orders_enabled, deadline_minutes, offline_mode, offline_until, auto_accept, missed_count_today, missed_count_week, last_missed_at, suspended_until, suspension_reason',
+      'business_id, orders_enabled, deadline_minutes, delivery_eta_minutes, offline_mode, offline_until, auto_accept, missed_count_today, missed_count_week, last_missed_at, suspended_until, suspension_reason',
     )
     .eq('business_id', businessId)
     .maybeSingle()

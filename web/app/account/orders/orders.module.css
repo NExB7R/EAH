@@ -418,3 +418,21 @@
   letter-spacing: 2px;
   font-size: 0.95rem;
 }
+
+.etaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(85, 231, 209, 0.08);
+  border: 1px solid rgba(85, 231, 209, 0.25);
+  color: #55e7d1;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.etaBadge strong {
+  color: rgb(255, 255, 255);
+  font-weight: 900;
+}

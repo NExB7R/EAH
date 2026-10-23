@@ -57,6 +57,7 @@ export default async function MerchantOrderSettingsPage() {
         settings={{
           orders_enabled: settings.orders_enabled,
           deadline_minutes: settings.deadline_minutes,
+          delivery_eta_minutes: settings.delivery_eta_minutes,
           offline_mode: settings.offline_mode,
           offline_until: settings.offline_until,
           suspended_until: settings.suspended_until,

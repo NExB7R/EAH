@@ -11,12 +11,20 @@ import { logAudit } from '@/lib/logging/audit'
 
 type Result = { ok: true; reportId?: string } | { ok: false; error: string }
 
-export async function enableOrders(businessId: string, deadlineMinutes: number): Promise<Result> {
+export async function enableOrders(
+  businessId: string,
+  deadlineMinutes: number,
+  deliveryEtaMinutes: number,
+): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
   if (!businessId) return { ok: false, error: 'businessId مفقود' }
   const safeDeadline = Math.max(5, Math.min(60, Math.trunc(deadlineMinutes) || 10))
+  const safeEta = Math.max(15, Math.min(240, Math.trunc(deliveryEtaMinutes) || 0))
+  if (safeEta < 15) {
+    return { ok: false, error: 'حدد مدة التسليم (15-240 دقيقة)' }
+  }
 
   // Fetch business + owner
   const { data: biz } = await ctx.supabase
@@ -47,7 +55,7 @@ export async function enableOrders(businessId: string, deadlineMinutes: number):
       userId: biz.owner_profile_id,
       type: 'system',
       title: '🎯 استلام الطلبات اتفعّل',
-      body: `من دلوقتي هتستقبل طلبات من العملاء. رد خلال ${safeDeadline} دقايق — المتأخر ينقص تقييمك. لو مش متاح، اقفل الاستلام مؤقتاً من الإعدادات (بدون عقوبة).`,
+      body: `من دلوقتي هتستقبل طلبات. رد خلال ${safeDeadline} دقايق · التسليم خلال ${safeEta} دقيقة. المتأخر ينقص تقييمك. لو مش متاح، اقفل الاستلام مؤقتاً (بدون عقوبة).`,
       deepLink: '/merchant/orders/settings',
     })
   }
@@ -57,7 +65,7 @@ export async function enableOrders(businessId: string, deadlineMinutes: number):
     action: 'orders.enable',
     entityType: 'business',
     entityId: businessId,
-    metadata: { deadline_minutes: safeDeadline },
+    metadata: { deadline_minutes: safeDeadline, delivery_eta_minutes: safeEta },
   })
 
   revalidatePath(`/admin/businesses/${businessId}`)
