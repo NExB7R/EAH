@@ -462,3 +462,49 @@ export async function getAllInsights(businessId: string, limit = 12): Promise<St
 
   return (data ?? []) as unknown as StoredInsight[]
 }
+
+// ═══════════════════════════════════════════════════════════
+// Admin: list ALL insights across businesses
+// ═══════════════════════════════════════════════════════════
+
+export type AdminInsightRow = {
+  id: string
+  business_id: string
+  business_name: string
+  business_slug: string
+  period_start: string
+  period_end: string
+  score: number | null
+  summary: string | null
+  generated_by: string | null
+  created_at: string
+}
+
+export async function getAllInsightsForAdmin(limit = 100): Promise<AdminInsightRow[]> {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('business_insights')
+    .select(
+      'id, business_id, period_start, period_end, score, summary, generated_by, created_at, business:businesses(name, slug)',
+    )
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (!data) return []
+
+  return data.map((r) => {
+    const biz = r.business as unknown as { name: string; slug: string } | null
+    return {
+      id: r.id,
+      business_id: r.business_id,
+      business_name: biz?.name ?? '—',
+      business_slug: biz?.slug ?? '',
+      period_start: r.period_start,
+      period_end: r.period_end,
+      score: r.score,
+      summary: r.summary,
+      generated_by: r.generated_by,
+      created_at: r.created_at ?? new Date().toISOString(),
+    }
+  })
+}
