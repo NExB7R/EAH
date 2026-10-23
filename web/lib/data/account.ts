@@ -33,6 +33,14 @@ export type OrderItem = {
   customer_name: string | null
   customer_phone: string | null
   created_at: string
+  delivered_at: string | null
+  feedback_rating: number | null
+  feedback_issue_type: string | null
+  feedback_sent_at: string | null
+  payment_method: string | null
+  delivery_address: string | null
+  secondary_phone: string | null
+  attachments: unknown[] | null
   business: { slug: string; name: string; area: string | null } | null
 }
 
