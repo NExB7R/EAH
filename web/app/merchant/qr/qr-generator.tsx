@@ -128,7 +128,7 @@ export default function QrGenerator({ slug, businessName }: Props) {
             <p className={styles.shareTitle}>شارك رابط نشاطك</p>
             <div className={styles.shareGrid}>
               <button type="button" onClick={handleCopy} className={styles.shareBtn}>
-                <CopyIcon size={16} />
+                <CheckCircleIcon size={16} />
                 <span>{copied ? 'اتنسخ ✓' : 'انسخ الرابط'}</span>
               </button>
               <button
