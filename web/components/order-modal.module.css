@@ -182,7 +182,7 @@
   border: none;
   border-radius: var(--radius-md);
   background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
-  color: #fff;
+  color: rgb(255, 255, 255);
   font-size: 0.85rem;
   font-weight: 800;
   cursor: pointer;

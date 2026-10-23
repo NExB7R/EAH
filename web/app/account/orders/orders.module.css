@@ -299,7 +299,7 @@
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  min-height: 36px;
+  min-height: 40px;
   transition: all 160ms ease;
 }
 

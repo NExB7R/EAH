@@ -239,7 +239,7 @@
 
 .msgUser .bubble {
   background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
-  color: #fff;
+  color: rgb(255, 255, 255);
   border-end-end-radius: 4px;
 }
 

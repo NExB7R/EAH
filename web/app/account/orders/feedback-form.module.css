@@ -12,7 +12,7 @@
   border: 1px solid rgba(232, 199, 154, 0.35);
   cursor: pointer;
   transition: background 160ms ease;
-  min-height: 36px;
+  min-height: 40px;
 }
 
 .trigger:hover {
