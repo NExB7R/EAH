@@ -51,7 +51,7 @@ export type SaveInsightInput = {
   metrics: BusinessMetrics
   analysis: AnalysisResult
   comparison: ComparisonData | null
-  generatedBy: string
+  generatedBy: string | null
   aiNarrative: string | null
 }
 
