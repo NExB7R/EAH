@@ -15,6 +15,7 @@ import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import { computeIsOpenNow } from '@/lib/data/business-detail'
 import BusinessNotice from '@/components/business-notice'
 import { getFeatureFlags } from '@/lib/features'
+import { getMerchantOrderSettings, isOrderAcceptanceActive } from '@/lib/data/orders-settings'
 import type { BusinessDetail } from '@/lib/data/business-detail'
 import { getUserSession } from '@/lib/data/user'
 import { getComments, getMyFollowingRootIds } from '@/lib/data/comments'
@@ -184,6 +185,10 @@ export default async function BusinessPage({ params }: Props) {
   const menuImages = detail.menu.map((m) => m.storage_path)
   const offersList = offers.map((o) => ({ title: o.title, image: o.image_url }))
 
+  // ─── Order acceptance status (for the "اطلب الآن" button) ───
+  const orderSettings = await getMerchantOrderSettings(business.id)
+  const { active: ordersEnabled } = isOrderAcceptanceActive(orderSettings)
+
   return (
     <main className={styles.page}>
       <BusinessCache slug={business.slug} detail={detail} />
@@ -229,6 +234,7 @@ export default async function BusinessPage({ params }: Props) {
             phone={phone}
             isOpen={isOpen}
             acceptsWhatsapp={business.accepts_whatsapp_orders}
+            ordersEnabled={ordersEnabled}
             isFavorite={isFavorite}
             isFollowing={isFollowing}
             menuImages={menuImages}
