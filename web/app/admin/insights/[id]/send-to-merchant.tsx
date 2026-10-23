@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { CheckCircleIcon, AlertIcon, BellIcon } from '@/components/icons'
 import { sendInsightToMerchant } from './actions'
+import styles from './send-to-merchant.module.css'
 
 type Props = { insightId: string }
 
@@ -32,7 +33,7 @@ export default function SendToMerchant({ insightId }: Props) {
       type="button"
       onClick={send}
       disabled={pending || state === 'ok'}
-      className="sendToMerchantBtn"
+      className={styles.btn}
       title={error ?? 'إرسال إشعار لصاحب النشاط'}
     >
       {state === 'ok' ? (
