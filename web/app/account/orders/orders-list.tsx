@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { MapPinIcon, ClockIcon, SearchIcon, CloseIcon, StoreIcon } from '@/components/icons'
+import FeedbackForm from './feedback-form'
 import styles from './orders.module.css'
 
 // ═══════════════════════════════════════════════════════════════════
@@ -21,6 +22,9 @@ type Order = {
   status: string
   created_at: string
   business: OrderBusiness | null
+  delivered_at: string | null
+  feedback_rating: number | null
+  feedback_issue_type: string | null
 }
 
 type Props = { orders: Order[] }
@@ -208,6 +212,24 @@ export default function OrdersList({ orders }: Props) {
                         شوف أنشطة مشابهة ←
                       </Link>
                     )}
+                  </div>
+                )}
+
+                {order.status === 'delivered' &&
+                  order.feedback_rating === null &&
+                  order.business && (
+                    <div className={styles.feedbackRow}>
+                      <FeedbackForm orderId={order.id} businessName={order.business.name} />
+                    </div>
+                  )}
+
+                {order.status === 'delivered' && order.feedback_rating !== null && (
+                  <div className={styles.ratedNote}>
+                    <span>قيّمت الطلب بـ</span>
+                    <span className={styles.ratedStars}>
+                      {'★'.repeat(order.feedback_rating)}
+                      {'☆'.repeat(5 - order.feedback_rating)}
+                    </span>
                   </div>
                 )}
 
