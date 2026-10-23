@@ -14,12 +14,14 @@ BRAIN.md خلاصة SACRED + AI_CONTRACT + LESSONS. ممنوع تكتب كود �
 ## 1. الهوية (مقدسة)
 
 ### 1.1 الاسم والسلوغان
+
 - الاسم: EAH
 - السلوغان: "شبيك لبيك — كل حاجة حواليك"
 - الجمهور: شبين القناطر والقرى حواليها
 - الفكرة: توصّل الناس بأماكنهم المحلية — بحث ذكي باللهجة المصرية، طلب واتساب، بدون وسيط
 
 ### 1.2 الألوان
+
 - بنفسجي أساسي: #9D4EDD
 - بنفسجي نيون: #A855F7
 - بنفسجي فاتح: #C77DFF
@@ -32,11 +34,13 @@ BRAIN.md خلاصة SACRED + AI_CONTRACT + LESSONS. ممنوع تكتب كود �
 **ممنوع:** ألوان خارج القائمة، تدرجات جديدة، light mode.
 
 ### 1.3 الخطوط
+
 - رئيسي: Cairo Variable
 - عرض: Tajawal Variable
 - ممنوع: Poppins/Inter/Roboto/أي خط تاني
 
 ### 1.4 الستايل
+
 - Dark-only
 - نيون ناعم (طبقة واحدة)
 - بدون backdrop-filter على الكروت
@@ -92,6 +96,7 @@ web/
 ### 5.1 Server Actions
 
 كل action لازم:
+
 1. use server في الأول
 2. requireAdmin/requireMerchant/getUserSession
 3. Zod schema للتحقق
@@ -102,38 +107,40 @@ web/
 ### 5.2 Server Components
 
 ```tsx
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default async function MyPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>
+  searchParams: Promise<{ q?: string }>;
 }) {
-  const params = await searchParams
-  const data = await getData(params.q)
-  return <ClientComponent data={data} />
+  const params = await searchParams;
+  const data = await getData(params.q);
+  return <ClientComponent data={data} />;
 }
 ```
 
 ### 5.3 Client Components
 
 ```tsx
-'use client'
-import { useState, useTransition } from 'react'
+"use client";
+import { useState, useTransition } from "react";
 
 export default function MyClient({ data }: Props) {
-  const [pending, startTransition] = useTransition()
-  const [error, setError] = useState<string | null>(null)
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 }
 ```
 
 ### 5.4 URL-Driven Filters (إلزامي)
 
 ```tsx
-const sp = useSearchParams()
-const router = useRouter()
-const pathname = usePathname()
-router.replace(`${pathname}?${new URLSearchParams({ q }).toString()}`, { scroll: false })
+const sp = useSearchParams();
+const router = useRouter();
+const pathname = usePathname();
+router.replace(`${pathname}?${new URLSearchParams({ q }).toString()}`, {
+  scroll: false,
+});
 ```
 
 السبب: bookmarkable + shareable + back/forward يعمل.
@@ -141,8 +148,8 @@ router.replace(`${pathname}?${new URLSearchParams({ q }).toString()}`, { scroll:
 ### 5.5 Optimistic UI
 
 ```tsx
-const [removedIds, setRemovedIds] = useState<Set<string>>(new Set())
-const visible = data.filter((d) => !removedIds.has(d.id))
+const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
+const visible = data.filter((d) => !removedIds.has(d.id));
 ```
 
 ---
@@ -198,20 +205,24 @@ const visible = data.filter((d) => !removedIds.has(d.id))
 12. It Will Work Migrations — backup -> test -> deploy -> verify
 
 ---
+
 ## 8. دروس مستفادة
 
 ### 8.1 من 2026-09-25
+
 - heredoc + عربي = كوارث — استخدم Python أو chunks صغيرة
 - nano بيتقطع — استخدم Python أو VS Code
 - CSP صارم بيكسر Next.js 16 — استخدم nonce
 
 ### 8.2 من 2026-10-17 (Admin Overhaul — 20 commit)
+
 - Date.now() في render = خطأ React 19 — lazy useState
 - setState في effect = cascading render — نقله للـ event
 - regex markers للـ replace — re.sub() مع markers
 - verify-before-replace — grep -c pattern الأول
 
 ### 8.3 من 2026-10-19 (Security + Wizard)
+
 - page.tsx ممكن يكون مستورد الملف القديم — تحقق من الـ imports
 - commitlint type enum محدود — sec: مش security:
 - Supabase 2026 غيّر سلوك GRANTs — الجداول الجديدة لازم GRANT صريح
@@ -268,18 +279,18 @@ git push origin main
 
 ## 12. الملفات التفصيلية
 
-| الملف | متى تقرأه |
-|-------|-----------|
-| docs/SACRED.md | قبل أي تعديل هوية/تصميم |
-| docs/AI_CONTRACT.md | قبل أي كود |
-| docs/LESSONS.md | قبل أي مهمة (فشل قديم) |
-| docs/MASTER_BRIEF.md | الصورة الكاملة |
-| docs/CONTEXT_MAP.md | إيه موجود؟ |
-| docs/SESSION_LOG.md | تاريخ العمل |
-| docs/PROGRESS.md | حالة الميزات |
-| docs/CODE_STANDARDS.md | معايير الكود |
-| docs/DESIGN_SYSTEM.md | تفاصيل بصرية |
-| docs/DATABASE_RULES.md | قبل تعديل DB |
+| الملف                  | متى تقرأه               |
+| ---------------------- | ----------------------- |
+| docs/SACRED.md         | قبل أي تعديل هوية/تصميم |
+| docs/AI_CONTRACT.md    | قبل أي كود              |
+| docs/LESSONS.md        | قبل أي مهمة (فشل قديم)  |
+| docs/MASTER_BRIEF.md   | الصورة الكاملة          |
+| docs/CONTEXT_MAP.md    | إيه موجود؟              |
+| docs/SESSION_LOG.md    | تاريخ العمل             |
+| docs/PROGRESS.md       | حالة الميزات            |
+| docs/CODE_STANDARDS.md | معايير الكود            |
+| docs/DESIGN_SYSTEM.md  | تفاصيل بصرية            |
+| docs/DATABASE_RULES.md | قبل تعديل DB            |
 
 ---
 
@@ -346,6 +357,7 @@ BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> �
 **الفرع:** `main` (clean)
 
 ### ✅ شغال
+
 - **نظام الطلبات v2**: ETA إجباري + auto-deliver + feedback + reminder + admin control
 
 - **تقارير الأنشطة** (`/admin/insights`): يدوي، اختيار نشاط + فترة + سيكشنات + طباعة + حذف
@@ -363,17 +375,20 @@ BRAIN.md حي. كل جلسة كبيرة -> حدّثه. كل خطأ جديد -> �
 - God Components ≤300 سطر
 
 ### ❌ مشاكل معروفة
+
 - SEC-01: 11 مفتاح rotate
 - SEC-02b: OIDC token في git history
 - B2: 1 select('*') — admin-business (exception موثّق)
 
 ### 🎯 الأولويات
+
 1. **أول نشاط حقيقي**
 2. اختبار end-to-end
 3. SEC-01 rotate
 4. SEC-02b git history
 
 ### 🚫 ممنوع
+
 - Puck/designtools/Surface
 - Branches جديدة قبل الإطلاق
 - DB بدون migration
