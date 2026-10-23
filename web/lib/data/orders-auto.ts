@@ -41,18 +41,31 @@ export async function autoDeliverDueOrders(): Promise<number> {
       updated_at: nowIso,
     })
     .in('id', ids)
+    .in('status', ['accepted', 'preparing', 'on_way']) // ← race-safe guard
 
   if (error) return 0
 
-  // Audit reactions
-  const reactions = ids.map((id) => ({
-    order_id: id,
-    actor_type: 'system' as const,
-    actor_id: null,
-    action: 'auto_delivered',
-    metadata: { reason: 'past_expected_delivery_at' },
-  }))
-  await supabase.from('order_reactions').insert(reactions)
+  // Audit reactions (dedupe — race-safe)
+  const { data: existing } = await supabase
+    .from('order_reactions')
+    .select('order_id')
+    .in('order_id', ids)
+    .eq('action', 'auto_delivered')
+
+  const existingSet = new Set((existing ?? []).map((r) => r.order_id))
+  const newReactions = ids
+    .filter((id) => !existingSet.has(id))
+    .map((id) => ({
+      order_id: id,
+      actor_type: 'system' as const,
+      actor_id: null,
+      action: 'auto_delivered',
+      metadata: { reason: 'past_expected_delivery_at' },
+    }))
+
+  if (newReactions.length > 0) {
+    await supabase.from('order_reactions').insert(newReactions)
+  }
 
   return ids.length
 }
