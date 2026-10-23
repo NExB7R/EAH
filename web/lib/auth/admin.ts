@@ -23,20 +23,30 @@ export async function requireAdmin(): Promise<AdminContext> {
 
   if (!user) return { ok: false, error: 'غير مصرح' }
 
-  const { data: row } = await supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', user.id)
-    .maybeSingle()
+  try {
+    const { data: row, error } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .maybeSingle()
 
-  if (row?.role !== 'admin' && row?.role !== 'super_admin') {
-    return { ok: false, error: 'غير مصرح' }
-  }
+    if (error) {
+      console.error('[requireAdmin] role lookup failed:', error.message)
+      return { ok: false, error: 'تعذر التحقق من الصلاحيات' }
+    }
 
-  return {
-    ok: true,
-    supabase,
-    userId: user.id,
-    role: row.role as 'admin' | 'super_admin',
+    if (row?.role !== 'admin' && row?.role !== 'super_admin') {
+      return { ok: false, error: 'غير مصرح' }
+    }
+
+    return {
+      ok: true,
+      supabase,
+      userId: user.id,
+      role: row.role as 'admin' | 'super_admin',
+    }
+  } catch (err) {
+    console.error('[requireAdmin] unexpected error:', err)
+    return { ok: false, error: 'تعذر التحقق من الصلاحيات' }
   }
 }
