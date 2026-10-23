@@ -1,3 +1,9 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .currentCard {
   position: relative;
   padding: 24px;
@@ -223,7 +229,7 @@
   font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 900;
-  color: #55e7d1;
+  color: rgb(85, 231, 209);
 }
 .planFeatures {
   list-style: none;
@@ -295,7 +301,7 @@
   border-radius: 10px;
   background: rgba(85, 231, 209, 0.1);
   border: 1px solid rgba(85, 231, 209, 0.3);
-  color: var(--teal, #55e7d1);
+  color: var(--teal, rgb(85, 231, 209));
   font-size: 0.75rem;
   font-weight: 800;
   text-align: center;

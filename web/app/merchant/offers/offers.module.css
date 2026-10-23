@@ -7,7 +7,7 @@
   border: 1px solid var(--purple-primary);
   border-radius: var(--radius-md);
   background: var(--purple-primary);
-  color: #fff;
+  color: rgb(255, 255, 255);
   font-size: 0.85rem;
   font-weight: 800;
   cursor: pointer;
@@ -154,7 +154,7 @@
 
 .submitBtn {
   background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
-  color: #fff;
+  color: rgb(255, 255, 255);
 }
 
 .submitBtn:hover:not(:disabled) {

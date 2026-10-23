@@ -43,7 +43,7 @@ export default async function MerchantSubscriptionPage() {
   const isBasic = currentCode === 'basic'
 
   return (
-    <div>
+    <div className={styles.page}>
       <AccountPageHeader title="الاشتراك" description="باقتك الحالية + خيارات الترقية" />
 
       {/* Current plan card */}
