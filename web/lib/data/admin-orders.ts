@@ -100,3 +100,44 @@ export function computeAdminOrdersStats(orders: AdminOrder[]): AdminOrdersStats 
     today,
   }
 }
+
+export type AdminOrderFlow = {
+  today: number
+  pending: number
+  in_progress: number
+  delivered_today: number
+}
+
+export async function getAdminOrderFlowStats(): Promise<AdminOrderFlow> {
+  const supabase = await createClient()
+  const todayStart = new Date()
+  todayStart.setHours(0, 0, 0, 0)
+  const todayIso = todayStart.toISOString()
+
+  const [today, pending, in_progress, deliveredToday] = await Promise.all([
+    supabase
+      .from('order_requests')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', todayIso),
+    supabase
+      .from('order_requests')
+      .select('id', { count: 'exact', head: true })
+      .in('status', ['sent', 'seen']),
+    supabase
+      .from('order_requests')
+      .select('id', { count: 'exact', head: true })
+      .in('status', ['accepted', 'preparing', 'on_way']),
+    supabase
+      .from('order_requests')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'delivered')
+      .gte('delivered_at', todayIso),
+  ])
+
+  return {
+    today: today.count ?? 0,
+    pending: pending.count ?? 0,
+    in_progress: in_progress.count ?? 0,
+    delivered_today: deliveredToday.count ?? 0,
+  }
+}

@@ -84,9 +84,13 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
     .limit(1)
     .maybeSingle()
 
-  const rawLocations = (data as typeof data & {
-    business_locations?: { latitude: number | null; longitude: number | null; is_primary: boolean }[] | null
-  }).business_locations ?? []
+  const rawLocations =
+    (
+      data as typeof data & {
+        business_locations?:
+          { latitude: number | null; longitude: number | null; is_primary: boolean }[] | null
+      }
+    ).business_locations ?? []
   const primaryLocation = rawLocations.find((item) => item.is_primary) ?? rawLocations[0]
   const location =
     primaryLocation &&
@@ -320,4 +324,51 @@ export async function getMyBranches(businessId: string): Promise<MerchantBranch[
     .order('sort_order', { ascending: true })
 
   return (data ?? []) as MerchantBranch[]
+}
+
+export type MerchantOrderFlow = {
+  pending: number
+  in_progress: number
+  avg_rating: number | null
+  rated_count: number
+}
+
+export async function getMerchantOrderFlow(businessId: string): Promise<MerchantOrderFlow> {
+  const supabase = await createClient()
+
+  const [pending, inProgress, ratings] = await Promise.all([
+    supabase
+      .from('order_requests')
+      .select('id', { count: 'exact', head: true })
+      .eq('business_id', businessId)
+      .in('status', ['sent', 'seen']),
+    supabase
+      .from('order_requests')
+      .select('id', { count: 'exact', head: true })
+      .eq('business_id', businessId)
+      .in('status', ['accepted', 'preparing', 'on_way']),
+    supabase
+      .from('order_requests')
+      .select('feedback_rating')
+      .eq('business_id', businessId)
+      .eq('status', 'delivered')
+      .not('feedback_rating', 'is', null)
+      .limit(100),
+  ])
+
+  const ratings_list = (ratings.data ?? [])
+    .map((r) => r.feedback_rating as number | null)
+    .filter((r): r is number => typeof r === 'number')
+
+  const avg =
+    ratings_list.length > 0
+      ? Math.round((ratings_list.reduce((a, b) => a + b, 0) / ratings_list.length) * 10) / 10
+      : null
+
+  return {
+    pending: pending.count ?? 0,
+    in_progress: inProgress.count ?? 0,
+    avg_rating: avg,
+    rated_count: ratings_list.length,
+  }
 }

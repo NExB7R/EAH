@@ -5,6 +5,7 @@ import {
   CrownGoldIcon,
   FileTextIcon,
   StarIcon,
+  ClockIcon,
   EyeIcon,
   ArrowLeftIcon,
   CheckCircleIcon,
@@ -16,7 +17,12 @@ import {
   SparklesIcon,
 } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
-import { getMyBusiness, getMerchantStats, getMySubscription } from '@/lib/data/merchant'
+import {
+  getMyBusiness,
+  getMerchantStats,
+  getMySubscription,
+  getMerchantOrderFlow,
+} from '@/lib/data/merchant'
 import StatCard from '@/components/dashboard/stat-card'
 import styles from './merchant-page.module.css'
 
@@ -60,9 +66,10 @@ export default async function MerchantDashboard() {
     )
   }
 
-  const [stats, subscription] = await Promise.all([
+  const [stats, subscription, orderFlow] = await Promise.all([
     getMerchantStats(business.id),
     getMySubscription(business.id),
+    getMerchantOrderFlow(business.id),
   ])
 
   const statusBadge = business.is_published
@@ -207,6 +214,46 @@ export default async function MerchantDashboard() {
             label="طلبات الأسبوع"
             value={stats.ordersWeek}
             tone="gold"
+          />
+        </div>
+      </section>
+
+      {/* Order Flow */}
+      <section>
+        <header className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>تدفق الطلبات</h2>
+          <Link href="/merchant/orders" className={styles.sectionHint}>
+            عرض الكل ←
+          </Link>
+        </header>
+        <div className={styles.kpiGrid}>
+          <StatCard
+            icon={FileTextIcon}
+            label="طلبات النهاردة"
+            value={stats.ordersToday}
+            href="/merchant/orders"
+            tone="purple"
+          />
+          <StatCard
+            icon={AlertIcon}
+            label="معلقة الآن"
+            value={orderFlow.pending}
+            href="/merchant/orders"
+            tone="orange"
+          />
+          <StatCard
+            icon={ClockIcon}
+            label="نشطة الآن"
+            value={orderFlow.in_progress}
+            href="/merchant/orders"
+            tone="gold"
+          />
+          <StatCard
+            icon={StarIcon}
+            label="متوسط التقييم"
+            value={orderFlow.avg_rating ?? '—'}
+            hint={orderFlow.rated_count > 0 ? `${orderFlow.rated_count} تقييم` : undefined}
+            tone="teal"
           />
         </div>
       </section>
