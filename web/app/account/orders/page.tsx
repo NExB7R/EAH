@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { FileTextIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getOrders } from '@/lib/data/account'
+import { autoDeliverDueOrders, sendFeedbackReminders } from '@/lib/data/orders-auto'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import OrdersList from './orders-list'
@@ -12,6 +13,7 @@ export default async function OrdersPage() {
   const session = await getUserSession()
   if (!session) redirect('/auth?next=/account/orders')
 
+  await Promise.all([autoDeliverDueOrders(), sendFeedbackReminders()])
   const orders = await getOrders(session.userId)
 
   return (

@@ -9,7 +9,7 @@ import {
   CrownGoldIcon,
   SettingsIcon,
 } from '@/components/icons'
-import { setOfflineMode } from './actions'
+import { setOfflineMode, setDeliveryEta } from './actions'
 import styles from './settings.module.css'
 
 type Status = 'active' | 'suspended' | 'offline' | 'disabled'
@@ -18,6 +18,7 @@ type Props = {
   settings: {
     orders_enabled: boolean
     deadline_minutes: number
+    delivery_eta_minutes: number | null
     offline_mode: boolean
     offline_until: string | null
     suspended_until: string | null
@@ -38,6 +39,8 @@ export default function OrderSettingsCard({ settings, status }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [showOfflineModal, setShowOfflineModal] = useState(false)
   const [offlineMinutes, setOfflineMinutes] = useState(60)
+  const [eta, setEta] = useState(settings.delivery_eta_minutes ?? 45)
+  const [etaSaving, setEtaSaving] = useState(false)
 
   const meta = {
     active: { label: 'مفعّل', tone: 'ok' as const, Icon: CheckCircleIcon },
@@ -108,6 +111,13 @@ export default function OrderSettingsCard({ settings, status }: Props) {
               <span>رد على كل طلب خلال {settings.deadline_minutes} دقايق</span>
             </li>
             <li>
+              <ClockIcon size={13} />
+              <span>
+                التسليم خلال <strong>{settings.delivery_eta_minutes ?? '—'} دقيقة</strong> من وقت
+                الطلب
+              </span>
+            </li>
+            <li>
               <AlertIcon size={13} />
               <span>الرد المتأخر ينقص تقييمك (3/يوم = تنبيه، 10/أسبوع = إيقاف 24 ساعة)</span>
             </li>
@@ -123,6 +133,42 @@ export default function OrderSettingsCard({ settings, status }: Props) {
         <div className={styles.error}>
           <AlertIcon size={12} />
           <span>{error}</span>
+        </div>
+      )}
+
+      {settings.orders_enabled && (
+        <div className={styles.etaEditor}>
+          <label className={styles.etaLabel}>
+            <ClockIcon size={14} />
+            <span>مدة التسليم</span>
+            <input
+              type="number"
+              min={15}
+              max={240}
+              step={5}
+              value={eta}
+              onChange={(e) => setEta(Math.max(15, Math.min(240, +e.target.value || 45)))}
+              disabled={pending || etaSaving}
+              className={styles.etaInput}
+            />
+            <span>دقيقة</span>
+            <button
+              type="button"
+              onClick={() => {
+                setEtaSaving(true)
+                startTransition(async () => {
+                  const res = await setDeliveryEta(eta)
+                  setEtaSaving(false)
+                  if (!res.ok) setError(res.error)
+                  else router.refresh()
+                })
+              }}
+              disabled={pending || etaSaving || eta === settings.delivery_eta_minutes}
+              className={styles.etaSaveBtn}
+            >
+              {etaSaving ? '…' : 'حفظ'}
+            </button>
+          </label>
         </div>
       )}
 

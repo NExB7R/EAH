@@ -34,6 +34,8 @@ export type OrderItem = {
   customer_phone: string | null
   created_at: string
   delivered_at: string | null
+  expected_delivery_at: string | null
+  feedback_due_at: string | null
   feedback_rating: number | null
   feedback_issue_type: string | null
   feedback_sent_at: string | null

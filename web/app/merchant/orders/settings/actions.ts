@@ -61,3 +61,45 @@ export async function setOfflineMode(offline: boolean, untilIso?: string): Promi
   revalidatePath('/merchant/orders')
   return { ok: true }
 }
+
+export async function setDeliveryEta(etaMinutes: number): Promise<Result> {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+
+  const safeEta = Math.max(15, Math.min(240, Math.trunc(etaMinutes) || 0))
+  if (safeEta < 15) return { ok: false, error: 'حدد مدة التسليم (15-240 دقيقة)' }
+
+  const { data: biz } = await supabase
+    .from('businesses')
+    .select('id')
+    .eq('owner_profile_id', user.id)
+    .limit(1)
+    .maybeSingle()
+
+  if (!biz) return { ok: false, error: 'مفيش نشاط مرتبط بحسابك' }
+
+  const { error } = await supabase
+    .from('merchant_order_settings')
+    .update({
+      delivery_eta_minutes: safeEta,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('business_id', biz.id)
+
+  if (error) return { ok: false, error: 'فشل التحديث' }
+
+  await logAudit(supabase, {
+    actorUserId: user.id,
+    action: 'orders.eta_update',
+    entityType: 'business',
+    entityId: biz.id,
+    metadata: { delivery_eta_minutes: safeEta },
+  })
+
+  revalidatePath('/merchant/orders/settings')
+  revalidatePath('/merchant/orders')
+  return { ok: true }
+}

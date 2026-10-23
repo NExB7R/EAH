@@ -83,6 +83,21 @@ export async function submitOrder(
   }
 
   const deadlineAt = new Date(nowMs + settings.deadline_minutes * 60 * 1000).toISOString()
+  const { data: etaData } = await supabase
+    .from('merchant_order_settings')
+    .select('delivery_eta_minutes')
+    .eq('business_id', businessId)
+    .maybeSingle()
+
+  const etaMinutes = etaData?.delivery_eta_minutes ?? null
+  if (!etaMinutes) {
+    return {
+      ok: false,
+      error: 'التاجر مش محدد مدة التسليم — كلمه مباشرة',
+    }
+  }
+
+  const expectedDeliveryAt = new Date(nowMs + etaMinutes * 60 * 1000).toISOString()
 
   // ═══════════════════════════════════════════════════════════════════
   // 2. Fetch business + branch
@@ -180,6 +195,7 @@ export async function submitOrder(
       payment_method: d.payment_method ?? null,
       attachments,
       deadline_at: deadlineAt,
+      expected_delivery_at: expectedDeliveryAt,
     })
     .select('id')
     .maybeSingle()

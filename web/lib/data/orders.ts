@@ -68,6 +68,7 @@ export type MerchantOrderSettings = {
   business_id: string
   orders_enabled: boolean
   deadline_minutes: number
+  delivery_eta_minutes: number | null
   offline_mode: boolean
   offline_until: string | null
   auto_accept: boolean
@@ -105,6 +106,7 @@ export type MerchantOrderFull = {
   attachments: OrderAttachment[]
   secondary_phone: string | null
   deadline_at: string | null
+  expected_delivery_at: string | null
   accepted_at: string | null
   delivered_at: string | null
   feedback_due_at: string | null
