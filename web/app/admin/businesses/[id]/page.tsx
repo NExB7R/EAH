@@ -2,10 +2,12 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeftIcon } from '@/components/icons'
 import { getBusinessById } from '@/lib/data/admin-business'
+import { getMerchantOrderSettings } from '@/lib/data/orders-settings'
 import BusinessForm from '../business-form'
 import BusinessPreview from '../business-preview'
 import BusinessHero from './business-hero'
 import BusinessActionsBar from './business-actions-bar'
+import OrderSettingsPanel from './order-settings-panel'
 import OverviewPanel from './overview-panel'
 import TrialOwnerPanel from './trial-owner-panel'
 import tabsStyles from './detail-tabs.module.css'
@@ -33,7 +35,10 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
     ? (requested as TabKey)
     : 'overview'
 
-  const biz = await getBusinessById(id)
+  const [biz, orderSettings] = await Promise.all([
+    getBusinessById(id),
+    getMerchantOrderSettings(id),
+  ])
   if (!biz) notFound()
 
   const logoUrl = biz.media.find((m) => m.media_type === 'logo')?.storage_path ?? null
@@ -48,6 +53,22 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
       </Link>
 
       <BusinessHero biz={biz} />
+
+      <OrderSettingsPanel
+        businessId={biz.id}
+        settings={
+          orderSettings
+            ? {
+                orders_enabled: orderSettings.orders_enabled,
+                deadline_minutes: orderSettings.deadline_minutes,
+                orders_enabled_at:
+                  (orderSettings as unknown as { orders_enabled_at?: string | null })
+                    .orders_enabled_at ?? null,
+                suspended_until: orderSettings.suspended_until,
+              }
+            : null
+        }
+      />
 
       <div className={tabsStyles.actionsRow}>
         <BusinessActionsBar
