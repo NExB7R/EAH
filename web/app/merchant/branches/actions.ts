@@ -167,10 +167,9 @@ export async function deleteBranch(id: string): Promise<Result> {
 
   if (remaining) {
     for (let i = 0; i < remaining.length; i++) {
-      await ctx.supabase
-        .from('business_branches')
-        .update({ sort_order: i })
-        .eq('id', remaining[i].id)
+      const br = remaining[i]
+      if (!br) continue
+      await ctx.supabase.from('business_branches').update({ sort_order: i }).eq('id', br.id)
     }
   }
 
