@@ -4,25 +4,22 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last commit: `d6252543`
+- Last commit: `4e1f9e64`
 - Branch: main (clean)
 - Invariants: all OK
 
-**Orders v2 — مكتمل 100%:**
-- DB: merchant_order_settings + order_reactions + customer_order_stats + 20 column + trigger rating
-- Admin: enable/disable + ETA + orders list + extend/cancel + housekeeping
-- Merchant: settings + ETA editor + orders + offline + expiry suspension
-- Customer: modal (text/audio/images) + payment + tracking + feedback + rating trigger
-- Auto: deliver + expire + reminder
-- Suspension: 10/week → 24h auto
-- Notifications: merchant + customer + admin
-- Reports: order metrics in business_insights
-- Dashboards: order flow sections
+**مكتمل 100% (النهاردة 2026-10-23):**
+- **Orders v2** — DB (3 جداول + 20 عمود + trigger) · Admin (enable/ETA/list/extend/cancel) · Merchant (settings/ETA/offline) · Customer (modal/tracking/feedback) · Auto (deliver/expire/reminder/suspension) · Business rating trigger
+- **Notifications** — admin bell + merchant sidebar + /merchant/notifications redirect
+- **Dashboards** — order flow sections (admin + merchant)
+- **Reports** — order metrics integration (accept rate, on-time, feedback, issues) + SendToMerchant + print
+- **Merchant pages** — audit clean (no hardcoded colors, no :global, no any, no console, touch targets 40px)
+- **Push infra** — VAPID + SW + web-push + endpoint (E2E subscription pending browser re-subscribe)
 
-**Remaining (outside orders):**
-- Push E2E verification (subscription must be created from browser)
-- Merchant small pages polish (offers/ads/qr/branches/trust/settings)
-- إضافة 20 نشاط
+**Remaining:**
+- Push E2E verification (browser re-subscribe)
+- إضافة 20 نشاط (آخر خطوة)
+- apply/success design polish (لو محتاج)
 
 ## Working
 
