@@ -1,13 +1,7 @@
 'use client'
 
 import { useEffect, useState, useTransition } from 'react'
-import {
-  SparklesIcon,
-  CheckCircleIcon,
-  WhatsAppIcon,
-  ShareIcon,
-  CopyIcon,
-} from '@/components/icons'
+import { SparklesIcon, CheckCircleIcon, WhatsAppIcon, ShareIcon } from '@/components/icons'
 import { generateBusinessQr } from './actions'
 import styles from './qr.module.css'
 
