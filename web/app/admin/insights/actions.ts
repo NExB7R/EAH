@@ -17,10 +17,17 @@ import { createNotification } from '@/lib/notifications/server'
 
 type Result = { ok: true; insightId: string } | { ok: false; error: string }
 
+export type InsightSections = {
+  top_points: boolean
+  recommendations: boolean
+  ai_narrative: boolean
+}
+
 export async function generateAdminInsight(
   businessId: string,
   days: number,
   notifyOwner: boolean,
+  sections: InsightSections,
 ): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
@@ -50,7 +57,7 @@ export async function generateAdminInsight(
   ])
 
   const analysis = analyzeBusiness(metrics, comparison)
-  const aiNarrative = await generateNarrative(metrics, analysis)
+  const aiNarrative = sections.ai_narrative ? await generateNarrative(metrics, analysis) : null
 
   const saveResult = await saveInsight({
     businessId,
@@ -62,6 +69,15 @@ export async function generateAdminInsight(
   })
 
   if (!saveResult.ok) return { ok: false, error: saveResult.error }
+
+  // Null out sections the admin chose to hide
+  const updates: Record<string, null> = {}
+  if (!sections.top_points) updates.top_points = null
+  if (!sections.recommendations) updates.recommendations = null
+  if (!sections.ai_narrative) updates.ai_narrative = null
+  if (Object.keys(updates).length > 0) {
+    await ctx.supabase.from('business_insights').update(updates).eq('id', saveResult.insightId)
+  }
 
   // Optionally notify business owner
   if (notifyOwner && biz.owner_profile_id) {
