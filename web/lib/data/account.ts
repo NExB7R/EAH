@@ -153,6 +153,8 @@ export async function getOrders(userId: string): Promise<OrderItem[]> {
     .select(
       `
       id, order_code, status, items, notes, customer_name, customer_phone, created_at,
+      delivered_at, feedback_rating, feedback_text, feedback_issue_type, feedback_sent_at,
+      payment_method, delivery_address, secondary_phone, attachments,
       business:businesses(slug, name, area)
     `,
     )
