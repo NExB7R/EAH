@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useTransition } from 'react'
+import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import dynamic from 'next/dynamic'
 import {
   CloseIcon,
@@ -100,8 +100,7 @@ export default function OrderModal({
 
   const paymentMeta = PAYMENT_OPTIONS.find((p) => p.key === payment)!
 
-  // Reset all local state — call before closing
-  const resetState = () => {
+  const resetState = useCallback(() => {
     setStep('form')
     setMsg(null)
     setSuccessCode('')
@@ -114,7 +113,7 @@ export default function OrderModal({
     setAttachments([])
     setConfirmed(false)
     setMenuOpen(false)
-  }
+  }, [])
 
   const handleClose = () => {
     if (pending) return
@@ -125,8 +124,7 @@ export default function OrderModal({
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (pending) return
+      if (e.key === 'Escape' && !pending) {
         resetState()
         onClose()
       }
@@ -137,8 +135,7 @@ export default function OrderModal({
       window.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, onClose])
+  }, [open, pending, onClose, resetState])
 
   if (!open) return null
 
@@ -167,7 +164,6 @@ export default function OrderModal({
         setMsg(data.error ?? 'فشل الرفع')
         return
       }
-      const duration = kind === 'voice' ? getAudioDurationSec(file) : undefined
       setAttachments((prev) => [
         ...prev,
         {
@@ -175,7 +171,6 @@ export default function OrderModal({
           url: data.url!,
           size: data.size ?? file.size,
           mime: data.mime ?? file.type,
-          duration_sec: duration,
         },
       ])
     } catch {
@@ -410,8 +405,12 @@ export default function OrderModal({
                   {attachments.map((a, i) => (
                     <div key={i} className={styles.attachment}>
                       {a.type === 'image' ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={a.url} alt="مرفق" className={styles.attachmentThumb} />
+                        <div
+                          className={styles.attachmentThumb}
+                          style={{ backgroundImage: `url(${a.url})` }}
+                          role="img"
+                          aria-label="مرفق"
+                        />
                       ) : (
                         <span className={styles.attachmentVoice}>
                           <MicIcon size={16} />
@@ -557,8 +556,12 @@ export default function OrderModal({
                     {attachments.map((a, i) => (
                       <div key={i} className={styles.attachment}>
                         {a.type === 'image' ? (
-                          /* eslint-disable-next-line @next/next/no-img-element */
-                          <img src={a.url} alt="مرفق" className={styles.attachmentThumb} />
+                          <div
+                            className={styles.attachmentThumb}
+                            style={{ backgroundImage: `url(${a.url})` }}
+                            role="img"
+                            aria-label="مرفق"
+                          />
                         ) : (
                           <span className={styles.attachmentVoice}>
                             <MicIcon size={16} />
@@ -650,6 +653,3 @@ export default function OrderModal({
 
 // Note: duration is unknown synchronously for picked files.
 // We omit duration for picked audio (Cloudinary stores the file itself).
-function getAudioDurationSec(_file: File): number | undefined {
-  return undefined
-}
