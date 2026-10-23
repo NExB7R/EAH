@@ -2,11 +2,20 @@ import { FileTextIcon, CheckCircleIcon, ClockIcon, AlertIcon } from '@/component
 import AccountPageHeader from '@/components/account-page-header'
 import StatCard from '@/components/dashboard/stat-card'
 import { getAdminOrders, computeAdminOrdersStats } from '@/lib/data/admin-orders'
+import { expireStaleOrders } from '@/lib/data/orders-expire'
+import { autoDeliverDueOrders, sendFeedbackReminders } from '@/lib/data/orders-auto'
 import AdminOrdersList from './orders-list'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminOrdersPage() {
+  // Lazy housekeeping — runs on page load (no cron needed)
+  await Promise.all([
+    expireStaleOrders(), // ALL businesses
+    autoDeliverDueOrders(),
+    sendFeedbackReminders(),
+  ])
+
   const orders = await getAdminOrders(300)
   const stats = computeAdminOrdersStats(orders)
 

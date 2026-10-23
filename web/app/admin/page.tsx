@@ -15,6 +15,8 @@ import {
 } from '@/components/icons'
 import { getAdminStats, getAdminRecent, getAdminBadges } from '@/lib/data/admin'
 import { getAdminOrderFlowStats } from '@/lib/data/admin-orders'
+import { expireStaleOrders } from '@/lib/data/orders-expire'
+import { autoDeliverDueOrders } from '@/lib/data/orders-auto'
 import { getUserSession } from '@/lib/data/user'
 import ActivityFeed from '@/components/admin/activity-feed'
 import StatCard from '@/components/dashboard/stat-card'
@@ -51,6 +53,10 @@ const QUICK_ACTIONS = [
 ]
 
 export default async function AdminDashboard() {
+  // Lazy housekeeping (fire-and-forget — non-blocking for dashboard)
+  void expireStaleOrders().catch(() => {})
+  void autoDeliverDueOrders().catch(() => {})
+
   const [stats, recent, badges, session, orderFlow] = await Promise.all([
     getAdminStats(),
     getAdminRecent(),
