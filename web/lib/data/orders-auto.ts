@@ -1,5 +1,5 @@
 import { createNotification } from '@/lib/notifications/server'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 
 // ═══════════════════════════════════════════════════════════════════
 // Lazy housekeeping — no cron needed.
@@ -12,7 +12,7 @@ const FEEDBACK_DELAY_MS = 60 * 60 * 1000 // 1 hour after delivered (feedback due
 const FEEDBACK_REMINDER_DELAY_MS = 30 * 60 * 1000 // +30 min for reminder
 
 export async function autoDeliverDueOrders(): Promise<number> {
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const now = new Date()
   const nowIso = now.toISOString()
 
@@ -62,7 +62,7 @@ export async function autoDeliverDueOrders(): Promise<number> {
 // (so we're not annoying). Only for delivered orders without feedback.
 // ═══════════════════════════════════════════════════════════════════
 export async function sendFeedbackReminders(): Promise<number> {
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const nowIso = new Date().toISOString()
 
   const { data: due } = await supabase

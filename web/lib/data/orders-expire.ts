@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 
 // ═══════════════════════════════════════════════════════════════════
 // Lazy expire — no cron needed.
@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server'
 // ═══════════════════════════════════════════════════════════════════
 
 export async function expireStaleOrders(businessId: string): Promise<number> {
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const now = new Date().toISOString()
 
   const { data: stale, error } = await supabase
