@@ -230,9 +230,3 @@
     color: rgb(0, 0, 0);
   }
 }
-
-@media print {
-  :global(.sendToMerchantBtn) {
-    display: none !important;
-  }
-}
