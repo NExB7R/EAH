@@ -56,16 +56,17 @@
   gap: 8px;
 }
 .item {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  gap: 14px;
-  align-items: center;
-  padding: 14px 16px;
+  display: flex;
+  align-items: stretch;
   border-radius: 14px;
   background: rgba(20, 14, 34, 0.5);
-  border: 1px solid rgba(168, 85, 247, 0.15);
-  text-decoration: none;
-  transition: all 180ms var(--ease);
+  border: 1px solid rgba(168, 85, 247, 0.14);
+  overflow: hidden;
+  transition: border-color 160ms ease;
+}
+
+.item:hover {
+  border-color: rgba(199, 125, 255, 0.35);
 }
 .item:hover {
   border-color: rgba(199, 125, 255, 0.5);
@@ -136,4 +137,43 @@
   .itemStats {
     display: none;
   }
+}
+
+/* ─── Item actions column ─── */
+.itemMain {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border-left: 1px solid rgba(168, 85, 247, 0.1);
+}
+
+.printBtn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--purple-light);
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+  text-decoration: none;
+  transition: background 140ms ease;
+}
+
+.printBtn:hover {
+  background: rgba(168, 85, 247, 0.16);
 }

@@ -88,3 +88,25 @@ export async function generateAdminInsight(
 
   return { ok: true, insightId: saveResult.insightId }
 }
+
+export async function deleteInsight(insightId: string): Promise<Result | { ok: true }> {
+  const ctx = await requireAdmin()
+  if (!ctx.ok) return ctx
+
+  if (!insightId) return { ok: false, error: 'معرّف التقرير مفقود' }
+
+  const { error } = await ctx.supabase.from('business_insights').delete().eq('id', insightId)
+
+  if (error) return { ok: false, error: 'فشل الحذف' }
+
+  await logAudit(ctx.supabase, {
+    actorUserId: ctx.userId,
+    action: 'insight.delete',
+    entityType: 'business_insight',
+    entityId: insightId,
+    metadata: {},
+  })
+
+  revalidatePath('/admin/insights')
+  return { ok: true }
+}
