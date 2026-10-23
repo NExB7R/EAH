@@ -84,6 +84,8 @@ export default function OrderModal({
   const [menuOpen, setMenuOpen] = useState(false)
 
   // Form fields
+  const [customerName, setCustomerName] = useState(defaultName)
+  const [customerPhone, setCustomerPhone] = useState(defaultPhone)
   const [secondaryPhone, setSecondaryPhone] = useState('')
   const [area, setArea] = useState('')
   const [address, setAddress] = useState('')
@@ -104,6 +106,8 @@ export default function OrderModal({
     setStep('form')
     setMsg(null)
     setSuccessCode('')
+    setCustomerName(defaultName)
+    setCustomerPhone(defaultPhone)
     setSecondaryPhone('')
     setArea('')
     setAddress('')
@@ -113,7 +117,7 @@ export default function OrderModal({
     setAttachments([])
     setConfirmed(false)
     setMenuOpen(false)
-  }, [])
+  }, [defaultName, defaultPhone])
 
   const handleClose = () => {
     if (pending) return
@@ -208,6 +212,15 @@ export default function OrderModal({
   }
 
   const goReview = () => {
+    if (customerName.trim().length < 2) {
+      setMsg('اكتب اسمك (2 حرف على الأقل)')
+      return
+    }
+    const phoneClean = customerPhone.trim().replace(/[\s-]/g, '')
+    if (phoneClean.length < 11) {
+      setMsg('اكتب رقمك (11 رقم)')
+      return
+    }
     if (!hasContent) {
       setMsg('اكتب طلبك أو ارفع صورة/صوت')
       return
@@ -221,9 +234,18 @@ export default function OrderModal({
       setMsg('لازم توافق على الشروط')
       return
     }
+    if (customerName.trim().length < 2) {
+      setMsg('اكتب اسمك (2 حرف على الأقل)')
+      return
+    }
+    const phoneClean = customerPhone.trim().replace(/[\s-]/g, '')
+    if (phoneClean.length < 11) {
+      setMsg('اكتب رقمك (11 رقم)')
+      return
+    }
     const fd = new FormData()
-    fd.set('customer_name', defaultName)
-    fd.set('customer_phone', defaultPhone)
+    fd.set('customer_name', customerName.trim())
+    fd.set('customer_phone', customerPhone.trim())
     fd.set('secondary_phone', secondaryPhone)
     fd.set('customer_area', area)
     fd.set('customer_address', address)
@@ -297,24 +319,32 @@ export default function OrderModal({
               {/* Contact (read-only defaults) */}
               <div className={styles.row}>
                 <div className={styles.field}>
-                  <label className={styles.label}>اسمك</label>
+                  <label className={styles.label}>
+                    اسمك <span style={{ color: '#fca5a5' }}>*</span>
+                  </label>
                   <input
                     type="text"
-                    value={defaultName || '—'}
-                    readOnly
-                    className={`${styles.input} ${styles.readOnly}`}
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    readOnly={!!defaultName}
+                    maxLength={60}
+                    placeholder={defaultName ? undefined : 'اكتب اسمك'}
+                    className={`${styles.input} ${defaultName ? styles.readOnly : ''}`}
                     dir="rtl"
                   />
                 </div>
                 <div className={styles.field}>
                   <label className={styles.label}>
-                    <PhoneIcon size={11} /> رقمك
+                    <PhoneIcon size={11} /> رقمك <span style={{ color: '#fca5a5' }}>*</span>
                   </label>
                   <input
                     type="tel"
-                    value={defaultPhone || '—'}
-                    readOnly
-                    className={`${styles.input} ${styles.readOnly}`}
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                    readOnly={!!defaultPhone}
+                    maxLength={15}
+                    placeholder={defaultPhone ? undefined : '01xxxxxxxxx'}
+                    className={`${styles.input} ${defaultPhone ? styles.readOnly : ''}`}
                     dir="ltr"
                   />
                 </div>
@@ -520,10 +550,10 @@ export default function OrderModal({
               <div className={styles.reviewSection}>
                 <h3 className={styles.reviewTitle}>بياناتك</h3>
                 <p className={styles.reviewLine}>
-                  <span>الاسم:</span> <strong>{defaultName || '—'}</strong>
+                  <span>الاسم:</span> <strong>{customerName || '—'}</strong>
                 </p>
                 <p className={styles.reviewLine}>
-                  <span>الرقم:</span> <strong dir="ltr">{defaultPhone || '—'}</strong>
+                  <span>الرقم:</span> <strong dir="ltr">{customerPhone || '—'}</strong>
                 </p>
                 {secondaryPhone && (
                   <p className={styles.reviewLine}>
