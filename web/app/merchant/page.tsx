@@ -37,6 +37,12 @@ type Alert = {
 
 const QUICK_ACTIONS = [
   { href: '/merchant/orders', label: 'الطلبات', desc: 'إدارة الطلبات', Icon: FileTextIcon },
+  {
+    href: '/merchant/orders/settings',
+    label: 'إعدادات الطلبات',
+    desc: 'استلام + ETA',
+    Icon: ClockIcon,
+  },
   { href: '/merchant/offers', label: 'العروض', desc: 'خصوماتك', Icon: TagIcon },
   { href: '/merchant/qr', label: 'QR Code', desc: 'كود نشاطك', Icon: ShareIcon },
   { href: '/merchant/insights', label: 'التحليلات', desc: 'تقارير ذكية', Icon: SparklesIcon },
