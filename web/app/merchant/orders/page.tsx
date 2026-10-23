@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { SettingsIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness, getMerchantOrders } from '@/lib/data/merchant'
-import AccountPageHeader from '@/components/account-page-header'
+import { getMerchantOrderSettings } from '@/lib/data/orders-settings'
 import OrderList from './order-list'
+import styles from './orders.module.css'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,31 +16,38 @@ export default async function MerchantOrdersPage() {
   const business = await getMyBusiness(session.userId)
   if (!business) redirect('/merchant')
 
-  const orders = await getMerchantOrders(business.id)
+  const [orders, settings] = await Promise.all([
+    getMerchantOrders(business.id),
+    getMerchantOrderSettings(business.id),
+  ])
+
+  const isEnabled = !!settings?.orders_enabled
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
-        <Link
-          href="/merchant/orders/settings"
-          style={{
-            fontSize: '0.78rem',
-            fontWeight: 800,
-            color: 'var(--purple-light)',
-            textDecoration: 'none',
-            padding: '6px 12px',
-            borderRadius: 8,
-            background: 'rgba(168,85,247,0.08)',
-          }}
-        >
-          ⚙ إعدادات الاستلام
+    <div className={styles.page}>
+      <header className={styles.header}>
+        <div className={styles.headerText}>
+          <h1 className={styles.title}>الطلبات</h1>
+          <p className={styles.subtitle}>
+            {orders.length.toLocaleString('en-US')} طلب
+            {isEnabled && settings && ` · الرد خلال ${settings.deadline_minutes} دقايق`}
+          </p>
+        </div>
+        <Link href="/merchant/orders/settings" className={styles.settingsBtn}>
+          <SettingsIcon size={16} />
+          <span className={styles.settingsLabel}>الإعدادات</span>
         </Link>
-      </div>
-      <AccountPageHeader
-        title="الطلبات"
-        description={`${orders.length} طلب — أكّد خلال 10 دقايق`}
-      />
-      <OrderList orders={orders} />
+      </header>
+
+      {!isEnabled && (
+        <Link href="/merchant/orders/settings" className={styles.disabledBanner}>
+          <span className={styles.disabledDot} aria-hidden />
+          <span className={styles.disabledText}>استلام الطلبات موقوف — لن تستقبل طلبات جديدة</span>
+          <span className={styles.disabledArrow}>›</span>
+        </Link>
+      )}
+
+      <OrderList orders={orders} isEnabled={isEnabled} />
     </div>
   )
 }
