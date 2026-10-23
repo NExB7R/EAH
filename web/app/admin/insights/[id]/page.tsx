@@ -5,6 +5,18 @@ import { ArrowLeftIcon } from '@/components/icons'
 import PrintButton from './print-button'
 import styles from './page.module.css'
 
+type OrderMetricsView = {
+  total?: number
+  accept_rate?: number
+  deliver_rate?: number
+  avg_response_min?: number | null
+  on_time_delivery_rate?: number | null
+  avg_feedback_rating?: number | null
+  feedback_count?: number
+  issue_breakdown?: Record<string, number>
+  payment_breakdown?: Record<string, number>
+}
+
 export const dynamic = 'force-dynamic'
 
 function asStringArray(val: unknown): string[] {
@@ -24,6 +36,9 @@ export default async function InsightDetailPage({ params }: { params: Promise<{ 
     .maybeSingle()
 
   if (!data) notFound()
+
+  const rawData = (data.data as Record<string, unknown> | null) ?? {}
+  const orderMetricsView = (rawData.order_metrics ?? null) as OrderMetricsView | null
 
   const bizName = (data.business as unknown as { name: string } | null)?.name ?? '—'
   const topPoints = asStringArray(data.top_points)
@@ -66,6 +81,74 @@ export default async function InsightDetailPage({ params }: { params: Promise<{ 
           <span className={styles.scoreMax}>/100</span>
           {data.summary && <p className={styles.summary}>{data.summary}</p>}
         </section>
+
+        {orderMetricsView && (orderMetricsView.total ?? 0) > 0 && (
+          <section className={styles.block}>
+            <h2 className={styles.h2}>سجل الطلبات</h2>
+            <div className={styles.metricsGrid}>
+              <div className={styles.metricCell}>
+                <span className={styles.metricLabel}>إجمالي الطلبات</span>
+                <span className={styles.metricValue}>{orderMetricsView.total ?? 0}</span>
+              </div>
+              <div className={styles.metricCell}>
+                <span className={styles.metricLabel}>نسبة القبول</span>
+                <span className={styles.metricValue}>{orderMetricsView.accept_rate ?? 0}%</span>
+              </div>
+              <div className={styles.metricCell}>
+                <span className={styles.metricLabel}>نسبة التسليم</span>
+                <span className={styles.metricValue}>{orderMetricsView.deliver_rate ?? 0}%</span>
+              </div>
+              {typeof orderMetricsView.avg_response_min === 'number' && (
+                <div className={styles.metricCell}>
+                  <span className={styles.metricLabel}>متوسط الرد</span>
+                  <span className={styles.metricValue}>{orderMetricsView.avg_response_min} د</span>
+                </div>
+              )}
+              {typeof orderMetricsView.on_time_delivery_rate === 'number' && (
+                <div className={styles.metricCell}>
+                  <span className={styles.metricLabel}>التسليم في الوقت</span>
+                  <span className={styles.metricValue}>
+                    {orderMetricsView.on_time_delivery_rate}%
+                  </span>
+                </div>
+              )}
+              {typeof orderMetricsView.avg_feedback_rating === 'number' && (
+                <div className={styles.metricCell}>
+                  <span className={styles.metricLabel}>رضا العملاء</span>
+                  <span className={styles.metricValue}>
+                    ⭐ {orderMetricsView.avg_feedback_rating}/5
+                  </span>
+                  <span className={styles.metricHint}>{orderMetricsView.feedback_count} تقييم</span>
+                </div>
+              )}
+            </div>
+
+            {orderMetricsView.issue_breakdown &&
+              Object.keys(orderMetricsView.issue_breakdown).length > 0 && (
+                <div className={styles.block} style={{ marginTop: 16 }}>
+                  <h3 className={styles.h3}>المشاكل المتكررة</h3>
+                  <ul className={styles.list}>
+                    {Object.entries(orderMetricsView.issue_breakdown)
+                      .sort((a, b) => b[1] - a[1])
+                      .map(([key, count]) => {
+                        const labels: Record<string, string> = {
+                          late: 'التأخير',
+                          missing: 'حاجة ناقصة',
+                          quality: 'الجودة',
+                          payment: 'مشكلة الدفع',
+                          other: 'أخرى',
+                        }
+                        return (
+                          <li key={key}>
+                            {labels[key] ?? key} — {count} تقرير
+                          </li>
+                        )
+                      })}
+                  </ul>
+                </div>
+              )}
+          </section>
+        )}
 
         {topPoints.length > 0 && (
           <section className={styles.block}>

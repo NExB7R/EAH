@@ -167,3 +167,66 @@
     border-color: rgba(0, 0, 0, 0.2) !important;
   }
 }
+
+/* ─── Metrics grid (order metrics section) ─── */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.metricCell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.15);
+}
+
+.metricLabel {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.metricValue {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.metricHint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+@media print {
+  .metricsGrid {
+    gap: 8px;
+  }
+  .metricCell {
+    background: rgb(245, 245, 245);
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+  .metricLabel,
+  .metricHint {
+    color: rgba(0, 0, 0, 0.7);
+  }
+  .metricValue {
+    color: rgb(0, 0, 0);
+  }
+}
