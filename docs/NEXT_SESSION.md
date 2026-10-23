@@ -4,11 +4,13 @@
 > آخر تحديث: 2026-10-20
 
 ## State
+
 - Last commit: `ce4e6537`
 - Branch: main (clean)
 - Invariants: all OK
 
 **Orders System v2 — مكتمل:**
+
 - DB: 3 جداول + 20 عمود (migration v2-recovery)
 - RLS: mos_select_authenticated + branches_select_authenticated
 - profiles.phone added
@@ -24,11 +26,13 @@
 - Notifications: /account/notifications (unified) + /merchant/notifications redirect + admin bell
 
 **Remaining (minor):**
+
 - Test data cleanup: TEST01 order
 - إضافة 20 نشاط (آخر خطوة)
 - Merchant polish (offers/ads/qr/branches/trust/settings)
 
 ## Working
+
 - Business wizard fullscreen + 10 contact types
 - Notice + open-override + location picker (📍 + OSM)
 - Images: file upload + URL paste (logo/cover/menu/gallery) — 200 on all
@@ -44,12 +48,14 @@
 - Invariants CI gate (B1=0, B2=1, B3=10, B4=16, B5=47, B6=31, B7=8, B8=21, X1-X4=0)
 
 ## Known Issues
+
 - SEC-01: 11 keys rotate (DEFERRED)
 - SEC-02b: VERCEL_OIDC_TOKEN in git history (pre-launch)
 - B2: 1 select('*') — admin-business (documented exception)
 - Testing: end-to-end with real business data pending
 
 ## Next Priorities (in order)
+
 1. **Add first real business** (primary goal)
 2. Test end-to-end: images + offers + share + mobile drawer
 3. SEC-01 rotate (when owner ready)
@@ -57,12 +63,14 @@
 5. UI polish based on real-world feedback
 
 ## Forbidden
+
 - No Puck/designtools/Surface (failed experiments)
 - No new branches before launch
 - No DB changes without migration in docs/migrations/
 - Never commit .env.local
 
 ## Key Files
+
 - AI_PLAYBOOK.md — read first
 - BRAIN.md — quick understanding
 - ERROR_REGISTER.md — error states
