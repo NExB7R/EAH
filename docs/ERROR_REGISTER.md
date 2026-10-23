@@ -174,6 +174,8 @@
 - [ ] GOD-01: split business-form.tsx
 - [ ] SPRAWL-01: merge monitoring pages
 - [x] Admin sidebar restructured to 6 sections
+- [x] Merchant dashboard 2026 — Hero + alerts + KPI + quick actions (2026-10-23)
+- [x] Admin business detail Hero + underline tabs (2026-10-23)
 - [x] Reports hub live (generate/section-toggle/print/delete/filter)
 - [x] Admin dashboard rebuilt (StatCard + Panel + alerts)
 - [x] CI-01: E2E on push:main + pull_request (2026-10-23)

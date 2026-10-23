@@ -4,17 +4,21 @@
 > آخر تحديث: 2026-10-20
 
 ## State
-- Last commit: `c8930db8` (+ this commit)
+- Last commit: `55fa25ef`
 - Branch: main (clean)
 - Invariants: all OK
-- **Today's wins (2026-10-23):**
-  - Admin dashboard 2026 rebuild (StatCard + Panel + alerts + quick actions)
-  - 6-section sidebar, no audit/settings, التقارير as own section
-  - 4 business types only (restaurant/pharmacy/delivery_office/misc) — DB + code + UI
-  - Reports hub: generate (sections toggle) + print + delete + filter
-  - GOD-01 done — business-form.tsx 1179 → 18 lines dispatcher + 14 files
-  - CI-07 live — invariants verifier in CI
-  - Migration file for EMPTY-01/CONFLICT-01 prepared (not executed)
+
+**Live (2026-10-23):**
+- Admin dashboard 2026 — StatCard + Panel + alerts + quick actions
+- Admin sidebar — 6 sections, التقارير مستقل
+- Admin business detail — Hero + underline tabs + StatCards (YouTube style)
+- **Merchant dashboard — Hero + alerts + KPI + quick actions (YouTube Creator Studio)**
+- Reports hub (admin) — generate + print + delete + filter + sections
+- Merchant archive — browse all past reports by month
+- CI-01 + CI-02 — E2E on PR + auto Vercel preview URL
+- Types: 4 only (restaurant/pharmacy/delivery_office/misc)
+- GOD-01 split — business-form 1179 → 14 files
+- SPRAWL-01 — audit merged into health (tabs)
 
 ## Working
 - Business wizard fullscreen + 10 contact types
