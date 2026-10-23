@@ -89,7 +89,7 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
   }
 
   // Enrich with order metrics
-  if (orderMetrics.total > 0 && saveResult.ok) {
+  if (orderMetrics.total > 0 && result.ok) {
     const orderPoints: string[] = []
     if (orderMetrics.total > 0) orderPoints.push(`📊 ${orderMetrics.total} طلب`)
     if (orderMetrics.accept_rate > 0) orderPoints.push(`✅ قبول ${orderMetrics.accept_rate}%`)
@@ -103,7 +103,7 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
     const { data: existing } = await supabase
       .from('business_insights')
       .select('top_points, data')
-      .eq('id', saveResult.insightId)
+      .eq('id', result.insightId)
       .maybeSingle()
 
     if (existing) {
@@ -117,7 +117,7 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
           top_points: [...orderPoints, ...existingPoints],
           data: { ...existingData, order_metrics: orderMetrics },
         })
-        .eq('id', saveResult.insightId)
+        .eq('id', result.insightId)
     }
   }
 
