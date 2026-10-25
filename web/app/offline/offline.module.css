@@ -113,3 +113,22 @@
     transition: none;
   }
 }
+
+/* ═══ EAH Mobile Hardening (≤640px) ═══ */
+@media (max-width: 640px) {
+  .actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .iconWrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  button {
+    min-height: 44px;
+  }
+}

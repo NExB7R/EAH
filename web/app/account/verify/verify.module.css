@@ -121,3 +121,37 @@
   text-align: center;
   line-height: 1.6;
 }
+
+/* ═══ EAH Mobile Hardening (≤640px) ═══ */
+@media (max-width: 640px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+  .row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rowOk {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rowIcon {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rowBody {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rowTitle {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rowDesc {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  button {
+    min-height: 44px;
+  }
+}

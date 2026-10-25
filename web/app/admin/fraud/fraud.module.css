@@ -220,3 +220,31 @@
   font-size: 0.68rem;
   font-weight: 800;
 }
+
+/* ═══ EAH Mobile Hardening (≤640px) ═══ */
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .list {
+    grid-template-columns: 1fr;
+  }
+  .eventList {
+    grid-template-columns: 1fr;
+  }
+  .userRow {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .sectionTitle {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  button {
+    min-height: 44px;
+  }
+}

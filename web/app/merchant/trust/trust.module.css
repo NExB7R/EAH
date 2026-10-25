@@ -113,3 +113,24 @@
 .learnMore:hover {
   color: var(--purple-3, #c77dff);
 }
+
+/* ═══ EAH Mobile Hardening (≤640px) ═══ */
+@media (max-width: 640px) {
+  .helpList {
+    grid-template-columns: 1fr;
+  }
+  .eventsList {
+    grid-template-columns: 1fr;
+  }
+  .section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .sectionTitle {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  button {
+    min-height: 44px;
+  }
+}

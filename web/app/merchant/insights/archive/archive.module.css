@@ -111,3 +111,13 @@
 .backLink:hover {
   background: rgba(168, 85, 247, 0.12);
 }
+
+/* ═══ EAH Mobile Hardening (≤640px) ═══ */
+@media (max-width: 640px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+  button {
+    min-height: 44px;
+  }
+}

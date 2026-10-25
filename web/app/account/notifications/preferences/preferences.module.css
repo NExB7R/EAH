@@ -136,3 +136,25 @@
   color: var(--teal);
   font-weight: 800;
 }
+
+/* ═══ EAH Mobile Hardening (≤640px) ═══ */
+@media (max-width: 640px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+  .row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .wrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .switchWrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  button {
+    min-height: 44px;
+  }
+}
