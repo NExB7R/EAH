@@ -675,3 +675,43 @@ video {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   EAH — Mobile UX (safe, non-breaking)
+   ═══════════════════════════════════════════════════ */
+
+/* Remove 300ms legacy tap delay */
+button,
+a,
+[role='button'] {
+  touch-action: manipulation;
+}
+
+/* Images never overflow */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Respect system font size */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* iOS: prevent input zoom (font >= 16px on mobile) */
+@media (max-width: 640px) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* Long words break instead of overflowing */
+.prose,
+article p,
+article li {
+  overflow-wrap: anywhere;
+}
