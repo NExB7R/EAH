@@ -240,3 +240,33 @@
     transform: none;
   }
 }
+
+/* ─── Unified card wrapper ─── */
+.cardWrap {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.centeredGrid {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 4px 0;
+}
+
+@media (max-width: 640px) {
+  .cardWrap {
+    width: 220px;
+  }
+  .centeredGrid {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .cardWrap {
+    width: 200px;
+  }
+}

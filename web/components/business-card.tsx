@@ -11,7 +11,6 @@ import {
   SparkleStarIcon,
   CheckCircleIcon,
   AlertIcon,
-  WhatsAppIcon,
   StoreIcon,
   GiftIcon,
   MapPinIcon,
@@ -19,6 +18,9 @@ import {
   PillIcon,
   BikeIcon,
   SparklesIcon,
+  ArrowLeftIcon,
+  SunriseIcon,
+  TrendingUpIcon,
 } from './icons'
 import styles from './business-card.module.css'
 
@@ -29,11 +31,14 @@ import styles from './business-card.module.css'
 // ═══════════════════════════════════════════════════════════
 
 export type CardTone = 'gold' | 'orange' | 'purple' | 'teal' | 'pink' | 'blue'
+export type CardContext = 'default' | 'featured' | 'trending' | 'new' | 'nearby'
 
 type Props = {
   business: Business
   tone?: CardTone
   variant?: 'default' | 'featured'
+  context?: CardContext
+  rank?: number
 }
 
 type TypeMeta = { label: string; Icon: typeof UtensilsIcon }
@@ -68,7 +73,14 @@ function branchesText(c: number): string {
   return `${c} فروع`
 }
 
-export default function BusinessCard({ business, tone = 'purple', variant = 'default' }: Props) {
+export default function BusinessCard({
+  business,
+  tone = 'purple',
+  variant = 'default',
+  context,
+  rank,
+}: Props) {
+  const ctx: CardContext = context ?? (variant === 'featured' ? 'featured' : 'default')
   const meta = TYPE_META[business.business_type] ?? TYPE_META.misc!
   const TypeIcon = meta.Icon
   const typeLabel = getBusinessTypeLabel(business)
@@ -78,6 +90,36 @@ export default function BusinessCard({ business, tone = 'purple', variant = 'def
   // real approved review data exists for this business.
   const hasRealRating = business.rating_count > 0
   const ratingValue = hasRealRating ? business.rating_avg.toFixed(1) : null
+
+  // ═══ Context-specific logic ═══
+  // CTA text — يعكس الغرض من القسم
+  const isOrderable =
+    business.is_open &&
+    (business.business_type === 'restaurant' ||
+      business.business_type === 'pharmacy' ||
+      business.business_type === 'delivery_office')
+
+  const ctaText = (() => {
+    if (isOrderable) return 'اطلب دلوقتي'
+    switch (ctx) {
+      case 'featured':
+        return 'اكتشف المميز'
+      case 'trending':
+        return 'اكتشف ليه'
+      case 'new':
+        return 'ادعمهم'
+      case 'nearby':
+        return 'شوف التفاصيل'
+      default:
+        return 'شوف التفاصيل'
+    }
+  })()
+
+  // Trending signal — دليل إن النشاط ترند
+  const trendSignal =
+    business.successful_orders > 0
+      ? `${business.successful_orders} ${business.successful_orders === 1 ? 'طلب ناجح' : 'طلب ناجح'}`
+      : null
 
   const hasImage = !!business.cover_image_url
 
@@ -97,16 +139,41 @@ export default function BusinessCard({ business, tone = 'purple', variant = 'def
           />
         ) : (
           <div className={styles.placeholder} aria-hidden>
-            <TypeIcon size={40} />
+            <span className={styles.placeholderInitial}>{business.name.charAt(0)}</span>
+            <span className={styles.placeholderType}>
+              <TypeIcon size={14} />
+              {typeLabel}
+            </span>
           </div>
         )}
         <div className={styles.imageOverlay} aria-hidden />
 
         <div className={styles.topBadges}>
-          {variant === 'featured' && (
+          {ctx === 'featured' && (
             <span className={styles.featuredBadge}>
               <CrownGoldIcon size={11} />
               مميز
+            </span>
+          )}
+          {ctx === 'new' && (
+            <span className={styles.newBadge}>
+              <SunriseIcon size={11} />
+              جديد
+            </span>
+          )}
+          {ctx === 'trending' && typeof rank === 'number' && (
+            <span
+              className={`${styles.rankBadge} ${
+                rank === 1
+                  ? styles.rankGold
+                  : rank === 2
+                    ? styles.rankSilver
+                    : rank === 3
+                      ? styles.rankBronze
+                      : ''
+              }`}
+            >
+              #{rank}
             </span>
           )}
           <span className={`${styles.status} ${business.is_open ? styles.open : styles.closed}`}>
@@ -134,6 +201,25 @@ export default function BusinessCard({ business, tone = 'purple', variant = 'def
         <h3 className={styles.name}>{business.name}</h3>
 
         {business.hook && <p className={styles.hook}>{business.hook}</p>}
+
+        {ctx === 'trending' && trendSignal && (
+          <p className={`${styles.contextLine} ${styles.contextTrending}`}>
+            <TrendingUpIcon size={11} />
+            {trendSignal}
+          </p>
+        )}
+        {ctx === 'nearby' && business.area && (
+          <p className={`${styles.contextLine} ${styles.contextNearby}`}>
+            <MapPinIcon size={11} />
+            من {business.area}
+          </p>
+        )}
+        {ctx === 'featured' && (
+          <p className={`${styles.contextLine} ${styles.contextFeatured}`}>
+            <CrownGoldIcon size={11} />
+            اختيار فريق EAH
+          </p>
+        )}
 
         <div className={styles.chips}>
           <span className={styles.chip}>
@@ -168,13 +254,13 @@ export default function BusinessCard({ business, tone = 'purple', variant = 'def
               {offersText(business.offers_count)}
             </span>
           )}
+        </div>
 
-          {business.accepts_whatsapp_orders && (
-            <span className={`${styles.chip} ${styles.chipWhatsapp}`}>
-              <WhatsAppIcon size={12} />
-              واتساب
-            </span>
-          )}
+        <div className={styles.ctaWrap}>
+          <span className={`${styles.cta} ${isOrderable ? styles.ctaOrder : ''}`}>
+            <span>{ctaText}</span>
+            <ArrowLeftIcon size={12} />
+          </span>
         </div>
       </div>
     </Link>
