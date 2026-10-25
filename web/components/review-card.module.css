@@ -119,3 +119,32 @@
 .card:hover .reportWrap {
   opacity: 1;
 }
+
+/* ═══════════════════════════════════════════════════
+   EAH — Mobile Hardening (≤640px)
+   Auto-appended · safe no-ops on non-matching elements
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Allow flex rows to wrap */
+  .header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .headerText {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ratingRow {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  /* Reduce container padding */
+  .reportWrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  /* Touch targets ≥ 44px */
+  button {
+    min-height: 44px;
+  }
+}

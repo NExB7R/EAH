@@ -347,3 +347,59 @@
     transition: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   EAH — Mobile Hardening (≤640px)
+   Auto-appended · safe no-ops on non-matching elements
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Stack grids to single column */
+  .list {
+    grid-template-columns: 1fr;
+  }
+  /* Allow flex rows to wrap */
+  .row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rowHeader {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rowTitle {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rowBody {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rowLink {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  /* Full-width form controls */
+  .form input,
+  .form select,
+  .form textarea {
+    width: 100%;
+  }
+  .formTitle input,
+  .formTitle select,
+  .formTitle textarea {
+    width: 100%;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+  }
+  /* Touch targets ≥ 44px */
+  button {
+    min-height: 44px;
+  }
+}

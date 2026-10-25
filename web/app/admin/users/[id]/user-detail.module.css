@@ -476,3 +476,87 @@
   color: var(--text-tertiary);
   font-size: 0.78rem;
 }
+
+/* ═══════════════════════════════════════════════════
+   EAH — Mobile Hardening (≤640px)
+   Auto-appended · safe no-ops on non-matching elements
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Stack grids to single column */
+  .metaGrid {
+    grid-template-columns: 1fr;
+  }
+  .roleGrid {
+    grid-template-columns: 1fr;
+  }
+  .list {
+    grid-template-columns: 1fr;
+  }
+  .listItem {
+    grid-template-columns: 1fr;
+  }
+  .listLink {
+    grid-template-columns: 1fr;
+  }
+  .listTitle {
+    grid-template-columns: 1fr;
+  }
+  /* Allow flex rows to wrap */
+  .headerCard {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .headerMain {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .headerInfo {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .actionRow {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .errorBar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  /* Reduce container padding */
+  .wrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .sectionTitle {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  /* Full-width form controls */
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+  }
+  .input input,
+  .input select,
+  .input textarea {
+    width: 100%;
+  }
+  .textarea input,
+  .textarea select,
+  .textarea textarea {
+    width: 100%;
+  }
+  /* Touch targets ≥ 44px */
+  button {
+    min-height: 44px;
+  }
+}

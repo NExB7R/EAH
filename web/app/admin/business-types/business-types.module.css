@@ -226,3 +226,38 @@
     transition: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   EAH — Mobile Hardening (≤640px)
+   Auto-appended · safe no-ops on non-matching elements
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Stack grids to single column */
+  .list {
+    grid-template-columns: 1fr;
+  }
+  /* Allow flex rows to wrap */
+  .cardActions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .modalActions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  /* Reduce container padding */
+  .wrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  /* Full-width form controls */
+  .textarea input,
+  .textarea select,
+  .textarea textarea {
+    width: 100%;
+  }
+  /* Touch targets ≥ 44px */
+  button {
+    min-height: 44px;
+  }
+}

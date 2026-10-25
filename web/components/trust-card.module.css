@@ -172,3 +172,36 @@
 .ostora .tierDotActive {
   background: var(--gold-light, #f5d9a7);
 }
+
+/* ═══════════════════════════════════════════════════
+   EAH — Mobile Hardening (≤640px)
+   Auto-appended · safe no-ops on non-matching elements
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Allow flex rows to wrap */
+  .header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .headerText {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tiersBar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  /* Reduce container padding */
+  .iconWrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .progressWrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  /* Touch targets ≥ 44px */
+  button {
+    min-height: 44px;
+  }
+}
