@@ -250,12 +250,14 @@ export async function submitOrder(
   // 6. Notify merchant — deep link straight to the order
   // ═══════════════════════════════════════════════════════════════════
   if (biz.owner_profile_id) {
+    const itemsPart = (d.items_summary ?? '').slice(0, 70) || '(تفاصيل مرفقة)'
     void createNotification({
       userId: biz.owner_profile_id,
       type: 'order_new',
       title: `🔔 طلب جديد #${orderCode}`,
-      body: `${d.customer_name}: ${(d.items_summary ?? '').slice(0, 80) || '(مرفق)'}`,
+      body: `${d.customer_name}: ${itemsPart}`,
       deepLink: `/merchant/orders?order=${orderId}`,
+      push: true,
       pushTag: `order-${orderId}`,
     }).catch(() => {})
   }

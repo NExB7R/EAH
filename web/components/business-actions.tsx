@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { WhatsAppIcon, PhoneIcon, HeartIcon, EyeIcon, ShareIcon, MessageCircleIcon } from './icons'
+import { StoreIcon, PhoneIcon, HeartIcon, EyeIcon, ShareIcon, MessageCircleIcon } from './icons'
 import SmartLockModal, { useSmartLock } from './smart-lock-modal'
 import OrderModal from './order-modal'
 import BusinessShareModal from './business-share-modal'
@@ -48,6 +48,10 @@ export default function BusinessActions({
   menuImages = [],
   offers = [],
 }: Props) {
+  // Keep props stable for future use (contact display, etc.)
+  void whatsapp
+  void acceptsWhatsapp
+
   const lock = useSmartLock()
   const [fav, setFav] = useState(isFavorite)
   const [follow, setFollow] = useState(isFollowing)
@@ -71,10 +75,10 @@ export default function BusinessActions({
     }).catch(() => {})
   }
 
-  // ─── WhatsApp → Order Modal ───
-  const handleWhatsapp = () => {
-    if (requireAuth('تطلب من واتساب مباشرة')) return
-    if (!whatsapp || !acceptsWhatsapp) return
+  // ─── Order Modal (in-app, مرتبط بـ merchant_order_settings) ───
+  const handleOrder = () => {
+    if (requireAuth('تطلب من النشاط')) return
+    if (!ordersEnabled || !isOpen) return
     setOrderKey((k) => k + 1)
     setOrderOpen(true)
   }
@@ -150,22 +154,18 @@ export default function BusinessActions({
   return (
     <>
       <div className={styles.actions}>
-        {/* WhatsApp */}
+        {/* Order (in-app) */}
         <button
           type="button"
-          onClick={handleWhatsapp}
-          disabled={!ordersEnabled || !whatsapp}
-          className={`${styles.action} ${styles.whatsapp}`}
+          onClick={handleOrder}
+          disabled={!ordersEnabled || !isOpen}
+          className={`${styles.action} ${styles.order}`}
         >
           <span className={styles.actionIcon}>
-            <WhatsAppIcon size={20} />
+            <StoreIcon size={20} />
           </span>
           <span className={styles.actionLabel}>
-            {ordersEnabled && whatsapp
-              ? isOpen
-                ? 'اطلب الآن'
-                : 'اطلب — مغلق حالياً'
-              : 'مش بيستقبل طلبات'}
+            {!ordersEnabled ? 'الطلب غير متاح' : isOpen ? 'اطلب دلوقتي' : 'اطلب — مغلق حالياً'}
           </span>
         </button>
 
