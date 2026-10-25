@@ -168,3 +168,41 @@
   font-weight: 800;
   color: var(--teal);
 }
+
+/* ═══ EAH Mobile Hardening (≤640px) ═══ */
+@media (max-width: 640px) {
+  .cardHeader {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .avatarRow {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .wrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .hiddenInput input,
+  .hiddenInput select,
+  .hiddenInput textarea {
+    width: 100%;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+  }
+  .input input,
+  .input select,
+  .input textarea {
+    width: 100%;
+  }
+  button {
+    min-height: 44px;
+  }
+}

@@ -203,3 +203,42 @@
   display: flex;
   gap: 8px;
 }
+
+/* ═══ EAH Mobile Hardening (≤640px) ═══ */
+@media (max-width: 640px) {
+  .modalList {
+    grid-template-columns: 1fr;
+  }
+  .actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .modalActions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .panel {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .panelHead {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .panelIcon {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .panelInfo {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .deadlineInput input,
+  .deadlineInput select,
+  .deadlineInput textarea {
+    width: 100%;
+  }
+  button {
+    min-height: 44px;
+  }
+}

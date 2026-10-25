@@ -182,3 +182,19 @@
   font-size: 0.75rem;
   color: var(--text-tertiary);
 }
+
+/* ═══ EAH Mobile Hardening (≤640px) ═══ */
+@media (max-width: 640px) {
+  .modal {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .form input,
+  .form select,
+  .form textarea {
+    width: 100%;
+  }
+  button {
+    min-height: 44px;
+  }
+}
