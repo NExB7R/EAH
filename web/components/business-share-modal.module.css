@@ -20,6 +20,11 @@
   border: 1px solid rgba(168, 85, 247, 0.3);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
   color: var(--text-primary);
+  max-height: calc(100svh - 32px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .header {

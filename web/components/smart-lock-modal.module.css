@@ -38,7 +38,11 @@
   align-items: center;
   text-align: center;
   gap: 12px;
-  overflow: hidden;
+  max-height: calc(100svh - 32px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   animation: slideUp 260ms var(--ease-out);
 }
 
