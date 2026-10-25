@@ -33,8 +33,20 @@ export default function SettingsSection() {
           checked={ctx.acceptsWhatsapp}
           onChange={(e) => ctx.setAcceptsWhatsapp(e.target.checked)}
         />
-        <label htmlFor="accepts_whatsapp_orders">يقبل طلبات واتساب</label>
+        <label htmlFor="accepts_whatsapp_orders">تفعيل زر تواصل واتساب</label>
       </div>
+
+      <p
+        style={{
+          margin: '4px 0 12px',
+          fontSize: '0.72rem',
+          color: 'var(--text-tertiary)',
+          lineHeight: 1.5,
+        }}
+      >
+        ملاحظة: استقبال الطلبات نفسها يُدار من لوحة Order Settings فوق (تفعيل/إيقاف + مدة الرد
+        والتسليم).
+      </p>
 
       <div className={styles.checkRow}>
         <input
