@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useTransition } from 'react'
 import {
   CheckCircleIcon,
@@ -295,9 +296,50 @@ export default function BusinessEditForm({ initial }: Props) {
           <span className={styles.toggleTrack} aria-hidden />
           <span className={styles.toggleLabel}>
             <WhatsAppIcon size={14} />
-            استقبل طلبات على واتساب
+            تفعيل زر تواصل واتساب
           </span>
         </label>
+
+        <div
+          style={{
+            marginTop: 14,
+            padding: '12px 14px',
+            borderRadius: 12,
+            background: 'rgba(85, 231, 209, 0.06)',
+            border: '1px solid rgba(85, 231, 209, 0.28)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 12,
+            flexWrap: 'wrap',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: '1 1 200px' }}>
+            <strong style={{ fontSize: '0.85rem', color: '#8ff0e1' }}>
+              استقبال الطلبات المباشرة (Orders)
+            </strong>
+            <span style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)', lineHeight: 1.5 }}>
+              فعّل أو اقفل استلام الطلبات · حدد مدة الرد والتسليم
+            </span>
+          </div>
+          <Link
+            href="/merchant/orders/settings"
+            style={{
+              padding: '9px 16px',
+              borderRadius: 10,
+              fontSize: '0.78rem',
+              fontWeight: 800,
+              color: 'rgb(255, 255, 255)',
+              background:
+                'linear-gradient(135deg, rgba(85, 231, 209, 0.45), rgba(85, 231, 209, 0.22))',
+              border: '1px solid rgba(85, 231, 209, 0.5)',
+              textDecoration: 'none',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            إدارة الاستلام ←
+          </Link>
+        </div>
       </fieldset>
 
       {msg && (
