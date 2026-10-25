@@ -70,7 +70,13 @@ export default function FeaturedBento({ businesses }: Props) {
 
           <div className={styles.grid}>
             {visible.map((b) => (
-              <BusinessCard key={b.id} business={b} tone="gold" variant="featured" />
+              <BusinessCard
+                key={b.id}
+                business={b}
+                tone="gold"
+                variant="featured"
+                context="featured"
+              />
             ))}
           </div>
 

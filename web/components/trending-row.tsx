@@ -1,59 +1,28 @@
 import Link from 'next/link'
-import WmImage from './wm-image'
-import DistanceBadge from './distance-badge'
-import {
-  TrendingUpIcon,
-  ArrowLeftIcon,
-  StarIcon,
-  MapPinIcon,
-  UtensilsIcon,
-  PillIcon,
-  BikeIcon,
-  SparklesIcon,
-  ShieldCheckIcon,
-} from './icons'
+import BusinessCard from './business-card'
+import { TrendingUpIcon, ArrowLeftIcon } from './icons'
 import RowCarousel from './row-carousel'
 import type { Business } from '@/lib/data'
 import styles from './trending-row.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Trending Row (Home — Single Row Carousel)
-//   • صف واحد أفقي — auto-scroll + أسهم مخفية
-//   • rank badge على كل كارت
+// EAH — Trending Row (Home)
+//   • Unified BusinessCard
+//   • Smart layout: ≤3 items → centered grid, >3 → carousel
 // ═══════════════════════════════════════════════════════════
 
-type Props = {
-  businesses: Business[]
-  limit?: number
-}
-
-type TypeMeta = { label: string; Icon: typeof UtensilsIcon }
-
-const TYPE_META: Record<string, TypeMeta> = {
-  restaurant: { label: 'مطعم', Icon: UtensilsIcon },
-  pharmacy: { label: 'صيدلية', Icon: PillIcon },
-  delivery_office: { label: 'توصيل', Icon: BikeIcon },
-  misc: { label: 'أنشطة', Icon: SparklesIcon },
-}
-
-const TIER_LABEL: Record<string, string> = {
-  bade2: 'لسه بادئ',
-  mashey: 'ماشي حاله',
-  fel: 'زي الفل',
-  harif: 'حريف',
-  ostora: 'الأسطورة',
-}
-
-function rankClass(rank: number, s: Record<string, string>): string {
-  if (rank === 1) return s.rank1!
-  if (rank === 2) return s.rank2!
-  if (rank === 3) return s.rank3!
-  return s.rankN!
-}
+type Props = { businesses: Business[]; limit?: number }
 
 export default function TrendingRow({ businesses, limit = 12 }: Props) {
   if (businesses.length === 0) return null
   const visible = businesses.slice(0, limit)
+  const useGrid = visible.length <= 3
+
+  const cards = visible.map((b, i) => (
+    <div key={b.id} className={styles.cardWrap}>
+      <BusinessCard business={b} tone="orange" context="trending" rank={i + 1} />
+    </div>
+  ))
 
   return (
     <section className={styles.section}>
@@ -74,75 +43,11 @@ export default function TrendingRow({ businesses, limit = 12 }: Props) {
 
         <div className={styles.neonLine} aria-hidden />
 
-        <RowCarousel accent="#FDBA74">
-          {visible.map((b, i) => {
-            const rank = i + 1
-            const meta = TYPE_META[b.business_type] ?? TYPE_META.misc!
-            const TypeIcon = meta.Icon
-            const rating =
-              b.rating_count > 0
-                ? b.rating_avg.toFixed(1)
-                : b.trust_score
-                  ? (b.trust_score / 20).toFixed(1)
-                  : null
-            const tierLabel = TIER_LABEL[b.trust_tier] ?? null
-
-            return (
-              <Link key={b.id} href={`/businesses/${b.slug}`} className={styles.card}>
-                <div className={styles.imageWrap}>
-                  {b.cover_image_url ? (
-                    <WmImage
-                      src={b.cover_image_url}
-                      alt={b.name}
-                      fill
-                      sizes="220px"
-                      className={styles.image}
-                    />
-                  ) : (
-                    <div className={styles.imageFallback} aria-hidden>
-                      <TypeIcon size={36} />
-                    </div>
-                  )}
-                  <div className={styles.imageOverlay} aria-hidden />
-
-                  <span className={`${styles.rank} ${rankClass(rank, styles)}`}>#{rank}</span>
-
-                  {rating && (
-                    <span className={styles.rating}>
-                      <StarIcon size={11} />
-                      {rating}
-                    </span>
-                  )}
-
-                  {b.location && <DistanceBadge lat={b.location.lat} lng={b.location.lng} />}
-                </div>
-
-                <div className={styles.body}>
-                  <h3 className={styles.name}>{b.name}</h3>
-
-                  <p className={styles.meta}>
-                    <TypeIcon size={12} />
-                    <span>{meta.label}</span>
-                    {b.area && (
-                      <>
-                        <span className={styles.dot}>·</span>
-                        <MapPinIcon size={11} />
-                        <span>{b.area}</span>
-                      </>
-                    )}
-                  </p>
-
-                  {tierLabel && (
-                    <span className={styles.tier}>
-                      <ShieldCheckIcon size={11} />
-                      {tierLabel}
-                    </span>
-                  )}
-                </div>
-              </Link>
-            )
-          })}
-        </RowCarousel>
+        {useGrid ? (
+          <div className={styles.centeredGrid}>{cards}</div>
+        ) : (
+          <RowCarousel accent="#FDBA74">{cards}</RowCarousel>
+        )}
       </div>
     </section>
   )

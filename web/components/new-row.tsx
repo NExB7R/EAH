@@ -1,44 +1,28 @@
 import Link from 'next/link'
-import WmImage from './wm-image'
-import DistanceBadge from './distance-badge'
-import {
-  SunriseIcon,
-  ArrowLeftIcon,
-  MapPinIcon,
-  StarIcon,
-  UtensilsIcon,
-  PillIcon,
-  CartIcon,
-  BikeIcon,
-  SparklesIcon,
-  ShieldCheckIcon,
-} from './icons'
+import BusinessCard from './business-card'
+import { SunriseIcon, ArrowLeftIcon } from './icons'
 import RowCarousel from './row-carousel'
 import type { Business } from '@/lib/data'
 import styles from './new-row.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — New Row (Home — Single Row Carousel)
+// EAH — New Row (Home)
+//   • Unified BusinessCard
+//   • Smart layout: ≤3 items → centered grid, >3 → carousel
 // ═══════════════════════════════════════════════════════════
 
-type Props = {
-  businesses: Business[]
-  limit?: number
-}
-
-type TypeMeta = { label: string; Icon: typeof UtensilsIcon }
-
-const TYPE_META: Record<string, TypeMeta> = {
-  restaurant: { label: 'مطعم', Icon: UtensilsIcon },
-  pharmacy: { label: 'صيدلية', Icon: PillIcon },
-  supermarket: { label: 'ماركت', Icon: CartIcon },
-  delivery_office: { label: 'توصيل', Icon: BikeIcon },
-  misc: { label: 'أنشطة', Icon: SparklesIcon },
-}
+type Props = { businesses: Business[]; limit?: number }
 
 export default function NewRow({ businesses, limit = 12 }: Props) {
   if (businesses.length === 0) return null
   const visible = businesses.slice(0, limit)
+  const useGrid = visible.length <= 3
+
+  const cards = visible.map((b) => (
+    <div key={b.id} className={styles.cardWrap}>
+      <BusinessCard business={b} tone="pink" context="new" />
+    </div>
+  ))
 
   return (
     <section className={styles.section}>
@@ -62,79 +46,11 @@ export default function NewRow({ businesses, limit = 12 }: Props) {
 
         <div className={styles.neonLine} aria-hidden />
 
-        <RowCarousel accent="#F472B6">
-          {visible.map((b) => {
-            const meta = TYPE_META[b.business_type] ?? TYPE_META.misc!
-            const TypeIcon = meta.Icon
-            const rating =
-              b.rating_count > 0
-                ? b.rating_avg.toFixed(1)
-                : b.trust_score
-                  ? (b.trust_score / 20).toFixed(1)
-                  : null
-
-            return (
-              <Link key={b.id} href={`/businesses/${b.slug}`} className={styles.card}>
-                <div className={styles.imageWrap}>
-                  {b.cover_image_url ? (
-                    <WmImage
-                      src={b.cover_image_url}
-                      alt={b.name}
-                      fill
-                      sizes="220px"
-                      className={styles.image}
-                    />
-                  ) : (
-                    <div className={styles.imageFallback} aria-hidden>
-                      <TypeIcon size={36} />
-                    </div>
-                  )}
-                  <div className={styles.imageOverlay} aria-hidden />
-
-                  <span className={styles.newBadge}>
-                    <SunriseIcon size={10} />
-                    بدايات
-                  </span>
-
-                  {rating && (
-                    <span className={styles.rating}>
-                      <StarIcon size={11} />
-                      {rating}
-                    </span>
-                  )}
-
-                  {b.location && <DistanceBadge lat={b.location.lat} lng={b.location.lng} />}
-                </div>
-
-                <div className={styles.body}>
-                  <h3 className={styles.name}>{b.name}</h3>
-                  <p className={styles.meta}>
-                    <TypeIcon size={12} />
-                    <span>{meta.label}</span>
-                    {b.area && (
-                      <>
-                        <span className={styles.dot}>·</span>
-                        <MapPinIcon size={11} />
-                        <span>{b.area}</span>
-                      </>
-                    )}
-                  </p>
-
-                  {b.trust_tier && (
-                    <span className={styles.tier}>
-                      <ShieldCheckIcon size={11} />
-                      {b.trust_tier === 'bade2' && 'لسه بادئ'}
-                      {b.trust_tier === 'mashey' && 'ماشي حاله'}
-                      {b.trust_tier === 'fel' && 'زي الفل'}
-                      {b.trust_tier === 'harif' && 'حريف'}
-                      {b.trust_tier === 'ostora' && 'الأسطورة'}
-                    </span>
-                  )}
-                </div>
-              </Link>
-            )
-          })}
-        </RowCarousel>
+        {useGrid ? (
+          <div className={styles.centeredGrid}>{cards}</div>
+        ) : (
+          <RowCarousel accent="#F472B6">{cards}</RowCarousel>
+        )}
       </div>
     </section>
   )
