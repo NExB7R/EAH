@@ -156,3 +156,23 @@
     animation: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   EAH — Mobile Hardening (≤640px)
+   Auto-appended · safe no-ops on non-matching elements
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Reduce container padding */
+  .panel {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .micWrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  /* Touch targets ≥ 44px */
+  button {
+    min-height: 44px;
+  }
+}

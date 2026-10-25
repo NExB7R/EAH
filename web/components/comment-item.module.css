@@ -419,3 +419,44 @@
   color: var(--gold-light) !important;
   background: rgba(232, 199, 154, 0.18);
 }
+
+/* ═══════════════════════════════════════════════════
+   EAH — Mobile Hardening (≤640px)
+   Auto-appended · safe no-ops on non-matching elements
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Allow flex rows to wrap */
+  .actions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .replyActions {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  /* Reduce container padding */
+  .wrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  /* Full-width form controls */
+  .replyForm input,
+  .replyForm select,
+  .replyForm textarea {
+    width: 100%;
+  }
+  .replyInput input,
+  .replyInput select,
+  .replyInput textarea {
+    width: 100%;
+  }
+  .editForm input,
+  .editForm select,
+  .editForm textarea {
+    width: 100%;
+  }
+  /* Touch targets ≥ 44px */
+  button {
+    min-height: 44px;
+  }
+}

@@ -310,3 +310,41 @@
 .ctaSecondary:hover {
   color: var(--text-primary);
 }
+
+/* ═══════════════════════════════════════════════════
+   EAH — Mobile Hardening (≤640px)
+   Auto-appended · safe no-ops on non-matching elements
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Stack grids to single column */
+  .tiersGrid {
+    grid-template-columns: 1fr;
+  }
+  .eventsList {
+    grid-template-columns: 1fr;
+  }
+  .factorsGrid {
+    grid-template-columns: 1fr;
+  }
+  /* Reduce container padding */
+  .page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .sectionTitle {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .sectionText {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  /* Touch targets ≥ 44px */
+  button {
+    min-height: 44px;
+  }
+}

@@ -111,3 +111,23 @@
   font-size: 0.65rem;
   color: var(--text-muted);
 }
+
+/* ═══════════════════════════════════════════════════
+   EAH — Mobile Hardening (≤640px)
+   Auto-appended · safe no-ops on non-matching elements
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Stack grids to single column */
+  .list {
+    grid-template-columns: 1fr;
+  }
+  /* Reduce container padding */
+  .iconWrap {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  /* Touch targets ≥ 44px */
+  button {
+    min-height: 44px;
+  }
+}

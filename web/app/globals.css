@@ -637,3 +637,41 @@ html:has(main[data-snap='true']) {
     color: #000000 !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   EAH-MOBILE-HARDENING (2026)
+   Safe global rules — applied once, do not duplicate.
+   ═══════════════════════════════════════════════════════════ */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent iOS zoom on input focus (must be >= 16px) */
+@media (max-width: 640px) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']):not([type='file']),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+/* Images & media never overflow */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
