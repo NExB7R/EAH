@@ -146,3 +146,21 @@
     transform: none;
   }
 }
+
+/* ─── Order (in-app, primary CTA) ─── */
+.action.order {
+  color: #8ff0e1;
+  background: linear-gradient(135deg, rgba(85, 231, 209, 0.12), rgba(85, 231, 209, 0.04));
+  border-color: rgba(85, 231, 209, 0.35);
+}
+
+.action.order:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(85, 231, 209, 0.24), rgba(85, 231, 209, 0.08));
+  border-color: rgba(85, 231, 209, 0.7);
+  box-shadow: 0 0 16px rgba(85, 231, 209, 0.35);
+}
+
+.action.order:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

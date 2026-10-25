@@ -95,7 +95,8 @@ export async function getAccountStats(userId: string): Promise<AccountStats> {
       .from('notifications')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', userId)
-      .is('read_at', null),
+      .is('read_at', null)
+      .not('notification_type', 'eq', 'system'),
   ])
 
   return {

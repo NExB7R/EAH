@@ -1,10 +1,14 @@
-import WmImage from './wm-image'
+'use client'
+
+import { useState } from 'react'
 import type { AppRole } from '@/lib/data/user'
 import { BadgeCheckIcon } from './icons'
 import styles from './avatar.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Avatar with Role-based Frame
+// EAH — Avatar with Role-based Frame + Image Fallback
+//   • بلا WmImage — بسيط، سريع، لا watermark
+//   • لو الصورة فشلت → يرجع للحرف الأول (بدون كسر التصميم)
 // ═══════════════════════════════════════════════════════════
 
 type AvatarProps = {
@@ -23,6 +27,7 @@ export default function Avatar({
   size = 'md',
 }: AvatarProps) {
   const initial = displayName.trim().charAt(0) || '؟'
+  const [imgError, setImgError] = useState(false)
 
   const sizeCls = styles[size]
   const roleCls =
@@ -35,17 +40,19 @@ export default function Avatar({
           : ''
 
   const cls = [styles.avatar, sizeCls, roleCls].filter(Boolean).join(' ')
+  const showImage = !!avatarUrl && !imgError
 
   return (
     <div className={cls}>
-      {avatarUrl ? (
-        <WmImage
+      {showImage ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
           src={avatarUrl}
           alt={displayName}
-          width={40}
-          height={40}
           className={styles.img}
-          noWatermark
+          onError={() => setImgError(true)}
+          loading="lazy"
+          decoding="async"
         />
       ) : (
         <span className={styles.initial}>{initial}</span>
