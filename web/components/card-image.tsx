@@ -5,37 +5,44 @@ import Image from 'next/image'
 import styles from './business-card.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Card Image with graceful fallback
+// EAH — Card Image (logo → cover → initial fallback)
+//   • Logo takes priority (padded inside gradient)
+//   • Falls back to cover on logo error
+//   • Falls back to initial if both fail
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
-  src: string | null
+  logoUrl: string | null
+  coverUrl: string | null
   alt: string
   initial: string
-  typeLabel: string
 }
 
-export default function CardImage({ src, alt, initial, typeLabel }: Props) {
-  const [failed, setFailed] = useState(false)
-  const showImage = !!src && !failed
+export default function CardImage({ logoUrl, coverUrl, alt, initial }: Props) {
+  const [logoFailed, setLogoFailed] = useState(false)
+  const [coverFailed, setCoverFailed] = useState(false)
 
-  if (!showImage) {
+  const showLogo = !!logoUrl && !logoFailed
+  const showCover = !showLogo && !!coverUrl && !coverFailed
+
+  if (showLogo || showCover) {
+    const src = showLogo ? logoUrl! : coverUrl!
     return (
-      <div className={styles.placeholder} aria-hidden>
-        <span className={styles.placeholderInitial}>{initial}</span>
-        <span className={styles.placeholderType}>{typeLabel}</span>
-      </div>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 400px) 340px, (max-width: 640px) 400px, (max-width: 1024px) 440px, 480px"
+        className={showLogo ? styles.logo : styles.cover}
+        style={{ objectFit: showLogo ? 'contain' : 'cover' }}
+        onError={() => (showLogo ? setLogoFailed(true) : setCoverFailed(true))}
+      />
     )
   }
 
   return (
-    <Image
-      src={src}
-      alt={alt}
-      fill
-      sizes="(max-width: 400px) 200px, (max-width: 640px) 220px, (max-width: 1024px) 280px, 440px"
-      style={{ objectFit: 'cover' }}
-      onError={() => setFailed(true)}
-    />
+    <div className={styles.placeholder} aria-hidden>
+      <span className={styles.placeholderInitial}>{initial}</span>
+    </div>
   )
 }
