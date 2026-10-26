@@ -86,11 +86,7 @@ export default function BusinessCard({
 
   const hasRating = business.rating_count > 0
   const rating = hasRating ? business.rating_avg.toFixed(1) : null
-  const isOrderable =
-    business.is_open &&
-    (business.business_type === 'restaurant' ||
-      business.business_type === 'pharmacy' ||
-      business.business_type === 'delivery_office')
+  const isOrderable = business.orders_enabled && business.is_open
 
   const ctaText = (() => {
     if (isOrderable) return 'اطلب دلوقتي'

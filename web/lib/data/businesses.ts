@@ -53,6 +53,7 @@ export type Business = {
   new_until: string | null
   working_hours: WorkingHours | null
   accepts_whatsapp_orders: boolean
+  orders_enabled: boolean
   response_time_avg_seconds: number | null
   response_rate: number | null
   last_activity_at: string | null
@@ -120,7 +121,8 @@ const BUSINESS_COLUMNS = `
   response_time_avg_seconds, response_rate,
   last_activity_at, created_at, updated_at,
   branches_count, offers_count, rating_avg, rating_count,
-  business_locations(latitude, longitude, is_primary)
+  business_locations(latitude, longitude, is_primary),
+  merchant_order_settings(orders_enabled)
 `
 
 // ─── Normalize: extract primary location from join ───
@@ -144,9 +146,17 @@ function pickPrimaryLocation(raw: unknown): { lat: number; lng: number } | null 
 
 function normalizeBusiness(raw: Record<string, unknown>): Business {
   const loc = pickPrimaryLocation(raw.business_locations)
+
+  // merchant_order_settings join (1-to-1) → boolean
+  const mos = raw.merchant_order_settings as
+    { orders_enabled?: boolean | null } | { orders_enabled?: boolean | null }[] | null | undefined
+  const mosRow = Array.isArray(mos) ? (mos[0] ?? null) : (mos ?? null)
+  const orders_enabled = mosRow?.orders_enabled === true
+
   const rest: Record<string, unknown> = { ...raw }
   delete rest.business_locations
-  return { ...(rest as unknown as Business), location: loc }
+  delete rest.merchant_order_settings
+  return { ...(rest as unknown as Business), location: loc, orders_enabled }
 }
 
 function normalizeBusinesses(data: unknown[] | null): Business[] {
