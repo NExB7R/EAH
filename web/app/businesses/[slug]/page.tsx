@@ -15,7 +15,6 @@ import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import { computeIsOpenNow } from '@/lib/data/business-detail'
 import BusinessNotice from '@/components/business-notice'
 import { getFeatureFlags } from '@/lib/features'
-import { getMerchantOrderSettings, isOrderAcceptanceActive } from '@/lib/data/orders-settings'
 import type { BusinessDetail } from '@/lib/data/business-detail'
 import { getUserSession } from '@/lib/data/user'
 import { getComments, getMyFollowingRootIds } from '@/lib/data/comments'
@@ -59,8 +58,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 function buildJsonLd(
   business: BusinessDetail['business'],
   contacts: BusinessDetail['contacts'],
-  whatsapp: string | null,
-  phone: string | null,
 ) {
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
   const url = `${SITE_URL}/businesses/${business.slug}`
@@ -85,7 +82,6 @@ function buildJsonLd(
       addressCountry: 'EG',
       streetAddress: business.address_text ?? undefined,
     },
-    telephone: phone ?? whatsapp ?? undefined,
   }
 
   if (sameAs.length > 0) schema.sameAs = sameAs
@@ -177,17 +173,11 @@ export default async function BusinessPage({ params }: Props) {
   })
 
   const isOpen = computeIsOpenNow(detail.openNowOverride, business.working_hours)
-  const whatsapp = contacts.find((c) => c.method_type === 'whatsapp')?.value ?? null
-  const phone = contacts.find((c) => c.method_type === 'phone')?.value ?? null
-
-  const hasWhatsapp = !!whatsapp && business.accepts_whatsapp_orders
+  const acceptsWhatsapp = business.accepts_whatsapp_orders
+  const ordersEnabled = flags.orders_enabled && business.accepts_orders
 
   const menuImages = detail.menu.map((m) => m.storage_path)
   const offersList = offers.map((o) => ({ title: o.title, image: o.image_url }))
-
-  // ─── Order acceptance status (for the "اطلب الآن" button) ───
-  const orderSettings = await getMerchantOrderSettings(business.id)
-  const { active: ordersEnabled } = isOrderAcceptanceActive(orderSettings)
 
   return (
     <main className={styles.page}>
@@ -196,7 +186,7 @@ export default async function BusinessPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           // escape < → \u003c يمنع XSS لو اسم النشاط فيه </script>
-          __html: JSON.stringify(buildJsonLd(business, contacts, whatsapp, phone)).replace(
+          __html: JSON.stringify(buildJsonLd(business, contacts)).replace(
             /</g,
             '\\u003c',
           ),
@@ -230,8 +220,6 @@ export default async function BusinessPage({ params }: Props) {
             businessSlug={business.slug}
             businessName={business.name}
             isLoggedIn={!!session}
-            whatsapp={whatsapp}
-            phone={phone}
             isOpen={isOpen}
             acceptsWhatsapp={business.accepts_whatsapp_orders}
             ordersEnabled={ordersEnabled}
@@ -287,11 +275,10 @@ export default async function BusinessPage({ params }: Props) {
         businessId={business.id}
         businessSlug={business.slug}
         businessName={business.name}
-        whatsapp={hasWhatsapp ? whatsapp : null}
-        phone={phone}
+        acceptsWhatsapp={acceptsWhatsapp}
         isLoggedIn={!!session}
         isOpen={isOpen}
-        ordersEnabled={flags.orders_enabled}
+        ordersEnabled={ordersEnabled}
         defaultName={session?.displayName ?? ''}
         menuImages={menuImages}
         offers={offersList}

@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Merchant Data
@@ -313,8 +314,23 @@ export type MerchantBranch = {
 }
 
 export async function getMyBranches(businessId: string): Promise<MerchantBranch[]> {
-  const supabase = await createClient()
-  const { data } = await supabase
+  const authClient = await createClient()
+  const {
+    data: { user },
+  } = await authClient.auth.getUser()
+  if (!user) return []
+
+  const { data: ownedBusiness, error: ownershipError } = await authClient
+    .from('businesses')
+    .select('id')
+    .eq('id', businessId)
+    .eq('owner_profile_id', user.id)
+    .limit(1)
+    .maybeSingle()
+  if (ownershipError || !ownedBusiness) return []
+
+  const privileged = createServiceClient()
+  const { data, error } = await privileged
     .from('business_branches')
     .select(
       'id, business_id, name, area, address_text, latitude, longitude, phone, whatsapp, is_primary, is_active, sort_order',
@@ -323,6 +339,10 @@ export async function getMyBranches(businessId: string): Promise<MerchantBranch[
     .order('is_primary', { ascending: false })
     .order('sort_order', { ascending: true })
 
+  if (error) {
+    console.error('[merchant] failed to load owned branches:', error.message)
+    return []
+  }
   return (data ?? []) as MerchantBranch[]
 }
 

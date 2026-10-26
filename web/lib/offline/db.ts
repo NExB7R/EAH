@@ -4,7 +4,7 @@
 // ═══════════════════════════════════════════════════════════
 
 const DB_NAME = 'eah-offline'
-const DB_VERSION = 1
+const DB_VERSION = 2
 
 export const STORES = {
   businesses: 'businesses',
@@ -23,11 +23,15 @@ export function openDB(): Promise<IDBDatabase> {
   dbPromise = new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, DB_VERSION)
 
-    req.onupgradeneeded = () => {
+    req.onupgradeneeded = (event) => {
       const db = req.result
 
       if (!db.objectStoreNames.contains(STORES.businesses)) {
         db.createObjectStore(STORES.businesses, { keyPath: 'slug' })
+      } else if (event.oldVersion < 2) {
+        // Purge old business details that cached branch phone/WhatsApp values before
+        // the contact-reveal change. Keep pending offline actions and metadata intact.
+        req.transaction?.objectStore(STORES.businesses).clear()
       }
       if (!db.objectStoreNames.contains(STORES.pending)) {
         const store = db.createObjectStore(STORES.pending, {
@@ -41,7 +45,14 @@ export function openDB(): Promise<IDBDatabase> {
       }
     }
 
-    req.onsuccess = () => resolve(req.result)
+    req.onsuccess = () => {
+      const db = req.result
+      db.onversionchange = () => {
+        db.close()
+        dbPromise = null
+      }
+      resolve(db)
+    }
     req.onerror = () => reject(req.error)
   })
 

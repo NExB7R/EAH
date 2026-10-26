@@ -1,7 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { StoreIcon, PhoneIcon, HeartIcon, EyeIcon, ShareIcon, MessageCircleIcon } from './icons'
+import {
+  StoreIcon,
+  PhoneIcon,
+  WhatsAppIcon,
+  HeartIcon,
+  EyeIcon,
+  ShareIcon,
+  MessageCircleIcon,
+} from './icons'
 import SmartLockModal, { useSmartLock } from './smart-lock-modal'
 import OrderModal from './order-modal'
 import BusinessShareModal from './business-share-modal'
@@ -18,8 +26,6 @@ type Props = {
   businessSlug: string
   businessName: string
   isLoggedIn: boolean
-  whatsapp: string | null
-  phone: string | null
   isOpen: boolean
   acceptsWhatsapp: boolean
   ordersEnabled: boolean
@@ -36,8 +42,6 @@ export default function BusinessActions({
   businessSlug,
   businessName,
   isLoggedIn,
-  whatsapp,
-  phone,
   isOpen,
   acceptsWhatsapp,
   ordersEnabled,
@@ -48,14 +52,12 @@ export default function BusinessActions({
   menuImages = [],
   offers = [],
 }: Props) {
-  // Keep props stable for future use (contact display, etc.)
-  void whatsapp
-  void acceptsWhatsapp
-
   const lock = useSmartLock()
   const [fav, setFav] = useState(isFavorite)
   const [follow, setFollow] = useState(isFollowing)
   const [pending, setPending] = useState(false)
+  const [contactPending, setContactPending] = useState<'phone' | 'whatsapp' | null>(null)
+  const [contactMessage, setContactMessage] = useState<string | null>(null)
   const [orderOpen, setOrderOpen] = useState(false)
   const [orderKey, setOrderKey] = useState(0)
   const [shareOpen, setShareOpen] = useState(false)
@@ -67,12 +69,53 @@ export default function BusinessActions({
     return true
   }
 
-  const trackContact = (method: 'phone' | 'whatsapp') => {
-    void fetch('/api/track-contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ businessId, method }),
-    }).catch(() => {})
+  const handleContact = async (method: 'phone' | 'whatsapp') => {
+    if (requireAuth(method === 'phone' ? 'تتصل بالنشاط مباشرة' : 'تتواصل على واتساب')) return
+    if (contactPending) return
+
+    setContactMessage(null)
+    setContactPending(method)
+    try {
+      const response = await fetch('/api/track-contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ businessId, method }),
+      })
+      const result = (await response.json().catch(() => null)) as
+        | { ok?: boolean; value?: string; error?: string }
+        | null
+
+      if (!response.ok || typeof result?.value !== 'string' || !result.value.trim()) {
+        setContactMessage('بيانات التواصل مش متاحة حالياً.')
+        return
+      }
+
+      if (method === 'phone') {
+        const safePhone = result.value.replace(/[^0-9+]/g, '')
+        if (!/^\+?\d{8,15}$/.test(safePhone)) {
+          setContactMessage('رقم التواصل غير صحيح.')
+          return
+        }
+        window.location.href = `tel:${safePhone}`
+        return
+      }
+
+      const digits = result.value.replace(/\D/g, '')
+      const normalized = digits.startsWith('20')
+        ? digits
+        : digits.startsWith('0')
+          ? `20${digits.slice(1)}`
+          : `20${digits}`
+      if (normalized.length < 11 || normalized.length > 15) {
+        setContactMessage('رقم واتساب غير صحيح.')
+        return
+      }
+      window.location.href = `https://wa.me/${normalized}`
+    } catch {
+      setContactMessage('تعذر جلب بيانات التواصل. جرّب تاني.')
+    } finally {
+      setContactPending(null)
+    }
   }
 
   // ─── Order Modal (in-app, مرتبط بـ merchant_order_settings) ───
@@ -83,13 +126,7 @@ export default function BusinessActions({
     setOrderOpen(true)
   }
 
-  // ─── Phone ───
-  const handlePhone = () => {
-    if (requireAuth('تتصل بالنشاط مباشرة')) return
-    if (!phone) return
-    trackContact('phone')
-    window.location.href = `tel:${phone}`
-  }
+  // بيانات الاتصال بتتجاب من الخادم بعد ضغطة المستخدم وتحقق الصلاحيات.
 
   // ─── Favorite ───
   const handleFavorite = async () => {
@@ -172,15 +209,31 @@ export default function BusinessActions({
         {/* Phone */}
         <button
           type="button"
-          onClick={handlePhone}
-          disabled={!phone}
+          onClick={() => void handleContact('phone')}
+          disabled={contactPending !== null}
           className={`${styles.action} ${styles.phone}`}
         >
           <span className={styles.actionIcon}>
             <PhoneIcon size={20} />
           </span>
-          <span className={styles.actionLabel}>اتصال</span>
+          <span className={styles.actionLabel}>
+            {contactPending === 'phone' ? 'بيفتح…' : 'اتصال'}
+          </span>
         </button>
+
+        {acceptsWhatsapp && (
+          <button
+            type="button"
+            onClick={() => void handleContact('whatsapp')}
+            disabled={contactPending !== null}
+            className={`${styles.action} ${styles.whatsapp}`}
+          >
+            <span className={styles.actionIcon}><WhatsAppIcon size={20} /></span>
+            <span className={styles.actionLabel}>
+              {contactPending === 'whatsapp' ? 'بيفتح…' : 'واتساب'}
+            </span>
+          </button>
+        )}
 
         {/* Favorite */}
         <button
@@ -226,6 +279,11 @@ export default function BusinessActions({
           <span className={styles.actionLabel}>شارك</span>
         </button>
       </div>
+      {contactMessage && (
+        <p role="status" className={styles.contactMessage}>
+          {contactMessage}
+        </p>
+      )}
 
       <SmartLockModal open={lock.open} onClose={lock.close} action={lock.action} hint={lock.hint} />
 

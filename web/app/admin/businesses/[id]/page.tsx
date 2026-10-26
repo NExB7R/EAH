@@ -59,6 +59,7 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
         settings={
           orderSettings
             ? {
+                admin_enabled: orderSettings.admin_enabled,
                 orders_enabled: orderSettings.orders_enabled,
                 deadline_minutes: orderSettings.deadline_minutes,
                 delivery_eta_minutes: orderSettings.delivery_eta_minutes,

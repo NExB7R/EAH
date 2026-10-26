@@ -15,7 +15,7 @@ import { getMyBusiness } from '@/lib/data/merchant'
 import { getFavoriteIds } from '@/lib/data/account'
 import { getActiveAdsForSlot } from '@/lib/data/ads'
 import { fairOrder, fairOrderOffers } from '@/lib/fair-ranking'
-import { isOpenNow } from '@/lib/data/businesses'
+import { isBusinessOpen } from '@/lib/utils/working-hours'
 import type { Business } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
@@ -54,7 +54,7 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
   // ─── الفلترة ───
   let all = allRaw
   if (typeFilter === 'open') {
-    all = all.filter((b) => isOpenNow(b.working_hours))
+    all = all.filter((business) => isBusinessOpen(business))
   } else if (typeFilter === 'online') {
     all = all.filter((b) => b.accepts_whatsapp_orders)
   } else if (typeFilter && typeFilter !== 'all') {

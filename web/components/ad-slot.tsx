@@ -2,6 +2,7 @@ import Link from 'next/link'
 import WmImage from './wm-image'
 import { ExternalLinkIcon, TagIcon } from './icons'
 import type { ActiveAd } from '@/lib/data/ads'
+import { safeAdHref } from '@/lib/utils/safe-ad-link'
 import styles from './ad-slot.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -20,6 +21,7 @@ export default function AdSlot({ ads, variant = 'banner' }: Props) {
 
   const ad = ads[0]
   if (!ad) return null
+  const safeLinkUrl = safeAdHref(ad.link_url)
 
   const inner = (
     <>
@@ -57,9 +59,9 @@ export default function AdSlot({ ads, variant = 'banner' }: Props) {
 
   const className = `${styles.wrap} ${styles[variant]}`
 
-  if (ad.link_url) {
+  if (safeLinkUrl) {
     return (
-      <Link href={ad.link_url} className={className} target="_blank" rel="noopener sponsored">
+      <Link href={safeLinkUrl} className={className} target="_blank" rel="noopener sponsored">
         {inner}
       </Link>
     )

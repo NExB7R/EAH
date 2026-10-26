@@ -42,7 +42,12 @@ export type CreateBulkInput = {
 }
 
 // ─── أنواع "مقفلة" (مش قابلة للإطفاء) ───
-const LOCKED_TYPES: Set<NotificationType> = new Set(['system', 'admin', 'announcement'])
+const LOCKED_TYPES: Set<NotificationType> = new Set([
+  'system',
+  'admin',
+  'announcement',
+  'order_new',
+])
 
 // ─── فحص تفضيلات المستخدم ───
 async function isTypeEnabled(userId: string, type: NotificationType): Promise<boolean> {

@@ -12,10 +12,11 @@ import {
 import { setOfflineMode, setDeliveryEta, setOrdersEnabled } from './actions'
 import styles from './settings.module.css'
 
-type Status = 'active' | 'suspended' | 'offline' | 'disabled'
+type Status = 'active' | 'suspended' | 'offline' | 'disabled' | 'not-authorized'
 
 type Props = {
   settings: {
+    admin_enabled: boolean
     orders_enabled: boolean
     deadline_minutes: number
     delivery_eta_minutes: number | null
@@ -47,6 +48,7 @@ export default function OrderSettingsCard({ settings, status }: Props) {
     suspended: { label: 'موقوف مؤقتاً', tone: 'warn' as const, Icon: AlertIcon },
     offline: { label: 'مش متاح', tone: 'muted' as const, Icon: ClockIcon },
     disabled: { label: 'مش مفعّل', tone: 'warn' as const, Icon: SettingsIcon },
+    'not-authorized': { label: 'بانتظار تفعيل الإدارة', tone: 'warn' as const, Icon: SettingsIcon },
   }[status]
 
   const StatusIcon = meta.Icon
@@ -88,6 +90,16 @@ export default function OrderSettingsCard({ settings, status }: Props) {
           {meta.label}
         </span>
       </header>
+
+      {status === 'not-authorized' && (
+        <div className={styles.noticeWarn}>
+          <AlertIcon size={16} />
+          <div>
+            <strong>استقبال الطلبات لسه مش متاح</strong>
+            <p>الإدارة لازم تفعّل الاستقبال للنشاط الأول. بعد التفعيل هتقدر تفتحه وتقفله بنفسك.</p>
+          </div>
+        </div>
+      )}
 
       {status === 'disabled' && (
         <>
@@ -157,7 +169,7 @@ export default function OrderSettingsCard({ settings, status }: Props) {
         </div>
       )}
 
-      {settings.orders_enabled && (
+      {settings.admin_enabled && settings.orders_enabled && (
         <div className={styles.obligations}>
           <h3 className={styles.obligationsTitle}>التزاماتك</h3>
           <ul className={styles.obligationsList}>
@@ -191,7 +203,7 @@ export default function OrderSettingsCard({ settings, status }: Props) {
         </div>
       )}
 
-      {settings.orders_enabled && (
+      {settings.admin_enabled && settings.orders_enabled && (
         <div className={styles.etaEditor}>
           <label className={styles.etaLabel}>
             <ClockIcon size={14} />
@@ -227,7 +239,7 @@ export default function OrderSettingsCard({ settings, status }: Props) {
         </div>
       )}
 
-      {settings.orders_enabled && status !== 'suspended' && (
+      {settings.admin_enabled && settings.orders_enabled && status !== 'suspended' && (
         <div className={styles.actions}>
           {status === 'active' ? (
             <button

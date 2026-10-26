@@ -1,13 +1,17 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { orderSchema, orderHasContent } from '@/lib/validations/order'
-import { createNotification } from '@/lib/notifications/server'
+import { sendPushToUser } from '@/lib/push/server'
+import { createServiceClient } from '@/lib/supabase/service'
+import { isOpenNow } from '@/lib/utils/working-hours'
+import type { WorkingHours } from '@/lib/data/businesses'
+import { z } from 'zod'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 
 type Result =
-  | { ok: true; orderCode: string; orderId: string; whatsappUrl: string }
+  | { ok: true; orderCode: string; orderId: string }
   | { ok: false; error: string }
 
 function genOrderCode(): string {
@@ -26,6 +30,10 @@ export async function submitOrder(
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  const identity = z.object({ businessId: z.string().uuid(), slug: z.string().min(1).max(120) })
+  if (!identity.safeParse({ businessId, slug }).success) {
+    return { ok: false, error: 'النشاط المطلوب غير صحيح' }
+  }
 
   // Rate limit — 5 طلبات / 15 دقيقة
   const rl = await checkRateLimit(strictLimiter, `order:${user.id}`, { failClosed: true })
@@ -59,64 +67,70 @@ export async function submitOrder(
     return { ok: false, error: 'لازم تكتب طلبك أو ترفع صورة/صوت' }
   }
 
-  // ═══════════════════════════════════════════════════════════════════
-  // 1. Gate: is order acceptance enabled for this business?
-  // ═══════════════════════════════════════════════════════════════════
-  const { data: settings } = await supabase
-    .from('merchant_order_settings')
-    .select(
-      'orders_enabled, deadline_minutes, delivery_eta_minutes, offline_mode, offline_until, suspended_until',
-    )
-    .eq('business_id', businessId)
-    .maybeSingle()
+  // Read private settings only on the server; client props are not an authorization boundary.
+  const privileged = createServiceClient()
+  const [{ data: biz, error: businessError }, { data: settings, error: settingsError }] =
+    await Promise.all([
+      privileged
+        .from('businesses')
+        .select(
+          'id, slug, name, owner_profile_id, is_published, accepts_orders, working_hours, open_now_override',
+        )
+        .eq('id', businessId)
+        .eq('slug', slug)
+        .maybeSingle(),
+      privileged
+        .from('merchant_order_settings')
+        .select(
+          'admin_enabled, orders_enabled, deadline_minutes, delivery_eta_minutes, offline_mode, offline_until, suspended_until',
+        )
+        .eq('business_id', businessId)
+        .maybeSingle(),
+    ])
 
-  if (!settings || !settings.orders_enabled) {
-    return { ok: false, error: 'النشاط مش بيستقبل طلبات حالياً — كلمه مباشرة' }
+  if (businessError || settingsError) {
+    console.error('[orders] failed to validate order availability')
+    return { ok: false, error: 'تعذر التحقق من استقبال الطلبات. جرّب تاني.' }
+  }
+  if (!biz || !biz.is_published) return { ok: false, error: 'النشاط مش متاح حالياً' }
+  if (!biz.owner_profile_id) {
+    return { ok: false, error: 'النشاط محتاج مالك مفعّل قبل استقبال الطلبات' }
+  }
+  if (!biz.accepts_orders || !settings?.admin_enabled || !settings.orders_enabled) {
+    return { ok: false, error: 'النشاط مش بيستقبل طلبات حالياً' }
   }
 
   const nowMs = Date.now()
-  if (
-    (settings.offline_mode &&
-      (!settings.offline_until || new Date(settings.offline_until).getTime() > nowMs)) ||
-    (settings.suspended_until && new Date(settings.suspended_until).getTime() > nowMs)
-  ) {
+  const hours = (biz.working_hours ?? null) as WorkingHours | null
+  const currentlyOpen =
+    typeof biz.open_now_override === 'boolean' ? biz.open_now_override : isOpenNow(hours)
+  if (!currentlyOpen) return { ok: false, error: 'النشاط مغلق حالياً' }
+
+  const offlineUntil = settings.offline_until ? new Date(settings.offline_until).getTime() : null
+  const suspendedUntil = settings.suspended_until
+    ? new Date(settings.suspended_until).getTime()
+    : null
+  const isOffline = settings.offline_mode && (offlineUntil === null || offlineUntil > nowMs)
+  const isSuspended = suspendedUntil !== null && suspendedUntil > nowMs
+  if (isOffline || isSuspended) {
     return { ok: false, error: 'النشاط مش متاح حالياً — جرّب تاني بعدين' }
   }
 
   const etaMinutes = settings.delivery_eta_minutes
-  if (!etaMinutes) {
-    return { ok: false, error: 'التاجر مش محدد مدة التسليم — كلمه مباشرة' }
+  if (
+    typeof etaMinutes !== 'number' ||
+    !Number.isInteger(etaMinutes) ||
+    etaMinutes < 15 ||
+    etaMinutes > 240
+  ) {
+    return { ok: false, error: 'التاجر لسه محددش مدة تسليم صحيحة' }
   }
-
-  const deadlineAt = new Date(nowMs + settings.deadline_minutes * 60 * 1000).toISOString()
+  const rawDeadline = settings.deadline_minutes
+  const deadlineMinutes =
+    Number.isInteger(rawDeadline) && rawDeadline >= 5 && rawDeadline <= 60 ? rawDeadline : 10
+  const deadlineAt = new Date(nowMs + deadlineMinutes * 60 * 1000).toISOString()
   const expectedDeliveryAt = new Date(nowMs + etaMinutes * 60 * 1000).toISOString()
-
-  // ═══════════════════════════════════════════════════════════════════
-  // 2. Fetch business + branch
-  // ═══════════════════════════════════════════════════════════════════
-  const { data: biz } = await supabase
-    .from('businesses')
-    .select('id, name, owner_profile_id')
-    .eq('id', businessId)
-    .maybeSingle()
-
-  if (!biz) return { ok: false, error: 'النشاط مش موجود' }
-
-  const { data: branch } = await supabase
-    .from('business_branches')
-    .select('phone, whatsapp')
-    .eq('business_id', businessId)
-    .eq('is_active', true)
-    .order('is_primary', { ascending: false })
-    .limit(1)
-    .maybeSingle()
-
-  if (!branch?.whatsapp && !branch?.phone) {
-    return { ok: false, error: 'النشاط مش بيستقبل طلبات' }
-  }
-
   const orderCode = genOrderCode()
-  const merchantPhone = branch.whatsapp || branch.phone || ''
 
   // ═══════════════════════════════════════════════════════════════════
   // 3. Optional new fields (v2)
@@ -213,58 +227,26 @@ export async function submitOrder(
     console.warn('[order_reactions] insert failed:', reactionErr.message)
   }
 
-  // ═══════════════════════════════════════════════════════════════════
-  // 5. WhatsApp link (client opens it)
-  // ═══════════════════════════════════════════════════════════════════
-  const lines = [
-    `طلب جديد #${orderCode}`,
-    `من: ${d.customer_name}`,
-    `رقم: ${d.customer_phone}`,
-    d.customer_area ? `منطقة: ${d.customer_area}` : '',
-    d.customer_address ? `عنوان: ${d.customer_address}` : '',
-    '',
-    'الطلب:',
-    (d.items_summary ?? '').trim() || '(شوف المرفقات)',
-    attachments.length > 0 ? `📎 ${attachments.length} مرفق` : '',
-    d.notes ? `\nملاحظات: ${d.notes}` : '',
-    '',
-    '— مرسل من EAH',
-  ]
-    .filter(Boolean)
-    .join('\n')
-
-  // Robust normalization for Egyptian numbers:
-  //   "01012345678"     → "201012345678"
-  //   "201012345678"    → "201012345678"
-  //   "+201012345678"   → "201012345678"
-  const cleaned = merchantPhone.replace(/[\s+\-]/g, '')
-  const normalized = cleaned.startsWith('20')
-    ? cleaned
-    : cleaned.startsWith('0')
-      ? '20' + cleaned.slice(1)
-      : '20' + cleaned
-
-  const whatsappUrl = `https://wa.me/${normalized}?text=${encodeURIComponent(lines)}`
-
-  // ═══════════════════════════════════════════════════════════════════
-  // 6. Notify merchant — deep link straight to the order
-  // ═══════════════════════════════════════════════════════════════════
+  // The in-app notification row is created by the order INSERT trigger.
+  // Push delivery is best-effort; a push-provider failure must not undo the order.
   if (biz.owner_profile_id) {
-    const itemsPart = (d.items_summary ?? '').slice(0, 70) || '(تفاصيل مرفقة)'
-    void createNotification({
-      userId: biz.owner_profile_id,
-      type: 'order_new',
-      title: `🔔 طلب جديد #${orderCode}`,
-      body: `${d.customer_name}: ${itemsPart}`,
-      deepLink: `/merchant/orders?order=${orderId}`,
-      push: true,
-      pushTag: `order-${orderId}`,
-    }).catch(() => {})
+    void sendPushToUser(biz.owner_profile_id, {
+      title: `طلب جديد #${orderCode}`,
+      body: `${d.customer_name}: ${(d.items_summary ?? '').slice(0, 70) || '(تفاصيل مرفقة)'}`,
+      url: `/merchant/orders?order=${orderId}`,
+      tag: `order-${orderId}`,
+    }).catch((error: unknown) => {
+      console.error(
+        '[orders] push delivery failed:',
+        error instanceof Error ? error.message : 'unknown error',
+      )
+    })
   }
 
   revalidatePath(`/businesses/${slug}`)
   revalidatePath('/merchant/orders')
   revalidatePath('/account/orders')
+  revalidateTag('businesses', 'default')
 
-  return { ok: true, orderCode, orderId, whatsappUrl }
+  return { ok: true, orderCode, orderId }
 }

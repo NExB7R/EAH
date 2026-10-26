@@ -7,6 +7,7 @@ import { enableOrders, disableOrders } from './order-settings-actions'
 import styles from './order-settings-panel.module.css'
 
 type Settings = {
+  admin_enabled: boolean
   orders_enabled: boolean
   deadline_minutes: number
   delivery_eta_minutes: number | null
@@ -29,7 +30,7 @@ export default function OrderSettingsPanel({
   const [deadline, setDeadline] = useState(settings?.deadline_minutes ?? 10)
   const [eta, setEta] = useState(settings?.delivery_eta_minutes ?? 45)
 
-  const isEnabled = !!settings?.orders_enabled
+  const isEnabled = !!settings?.admin_enabled && !!settings?.orders_enabled
 
   const doEnable = () => {
     setError(null)

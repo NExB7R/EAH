@@ -12,7 +12,7 @@ export async function getMerchantOrderSettings(
   const { data } = await supabase
     .from('merchant_order_settings')
     .select(
-      'business_id, orders_enabled, deadline_minutes, delivery_eta_minutes, offline_mode, offline_until, auto_accept, missed_count_today, missed_count_week, last_missed_at, suspended_until, suspension_reason',
+      'business_id, admin_enabled, orders_enabled, deadline_minutes, delivery_eta_minutes, offline_mode, offline_until, auto_accept, missed_count_today, missed_count_week, last_missed_at, suspended_until, suspension_reason',
     )
     .eq('business_id', businessId)
     .maybeSingle()
@@ -30,7 +30,9 @@ export function isOrderAcceptanceActive(settings: MerchantOrderSettings | null):
   active: boolean
   reason: string | null
 } {
-  if (!settings) return { active: false, reason: 'لم يتم تفعيل استلام الطلبات بعد' }
+  if (!settings || !settings.admin_enabled) {
+    return { active: false, reason: 'استلام الطلبات غير مفعّل من الإدارة' }
+  }
   if (!settings.orders_enabled) {
     return { active: false, reason: 'استلام الطلبات موقوف من الإدارة' }
   }

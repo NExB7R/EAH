@@ -9,17 +9,19 @@ import styles from './settings.module.css'
 
 export const dynamic = 'force-dynamic'
 
-type Status = 'active' | 'suspended' | 'offline' | 'disabled'
+type Status = 'active' | 'suspended' | 'offline' | 'disabled' | 'not-authorized'
 
 function computeStatus(
   settings: {
+    admin_enabled: boolean
     orders_enabled: boolean
     offline_mode: boolean
     offline_until: string | null
     suspended_until: string | null
   } | null,
 ): Status {
-  if (!settings || !settings.orders_enabled) return 'disabled'
+  if (!settings || !settings.admin_enabled) return 'not-authorized'
+  if (!settings.orders_enabled) return 'disabled'
   const now = Date.now()
   if (settings.suspended_until && new Date(settings.suspended_until).getTime() > now) {
     return 'suspended'
@@ -40,9 +42,22 @@ export default async function MerchantOrderSettingsPage() {
   const business = await getMyBusiness(session.userId)
   if (!business) redirect('/merchant')
 
-  const settings = await getMerchantOrderSettings(business.id)
-  if (!settings) redirect('/merchant')
-
+  const storedSettings = await getMerchantOrderSettings(business.id)
+  const settings = storedSettings ?? {
+    business_id: business.id,
+    admin_enabled: false,
+    orders_enabled: false,
+    deadline_minutes: 10,
+    delivery_eta_minutes: null,
+    offline_mode: false,
+    offline_until: null,
+    auto_accept: false,
+    missed_count_today: 0,
+    missed_count_week: 0,
+    last_missed_at: null,
+    suspended_until: null,
+    suspension_reason: null,
+  }
   const status = computeStatus(settings)
 
   return (
@@ -55,6 +70,7 @@ export default async function MerchantOrderSettingsPage() {
       <OrderSettingsCard
         status={status}
         settings={{
+          admin_enabled: settings.admin_enabled,
           orders_enabled: settings.orders_enabled,
           deadline_minutes: settings.deadline_minutes,
           delivery_eta_minutes: settings.delivery_eta_minutes,

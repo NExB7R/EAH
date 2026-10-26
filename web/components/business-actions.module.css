@@ -1,6 +1,6 @@
 .actions {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 10px;
   padding: 20px 0;
 }
@@ -114,6 +114,18 @@
   color: var(--gold-light);
 }
 
+/* ─── Tablet ─── */
+@media (min-width: 641px) and (max-width: 899px) {
+  .actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.contactMessage {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
 /* ─── Mobile ─── */
 @media (max-width: 640px) {
   .actions {
@@ -121,6 +133,7 @@
     gap: 8px;
   }
   .action {
+    min-width: 0;
     padding: 10px 6px;
     border-radius: 14px;
   }
@@ -133,6 +146,8 @@
     height: 18px;
   }
   .actionLabel {
+    white-space: normal;
+    overflow-wrap: anywhere;
     font-size: 0.65rem;
   }
 }

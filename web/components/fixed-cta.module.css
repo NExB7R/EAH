@@ -40,6 +40,21 @@
   box-shadow: 0 0 36px rgba(37, 211, 102, 0.7);
 }
 
+.order {
+  color: #8ff0e1;
+  background: linear-gradient(135deg, rgba(85, 231, 209, 0.2), rgba(85, 231, 209, 0.06));
+  border: 1px solid rgba(85, 231, 209, 0.45);
+  box-shadow: 0 0 20px rgba(85, 231, 209, 0.22);
+}
+
+.message {
+  margin: 8px 4px 0;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
 .phone {
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
   box-shadow: 0 0 24px rgba(232, 199, 154, 0.5);

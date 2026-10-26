@@ -258,12 +258,14 @@ export default function OrderModal({
     startTransition(async () => {
       const res = await submitOrder(businessId, businessSlug, fd)
       if (res.ok) {
+        try {
+          addPendingReview({ businessId, businessSlug, businessName })
+        } catch (error) {
+          // Order submission has succeeded; optional review reminders must not block confirmation.
+          console.warn('[order-modal] pending review reminder could not be saved:', error)
+        }
         setSuccessCode(res.orderCode)
         setStep('success')
-        addPendingReview({ businessId, businessSlug, businessName })
-        setTimeout(() => {
-          window.open(res.whatsappUrl, '_blank')
-        }, 900)
       } else {
         setMsg(res.error)
       }
@@ -288,7 +290,7 @@ export default function OrderModal({
             <h2 className={styles.successTitle}>تم!</h2>
             <p className={styles.successText}>طلبك #{successCode} وصل للتاجر ✓</p>
             <p className={styles.successHint}>
-              هيتم فتح واتساب الآن لإشعار التاجر. لو ما فتحش، كلم النشاط من صفحته.
+تقدر تتابع حالة الطلب والرد من صفحة «طلباتي» داخل EAH. رقم طلبك محفوظ.
             </p>
             <div className={styles.timelinePreview}>
               <p className={styles.timelinePreviewTitle}>الخطوات القادمة:</p>

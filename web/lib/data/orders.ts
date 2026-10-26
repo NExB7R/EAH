@@ -66,6 +66,7 @@ export type OrderReaction = {
 
 export type MerchantOrderSettings = {
   business_id: string
+  admin_enabled: boolean
   orders_enabled: boolean
   deadline_minutes: number
   delivery_eta_minutes: number | null

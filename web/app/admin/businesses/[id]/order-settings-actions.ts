@@ -1,9 +1,10 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { requireAdmin } from '@/lib/auth/admin'
 import { createNotification } from '@/lib/notifications/server'
 import { logAudit } from '@/lib/logging/audit'
+import { z } from 'zod'
 
 // ═══════════════════════════════════════════════════════════════════
 // Admin: enable/disable order acceptance + summary report on disable
@@ -19,26 +20,40 @@ export async function enableOrders(
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  if (!businessId) return { ok: false, error: 'businessId مفقود' }
-  const safeDeadline = Math.max(5, Math.min(60, Math.trunc(deadlineMinutes) || 10))
-  const safeEta = Math.max(15, Math.min(240, Math.trunc(deliveryEtaMinutes) || 0))
-  if (safeEta < 15) {
-    return { ok: false, error: 'حدد مدة التسليم (15-240 دقيقة)' }
+  if (!z.string().uuid().safeParse(businessId).success) {
+    return { ok: false, error: 'معرّف النشاط غير صحيح' }
   }
+  if (!Number.isInteger(deadlineMinutes) || deadlineMinutes < 5 || deadlineMinutes > 60) {
+    return { ok: false, error: 'مدة الرد لازم تكون من 5 لـ 60 دقيقة' }
+  }
+  if (
+    !Number.isInteger(deliveryEtaMinutes) ||
+    deliveryEtaMinutes < 15 ||
+    deliveryEtaMinutes > 240
+  ) {
+    return { ok: false, error: 'مدة التسليم لازم تكون من 15 لـ 240 دقيقة' }
+  }
+  const safeDeadline = deadlineMinutes
+  const safeEta = deliveryEtaMinutes
 
   // Fetch business + owner
   const { data: biz } = await ctx.supabase
     .from('businesses')
-    .select('id, name, owner_profile_id')
+    .select('id, name, owner_profile_id, is_published')
     .eq('id', businessId)
     .maybeSingle()
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
+  if (!biz.owner_profile_id || !biz.is_published) {
+    return { ok: false, error: 'لازم النشاط يكون منشور ومرتبط بمالك قبل تفعيل الطلبات' }
+  }
 
   const { error: updErr } = await ctx.supabase.from('merchant_order_settings').upsert(
     {
       business_id: businessId,
+      admin_enabled: true,
       orders_enabled: true,
       deadline_minutes: safeDeadline,
+      delivery_eta_minutes: safeEta,
       orders_enabled_at: new Date().toISOString(),
       offline_mode: false,
       offline_until: null,
@@ -71,6 +86,7 @@ export async function enableOrders(
   revalidatePath(`/admin/businesses/${businessId}`)
   revalidatePath('/merchant/orders')
   revalidatePath('/merchant/orders/settings')
+  revalidateTag('businesses', 'default')
   return { ok: true }
 }
 
@@ -178,6 +194,7 @@ export async function disableOrders(businessId: string): Promise<Result> {
   const { error: updErr } = await ctx.supabase
     .from('merchant_order_settings')
     .update({
+      admin_enabled: false,
       orders_enabled: false,
       orders_disabled_at: new Date().toISOString(),
       offline_mode: false,
@@ -219,6 +236,7 @@ export async function disableOrders(businessId: string): Promise<Result> {
   revalidatePath('/merchant/orders')
   revalidatePath('/merchant/orders/settings')
   revalidatePath('/merchant/insights')
+  revalidateTag('businesses', 'default')
 
   return { ok: true, reportId: savedReport?.id }
 }

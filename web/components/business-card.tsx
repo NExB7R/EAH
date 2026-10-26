@@ -2,6 +2,7 @@ import Link from 'next/link'
 import CardImage from './card-image'
 import DistanceBadge from './distance-badge'
 import type { Business } from '@/lib/data/businesses'
+import { isBusinessOpen } from '@/lib/utils/working-hours'
 import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import {
   StarIcon,
@@ -21,7 +22,6 @@ import {
   HeartIcon,
   ArrowLeftIcon,
   SunriseIcon,
-  TrendingUpIcon,
   CartIcon,
 } from './icons'
 import styles from './business-card.module.css'
@@ -86,7 +86,8 @@ export default function BusinessCard({
 
   const hasRating = business.rating_count > 0
   const rating = hasRating ? business.rating_avg.toFixed(1) : null
-  const isOrderable = business.orders_enabled && business.is_open
+  const isOpen = isBusinessOpen(business)
+  const isOrderable = business.accepts_orders && isOpen
 
   const ctaText = (() => {
     if (isOrderable) return 'اطلب دلوقتي'
@@ -160,9 +161,9 @@ export default function BusinessCard({
                 <HeartIcon size={11} />
               </span>
             )}
-            <span className={`${styles.status} ${business.is_open ? styles.open : styles.closed}`}>
-              {business.is_open ? <CheckCircleIcon size={10} /> : <AlertIcon size={10} />}
-              {business.is_open ? 'مفتوح' : 'مغلق'}
+            <span className={`${styles.status} ${isOpen ? styles.open : styles.closed}`}>
+              {isOpen ? <CheckCircleIcon size={10} /> : <AlertIcon size={10} />}
+              {isOpen ? 'مفتوح' : 'مغلق'}
             </span>
           </div>
         </div>
@@ -218,10 +219,10 @@ export default function BusinessCard({
               {offersText}
             </span>
           )}
-          {business.accepts_whatsapp_orders && (
+          {business.accepts_orders && (
             <span className={`${styles.chip} ${styles.chipOrder}`}>
-              <TrendingUpIcon size={11} />
-              بيستقبل طلبات
+              <StoreIcon size={11} />
+              استقبال الطلبات
             </span>
           )}
         </div>

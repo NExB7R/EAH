@@ -4,7 +4,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import type { Business, BusinessType } from '@/lib/data/businesses'
-import { isOpenNow } from '@/lib/data/businesses'
+import { isBusinessOpen } from '@/lib/utils/working-hours'
 import { distanceKm, type LatLng } from '@/lib/utils/distance'
 
 export type SortOption = 'trust' | 'rating' | 'distance' | 'newest' | 'relevance'
@@ -73,7 +73,7 @@ export function applyFilters(businesses: Business[], filters: Filters): Business
 
   // 3) مفتوح دلوقتي
   if (filters.openNow) {
-    result = result.filter((b) => isOpenNow(b.working_hours))
+    result = result.filter((business) => isBusinessOpen(business))
   }
 
   // 3b) واتساب

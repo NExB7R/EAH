@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createPublicClient } from '@/lib/supabase/public'
-import { isOpenNow, type Business } from './businesses'
+import { isBusinessOpen, isOpenNow, type Business, type WorkingHours } from './businesses'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Detail (Full Page Data)
@@ -20,8 +20,20 @@ function normalizeBusinessRows(data: unknown[] | null): Business[] {
       primaryLoc && Number.isFinite(primaryLoc.latitude) && Number.isFinite(primaryLoc.longitude)
         ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
         : null
+    const acceptsOrders = raw.accepts_orders === true
+    const isOpen = isBusinessOpen({
+      working_hours: (raw.working_hours as WorkingHours | null) ?? null,
+      open_now_override:
+        typeof raw.open_now_override === 'boolean' ? raw.open_now_override : null,
+    })
     delete raw.business_locations
-    return { ...(raw as unknown as Business), location }
+    return {
+      ...(raw as unknown as Business),
+      location,
+      is_open: isOpen,
+      accepts_orders: acceptsOrders,
+      orders_enabled: acceptsOrders,
+    }
   })
 }
 
@@ -57,8 +69,6 @@ export type Branch = {
   address_text: string | null
   latitude: number | null
   longitude: number | null
-  phone: string | null
-  whatsapp: string | null
   is_primary: boolean
 }
 
@@ -147,7 +157,7 @@ export const getBusinessDetail = unstable_cache(
         is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         trust_score, trust_tier, successful_orders,
         featured_order, featured_until, featured_pin,
-        new_until, working_hours, accepts_whatsapp_orders,
+        new_until, working_hours, accepts_whatsapp_orders, accepts_orders,
         response_time_avg_seconds, response_rate,
         last_activity_at, created_at, updated_at,
         branches_count, offers_count, rating_avg, rating_count,
@@ -172,7 +182,16 @@ export const getBusinessDetail = unstable_cache(
         ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
         : null
     delete rawBiz.business_locations
-    const business = { ...(rawBiz as unknown as Omit<Business, 'owner_profile_id'>), location }
+    const business = {
+      ...(rawBiz as unknown as Omit<Business, 'owner_profile_id'>),
+      location,
+      is_open: isBusinessOpen({
+        working_hours: (rawBiz.working_hours as WorkingHours | null) ?? null,
+        open_now_override:
+          typeof rawBiz.open_now_override === 'boolean' ? rawBiz.open_now_override : null,
+      }),
+      orders_enabled: rawBiz.accepts_orders === true,
+    }
 
     const noticeText = ((rawBiz.important_notice as string | null) ?? '').trim()
     const noticeExpiresAt = (rawBiz.notice_expires_at as string | null) ?? null
@@ -195,6 +214,7 @@ export const getBusinessDetail = unstable_cache(
         .select('method_type, value, is_primary')
         .eq('business_id', business.id)
         .eq('is_public', true)
+        .in('method_type', ['facebook', 'instagram', 'website'])
         .order('is_primary', { ascending: false }),
       supabase
         .from('business_media')
@@ -204,7 +224,7 @@ export const getBusinessDetail = unstable_cache(
         .order('sort_order', { ascending: true }),
       supabase
         .from('business_branches')
-        .select('id, name, area, address_text, latitude, longitude, phone, whatsapp, is_primary')
+        .select('id, name, area, address_text, latitude, longitude, is_primary')
         .eq('business_id', business.id)
         .eq('is_active', true)
         .order('is_primary', { ascending: false }),
@@ -232,7 +252,7 @@ export const getBusinessDetail = unstable_cache(
       openNowOverride,
     }
   },
-  ['business-detail-v1'],
+  ['business-detail-v2'],
   { revalidate: 120, tags: ['businesses'] },
 )
 
@@ -338,7 +358,7 @@ export const getSimilarBusinesses = unstable_cache(
         is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         trust_score, trust_tier, successful_orders,
         featured_order, featured_until, featured_pin,
-        new_until, working_hours, accepts_whatsapp_orders,
+        new_until, working_hours, open_now_override, accepts_whatsapp_orders, accepts_orders,
         response_time_avg_seconds, response_rate,
         last_activity_at, created_at, updated_at,
         branches_count, offers_count, rating_avg, rating_count,
@@ -353,7 +373,7 @@ export const getSimilarBusinesses = unstable_cache(
 
     return normalizeBusinessRows(data)
   },
-  ['business-similar-v1'],
+  ['business-similar-v2'],
   { revalidate: 300, tags: ['businesses'] },
 )
 
