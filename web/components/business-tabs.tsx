@@ -41,6 +41,12 @@ type Props = {
   offers?: BusinessOfferSimple[]
 }
 
+// Helper: true if string has real content (not just whitespace/punctuation)
+function isNonEmpty(s: string | null | undefined): s is string {
+  if (!s) return false
+  return s.replace(/[:\s.،،]/g, '').length > 0
+}
+
 const DAY_LABEL: Record<string, string> = {
   sun: 'الأحد',
   mon: 'الاثنين',
@@ -285,21 +291,31 @@ export default function BusinessTabs({
             </div>
           )}
 
-          {/* Description */}
-          {business.description && (
+          {/* Description — prefer description, fallback to hook */}
+          {isNonEmpty(business.description) ? (
             <div className={styles.block}>
               <h3 className={styles.blockTitle}>عن النشاط</h3>
-              <p className={styles.desc}>{business.description}</p>
+              <p className={styles.desc}>{business.description.trim()}</p>
             </div>
-          )}
-
-          {/* Branches */}
-          {branches.length > 0 && (
+          ) : isNonEmpty(business.hook) ? (
             <div className={styles.block}>
-              <h3 className={styles.blockTitle}>الفروع ({branches.length})</h3>
-              <BranchList branches={branches} />
+              <h3 className={styles.blockTitle}>عن النشاط</h3>
+              <p className={styles.desc}>{business.hook.trim()}</p>
             </div>
-          )}
+          ) : null}
+
+          {/* Branches — show only if at least one has meaningful data */}
+          {branches.length > 0 &&
+            branches.some(
+              (b) =>
+                (b.address_text && b.address_text.trim().length > 0) ||
+                (b.phone && b.phone.trim().length > 0),
+            ) && (
+              <div className={styles.block}>
+                <h3 className={styles.blockTitle}>الفروع ({branches.length})</h3>
+                <BranchList branches={branches} />
+              </div>
+            )}
 
           {/* Gallery */}
           {gallery.length > 0 && (
