@@ -20,10 +20,8 @@ export default function Logo({
 }: LogoProps) {
   const sizeCls = styles[size]
   const variantCls = variant === 'crown' ? styles.crownOnly : ''
-  const cls = [styles.logo, sizeCls, variantCls, className].filter(Boolean).join(' ')
-
-  // إجبار الحجم على الموبايل للهيرو
-  const forceHeroSize = size === 'lg' && !href ? styles.forceMobileHero : ''
+  const forceHeroSize = size === 'lg' ? styles.forceMobileHero : ''
+  const cls = [styles.logo, sizeCls, variantCls, forceHeroSize, className].filter(Boolean).join(' ')
 
   const inner = (
     <>
@@ -75,7 +73,7 @@ export default function Logo({
   }
 
   return (
-    <span className={`${cls} ${forceHeroSize}`} aria-label="EAH — اللى نفسك فيه ؟">
+    <span className={cls} aria-label="EAH — اللى نفسك فيه ؟">
       {inner}
     </span>
   )
