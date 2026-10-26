@@ -352,8 +352,4 @@
   .formLeft textarea {
     width: 100%;
   }
-  /* Touch targets ≥ 44px */
-  button {
-    min-height: 44px;
-  }
 }

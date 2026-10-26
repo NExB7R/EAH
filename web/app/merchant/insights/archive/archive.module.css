@@ -117,7 +117,4 @@
   .list {
     grid-template-columns: 1fr;
   }
-  button {
-    min-height: 44px;
-  }
 }

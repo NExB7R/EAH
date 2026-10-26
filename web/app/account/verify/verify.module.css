@@ -151,7 +151,4 @@
     flex-wrap: wrap;
     gap: 8px;
   }
-  button {
-    min-height: 44px;
-  }
 }

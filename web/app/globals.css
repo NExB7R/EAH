@@ -715,3 +715,17 @@ article p,
 article li {
   overflow-wrap: anywhere;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   EAH-TOUCH-TARGETS (2026)
+   ⚠️ Element selectors belong ONLY here, never in *.module.css
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  button,
+  [role='button'],
+  input[type='submit'],
+  input[type='button'],
+  a[role='button'] {
+    min-height: 44px;
+  }
+}
