@@ -14,12 +14,6 @@ type Result =
   | { ok: true; orderCode: string; orderId: string }
   | { ok: false; error: string }
 
-function genOrderCode(): string {
-  const t = Date.now().toString(36).slice(-4).toUpperCase()
-  const r = Math.random().toString(36).slice(2, 5).toUpperCase()
-  return `${t}${r}`
-}
-
 export async function submitOrder(
   businessId: string,
   slug: string,
@@ -125,12 +119,6 @@ export async function submitOrder(
   ) {
     return { ok: false, error: 'التاجر لسه محددش مدة تسليم صحيحة' }
   }
-  const rawDeadline = settings.deadline_minutes
-  const deadlineMinutes =
-    Number.isInteger(rawDeadline) && rawDeadline >= 5 && rawDeadline <= 60 ? rawDeadline : 10
-  const deadlineAt = new Date(nowMs + deadlineMinutes * 60 * 1000).toISOString()
-  const expectedDeliveryAt = new Date(nowMs + etaMinutes * 60 * 1000).toISOString()
-  const orderCode = genOrderCode()
 
   // ═══════════════════════════════════════════════════════════════════
   // 3. Optional new fields (v2)
@@ -182,33 +170,34 @@ export async function submitOrder(
   // ═══════════════════════════════════════════════════════════════════
   // 4. Insert order (get id back for deep link)
   // ═══════════════════════════════════════════════════════════════════
-  const { data: inserted, error } = await supabase
+  // Only this validated, rate-limited server action can create order_requests.
+  // The database trigger independently rechecks intake eligibility and owns system fields.
+  const { data: inserted, error } = await privileged
     .from('order_requests')
     .insert({
       business_id: businessId,
       customer_profile_id: user.id,
-      order_code: orderCode,
-      status: 'sent',
       items: (d.items_summary ?? '').trim() || null,
       notes: d.notes || null,
       customer_name: d.customer_name,
       customer_phone: d.customer_phone,
       customer_area: d.customer_area || null,
       customer_address: d.customer_address || null,
-      // v2 fields
       delivery_address: d.customer_address || null,
       secondary_phone: d.secondary_phone || null,
       payment_method: d.payment_method ?? null,
       attachments,
-      deadline_at: deadlineAt,
-      expected_delivery_at: expectedDeliveryAt,
     })
-    .select('id')
+    .select('id, order_code')
     .maybeSingle()
 
-  if (error || !inserted) return { ok: false, error: error?.message ?? 'فشل إنشاء الطلب' }
+  if (error || !inserted) {
+    console.error('[orders] insert failed:', error?.message ?? 'no row returned')
+    return { ok: false, error: 'فشل إنشاء الطلب. جرّب تاني.' }
+  }
 
   const orderId = inserted.id
+  const orderCode = inserted.order_code || `EAH-${orderId.slice(0, 8).toUpperCase()}`
 
   // Audit: record the customer creation action (non-fatal)
   const { error: reactionErr } = await supabase.from('order_reactions').insert({
