@@ -1,7 +1,7 @@
 -- EAH pre-launch regression tests for order/contact database hardening.
 -- These assertions are expected to pass only after the matching migration is applied.
 BEGIN;
-SELECT plan(15);
+SELECT plan(19);
 
 SELECT is(
   has_table_privilege('anon', 'public.ads', 'SELECT'),
@@ -123,6 +123,40 @@ SELECT is(
   has_function_privilege('service_role', 'public.reveal_contact(uuid, text, text)', 'EXECUTE'),
   true,
   'the validated server endpoint can record contact reveals with the service role'
+);
+
+SELECT is(
+  has_table_privilege('authenticated', 'public.order_requests', 'INSERT'),
+  false,
+  'authenticated clients cannot insert orders directly'
+);
+
+SELECT is(
+  has_any_column_privilege('authenticated', 'public.order_requests', 'INSERT'),
+  false,
+  'legacy column-level order insert grants are also revoked'
+);
+
+SELECT is(
+  EXISTS (
+    SELECT 1
+    FROM pg_trigger t
+    JOIN pg_class c ON c.oid = t.tgrelid
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE n.nspname = 'public'
+      AND c.relname = 'order_requests'
+      AND t.tgname = 'aaa_guard_order_request_insert'
+      AND NOT t.tgisinternal
+  ),
+  true,
+  'database independently guards order creation'
+);
+
+SELECT is(
+  pg_get_functiondef('public.assign_order_code_v2()'::regprocedure)
+    LIKE '%NEW.order_code := NEW.order_code_v2%',
+  true,
+  'the generated monthly order code is mirrored into the UI-facing column'
 );
 
 SELECT * FROM finish();
