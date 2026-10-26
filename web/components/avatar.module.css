@@ -22,6 +22,8 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
+  display: block;
+  background: var(--bg-base);
 }
 
 .initial {
