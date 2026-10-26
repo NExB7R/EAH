@@ -314,3 +314,15 @@
     width: 200px;
   }
 }
+
+/* ─── Single card — wider when alone in section ─── */
+.singleCard .cardWrap {
+  width: 440px;
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .singleCard .cardWrap {
+    width: 280px;
+  }
+}

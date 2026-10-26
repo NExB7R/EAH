@@ -45,7 +45,11 @@ export default function NearbyGrid({ businesses }: Props) {
         <div className={styles.neonLine} aria-hidden />
 
         {useGrid ? (
-          <div className={styles.centeredGrid}>{cards}</div>
+          <div
+            className={`${styles.centeredGrid} ${visible.length === 1 ? styles.singleCard : ''}`}
+          >
+            {cards}
+          </div>
         ) : (
           <RowCarousel accent="#55E7D1">{cards}</RowCarousel>
         )}

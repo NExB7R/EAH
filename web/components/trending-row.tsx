@@ -44,7 +44,11 @@ export default function TrendingRow({ businesses, limit = 12 }: Props) {
         <div className={styles.neonLine} aria-hidden />
 
         {useGrid ? (
-          <div className={styles.centeredGrid}>{cards}</div>
+          <div
+            className={`${styles.centeredGrid} ${visible.length === 1 ? styles.singleCard : ''}`}
+          >
+            {cards}
+          </div>
         ) : (
           <RowCarousel accent="#FDBA74">{cards}</RowCarousel>
         )}

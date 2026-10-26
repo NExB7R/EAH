@@ -95,8 +95,8 @@
   align-items: center;
   justify-content: center;
   margin: 0;
-  max-width: 260px;
-  max-height: 180px;
+  max-width: 340px;
+  max-height: 240px;
   animation: eahHeroIn 240ms var(--ease-out) 0ms both;
 }
 
@@ -240,8 +240,8 @@
 /* ─── Mobile: constrain logo + reduce hero height ─── */
 @media (max-width: 640px) {
   .logoWrap {
-    max-width: 180px;
-    max-height: 130px;
+    max-width: 240px;
+    max-height: 170px;
   }
   .hero {
     min-height: auto;
