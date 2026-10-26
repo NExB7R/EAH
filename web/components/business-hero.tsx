@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import DetailCover from './detail-cover'
 import { StarIcon, BadgeCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
 import DistanceBadge from './distance-badge'
@@ -41,7 +42,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
       <div className={styles.body}>
         <div className={styles.logoWrap}>
           {logo ? (
-            <WmImage
+            <Image
               src={logo.storage_path}
               alt={business.name}
               fill
