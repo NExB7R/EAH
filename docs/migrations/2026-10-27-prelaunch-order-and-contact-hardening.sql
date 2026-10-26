@@ -665,7 +665,7 @@ $function$;
 
 -- Remove direct INSERT privileges, including legacy column-level grants.
 REVOKE INSERT ON TABLE public.order_requests FROM PUBLIC, anon, authenticated;
-DO $revoke_order_request_column_inserts$
+DO LANGUAGE plpgsql $revoke_order_request_column_inserts$
 DECLARE
   v_columns text;
 BEGIN
