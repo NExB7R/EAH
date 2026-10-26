@@ -6,7 +6,7 @@ export function safeAdHref(value: string | null | undefined): string | null {
   if (typeof value !== 'string') return null
 
   const href = value.trim()
-  if (!href || /[\\\\\u0000-\u001f\u007f]/.test(href)) return null
+  if (!href || href.includes('\\') || /[\u0000-\u001f\u007f]/.test(href)) return null
 
   if (href.startsWith('/')) {
     return href.startsWith('//') ? null : href
