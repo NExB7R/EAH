@@ -9,7 +9,7 @@ import {
   CrownGoldIcon,
   SettingsIcon,
 } from '@/components/icons'
-import { setOfflineMode, setDeliveryEta } from './actions'
+import { setOfflineMode, setDeliveryEta, setOrdersEnabled } from './actions'
 import styles from './settings.module.css'
 
 type Status = 'active' | 'suspended' | 'offline' | 'disabled'
@@ -67,6 +67,18 @@ export default function OrderSettingsCard({ settings, status }: Props) {
     })
   }
 
+  const handleEnable = () => {
+    setError(null)
+    startTransition(async () => {
+      const res = await setOrdersEnabled(true, eta)
+      if (res.ok) {
+        router.refresh()
+      } else {
+        setError(res.error)
+      }
+    })
+  }
+
   return (
     <section className={styles.card}>
       <header className={styles.cardHead}>
@@ -78,13 +90,56 @@ export default function OrderSettingsCard({ settings, status }: Props) {
       </header>
 
       {status === 'disabled' && (
-        <div className={styles.notice}>
-          <AlertIcon size={16} />
-          <div>
-            <strong>استلام الطلبات مش مفعّل</strong>
-            <p>الإدارة مش مفعّلة الاستلام لنشاطك. كلمنا لو محتاج تفعّله.</p>
+        <>
+          <div className={styles.notice}>
+            <AlertIcon size={16} />
+            <div>
+              <strong>استلام الطلبات مش مفعّل</strong>
+              <p>فعّله دلوقتي عشان تبدأ تستقبل طلبات من العملاء. حدد مدة التسليم وابدأ.</p>
+            </div>
           </div>
-        </div>
+
+          <div className={styles.etaEditor}>
+            <label className={styles.etaLabel}>
+              <ClockIcon size={14} />
+              <span>مدة التسليم</span>
+              <input
+                type="number"
+                min={15}
+                max={240}
+                step={5}
+                value={eta}
+                onChange={(e) => setEta(Math.max(15, Math.min(240, +e.target.value || 45)))}
+                disabled={pending}
+                className={styles.etaInput}
+              />
+              <span>دقيقة</span>
+            </label>
+          </div>
+
+          <div className={styles.actions}>
+            <button
+              type="button"
+              onClick={handleEnable}
+              disabled={pending}
+              className={styles.primaryBtn}
+            >
+              <CheckCircleIcon size={14} />
+              <span>{pending ? 'بيتم…' : 'افتح الاستلام'}</span>
+            </button>
+          </div>
+
+          <ul className={styles.obligationsList} style={{ marginTop: 12 }}>
+            <li>
+              <ClockIcon size={13} />
+              <span>رد على كل طلب خلال {settings.deadline_minutes || 10} دقايق</span>
+            </li>
+            <li>
+              <AlertIcon size={13} />
+              <span>المتأخر ينقص تقييمك — اقفل مؤقتاً لو مش متاح (بدون عقوبة)</span>
+            </li>
+          </ul>
+        </>
       )}
 
       {status === 'suspended' && (
