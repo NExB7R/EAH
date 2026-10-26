@@ -64,6 +64,8 @@ export type BusinessFormCtx = {
   setAcceptsWhatsapp: Setter<boolean>
   isFeatured: boolean
   setIsFeatured: Setter<boolean>
+  isVerified: boolean
+  setIsVerified: Setter<boolean>
   featuredOrder: number
   setFeaturedOrder: Setter<number>
   featuredPin: boolean

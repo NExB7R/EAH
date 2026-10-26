@@ -58,6 +58,16 @@ export default function SettingsSection() {
         <label htmlFor="is_featured">مميز (Featured)</label>
       </div>
 
+      <div className={styles.checkRow}>
+        <input
+          id="is_verified"
+          type="checkbox"
+          checked={ctx.isVerified}
+          onChange={(e) => ctx.setIsVerified(e.target.checked)}
+        />
+        <label htmlFor="is_verified">☑️ موثق (Verified) — شهادة EAH الرسمية</label>
+      </div>
+
       {ctx.isFeatured && (
         <>
           <div className={styles.field}>
