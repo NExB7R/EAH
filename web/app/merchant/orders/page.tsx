@@ -29,7 +29,7 @@ export default async function MerchantOrdersPage() {
     getMerchantOrderSettings(business.id),
   ])
 
-  const isEnabled = !!settings?.orders_enabled
+  const isEnabled = !!settings?.admin_enabled && !!settings?.orders_enabled
 
   return (
     <div className={styles.page}>
