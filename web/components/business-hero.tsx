@@ -1,4 +1,4 @@
-import WmImage from './wm-image'
+import DetailCover from './detail-cover'
 import { StarIcon, BadgeCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
 import DistanceBadge from './distance-badge'
 import type { BusinessDetail } from '@/lib/data/business-detail'
@@ -30,27 +30,10 @@ export default function BusinessHero({ detail, isOpen }: Props) {
     <section className={`${styles.hero} ${business.is_featured ? styles.featured : ''}`}>
       {/* ─── Cover ─── */}
       <div className={styles.cover}>
-        {cover ? (
-          <WmImage
-            src={cover.storage_path}
-            alt={business.name}
-            fill
-            sizes="(max-width: 768px) 100vw, 900px"
-            className={styles.coverImg}
-            priority
-          />
-        ) : business.cover_image_url ? (
-          <WmImage
-            src={business.cover_image_url}
-            alt={business.name}
-            fill
-            sizes="(max-width: 768px) 100vw, 900px"
-            className={styles.coverImg}
-            priority
-          />
-        ) : (
-          <div className={styles.coverFallback} aria-hidden />
-        )}
+        <DetailCover
+          src={cover?.storage_path ?? business.cover_image_url ?? null}
+          alt={business.name}
+        />
         <div className={styles.coverOverlay} aria-hidden />
       </div>
 

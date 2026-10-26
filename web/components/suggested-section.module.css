@@ -149,3 +149,10 @@
     transition: none;
   }
 }
+
+@media (max-width: 640px) {
+  .section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}

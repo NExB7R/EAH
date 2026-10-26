@@ -93,7 +93,7 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
           <AdSlot ads={homeBanner} variant="banner" />
         </div>
       )}
-      {flags.trends_enabled && (
+      {flags.trends_enabled && trending.length >= 2 && (
         <div id="trending">
           <TrendingRow businesses={trending} />
         </div>

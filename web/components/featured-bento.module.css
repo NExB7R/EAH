@@ -182,6 +182,12 @@
   .grid {
     gap: 10px;
   }
+
+  /* Mobile: outer padding so sections don't touch screen edges */
+  .section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
