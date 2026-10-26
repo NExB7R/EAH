@@ -15,18 +15,16 @@ const ALLOWED_AUDIO = ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/mpeg', 'au
 
 const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
 const UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET
-const API_KEY = process.env.CLOUDINARY_API_KEY
-const API_SECRET = process.env.CLOUDINARY_API_SECRET
 
 async function cloudinaryUpload(
   file: File,
   resourceType: 'image' | 'video',
-): Promise<{ url: string } | { error: string }> {
-  if (!CLOUD_NAME) return { error: 'Cloudinary مش مضبوط' }
+): Promise<{ url: string; duration?: number } | { error: string }> {
+  if (!CLOUD_NAME || !UPLOAD_PRESET) return { error: 'Cloudinary مش مضبوط' }
 
   const fd = new FormData()
   fd.append('file', file)
-  fd.append('upload_preset', UPLOAD_PRESET ?? 'eah_unsigned')
+  fd.append('upload_preset', UPLOAD_PRESET)
   fd.append('folder', 'eah/orders')
 
   const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${resourceType}/upload`
@@ -35,11 +33,18 @@ async function cloudinaryUpload(
     const data = (await res.json()) as {
       secure_url?: string
       error?: { message?: string }
+      duration?: number
     }
     if (!res.ok || !data.secure_url) {
       return { error: data.error?.message ?? 'فشل الرفع' }
     }
-    return { url: data.secure_url }
+    if (resourceType === 'video') {
+      if (typeof data.duration !== 'number' || !Number.isFinite(data.duration) || data.duration <= 0) {
+        return { error: 'تعذر التحقق من مدة الصوت' }
+      }
+      if (data.duration > 60) return { error: 'الصوت لازم يكون 60 ثانية أو أقل' }
+    }
+    return { url: data.secure_url, duration: data.duration }
   } catch {
     return { error: 'فشل الاتصال بـ Cloudinary' }
   }
@@ -57,6 +62,11 @@ export async function POST(req: NextRequest) {
   })
   if (!rl.ok) {
     return NextResponse.json({ ok: false, error: rl.error }, { status: 429 })
+  }
+
+  const contentLength = Number(req.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > MAX_SIZE + 1024 * 1024) {
+    return NextResponse.json({ ok: false, error: 'الحجم كبير (5MB max)' }, { status: 413 })
   }
 
   const formData = await req.formData()
@@ -93,6 +103,6 @@ export async function POST(req: NextRequest) {
     size: file.size,
     mime,
     kind,
-    api_key_present: !!API_KEY && !!API_SECRET, // diagnostic only
+    duration_sec: res.duration,
   })
 }
