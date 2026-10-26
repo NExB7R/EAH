@@ -59,8 +59,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
       .from('notifications')
       .select('*', { count: 'exact', head: true })
       .eq('user_id', user.id)
-      .is('read_at', null)
-      .not('notification_type', 'eq', 'system'),
+      .is('read_at', null),
   ])
 
   return {
