@@ -12,6 +12,7 @@ import { getPublishedBusinesses, getActiveOffers } from '@/lib/data'
 import { getFeatureFlags } from '@/lib/features'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness } from '@/lib/data/merchant'
+import { getFavoriteIds } from '@/lib/data/account'
 import { getActiveAdsForSlot } from '@/lib/data/ads'
 import { fairOrder, fairOrderOffers } from '@/lib/fair-ranking'
 import { isOpenNow } from '@/lib/data/businesses'
@@ -40,12 +41,14 @@ export default async function Home({ searchParams }: Props) {
 }
 
 async function HomeSections({ typeFilter }: { typeFilter?: string }) {
-  const [allRaw, rawOffers, flags, homeBanner, homeFeed] = await Promise.all([
+  const session = await getUserSession()
+  const [allRaw, rawOffers, flags, homeBanner, homeFeed, favoriteIds] = await Promise.all([
     getPublishedBusinesses(),
     getActiveOffers(30),
     getFeatureFlags(),
     getActiveAdsForSlot('home_banner', 1),
     getActiveAdsForSlot('home_feed', 1),
+    session ? getFavoriteIds(session.userId) : Promise.resolve(new Set<string>()),
   ])
 
   // ─── الفلترة ───
@@ -95,7 +98,7 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
       )}
       {flags.trends_enabled && trending.length >= 2 && (
         <div id="trending">
-          <TrendingRow businesses={trending} />
+          <TrendingRow businesses={trending} favoriteIds={favoriteIds} />
         </div>
       )}
       {flags.offers_enabled && (
@@ -110,12 +113,12 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
       )}
       {flags.new_enabled && (
         <div id="new">
-          <NewRow businesses={newOnes} />
+          <NewRow businesses={newOnes} favoriteIds={favoriteIds} />
         </div>
       )}
       {flags.nearby_enabled && (
         <div id="nearby">
-          <NearbyGrid businesses={nearby} />
+          <NearbyGrid businesses={nearby} favoriteIds={favoriteIds} />
         </div>
       )}
       <div id="suggested">

@@ -11,16 +11,16 @@ import styles from './new-row.module.css'
 //   • Smart layout: ≤3 items → centered grid, >3 → carousel
 // ═══════════════════════════════════════════════════════════
 
-type Props = { businesses: Business[]; limit?: number }
+type Props = { businesses: Business[]; favoriteIds?: Set<string>; limit?: number }
 
-export default function NewRow({ businesses, limit = 12 }: Props) {
+export default function NewRow({ businesses, limit = 12, favoriteIds = new Set() }: Props) {
   if (businesses.length === 0) return null
   const visible = businesses.slice(0, limit)
   const useGrid = visible.length <= 3
 
   const cards = visible.map((b) => (
     <div key={b.id} className={styles.cardWrap}>
-      <BusinessCard business={b} tone="pink" context="new" />
+      <BusinessCard business={b} tone="pink" context="new" isFavorite={favoriteIds.has(b.id)} />
     </div>
   ))
 

@@ -12,16 +12,21 @@ import styles from './nearby-grid.module.css'
 //   • Location CTA moved to /nearby page
 // ═══════════════════════════════════════════════════════════
 
-type Props = { businesses: Business[] }
+type Props = { businesses: Business[]; favoriteIds?: Set<string> }
 
-export default function NearbyGrid({ businesses }: Props) {
+export default function NearbyGrid({ businesses, favoriteIds = new Set() }: Props) {
   if (businesses.length === 0) return null
   const visible = businesses.slice(0, 12)
   const useGrid = visible.length <= 3
 
   const cards = visible.map((b) => (
     <div key={b.id} className={styles.cardWrap}>
-      <BusinessCard business={b} tone="purple" context="nearby" />
+      <BusinessCard
+        business={b}
+        tone="purple"
+        context="nearby"
+        isFavorite={favoriteIds.has(b.id)}
+      />
     </div>
   ))
 
