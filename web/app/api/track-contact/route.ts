@@ -10,6 +10,50 @@ const schema = z.object({
   method: z.enum(['phone', 'whatsapp']),
 })
 
+const MAX_BODY_BYTES = 8192
+
+async function readLimitedJson(
+  request: Request,
+): Promise<{ ok: true; value: unknown } | { ok: false; tooLarge: boolean }> {
+  const contentLength = Number(request.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    return { ok: false, tooLarge: true }
+  }
+
+  const reader = request.body?.getReader()
+  if (!reader) return { ok: false, tooLarge: false }
+
+  const chunks: Uint8Array[] = []
+  let totalBytes = 0
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      totalBytes += value.byteLength
+      if (totalBytes > MAX_BODY_BYTES) {
+        await reader.cancel().catch(() => undefined)
+        return { ok: false, tooLarge: true }
+      }
+      chunks.push(value)
+    }
+  } catch {
+    return { ok: false, tooLarge: false }
+  }
+
+  const bytes = new Uint8Array(totalBytes)
+  let offset = 0
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset)
+    offset += chunk.byteLength
+  }
+
+  try {
+    return { ok: true, value: JSON.parse(new TextDecoder().decode(bytes)) }
+  } catch {
+    return { ok: false, tooLarge: false }
+  }
+}
+
 export async function POST(request: Request) {
   const supabase = await createClient()
   const {
@@ -20,13 +64,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 })
   }
 
-  const contentLength = Number(request.headers.get('content-length') ?? '0')
-  if (Number.isFinite(contentLength) && contentLength > 8192) {
-    return NextResponse.json({ ok: false, error: 'payload_too_large' }, { status: 413 })
+  const body = await readLimitedJson(request)
+  if (!body.ok) {
+    return NextResponse.json(
+      { ok: false, error: body.tooLarge ? 'payload_too_large' : 'invalid' },
+      { status: body.tooLarge ? 413 : 400 },
+    )
   }
 
-  const body = await request.json().catch(() => null)
-  const parsed = schema.safeParse(body)
+  const parsed = schema.safeParse(body.value)
   if (!parsed.success) {
     return NextResponse.json({ ok: false, error: 'invalid' }, { status: 400 })
   }
