@@ -117,12 +117,11 @@ const BUSINESS_COLUMNS = `
   is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   trust_score, trust_tier, velocity_score, engagement_score, diversity_score, successful_orders,
   featured_order, featured_until, featured_pin,
-  new_until, working_hours, accepts_whatsapp_orders,
+  new_until, working_hours, accepts_whatsapp_orders, accepts_orders,
   response_time_avg_seconds, response_rate,
   last_activity_at, created_at, updated_at,
   branches_count, offers_count, rating_avg, rating_count,
-  business_locations(latitude, longitude, is_primary),
-  merchant_order_settings(orders_enabled)
+  business_locations(latitude, longitude, is_primary)
 `
 
 // ─── Normalize: extract primary location from join ───
@@ -146,16 +145,13 @@ function pickPrimaryLocation(raw: unknown): { lat: number; lng: number } | null 
 
 function normalizeBusiness(raw: Record<string, unknown>): Business {
   const loc = pickPrimaryLocation(raw.business_locations)
-
-  // merchant_order_settings join (1-to-1) → boolean
-  const mos = raw.merchant_order_settings as
-    { orders_enabled?: boolean | null } | { orders_enabled?: boolean | null }[] | null | undefined
-  const mosRow = Array.isArray(mos) ? (mos[0] ?? null) : (mos ?? null)
-  const orders_enabled = mosRow?.orders_enabled === true
+  // Public availability is denormalized onto businesses so public reads never need
+  // permission to inspect the private merchant_order_settings table.
+  const orders_enabled = raw.accepts_orders === true
 
   const rest: Record<string, unknown> = { ...raw }
   delete rest.business_locations
-  delete rest.merchant_order_settings
+  delete rest.accepts_orders
   return { ...(rest as unknown as Business), location: loc, orders_enabled }
 }
 
@@ -184,7 +180,7 @@ export const getPublishedBusinesses = unstable_cache(
     }
     return normalizeBusinesses(data)
   },
-  ['businesses-published'],
+  ['businesses-published-v2'],
   { revalidate: 300, tags: ['businesses'] },
 )
 
@@ -211,7 +207,7 @@ export const getFeaturedBusinesses = unstable_cache(
     }
     return normalizeBusinesses(data)
   },
-  ['businesses-featured'],
+  ['businesses-featured-v2'],
   { revalidate: 300, tags: ['businesses', 'featured'] },
 )
 
@@ -237,7 +233,7 @@ export const getNewBusinesses = unstable_cache(
     }
     return normalizeBusinesses(data)
   },
-  ['businesses-new'],
+  ['businesses-new-v2'],
   { revalidate: 300, tags: ['businesses', 'new'] },
 )
 
@@ -262,7 +258,7 @@ export const getBusinessesByType = unstable_cache(
     }
     return normalizeBusinesses(data)
   },
-  ['businesses-by-type'],
+  ['businesses-by-type-v2'],
   { revalidate: 300, tags: ['businesses'] },
 )
 
@@ -298,7 +294,7 @@ export const getTrendingBusinesses = unstable_cache(
     }
     return sortByTrend(normalizeBusinesses(data)).slice(0, limit)
   },
-  ['businesses-trending'],
+  ['businesses-trending-v2'],
   { revalidate: 300, tags: ['businesses', 'trending'] },
 )
 
@@ -370,6 +366,6 @@ export const getNearbyBusinesses = unstable_cache(
     }
     return normalizeBusinesses(data)
   },
-  ['businesses-nearby'],
+  ['businesses-nearby-v2'],
   { revalidate: 300, tags: ['businesses'] },
 )
