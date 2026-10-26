@@ -5,6 +5,10 @@
   padding: 20px 0;
 }
 
+.actionsWithoutWhatsapp {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
 .action {
   display: flex;
   flex-direction: column;
@@ -117,6 +121,7 @@
 /* ─── Tablet ─── */
 @media (min-width: 641px) and (max-width: 899px) {
   .actions { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .actionsWithoutWhatsapp { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 .contactMessage {
