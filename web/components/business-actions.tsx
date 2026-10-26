@@ -190,7 +190,7 @@ export default function BusinessActions({
 
   return (
     <>
-      <div className={styles.actions}>
+      <div className={`${styles.actions} ${!acceptsWhatsapp ? styles.actionsWithoutWhatsapp : ''} `}>
         {/* Order (in-app) */}
         <button
           type="button"
