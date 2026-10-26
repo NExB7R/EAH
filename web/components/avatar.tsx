@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import type { AppRole } from '@/lib/data/user'
 import { BadgeCheckIcon } from './icons'
 import styles from './avatar.module.css'
@@ -8,7 +9,7 @@ import styles from './avatar.module.css'
 // ═══════════════════════════════════════════════════════════
 // EAH — Avatar with Role Frame + Image Fallback
 //   • Cloudinary transform (w_96, q_auto) for fast load
-//   • Plain <img> — no optimizer dependency
+//   • next/image with unoptimized (Cloudinary transform handles size)
 //   • onError → fallback to initial (always visible)
 // ═══════════════════════════════════════════════════════════
 
@@ -56,8 +57,7 @@ export default function Avatar({
   return (
     <div className={cls}>
       {showImage ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+        <Image
           src={optimizedSrc}
           alt={displayName}
           className={styles.img}
@@ -66,7 +66,8 @@ export default function Avatar({
           height={targetWidth}
           loading="eager"
           decoding="async"
-          fetchPriority="high"
+          priority
+          unoptimized
         />
       ) : (
         <span className={styles.initial}>{initial}</span>
