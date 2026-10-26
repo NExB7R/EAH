@@ -184,3 +184,10 @@
     transition: none;
   }
 }
+/* -- إجبار حجم الهيرو على الموبايل -- */
+@media (max-width: 640px) {
+  .forceMobileHero {
+    --logo-w: 88vw !important;
+    --slogan-fs: 1.1rem;
+  }
+}
