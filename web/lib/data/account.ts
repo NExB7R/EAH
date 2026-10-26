@@ -240,3 +240,10 @@ export async function getFullProfile(_userId: string): Promise<FullProfile | nul
   const { data } = await supabase.rpc('get_my_profile').maybeSingle()
   return (data as FullProfile) ?? null
 }
+
+// ─── Favorites Set (for home / cards) ───
+export async function getFavoriteIds(userId: string): Promise<Set<string>> {
+  const supabase = await createClient()
+  const { data } = await supabase.from('favorites').select('business_id').eq('user_id', userId)
+  return new Set((data ?? []).map((r) => r.business_id as string))
+}

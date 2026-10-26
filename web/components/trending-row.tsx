@@ -11,16 +11,22 @@ import styles from './trending-row.module.css'
 //   • Smart layout: ≤3 items → centered grid, >3 → carousel
 // ═══════════════════════════════════════════════════════════
 
-type Props = { businesses: Business[]; limit?: number }
+type Props = { businesses: Business[]; favoriteIds?: Set<string>; limit?: number }
 
-export default function TrendingRow({ businesses, limit = 12 }: Props) {
+export default function TrendingRow({ businesses, limit = 12, favoriteIds = new Set() }: Props) {
   if (businesses.length === 0) return null
   const visible = businesses.slice(0, limit)
   const useGrid = visible.length <= 3
 
   const cards = visible.map((b, i) => (
     <div key={b.id} className={styles.cardWrap}>
-      <BusinessCard business={b} tone="orange" context="trending" rank={i + 1} />
+      <BusinessCard
+        business={b}
+        tone="orange"
+        context="trending"
+        rank={i + 1}
+        isFavorite={favoriteIds.has(b.id)}
+      />
     </div>
   ))
 
