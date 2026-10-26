@@ -94,17 +94,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   margin: 0;
-  max-width: 440px;
-  max-height: 300px;
   animation: eahHeroIn 240ms var(--ease-out) 0ms both;
-}
-
-.logoWrap > * {
-  max-width: 100%;
-  max-height: 100%;
-  height: auto;
-  width: auto;
 }
 
 /* ─── Hook ─── */
