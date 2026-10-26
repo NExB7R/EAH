@@ -34,6 +34,8 @@ export type Business = {
   cover_image_url: string | null
   is_open: boolean
   is_featured: boolean
+  is_verified: boolean
+  verified_at: string | null
   is_new_project: boolean
   is_opportunity: boolean
   opportunity_until: string | null
@@ -110,7 +112,7 @@ export function isOpenNow(hours: WorkingHours | null): boolean {
 const BUSINESS_COLUMNS = `
   id, slug, name, business_type, custom_business_type, business_type_status, subcategory, description, hook,
   area, city, address_text, map_url, cover_image_url,
-  is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
+  is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   trust_score, trust_tier, velocity_score, engagement_score, diversity_score, successful_orders,
   featured_order, featured_until, featured_pin,
   new_until, working_hours, accepts_whatsapp_orders,

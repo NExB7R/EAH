@@ -39,6 +39,7 @@ type Props = {
   variant?: 'default' | 'featured'
   context?: CardContext
   rank?: number
+  isFavorite?: boolean
 }
 
 type TypeMeta = { label: string; Icon: typeof UtensilsIcon }
