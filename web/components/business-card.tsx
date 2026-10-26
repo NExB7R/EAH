@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import WmImage from './wm-image'
+import CardImage from './card-image'
 import DistanceBadge from './distance-badge'
 import type { Business } from '@/lib/data/businesses'
 import { getBusinessTypeLabel } from '@/lib/business-type-label'
@@ -121,31 +121,18 @@ export default function BusinessCard({
       ? `${business.successful_orders} ${business.successful_orders === 1 ? 'طلب ناجح' : 'طلب ناجح'}`
       : null
 
-  const hasImage = !!business.cover_image_url
-
   return (
     <Link
       href={`/businesses/${business.slug}`}
       className={`${styles.card} ${styles[tone]} ${variant === 'featured' ? styles.featured : ''}`}
     >
       <div className={styles.imageWrap}>
-        {hasImage ? (
-          <WmImage
-            src={business.cover_image_url!}
-            alt={business.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className={styles.image}
-          />
-        ) : (
-          <div className={styles.placeholder} aria-hidden>
-            <span className={styles.placeholderInitial}>{business.name.charAt(0)}</span>
-            <span className={styles.placeholderType}>
-              <TypeIcon size={14} />
-              {typeLabel}
-            </span>
-          </div>
-        )}
+        <CardImage
+          src={business.cover_image_url}
+          alt={business.name}
+          initial={business.name.charAt(0)}
+          typeLabel={typeLabel}
+        />
         <div className={styles.imageOverlay} aria-hidden />
 
         <div className={styles.topBadges}>
