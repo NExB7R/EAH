@@ -261,3 +261,8 @@ Read in order:
 4. ERROR_REGISTER.md (this file)
 
 If any Pre-Launch blocker is open, fix it before adding features.
+
+
+## E-021: CSS Modules purity
+
+Build break fix. See scripts/check-css-modules-purity.mjs.

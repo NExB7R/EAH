@@ -143,8 +143,4 @@
     padding-left: 12px;
     padding-right: 12px;
   }
-  /* Touch targets ≥ 44px */
-  button {
-    min-height: 44px;
-  }
 }

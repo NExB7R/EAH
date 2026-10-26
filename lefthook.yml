@@ -18,6 +18,11 @@ pre-commit:
       glob: "**/*.{ts,tsx,css,json}"
       run: npx prettier --check {staged_files}
 
+    # css-modules-purity
+    css-modules-purity:
+      glob: "web/**/*.module.css"
+      run: node scripts/check-css-modules-purity.mjs
+
     # stylelint على ملفات CSS المعدلة
     stylelint:
       root: "web/"
