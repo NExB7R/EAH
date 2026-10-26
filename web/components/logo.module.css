@@ -184,10 +184,11 @@
     transition: none;
   }
 }
-/* -- إجبار حجم الهيرو على الموبايل -- */
+
+/* ─── Hero size override (applied via cls on size=lg) ─── */
 @media (max-width: 640px) {
   .forceMobileHero {
-    --logo-w: 88vw !important;
+    --logo-w: min(88vw, 420px);
     --slogan-fs: 1.1rem;
   }
 }
