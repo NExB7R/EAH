@@ -240,8 +240,8 @@
 /* ─── Mobile: constrain logo + reduce hero height ─── */
 @media (max-width: 640px) {
   .logoWrap {
-    max-width: 320px;
-    max-height: 220px;
+    max-width: 100%;
+    width: 100%;
   }
   .hero {
     min-height: auto;
