@@ -22,6 +22,9 @@ export default function Logo({
   const variantCls = variant === 'crown' ? styles.crownOnly : ''
   const cls = [styles.logo, sizeCls, variantCls, className].filter(Boolean).join(' ')
 
+  // إجبار الحجم على الموبايل للهيرو
+  const forceHeroSize = size === 'lg' && !href ? styles.forceMobileHero : ''
+
   const inner = (
     <>
       {variant !== 'crown' && <span className={styles.glow} aria-hidden />}
@@ -72,7 +75,7 @@ export default function Logo({
   }
 
   return (
-    <span className={cls} aria-label="EAH — اللى نفسك فيه ؟">
+    <span className={`${cls} ${forceHeroSize}`} aria-label="EAH — اللى نفسك فيه ؟">
       {inner}
     </span>
   )
