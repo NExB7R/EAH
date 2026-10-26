@@ -665,22 +665,7 @@ $function$;
 
 -- Remove direct INSERT privileges, including legacy column-level grants.
 REVOKE INSERT ON TABLE public.order_requests FROM PUBLIC, anon, authenticated;
-DO LANGUAGE plpgsql $revoke_order_request_column_inserts$
-DECLARE
-  v_columns text;
-BEGIN
-  SELECT string_agg(format('%I', attname), ', ' ORDER BY attnum)
-  INTO v_columns
-  FROM pg_attribute
-  WHERE attrelid = 'public.order_requests'::regclass AND attnum > 0 AND NOT attisdropped;
-  IF v_columns IS NOT NULL THEN
-    EXECUTE format(
-      'REVOKE INSERT (%s) ON TABLE public.order_requests FROM PUBLIC, anon, authenticated',
-      v_columns
-    );
-  END IF;
-END;
-$revoke_order_request_column_inserts$;
+REVOKE INSERT (id, business_id, customer_profile_id, customer_name, customer_phone, customer_area, customer_address, items, notes, status, created_at, updated_at, order_code, confirmed_at, confirmed_via, whatsapp_sent_at, review_reminder_sent_at, delivery_lat, delivery_lng, location_accuracy, monthly_seq, order_code_v2, voice_url, images, customer_trust_score_snapshot, business_trust_score_snapshot, customer_location_label, customer_location_lat, customer_location_lng, expires_at, reminder_sent_at, no_response_sent_at, message_locked_at, whatsapp_message, delivery_address, payment_method, payment_reference, attachments, secondary_phone, deadline_at, accepted_at, delivered_at, expected_delivery_at, feedback_due_at, feedback_sent_at, feedback_reminder_at, feedback_reminder_sent_at, feedback_rating, feedback_text, feedback_issue_type, snoozed_until, expired_at) ON TABLE public.order_requests FROM PUBLIC, anon, authenticated;
 
 DROP POLICY IF EXISTS order_requests_customer_insert ON public.order_requests;
 CREATE POLICY order_requests_customer_insert
