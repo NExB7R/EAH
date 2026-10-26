@@ -67,7 +67,9 @@ export type FormState = {
   acceptsWhatsapp: boolean
   setAcceptsWhatsapp: Setter<boolean>
   isFeatured: boolean
+  isVerified: boolean
   setIsFeatured: Setter<boolean>
+  setIsVerified: Setter<boolean>
   featuredOrder: number
   setFeaturedOrder: Setter<number>
   featuredPin: boolean
@@ -122,7 +124,7 @@ export function useFormState(business: AdminBusiness | null): FormState {
   const [isPublished, setIsPublished] = useState(business?.is_published ?? false)
   const [isOpen, setIsOpen] = useState(business?.is_open ?? true)
   const [acceptsWhatsapp, setAcceptsWhatsapp] = useState(false)
-  const [isFeatured, isVerified, setIsVerified, setIsFeatured] = useState(
+  const [isFeatured, setIsFeatured] = useState(
     business?.is_featured ?? false,
   )
   const [isVerified, setIsVerified] = useState(!!business?.is_verified)
@@ -237,6 +239,8 @@ export function useFormState(business: AdminBusiness | null): FormState {
     acceptsWhatsapp,
     setAcceptsWhatsapp,
     isFeatured,
+    isVerified,
+    setIsVerified,
     setIsFeatured,
     featuredOrder,
     setFeaturedOrder,

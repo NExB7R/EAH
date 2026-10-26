@@ -152,6 +152,7 @@ export const settingsSchema = z.object({
   is_open: z.coerce.boolean().default(true),
   accepts_whatsapp_orders: z.coerce.boolean().default(false),
   is_featured: z.coerce.boolean().default(false),
+  is_verified: z.coerce.boolean().default(false),
   featured_order: z.coerce.number().int().min(0).max(999).default(0),
   featured_pin: z.coerce.boolean().default(false),
   featured_until: z
