@@ -172,7 +172,7 @@
     --slogan-fs: 1rem;
   }
   .lg {
-    --logo-w: min(88vw, 420px);
+    --logo-w: min(68vw, 300px);
     --slogan-fs: 1.1rem;
   }
 }
@@ -188,7 +188,7 @@
 /* ─── Hero size override (applied via cls on size=lg) ─── */
 @media (max-width: 640px) {
   .forceMobileHero {
-    --logo-w: min(88vw, 420px);
+    --logo-w: min(68vw, 300px);
     --slogan-fs: 1.1rem;
     width: var(--logo-w) !important;
     height: auto !important;
