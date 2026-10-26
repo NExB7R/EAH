@@ -190,5 +190,8 @@
   .forceMobileHero {
     --logo-w: min(88vw, 420px);
     --slogan-fs: 1.1rem;
+    width: var(--logo-w) !important;
+    height: auto !important;
+    max-height: none !important;
   }
 }
