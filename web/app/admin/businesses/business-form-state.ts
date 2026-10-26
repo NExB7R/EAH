@@ -122,7 +122,10 @@ export function useFormState(business: AdminBusiness | null): FormState {
   const [isPublished, setIsPublished] = useState(business?.is_published ?? false)
   const [isOpen, setIsOpen] = useState(business?.is_open ?? true)
   const [acceptsWhatsapp, setAcceptsWhatsapp] = useState(false)
-  const [isFeatured, setIsFeatured] = useState(business?.is_featured ?? false)
+  const [isFeatured, isVerified, setIsVerified, setIsFeatured] = useState(
+    business?.is_featured ?? false,
+  )
+  const [isVerified, setIsVerified] = useState(!!business?.is_verified)
   const [featuredOrder, setFeaturedOrder] = useState(0)
   const [featuredPin, setFeaturedPin] = useState(false)
   const [featuredUntil, setFeaturedUntil] = useState('')

@@ -469,6 +469,7 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
     is_open: fdBool(formData, 'is_open'),
     accepts_whatsapp_orders: fdBool(formData, 'accepts_whatsapp_orders'),
     is_featured: fdBool(formData, 'is_featured'),
+    is_verified: fdBool(formData, 'is_verified'),
     featured_order: fd(formData, 'featured_order') || '0',
     featured_pin: fdBool(formData, 'featured_pin'),
     featured_until: fd(formData, 'featured_until'),
@@ -503,10 +504,27 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
 
   // Publication is controlled by the admin's explicit visibility setting.
   // Custom-type approval affects the label only, never whether a business can be listed.
+  // ═══ Verification change tracking ═══
+  const { data: currentRow } = await ctx.supabase
+    .from('businesses')
+    .select('is_verified')
+    .eq('id', businessId)
+    .maybeSingle()
+  const wasVerified = !!currentRow?.is_verified
+  const nowVerified = parsed.data.is_verified ?? false
+  const verificationChange = wasVerified !== nowVerified
+
   const settings = {
     ...parsed.data,
     featured_until: featuredUntil,
     new_until: newUntil,
+    ...(verificationChange
+      ? {
+          is_verified: nowVerified,
+          verified_at: nowVerified ? new Date().toISOString() : null,
+          verified_by: nowVerified ? ctx.userId : null,
+        }
+      : {}),
   }
 
   const { data: updated, error } = await ctx.supabase

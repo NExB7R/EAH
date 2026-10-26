@@ -24,6 +24,8 @@ export type AdminBusiness = {
   is_published: boolean
   is_open: boolean
   is_featured: boolean
+  is_verified: boolean
+  verified_at: string | null
   trust_score: number
   trust_tier: string
   successful_orders: number
@@ -102,7 +104,9 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
       .eq('business_id', id),
     supabase
       .from('business_branches')
-      .select('id, name, area, address_text, latitude, longitude, phone, whatsapp, is_primary, is_active, sort_order')
+      .select(
+        'id, name, area, address_text, latitude, longitude, phone, whatsapp, is_primary, is_active, sort_order',
+      )
       .eq('business_id', id)
       .order('is_primary', { ascending: false })
       .order('sort_order', { ascending: true }),
@@ -144,6 +148,8 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     is_published: !!b.is_published,
     is_open: !!b.is_open,
     is_featured: !!b.is_featured,
+    is_verified: !!b.is_verified,
+    verified_at: (b.verified_at as string | null) ?? null,
     trust_score: (b.trust_score as number) ?? 50,
     trust_tier: (b.trust_tier as string) ?? 'fel',
     successful_orders: (b.successful_orders as number) ?? 0,
