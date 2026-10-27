@@ -308,8 +308,9 @@ export default function BusinessTabs({
           {branches.length > 0 &&
             branches.some(
               (b) =>
-                (b.address_text && b.address_text.trim().length > 0) ||
-                (b.phone && b.phone.trim().length > 0),
+                isNonEmpty(b.address_text) ||
+                isNonEmpty(b.area) ||
+                (typeof b.latitude === 'number' && typeof b.longitude === 'number'),
             ) && (
               <div className={styles.block}>
                 <h3 className={styles.blockTitle}>الفروع ({branches.length})</h3>
