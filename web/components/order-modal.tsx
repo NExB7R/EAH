@@ -23,7 +23,9 @@ type Attachment = {
   url: string
   size: number
   duration_sec?: number
-  mime?: string
+  mime: string
+  expires_at: number
+  signature: string
 }
 
 type Props = {
@@ -162,10 +164,23 @@ export default function OrderModal({
         url?: string
         size?: number
         mime?: string
+        duration_sec?: number
+        expires_at?: number
+        signature?: string
         error?: string
       }
-      if (!res.ok || !data.ok || !data.url) {
-        setMsg(data.error ?? 'فشل الرفع')
+      if (
+        !res.ok ||
+        !data.ok ||
+        !data.url ||
+        !Number.isSafeInteger(data.size) ||
+        !data.mime ||
+        !Number.isSafeInteger(data.expires_at) ||
+        !data.signature ||
+        (kind === 'voice' &&
+          (typeof data.duration_sec !== 'number' || !Number.isFinite(data.duration_sec)))
+      ) {
+        setMsg(data.error ?? 'استجابة الرفع غير صحيحة. جرّب تاني.')
         return
       }
       setAttachments((prev) => [
@@ -173,8 +188,11 @@ export default function OrderModal({
         {
           type: kind,
           url: data.url!,
-          size: data.size ?? file.size,
-          mime: data.mime ?? file.type,
+          size: data.size!,
+          mime: data.mime!,
+          expires_at: data.expires_at!,
+          signature: data.signature!,
+          ...(kind === 'voice' ? { duration_sec: data.duration_sec } : {}),
         },
       ])
     } catch {
