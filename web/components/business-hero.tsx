@@ -3,7 +3,8 @@ import DetailCover from './detail-cover'
 import { StarIcon, BadgeCheckIcon, ShieldCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
 import DistanceBadge from './distance-badge'
 import type { BusinessDetail } from '@/lib/data/business-detail'
-import { TYPE_LABEL, TIER_LABEL } from '@/lib/data/business-detail'
+import { TIER_LABEL } from '@/lib/data/business-detail'
+import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import styles from './business-hero.module.css'
 
 type Props = {
@@ -21,12 +22,17 @@ const TIER_TONE: Record<string, 'teal' | 'gold' | 'purple'> = {
 
 export default function BusinessHero({ detail, isOpen }: Props) {
   const { business, cover, logo } = detail
-  const typeLabel = TYPE_LABEL[business.business_type] ?? 'نشاط'
+  const typeLabel = getBusinessTypeLabel(business)
   const tierLabel = TIER_LABEL[business.trust_tier] ?? null
   const tierTone = TIER_TONE[business.trust_tier] ?? 'purple'
 
   const hasRating = business.rating_count > 0
   const ratingValue = hasRating ? business.rating_avg.toFixed(1) : null
+  const summary = business.hook?.trim() || business.description?.trim() || ''
+  const locationLabel =
+    business.area && business.city && business.area !== business.city
+      ? business.area + '، ' + business.city
+      : business.area || business.city
 
   return (
     <section className={`${styles.hero} ${business.is_featured ? styles.featured : ''}`}>
@@ -70,12 +76,12 @@ export default function BusinessHero({ detail, isOpen }: Props) {
 
           <div className={styles.metaRow}>
             <span className={styles.type}>{typeLabel}</span>
-            {business.area && (
+            {locationLabel && (
               <>
                 <span className={styles.dot}>·</span>
                 <span className={styles.area}>
                   <MapPinIcon size={12} />
-                  {business.area}
+                  {locationLabel}
                 </span>
               </>
             )}
@@ -134,9 +140,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
             )}
           </div>
 
-          {(business.hook || business.description) && (
-            <p className={styles.hook}>{business.hook || business.description}</p>
-          )}
+          {summary && <p className={styles.hook}>{summary}</p>}
         </div>
       </div>
     </section>
