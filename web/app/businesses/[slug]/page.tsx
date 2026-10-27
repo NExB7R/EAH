@@ -12,7 +12,6 @@ import {
   getBusinessOffers,
 } from '@/lib/data/business-detail'
 import { getBusinessTypeLabel } from '@/lib/business-type-label'
-import { computeIsOpenNow } from '@/lib/data/business-detail'
 import BusinessNotice from '@/components/business-notice'
 import { getFeatureFlags } from '@/lib/features'
 import type { BusinessDetail } from '@/lib/data/business-detail'
@@ -172,7 +171,7 @@ export default async function BusinessPage({ params }: Props) {
     return h1 - h2
   })
 
-  const isOpen = computeIsOpenNow(detail.openNowOverride, business.working_hours)
+  const isOpen = business.is_open
   const acceptsWhatsapp = business.accepts_whatsapp_orders
   const ordersEnabled = flags.orders_enabled && business.accepts_orders
 

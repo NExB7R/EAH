@@ -1,9 +1,9 @@
 import Image from 'next/image'
 import DetailCover from './detail-cover'
-import { StarIcon, BadgeCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
+import { StarIcon, BadgeCheckIcon, ShieldCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
 import DistanceBadge from './distance-badge'
 import type { BusinessDetail } from '@/lib/data/business-detail'
-import { TYPE_LABEL, TIER_LABEL, TIER_EMOJI } from '@/lib/data/business-detail'
+import { TYPE_LABEL, TIER_LABEL } from '@/lib/data/business-detail'
 import styles from './business-hero.module.css'
 
 type Props = {
@@ -23,7 +23,6 @@ export default function BusinessHero({ detail, isOpen }: Props) {
   const { business, cover, logo } = detail
   const typeLabel = TYPE_LABEL[business.business_type] ?? 'نشاط'
   const tierLabel = TIER_LABEL[business.trust_tier] ?? null
-  const tierEmoji = TIER_EMOJI[business.trust_tier] ?? ''
   const tierTone = TIER_TONE[business.trust_tier] ?? 'purple'
 
   const hasRating = business.rating_count > 0
@@ -97,7 +96,8 @@ export default function BusinessHero({ detail, isOpen }: Props) {
           <div className={styles.badges}>
             {tierLabel && (
               <span className={`${styles.tier} ${styles['tier_' + tierTone]}`}>
-                {tierEmoji ? tierEmoji + ' ' : ''}{tierLabel}
+                <ShieldCheckIcon size={12} />
+                {tierLabel}
               </span>
             )}
             {business.trust_score > 0 && (
