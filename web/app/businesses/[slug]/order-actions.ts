@@ -3,6 +3,7 @@
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { orderSchema, orderHasContent } from '@/lib/validations/order'
+import { parseOrderAttachments, verifyOrderAttachment } from '@/lib/validations/order-attachments'
 import { sendPushToUser } from '@/lib/push/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { isOpenNow } from '@/lib/utils/working-hours'
@@ -50,6 +51,24 @@ export async function submitOrder(
   }
 
   const d = parsed.data
+
+  const attachmentsInput = d.attachments_json ?? ''
+  const parsedAttachments = parseOrderAttachments(attachmentsInput)
+  if (!parsedAttachments) {
+    return { ok: false, error: 'فيه مرفق غير صحيح. ارفعه مرة تانية.' }
+  }
+
+  if (parsedAttachments.length > 0) {
+    const signingSecret = process.env.CLOUDINARY_API_SECRET
+    if (
+      !signingSecret ||
+      parsedAttachments.some(
+        (attachment) => !verifyOrderAttachment(user.id, attachment, signingSecret),
+      )
+    ) {
+      return { ok: false, error: 'انتهت صلاحية المرفق أو تعذر التحقق منه. ارفعه مرة تانية.' }
+    }
+  }
 
   // Custom: at least one content source (text OR attachments)
   if (
@@ -123,49 +142,7 @@ export async function submitOrder(
   // ═══════════════════════════════════════════════════════════════════
   // 3. Optional new fields (v2)
   // ═══════════════════════════════════════════════════════════════════
-  type Attachment = {
-    type: 'image' | 'voice'
-    url: string
-    size: number
-    duration_sec?: number
-    mime?: string
-  }
-  const attachments: Attachment[] = []
-  if (d.attachments_json) {
-    try {
-      const parsedAtt = JSON.parse(d.attachments_json)
-      if (Array.isArray(parsedAtt)) {
-        for (const a of parsedAtt.slice(0, 5)) {
-          if (!a || typeof a !== 'object') continue
-          const obj = a as {
-            type?: unknown
-            url?: unknown
-            size?: unknown
-            duration_sec?: unknown
-            mime?: unknown
-          }
-          if (
-            (obj.type === 'image' || obj.type === 'voice') &&
-            typeof obj.url === 'string' &&
-            obj.url.startsWith('https://') &&
-            typeof obj.size === 'number' &&
-            obj.size > 0 &&
-            obj.size <= 5_000_000
-          ) {
-            attachments.push({
-              type: obj.type,
-              url: obj.url,
-              size: obj.size,
-              duration_sec: typeof obj.duration_sec === 'number' ? obj.duration_sec : undefined,
-              mime: typeof obj.mime === 'string' ? obj.mime : undefined,
-            })
-          }
-        }
-      }
-    } catch {
-      // ignore malformed
-    }
-  }
+  const attachments = parsedAttachments.map(({ signature: _signature, expires_at: _expiresAt, ...attachment }) => attachment)
 
   // ═══════════════════════════════════════════════════════════════════
   // 4. Insert order (get id back for deep link)
