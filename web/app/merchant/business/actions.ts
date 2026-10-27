@@ -27,7 +27,7 @@ const schema = z
     whatsapp: phoneSchema,
     is_open: z.boolean(),
     accepts_whatsapp_orders: z.boolean(),
-    business_type: z.enum(['restaurant', 'pharmacy', 'delivery_office', 'misc']),
+    business_type: z.enum(['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc']),
     latitude: z.number().min(-90).max(90).nullable(),
     longitude: z.number().min(-180).max(180).nullable(),
   })

@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { randomBytes } from 'crypto'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
-import { applySchema } from '@/lib/validations/merchant'
+import { applySchema, resolveWhatsappNumber } from '@/lib/validations/merchant'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Merchant Application Action
@@ -108,6 +108,7 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
   const raw = {
     name: formData.get('name')?.toString() ?? '',
     business_type: formData.get('business_type')?.toString() ?? '',
+    custom_business_type: formData.get('custom_business_type')?.toString() ?? '',
     area: formData.get('area')?.toString() ?? '',
     city: formData.get('city')?.toString() || 'شبين القناطر',
     description: formData.get('description')?.toString() ?? '',
@@ -161,13 +162,14 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
       name: data.name,
       slug,
       business_type: data.business_type,
+      custom_business_type:
+        data.business_type === 'misc' ? data.custom_business_type?.trim() || null : null,
+      business_type_status: data.business_type === 'misc' ? 'pending' : 'approved',
       area: data.area,
       city: data.city,
       description: data.description,
       hook: data.hook ?? null,
       address_text: data.address_text,
-      latitude: data.latitude ?? null,
-      longitude: data.longitude ?? null,
       owner_profile_id: user.id,
       source: 'merchant',
       is_published: false,
@@ -184,11 +186,35 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
 
   const businessId = created.id
 
+  // The public detail/search queries use business_locations as the canonical
+  // geolocation source. Do not only populate legacy latitude/longitude columns.
+  if (data.latitude != null && data.longitude != null) {
+    const { error: locationError } = await privileged.from('business_locations').insert({
+      business_id: businessId,
+      address_text: data.address_text,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      is_primary: true,
+    })
+
+    if (locationError) {
+      const rolledBack = await rollbackMerchantApplication(businessId)
+      return {
+        ok: false,
+        error: rolledBack
+          ? 'تعذر حفظ موقع النشاط؛ تم إلغاء الطلب غير المكتمل'
+          : 'تعذر حفظ موقع النشاط والتراجع عنه تلقائيًا. تواصل مع الدعم قبل إعادة المحاولة',
+      }
+    }
+  }
+
   // 5. أضف طرق التواصل
   const contacts: Array<{ method_type: string; value: string; is_primary: boolean }> = []
   if (data.phone) contacts.push({ method_type: 'phone', value: data.phone, is_primary: true })
-  if (data.whatsapp)
-    contacts.push({ method_type: 'whatsapp', value: data.whatsapp, is_primary: false })
+  const whatsappNumber = resolveWhatsappNumber(data.phone, data.whatsapp)
+  if (whatsappNumber) {
+    contacts.push({ method_type: 'whatsapp', value: whatsappNumber, is_primary: false })
+  }
   if (data.facebook)
     contacts.push({ method_type: 'facebook', value: data.facebook, is_primary: false })
   if (data.instagram)
@@ -290,8 +316,8 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
       return {
         ok: false,
         error: rolledBack
-          ? 'تعذر تفعيل حساب التاجر؛ تم إلغاء الطلب. حاول تاني'
-          : 'تعذر تفعيل حساب التاجر والتراجع التلقائي. تواصل مع الدعم قبل إعادة المحاولة',
+          ? 'تعذر تفعيل حساب البايع؛ تم إلغاء الطلب. حاول تاني'
+          : 'تعذر تفعيل حساب البايع والتراجع التلقائي. تواصل مع الدعم قبل إعادة المحاولة',
       }
     }
   }

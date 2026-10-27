@@ -11,6 +11,7 @@ import {
   ImageIcon,
   AlertIcon,
   FileTextIcon,
+  CartIcon,
 } from '@/components/icons'
 import type { AdminBusiness, BusinessOwnerOption } from '@/lib/data/admin-business'
 
@@ -22,6 +23,7 @@ import type { AdminBusiness, BusinessOwnerOption } from '@/lib/data/admin-busine
 export const TYPES = [
   { value: 'restaurant', label: 'مطعم', Icon: GiftIcon },
   { value: 'pharmacy', label: 'صيدلية', Icon: CheckCircleIcon },
+  { value: 'supermarket', label: 'ماركت', Icon: CartIcon },
   { value: 'delivery_office', label: 'توصيل', Icon: MapPinIcon },
   { value: 'misc', label: 'أخرى', Icon: CrownGoldIcon },
 ] as const

@@ -1,12 +1,13 @@
 'use client'
 
-import { GiftIcon, CheckCircleIcon, MapPinIcon, CrownGoldIcon } from '@/components/icons'
+import { GiftIcon, CheckCircleIcon, MapPinIcon, CrownGoldIcon, CartIcon } from '@/components/icons'
 import type { WizardData } from './new-business-wizard'
 import styles from './wizard.module.css'
 
 const TYPES = [
   { value: 'restaurant', label: 'مطعم', Icon: GiftIcon },
   { value: 'pharmacy', label: 'صيدلية', Icon: CheckCircleIcon },
+  { value: 'supermarket', label: 'ماركت', Icon: CartIcon },
   { value: 'delivery_office', label: 'توصيل', Icon: MapPinIcon },
   { value: 'misc', label: 'أخرى', Icon: CrownGoldIcon },
 ] as const

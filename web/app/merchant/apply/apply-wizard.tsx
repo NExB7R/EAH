@@ -10,6 +10,7 @@ import {
   ArrowLeftIcon,
   UtensilsIcon,
   PillIcon,
+  CartIcon,
   BikeIcon,
   SparklesIcon,
 } from '@/components/icons'
@@ -24,7 +25,7 @@ type Props = {
   areas: readonly string[]
 }
 
-type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office' | 'misc'
+type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
 
 const STEPS = [
   { key: 'basic', label: 'الأساسيات', Icon: StoreIcon },
@@ -36,6 +37,7 @@ const STEPS = [
 const TYPES: Array<{ value: BusinessType; label: string; Icon: typeof UtensilsIcon }> = [
   { value: 'restaurant', label: 'مطعم', Icon: UtensilsIcon },
   { value: 'pharmacy', label: 'صيدلية', Icon: PillIcon },
+  { value: 'supermarket', label: 'ماركت', Icon: CartIcon },
   { value: 'delivery_office', label: 'توصيل', Icon: BikeIcon },
   { value: 'misc', label: 'أنشطة أخرى', Icon: SparklesIcon },
 ]
@@ -49,6 +51,7 @@ export default function ApplyWizard({ areas }: Props) {
   // form state
   const [name, setName] = useState('')
   const [businessType, setBusinessType] = useState<BusinessType>('restaurant')
+  const [customBusinessType, setCustomBusinessType] = useState('')
   const [area, setArea] = useState('')
   const [description, setDescription] = useState('')
   const [hook, setHook] = useState('')
@@ -66,7 +69,13 @@ export default function ApplyWizard({ areas }: Props) {
 
   const canNext = (): boolean => {
     if (step === 0) {
-      return name.trim().length >= 2 && area.length > 0 && description.trim().length >= 10
+      const customTypeValid = businessType !== 'misc' || customBusinessType.trim().length >= 2
+      return (
+        name.trim().length >= 2 &&
+        area.length > 0 &&
+        description.trim().length >= 10 &&
+        customTypeValid
+      )
     }
     if (step === 1) {
       return /^01[0125][0-9]{8}$/.test(phone.trim())
@@ -106,6 +115,7 @@ export default function ApplyWizard({ areas }: Props) {
     const fd = new FormData()
     fd.set('name', name)
     fd.set('business_type', businessType)
+    fd.set('custom_business_type', businessType === 'misc' ? customBusinessType.trim() : '')
     fd.set('area', area)
     fd.set('city', 'شبين القناطر')
     fd.set('description', description)
@@ -195,6 +205,23 @@ export default function ApplyWizard({ areas }: Props) {
               </div>
             </div>
 
+            {businessType === 'misc' && (
+              <label className={styles.field}>
+                <span className={styles.label}>نوع النشاط بالتحديد * (حرفين على الأقل)</span>
+                <input
+                  className={styles.input}
+                  value={customBusinessType}
+                  onChange={(e) => setCustomBusinessType(e.target.value.slice(0, 50))}
+                  placeholder="مثال: مغسلة ملابس، حلاق، ورشة..."
+                  maxLength={50}
+                  aria-invalid={customBusinessType.trim().length > 0 && customBusinessType.trim().length < 2}
+                />
+                <span className={styles.fieldHint}>
+                  لحد ما الأدمن يعتمد الاسم، النوع هيظهر للزوار تحت «أخرى».
+                </span>
+              </label>
+            )}
+
             <label className={styles.field}>
               <span className={styles.label}>المنطقة *</span>
               <select
@@ -240,7 +267,7 @@ export default function ApplyWizard({ areas }: Props) {
         {step === 1 && (
           <>
             <h2 className={styles.stepTitle}>التواصل</h2>
-            <p className={styles.stepDesc}>عشان العملاء يوصلك بسهولة</p>
+            <p className={styles.stepDesc}>عشان المشتري يوصلك بسهولة</p>
 
             <label className={styles.field}>
               <span className={styles.label}>رقم الموبايل * (11 رقم)</span>
@@ -335,7 +362,7 @@ export default function ApplyWizard({ areas }: Props) {
               <div className={styles.summaryRow}>
                 <span className={styles.summaryLabel}>النوع</span>
                 <span className={styles.summaryValue}>
-                  {TYPES.find((t) => t.value === businessType)?.label}
+                  {businessType === 'misc' ? customBusinessType.trim() : TYPES.find((t) => t.value === businessType)?.label}
                 </span>
               </div>
               <div className={styles.summaryRow}>

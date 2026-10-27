@@ -40,6 +40,12 @@ export const applySchema = z.object({
   // Step 1 — الأساسيات
   name: z.string().trim().min(2, 'الاسم قصير').max(80, 'الاسم طويل'),
   business_type: z.enum(BUSINESS_TYPES),
+  custom_business_type: z
+    .string()
+    .trim()
+    .max(50, 'نوع النشاط طويل (50 حرف كحد أقصى)')
+    .optional()
+    .nullable(),
   area: z.enum(AREAS_LIST),
   city: z.string().trim().default('شبين القناطر'),
   description: z.string().trim().min(10, 'الوصف قصير — 10 حروف على الأقل').max(500, 'الوصف طويل'),
@@ -60,4 +66,36 @@ export const applySchema = z.object({
   agree_terms: z.literal(true, {
     message: 'لازم توافق على الشروط',
   }),
+}).superRefine((data, ctx) => {
+  const customType = data.custom_business_type?.trim() ?? ''
+  if (data.business_type === 'misc' && customType.length < 2) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['custom_business_type'],
+      message: 'اكتب نوع النشاط الآخر (حرفين على الأقل)',
+    })
+  }
+  if (data.business_type !== 'misc' && customType.length > 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['custom_business_type'],
+      message: 'النوع المخصص متاح عند اختيار «أنشطة أخرى» فقط',
+    })
+  }
+
+  const hasLatitude = data.latitude != null
+  const hasLongitude = data.longitude != null
+  if (hasLatitude !== hasLongitude) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['latitude'],
+      message: 'لازم تدخل خط العرض وخط الطول مع بعض، أو تسيب الاتنين فاضيين',
+    })
+  }
 })
+
+
+/** Resolve the WhatsApp channel according to the application form's "if different" label. */
+export function resolveWhatsappNumber(phone: string, whatsapp?: string | null): string {
+  return whatsapp?.trim() || phone.trim()
+}
