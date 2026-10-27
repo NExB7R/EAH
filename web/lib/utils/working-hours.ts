@@ -64,9 +64,12 @@ export function isOpenAt(hours: HoursMap | null, now: Date): boolean {
   if (!clock) return false
 
   const todayKey = DAY_KEYS[clock.dayIndex]
+  // Array lookups can be undefined under noUncheckedIndexedAccess; fail closed.
+  if (!todayKey) return false
   if (isWithinDayWindow(hours[todayKey], clock.minuteOfDay)) return true
 
-  const previousKey = DAY_KEYS[(clock.dayIndex + 6) % 7]
+  const previousKey = DAY_KEYS[(clock.dayIndex + DAY_KEYS.length - 1) % DAY_KEYS.length]
+  if (!previousKey) return false
   const previous = hours[previousKey]
   if (!previous) return false
 
