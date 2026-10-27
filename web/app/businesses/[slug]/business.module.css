@@ -1,24 +1,23 @@
 .page {
   min-height: 100vh;
-  padding-bottom: 100px;
+  padding-bottom: 112px;
 }
 
 .container {
-  max-width: 900px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-}
-
-.actionsWrap {
   padding: 0 20px;
 }
 
+.actionsWrap,
 .tabsWrap {
-  padding: 0 20px;
+  padding: 0;
 }
 
 .similar {
-  padding: 0 20px;
-  margin-top: 40px;
+  padding: 0;
+  margin-top: 32px;
 }
 
 .similarHeader {
@@ -62,10 +61,14 @@
   }
 }
 
-@media (max-width: 480px) {
-  .similarGrid {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 640px) {
+  .container { padding: 0 10px; }
+  .similar { margin-top: 24px; }
+  .similarGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+}
+
+@media (max-width: 360px) {
+  .similarGrid { grid-template-columns: 1fr; }
 }
 
 .ownerBanner {
@@ -123,4 +126,53 @@
 .ownerLinkGhost:hover {
   border-color: rgba(232, 199, 154, 0.5);
   color: var(--text-primary);
+}
+
+
+/* Simple, predictable way back to discovery from a detail page. */
+.breadcrumb {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0 10px;
+  color: var(--text-tertiary, #a29db5);
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.breadcrumbLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #d8b7ff;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.breadcrumbLink:hover {
+  color: #f4e6ff;
+}
+
+.breadcrumbCurrent {
+  overflow: hidden;
+  color: var(--text-secondary, #c9c2db);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .breadcrumb {
+    padding: 12px 0 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breadcrumbLink {
+    transition: none;
+  }
 }

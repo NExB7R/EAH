@@ -1,13 +1,58 @@
+import { createHash } from 'crypto'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
-import { createHash } from 'crypto'
+import { createServiceClient } from '@/lib/supabase/service'
 import { getClientIp, strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 
 const schema = z.object({
   businessId: z.string().uuid(),
   method: z.enum(['phone', 'whatsapp']),
 })
+
+const MAX_BODY_BYTES = 8192
+
+async function readLimitedJson(
+  request: Request,
+): Promise<{ ok: true; value: unknown } | { ok: false; tooLarge: boolean }> {
+  const contentLength = Number(request.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    return { ok: false, tooLarge: true }
+  }
+
+  const reader = request.body?.getReader()
+  if (!reader) return { ok: false, tooLarge: false }
+
+  const chunks: Uint8Array[] = []
+  let totalBytes = 0
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      totalBytes += value.byteLength
+      if (totalBytes > MAX_BODY_BYTES) {
+        await reader.cancel().catch(() => undefined)
+        return { ok: false, tooLarge: true }
+      }
+      chunks.push(value)
+    }
+  } catch {
+    return { ok: false, tooLarge: false }
+  }
+
+  const bytes = new Uint8Array(totalBytes)
+  let offset = 0
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset)
+    offset += chunk.byteLength
+  }
+
+  try {
+    return { ok: true, value: JSON.parse(new TextDecoder().decode(bytes)) }
+  } catch {
+    return { ok: false, tooLarge: false }
+  }
+}
 
 export async function POST(request: Request) {
   const supabase = await createClient()
@@ -17,6 +62,19 @@ export async function POST(request: Request) {
 
   if (!user) {
     return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 })
+  }
+
+  const body = await readLimitedJson(request)
+  if (!body.ok) {
+    return NextResponse.json(
+      { ok: false, error: body.tooLarge ? 'payload_too_large' : 'invalid' },
+      { status: body.tooLarge ? 413 : 400 },
+    )
+  }
+
+  const parsed = schema.safeParse(body.value)
+  if (!parsed.success) {
+    return NextResponse.json({ ok: false, error: 'invalid' }, { status: 400 })
   }
 
   const ip = await getClientIp()
@@ -34,33 +92,86 @@ export async function POST(request: Request) {
     )
   }
 
-  const contentLength = Number(request.headers.get('content-length') ?? '0')
-  if (Number.isFinite(contentLength) && contentLength > 8192) {
-    return NextResponse.json({ ok: false, error: 'payload_too_large' }, { status: 413 })
+  let privileged: ReturnType<typeof createServiceClient>
+  try {
+    privileged = createServiceClient()
+  } catch {
+    return NextResponse.json({ ok: false, error: 'service_unavailable' }, { status: 503 })
   }
 
-  const body = await request.json().catch(() => null)
-  const parsed = schema.safeParse(body)
-  if (!parsed.success) {
-    return NextResponse.json({ ok: false, error: 'invalid' }, { status: 400 })
+  const { data: business, error: businessError } = await privileged
+    .from('businesses')
+    .select('id, is_published, accepts_whatsapp_orders')
+    .eq('id', parsed.data.businessId)
+    .maybeSingle()
+  if (businessError) {
+    console.error('[track-contact] business lookup failed:', businessError.message)
+    return NextResponse.json({ ok: false, error: 'تعذر التحقق من النشاط' }, { status: 500 })
+  }
+  if (!business?.is_published) {
+    return NextResponse.json({ ok: false, error: 'النشاط مش متاح' }, { status: 404 })
+  }
+  if (parsed.data.method === 'whatsapp' && !business.accepts_whatsapp_orders) {
+    return NextResponse.json(
+      { ok: false, error: 'النشاط مش بيستقبل واتساب حالياً' },
+      { status: 403 },
+    )
   }
 
-  // visitor_hash = sha256(user.id + business.id + method)
-  // يمنع التضخيم من نفس المستخدم
+  const { data: branches, error: branchError } = await privileged
+    .from('business_branches')
+    .select('phone, whatsapp, is_primary, sort_order')
+    .eq('business_id', parsed.data.businessId)
+    .eq('is_active', true)
+    .order('is_primary', { ascending: false })
+    .order('sort_order', { ascending: true })
+    .limit(25)
+  if (branchError) {
+    console.error('[track-contact] branch lookup failed:', branchError.message)
+    return NextResponse.json({ ok: false, error: 'تعذر جلب بيانات التواصل' }, { status: 500 })
+  }
+
+  let value = (branches ?? [])
+    .map((row) => row[parsed.data.method])
+    .find(
+      (candidate): candidate is string =>
+        typeof candidate === 'string' && candidate.trim().length > 0,
+    )
+
+  if (!value) {
+    const { data: contactRows, error: contactError } = await privileged
+      .from('business_contact_methods')
+      .select('value, is_primary')
+      .eq('business_id', parsed.data.businessId)
+      .eq('method_type', parsed.data.method)
+      .order('is_primary', { ascending: false })
+      .limit(5)
+    if (contactError) {
+      console.error('[track-contact] contact lookup failed:', contactError.message)
+      return NextResponse.json({ ok: false, error: 'تعذر جلب بيانات التواصل' }, { status: 500 })
+    }
+    value = contactRows?.find(
+      (row) => typeof row.value === 'string' && row.value.trim().length > 0,
+    )?.value
+  }
+
+  if (!value) {
+    return NextResponse.json({ ok: false, error: 'بيانات التواصل مش متاحة' }, { status: 404 })
+  }
+
   const visitorHash = createHash('sha256')
     .update(`${user.id}:${parsed.data.businessId}:${parsed.data.method}`)
     .digest('hex')
-
-  const { error } = await supabase.rpc('reveal_contact', {
+  const { error: revealError } = await privileged.rpc('reveal_contact', {
     p_business_id: parsed.data.businessId,
     p_method_type: parsed.data.method,
     p_visitor_hash: visitorHash,
   })
 
-  if (error) {
-    console.error('[track-contact] contact event failed:', error.message)
+  if (revealError) {
+    console.error('[track-contact] contact reveal failed:', revealError.message)
     return NextResponse.json({ ok: false, error: 'تعذر تسجيل العملية' }, { status: 500 })
   }
 
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({ ok: true, value })
 }

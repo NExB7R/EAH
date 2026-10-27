@@ -1,5 +1,6 @@
+import 'server-only'
 import { unstable_cache } from 'next/cache'
-import { createPublicClient } from '@/lib/supabase/public'
+import { createServiceClient } from '@/lib/supabase/service'
 import { createClient } from '@/lib/supabase/server'
 
 // ═══════════════════════════════════════════════════════════
@@ -46,24 +47,38 @@ export type AdminAd = MerchantAd & {
 
 export const getActiveAdsForSlot = unstable_cache(
   async (slotCode: AdSlotCode, limit = 3): Promise<ActiveAd[]> => {
-    const supabase = createPublicClient()
+    let supabase: ReturnType<typeof createServiceClient>
+    try {
+      supabase = createServiceClient()
+    } catch (error) {
+      console.error(
+        '[data] getActiveAdsForSlot service client unavailable:',
+        error instanceof Error ? error.message : 'unknown error',
+      )
+      return []
+    }
 
-    const { data: slot } = await supabase
+    const { data: slot, error: slotError } = await supabase
       .from('ad_slots')
       .select('id')
       .eq('code', slotCode)
       .eq('is_active', true)
       .maybeSingle()
 
+    if (slotError) {
+      console.error('[data] getActiveAdsForSlot slot lookup failed:', slotError.message)
+      return []
+    }
     if (!slot) return []
 
     const now = new Date().toISOString()
+    const safeLimit = Number.isInteger(limit) ? Math.max(1, Math.min(limit, 10)) : 3
     const { data, error } = await supabase
       .from('ads')
       .select(
         `
-        id, title, image_url, link_url,
-        business:businesses!ads_business_id_fkey(slug, name)
+        id, title, image_url, link_url, business_id,
+        business:businesses!ads_business_id_fkey(slug, name, is_published)
       `,
       )
       .eq('slot_id', slot.id)
@@ -71,27 +86,37 @@ export const getActiveAdsForSlot = unstable_cache(
       .or(`starts_at.is.null,starts_at.lte.${now}`)
       .or(`ends_at.is.null,ends_at.gt.${now}`)
       .order('created_at', { ascending: false })
-      .limit(limit)
+      .limit(Math.min(safeLimit * 3, 30))
 
     if (error) {
       console.error('[data] getActiveAdsForSlot error:', error.message)
       return []
     }
 
-    return (data ?? []).map((r) => {
-      const biz = r.business as unknown as
-        { slug: string; name: string }[] | { slug: string; name: string } | null
-      const single = Array.isArray(biz) ? (biz[0] ?? null) : biz
-      return {
-        id: r.id,
-        title: r.title,
-        image_url: r.image_url,
-        link_url: r.link_url,
-        business: single,
-      }
-    })
+    return (data ?? [])
+      .flatMap((r) => {
+        const biz = r.business as unknown as
+          | { slug: string; name: string; is_published: boolean }[]
+          | { slug: string; name: string; is_published: boolean }
+          | null
+        const single = Array.isArray(biz) ? (biz[0] ?? null) : biz
+
+        // Linked ads must point to a published activity; standalone external ads remain supported.
+        if (r.business_id && (!single || !single.is_published)) return []
+
+        return [
+          {
+            id: r.id,
+            title: r.title,
+            image_url: r.image_url,
+            link_url: r.link_url,
+            business: single ? { slug: single.slug, name: single.name } : null,
+          },
+        ]
+      })
+      .slice(0, safeLimit)
   },
-  ['ads-active-slot'],
+  ['ads-active-slot-v2'],
   { revalidate: 60, tags: ['ads'] },
 )
 

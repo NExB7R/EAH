@@ -2,7 +2,7 @@
 
 > منصة اكتشاف محلية مصرية — تبدأ من شبين القناطر والقرى حواليها.
 
-**آخر تحديث:** 2026-09-24
+**آخر تحديث:** 2026-10-27
 **الإصدار:** v2.0 (fresh start)
 **المالك:** NourEldin B7R — nexb7r@gmail.com
 
@@ -25,10 +25,12 @@
 
 **لو أنت AI / مطور جديد:**
 
-1. **[docs/MASTER_BRIEF.md](./docs/MASTER_BRIEF.md)** — الرؤية والهوية والأهداف
-2. **[docs/AI_CONTRACT.md](./docs/AI_CONTRACT.md)** — القواعد الإجبارية
-3. **[docs/SACRED.md](./docs/SACRED.md)** — المقدسات
-4. **[docs/ROADMAP.md](./docs/ROADMAP.md)** — خطة التنفيذ
+1. **[docs/PROJECT_OPERATING_GUIDE.md](./docs/PROJECT_OPERATING_GUIDE.md)** — الحالة الحالية، ترتيب التنفيذ، والمعايير التشغيلية
+2. **[docs/ROLES_MATRIX.md](./docs/ROLES_MATRIX.md)** — الأدوار والصلاحيات ودورة النشاط
+3. **[docs/MASTER_BRIEF.md](./docs/MASTER_BRIEF.md)** — الرؤية والهوية والأهداف
+4. **[docs/AI_CONTRACT.md](./docs/AI_CONTRACT.md)** — القواعد الإجبارية
+5. **[docs/SACRED.md](./docs/SACRED.md)** — المقدسات
+6. **[docs/ROADMAP.md](./docs/ROADMAP.md)** — خطة التنفيذ
 
 **بعدها قول:** "قرأت. جاهز." واستنى التعليمات.
 
