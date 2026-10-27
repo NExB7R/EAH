@@ -1,3 +1,6 @@
+import 'server-only'
+import { createHmac, timingSafeEqual } from 'node:crypto'
+
 export type OrderAttachment = {
   type: 'image' | 'voice'
   url: string
@@ -6,6 +9,35 @@ export type OrderAttachment = {
   duration_sec?: number
   expires_at: number
   signature: string
+}
+
+export function signOrderAttachment(
+  userId: string,
+  attachment: Omit<OrderAttachment, 'signature'>,
+  secret: string,
+): string {
+  return createHmac('sha256', secret)
+    .update(orderAttachmentSignaturePayload(userId, attachment))
+    .digest('hex')
+}
+
+export function verifyOrderAttachment(
+  userId: string,
+  attachment: OrderAttachment,
+  secret: string,
+  nowSeconds = Math.floor(Date.now() / 1000),
+): boolean {
+  if (!attachment.signature || attachment.expires_at <= nowSeconds) return false
+  // Never accept unexpectedly long-lived upload grants.
+  if (attachment.expires_at > nowSeconds + 60 * 60) return false
+  const { signature, ...payload } = attachment
+  const expected = signOrderAttachment(userId, payload, secret)
+  const suppliedBytes = Buffer.from(signature, 'hex')
+  const expectedBytes = Buffer.from(expected, 'hex')
+  return (
+    suppliedBytes.length === expectedBytes.length &&
+    timingSafeEqual(suppliedBytes, expectedBytes)
+  )
 }
 
 export const ORDER_IMAGE_MIMES = new Set([
