@@ -12,6 +12,16 @@ test.describe('Explore page', () => {
     await expect(cards.first().getByText(/مفتوح الآن|مغلق الآن/)).toBeVisible()
   })
 
+  test('offers supermarket as a filter type', async ({ page }) => {
+    await page.goto('/explore?filters=1', { waitUntil: 'networkidle' })
+
+    const supermarketFilter = page.getByRole('button', { name: /ماركت/ })
+    await expect(supermarketFilter).toBeVisible()
+    await supermarketFilter.click()
+
+    await expect(page).toHaveURL(/type=supermarket/)
+  })
+
   test('opens the activity detail page from its card', async ({ page }) => {
     await page.goto('/explore', { waitUntil: 'networkidle' })
 

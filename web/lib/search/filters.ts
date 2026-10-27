@@ -151,7 +151,7 @@ export function applyFilters(businesses: Business[], filters: Filters): Business
 
 export function parseFilters(params: Record<string, string | undefined>): Filters {
   const types: BusinessType[] = []
-  const validTypes: BusinessType[] = ['restaurant', 'pharmacy', 'delivery_office', 'misc']
+  const validTypes: BusinessType[] = ['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc']
   if (params.type && validTypes.includes(params.type as BusinessType)) {
     types.push(params.type as BusinessType)
   }
