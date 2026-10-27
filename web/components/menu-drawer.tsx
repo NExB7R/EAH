@@ -73,7 +73,7 @@ const CUSTOMER_ITEMS: MenuItem[] = [
   { href: '/account/points', label: 'النقاط', Icon: GiftIcon },
 ]
 
-// ─── Merchant dashboard (للتاجر المرتبط بنشاط) ───
+// ─── Seller dashboard (للبايع المرتبط بنشاط) ───
 const MERCHANT_SECTION: MenuItem[] = [
   { href: '/merchant', label: 'لوحة البايع', Icon: LayoutDashboardIcon },
   { href: '/merchant/business', label: 'بيانات النشاط', Icon: StoreIcon },
@@ -83,7 +83,7 @@ const MERCHANT_SECTION: MenuItem[] = [
   { href: '/merchant/subscription', label: 'الباقة والاشتراك', Icon: CrownGoldIcon },
 ]
 
-// ─── Merchant onboarding (للزائر أو العميل الذي ليس لديه نشاط) ───
+// ─── Seller application (للمشتري الذي لم يربط نشاطًا) ───
 const MERCHANT_APPLY: MenuItem[] = [
   { href: '/merchant/apply', label: 'قدّم نشاطك كـ بايع', Icon: StoreIcon },
   { href: '/pricing', label: 'الباقات', Icon: GiftIcon },

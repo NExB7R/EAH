@@ -4,7 +4,7 @@ import { CheckCircleIcon, StoreIcon, ArrowLeftIcon } from '@/components/icons'
 import SecondaryHero from '@/components/secondary-hero'
 import styles from './success.module.css'
 
-export const metadata: Metadata = { title: 'تم التسجيل · EAH' }
+export const metadata: Metadata = { title: 'طلب النشاط قيد المراجعة · EAH' }
 
 export default function SuccessPage() {
   return (
@@ -17,21 +17,21 @@ export default function SuccessPage() {
             <CheckCircleIcon size={56} />
           </span>
 
-          <h1 className={styles.title}>تم تسجيل نشاطك ✓</h1>
+          <h1 className={styles.title}>طلبك وصل للإدارة ✓</h1>
 
           <p className={styles.text}>
-            اهلاً بيك في عيلة EAH. النشاط هيتم مراجعته خلال 24 ساعة، وهنبلغك أول ما يتفعّل.
+            شكرًا ليك. النشاط دلوقتي تحت مراجعة الإدارة، ومش هيظهر للزوار إلا بعد الموافقة. تقدر تتابع حالة طلبك من لوحة البايع.
           </p>
 
           <div className={styles.info}>
-            <strong>كل حاجة مجانية للأبد</strong>
-            <span>صفحتك جاهزة — تقدر تبدأ تستقبل طلبات واتساب فوراً</span>
+            <strong>الخطوة الجاية</strong>
+            <span>بعد الموافقة، راجع صفحة النشاط واستكمل صورها وبياناتها قبل مشاركة الرابط.</span>
           </div>
 
           <div className={styles.actions}>
             <Link href="/merchant" className={styles.btnPrimary}>
               <StoreIcon size={18} />
-              <span>افتح لوحة التحكم</span>
+              <span>افتح لوحة البايع</span>
             </Link>
             <Link href="/" className={styles.btnGhost}>
               <span>رجوع للرئيسية</span>

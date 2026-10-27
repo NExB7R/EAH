@@ -15,7 +15,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
     <div>
       <div className={styles.cardHead}>
         <h2 className={styles.cardTitle}>الخيارات والحالة</h2>
-        <p className={styles.cardHint}>اضبط الحالة الافتراضية وصاحب النشاط</p>
+        <p className={styles.cardHint}>اضبط الحالة الافتراضية وحدد البايع إن وجد</p>
       </div>
 
       <div className={styles.fields}>
@@ -83,7 +83,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
         </div>
 
         <p className={styles.gpsHint}>
-          💡 صور الغلاف والشعار والمعرض تقدر تضيفها بعد إنشاء النشاط من صفحة التعديل.
+          صور الغلاف والشعار والمعرض تقدر تضيفها بعد إنشاء النشاط من صفحة التعديل.
         </p>
       </div>
     </div>

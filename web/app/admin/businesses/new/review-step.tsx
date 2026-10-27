@@ -49,8 +49,8 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
     data.business_type === 'misc' && data.custom_business_type.trim().length > 0
   const publishStatus = needsTypeApproval
     ? owner
-      ? 'سينشر تحت «أخرى» — النوع المخصص قيد المراجعة'
-      : 'سينشر تحت «أخرى» — بدون مالك، والنوع قيد المراجعة'
+      ? 'هيظهر تحت فئة «أخرى» — النوع المخصص قيد المراجعة'
+      : 'هيظهر تحت فئة «أخرى» — من غير بايع مرتبط، والنوع قيد المراجعة'
     : owner
       ? 'جاهز للنشر — بايع مرتبط'
       : 'جاهز للنشر — من غير بايع مرتبط'
@@ -98,7 +98,7 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
         <Item label="حالة النشر" value={publishStatus} step={2} goTo={goTo} />
         <Item label="الحالة" value={data.is_open ? 'مفتوح الآن' : 'مغلق'} step={2} goTo={goTo} />
         <Item
-          label="واتساب أوردرز"
+          label="استقبال طلبات واتساب"
           value={data.accepts_whatsapp_orders ? 'يستقبل' : 'لا يستقبل'}
           step={2}
           goTo={goTo}

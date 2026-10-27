@@ -62,11 +62,11 @@ export default async function MerchantDashboard() {
         <span className={styles.emptyIcon}>
           <StoreIcon size={48} />
         </span>
-        <h1 className={styles.emptyTitle}>لسه مسجلتش نشاط</h1>
-        <p className={styles.emptyText}>سجّل نشاطك مجاناً — تطبيقك الخاص على EAH</p>
+        <h1 className={styles.emptyTitle}>لسه ما أضفتش نشاط</h1>
+        <p className={styles.emptyText}>قدّم طلب إضافة نشاط كـ بايع. الإدارة هتراجع البيانات قبل النشر.</p>
         <Link href="/merchant/apply" className={styles.emptyCta}>
           <StoreIcon size={18} />
-          <span>سجّل نشاطك دلوقتي</span>
+          <span>إضافة نشاط كـ بايع</span>
         </Link>
       </div>
     )
