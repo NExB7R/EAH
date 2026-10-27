@@ -273,13 +273,13 @@
 
 /* ─── Single card — wider when alone in section ─── */
 .singleCard .cardWrap {
-  width: 440px;
+  width: min(100%, 560px);
   max-width: 100%;
 }
 
 @media (max-width: 640px) {
   .singleCard .cardWrap {
-    width: 280px;
+    width: 100%;
   }
 
   /* Mobile: outer padding so sections don't touch screen edges */

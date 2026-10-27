@@ -392,19 +392,19 @@ export const TYPE_LABEL: Record<string, string> = {
 }
 
 export const TIER_LABEL: Record<string, string> = {
-  baraka: 'على البركة',
-  active: 'شغّال',
-  mo3tabar: 'معتبر',
-  kebeer: 'كبير',
-  legend: 'أسطورة',
+  bade2: 'لسه بادئ',
+  mashey: 'ماشي حاله',
+  fel: 'زي الفل',
+  harif: 'حريف',
+  ostora: 'الأسطورة',
 }
 
 export const TIER_EMOJI: Record<string, string> = {
-  baraka: '🌱',
-  active: '🌿',
-  mo3tabar: '🌳',
-  kebeer: '⭐',
-  legend: '👑',
+  bade2: '🌱',
+  mashey: '🌿',
+  fel: '🌳',
+  harif: '⭐',
+  ostora: '👑',
 }
 
 // ═══════════════════════════════════════════════════════════

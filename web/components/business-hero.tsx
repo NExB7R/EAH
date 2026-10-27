@@ -13,11 +13,11 @@ type Props = {
 }
 
 const TIER_TONE: Record<string, 'teal' | 'gold' | 'purple'> = {
-  baraka: 'purple',
-  active: 'teal',
-  mo3tabar: 'teal',
-  kebeer: 'gold',
-  legend: 'gold',
+  bade2: 'purple',
+  mashey: 'teal',
+  fel: 'purple',
+  harif: 'gold',
+  ostora: 'gold',
 }
 
 export default function BusinessHero({ detail, isOpen }: Props) {

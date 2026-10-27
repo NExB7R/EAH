@@ -4,13 +4,6 @@ import { useState } from 'react'
 import Image from 'next/image'
 import styles from './business-card.module.css'
 
-// ═══════════════════════════════════════════════════════════
-// EAH — Card Image (logo → cover → initial fallback)
-//   • Logo takes priority (padded inside gradient)
-//   • Falls back to cover on logo error
-//   • Falls back to initial if both fail
-// ═══════════════════════════════════════════════════════════
-
 type Props = {
   logoUrl: string | null
   coverUrl: string | null
@@ -18,24 +11,55 @@ type Props = {
   initial: string
 }
 
+/**
+ * The cover is the card's primary image. The logo is a small brand marker,
+ * never a replacement for a real cover photo. When the cover is missing or
+ * fails to load, fall back to the logo and then the activity initial.
+ */
 export default function CardImage({ logoUrl, coverUrl, alt, initial }: Props) {
   const [logoFailed, setLogoFailed] = useState(false)
   const [coverFailed, setCoverFailed] = useState(false)
 
-  const showLogo = !!logoUrl && !logoFailed
-  const showCover = !showLogo && !!coverUrl && !coverFailed
+  const showCover = Boolean(coverUrl && !coverFailed)
+  const showLogo = Boolean(logoUrl && !logoFailed)
 
-  if (showLogo || showCover) {
-    const src = showLogo ? logoUrl! : coverUrl!
+  if (showCover) {
+    return (
+      <>
+        <Image
+          src={coverUrl!}
+          alt={alt}
+          fill
+          sizes="(max-width: 640px) calc(100vw - 48px), 560px"
+          className={styles.cover}
+          onError={() => setCoverFailed(true)}
+        />
+        <div className={styles.imageOverlay} aria-hidden />
+        {showLogo && (
+          <span className={styles.logoBadge} aria-hidden="true">
+            <Image
+              src={logoUrl!}
+              alt=""
+              fill
+              sizes="44px"
+              className={styles.logoBadgeImg}
+              onError={() => setLogoFailed(true)}
+            />
+          </span>
+        )}
+      </>
+    )
+  }
+
+  if (showLogo) {
     return (
       <Image
-        src={src}
+        src={logoUrl!}
         alt={alt}
         fill
-        sizes="(max-width: 400px) 340px, (max-width: 640px) 400px, (max-width: 1024px) 440px, 480px"
-        className={showLogo ? styles.logo : styles.cover}
-        style={{ objectFit: showLogo ? 'contain' : 'cover' }}
-        onError={() => (showLogo ? setLogoFailed(true) : setCoverFailed(true))}
+        sizes="(max-width: 640px) calc(100vw - 48px), 560px"
+        className={styles.logo}
+        onError={() => setLogoFailed(true)}
       />
     )
   }
