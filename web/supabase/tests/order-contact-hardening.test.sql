@@ -1,7 +1,7 @@
 -- EAH pre-launch regression tests for order/contact database hardening.
 -- These assertions are expected to pass only after the matching migration is applied.
 BEGIN;
-SELECT plan(19);
+SELECT plan(24);
 
 SELECT is(
   has_table_privilege('anon', 'public.ads', 'SELECT'),
@@ -157,6 +157,72 @@ SELECT is(
     LIKE '%NEW.order_code := NEW.order_code_v2%',
   true,
   'the generated monthly order code is mirrored into the UI-facing column'
+);
+
+SELECT is(
+  EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'storage'
+      AND tablename = 'objects'
+      AND policyname = 'business owners upload media'
+      AND with_check LIKE '%biz-%'
+      AND with_check LIKE '%owner_profile_id%'
+      AND with_check LIKE '%gallery%'
+  ),
+  true,
+  'business media uploads use a business-ID path and owner check'
+);
+
+SELECT is(
+  EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'storage'
+      AND tablename = 'objects'
+      AND policyname = 'business owners update media'
+      AND qual LIKE '%owner_profile_id%'
+      AND with_check LIKE '%owner_profile_id%'
+      AND qual LIKE '%biz-%'
+      AND with_check LIKE '%biz-%'
+  ),
+  true,
+  'business media updates preserve owner and path checks before and after update'
+);
+
+SELECT is(
+  EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'storage'
+      AND tablename = 'objects'
+      AND policyname = 'business owners delete media'
+      AND qual LIKE '%owner_profile_id%'
+      AND qual LIKE '%biz-%'
+  ),
+  true,
+  'business media deletion is restricted to the activity owner and activity path'
+);
+
+SELECT is(
+  EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'storage'
+      AND tablename = 'objects'
+      AND policyname = 'voice_upload_authenticated'
+      AND with_check LIKE '%auth.uid%'
+      AND with_check LIKE '%foldername%'
+  ),
+  true,
+  'legacy order voice uploads must use the signed-in user folder'
+);
+
+SELECT is(
+  NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'storage'
+      AND tablename = 'objects'
+      AND policyname = 'public business media read'
+  ),
+  true,
+  'duplicate public business media read policy is removed'
 );
 
 SELECT * FROM finish();

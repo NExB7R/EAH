@@ -469,4 +469,81 @@ REVOKE EXECUTE ON FUNCTION public.guard_new_order_request() FROM PUBLIC, anon, a
 REVOKE EXECUTE ON FUNCTION public.reveal_contact(uuid, text, text) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.reveal_contact(uuid, text, text) TO service_role;
 
+-- Repair legacy Storage RLS to use the real object path.
+-- Current public activity-media objects follow biz-<business UUID>/<category>/<file>.
+-- The app's current image endpoints use authenticated server-side Cloudinary uploads, so
+-- legacy direct Storage writes must remain strictly scoped to an authenticated owner/admin.
+DROP POLICY IF EXISTS "public business media read" ON storage.objects;
+
+DROP POLICY IF EXISTS "business owners upload media" ON storage.objects;
+CREATE POLICY "business owners upload media"
+  ON storage.objects FOR INSERT TO authenticated
+  WITH CHECK (
+    bucket_id = 'business-media'
+    AND array_length(storage.foldername(name), 1) = 2
+    AND split_part(name, '/', 2) IN ('logo', 'cover', 'menu', 'gallery')
+    AND substring(name FROM '^biz-([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})/') IS NOT NULL
+    AND EXISTS (
+      SELECT 1
+      FROM public.businesses b
+      WHERE b.id::text = substring(storage.objects.name FROM '^biz-([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})/')
+        AND b.owner_profile_id = (SELECT auth.uid())
+    )
+  );
+
+DROP POLICY IF EXISTS "business owners update media" ON storage.objects;
+CREATE POLICY "business owners update media"
+  ON storage.objects FOR UPDATE TO authenticated
+  USING (
+    bucket_id = 'business-media'
+    AND array_length(storage.foldername(name), 1) = 2
+    AND split_part(name, '/', 2) IN ('logo', 'cover', 'menu', 'gallery')
+    AND substring(name FROM '^biz-([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})/') IS NOT NULL
+    AND EXISTS (
+      SELECT 1
+      FROM public.businesses b
+      WHERE b.id::text = substring(storage.objects.name FROM '^biz-([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})/')
+        AND b.owner_profile_id = (SELECT auth.uid())
+    )
+  )
+  WITH CHECK (
+    bucket_id = 'business-media'
+    AND array_length(storage.foldername(name), 1) = 2
+    AND split_part(name, '/', 2) IN ('logo', 'cover', 'menu', 'gallery')
+    AND substring(name FROM '^biz-([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})/') IS NOT NULL
+    AND EXISTS (
+      SELECT 1
+      FROM public.businesses b
+      WHERE b.id::text = substring(storage.objects.name FROM '^biz-([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})/')
+        AND b.owner_profile_id = (SELECT auth.uid())
+    )
+  );
+
+DROP POLICY IF EXISTS "business owners delete media" ON storage.objects;
+CREATE POLICY "business owners delete media"
+  ON storage.objects FOR DELETE TO authenticated
+  USING (
+    bucket_id = 'business-media'
+    AND array_length(storage.foldername(name), 1) = 2
+    AND split_part(name, '/', 2) IN ('logo', 'cover', 'menu', 'gallery')
+    AND substring(name FROM '^biz-([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})/') IS NOT NULL
+    AND EXISTS (
+      SELECT 1
+      FROM public.businesses b
+      WHERE b.id::text = substring(storage.objects.name FROM '^biz-([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})/')
+        AND b.owner_profile_id = (SELECT auth.uid())
+    )
+  );
+
+-- Keep legacy private voice storage confined to the authenticated user's own namespace.
+-- Current order attachments use user-bound, signed Cloudinary URLs; this rule is defense in depth.
+DROP POLICY IF EXISTS voice_upload_authenticated ON storage.objects;
+CREATE POLICY voice_upload_authenticated
+  ON storage.objects FOR INSERT TO authenticated
+  WITH CHECK (
+    bucket_id = 'order-voice'
+    AND array_length(storage.foldername(name), 1) = 1
+    AND (storage.foldername(name))[1] = (SELECT auth.uid())::text
+  );
+
 COMMIT;
