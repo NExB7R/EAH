@@ -25,6 +25,7 @@ function normalizeBusinessRows(data: unknown[] | null): Business[] {
       working_hours: (raw.working_hours as WorkingHours | null) ?? null,
       open_now_override:
         typeof raw.open_now_override === 'boolean' ? raw.open_now_override : null,
+      is_open: typeof raw.is_open === 'boolean' ? raw.is_open : null,
     })
     delete raw.business_locations
     return {
@@ -189,6 +190,7 @@ export const getBusinessDetail = unstable_cache(
         working_hours: (rawBiz.working_hours as WorkingHours | null) ?? null,
         open_now_override:
           typeof rawBiz.open_now_override === 'boolean' ? rawBiz.open_now_override : null,
+        is_open: typeof rawBiz.is_open === 'boolean' ? rawBiz.is_open : null,
       }),
       orders_enabled: rawBiz.accepts_orders === true,
     }
