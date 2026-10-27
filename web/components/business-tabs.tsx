@@ -245,7 +245,7 @@ export default function BusinessTabs({
           )}
 
           {/* Hours */}
-          {business.working_hours && (
+          {business.working_hours && Object.keys(business.working_hours).length > 0 ? (
             <div className={styles.block}>
               <h3 className={styles.blockTitle}>
                 <ClockIcon size={14} />
@@ -266,6 +266,16 @@ export default function BusinessTabs({
                   )
                 })}
               </ul>
+            </div>
+          ) : (
+            <div className={styles.block}>
+              <h3 className={styles.blockTitle}>
+                <ClockIcon size={14} />
+                مواعيد العمل
+              </h3>
+              <p className={styles.hoursNotice}>
+                المواعيد الأسبوعية لسه مش محددة. حالة الفتح الحالية بتعتمد على إعداد النشاط.
+              </p>
             </div>
           )}
 
@@ -308,8 +318,10 @@ export default function BusinessTabs({
           {branches.length > 0 &&
             branches.some(
               (b) =>
-                (b.address_text && b.address_text.trim().length > 0) ||
-                (b.phone && b.phone.trim().length > 0),
+                isNonEmpty(b.name) ||
+                isNonEmpty(b.address_text) ||
+                isNonEmpty(b.area) ||
+                (typeof b.latitude === 'number' && typeof b.longitude === 'number'),
             ) && (
               <div className={styles.block}>
                 <h3 className={styles.blockTitle}>الفروع ({branches.length})</h3>
