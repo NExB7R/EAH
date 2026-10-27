@@ -104,11 +104,12 @@ PLAYWRIGHT_SKIP_SERVER=1 PLAYWRIGHT_BASE_URL=https://<preview>.vercel.app npx pl
 
 ## 8. الحالة المتحققة في 2026-10-27
 
-- رابط المعاينة الحالي (READY): https://eah-91ujcy84v-eah-74a0.vercel.app/؛ ورابط الفرع المستقر: https://eah-git-prelaunch-audit-hardening-2026-10-27-eah-74a0.vercel.app/.
-- آخر Build تم التحقق منه: `c08fdefbfce48ffdd5499476f0bd8918a8ffcdc2` (READY). TypeScript نجح، وتولدت 54 صفحة، وأكمل Vercel deployment.
+- رابط المعاينة الحالي (READY): https://eah-cryssbz2c-eah-74a0.vercel.app/؛ ورابط الفرع المستقر: https://eah-git-prelaunch-audit-hardening-2026-10-27-eah-74a0.vercel.app/.
+- آخر Build تم التحقق منه: `39be3457dd570a395a565683d53ec2ec1f12447f` (READY). TypeScript نجح، وتولدت 54 صفحة، وأكمل Vercel deployment.
 - Vercel build: `READY`؛ التجميع وTypeScript نجحا، وجرى توليد 54 صفحة ثابتة.
 - Smoke checks للزائر أعادت `200` للصفحة الرئيسية والاستكشاف والقريب منك والبدايات والعروض وصفحة `/businesses/tapooosh` والباقات وطلب البايع.
 - هذا ليس اختبارًا كاملًا للمصادقة أو ترقية المالك أو Cloudinary أو عمليات الأدمن/البايع الموقعة.
 - GitHub Actions لا تزال تفشل قبل تخصيص runner (`runner_id=0`, `steps=0`)، انظر [issue #22](https://github.com/NExB7R/EAH/issues/22). لم يتم تشغيل اختبارات unit أو Playwright حتى الآن.
+- سياسات Storage القديمة في الإنتاج لا تزال كما هي؛ الترحيل المقترح يصحح مساراتها، وقد تم dry-run لتغيير السياسات داخل معاملة انتهت بـ rollback.
 - PR #33 وPR #34 مسودتان غير مدمجتين. ترحيل قاعدة البيانات في PR #33 لم يُطبّق على الإنتاج.
 - لا تبدأ إضافة أنشطة حقيقية للإطلاق حتى تمر دورة الأدمن/البايع/المشتري من الإنشاء إلى ظهور الصفحة العامة على بيئة اختبار، ويجتاز CI وRLS الفعليان.
