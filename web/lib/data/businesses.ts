@@ -123,6 +123,7 @@ function normalizeBusiness(raw: Record<string, unknown>): Business {
     working_hours: (raw.working_hours as WorkingHours | null) ?? null,
     open_now_override:
       typeof raw.open_now_override === 'boolean' ? raw.open_now_override : null,
+    is_open: typeof raw.is_open === 'boolean' ? raw.is_open : null,
   })
   return {
     ...(rest as unknown as Business),
