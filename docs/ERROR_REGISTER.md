@@ -296,3 +296,19 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
 | UI-HOURS-02 | FIXED — VERIFY | جدول ساعات فارغ `{}` كان يعرض كل أيام الأسبوع «مغلق» رغم عدم تحديد مواعيد أسبوعية. | عند غياب الجدول، تظهر رسالة صريحة بأن المواعيد غير محددة. | ينتظر Build ومعاينة أحدث commit. |
 | UI-BRANCH-01 | FIXED — VERIFY | فرع له اسم فقط قد يختفي من قسم الفروع. | عرض القسم إذا كان لأي فرع اسم أو بيانات عامة أخرى، من دون كشف أرقام اتصال خاصة. | ينتظر Build ومعاينة أحدث commit. |
 | UI-COMMENT-01 | FIXED — VERIFY | زر «رأيك» كان يمرر المستخدم إلى زر تبويب التقييمات دون تفعيل التبويب، ولا يعمل بشكل مفيد إذا كانت التقييمات معطّلة. | تفعيل تبويب التقييمات؛ fallback إلى تبويب التعليقات إذا لم يظهر تبويب التقييمات. | ينتظر Build ومعاينة أحدث commit. |
+
+
+## سجل تحقق المعاينة — 2026-10-27
+
+### ما تم التحقق منه
+- Vercel Preview للـ commit `d5d7d9843d751e43e424abcbfe8a41ae7bbd7b48` أصبحت `READY`.
+- سجل البناء يحتوي على `Compiled successfully`، و`Finished TypeScript`، وتوليد 54 صفحة، و`Deployment completed`.
+- Smoke check: `/`, `/explore`, `/businesses/tapooosh`, `/merchant/apply`, `/merchant/apply/success`, `/new`, `/nearby` جميعها رجعت HTTP 200 ولم تظهر في HTML رسالة خطأ تطبيق.
+- صفحة النشاط المنشور «طبوش السوري» ظهرت على المسار العام. بطاقة الاكتشاف تعرض «تفاصيل النشاط»، ونجاح طلب البايع لم يعد يدعي أن الصفحة جاهزة للنشر؛ يوضح أن الطلب ينتظر الإدارة.
+
+### ما لا يزال غير متحقق
+- لا تُعتبر اختبارات المتصفح/التفاعل (E2E)، أو تدفق إنشاء نشاط فعلي، أو سيناريو عدم وجود ساعات/فروع، أو قواعد RLS بعد تطبيق migration ناجحة من Build وحده.
+- وظائف GitHub Actions لا تصل إلى مرحلة تشغيل runner: `runner_id=0` و`steps=0`. أحدث السجلات: [E2E](https://github.com/NExB7R/EAH/actions/runs/40463732004)، [Quality Gate](https://github.com/NExB7R/EAH/actions/runs/40463732061)، [CodeQL](https://github.com/NExB7R/EAH/actions/runs/40463731998)، [Invariants](https://github.com/NExB7R/EAH/actions/runs/40463732017).
+- الحالة «FIXED — VERIFY» تعني أن المصدر اتعدل لكن السيناريو المتخصص لم يُختبر؛ لا تغيّرها إلى VERIFIED إلا عند وجود نتيجة فعلية لذلك السيناريو.
+- كل التغييرات ما زالت على فرع مراجعة؛ لا يوجد دمج إلى `main` ولا تغيير إنتاجي.
+
