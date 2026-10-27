@@ -17,7 +17,7 @@ import { submitMerchantApplication } from '../actions'
 import styles from './apply-wizard.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Merchant Apply Wizard (4 steps)
+// EAH — Seller activity application wizard (4 steps)
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -30,7 +30,7 @@ const STEPS = [
   { key: 'basic', label: 'الأساسيات', Icon: StoreIcon },
   { key: 'contact', label: 'التواصل', Icon: PhoneIcon },
   { key: 'location', label: 'الموقع', Icon: MapPinIcon },
-  { key: 'confirm', label: 'التأكيد', Icon: CheckCircleIcon },
+  { key: 'confirm', label: 'مراجعة الطلب', Icon: CheckCircleIcon },
 ] as const
 
 const TYPES: Array<{ value: BusinessType; label: string; Icon: typeof UtensilsIcon }> = [
@@ -324,8 +324,8 @@ export default function ApplyWizard({ areas }: Props) {
 
         {step === 3 && (
           <>
-            <h2 className={styles.stepTitle}>التأكيد</h2>
-            <p className={styles.stepDesc}>راجع بياناتك قبل الإرسال</p>
+            <h2 className={styles.stepTitle}>مراجعة الطلب</h2>
+            <p className={styles.stepDesc}>راجع بيانات النشاط قبل إرساله للإدارة للمراجعة</p>
 
             <div className={styles.summary}>
               <div className={styles.summaryRow}>
@@ -399,7 +399,7 @@ export default function ApplyWizard({ areas }: Props) {
             disabled={!canNext() || pending}
             className={styles.btnPrimary}
           >
-            <span>{pending ? 'بيتم الإرسال…' : 'سجّل نشاطك'}</span>
+            <span>{pending ? 'بيتم إرسال الطلب…' : 'إرسال الطلب للإدارة'}</span>
             <ArrowLeftIcon size={16} />
           </button>
         )}

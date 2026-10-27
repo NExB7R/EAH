@@ -20,31 +20,30 @@ export default function OptionsStep({ data, owners, update }: Props) {
 
       <div className={styles.fields}>
         <label className={styles.field}>
-          <span className={styles.label}>صاحب النشاط</span>
+          <span className={styles.label}>ربط النشاط ببايع (اختياري)</span>
           <select
             value={data.owner_user_id}
             onChange={(e) => update({ owner_user_id: e.target.value })}
             className={styles.input}
           >
-            <option value="">— بدون مالك مرتبط —</option>
+            <option value="">— بدون بايع مرتبط —</option>
             {owners.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.display_name}
                 {o.phone ? ` — ${o.phone}` : ''}
-                {o.role === 'merchant' ? ' — تاجر' : ' — حساب مسجل'}
+                {o.role === 'merchant' ? ' — بايع' : ' — مشتري'}
               </option>
             ))}
           </select>
           <span className={styles.hint}>
-            <UserIcon size={11} /> اختيار المالك اختياري: النشاط هيتنشر حتى لو مفيش حساب مالك مرتبط،
-            وتقدر تربطه لاحقًا من الإدارة.
+            <UserIcon size={11} /> اختيار البايع اختياري. لو اخترت حسابًا، هيكون مالك النشاط ويقدر يديره كـ بايع. ولو سيبتها فاضية،
+            النشاط هيتنشر ويظهر للزوار من غير بايع مرتبط.
           </span>
         </label>
 
         {owners.length === 0 && (
           <p className={styles.gpsHint}>
-            مفيش حساب مسجل ينفع نربطه حاليًا. خلي صاحب النشاط يسجل من صفحة إنشاء الحساب، وبعدها حدّث
-            الصفحة؛ هيظهر هنا حتى لو حسابه لسه بدور عميل.
+            مفيش حساب مشتري مسجل متاح للربط حاليًا. تقدر تكمل إنشاء النشاط من غير بايع مرتبط، أو تسجل حساب المشتري أولًا.
           </p>
         )}
 
@@ -84,7 +83,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
         </div>
 
         <p className={styles.gpsHint}>
-          💡 الصور (Logo + Cover) بتتضاف بعد إنشاء النشاط من صفحة النشاط.
+          💡 صور الغلاف والشعار والمعرض تقدر تضيفها بعد إنشاء النشاط من صفحة التعديل.
         </p>
       </div>
     </div>

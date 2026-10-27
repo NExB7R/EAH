@@ -7,12 +7,13 @@ import { getUserSession } from '@/lib/data/user'
 import { createClient } from '@/lib/supabase/server'
 import { AREAS } from '@/lib/data/areas'
 import ApplyWizard from './apply-wizard'
+import wizardStyles from './apply-wizard.module.css'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'سجّل نشاطك · EAH',
-  description: 'سجّل نشاطك مجاناً — تطبيقك الخاص على EAH',
+  title: 'إضافة نشاط للبايع · EAH',
+  description: 'قدّم طلب إضافة نشاط للمنصة، وتراجع الإدارة البيانات قبل النشر.',
 }
 
 export default async function MerchantApplyPage() {
@@ -51,14 +52,18 @@ export default async function MerchantApplyPage() {
     <main>
       <SecondaryHero
         activeKey="merchant"
-        title="سجّل نشاطك"
+        title="قدّم نشاطك كـ بايع"
         Icon={StoreIcon}
         tone="gold"
         countLabel="مجاناً"
         showNav={false}
       />
 
-      <section style={{ padding: '20px 0 60px' }}>
+      <section style={{ padding: '20px 16px 60px' }}>
+        <div className={wizardStyles.sellerReviewNotice} role="note">
+          <strong>قبل إرسال الطلب</strong>
+          <p>الإدارة هتراجع بيانات النشاط الأول. الصفحة مش هتظهر للزوار إلا بعد اعتمادها.</p>
+        </div>
         <ApplyWizard areas={AREAS} />
       </section>
     </main>
