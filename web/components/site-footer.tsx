@@ -39,7 +39,7 @@ const CONTACTS = {
 const COLUMNS = [
   {
     key: 'customers',
-    title: 'للعملاء',
+    title: 'للمشتري',
     Icon: TargetIcon,
     links: [
       { href: '/', label: 'الرئيسية', Icon: TargetIcon },
@@ -52,7 +52,7 @@ const COLUMNS = [
   },
   {
     key: 'merchants',
-    title: 'للتجار',
+    title: 'للبايع',
     Icon: StoreIcon,
     links: [
       { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
