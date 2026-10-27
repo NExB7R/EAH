@@ -5,9 +5,9 @@
 
 .container {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 20px;
 }
 
 .actionsWrap,
@@ -126,4 +126,53 @@
 .ownerLinkGhost:hover {
   border-color: rgba(232, 199, 154, 0.5);
   color: var(--text-primary);
+}
+
+
+/* Simple, predictable way back to discovery from a detail page. */
+.breadcrumb {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0 10px;
+  color: var(--text-tertiary, #a29db5);
+  font-size: 0.76rem;
+  font-weight: 750;
+}
+
+.breadcrumbLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #d8b7ff;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.breadcrumbLink:hover {
+  color: #f4e6ff;
+}
+
+.breadcrumbCurrent {
+  overflow: hidden;
+  color: var(--text-secondary, #c9c2db);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .breadcrumb {
+    padding: 12px 0 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breadcrumbLink {
+    transition: none;
+  }
 }
