@@ -6,7 +6,7 @@ import { orderSchema, orderHasContent } from '@/lib/validations/order'
 import { parseOrderAttachments, verifyOrderAttachment } from '@/lib/validations/order-attachments'
 import { sendPushToUser } from '@/lib/push/server'
 import { createServiceClient } from '@/lib/supabase/service'
-import { isOpenNow } from '@/lib/utils/working-hours'
+import { isBusinessOpen } from '@/lib/utils/working-hours'
 import type { WorkingHours } from '@/lib/data/businesses'
 import { z } from 'zod'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
@@ -87,7 +87,7 @@ export async function submitOrder(
       privileged
         .from('businesses')
         .select(
-          'id, slug, name, owner_profile_id, is_published, accepts_orders, working_hours, open_now_override',
+          'id, slug, name, owner_profile_id, is_published, is_open, accepts_orders, working_hours, open_now_override',
         )
         .eq('id', businessId)
         .eq('slug', slug)
@@ -115,8 +115,12 @@ export async function submitOrder(
 
   const nowMs = Date.now()
   const hours = (biz.working_hours ?? null) as WorkingHours | null
-  const currentlyOpen =
-    typeof biz.open_now_override === 'boolean' ? biz.open_now_override : isOpenNow(hours)
+  const currentlyOpen = isBusinessOpen({
+    working_hours: hours,
+    open_now_override:
+      typeof biz.open_now_override === 'boolean' ? biz.open_now_override : null,
+    is_open: typeof biz.is_open === 'boolean' ? biz.is_open : null,
+  })
   if (!currentlyOpen) return { ok: false, error: 'النشاط مغلق حالياً' }
 
   const offlineUntil = settings.offline_until ? new Date(settings.offline_until).getTime() : null
