@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
+import { isAllowedOrderAttachmentUrl, signOrderAttachment } from '@/lib/validations/order-attachments'
 
 // ═══════════════════════════════════════════════════════════════════
 // Customer order attachment upload
@@ -15,11 +16,12 @@ const ALLOWED_AUDIO = ['audio/webm', 'audio/mp4', 'audio/ogg', 'audio/mpeg', 'au
 
 const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
 const UPLOAD_PRESET = process.env.CLOUDINARY_UPLOAD_PRESET
+const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET
 
 async function cloudinaryUpload(
   file: File,
   resourceType: 'image' | 'video',
-): Promise<{ url: string; duration?: number } | { error: string }> {
+): Promise<{ url: string; size: number; duration?: number } | { error: string }> {
   if (!CLOUD_NAME || !UPLOAD_PRESET) return { error: 'Cloudinary مش مضبوط' }
 
   const fd = new FormData()
@@ -34,9 +36,18 @@ async function cloudinaryUpload(
       secure_url?: string
       error?: { message?: string }
       duration?: number
+      bytes?: number
     }
     if (!res.ok || !data.secure_url) {
       return { error: data.error?.message ?? 'فشل الرفع' }
+    }
+    if (
+      typeof data.bytes !== 'number' ||
+      !Number.isSafeInteger(data.bytes) ||
+      data.bytes < 1 ||
+      data.bytes > MAX_SIZE
+    ) {
+      return { error: 'تعذر التحقق من حجم المرفق' }
     }
     if (resourceType === 'video') {
       if (typeof data.duration !== 'number' || !Number.isFinite(data.duration) || data.duration <= 0) {
@@ -44,7 +55,7 @@ async function cloudinaryUpload(
       }
       if (data.duration > 60) return { error: 'الصوت لازم يكون 60 ثانية أو أقل' }
     }
-    return { url: data.secure_url, duration: data.duration }
+    return { url: data.secure_url, size: data.bytes, duration: data.duration }
   } catch {
     return { error: 'فشل الاتصال بـ Cloudinary' }
   }
@@ -56,6 +67,12 @@ export async function POST(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ ok: false, error: 'لازم تسجل دخول' }, { status: 401 })
+  if (!CLOUDINARY_API_SECRET) {
+    return NextResponse.json(
+      { ok: false, error: 'خدمة رفع المرفقات غير مكتملة الإعداد' },
+      { status: 503 },
+    )
+  }
 
   const rl = await checkRateLimit(strictLimiter, `order-upload:${user.id}`, {
     failClosed: true,
@@ -97,12 +114,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: res.error }, { status: 500 })
   }
 
+  if (!isAllowedOrderAttachmentUrl(res.url)) {
+    console.error('[orders/upload] Cloudinary returned a URL outside the EAH order folder')
+    return NextResponse.json({ ok: false, error: 'رابط المرفق غير صحيح' }, { status: 502 })
+  }
+
+  const expires_at = Math.floor(Date.now() / 1000) + 30 * 60
+  const attachment = {
+    type: kind as 'image' | 'voice',
+    url: res.url,
+    size: res.size,
+    mime,
+    ...(isVoice ? { duration_sec: res.duration } : {}),
+    expires_at,
+  }
+  const signature = signOrderAttachment(user.id, attachment, CLOUDINARY_API_SECRET)
+
   return NextResponse.json({
     ok: true,
-    url: res.url,
-    size: file.size,
-    mime,
-    kind,
-    duration_sec: res.duration,
+    ...attachment,
+    signature,
   })
 }
