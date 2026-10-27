@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import DetailCover from './detail-cover'
-import { StarIcon, BadgeCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
+import { StarIcon, BadgeCheckIcon, ShieldCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
 import DistanceBadge from './distance-badge'
 import type { BusinessDetail } from '@/lib/data/business-detail'
-import { TYPE_LABEL, TIER_LABEL, TIER_EMOJI } from '@/lib/data/business-detail'
+import { TIER_LABEL } from '@/lib/data/business-detail'
+import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import styles from './business-hero.module.css'
 
 type Props = {
@@ -12,20 +13,26 @@ type Props = {
 }
 
 const TIER_TONE: Record<string, 'teal' | 'gold' | 'purple'> = {
-  trusted: 'teal',
-  verified: 'gold',
-  new: 'purple',
+  baraka: 'purple',
+  active: 'teal',
+  mo3tabar: 'teal',
+  kebeer: 'gold',
+  legend: 'gold',
 }
 
 export default function BusinessHero({ detail, isOpen }: Props) {
   const { business, cover, logo } = detail
-  const typeLabel = TYPE_LABEL[business.business_type] ?? 'نشاط'
-  const tierLabel = TIER_LABEL[business.trust_tier] ?? business.trust_tier
-  const tierEmoji = TIER_EMOJI[business.trust_tier] ?? ''
+  const typeLabel = getBusinessTypeLabel(business)
+  const tierLabel = TIER_LABEL[business.trust_tier] ?? null
   const tierTone = TIER_TONE[business.trust_tier] ?? 'purple'
 
   const hasRating = business.rating_count > 0
   const ratingValue = hasRating ? business.rating_avg.toFixed(1) : null
+  const summary = business.hook?.trim() || business.description?.trim() || ''
+  const locationLabel =
+    business.area && business.city && business.area !== business.city
+      ? business.area + '، ' + business.city
+      : business.area || business.city
 
   return (
     <section className={`${styles.hero} ${business.is_featured ? styles.featured : ''}`}>
@@ -59,21 +66,22 @@ export default function BusinessHero({ detail, isOpen }: Props) {
         <div className={styles.info}>
           <div className={styles.titleRow}>
             <h1 className={styles.name}>{business.name}</h1>
-            {(business.trust_tier === 'harif' || business.trust_tier === 'ostora') && (
-              <span className={styles.verified} title="موثّق">
-                <BadgeCheckIcon size={18} />
+            {business.is_verified && (
+              <span className={styles.verified} title="نشاط موثّق">
+                <BadgeCheckIcon size={15} />
+                موثّق
               </span>
             )}
           </div>
 
           <div className={styles.metaRow}>
             <span className={styles.type}>{typeLabel}</span>
-            {business.area && (
+            {locationLabel && (
               <>
                 <span className={styles.dot}>·</span>
                 <span className={styles.area}>
                   <MapPinIcon size={12} />
-                  {business.area}
+                  {locationLabel}
                 </span>
               </>
             )}
@@ -92,9 +100,12 @@ export default function BusinessHero({ detail, isOpen }: Props) {
           </div>
 
           <div className={styles.badges}>
-            <span className={`${styles.tier} ${styles['tier_' + tierTone]}`}>
-              {tierEmoji} {tierLabel}
-            </span>
+            {tierLabel && (
+              <span className={`${styles.tier} ${styles['tier_' + tierTone]}`}>
+                <ShieldCheckIcon size={12} />
+                {tierLabel}
+              </span>
+            )}
             {business.trust_score > 0 && (
               <span className={styles.trust}>مصداقية {business.trust_score}</span>
             )}
@@ -102,7 +113,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
 
           {/* Rating + Stats */}
           <div className={styles.stats}>
-            {hasRating && (
+            {hasRating ? (
               <div className={styles.ratingBig}>
                 <span className={styles.ratingValue}>{ratingValue}</span>
                 <span className={styles.ratingStars}>
@@ -110,11 +121,13 @@ export default function BusinessHero({ detail, isOpen }: Props) {
                 </span>
                 <span className={styles.ratingCount}>({business.rating_count})</span>
               </div>
+            ) : (
+              <div className={styles.ratingEmpty}>لسه مفيش تقييمات</div>
             )}
             {business.successful_orders > 0 && (
               <div className={styles.statSmall}>
                 <span className={styles.statValue}>{business.successful_orders}+</span>
-                <span className={styles.statLabel}>طلب</span>
+                <span className={styles.statLabel}>طلب ناجح</span>
               </div>
             )}
             {business.branches_count > 0 && (
@@ -127,7 +140,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
             )}
           </div>
 
-          {business.hook && <p className={styles.hook}>{business.hook}</p>}
+          {summary && <p className={styles.hook}>{summary}</p>}
         </div>
       </div>
     </section>

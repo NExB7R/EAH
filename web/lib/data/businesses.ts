@@ -1,12 +1,13 @@
 import { unstable_cache } from 'next/cache'
 import { createPublicClient } from '@/lib/supabase/public'
 import { sortByTrend } from '@/lib/ranking'
+import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Data Fetching Layer
 // ═══════════════════════════════════════════════════════════
 
-export type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office' | 'misc'
+export type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
 export type BusinessTypeStatus = 'pending' | 'approved' | 'rejected' | null
 
 export type WorkingDay = {
@@ -52,7 +53,10 @@ export type Business = {
   featured_pin: boolean
   new_until: string | null
   working_hours: WorkingHours | null
+  open_now_override?: boolean | null
   accepts_whatsapp_orders: boolean
+  accepts_orders: boolean
+  /** Legacy alias; public availability comes from accepts_orders. */
   orders_enabled: boolean
   response_time_avg_seconds: number | null
   response_rate: number | null
@@ -72,40 +76,7 @@ export type Business = {
 
 export { getBusinessTypeLabel } from '../business-type-label'
 
-// تحديد يوم الأسبوع بالإنجليزي
-const DAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
-
-function todayKey(): string {
-  const d = new Date()
-  return DAY_KEYS[d.getDay()] ?? 'sun'
-}
-
-function nowMinutes(): number {
-  const d = new Date()
-  return d.getHours() * 60 + d.getMinutes()
-}
-
-function hhmmToMinutes(hhmm: string): number {
-  const [h, m] = hhmm.split(':').map((x) => parseInt(x, 10))
-  return (h ?? 0) * 60 + (m ?? 0)
-}
-
-// هل النشاط مفتوح دلوقتي؟ (من working_hours)
-export function isOpenNow(hours: WorkingHours | null): boolean {
-  if (!hours) return false
-  const key = todayKey()
-  const day = hours[key]
-  if (!day) return false
-
-  const now = nowMinutes()
-  const open = hhmmToMinutes(day.open)
-  const close = hhmmToMinutes(day.close)
-
-  // لو close بعد open (عادي)
-  if (close > open) return now >= open && now < close
-  // لو close بعد منتصف الليل (مثلاً 02:00)
-  return now >= open || now < close
-}
+export { isBusinessOpen, isOpenNow }
 
 // ═══════════════════════════════════════════════════════════
 // Select columns (نفس الترتيب في كل query)
@@ -117,12 +88,11 @@ const BUSINESS_COLUMNS = `
   is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   trust_score, trust_tier, velocity_score, engagement_score, diversity_score, successful_orders,
   featured_order, featured_until, featured_pin,
-  new_until, working_hours, accepts_whatsapp_orders,
+  new_until, working_hours, open_now_override, accepts_whatsapp_orders, accepts_orders,
   response_time_avg_seconds, response_rate,
   last_activity_at, created_at, updated_at,
   branches_count, offers_count, rating_avg, rating_count,
-  business_locations(latitude, longitude, is_primary),
-  merchant_order_settings(orders_enabled)
+  business_locations(latitude, longitude, is_primary)
 `
 
 // ─── Normalize: extract primary location from join ───
@@ -146,17 +116,22 @@ function pickPrimaryLocation(raw: unknown): { lat: number; lng: number } | null 
 
 function normalizeBusiness(raw: Record<string, unknown>): Business {
   const loc = pickPrimaryLocation(raw.business_locations)
-
-  // merchant_order_settings join (1-to-1) → boolean
-  const mos = raw.merchant_order_settings as
-    { orders_enabled?: boolean | null } | { orders_enabled?: boolean | null }[] | null | undefined
-  const mosRow = Array.isArray(mos) ? (mos[0] ?? null) : (mos ?? null)
-  const orders_enabled = mosRow?.orders_enabled === true
-
   const rest: Record<string, unknown> = { ...raw }
   delete rest.business_locations
-  delete rest.merchant_order_settings
-  return { ...(rest as unknown as Business), location: loc, orders_enabled }
+  const acceptsOrders = raw.accepts_orders === true
+  const isOpen = isBusinessOpen({
+    working_hours: (raw.working_hours as WorkingHours | null) ?? null,
+    open_now_override:
+      typeof raw.open_now_override === 'boolean' ? raw.open_now_override : null,
+    is_open: typeof raw.is_open === 'boolean' ? raw.is_open : null,
+  })
+  return {
+    ...(rest as unknown as Business),
+    location: loc,
+    is_open: isOpen,
+    accepts_orders: acceptsOrders,
+    orders_enabled: acceptsOrders,
+  }
 }
 
 function normalizeBusinesses(data: unknown[] | null): Business[] {
@@ -184,7 +159,7 @@ export const getPublishedBusinesses = unstable_cache(
     }
     return normalizeBusinesses(data)
   },
-  ['businesses-published'],
+  ['businesses-published-v2'],
   { revalidate: 300, tags: ['businesses'] },
 )
 
@@ -211,7 +186,7 @@ export const getFeaturedBusinesses = unstable_cache(
     }
     return normalizeBusinesses(data)
   },
-  ['businesses-featured'],
+  ['businesses-featured-v2'],
   { revalidate: 300, tags: ['businesses', 'featured'] },
 )
 
@@ -237,7 +212,7 @@ export const getNewBusinesses = unstable_cache(
     }
     return normalizeBusinesses(data)
   },
-  ['businesses-new'],
+  ['businesses-new-v2'],
   { revalidate: 300, tags: ['businesses', 'new'] },
 )
 
@@ -262,7 +237,7 @@ export const getBusinessesByType = unstable_cache(
     }
     return normalizeBusinesses(data)
   },
-  ['businesses-by-type'],
+  ['businesses-by-type-v2'],
   { revalidate: 300, tags: ['businesses'] },
 )
 
@@ -298,7 +273,7 @@ export const getTrendingBusinesses = unstable_cache(
     }
     return sortByTrend(normalizeBusinesses(data)).slice(0, limit)
   },
-  ['businesses-trending'],
+  ['businesses-trending-v2'],
   { revalidate: 300, tags: ['businesses', 'trending'] },
 )
 
@@ -370,6 +345,6 @@ export const getNearbyBusinesses = unstable_cache(
     }
     return normalizeBusinesses(data)
   },
-  ['businesses-nearby'],
+  ['businesses-nearby-v2'],
   { revalidate: 300, tags: ['businesses'] },
 )
