@@ -269,6 +269,9 @@ BEGIN
     v_is_open := true;
   ELSIF v_business.open_now_override IS FALSE THEN
     v_is_open := false;
+  ELSIF v_business.working_hours IS NULL OR v_business.working_hours = '{}'::jsonb THEN
+    -- Admin-created activities often start without weekly hours; use their explicit open flag.
+    v_is_open := v_business.is_open IS TRUE;
   ELSE
     v_cairo := v_now AT TIME ZONE 'Africa/Cairo';
     v_dow := EXTRACT(DOW FROM v_cairo)::integer;
