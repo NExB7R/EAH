@@ -34,7 +34,6 @@ export default function CardImage({ logoUrl, coverUrl, alt, initial }: Props) {
           className={styles.cover}
           onError={() => setCoverFailed(true)}
         />
-        <div className={styles.imageOverlay} aria-hidden />
         {showLogo && (
           <span className={styles.logoBadge} aria-hidden="true">
             <Image
