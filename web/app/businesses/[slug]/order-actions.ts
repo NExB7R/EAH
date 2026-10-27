@@ -142,7 +142,15 @@ export async function submitOrder(
   // ═══════════════════════════════════════════════════════════════════
   // 3. Optional new fields (v2)
   // ═══════════════════════════════════════════════════════════════════
-  const attachments = parsedAttachments.map(({ signature: _signature, expires_at: _expiresAt, ...attachment }) => attachment)
+  const attachments = parsedAttachments.map((attachment) => ({
+    type: attachment.type,
+    url: attachment.url,
+    size: attachment.size,
+    mime: attachment.mime,
+    ...(attachment.duration_sec === undefined
+      ? {}
+      : { duration_sec: attachment.duration_sec }),
+  }))
 
   // ═══════════════════════════════════════════════════════════════════
   // 4. Insert order (get id back for deep link)
