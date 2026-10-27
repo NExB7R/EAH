@@ -41,10 +41,16 @@ type Props = {
   offers?: BusinessOfferSimple[]
 }
 
-// Helper: true if string has real content (not just whitespace/punctuation)
+// Treat punctuation-only values (for example ":" or "(:") as empty UI data.
 function isNonEmpty(s: string | null | undefined): s is string {
   if (!s) return false
-  return s.replace(/[:\s.،،]/g, '').length > 0
+  return s.replace(/[\p{P}\p{S}\s]/gu, '').length > 0
+}
+
+function toMinutes(value: string): number | null {
+  const match = /^([01]\d|2[0-3]):[0-5]\d$/.exec(value)
+  if (!match) return null
+  return Number(match[1]) * 60 + Number(match[0].slice(3))
 }
 
 const DAY_LABEL: Record<string, string> = {
@@ -256,12 +262,33 @@ export default function BusinessTabs({
                   const h = (
                     business.working_hours as Record<string, { open: string; close: string }> | null
                   )?.[day]
+                  const openMinutes = h ? toMinutes(h.open) : null
+                  const closeMinutes = h ? toMinutes(h.close) : null
+                  const overnight =
+                    h !== undefined &&
+                    h !== null &&
+                    h.open !== h.close &&
+                    openMinutes !== null &&
+                    closeMinutes !== null &&
+                    closeMinutes < openMinutes
+
                   return (
                     <li key={day} className={styles.hoursRow}>
                       <span className={styles.hoursDay}>{DAY_LABEL[day]}</span>
-                      <span className={styles.hoursTime}>
-                        {h ? `${h.open} — ${h.close}` : 'مغلق'}
-                      </span>
+                      {h ? (
+                        <span className={styles.hoursRange} dir="ltr">
+                          <span className={styles.hoursTime}>{h.open}</span>
+                          <span className={styles.hoursSeparator} aria-hidden="true">–</span>
+                          <span className={styles.hoursTime}>{h.close}</span>
+                          {overnight && (
+                            <span className={styles.overnightNote} dir="rtl">
+                              لليوم التالي
+                            </span>
+                          )}
+                        </span>
+                      ) : (
+                        <span className={styles.hoursTime}>مغلق</span>
+                      )}
                     </li>
                   )
                 })}
