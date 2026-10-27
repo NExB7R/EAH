@@ -87,9 +87,17 @@ export function isOpenNow(hours: HoursMap | null): boolean {
 type BusinessHoursSource = {
   working_hours: HoursMap | null
   open_now_override?: boolean | null
+  is_open?: boolean | null
 }
 
 export function isBusinessOpen(business: BusinessHoursSource): boolean {
   if (typeof business.open_now_override === 'boolean') return business.open_now_override
+
+  // Admin-created activities may not have a weekly schedule yet. In that case,
+  // respect the saved manual state rather than marking every unscheduled activity closed.
+  if (!business.working_hours || Object.keys(business.working_hours).length === 0) {
+    return business.is_open === true
+  }
+
   return isOpenNow(business.working_hours)
 }
