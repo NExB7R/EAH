@@ -1,24 +1,28 @@
 # EAH — Whole-platform launch audit
 
-**Snapshot date:** 2026-10-21  
+**Snapshot date:** 2026-10-27  
 **Scope:** source-tree inventory, admin/customer/merchant route structure, selected auth/API flows, GitHub workflow configuration, and read-only Supabase inspection.  
 **Status:** **NOT READY TO LAUNCH** — this is an initial engineering audit, not a certification that every route or production integration has been tested.
 
-## Deployment visibility / why production has not changed
+## Current deployment and validation status (2026-10-27)
 
-- The public production URL referenced by the project workflows is https://eah-sq.vercel.app. It is intentionally unchanged because PR #27 is still a draft and is stacked on PR #26; neither PR has been merged to `main`.
-- **Current preview validation is blocked:** Vercel returns the project/team `build-rate-limit` gate instead of running a fresh build. The supplied failed log was for commit `be756e2`; its syntax error in `edit-actions.ts` was corrected in a later source commit, but that later source has not yet produced a successful build.
-- GitHub Actions `Quality Gate` jobs finish in about two seconds with `runner_id: 0`, no runner name, and an empty `steps` array; their logs return `BlobNotFound`. This matches issue #22 (runner infrastructure) and is not evidence that TypeScript/build/tests passed.
-- Do not merge the platform changes until a fresh current-head build and role-specific workflow tests have actual results.
+- Production remains `https://eah-sq.vercel.app`. No changes from this pre-launch branch have been merged to `main` or deployed to production.
+- The current PR #33 head is `74513dbdf66e8f6fb6ec7554334a0b51dfdc5773` on `prelaunch/audit-hardening-2026-10-27`; its Vercel preview is **READY**: https://eah-8m8000y65-eah-74a0.vercel.app/
+- The latest Vercel build compiled successfully, completed TypeScript, generated all 54 static pages, and reached `Build Completed`.
+- Anonymous smoke checks returned HTTP 200 for `/`, `/explore`, `/nearby`, `/new`, `/offers`, `/businesses/tapooosh`, `/pricing`, and `/merchant/apply`. Protected admin/seller pages redirect unauthenticated visitors to authentication as expected. These checks do **not** replace signed-in admin/seller E2E tests or real image-upload verification.
+- Discovery currently shows one published activity on the last observed public dataset. The available preview contains no verified real admin-create submission, so successful creation, owner promotion, image upload, search visibility, and owner permissions still need an authenticated E2E cycle.
+- GitHub Actions runs still terminate before any step starts (`runner_id: 0`, zero recorded steps); see [issue #22](https://github.com/NExB7R/EAH/issues/22). A failing run in that state does not establish a source-code test failure. Retries did not resolve runner allocation.
+- PR #33 contains a database hardening migration that has **not** been applied to production. A transactional dry-run was rolled back, but migration-history reconciliation, a verified backup/rollback plan, and a non-production RLS run remain release gates.
+- PR #34 separately addresses public listing/ads permission errors. Both PRs are still drafts; keep them unmerged until the release gates below have genuine results.
 
-## Inventory observed
+## Inventory observed (initial baseline 2026-10-21)
 
 - 76 Next.js page routes and 23 API route handlers in the tracked tree.
 - 23 test/spec-related files/patterns across Playwright, SQL/RLS tests, and other test sources.
 - 41 migration SQL files tracked under `docs/migrations/`.
 - 47 migrations reported as applied by the connected Supabase project (latest reported version: `20261020220827`). The repo and live migration histories therefore do not currently reconcile; identify the missing/extra history entries before any future schema change.
 - Open platform CI issues: [#20 Supabase security/RLS findings](https://github.com/NExB7R/EAH/issues/20), [#21 CodeQL publishing](https://github.com/NExB7R/EAH/issues/21), [#22 GitHub Actions runners failing before steps](https://github.com/NExB7R/EAH/issues/22).
-- Current admin redesign review: [PR #27](https://github.com/NExB7R/EAH/pull/27), stacked on [PR #26](https://github.com/NExB7R/EAH/pull/26). Neither is merged.
+- Current pre-launch hardening: [PR #33](https://github.com/NExB7R/EAH/pull/33). Public permission hotfix: [PR #34](https://github.com/NExB7R/EAH/pull/34). Both remain draft and unmerged.
 
 ## Confirmed findings and branch work
 

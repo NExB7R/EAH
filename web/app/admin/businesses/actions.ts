@@ -393,7 +393,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       return { ok: false, error: 'حساب المالك غير مهيأ داخل النظام — راجع حسابه قبل الربط' }
     }
     if (roleRow.role !== 'customer' && roleRow.role !== 'merchant') {
-      return { ok: false, error: 'اختر حساب عميل أو تاجر، ولا تربط النشاط بحساب إداري' }
+      return { ok: false, error: 'اختر حساب مشتري أو بايع، ولا تربط النشاط بحساب إداري' }
     }
     selectedOwnerRole = roleRow.role
   }
@@ -540,7 +540,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       return {
         ok: false,
         error:
-          'تعذّر تفعيل حساب المالك كتاجر، وتم إلغاء إنشاء النشاط. حاول مرة أخرى أو راجع صلاحيات النظام.',
+          'تعذّر تفعيل حساب المالك كبايع، وتم إلغاء إنشاء النشاط. حاول مرة أخرى أو راجع صلاحيات النظام.',
       }
     }
   }
@@ -551,7 +551,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         userId: d.owner_profile_id,
         type: 'admin',
         title: 'تم ربط نشاط بحسابك',
-        body: `نشاط "${d.name}" اتربط بحسابك — تقدر تديره من لوحة التاجر`,
+        body: `نشاط "${d.name}" اتربط بحسابك — تقدر تديره من لوحة البايع`,
         deepLink: '/merchant',
       })
     } catch {
@@ -750,7 +750,7 @@ export async function findUserByPhone(phone: string): Promise<UserLookup> {
     return { ok: false, error: 'تعذر تحميل بيانات حساب المالك — حاول تاني' }
   }
   if (!roleRes.data || (roleRes.data.role !== 'customer' && roleRes.data.role !== 'merchant')) {
-    return { ok: false, error: 'حساب المستخدم غير مهيأ لدور عميل أو تاجر' }
+    return { ok: false, error: 'حساب المستخدم غير مهيأ لدور المشتري أو البايع' }
   }
 
   return {
@@ -869,7 +869,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
         })
         return {
           ok: false,
-          error: 'النشاط مربوط بالحساب بالفعل، لكن تعذّر تفعيل دور التاجر. لم نغيّر الربط الحالي.',
+          error: 'النشاط مربوط بالحساب بالفعل، لكن تعذّر تفعيل دور البايع. لم نغيّر الربط الحالي.',
         }
       }
 
@@ -904,7 +904,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
 
       return {
         ok: false,
-        error: 'تعذّر تفعيل حساب المالك كتاجر، وتم التراجع عن الربط. حاول تاني.',
+        error: 'تعذّر تفعيل حساب المالك كبايع، وتم التراجع عن الربط. حاول تاني.',
       }
     }
   }
