@@ -7,7 +7,7 @@ import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
 // EAH — Data Fetching Layer
 // ═══════════════════════════════════════════════════════════
 
-export type BusinessType = 'restaurant' | 'pharmacy' | 'supermarket' | 'delivery_office' | 'misc'
+export type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office' | 'misc'
 export type BusinessTypeStatus = 'pending' | 'approved' | 'rejected' | null
 
 export type WorkingDay = {
