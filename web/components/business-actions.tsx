@@ -174,10 +174,17 @@ export default function BusinessActions({
 
   // ─── Comment ───
   const handleComment = () => {
-    if (requireAuth('تكتب تقييم أو تعليق', 'رأيك بيساعد 1000 شخص تاني')) return
-    // يوديه على التقييمات
-    const el = document.getElementById('reviews-section')
-    el?.scrollIntoView({ behavior: 'smooth' })
+    if (requireAuth('تكتب تقييم أو تعليق', 'رأيك بيساعد الناس تختار بشكل أفضل')) return
+
+    // Activate the available tab before scrolling to it. Reviews may be disabled,
+    // so fall back to comments instead of leaving the user on the information tab.
+    const target =
+      document.getElementById('reviews-section') ??
+      document.getElementById('comments-section')
+
+    if (!target) return
+    target.click()
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 
   // ─── Share (opens modal — all platforms + QR) ───
@@ -268,7 +275,7 @@ export default function BusinessActions({
           <span className={styles.actionIcon}>
             <MessageCircleIcon size={20} />
           </span>
-          <span className={styles.actionLabel}>قيّم</span>
+          <span className={styles.actionLabel}>رأيك</span>
         </button>
 
         {/* Share — opens modal */}
