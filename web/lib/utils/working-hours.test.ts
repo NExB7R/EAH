@@ -26,6 +26,13 @@ describe('working hours use Africa/Cairo local time', () => {
     expect(isBusinessOpen({ working_hours: closedSchedule })).toBe(false)
   })
 
+  it('uses the saved manual state when no weekly schedule is configured', () => {
+    expect(isBusinessOpen({ working_hours: null, is_open: true })).toBe(true)
+    expect(isBusinessOpen({ working_hours: null, is_open: false })).toBe(false)
+    expect(isBusinessOpen({ working_hours: {}, is_open: true })).toBe(true)
+    expect(isBusinessOpen({ working_hours: {}, is_open: false })).toBe(false)
+  })
+
   it('fails closed for malformed hours and invalid dates', () => {
     expect(
       isOpenAt({ mon: { open: '25:90', close: '02:00' } }, new Date('2026-10-26T19:00:00Z')),
