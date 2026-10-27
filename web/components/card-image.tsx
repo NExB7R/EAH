@@ -4,13 +4,6 @@ import { useState } from 'react'
 import Image from 'next/image'
 import styles from './business-card.module.css'
 
-// ═══════════════════════════════════════════════════════════
-// EAH — Card Image (logo → cover → initial fallback)
-//   • Logo takes priority (padded inside gradient)
-//   • Falls back to cover on logo error
-//   • Falls back to initial if both fail
-// ═══════════════════════════════════════════════════════════
-
 type Props = {
   logoUrl: string | null
   coverUrl: string | null
@@ -22,27 +15,51 @@ export default function CardImage({ logoUrl, coverUrl, alt, initial }: Props) {
   const [logoFailed, setLogoFailed] = useState(false)
   const [coverFailed, setCoverFailed] = useState(false)
 
+  // A cover photo tells the buyer more about the place than a large logo.
+  // Keep the logo as a small brand marker when both assets exist.
+  const showCover = !!coverUrl && !coverFailed
   const showLogo = !!logoUrl && !logoFailed
-  const showCover = !showLogo && !!coverUrl && !coverFailed
-
-  if (showLogo || showCover) {
-    const src = showLogo ? logoUrl! : coverUrl!
-    return (
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes="(max-width: 400px) 340px, (max-width: 640px) 400px, (max-width: 1024px) 440px, 480px"
-        className={showLogo ? styles.logo : styles.cover}
-        style={{ objectFit: showLogo ? 'contain' : 'cover' }}
-        onError={() => (showLogo ? setLogoFailed(true) : setCoverFailed(true))}
-      />
-    )
-  }
+  const showLogoFallback = !showCover && showLogo
 
   return (
-    <div className={styles.placeholder} aria-hidden>
-      <span className={styles.placeholderInitial}>{initial}</span>
-    </div>
+    <>
+      {showCover ? (
+        <Image
+          src={coverUrl!}
+          alt={alt}
+          fill
+          priority={false}
+          sizes="(max-width: 400px) 340px, (max-width: 640px) 400px, (max-width: 1024px) 440px, 480px"
+          className={styles.cover}
+          onError={() => setCoverFailed(true)}
+        />
+      ) : showLogoFallback ? (
+        <Image
+          src={logoUrl!}
+          alt={alt}
+          fill
+          sizes="(max-width: 400px) 340px, (max-width: 640px) 400px, (max-width: 1024px) 440px, 480px"
+          className={styles.logo}
+          onError={() => setLogoFailed(true)}
+        />
+      ) : (
+        <div className={styles.placeholder} aria-hidden>
+          <span className={styles.placeholderInitial}>{initial}</span>
+        </div>
+      )}
+
+      {showCover && showLogo && (
+        <span className={styles.logoBadge} aria-hidden>
+          <Image
+            src={logoUrl!}
+            alt=""
+            fill
+            sizes="48px"
+            className={styles.logoBadgeImg}
+            onError={() => setLogoFailed(true)}
+          />
+        </span>
+      )}
+    </>
   )
 }

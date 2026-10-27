@@ -89,7 +89,7 @@ export default function BusinessCard({
             </span>
           ) : <span className={styles.noRatingBadge}>بدون تقييمات</span>}
         </div>
-        <div className={styles.imageInfo}>
+        <div className={[styles.imageInfo, business.cover_image_url && business.logo_url ? styles.imageInfoWithLogo : ''].filter(Boolean).join(' ')}>
           <h3 className={styles.name}>{business.name}</h3>
           <div className={styles.imageMeta}>
             <span><TypeIcon size={12} />{typeLabel || typeMeta.label}</span>

@@ -64,3 +64,79 @@
   .footer { align-items: stretch; } .cta { padding: 8px 9px; }
 }
 @media (prefers-reduced-motion: reduce) { .card, .cta { transition: none; } .card:hover { transform: none; } }
+
+
+/* Media fallbacks and logo overlay used by CardImage. */
+.cover,
+.logo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cover { object-fit: cover; }
+
+.logo {
+  object-fit: contain;
+  padding: 18%;
+  background:
+    radial-gradient(circle at 25% 25%, rgb(168 85 247 / 30%), transparent 52%),
+    linear-gradient(145deg, #27133a, #11091c);
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 25% 25%, rgb(168 85 247 / 38%), transparent 50%),
+    linear-gradient(145deg, #27133a, #11091c);
+}
+
+.placeholderInitial {
+  color: #f5d9a7;
+  font-family: var(--font-display, inherit);
+  font-size: clamp(3rem, 9vw, 5rem);
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 4px 18px rgb(0 0 0 / 40%);
+}
+
+.logoBadge {
+  position: absolute;
+  z-index: 2;
+  inset-inline-end: 11px;
+  bottom: 10px;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border: 2px solid #f5d9a7;
+  border-radius: 12px;
+  background: #130a1d;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 45%);
+  pointer-events: none;
+}
+
+.logoBadgeImg {
+  object-fit: contain;
+  padding: 4px;
+}
+
+.imageInfoWithLogo {
+  padding-inline-end: 64px;
+}
+
+@media (max-width: 640px) {
+  .logoBadge {
+    inset-inline-end: 8px;
+    bottom: 8px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .imageInfoWithLogo { padding-inline-end: 52px; }
+}
