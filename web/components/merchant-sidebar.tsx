@@ -84,14 +84,14 @@ export default function MerchantSidebar({ newOrders = 0, hasBusiness = true }: P
           title: 'البداية',
           items: [
             { href: '/merchant', label: 'نظرة عامة', Icon: LayoutDashboardIcon },
-            { href: '/merchant/apply', label: 'تسجيل نشاط', Icon: StoreIcon },
+            { href: '/merchant/apply', label: 'إضافة نشاط كـ بايع', Icon: StoreIcon },
           ],
         },
       ]
 
   return (
     <aside className={styles.sidebar}>
-      <nav className={styles.nav} aria-label="إدارة نشاطك">
+      <nav className={styles.nav} aria-label="لوحة البايع">
         {sections.map((section) => (
           <div key={section.title} className={styles.section}>
             <h4 className={styles.sectionTitle}>{section.title}</h4>

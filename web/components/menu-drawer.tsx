@@ -65,7 +65,7 @@ const PUBLIC_ITEMS: MenuItem[] = [
 
 // ─── Customer account (لكل مستخدم مسجل غير الأدمن) ───
 const CUSTOMER_ITEMS: MenuItem[] = [
-  { href: '/account', label: 'حسابي', Icon: LayoutDashboardIcon },
+  { href: '/account', label: 'حساب المشتري', Icon: LayoutDashboardIcon },
   { href: '/account/orders', label: 'طلباتي', Icon: FileTextIcon },
   { href: '/account/favorites', label: 'المفضلات', Icon: StarIcon },
   { href: '/account/following', label: 'المتابعات', Icon: StoreIcon },
@@ -75,7 +75,7 @@ const CUSTOMER_ITEMS: MenuItem[] = [
 
 // ─── Merchant dashboard (للتاجر المرتبط بنشاط) ───
 const MERCHANT_SECTION: MenuItem[] = [
-  { href: '/merchant', label: 'لوحة نشاطي', Icon: LayoutDashboardIcon },
+  { href: '/merchant', label: 'لوحة البايع', Icon: LayoutDashboardIcon },
   { href: '/merchant/business', label: 'بيانات النشاط', Icon: StoreIcon },
   { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon },
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
@@ -85,7 +85,7 @@ const MERCHANT_SECTION: MenuItem[] = [
 
 // ─── Merchant onboarding (للزائر أو العميل الذي ليس لديه نشاط) ───
 const MERCHANT_APPLY: MenuItem[] = [
-  { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
+  { href: '/merchant/apply', label: 'قدّم نشاطك كـ بايع', Icon: StoreIcon },
   { href: '/pricing', label: 'الباقات', Icon: GiftIcon },
   { href: '/advertise', label: 'أعلن معانا', Icon: TrendingUpIcon },
 ]
@@ -248,7 +248,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
                 <LayoutDashboardIcon size={14} />
-                <span>حسابي</span>
+                <span>حساب المشتري</span>
               </div>
               <ul className={styles.list}>
                 {CUSTOMER_ITEMS.map(({ href, label, Icon }) => (
@@ -271,7 +271,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
                 <StoreIcon size={14} />
-                <span>نشاطي</span>
+                <span>لوحة البايع</span>
               </div>
               <ul className={styles.list}>
                 {MERCHANT_SECTION.map(({ href, label, Icon }) => (
@@ -294,7 +294,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
                 <StoreIcon size={14} />
-                <span>سجّل نشاطك</span>
+                <span>قدّم نشاطك كـ بايع</span>
               </div>
               <ul className={styles.list}>
                 {MERCHANT_APPLY.map(({ href, label, Icon }) => (
@@ -317,7 +317,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
                 <StoreIcon size={14} />
-                <span>للتجار</span>
+                <span>للبايعين</span>
               </div>
               <ul className={styles.list}>
                 {MERCHANT_APPLY.map(({ href, label, Icon }) => (

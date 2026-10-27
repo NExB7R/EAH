@@ -31,10 +31,10 @@ export default async function MerchantBusinessPage() {
     return (
       <EmptyState
         Icon={StoreIcon}
-        title="لسه مسجلتش نشاط"
-        description="سجّل نشاطك الأول عشان تعدّل بياناته"
+        title="لسه ما أضفتش نشاط"
+        description="قدّم طلب إضافة نشاط كـ بايع. الإدارة هتراجع البيانات قبل النشر."
         ctaHref="/merchant/apply"
-        ctaLabel="سجّل نشاطك"
+        ctaLabel="إضافة نشاط كـ بايع"
       />
     )
   }

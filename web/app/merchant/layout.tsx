@@ -42,7 +42,7 @@ export default async function MerchantLayout({ children }: { children: React.Rea
     <main className={styles.page}>
       <SecondaryHero
         activeKey="merchant"
-        title="لوحة التحكم"
+        title="لوحة البايع"
         Icon={CrownGoldIcon}
         tone="gold"
         countLabel={business ? 'نشاط' : 'بدون نشاط'}
