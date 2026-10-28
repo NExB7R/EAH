@@ -255,7 +255,7 @@ END;
 $function$;
 REVOKE ALL ON FUNCTION public.on_order_confirmed() FROM PUBLIC, anon, authenticated;
 
-CREATE OR REPLACE FUNCTION public.guard_order_update_state()CREATE OR REPLACE FUNCTION public.guard_order_update_state()CREATE OR REPLACE FUNCTION public.guard_order_update_state()
+CREATE OR REPLACE FUNCTION public.guard_order_update_state()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER
 SET search_path = public, private, pg_temp
 AS $function$
