@@ -43,7 +43,7 @@ export async function flushQueue(): Promise<{ flushed: number; failed: number; d
   }
 
   const queue = await getPending()
-  if (queue.length === 0) return { flushed: 0, failed: 0 }
+  if (queue.length === 0) return { flushed: 0, failed: 0, discarded: 0 }
 
   let flushed = 0
   let failed = 0
