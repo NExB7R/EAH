@@ -4,6 +4,7 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
+import { createServiceClient } from '@/lib/supabase/service'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Users Bulk Actions
@@ -101,21 +102,52 @@ export async function bulkChangeRole(ids: string[], role: string): Promise<Resul
   const safeIds = parsed.data.ids.filter((id) => id !== ctx.userId)
   if (safeIds.length === 0) return { ok: false, error: 'مش ممكن تغير دورك' }
 
-  // upsert على user_roles
+  if (parsed.data.role === 'super_admin' && ctx.role !== 'super_admin') {
+    return { ok: false, error: 'منح صلاحيات الأدمن الأعلى متاح للأدمن الأعلى فقط' }
+  }
+
+  let admin: ReturnType<typeof createServiceClient>
+  try {
+    admin = createServiceClient()
+  } catch {
+    return { ok: false, error: 'تغيير الأدوار غير متاح مؤقتًا — حاول تاني' }
+  }
+
+  const { data: existingRoles, error: rolesError } = await admin
+    .from('user_roles')
+    .select('user_id, role')
+    .in('user_id', safeIds)
+
+  if (rolesError) return { ok: false, error: 'تعذر التحقق من الأدوار الحالية' }
+  if (
+    ctx.role !== 'super_admin' &&
+    (existingRoles ?? []).some((item) => item.role === 'super_admin')
+  ) {
+    return { ok: false, error: 'تغيير دور الأدمن الأعلى متاح للأدمن الأعلى فقط' }
+  }
+
+  // Use the privileged client only after admin authorization and role-boundary checks.
   const rows = safeIds.map((id) => ({ user_id: id, role: parsed.data.role }))
+  const { error } = await admin.from('user_roles').upsert(rows, { onConflict: 'user_id' })
 
-  const { error } = await ctx.supabase.from('user_roles').upsert(rows, { onConflict: 'user_id' })
+  if (error) return { ok: false, error: 'تعذر حفظ الأدوار الجديدة — لم يتم حذف الأدوار الحالية' }
 
-  if (error) return { ok: false, error: error.message }
-
-  await logAudit(ctx.supabase, {
+  await logAudit(admin, {
     actorUserId: ctx.userId,
     action: 'user.bulk_role',
     entityType: 'user_role',
-    metadata: { ids: safeIds, role: parsed.data.role },
+    metadata: {
+      ids: safeIds,
+      role: parsed.data.role,
+      previous_roles: (existingRoles ?? []).map((item) => ({
+        user_id: item.user_id,
+        role: item.role,
+      })),
+    },
   })
 
   revalidatePath('/admin/users')
+  revalidateTag('admin-badges', 'default')
   return { ok: true, affected: safeIds.length }
 }
 
