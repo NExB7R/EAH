@@ -6,6 +6,9 @@
 CREATE INDEX IF NOT EXISTS idx_announcements_created_by
   ON public.announcements (created_by);
 
+CREATE INDEX IF NOT EXISTS idx_ads_approved_by
+  ON public.ads (approved_by);
+
 CREATE INDEX IF NOT EXISTS idx_area_requests_business_id
   ON public.area_requests (business_id);
 
@@ -49,7 +52,7 @@ CREATE INDEX IF NOT EXISTS idx_system_errors_user_id
 -- SELECT conrelid::regclass AS table_name, conname
 -- FROM pg_constraint
 -- WHERE contype = 'f'
---   AND conrelid::regclass::text IN ('public.announcements', 'public.area_requests',
+--   AND conrelid::regclass::text IN ('public.announcements', 'public.ads', 'public.area_requests',
 --       'public.business_insights', 'public.business_reviews', 'public.businesses',
 --       'public.comment_thread_follows', 'public.engagement_events',
 --       'public.moderation_queue', 'public.system_errors')
