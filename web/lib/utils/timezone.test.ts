@@ -13,9 +13,9 @@ describe('Cairo business timezone helpers', () => {
   })
 
   it('uses Egypt standard time outside daylight-saving time', () => {
-    expect(getCairoDateParts('2026-10-28T22:30:00.000Z')).toEqual({
-      dateKey: '2026-10-29',
-      dayKey: 'thu',
+    expect(getCairoDateParts('2026-11-01T22:30:00.000Z')).toEqual({
+      dateKey: '2026-11-02',
+      dayKey: 'mon',
       hour: 0,
       minute: 30,
     })
@@ -25,7 +25,7 @@ describe('Cairo business timezone helpers', () => {
     expect(getCairoDateParts('2026-10-26T17:45:00.000Z')).toEqual({
       dateKey: '2026-10-26',
       dayKey: 'mon',
-      hour: 19,
+      hour: 20,
       minute: 45,
     })
   })
