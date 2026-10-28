@@ -123,6 +123,16 @@ $function$;
 
 REVOKE ALL ON FUNCTION public.lock_order_message() FROM PUBLIC, anon, authenticated;
 
+-- Keep the database status constraint in sync with the seller order state machine.
+ALTER TABLE public.order_requests
+  DROP CONSTRAINT IF EXISTS order_requests_status_check;
+ALTER TABLE public.order_requests
+  ADD CONSTRAINT order_requests_status_check
+  CHECK (status = ANY (ARRAY[
+    'sent'::text, 'seen'::text, 'accepted'::text, 'rejected'::text,
+    'preparing'::text, 'on_way'::text, 'delivered'::text, 'cancelled'::text
+  ]));
+
 CREATE OR REPLACE FUNCTION public.guard_order_update_state()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER
 SET search_path = public, private, pg_temp
