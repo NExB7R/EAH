@@ -1,7 +1,7 @@
 -- ============================================================
 -- EAH — RLS Audit (Comprehensive)
 -- يفحص كل الجداول + السياسات + الأعمدة الحساسة
--- آخر تحديث: 2026-10-07
+-- آخر تحديث: 2026-10-29
 -- ============================================================
 
 -- ============================================================
@@ -95,12 +95,17 @@ ORDER BY c.relname;
 -- ============================================================
 SELECT
   '7_definer_no_path' AS check_name,
-  proname AS detail,
+  format('%I.%I(%s)', n.nspname, p.proname, pg_get_function_identity_arguments(p.oid)) AS detail,
   'HIGH: search_path ناقص' AS issue
-FROM pg_proc
-WHERE pronamespace = 'public'::regnamespace
-  AND prosecdef = true
-  AND proconfig IS NULL;
+FROM pg_proc AS p
+JOIN pg_namespace AS n ON n.oid = p.pronamespace
+WHERE n.nspname IN ('public', 'private')
+  AND p.prosecdef = true
+  AND NOT EXISTS (
+    SELECT 1
+    FROM unnest(coalesce(p.proconfig, ARRAY[]::text[])) AS setting
+    WHERE setting LIKE 'search_path=%'
+  );
 
 -- ============================================================
 -- 8. ملخص عدد السياسات لكل جدول
@@ -113,3 +118,69 @@ FROM pg_policies
 WHERE schemaname = 'public'
 GROUP BY tablename
 ORDER BY tablename;
+
+-- ============================================================
+-- 9. RLS enabled with no policies (do not add public policies
+--    automatically; classify each table as private/internal first)
+-- ============================================================
+SELECT
+  '9_rls_no_policy' AS check_name,
+  n.nspname || '.' || c.relname AS detail,
+  'REVIEW: RLS enabled but no policies exist' AS issue
+FROM pg_class AS c
+JOIN pg_namespace AS n ON n.oid = c.relnamespace
+WHERE n.nspname = 'public'
+  AND c.relkind = 'r'
+  AND c.relrowsecurity = true
+  AND NOT EXISTS (
+    SELECT 1 FROM pg_policies AS p
+    WHERE p.schemaname = n.nspname AND p.tablename = c.relname
+  )
+ORDER BY c.relname;
+
+-- ============================================================
+-- 10. Anon-callable SECURITY DEFINER RPCs (review each; some
+--     public telemetry/search RPCs are intentionally exposed)
+-- ============================================================
+SELECT
+  '10_anon_security_definer' AS check_name,
+  format('%I.%I(%s)', n.nspname, p.proname, pg_get_function_identity_arguments(p.oid)) AS detail,
+  'REVIEW: anon can execute SECURITY DEFINER function' AS issue
+FROM pg_proc AS p
+JOIN pg_namespace AS n ON n.oid = p.pronamespace
+WHERE n.nspname IN ('public', 'private')
+  AND p.prosecdef = true
+  AND has_function_privilege('anon', p.oid, 'EXECUTE')
+ORDER BY n.nspname, p.proname;
+
+-- ============================================================
+-- 11. Foreign keys missing a leading-column index
+-- ============================================================
+WITH foreign_key_columns AS (
+  SELECT
+    con.conrelid AS table_oid,
+    con.conname,
+    con.conkey,
+    con.conrelid::regclass AS table_name,
+    array_agg(att.attname ORDER BY k.ord) AS column_names
+  FROM pg_constraint AS con
+  JOIN pg_namespace AS n ON n.oid = con.connamespace
+  JOIN unnest(con.conkey) WITH ORDINALITY AS k(attnum, ord) ON true
+  JOIN pg_attribute AS att ON att.attrelid = con.conrelid AND att.attnum = k.attnum
+  WHERE con.contype = 'f' AND n.nspname = 'public'
+  GROUP BY con.oid, con.conrelid, con.conname, con.conkey
+)
+SELECT
+  '11_fk_missing_index' AS check_name,
+  format('%s.%s (%s)', fk.table_name, fk.conname, array_to_string(fk.column_names, ', ')) AS detail,
+  'REVIEW: foreign key has no covering leading-column index' AS issue
+FROM foreign_key_columns AS fk
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM pg_index AS i
+  WHERE i.indrelid = fk.table_oid
+    AND i.indisvalid
+    AND i.indisready
+    AND (i.indkey::int2[])[0:array_length(fk.conkey, 1) - 1] @> fk.conkey
+)
+ORDER BY fk.table_name, fk.conname;
