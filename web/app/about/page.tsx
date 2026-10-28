@@ -25,13 +25,13 @@ import styles from './about.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — About / Pitch
-//   • بيتش كامل للمنصة (للعميل + للتاجر)
+//   • بيتش كامل للمنصة (للمشتري + للبايع)
 //   • صفر JS — Server Component
 // ═══════════════════════════════════════════════════════════
 
 export const metadata: Metadata = {
   title: 'من نحن · EAH',
-  description: 'EAH — منصة اكتشاف محلية مصرية. مجانية للعميل، بدون عمولة على التاجر.',
+  description: 'EAH — منصة اكتشاف محلية مصرية. مجانية للمشتري، بدون عمولة على البايع.',
 }
 
 export default function AboutPage() {
@@ -58,7 +58,7 @@ export default function AboutPage() {
 
           <p className={styles.heroText}>
             منصة اكتشاف محلية مصرية، بتوصّل أهل شبين القناطر والقرى حواليها بأماكنهم المفضلة. مجانية
-            للعميل، بدون عمولة على التاجر.
+            للمشتري، بدون عمولة على البايع.
           </p>
 
           <div className={styles.heroActions}>
@@ -136,7 +136,7 @@ export default function AboutPage() {
               </span>
               <h3 className={styles.solutionTitle}>طلب مباشر</h3>
               <p className={styles.solutionText}>
-                بدون وسيط. العميل يطلب واتساب مباشرة، والتاجر يرد في دقائق.
+                بدون وسيط. المشتري يطلب واتساب مباشرة، والبايع يرد في دقائق.
               </p>
             </div>
             <div className={styles.solutionCard}>
@@ -154,11 +154,11 @@ export default function AboutPage() {
 
       <AboutFreeApp />
 
-      {/* ═══ 4. للعميل ═══ */}
+      {/* ═══ 4. للمشتري ═══ */}
       <section className={styles.section}>
         <div className={styles.container}>
           <header className={styles.sectionHeader}>
-            <span className={`${styles.sectionBadge} ${styles.badgePurple}`}>للعميل</span>
+            <span className={`${styles.sectionBadge} ${styles.badgePurple}`}>للمشتري</span>
             <h2 className={styles.sectionTitle}>مجاناً 100%</h2>
             <p className={styles.sectionText}>
               كل حاجة تحتاجها عشان تكتشف وتطلب، بدون رسوم ولا اشتراكات.
@@ -198,11 +198,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ═══ 5. للتاجر ═══ */}
+      {/* ═══ 5. للبايع ═══ */}
       <section className={styles.section}>
         <div className={styles.container}>
           <header className={styles.sectionHeader}>
-            <span className={`${styles.sectionBadge} ${styles.badgeGold}`}>للتاجر</span>
+            <span className={`${styles.sectionBadge} ${styles.badgeGold}`}>للبايع</span>
             <h2 className={styles.sectionTitle}>ظهور مجاني. بدون عمولة.</h2>
             <p className={styles.sectionText}>سجّل نشاطك في 5 دقايق. مش بناخد أي نسبة من طلباتك.</p>
           </header>
@@ -216,7 +216,7 @@ export default function AboutPage() {
             <FeatureCard
               Icon={WhatsAppIcon}
               title="طلبات واتساب"
-              text="العميل يكلمك مباشرة — بدون وسيط."
+              text="المشتري يكلمك مباشرة — بدون وسيط."
             />
             <FeatureCard
               Icon={LayoutDashboardIcon}
@@ -263,8 +263,8 @@ export default function AboutPage() {
         <div className={styles.container}>
           <div className={styles.statsGrid}>
             <StatCard num="53+" label="نشاط مسجّل" />
-            <StatCard num="100%" label="مجاني للعميل" />
-            <StatCard num="0%" label="عمولة على التاجر" />
+            <StatCard num="100%" label="مجاني للمشتري" />
+            <StatCard num="0%" label="عمولة على البايع" />
             <StatCard num="24/7" label="متاح دايماً" />
           </div>
         </div>
