@@ -123,6 +123,26 @@ export async function changeUserRole(userId: string, role: string): Promise<Resu
 
   if (targetRole?.role === parsed.data) return { ok: true }
 
+  // An activity owner must keep the seller role to retain management access.
+  if (parsed.data !== 'merchant') {
+    const { data: ownedBusiness, error: ownerCheckError } = await admin
+      .from('businesses')
+      .select('id')
+      .eq('owner_profile_id', userId)
+      .limit(1)
+      .maybeSingle()
+
+    if (ownerCheckError) {
+      return { ok: false, error: 'تعذر التحقق من الأنشطة المرتبطة بالمستخدم' }
+    }
+    if (ownedBusiness) {
+      return {
+        ok: false,
+        error: 'لا يمكن تغيير دور البايع المرتبط بنشاط. انقل ملكية النشاط أو فك ربطه أولًا.',
+      }
+    }
+  }
+
   // Upsert changes the role atomically; do not delete the old role first.
   const { error: updateError } = await admin
     .from('user_roles')
