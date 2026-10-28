@@ -1,6 +1,6 @@
 -- EAH reputation/order regression checks (pgTAP)
 BEGIN;
-SELECT plan(8);
+SELECT plan(9);
 
 SELECT ok(
   position('expired' in (
@@ -43,6 +43,12 @@ SELECT has_trigger(
 SELECT ok(
   position('is_verified_transaction = true' in pg_get_functiondef('public.refresh_business_counts()'::regprocedure)) > 0,
   'public rating aggregate counts only transaction-verified reviews'
+);
+
+SELECT ok(
+  position('review_dimension_value_invalid' in pg_get_functiondef('public.enforce_transaction_verified_review()'::regprocedure)) > 0
+    AND position('review_comment_length_invalid' in pg_get_functiondef('public.enforce_transaction_verified_review()'::regprocedure)) > 0,
+  'database rejects forged review dimensions and invalid comment lengths'
 );
 
 SELECT is(
