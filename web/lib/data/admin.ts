@@ -519,6 +519,9 @@ export type ReportRow = {
   reason: string
   note: string | null
   status: string
+  admin_note: string | null
+  reviewed_by: string | null
+  reviewed_at: string | null
   created_at: string
   reporter: { display_name: string } | null
 }
@@ -527,7 +530,7 @@ export async function getReports(status: string = 'open'): Promise<ReportRow[]> 
   const supabase = await createClient()
   let q = supabase
     .from('reports')
-    .select('id, reporter_id, entity_type, entity_id, reason, note, status, created_at')
+    .select('id, reporter_id, entity_type, entity_id, reason, note, status, admin_note, reviewed_by, reviewed_at, created_at')
     .order('created_at', { ascending: false })
     .limit(100)
 

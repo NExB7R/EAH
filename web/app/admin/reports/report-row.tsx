@@ -12,6 +12,9 @@ type Report = {
   reason: string
   note: string | null
   status: string
+  admin_note: string | null
+  reviewed_by: string | null
+  reviewed_at: string | null
   created_at: string
   reporter: { display_name: string } | null
 }
@@ -39,6 +42,7 @@ const REASON_LABEL: Record<string, string> = {
 export default function ReportRow({ report }: Props) {
   const [pending, startTransition] = useTransition()
   const [status, setStatus] = useState(report.status)
+  const [adminNote, setAdminNote] = useState(report.admin_note ?? '')
   const [msg, setMsg] = useState<string | null>(null)
 
   const date = new Date(report.created_at).toLocaleString('ar-EG', {
@@ -49,8 +53,12 @@ export default function ReportRow({ report }: Props) {
   })
 
   const handle = (next: string) => {
+    if ((next === 'resolved' || next === 'dismissed') && adminNote.trim().length < 3) {
+      setMsg('اكتب سبب قرار الأدمن قبل إغلاق البلاغ')
+      return
+    }
     startTransition(async () => {
-      const res = await updateReportStatus(report.id, next)
+      const res = await updateReportStatus(report.id, next, adminNote)
       if (res.ok) {
         setStatus(next)
         setMsg('تم التحديث')
@@ -92,6 +100,16 @@ export default function ReportRow({ report }: Props) {
 
       {isOpen ? (
         <div className={styles.actions}>
+          <textarea
+            className={styles.adminNoteInput}
+            value={adminNote}
+            onChange={(event) => setAdminNote(event.target.value)}
+            placeholder="سبب قرار الأدمن (مطلوب عند التأكيد أو الرفض)"
+            aria-label="سبب قرار الأدمن"
+            maxLength={500}
+            rows={2}
+            disabled={pending}
+          />
           <button
             type="button"
             onClick={() => handle('reviewing')}
@@ -108,7 +126,7 @@ export default function ReportRow({ report }: Props) {
             className={`${styles.btn} ${styles.btnOk}`}
           >
             <CheckCircleIcon size={12} />
-            <span>تم الحل</span>
+            <span>تأكيد البلاغ واتخاذ إجراء</span>
           </button>
           <button
             type="button"
@@ -117,14 +135,15 @@ export default function ReportRow({ report }: Props) {
             className={`${styles.btn} ${styles.btnDismiss}`}
           >
             <CloseIcon size={12} />
-            <span>رفض</span>
+            <span>البلاغ غير مثبت</span>
           </button>
         </div>
       ) : (
         <div
           className={`${styles.statusBadge} ${status === 'resolved' ? styles.resolved : styles.dismissed}`}
         >
-          {status === 'resolved' ? 'تم الحل' : 'مرفوض'}
+          {status === 'resolved' ? 'تم التحقق واتخاذ إجراء' : 'البلاغ غير مثبت'}
+          {adminNote && <p className={styles.adminDecision}>{adminNote}</p>}
         </div>
       )}
 

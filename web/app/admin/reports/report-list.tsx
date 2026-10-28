@@ -12,6 +12,9 @@ type Report = {
   reason: string
   note: string | null
   status: string
+  admin_note: string | null
+  reviewed_by: string | null
+  reviewed_at: string | null
   created_at: string
   reporter: { display_name: string } | null
 }
@@ -23,7 +26,8 @@ type Props = {
 const FILTERS = [
   { key: 'pending', label: 'مفتوح' },
   { key: 'reviewing', label: 'قيد المراجعة' },
-  { key: 'resolved', label: 'تم الحل' },
+  { key: 'resolved', label: 'مثبتة' },
+  { key: 'dismissed', label: 'غير مثبتة' },
   { key: 'all', label: 'الكل' },
 ] as const
 

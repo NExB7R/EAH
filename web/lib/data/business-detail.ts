@@ -394,22 +394,6 @@ export const TYPE_LABEL: Record<string, string> = {
   misc: 'أخرى',
 }
 
-export const TIER_LABEL: Record<string, string> = {
-  bade2: 'لسه بادئ',
-  mashey: 'ماشي حاله',
-  fel: 'زي الفل',
-  harif: 'حريف',
-  ostora: 'الأسطورة',
-}
-
-export const TIER_EMOJI: Record<string, string> = {
-  bade2: '🌱',
-  mashey: '🌿',
-  fel: '🌳',
-  harif: '⭐',
-  ostora: '👑',
-}
-
 // ═══════════════════════════════════════════════════════════
 // Business Activity Stats
 // ═══════════════════════════════════════════════════════════

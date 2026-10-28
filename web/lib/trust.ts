@@ -54,7 +54,7 @@ export const TRUST_EVENTS = {
   review_rejected: { delta: -15, label: 'تقييم مرفوض', icon: '❌' },
   report_valid: { delta: -25, label: 'بلاغ صحيح', icon: '🚨' },
   order_cancelled: { delta: -5, label: 'طلب ملغي', icon: '❌' },
-  order_rejected: { delta: -3, label: 'طلب مرفوض', icon: '⚠️' },
+  order_rejected: { delta: 0, label: 'طلب مرفوض — بدون خصم تلقائي', icon: '⚠️' },
   decay: { delta: -1, label: 'خمول طويل', icon: '💤' },
 } as const
 
