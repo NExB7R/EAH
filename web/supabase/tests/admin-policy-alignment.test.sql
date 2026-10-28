@@ -1,7 +1,7 @@
 -- EAH targeted regression checks for the 2026-10-29 admin/RLS migrations.
 -- Run only on a dedicated non-production database after applying the migration set.
 BEGIN;
-SELECT plan(33);
+SELECT plan(38);
 
 SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.businesses'::regclass), true, 'RLS remains enabled on businesses');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='businesses' AND policyname='businesses_admin_all'), 'admin activity policy uses shared admin authorization');
@@ -27,6 +27,11 @@ SELECT ok((SELECT qual LIKE '%auth_is_admin()%' AND qual LIKE '%status = ''activ
 SELECT ok((SELECT with_check LIKE '%auth_is_admin()%' AND with_check LIKE '%owner_profile_id%' FROM pg_policies WHERE schemaname='public' AND tablename='ads' AND policyname='ads_insert'), 'ad insertion is limited to owner or admin');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' AND qual LIKE '%owner_profile_id%' AND with_check LIKE '%auth_is_admin()%' AND with_check LIKE '%owner_profile_id%' FROM pg_policies WHERE schemaname='public' AND tablename='ads' AND policyname='ads_update'), 'ad updates preserve owner boundaries and allow admins');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='ads' AND policyname='ads_delete'), 'ad deletion is restricted to authorized admin');
+SELECT ok((SELECT qual LIKE '%owner_profile_id%' AND qual LIKE '%pending%' AND qual LIKE '%rejected%' FROM pg_policies WHERE schemaname='public' AND tablename='ads' AND policyname='ads_delete'), 'ad owners can cancel only pending/rejected ads');
+SELECT has_column('public', 'ads', 'approved_by', 'ads records the approving admin');
+SELECT has_column('public', 'ads', 'approved_at', 'ads records approval timestamp');
+SELECT has_trigger('public', 'ads', 'ads_protect_moderation_fields', 'ad moderation fields are protected by a database trigger');
+SELECT ok((SELECT pg_get_functiondef('public.prevent_owner_ad_moderation_update()'::regprocedure) LIKE '%NEW.status IS DISTINCT FROM OLD.status%' AND pg_get_functiondef('public.prevent_owner_ad_moderation_update()'::regprocedure) LIKE '%NEW.approved_at IS DISTINCT FROM OLD.approved_at%'), 'owners cannot change moderation fields with direct table updates');
 
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='page_view_events' AND policyname='page_view_events_admin_select'), 'admin analytics can read page views');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='live_page_sessions' AND policyname='live_sessions_admin_select'), 'admin analytics can read live sessions');
