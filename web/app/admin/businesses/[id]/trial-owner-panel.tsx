@@ -41,8 +41,8 @@ type Props = {
 }
 
 const ROLE_LABEL: Record<string, string> = {
-  customer: 'عميل',
-  merchant: 'تاجر',
+  customer: 'المشتري',
+  merchant: 'البايع',
   admin: 'أدمن',
   super_admin: 'سوبر أدمن',
 }
@@ -138,7 +138,7 @@ export default function TrialOwnerPanel({
           <span
             className={`${styles.chip} ${source === 'admin' ? styles.chipAdmin : styles.chipMerchant}`}
           >
-            {source === 'admin' ? 'أدمن' : 'تاجر'}
+            {source === 'admin' ? 'الأدمن' : 'البايع'}
           </span>
         </div>
         <div className={styles.statusItem}>
