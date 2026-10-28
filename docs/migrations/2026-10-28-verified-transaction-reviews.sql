@@ -94,6 +94,35 @@ BEGIN
 END;
 $function$;
 
+-- Existing order_message_lock_trigger referenced a removed whatsapp_url column.
+-- The current orders table stores the customer-facing message in whatsapp_message.
+CREATE OR REPLACE FUNCTION public.lock_order_message()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $function$
+BEGIN
+  IF OLD.message_locked_at IS NOT NULL THEN
+    NEW.message_locked_at := OLD.message_locked_at;
+    NEW.whatsapp_sent_at := OLD.whatsapp_sent_at;
+    NEW.whatsapp_message := OLD.whatsapp_message;
+    RETURN NEW;
+  END IF;
+
+  IF NEW.whatsapp_message IS NOT NULL
+    AND OLD.whatsapp_message IS DISTINCT FROM NEW.whatsapp_message
+  THEN
+    NEW.message_locked_at := COALESCE(NEW.message_locked_at, now());
+    NEW.whatsapp_sent_at := COALESCE(NEW.whatsapp_sent_at, now());
+  END IF;
+
+  RETURN NEW;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.lock_order_message() FROM PUBLIC, anon, authenticated;
+
 CREATE OR REPLACE FUNCTION public.guard_order_update_state()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER
 SET search_path = public, private, pg_temp
