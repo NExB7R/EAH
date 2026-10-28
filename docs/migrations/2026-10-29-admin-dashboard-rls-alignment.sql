@@ -10,6 +10,15 @@
 -- the other 2026-10-29 migrations and must not be applied to production without staging
 -- validation and a backup. No data rows are changed by this migration.
 
+-- The admin approval action already writes these fields, but the live ads table lacked
+-- them. Add them before updating the policy/trigger so approval does not fail with
+-- a schema-cache/undefined-column error. Moderator IDs reference auth.users just like
+-- business_reviews.moderated_by and reports.reviewed_by.
+ALTER TABLE public.ads
+  ADD COLUMN IF NOT EXISTS approved_by uuid REFERENCES auth.users(id) ON DELETE SET NULL;
+ALTER TABLE public.ads
+  ADD COLUMN IF NOT EXISTS approved_at timestamptz;
+
 -- Activity reviews: admin review/approve/reject/delete actions use the session client.
 DROP POLICY IF EXISTS business_reviews_admin_all ON public.business_reviews;
 CREATE POLICY business_reviews_admin_all
@@ -93,7 +102,43 @@ CREATE POLICY ads_delete
 ON public.ads
 FOR DELETE
 TO authenticated
-USING ((SELECT public.auth_is_admin()));
+USING (
+  (SELECT public.auth_is_admin())
+  OR (
+    owner_profile_id = (SELECT auth.uid())
+    AND status IN ('pending', 'rejected')
+  )
+);
+
+-- A row owner may edit the creative/request details, but cannot self-approve, pause,
+-- reject or otherwise change moderation state by bypassing the server action.
+CREATE OR REPLACE FUNCTION public.prevent_owner_ad_moderation_update()
+RETURNS trigger
+LANGUAGE plpgsql
+SET search_path = pg_catalog, public
+AS $function$
+BEGIN
+  IF auth.uid() IS NOT NULL AND NOT public.auth_is_admin() THEN
+    IF NEW.status IS DISTINCT FROM OLD.status
+       OR NEW.approved_by IS DISTINCT FROM OLD.approved_by
+       OR NEW.approved_at IS DISTINCT FROM OLD.approved_at
+       OR NEW.rejected_reason IS DISTINCT FROM OLD.rejected_reason THEN
+      RAISE EXCEPTION 'Only platform admins can change ad moderation fields'
+        USING ERRCODE = '42501';
+    END IF;
+  END IF;
+
+  RETURN NEW;
+END;
+$function$;
+
+REVOKE ALL PRIVILEGES ON FUNCTION public.prevent_owner_ad_moderation_update() FROM PUBLIC, anon, authenticated;
+
+DROP TRIGGER IF EXISTS ads_protect_moderation_fields ON public.ads;
+CREATE TRIGGER ads_protect_moderation_fields
+BEFORE UPDATE ON public.ads
+FOR EACH ROW
+EXECUTE FUNCTION public.prevent_owner_ad_moderation_update();
 
 -- Subscription approvals and extensions are handled in the admin dashboard via the
 -- authenticated session. The business owner still has their own read/request policies.
