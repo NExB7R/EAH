@@ -1,6 +1,6 @@
 -- EAH reputation/order regression checks (pgTAP)
 BEGIN;
-SELECT plan(7);
+SELECT plan(8);
 
 SELECT ok(
   position('expired' in (
@@ -38,6 +38,11 @@ SELECT has_trigger(
   'public.business_reviews',
   'trg_enforce_transaction_verified_review_insert',
   'public review insert requires a delivered platform order'
+);
+
+SELECT ok(
+  position('is_verified_transaction = true' in pg_get_functiondef('public.refresh_business_counts()'::regprocedure)) > 0,
+  'public rating aggregate counts only transaction-verified reviews'
 );
 
 SELECT is(

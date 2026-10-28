@@ -90,6 +90,10 @@ export async function flushQueue(): Promise<{ flushed: number; failed: number; d
     }
   }
 
+  if (discarded > 0 && typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('eah:offline-queue-discarded', { detail: { count: discarded } }))
+  }
+
   return { flushed, failed, discarded }
 }
 
