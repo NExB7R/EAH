@@ -233,7 +233,6 @@ async function toolGetBusinessDetails(args: { slug: string }) {
       rating: data.rating_count > 0 ? data.rating_avg : null,
       rating_count: data.rating_count,
       is_verified: data.is_verified,
-      rating_count: data.rating_count,
       successful_orders: data.successful_orders,
       accepts_whatsapp: data.accepts_whatsapp_orders,
       working_hours: data.working_hours,
