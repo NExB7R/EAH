@@ -16,38 +16,102 @@ type Result = { ok: true } | { ok: false; error: string }
 
 const banSchema = z.object({
   days: z.coerce.number().int().min(1).max(3650),
-  reason: z.string().min(5).max(300),
+  reason: z.string().trim().min(5).max(300),
 })
+
+const userIdSchema = z.string().uuid()
+
+type ModerationTargetResult =
+  | { ok: true; role: string }
+  | { ok: false; error: string }
+
+async function validateModerationTarget(
+  admin: ReturnType<typeof createServiceClient>,
+  userId: string,
+  actorRole: 'admin' | 'super_admin',
+): Promise<ModerationTargetResult> {
+  const { data: profile, error: profileError } = await admin
+    .from('profiles')
+    .select('id')
+    .eq('id', userId)
+    .maybeSingle()
+
+  if (profileError) return { ok: false, error: 'تعذر التحقق من المستخدم' }
+  if (!profile) return { ok: false, error: 'المستخدم مش موجود' }
+
+  const { data: roleRow, error: roleError } = await admin
+    .from('user_roles')
+    .select('role')
+    .eq('user_id', userId)
+    .maybeSingle()
+
+  if (roleError) return { ok: false, error: 'تعذر التحقق من صلاحيات المستخدم' }
+  if (!roleRow?.role) return { ok: false, error: 'حساب المستخدم ليس له دور مهيأ داخل النظام' }
+  if (roleRow.role === 'super_admin') {
+    return { ok: false, error: 'لا يمكن حظر الأدمن الأعلى أو فك حظره من هذه الشاشة' }
+  }
+  if (roleRow.role === 'admin' && actorRole !== 'super_admin') {
+    return { ok: false, error: 'إدارة حظر حسابات الأدمن متاحة للأدمن الأعلى فقط' }
+  }
+
+  return { ok: true, role: roleRow.role }
+}
+
+function createModerationClient() {
+  try {
+    return createServiceClient()
+  } catch {
+    return null
+  }
+}
 
 export async function banUser(userId: string, formData: FormData): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  if (!userIdSchema.safeParse(userId).success) {
+    return { ok: false, error: 'معرّف المستخدم غير صحيح' }
+  }
   if (userId === ctx.userId) return { ok: false, error: 'مش ممكن تحظر نفسك' }
 
   const parsed = banSchema.safeParse({
-    days: Number(formData.get('days') ?? 0),
-    reason: String(formData.get('reason') ?? '').trim(),
+    days: formData.get('days'),
+    reason: String(formData.get('reason') ?? ''),
   })
-
   if (!parsed.success) {
     return { ok: false, error: parsed.error.issues[0]?.message ?? 'بيانات غير صحيحة' }
   }
 
+  const admin = createModerationClient()
+  if (!admin) return { ok: false, error: 'إدارة الحظر غير متاحة مؤقتًا — حاول تاني' }
+
+  const target = await validateModerationTarget(admin, userId, ctx.role)
+  if (!target.ok) return target
+
   const until = new Date()
   until.setDate(until.getDate() + parsed.data.days)
+  const bannedUntil = until.toISOString()
 
-  const { error } = await ctx.supabase
+  const { data: updated, error } = await admin
     .from('profiles')
-    .update({
-      banned_until: until.toISOString(),
-      ban_reason: parsed.data.reason,
-    })
+    .update({ banned_until: bannedUntil, ban_reason: parsed.data.reason })
     .eq('id', userId)
+    .select('id')
+    .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر حفظ الحظر — لم يتم تأكيد أي تغيير' }
+  if (!updated) return { ok: false, error: 'لم يتغير أي سجل — حدّث الصفحة وتأكد من وجود المستخدم' }
+
+  await logAudit(admin, {
+    actorUserId: ctx.userId,
+    action: 'user.ban',
+    entityType: 'profile',
+    entityId: userId,
+    metadata: { days: parsed.data.days, reason: parsed.data.reason, banned_until: bannedUntil, target_role: target.role },
+  })
 
   revalidatePath('/admin/users')
+  revalidatePath(`/admin/users/${userId}`)
   revalidateTag('admin-badges', 'default')
   return { ok: true }
 }
@@ -56,14 +120,37 @@ export async function unbanUser(userId: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { error } = await ctx.supabase
+  if (!userIdSchema.safeParse(userId).success) {
+    return { ok: false, error: 'معرّف المستخدم غير صحيح' }
+  }
+  if (userId === ctx.userId) return { ok: false, error: 'لا يمكن تنفيذ الإجراء على حسابك' }
+
+  const admin = createModerationClient()
+  if (!admin) return { ok: false, error: 'إدارة الحظر غير متاحة مؤقتًا — حاول تاني' }
+
+  const target = await validateModerationTarget(admin, userId, ctx.role)
+  if (!target.ok) return target
+
+  const { data: updated, error } = await admin
     .from('profiles')
     .update({ banned_until: null, ban_reason: null })
     .eq('id', userId)
+    .select('id')
+    .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر حفظ فك الحظر — لم يتم تأكيد أي تغيير' }
+  if (!updated) return { ok: false, error: 'لم يتغير أي سجل — حدّث الصفحة وتأكد من وجود المستخدم' }
+
+  await logAudit(admin, {
+    actorUserId: ctx.userId,
+    action: 'user.unban',
+    entityType: 'profile',
+    entityId: userId,
+    metadata: { target_role: target.role },
+  })
 
   revalidatePath('/admin/users')
+  revalidatePath(`/admin/users/${userId}`)
   revalidateTag('admin-badges', 'default')
   return { ok: true }
 }
@@ -71,7 +158,6 @@ export async function unbanUser(userId: string): Promise<Result> {
 // ─── Change Role ───
 
 const roleSchema = z.enum(['customer', 'merchant', 'admin', 'super_admin'])
-const userIdSchema = z.string().uuid()
 
 export async function changeUserRole(userId: string, role: string): Promise<Result> {
   const ctx = await requireAdmin()
