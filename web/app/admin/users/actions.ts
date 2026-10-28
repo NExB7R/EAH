@@ -3,6 +3,8 @@
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
+import { createServiceClient } from '@/lib/supabase/service'
+import { logAudit } from '@/lib/logging/audit'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Users Actions
@@ -69,27 +71,78 @@ export async function unbanUser(userId: string): Promise<Result> {
 // ─── Change Role ───
 
 const roleSchema = z.enum(['customer', 'merchant', 'admin', 'super_admin'])
+const userIdSchema = z.string().uuid()
 
 export async function changeUserRole(userId: string, role: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  if (!userIdSchema.safeParse(userId).success) {
+    return { ok: false, error: 'معرّف المستخدم غير صحيح' }
+  }
   if (userId === ctx.userId) return { ok: false, error: 'مش ممكن تغير دورك' }
 
   const parsed = roleSchema.safeParse(role)
   if (!parsed.success) return { ok: false, error: 'دور غير صحيح' }
 
-  // شيل الأدوار القديمة
-  await ctx.supabase.from('user_roles').delete().eq('user_id', userId)
+  // Only the internal super-admin permission may grant or change that permission.
+  if (parsed.data === 'super_admin' && ctx.role !== 'super_admin') {
+    return { ok: false, error: 'منح صلاحيات الأدمن الأعلى متاح للأدمن الأعلى فقط' }
+  }
 
-  // ضيف الدور الجديد
-  const { error } = await ctx.supabase
+  let admin: ReturnType<typeof createServiceClient>
+  try {
+    admin = createServiceClient()
+  } catch {
+    return { ok: false, error: 'تغيير الدور غير متاح مؤقتًا — حاول تاني' }
+  }
+
+  // user_roles is self-readable under RLS, so inspect the target through the
+  // service client only after the caller has passed requireAdmin().
+  const { data: targetRole, error: targetRoleError } = await admin
     .from('user_roles')
-    .insert({ user_id: userId, role: parsed.data })
+    .select('role')
+    .eq('user_id', userId)
+    .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (targetRoleError) {
+    return { ok: false, error: 'تعذر التحقق من الدور الحالي للمستخدم' }
+  }
+  if (targetRole?.role === 'super_admin' && ctx.role !== 'super_admin') {
+    return { ok: false, error: 'تغيير دور الأدمن الأعلى متاح للأدمن الأعلى فقط' }
+  }
+
+  const { data: profile, error: profileError } = await admin
+    .from('profiles')
+    .select('id')
+    .eq('id', userId)
+    .maybeSingle()
+
+  if (profileError) return { ok: false, error: 'تعذر التحقق من المستخدم' }
+  if (!profile) return { ok: false, error: 'المستخدم مش موجود' }
+
+  if (targetRole?.role === parsed.data) return { ok: true }
+
+  // Upsert changes the role atomically; do not delete the old role first.
+  const { error: updateError } = await admin
+    .from('user_roles')
+    .upsert({ user_id: userId, role: parsed.data }, { onConflict: 'user_id' })
+
+  if (updateError) {
+    return { ok: false, error: 'تعذر حفظ الدور الجديد — لم يتم تغيير الدور الحالي' }
+  }
+
+  await logAudit(admin, {
+    actorUserId: ctx.userId,
+    action: 'user.role.change',
+    entityType: 'profile',
+    entityId: userId,
+    metadata: { from: targetRole?.role ?? null, to: parsed.data },
+  })
 
   revalidatePath('/admin/users')
+  revalidatePath(`/admin/users/${userId}`)
+  revalidateTag('admin-badges', 'default')
   return { ok: true }
 }
 
