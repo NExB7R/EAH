@@ -1,0 +1,6 @@
+# Supabase CLI configuration for the EAH web application.
+# The CI database tests use an explicitly supplied non-production connection URL.
+project_id = "eah"
+
+[db]
+major_version = 17
