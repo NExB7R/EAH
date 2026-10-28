@@ -126,6 +126,24 @@ export async function bulkChangeRole(ids: string[], role: string): Promise<Resul
     return { ok: false, error: 'تغيير دور الأدمن الأعلى متاح للأدمن الأعلى فقط' }
   }
 
+  if (parsed.data.role !== 'merchant') {
+    const { data: ownedBusinesses, error: ownerCheckError } = await admin
+      .from('businesses')
+      .select('owner_profile_id')
+      .in('owner_profile_id', safeIds)
+      .limit(1)
+
+    if (ownerCheckError) {
+      return { ok: false, error: 'تعذر التحقق من الأنشطة المرتبطة بالمستخدمين' }
+    }
+    if (ownedBusinesses?.length) {
+      return {
+        ok: false,
+        error: 'لا يمكن تغيير دور بايع مرتبط بنشاط. انقل ملكية الأنشطة أو فك ربطها أولًا.',
+      }
+    }
+  }
+
   // Use the privileged client only after admin authorization and role-boundary checks.
   const rows = safeIds.map((id) => ({ user_id: id, role: parsed.data.role }))
   const { error } = await admin.from('user_roles').upsert(rows, { onConflict: 'user_id' })
