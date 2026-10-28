@@ -130,7 +130,7 @@ ALTER TABLE public.order_requests
   ADD CONSTRAINT order_requests_status_check
   CHECK (status = ANY (ARRAY[
     'sent'::text, 'seen'::text, 'accepted'::text, 'rejected'::text,
-    'preparing'::text, 'on_way'::text, 'delivered'::text, 'cancelled'::text
+    'preparing'::text, 'on_way'::text, 'delivered'::text, 'cancelled'::text, 'expired'::text
   ]));
 
 -- Keep internal risk signals separate: a pending accusation is not evidence.

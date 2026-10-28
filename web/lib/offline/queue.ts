@@ -37,9 +37,9 @@ export async function clearPending(): Promise<void> {
 }
 
 // ─── Flush — يبعت كل العمليات المعلقة ───
-export async function flushQueue(): Promise<{ flushed: number; failed: number }> {
+export async function flushQueue(): Promise<{ flushed: number; failed: number; discarded: number }> {
   if (typeof navigator === 'undefined' || !navigator.onLine) {
-    return { flushed: 0, failed: 0 }
+    return { flushed: 0, failed: 0, discarded: 0 }
   }
 
   const queue = await getPending()
@@ -47,6 +47,7 @@ export async function flushQueue(): Promise<{ flushed: number; failed: number }>
 
   let flushed = 0
   let failed = 0
+  let discarded = 0
 
   for (const action of queue) {
     try {
@@ -60,6 +61,20 @@ export async function flushQueue(): Promise<{ flushed: number; failed: number }>
         if (action.id) await idbDelete(STORES.pending, action.id)
         flushed++
       } else {
+        // This is a permanent validation failure, not a network issue. Do not keep
+        // retrying a review that cannot be attached to a completed platform order.
+        if (res.status === 409) {
+          const payload = (await res.json().catch(() => null)) as
+            | { code?: string; discard?: boolean }
+            | null
+          if (payload?.code === 'review_requires_delivered_order' && payload.discard === true) {
+            if (action.id) await idbDelete(STORES.pending, action.id)
+            discarded++
+            failed++
+            continue
+          }
+        }
+
         // حاول تاني — بس زوّد الـ attempts
         const next: PendingAction = { ...action, attempts: action.attempts + 1 }
         // لو تجاوز 5 محاولات — ارفضه
@@ -75,7 +90,7 @@ export async function flushQueue(): Promise<{ flushed: number; failed: number }>
     }
   }
 
-  return { flushed, failed }
+  return { flushed, failed, discarded }
 }
 
 // ─── Background Sync Registration ───
