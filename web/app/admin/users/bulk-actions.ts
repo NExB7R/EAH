@@ -14,52 +14,104 @@ type Result = { ok: true; affected: number } | { ok: false; error: string }
 
 const idsSchema = z.array(z.string().uuid()).min(1).max(100)
 
-// ─── حظر جماعي ───
+// ─── حظر/فك حظر جماعي ───
 const bulkBanSchema = z.object({
   ids: idsSchema,
   days: z.coerce.number().int().min(1).max(3650),
-  reason: z.string().min(5, 'السبب قصير').max(300),
+  reason: z.string().trim().min(5, 'السبب قصير').max(300),
 })
+
+type BulkModerationContext = { userId: string; role: 'admin' | 'super_admin' }
+type PreparedTargets =
+  | {
+      ok: true
+      admin: ReturnType<typeof createServiceClient>
+      ids: string[]
+      roles: Array<{ user_id: string; role: string }>
+    }
+  | { ok: false; error: string }
+
+async function prepareModerationTargets(
+  ctx: BulkModerationContext,
+  inputIds: string[],
+): Promise<PreparedTargets> {
+  const ids = [...new Set(inputIds)]
+  if (ids.includes(ctx.userId)) {
+    return { ok: false, error: 'أزل حسابك من التحديد قبل تنفيذ الإجراء الجماعي' }
+  }
+
+  let admin: ReturnType<typeof createServiceClient>
+  try {
+    admin = createServiceClient()
+  } catch {
+    return { ok: false, error: 'إدارة المستخدمين غير متاحة مؤقتًا — حاول تاني' }
+  }
+
+  const [profilesResult, rolesResult] = await Promise.all([
+    admin.from('profiles').select('id').in('id', ids),
+    admin.from('user_roles').select('user_id, role').in('user_id', ids),
+  ])
+
+  if (profilesResult.error || rolesResult.error) {
+    return { ok: false, error: 'تعذر التحقق من حسابات المستخدمين المحددين' }
+  }
+  if ((profilesResult.data ?? []).length !== ids.length) {
+    return { ok: false, error: 'بعض الحسابات المحددة غير موجودة — حدّث القائمة وحاول تاني' }
+  }
+
+  const roles = (rolesResult.data ?? []) as Array<{ user_id: string; role: string }>
+  const roleById = new Map(roles.map((item) => [item.user_id, item.role]))
+  if (ids.some((id) => !roleById.has(id))) {
+    return { ok: false, error: 'بعض الحسابات ليس لها دور مهيأ — أصلح بيانات الحساب أولًا' }
+  }
+  if (roles.some((item) => item.role === 'super_admin')) {
+    return { ok: false, error: 'لا يمكن الحظر الجماعي أو فك الحظر عن حساب الأدمن الأعلى' }
+  }
+  if (ctx.role !== 'super_admin' && roles.some((item) => item.role === 'admin')) {
+    return { ok: false, error: 'إدارة حظر حسابات الأدمن متاحة للأدمن الأعلى فقط' }
+  }
+
+  return { ok: true, admin, ids, roles }
+}
 
 export async function bulkBanUsers(ids: string[], days: number, reason: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const parsed = bulkBanSchema.safeParse({ ids, days, reason: reason.trim() })
+  const parsed = bulkBanSchema.safeParse({ ids, days, reason })
   if (!parsed.success) {
     return { ok: false, error: parsed.error.issues[0]?.message ?? 'بيانات غير صحيحة' }
   }
 
-  // استبعاد نفس الأدمن
-  const safeIds = parsed.data.ids.filter((id) => id !== ctx.userId)
-  if (safeIds.length === 0) return { ok: false, error: 'مش ممكن تحظر نفسك' }
+  const prepared = await prepareModerationTargets(ctx, parsed.data.ids)
+  if (!prepared.ok) return prepared
 
   const until = new Date()
   until.setDate(until.getDate() + parsed.data.days)
+  const bannedUntil = until.toISOString()
 
-  const { error } = await ctx.supabase
+  const { data: updated, error } = await prepared.admin
     .from('profiles')
-    .update({
-      banned_until: until.toISOString(),
-      ban_reason: parsed.data.reason,
-    })
-    .in('id', safeIds)
+    .update({ banned_until: bannedUntil, ban_reason: parsed.data.reason })
+    .in('id', prepared.ids)
+    .select('id')
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر حفظ الحظر الجماعي — لم يتم تأكيد أي تغيير' }
+  const affectedIds = (updated ?? []).map((item) => item.id)
+  if (affectedIds.length === 0) return { ok: false, error: 'لم يتغير أي سجل — حدّث القائمة وحاول تاني' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(prepared.admin, {
     actorUserId: ctx.userId,
     action: 'user.bulk_ban',
     entityType: 'profile',
-    metadata: { ids: safeIds, days: parsed.data.days, reason: parsed.data.reason },
+    metadata: { ids: affectedIds, days: parsed.data.days, reason: parsed.data.reason, banned_until: bannedUntil },
   })
 
   revalidatePath('/admin/users')
   revalidateTag('admin-badges', 'default')
-  return { ok: true, affected: safeIds.length }
+  return { ok: true, affected: affectedIds.length }
 }
 
-// ─── إلغاء حظر جماعي ───
 export async function bulkUnbanUsers(ids: string[]): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
@@ -67,23 +119,29 @@ export async function bulkUnbanUsers(ids: string[]): Promise<Result> {
   const parsed = idsSchema.safeParse(ids)
   if (!parsed.success) return { ok: false, error: 'قائمة غير صالحة' }
 
-  const { error } = await ctx.supabase
+  const prepared = await prepareModerationTargets(ctx, parsed.data)
+  if (!prepared.ok) return prepared
+
+  const { data: updated, error } = await prepared.admin
     .from('profiles')
     .update({ banned_until: null, ban_reason: null })
-    .in('id', parsed.data)
+    .in('id', prepared.ids)
+    .select('id')
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر حفظ فك الحظر الجماعي — لم يتم تأكيد أي تغيير' }
+  const affectedIds = (updated ?? []).map((item) => item.id)
+  if (affectedIds.length === 0) return { ok: false, error: 'لم يتغير أي سجل — حدّث القائمة وحاول تاني' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(prepared.admin, {
     actorUserId: ctx.userId,
     action: 'user.bulk_unban',
     entityType: 'profile',
-    metadata: { ids: parsed.data, count: parsed.data.length },
+    metadata: { ids: affectedIds, count: affectedIds.length },
   })
 
   revalidatePath('/admin/users')
   revalidateTag('admin-badges', 'default')
-  return { ok: true, affected: parsed.data.length }
+  return { ok: true, affected: affectedIds.length }
 }
 
 // ─── تغيير دور جماعي ───
