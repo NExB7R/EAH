@@ -252,8 +252,8 @@ export type MerchantOrder = {
   customer_phone: string | null
   created_at: string
   buyerAccountLinked: boolean
-  buyerPhoneVerified: boolean
-  buyerCompletedOrders: number
+  buyerPhoneVerified: boolean | null
+  buyerCompletedOrders: number | null
 }
 
 type MerchantOrderRow = Omit<MerchantOrder, 'buyerAccountLinked' | 'buyerPhoneVerified' | 'buyerCompletedOrders'> & {
@@ -286,6 +286,8 @@ export async function getMerchantOrders(businessId: string, limit = 50): Promise
   const buyerIds = [...new Set(rows.map((row) => row.customer_profile_id).filter((id): id is string => !!id))]
   const phoneVerified = new Map<string, boolean>()
   const completedOrders = new Map<string, number>()
+  let phoneVerificationAvailable = true
+  let completedStatsAvailable = true
 
   if (buyerIds.length > 0) {
     try {
@@ -294,14 +296,20 @@ export async function getMerchantOrders(businessId: string, limit = 50): Promise
         service.from('profiles').select('id, phone_verified_at').in('id', buyerIds),
         service.from('customer_order_stats').select('profile_id, successful_orders').in('profile_id', buyerIds),
       ])
-      if (!profileError) {
+      if (profileError) {
+        phoneVerificationAvailable = false
+      } else {
         for (const profile of profiles ?? []) phoneVerified.set(profile.id as string, !!profile.phone_verified_at)
       }
-      if (!statsError) {
+      if (statsError) {
+        completedStatsAvailable = false
+      } else {
         for (const row of stats ?? []) completedOrders.set(row.profile_id as string, Math.max(0, Number(row.successful_orders) || 0))
       }
     } catch {
-      // Buyer indicators fail closed to unknown/zero; order management must still work.
+      // Do not convert lookup failures into negative claims about a buyer.
+      phoneVerificationAvailable = false
+      completedStatsAvailable = false
     }
   }
 
@@ -315,8 +323,14 @@ export async function getMerchantOrders(businessId: string, limit = 50): Promise
     customer_phone: row.customer_phone,
     created_at: row.created_at,
     buyerAccountLinked: !!row.customer_profile_id,
-    buyerPhoneVerified: row.customer_profile_id ? phoneVerified.get(row.customer_profile_id) === true : false,
-    buyerCompletedOrders: row.customer_profile_id ? completedOrders.get(row.customer_profile_id) ?? 0 : 0,
+    buyerPhoneVerified:
+      row.customer_profile_id && phoneVerificationAvailable && phoneVerified.has(row.customer_profile_id)
+        ? phoneVerified.get(row.customer_profile_id)!
+        : null,
+    buyerCompletedOrders:
+      row.customer_profile_id && completedStatsAvailable
+        ? completedOrders.get(row.customer_profile_id) ?? 0
+        : null,
   }))
 }
 
