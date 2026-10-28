@@ -43,8 +43,8 @@ type Props = {
 const ROLE_LABEL: Record<string, string> = {
   customer: 'المشتري',
   merchant: 'البايع',
-  admin: 'أدمن',
-  super_admin: 'سوبر أدمن',
+  admin: 'الأدمن',
+  super_admin: 'الأدمن',
 }
 
 export default function TrialOwnerPanel({
