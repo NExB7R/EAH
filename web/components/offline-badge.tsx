@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { WifiOffIcon, RefreshIcon, AlertIcon } from './icons'
+import { WifiOffIcon, RefreshIcon, AlertIcon, CloseIcon } from './icons'
 import { useOnlineStatus } from '@/lib/hooks/use-online-status'
 import { getPending, flushQueue } from '@/lib/offline/queue'
 import styles from './offline-badge.module.css'
@@ -22,9 +22,22 @@ export default function OfflineBadge() {
       const p = await getPending()
       setPending(p.length)
     }
+    const onDiscarded = (event: Event) => {
+      const detail = (event as CustomEvent<{ count?: number }>).detail
+      const count = Math.max(1, Number(detail?.count) || 1)
+      setNotice(
+        count === 1
+          ? 'اتشال تقييم من المزامنة لأنه لا يوجد طلب مكتمل مرتبط به. تقدر تعيد التقييم بعد اكتمال الطلب.'
+          : `اتشال ${count} تقييمات من المزامنة لعدم وجود طلب مكتمل مرتبط بها. تقدر تعيد التقييم بعد اكتمال الطلب.`,
+      )
+    }
     void check()
     const t = setInterval(check, 5000)
-    return () => clearInterval(t)
+    window.addEventListener('eah:offline-queue-discarded', onDiscarded)
+    return () => {
+      clearInterval(t)
+      window.removeEventListener('eah:offline-queue-discarded', onDiscarded)
+    }
   }, [online])
 
   if (online && pending === 0 && !notice) return null
@@ -64,7 +77,17 @@ export default function OfflineBadge() {
           </>
         )}
       </span>
-      {online && pending > 0 && (
+      {notice && (
+        <button
+          type="button"
+          className={styles.retry}
+          onClick={() => setNotice(null)}
+          aria-label="إغلاق التنبيه"
+        >
+          <CloseIcon size={12} />
+        </button>
+      )}
+      {!notice && online && pending > 0 && (
         <button type="button" className={styles.retry} onClick={handleRetry} disabled={flushing}>
           <RefreshIcon size={12} />
           <span>{flushing ? '...' : 'جرب'}</span>
