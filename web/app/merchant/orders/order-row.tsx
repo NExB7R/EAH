@@ -15,8 +15,8 @@ type Order = {
   customer_phone: string | null
   created_at: string
   buyerAccountLinked: boolean
-  buyerPhoneVerified: boolean
-  buyerCompletedOrders: number
+  buyerPhoneVerified: boolean | null
+  buyerCompletedOrders: number | null
 }
 
 const COUNTDOWN_MS = 10 * 60 * 1000
@@ -192,14 +192,18 @@ export default function OrderRow({ order, isHighlighted = false }: Props) {
             <span className={styles.buyerSignalNeutral}>طلب ضيف — لا يوجد حساب EAH مرتبط</span>
           ) : (
             <>
-              <span className={order.buyerPhoneVerified ? `${styles.buyerSignal} ${styles.buyerSignalVerified}` : `${styles.buyerSignal} ${styles.buyerSignalNeutral}`}>
-                {order.buyerPhoneVerified && <ShieldCheckIcon size={12} />}
-                {order.buyerPhoneVerified ? 'الهاتف موثّق' : 'الهاتف لم يتم توثيقه'}
+              <span className={order.buyerPhoneVerified === true ? `${styles.buyerSignal} ${styles.buyerSignalVerified}` : `${styles.buyerSignal} ${styles.buyerSignalNeutral}`}>
+                {order.buyerPhoneVerified === true && <ShieldCheckIcon size={12} />}
+                {order.buyerPhoneVerified === null
+                  ? 'تعذّر التحقق من حالة الهاتف مؤقتًا'
+                  : order.buyerPhoneVerified ? 'الهاتف موثّق' : 'الهاتف لم يتم توثيقه'}
               </span>
               <span className={styles.buyerSignalNeutral}>
-                {order.buyerCompletedOrders > 0
-                  ? `${order.buyerCompletedOrders.toLocaleString('ar-EG')} طلب مكتمل على EAH`
-                  : 'لا يوجد سجل طلبات مكتملة كافٍ بعد'}
+                {order.buyerCompletedOrders === null
+                  ? 'تعذّر تحميل سجل الطلبات مؤقتًا'
+                  : order.buyerCompletedOrders > 0
+                    ? `${order.buyerCompletedOrders.toLocaleString('ar-EG')} طلب مكتمل على EAH`
+                    : 'لا يوجد سجل طلبات مكتملة كافٍ بعد'}
               </span>
             </>
           )}
