@@ -71,9 +71,11 @@ jobs:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
 
     steps:
-      - name: Skip warning if no DB URL
+      - name: Require non-production database URL
         if: env.SUPABASE_DB_URL == ''
-        run: echo "::warning::SUPABASE_DB_URL not set — skipping RLS tests"
+        run: |
+          echo "::error::SUPABASE_DB_URL is required; RLS tests must not silently skip. Configure it as a GitHub Actions secret pointing to a dedicated non-production test database."
+          exit 1
 
       - name: Checkout
         if: env.SUPABASE_DB_URL != ''
