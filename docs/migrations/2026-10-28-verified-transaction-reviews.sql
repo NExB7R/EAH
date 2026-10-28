@@ -111,9 +111,16 @@ $function$;
 REVOKE ALL ON FUNCTION public.enforce_transaction_verified_review() FROM PUBLIC, anon, authenticated;
 
 DROP TRIGGER IF EXISTS trg_enforce_transaction_verified_review ON public.business_reviews;
+DROP TRIGGER IF EXISTS trg_enforce_transaction_verified_review_insert ON public.business_reviews;
+DROP TRIGGER IF EXISTS trg_enforce_transaction_verified_review_update ON public.business_reviews;
 
-CREATE TRIGGER trg_enforce_transaction_verified_review
-BEFORE INSERT OR UPDATE OF business_id, user_id, is_verified_transaction
+CREATE TRIGGER trg_enforce_transaction_verified_review_insert
+BEFORE INSERT ON public.business_reviews
+FOR EACH ROW
+EXECUTE FUNCTION public.enforce_transaction_verified_review();
+
+CREATE TRIGGER trg_enforce_transaction_verified_review_update
+BEFORE UPDATE OF business_id, user_id, is_verified_transaction
 ON public.business_reviews
 FOR EACH ROW
 EXECUTE FUNCTION public.enforce_transaction_verified_review();
