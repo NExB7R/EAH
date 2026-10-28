@@ -74,7 +74,7 @@ jobs:
 
   rls-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     defaults:
       run:
@@ -83,32 +83,51 @@ jobs:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
 
     steps:
-      - name: Require non-production database URL
-        if: env.SUPABASE_DB_URL == ''
+      - name: Require a dedicated non-production database
         run: |
-          echo "::error::SUPABASE_DB_URL is required; RLS tests must not silently skip. Configure it as a GitHub Actions secret pointing to a dedicated non-production test database."
-          exit 1
+          if [[ -z "$SUPABASE_DB_URL" ]]; then
+            echo "::error::SUPABASE_DB_URL is required; point it at a dedicated non-production test database."
+            exit 1
+          fi
+          if [[ "$SUPABASE_DB_URL" == *"npmpiivmdksdirrumbmt"* ]]; then
+            echo "::error::Refusing to mutate the EAH production database from CI."
+            exit 1
+          fi
 
       - name: Checkout
-        if: env.SUPABASE_DB_URL != ''
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
 
       - name: Setup Supabase CLI
-        if: env.SUPABASE_DB_URL != ''
         uses: supabase/setup-cli@v1
         with:
           version: latest
 
-      - name: Run RLS tests
-        if: env.SUPABASE_DB_URL != ''
+      - name: Setup PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Enable pgTAP on test database
+        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -c "CREATE EXTENSION IF NOT EXISTS pgtap WITH SCHEMA extensions"
+
+      - name: Apply reviewed migrations to test database only
+        working-directory: .
+        run: |
+          set -euo pipefail
+          for migration in \
+            docs/migrations/2026-10-29-admin-dashboard-rls-alignment.sql \
+            docs/migrations/2026-10-29-business-admin-access-policy.sql \
+            docs/migrations/2026-10-29-foreign-key-indexes.sql \
+            docs/migrations/2026-10-29-prelaunch-access-control.sql \
+            docs/migrations/2026-10-29-restore-rls-helper-execute.sql
+          do
+            echo "::group::Applying $migration to the isolated test database"
+            psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f "$migration"
+            echo "::endgroup::"
+          done
+
+      - name: Run RLS and admin policy regression tests
         run: supabase test db supabase/tests/rls.test.sql supabase/tests/reputation-policy.test.sql supabase/tests/admin-policy-alignment.test.sql --db-url "$SUPABASE_DB_URL"
 
-      - name: Setup PostgreSQL client
-        if: env.SUPABASE_DB_URL != ''
-        run: sudo apt-get install -y postgresql-client
-
       - name: RLS Audit (comprehensive)
-        if: env.SUPABASE_DB_URL != ''
-        run: psql "$SUPABASE_DB_URL" -f supabase/tests/rls-audit.sql
+        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/tests/rls-audit.sql
