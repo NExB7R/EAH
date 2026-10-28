@@ -17,9 +17,12 @@ type Props = {
 const ROLES = [
   { value: 'customer', label: 'المشتري' },
   { value: 'merchant', label: 'البايع' },
-  { value: 'admin', label: 'أدمن' },
-  { value: 'super_admin', label: 'سوبر أدمن' },
+  { value: 'admin', label: 'الأدمن' },
 ]
+
+function getRoleLabel(role: string): string {
+  return ROLES.find((item) => item.value === role)?.label ?? (role === 'super_admin' ? 'الأدمن' : role)
+}
 
 type Modal = 'ban' | 'role' | 'trust' | null
 
@@ -161,7 +164,7 @@ export default function UserDetailActions({
       {modal === 'role' && (
         <div className={styles.modalBackdrop} onClick={() => setModal(null)}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <h3 className={styles.modalTitle}>تغيير الدور (الحالي: {currentRole})</h3>
+            <h3 className={styles.modalTitle}>تغيير الدور (الحالي: {getRoleLabel(currentRole)})</h3>
             <div className={styles.roleGrid}>
               {ROLES.map((r) => (
                 <button
