@@ -15,6 +15,17 @@ const DAY_KEY_BY_WEEKDAY: Record<string, CairoDateParts['dayKey']> = {
   Sat: 'sat',
 }
 
+const CAIRO_DATE_FORMATTER = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Africa/Cairo',
+  weekday: 'short',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  hourCycle: 'h23',
+})
+
 /**
  * Convert a timestamp into the platform's business timezone.
  * Use the IANA timezone instead of a fixed UTC offset so daylight-saving
@@ -24,16 +35,7 @@ export function getCairoDateParts(value: string | Date): CairoDateParts | null {
   const date = value instanceof Date ? value : new Date(value)
   if (!Number.isFinite(date.getTime())) return null
 
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Africa/Cairo',
-    weekday: 'short',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  }).formatToParts(date)
+  const parts = CAIRO_DATE_FORMATTER.formatToParts(date)
 
   const values = new Map(parts.map((part) => [part.type, part.value]))
   const dayKey = DAY_KEY_BY_WEEKDAY[values.get('weekday') ?? '']
