@@ -13,7 +13,7 @@ SECURITY DEFINER
 SET search_path = public, pg_temp
 AS $function$
 BEGIN
-  IF auth.role() IN ('anon', 'authenticated') THEN
+  IF COALESCE(auth.jwt() ->> 'role', '') IN ('anon', 'authenticated') THEN
     NEW.status := 'sent';
     NEW.confirmed_at := NULL;
     NEW.confirmed_via := NULL;
@@ -44,6 +44,45 @@ EXECUTE FUNCTION public.guard_client_order_insert_state();
 
 COMMENT ON FUNCTION public.guard_client_order_insert_state() IS
   'EAH: order rows created through client JWTs always start as sent and cannot spoof delivery or feedback fields.';
+
+-- Keep reviewers from editing moderation/ownership outcomes through the self-update policy.
+-- They may edit their own text/dimensions, but only admins may change review state or moderation fields.
+CREATE OR REPLACE FUNCTION public.guard_review_moderation_fields()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, private, pg_temp
+AS $function$
+BEGIN
+  IF auth.uid() IS NOT NULL AND NOT private.is_admin(auth.uid()) THEN
+    IF NEW.status IS DISTINCT FROM OLD.status
+      OR NEW.flagged_reason IS DISTINCT FROM OLD.flagged_reason
+      OR NEW.moderated_by IS DISTINCT FROM OLD.moderated_by
+      OR NEW.moderated_at IS DISTINCT FROM OLD.moderated_at
+      OR NEW.review_quality_score IS DISTINCT FROM OLD.review_quality_score
+      OR NEW.merchant_reply IS DISTINCT FROM OLD.merchant_reply
+      OR NEW.merchant_reply_at IS DISTINCT FROM OLD.merchant_reply_at
+      OR NEW.merchant_reply_by IS DISTINCT FROM OLD.merchant_reply_by
+      OR NEW.is_verified_transaction IS DISTINCT FROM OLD.is_verified_transaction
+    THEN
+      RAISE EXCEPTION 'review_moderation_fields_are_server_managed'
+        USING ERRCODE = '42501';
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.guard_review_moderation_fields() FROM PUBLIC, anon, authenticated;
+
+DROP TRIGGER IF EXISTS a_guard_review_moderation_fields ON public.business_reviews;
+CREATE TRIGGER a_guard_review_moderation_fields
+BEFORE UPDATE ON public.business_reviews
+FOR EACH ROW
+EXECUTE FUNCTION public.guard_review_moderation_fields();
+
+COMMENT ON FUNCTION public.guard_review_moderation_fields() IS
+  'EAH: reviewer self-update cannot approve/reject/verify reviews or rewrite moderation/reply fields.';
 
 CREATE OR REPLACE FUNCTION public.enforce_transaction_verified_review()
 RETURNS trigger
