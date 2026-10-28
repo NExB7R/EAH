@@ -93,7 +93,7 @@ export async function changeUserRole(userId: string, role: string): Promise<Resu
   return { ok: true }
 }
 
-// ─── Adjust Trust ───
+// ─── Adjust internal participation points (legacy trust_score field) ───
 
 const trustSchema = z.object({
   delta: z.coerce.number().int().min(-100).max(100),

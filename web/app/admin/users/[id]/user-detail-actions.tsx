@@ -104,7 +104,7 @@ export default function UserDetailActions({
           disabled={pending}
           className={styles.btn}
         >
-          <StarIcon size={14} /> تعديل الثقة ({trustScore})
+          <StarIcon size={14} /> تعديل نقاط المشاركة ({trustScore})
         </button>
 
         <button
@@ -191,7 +191,7 @@ export default function UserDetailActions({
             onClick={(e) => e.stopPropagation()}
             onSubmit={handleTrust}
           >
-            <h3 className={styles.modalTitle}>تعديل الثقة (الحالي: {trustScore})</h3>
+            <h3 className={styles.modalTitle}>تعديل نقاط المشاركة (الحالي: {trustScore})</h3>
             <label className={styles.field}>
               <span className={styles.label}>الفرق (-100 إلى +100)</span>
               <input
