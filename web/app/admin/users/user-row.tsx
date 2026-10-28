@@ -30,7 +30,7 @@ const ROLE_LABEL: Record<string, string> = {
   super_admin: 'الأدمن',
 }
 
-const ROLES = ['customer', 'merchant', 'admin', 'super_admin'] as const
+const ROLES = ['customer', 'merchant', 'admin'] as const
 
 export default function UserRow({
   user: u,
