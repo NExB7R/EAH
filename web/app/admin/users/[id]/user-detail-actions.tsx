@@ -15,8 +15,8 @@ type Props = {
 }
 
 const ROLES = [
-  { value: 'customer', label: 'عميل' },
-  { value: 'merchant', label: 'تاجر' },
+  { value: 'customer', label: 'المشتري' },
+  { value: 'merchant', label: 'البايع' },
   { value: 'admin', label: 'أدمن' },
   { value: 'super_admin', label: 'سوبر أدمن' },
 ]
