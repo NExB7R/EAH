@@ -107,7 +107,12 @@ export async function banUser(userId: string, formData: FormData): Promise<Resul
     action: 'user.ban',
     entityType: 'profile',
     entityId: userId,
-    metadata: { days: parsed.data.days, reason: parsed.data.reason, banned_until: bannedUntil, target_role: target.role },
+    metadata: {
+      days: parsed.data.days,
+      reason: parsed.data.reason,
+      banned_until: bannedUntil,
+      target_role: target.role,
+    },
   })
 
   revalidatePath('/admin/users')
