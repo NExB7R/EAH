@@ -44,7 +44,7 @@ const CUSTOMER_TOPICS: Topic[] = [
   {
     Icon: WhatsAppIcon,
     title: 'اطلب على واتساب',
-    body: 'افتح صفحة النشاط واضغط "اطلب على واتساب" — رسالة جاهزة بتوصل للتاجر مباشرة، بدون وسيط.',
+    body: 'افتح صفحة النشاط واضغط "اطلب على واتساب" — رسالة جاهزة بتوصل للبايع مباشرة، بدون وسيط.',
   },
   {
     Icon: GiftIcon,
@@ -82,7 +82,7 @@ const MERCHANT_TOPICS: Topic[] = [
   {
     Icon: BellIcon,
     title: 'استقبل الطلبات',
-    body: 'العميل يكلمك واتساب مباشرة. أكّد الطلب خلال 10 دقايق (الافتراضي).',
+    body: 'المشتري يكلمك واتساب مباشرة. أكّد الطلب خلال 10 دقايق (الافتراضي).',
     link: { href: '/merchant/orders', label: 'شوف الطلبات' },
   },
   {
@@ -188,7 +188,7 @@ export default async function HelpPage() {
           <details className={styles.faqItem}>
             <summary>هل EAH مجانية؟</summary>
             <p>
-              أيوه — 100% مجانية للعميل. وبدون عمولة على التاجر. الربح من باقات اختيارية + إعلانات.
+              أيوه — 100% مجانية للمشتري. وبدون عمولة على البايع. الربح من باقات اختيارية + إعلانات.
             </p>
           </details>
           <details className={styles.faqItem}>
