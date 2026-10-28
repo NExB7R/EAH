@@ -123,7 +123,35 @@ export async function POST(req: NextRequest) {
       }
       if (existing) return NextResponse.json({ ok: true, skipped: 'already_reviewed' })
 
-      const quality = reviewQualityScore(payload.comment, false)
+      // Offline review sync must enforce the same delivered-order requirement as online review.
+      const { data: deliveredOrder, error: orderLookupError } = await supabase
+        .from('order_requests')
+        .select('id')
+        .eq('business_id', payload.businessId)
+        .eq('customer_profile_id', user.id)
+        .eq('status', 'delivered')
+        .limit(1)
+        .maybeSingle()
+
+      if (orderLookupError) {
+        console.error('[offline/flush] delivered order lookup failed:', orderLookupError.message)
+        return NextResponse.json(
+          { error: 'تعذر التحقق من الطلب المكتمل', code: 'review_verification_unavailable' },
+          { status: 503, headers: { 'Retry-After': '30' } },
+        )
+      }
+      if (!deliveredOrder) {
+        return NextResponse.json(
+          {
+            error: 'لم يتم حفظ التقييم لأنه لا يوجد طلب مكتمل مرتبط بهذا النشاط.',
+            code: 'review_requires_delivered_order',
+            discard: true,
+          },
+          { status: 409 },
+        )
+      }
+
+      const quality = reviewQualityScore(payload.comment, true)
       const { error } = await supabase.from('business_reviews').insert({
         business_id: payload.businessId,
         user_id: user.id,

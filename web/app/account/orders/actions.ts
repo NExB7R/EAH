@@ -10,8 +10,8 @@ import { FEEDBACK_ISSUE_TYPES } from '@/lib/data/orders'
 // - Idempotent (1 rating per order)
 // - Gated by feedback_due_at
 // - Inserts audit reaction
-// - Business rating aggregate updated by DB trigger
-//   (trg_update_business_rating — see docs/migrations/2026-10-23-business-rating-trigger.sql)
+// - Stored as private operational feedback on this order.
+// - Public activity stars are aggregated only from approved, transaction-verified business_reviews.
 // ═══════════════════════════════════════════════════════════════════
 
 type Result = { ok: true } | { ok: false; error: string }

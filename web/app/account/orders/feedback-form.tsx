@@ -84,12 +84,12 @@ export default function FeedbackForm({ orderId, businessName }: Props) {
                   <CheckCircleIcon size={36} />
                 </span>
                 <h3 className={styles.successTitle}>شكراً!</h3>
-                <p className={styles.successText}>تقييمك يساعد {businessName} والناس</p>
+                <p className={styles.successText}>تقييمك بيساعدنا نتابع جودة تنفيذ الطلب ونحل أي مشكلة.</p>
               </div>
             ) : (
               <>
                 <h3 className={styles.title}>قيّم طلبك من {businessName}</h3>
-                <p className={styles.subtitle}>رأيك يساعدنا نحسّن الخدمة</p>
+                <p className={styles.subtitle}>التقييم ده خاص بتجربة الطلب، ومش بيغيّر نجوم النشاط العامة.</p>
 
                 {/* Stars */}
                 <div className={styles.stars} role="radiogroup" aria-label="تقييم">

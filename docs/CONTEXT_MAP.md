@@ -179,7 +179,7 @@
 | `sw-register.tsx` | SwRegister | EAH — Service Worker Registration + Queue Flusher |
 | `trending-row.tsx` | TrendingRow | EAH — Trending Row (Home — Single Row Carousel) |
 | `reputation.ts` | getBusinessReputationScore | دليل السمعة العام من التوثيق/التقييم/الطلبات المكتملة فقط |
-| `trust-card.tsx` | TrustCard | EAH — Participation Points (المصداقية) |
+| `trust-card.tsx` | TrustCard | EAH — Participation Points (نقاط المشاركة) |
 | `voice-search-button.tsx` | VoiceSearchButton | لو موجود → يستخدم callback بدل النقل لـ /explore |
 | `voice-search.tsx` | VoiceSearch | EAH — Voice Search Modal |
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |

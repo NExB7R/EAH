@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { WifiOffIcon, RefreshIcon } from './icons'
+import { WifiOffIcon, RefreshIcon, AlertIcon } from './icons'
 import { useOnlineStatus } from '@/lib/hooks/use-online-status'
 import { getPending, flushQueue } from '@/lib/offline/queue'
 import styles from './offline-badge.module.css'
@@ -15,6 +15,7 @@ export default function OfflineBadge() {
   const online = useOnlineStatus()
   const [pending, setPending] = useState(0)
   const [flushing, setFlushing] = useState(false)
+  const [notice, setNotice] = useState<string | null>(null)
 
   useEffect(() => {
     const check = async () => {
@@ -26,7 +27,7 @@ export default function OfflineBadge() {
     return () => clearInterval(t)
   }, [online])
 
-  if (online && pending === 0) return null
+  if (online && pending === 0 && !notice) return null
 
   const handleRetry = async () => {
     setFlushing(true)
@@ -34,6 +35,11 @@ export default function OfflineBadge() {
     setFlushing(false)
     const p = await getPending()
     setPending(p.length)
+    if (res.discarded > 0) {
+      setNotice('اتشال تقييم من المزامنة لأنه لا يوجد طلب مكتمل مرتبط به. تقدر تعيد التقييم بعد اكتمال الطلب.')
+    } else {
+      setNotice(null)
+    }
     if (res.flushed > 0) {
       // اختفى تلقائياً لو النجاح
     }
@@ -42,16 +48,17 @@ export default function OfflineBadge() {
   return (
     <div className={styles.bar} role="status" aria-live="polite">
       <span className={styles.icon}>
-        <WifiOffIcon size={14} />
+        {notice ? <AlertIcon size={14} /> : <WifiOffIcon size={14} />}
       </span>
       <span className={styles.text}>
-        {!online && pending > 0 && (
+        {notice && notice}
+        {!notice && !online && pending > 0 && (
           <>
             أنت offline — <strong>{pending}</strong> عملية هتتبعت لما النت يرجع
           </>
         )}
-        {!online && pending === 0 && <>أنت offline — تقدر تتصفح المخزن</>}
-        {online && pending > 0 && (
+        {!notice && !online && pending === 0 && <>أنت offline — تقدر تتصفح المخزن</>}
+        {!notice && online && pending > 0 && (
           <>
             في <strong>{pending}</strong> عملية في الانتظار
           </>
