@@ -36,6 +36,7 @@
 
 | ORDER-MESSAGE-LOCK-01 | IMPLEMENTED — VERIFY | Trigger قفل رسالة واتساب كان يشير إلى العمود المحذوف `whatsapp_url`، ما كان يجعل أي UPDATE للطلب يفشل. | استبدال المرجع بـ `whatsapp_message` وتثبيت الرسالة وتوقيتها بعد القفل؛ اختبر انتقال الطلبات وتعديل الرسالة بعد القفل داخل rollback. |
 
+| ORDER-STATUS-CONSTRAINT-01 | FIXED — VERIFY | قيد `order_requests_status_check` كان يرفض الحالتين `preparing` و`on_way` المستخدمتين في لوحة البايع، فيتوقف سير الطلب بعد القبول. | توحيد قيد قاعدة البيانات مع الـ state machine في الكود وإعادة اختبار انتقالات الحالات من sent إلى delivered. |
 ### قاعدة التحقق
 `FIXED — VERIFY` تعني أن الكود تغيّر، وليست إثباتًا أن المشكلة انتهت على النشر. لا تنتقل إلى `VERIFIED` إلا مع رابط Build/Preview ونتيجة اختبار قابلة لإعادة التنفيذ.
 
