@@ -39,7 +39,7 @@ const PHASES: {
       { title: 'الحساب الكامل', body: 'نقاط، ولاء، دعوات، إشعارات', status: 'done' },
       { title: 'لوحة التاجر', body: 'إحصائيات، تقارير، QR', status: 'done' },
       { title: 'لوحة الأدمن', body: 'إدارة كاملة، مراجعة، إشعارات', status: 'done' },
-      { title: 'نظام التقييمات', body: 'تقييم + رد + مصداقية', status: 'done' },
+      { title: 'نظام التقييمات', body: 'تقييمات مرتبطة بطلب مكتمل + رد البايع + سمعة مبنية على الأدلة', status: 'done' },
       { title: 'Push Notifications', body: 'إشعارات فورية للمتصفح', status: 'done' },
     ],
   },
