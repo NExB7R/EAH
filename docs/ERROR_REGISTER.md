@@ -37,6 +37,11 @@
 | ORDER-MESSAGE-LOCK-01 | IMPLEMENTED — VERIFY | Trigger قفل رسالة واتساب كان يشير إلى العمود المحذوف `whatsapp_url`، ما كان يجعل أي UPDATE للطلب يفشل. | استبدال المرجع بـ `whatsapp_message` وتثبيت الرسالة وتوقيتها بعد القفل؛ اختبر انتقال الطلبات وتعديل الرسالة بعد القفل داخل rollback. |
 
 | ORDER-STATUS-CONSTRAINT-01 | FIXED — VERIFY | قيد `order_requests_status_check` كان يرفض الحالتين `preparing` و`on_way` المستخدمتين في لوحة البايع، فيتوقف سير الطلب بعد القبول. | توحيد قيد قاعدة البيانات مع الـ state machine في الكود وإعادة اختبار انتقالات الحالات من sent إلى delivered. |
+| REPORT-PENDING-01 | FIXED — VERIFY | بلاغ غير محقق كان يرفع wanted_level بمجرد الإدخال، ثم يعاد حسابه من عدد البلاغات المعلقة؛ كده اتهام غير مثبت يتحول إلى إشارة خطر. | فصل مستوى الحسابات المتعددة عن مستوى البلاغات، وعدم تغيير مستوى البلاغ حتى يقرر الأدمن `resolved` مع سبب مكتوب. اختبار pending/reviewing/dismissed = لا تغيير، وresolved فقط يحتسب. |
+| REPORT-DUPLICATE-01 | FIXED — VERIFY | التطبيق كان يمنع تكرار البلاغ المعلق فقط؛ يمكن إعادة البلاغ نفسه بعد حله/رفضه لرفع المؤشر. | فحص البلاغ السابق في الخادم وفهرس unique على reporter/entity؛ اختبر إدخالين متزامنين وبلاغًا مكررًا بعد الإغلاق. |
+| MULTI-ACCOUNT-EVENT-01 | FIXED — VERIFY | كشف الحسابات المتعددة كان يكتب entity_type=`user` في trust_events بينما القيد يقبل `customer` و`business` فقط. | تحديث الدالة إلى `customer` وفصل multi_account_level عن إشارات البلاغات؛ اختبر التسجيل المتكرر داخل بيئة اختبار. |
+| REPORT-DECISION-01 | IMPLEMENTED — VERIFY | إغلاق البلاغات لم يكن يتطلب سببًا موثقًا، ولم يتم تسجيل `reviewed_by/reviewed_at` في إجراء الأدمن. | يشترط سببًا عند `resolved/dismissed` ويسجل القرار والمشرف والوقت؛ يلزم اختبار واجهة الأدمن وحالات التزامن. |
+
 ### قاعدة التحقق
 `FIXED — VERIFY` تعني أن الكود تغيّر، وليست إثباتًا أن المشكلة انتهت على النشر. لا تنتقل إلى `VERIFIED` إلا مع رابط Build/Preview ونتيجة اختبار قابلة لإعادة التنفيذ.
 

@@ -49,7 +49,7 @@ export default async function FraudView() {
           <div className={styles.cardValue}>{stats.flagged}</div>
         </div>
         <div className={`${styles.card} ${stats.wanted > 0 ? styles.cardWarn : ''}`}>
-          <div className={styles.cardLabel}>مستخدمون مُبلَّغ عنهم</div>
+          <div className={styles.cardLabel}>إشارات مخاطر داخلية</div>
           <div className={styles.cardValue}>{stats.wanted}</div>
         </div>
         <div className={`${styles.card} ${stats.banned > 0 ? styles.cardDanger : ''}`}>
@@ -96,12 +96,12 @@ export default async function FraudView() {
 
       {/* Wanted Users */}
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>مستخدمون مُبلَّغ عنهم</h2>
+        <h2 className={styles.sectionTitle}>إشارات مخاطر داخلية</h2>
         {flaggedUsers.length === 0 ? (
           <EmptyState
             Icon={UserIcon}
-            title="مفيش مستخدمين مبلَّغ عنهم"
-            description="الجميع ملتزمون."
+            title="مفيش إشارات مخاطر داخلية"
+            description="مفيش إشارة داخلية مسجلة حاليًا. البلاغات غير المحققة لا تُحتسب."
           />
         ) : (
           <ul className={styles.list}>
@@ -120,7 +120,9 @@ export default async function FraudView() {
                     <div className={styles.userRow}>
                       <span className={styles.userName}>{u.display_name}</span>
                       <span className={styles.userMeta}>نقاط المشاركة: {u.trust_score}</span>
-                      {u.phone && <span className={styles.userMeta}>· {u.phone}</span>}
+                      <span className={styles.userMeta}>بلاغات مثبتة: {u.report_wanted_level}</span>
+                      <span className={styles.userMeta}>إشارة حسابات متعددة: {u.multi_account_level}</span>
+                      {u.phone && <span className={styles.userMeta}>· {u.phone}</span>
                     </div>
                   </div>
                 </li>

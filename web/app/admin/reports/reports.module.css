@@ -269,3 +269,31 @@
     gap: 8px;
   }
 }
+
+
+.adminNoteInput {
+  flex: 1 1 100%;
+  width: 100%;
+  min-width: 0;
+  resize: vertical;
+  padding: 9px 10px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+.adminNoteInput:focus-visible {
+  outline: 2px solid var(--purple-primary);
+  outline-offset: 2px;
+}
+.adminDecision {
+  max-width: 100%;
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.6;
+}

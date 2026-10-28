@@ -32,6 +32,8 @@ export type FlaggedUser = {
   display_name: string
   phone: string | null
   wanted_level: number
+  report_wanted_level: number
+  multi_account_level: number
   trust_score: number
   banned_until: string | null
 }
@@ -71,7 +73,7 @@ export async function getFlaggedUsers(limit = 30): Promise<FlaggedUser[]> {
   const supabase = createServiceClient()
   const { data } = await supabase
     .from('profiles')
-    .select('id, display_name, phone, wanted_level, trust_score, banned_until')
+    .select('id, display_name, phone, wanted_level, report_wanted_level, multi_account_level, trust_score, banned_until')
     .gt('wanted_level', 0)
     .order('wanted_level', { ascending: false })
     .order('display_name', { ascending: true })

@@ -2,6 +2,7 @@
 
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { strictLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 // ═══════════════════════════════════════════════════════════
@@ -50,19 +51,29 @@ export async function submitReport(formData: FormData): Promise<Result> {
 
   const d = parsed.data
 
-  // مفيش بلاغ مكرر من نفس المستخدم
-  const { data: existing } = await supabase
-    .from('reports')
-    .select('id')
-    .eq('reporter_id', user.id)
-    .eq('entity_type', d.entityType)
-    .eq('entity_id', d.entityId)
-    .eq('status', 'pending')
-    .maybeSingle()
+  // Verify the polymorphic target exists before inserting a report.
+  const service = createServiceClient()
+  let targetExists = false
 
-  if (existing) return { ok: false, error: 'عندك بلاغ معلّق على المحتوى ده' }
+  if (d.entityType === 'business') {
+    const { data } = await service.from('businesses').select('id').eq('id', d.entityId).eq('is_published', true).maybeSingle()
+    targetExists = !!data
+  } else if (d.entityType === 'review') {
+    const { data } = await service.from('business_reviews').select('id, user_id').eq('id', d.entityId).eq('status', 'approved').maybeSingle()
+    if (data?.user_id === user.id) return { ok: false, error: 'مش ممكن تبلّغ عن تقييمك أنت' }
+    targetExists = !!data
+  } else {
+    const { data } = await service.from('profiles').select('id').eq('id', d.entityId).maybeSingle()
+    targetExists = !!data
+  }
 
-  // ممنوع يبلّغ نفسه
+  if (!targetExists) return { ok: false, error: 'المحتوى اللي بتحاول تبلغ عنه مش متاح' }
+
+  // One report per reporter and entity; the DB unique index also protects against concurrent submissions.
+  const { data: existing } = await supabase.from('reports').select('id').eq('reporter_id', user.id)
+    .eq('entity_type', d.entityType).eq('entity_id', d.entityId).maybeSingle()
+  if (existing) return { ok: false, error: 'سبق وقدّمت بلاغ على المحتوى ده' }
+
   if (d.entityType === 'user' && d.entityId === user.id) {
     return { ok: false, error: 'مش ممكن تبلّغ عن نفسك' }
   }
@@ -76,7 +87,11 @@ export async function submitReport(formData: FormData): Promise<Result> {
     status: 'pending',
   })
 
-  if (error) return { ok: false, error: error.message }
+  if (error) {
+    if (error.code === '23505') return { ok: false, error: 'سبق وقدّمت بلاغ على المحتوى ده' }
+    console.error('[report] insert failed:', error.message)
+    return { ok: false, error: 'تعذر إرسال البلاغ الآن. حاول مرة أخرى.' }
+  }
 
   return { ok: true }
 }

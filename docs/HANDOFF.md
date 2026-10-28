@@ -15,7 +15,7 @@
 - **الستيكر:** من قلب شبين القناطر
 
 **الفكرة:** كل حاجة محلية في مكان واحد — مطاعم، صيدليات، توصيل، وأي خدمة.
-- **للعميل:** مجاني 100%
+- **للمشتري:** مجاني 100%
 - **للتاجر:** بدون عمولة على الطلبات
 - **الربح:** باقات + إعلانات + مميز + توثيق (اختياري)
 
@@ -36,7 +36,7 @@
 - Core كامل (Auth + Supabase + Design + PWA)
 - Home + Explore + Featured + Trends + Offers + Nearby + Suggest + بدايات
 - Account كامل (12 صفحة) + Merchant (11 صفحة) + Admin (19 صفحة)
-- Trust System 2.0 (5 مستويات)
+- نقاط مشاركة داخلية منفصلة عن سمعة البايع وتوثيق النشاط
 - Badge System (18 شارة)
 - Fraud Detection كامل
 - Referral System
@@ -176,7 +176,7 @@
 - BranchList — كل فرع بمسافته + الأقرب ليك تلقائية
 - Cache: localStorage — ساعة
 
-**القاعدة:** كل بطاقة نشاط = Trust + Distance
+**القاعدة:** كل بطاقة نشاط = أدلة سمعة منفصلة + المسافة
 
 ---
 
@@ -224,8 +224,9 @@
 
 ## 10. الفحص المكتمل
 
-**Trust System:** 5 دوال + triggers + UI كامل
-**Fraud Detection:** wanted_level internal + multi-account + rate limit
+**نقاط المشاركة:** نظام داخلي فقط؛ ليست درجة موثوقية عامة.
+**السمعة:** توثيق إداري + تقييم وعدده + طلبات مكتملة، دون عقوبة تلقائية على البلاغات غير المحققة.
+**إشارات المخاطر:** multi_account_level منفصل عن report_wanted_level؛ pending/reviewing/dismissed لا تُعاقب المشتبه به.
 **Health Monitor:** system_errors + error logging + cron
 
 **كل الفحوصات:**

@@ -133,7 +133,129 @@ ALTER TABLE public.order_requests
     'preparing'::text, 'on_way'::text, 'delivered'::text, 'cancelled'::text
   ]));
 
-CREATE OR REPLACE FUNCTION public.guard_order_update_state()
+-- Keep internal risk signals separate: a pending accusation is not evidence.
+DO $migration$
+DECLARE had_multi_account_level boolean; had_report_wanted_level boolean;
+BEGIN
+  SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='profiles' AND column_name='multi_account_level') INTO had_multi_account_level;
+  IF NOT had_multi_account_level THEN
+    ALTER TABLE public.profiles ADD COLUMN multi_account_level integer NOT NULL DEFAULT 0;
+    -- Reports had no rows during this rollout; preserve prior private flags as multi-account signals.
+    UPDATE public.profiles SET multi_account_level = GREATEST(0, LEAST(5, COALESCE(wanted_level, 0)));
+  END IF;
+  SELECT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='profiles' AND column_name='report_wanted_level') INTO had_report_wanted_level;
+  IF NOT had_report_wanted_level THEN
+    ALTER TABLE public.profiles ADD COLUMN report_wanted_level integer NOT NULL DEFAULT 0;
+  END IF;
+END;
+$migration$;
+
+DO $constraints$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.profiles'::regclass AND conname='profiles_multi_account_level_check') THEN
+    ALTER TABLE public.profiles ADD CONSTRAINT profiles_multi_account_level_check CHECK (multi_account_level BETWEEN 0 AND 5);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conrelid='public.profiles'::regclass AND conname='profiles_report_wanted_level_check') THEN
+    ALTER TABLE public.profiles ADD CONSTRAINT profiles_report_wanted_level_check CHECK (report_wanted_level BETWEEN 0 AND 5);
+  END IF;
+END;
+$constraints$;
+
+UPDATE public.profiles
+SET wanted_level = GREATEST(COALESCE(multi_account_level, 0), COALESCE(report_wanted_level, 0))
+WHERE wanted_level IS DISTINCT FROM GREATEST(COALESCE(multi_account_level, 0), COALESCE(report_wanted_level, 0));
+
+-- Inserting a report only creates a review queue item; it has no risk-score effect.
+CREATE OR REPLACE FUNCTION public.apply_wanted_level_on_report()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+AS $function$
+BEGIN RETURN NEW; END;
+$function$;
+REVOKE ALL ON FUNCTION public.apply_wanted_level_on_report() FROM PUBLIC, anon, authenticated;
+
+-- Only reports that an admin marks resolved contribute to the internal report risk component.
+CREATE OR REPLACE FUNCTION public.recalc_wanted_level_on_resolve()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+AS $function$
+DECLARE v_target_user_id uuid; v_resolved_count integer; v_new_report_level integer;
+BEGIN
+  IF TG_OP <> 'UPDATE' OR OLD.status IS NOT DISTINCT FROM NEW.status THEN RETURN NEW; END IF;
+  IF NEW.entity_type = 'user' THEN
+    v_target_user_id := NEW.entity_id;
+  ELSIF NEW.entity_type = 'review' THEN
+    SELECT user_id INTO v_target_user_id FROM public.business_reviews WHERE id = NEW.entity_id;
+  ELSIF NEW.entity_type = 'business' THEN
+    SELECT owner_profile_id INTO v_target_user_id FROM public.businesses WHERE id = NEW.entity_id;
+  END IF;
+  IF v_target_user_id IS NULL THEN RETURN NEW; END IF;
+
+  SELECT COUNT(*) INTO v_resolved_count
+  FROM public.reports r
+  WHERE r.status = 'resolved'
+    AND (
+      (r.entity_type = 'user' AND r.entity_id = v_target_user_id)
+      OR (r.entity_type = 'review' AND r.entity_id IN (SELECT id FROM public.business_reviews WHERE user_id = v_target_user_id))
+      OR (r.entity_type = 'business' AND r.entity_id IN (SELECT id FROM public.businesses WHERE owner_profile_id = v_target_user_id))
+    );
+  v_new_report_level := CASE
+    WHEN v_resolved_count >= 12 THEN 5 WHEN v_resolved_count >= 8 THEN 4
+    WHEN v_resolved_count >= 5 THEN 3 WHEN v_resolved_count >= 3 THEN 2
+    WHEN v_resolved_count >= 1 THEN 1 ELSE 0 END;
+
+  UPDATE public.profiles
+  SET report_wanted_level = v_new_report_level,
+      wanted_level = GREATEST(COALESCE(multi_account_level, 0), v_new_report_level),
+      updated_at = now()
+  WHERE id = v_target_user_id;
+  RETURN NEW;
+END;
+$function$;
+REVOKE ALL ON FUNCTION public.recalc_wanted_level_on_resolve() FROM PUBLIC, anon, authenticated;
+
+-- Preserve multi-account detection separately and use the valid trust_events entity value.
+CREATE OR REPLACE FUNCTION public.detect_multi_account_signup()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp
+AS $function$
+DECLARE v_count integer;
+BEGIN
+  IF NEW.signup_ip_hash IS NULL THEN RETURN NEW; END IF;
+  SELECT public.count_accounts_from_ip(NEW.signup_ip_hash, 7) INTO v_count;
+  IF v_count >= 3 THEN
+    UPDATE public.profiles
+    SET multi_account_level = GREATEST(COALESCE(multi_account_level, 0), 2),
+        wanted_level = GREATEST(COALESCE(report_wanted_level, 0), COALESCE(multi_account_level, 0), 2),
+        updated_at = now()
+    WHERE id = NEW.id;
+    INSERT INTO public.trust_events (entity_type, entity_id, event_type, delta, score_before, score_after, metadata)
+    VALUES ('customer', NEW.id, 'multi_account_detected', 0, 0, 0,
+      jsonb_build_object('ip_hash_prefix', left(NEW.signup_ip_hash, 8), 'count_7d', v_count));
+  END IF;
+  RETURN NEW;
+END;
+$function$;
+REVOKE ALL ON FUNCTION public.detect_multi_account_signup() FROM PUBLIC, anon, authenticated;
+
+CREATE UNIQUE INDEX IF NOT EXISTS reports_reporter_entity_unique
+ON public.reports (reporter_id, entity_type, entity_id);
+
+CREATE OR REPLACE FUNCTION public.on_order_confirmed()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public
+AS $function$
+BEGIN
+  IF TG_OP <> 'UPDATE' THEN RETURN NEW; END IF;
+  IF NEW.status = 'delivered' AND OLD.status IS DISTINCT FROM 'delivered' THEN
+    IF NEW.customer_profile_id IS NOT NULL THEN
+      PERFORM public.award_trust_points('user', NEW.customer_profile_id, 'order_completed', 8, jsonb_build_object('order_id', NEW.id));
+    END IF;
+    PERFORM public.award_trust_points('business', NEW.business_id, 'order_completed', 8, jsonb_build_object('order_id', NEW.id));
+  END IF;
+  -- Rejection alone is not a penalty signal: stock, hours, duplicate orders and customer changes matter.
+  RETURN NEW;
+END;
+$function$;
+REVOKE ALL ON FUNCTION public.on_order_confirmed() FROM PUBLIC, anon, authenticated;
+
+CREATE OR REPLACE FUNCTION public.guard_order_update_state()CREATE OR REPLACE FUNCTION public.guard_order_update_state()CREATE OR REPLACE FUNCTION public.guard_order_update_state()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER
 SET search_path = public, private, pg_temp
 AS $function$
