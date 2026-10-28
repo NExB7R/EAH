@@ -146,7 +146,10 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
       return
     }
     for (let i = step; i < index; i++) {
-      if (!validateStep(i)) return
+      if (!validateStep(i)) {
+        setStep(i)
+        return
+      }
     }
     setStep(index)
   }
