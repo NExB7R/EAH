@@ -160,8 +160,12 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
   }
 
   const submit = async () => {
-    if (!validateStep(0) || !validateStep(1)) {
+    if (!validateStep(0)) {
       setStep(0)
+      return
+    }
+    if (!validateStep(1)) {
+      setStep(1)
       return
     }
     setSubmitting(true)
