@@ -4,6 +4,96 @@
 -- No existing review rows were found during the 2026-10-28 schema audit, but this migration
 -- deliberately does not rewrite or delete review history.
 
+-- Fix a legacy mismatch: award_trust_points accepted "user" but trust_events only
+-- stores "customer" or "business". Map the event type without changing profiles APIs.
+CREATE OR REPLACE FUNCTION public.award_trust_points(
+  p_entity_type text,
+  p_entity_id uuid,
+  p_event_type text,
+  p_delta integer,
+  p_metadata jsonb DEFAULT '{}'::jsonb
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $function$
+DECLARE
+  v_current integer;
+  v_factor numeric;
+  v_effective integer;
+  v_new integer;
+  v_tier text;
+  v_legend integer;
+  v_legend_delta integer := 0;
+BEGIN
+  IF p_entity_type = 'user' THEN
+    SELECT trust_score, legend_points INTO v_current, v_legend
+    FROM public.profiles WHERE id = p_entity_id;
+  ELSIF p_entity_type = 'business' THEN
+    SELECT trust_score, legend_points INTO v_current, v_legend
+    FROM public.businesses WHERE id = p_entity_id;
+  ELSE
+    RAISE EXCEPTION 'invalid entity_type: %', p_entity_type;
+  END IF;
+
+  v_current := COALESCE(v_current, 50);
+  v_legend := COALESCE(v_legend, 0);
+
+  IF p_delta > 0 THEN
+    v_factor := CASE
+      WHEN v_current < 30 THEN 1.5
+      WHEN v_current < 50 THEN 1.0
+      WHEN v_current < 70 THEN 0.7
+      WHEN v_current < 85 THEN 0.4
+      WHEN v_current < 95 THEN 0.2
+      ELSE 0.1
+    END;
+  ELSE
+    v_factor := 1.0;
+  END IF;
+
+  v_effective := ROUND(p_delta * v_factor);
+  v_new := GREATEST(0, LEAST(100, v_current + v_effective));
+
+  IF v_current >= 100 AND p_delta > 0 THEN
+    v_legend_delta := p_delta;
+    v_new := 100;
+  END IF;
+
+  v_legend := v_legend + v_legend_delta;
+  v_tier := public.get_trust_tier(v_new);
+
+  IF p_entity_type = 'user' THEN
+    UPDATE public.profiles
+    SET trust_score = v_new, trust_tier = v_tier,
+        legend_points = v_legend, trust_updated_at = now()
+    WHERE id = p_entity_id;
+  ELSE
+    UPDATE public.businesses
+    SET trust_score = v_new, trust_tier = v_tier,
+        legend_points = v_legend, trust_updated_at = now()
+    WHERE id = p_entity_id;
+  END IF;
+
+  INSERT INTO public.trust_events (
+    entity_type, entity_id, event_type, delta, score_before, score_after, metadata
+  ) VALUES (
+    CASE WHEN p_entity_type = 'user' THEN 'customer' ELSE 'business' END,
+    p_entity_id, p_event_type, v_effective, v_current, v_new, p_metadata
+  );
+
+  RETURN jsonb_build_object(
+    'before', v_current,
+    'delta_raw', p_delta,
+    'delta_effective', v_effective,
+    'after', v_new,
+    'tier', v_tier,
+    'legend', v_legend
+  );
+END;
+$function$;
+
 -- A client-created order must never be born as delivered or with fabricated feedback.
 -- Seller-side status transitions remain governed by order_requests RLS.
 CREATE OR REPLACE FUNCTION public.guard_client_order_insert_state()
