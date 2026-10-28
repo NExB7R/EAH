@@ -44,8 +44,6 @@ export type BusinessMetrics = {
   followsCount: number
 
   // معلومات أساسية
-  trustScore: number
-  trustTier: string
   isVerified: boolean
   hasWhatsapp: boolean
   hasPhone: boolean
@@ -119,7 +117,7 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
     supabase
       .from('businesses')
       .select(
-        'trust_score, trust_tier, accepts_whatsapp_orders, offers_count, rating_avg, rating_count',
+        'is_verified, accepts_whatsapp_orders, offers_count, rating_avg, rating_count',
       )
       .eq('id', businessId)
       .single(),
@@ -361,9 +359,7 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
     favoritesCount: favoritesCount ?? 0,
     followsCount: followsCount ?? 0,
 
-    trustScore: business?.trust_score ?? 50,
-    trustTier: business?.trust_tier ?? 'fel',
-    isVerified: business?.trust_tier === 'harif' || business?.trust_tier === 'ostora',
+    isVerified: business?.is_verified === true,
     hasWhatsapp: business?.accepts_whatsapp_orders ?? false,
     hasPhone: true,
     hasMenu: mediaTotal > 0,

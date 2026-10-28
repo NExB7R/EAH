@@ -178,7 +178,8 @@
 | `support-widget.tsx` | SupportWidget | EAH — Support Widget (Inline — للـ /help) |
 | `sw-register.tsx` | SwRegister | EAH — Service Worker Registration + Queue Flusher |
 | `trending-row.tsx` | TrendingRow | EAH — Trending Row (Home — Single Row Carousel) |
-| `trust-card.tsx` | TrustCard | EAH — Trust Card (المصداقية) |
+| `reputation.ts` | getBusinessReputationScore | دليل السمعة العام من التوثيق/التقييم/الطلبات المكتملة فقط |
+| `trust-card.tsx` | TrustCard | EAH — Participation Points (المصداقية) |
 | `voice-search-button.tsx` | VoiceSearchButton | لو موجود → يستخدم callback بدل النقل لـ /explore |
 | `voice-search.tsx` | VoiceSearch | EAH — Voice Search Modal |
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |

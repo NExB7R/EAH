@@ -1,9 +1,8 @@
 import Image from 'next/image'
 import DetailCover from './detail-cover'
-import { StarIcon, BadgeCheckIcon, ShieldCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
+import { StarIcon, BadgeCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
 import DistanceBadge from './distance-badge'
 import type { BusinessDetail } from '@/lib/data/business-detail'
-import { TIER_LABEL } from '@/lib/data/business-detail'
 import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import styles from './business-hero.module.css'
 
@@ -12,19 +11,9 @@ type Props = {
   isOpen: boolean
 }
 
-const TIER_TONE: Record<string, 'teal' | 'gold' | 'purple'> = {
-  bade2: 'purple',
-  mashey: 'teal',
-  fel: 'purple',
-  harif: 'gold',
-  ostora: 'gold',
-}
-
 export default function BusinessHero({ detail, isOpen }: Props) {
   const { business, cover, logo } = detail
   const typeLabel = getBusinessTypeLabel(business)
-  const tierLabel = TIER_LABEL[business.trust_tier] ?? null
-  const tierTone = TIER_TONE[business.trust_tier] ?? 'purple'
 
   const hasRating = business.rating_count > 0
   const ratingValue = hasRating ? business.rating_avg.toFixed(1) : null
@@ -67,9 +56,9 @@ export default function BusinessHero({ detail, isOpen }: Props) {
           <div className={styles.titleRow}>
             <h1 className={styles.name}>{business.name}</h1>
             {business.is_verified && (
-              <span className={styles.verified} title="نشاط موثّق">
+              <span className={styles.verified} title="تحققت إدارة EAH من بيانات النشاط">
                 <BadgeCheckIcon size={15} />
-                موثّق
+                موثّق من الإدارة
               </span>
             )}
           </div>
@@ -99,17 +88,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
             )}
           </div>
 
-          <div className={styles.badges}>
-            {tierLabel && (
-              <span className={`${styles.tier} ${styles['tier_' + tierTone]}`}>
-                <ShieldCheckIcon size={12} />
-                {tierLabel}
-              </span>
-            )}
-            {business.trust_score > 0 && (
-              <span className={styles.trust}>مصداقية {business.trust_score}</span>
-            )}
-          </div>
+
 
           {/* Rating + Stats */}
           <div className={styles.stats}>

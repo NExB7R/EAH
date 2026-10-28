@@ -37,7 +37,7 @@ export default function OverviewPanel({ biz }: { biz: AdminBusiness }) {
       )}
 
       <section className={styles.overviewStats}>
-        <StatCard icon={ShieldCheckIcon} label="المصداقية" value={biz.trust_score} tone="teal" />
+        <StatCard icon={ShieldCheckIcon} label="نقاط المشاركة" value={biz.trust_score} tone="teal" />
         <StatCard
           icon={StarIcon}
           label="التقييم"

@@ -1,12 +1,12 @@
 // ═══════════════════════════════════════════════════════════
-// EAH — Trust System 2.0 (2026-10-06)
+// EAH — Participation Points (2026-10-06). This is gamification, not reliability.
 // ═══════════════════════════════════════════════════════════
 // 5 مستويات شعبية مصري:
-//   baraka (0-19)  → على البركة
-//   active (20-39) → شغّال
-//   mo3tabar (40-59) → معتبر
-//   kebeer (60-79) → كبير
-//   legend (80-100) → أسطورة
+//   bade2 (0-19)  → بداية
+//   mashey (20-39) → مشارك
+//   fel (40-59) → نشط
+//   harif (60-79) → متميز
+//   ostora (80-100) → أسطورة
 //
 // Log scale: الصعوبة بتزيد كل ما تقرب من 100
 // Legend Points: بتتحسب بعد ما توصل 100 — للترتيب الداخلي
@@ -19,10 +19,10 @@ export const TRUST_DEFAULT = 50
 
 // ─── 5 مستويات ───
 export const TRUST_TIERS = {
-  bade2: { min: 0, max: 19, label: 'لسه بادئ', emoji: '🌱', color: '#7B7490' },
-  mashey: { min: 20, max: 39, label: 'ماشي حاله', emoji: '🌿', color: '#55E7D1' },
-  fel: { min: 40, max: 59, label: 'زي الفل', emoji: '🌳', color: '#A855F7' },
-  harif: { min: 60, max: 79, label: 'حريف', emoji: '🏆', color: '#E8C79A' },
+  bade2: { min: 0, max: 19, label: 'بداية', emoji: '🌱', color: '#7B7490' },
+  mashey: { min: 20, max: 39, label: 'مشارك', emoji: '🌿', color: '#55E7D1' },
+  fel: { min: 40, max: 59, label: 'نشط', emoji: '🌳', color: '#A855F7' },
+  harif: { min: 60, max: 79, label: 'متميز', emoji: '🏆', color: '#E8C79A' },
   ostora: { min: 80, max: 100, label: 'الأسطورة', emoji: '👑', color: '#F5D9A7' },
 } as const
 

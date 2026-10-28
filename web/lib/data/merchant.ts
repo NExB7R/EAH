@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Merchant Data
@@ -19,6 +20,7 @@ export type MerchantBusiness = {
   is_published: boolean
   is_open: boolean
   accepts_whatsapp_orders: boolean
+  is_verified: boolean
   trust_score: number
   trust_tier: string
   successful_orders: number
@@ -66,7 +68,7 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
   const { data, error } = await supabase
     .from('businesses')
     .select(
-      'id, slug, name, business_type, area, description, hook, address_text, cover_image_url, is_published, is_open, accepts_whatsapp_orders, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at, business_locations(latitude, longitude, is_primary)',
+      'id, slug, name, business_type, area, description, hook, address_text, cover_image_url, is_published, is_open, is_verified, accepts_whatsapp_orders, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at, business_locations(latitude, longitude, is_primary)',
     )
     .eq('owner_profile_id', userId)
     .limit(1)
@@ -249,18 +251,73 @@ export type MerchantOrder = {
   customer_name: string | null
   customer_phone: string | null
   created_at: string
+  buyerAccountLinked: boolean
+  buyerPhoneVerified: boolean
+  buyerCompletedOrders: number
+}
+
+type MerchantOrderRow = Omit<MerchantOrder, 'buyerAccountLinked' | 'buyerPhoneVerified' | 'buyerCompletedOrders'> & {
+  customer_profile_id: string | null
 }
 
 export async function getMerchantOrders(businessId: string, limit = 50): Promise<MerchantOrder[]> {
   const supabase = await createClient()
-  const { data } = await supabase
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return []
+
+  // Verify ownership before any privileged lookup of buyer verification/history.
+  const { data: ownedBusiness } = await supabase
+    .from('businesses')
+    .select('id')
+    .eq('id', businessId)
+    .eq('owner_profile_id', user.id)
+    .maybeSingle()
+  if (!ownedBusiness) return []
+
+  const { data, error } = await supabase
     .from('order_requests')
-    .select('id, order_code, status, items, notes, customer_name, customer_phone, created_at')
+    .select('id, order_code, status, items, notes, customer_name, customer_phone, created_at, customer_profile_id')
     .eq('business_id', businessId)
     .order('created_at', { ascending: false })
     .limit(limit)
+  if (error) return []
 
-  return (data ?? []) as MerchantOrder[]
+  const rows = (data ?? []) as unknown as MerchantOrderRow[]
+  const buyerIds = [...new Set(rows.map((row) => row.customer_profile_id).filter((id): id is string => !!id))]
+  const phoneVerified = new Map<string, boolean>()
+  const completedOrders = new Map<string, number>()
+
+  if (buyerIds.length > 0) {
+    try {
+      const service = createServiceClient()
+      const [{ data: profiles, error: profileError }, { data: stats, error: statsError }] = await Promise.all([
+        service.from('profiles').select('id, phone_verified_at').in('id', buyerIds),
+        service.from('customer_order_stats').select('profile_id, successful_orders').in('profile_id', buyerIds),
+      ])
+      if (!profileError) {
+        for (const profile of profiles ?? []) phoneVerified.set(profile.id as string, !!profile.phone_verified_at)
+      }
+      if (!statsError) {
+        for (const row of stats ?? []) completedOrders.set(row.profile_id as string, Math.max(0, Number(row.successful_orders) || 0))
+      }
+    } catch {
+      // Buyer indicators fail closed to unknown/zero; order management must still work.
+    }
+  }
+
+  return rows.map((row) => ({
+    id: row.id,
+    order_code: row.order_code,
+    status: row.status,
+    items: row.items,
+    notes: row.notes,
+    customer_name: row.customer_name,
+    customer_phone: row.customer_phone,
+    created_at: row.created_at,
+    buyerAccountLinked: !!row.customer_profile_id,
+    buyerPhoneVerified: row.customer_profile_id ? phoneVerified.get(row.customer_profile_id) === true : false,
+    buyerCompletedOrders: row.customer_profile_id ? completedOrders.get(row.customer_profile_id) ?? 0 : 0,
+  }))
 }
 
 // ═══════════════════════════════════════════════════════════

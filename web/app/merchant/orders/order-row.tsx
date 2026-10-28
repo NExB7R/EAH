@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useTransition } from 'react'
-import { CheckCircleIcon, AlertIcon, PhoneIcon, WhatsAppIcon, ClockIcon } from '@/components/icons'
+import { CheckCircleIcon, AlertIcon, PhoneIcon, WhatsAppIcon, ClockIcon, ShieldCheckIcon } from '@/components/icons'
 import { updateOrderStatus } from './actions'
 import styles from './orders.module.css'
 
@@ -14,6 +14,9 @@ type Order = {
   customer_name: string | null
   customer_phone: string | null
   created_at: string
+  buyerAccountLinked: boolean
+  buyerPhoneVerified: boolean
+  buyerCompletedOrders: number
 }
 
 const COUNTDOWN_MS = 10 * 60 * 1000
@@ -184,6 +187,23 @@ export default function OrderRow({ order, isHighlighted = false }: Props) {
 
       <div className={styles.rowBody}>
         <p className={styles.customerName}>{order.customer_name ?? '—'}</p>
+        <div className={styles.buyerSignals} aria-label="معلومات مرتبطة بالحساب في هذا الطلب">
+          {!order.buyerAccountLinked ? (
+            <span className={styles.buyerSignalNeutral}>طلب ضيف — لا يوجد حساب EAH مرتبط</span>
+          ) : (
+            <>
+              <span className={order.buyerPhoneVerified ? `${styles.buyerSignal} ${styles.buyerSignalVerified}` : `${styles.buyerSignal} ${styles.buyerSignalNeutral}`}>
+                {order.buyerPhoneVerified && <ShieldCheckIcon size={12} />}
+                {order.buyerPhoneVerified ? 'الهاتف موثّق' : 'الهاتف لم يتم توثيقه'}
+              </span>
+              <span className={styles.buyerSignalNeutral}>
+                {order.buyerCompletedOrders > 0
+                  ? `${order.buyerCompletedOrders.toLocaleString('ar-EG')} طلب مكتمل على EAH`
+                  : 'لا يوجد سجل طلبات مكتملة كافٍ بعد'}
+              </span>
+            </>
+          )}
+        </div>
         {order.customer_phone && (
           <a href={`tel:${order.customer_phone}`} className={styles.customerPhone} dir="ltr">
             {order.customer_phone}

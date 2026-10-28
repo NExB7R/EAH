@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
       { key: 'area', label: 'المنطقة' },
       { key: 'city', label: 'المدينة' },
       { key: 'address_text', label: 'العنوان' },
-      { key: 'trust_score', label: 'Trust' },
+      { key: 'trust_score', label: 'نقاط المشاركة' },
       { key: 'rating_avg', label: 'التقييم' },
       { key: 'rating_count', label: 'عدد التقييمات' },
       { key: 'successful_orders', label: 'الطلبات' },
@@ -139,7 +139,7 @@ export async function GET(req: NextRequest) {
       { key: 'display_name', label: 'الاسم' },
       { key: 'phone', label: 'الرقم' },
       { key: 'role', label: 'الدور' },
-      { key: 'trust_score', label: 'Trust' },
+      { key: 'trust_score', label: 'نقاط المشاركة' },
       { key: 'is_premium', label: 'Premium' },
       { key: 'banned_until', label: 'محظور حتى' },
       { key: 'created_at', label: 'تاريخ التسجيل' },
@@ -215,7 +215,7 @@ export async function GET(req: NextRequest) {
       { key: 'area', label: 'المنطقة' },
       { key: 'featured_pin', label: 'مثبّت' },
       { key: 'featured_until', label: 'ينتهي' },
-      { key: 'trust_score', label: 'Trust' },
+      { key: 'trust_score', label: 'نقاط المشاركة' },
     ]
     return csvResponse(buildCsv(rows, columns), `featured-${timestamp}`)
   }

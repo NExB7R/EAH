@@ -6,6 +6,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import type { Business, Offer } from '@/lib/data/businesses'
+import { getBusinessReputationScore } from '@/lib/reputation'
 
 export type FairWeights = {
   quality: number
@@ -24,10 +25,7 @@ export const WEIGHTS: Record<string, FairWeights> = {
 }
 
 function qualityScore(b: Business): number {
-  const trust = b.trust_score / 100
-  const rating = b.rating_count > 0 ? b.rating_avg / 5 : 0.5
-  const response = b.response_rate ?? 0.5
-  return trust * 0.5 + rating * 0.3 + response * 0.2
+  return getBusinessReputationScore(b) / 100
 }
 
 function freshnessScore(b: Business): number {
@@ -140,14 +138,14 @@ export function fairOrderOffers(offers: Offer[], limit = 20): Offer[] {
 
   const seed = daySeed()
   const scored = offers.map((o) => {
-    const trust = (o.business?.trust_score ?? 0) / 100
+    const reputation = o.business ? getBusinessReputationScore(o.business) / 100 : 0
     const created = new Date(o.created_at).getTime()
     const days = created ? (Date.now() - created) / 86400000 : 60
     const fresh = Math.max(0.2, 1 - days / 60)
     const fairness = fairnessBoost(o.id, seed)
     return {
       o,
-      score: trust * 0.35 + fresh * 0.4 + fairness * 0.25,
+      score: reputation * 0.35 + fresh * 0.4 + fairness * 0.25,
     }
   })
   scored.sort((a, b) => b.score - a.score)

@@ -74,7 +74,7 @@ export async function getFlaggedUsers(limit = 30): Promise<FlaggedUser[]> {
     .select('id, display_name, phone, wanted_level, trust_score, banned_until')
     .gt('wanted_level', 0)
     .order('wanted_level', { ascending: false })
-    .order('trust_score', { ascending: true })
+    .order('display_name', { ascending: true })
     .limit(Math.max(1, Math.min(100, Math.trunc(limit) || 30)))
   return (data ?? []) as FlaggedUser[]
 }

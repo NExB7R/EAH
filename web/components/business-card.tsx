@@ -7,7 +7,6 @@ import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import {
   StarIcon,
   CrownGoldIcon,
-  ShieldCheckIcon,
   BadgeCheckIcon,
   SparkleStarIcon,
   CheckCircleIcon,
@@ -46,15 +45,6 @@ const TYPE_META: Record<string, TypeMeta> = {
   misc: { label: 'أخرى', Icon: SparklesIcon },
 }
 
-type TierMeta = { label: string; cls: string; Icon: typeof ShieldCheckIcon }
-
-const TIER_META: Record<string, TierMeta> = {
-  bade2: { label: 'لسه بادئ', cls: 'bade2', Icon: SparkleStarIcon },
-  mashey: { label: 'ماشي حاله', cls: 'mashey', Icon: ShieldCheckIcon },
-  fel: { label: 'زي الفل', cls: 'fel', Icon: ShieldCheckIcon },
-  harif: { label: 'حريف', cls: 'harif', Icon: BadgeCheckIcon },
-  ostora: { label: 'الأسطورة', cls: 'ostora', Icon: CrownGoldIcon },
-}
 
 function plural(n: number, forms: [string, string, string]): string {
   if (n <= 0) return ''
@@ -74,7 +64,6 @@ export default function BusinessCard({
   const typeMeta = TYPE_META[business.business_type] ?? TYPE_META.misc!
   const TypeIcon = typeMeta.Icon
   const typeLabel = getBusinessTypeLabel(business)
-  const tier = TIER_META[business.trust_tier] ?? null
   const ctx: CardContext = context ?? (variant === 'featured' ? 'featured' : 'default')
   const isOpen = isBusinessOpen(business)
   const hasRating = business.rating_count > 0
@@ -200,12 +189,7 @@ export default function BusinessCard({
               واتساب
             </span>
           )}
-          {tier && (
-            <span className={[styles.tier, styles['tier_' + tier.cls]].join(' ')}>
-              <tier.Icon size={13} />
-              {tier.label}
-            </span>
-          )}
+
         </div>
 
         <div className={styles.footer}>
@@ -220,6 +204,12 @@ export default function BusinessCard({
               <span className={styles.metric}>
                 <GiftIcon size={13} />
                 {plural(business.offers_count, ['عرض', 'عرضين', 'عروض'])}
+              </span>
+            )}
+            {business.successful_orders > 0 && (
+              <span className={styles.metric}>
+                <CheckCircleIcon size={13} />
+                {plural(business.successful_orders, ['طلب مكتمل', 'طلبين مكتملين', 'طلبات مكتملة'])}
               </span>
             )}
           </div>

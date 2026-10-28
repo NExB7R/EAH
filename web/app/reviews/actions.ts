@@ -63,7 +63,26 @@ export async function submitReview(
   }
 
   const data = parsed.data
-  const quality = reviewQualityScore(data.comment, false)
+
+  // Only a delivered platform order can produce a transaction-verified review.
+  // Fail closed if the order history cannot be checked.
+  const { data: deliveredOrder, error: orderLookupError } = await supabase
+    .from('order_requests')
+    .select('id')
+    .eq('business_id', businessId)
+    .eq('customer_profile_id', user.id)
+    .eq('status', 'delivered')
+    .limit(1)
+    .maybeSingle()
+
+  if (orderLookupError) {
+    return { ok: false, error: 'مش قادرين نتحقق من اكتمال الطلب دلوقتي. حاول مرة أخرى.' }
+  }
+  if (!deliveredOrder) {
+    return { ok: false, error: 'تقدر تقيّم النشاط بعد اكتمال طلب مسجل على EAH.' }
+  }
+
+  const quality = reviewQualityScore(data.comment, true)
 
   const { error } = await supabase.from('business_reviews').insert({
     business_id: businessId,
@@ -72,9 +91,14 @@ export async function submitReview(
     comment: data.comment,
     status: 'pending',
     review_quality_score: quality,
+    is_verified_transaction: true,
   })
 
-  if (error) return { ok: false, error: error.message }
+  if (error) {
+    if (error.code === '23505') return { ok: false, error: 'قيّمت النشاط ده قبل كده' }
+    console.error('[review] insert failed:', error.message)
+    return { ok: false, error: 'تعذر حفظ التقييم الآن. حاول مرة أخرى.' }
+  }
 
   // سجّل activity (comment) — trigger هيحدّث impact_score تلقائياً
   await supabase.from('business_activities').insert({

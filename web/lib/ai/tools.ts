@@ -133,7 +133,9 @@ type SearchResult = {
     hook: string | null
     is_open: boolean
     rating: number | null
-    trust_tier: string
+    is_verified: boolean
+    rating_count: number
+    successful_orders: number
   }[]
   error?: string
 }
@@ -155,7 +157,7 @@ async function toolSearchBusinesses(args: {
 
   let q = supabase
     .from('businesses')
-    .select('name, slug, business_type, area, hook, is_open, rating_avg, rating_count, trust_tier')
+    .select('name, slug, business_type, area, hook, is_open, is_verified, rating_avg, rating_count, successful_orders')
     .eq('is_published', true)
 
   if (type && VALID_TYPES.includes(type)) {
@@ -167,7 +169,12 @@ async function toolSearchBusinesses(args: {
     q = q.or(`name.ilike.%${safe}%,hook.ilike.%${safe}%,description.ilike.%${safe}%`)
   }
 
-  const { data, error } = await q.order('trust_score', { ascending: false }).limit(limit)
+  const { data, error } = await q
+    .order('is_verified', { ascending: false })
+    .order('rating_count', { ascending: false })
+    .order('rating_avg', { ascending: false })
+    .order('successful_orders', { ascending: false })
+    .limit(limit)
 
   if (error) {
     console.error('[AI Tool] search error:', error.message)
@@ -185,7 +192,9 @@ async function toolSearchBusinesses(args: {
       hook: b.hook,
       is_open: b.is_open,
       rating: b.rating_count > 0 ? b.rating_avg : null,
-      trust_tier: b.trust_tier,
+      is_verified: b.is_verified,
+      rating_count: b.rating_count,
+      successful_orders: b.successful_orders,
     })),
   }
 }
@@ -198,7 +207,7 @@ async function toolGetBusinessDetails(args: { slug: string }) {
   const { data, error } = await supabase
     .from('businesses')
     .select(
-      'name, slug, business_type, description, hook, area, address_text, is_open, rating_avg, rating_count, trust_tier, working_hours, accepts_whatsapp_orders',
+      'name, slug, business_type, description, hook, area, address_text, is_open, is_verified, rating_avg, rating_count, successful_orders, working_hours, accepts_whatsapp_orders',
     )
     .eq('slug', slug)
     .eq('is_published', true)
@@ -223,7 +232,9 @@ async function toolGetBusinessDetails(args: { slug: string }) {
       is_open: data.is_open,
       rating: data.rating_count > 0 ? data.rating_avg : null,
       rating_count: data.rating_count,
-      trust_tier: data.trust_tier,
+      is_verified: data.is_verified,
+      rating_count: data.rating_count,
+      successful_orders: data.successful_orders,
       accepts_whatsapp: data.accepts_whatsapp_orders,
       working_hours: data.working_hours,
     },
@@ -232,7 +243,7 @@ async function toolGetBusinessDetails(args: { slug: string }) {
 
 async function toolGetMyStats(): Promise<{
   ok: boolean
-  stats?: { points: number; favorites: number; follows: number; orders: number; trust: number }
+  stats?: { points: number; favorites: number; follows: number; orders: number; participationPoints: number }
   error?: string
 }> {
   const supabase = await createClient()
@@ -274,7 +285,7 @@ async function toolGetMyStats(): Promise<{
       favorites: favorites ?? 0,
       follows: follows ?? 0,
       orders: orders ?? 0,
-      trust: profile?.trust_score ?? 50,
+      participationPoints: profile?.trust_score ?? 50,
     },
   }
 }
@@ -330,10 +341,11 @@ async function toolGetTrending(args: { limit?: number }) {
 
   const { data, error } = await supabase
     .from('businesses')
-    .select('name, slug, business_type, area, rating_avg, rating_count, trust_score, trust_tier')
+    .select('name, slug, business_type, area, rating_avg, rating_count, is_verified, successful_orders, velocity_score, engagement_score')
     .eq('is_published', true)
-    .order('trust_score', { ascending: false })
-    .order('rating_avg', { ascending: false })
+    .order('velocity_score', { ascending: false })
+    .order('engagement_score', { ascending: false })
+    .order('successful_orders', { ascending: false })
     .limit(limit)
 
   if (error) {
@@ -351,7 +363,9 @@ async function toolGetTrending(args: { limit?: number }) {
       type: b.business_type,
       area: b.area,
       rating: b.rating_count > 0 ? b.rating_avg : null,
-      trust_tier: b.trust_tier,
+      is_verified: b.is_verified,
+      rating_count: b.rating_count,
+      successful_orders: b.successful_orders,
     })),
   }
 }
@@ -406,10 +420,13 @@ async function toolGetBusinessesByArea(args: { area: string; limit?: number }) {
 
   const { data, error } = await supabase
     .from('businesses')
-    .select('name, slug, business_type, area, rating_avg, rating_count, is_open, trust_tier')
+    .select('name, slug, business_type, area, rating_avg, rating_count, is_open, is_verified, successful_orders')
     .eq('is_published', true)
     .ilike('area', `%${area}%`)
-    .order('trust_score', { ascending: false })
+    .order('is_verified', { ascending: false })
+    .order('rating_count', { ascending: false })
+    .order('rating_avg', { ascending: false })
+    .order('successful_orders', { ascending: false })
     .limit(limit)
 
   if (error) {
@@ -428,7 +445,9 @@ async function toolGetBusinessesByArea(args: { area: string; limit?: number }) {
       area: b.area,
       is_open: b.is_open,
       rating: b.rating_count > 0 ? b.rating_avg : null,
-      trust_tier: b.trust_tier,
+      is_verified: b.is_verified,
+      rating_count: b.rating_count,
+      successful_orders: b.successful_orders,
     })),
   }
 }

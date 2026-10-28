@@ -36,6 +36,7 @@ import {
 import Avatar from './avatar'
 import Logo from './logo'
 import type { UserSession } from '@/lib/data/user'
+import { getTrustTierMeta } from '@/lib/trust'
 import styles from './menu-drawer.module.css'
 
 type Props = {
@@ -60,7 +61,7 @@ const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/trends', label: 'الترند', Icon: TrendingUpIcon },
   { href: '/new', label: 'بدايات جديدة', Icon: SparklesIcon },
   { href: '/suggest', label: 'ارشحلك', Icon: TargetIcon },
-  { href: '/trust', label: 'المصداقية', Icon: ShieldCheckIcon },
+  { href: '/trust', label: 'السمعة والتوثيق', Icon: ShieldCheckIcon },
 ]
 
 // ─── Customer account (لكل مستخدم مسجل غير الأدمن) ───
@@ -215,9 +216,9 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
               </div>
               {!isAdmin && (
                 <div className={styles.profileStats}>
-                  <span>مصداقية {session.trustScore}</span>
+                  <span>نقاط المشاركة {session.trustScore}</span>
                   <span className={styles.dot}>·</span>
-                  <span>{session.trustTier}</span>
+                  <span>{getTrustTierMeta(session.trustScore).label}</span>
                 </div>
               )}
             </div>

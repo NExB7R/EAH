@@ -58,10 +58,10 @@ const SECTIONS: Section[] = [
     ],
   },
   {
-    title: 'النمو والثقة',
+    title: 'النمو والسمعة',
     items: [
       { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon, tone: 'gold' },
-      { href: '/merchant/trust', label: 'المصداقية', Icon: ShieldCheckIcon },
+      { href: '/merchant/trust', label: 'سمعة النشاط', Icon: ShieldCheckIcon },
       { href: '/merchant/subscription', label: 'الباقة والاشتراك', Icon: CrownGoldIcon },
     ],
   },

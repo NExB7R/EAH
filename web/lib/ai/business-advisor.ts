@@ -52,21 +52,21 @@ export function analyzeBusiness(
   if (metrics.isVerified) completeness += 5
   score += completeness
 
-  // التقييمات (25)
+  // التقييمات (30)
   let ratingScore = 0
   if (metrics.reviewsTotal >= 5) {
-    ratingScore = Math.round((metrics.avgRating / 5) * 25)
-    if (metrics.avgRating >= 4.5) ratingScore = 25
+    ratingScore = Math.round((metrics.avgRating / 5) * 30)
+    if (metrics.avgRating >= 4.5) ratingScore = 30
   } else if (metrics.reviewsTotal > 0) {
-    ratingScore = Math.round((metrics.avgRating / 5) * 15)
+    ratingScore = Math.round((metrics.avgRating / 5) * 18)
   }
   score += ratingScore
 
-  // الطلبات (20)
+  // الطلبات (25)
   let orderScore = 0
   if (metrics.ordersTotal > 0) {
     const rate = metrics.ordersConfirmed / metrics.ordersTotal
-    orderScore = Math.round(rate * 20)
+    orderScore = Math.round(rate * 25)
   }
   score += orderScore
 
@@ -81,9 +81,6 @@ export function analyzeBusiness(
     responseScore = 10
   }
   score += responseScore
-
-  // المصداقية (10)
-  score += Math.round((metrics.trustScore / 100) * 10)
 
   // التفاعل (10)
   let eng = 0

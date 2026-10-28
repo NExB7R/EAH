@@ -12,22 +12,17 @@ import {
   StoreIcon,
 } from '@/components/icons'
 import { getAdminUserDetail } from '@/lib/data/admin-user-detail'
+import { getTrustTierMeta } from '@/lib/trust'
 import UserDetailActions from './user-detail-actions'
 import styles from './user-detail.module.css'
 
 export const dynamic = 'force-dynamic'
 
 const ROLE_LABEL: Record<string, string> = {
-  customer: 'عميل',
-  merchant: 'تاجر',
-  admin: 'أدمن',
-  super_admin: 'سوبر أدمن',
-}
-
-const TIER_LABEL: Record<string, string> = {
-  trusted: 'موثوق',
-  verified: 'موثّق',
-  new: 'جديد',
+  customer: 'المشتري',
+  merchant: 'البايع',
+  admin: 'الأدمن',
+  super_admin: 'الأدمن',
 }
 
 function timeAgo(iso: string): string {
@@ -93,7 +88,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                 </span>
               )}
               {u.trust_tier && (
-                <span className={styles.badge}>{TIER_LABEL[u.trust_tier] ?? u.trust_tier}</span>
+                <span className={styles.badge}>نقاط المشاركة: {getTrustTierMeta(u.trust_score).label}</span>
               )}
             </div>
           </div>
@@ -107,7 +102,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
             </span>
           </div>
           <div className={styles.metaItem}>
-            <span className={styles.metaLabel}>الثقة</span>
+            <span className={styles.metaLabel}>نقاط المشاركة</span>
             <span className={styles.metaValue}>{u.trust_score}/100</span>
           </div>
           <div className={styles.metaItem}>

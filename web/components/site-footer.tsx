@@ -67,7 +67,7 @@ const COLUMNS = [
     Icon: ShieldCheckIcon,
     links: [
       { href: '/about', label: 'مين إحنا', Icon: ShieldCheckIcon },
-      { href: '/trust', label: 'المصداقية', Icon: ShieldCheckIcon },
+      { href: '/trust', label: 'السمعة والتوثيق', Icon: ShieldCheckIcon },
       { href: '/contact', label: 'تواصل معانا', Icon: PhoneIcon },
       { href: '/support-palestine', label: 'دعم فلسطين', Icon: MapPinIcon },
       { href: '/help', label: 'المساعدة', Icon: ShieldCheckIcon },
