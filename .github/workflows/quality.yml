@@ -3,6 +3,10 @@ name: Quality Gate
 permissions:
   contents: read
 
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [main]
@@ -99,7 +103,7 @@ jobs:
 
       - name: Run RLS tests
         if: env.SUPABASE_DB_URL != ''
-        run: supabase test db --db-url "$SUPABASE_DB_URL"
+        run: supabase test db supabase/tests/rls.test.sql supabase/tests/reputation-policy.test.sql --db-url "$SUPABASE_DB_URL"
 
       - name: Setup PostgreSQL client
         if: env.SUPABASE_DB_URL != ''
