@@ -78,13 +78,13 @@ SELECT is((
 ), 3, 'mutable search_path functions have explicit settings');
 SELECT is((
   SELECT count(*)::int FROM pg_indexes WHERE schemaname='public' AND indexname=ANY(ARRAY[
-    'idx_announcements_created_by','idx_area_requests_business_id','idx_area_requests_requested_by',
+    'idx_announcements_created_by','idx_ads_approved_by','idx_area_requests_business_id','idx_area_requests_requested_by',
     'idx_area_requests_reviewed_by','idx_business_insights_generated_by','idx_business_reviews_moderated_by',
     'idx_businesses_claimed_by_user_id','idx_businesses_rejected_by','idx_businesses_verified_by',
     'idx_comment_thread_follows_business_id','idx_engagement_events_user_id','idx_moderation_queue_reviewed_by',
     'idx_system_errors_resolved_by','idx_system_errors_user_id'
   ])
-), 14, 'all reported foreign-key indexes have been created');
+), 15, 'foreign-key indexes include the new ad approver index');
 
 SELECT ok(EXISTS(SELECT 1 FROM pg_policies WHERE schemaname='public' AND tablename='reports' AND policyname='reports_self_insert'), 'reporters can still submit their own reports');
 SELECT ok((SELECT qual LIKE '%owner_profile_id%' FROM pg_policies WHERE schemaname='public' AND tablename='ads' AND policyname='ads_read'), 'ad owners retain visibility to their own ads');
