@@ -161,18 +161,19 @@ export async function replyToReview(
 
   const { data: review } = await supabase
     .from('business_reviews')
-    .select('business_id, merchant_reply, businesses!inner(owner_profile_id)')
+    .select('business_id, status, merchant_reply, businesses!inner(owner_profile_id)')
     .eq('id', reviewId)
     .maybeSingle()
 
   if (!review) return { ok: false, error: 'التقييم مش موجود' }
+  if (review.status !== 'approved') return { ok: false, error: 'الرد متاح بعد اعتماد التقييم من الإدارة' }
   if (review.merchant_reply) return { ok: false, error: 'رديت على التقييم ده قبل كده' }
 
   const ownerId = (review.businesses as unknown as { owner_profile_id: string } | null)
     ?.owner_profile_id
   if (ownerId !== user.id) return { ok: false, error: 'مش صاحب النشاط' }
 
-  const { error } = await supabase
+  const { data: updatedReview, error } = await supabase
     .from('business_reviews')
     .update({
       merchant_reply: parsed.data.reply,
@@ -180,8 +181,15 @@ export async function replyToReview(
       merchant_reply_by: user.id,
     })
     .eq('id', reviewId)
+    .is('merchant_reply', null)
+    .select('id')
+    .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) {
+    console.error('[review-reply] update failed:', error.message)
+    return { ok: false, error: 'تعذر حفظ الرد الآن. حاول مرة أخرى.' }
+  }
+  if (!updatedReview) return { ok: false, error: 'لم يتم حفظ الرد؛ ربما سبق الرد على هذا التقييم' }
 
   // إشعار لصاحب التقييم
   const { data: reviewMeta } = await supabase

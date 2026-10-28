@@ -94,6 +94,61 @@ BEGIN
 END;
 $function$;
 
+CREATE OR REPLACE FUNCTION public.guard_order_update_state()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER
+SET search_path = public, private, pg_temp
+AS $function$
+DECLARE v_transition_allowed boolean := false;
+BEGIN
+  IF auth.uid() IS NULL OR private.is_admin(auth.uid()) THEN RETURN NEW; END IF;
+
+  IF NEW.business_id IS DISTINCT FROM OLD.business_id
+    OR NEW.customer_profile_id IS DISTINCT FROM OLD.customer_profile_id THEN
+    RAISE EXCEPTION 'order_identity_fields_are_immutable' USING ERRCODE = '42501';
+  END IF;
+
+  IF NEW.status IS DISTINCT FROM OLD.status THEN
+    v_transition_allowed := CASE OLD.status
+      WHEN 'sent' THEN NEW.status IN ('seen', 'accepted', 'rejected', 'cancelled')
+      WHEN 'seen' THEN NEW.status IN ('accepted', 'rejected', 'cancelled')
+      WHEN 'accepted' THEN NEW.status IN ('preparing', 'cancelled')
+      WHEN 'preparing' THEN NEW.status IN ('on_way', 'cancelled')
+      WHEN 'on_way' THEN NEW.status IN ('delivered', 'cancelled')
+      ELSE false
+    END;
+    IF NOT v_transition_allowed THEN
+      RAISE EXCEPTION 'invalid_order_status_transition: % -> %', OLD.status, NEW.status USING ERRCODE = '23514';
+    END IF;
+    IF NEW.status = 'delivered' THEN
+      NEW.delivered_at := COALESCE(NEW.delivered_at, now());
+      NEW.feedback_due_at := COALESCE(NEW.feedback_due_at, now() + interval '1 hour');
+      NEW.feedback_reminder_at := COALESCE(NEW.feedback_reminder_at, NEW.feedback_due_at + interval '30 minutes');
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.guard_order_update_state() FROM PUBLIC, anon, authenticated;
+DROP TRIGGER IF EXISTS trg_guard_order_update_state ON public.order_requests;
+CREATE TRIGGER trg_guard_order_update_state BEFORE UPDATE ON public.order_requests
+FOR EACH ROW EXECUTE FUNCTION public.guard_order_update_state();
+
+COMMENT ON FUNCTION public.guard_order_update_state() IS
+  'EAH: seller order updates preserve buyer/business identity and follow the allowed order lifecycle.';
+
+DROP POLICY IF EXISTS order_requests_owner_update ON public.order_requests;
+CREATE POLICY order_requests_owner_update ON public.order_requests
+FOR UPDATE TO authenticated
+USING (
+  EXISTS (SELECT 1 FROM public.businesses b WHERE b.id = order_requests.business_id AND b.owner_profile_id = (SELECT auth.uid()))
+  OR EXISTS (SELECT 1 FROM public.user_roles ur WHERE ur.user_id = (SELECT auth.uid()) AND ur.role = 'super_admin'::public.app_role)
+)
+WITH CHECK (
+  EXISTS (SELECT 1 FROM public.businesses b WHERE b.id = order_requests.business_id AND b.owner_profile_id = (SELECT auth.uid()))
+  OR EXISTS (SELECT 1 FROM public.user_roles ur WHERE ur.user_id = (SELECT auth.uid()) AND ur.role = 'super_admin'::public.app_role)
+);
+
 -- A client-created order must never be born as delivered or with fabricated feedback.
 -- Seller-side status transitions remain governed by order_requests RLS.
 CREATE OR REPLACE FUNCTION public.guard_client_order_insert_state()
@@ -137,7 +192,7 @@ COMMENT ON FUNCTION public.guard_client_order_insert_state() IS
 
 -- Keep reviewers from editing moderation/ownership outcomes through the self-update policy.
 -- They may edit their own text/dimensions, but only admins may change review state or moderation fields.
-CREATE OR REPLACE FUNCTION public.guard_review_moderation_fields()
+CREATE OR REPLACE FUNCTION public.guard_review_submission_state()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
@@ -145,17 +200,69 @@ SET search_path = public, private, pg_temp
 AS $function$
 BEGIN
   IF auth.uid() IS NOT NULL AND NOT private.is_admin(auth.uid()) THEN
-    IF NEW.status IS DISTINCT FROM OLD.status
-      OR NEW.flagged_reason IS DISTINCT FROM OLD.flagged_reason
-      OR NEW.moderated_by IS DISTINCT FROM OLD.moderated_by
-      OR NEW.moderated_at IS DISTINCT FROM OLD.moderated_at
-      OR NEW.review_quality_score IS DISTINCT FROM OLD.review_quality_score
-      OR NEW.merchant_reply IS DISTINCT FROM OLD.merchant_reply
-      OR NEW.merchant_reply_at IS DISTINCT FROM OLD.merchant_reply_at
-      OR NEW.merchant_reply_by IS DISTINCT FROM OLD.merchant_reply_by
-      OR NEW.is_verified_transaction IS DISTINCT FROM OLD.is_verified_transaction
+    NEW.status := 'pending';
+    NEW.flagged_reason := NULL;
+    NEW.moderated_by := NULL;
+    NEW.moderated_at := NULL;
+    NEW.merchant_reply := NULL;
+    NEW.merchant_reply_at := NULL;
+    NEW.merchant_reply_by := NULL;
+  END IF;
+  RETURN NEW;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.guard_review_submission_state() FROM PUBLIC, anon, authenticated;
+DROP TRIGGER IF EXISTS a_guard_review_submission_state ON public.business_reviews;
+CREATE TRIGGER a_guard_review_submission_state
+BEFORE INSERT ON public.business_reviews
+FOR EACH ROW EXECUTE FUNCTION public.guard_review_submission_state();
+
+COMMENT ON FUNCTION public.guard_review_submission_state() IS
+  'EAH: non-admin review submissions always enter moderation as pending.';
+
+CREATE OR REPLACE FUNCTION public.guard_review_moderation_fields()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, private, pg_temp
+AS $function$
+DECLARE
+  v_is_admin boolean := auth.uid() IS NOT NULL AND private.is_admin(auth.uid());
+  v_is_owner boolean := false;
+BEGIN
+  IF v_is_admin OR auth.uid() IS NULL THEN RETURN NEW; END IF;
+
+  IF NEW.status IS DISTINCT FROM OLD.status
+    OR NEW.flagged_reason IS DISTINCT FROM OLD.flagged_reason
+    OR NEW.moderated_by IS DISTINCT FROM OLD.moderated_by
+    OR NEW.moderated_at IS DISTINCT FROM OLD.moderated_at
+    OR NEW.review_quality_score IS DISTINCT FROM OLD.review_quality_score
+    OR NEW.is_verified_transaction IS DISTINCT FROM OLD.is_verified_transaction
+    OR NEW.business_id IS DISTINCT FROM OLD.business_id
+    OR NEW.user_id IS DISTINCT FROM OLD.user_id
+    OR NEW.comment IS DISTINCT FROM OLD.comment
+    OR NEW.dimensions IS DISTINCT FROM OLD.dimensions
+  THEN
+    RAISE EXCEPTION 'review_content_and_moderation_are_server_managed'
+      USING ERRCODE = '42501';
+  END IF;
+
+  IF NEW.merchant_reply IS DISTINCT FROM OLD.merchant_reply
+    OR NEW.merchant_reply_at IS DISTINCT FROM OLD.merchant_reply_at
+    OR NEW.merchant_reply_by IS DISTINCT FROM OLD.merchant_reply_by
+  THEN
+    SELECT EXISTS (
+      SELECT 1 FROM public.businesses b
+      WHERE b.id = OLD.business_id AND b.owner_profile_id = auth.uid()
+    ) INTO v_is_owner;
+
+    IF NOT v_is_owner OR OLD.status <> 'approved'
+      OR OLD.merchant_reply IS NOT NULL OR NEW.merchant_reply IS NULL
+      OR NEW.merchant_reply_by IS DISTINCT FROM auth.uid()
+      OR NEW.merchant_reply_at IS NULL
     THEN
-      RAISE EXCEPTION 'review_moderation_fields_are_server_managed'
+      RAISE EXCEPTION 'only_activity_owner_may_reply_once_to_approved_review'
         USING ERRCODE = '42501';
     END IF;
   END IF;
@@ -164,15 +271,19 @@ END;
 $function$;
 
 REVOKE ALL ON FUNCTION public.guard_review_moderation_fields() FROM PUBLIC, anon, authenticated;
-
 DROP TRIGGER IF EXISTS a_guard_review_moderation_fields ON public.business_reviews;
 CREATE TRIGGER a_guard_review_moderation_fields
 BEFORE UPDATE ON public.business_reviews
-FOR EACH ROW
-EXECUTE FUNCTION public.guard_review_moderation_fields();
+FOR EACH ROW EXECUTE FUNCTION public.guard_review_moderation_fields();
 
 COMMENT ON FUNCTION public.guard_review_moderation_fields() IS
-  'EAH: reviewer self-update cannot approve/reject/verify reviews or rewrite moderation/reply fields.';
+  'EAH: only admins moderate reviews; the activity owner may reply once to an approved review.';
+
+DROP POLICY IF EXISTS business_reviews_merchant_reply ON public.business_reviews;
+CREATE POLICY business_reviews_merchant_reply ON public.business_reviews
+FOR UPDATE TO authenticated
+USING (EXISTS (SELECT 1 FROM public.businesses b WHERE b.id = business_reviews.business_id AND b.owner_profile_id = (SELECT auth.uid())))
+WITH CHECK (EXISTS (SELECT 1 FROM public.businesses b WHERE b.id = business_reviews.business_id AND b.owner_profile_id = (SELECT auth.uid())));
 
 CREATE OR REPLACE FUNCTION public.enforce_transaction_verified_review()
 RETURNS trigger
@@ -180,20 +291,23 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public, pg_temp
 AS $function$
+DECLARE v_comment_length integer;
 BEGIN
   IF NOT EXISTS (
-    SELECT 1
-    FROM public.order_requests AS o
+    SELECT 1 FROM public.order_requests o
     WHERE o.business_id = NEW.business_id
       AND o.customer_profile_id = NEW.user_id
       AND o.status = 'delivered'
   ) THEN
-    RAISE EXCEPTION 'review_requires_delivered_order'
-      USING ERRCODE = '23514';
+    RAISE EXCEPTION 'review_requires_delivered_order' USING ERRCODE = '23514';
   END IF;
-
-  -- Never trust a value supplied by the browser/API caller.
   NEW.is_verified_transaction := TRUE;
+  v_comment_length := length(btrim(coalesce(NEW.comment, '')));
+  NEW.review_quality_score :=
+    (CASE WHEN v_comment_length >= 150 THEN 70
+          WHEN v_comment_length >= 50 THEN 40
+          WHEN v_comment_length >= 20 THEN 20
+          ELSE 0 END) + 30;
   RETURN NEW;
 END;
 $function$;
