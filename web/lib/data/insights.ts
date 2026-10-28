@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
+import { getCairoDateParts } from '@/lib/utils/timezone'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Insights (AI Analysis Data Layer)
@@ -73,19 +74,7 @@ function avgFromDimensions(dims: Record<string, number> | null): number {
   return vals.reduce((a, b) => a + b, 0) / vals.length
 }
 
-const DAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
 
-// Cairo offset (UTC+2, DST مفعّل صيفاً — بنستخدم +2 كتقريب آمن)
-function cairoHour(iso: string): number {
-  const d = new Date(iso)
-  const hour = d.getUTCHours() + 2
-  return hour >= 24 ? hour - 24 : hour
-}
-
-function cairoDayKey(iso: string): string {
-  const d = new Date(iso)
-  return DAY_KEYS[d.getUTCDay()] ?? 'sun'
-}
 
 // ═══════════════════════════════════════════════════════════
 // Main: Get Business Metrics
@@ -197,11 +186,13 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
   }
 
   for (const v of pageViews ?? []) {
-    const day = v.created_at.slice(0, 10)
-    viewsByDayMap[day] = (viewsByDayMap[day] ?? 0) + 1
+    const cairoTime = getCairoDateParts(v.created_at)
+    if (!cairoTime) continue
+
+    viewsByDayMap[cairoTime.dateKey] = (viewsByDayMap[cairoTime.dateKey] ?? 0) + 1
     if (v.visitor_id) uniqueVisitorIds.add(v.visitor_id)
-    hourHistogram[cairoHour(v.created_at)]! += 1
-    dayHistogram[cairoDayKey(v.created_at)]! += 1
+    hourHistogram[cairoTime.hour]! += 1
+    dayHistogram[cairoTime.dayKey]! += 1
   }
 
   const viewsByDay = Object.entries(viewsByDayMap)
@@ -237,8 +228,10 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
   const ordersByDayMap: Record<string, number> = {}
 
   for (const o of orders ?? []) {
-    const day = o.created_at.slice(0, 10)
-    ordersByDayMap[day] = (ordersByDayMap[day] ?? 0) + 1
+    const cairoTime = getCairoDateParts(o.created_at)
+    if (cairoTime) {
+      ordersByDayMap[cairoTime.dateKey] = (ordersByDayMap[cairoTime.dateKey] ?? 0) + 1
+    }
 
     if (o.status === 'delivered' || o.status === 'confirmed') confirmed++
     else if (o.status === 'cancelled') cancelled++
