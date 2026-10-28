@@ -110,7 +110,7 @@ export default function OrderSettingsPanel({
       {showEnable && (
         <Modal onClose={() => !pending && setShowEnable(false)}>
           <h3 className={styles.modalTitle}>تفعيل استلام الطلبات</h3>
-          <p className={styles.modalText}>التاجر هيستقبل إشعار بالالتزامات دي:</p>
+          <p className={styles.modalText}>البايع هيستقبل إشعار بالالتزامات دي:</p>
           <ul className={styles.modalList}>
             <li>
               <ClockIcon size={13} />
@@ -172,7 +172,7 @@ export default function OrderSettingsPanel({
         <Modal onClose={() => !pending && setShowDisable(false)}>
           <h3 className={styles.modalTitle}>إيقاف استلام الطلبات</h3>
           <p className={styles.modalText}>
-            هيتولّد <strong>تقرير ملخص</strong> لفترة الاستلام + إشعار للتاجر بالنتائج. الاستمرار؟
+            هيتولّد <strong>تقرير ملخص</strong> لفترة الاستلام + إشعار للبايع بالنتائج. الاستمرار؟
           </p>
           <div className={styles.modalActions}>
             <button
