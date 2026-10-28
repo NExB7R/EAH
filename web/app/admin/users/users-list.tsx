@@ -20,8 +20,8 @@ type Props = {
 type Modal = 'ban' | 'role' | null
 
 const ROLES = [
-  { value: 'customer', label: 'عميل' },
-  { value: 'merchant', label: 'تاجر' },
+  { value: 'customer', label: 'المشتري' },
+  { value: 'merchant', label: 'البايع' },
   { value: 'admin', label: 'أدمن' },
 ] as const
 
