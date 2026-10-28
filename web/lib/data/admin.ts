@@ -534,7 +534,8 @@ export async function getReports(status: string = 'open'): Promise<ReportRow[]> 
     .order('created_at', { ascending: false })
     .limit(100)
 
-  if (status !== 'all') q = q.eq('status', status)
+  if (status === 'open') q = q.in('status', ['pending', 'reviewing'])
+  else if (status !== 'all') q = q.eq('status', status)
 
   const { data: reports } = await q
   if (!reports || reports.length === 0) return []
