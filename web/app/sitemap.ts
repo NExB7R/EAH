@@ -47,7 +47,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .from('businesses')
     .select('slug, updated_at')
     .eq('is_published', true)
-    .order('trust_score', { ascending: false })
+    .order('is_verified', { ascending: false })
+    .order('rating_count', { ascending: false })
+    .order('rating_avg', { ascending: false })
+    .order('successful_orders', { ascending: false })
     .limit(5000)
 
   const bizEntries: MetadataRoute.Sitemap = (businesses ?? []).map((b) => ({

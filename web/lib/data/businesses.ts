@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { createPublicClient } from '@/lib/supabase/public'
 import { sortByTrend } from '@/lib/ranking'
+import { getBusinessReputationScore } from '@/lib/reputation'
 import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
 
 // ═══════════════════════════════════════════════════════════
@@ -42,8 +43,8 @@ export type Business = {
   is_opportunity: boolean
   opportunity_until: string | null
   opportunity_note: string | null
-  trust_score: number
-  trust_tier: string
+  trust_score?: number
+  trust_tier?: string
   velocity_score: number
   engagement_score: number
   diversity_score: number
@@ -86,7 +87,7 @@ const BUSINESS_COLUMNS = `
   id, slug, name, business_type, custom_business_type, business_type_status, subcategory, description, hook,
   area, city, address_text, map_url, cover_image_url, logo_url,
   is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
-  trust_score, trust_tier, velocity_score, engagement_score, diversity_score, successful_orders,
+  velocity_score, engagement_score, diversity_score, successful_orders,
   featured_order, featured_until, featured_pin,
   new_until, working_hours, open_now_override, accepts_whatsapp_orders, accepts_orders,
   response_time_avg_seconds, response_rate,
@@ -150,14 +151,20 @@ export const getPublishedBusinesses = unstable_cache(
       .from('businesses')
       .select(BUSINESS_COLUMNS)
       .eq('is_published', true)
-      .order('trust_score', { ascending: false })
+      .order('rating_count', { ascending: false })
+      .order('rating_avg', { ascending: false })
+      .order('successful_orders', { ascending: false })
+      .order('is_verified', { ascending: false })
       .limit(100)
 
     if (error) {
       console.error('[data] getPublishedBusinesses error:', error.message)
       return []
     }
-    return normalizeBusinesses(data)
+    const normalized = normalizeBusinesses(data)
+    return normalized.sort(
+      (a, b) => getBusinessReputationScore(b) - getBusinessReputationScore(a),
+    )
   },
   ['businesses-published-v2'],
   { revalidate: 300, tags: ['businesses'] },
@@ -177,7 +184,10 @@ export const getFeaturedBusinesses = unstable_cache(
       .eq('is_featured', true)
       .order('featured_pin', { ascending: false })
       .order('featured_order', { ascending: true })
-      .order('trust_score', { ascending: false })
+      .order('rating_count', { ascending: false })
+      .order('rating_avg', { ascending: false })
+      .order('successful_orders', { ascending: false })
+      .order('is_verified', { ascending: false })
       .limit(limit)
 
     if (error) {
@@ -228,7 +238,10 @@ export const getBusinessesByType = unstable_cache(
       .select(BUSINESS_COLUMNS)
       .eq('is_published', true)
       .eq('business_type', type)
-      .order('trust_score', { ascending: false })
+      .order('rating_count', { ascending: false })
+      .order('rating_avg', { ascending: false })
+      .order('successful_orders', { ascending: false })
+      .order('is_verified', { ascending: false })
       .limit(limit)
 
     if (error) {
@@ -295,7 +308,8 @@ export type Offer = {
     slug: string
     name: string
     area: string | null
-    trust_score: number
+    is_verified: boolean
+    rating_avg: number
   } | null
 }
 
@@ -308,7 +322,7 @@ export const getActiveOffers = unstable_cache(
       .select(
         `
         id, title, description, price, image_url, starts_at, ends_at, created_at,
-        business:businesses(id, slug, name, area, trust_score)
+        business:businesses(id, slug, name, area, is_verified, rating_avg, rating_count, successful_orders)
       `,
       )
       .eq('is_published', true)
@@ -337,7 +351,10 @@ export const getNearbyBusinesses = unstable_cache(
 
     if (area) q = q.eq('area', area)
 
-    const { data, error } = await q.order('trust_score', { ascending: false }).limit(limit)
+    const { data, error } = await q.order('rating_count', { ascending: false })
+      .order('rating_avg', { ascending: false })
+      .order('successful_orders', { ascending: false })
+      .order('is_verified', { ascending: false }).limit(limit)
 
     if (error) {
       console.error('[data] getNearbyBusinesses error:', error.message)

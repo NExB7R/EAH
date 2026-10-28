@@ -32,6 +32,7 @@ type SearchParams = {
   lat?: string
   lng?: string
   sort?: string
+  verified?: string
   suggest?: string
 }
 
@@ -87,13 +88,7 @@ export default async function ExplorePage({
       delivery_office: allBusinesses.filter((b) => b.business_type === 'delivery_office').length,
       misc: allBusinesses.filter((b) => b.business_type === 'misc').length,
     },
-    tiers: {
-      bade2: allBusinesses.filter((b) => b.trust_score <= 19).length,
-      mashey: allBusinesses.filter((b) => b.trust_score >= 20 && b.trust_score <= 39).length,
-      fel: allBusinesses.filter((b) => b.trust_score >= 40 && b.trust_score <= 59).length,
-      harif: allBusinesses.filter((b) => b.trust_score >= 60 && b.trust_score <= 79).length,
-      ostora: allBusinesses.filter((b) => b.trust_score >= 80).length,
-    },
+    verified: allBusinesses.filter((b) => b.is_verified).length,
   }
 
   return (

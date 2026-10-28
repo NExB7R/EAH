@@ -21,7 +21,7 @@ const BUSINESS_COLUMNS = `
   id, slug, name, business_type, description, hook,
   area, city, address_text, map_url, cover_image_url,
   is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
-  trust_score, trust_tier, successful_orders,
+  successful_orders,
   featured_order, featured_until, featured_pin,
   new_until, working_hours, accepts_whatsapp_orders,
   response_time_avg_seconds, response_rate,
@@ -69,7 +69,10 @@ const getTopRated = unstable_cache(
       .from('businesses')
       .select(BUSINESS_COLUMNS)
       .eq('is_published', true)
-      .order('trust_score', { ascending: false })
+      .order('rating_count', { ascending: false })
+      .order('rating_avg', { ascending: false })
+      .order('successful_orders', { ascending: false })
+      .order('is_verified', { ascending: false })
       .order('rating_avg', { ascending: false })
       .limit(limit)
 
@@ -159,7 +162,10 @@ export async function getSuggestedBusinesses(userId: string | null): Promise<Sug
       .select(BUSINESS_COLUMNS)
       .eq('is_published', true)
       .eq('area', AREA_DEFAULT)
-      .order('trust_score', { ascending: false })
+      .order('rating_count', { ascending: false })
+      .order('rating_avg', { ascending: false })
+      .order('successful_orders', { ascending: false })
+      .order('is_verified', { ascending: false })
       .limit(MAX_RESULTS)
 
     const businesses = normalizeBusinesses(data)
@@ -181,7 +187,10 @@ export async function getSuggestedBusinesses(userId: string | null): Promise<Sug
     .select(BUSINESS_COLUMNS)
     .eq('is_published', true)
     .in('business_type', rankedTypes)
-    .order('trust_score', { ascending: false })
+    .order('rating_count', { ascending: false })
+      .order('rating_avg', { ascending: false })
+      .order('successful_orders', { ascending: false })
+      .order('is_verified', { ascending: false })
     .limit(MAX_RESULTS + 10) // هامش للاستبعاد
 
   if (error) {

@@ -16,23 +16,23 @@ import {
 // ═══════════════════════════════════════════════════════════
 
 describe('getTrustTier', () => {
-  it('0-19 → baraka', () => {
+  it('0-19 → بداية', () => {
     expect(getTrustTier(0)).toBe('bade2')
     expect(getTrustTier(19)).toBe('bade2')
   })
-  it('20-39 → active', () => {
+  it('20-39 → مشارك', () => {
     expect(getTrustTier(20)).toBe('mashey')
     expect(getTrustTier(39)).toBe('mashey')
   })
-  it('40-59 → mo3tabar', () => {
+  it('40-59 → نشط', () => {
     expect(getTrustTier(40)).toBe('fel')
     expect(getTrustTier(59)).toBe('fel')
   })
-  it('60-79 → kebeer', () => {
+  it('60-79 → متميز', () => {
     expect(getTrustTier(60)).toBe('harif')
     expect(getTrustTier(79)).toBe('harif')
   })
-  it('80-100 → legend', () => {
+  it('80-100 → أسطورة', () => {
     expect(getTrustTier(80)).toBe('ostora')
     expect(getTrustTier(100)).toBe('ostora')
   })

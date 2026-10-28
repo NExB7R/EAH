@@ -81,12 +81,12 @@ export default async function AccountPage() {
             <div className={styles.chips}>
               <span className={styles.chip}>
                 <StarIcon size={12} />
-                {profile.trust_score} ثقة
+                {profile.trust_score} نقطة مشاركة
               </span>
               {profile.phone_verified_at && (
                 <span className={`${styles.chip} ${styles.chipOk}`}>
                   <ShieldCheckIcon size={12} />
-                  موثّق
+                  الهاتف موثّق
                 </span>
               )}
               <span className={styles.chip}>عضو من {memberSince}</span>
@@ -101,6 +101,7 @@ export default async function AccountPage() {
 
       <TrustCard
         score={profile.trust_score ?? 50}
+        label="نقاط المشاركة"
         streakDays={profile.streak_days ?? 0}
         legendPoints={profile.legend_points ?? 0}
       />

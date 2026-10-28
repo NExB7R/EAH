@@ -155,8 +155,8 @@ export const getBusinessDetail = unstable_cache(
         `
         id, slug, name, business_type, custom_business_type, business_type_status, description, hook,
         area, city, address_text, map_url, cover_image_url,
-        is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
-        trust_score, trust_tier, successful_orders,
+        is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
+        successful_orders,
         featured_order, featured_until, featured_pin,
         new_until, working_hours, accepts_whatsapp_orders, accepts_orders,
         response_time_avg_seconds, response_rate,
@@ -357,8 +357,8 @@ export const getSimilarBusinesses = unstable_cache(
         `
         id, slug, name, business_type, description, hook,
         area, city, address_text, map_url, cover_image_url,
-        is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
-        trust_score, trust_tier, successful_orders,
+        is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
+        successful_orders,
         featured_order, featured_until, featured_pin,
         new_until, working_hours, open_now_override, accepts_whatsapp_orders, accepts_orders,
         response_time_avg_seconds, response_rate,
@@ -370,7 +370,10 @@ export const getSimilarBusinesses = unstable_cache(
       .eq('business_type', businessType)
       .eq('is_published', true)
       .neq('id', businessId)
-      .order('trust_score', { ascending: false })
+      .order('is_verified', { ascending: false })
+      .order('rating_count', { ascending: false })
+      .order('rating_avg', { ascending: false })
+      .order('successful_orders', { ascending: false })
       .limit(limit)
 
     return normalizeBusinessRows(data)

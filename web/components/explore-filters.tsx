@@ -42,24 +42,16 @@ const DISTANCES = [
   { value: '20000', label: '20 كم' },
 ] as const
 
-const TIERS = [
-  { value: 'bade2', label: 'لسه بادئ', icon: '🌱' },
-  { value: 'mashey', label: 'ماشي حاله', icon: '🌿' },
-  { value: 'fel', label: 'زي الفل', icon: '🌳' },
-  { value: 'harif', label: 'حريف', icon: '🏆' },
-  { value: 'ostora', label: 'الأسطورة', icon: '👑' },
-] as const
-
 const SORTS = [
   { value: 'distance', label: 'الأقرب', needsGeo: true },
-  { value: 'trust', label: 'الأعلى مصداقية' },
+  { value: 'quality', label: 'الأفضل حسب التقييم والسجل' },
   { value: 'rating', label: 'الأعلى تقييماً' },
   { value: 'newest', label: 'الأحدث' },
 ] as const
 
 type Counts = {
   types: Record<string, number>
-  tiers: Record<string, number>
+  verified: number
 }
 
 type Props = {
@@ -80,9 +72,10 @@ export default function ExploreFilters({ area, counts, activeAreas }: Props) {
   const currentType = searchParams.get('type')
   const currentRating = searchParams.get('rating')
   const currentDistance = searchParams.get('distance')
-  const currentSort = searchParams.get('sort') ?? 'trust'
+  const requestedSort = searchParams.get('sort')
+  const currentSort = !requestedSort || requestedSort === 'trust' ? 'quality' : requestedSort
   const currentArea = searchParams.get('area')
-  const currentTier = searchParams.get('tier')
+  const currentVerified = searchParams.get('verified') === '1'
   const openNow = searchParams.get('open') === '1'
   const online = searchParams.get('online') === '1'
   const hasOffers = searchParams.get('offers') === '1'
@@ -125,7 +118,7 @@ export default function ExploreFilters({ area, counts, activeAreas }: Props) {
 
   const activeCount =
     (currentType ? 1 : 0) +
-    (currentTier ? 1 : 0) +
+    (currentVerified ? 1 : 0) +
     (currentRating ? 1 : 0) +
     (currentDistance ? 1 : 0) +
     (openNow ? 1 : 0) +
@@ -237,24 +230,17 @@ export default function ExploreFilters({ area, counts, activeAreas }: Props) {
             </div>
           </Section>
 
-          <Section title="المصداقية">
+          <Section title="توثيق النشاط">
             <div className={styles.chips}>
-              {TIERS.map((t) => {
-                const c = counts?.tiers[t.value]
-                return (
-                  <Chip
-                    key={t.value}
-                    active={currentTier === t.value}
-                    onClick={() => updateParam('tier', currentTier === t.value ? null : t.value)}
-                  >
-                    <span className={styles.tierEmoji} aria-hidden="true">
-                      {t.icon}
-                    </span>
-                    {t.label}
-                    {c !== undefined && <span className={styles.count}>({c})</span>}
-                  </Chip>
-                )
-              })}
+              <Chip
+                active={currentVerified}
+                onClick={() => updateParam('verified', currentVerified ? null : '1')}
+              >
+                <span>أنشطة موثّقة من إدارة EAH</span>
+                {counts?.verified !== undefined && (
+                  <span className={styles.count}>({counts.verified})</span>
+                )}
+              </Chip>
             </div>
           </Section>
 

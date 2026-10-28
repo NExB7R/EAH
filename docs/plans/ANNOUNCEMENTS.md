@@ -19,7 +19,7 @@
 | **كل الأنشطة** | role = merchant |
 | **كل المستخدمين** | الجميع |
 | **باقة معينة** | subscription = premium / growth / partnership |
-| **حالة معينة** | phone_verified / trust_score > X / Streak > Y |
+| **حالة معينة** | phone_verified / نقاط المشاركة (trust_score) > X / Streak > Y |
 
 ---
 

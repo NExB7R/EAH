@@ -1,13 +1,14 @@
 import type { Business } from '@/lib/data/businesses'
 import { cachedNormalize, tokenize } from './normalize'
 import { extractTypes } from './synonyms'
+import { getBusinessReputationScore } from '@/lib/reputation'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Smart Search v2
 //   • Word-level matching
 //   • Fix bug: نفلتر بالـ type أولاً، ثم نرتّب بالاسم
 //   • Fuzzy matching (typos)
-//   • Secondary ranking (is_open + trust + rating)
+//   • Secondary ranking (availability + evidence-based business reputation)
 //   • Intent detection
 // ═══════════════════════════════════════════════════════════
 
@@ -161,9 +162,7 @@ function secondaryScore(b: Business): number {
   let s = 0
   if (b.is_open) s += 30
   if (b.is_featured) s += 15
-  s += (b.trust_score ?? 0) * 0.3
-  s += (b.rating_avg ?? 0) * 5
-  s += Math.min(b.rating_count ?? 0, 50) * 0.2
+  s += getBusinessReputationScore(b) * 0.3
   return s
 }
 

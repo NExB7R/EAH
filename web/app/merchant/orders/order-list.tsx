@@ -15,6 +15,9 @@ type Order = {
   customer_name: string | null
   customer_phone: string | null
   created_at: string
+  buyerAccountLinked: boolean
+  buyerPhoneVerified: boolean
+  buyerCompletedOrders: number
 }
 
 type Props = {

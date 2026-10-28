@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { trendScore, sortByTrend, sortByTrust, dailyShuffle } from './ranking'
+import { getBusinessReputationScore } from './reputation'
 import type { Business } from '@/lib/data'
 
 function makeBusiness(overrides: Partial<Business> = {}): Business {
@@ -44,10 +45,18 @@ describe('trendScore', () => {
     expect(score).toBeLessThan(2)
   })
 
-  it('ثقة أعلى = score أعلى', () => {
-    const low = makeBusiness({ trust_score: 20 })
-    const high = makeBusiness({ trust_score: 90 })
-    expect(trendScore(high)).toBeGreaterThan(trendScore(low))
+  it('نقاط المشاركة وحدها لا ترفع ترتيب النشاط', () => {
+    const low = makeBusiness({ trust_score: 20, is_verified: false, rating_count: 0, successful_orders: 0 })
+    const high = makeBusiness({ trust_score: 90, is_verified: false, rating_count: 0, successful_orders: 0 })
+    expect(getBusinessReputationScore(high)).toBe(getBusinessReputationScore(low))
+    expect(trendScore(high)).toBe(trendScore(low))
+  })
+
+  it('التوثيق والتقييم والطلبات المكتملة ترفع دليل السمعة', () => {
+    const newBusiness = makeBusiness({ is_verified: false, rating_count: 0, successful_orders: 0 })
+    const provenBusiness = makeBusiness({ is_verified: true, rating_avg: 4.8, rating_count: 12, successful_orders: 25 })
+    expect(getBusinessReputationScore(provenBusiness)).toBeGreaterThan(getBusinessReputationScore(newBusiness))
+    expect(trendScore(provenBusiness)).toBeGreaterThan(trendScore(newBusiness))
   })
 
   it('velocity أعلى = score أعلى', () => {
@@ -70,10 +79,10 @@ describe('trendScore', () => {
 })
 
 describe('sortByTrend', () => {
-  it('بيرتب تنازلياً حسب trendScore', () => {
-    const a = makeBusiness({ id: 'a', trust_score: 30 })
-    const b = makeBusiness({ id: 'b', trust_score: 80 })
-    const c = makeBusiness({ id: 'c', trust_score: 60 })
+  it('بيرتب تنازلياً حسب trendScore والأدلة الفعلية', () => {
+    const a = makeBusiness({ id: 'a', velocity_score: 5, is_verified: false, rating_count: 0, successful_orders: 0 })
+    const b = makeBusiness({ id: 'b', velocity_score: 45, is_verified: true, rating_avg: 4.8, rating_count: 12, successful_orders: 20 })
+    const c = makeBusiness({ id: 'c', velocity_score: 25, is_verified: true, rating_avg: 4.5, rating_count: 5, successful_orders: 8 })
     const sorted = sortByTrend([a, b, c])
     expect(sorted[0]?.id).toBe('b')
     expect(sorted[1]?.id).toBe('c')
@@ -81,8 +90,8 @@ describe('sortByTrend', () => {
   })
 
   it('مش بيعدّل المصفوفة الأصلية', () => {
-    const a = makeBusiness({ id: 'a', trust_score: 30 })
-    const b = makeBusiness({ id: 'b', trust_score: 80 })
+    const a = makeBusiness({ id: 'a', velocity_score: 5 })
+    const b = makeBusiness({ id: 'b', velocity_score: 45 })
     const original = [a, b]
     sortByTrend(original)
     expect(original[0]?.id).toBe('a')
@@ -90,12 +99,12 @@ describe('sortByTrend', () => {
 })
 
 describe('sortByTrust', () => {
-  it('بيرتب حسب trust_score', () => {
-    const a = makeBusiness({ id: 'a', trust_score: 20 })
-    const b = makeBusiness({ id: 'b', trust_score: 90 })
-    const c = makeBusiness({ id: 'c', trust_score: 50 })
-    const sorted = sortByTrust([a, b, c])
-    expect(sorted.map((x) => x.id)).toEqual(['b', 'c', 'a'])
+  it('الدالة القديمة sortByTrust تفرز دليل السمعة لا نقاط المشاركة', () => {
+    const a = makeBusiness({ id: 'a', trust_score: 100, is_verified: false, rating_count: 0, successful_orders: 0 })
+    const b = makeBusiness({ id: 'b', trust_score: 0, is_verified: true, rating_avg: 4.8, rating_count: 10, successful_orders: 20 })
+    const sorted = sortByTrust([a, b])
+    expect(sorted[0]?.id).toBe('b')
+    expect(sorted[1]?.id).toBe('a')
   })
 })
 

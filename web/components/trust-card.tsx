@@ -3,8 +3,7 @@ import { TRUST_TIERS, getTrustTier, getTrustTierMeta, trustProgress } from '@/li
 import styles from './trust-card.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Trust Card (المصداقية)
-// 5 مستويات: على البركة → أسطورة
+// EAH — Participation Points (not a reputation or verification score)
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
@@ -18,7 +17,7 @@ export default function TrustCard({
   score,
   streakDays,
   legendPoints = 0,
-  label = 'مصداقيتك',
+  label = 'نقاط المشاركة',
 }: Props) {
   const tier = getTrustTier(score)
   const meta = getTrustTierMeta(score)
@@ -28,7 +27,7 @@ export default function TrustCard({
   const progressPercent = isLegend ? Math.min(100, (legendPoints / 500) * 100) : progress.percent
 
   return (
-    <section className={`${styles.card} ${styles[tier]}`} aria-label="المصداقية">
+    <section className={`${styles.card} ${styles[tier]}`} aria-label="نقاط المشاركة">
       <header className={styles.header}>
         <div className={styles.iconWrap}>
           <ShieldCheckIcon size={20} />

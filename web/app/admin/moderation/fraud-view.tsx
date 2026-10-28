@@ -28,7 +28,7 @@ const EVENT_LABEL: Record<string, string> = {
   order_cancelled: 'طلب ملغي',
   report_filed: 'بلاغ',
   report_resolved: 'بلاغ اتحل',
-  decay: 'تناقص trust',
+  decay: 'تراجع نقاط المشاركة',
   badge_awarded: 'شارة جديدة',
 }
 
@@ -119,7 +119,7 @@ export default async function FraudView() {
                   <div className={styles.itemBody}>
                     <div className={styles.userRow}>
                       <span className={styles.userName}>{u.display_name}</span>
-                      <span className={styles.userMeta}>Trust: {u.trust_score}</span>
+                      <span className={styles.userMeta}>نقاط المشاركة: {u.trust_score}</span>
                       {u.phone && <span className={styles.userMeta}>· {u.phone}</span>}
                     </div>
                   </div>

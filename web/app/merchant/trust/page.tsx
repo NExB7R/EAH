@@ -1,17 +1,12 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import AccountPageHeader from '@/components/account-page-header'
-import TrustCard from '@/components/trust-card'
-import { AlertIcon, CheckCircleIcon, ArrowLeftIcon } from '@/components/icons'
+import { AlertIcon, CheckCircleIcon, ShieldCheckIcon, StarIcon, ArrowLeftIcon } from '@/components/icons'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness } from '@/lib/data/merchant'
-import { TRUST_EVENTS } from '@/lib/trust'
 import styles from './trust.module.css'
 
 export const dynamic = 'force-dynamic'
-
-const GAIN = Object.entries(TRUST_EVENTS).filter(([, v]) => v.delta > 0)
-const LOSE = Object.entries(TRUST_EVENTS).filter(([, v]) => v.delta < 0)
 
 export default async function MerchantTrustPage() {
   const session = await getUserSession()
@@ -22,79 +17,58 @@ export default async function MerchantTrustPage() {
 
   return (
     <div>
-      <AccountPageHeader title="مصداقية نشاطك" description="إزاي بتحسب + إزاي ترفعها + مكانتك" />
-
-      <TrustCard
-        score={business.trust_score ?? 50}
-        streakDays={session.streakDays ?? 0}
-        legendPoints={session.legendPoints ?? 0}
-        label="مصداقية النشاط"
+      <AccountPageHeader
+        title="سمعة نشاطك"
+        description="بيانات واضحة تساعد المشترين على فهم نشاطك وسجل التعاملات."
       />
-
-      <p
-        style={{
-          margin: '-8px 0 16px',
-          padding: '10px 14px',
-          borderRadius: 10,
-          background: 'rgba(168, 85, 247, 0.06)',
-          border: '1px solid rgba(168, 85, 247, 0.15)',
-          fontSize: '0.75rem',
-          color: 'var(--text-muted)',
-          lineHeight: 1.5,
-          textAlign: 'center',
-        }}
-      >
-        🔥 {session.streakDays ?? 0} يوم نشاط متواصل · ⭐ {session.legendPoints ?? 0} نقطة
-      </p>
-
-      <section className={styles.section}>
-        <div className={styles.helpCard}>
-          <h2 className={styles.helpTitle}>إزاي ترفع مصداقيتك؟</h2>
-          <p className={styles.helpText}>المصداقية بتزيد مع كل تفاعل حقيقي. ركّز على:</p>
-          <ul className={styles.helpList}>
-            <li>✅ الرد السريع على الطلبات</li>
-            <li>✅ تقييمات معتمدة من عملاء حقيقيين</li>
-            <li>✅ إكمال الطلبات بدون إلغاء</li>
-            <li>✅ نشاط مستمر على المنصة</li>
-          </ul>
-        </div>
+      <section className={styles.summaryGrid} aria-label="مؤشرات سمعة النشاط">
+        <article className={styles.summaryCard}>
+          <span className={styles.summaryIcon}><ShieldCheckIcon size={20} /></span>
+          <span className={styles.summaryLabel}>توثيق إدارة EAH</span>
+          <strong className={business.is_verified ? styles.summaryVerified : styles.summaryValue}>
+            {business.is_verified ? 'تم التحقق' : 'لم يتم التحقق بعد'}
+          </strong>
+          <p className={styles.summaryHint}>
+            {business.is_verified ? 'تم التحقق من بيانات محددة للنشاط.' : 'أكمل بيانات نشاطك حتى تتمكن الإدارة من مراجعتها.'}
+          </p>
+        </article>
+        <article className={styles.summaryCard}>
+          <span className={styles.summaryIcon}><StarIcon size={20} /></span>
+          <span className={styles.summaryLabel}>تقييم المشترين</span>
+          <strong className={styles.summaryValue}>
+            {business.rating_count > 0 ? `${business.rating_avg.toFixed(1)} / 5` : 'لا توجد تقييمات بعد'}
+          </strong>
+          <p className={styles.summaryHint}>
+            {business.rating_count > 0 ? `${business.rating_count.toLocaleString('ar-EG')} تقييم` : 'يظهر التقييم بعد توفر تجارب تعامل حقيقية.'}
+          </p>
+        </article>
+        <article className={styles.summaryCard}>
+          <span className={styles.summaryIcon}><CheckCircleIcon size={20} /></span>
+          <span className={styles.summaryLabel}>طلبات مكتملة على EAH</span>
+          <strong className={styles.summaryValue}>{business.successful_orders.toLocaleString('ar-EG')}</strong>
+          <p className={styles.summaryHint}>عدد فعلي للطلبات المسجلة كمكتملة على المنصة.</p>
+        </article>
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>
-          <CheckCircleIcon size={18} />
-          اللي بيزوّد
-        </h2>
-        <ul className={styles.eventsList}>
-          {GAIN.map(([key, ev]) => (
-            <li key={key} className={styles.eventItem}>
-              <span className={styles.eventIcon}>{ev.icon}</span>
-              <span className={styles.eventLabel}>{ev.label}</span>
-              <span className={styles.eventDeltaPlus}>+{ev.delta}</span>
-            </li>
-          ))}
+      <section className={styles.explanationCard}>
+        <h2 className={styles.helpTitle}>إزاي تحسن سمعة نشاطك؟</h2>
+        <ul className={styles.helpList}>
+          <li>✅ حافظ على معلومات النشاط وصوره ومواعيده محدثة.</li>
+          <li>✅ وضّح حالة الطلب للمشتري وتابع الطلبات حتى اكتمالها.</li>
+          <li>✅ اطلب تقييمًا بعد تجربة حقيقية، وتجنب التقييمات الوهمية أو المتبادلة.</li>
+          <li>✅ تعامل مع الشكاوى بجدية؛ البلاغ وحده لا يثبت مخالفة، لكن الأدلة المثبتة قد تستدعي مراجعة الإدارة.</li>
         </ul>
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>
-          <AlertIcon size={18} />
-          اللي بينقّص
-        </h2>
-        <ul className={styles.eventsList}>
-          {LOSE.map(([key, ev]) => (
-            <li key={key} className={styles.eventItem}>
-              <span className={styles.eventIcon}>{ev.icon}</span>
-              <span className={styles.eventLabel}>{ev.label}</span>
-              <span className={styles.eventDeltaMinus}>{ev.delta}</span>
-            </li>
-          ))}
-        </ul>
+      <section className={styles.noticeCard}>
+        <AlertIcon size={17} />
+        <p>
+          نقاط المشاركة والمشاهدات والإعجابات ليست دليلًا على جودة التعامل، ولا ترفع ترتيب سمعة نشاطك. لن يظهر للمشتري رقم مصداقية افتراضي؛ تظهر له التقييمات وسجل الطلبات والتوثيق كلٌّ بمعناه.
+        </p>
       </section>
-
       <section className={styles.footer}>
         <Link href="/trust" className={styles.learnMore}>
-          <span>اعرف أكتر عن نظام المصداقية</span>
+          <span>اعرف قواعد السمعة والتوثيق</span>
           <ArrowLeftIcon size={14} />
         </Link>
       </section>

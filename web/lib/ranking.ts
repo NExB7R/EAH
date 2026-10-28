@@ -1,4 +1,5 @@
 import type { Business } from '@/lib/data'
+import { getBusinessReputationScore } from '@/lib/reputation'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Trend Score (2026) — 7 معايير
@@ -27,8 +28,8 @@ export function trendScore(b: Business): number {
   // 1) Velocity (25%) — نشاط الأسبوع الأخير
   const velocity = Math.min(1, (b.velocity_score ?? 0) / 50)
 
-  // 2) Trust (20%)
-  const trust = Math.min(1, b.trust_score / 100)
+  // 2) Evidence-based public business reputation (20%); participation points are excluded.
+  const reputation = getBusinessReputationScore(b) / 100
 
   // 3) Recency (15%) — آخر نشاط
   const recency = decay(daysSince(b.last_activity_at))
@@ -47,7 +48,7 @@ export function trendScore(b: Business): number {
 
   return (
     velocity * 0.25 +
-    trust * 0.2 +
+    reputation * 0.2 +
     recency * 0.15 +
     diversity * 0.15 +
     quality * 0.1 +
@@ -60,8 +61,9 @@ export function sortByTrend(businesses: Business[]): Business[] {
   return [...businesses].sort((a, b) => trendScore(b) - trendScore(a))
 }
 
+/** Backward-compatible name; orders by evidence-based business reputation. */
 export function sortByTrust(businesses: Business[]): Business[] {
-  return [...businesses].sort((a, b) => b.trust_score - a.trust_score)
+  return [...businesses].sort((a, b) => getBusinessReputationScore(b) - getBusinessReputationScore(a))
 }
 
 // ═══════════════════════════════════════════════════════════

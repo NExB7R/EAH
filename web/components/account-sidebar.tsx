@@ -69,8 +69,8 @@ const SECTIONS: Section[] = [
     ],
   },
   {
-    title: 'الثقة',
-    items: [{ key: 'trust', href: '/trust', label: 'المصداقية', Icon: ShieldCheckIcon }],
+    title: 'السمعة والتوثيق',
+    items: [{ key: 'trust', href: '/trust', label: 'السمعة والتوثيق', Icon: ShieldCheckIcon }],
   },
 ]
 

@@ -14,6 +14,7 @@ import Avatar from '@/components/avatar'
 import { banUser, unbanUser, changeUserRole, adjustTrust, togglePremium } from './actions'
 import type { AdminUser } from './types'
 import styles from './users.module.css'
+import { getTrustTierMeta } from '@/lib/trust'
 
 type Props = {
   user: AdminUser
@@ -22,17 +23,11 @@ type Props = {
   showCheckbox?: boolean
 }
 
-const TIER_LABEL: Record<string, string> = {
-  trusted: 'موثوق',
-  verified: 'موثّق',
-  new: 'جديد',
-}
-
 const ROLE_LABEL: Record<string, string> = {
-  customer: 'عميل',
-  merchant: 'تاجر',
-  admin: 'أدمن',
-  super_admin: 'سوبر أدمن',
+  customer: 'المشتري',
+  merchant: 'البايع',
+  admin: 'الأدمن',
+  super_admin: 'الأدمن',
 }
 
 const ROLES = ['customer', 'merchant', 'admin', 'super_admin'] as const
@@ -143,14 +138,14 @@ export default function UserRow({
           <div className={styles.meta}>
             {u.phone && <span className={styles.phone}>{u.phone}</span>}
             <span className={styles.dot}>·</span>
-            <span>{TIER_LABEL[u.trust_tier] ?? u.trust_tier}</span>
+            <span>نقاط المشاركة: {getTrustTierMeta(u.trust_score).label}</span>
             <span className={styles.dot}>·</span>
             <span>انضم {joined}</span>
           </div>
         </div>
         <span className={styles.trust}>
           <StarIcon size={12} />
-          {u.trust_score}
+          نقاط {u.trust_score}
         </span>
       </div>
 

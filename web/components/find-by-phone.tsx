@@ -3,8 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Turnstile } from '@marsidev/react-turnstile'
-import { SearchIcon, PhoneIcon, ShieldCheckIcon, StarIcon, AlertIcon } from './icons'
-import { getTrustTierMeta } from '@/lib/trust'
+import { SearchIcon, PhoneIcon, AlertIcon } from './icons'
 import styles from './find-by-phone.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -17,9 +16,6 @@ type UserResult = {
   display_name: string
   alias: string | null
   avatar_url: string | null
-  trust_score: number
-  trust_tier: string
-  legend_points: number
   is_premium: boolean
   is_business: boolean
   business_slug: string | null
@@ -154,41 +150,14 @@ export default function FindByPhone() {
                 {state.user.is_premium && <span className={styles.premium}>⭐</span>}
               </h3>
               <div className={styles.userMeta}>
-                <span className={styles.levelBadge}>
-                  {getTrustTierMeta(state.user.trust_score).emoji}{' '}
-                  {getTrustTierMeta(state.user.trust_score).label}
-                </span>
-                {state.user.trust_tier === 'harif' && (
-                  <span className={styles.verified}>
-                    <ShieldCheckIcon size={12} />
-                    كبير
-                  </span>
-                )}
-                {state.user.trust_tier === 'ostora' && (
-                  <span className={styles.verified}>
-                    <ShieldCheckIcon size={12} />
-                    أسطورة
-                  </span>
-                )}
+                <span className={styles.profileNote}>ملف مستخدم على EAH</span>
               </div>
             </div>
           </div>
 
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <span className={styles.statValue}>
-                <StarIcon size={14} />
-                {state.user.trust_score}
-              </span>
-              <span className={styles.statLabel}>المصداقية</span>
-            </div>
-            {state.user.legend_points > 0 && (
-              <div className={styles.stat}>
-                <span className={styles.statValue}>👑 {state.user.legend_points}</span>
-                <span className={styles.statLabel}>نقاط أسطورة</span>
-              </div>
-            )}
-          </div>
+          <p className={styles.privacyNote}>
+            بيانات السمعة والتعاملات لا تظهر عبر البحث برقم الهاتف. لا يمكن الحكم على موثوقية شخص من بيانات الملف وحدها.
+          </p>
 
           {state.user.is_business && state.user.business_slug && (
             <Link href={`/businesses/${state.user.business_slug}`} className={styles.businessBtn}>

@@ -26,7 +26,8 @@
 **لو أنت AI / مطور جديد:**
 
 1. **[docs/PROJECT_OPERATING_GUIDE.md](./docs/PROJECT_OPERATING_GUIDE.md)** — الحالة الحالية، ترتيب التنفيذ، والمعايير التشغيلية
-2. **[docs/ROLES_MATRIX.md](./docs/ROLES_MATRIX.md)** — الأدوار والصلاحيات ودورة النشاط
+2. **[docs/ROLES_MATRIX.md](./docs/ROLES_MATRIX.md)
+- **[docs/REPUTATION_POLICY.md](./docs/REPUTATION_POLICY.md)** — سياسة السمعة والتوثيق وخصوصية المشتري** — الأدوار والصلاحيات ودورة النشاط
 3. **[docs/MASTER_BRIEF.md](./docs/MASTER_BRIEF.md)** — الرؤية والهوية والأهداف
 4. **[docs/AI_CONTRACT.md](./docs/AI_CONTRACT.md)** — القواعد الإجبارية
 5. **[docs/SACRED.md](./docs/SACRED.md)** — المقدسات
