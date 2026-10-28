@@ -83,6 +83,11 @@ jobs:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
       - name: Require a dedicated non-production database
         run: |
           if [[ -z "$SUPABASE_DB_URL" ]]; then
@@ -93,11 +98,6 @@ jobs:
             echo "::error::Refusing to mutate the EAH production database from CI."
             exit 1
           fi
-
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          persist-credentials: false
 
       - name: Setup Supabase CLI
         uses: supabase/setup-cli@v1
