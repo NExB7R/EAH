@@ -104,7 +104,12 @@ export async function bulkBanUsers(ids: string[], days: number, reason: string):
     actorUserId: ctx.userId,
     action: 'user.bulk_ban',
     entityType: 'profile',
-    metadata: { ids: affectedIds, days: parsed.data.days, reason: parsed.data.reason, banned_until: bannedUntil },
+    metadata: {
+      ids: affectedIds,
+      days: parsed.data.days,
+      reason: parsed.data.reason,
+      banned_until: bannedUntil,
+    },
   })
 
   revalidatePath('/admin/users')
