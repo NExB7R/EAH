@@ -122,7 +122,7 @@ export default async function FraudView() {
                       <span className={styles.userMeta}>نقاط المشاركة: {u.trust_score}</span>
                       <span className={styles.userMeta}>بلاغات مثبتة: {u.report_wanted_level}</span>
                       <span className={styles.userMeta}>إشارة حسابات متعددة: {u.multi_account_level}</span>
-                      {u.phone && <span className={styles.userMeta}>· {u.phone}</span>
+                      {u.phone && <span className={styles.userMeta}>· {u.phone}</span>}
                     </div>
                   </div>
                 </li>
