@@ -2,6 +2,8 @@
 
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
+import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
+import { parseCairoLocalDateTime } from '@/lib/utils/timezone'
 import { logAudit } from '@/lib/logging/audit'
 import { createServiceClient } from '@/lib/supabase/service'
 import { createClient } from '@/lib/supabase/server'
@@ -34,7 +36,7 @@ const optionalDateTime = z
   .string()
   .optional()
   .or(z.literal(''))
-  .refine((value) => !value || Number.isFinite(Date.parse(value)), {
+  .refine((value) => !value || parseCairoLocalDateTime(value) !== null, {
     message: 'صيغة التاريخ غير صحيحة',
   })
 
@@ -51,11 +53,11 @@ const schema = z
   })
   .refine(
     (value) => {
-      const startsAt = value.startsAt ? Date.parse(value.startsAt) : Date.now()
-      if (!Number.isFinite(startsAt)) return false
+      const start = value.startsAt ? parseCairoLocalDateTime(value.startsAt)?.getTime() : Date.now()
+      if (start === undefined || !Number.isFinite(start)) return false
       if (!value.endsAt) return true
-      const endsAt = Date.parse(value.endsAt)
-      return Number.isFinite(endsAt) && endsAt > startsAt
+      const end = parseCairoLocalDateTime(value.endsAt)?.getTime()
+      return end !== undefined && Number.isFinite(end) && end > start
     },
     { message: 'موعد الانتهاء لازم يكون بعد بداية الإعلان' },
   )
@@ -98,6 +100,11 @@ export async function requestAd(formData: FormData): Promise<Result> {
   const ctx = await myBiz()
   if (!ctx.ok) return { ok: false, error: ctx.error }
 
+  const rateLimit = await checkRateLimit(strictLimiter, `merchant-ad-request:${ctx.userId}`, {
+    failClosed: true,
+  })
+  if (!rateLimit.ok) return { ok: false, error: rateLimit.error }
+
   const parsed = schema.safeParse({
     slotId: String(formData.get('slotId') ?? '').trim(),
     title: String(formData.get('title') ?? '').trim(),
@@ -123,8 +130,13 @@ export async function requestAd(formData: FormData): Promise<Result> {
   if (!slot) return { ok: false, error: 'مكان الإعلان غير متاح حاليًا. اختار مكانًا آخر.' }
 
   // The live schema requires starts_at; do not send NULL for an empty form field.
-  const startsAt = d.startsAt ? new Date(d.startsAt).toISOString() : new Date().toISOString()
-  const endsAt = d.endsAt ? new Date(d.endsAt).toISOString() : null
+  const startDate = d.startsAt ? parseCairoLocalDateTime(d.startsAt) : new Date()
+  const endDate = d.endsAt ? parseCairoLocalDateTime(d.endsAt) : null
+  if (!startDate || (d.endsAt && !endDate)) {
+    return { ok: false, error: 'صيغة التاريخ غير صحيحة' }
+  }
+  const startsAt = startDate.toISOString()
+  const endsAt = endDate?.toISOString() ?? null
 
   const { data, error } = await ctx.supabase
     .from('ads')
@@ -160,16 +172,18 @@ export async function requestAd(formData: FormData): Promise<Result> {
     .eq('role', 'super_admin')
 
   if (admins && admins.length > 0) {
-    for (const admin of admins) {
-      void createNotification({
-        userId: admin.user_id,
-        type: 'admin',
-        title: 'إعلان جديد بانتظار المراجعة',
-        body: `من نشاط — "${d.title}"`,
-        deepLink: '/admin/ads',
-        pushTag: `ad-request-${data.id}`,
-      }).catch(() => {})
-    }
+    await Promise.allSettled(
+      admins.map((admin) =>
+        createNotification({
+          userId: admin.user_id,
+          type: 'admin',
+          title: 'إعلان جديد بانتظار المراجعة',
+          body: `من نشاط — "${d.title}"`,
+          deepLink: '/admin/ads',
+          pushTag: `ad-request-${data.id}`,
+        }),
+      ),
+    )
   }
 
   revalidatePath('/merchant/ads')
@@ -184,6 +198,11 @@ export async function cancelMyAd(id: string): Promise<Result> {
 
   const ctx = await myBiz()
   if (!ctx.ok) return { ok: false, error: ctx.error }
+
+  const rateLimit = await checkRateLimit(strictLimiter, `merchant-ad-cancel:${ctx.userId}`, {
+    failClosed: true,
+  })
+  if (!rateLimit.ok) return { ok: false, error: rateLimit.error }
 
   const { data: ad, error: lookupError } = await ctx.supabase
     .from('ads')

@@ -62,3 +62,77 @@ export function getCairoDateParts(value: string | Date): CairoDateParts | null {
 
   return { dateKey: `${year}-${month}-${day}`, dayKey, hour, minute }
 }
+
+
+/**
+ * Interpret a datetime-local input as Cairo wall time and convert it to UTC.
+ * Returns null for malformed calendar values and local times skipped by DST.
+ */
+export function parseCairoLocalDateTime(value: string): Date | null {
+  const match = /^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})(?::(\\d{2}))?$/.exec(
+    value.trim(),
+  )
+  if (!match) return null
+
+  const [, yearRaw, monthRaw, dayRaw, hourRaw, minuteRaw, secondRaw = '0'] = match
+  const year = Number(yearRaw)
+  const month = Number(monthRaw)
+  const day = Number(dayRaw)
+  const hour = Number(hourRaw)
+  const minute = Number(minuteRaw)
+  const second = Number(secondRaw)
+
+  if (
+    year < 1900 ||
+    month < 1 ||
+    month > 12 ||
+    day < 1 ||
+    day > 31 ||
+    hour > 23 ||
+    minute > 59 ||
+    second > 59
+  ) {
+    return null
+  }
+
+  const desired = new Date(0)
+  desired.setUTCFullYear(year, month - 1, day)
+  desired.setUTCHours(hour, minute, second, 0)
+  const desiredTimestamp = desired.getTime()
+
+  // setUTCFullYear normalizes impossible dates, so reject any rollover.
+  if (
+    desired.getUTCFullYear() !== year ||
+    desired.getUTCMonth() + 1 !== month ||
+    desired.getUTCDate() !== day
+  ) {
+    return null
+  }
+
+  let candidate = desiredTimestamp
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const parts = getCairoDateParts(new Date(candidate))
+    if (!parts) return null
+
+    const [cairoYear, cairoMonth, cairoDay] = parts.dateKey.split('-').map(Number)
+    const represented = Date.UTC(cairoYear, cairoMonth - 1, cairoDay, parts.hour, parts.minute)
+    const difference = desiredTimestamp - represented
+    if (difference === 0) break
+    candidate += difference
+  }
+
+  const resolved = new Date(candidate)
+  const finalParts = getCairoDateParts(resolved)
+  if (!finalParts) return null
+
+  const expectedDate = `${yearRaw}-${monthRaw}-${dayRaw}`
+  if (
+    finalParts.dateKey !== expectedDate ||
+    finalParts.hour !== hour ||
+    finalParts.minute !== minute
+  ) {
+    return null
+  }
+
+  return resolved
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getCairoDateParts } from './timezone'
+import { getCairoDateParts, parseCairoLocalDateTime } from './timezone'
 
 describe('Cairo business timezone helpers', () => {
   it('uses Egypt daylight-saving time when it is active', () => {
@@ -30,7 +30,25 @@ describe('Cairo business timezone helpers', () => {
     })
   })
 
-  it('fails closed for invalid timestamps', () => {
+  it('converts Cairo local time to UTC during daylight-saving time', () => {
+    expect(parseCairoLocalDateTime('2026-07-02T01:30')?.toISOString()).toBe(
+      '2026-07-01T22:30:00.000Z',
+    )
+  })
+
+  it('converts Cairo local time to UTC during standard time', () => {
+    expect(parseCairoLocalDateTime('2026-11-02T00:30')?.toISOString()).toBe(
+      '2026-11-01T22:30:00.000Z',
+    )
+  })
+
+  it('rejects impossible local datetimes', () => {
+    expect(parseCairoLocalDateTime('2026-02-30T12:00')).toBeNull()
+    expect(parseCairoLocalDateTime('2026-13-01T12:00')).toBeNull()
+    expect(parseCairoLocalDateTime('invalid')).toBeNull()
+  })
+
+  it('fails closed for invalid timestamps', () =>
     expect(getCairoDateParts('not-a-date')).toBeNull()
     expect(getCairoDateParts(new Date(Number.NaN))).toBeNull()
   })
