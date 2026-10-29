@@ -26,11 +26,11 @@ type Props = {
 const ROLE_LABEL: Record<string, string> = {
   customer: 'المشتري',
   merchant: 'البايع',
-  admin: 'الأدمن',
+  admin: 'دور إداري قديم',
   super_admin: 'الأدمن',
 }
 
-const ROLES = ['customer', 'merchant', 'admin'] as const
+const ROLES = ['customer', 'merchant'] as const
 
 export default function UserRow({
   user: u,

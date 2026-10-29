@@ -162,7 +162,7 @@ export async function unbanUser(userId: string): Promise<Result> {
 
 // ─── Change Role ───
 
-const roleSchema = z.enum(['customer', 'merchant', 'admin', 'super_admin'])
+const roleSchema = z.enum(['customer', 'merchant'])
 
 export async function changeUserRole(userId: string, role: string): Promise<Result> {
   const ctx = await requireAdmin()
@@ -175,11 +175,6 @@ export async function changeUserRole(userId: string, role: string): Promise<Resu
 
   const parsed = roleSchema.safeParse(role)
   if (!parsed.success) return { ok: false, error: 'دور غير صحيح' }
-
-  // Only the internal super-admin permission may grant or change that permission.
-  if (parsed.data === 'super_admin' && ctx.role !== 'super_admin') {
-    return { ok: false, error: 'منح صلاحيات الأدمن الأعلى متاح للأدمن الأعلى فقط' }
-  }
 
   let admin: ReturnType<typeof createServiceClient>
   try {
@@ -199,8 +194,8 @@ export async function changeUserRole(userId: string, role: string): Promise<Resu
   if (targetRoleError) {
     return { ok: false, error: 'تعذر التحقق من الدور الحالي للمستخدم' }
   }
-  if (targetRole?.role === 'super_admin' && ctx.role !== 'super_admin') {
-    return { ok: false, error: 'تغيير دور الأدمن الأعلى متاح للأدمن الأعلى فقط' }
+  if (targetRole?.role === 'super_admin') {
+    return { ok: false, error: 'ده حساب الأدمن الأعلى الوحيد؛ ممنوع تغيير دوره من شاشة المستخدمين' }
   }
 
   const { data: profile, error: profileError } = await admin

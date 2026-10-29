@@ -87,7 +87,7 @@ export async function requestAd(formData: FormData): Promise<Result> {
   const { data: admins } = await ctx.supabase
     .from('user_roles')
     .select('user_id')
-    .in('role', ['admin', 'super_admin'])
+    .eq('role', 'super_admin')
 
   if (admins && admins.length > 0) {
     for (const admin of admins) {
