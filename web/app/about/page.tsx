@@ -103,7 +103,7 @@ export default function AboutPage() {
             </div>
             <div className={styles.problemCard}>
               <span className={styles.problemNum}>03</span>
-              <h3 className={styles.problemTitle}>التجار بيغرقوا</h3>
+              <h3 className={styles.problemTitle}>البايعين محتاجين ظهور</h3>
               <p className={styles.problemText}>
                 صاحب النشاط محتاج يوصل للناس، بس مش عايز يدفع عمولات كل طلب.
               </p>

@@ -6,7 +6,7 @@ import styles from './faq.module.css'
 
 export const metadata: Metadata = {
   title: 'الأسئلة الشائعة',
-  description: 'أسئلة متكررة عن EAH — للعملاء وأصحاب الأنشطة',
+  description: 'أسئلة متكررة عن EAH — للمشتري والبايع',
 }
 
 export const revalidate = 3600
@@ -119,7 +119,7 @@ const GENERAL_FAQ: QA[] = [
 
 const CATEGORIES = [
   { key: 'customer', title: 'للعملاء', Icon: UserIcon, items: CUSTOMER_FAQ, tone: 'purple' },
-  { key: 'merchant', title: 'لأصحاب الأنشطة', Icon: StoreIcon, items: MERCHANT_FAQ, tone: 'gold' },
+  { key: 'merchant', title: 'للبايع', Icon: StoreIcon, items: MERCHANT_FAQ, tone: 'gold' },
   { key: 'general', title: 'عام', Icon: ShieldCheckIcon, items: GENERAL_FAQ, tone: 'teal' },
 ] as const
 
@@ -136,7 +136,7 @@ export default function FaqPage() {
           </span>
           <h1 className={styles.introTitle}>كل اللي محتاج تعرفه عن EAH</h1>
           <p className={styles.introText}>
-            جمّعنا هنا الأسئلة الأكثر شيوعاً — للعملاء، لأصحاب الأنشطة، وأسئلة عامة.
+            جمّعنا هنا الأسئلة الأكثر شيوعاً — للمشتري، والبايع، وأسئلة عامة.
           </p>
         </section>
 
