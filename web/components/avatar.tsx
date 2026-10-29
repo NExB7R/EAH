@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import type { AppRole } from '@/lib/data/user'
-import { BadgeCheckIcon } from './icons'
+import { BadgeCheckIcon, CrownGoldIcon } from './icons'
 import styles from './avatar.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -40,7 +40,7 @@ export default function Avatar({
 
   const sizeCls = styles[size]
   const roleCls =
-    role === 'super_admin' || role === 'admin'
+    role === 'super_admin'
       ? styles.admin
       : role === 'merchant'
         ? styles.merchant
@@ -73,13 +73,13 @@ export default function Avatar({
         <span className={styles.initial}>{initial}</span>
       )}
 
-      {(role === 'super_admin' || role === 'admin') && (
+      {role === 'super_admin' && (
         <span className={styles.badge} aria-hidden>
-          👑
+          <CrownGoldIcon size={12} />
         </span>
       )}
 
-      {phoneVerified && role !== 'super_admin' && role !== 'admin' && (
+      {phoneVerified && role !== 'super_admin' && (
         <span className={styles.check} aria-hidden>
           <BadgeCheckIcon size={12} />
         </span>

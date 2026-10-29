@@ -23,7 +23,7 @@ type Props = {
     hideAvatar: boolean
     hideFavorites: boolean
     hideFollowing: boolean
-    role: 'customer' | 'merchant' | 'admin' | 'super_admin'
+    role: 'customer' | 'merchant' | 'super_admin'
     phoneVerified: boolean
   }
 }
