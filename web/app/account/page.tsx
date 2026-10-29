@@ -70,7 +70,8 @@ export default async function AccountPage() {
             displayName={profile.display_name}
             avatarUrl={profile.avatar_url}
             role={session.role}
-            phoneVerified={!!profile.phone_verified_at}
+            isVerified={session.isVerified}
+            isPaidMember={session.isPaidMember}
             size="lg"
           />
           <div className={styles.info}>
