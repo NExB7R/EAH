@@ -144,6 +144,7 @@ export async function POST(request: Request) {
       .select('value, is_primary')
       .eq('business_id', parsed.data.businessId)
       .eq('method_type', parsed.data.method)
+      .eq('is_public', true)
       .order('is_primary', { ascending: false })
       .limit(5)
     if (contactError) {
