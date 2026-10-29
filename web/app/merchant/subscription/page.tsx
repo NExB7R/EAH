@@ -11,6 +11,7 @@ import {
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness, getMySubscription } from '@/lib/data/merchant'
 import { getSubscriptionPlans, FEATURE_LABEL } from '@/lib/data/subscriptions'
+import { getPublicContactSettings } from '@/lib/data/site-settings'
 import type { PlanFeatureKey } from '@/lib/data/subscriptions'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
@@ -27,9 +28,10 @@ export default async function MerchantSubscriptionPage() {
   const business = await getMyBusiness(session.userId)
   if (!business) redirect('/merchant')
 
-  const [subscription, plans] = await Promise.all([
+  const [subscription, plans, contactLinks] = await Promise.all([
     getMySubscription(business.id),
     getSubscriptionPlans(),
+    getPublicContactSettings(),
   ])
 
   const currentCode = subscription?.plan?.code ?? 'basic'
@@ -96,16 +98,22 @@ export default async function MerchantSubscriptionPage() {
           </span>
           <div className={styles.trialMsgBody}>
             <strong>عايز تكمّل التجربة 15 يوم كمان؟</strong>
-            <p>اعمل بوست على صفحتك + تقييم على صفحتنا، وابعت السكرين شوت لرقمنا على واتساب.</p>
+            <p>تقدر تراجع خيارات التواصل المعتمدة أو تتابع من مركز المساعدة.</p>
           </div>
-          <a
-            href="https://wa.me/201012892806?text=عايز%20أكمّل%20التجربة%20المجانية"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.trialMsgBtn}
-          >
-            ابعت السكرين
-          </a>
+          {contactLinks.supportWhatsappUrl ? (
+            <a
+              href={`${contactLinks.supportWhatsappUrl}?text=${encodeURIComponent('عايز أكمّل التجربة المجانية')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.trialMsgBtn}
+            >
+              تواصل على واتساب
+            </a>
+          ) : (
+            <Link href="/contact" className={styles.trialMsgBtn}>
+              خيارات التواصل
+            </Link>
+          )}
         </div>
       )}
 
