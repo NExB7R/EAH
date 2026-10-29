@@ -86,6 +86,12 @@ export type ContactMethod = {
   is_primary: boolean
 }
 
+function safeContactOptionLabel(value: string | null | undefined, fallback: string): string {
+  const label = value?.trim().replace(/\\s+/g, ' ')
+  if (!label || /(?:\\+?\\d[\\d\\s().-]{6,}\\d)/.test(label)) return fallback
+  return label.slice(0, 60)
+}
+
 export type ContactOption = {
   method: 'phone' | 'whatsapp'
   label: string
@@ -310,7 +316,7 @@ export const getBusinessDetail = unstable_cache(
     // Only the non-sensitive branch fields may be serialized to the browser.
     const branches: Branch[] = rawBranches.map((branch) => ({
       id: branch.id,
-      name: branch.name,
+      name: safeContactOptionLabel(branch.name, branch.is_primary ? 'الفرع الرئيسي' : 'فرع النشاط'),
       area: branch.area,
       address_text: branch.address_text,
       latitude: branch.latitude,
@@ -356,7 +362,10 @@ export const getBusinessDetail = unstable_cache(
     }
 
     for (const branch of rawBranches) {
-      const branchLabel = branch.name?.trim() || (branch.is_primary ? 'الفرع الرئيسي' : 'فرع النشاط')
+      const branchLabel = safeContactOptionLabel(
+        branch.name,
+        branch.is_primary ? 'الفرع الرئيسي' : 'فرع النشاط',
+      )
       if (branch.phone) {
         addOption('phone', branch.phone, branchLabel + ' — اتصال', branch.is_primary, { branchId: branch.id })
         phoneIndex++
@@ -378,7 +387,7 @@ export const getBusinessDetail = unstable_cache(
       addOption(
         method,
         contact.value,
-        contact.label?.trim() || defaultLabel,
+        safeContactOptionLabel(contact.label, defaultLabel),
         contact.is_primary,
         { contactId: contact.id },
       )
