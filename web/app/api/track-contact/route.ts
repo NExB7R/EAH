@@ -9,6 +9,10 @@ import { normalizePhoneDestination, normalizeWhatsAppDestination } from '@/lib/d
 const schema = z.object({
   businessId: z.string().uuid(),
   method: z.enum(['phone', 'whatsapp']),
+  contactId: z.string().uuid().optional(),
+  branchId: z.string().uuid().optional(),
+}).refine((data) => !(data.contactId && data.branchId), {
+  message: 'اختر جهة اتصال واحدة فقط',
 })
 
 const MAX_BODY_BYTES = 8192
@@ -119,57 +123,80 @@ export async function POST(request: Request) {
     )
   }
 
-  const { data: branches, error: branchError } = await privileged
-    .from('business_branches')
-    .select('phone, whatsapp, is_primary, sort_order')
-    .eq('business_id', parsed.data.businessId)
-    .eq('is_active', true)
-    .order('is_primary', { ascending: false })
-    .order('sort_order', { ascending: true })
-    .limit(25)
-  if (branchError) {
-    console.error('[track-contact] branch lookup failed:', branchError.message)
-    return NextResponse.json({ ok: false, error: 'تعذر جلب بيانات التواصل' }, { status: 500 })
-  }
+  const normalizeCandidate = (candidate: unknown): string | null =>
+    parsed.data.method === 'whatsapp'
+      ? normalizeWhatsAppDestination(candidate)
+      : normalizePhoneDestination(candidate)
 
-  let value = (branches ?? [])
-    .map((row) => row[parsed.data.method])
-    .find(
-      (candidate): candidate is string =>
-        typeof candidate === 'string' && candidate.trim().length > 0,
-    )
+  let value: string | null = null
 
-  if (!value) {
-    const { data: contactRows, error: contactError } = await privileged
+  if (parsed.data.branchId) {
+    const { data: branch, error: branchError } = await privileged
+      .from('business_branches')
+      .select('phone, whatsapp')
+      .eq('id', parsed.data.branchId)
+      .eq('business_id', parsed.data.businessId)
+      .eq('is_active', true)
+      .maybeSingle()
+    if (branchError) {
+      console.error('[track-contact] selected branch lookup failed:', branchError.message)
+      return NextResponse.json({ ok: false, error: 'تعذر جلب بيانات التواصل' }, { status: 500 })
+    }
+    value = normalizeCandidate(branch?.[parsed.data.method])
+  } else if (parsed.data.contactId) {
+    const { data: contact, error: contactError } = await privileged
       .from('business_contact_methods')
-      .select('value, is_primary')
+      .select('value')
+      .eq('id', parsed.data.contactId)
       .eq('business_id', parsed.data.businessId)
       .eq('method_type', parsed.data.method)
       .eq('is_public', true)
-      .order('is_primary', { ascending: false })
-      .limit(5)
+      .maybeSingle()
     if (contactError) {
-      console.error('[track-contact] contact lookup failed:', contactError.message)
+      console.error('[track-contact] selected contact lookup failed:', contactError.message)
       return NextResponse.json({ ok: false, error: 'تعذر جلب بيانات التواصل' }, { status: 500 })
     }
-    value = contactRows?.find(
-      (row) => typeof row.value === 'string' && row.value.trim().length > 0,
-    )?.value
+    value = normalizeCandidate(contact?.value)
+  } else {
+    const { data: branches, error: branchError } = await privileged
+      .from('business_branches')
+      .select('phone, whatsapp, is_primary, sort_order')
+      .eq('business_id', parsed.data.businessId)
+      .eq('is_active', true)
+      .order('is_primary', { ascending: false })
+      .order('sort_order', { ascending: true })
+      .limit(25)
+    if (branchError) {
+      console.error('[track-contact] branch lookup failed:', branchError.message)
+      return NextResponse.json({ ok: false, error: 'تعذر جلب بيانات التواصل' }, { status: 500 })
+    }
+
+    value = (branches ?? [])
+      .map((row) => normalizeCandidate(row[parsed.data.method]))
+      .find((candidate): candidate is string => candidate !== null) ?? null
+
+    if (!value) {
+      const { data: contactRows, error: contactError } = await privileged
+        .from('business_contact_methods')
+        .select('value, is_primary, sort_order')
+        .eq('business_id', parsed.data.businessId)
+        .eq('method_type', parsed.data.method)
+        .eq('is_public', true)
+        .order('is_primary', { ascending: false })
+        .order('sort_order', { ascending: true })
+        .limit(25)
+      if (contactError) {
+        console.error('[track-contact] contact lookup failed:', contactError.message)
+        return NextResponse.json({ ok: false, error: 'تعذر جلب بيانات التواصل' }, { status: 500 })
+      }
+      value = (contactRows ?? [])
+        .map((row) => normalizeCandidate(row.value))
+        .find((candidate): candidate is string => candidate !== null) ?? null
+    }
   }
 
   if (!value) {
-    return NextResponse.json({ ok: false, error: 'بيانات التواصل مش متاحة' }, { status: 404 })
-  }
-
-  if (parsed.data.method === 'whatsapp') {
-    const normalized = normalizeWhatsAppDestination(value)
-    if (!normalized) {
-      return NextResponse.json(
-        { ok: false, error: 'رقم واتساب غير متاح أو غير صالح' },
-        { status: 404 },
-      )
-    }
-    value = normalized
+    return NextResponse.json({ ok: false, error: 'بيانات التواصل مش متاحة أو الرقم غير صالح' }, { status: 404 })
   }
 
   const visitorHash = createHash('sha256')

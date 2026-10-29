@@ -172,7 +172,6 @@ export default async function BusinessPage({ params }: Props) {
   })
 
   const isOpen = business.is_open
-  const acceptsWhatsapp = business.accepts_whatsapp_orders
   const ordersEnabled = flags.orders_enabled && business.accepts_orders
 
   const menuImages = detail.menu.map((m) => m.storage_path)
@@ -230,7 +229,7 @@ export default async function BusinessPage({ params }: Props) {
             businessName={business.name}
             isLoggedIn={!!session}
             isOpen={isOpen}
-            acceptsWhatsapp={business.accepts_whatsapp_orders}
+            contactOptions={detail.contactOptions}
             ordersEnabled={ordersEnabled}
             isFavorite={isFavorite}
             isFollowing={isFollowing}
@@ -284,7 +283,7 @@ export default async function BusinessPage({ params }: Props) {
         businessId={business.id}
         businessSlug={business.slug}
         businessName={business.name}
-        acceptsWhatsapp={acceptsWhatsapp}
+        contactOptions={detail.contactOptions}
         isLoggedIn={!!session}
         isOpen={isOpen}
         ordersEnabled={ordersEnabled}
