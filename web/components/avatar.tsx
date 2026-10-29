@@ -74,7 +74,7 @@ export default function Avatar({
         </span>
       )}
 
-      {isVerified && role !== 'super_admin' && (
+      {isVerified && (
         <span className={styles.check} aria-hidden>
           <BadgeCheckIcon size={12} />
         </span>
