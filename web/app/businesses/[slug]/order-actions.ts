@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { orderSchema, orderHasContent } from '@/lib/validations/order'
 import { createNotification } from '@/lib/notifications/server'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
+import { canAcceptInAppOrders } from '@/lib/data/order-availability'
 
 type Result =
   | { ok: true; orderCode: string; orderId: string; whatsappUrl: string }
@@ -59,8 +60,34 @@ export async function submitOrder(
     return { ok: false, error: 'لازم تكتب طلبك أو ترفع صورة/صوت' }
   }
 
+  // Check publication, ownership and the activity-level order flag before reading order settings.
+  // This is authoritative even when a client bypasses the order button or submits stale page data.
+  const { data: biz, error: businessError } = await supabase
+    .from('businesses')
+    .select('id, name, slug, owner_profile_id, is_published, accepts_orders')
+    .eq('id', businessId)
+    .eq('slug', slug)
+    .maybeSingle()
+
+  if (businessError) {
+    console.error('[submitOrder] business availability lookup failed:', businessError.message)
+    return { ok: false, error: 'تعذر التحقق من إتاحة الطلب. جرّب تاني.' }
+  }
+  if (!biz || biz.is_published !== true) {
+    return { ok: false, error: 'النشاط مش متاح للطلب حالياً' }
+  }
+  if (typeof biz.owner_profile_id !== 'string' || !biz.owner_profile_id.trim()) {
+    return {
+      ok: false,
+      error: 'النشاط لسه ما اتربطش ببايع، والطلب الداخلي غير متاح حالياً — كلمه مباشرة.',
+    }
+  }
+  if (!canAcceptInAppOrders(biz.accepts_orders, biz.owner_profile_id)) {
+    return { ok: false, error: 'النشاط مش بيستقبل طلبات داخل المنصة حالياً — كلمه مباشرة.' }
+  }
+
   // ═══════════════════════════════════════════════════════════════════
-  // 1. Gate: is order acceptance enabled for this business?
+  // Gate: is order acceptance enabled in the merchant's order settings?
   // ═══════════════════════════════════════════════════════════════════
   const { data: settings } = await supabase
     .from('merchant_order_settings')
@@ -92,15 +119,8 @@ export async function submitOrder(
   const expectedDeliveryAt = new Date(nowMs + etaMinutes * 60 * 1000).toISOString()
 
   // ═══════════════════════════════════════════════════════════════════
-  // 2. Fetch business + branch
+  // Branch/contact for the already-validated activity
   // ═══════════════════════════════════════════════════════════════════
-  const { data: biz } = await supabase
-    .from('businesses')
-    .select('id, name, owner_profile_id')
-    .eq('id', businessId)
-    .maybeSingle()
-
-  if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
   const { data: branch } = await supabase
     .from('business_branches')

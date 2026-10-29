@@ -3,6 +3,7 @@ import { createPublicClient } from '@/lib/supabase/public'
 import { sortByTrend } from '@/lib/ranking'
 import { getBusinessReputationScore } from '@/lib/reputation'
 import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
+import { canAcceptInAppOrders } from './order-availability'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Data Fetching Layer
@@ -84,7 +85,7 @@ export { isBusinessOpen, isOpenNow }
 // ═══════════════════════════════════════════════════════════
 
 const BUSINESS_COLUMNS = `
-  id, slug, name, business_type, custom_business_type, business_type_status, subcategory, description, hook,
+  id, slug, name, owner_profile_id, business_type, custom_business_type, business_type_status, subcategory, description, hook,
   area, city, address_text, map_url, cover_image_url, logo_url,
   is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   velocity_score, engagement_score, diversity_score, successful_orders,
@@ -119,7 +120,9 @@ function normalizeBusiness(raw: Record<string, unknown>): Business {
   const loc = pickPrimaryLocation(raw.business_locations)
   const rest: Record<string, unknown> = { ...raw }
   delete rest.business_locations
-  const acceptsOrders = raw.accepts_orders === true
+  // Owner IDs are only used on the server to derive order availability; never serialize them.
+  delete rest.owner_profile_id
+  const acceptsOrders = canAcceptInAppOrders(raw.accepts_orders, raw.owner_profile_id)
   const isOpen = isBusinessOpen({
     working_hours: (raw.working_hours as WorkingHours | null) ?? null,
     open_now_override:
