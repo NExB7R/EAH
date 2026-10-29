@@ -10,7 +10,7 @@ type Props = {
   initial: {
     displayName: string
     avatarUrl: string | null
-    role: 'admin' | 'super_admin'
+    role: 'super_admin'
     phoneVerified: boolean
   }
 }

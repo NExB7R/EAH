@@ -21,7 +21,7 @@ export default async function AdminProfilePage() {
         initial={{
           displayName: profile.display_name,
           avatarUrl: profile.avatar_url,
-          role: session.role as 'admin' | 'super_admin',
+          role: 'super_admin',
           phoneVerified: !!profile.phone_verified_at,
         }}
       />
