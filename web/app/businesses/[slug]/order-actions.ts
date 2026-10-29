@@ -27,7 +27,7 @@ export async function submitOrder(
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
   // Rate limit — 5 طلبات / 15 دقيقة
   const rl = await checkRateLimit(strictLimiter, `order:${user.id}`, { failClosed: true })

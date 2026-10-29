@@ -19,7 +19,7 @@ export async function createComment(
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
   const rl = await checkRateLimit(strictLimiter, `comment:${user.id}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
@@ -155,7 +155,7 @@ export async function likeComment(commentId: string, slug: string): Promise<Acti
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
   const { error } = await supabase
     .from('comment_likes')
@@ -175,7 +175,7 @@ export async function unlikeComment(commentId: string, slug: string): Promise<Ac
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
   await supabase.from('comment_likes').delete().eq('comment_id', commentId).eq('user_id', user.id)
 
@@ -189,7 +189,7 @@ export async function deleteComment(commentId: string, slug: string): Promise<Ac
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
   const { error } = await supabase
     .from('business_comments')
@@ -213,7 +213,7 @@ export async function editComment(
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
   const { data: existing } = await supabase
     .from('business_comments')
@@ -262,7 +262,7 @@ export async function toggleFollowThread(
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
   const rootId = await getRootCommentId(commentId)
   if (!rootId) return { ok: false, error: 'التعليق مش موجود' }
