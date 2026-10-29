@@ -35,7 +35,7 @@ export async function requireAdmin(): Promise<AdminContext> {
       return { ok: false, error: 'تعذر التحقق من الصلاحيات' }
     }
 
-    if (row?.role !== 'admin' && row?.role !== 'super_admin') {
+    if (row?.role !== 'super_admin') {
       return { ok: false, error: 'غير مصرح' }
     }
 
@@ -43,7 +43,7 @@ export async function requireAdmin(): Promise<AdminContext> {
       ok: true,
       supabase,
       userId: user.id,
-      role: row.role as 'admin' | 'super_admin',
+      role: 'super_admin',
     }
   } catch (err) {
     console.error('[requireAdmin] unexpected error:', err)
