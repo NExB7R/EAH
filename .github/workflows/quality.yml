@@ -136,6 +136,7 @@ jobs:
             docs/migrations/2026-10-29-restore-rls-helper-execute.sql \
             docs/migrations/2026-10-29-legacy-ads-rls-hardening.sql
             docs/migrations/2026-10-30-registered-interaction-auth.sql \
+            docs/migrations/2026-10-30-registered-interaction-auth-expansion.sql \
           do
             echo "::group::Applying $migration to the isolated test database"
             psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f "$migration"
