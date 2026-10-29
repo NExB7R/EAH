@@ -77,7 +77,8 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
         />
         <Item label="الاسم" value={data.name} step={0} goTo={goTo} />
         <Item label="الهوك" value={data.hook} empty={!data.hook} step={0} goTo={goTo} />
-        <Item label="المنطقة" value={data.area} empty={!data.area} step={1} goTo={goTo} />
+        <Item label="المدينة" value={data.city} empty={!data.city} step={1} goTo={goTo} />
+        <Item label="المنطقة / القرية" value={data.area} empty={!data.area} step={1} goTo={goTo} />
         <Item
           label="العنوان"
           value={data.address_text}

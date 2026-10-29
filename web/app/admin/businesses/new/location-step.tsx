@@ -46,32 +46,45 @@ export default function LocationStep({ data, errors, update }: Props) {
         <div className={styles.row}>
           <label className={styles.field}>
             <span className={styles.label}>
-              <MapPinIcon size={12} /> المنطقة
+              <MapPinIcon size={12} /> المدينة
             </span>
             <input
               type="text"
-              value={data.area}
-              onChange={(e) => update({ area: e.target.value.slice(0, 50) })}
+              value={data.city}
+              onChange={(e) => update({ city: e.target.value.slice(0, 60) })}
               className={styles.input}
               placeholder="شبين القناطر"
-              maxLength={50}
+              maxLength={60}
               dir="rtl"
             />
           </label>
 
           <label className={styles.field}>
-            <span className={styles.label}>العنوان التفصيلي</span>
+            <span className={styles.label}>المنطقة / القرية</span>
             <input
               type="text"
-              value={data.address_text}
-              onChange={(e) => update({ address_text: e.target.value.slice(0, 200) })}
+              value={data.area}
+              onChange={(e) => update({ area: e.target.value.slice(0, 60) })}
               className={styles.input}
-              placeholder="اكتب عنوانك بالتفصيل (مثال: أمام مسجد النور، بجوار صيدلية..)"
-              maxLength={200}
+              placeholder="اسم المنطقة أو القرية"
+              maxLength={60}
               dir="rtl"
             />
           </label>
         </div>
+
+        <label className={styles.field}>
+          <span className={styles.label}>العنوان التفصيلي</span>
+          <input
+            type="text"
+            value={data.address_text}
+            onChange={(e) => update({ address_text: e.target.value.slice(0, 200) })}
+            className={styles.input}
+            placeholder="اكتب عنوان النشاط بالتفصيل (اختياري)"
+            maxLength={200}
+            dir="rtl"
+          />
+        </label>
 
         <div className={styles.contactsBlock}>
           <div className={styles.contactsHeader}>
