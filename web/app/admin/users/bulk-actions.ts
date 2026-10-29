@@ -152,7 +152,7 @@ export async function bulkUnbanUsers(ids: string[]): Promise<Result> {
 // ─── تغيير دور جماعي ───
 const bulkRoleSchema = z.object({
   ids: idsSchema,
-  role: z.enum(['customer', 'merchant', 'admin', 'super_admin']),
+  role: z.enum(['customer', 'merchant']),
 })
 
 export async function bulkChangeRole(ids: string[], role: string): Promise<Result> {
@@ -164,10 +164,6 @@ export async function bulkChangeRole(ids: string[], role: string): Promise<Resul
 
   const safeIds = parsed.data.ids.filter((id) => id !== ctx.userId)
   if (safeIds.length === 0) return { ok: false, error: 'مش ممكن تغير دورك' }
-
-  if (parsed.data.role === 'super_admin' && ctx.role !== 'super_admin') {
-    return { ok: false, error: 'منح صلاحيات الأدمن الأعلى متاح للأدمن الأعلى فقط' }
-  }
 
   let admin: ReturnType<typeof createServiceClient>
   try {
@@ -182,11 +178,8 @@ export async function bulkChangeRole(ids: string[], role: string): Promise<Resul
     .in('user_id', safeIds)
 
   if (rolesError) return { ok: false, error: 'تعذر التحقق من الأدوار الحالية' }
-  if (
-    ctx.role !== 'super_admin' &&
-    (existingRoles ?? []).some((item) => item.role === 'super_admin')
-  ) {
-    return { ok: false, error: 'تغيير دور الأدمن الأعلى متاح للأدمن الأعلى فقط' }
+  if ((existingRoles ?? []).some((item) => item.role === 'super_admin')) {
+    return { ok: false, error: 'لا يمكن تغيير دور الأدمن الأعلى من التعديل الجماعي' }
   }
 
   if (parsed.data.role !== 'merchant') {

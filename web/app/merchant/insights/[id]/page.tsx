@@ -149,7 +149,7 @@ export default async function InsightPage({ params }: Props) {
 
   if (!biz) notFound()
 
-  const isAdmin = session.role === 'admin' || session.role === 'super_admin'
+  const isAdmin = session.role === 'super_admin'
   const isOwner = biz.owner_profile_id === session.userId
 
   if (!isOwner && !isAdmin) {
