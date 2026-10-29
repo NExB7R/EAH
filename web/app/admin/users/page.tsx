@@ -18,7 +18,7 @@ const TABS: { key: UserFilter; label: string }[] = [
   { key: 'all', label: 'الكل' },
   { key: 'customers', label: 'المشترون' },
   { key: 'merchants', label: 'البايعون' },
-  { key: 'admins', label: 'الأدمن' },
+  { key: 'admins', label: 'الأدوار الإدارية القديمة' },
   { key: 'premium', label: 'مميز' },
   { key: 'banned', label: 'محظورين' },
 ]

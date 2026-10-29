@@ -80,7 +80,7 @@ export async function requestSubscription(formData: FormData): Promise<Result> {
   const { data: admins } = await service
     .from('user_roles')
     .select('user_id')
-    .in('role', ['admin', 'super_admin'])
+    .eq('role', 'super_admin')
 
   if (admins && admins.length > 0) {
     await Promise.all(

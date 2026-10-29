@@ -17,11 +17,10 @@ type Props = {
 const ROLES = [
   { value: 'customer', label: 'المشتري' },
   { value: 'merchant', label: 'البايع' },
-  { value: 'admin', label: 'الأدمن' },
 ]
 
 function getRoleLabel(role: string): string {
-  return ROLES.find((item) => item.value === role)?.label ?? (role === 'super_admin' ? 'الأدمن' : role)
+  return ROLES.find((item) => item.value === role)?.label ?? (role === 'super_admin' ? 'الأدمن الأعلى' : role === 'admin' ? 'دور إداري قديم' : role)
 }
 
 type Modal = 'ban' | 'role' | 'trust' | null
