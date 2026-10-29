@@ -5,7 +5,11 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { isBusinessOpen, isOpenNow, type Business, type WorkingHours } from './businesses'
 import { canAcceptInAppOrders } from './order-availability'
 import { getWhatsAppDestinationBusinessIds } from './contact-availability'
-import { isWhatsAppChannelAvailable } from './contact-availability-utils'
+import {
+  isWhatsAppChannelAvailable,
+  normalizePhoneDestination,
+  normalizeWhatsAppDestination,
+} from './contact-availability-utils'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Detail (Full Page Data)
@@ -74,6 +78,14 @@ export type ContactMethod = {
   is_primary: boolean
 }
 
+export type ContactOption = {
+  method: 'phone' | 'whatsapp'
+  label: string
+  isPrimary: boolean
+  contactId: string | null
+  branchId: string | null
+}
+
 export type MediaItem = {
   id: string
   media_type: 'logo' | 'cover' | 'gallery' | 'menu'
@@ -126,6 +138,7 @@ export function computeIsOpenNow(
 export type BusinessDetail = {
   business: Omit<Business, 'owner_profile_id'>
   contacts: ContactMethod[]
+  contactOptions: ContactOption[]
   media: MediaItem[]
   branches: Branch[]
   menu: MediaItem[]
@@ -240,7 +253,7 @@ export const getBusinessDetail = unstable_cache(
         : null
 
     // 2. Parallel: contacts + media + branches
-    const [contactsRes, mediaRes, branchesRes] = await Promise.all([
+    const [contactsRes, mediaRes, branchesRes, contactOptionsRes] = await Promise.all([
       supabase
         .from('business_contact_methods')
         .select('method_type, value, is_primary')
@@ -256,15 +269,105 @@ export const getBusinessDetail = unstable_cache(
         .order('sort_order', { ascending: true }),
       supabase
         .from('business_branches')
-        .select('id, name, area, address_text, latitude, longitude, is_primary')
+        .select('id, name, area, address_text, latitude, longitude, is_primary, phone, whatsapp, sort_order')
         .eq('business_id', business.id)
         .eq('is_active', true)
-        .order('is_primary', { ascending: false }),
+        .order('is_primary', { ascending: false })
+        .order('sort_order', { ascending: true }),
+      supabase
+        .from('business_contact_methods')
+        .select('id, method_type, value, label, is_primary, sort_order')
+        .eq('business_id', business.id)
+        .eq('is_public', true)
+        .in('method_type', ['phone', 'whatsapp'])
+        .order('is_primary', { ascending: false })
+        .order('sort_order', { ascending: true }),
     ])
 
     const contacts = (contactsRes.data ?? []) as ContactMethod[]
     const media = (mediaRes.data ?? []) as MediaItem[]
-    const branches = (branchesRes.data ?? []) as Branch[]
+    type RawBranch = Branch & {
+      phone: string | null
+      whatsapp: string | null
+      sort_order: number | null
+    }
+    const rawBranches = (branchesRes.data ?? []) as unknown as RawBranch[]
+    // Only the non-sensitive branch fields may be serialized to the browser.
+    const branches: Branch[] = rawBranches.map((branch) => ({
+      id: branch.id,
+      name: branch.name,
+      area: branch.area,
+      address_text: branch.address_text,
+      latitude: branch.latitude,
+      longitude: branch.longitude,
+      is_primary: branch.is_primary,
+    }))
+
+    type RawContactOption = {
+      id: string
+      method_type: string
+      value: string
+      label: string | null
+      is_primary: boolean
+      sort_order: number | null
+    }
+    const rawContactOptions = (contactOptionsRes.data ?? []) as unknown as RawContactOption[]
+    const contactOptions: ContactOption[] = []
+    const seenDestinations = new Set<string>()
+    let phoneIndex = 0
+    let whatsappIndex = 0
+    const addOption = (
+      method: 'phone' | 'whatsapp',
+      value: string | null,
+      label: string,
+      isPrimary: boolean,
+      source: { contactId?: string; branchId?: string },
+    ) => {
+      const normalized =
+        method === 'whatsapp'
+          ? normalizeWhatsAppDestination(value)
+          : normalizePhoneDestination(value)
+      if (!normalized || (method === 'whatsapp' && !acceptsWhatsApp)) return
+      const destinationKey = method + ':' + normalized
+      if (seenDestinations.has(destinationKey)) return
+      seenDestinations.add(destinationKey)
+      contactOptions.push({
+        method,
+        label,
+        isPrimary,
+        contactId: source.contactId ?? null,
+        branchId: source.branchId ?? null,
+      })
+    }
+
+    for (const branch of rawBranches) {
+      const branchLabel = branch.name?.trim() || (branch.is_primary ? 'الفرع الرئيسي' : 'فرع النشاط')
+      if (branch.phone) {
+        addOption('phone', branch.phone, branchLabel + ' — اتصال', branch.is_primary, { branchId: branch.id })
+        phoneIndex++
+      }
+      if (branch.whatsapp) {
+        addOption('whatsapp', branch.whatsapp, branchLabel + ' — واتساب', branch.is_primary, { branchId: branch.id })
+        whatsappIndex++
+      }
+    }
+
+    for (const contact of rawContactOptions) {
+      if (contact.method_type !== 'phone' && contact.method_type !== 'whatsapp') continue
+      const method = contact.method_type
+      const index = method === 'phone' ? ++phoneIndex : ++whatsappIndex
+      const defaultLabel =
+        method === 'phone'
+          ? contact.is_primary ? 'رقم الاتصال الرئيسي' : 'رقم اتصال إضافي ' + index
+          : contact.is_primary ? 'واتساب الرئيسي' : 'رقم واتساب إضافي ' + index
+      addOption(
+        method,
+        contact.value,
+        contact.label?.trim() || defaultLabel,
+        contact.is_primary,
+        { contactId: contact.id },
+      )
+    }
 
     const logo = media.find((m) => m.media_type === 'logo') ?? null
     const cover = media.find((m) => m.media_type === 'cover') ?? null
@@ -274,6 +377,7 @@ export const getBusinessDetail = unstable_cache(
     return {
       business,
       contacts,
+      contactOptions,
       media,
       branches,
       menu,
@@ -284,7 +388,7 @@ export const getBusinessDetail = unstable_cache(
       openNowOverride,
     }
   },
-  ['business-detail-v3'],
+  ['business-detail-v4'],
   { revalidate: 120, tags: ['businesses'] },
 )
 
