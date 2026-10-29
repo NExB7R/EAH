@@ -37,6 +37,8 @@ export default async function EditPage() {
           hideFavorites: profile.hide_favorites,
           hideFollowing: profile.hide_following,
           role,
+          isVerified: session.isVerified,
+          isPaidMember: session.isPaidMember,
           phoneVerified: !!profile.phone_verified_at,
         }}
       />
