@@ -47,6 +47,37 @@
   box-shadow: 0 0 20px rgba(85, 231, 209, 0.22);
 }
 
+.contactChoices {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  border-radius: 14px;
+  background: rgba(7, 2, 13, 0.97);
+}
+
+.contactChoice {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid rgba(37, 211, 102, 0.25);
+  border-radius: 10px;
+  color: var(--text-primary);
+  background: rgba(18, 55, 42, 0.95);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: start;
+  cursor: pointer;
+}
+
+.contactChoice:focus-visible {
+  outline: 3px solid #25d366;
+  outline-offset: 2px;
+}
+
 .message {
   margin: 8px 4px 0;
   color: var(--text-secondary);
