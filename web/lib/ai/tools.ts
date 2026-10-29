@@ -162,6 +162,7 @@ async function toolSearchBusinesses(args: {
     .from('businesses')
     .select('name, slug, business_type, area, hook, is_open, is_verified, rating_avg, rating_count, successful_orders')
     .eq('is_published', true)
+    .not('slug', 'like', 'eah-qa-test-%')
 
   if (type && VALID_TYPES.includes(type)) {
     q = q.eq('business_type', type)
@@ -214,6 +215,7 @@ async function toolGetBusinessDetails(args: { slug: string }) {
     )
     .eq('slug', slug)
     .eq('is_published', true)
+    .not('slug', 'like', 'eah-qa-test-%')
     .maybeSingle()
 
   if (error) {
@@ -357,6 +359,7 @@ async function toolGetTrending(args: { limit?: number }) {
     .from('businesses')
     .select('name, slug, business_type, area, rating_avg, rating_count, is_verified, successful_orders, velocity_score, engagement_score')
     .eq('is_published', true)
+    .not('slug', 'like', 'eah-qa-test-%')
     .order('velocity_score', { ascending: false })
     .order('engagement_score', { ascending: false })
     .order('successful_orders', { ascending: false })
@@ -393,6 +396,7 @@ async function toolGetCategories() {
     .from('businesses')
     .select('business_type')
     .eq('is_published', true)
+    .not('slug', 'like', 'eah-qa-test-%')
 
   if (error) {
     console.error('[AI Tool] categories error:', error.message)
@@ -436,6 +440,7 @@ async function toolGetBusinessesByArea(args: { area: string; limit?: number }) {
     .from('businesses')
     .select('name, slug, business_type, area, rating_avg, rating_count, is_open, is_verified, successful_orders')
     .eq('is_published', true)
+    .not('slug', 'like', 'eah-qa-test-%')
     .ilike('area', `%${area}%`)
     .order('is_verified', { ascending: false })
     .order('rating_count', { ascending: false })
