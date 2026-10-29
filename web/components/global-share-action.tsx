@@ -37,7 +37,9 @@ export default function GlobalShareAction({
         aria-haspopup="dialog"
         onClick={openShare}
       >
-        <ShareIcon size={18} />
+        <span className={styles.iconWrap} aria-hidden="true">
+          <ShareIcon size={18} />
+        </span>
         <span>{label}</span>
       </button>
       {mounted && url && createPortal(
