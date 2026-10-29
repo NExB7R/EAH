@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import SecondaryHero from './secondary-hero'
 import styles from './legal-page.module.css'
 
@@ -48,7 +49,7 @@ export default function LegalPage({ title, activeKey, updated, intro, sections }
 
         <footer className={styles.footer}>
           <p>
-            لأي استفسار قانوني: <a href="mailto:nexb7r@gmail.com">nexb7r@gmail.com</a>
+            لأي استفسار قانوني: <Link href="/contact">صفحة التواصل الرسمية</Link>
           </p>
           <p className={styles.copyright}>© 2026 EAH — كل الحقوق محفوظة</p>
         </footer>

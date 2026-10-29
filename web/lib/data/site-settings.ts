@@ -72,13 +72,6 @@ async function readStoredSettings(): Promise<{ settings: SiteSettings; updatedAt
       featured_enabled: typeof raw.featured_enabled === 'boolean' ? raw.featured_enabled : true,
     }
 
-    if (!settings.public_contacts_enabled) {
-      settings.support_email = ''
-      settings.support_whatsapp = ''
-      settings.support_facebook_url = ''
-      settings.whatsapp_channel_url = ''
-    }
-
     return { settings, updatedAt: stored?.updated_at ?? null }
   } catch (error) {
     console.error('[site-settings] settings unavailable:', error)

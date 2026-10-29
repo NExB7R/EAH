@@ -1,119 +1,79 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import SecondaryHero from '@/components/secondary-hero'
-import {
-  WhatsAppIcon,
-  FacebookIcon,
-  BroadcastIcon,
-  PhoneIcon,
-  MapPinIcon,
-  ClockIcon,
-  FileTextIcon,
-} from '@/components/icons'
+import { WhatsAppIcon, FacebookIcon, BroadcastIcon, PhoneIcon, FileTextIcon } from '@/components/icons'
+import { getPublicContactSettings } from '@/lib/data/site-settings'
 import styles from './contact.module.css'
 
 export const metadata: Metadata = {
   title: 'تواصل معانا · EAH',
-  description: 'كلمنا على واتساب، أو تابع قناتنا — رد سريع من إدارة EAH',
+  description: 'قنوات التواصل الرسمية ومركز المساعدة لمنصة EAH',
 }
 
 export const revalidate = 3600
 
-const CONTACTS = {
-  whatsapp: 'https://wa.me/201012892806',
-  channel: 'https://whatsapp.com/channel/eaH',
-  facebook: 'https://facebook.com/eah.eg',
-  email: 'nexb7r@gmail.com',
-}
+export default async function ContactPage() {
+  const contacts = await getPublicContactSettings()
 
-const REASONS = [
-  {
-    Icon: WhatsAppIcon,
-    title: 'استفسار سريع',
-    body: 'اطلب، اسأل، أو اقترح — رد خلال دقايق',
-    cta: 'كلم المسؤول',
-    href: CONTACTS.whatsapp,
-    tone: 'wa' as const,
-  },
-  {
-    Icon: BroadcastIcon,
-    title: 'قناة الواتساب',
-    body: 'أول ما ينزل عرض جديد، إنت أول واحد يعرف',
-    cta: 'اشترك في القناة',
-    href: CONTACTS.channel,
-    tone: 'channel' as const,
-  },
-  {
-    Icon: FacebookIcon,
-    title: 'صفحة فيسبوك',
-    body: 'أخبار EAH، فرص للشركاء، وتحديثات المنصة',
-    cta: 'تابع الصفحة',
-    href: CONTACTS.facebook,
-    tone: 'fb' as const,
-  },
-  {
-    Icon: FileTextIcon,
-    title: 'إيميل رسمي',
-    body: 'للاستفسارات الرسمية والشراكات',
-    cta: CONTACTS.email,
-    href: `mailto:${CONTACTS.email}`,
-    tone: 'email' as const,
-  },
-]
-
-export default function ContactPage() {
   return (
     <main className={styles.page}>
       <SecondaryHero title="تواصل معانا" activeKey="contact" />
-
       <div className={styles.container}>
         <section className={styles.intro}>
-          <span className={styles.introIcon}>
-            <PhoneIcon size={26} />
-          </span>
+          <span className={styles.introIcon}><PhoneIcon size={26} /></span>
           <h1 className={styles.introTitle}>إحنا هنا عشان نساعدك</h1>
           <p className={styles.introText}>
-            رد سريع من فريق EAH — بدون لف، بدون انتظار. اختار الطريقة اللي تريحك.
+            {contacts.enabled
+              ? 'اختار قناة التواصل الرسمية المناسبة ليك، أو استخدم مركز المساعدة.'
+              : 'قنوات التواصل الرسمية هتظهر هنا بعد اعتماد بياناتها. مش هنحط رقم أو رابط غير مؤكد.'}
           </p>
         </section>
 
-        <div className={styles.grid}>
-          {REASONS.map((c) => (
-            <a
-              key={c.title}
-              href={c.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${styles.card} ${styles[c.tone]}`}
-            >
-              <span className={styles.cardIcon}>
-                <c.Icon size={22} />
-              </span>
-              <h3 className={styles.cardTitle}>{c.title}</h3>
-              <p className={styles.cardBody}>{c.body}</p>
-              <span className={styles.cardCta}>{c.cta} ←</span>
-            </a>
-          ))}
-        </div>
-
-        <section className={styles.info}>
-          <div className={styles.infoCard}>
-            <span className={styles.infoIcon}>
-              <MapPinIcon size={18} />
-            </span>
-            <div>
-              <h4 className={styles.infoTitle}>الموقع</h4>
-              <p className={styles.infoBody}>شبين القناطر — القليوبية، مصر</p>
-            </div>
+        {contacts.enabled && (
+          <div className={styles.grid}>
+            {contacts.supportWhatsappUrl && (
+              <a href={contacts.supportWhatsappUrl} target="_blank" rel="noopener noreferrer" className={`${styles.card} ${styles.wa}`}>
+                <span className={styles.cardIcon}><WhatsAppIcon size={22} /></span>
+                <h3 className={styles.cardTitle}>تواصل مع الدعم على واتساب</h3>
+                <p className={styles.cardBody}>استفساراتك وملاحظاتك لفريق EAH.</p>
+                <span className={styles.cardCta}>افتح واتساب ←</span>
+              </a>
+            )}
+            {contacts.whatsappChannelUrl && (
+              <a href={contacts.whatsappChannelUrl} target="_blank" rel="noopener noreferrer" className={`${styles.card} ${styles.channel}`}>
+                <span className={styles.cardIcon}><BroadcastIcon size={22} /></span>
+                <h3 className={styles.cardTitle}>قناة واتساب</h3>
+                <p className={styles.cardBody}>تحديثات وإعلانات المنصة في القناة الرسمية.</p>
+                <span className={styles.cardCta}>افتح القناة ←</span>
+              </a>
+            )}
+            {contacts.facebookUrl && (
+              <a href={contacts.facebookUrl} target="_blank" rel="noopener noreferrer" className={`${styles.card} ${styles.fb}`}>
+                <span className={styles.cardIcon}><FacebookIcon size={22} /></span>
+                <h3 className={styles.cardTitle}>صفحة فيسبوك</h3>
+                <p className={styles.cardBody}>المحتوى والتحديثات المنشورة رسميًا من EAH.</p>
+                <span className={styles.cardCta}>تابع الصفحة ←</span>
+              </a>
+            )}
+            {contacts.email && (
+              <a href={`mailto:${contacts.email}`} className={`${styles.card} ${styles.email}`}>
+                <span className={styles.cardIcon}><FileTextIcon size={22} /></span>
+                <h3 className={styles.cardTitle}>إيميل الدعم</h3>
+                <p className={styles.cardBody}>للاستفسارات الرسمية والتعاون.</p>
+                <span className={styles.cardCta}>{contacts.email}</span>
+              </a>
+            )}
           </div>
+        )}
 
-          <div className={styles.infoCard}>
-            <span className={styles.infoIcon}>
-              <ClockIcon size={18} />
-            </span>
-            <div>
-              <h4 className={styles.infoTitle}>وقت الرد</h4>
-              <p className={styles.infoBody}>كل يوم، من 9 صباحاً لـ 11 مساءً</p>
-            </div>
+        <section className={styles.helpSection}>
+          <div className={styles.helpCopy}>
+            <h2 className={styles.helpTitle}>محتاج مساعدة دلوقتي؟</h2>
+            <p className={styles.helpText}>تقدر تراجع مركز المساعدة أو الأسئلة الشائعة لحد تفعيل قنوات التواصل الرسمية.</p>
+          </div>
+          <div className={styles.helpActions}>
+            <Link href="/help" className={styles.helpLink}>مركز المساعدة</Link>
+            <Link href="/faq" className={styles.helpLinkSecondary}>الأسئلة الشائعة</Link>
           </div>
         </section>
       </div>
