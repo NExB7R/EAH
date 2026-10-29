@@ -21,3 +21,6 @@ Build
 lefthook
 next
 web@1.0.0
+
+# Local-only test credentials. Never commit.
+/web/.qa-test-credentials.local.json
