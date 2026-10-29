@@ -38,10 +38,34 @@
   z-index: 1;
 }
 
+.contactNotice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin: 12px 0 24px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-purple-soft);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.075), rgba(232, 199, 154, 0.035));
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.contactNotice a {
+  color: var(--gold-light);
+  font-weight: 850;
+  text-decoration: underline;
+  text-decoration-color: rgba(232, 199, 154, 0.35);
+  text-underline-offset: 3px;
+}
+
 /* ─── Contact Cards ─── */
 .contacts {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 14px;
   margin: 12px 0 24px;
 }
@@ -333,9 +357,6 @@
   .contacts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .contacts > :last-child {
-    grid-column: span 2;
-  }
   .columns {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     max-width: 560px;
@@ -357,9 +378,6 @@
     grid-template-columns: 1fr;
     gap: 10px;
     margin: 24px 0 32px;
-  }
-  .contacts > :last-child {
-    grid-column: auto;
   }
   .card {
     padding: 14px 16px;

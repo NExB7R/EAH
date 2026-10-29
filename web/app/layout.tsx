@@ -20,6 +20,7 @@ import { GeoProvider } from '@/lib/contexts/geo-context'
 import { getFeatureFlags } from '@/lib/features'
 import { getActiveAnnouncements } from '@/lib/data/announcements'
 import { getAllLiveStats } from '@/lib/data/live-stats'
+import { getPublicContactSettings } from '@/lib/data/site-settings'
 import './globals.css'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
@@ -104,10 +105,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 async function TopBar() {
   if (!(await shouldRenderPublicChrome())) return null
 
-  const [session, flags] = await Promise.all([getUserSession(), getFeatureFlags()])
+  const [session, flags, contactLinks] = await Promise.all([getUserSession(), getFeatureFlags(), getPublicContactSettings()])
   return (
     <SiteChromeGate>
-      <FloatingCapsule session={session} />
+      <FloatingCapsule session={session} contactLinks={contactLinks} />
       {flags.announcements_enabled && (
         <Suspense fallback={null}>
           <AnnouncementsSlot />

@@ -23,18 +23,13 @@ import {
 import styles from './site-footer.module.css'
 import { APP_VERSION } from '@/lib/version'
 import { getAppTexts } from '@/lib/data/app-texts'
+import { getPublicContactSettings } from '@/lib/data/site-settings'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Site Footer (Premium 2026 — Final)
 // ═══════════════════════════════════════════════════════════
 
 // §26 — نسخة واحدة من lib/version.ts
-
-const CONTACTS = {
-  channel: 'https://whatsapp.com/channel/eaH',
-  facebook: 'https://facebook.com/eah.eg',
-  whatsapp: 'https://wa.me/201012892806',
-}
 
 const COLUMNS = [
   {
@@ -88,7 +83,7 @@ const COLUMNS = [
 export default async function SiteFooter() {
   if (!(await shouldRenderPublicChrome())) return null
 
-  const texts = await getAppTexts()
+  const [texts, contacts] = await Promise.all([getAppTexts(), getPublicContactSettings()])
   return (
     <footer className={styles.footer}>
       <div className={styles.glow} aria-hidden />
@@ -99,56 +94,55 @@ export default async function SiteFooter() {
       </div>
 
       <div className={styles.container}>
-        {/* ─── Contact Cards ─── */}
-        <div className={styles.contacts}>
-          <a
-            href={CONTACTS.channel}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${styles.card} ${styles.channel}`}
-          >
-            <span className={styles.cardIcon}>
-              <BroadcastIcon size={22} />
-            </span>
-            <span className={styles.cardBody}>
-              <strong className={styles.cardTitle}>قناة الواتساب</strong>
-              <small className={styles.cardSub}>أول ما ينزل عرض — إنت أول واحد يعرف</small>
-            </span>
-            <ArrowLeftIcon size={14} className={styles.cardArrow} />
-          </a>
-
-          <a
-            href={CONTACTS.facebook}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${styles.card} ${styles.facebook}`}
-          >
-            <span className={styles.cardIcon}>
-              <FacebookIcon size={22} />
-            </span>
-            <span className={styles.cardBody}>
-              <strong className={styles.cardTitle}>صفحة فيسبوك</strong>
-              <small className={styles.cardSub}>أخبار EAH وفرص للشركاء</small>
-            </span>
-            <ArrowLeftIcon size={14} className={styles.cardArrow} />
-          </a>
-
-          <a
-            href={CONTACTS.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`${styles.card} ${styles.whatsapp}`}
-          >
-            <span className={styles.cardIcon}>
-              <WhatsAppIcon size={22} />
-            </span>
-            <span className={styles.cardBody}>
-              <strong className={styles.cardTitle}>كلم المسؤول</strong>
-              <small className={styles.cardSub}>رد خلال دقايق — بدون لف</small>
-            </span>
-            <ArrowLeftIcon size={14} className={styles.cardArrow} />
-          </a>
-        </div>
+        {contacts.enabled ? (
+          <div className={styles.contacts} aria-label="قنوات التواصل الرسمية">
+            {contacts.whatsappChannelUrl && (
+              <a href={contacts.whatsappChannelUrl} target="_blank" rel="noopener noreferrer" className={`${styles.card} ${styles.channel}`}>
+                <span className={styles.cardIcon}><BroadcastIcon size={22} /></span>
+                <span className={styles.cardBody}>
+                  <strong className={styles.cardTitle}>قناة واتساب الرسمية</strong>
+                  <small className={styles.cardSub}>تحديثات المنصة والإعلانات</small>
+                </span>
+                <ArrowLeftIcon size={14} className={styles.cardArrow} />
+              </a>
+            )}
+            {contacts.facebookUrl && (
+              <a href={contacts.facebookUrl} target="_blank" rel="noopener noreferrer" className={`${styles.card} ${styles.facebook}`}>
+                <span className={styles.cardIcon}><FacebookIcon size={22} /></span>
+                <span className={styles.cardBody}>
+                  <strong className={styles.cardTitle}>صفحة EAH الرسمية</strong>
+                  <small className={styles.cardSub}>الأخبار والمحتوى المنشور</small>
+                </span>
+                <ArrowLeftIcon size={14} className={styles.cardArrow} />
+              </a>
+            )}
+            {contacts.supportWhatsappUrl && (
+              <a href={contacts.supportWhatsappUrl} target="_blank" rel="noopener noreferrer" className={`${styles.card} ${styles.whatsapp}`}>
+                <span className={styles.cardIcon}><WhatsAppIcon size={22} /></span>
+                <span className={styles.cardBody}>
+                  <strong className={styles.cardTitle}>تواصل مع الدعم</strong>
+                  <small className={styles.cardSub}>قناة التواصل المعتمدة للمنصة</small>
+                </span>
+                <ArrowLeftIcon size={14} className={styles.cardArrow} />
+              </a>
+            )}
+            {contacts.email && (
+              <a href={`mailto:${contacts.email}`} className={`${styles.card} ${styles.email}`}>
+                <span className={styles.cardIcon}><PhoneIcon size={22} /></span>
+                <span className={styles.cardBody}>
+                  <strong className={styles.cardTitle}>إيميل الدعم</strong>
+                  <small className={styles.cardSub}>{contacts.email}</small>
+                </span>
+                <ArrowLeftIcon size={14} className={styles.cardArrow} />
+              </a>
+            )}
+          </div>
+        ) : (
+          <div className={styles.contactNotice}>
+            <span>قنوات التواصل الرسمية هتظهر هنا بعد اعتماد بياناتها.</span>
+            <Link href="/help">مركز المساعدة</Link>
+          </div>
+        )}
 
         {/* ─── Columns ─── */}
         <nav className={styles.columns} aria-label="روابط الفوتر">
