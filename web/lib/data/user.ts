@@ -19,6 +19,8 @@ export type UserSession = {
   role: AppRole
   notifCount: number
   phoneVerified: boolean
+  isVerified: boolean
+  isPaidMember: boolean
   emailVerified: boolean
   trustScore: number
   trustTier: string
@@ -46,11 +48,18 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
 
   if (!user) return null
 
-  const [{ data: profile }, { data: roleRow }, { count }] = await Promise.all([
+  const now = new Date()
+  const [
+    { data: profile },
+    { data: roleRow },
+    { count },
+    { data: ownedBusinesses },
+    { data: activeAds },
+  ] = await Promise.all([
     supabase
       .from('profiles')
       .select(
-        'display_name, phone, avatar_url, phone_verified_at, trust_score, trust_tier, streak_days, legend_points, is_premium, premium_until, display_name_mode, alias, hide_avatar, hide_favorites, hide_following',
+        'display_name, phone, avatar_url, phone_verified_at, verified_at, trust_score, trust_tier, streak_days, legend_points, is_premium, premium_until, display_name_mode, alias, hide_avatar, hide_favorites, hide_following',
       )
       .eq('id', user.id)
       .maybeSingle(),
@@ -61,7 +70,64 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
       .eq('user_id', user.id)
       .is('read_at', null)
       .not('notification_type', 'in', '("system","admin","announcement")'),
+    supabase.from('businesses').select('id').eq('owner_profile_id', user.id).limit(20),
+    supabase
+      .from('ads')
+      .select('id, starts_at, ends_at, slot:ad_slots(base_price_egp)')
+      .eq('owner_profile_id', user.id)
+      .eq('status', 'active')
+      .limit(20),
   ])
+
+  const businessIds = (ownedBusinesses ?? []).map((business) => business.id)
+  const { data: activeSubscriptions } = businessIds.length
+    ? await supabase
+        .from('business_subscriptions')
+        .select('id, is_trial, starts_at, expires_at, plan:subscription_plans(price_egp)')
+        .in('business_id', businessIds)
+        .eq('status', 'active')
+        .eq('is_trial', false)
+        .limit(20)
+    : { data: [] }
+
+  const isWithinActiveDates = (startsAt: string | null, endsAt: string | null) => {
+    const nowMs = now.getTime()
+    const startMs = startsAt ? new Date(startsAt).getTime() : Number.NEGATIVE_INFINITY
+    const endMs = endsAt ? new Date(endsAt).getTime() : Number.POSITIVE_INFINITY
+    return Number.isFinite(startMs) || startsAt === null
+      ? startMs <= nowMs && endMs > nowMs
+      : false
+  }
+
+  const ads = (activeAds ?? []) as unknown as Array<{
+    starts_at: string | null
+    ends_at: string | null
+    slot: { base_price_egp?: string | number | null } | null
+  }>
+  const subscriptions = (activeSubscriptions ?? []) as unknown as Array<{
+    starts_at: string | null
+    expires_at: string | null
+    plan: { price_egp?: string | number | null } | null
+  }>
+  const hasPaidAdPackage = ads.some(
+    (ad) =>
+      isWithinActiveDates(ad.starts_at, ad.ends_at) &&
+      Number(ad.slot?.base_price_egp ?? 0) > 0,
+  )
+  const hasPaidBusinessSubscription = subscriptions.some(
+    (subscription) =>
+      isWithinActiveDates(subscription.starts_at, subscription.expires_at) &&
+      Number(subscription.plan?.price_egp ?? 0) > 0,
+  )
+
+  const role = roleRow?.role === 'admin' ? 'customer' : ((roleRow?.role as AppRole) ?? 'customer')
+  const premiumUntil = profile?.premium_until ?? null
+  const isPremium =
+    !!profile?.is_premium &&
+    (!premiumUntil || (Number.isFinite(new Date(premiumUntil).getTime()) && new Date(premiumUntil).getTime() > now.getTime()))
+  const isVerified = !!profile?.verified_at
+  const isPaidMember =
+    role !== 'super_admin' && (isPremium || hasPaidAdPackage || hasPaidBusinessSubscription)
 
   return {
     userId: user.id,
@@ -72,13 +138,15 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     notifCount: count ?? 0,
     phone: (profile?.phone as string | null) ?? null,
     phoneVerified: !!profile?.phone_verified_at,
+    isVerified,
+    isPaidMember,
     emailVerified: !!user.email_confirmed_at,
     trustScore: profile?.trust_score ?? 50,
     trustTier: profile?.trust_tier ?? 'fel',
     streakDays: profile?.streak_days ?? 0,
     legendPoints: profile?.legend_points ?? 0,
-    isPremium: profile?.is_premium ?? false,
-    premiumUntil: profile?.premium_until ?? null,
+    isPremium,
+    premiumUntil,
     displayNameMode: (profile?.display_name_mode as DisplayNameMode) ?? 'real',
     alias: profile?.alias ?? null,
     hideAvatar: profile?.hide_avatar ?? false,
