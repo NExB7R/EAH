@@ -59,8 +59,8 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
-    return { ok: false, error: 'لازم تسجل دخول الأول' }
+  if (!user || user.is_anonymous) {
+    return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
   }
 
   const rateLimit = await checkRateLimit(strictLimiter, `merchant-apply:${user.id}`, {

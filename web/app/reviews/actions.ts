@@ -25,7 +25,7 @@ export async function submitReview(
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول الأول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
   // Rate limit — 5 تقييمات / 15 دقيقة
   const rl = await checkRateLimit(strictLimiter, `review:${user.id}`, { failClosed: true })
@@ -145,7 +145,7 @@ export async function replyToReview(
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول الأول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
   // Rate limit — 5 ردود / 15 دقيقة
   const rl = await checkRateLimit(strictLimiter, `reply:${user.id}`, { failClosed: true })
