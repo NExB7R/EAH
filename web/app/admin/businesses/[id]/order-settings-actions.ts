@@ -4,12 +4,22 @@ import { revalidatePath } from 'next/cache'
 import { requireAdmin } from '@/lib/auth/admin'
 import { createNotification } from '@/lib/notifications/server'
 import { logAudit } from '@/lib/logging/audit'
+import { createServiceClient } from '@/lib/supabase/service'
+import { z } from 'zod'
 
 // ═══════════════════════════════════════════════════════════════════
 // Admin: enable/disable order acceptance + summary report on disable
 // ═══════════════════════════════════════════════════════════════════
 
 type Result = { ok: true; reportId?: string } | { ok: false; error: string }
+
+function createAdminDb() {
+  try {
+    return createServiceClient()
+  } catch {
+    return null
+  }
+}
 
 export async function enableOrders(
   businessId: string,
@@ -19,6 +29,12 @@ export async function enableOrders(
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  if (!z.string().uuid().safeParse(businessId).success) {
+    return { ok: false, error: 'معرّف النشاط غير صحيح' }
+  }
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'إعدادات الطلبات غير متاحة مؤقتًا — حاول تاني' }
+
   if (!businessId) return { ok: false, error: 'businessId مفقود' }
   const safeDeadline = Math.max(5, Math.min(60, Math.trunc(deadlineMinutes) || 10))
   const safeEta = Math.max(15, Math.min(240, Math.trunc(deliveryEtaMinutes) || 0))
@@ -27,9 +43,9 @@ export async function enableOrders(
   }
 
   // Fetch business + owner
-  const { data: biz } = await ctx.supabase
+  const { data: biz } = await adminDb
     .from('businesses')
-    .select('id, name, owner_profile_id')
+    .select('id, name, slug, owner_profile_id')
     .eq('id', businessId)
     .maybeSingle()
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
@@ -37,7 +53,7 @@ export async function enableOrders(
     return { ok: false, error: 'اربط بايعًا بالنشاط أولًا قبل تفعيل استلام الطلبات' }
   }
 
-  const { error: updErr } = await ctx.supabase.from('merchant_order_settings').upsert(
+  const { error: updErr } = await adminDb.from('merchant_order_settings').upsert(
     {
       business_id: businessId,
       orders_enabled: true,
@@ -55,16 +71,25 @@ export async function enableOrders(
 
   // Notify merchant with obligations
   if (biz.owner_profile_id) {
-    await createNotification({
-      userId: biz.owner_profile_id,
-      type: 'system',
-      title: '🎯 استلام الطلبات اتفعّل',
-      body: `من دلوقتي هتستقبل طلبات. رد خلال ${safeDeadline} دقايق · التسليم خلال ${safeEta} دقيقة. المتأخر ينقص تقييمك. لو مش متاح، اقفل الاستلام مؤقتاً (بدون عقوبة).`,
-      deepLink: '/merchant/orders/settings',
-    })
+    try {
+      await createNotification({
+        userId: biz.owner_profile_id,
+        type: 'system',
+        title: '🎯 استلام الطلبات اتفعّل',
+        body: `من دلوقتي هتستقبل طلبات. رد خلال ${safeDeadline} دقايق · التسليم خلال ${safeEta} دقيقة. المتأخر ينقص تقييمك. لو مش متاح، اقفل الاستلام مؤقتاً (بدون عقوبة).`,
+        deepLink: '/merchant/orders/settings',
+      })
+    } catch {
+      await logAudit(adminDb, {
+        actorUserId: ctx.userId,
+        action: 'orders.enable.notification_failed',
+        entityType: 'business',
+        entityId: businessId,
+      })
+    }
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'orders.enable',
     entityType: 'business',
@@ -73,8 +98,10 @@ export async function enableOrders(
   })
 
   revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath(`/businesses/${biz.slug}`)
   revalidatePath('/merchant/orders')
   revalidatePath('/merchant/orders/settings')
+  revalidateTag('businesses', 'default')
   return { ok: true }
 }
 
@@ -82,17 +109,23 @@ export async function disableOrders(businessId: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  if (!z.string().uuid().safeParse(businessId).success) {
+    return { ok: false, error: 'معرّف النشاط غير صحيح' }
+  }
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'إعدادات الطلبات غير متاحة مؤقتًا — حاول تاني' }
+
   if (!businessId) return { ok: false, error: 'businessId مفقود' }
 
-  const { data: biz } = await ctx.supabase
+  const { data: biz } = await adminDb
     .from('businesses')
-    .select('id, name, owner_profile_id')
+    .select('id, name, slug, owner_profile_id')
     .eq('id', businessId)
     .maybeSingle()
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
   // Period = since enabled_at (or last 30 days)
-  const { data: current } = await ctx.supabase
+  const { data: current } = await adminDb
     .from('merchant_order_settings')
     .select('orders_enabled_at')
     .eq('business_id', businessId)
@@ -105,7 +138,7 @@ export async function disableOrders(businessId: string): Promise<Result> {
   const periodEnd = now
 
   // Fetch orders in period
-  const { data: orders } = await ctx.supabase
+  const { data: orders } = await adminDb
     .from('order_requests')
     .select('status, created_at, accepted_at, delivered_at')
     .eq('business_id', businessId)
@@ -151,7 +184,7 @@ export async function disableOrders(businessId: string): Promise<Result> {
     `الطلبات المسلّمة: ${delivered}`,
   ].join('\n')
 
-  const { data: savedReport } = await ctx.supabase
+  const { data: savedReport } = await adminDb
     .from('business_insights')
     .insert({
       business_id: businessId,
@@ -179,7 +212,7 @@ export async function disableOrders(businessId: string): Promise<Result> {
     .maybeSingle()
 
   // Disable
-  const { error: updErr } = await ctx.supabase
+  const { error: updErr } = await adminDb
     .from('merchant_order_settings')
     .update({
       orders_enabled: false,
@@ -194,18 +227,28 @@ export async function disableOrders(businessId: string): Promise<Result> {
 
   // Notify merchant with summary
   if (biz.owner_profile_id) {
-    await createNotification({
-      userId: biz.owner_profile_id,
-      type: 'system',
-      title: '📊 ملخص فترة الاستلام',
-      body: `اتوقف استلام الطلبات. الفترة (${periodLabel}): ${total} طلب — ${accepted} مقبول (${acceptRate}%) · ${rejected} مرفوض · ${expired} فات · متوسط الرد ${avgMin} دقيقة.`,
-      deepLink: savedReport?.id
-        ? `/merchant/insights/${savedReport.id}`
-        : '/merchant/orders/settings',
-    })
+    try {
+      await createNotification({
+        userId: biz.owner_profile_id,
+        type: 'system',
+        title: '📊 ملخص فترة الاستلام',
+        body: `اتوقف استلام الطلبات. الفترة (${periodLabel}): ${total} طلب — ${accepted} مقبول (${acceptRate}%) · ${rejected} مرفوض · ${expired} فات · متوسط الرد ${avgMin} دقيقة.`,
+        deepLink: savedReport?.id
+          ? `/merchant/insights/${savedReport.id}`
+          : '/merchant/orders/settings',
+      })
+    } catch {
+      await logAudit(adminDb, {
+        actorUserId: ctx.userId,
+        action: 'orders.disable.notification_failed',
+        entityType: 'business',
+        entityId: businessId,
+        metadata: { report_id: savedReport?.id ?? null },
+      })
+    }
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'orders.disable',
     entityType: 'business',
@@ -220,9 +263,11 @@ export async function disableOrders(businessId: string): Promise<Result> {
   })
 
   revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath(`/businesses/${biz.slug}`)
   revalidatePath('/merchant/orders')
   revalidatePath('/merchant/orders/settings')
   revalidatePath('/merchant/insights')
+  revalidateTag('businesses', 'default')
 
   return { ok: true, reportId: savedReport?.id }
 }
