@@ -387,3 +387,33 @@
     pointer-events: none;
   }
 }
+
+
+/* Compact header layout for narrow phones; preserve comfortable tap targets. */
+.avatarLink {
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+@media (max-width: 380px) {
+  .right,
+  .left {
+    min-width: 0;
+    gap: 4px;
+  }
+
+  .right > .weather {
+    display: none;
+  }
+
+  .center {
+    min-width: 0;
+  }
+
+  .center > * {
+    max-width: 80px;
+  }
+}

@@ -241,3 +241,12 @@
     width: 100%;
   }
 }
+
+
+/* The QR frame is white, so loading/error text must remain dark and readable. */
+.qrFrame .qrHint {
+  max-width: 240px;
+  color: #342044;
+  padding: 8px;
+  line-height: 1.5;
+}
