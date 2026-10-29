@@ -234,14 +234,14 @@ export default async function AboutPage() {
             <FeatureCard
               Icon={StarIcon}
               title="تقييمات موثوقة"
-              text="رد على عملائك، وحسّن سمعتك."
+              text="رد على المشترين، وحسّن سمعتك."
             />
             <FeatureCard
               Icon={ShieldCheckIcon}
               title="شارة الثقة"
               text="كل ما تتفاعل، تترقّى في التصنيف."
             />
-            <FeatureCard Icon={GiftIcon} title="عروض وقسائم" text="اعمل عروض لجذب عملاء جدد." />
+            <FeatureCard Icon={GiftIcon} title="عروض وقسائم" text="اعمل عروض لجذب مشترين جدد." />
             <FeatureCard
               Icon={CrownGoldIcon}
               title="ترقيات اختيارية"

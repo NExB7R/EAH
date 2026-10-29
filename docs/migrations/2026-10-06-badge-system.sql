@@ -29,7 +29,7 @@ INSERT INTO public.badge_catalog (key, label, description, icon, category, displ
   ('first_follow', 'متابع', 'أول متابعة لنشاط', '👁', 'social', 110),
   ('follower_10', 'متابع نشيط', 'تابعت 10 أنشطة', '👁', 'social', 120),
   ('first_order', 'أول طلب', 'أول طلب على المنصة', '🛒', 'achievement', 130),
-  ('orders_10', 'عميل وفي', '10 طلبات مكتملة', '🛒', 'achievement', 140),
+  ('orders_10', 'مشتري مخلص', '10 طلبات مكتملة', '🛒', 'achievement', 140),
   ('top_reviewer', 'أفضل مراجع', 'من أفضل 10 مراجعين شهرياً', '🌟', 'special', 200),
   ('verified_identity', 'موثّق', 'تم التحقق من حسابك', '✓', 'special', 210),
   ('community_pillar', 'ركن المجتمع', 'ساعدت 100+ مستخدم', '🏛', 'special', 220),
