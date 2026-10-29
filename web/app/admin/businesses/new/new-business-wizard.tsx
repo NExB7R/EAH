@@ -31,6 +31,7 @@ export type WizardData = {
   name: string
   hook: string
   description: string
+  city: string
   area: string
   address_text: string
   contacts: Contact[]
@@ -52,6 +53,7 @@ const INITIAL: WizardData = {
   name: '',
   hook: '',
   description: '',
+  city: 'شبين القناطر',
   area: '',
   address_text: '',
   contacts: [{ tempId: 'c1', kind: 'phone', value: '', is_primary: true }],
@@ -182,6 +184,7 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
       }
       fd.set('hook', data.hook.trim())
       fd.set('description', data.description.trim())
+      fd.set('city', data.city.trim())
       fd.set('area', data.area.trim())
       fd.set('address_text', data.address_text.trim())
       fd.set(
