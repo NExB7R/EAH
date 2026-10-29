@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 // ROLES_MATRIX.md — single source of truth for role logic
 // ═══════════════════════════════════════════════════════════
 
-export type Role = 'guest' | 'customer' | 'merchant' | 'admin'
+export type Role = 'guest' | 'customer' | 'merchant' | 'super_admin'
 
 export type RoleContext = {
   role: Role
@@ -32,7 +32,7 @@ export async function getRoleContext(): Promise<RoleContext> {
     .maybeSingle()
 
   if (roleRow?.role === 'super_admin') {
-    return { role: 'admin', userId: user.id, isAdmin: true, isMerchant: false, hasBusiness: false }
+    return { role: 'super_admin', userId: user.id, isAdmin: true, isMerchant: false, hasBusiness: false }
   }
 
   const { data: biz } = await supabase
@@ -62,7 +62,7 @@ export async function getRoleContext(): Promise<RoleContext> {
 }
 
 export function getRedirectForRole(role: Role, pathname: string): string | null {
-  if (role === 'admin') {
+  if (role === 'super_admin') {
     // استثناء: الأدمن يقدر يعدل بروفايله
     if (pathname.startsWith('/account/edit')) return null
     if (pathname.startsWith('/account') || pathname.startsWith('/merchant')) {

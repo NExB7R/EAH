@@ -11,7 +11,7 @@ export type AdminContext =
       ok: true
       supabase: Awaited<ReturnType<typeof createClient>>
       userId: string
-      role: 'admin' | 'super_admin'
+      role: 'super_admin'
     }
   | { ok: false; error: string }
 

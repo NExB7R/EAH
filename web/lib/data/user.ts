@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 // يقلل 4 queries → 1 query + React.cache
 // ═══════════════════════════════════════════════════════════
 
-export type AppRole = 'customer' | 'merchant' | 'admin' | 'super_admin'
+export type AppRole = 'customer' | 'merchant' | 'super_admin'
 export type DisplayNameMode = 'real' | 'alias' | 'both' | 'anonymous'
 
 export type UserSession = {
