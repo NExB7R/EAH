@@ -851,6 +851,39 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     return { ok: true }
   }
 
+  // Ownership changes must never carry an old order-acceptance setting to a
+  // newly linked owner. Public visibility remains unchanged; only ordering is
+  // disabled until the new/current seller explicitly re-enables it.
+  const { error: closePublicOrdersError } = await privileged
+    .from('businesses')
+    .update({ accepts_orders: false })
+    .eq('id', businessId)
+  if (closePublicOrdersError) {
+    return { ok: false, error: 'تعذر إيقاف الطلبات قبل تغيير المالك؛ لم يتغير ربط النشاط.' }
+  }
+
+  const { error: closeOrderSettingsError } = await privileged
+    .from('merchant_order_settings')
+    .update({
+      orders_enabled: false,
+      orders_disabled_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq('business_id', businessId)
+  if (closeOrderSettingsError) {
+    await logAudit(privileged, {
+      actorUserId: ctx.userId,
+      action: 'business.link_owner.order_reset_failed',
+      entityType: 'business',
+      entityId: businessId,
+      metadata: { error: closeOrderSettingsError.message },
+    })
+    return {
+      ok: false,
+      error: 'تم إيقاف زر الطلب لحماية النشاط، لكن تعذر حفظ إعداداته. لم يتغير ربط المالك؛ راجع الإعدادات وحاول تاني.',
+    }
+  }
+
   if (!alreadyLinked) {
     const { error } = await privileged
       .from('businesses')
@@ -901,7 +934,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
         })
         return {
           ok: false,
-          error: 'النشاط مربوط بالحساب بالفعل، لكن تعذّر تفعيل دور البايع. لم نغيّر الربط الحالي.',
+          error: 'النشاط ما زال مربوطًا بالحساب، لكن تعذّر تفعيل دور البايع. أوقفنا الطلبات لحماية النشاط؛ راجع الدور وإعدادات الطلب.',
         }
       }
 
@@ -996,6 +1029,37 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
   if (!biz.owner_profile_id) return { ok: false, error: 'النشاط مش مربوط بأي حساب' }
+
+  // Unlinking must close both order flags before the activity becomes ownerless.
+  const { error: closePublicOrdersError } = await admin
+    .from('businesses')
+    .update({ accepts_orders: false })
+    .eq('id', businessId)
+  if (closePublicOrdersError) {
+    return { ok: false, error: 'تعذر إيقاف الطلبات قبل فك ربط المالك؛ لم يتغير الربط.' }
+  }
+
+  const { error: closeOrderSettingsError } = await admin
+    .from('merchant_order_settings')
+    .update({
+      orders_enabled: false,
+      orders_disabled_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq('business_id', businessId)
+  if (closeOrderSettingsError) {
+    await logAudit(admin, {
+      actorUserId: ctx.userId,
+      action: 'business.unlink_owner.order_reset_failed',
+      entityType: 'business',
+      entityId: businessId,
+      metadata: { error: closeOrderSettingsError.message },
+    })
+    return {
+      ok: false,
+      error: 'تم إيقاف زر الطلب لحماية النشاط، لكن تعذر حفظ إعداداته. لم يتم فك الربط؛ راجع إعدادات الطلب.',
+    }
+  }
 
   const { error } = await admin
     .from('businesses')
