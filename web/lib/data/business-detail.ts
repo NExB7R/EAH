@@ -2,6 +2,7 @@ import { unstable_cache } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createPublicClient } from '@/lib/supabase/public'
 import { isBusinessOpen, isOpenNow, type Business, type WorkingHours } from './businesses'
+import { canAcceptInAppOrders } from './order-availability'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Detail (Full Page Data)
@@ -20,7 +21,7 @@ function normalizeBusinessRows(data: unknown[] | null): Business[] {
       primaryLoc && Number.isFinite(primaryLoc.latitude) && Number.isFinite(primaryLoc.longitude)
         ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
         : null
-    const acceptsOrders = raw.accepts_orders === true
+    const acceptsOrders = canAcceptInAppOrders(raw.accepts_orders, raw.owner_profile_id)
     const isOpen = isBusinessOpen({
       working_hours: (raw.working_hours as WorkingHours | null) ?? null,
       open_now_override:
@@ -28,6 +29,8 @@ function normalizeBusinessRows(data: unknown[] | null): Business[] {
       is_open: typeof raw.is_open === 'boolean' ? raw.is_open : null,
     })
     delete raw.business_locations
+    // Do not leak the internal owner profile ID through public detail/similar-business payloads.
+    delete raw.owner_profile_id
     return {
       ...(raw as unknown as Business),
       location,
@@ -153,7 +156,7 @@ export const getBusinessDetail = unstable_cache(
       .from('businesses')
       .select(
         `
-        id, slug, name, business_type, custom_business_type, business_type_status, description, hook,
+        id, slug, name, owner_profile_id, business_type, custom_business_type, business_type_status, description, hook,
         area, city, address_text, map_url, cover_image_url,
         is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         successful_orders,
@@ -182,7 +185,10 @@ export const getBusinessDetail = unstable_cache(
       primaryLoc && Number.isFinite(primaryLoc.latitude) && Number.isFinite(primaryLoc.longitude)
         ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
         : null
+    const acceptsOrders = canAcceptInAppOrders(rawBiz.accepts_orders, rawBiz.owner_profile_id)
     delete rawBiz.business_locations
+    // Owner IDs are private linkage data; return only the derived availability flag.
+    delete rawBiz.owner_profile_id
     const business = {
       ...(rawBiz as unknown as Omit<Business, 'owner_profile_id'>),
       location,
@@ -192,7 +198,8 @@ export const getBusinessDetail = unstable_cache(
           typeof rawBiz.open_now_override === 'boolean' ? rawBiz.open_now_override : null,
         is_open: typeof rawBiz.is_open === 'boolean' ? rawBiz.is_open : null,
       }),
-      orders_enabled: rawBiz.accepts_orders === true,
+      accepts_orders: acceptsOrders,
+      orders_enabled: acceptsOrders,
     }
 
     const noticeText = ((rawBiz.important_notice as string | null) ?? '').trim()
@@ -355,7 +362,7 @@ export const getSimilarBusinesses = unstable_cache(
       .from('businesses')
       .select(
         `
-        id, slug, name, business_type, description, hook,
+        id, slug, name, owner_profile_id, business_type, description, hook,
         area, city, address_text, map_url, cover_image_url,
         is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         successful_orders,
