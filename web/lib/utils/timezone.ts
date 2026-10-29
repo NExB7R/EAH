@@ -69,7 +69,7 @@ export function getCairoDateParts(value: string | Date): CairoDateParts | null {
  * Returns null for malformed calendar values and local times skipped by DST.
  */
 export function parseCairoLocalDateTime(value: string): Date | null {
-  const match = /^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})(?::(\\d{2}))?$/.exec(
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(
     value.trim(),
   )
   if (!match) return null
