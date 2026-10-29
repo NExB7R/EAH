@@ -4,7 +4,7 @@ import { CheckCircleIcon, StoreIcon, ArrowLeftIcon } from '@/components/icons'
 import SecondaryHero from '@/components/secondary-hero'
 import styles from './success.module.css'
 
-export const metadata: Metadata = { title: 'تم التسجيل · EAH' }
+export const metadata: Metadata = { title: 'تم التسجيل' }
 
 export default function SuccessPage() {
   return (

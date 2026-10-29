@@ -14,7 +14,7 @@ import {
 import styles from './support-palestine.module.css'
 
 export const metadata: Metadata = {
-  title: 'فلسطين في القلب · EAH',
+  title: 'فلسطين في القلب',
   description: 'التزام EAH بدعم فلسطين — 5% من أرباح الباقات والإعلانات',
 }
 

@@ -37,12 +37,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const detail = await getBusinessDetail(slug)
 
   if (!detail) {
-    return { title: 'مش موجود · EAH' }
+    return { title: 'مش موجود' }
   }
 
   const { business } = detail
   return {
-    title: `${business.name} · EAH`,
+    title: business.name,
     description:
       business.description ??
       business.hook ??
