@@ -14,4 +14,26 @@ test.describe('Home page', () => {
     await page.goto('/', { waitUntil: 'networkidle' })
     expect(errors).toEqual([])
   })
+
+  test('waits for a streamed section before scrolling to it', async ({ page }) => {
+    await page.goto('/?scroll=late-test-section', { waitUntil: 'domcontentloaded' })
+    await expect(page.locator('h1')).toContainText('شبيك لبيك')
+    await page.waitForTimeout(500)
+
+    await page.evaluate(() => {
+      window.setTimeout(() => {
+        const section = document.createElement('section')
+        section.id = 'late-test-section'
+        section.style.height = '80px'
+        section.style.marginTop = '1400px'
+        section.textContent = 'Late section for scroll regression test'
+        document.body.append(section)
+      }, 250)
+    })
+
+    await expect.poll(() => page.evaluate(() => window.scrollY), {
+      timeout: 3000,
+      message: 'the chip scroll handler should scroll when the async section appears',
+    }).toBeGreaterThan(100)
+  })
 })
