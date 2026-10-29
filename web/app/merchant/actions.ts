@@ -172,7 +172,7 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
       source: 'merchant',
       is_published: false,
       is_open: true,
-      accepts_whatsapp_orders: !!data.whatsapp || !!data.phone,
+      accepts_whatsapp_orders: Boolean(data.whatsapp?.trim()),
     })
     .select('id')
     .single()

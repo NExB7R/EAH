@@ -76,7 +76,7 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
           goTo={goTo}
         />
         <Item label="الاسم" value={data.name} step={0} goTo={goTo} />
-        <Item label="الهوك" value={data.hook} empty={!data.hook} step={0} goTo={goTo} />
+        <Item label="العبارة التعريفية" value={data.hook} empty={!data.hook} step={0} goTo={goTo} />
         <Item label="المدينة" value={data.city} empty={!data.city} step={1} goTo={goTo} />
         <Item label="المنطقة / القرية" value={data.area} empty={!data.area} step={1} goTo={goTo} />
         <Item
@@ -103,7 +103,7 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
         <Item label="حالة النشر" value={publishStatus} step={2} goTo={goTo} />
         <Item label="الحالة" value={data.is_open ? 'مفتوح الآن' : 'مغلق'} step={2} goTo={goTo} />
         <Item
-          label="واتساب أوردرز"
+          label="استقبال طلبات واتساب"
           value={
             whatsappOrdersEnabled
               ? 'يستقبل'
