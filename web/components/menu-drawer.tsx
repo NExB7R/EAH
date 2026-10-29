@@ -204,13 +204,14 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               displayName={session.displayName}
               avatarUrl={session.avatarUrl}
               role={session.role}
-              phoneVerified={session.phoneVerified}
+              isVerified={session.isVerified}
+              isPaidMember={session.isPaidMember}
               size="lg"
             />
             <div className={styles.profileInfo}>
               <div className={styles.profileName}>
                 <span>{session.displayName}</span>
-                {session.phoneVerified && (
+                {session.isVerified && (
                   <span className={styles.verifiedIcon}>
                     <BadgeCheckIcon size={14} />
                   </span>
