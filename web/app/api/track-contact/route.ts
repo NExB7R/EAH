@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { getClientIp, strictLimiter, checkRateLimit } from '@/lib/rate-limit'
+import { normalizeWhatsAppDestination } from '@/lib/data/contact-availability-utils'
 
 const schema = z.object({
   businessId: z.string().uuid(),
@@ -158,6 +159,17 @@ export async function POST(request: Request) {
 
   if (!value) {
     return NextResponse.json({ ok: false, error: 'بيانات التواصل مش متاحة' }, { status: 404 })
+  }
+
+  if (parsed.data.method === 'whatsapp') {
+    const normalized = normalizeWhatsAppDestination(value)
+    if (!normalized) {
+      return NextResponse.json(
+        { ok: false, error: 'رقم واتساب غير متاح أو غير صالح' },
+        { status: 404 },
+      )
+    }
+    value = normalized
   }
 
   const visitorHash = createHash('sha256')

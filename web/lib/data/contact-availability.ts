@@ -1,7 +1,7 @@
 import 'server-only'
 
 import { createServiceClient } from '@/lib/supabase/service'
-import { hasNonEmptyContact } from './contact-availability-utils'
+import { hasUsableWhatsAppDestination } from './contact-availability-utils'
 
 type ServiceClient = ReturnType<typeof createServiceClient>
 
@@ -37,7 +37,7 @@ export async function getWhatsAppDestinationBusinessIds(
     console.error('[contact-availability] active branch lookup failed:', branchesResult.error.message)
   } else {
     for (const row of branchesResult.data ?? []) {
-      if (hasNonEmptyContact(row.whatsapp)) available.add(row.business_id)
+      if (hasUsableWhatsAppDestination(row.whatsapp)) available.add(row.business_id)
     }
   }
 
@@ -45,7 +45,7 @@ export async function getWhatsAppDestinationBusinessIds(
     console.error('[contact-availability] public contact lookup failed:', contactsResult.error.message)
   } else {
     for (const row of contactsResult.data ?? []) {
-      if (hasNonEmptyContact(row.value)) available.add(row.business_id)
+      if (hasUsableWhatsAppDestination(row.value)) available.add(row.business_id)
     }
   }
 
