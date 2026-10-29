@@ -19,17 +19,15 @@ VALUES (
 )
 ON CONFLICT (key) DO NOTHING;
 
-DO $$
+DO $
 BEGIN
+  -- The seed is intentionally non-destructive: it must never overwrite contacts
+  -- after the owner configures them. Assert row existence only, not empty values.
   IF NOT EXISTS (
     SELECT 1 FROM public.app_settings
     WHERE key = 'site'
-      AND COALESCE((value ->> 'public_contacts_enabled')::boolean, false) = false
-      AND COALESCE(value ->> 'support_email', '') = ''
-      AND COALESCE(value ->> 'support_whatsapp', '') = ''
-      AND COALESCE(value ->> 'support_facebook_url', '') = ''
-      AND COALESCE(value ->> 'whatsapp_channel_url', '') = ''
+      AND jsonb_typeof(value) = 'object'
   ) THEN
-    RAISE EXCEPTION 'Expected site settings row with no public contacts enabled';
+    RAISE EXCEPTION 'Expected central site settings row with a JSON object value';
   END IF;
-END $$;
+END $;
