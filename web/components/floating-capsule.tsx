@@ -135,7 +135,7 @@ export default function FloatingCapsule({ session, contactLinks }: Props) {
                     isVerified={session.isVerified}
                     isPaidMember={session.isPaidMember}
                     priority
-                    size="sm"
+                    size="md"
                   />
                 </Link>
               </>
