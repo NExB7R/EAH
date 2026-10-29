@@ -16,13 +16,17 @@ if ! git cat-file -e "$previous^{commit}" 2>/dev/null || ! git cat-file -e "$cur
 fi
 
 if git diff --quiet "$previous" "$current" -- . \
-  ':(exclude)docs/**' \
-  ':(exclude)**/*.md' \
-  ':(exclude)LICENSE' \
-  ':(exclude).gitignore'; then
-  echo "Documentation-only change; skipping the build."
+  ':(top,exclude)docs/**' \
+  ':(top,exclude)**/*.md' \
+  ':(top,exclude)*.md' \
+  ':(top,exclude)LICENSE' \
+  ':(top,exclude).gitignore' \
+  ':(top,exclude)**/.gitignore' \
+  ':(top,exclude).github/workflows/**' \
+  ':(top,exclude)web/scripts/ignore-vercel-build.sh'; then
+  echo "Only docs/CI housekeeping changed; skipping the app build."
   exit 0
 fi
 
-echo "Application or configuration changes detected; continuing with build."
+echo "Application or runtime configuration changes detected; continuing with build."
 exit 1

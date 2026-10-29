@@ -3,8 +3,22 @@ name: Invariants
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.github/workflows/**'
+      - 'web/scripts/ignore-vercel-build.sh'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - '.github/workflows/**'
+      - 'web/scripts/ignore-vercel-build.sh'
 
 permissions:
   contents: read
