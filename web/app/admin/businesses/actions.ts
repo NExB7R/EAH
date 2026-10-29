@@ -826,7 +826,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
 
   const { data: biz, error: businessError } = await privileged
     .from('businesses')
-    .select('id, name, owner_profile_id, source, claimed_at, claimed_by_user_id')
+    .select('id, name, slug, owner_profile_id, source, claimed_at, claimed_by_user_id')
     .eq('id', businessId)
     .maybeSingle()
 
@@ -974,7 +974,9 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
 
   revalidatePath(`/admin/businesses/${businessId}`)
   revalidatePath('/admin/businesses')
+  revalidatePath(`/businesses/${biz.slug}`)
   revalidateTag('admin-badges', 'default')
+  revalidateTag('businesses', 'default')
   return { ok: true }
 }
 
@@ -987,7 +989,7 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
 
   const { data: biz } = await admin
     .from('businesses')
-    .select('id, name, owner_profile_id')
+    .select('id, name, slug, owner_profile_id')
     .eq('id', businessId)
     .maybeSingle()
 
@@ -1017,5 +1019,7 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
 
   revalidatePath(`/admin/businesses/${businessId}`)
   revalidatePath('/admin/businesses')
+  revalidatePath(`/businesses/${biz.slug}`)
+  revalidateTag('businesses', 'default')
   return { ok: true }
 }
