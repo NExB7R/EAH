@@ -4,7 +4,7 @@ import FindByPhone from '@/components/find-by-phone'
 import styles from './find.module.css'
 
 export const metadata: Metadata = {
-  title: 'ابحث برقم · EAH',
+  'ابحث برقم',
   description: 'تحقق من تسجيل رقم في EAH',
 }
 
