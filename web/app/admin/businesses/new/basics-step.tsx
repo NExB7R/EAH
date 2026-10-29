@@ -72,7 +72,7 @@ export default function BasicsStep({ data, errors, update }: Props) {
             {errors.custom_business_type ? (
               <span className={styles.fieldError}>{errors.custom_business_type}</span>
             ) : (
-              <span className={styles.hint}>النوع ده محتاج موافقة الأدمن قبل ما النشاط يظهر</span>
+              <span className={styles.hint}>النشاط هيظهر ضمن فئة «أخرى» لحد ما يتم اعتماد اسم النوع المخصص.</span>
             )}
           </label>
         )}
