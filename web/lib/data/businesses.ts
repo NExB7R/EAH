@@ -195,6 +195,26 @@ export const getPublishedBusinesses = unstable_cache(
   { revalidate: 300, tags: ['businesses'] },
 )
 
+/** Count published production activities for public marketing copy; exclude QA fixtures. */
+export const getPublishedBusinessCount = unstable_cache(
+  async (): Promise<number | null> => {
+    const supabase = createServiceClient()
+    const { count, error } = await supabase
+      .from('businesses')
+      .select('id', { count: 'exact', head: true })
+      .eq('is_published', true)
+      .not('slug', 'like', 'eah-qa-test-%')
+
+    if (error) {
+      console.error('[data] getPublishedBusinessCount error:', error.message)
+      return null
+    }
+    return count ?? 0
+  },
+  ['businesses-published-count-v1'],
+  { revalidate: 300, tags: ['businesses'] },
+)
+
 // ═══════════════════════════════════════════════════════════
 // 2. الأنشطة المميزة (Featured)
 // ═══════════════════════════════════════════════════════════

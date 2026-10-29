@@ -21,6 +21,7 @@ import {
   MapPinIcon,
 } from '@/components/icons'
 import AboutFreeApp from '@/components/about-free-app'
+import { getPublishedBusinessCount } from '@/lib/data/businesses'
 import styles from './about.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -34,7 +35,9 @@ export const metadata: Metadata = {
   description: 'EAH — منصة اكتشاف محلية مصرية. مجانية للمشتري، بدون عمولة على البايع.',
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const publishedCount = await getPublishedBusinessCount()
+
   return (
     <main className={styles.page}>
       {/* ═══ 1. Hero ═══ */}
@@ -262,7 +265,10 @@ export default function AboutPage() {
       <section className={styles.section}>
         <div className={styles.container}>
           <div className={styles.statsGrid}>
-            <StatCard num="53+" label="نشاط مسجّل" />
+            <StatCard
+              num={publishedCount === null ? '—' : String(publishedCount)}
+              label={publishedCount === null ? 'عدد الأنشطة غير متاح' : 'نشاط منشور'}
+            />
             <StatCard num="100%" label="مجاني للمشتري" />
             <StatCard num="0%" label="عمولة على البايع" />
             <StatCard num="24/7" label="متاح دايماً" />
