@@ -7,6 +7,7 @@ import { orderSchema, orderHasContent } from '@/lib/validations/order'
 import { createNotification } from '@/lib/notifications/server'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { canAcceptInAppOrders } from '@/lib/data/order-availability'
+import { normalizeWhatsAppDestination } from '@/lib/data/contact-availability-utils'
 
 type Result =
   | { ok: true; orderCode: string; orderId: string; whatsappUrl: string }
@@ -132,50 +133,51 @@ export async function submitOrder(
     return { ok: false, error: 'بيانات تواصل النشاط غير متاحة مؤقتًا. جرّب تاني.' }
   }
 
-  const { data: branch, error: branchError } = await contactDb
+  const { data: branches, error: branchError } = await contactDb
     .from('business_branches')
-    .select('phone, whatsapp')
+    .select('whatsapp, is_primary, sort_order')
     .eq('business_id', businessId)
     .eq('is_active', true)
     .order('is_primary', { ascending: false })
-    .limit(1)
-    .maybeSingle()
+    .order('sort_order', { ascending: true })
+    .limit(25)
 
   if (branchError) {
     console.error('[submitOrder] branch lookup failed:', branchError.message)
     return { ok: false, error: 'تعذر التحقق من بيانات تواصل النشاط. جرّب تاني.' }
   }
 
-  // Simple activities may have business-level contacts before a separate branch
-  // record exists. Prefer an active branch, then fall back to saved contact methods.
-  let merchantPhone = branch?.whatsapp || branch?.phone || ''
-  if (!merchantPhone) {
+  let merchantWhatsApp =
+    (branches ?? [])
+      .map((branch) => normalizeWhatsAppDestination(branch.whatsapp))
+      .find((candidate): candidate is string => candidate !== null) ?? null
+
+  if (!merchantWhatsApp) {
     const { data: contactRows, error: contactError } = await contactDb
       .from('business_contact_methods')
-      .select('method_type, value, is_primary')
+      .select('value, is_primary, sort_order')
       .eq('business_id', businessId)
-      .in('method_type', ['whatsapp', 'phone'])
+      .eq('method_type', 'whatsapp')
+      .eq('is_public', true)
       .order('is_primary', { ascending: false })
-      .limit(10)
+      .order('sort_order', { ascending: true })
+      .limit(25)
 
     if (contactError) {
       console.error('[submitOrder] contact fallback lookup failed:', contactError.message)
       return { ok: false, error: 'تعذر جلب بيانات تواصل النشاط. جرّب تاني.' }
     }
 
-    merchantPhone =
-      (contactRows ?? []).find(
-        (row) => row.method_type === 'whatsapp' && typeof row.value === 'string' && row.value.trim(),
-      )?.value ??
-      (contactRows ?? []).find(
-        (row) => row.method_type === 'phone' && typeof row.value === 'string' && row.value.trim(),
-      )?.value ??
-      ''
+    merchantWhatsApp =
+      (contactRows ?? [])
+        .map((contact) => normalizeWhatsAppDestination(contact.value))
+        .find((candidate): candidate is string => candidate !== null) ?? null
   }
 
-  if (!merchantPhone.trim()) {
-    return { ok: false, error: 'النشاط مش مسجل له رقم لاستقبال الطلبات' }
+  if (!merchantWhatsApp) {
+    return { ok: false, error: 'النشاط مش مسجل له رقم واتساب صالح لاستقبال الطلبات' }
   }
+
 
   const orderCode = genOrderCode()
 
@@ -294,18 +296,8 @@ export async function submitOrder(
     .filter(Boolean)
     .join('\n')
 
-  // Robust normalization for Egyptian numbers:
-  //   "01012345678"     → "201012345678"
-  //   "201012345678"    → "201012345678"
-  //   "+201012345678"   → "201012345678"
-  const cleaned = merchantPhone.replace(/[\s+\-]/g, '')
-  const normalized = cleaned.startsWith('20')
-    ? cleaned
-    : cleaned.startsWith('0')
-      ? '20' + cleaned.slice(1)
-      : '20' + cleaned
-
-  const whatsappUrl = `https://wa.me/${normalized}?text=${encodeURIComponent(lines)}`
+  // The selected destination was normalized while resolving branch/general contact methods.
+  const whatsappUrl = `https://wa.me/${merchantWhatsApp}?text=${encodeURIComponent(lines)}`
 
   // ═══════════════════════════════════════════════════════════════════
   // 6. Notify merchant — deep link straight to the order
