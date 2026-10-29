@@ -86,7 +86,7 @@
 - **الموجود:** Trust Score + توثيق (✅ موجود)
 - **الجديد:**
   - شارات متعددة (verified/trusted/expert)
-  - Levels (Bronze → Diamond) — مسموح للمشتري والتاجر
+  - Levels (Bronze → Diamond) — مسموح للمشتري والبايع
   - حالات خاصة (Pioneer, Helper, Guardian)
 - **الوقت:** 3 أيام
 

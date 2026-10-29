@@ -105,6 +105,7 @@ const SELLER_ONBOARDING_ITEMS: MenuItem[] = [
 // ─── Admin ───
 const ADMIN_ITEMS: MenuItem[] = [
   { href: '/admin', label: 'لوحة الأدمن', Icon: ShieldCheckIcon },
+  { href: '/admin/businesses/new', label: 'إضافة نشاط', Icon: StoreIcon },
 ]
 
 const BOTTOM_ITEMS: MenuItem[] = [
