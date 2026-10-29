@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export default async function AdminProfilePage() {
   const session = await getUserSession()
   if (!session) redirect('/auth?next=/admin/profile')
-  if (session.role !== 'admin' && session.role !== 'super_admin') redirect('/')
+  if (session.role !== 'super_admin') redirect('/')
 
   const profile = await getFullProfile(session.userId)
   if (!profile) redirect('/auth?next=/admin/profile')

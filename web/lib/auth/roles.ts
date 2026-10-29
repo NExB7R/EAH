@@ -31,7 +31,7 @@ export async function getRoleContext(): Promise<RoleContext> {
     .eq('user_id', user.id)
     .maybeSingle()
 
-  if (roleRow?.role === 'admin' || roleRow?.role === 'super_admin') {
+  if (roleRow?.role === 'super_admin') {
     return { role: 'admin', userId: user.id, isAdmin: true, isMerchant: false, hasBusiness: false }
   }
 

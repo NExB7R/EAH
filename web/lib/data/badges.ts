@@ -32,7 +32,7 @@ export async function getBadgeCatalogWithStatus(userId: string): Promise<BadgeCa
       .select('role')
       .eq('user_id', user.id)
       .maybeSingle()
-    if (roleRow?.role !== 'admin' && roleRow?.role !== 'super_admin') return []
+    if (roleRow?.role !== 'super_admin') return []
   }
 
   const supabase = createServiceClient()

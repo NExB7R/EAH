@@ -68,7 +68,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     email: user.email ?? null,
     displayName: profile?.display_name ?? 'مستخدم EAH',
     avatarUrl: profile?.avatar_url ?? null,
-    role: (roleRow?.role as AppRole) ?? 'customer',
+    role: roleRow?.role === 'admin' ? 'customer' : ((roleRow?.role as AppRole) ?? 'customer'),
     notifCount: count ?? 0,
     phone: (profile?.phone as string | null) ?? null,
     phoneVerified: !!profile?.phone_verified_at,
