@@ -29,7 +29,7 @@ export default async function NewBusinessPage() {
           <ArrowLeftIcon size={14} />
           <span>رجوع للقائمة</span>
         </Link>
-        <span className={fsStyles.title}>نشاط جديد</span>
+        <span className={fsStyles.title}>إضافة نشاط جديد</span>
         <span className={fsStyles.subtitle}>4 خطوات سريعة</span>
       </header>
       <div className={fsStyles.container}>

@@ -28,7 +28,7 @@
   border-radius: 12px;
   border: 1px solid rgba(168, 85, 247, 0.15);
   background: rgba(20, 14, 34, 0.4);
-  transition: all 200ms var(--ease);
+  transition: border-color 180ms var(--ease-out), background 180ms var(--ease-out);
 }
 
 .progressIcon {
@@ -40,7 +40,7 @@
   border-radius: 50%;
   background: rgba(168, 85, 247, 0.08);
   color: var(--text-tertiary);
-  transition: all 200ms var(--ease);
+  transition: border-color 180ms var(--ease-out), background 180ms var(--ease-out);
 }
 
 .progressLabel {
@@ -53,18 +53,18 @@
 }
 
 .active {
-  border-color: rgba(232, 199, 154, 0.5);
-  background: rgba(232, 199, 154, 0.05);
+  border-color: rgba(199, 125, 255, 0.48);
+  background: rgba(168, 85, 247, 0.1);
 }
 
 .active .progressIcon {
-  background: rgba(232, 199, 154, 0.15);
-  color: var(--gold-light);
-  box-shadow: 0 0 12px rgba(232, 199, 154, 0.35);
+  background: linear-gradient(135deg, var(--purple-neon), var(--purple-light));
+  color: #fff;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.25);
 }
 
 .active .progressLabel {
-  color: var(--gold-light);
+  color: var(--text-primary);
 }
 
 .done .progressIcon {
@@ -82,9 +82,10 @@
   flex-direction: column;
   gap: 18px;
   padding: 24px;
-  border-radius: 20px;
-  background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.85));
-  border: 1px solid rgba(168, 85, 247, 0.18);
+  border-radius: var(--radius-xl);
+  background: var(--surface-gradient);
+  border: 1px solid var(--border-purple-soft);
+  box-shadow: var(--shadow-base);
   margin-bottom: 20px;
 }
 
@@ -193,10 +194,10 @@
 }
 
 .typeActive {
-  border-color: rgba(232, 199, 154, 0.6);
-  background: rgba(232, 199, 154, 0.08);
-  color: var(--gold-light);
-  box-shadow: 0 0 14px rgba(232, 199, 154, 0.2);
+  border-color: rgba(199, 125, 255, 0.6);
+  background: linear-gradient(160deg, rgba(199, 125, 255, 0.15), rgba(168, 85, 247, 0.06));
+  color: var(--text-primary);
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.16);
 }
 
 /* ─── Location button ─── */
@@ -339,15 +340,15 @@
 }
 
 .btnPrimary {
-  color: var(--bg-base);
-  background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
-  box-shadow: 0 0 20px rgba(232, 199, 154, 0.4);
+  color: #fff;
+  background: linear-gradient(135deg, var(--purple-neon), var(--purple-primary));
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
   margin-inline-start: auto;
 }
 
 .btnPrimary:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 0 28px rgba(232, 199, 154, 0.6);
+  box-shadow: 0 6px 26px rgba(168, 85, 247, 0.42);
 }
 
 .btnPrimary:disabled {

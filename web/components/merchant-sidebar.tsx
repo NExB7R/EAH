@@ -56,7 +56,7 @@ const SECTIONS: Section[] = [
       { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon, badge: 'orders' },
       { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
       { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
-      { href: '/merchant/qr', label: 'QR النشاط', Icon: QrCodeIcon },
+      { href: '/merchant/qr', label: 'رمز QR للنشاط', Icon: QrCodeIcon },
     ],
   },
   {

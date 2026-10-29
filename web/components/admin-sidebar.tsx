@@ -63,6 +63,7 @@ const SECTIONS: Section[] = [
         Icon: StoreIcon,
         badgeKey: 'pendingBusinesses',
       },
+      { href: '/admin/businesses/new', label: 'إضافة نشاط', Icon: StoreIcon },
       { href: '/admin/featured', label: 'الأنشطة المميزة', Icon: CrownGoldIcon },
       { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
     ],
@@ -76,7 +77,7 @@ const SECTIONS: Section[] = [
     key: 'users',
     title: 'المستخدمون',
     items: [
-      { href: '/admin/users', label: 'المستخدمين', Icon: UserIcon },
+      { href: '/admin/users', label: 'المستخدمون', Icon: UserIcon },
       {
         href: '/admin/subscriptions',
         label: 'الاشتراكات',
@@ -150,6 +151,10 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
                 let active = false
                 if (baseHref === '/admin') {
                   active = pathname === '/admin' && !currentTab
+                } else if (href === '/admin/businesses') {
+                  active =
+                    pathname === href ||
+                    (pathname.startsWith(`${href}/`) && pathname !== '/admin/businesses/new')
                 } else if (pathname === baseHref || pathname.startsWith(`${baseHref}/`)) {
                   if (targetTab) {
                     active = pathname === baseHref && currentTab === targetTab
