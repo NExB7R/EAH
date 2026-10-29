@@ -14,20 +14,37 @@ import { createServiceClient } from '@/lib/supabase/service'
 
 type Result = { ok: true; id?: string } | { ok: false; error: string }
 
+/**
+ * Server-only privileged database client for admin actions.
+ * Call only after requireAdmin() succeeds; keep public/browser access under RLS.
+ * This avoids a mismatch where the app accepts admin + super_admin but the
+ * current businesses_admin_all policy only recognizes super_admin.
+ */
+function createAdminServiceClient() {
+  try {
+    return createServiceClient()
+  } catch {
+    return null
+  }
+}
+
 // ─── موافقة ───
 
 export async function approveBusiness(businessId: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { data: biz } = await ctx.supabase
+  const admin = createAdminServiceClient()
+  if (!admin) return { ok: false, error: 'عمليات النشاط غير متاحة مؤقتًا — حاول تاني' }
+
+  const { data: biz } = await admin
     .from('businesses')
     .select('id, name, owner_profile_id, slug, business_type_status')
     .eq('id', businessId)
     .maybeSingle()
 
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
-  const { data: updated, error } = await ctx.supabase
+  const { data: updated, error } = await admin
     .from('businesses')
     .update({
       is_published: true,
@@ -54,7 +71,7 @@ export async function approveBusiness(businessId: string): Promise<Result> {
         deepLink: `/businesses/${biz.slug}`,
       })
     } catch {
-      await logAudit(ctx.supabase, {
+      await logAudit(admin, {
         actorUserId: ctx.userId,
         action: 'business.approve.notification_failed',
         entityType: 'business',
@@ -64,7 +81,7 @@ export async function approveBusiness(businessId: string): Promise<Result> {
     }
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(admin, {
     actorUserId: ctx.userId,
     action: 'business.approve',
     entityType: 'business',
@@ -96,7 +113,10 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
     return { ok: false, error: parsed.error.issues[0]?.message ?? 'بيانات غير صحيحة' }
   }
 
-  const { data: biz } = await ctx.supabase
+  const admin = createAdminServiceClient()
+  if (!admin) return { ok: false, error: 'عمليات النشاط غير متاحة مؤقتًا — حاول تاني' }
+
+  const { data: biz } = await admin
     .from('businesses')
     .select('id, name, owner_profile_id, slug')
     .eq('id', businessId)
@@ -104,7 +124,7 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
 
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
-  const { data: updated, error } = await ctx.supabase
+  const { data: updated, error } = await admin
     .from('businesses')
     .update({
       is_published: false,
@@ -131,7 +151,7 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
         deepLink: `/merchant/business`,
       })
     } catch {
-      await logAudit(ctx.supabase, {
+      await logAudit(admin, {
         actorUserId: ctx.userId,
         action: 'business.reject.notification_failed',
         entityType: 'business',
@@ -141,7 +161,7 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
     }
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(admin, {
     actorUserId: ctx.userId,
     action: 'business.reject',
     entityType: 'business',
@@ -160,7 +180,10 @@ export async function archiveBusiness(businessId: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { data: archived, error } = await ctx.supabase
+  const admin = createAdminServiceClient()
+  if (!admin) return { ok: false, error: 'عمليات النشاط غير متاحة مؤقتًا — حاول تاني' }
+
+  const { data: archived, error } = await admin
     .from('businesses')
     .update({ is_published: false })
     .eq('id', businessId)
@@ -170,7 +193,7 @@ export async function archiveBusiness(businessId: string): Promise<Result> {
   if (error) return { ok: false, error: error.message }
   if (!archived) return { ok: false, error: 'النشاط مش موجود أو تم تحديثه بالفعل' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(admin, {
     actorUserId: ctx.userId,
     action: 'business.archive',
     entityType: 'business',
@@ -189,13 +212,16 @@ export async function republishBusiness(businessId: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { data: biz } = await ctx.supabase
+  const admin = createAdminServiceClient()
+  if (!admin) return { ok: false, error: 'عمليات النشاط غير متاحة مؤقتًا — حاول تاني' }
+
+  const { data: biz } = await admin
     .from('businesses')
     .select('id')
     .eq('id', businessId)
     .maybeSingle()
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
-  const { data: republished, error } = await ctx.supabase
+  const { data: republished, error } = await admin
     .from('businesses')
     .update({
       is_published: true,
@@ -210,7 +236,7 @@ export async function republishBusiness(businessId: string): Promise<Result> {
   if (error) return { ok: false, error: error.message }
   if (!republished) return { ok: false, error: 'تعذر إعادة نشر النشاط — حدّث القائمة وحاول تاني' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(admin, {
     actorUserId: ctx.userId,
     action: 'business.republish',
     entityType: 'business',
@@ -229,14 +255,17 @@ export async function deleteBusiness(businessId: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { data: biz } = await ctx.supabase
+  const admin = createAdminServiceClient()
+  if (!admin) return { ok: false, error: 'عمليات النشاط غير متاحة مؤقتًا — حاول تاني' }
+
+  const { data: biz } = await admin
     .from('businesses')
     .select('name')
     .eq('id', businessId)
     .maybeSingle()
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
-  const { data: deleted, error } = await ctx.supabase
+  const { data: deleted, error } = await admin
     .from('businesses')
     .delete()
     .eq('id', businessId)
@@ -246,7 +275,7 @@ export async function deleteBusiness(businessId: string): Promise<Result> {
   if (error) return { ok: false, error: error.message }
   if (!deleted) return { ok: false, error: 'تعذر حذف النشاط — حدّث القائمة وحاول تاني' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(admin, {
     actorUserId: ctx.userId,
     action: 'business.delete',
     entityType: 'business',
@@ -406,7 +435,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   )
   const effectiveAcceptsWhatsapp = hasWhatsappContact ? (d.accepts_whatsapp_orders ?? true) : false
 
-  const { data: created, error } = await ctx.supabase
+  const { data: created, error } = await privileged
     .from('businesses')
     .insert({
       name: d.name,
@@ -461,7 +490,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         .eq('id', created.id)
 
       if (rollbackError) {
-        await logAudit(ctx.supabase, {
+        await logAudit(privileged, {
           actorUserId: ctx.userId,
           action: 'business.create_partial_failure',
           entityType: 'business',
@@ -518,7 +547,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         .eq('id', created.id)
 
       if (contactsRollbackError || businessRollbackError) {
-        await logAudit(ctx.supabase, {
+        await logAudit(privileged, {
           actorUserId: ctx.userId,
           action: 'business.create_owner_role_failure',
           entityType: 'business',
@@ -555,7 +584,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         deepLink: '/merchant',
       })
     } catch {
-      await logAudit(ctx.supabase, {
+      await logAudit(privileged, {
         actorUserId: ctx.userId,
         action: 'business.create.owner_notification_failed',
         entityType: 'business',
@@ -565,7 +594,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     }
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(privileged, {
     actorUserId: ctx.userId,
     action: 'business.create',
     entityType: 'business',
@@ -589,6 +618,9 @@ export async function updateBusiness(businessId: string, formData: FormData): Pr
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const admin = createAdminServiceClient()
+  if (!admin) return { ok: false, error: 'عمليات النشاط غير متاحة مؤقتًا — حاول تاني' }
+
   const parsed = updateSchema.safeParse({
     name: String(formData.get('name') ?? '').trim(),
     slug: String(formData.get('slug') ?? '')
@@ -609,7 +641,7 @@ export async function updateBusiness(businessId: string, formData: FormData): Pr
 
   const d = parsed.data
 
-  const { data: updated, error } = await ctx.supabase
+  const { data: updated, error } = await admin
     .from('businesses')
     .update({
       name: d.name,
@@ -629,7 +661,7 @@ export async function updateBusiness(businessId: string, formData: FormData): Pr
   if (error) return { ok: false, error: error.message }
   if (!updated) return { ok: false, error: 'تعذر حفظ النشاط — حدّث الصفحة وحاول تاني' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(admin, {
     actorUserId: ctx.userId,
     action: 'business.update',
     entityType: 'business',
@@ -656,8 +688,8 @@ export async function adminStartTrial(businessId: string, days = 30): Promise<Re
     return { ok: false, error: 'عدد أيام غير صالح (1-365)' }
   }
 
-  const { createServiceClient } = await import('@/lib/supabase/service')
-  const admin = createServiceClient()
+  const admin = createAdminServiceClient()
+  if (!admin) return { ok: false, error: 'عمليات الإدارة غير متاحة مؤقتًا — حاول تاني' }
 
   const { data, error } = await admin.rpc('start_business_trial', {
     p_business_id: businessId,
@@ -674,7 +706,7 @@ export async function adminStartTrial(businessId: string, days = 30): Promise<Re
   if (!result?.ok) return { ok: false, error: result?.error ?? 'فشل بدء التجربة' }
 
   // إشعار لصاحب النشاط (لو موجود)
-  const { data: biz } = await ctx.supabase
+  const { data: biz } = await admin
     .from('businesses')
     .select('name, owner_profile_id')
     .eq('id', businessId)
@@ -774,7 +806,16 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     return { ok: false, error: 'معرّف النشاط أو المستخدم غير صحيح' }
   }
 
-  const { data: profile, error: profileError } = await ctx.supabase
+  let privileged: ReturnType<typeof createServiceClient>
+  try {
+    // The service client is used only after requireAdmin() succeeds; the target
+    // role and activity metadata are not fully readable under self/public RLS.
+    privileged = createServiceClient()
+  } catch {
+    return { ok: false, error: 'تعذر تجهيز خدمة ربط المالك — حاول تاني' }
+  }
+
+  const { data: profile, error: profileError } = await privileged
     .from('profiles')
     .select('id, display_name')
     .eq('id', userId)
@@ -783,7 +824,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
   if (profileError) return { ok: false, error: 'تعذر التحقق من بيانات المستخدم' }
   if (!profile) return { ok: false, error: 'المستخدم مش موجود' }
 
-  const { data: biz, error: businessError } = await ctx.supabase
+  const { data: biz, error: businessError } = await privileged
     .from('businesses')
     .select('id, name, owner_profile_id, source, claimed_at, claimed_by_user_id')
     .eq('id', businessId)
@@ -791,15 +832,6 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
 
   if (businessError) return { ok: false, error: 'تعذر التحقق من بيانات النشاط' }
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
-
-  let privileged: ReturnType<typeof createServiceClient>
-  try {
-    // This action is admin-gated; the target role is not readable through the
-    // ordinary session because user_roles RLS is self-only.
-    privileged = createServiceClient()
-  } catch {
-    return { ok: false, error: 'تعذر تجهيز خدمة ربط المالك — حاول تاني' }
-  }
 
   const { data: currentRole, error: roleLookupError } = await privileged
     .from('user_roles')
@@ -820,7 +852,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
   }
 
   if (!alreadyLinked) {
-    const { error } = await ctx.supabase
+    const { error } = await privileged
       .from('businesses')
       .update({
         owner_profile_id: userId,
@@ -856,7 +888,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
 
     if (!ownerIsMerchant) {
       if (alreadyLinked) {
-        await logAudit(ctx.supabase, {
+        await logAudit(privileged, {
           actorUserId: ctx.userId,
           action: 'business.link_owner_role_failure',
           entityType: 'business',
@@ -873,7 +905,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
         }
       }
 
-      const { error: rollbackError } = await ctx.supabase
+      const { error: rollbackError } = await privileged
         .from('businesses')
         .update({
           owner_profile_id: biz.owner_profile_id,
@@ -884,7 +916,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
         .eq('id', businessId)
 
       if (rollbackError) {
-        await logAudit(ctx.supabase, {
+        await logAudit(privileged, {
           actorUserId: ctx.userId,
           action: 'business.link_owner_partial_failure',
           entityType: 'business',
@@ -919,7 +951,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     })
   } catch {
     // A notification outage must not turn a successful ownership change into an apparent failure.
-    await logAudit(ctx.supabase, {
+    await logAudit(privileged, {
       actorUserId: ctx.userId,
       action: 'business.link_owner.notification_failed',
       entityType: 'business',
@@ -928,7 +960,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     })
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(privileged, {
     actorUserId: ctx.userId,
     action: 'business.link_owner',
     entityType: 'business',
@@ -950,7 +982,10 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { data: biz } = await ctx.supabase
+  const admin = createAdminServiceClient()
+  if (!admin) return { ok: false, error: 'عمليات النشاط غير متاحة مؤقتًا — حاول تاني' }
+
+  const { data: biz } = await admin
     .from('businesses')
     .select('id, name, owner_profile_id')
     .eq('id', businessId)
@@ -960,7 +995,7 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
 
   if (!biz.owner_profile_id) return { ok: false, error: 'النشاط مش مربوط بأي حساب' }
 
-  const { error } = await ctx.supabase
+  const { error } = await admin
     .from('businesses')
     .update({
       owner_profile_id: null,
@@ -972,7 +1007,7 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
 
   if (error) return { ok: false, error: error.message }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(admin, {
     actorUserId: ctx.userId,
     action: 'business.unlink_owner',
     entityType: 'business',
