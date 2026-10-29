@@ -1,6 +1,16 @@
 import Image from 'next/image'
 import DetailCover from './detail-cover'
-import { StarIcon, BadgeCheckIcon, MapPinIcon, CheckCircleIcon, AlertIcon } from './icons'
+import {
+  StarIcon,
+  BadgeCheckIcon,
+  MapPinIcon,
+  CheckCircleIcon,
+  AlertIcon,
+  CrownGoldIcon,
+  SunriseIcon,
+  StoreIcon,
+  WhatsAppIcon,
+} from './icons'
 import DistanceBadge from './distance-badge'
 import type { BusinessDetail } from '@/lib/data/business-detail'
 import { getBusinessTypeLabel } from '@/lib/business-type-label'
@@ -22,6 +32,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
     business.area && business.city && business.area !== business.city
       ? business.area + '، ' + business.city
       : business.area || business.city
+  const addressText = business.address_text?.trim() ?? ''
 
   return (
     <section className={`${styles.hero} ${business.is_featured ? styles.featured : ''}`}>
@@ -88,7 +99,43 @@ export default function BusinessHero({ detail, isOpen }: Props) {
             )}
           </div>
 
+          {(business.is_featured ||
+            business.is_new_project ||
+            business.accepts_orders ||
+            business.accepts_whatsapp_orders) && (
+            <div className={styles.badges} aria-label="مميزات النشاط وطرق الطلب">
+              {business.is_featured && (
+                <span className={[styles.tier, styles.tier_gold].join(' ')}>
+                  <CrownGoldIcon size={13} />
+                  نشاط مميز
+                </span>
+              )}
+              {business.is_new_project && (
+                <span className={[styles.tier, styles.tier_teal].join(' ')}>
+                  <SunriseIcon size={13} />
+                  مشروع جديد
+                </span>
+              )}
+              {business.accepts_orders && (
+                <span className={[styles.tier, styles.tier_purple].join(' ')}>
+                  <StoreIcon size={13} />
+                  طلبات داخل المنصة
+                </span>
+              )}
+              {business.accepts_whatsapp_orders && (
+                <span className={styles.trust}>
+                  <WhatsAppIcon size={13} />
+                  تواصل واتساب
+                </span>
+              )}
+            </div>
+          )}
 
+          {addressText && addressText !== locationLabel && (
+            <p className={styles.hook}>
+              <MapPinIcon size={14} /> {addressText}
+            </p>
+          )}
 
           {/* Rating + Stats */}
           <div className={styles.stats}>

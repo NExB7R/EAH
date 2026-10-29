@@ -192,6 +192,16 @@ export default async function BusinessPage({ params }: Props) {
         }}
       />
       <div className={styles.container}>
+        <nav className={styles.breadcrumb} aria-label="مسار التنقل">
+          <Link href="/explore" className={styles.breadcrumbLink}>
+            اكتشف الأنشطة
+          </Link>
+          <span aria-hidden="true">/</span>
+          <span className={styles.breadcrumbCurrent} aria-current="page">
+            {business.name}
+          </span>
+        </nav>
+
         {/* ─── Owner Banner ─── */}
         {isOwner && (
           <div className={styles.ownerBanner}>

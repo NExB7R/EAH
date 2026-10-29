@@ -80,8 +80,7 @@
 .rankBadge,
 .verifiedBadge,
 .favoriteBadge,
-.ratingBadge,
-.noRatingBadge {
+.ratingBadge {
   display: inline-flex;
   min-height: 26px;
   align-items: center;
@@ -163,16 +162,6 @@
   color: #3f3217;
   font-size: 0.64rem;
   font-weight: 750;
-}
-
-.noRatingBadge {
-  max-width: 42%;
-  color: #fff;
-  background: rgb(24 13 35 / 92%);
-  border-color: #65477d;
-  font-size: 0.63rem;
-  white-space: normal;
-  text-align: center;
 }
 
 .body {
@@ -289,6 +278,17 @@
   color: #a7f2d0;
   background: #10392d;
   border-color: #267657;
+}
+
+.noRating {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 2px;
+  color: #b9abc9;
+  font-size: 0.68rem;
+  font-weight: 750;
 }
 
 .tier_bade2 { color: #d3c5e2; border-color: #59416e; }
@@ -458,8 +458,7 @@
   .rankBadge,
   .verifiedBadge,
   .favoriteBadge,
-  .ratingBadge,
-  .noRatingBadge {
+  .ratingBadge {
     min-height: 23px;
     padding: 4px 6px;
     font-size: 0.62rem;
@@ -536,11 +535,6 @@
 
   .imageMeta {
     font-size: 0.66rem;
-  }
-
-  .noRatingBadge {
-    max-width: 45%;
-    white-space: normal;
   }
 
   .cta span {

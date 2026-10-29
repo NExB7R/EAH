@@ -10,8 +10,18 @@ concurrency:
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'LICENSE'
+      - '.gitignore'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'LICENSE'
+      - '.gitignore'
   workflow_dispatch:
 
 jobs:
@@ -119,7 +129,8 @@ jobs:
             docs/migrations/2026-10-29-business-admin-access-policy.sql \
             docs/migrations/2026-10-29-foreign-key-indexes.sql \
             docs/migrations/2026-10-29-prelaunch-access-control.sql \
-            docs/migrations/2026-10-29-restore-rls-helper-execute.sql
+            docs/migrations/2026-10-29-restore-rls-helper-execute.sql \
+            docs/migrations/2026-10-29-legacy-ads-rls-hardening.sql
           do
             echo "::group::Applying $migration to the isolated test database"
             psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f "$migration"
@@ -127,7 +138,7 @@ jobs:
           done
 
       - name: Run RLS and admin policy regression tests
-        run: supabase test db supabase/tests/rls.test.sql supabase/tests/reputation-policy.test.sql supabase/tests/admin-policy-alignment.test.sql --db-url "$SUPABASE_DB_URL"
+        run: supabase test db supabase/tests/rls.test.sql supabase/tests/reputation-policy.test.sql supabase/tests/admin-policy-alignment.test.sql supabase/tests/legacy-ads-rls.test.sql --db-url "$SUPABASE_DB_URL"
 
       - name: RLS Audit (comprehensive)
         run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/tests/rls-audit.sql
