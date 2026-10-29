@@ -1,5 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { createPublicClient } from '@/lib/supabase/public'
+import { createServiceClient } from '@/lib/supabase/service'
 import { sortByTrend } from '@/lib/ranking'
 import { getBusinessReputationScore } from '@/lib/reputation'
 import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
@@ -149,7 +150,7 @@ function normalizeBusinesses(data: unknown[] | null): Business[] {
 
 export const getPublishedBusinesses = unstable_cache(
   async (): Promise<Business[]> => {
-    const supabase = createPublicClient()
+    const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('businesses')
       .select(BUSINESS_COLUMNS)
@@ -179,7 +180,7 @@ export const getPublishedBusinesses = unstable_cache(
 
 export const getFeaturedBusinesses = unstable_cache(
   async (limit = 6): Promise<Business[]> => {
-    const supabase = createPublicClient()
+    const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('businesses')
       .select(BUSINESS_COLUMNS)
@@ -209,7 +210,7 @@ export const getFeaturedBusinesses = unstable_cache(
 
 export const getNewBusinesses = unstable_cache(
   async (limit = 10): Promise<Business[]> => {
-    const supabase = createPublicClient()
+    const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('businesses')
       .select(BUSINESS_COLUMNS)
@@ -235,7 +236,7 @@ export const getNewBusinesses = unstable_cache(
 
 export const getBusinessesByType = unstable_cache(
   async (type: BusinessType, limit = 20): Promise<Business[]> => {
-    const supabase = createPublicClient()
+    const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('businesses')
       .select(BUSINESS_COLUMNS)
@@ -275,7 +276,7 @@ export const getBusinessesByType = unstable_cache(
 
 export const getTrendingBusinesses = unstable_cache(
   async (limit = 10): Promise<Business[]> => {
-    const supabase = createPublicClient()
+    const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('businesses')
       .select(BUSINESS_COLUMNS)
@@ -349,7 +350,7 @@ export const getActiveOffers = unstable_cache(
 
 export const getNearbyBusinesses = unstable_cache(
   async (area?: string, limit = 4): Promise<Business[]> => {
-    const supabase = createPublicClient()
+    const supabase = createServiceClient()
     let q = supabase.from('businesses').select(BUSINESS_COLUMNS).eq('is_published', true)
 
     if (area) q = q.eq('area', area)

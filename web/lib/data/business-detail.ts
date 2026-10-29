@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createPublicClient } from '@/lib/supabase/public'
+import { createServiceClient } from '@/lib/supabase/service'
 import { isBusinessOpen, isOpenNow, type Business, type WorkingHours } from './businesses'
 import { canAcceptInAppOrders } from './order-availability'
 
@@ -149,7 +150,7 @@ export async function isBusinessOwner(businessId: string, userId: string): Promi
 
 export const getBusinessDetail = unstable_cache(
   async (slug: string): Promise<BusinessDetail | null> => {
-    const supabase = createPublicClient()
+    const supabase = createServiceClient()
 
     // 1. Business
     const { data: biz } = await supabase
@@ -357,7 +358,7 @@ export async function getUserReview(businessId: string, userId: string) {
 
 export const getSimilarBusinesses = unstable_cache(
   async (businessId: string, businessType: string, limit = 8): Promise<Business[]> => {
-    const supabase = createPublicClient()
+    const supabase = createServiceClient()
     const { data } = await supabase
       .from('businesses')
       .select(
