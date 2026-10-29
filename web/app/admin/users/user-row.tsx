@@ -27,7 +27,7 @@ const ROLE_LABEL: Record<string, string> = {
   customer: 'المشتري',
   merchant: 'البايع',
   admin: 'دور إداري قديم',
-  super_admin: 'الأدمن',
+  super_admin: 'الأدمن الأعلى',
 }
 
 const ROLES = ['customer', 'merchant'] as const
@@ -163,54 +163,61 @@ export default function UserRow({
         </div>
       )}
 
-      <div className={styles.actions}>
-        {isBanned ? (
-          <button type="button" onClick={handleUnban} disabled={pending} className={styles.okBtn}>
-            <CheckIcon size={14} />
-            <span>فك الحظر</span>
-          </button>
-        ) : (
+      {u.role === 'super_admin' ? (
+        <div className={styles.protectedNotice} role="note">
+          <ShieldCheckIcon size={15} />
+          <span>الأدمن الأعلى الوحيد — حساب محمي لا يمكن حظره أو تغيير دوره من هنا.</span>
+        </div>
+      ) : (
+        <div className={styles.actions}>
+          {isBanned ? (
+            <button type="button" onClick={handleUnban} disabled={pending} className={styles.okBtn}>
+              <CheckIcon size={14} />
+              <span>فك الحظر</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setModal('ban')}
+              disabled={pending}
+              className={styles.dangerBtn}
+            >
+              <CloseIcon size={14} />
+              <span>حظر</span>
+            </button>
+          )}
+  
           <button
             type="button"
-            onClick={() => setModal('ban')}
+            onClick={() => setModal('role')}
             disabled={pending}
-            className={styles.dangerBtn}
+            className={styles.actionBtn}
           >
-            <CloseIcon size={14} />
-            <span>حظر</span>
+            <UserIcon size={14} />
+            <span>تغيير الدور</span>
           </button>
-        )}
-
-        <button
-          type="button"
-          onClick={() => setModal('role')}
-          disabled={pending}
-          className={styles.actionBtn}
-        >
-          <UserIcon size={14} />
-          <span>تغيير الدور</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setModal('trust')}
-          disabled={pending}
-          className={styles.actionBtn}
-        >
-          <StarIcon size={14} />
-          <span>تعديل الثقة</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={handlePremium}
-          disabled={pending}
-          className={u.is_premium ? styles.premiumActiveBtn : styles.actionBtn}
-        >
-          <CrownGoldIcon size={14} />
-          <span>{u.is_premium ? 'إلغاء المميز' : 'ترقية للمميز'}</span>
-        </button>
-      </div>
+  
+          <button
+            type="button"
+            onClick={() => setModal('trust')}
+            disabled={pending}
+            className={styles.actionBtn}
+          >
+            <StarIcon size={14} />
+            <span>تعديل الثقة</span>
+          </button>
+  
+          <button
+            type="button"
+            onClick={handlePremium}
+            disabled={pending}
+            className={u.is_premium ? styles.premiumActiveBtn : styles.actionBtn}
+          >
+            <CrownGoldIcon size={14} />
+            <span>{u.is_premium ? 'إلغاء المميز' : 'ترقية للمميز'}</span>
+          </button>
+        </div>
+      )}
 
       {modal === 'ban' && (
         <form onSubmit={handleBanSubmit} className={styles.modalForm}>

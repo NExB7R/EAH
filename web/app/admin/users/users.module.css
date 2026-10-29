@@ -295,6 +295,36 @@
   flex-wrap: wrap;
 }
 
+.protectedNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: fit-content;
+  max-width: 360px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(232, 199, 154, 0.035));
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 750;
+  line-height: 1.6;
+}
+
+.protectedNotice svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--purple-light);
+}
+
+@media (max-width: 640px) {
+  .protectedNotice {
+    width: 100%;
+    max-width: none;
+  }
+}
+
 .actionBtn,
 .okBtn,
 .dangerBtn,
