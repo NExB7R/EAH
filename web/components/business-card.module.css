@@ -280,6 +280,12 @@
   border-color: #267657;
 }
 
+.channelUnavailable {
+  color: #ffc0c5;
+  background: #351923;
+  border-color: #7b3546;
+}
+
 .noRating {
   display: inline-flex;
   min-height: 28px;

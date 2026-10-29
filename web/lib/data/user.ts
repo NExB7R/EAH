@@ -46,7 +46,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return null
+  if (!user || user.is_anonymous) return null
 
   const now = new Date()
   const [

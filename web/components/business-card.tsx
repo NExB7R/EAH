@@ -180,18 +180,20 @@ export default function BusinessCard({
               لسه مفيش تقييمات
             </span>
           )}
-          {business.accepts_orders && (
-            <span className={[styles.channelBadge, styles.channelOrder].join(' ')}>
-              <StoreIcon size={13} />
-              طلبات داخل المنصة
-            </span>
-          )}
-          {!business.accepts_orders && business.accepts_whatsapp_orders && (
-            <span className={[styles.channelBadge, styles.channelWhatsapp].join(' ')}>
-              <HeartIcon size={13} />
-              واتساب
-            </span>
-          )}
+          <span
+            className={[
+              styles.channelBadge,
+              business.accepts_orders ? styles.channelOrder : styles.channelUnavailable,
+            ].join(' ')}
+            aria-label={
+              business.accepts_orders
+                ? 'يستقبل طلبات أونلاين داخل EAH'
+                : 'لا يستقبل طلبات أونلاين داخل EAH'
+            }
+          >
+            {business.accepts_orders ? <StoreIcon size={13} /> : <AlertIcon size={13} />}
+            {business.accepts_orders ? 'طلبات أونلاين: متاحة' : 'طلبات أونلاين: غير متاحة'}
+          </span>
 
         </div>
 
