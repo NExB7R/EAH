@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { requireAdmin } from '@/lib/auth/admin'
 import { createNotification } from '@/lib/notifications/server'
 import { logAudit } from '@/lib/logging/audit'
@@ -68,6 +68,34 @@ export async function enableOrders(
   )
 
   if (updErr) return { ok: false, error: 'فشل تفعيل الاستلام' }
+
+  // Public cards and detail pages use businesses.accepts_orders. Keep it in sync
+  // with merchant_order_settings so the visible CTA and the server gate agree.
+  const { data: enabledBusiness, error: enableFlagError } = await adminDb
+    .from('businesses')
+    .update({ accepts_orders: true })
+    .eq('id', businessId)
+    .select('id')
+    .maybeSingle()
+
+  if (enableFlagError || !enabledBusiness) {
+    const { error: rollbackError } = await adminDb
+      .from('merchant_order_settings')
+      .update({ orders_enabled: false, updated_at: new Date().toISOString() })
+      .eq('business_id', businessId)
+
+    await logAudit(adminDb, {
+      actorUserId: ctx.userId,
+      action: 'orders.enable.business_flag_failed',
+      entityType: 'business',
+      entityId: businessId,
+      metadata: {
+        business_flag_error: enableFlagError?.message ?? 'no row updated',
+        rollback_error: rollbackError?.message ?? null,
+      },
+    })
+    return { ok: false, error: 'تعذر تفعيل الطلبات للنشاط. لم نفعّل الزر العام؛ حاول تاني.' }
+  }
 
   // Notify merchant with obligations
   if (biz.owner_profile_id) {
@@ -211,6 +239,16 @@ export async function disableOrders(businessId: string): Promise<Result> {
     .select('id')
     .maybeSingle()
 
+  // Turn off the public order flag first: a failure later must leave ordering closed.
+  const { error: disableFlagError } = await adminDb
+    .from('businesses')
+    .update({ accepts_orders: false })
+    .eq('id', businessId)
+
+  if (disableFlagError) {
+    return { ok: false, error: 'تعذر إيقاف الطلبات العامة — لم نغيّر إعداد الاستلام. حاول تاني.' }
+  }
+
   // Disable
   const { error: updErr } = await adminDb
     .from('merchant_order_settings')
@@ -223,7 +261,16 @@ export async function disableOrders(businessId: string): Promise<Result> {
     })
     .eq('business_id', businessId)
 
-  if (updErr) return { ok: false, error: 'فشل إيقاف الاستلام' }
+  if (updErr) {
+    await logAudit(adminDb, {
+      actorUserId: ctx.userId,
+      action: 'orders.disable.settings_partial_failure',
+      entityType: 'business',
+      entityId: businessId,
+      metadata: { error: updErr.message },
+    })
+    return { ok: false, error: 'زر الطلب اتوقف عن الظهور، لكن تعذر حفظ إعداد الاستلام. راجع الإعدادات وحاول تاني.' }
+  }
 
   // Notify merchant with summary
   if (biz.owner_profile_id) {
