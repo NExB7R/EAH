@@ -6,7 +6,7 @@ import { getPublicContactSettings } from '@/lib/data/site-settings'
 import styles from './contact.module.css'
 
 export const metadata: Metadata = {
-  'تواصل معانا',
+  title: 'تواصل معانا',
   description: 'قنوات التواصل الرسمية ومركز المساعدة لمنصة EAH',
 }
 
