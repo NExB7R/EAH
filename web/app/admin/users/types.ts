@@ -11,6 +11,8 @@ export type AdminUser = {
   banned_until: string | null
   ban_reason: string | null
   is_premium: boolean
+  premium_until: string | null
+  is_paid_member: boolean
   verified_at: string | null
 }
 
