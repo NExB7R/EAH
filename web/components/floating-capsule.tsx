@@ -132,7 +132,9 @@ export default function FloatingCapsule({ session, contactLinks }: Props) {
                     displayName={session.displayName}
                     avatarUrl={session.avatarUrl}
                     role={session.role}
-                    phoneVerified={session.phoneVerified}
+                    isVerified={session.isVerified}
+                    isPaidMember={session.isPaidMember}
+                    priority
                     size="sm"
                   />
                 </Link>
