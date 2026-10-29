@@ -231,7 +231,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             ))}
           </ul>
 
-          {/* Customer — مسجل (مش أدمن) */}
+          {/* روابط الحساب للمشتري والبايع المسجلين */}
           {isLoggedIn && !isAdmin && (
             <>
               <div className={styles.divider} />
@@ -254,7 +254,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             </>
           )}
 
-          {/* Merchant dashboard — لو عنده نشاط */}
+          {/* مساحة عمل البايع المرتبط بنشاط */}
           {isSeller && (
             <>
               <div className={styles.divider} />
@@ -277,7 +277,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             </>
           )}
 
-          {/* Merchant apply — للمسجل بدون نشاط (مش أدمن) */}
+          {/* تسجيل نشاط للمشتري المسجل الذي لا يملك نشاطًا */}
           {isLoggedIn && !isSeller && !isAdmin && (
             <>
               <div className={styles.divider} />
@@ -300,7 +300,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             </>
           )}
 
-          {/* Guest — للزوار (بدون تسجيل) */}
+          {/* الزائر غير المسجل — يمكنه بدء تسجيل نشاط */}
           {!isLoggedIn && (
             <>
               <div className={styles.divider} />
