@@ -22,7 +22,7 @@ import styles from './help.module.css'
 
 export const metadata: Metadata = {
   title: 'المساعدة',
-  description: 'دليل استخدام EAH — للعملاء وأصحاب الأنشطة',
+  description: 'دليل استخدام EAH — للمشتري والبايع',
 }
 
 export const revalidate = 3600
@@ -88,7 +88,7 @@ const MERCHANT_TOPICS: Topic[] = [
   {
     Icon: QrCodeIcon,
     title: 'QR للنشاط',
-    body: 'حمّل الكود واطبعه — العملاء يمسحوه ويوصلوا لصفحتك في ثانية.',
+    body: 'حمّل الكود واطبعه — المشترين يمسحوه ويوصلوا لصفحتك في ثانية.',
     link: { href: '/merchant/qr', label: 'QR' },
   },
   {
@@ -148,7 +148,7 @@ export default async function HelpPage() {
           <div className={styles.sectionHead}>
             <span className={`${styles.sectionBadge} ${styles.badgeGold}`}>
               <StoreIcon size={12} />
-              لأصحاب الأنشطة
+              للبايع
             </span>
             <h2 className={styles.sectionTitle}>إزاي تنمّي نشاطك</h2>
           </div>
