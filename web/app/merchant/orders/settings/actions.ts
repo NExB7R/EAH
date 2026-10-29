@@ -158,6 +158,50 @@ export async function setOrdersEnabled(enabled: boolean, etaMinutes?: number): P
   if (verifyError) return { ok: false, error: 'تعذر تأكيد ملكية النشاط — حاول تاني' }
   if (!verifiedBusiness) return { ok: false, error: 'النشاط مش مربوط بحسابك حاليًا' }
 
+  if (enabled) {
+    const { data: activeBranches, error: branchError } = await adminDb
+      .from('business_branches')
+      .select('phone, whatsapp')
+      .eq('business_id', biz.id)
+      .eq('is_active', true)
+      .limit(25)
+  
+    if (branchError) {
+      return { ok: false, error: 'تعذر التحقق من أرقام تواصل النشاط' }
+    }
+  
+    let hasOrderContact = (activeBranches ?? []).some(
+      (branch) =>
+        (typeof branch.phone === 'string' && branch.phone.trim().length > 0) ||
+        (typeof branch.whatsapp === 'string' && branch.whatsapp.trim().length > 0),
+    )
+  
+    if (!hasOrderContact) {
+      const { data: contacts, error: contactsError } = await adminDb
+        .from('business_contact_methods')
+        .select('value')
+        .eq('business_id', biz.id)
+        .in('method_type', ['phone', 'whatsapp'])
+        .limit(15)
+  
+      if (contactsError) {
+        return { ok: false, error: 'تعذر التحقق من أرقام تواصل النشاط' }
+      }
+  
+      hasOrderContact = (contacts ?? []).some(
+        (contact) => typeof contact.value === 'string' && contact.value.trim().length > 0,
+      )
+    }
+  
+    if (!hasOrderContact) {
+      return {
+        ok: false,
+        error: 'ضيف رقم هاتف أو واتساب للنشاط نفسه قبل تفعيل استقبال الطلبات. رقم المالك الشخصي مش مطلوب.',
+      }
+    }
+  
+  }
+
   const { data: current, error: currentError } = await adminDb
     .from('merchant_order_settings')
     .select('delivery_eta_minutes, deadline_minutes, orders_enabled')

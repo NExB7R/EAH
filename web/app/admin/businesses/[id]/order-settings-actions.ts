@@ -53,6 +53,46 @@ export async function enableOrders(
     return { ok: false, error: 'اربط بايعًا بالنشاط أولًا قبل تفعيل استلام الطلبات' }
   }
 
+  const { data: activeBranches, error: branchError } = await adminDb
+    .from('business_branches')
+    .select('phone, whatsapp')
+    .eq('business_id', businessId)
+    .eq('is_active', true)
+    .limit(25)
+
+  if (branchError) {
+    return { ok: false, error: 'تعذر التحقق من أرقام تواصل النشاط' }
+  }
+
+  let hasOrderContact = (activeBranches ?? []).some(
+    (branch) =>
+      (typeof branch.phone === 'string' && branch.phone.trim().length > 0) ||
+      (typeof branch.whatsapp === 'string' && branch.whatsapp.trim().length > 0),
+  )
+
+  if (!hasOrderContact) {
+    const { data: contacts, error: contactsError } = await adminDb
+      .from('business_contact_methods')
+      .select('value')
+      .eq('business_id', businessId)
+      .in('method_type', ['phone', 'whatsapp'])
+      .limit(15)
+
+    if (contactsError) {
+      return { ok: false, error: 'تعذر التحقق من أرقام تواصل النشاط' }
+    }
+
+    hasOrderContact = (contacts ?? []).some(
+      (contact) => typeof contact.value === 'string' && contact.value.trim().length > 0,
+    )
+  }
+
+  if (!hasOrderContact) {
+    return {
+      ok: false,
+      error: 'ضيف رقم هاتف أو واتساب للنشاط نفسه قبل تفعيل استقبال الطلبات. رقم المالك الشخصي مش مطلوب.',
+    }
+  }
   const { error: updErr } = await adminDb.from('merchant_order_settings').upsert(
     {
       business_id: businessId,
