@@ -8,7 +8,7 @@ import type { Business } from '@/lib/data'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  'العروض',
+  title: 'العروض',
   description: 'أحدث العروض في شبين القناطر والقرى حواليها',
 }
 

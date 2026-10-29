@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import LegalPage, { type LegalSection } from '@/components/legal-page'
 
 export const metadata: Metadata = {
-  'سياسة الخصوصية',
+  title: 'سياسة الخصوصية',
   description: 'إزاي بنحمي بياناتك — شفافية كاملة',
 }
 

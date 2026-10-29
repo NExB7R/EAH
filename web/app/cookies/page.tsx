@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import LegalPage, { type LegalSection } from '@/components/legal-page'
 
 export const metadata: Metadata = {
-  'سياسة الكوكيز',
+  title: 'سياسة الكوكيز',
   description: 'بنستخدم كوكيز أساسية بس — بدون تتبع',
 }
 
