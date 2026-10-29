@@ -1496,3 +1496,13 @@ Admin list:
 - أضفت paths-ignore على workflows لتقليل تشغيلات docs/workflow housekeeping، وثبتت Vercel Ignored Build Step fail-open. تأكد إلغاء build لتغيير workflow/helper فقط، بينما commit التطبيق 1b7091b انتهى READY مع نجاح التجميع وTypeScript.
 - لا يزال المطلوب من إعدادات GitHub: مراجعة Actions billing/usage/spending limits أو إضافة self-hosted runner؛ تعديل YAML وحده لن يجعل runner يُخصص.
 - لم أنشئ فرع Supabase مدفوعًا أو حساب دخول وهميًا. تكلفة الفرع ظهرت USD 0.01344/hour ولم تؤخذ موافقة مستقلة عليها.
+
+
+## 2026-10-29 — إغلاق دفعة البطاقات وRLS مع حدود CI
+
+- تحسين بطاقة النشاط: نقل رسالة عدم وجود تقييمات من فوق صورة الغلاف إلى metadata داخل البطاقة. تحسين صفحة التفاصيل بإضافة breadcrumb، شارات فعلية للميزات وقنوات الطلب، وعرض العنوان الدقيق عند وجوده.
+- نشاط QA معلن في الإنتاج بالمسار /businesses/eah-qa-test-20261029، بدون مالك أو هاتف أو قبول طلبات. تأكد ظهوره في /explore وصفحته العامة 200 مع التنبيه. يجب تنظيفه بعد الانتهاء وقبل السماح له بالبقاء بلا غرض اختباري.
+- Migration legacy_ads_rls_hardening_20261029 مطبق فعليًا على Supabase؛ live policies تحقق صلاحيات القراءة والإدراج والتحديث والحذف. اختبارات pgTAP أضيفت للمستودع ولـQuality Gate لكن Runner لم ينفذها.
+- Vercel: commit 1b7091be5dd885835606e7ed36041412c3f7d2f7 READY؛ السجلات تقول Compiled successfully وFinished TypeScript. تجاهل تغييرات الوثائق وCI helper يعمل وتم التحقق من إلغاء build غير ضروري.
+- GitHub Actions للموديلات التي تغيّر التطبيق ما زالت تفشل قبل بداية أي step (runner_id=0، runner_name فارغ). لا يمكن حل تخصيص hosted Runner من كود workflow وحده؛ يلزم إعداد Actions billing/usage أو تسجيل self-hosted runner من إعدادات المستودع/المؤسسة.
+- لا حسابات وهمية تم إنشاؤها ولا فرع staging؛ تكلفة الفرع 0.01344 USD/ساعة وتتطلب موافقة منفصلة.
