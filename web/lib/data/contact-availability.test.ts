@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { hasNonEmptyContact, isWhatsAppChannelAvailable } from './contact-availability'
+import { hasNonEmptyContact, isWhatsAppChannelAvailable } from './contact-availability-utils'
 
 describe('public WhatsApp channel availability', () => {
   const configured = new Set(['business-with-branch-whatsapp', 'business-with-public-whatsapp'])

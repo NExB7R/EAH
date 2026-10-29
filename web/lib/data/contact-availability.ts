@@ -1,25 +1,10 @@
 import 'server-only'
 
 import { createServiceClient } from '@/lib/supabase/service'
+import { hasNonEmptyContact } from './contact-availability-utils'
 
 type ServiceClient = ReturnType<typeof createServiceClient>
 
-export function hasNonEmptyContact(value: unknown): boolean {
-  return typeof value === 'string' && value.trim().length > 0
-}
-
-export function isWhatsAppChannelAvailable(
-  enabled: unknown,
-  businessId: unknown,
-  configuredBusinessIds: ReadonlySet<string>,
-): boolean {
-  return (
-    enabled === true &&
-    typeof businessId === 'string' &&
-    businessId.length > 0 &&
-    configuredBusinessIds.has(businessId)
-  )
-}
 
 /**
  * Return only the business IDs with at least one usable WhatsApp destination.
