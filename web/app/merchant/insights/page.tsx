@@ -32,7 +32,7 @@ export default async function MerchantInsightsPage() {
   const planLevel = PLAN_ORDER[planCode] ?? 0
 
   // الأدمن عنده صلاحية كاملة — حتى للباقة الأساسية
-  const isAdmin = session.role === 'admin' || session.role === 'super_admin'
+  const isAdmin = session.role === 'super_admin'
 
   // هل عنده صلاحية؟
   const hasAccess = isAdmin || planLevel >= 2 // featured_quarterly وأعلى

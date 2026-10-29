@@ -38,7 +38,7 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
     .eq('user_id', user.id)
     .maybeSingle()
 
-  const isAdmin = role?.role === 'admin' || role?.role === 'super_admin'
+  const isAdmin = role?.role === 'super_admin'
   const isOwner = biz.owner_profile_id === user.id
 
   if (!isOwner && !isAdmin) {
