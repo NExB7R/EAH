@@ -5,10 +5,8 @@ import { sortByTrend } from '@/lib/ranking'
 import { getBusinessReputationScore } from '@/lib/reputation'
 import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
 import { canAcceptInAppOrders } from './order-availability'
-import {
-  getWhatsAppDestinationBusinessIds,
-  isWhatsAppChannelAvailable,
-} from './contact-availability'
+import { getWhatsAppDestinationBusinessIds } from './contact-availability'
+import { isWhatsAppChannelAvailable } from './contact-availability-utils'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Data Fetching Layer

@@ -4,10 +4,8 @@ import { createPublicClient } from '@/lib/supabase/public'
 import { createServiceClient } from '@/lib/supabase/service'
 import { isBusinessOpen, isOpenNow, type Business, type WorkingHours } from './businesses'
 import { canAcceptInAppOrders } from './order-availability'
-import {
-  getWhatsAppDestinationBusinessIds,
-  isWhatsAppChannelAvailable,
-} from './contact-availability'
+import { getWhatsAppDestinationBusinessIds } from './contact-availability'
+import { isWhatsAppChannelAvailable } from './contact-availability-utils'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Detail (Full Page Data)
