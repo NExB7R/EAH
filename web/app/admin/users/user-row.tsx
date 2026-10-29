@@ -113,7 +113,8 @@ export default function UserRow({
           displayName={u.display_name}
           avatarUrl={u.avatar_url}
           role={(u.role as never) ?? 'customer'}
-          phoneVerified={!!u.phone_verified_at}
+          isVerified={!!u.verified_at}
+          isPaidMember={u.is_paid_member}
           size="md"
         />
         <div className={styles.info}>

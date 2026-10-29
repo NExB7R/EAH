@@ -58,7 +58,9 @@ async function getUsers(filter: UserFilter, q: string): Promise<AdminUser[]> {
     banned_until: (p.banned_until as string | null) ?? null,
     ban_reason: (p.ban_reason as string | null) ?? null,
     is_premium: (p.is_premium as boolean) ?? false,
-    verified_at: (p.verified_at as string | null) ?? null,
+    premium_until: null,
+    is_paid_member: false,
+    verified_at: null,
   }))
 
   // 4) فلترة
@@ -80,8 +82,108 @@ async function getUsers(filter: UserFilter, q: string): Promise<AdminUser[]> {
     )
   }
 
-  // 6) limit
-  return users.slice(0, 200)
+  // Enrich only the visible page with verification and paid-membership state.
+  // The admin RPC intentionally returns a smaller projection, so verified_at and
+  // premium_until are fetched separately only for the IDs shown on this page.
+  const visibleUsers = users.slice(0, 200)
+  const userIds = visibleUsers.map((user) => user.id)
+  if (userIds.length === 0) return []
+
+  const [{ data: badgeProfiles }, { data: activeAds }, { data: ownedBusinesses }] =
+    await Promise.all([
+      supabase.from('profiles').select('id, verified_at, premium_until').in('id', userIds),
+      supabase
+        .from('ads')
+        .select('owner_profile_id, starts_at, ends_at, slot:ad_slots(base_price_egp)')
+        .in('owner_profile_id', userIds)
+        .eq('status', 'active')
+        .limit(1000),
+      supabase.from('businesses').select('id, owner_profile_id').in('owner_profile_id', userIds).limit(500),
+    ])
+
+  const badgeProfileMap = new Map(
+    (badgeProfiles ?? []).map((profile) => [
+      profile.id as string,
+      {
+        verified_at: profile.verified_at as string | null,
+        premium_until: profile.premium_until as string | null,
+      },
+    ]),
+  )
+  const businessOwners = new Map(
+    (ownedBusinesses ?? []).map((business) => [business.id as string, business.owner_profile_id as string]),
+  )
+  const businessIds = Array.from(businessOwners.keys())
+  const { data: activeSubscriptions } = businessIds.length
+    ? await supabase
+        .from('business_subscriptions')
+        .select('business_id, starts_at, expires_at, plan:subscription_plans(price_egp)')
+        .in('business_id', businessIds)
+        .eq('status', 'active')
+        .eq('is_trial', false)
+        .limit(1000)
+    : { data: [] }
+
+  const nowMs = Date.now()
+  const isActiveRange = (startsAt: string | null, endsAt: string | null) => {
+    const startMs = startsAt ? new Date(startsAt).getTime() : Number.NEGATIVE_INFINITY
+    const endMs = endsAt ? new Date(endsAt).getTime() : Number.POSITIVE_INFINITY
+    return (
+      (startsAt === null || Number.isFinite(startMs)) &&
+      (endsAt === null || Number.isFinite(endMs)) &&
+      startMs <= nowMs &&
+      endMs > nowMs
+    )
+  }
+  const paidUserIds = new Set(
+    visibleUsers
+      .filter((user) => {
+        const premiumUntil = badgeProfileMap.get(user.id)?.premium_until
+        return (
+          user.is_premium &&
+          (!premiumUntil ||
+            (Number.isFinite(new Date(premiumUntil).getTime()) &&
+              new Date(premiumUntil).getTime() > nowMs))
+        )
+      })
+      .map((user) => user.id),
+  )
+
+  const ads = (activeAds ?? []) as unknown as Array<{
+    owner_profile_id: string
+    starts_at: string | null
+    ends_at: string | null
+    slot: { base_price_egp?: string | number | null } | null
+  }>
+  for (const ad of ads) {
+    if (isActiveRange(ad.starts_at, ad.ends_at) && Number(ad.slot?.base_price_egp ?? 0) > 0) {
+      paidUserIds.add(ad.owner_profile_id)
+    }
+  }
+
+  const subscriptions = (activeSubscriptions ?? []) as unknown as Array<{
+    business_id: string
+    starts_at: string | null
+    expires_at: string | null
+    plan: { price_egp?: string | number | null } | null
+  }>
+  for (const subscription of subscriptions) {
+    if (isActiveRange(subscription.starts_at, subscription.expires_at) &&
+        Number(subscription.plan?.price_egp ?? 0) > 0) {
+      const ownerId = businessOwners.get(subscription.business_id)
+      if (ownerId) paidUserIds.add(ownerId)
+    }
+  }
+
+  return visibleUsers.map((user) => {
+    const profile = badgeProfileMap.get(user.id)
+    return {
+      ...user,
+      verified_at: profile?.verified_at ?? null,
+      premium_until: profile?.premium_until ?? null,
+      is_paid_member: paidUserIds.has(user.id),
+    }
+  })
 }
 
 export default async function AdminUsersPage({ searchParams }: Props) {
