@@ -22,6 +22,20 @@ import {
 type Result =
   { ok: true; id?: string } | { ok: false; error: string; fieldErrors?: Record<string, string> }
 
+
+/**
+ * Privileged DB access for admin-only edit actions.
+ * Every exported action below must pass requireAdmin() before calling this helper.
+ * Never import/use this client from browser components.
+ */
+function createAdminDb() {
+  try {
+    return createServiceClient()
+  } catch {
+    return null
+  }
+}
+
 function parseError(parsed: z.ZodSafeParseError<unknown>): Result {
   const fieldErrors: Record<string, string> = {}
   for (const issue of parsed.error.issues) {
@@ -53,6 +67,9 @@ export async function saveBasics(businessId: string, formData: FormData): Promis
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
   const parsed = basicsSchema.safeParse({
     name: fd(formData, 'name'),
     slug: fd(formData, 'slug'),
@@ -78,7 +95,7 @@ export async function saveBasics(businessId: string, formData: FormData): Promis
           business_type_approved_at: null,
         }
 
-  const { data: updated, error } = await ctx.supabase
+  const { data: updated, error } = await adminDb
     .from('businesses')
     .update(updateData)
     .eq('id', businessId)
@@ -87,7 +104,7 @@ export async function saveBasics(businessId: string, formData: FormData): Promis
   if (error) return { ok: false, error: error.message }
   if (!updated) return { ok: false, error: 'تعذر حفظ بيانات النشاط — حدّث الصفحة وحاول تاني' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'business.update.basics',
     entityType: 'business',
@@ -106,6 +123,9 @@ export async function saveCustomBusinessType(
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
   if (!z.string().uuid().safeParse(businessId).success) {
     return { ok: false, error: 'معرّف النشاط غير صحيح' }
   }
@@ -115,7 +135,7 @@ export async function saveCustomBusinessType(
     return { ok: false, error: 'اسم النوع لازم يكون من حرفين إلى 50 حرفًا' }
   }
 
-  const { data: business, error: lookupError } = await ctx.supabase
+  const { data: business, error: lookupError } = await adminDb
     .from('businesses')
     .select('id, business_type')
     .eq('id', businessId)
@@ -126,7 +146,7 @@ export async function saveCustomBusinessType(
     return { ok: false, error: 'اختار «أخرى» كنوع أساسي قبل تعديل الاسم المخصص' }
   }
 
-  const { data: updated, error } = await ctx.supabase
+  const { data: updated, error } = await adminDb
     .from('businesses')
     .update({
       custom_business_type: cleanType,
@@ -140,7 +160,7 @@ export async function saveCustomBusinessType(
   if (error) return { ok: false, error: 'تعذر حفظ النوع المخصص لإعادة المراجعة' }
   if (!updated) return { ok: false, error: 'النشاط مش موجود أو لم يتم تحديثه' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'business_type.resubmit',
     entityType: 'business',
@@ -161,6 +181,9 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
   const parsed = contactsSchema.safeParse({
     phone: fd(formData, 'phone'),
     whatsapp: fd(formData, 'whatsapp'),
@@ -170,21 +193,13 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
   })
   if (!parsed.success) return parseError(parsed)
 
-  const { data: business } = await ctx.supabase
+  const { data: business } = await adminDb
     .from('businesses')
     .select('id, slug')
     .eq('id', businessId)
     .maybeSingle()
   if (!business) return { ok: false, error: 'النشاط مش موجود' }
 
-  let privileged: ReturnType<typeof createServiceClient>
-  try {
-    // This server action requires an authenticated admin. The contacts table
-    // allows owner/admin reads but has no authenticated write policy.
-    privileged = createServiceClient()
-  } catch {
-    return { ok: false, error: 'حفظ جهات الاتصال غير متاح مؤقتًا' }
-  }
 
   const extendedTypes = ['complaints', 'manager', 'shift_morning', 'shift_evening'] as const
   const extendedValues: Record<string, string> = {}
@@ -209,7 +224,7 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
   ]
 
   // Snapshot current values first, so failed writes can restore the public contacts.
-  const { data: previousRows, error: previousError } = await privileged
+  const { data: previousRows, error: previousError } = await adminDb
     .from('business_contact_methods')
     .select('business_id, method_type, value, is_primary, is_public, label, sort_order')
     .eq('business_id', businessId)
@@ -217,7 +232,7 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
   if (previousError) return { ok: false, error: 'تعذر قراءة جهات الاتصال الحالية' }
 
   // Keep "additional" and future contact types untouched.
-  const { error: deleteError } = await privileged
+  const { error: deleteError } = await adminDb
     .from('business_contact_methods')
     .delete()
     .eq('business_id', businessId)
@@ -289,16 +304,16 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
   }
 
   if (rows.length > 0) {
-    const { error } = await privileged.from('business_contact_methods').insert(rows)
+    const { error } = await adminDb.from('business_contact_methods').insert(rows)
     if (error) {
-      const { error: clearError } = await privileged
+      const { error: clearError } = await adminDb
         .from('business_contact_methods')
         .delete()
         .eq('business_id', businessId)
         .in('method_type', managedTypes)
       const { error: restoreError } =
         previousRows && previousRows.length > 0
-          ? await privileged.from('business_contact_methods').insert(previousRows)
+          ? await adminDb.from('business_contact_methods').insert(previousRows)
           : { error: null }
 
       if (clearError || restoreError) {
@@ -312,7 +327,7 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
     }
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'business.update.contacts',
     entityType: 'business',
@@ -329,6 +344,9 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
   const latRaw = fd(formData, 'latitude')
   const lngRaw = fd(formData, 'longitude')
 
@@ -344,21 +362,15 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
   const hasLng = parsed.data.longitude !== null && parsed.data.longitude !== undefined
   if (hasLat !== hasLng) return { ok: false, error: 'لازم الإحداثيين مع بعض أو الاتنين فاضيين' }
 
-  const { data: business } = await ctx.supabase
+  const { data: business } = await adminDb
     .from('businesses')
     .select('id, slug')
     .eq('id', businessId)
     .maybeSingle()
   if (!business) return { ok: false, error: 'النشاط مش موجود' }
 
-  let privileged: ReturnType<typeof createServiceClient>
-  try {
-    privileged = createServiceClient()
-  } catch {
-    return { ok: false, error: 'حفظ الموقع غير متاح مؤقتًا' }
-  }
 
-  const { data: currentLocations, error: lookupError } = await privileged
+  const { data: currentLocations, error: lookupError } = await adminDb
     .from('business_locations')
     .select('id')
     .eq('business_id', businessId)
@@ -370,7 +382,7 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
   if (hasLat && hasLng) {
     const existing = currentLocations?.[0]
     if (existing) {
-      const { error } = await privileged
+      const { error } = await adminDb
         .from('business_locations')
         .update({
           latitude: parsed.data.latitude,
@@ -382,7 +394,7 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
         .eq('business_id', businessId)
       if (error) return { ok: false, error: 'تعذر تحديث موقع النشاط' }
     } else {
-      const { error } = await privileged.from('business_locations').insert({
+      const { error } = await adminDb.from('business_locations').insert({
         business_id: businessId,
         latitude: parsed.data.latitude,
         longitude: parsed.data.longitude,
@@ -394,11 +406,11 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
 
     const duplicates = (currentLocations ?? []).slice(existing ? 1 : 0).map((item) => item.id)
     if (duplicates.length > 0) {
-      const { error } = await privileged.from('business_locations').delete().in('id', duplicates)
+      const { error } = await adminDb.from('business_locations').delete().in('id', duplicates)
       if (error) return { ok: false, error: 'الموقع اتحفظ لكن تعذر تنظيف المواقع المكررة' }
     }
   } else if ((currentLocations ?? []).length > 0) {
-    const { error } = await privileged
+    const { error } = await adminDb
       .from('business_locations')
       .delete()
       .eq('business_id', businessId)
@@ -406,7 +418,7 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
     if (error) return { ok: false, error: 'تعذر مسح الموقع القديم' }
   }
 
-  const { error: addressError } = await ctx.supabase
+  const { error: addressError } = await adminDb
     .from('businesses')
     .update({
       address_text: parsed.data.address_text ?? null,
@@ -415,7 +427,7 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
     .eq('id', businessId)
   if (addressError) return { ok: false, error: 'الموقع اتحفظ لكن تعذر حفظ العنوان أو رابط الخريطة' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'business.update.location',
     entityType: 'business',
@@ -432,6 +444,9 @@ export async function saveHours(businessId: string, formData: FormData): Promise
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
   const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
   const raw: Record<string, { open: string; close: string } | null> = {}
   for (const day of days) {
@@ -443,13 +458,13 @@ export async function saveHours(businessId: string, formData: FormData): Promise
   const parsed = hoursSchema.safeParse(raw)
   if (!parsed.success) return parseError(parsed)
 
-  const { error } = await ctx.supabase
+  const { error } = await adminDb
     .from('businesses')
     .update({ working_hours: parsed.data })
     .eq('id', businessId)
   if (error) return { ok: false, error: error.message }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'business.update.hours',
     entityType: 'business',
@@ -463,6 +478,9 @@ export async function saveHours(businessId: string, formData: FormData): Promise
 export async function saveSettings(businessId: string, formData: FormData): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
+
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
 
   const parsed = settingsSchema.safeParse({
     is_published: fdBool(formData, 'is_published'),
@@ -486,7 +504,7 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
 
   // WhatsApp gate: لا يمكن تفعيل استلام الأوردرات بدون رقم واتساب
   if (parsed.data.accepts_whatsapp_orders) {
-    const { data: wa, error: waError } = await ctx.supabase
+    const { data: wa, error: waError } = await adminDb
       .from('business_contact_methods')
       .select('value')
       .eq('business_id', businessId)
@@ -505,7 +523,7 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
   // Publication is controlled by the admin's explicit visibility setting.
   // Custom-type approval affects the label only, never whether a business can be listed.
   // ═══ Verification change tracking ═══
-  const { data: currentRow } = await ctx.supabase
+  const { data: currentRow } = await adminDb
     .from('businesses')
     .select('is_verified')
     .eq('id', businessId)
@@ -527,7 +545,7 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
       : {}),
   }
 
-  const { data: updated, error } = await ctx.supabase
+  const { data: updated, error } = await adminDb
     .from('businesses')
     .update(settings)
     .eq('id', businessId)
@@ -536,7 +554,7 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
   if (error) return { ok: false, error: error.message }
   if (!updated) return { ok: false, error: 'تعذر حفظ الإعدادات — حدّث الصفحة وحاول تاني' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'business.update.settings',
     entityType: 'business',
@@ -557,6 +575,9 @@ export async function saveBranch(
 ): Promise<Result> {
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
+
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
 
   const uuidSchema = z.string().uuid()
   if (
@@ -588,7 +609,7 @@ export async function saveBranch(
     return { ok: false, error: 'لا يمكن تعيين فرع غير نشط كفرع أساسي' }
   }
 
-  const { data: business, error: businessLookupError } = await ctx.supabase
+  const { data: business, error: businessLookupError } = await adminDb
     .from('businesses')
     .select('id')
     .eq('id', businessId)
@@ -598,7 +619,7 @@ export async function saveBranch(
 
   let existingBranchWasPrimary = false
   if (branchId) {
-    const { data: existingBranch, error: branchLookupError } = await ctx.supabase
+    const { data: existingBranch, error: branchLookupError } = await adminDb
       .from('business_branches')
       .select('id, is_primary')
       .eq('id', branchId)
@@ -613,7 +634,7 @@ export async function saveBranch(
   // activity without its previous primary branch.
   const { data: previousBranches, error: previousError } =
     parsed.data.is_primary || !!branchId
-      ? await ctx.supabase
+      ? await adminDb
           .from('business_branches')
           .select('id, is_primary')
           .eq('business_id', businessId)
@@ -622,7 +643,7 @@ export async function saveBranch(
   if (previousError) return { ok: false, error: 'تعذر قراءة حالة الفروع الحالية' }
 
   const restorePreviousPrimary = async (): Promise<boolean> => {
-    const { error: resetError } = await ctx.supabase
+    const { error: resetError } = await adminDb
       .from('business_branches')
       .update({ is_primary: false })
       .eq('business_id', businessId)
@@ -630,7 +651,7 @@ export async function saveBranch(
 
     for (const oldBranch of previousBranches ?? []) {
       if (!oldBranch.is_primary) continue
-      const { error } = await ctx.supabase
+      const { error } = await adminDb
         .from('business_branches')
         .update({ is_primary: true })
         .eq('id', oldBranch.id)
@@ -642,7 +663,7 @@ export async function saveBranch(
 
   // If the new branch is to become primary, do not continue when the reset fails.
   if (parsed.data.is_primary) {
-    const { error: clearPrimaryError } = await ctx.supabase
+    const { error: clearPrimaryError } = await adminDb
       .from('business_branches')
       .update({ is_primary: false })
       .eq('business_id', businessId)
@@ -655,7 +676,7 @@ export async function saveBranch(
   let saveError: { message: string } | null = null
 
   if (branchId) {
-    const { data, error } = await ctx.supabase
+    const { data, error } = await adminDb
       .from('business_branches')
       .update(parsed.data)
       .eq('id', branchId)
@@ -665,7 +686,7 @@ export async function saveBranch(
     saveError = error
     if (!error && !data) saveError = { message: 'الفرع غير موجود أو لم يتم تحديثه' }
   } else {
-    const { data, error } = await ctx.supabase
+    const { data, error } = await adminDb
       .from('business_branches')
       .insert({ ...parsed.data, business_id: businessId })
       .select('id')
@@ -679,7 +700,7 @@ export async function saveBranch(
     if (parsed.data.is_primary) {
       const restored = await restorePreviousPrimary()
       if (!restored) {
-        await logAudit(ctx.supabase, {
+        await logAudit(adminDb, {
           actorUserId: ctx.userId,
           action: 'branch.save_primary_partial_failure',
           entityType: 'business',
@@ -703,7 +724,7 @@ export async function saveBranch(
   // If the current primary branch was demoted or disabled, select another
   // active branch as primary so an activity does not silently lose its main branch.
   if (existingBranchWasPrimary && (!parsed.data.is_primary || !parsed.data.is_active)) {
-    const { data: candidate, error: candidateError } = await ctx.supabase
+    const { data: candidate, error: candidateError } = await adminDb
       .from('business_branches')
       .select('id')
       .eq('business_id', businessId)
@@ -715,7 +736,7 @@ export async function saveBranch(
       .maybeSingle()
 
     if (candidateError) {
-      await logAudit(ctx.supabase, {
+      await logAudit(adminDb, {
         actorUserId: ctx.userId,
         action: 'branch.primary_reassignment_failed',
         entityType: 'business',
@@ -729,7 +750,7 @@ export async function saveBranch(
     }
 
     if (candidate) {
-      const { data: promoted, error: promotionError } = await ctx.supabase
+      const { data: promoted, error: promotionError } = await adminDb
         .from('business_branches')
         .update({ is_primary: true })
         .eq('id', candidate.id)
@@ -738,7 +759,7 @@ export async function saveBranch(
         .maybeSingle()
 
       if (promotionError || !promoted) {
-        await logAudit(ctx.supabase, {
+        await logAudit(adminDb, {
           actorUserId: ctx.userId,
           action: 'branch.primary_reassignment_failed',
           entityType: 'business',
@@ -757,7 +778,7 @@ export async function saveBranch(
     }
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: branchId ? 'branch.update' : 'branch.create',
     entityType: 'business_branch',
@@ -774,12 +795,15 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
   const uuidSchema = z.string().uuid()
   if (!uuidSchema.safeParse(branchId).success || !uuidSchema.safeParse(businessId).success) {
     return { ok: false, error: 'معرّف النشاط أو الفرع غير صحيح' }
   }
 
-  const { data: branch, error: branchLookupError } = await ctx.supabase
+  const { data: branch, error: branchLookupError } = await adminDb
     .from('business_branches')
     .select('id, is_primary')
     .eq('id', branchId)
@@ -788,7 +812,7 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
   if (branchLookupError) return { ok: false, error: 'تعذر التحقق من الفرع' }
   if (!branch) return { ok: false, error: 'الفرع غير تابع للنشاط المحدد أو تم حذفه بالفعل' }
 
-  const { data: deleted, error } = await ctx.supabase
+  const { data: deleted, error } = await adminDb
     .from('business_branches')
     .delete()
     .eq('id', branchId)
@@ -799,7 +823,7 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
   if (!deleted) return { ok: false, error: 'الفرع غير موجود أو لم يتم حذفه' }
 
   if (branch.is_primary) {
-    const { data: nextPrimary, error: candidateError } = await ctx.supabase
+    const { data: nextPrimary, error: candidateError } = await adminDb
       .from('business_branches')
       .select('id')
       .eq('business_id', businessId)
@@ -810,7 +834,7 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
       .maybeSingle()
 
     if (candidateError) {
-      await logAudit(ctx.supabase, {
+      await logAudit(adminDb, {
         actorUserId: ctx.userId,
         action: 'branch.delete.primary_reassignment_failed',
         entityType: 'business',
@@ -824,7 +848,7 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
     }
 
     if (nextPrimary) {
-      const { data: promoted, error: promoteError } = await ctx.supabase
+      const { data: promoted, error: promoteError } = await adminDb
         .from('business_branches')
         .update({ is_primary: true })
         .eq('id', nextPrimary.id)
@@ -833,7 +857,7 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
         .maybeSingle()
 
       if (promoteError || !promoted) {
-        await logAudit(ctx.supabase, {
+        await logAudit(adminDb, {
           actorUserId: ctx.userId,
           action: 'branch.delete.primary_reassignment_failed',
           entityType: 'business',
@@ -852,7 +876,7 @@ export async function deleteBranch(branchId: string, businessId: string): Promis
     }
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'branch.delete',
     entityType: 'business_branch',
@@ -869,6 +893,9 @@ export async function saveNotice(businessId: string, formData: FormData): Promis
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
   const notice = fd(formData, 'important_notice')
   const expiresAt = fd(formData, 'notice_expires_at')
   const severity = fd(formData, 'notice_severity') || 'info'
@@ -882,7 +909,7 @@ export async function saveNotice(businessId: string, formData: FormData): Promis
     return { ok: false, error: 'تاريخ انتهاء التنبيه غير صحيح' }
   }
 
-  const { data: updated, error } = await ctx.supabase
+  const { data: updated, error } = await adminDb
     .from('businesses')
     .update({
       important_notice: notice || null,
@@ -895,7 +922,7 @@ export async function saveNotice(businessId: string, formData: FormData): Promis
   if (error) return { ok: false, error: 'تعذر حفظ التنبيه — راجع البيانات وحاول تاني' }
   if (!updated) return { ok: false, error: 'النشاط مش موجود' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'business.update.notice',
     entityType: 'business',
@@ -914,13 +941,16 @@ export async function saveOpenOverride(
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
   if (!['auto', 'open', 'closed'].includes(override)) {
     return { ok: false, error: 'حالة الفتح غير صحيحة' }
   }
 
   const value = override === 'auto' ? null : override === 'open'
 
-  const { data: updated, error } = await ctx.supabase
+  const { data: updated, error } = await adminDb
     .from('businesses')
     .update({ open_now_override: value })
     .eq('id', businessId)
@@ -929,7 +959,7 @@ export async function saveOpenOverride(
   if (error) return { ok: false, error: 'تعذر حفظ حالة الفتح' }
   if (!updated) return { ok: false, error: 'النشاط مش موجود' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'business.update.open_override',
     entityType: 'business',
@@ -964,6 +994,9 @@ export async function saveOffer(
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
   const parsed = offerSchema.safeParse({
     title: fd(formData, 'title'),
     description: fd(formData, 'description') || null,
@@ -995,7 +1028,7 @@ export async function saveOffer(
   }
 
   if (offerId) {
-    const { data: updated, error } = await ctx.supabase
+    const { data: updated, error } = await adminDb
       .from('offers')
       .update(payload)
       .eq('id', offerId)
@@ -1005,7 +1038,7 @@ export async function saveOffer(
     if (error) return { ok: false, error: 'تعذر حفظ العرض — راجع البيانات وحاول تاني' }
     if (!updated) return { ok: false, error: 'العرض مش موجود داخل النشاط المحدد' }
   } else {
-    const { data: created, error } = await ctx.supabase
+    const { data: created, error } = await adminDb
       .from('offers')
       .insert({ ...payload, business_id: businessId })
       .select('id')
@@ -1014,7 +1047,7 @@ export async function saveOffer(
     if (!created) return { ok: false, error: 'تعذر إضافة العرض — حاول تاني' }
   }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: offerId ? 'offer.update' : 'offer.create',
     entityType: 'offer',
@@ -1031,7 +1064,10 @@ export async function deleteOffer(offerId: string, businessId: string): Promise<
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { data: deleted, error } = await ctx.supabase
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
+  const { data: deleted, error } = await adminDb
     .from('offers')
     .delete()
     .eq('id', offerId)
@@ -1041,7 +1077,7 @@ export async function deleteOffer(offerId: string, businessId: string): Promise<
   if (error) return { ok: false, error: 'تعذر حذف العرض' }
   if (!deleted) return { ok: false, error: 'العرض مش موجود داخل النشاط المحدد' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: 'offer.delete',
     entityType: 'offer',
@@ -1062,7 +1098,10 @@ export async function toggleOfferPublished(
   const ctx = await requireAdmin()
   if (!ctx.ok) return ctx
 
-  const { data: updated, error } = await ctx.supabase
+  const adminDb = createAdminDb()
+  if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
+
+  const { data: updated, error } = await adminDb
     .from('offers')
     .update({ is_published: next })
     .eq('id', offerId)
@@ -1072,7 +1111,7 @@ export async function toggleOfferPublished(
   if (error) return { ok: false, error: 'تعذر تغيير حالة العرض' }
   if (!updated) return { ok: false, error: 'العرض مش موجود داخل النشاط المحدد' }
 
-  await logAudit(ctx.supabase, {
+  await logAudit(adminDb, {
     actorUserId: ctx.userId,
     action: next ? 'offer.publish' : 'offer.unpublish',
     entityType: 'offer',
