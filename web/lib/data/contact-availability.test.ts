@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { hasNonEmptyContact, isWhatsAppChannelAvailable } from './contact-availability-utils'
+import {
+  hasUsableWhatsAppDestination,
+  isWhatsAppChannelAvailable,
+  normalizeWhatsAppDestination,
+} from './contact-availability-utils'
 
 describe('public WhatsApp channel availability', () => {
   const configured = new Set(['business-with-branch-whatsapp', 'business-with-public-whatsapp'])
@@ -21,10 +25,18 @@ describe('public WhatsApp channel availability', () => {
     expect(isWhatsAppChannelAvailable(true, null, configured)).toBe(false)
   })
 
-  it('treats only non-empty string destinations as configured', () => {
-    expect(hasNonEmptyContact('+201234567890')).toBe(true)
-    expect(hasNonEmptyContact('   ')).toBe(false)
-    expect(hasNonEmptyContact(null)).toBe(false)
-    expect(hasNonEmptyContact(123456)).toBe(false)
+  it('accepts usable Egyptian and international WhatsApp number formats', () => {
+    expect(normalizeWhatsAppDestination('01012345678')).toBe('201012345678')
+    expect(normalizeWhatsAppDestination('+201012345678')).toBe('201012345678')
+    expect(normalizeWhatsAppDestination('https://wa.me/201012345678')).toBe('201012345678')
+  })
+
+  it('fails closed for empty, malformed, or non-string WhatsApp destinations', () => {
+    expect(hasUsableWhatsAppDestination('01012345678')).toBe(true)
+    expect(hasUsableWhatsAppDestination('   ')).toBe(false)
+    expect(hasUsableWhatsAppDestination('not a phone')).toBe(false)
+    expect(hasUsableWhatsAppDestination('123')).toBe(false)
+    expect(hasUsableWhatsAppDestination(null)).toBe(false)
+    expect(normalizeWhatsAppDestination(201012345678)).toBeNull()
   })
 })

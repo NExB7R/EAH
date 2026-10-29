@@ -1,5 +1,20 @@
-export function hasNonEmptyContact(value: unknown): boolean {
-  return typeof value === 'string' && value.trim().length > 0
+export function normalizeWhatsAppDestination(value: unknown): string | null {
+  if (typeof value !== 'string') return null
+
+  const digits = value.replace(/\\D/g, '')
+  if (!digits) return null
+
+  const normalized = digits.startsWith('20')
+    ? digits
+    : digits.startsWith('0')
+      ? `20${digits.slice(1)}`
+      : `20${digits}`
+
+  return normalized.length >= 11 && normalized.length <= 15 ? normalized : null
+}
+
+export function hasUsableWhatsAppDestination(value: unknown): boolean {
+  return normalizeWhatsAppDestination(value) !== null
 }
 
 export function isWhatsAppChannelAvailable(
