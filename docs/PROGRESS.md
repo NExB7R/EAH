@@ -556,3 +556,14 @@
 - CI root cause is external to the workflow YAML: the latest jobs show runner_id=0, empty runner_name, and no steps. Added paths-ignore rules so docs/workflow housekeeping doesn't keep consuming failing jobs. This does not repair hosted Runner availability for code changes; repository/account Actions usage/spending limits or a self-hosted runner still needs owner-side resolution.
 - Installed Vercel Ignored Build Step. A workflow/helper-only commit was confirmed skipped with exit code 0; missing Git SHAs/history fail open and continue the build. The app commit 1b7091b built successfully (TypeScript finished, webpack compiled, deployment READY).
 - No Supabase staging branch was created because it would incur about USD 0.01344/hour and needs explicit cost approval. No fake login users were created; the explicitly requested test activity was sufficient for the public card/detail path.
+
+
+## 2026-10-29 — حالة إصلاح الإنتاج ومرحلة التحقق
+
+- نشاط QA تجريبي منشور بعنوان «اختبار EAH — نشاط تجريبي (لا تتعامل)» على /businesses/eah-qa-test-20261029. لا مالك، لا هاتف أو وسيلة تواصل، ولا طلبات داخل المنصة أو واتساب. يظهر التنبيه في صفحة التفاصيل، والنشاط ظاهر الآن في /explore. ينتهي التنبيه 5 نوفمبر 2026؛ أزل أو ألغِ نشر سجل QA بعد انتهاء الاختبار حتى لا يبقى سجل تجريبي ضمن النتائج.
+- بطاقة النشاط لا تعرض «لسه مفيش تقييمات» فوق الصورة بعد الآن؛ الرسالة أصبحت جزءًا من تفاصيل البطاقة. صفحة التفاصيل فيها breadcrumb، شارات الميزات الحقيقية، والعنوان الكامل عند توفره.
+- نسخة التطبيق commit 1b7091be5dd885835606e7ed36041412c3f7d2f7 أصبحت READY على Vercel، مع نجاح التجميع وTypeScript. تم فحص الاستجابات العامة: الرئيسية/الاكتشاف والصفحة التجريبية 200، عنوان الصفحة التجريبية لا يكرر EAH، والنشاط التجريبي يظهر في نتائج الاكتشاف.
+- طُبقت سياسات RLS للإعلانات القديمة في الإنتاج بعد اختبار DDL داخل معاملة تم التراجع عنها؛ التحقق الحي أكد السياسات الأربع المتوقعة، وصفوف الإعلانات تظل صفرًا. Migration واختبار pgTAP موجودان في المستودع، لكن pgTAP لم يُشغّل على staging بعد.
+- GitHub Actions: Jobs على تغييرات التطبيق تفشل قبل تخصيص Runner (runner_id=0 وsteps=[]). تحديثات docs/workflow وحدها لم تعد تشغل هذه الوظائف، وهو تقليل لهدر التشغيل لا إصلاح لتوفر Runner. لحل الجذر، على مالك الحساب فحص Actions billing/usage/spending limit أو إضافة self-hosted runner.
+- Vercel Ignored Build Step يعمل: تحققنا أن التزام تغيير workflow/helper وحده أُلغي برسالة exit code 0، والالتزام الذي يغير التطبيق لا يتخطى البناء. هذا يقلل builds غير اللازمة لكنه لا يلغي quotas لحساب Vercel.
+- لم يتم إنشاء حساب دخول وهمي؛ نشاط QA العام كان كافيًا لاختبار البطاقة والتفاصيل. لم يتم إنشاء Supabase staging بسبب التكلفة المتكررة 0.01344 USD/ساعة وعدم وجود موافقة منفصلة.
