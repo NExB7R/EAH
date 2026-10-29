@@ -117,13 +117,13 @@ export default function FloatingCapsule({ session, contactLinks }: Props) {
 
                 <Link
                   href={
-                    session.role === 'admin' || session.role === 'super_admin'
+                    session.role === 'super_admin'
                       ? '/admin/profile'
                       : '/account'
                   }
                   className={styles.avatarLink}
                   aria-label={
-                    session.role === 'admin' || session.role === 'super_admin'
+                    session.role === 'super_admin'
                       ? 'بروفايلي'
                       : 'حسابي'
                   }

@@ -21,7 +21,7 @@ export default async function MerchantApplyPage() {
   // Applications must be linked to a real, signed-in account; admin-created
   // activities belong in the admin workflow instead.
   if (!session) redirect('/auth?next=%2Fmerchant%2Fapply')
-  if (session.role === 'admin' || session.role === 'super_admin') redirect('/admin')
+  if (session.role === 'super_admin') redirect('/admin')
 
   const supabase = await createClient()
   const { data: existing, error: existingError } = await supabase
