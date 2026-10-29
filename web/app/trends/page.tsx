@@ -9,7 +9,7 @@ import { getActiveAdsForSlot } from '@/lib/data/ads'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  'الترند',
+  title: 'الترند',
   description: 'الأنشطة الأكثر تفاعلاً في شبين القناطر والقرى حواليها',
 }
 
