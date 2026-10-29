@@ -6,7 +6,7 @@ import SectionLayout from '@/components/section-layout'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  'بدايات',
+  title: 'بدايات',
   description: 'مشاريع لسه فاتحة في شبين القناطر والقرى حواليها — ادعمهم',
 }
 
