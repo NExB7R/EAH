@@ -69,18 +69,15 @@ export function getCairoDateParts(value: string | Date): CairoDateParts | null {
  * Returns null for malformed calendar values and local times skipped by DST.
  */
 export function parseCairoLocalDateTime(value: string): Date | null {
-  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/.exec(
-    value.trim(),
-  )
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(value.trim())
   if (!match) return null
 
-  const [, yearRaw, monthRaw, dayRaw, hourRaw, minuteRaw, secondRaw = '0'] = match
+  const [, yearRaw, monthRaw, dayRaw, hourRaw, minuteRaw] = match
   const year = Number(yearRaw)
   const month = Number(monthRaw)
   const day = Number(dayRaw)
   const hour = Number(hourRaw)
   const minute = Number(minuteRaw)
-  const second = Number(secondRaw)
 
   if (
     year < 1900 ||
@@ -89,15 +86,14 @@ export function parseCairoLocalDateTime(value: string): Date | null {
     day < 1 ||
     day > 31 ||
     hour > 23 ||
-    minute > 59 ||
-    second > 59
+    minute > 59
   ) {
     return null
   }
 
   const desired = new Date(0)
   desired.setUTCFullYear(year, month - 1, day)
-  desired.setUTCHours(hour, minute, second, 0)
+  desired.setUTCHours(hour, minute, 0, 0)
   const desiredTimestamp = desired.getTime()
 
   // setUTCFullYear normalizes impossible dates, so reject any rollover.
@@ -114,7 +110,12 @@ export function parseCairoLocalDateTime(value: string): Date | null {
     const parts = getCairoDateParts(new Date(candidate))
     if (!parts) return null
 
-    const [cairoYear, cairoMonth, cairoDay] = parts.dateKey.split('-').map(Number)
+    const [yearPart, monthPart, dayPart] = parts.dateKey.split('-')
+    const cairoYear = Number(yearPart)
+    const cairoMonth = Number(monthPart)
+    const cairoDay = Number(dayPart)
+    if (![cairoYear, cairoMonth, cairoDay].every(Number.isInteger)) return null
+
     const represented = Date.UTC(cairoYear, cairoMonth - 1, cairoDay, parts.hour, parts.minute)
     const difference = desiredTimestamp - represented
     if (difference === 0) break
