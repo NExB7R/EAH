@@ -8,7 +8,7 @@ import LoadMoreGrid from '@/components/load-more'
 import { TargetIcon } from '@/components/icons'
 import { getPublishedBusinesses } from '@/lib/data/businesses'
 import { smartSearch } from '@/lib/search'
-import { parseFilters, applyFilters } from '@/lib/search/filters'
+import { parseFilters, applyFilters, resolveResultSort } from '@/lib/search/filters'
 import { getActiveAreas } from '@/lib/data/areas'
 import styles from './explore.module.css'
 
@@ -53,12 +53,13 @@ export default async function ExplorePage({
   const q = params.q?.trim() ?? ''
   const suggest = params.suggest === '1'
   const filters = parseFilters(params as Record<string, string | undefined>)
+  const resultSort = resolveResultSort(Boolean(q), params.sort, filters)
 
   let businesses = await getPublishedBusinesses()
 
   if (q) {
     businesses = smartSearch(businesses, q).map((r) => r.business)
-    businesses = applyFilters(businesses, { ...filters, sort: 'relevance' })
+    businesses = applyFilters(businesses, { ...filters, sort: resultSort })
   } else {
     businesses = applyFilters(businesses, filters)
   }
@@ -107,7 +108,13 @@ export default async function ExplorePage({
         </div>
 
         <Suspense fallback={null}>
-          <ExploreFilters area={filters.area} counts={counts} activeAreas={activeAreas} />
+          <ExploreFilters
+            area={filters.area}
+            counts={counts}
+            activeAreas={activeAreas}
+            sort={resultSort}
+            hasQuery={Boolean(q)}
+          />
         </Suspense>
 
         {businesses.length > 0 ? (

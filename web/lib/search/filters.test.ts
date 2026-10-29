@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Business } from '@/lib/data/businesses'
-import { applyFilters, DEFAULT_FILTERS } from './filters'
+import { applyFilters, DEFAULT_FILTERS, parseFilters, resolveResultSort } from './filters'
 
 function makeBusiness(overrides: Partial<Business> = {}): Business {
   return {
@@ -92,5 +92,27 @@ describe('public reputation filters', () => {
     const rated = makeBusiness({ id: 'rated', rating_avg: 4.4, rating_count: 3 })
     const result = applyFilters([unrated, rated], { ...DEFAULT_FILTERS, minRating: 4 })
     expect(result.map((business) => business.id)).toEqual(['rated'])
+  })
+})
+
+describe('search result sorting', () => {
+  it('defaults text searches to relevance when no sort was selected', () => {
+    const filters = { ...DEFAULT_FILTERS, sort: 'quality' as const }
+    expect(resolveResultSort(true, undefined, filters)).toBe('relevance')
+  })
+
+  it('honors explicit sort choices for text searches', () => {
+    expect(resolveResultSort(true, 'newest', { ...DEFAULT_FILTERS, sort: 'newest' })).toBe('newest')
+    expect(resolveResultSort(true, 'rating', { ...DEFAULT_FILTERS, sort: 'rating' })).toBe('rating')
+  })
+
+  it('does not claim distance sorting when a usable location is missing', () => {
+    const filters = parseFilters({ sort: 'distance' })
+    expect(filters.sort).toBe('quality')
+    expect(resolveResultSort(true, 'distance', filters)).toBe('relevance')
+  })
+
+  it('keeps the parsed browsing sort when there is no text query', () => {
+    expect(resolveResultSort(false, undefined, { ...DEFAULT_FILTERS, sort: 'newest' })).toBe('newest')
   })
 })

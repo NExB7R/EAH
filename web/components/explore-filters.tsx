@@ -4,6 +4,7 @@ import { useState, useEffect, useTransition } from 'react'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useGeo } from '@/lib/contexts/geo-context'
 import type { ActiveArea } from '@/lib/data/areas'
+import type { SortOption } from '@/lib/search/filters'
 import {
   TargetIcon,
   LocationIcon,
@@ -42,12 +43,18 @@ const DISTANCES = [
   { value: '20000', label: '20 كم' },
 ] as const
 
-const SORTS = [
+const SORTS: {
+  value: SortOption
+  label: string
+  needsGeo?: boolean
+  searchOnly?: boolean
+}[] = [
   { value: 'distance', label: 'الأقرب', needsGeo: true },
   { value: 'quality', label: 'الأفضل حسب التقييم والسجل' },
   { value: 'rating', label: 'الأعلى تقييماً' },
   { value: 'newest', label: 'الأحدث' },
-] as const
+  { value: 'relevance', label: 'الأكثر صلة بالبحث', searchOnly: true },
+]
 
 type Counts = {
   types: Record<string, number>
@@ -58,9 +65,11 @@ type Props = {
   area: string | null
   counts?: Counts
   activeAreas: ActiveArea[]
+  sort: SortOption
+  hasQuery: boolean
 }
 
-export default function ExploreFilters({ area, counts, activeAreas }: Props) {
+export default function ExploreFilters({ area, counts, activeAreas, sort, hasQuery }: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -72,8 +81,7 @@ export default function ExploreFilters({ area, counts, activeAreas }: Props) {
   const currentType = searchParams.get('type')
   const currentRating = searchParams.get('rating')
   const currentDistance = searchParams.get('distance')
-  const requestedSort = searchParams.get('sort')
-  const currentSort = !requestedSort || requestedSort === 'trust' ? 'quality' : requestedSort
+  const currentSort = sort === 'trust' ? 'quality' : sort
   const currentArea = searchParams.get('area')
   const currentVerified = searchParams.get('verified') === '1'
   const openNow = searchParams.get('open') === '1'
@@ -281,7 +289,7 @@ export default function ExploreFilters({ area, counts, activeAreas }: Props) {
 
           <Section title="الترتيب">
             <div className={styles.chips}>
-              {SORTS.map((s) => {
+              {SORTS.filter((s) => !s.searchOnly || hasQuery).map((s) => {
                 const disabled = 'needsGeo' in s && s.needsGeo && geo.status !== 'granted'
                 return (
                   <Chip
