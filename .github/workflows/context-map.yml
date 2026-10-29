@@ -3,8 +3,10 @@ name: Context Map
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - 'docs/CONTEXT_MAP.md'
+    paths:
+      - 'web/**'
+      - 'scripts/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 jobs:

@@ -8,7 +8,6 @@ import {
   StarIcon,
   CrownGoldIcon,
   BadgeCheckIcon,
-  SparkleStarIcon,
   CheckCircleIcon,
   AlertIcon,
   StoreIcon,
@@ -140,9 +139,7 @@ export default function BusinessCard({
               <strong>{business.rating_avg.toFixed(1)}</strong>
               <span className={styles.ratingCount}>({business.rating_count})</span>
             </span>
-          ) : (
-            <span className={styles.noRatingBadge}>لسه مفيش تقييمات</span>
-          )}
+          ) : null}
         </div>
       </div>
 
@@ -177,6 +174,12 @@ export default function BusinessCard({
             {isOpen ? <CheckCircleIcon size={13} /> : <AlertIcon size={13} />}
             {isOpen ? 'مفتوح الآن' : 'مغلق الآن'}
           </span>
+          {!hasRating && (
+            <span className={styles.noRating}>
+              <StarIcon size={13} />
+              لسه مفيش تقييمات
+            </span>
+          )}
           {business.accepts_orders && (
             <span className={[styles.channelBadge, styles.channelOrder].join(' ')}>
               <StoreIcon size={13} />
