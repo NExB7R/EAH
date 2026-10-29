@@ -544,3 +544,15 @@
 
 - وُحّدت بقايا تسميات جمهور الواجهة في الأسئلة الشائعة والمساعدة والشروط وصفحة التعريف إلى «المشتري/البايع».
 - لم تتغير قيم الأدوار الداخلية، أسماء الجداول، أو النصوص التاريخية في وثائق التطوير.
+
+
+## 2026-10-29 — QA activity, ad RLS and CI/build housekeeping
+
+- Added one public QA-only activity, “اختبار EAH — نشاط تجريبي (لا تتعامل)” at /businesses/eah-qa-test-20261029. It has no owner, phone/contact details, logo/cover, in-app orders or WhatsApp orders. Its public notice explicitly says it is not a real activity and not to contact/order. The warning expires on 2026-11-05; remove or unpublish this QA record when testing is complete.
+- Verified over the deployed site that the QA detail route returns HTTP 200 and shows the warning; /explore now includes its name and slug. Public activity title metadata no longer repeats EAH.
+- Refined cards: “لسه مفيش تقييمات” is metadata rather than a large badge covering the image. Detail page now has an accessible breadcrumb and shows genuine activity flags and the exact address when available.
+- Applied migration legacy_ads_rls_hardening_20261029 to Supabase production after testing the DDL inside a transaction that was rolled back. Live pg_policies verification confirms public read requires active/start/end window, seller inserts must link an owned business and stay pending, direct updates are admin-only, and seller deletes are restricted to their own pending/rejected ads. ads row count remains zero.
+- Added the matching migration file and six pgTAP regression assertions to the repository and wired them into the RLS quality job. The pgTAP suite has not run yet because GitHub runners fail before the first step; it must be executed once a runner is available.
+- CI root cause is external to the workflow YAML: the latest jobs show runner_id=0, empty runner_name, and no steps. Added paths-ignore rules so docs/workflow housekeeping doesn't keep consuming failing jobs. This does not repair hosted Runner availability for code changes; repository/account Actions usage/spending limits or a self-hosted runner still needs owner-side resolution.
+- Installed Vercel Ignored Build Step. A workflow/helper-only commit was confirmed skipped with exit code 0; missing Git SHAs/history fail open and continue the build. The app commit 1b7091b built successfully (TypeScript finished, webpack compiled, deployment READY).
+- No Supabase staging branch was created because it would incur about USD 0.01344/hour and needs explicit cost approval. No fake login users were created; the explicitly requested test activity was sufficient for the public card/detail path.
