@@ -9,7 +9,7 @@ import styles from './featured.module.css'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  'المميزون',
+  title: 'المميزون',
   description: 'الأنشطة المميزة في شبين القناطر والقرى حواليها',
 }
 

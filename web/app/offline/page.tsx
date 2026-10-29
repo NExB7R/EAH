@@ -4,7 +4,7 @@ import { WifiOffIcon, HomeIcon, CompassIcon, GiftIcon, LocationIcon } from '@/co
 import styles from './offline.module.css'
 
 export const metadata: Metadata = {
-  'مفيش نت',
+  title: 'مفيش نت',
   description: 'الصفحة دي بتظهرلك لما النت يقطع',
 }
 

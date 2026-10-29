@@ -11,7 +11,7 @@ import {
 import styles from './roadmap.module.css'
 
 export const metadata: Metadata = {
-  'خطتنا',
+  title: 'خطتنا',
   description: 'اللي خلص، اللي جاي، والرؤية الطويلة',
 }
 
