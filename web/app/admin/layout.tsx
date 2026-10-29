@@ -35,7 +35,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin" className={styles.brand} aria-label="EAH — لوحة الإدارة">
             <Logo size="xs" variant="compact" href={null} />
             <span className={styles.brandText}>
-              <strong>EAH</strong>
               <small>إدارة المنصة</small>
             </span>
           </Link>
