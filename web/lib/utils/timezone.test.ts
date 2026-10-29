@@ -48,7 +48,7 @@ describe('Cairo business timezone helpers', () => {
     expect(parseCairoLocalDateTime('invalid')).toBeNull()
   })
 
-  it('fails closed for invalid timestamps', () =>
+  it('fails closed for invalid timestamps', () => {
     expect(getCairoDateParts('not-a-date')).toBeNull()
     expect(getCairoDateParts(new Date(Number.NaN))).toBeNull()
   })
