@@ -13,7 +13,7 @@ import { getActiveAreas } from '@/lib/data/areas'
 import styles from './explore.module.css'
 
 export const metadata: Metadata = {
-  title: 'اكتشف · EAH',
+  'اكتشف',
   description: 'اكتشف أحسن الأماكن حواليك في شبين القناطر والقرى',
 }
 

@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import AuthForm from './auth-form'
 
 export const metadata = {
-  title: 'دخول · EAH',
+  'دخول',
 }
 
 export default async function AuthPage() {
