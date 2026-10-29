@@ -5,6 +5,37 @@ import { getBusinessReputationScore } from '@/lib/reputation'
 import { distanceKm, type LatLng } from '@/lib/utils/distance'
 
 export type SortOption = 'quality' | 'trust' | 'rating' | 'distance' | 'newest' | 'relevance'
+
+const VALID_SORT_OPTIONS: ReadonlySet<string> = new Set([
+  'quality',
+  'trust',
+  'rating',
+  'distance',
+  'newest',
+  'relevance',
+])
+
+/**
+ * Text searches default to relevance, but an explicit user-selected sort wins.
+ * Distance sorting is valid only when a usable location is available.
+ */
+export function resolveResultSort(
+  hasQuery: boolean,
+  requestedSort: string | undefined,
+  filters: Filters,
+): SortOption {
+  if (!hasQuery) {
+    if (filters.sort === 'relevance') return filters.userLocation ? 'distance' : 'quality'
+    if (filters.sort === 'distance' && !filters.userLocation) return 'quality'
+    return filters.sort
+  }
+
+  const canApplyRequestedSort =
+    VALID_SORT_OPTIONS.has(requestedSort ?? '') &&
+    !(requestedSort === 'distance' && !filters.userLocation)
+
+  return canApplyRequestedSort ? filters.sort : 'relevance'
+}
 export type Filters = {
   types: BusinessType[]
   verifiedOnly: boolean
@@ -92,12 +123,14 @@ export function parseFilters(params: Record<string, string | undefined>): Filter
   const minRating = params.rating ? Number.parseFloat(params.rating) : null
   const maxDistanceMeters = params.distance ? Number.parseInt(params.distance, 10) : null
   const requestedSort = params.sort
-  const sort: SortOption =
-    requestedSort === 'distance' || requestedSort === 'rating' || requestedSort === 'newest' || requestedSort === 'relevance'
-      ? requestedSort
-      : requestedSort === 'quality' || requestedSort === 'trust'
-        ? requestedSort
-        : userLocation ? 'distance' : 'quality'
+  const hasUsableRequestedSort =
+    VALID_SORT_OPTIONS.has(requestedSort ?? '') &&
+    !(requestedSort === 'distance' && !userLocation)
+  const sort: SortOption = hasUsableRequestedSort
+    ? (requestedSort as SortOption)
+    : userLocation
+      ? 'distance'
+      : 'quality'
 
   return {
     types,
