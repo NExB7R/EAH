@@ -28,6 +28,9 @@ import {
   ShieldCheckIcon,
   CrownGoldIcon,
   LocationIcon,
+  MapPinIcon,
+  QrCodeIcon,
+  SettingsIcon,
   StoreIcon,
   GiftIcon,
   HelpCircleIcon,
@@ -66,8 +69,8 @@ const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/trust', label: 'السمعة والتوثيق', Icon: ShieldCheckIcon },
 ]
 
-// ─── Customer account (لكل مستخدم مسجل غير الأدمن) ───
-const CUSTOMER_ITEMS: MenuItem[] = [
+// ─── روابط الحساب المشتركة (المشتري والبايع) ───
+const ACCOUNT_ITEMS: MenuItem[] = [
   { href: '/account', label: 'حسابي', Icon: LayoutDashboardIcon },
   { href: '/account/orders', label: 'طلباتي', Icon: FileTextIcon },
   { href: '/account/favorites', label: 'المفضلات', Icon: StarIcon },
@@ -76,19 +79,24 @@ const CUSTOMER_ITEMS: MenuItem[] = [
   { href: '/account/points', label: 'النقاط', Icon: GiftIcon },
 ]
 
-// ─── Merchant dashboard (للتاجر المرتبط بنشاط) ───
-const MERCHANT_SECTION: MenuItem[] = [
-  { href: '/merchant', label: 'لوحة نشاطي', Icon: LayoutDashboardIcon },
+// ─── مساحة عمل البايع: تطابق الروابط قائمة MerchantSidebar ───
+const SELLER_SECTION: MenuItem[] = [
+  { href: '/merchant', label: 'نظرة عامة', Icon: LayoutDashboardIcon },
   { href: '/merchant/business', label: 'بيانات النشاط', Icon: StoreIcon },
+  { href: '/merchant/branches', label: 'الفروع', Icon: MapPinIcon },
   { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon },
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
+  { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
+  { href: '/merchant/qr', label: 'رمز QR للنشاط', Icon: QrCodeIcon },
   { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon },
+  { href: '/merchant/trust', label: 'سمعة النشاط', Icon: ShieldCheckIcon },
   { href: '/merchant/subscription', label: 'الباقة والاشتراك', Icon: CrownGoldIcon },
-  { href: '/merchant/ads', label: 'إعلانات نشاطي', Icon: TagIcon }
+  { href: '/merchant/settings', label: 'إعدادات النشاط', Icon: SettingsIcon },
+  { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
 ]
 
-// ─── Merchant onboarding (للزائر أو المشتري الذي ليس لديه نشاط) ───
-const MERCHANT_APPLY: MenuItem[] = [
+// ─── بداية البايع (للزائر أو المشتري الذي ليس لديه نشاط) ───
+const SELLER_ONBOARDING_ITEMS: MenuItem[] = [
   { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
   { href: '/pricing', label: 'الباقات', Icon: GiftIcon },
   { href: '/advertise', label: 'أعلن معانا', Icon: TrendingUpIcon },
@@ -96,7 +104,7 @@ const MERCHANT_APPLY: MenuItem[] = [
 
 // ─── Admin ───
 const ADMIN_ITEMS: MenuItem[] = [
-  { href: '/admin', label: 'لوحة تحكم الإدارة', Icon: ShieldCheckIcon },
+  { href: '/admin', label: 'لوحة الأدمن', Icon: ShieldCheckIcon },
 ]
 
 const BOTTOM_ITEMS: MenuItem[] = [
@@ -137,7 +145,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
 
   const isLoggedIn = !!session
   const isAdmin = session?.role === 'super_admin'
-  const isMerchant = session?.role === 'merchant'
+  const isSeller = session?.role === 'merchant'
 
   const handleInstall = () => {
     window.dispatchEvent(new CustomEvent('eah:show-install'))
@@ -232,7 +240,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                 <span>حسابي</span>
               </div>
               <ul className={styles.list}>
-                {CUSTOMER_ITEMS.map(({ href, label, Icon }) => (
+                {ACCOUNT_ITEMS.filter(({ href }) => !(isSeller && href === '/account/notifications')).map(({ href, label, Icon }) => (
                   <li key={href}>
                     <Link href={href} className={styles.item} onClick={onClose}>
                       <span className={styles.itemIcon}>
@@ -247,7 +255,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
           )}
 
           {/* Merchant dashboard — لو عنده نشاط */}
-          {isMerchant && (
+          {isSeller && (
             <>
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
@@ -255,7 +263,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                 <span>نشاطي</span>
               </div>
               <ul className={styles.list}>
-                {MERCHANT_SECTION.map(({ href, label, Icon }) => (
+                {SELLER_SECTION.map(({ href, label, Icon }) => (
                   <li key={href}>
                     <Link href={href} className={styles.item} onClick={onClose}>
                       <span className={styles.itemIcon}>
@@ -270,7 +278,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
           )}
 
           {/* Merchant apply — للمسجل بدون نشاط (مش أدمن) */}
-          {isLoggedIn && !isMerchant && !isAdmin && (
+          {isLoggedIn && !isSeller && !isAdmin && (
             <>
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
@@ -278,7 +286,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                 <span>سجّل نشاطك</span>
               </div>
               <ul className={styles.list}>
-                {MERCHANT_APPLY.map(({ href, label, Icon }) => (
+                {SELLER_ONBOARDING_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
                     <Link href={href} className={styles.item} onClick={onClose}>
                       <span className={styles.itemIcon}>
@@ -301,7 +309,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                 <span>للبايع</span>
               </div>
               <ul className={styles.list}>
-                {MERCHANT_APPLY.map(({ href, label, Icon }) => (
+                {SELLER_ONBOARDING_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
                     <Link href={href} className={styles.item} onClick={onClose}>
                       <span className={styles.itemIcon}>

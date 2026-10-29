@@ -24,7 +24,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
 
       <div className={styles.fields}>
         <label className={styles.field}>
-          <span className={styles.label}>ربط النشاط ببايع (اختياري)</span>
+          <span className={styles.label}>حساب البايع المرتبط (اختياري)</span>
           <select
             value={data.owner_user_id}
             onChange={(e) => update({ owner_user_id: e.target.value })}
@@ -40,14 +40,14 @@ export default function OptionsStep({ data, owners, update }: Props) {
             ))}
           </select>
           <span className={styles.hint}>
-            <UserIcon size={11} /> اختيار البايع اختياري. لو اخترت حسابًا، هيكون مالك النشاط ويقدر يديره كـ بايع. ولو سيبتها فاضية،
-            النشاط هيتنشر ويظهر للزوار من غير بايع مرتبط.
+            <UserIcon size={11} /> اختيار الحساب اختياري. لو اخترت حساب مشتري، النظام هيحوّله لبايع ويربطه بالنشاط كمالكه الوحيد.
+            ولو سيبت الاختيار فاضي، النشاط هيتنشر ويظهر للزوار من غير بايع مرتبط.
           </span>
         </label>
 
         {owners.length === 0 && (
           <p className={styles.gpsHint}>
-            لا توجد حسابات مشتري أو بايع مؤهلة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير بايع مرتبط، وتربطه لاحقًا من الإدارة.
+            لا توجد حسابات مشتري أو بايع متاحة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير بايع مرتبط، وتربطه لاحقًا من الإدارة.
           </p>
         )}
 

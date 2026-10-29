@@ -29,10 +29,8 @@
   gap: 4px;
   padding: 16px 18px;
   border-radius: 16px;
-  background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
-  border: 1px solid rgba(168, 85, 247, 0.18);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: var(--surface-gradient-soft);
+  border: 1px solid var(--border-purple-soft);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -129,13 +127,11 @@
 
 .card {
   padding: 24px;
-  border-radius: 20px;
-  background: linear-gradient(160deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.85));
-  border: 1px solid rgba(168, 85, 247, 0.2);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
-  animation: cardIn 260ms var(--ease-out);
+  border-radius: var(--radius-xl);
+  background: var(--surface-gradient);
+  border: 1px solid var(--border-purple-soft);
+  box-shadow: var(--shadow-base);
+  animation: cardIn 240ms var(--ease-out);
 }
 
 @keyframes cardIn {
