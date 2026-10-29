@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
+  hasUsablePhoneDestination,
   hasUsableWhatsAppDestination,
   isWhatsAppChannelAvailable,
+  normalizePhoneDestination,
   normalizeWhatsAppDestination,
 } from './contact-availability-utils'
 
@@ -29,10 +31,16 @@ describe('public WhatsApp channel availability', () => {
     expect(normalizeWhatsAppDestination('01012345678')).toBe('201012345678')
     expect(normalizeWhatsAppDestination('+201012345678')).toBe('201012345678')
     expect(normalizeWhatsAppDestination('https://wa.me/201012345678')).toBe('201012345678')
+    expect(normalizeWhatsAppDestination('+447911123456')).toBe('447911123456')
+    expect(normalizeWhatsAppDestination('00447911123456')).toBe('447911123456')
+    expect(normalizePhoneDestination('+201012345678')).toBe('+201012345678')
+    expect(normalizePhoneDestination('010 1234 5678')).toBe('01012345678')
   })
 
   it('fails closed for empty, malformed, or non-string WhatsApp destinations', () => {
     expect(hasUsableWhatsAppDestination('01012345678')).toBe(true)
+    expect(hasUsablePhoneDestination('01012345678')).toBe(true)
+    expect(hasUsablePhoneDestination('call 01012345678')).toBe(false)
     expect(hasUsableWhatsAppDestination('   ')).toBe(false)
     expect(hasUsableWhatsAppDestination('not a phone')).toBe(false)
     expect(hasUsableWhatsAppDestination('123')).toBe(false)
