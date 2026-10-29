@@ -3,10 +3,13 @@ name: Context Map
 on:
   push:
     branches: [main]
-    paths:
-      - 'web/**'
-      - 'scripts/**'
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - 'LICENSE'
+      - '.gitignore'
       - '.github/workflows/**'
+      - 'web/scripts/ignore-vercel-build.sh'
   workflow_dispatch:
 
 jobs:
