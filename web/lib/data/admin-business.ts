@@ -205,30 +205,48 @@ export async function getBusinessOwnerCandidates(): Promise<BusinessOwnerOption[
 
   const supabase = createServiceClient()
 
-  const { data, error } = await supabase
+  // user_roles.user_id references auth.users, not profiles directly. Avoid a
+  // PostgREST embedded join here: the schema cache has no user_roles -> profiles
+  // relationship, which caused the owner picker to silently render an empty list.
+  const { data: roleData, error: roleError } = await supabase
     .from('user_roles')
-    .select('user_id, role, profiles:user_id(id, display_name, phone)')
+    .select('user_id, role')
     .in('role', ['customer', 'merchant'])
     .order('role', { ascending: true })
 
-  if (error) {
-    console.error('[admin-business] failed to load owner candidates:', error.message)
+  if (roleError) {
+    console.error('[admin-business] failed to load owner roles:', roleError.message)
     return []
   }
 
-  type Row = {
-    user_id: string
-    role: 'customer' | 'merchant'
-    profiles: { id: string; display_name: string; phone: string | null } | null
-  }
-  const rows = (data ?? []) as unknown as Row[]
+  type RoleRow = { user_id: string; role: 'customer' | 'merchant' }
+  const roleRows = (roleData ?? []) as RoleRow[]
+  const userIds = [...new Set(roleRows.map((row) => row.user_id).filter(Boolean))]
+  if (userIds.length === 0) return []
 
-  return rows
-    .filter((r) => r.profiles)
-    .map((r) => ({
-      id: r.user_id,
-      display_name: r.profiles!.display_name,
-      phone: r.profiles!.phone,
-      role: r.role,
-    }))
+  const { data: profileData, error: profileError } = await supabase
+    .from('profiles')
+    .select('id, display_name, phone')
+    .in('id', userIds)
+
+  if (profileError) {
+    console.error('[admin-business] failed to load owner profiles:', profileError.message)
+    return []
+  }
+
+  const profilesById = new Map((profileData ?? []).map((profile) => [profile.id, profile]))
+
+  return roleRows.flatMap((row) => {
+    const profile = profilesById.get(row.user_id)
+    return profile
+      ? [
+          {
+            id: row.user_id,
+            display_name: profile.display_name,
+            phone: profile.phone,
+            role: row.role,
+          },
+        ]
+      : []
+  })
 }
