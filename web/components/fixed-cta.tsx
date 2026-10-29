@@ -110,7 +110,8 @@ export default function FixedCta({
           setMessage('رقم واتساب غير صحيح.')
           return
         }
-        window.location.href = `https://wa.me/${normalized}`      })
+        window.location.href = `https://wa.me/${normalized}`
+      })
       .catch(() => setMessage('تعذر جلب بيانات التواصل. جرّب تاني.'))
       .finally(() => setContactPending(false))
   }
