@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { getClientIp, strictLimiter, checkRateLimit } from '@/lib/rate-limit'
-import { normalizeWhatsAppDestination } from '@/lib/data/contact-availability-utils'
+import { normalizePhoneDestination, normalizeWhatsAppDestination } from '@/lib/data/contact-availability-utils'
 
 const schema = z.object({
   businessId: z.string().uuid(),
@@ -61,8 +61,8 @@ export async function POST(request: Request) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
-    return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 })
+  if (!user || user.is_anonymous) {
+    return NextResponse.json({ ok: false, error: 'registered_login_required' }, { status: 401 })
   }
 
   const body = await readLimitedJson(request)
