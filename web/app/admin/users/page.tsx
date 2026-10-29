@@ -18,7 +18,7 @@ const TABS: { key: UserFilter; label: string }[] = [
   { key: 'all', label: 'الكل' },
   { key: 'customers', label: 'المشترون' },
   { key: 'merchants', label: 'البايعون' },
-  { key: 'admins', label: 'الأدوار الإدارية القديمة' },
+  { key: 'admins', label: 'الأدمن الأعلى' },
   { key: 'premium', label: 'مميز' },
   { key: 'banned', label: 'محظورين' },
 ]
@@ -67,7 +67,7 @@ async function getUsers(filter: UserFilter, q: string): Promise<AdminUser[]> {
   if (filter === 'customers') users = users.filter((u) => !u.role || u.role === 'customer')
   else if (filter === 'merchants') users = users.filter((u) => u.role === 'merchant')
   else if (filter === 'admins')
-    users = users.filter((u) => u.role === 'admin' || u.role === 'super_admin')
+    users = users.filter((u) => u.role === 'super_admin')
   else if (filter === 'premium') users = users.filter((u) => u.is_premium)
   else if (filter === 'banned')
     users = users.filter((u) => u.banned_until && new Date(u.banned_until) > now)
