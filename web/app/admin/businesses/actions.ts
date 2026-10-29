@@ -7,6 +7,7 @@ import { createNotification } from '@/lib/notifications/server'
 import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
 import { createServiceClient } from '@/lib/supabase/service'
+import { hasUsableWhatsAppDestination } from '@/lib/data/contact-availability-utils'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Businesses Actions
@@ -431,7 +432,8 @@ export async function createBusiness(formData: FormData): Promise<Result> {
 
   // WhatsApp gate: auto-disable orders if no whatsapp contact provided
   const hasWhatsappContact = (d.contacts ?? []).some(
-    (c) => c.kind === 'whatsapp' && c.value.trim().length > 0,
+    (contact) =>
+      contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
   )
   const effectiveAcceptsWhatsapp = hasWhatsappContact ? (d.accepts_whatsapp_orders ?? true) : false
 

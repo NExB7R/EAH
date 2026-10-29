@@ -1,6 +1,9 @@
 import { unstable_cache } from 'next/cache'
 import { createPublicClient } from '@/lib/supabase/public'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
+import { getWhatsAppDestinationBusinessIds } from './contact-availability'
+import { isWhatsAppChannelAvailable } from './contact-availability-utils'
 import type { Business, BusinessType } from './businesses'
 
 // ═══════════════════════════════════════════════════════════
@@ -55,9 +58,30 @@ function normalizeBusiness(raw: Record<string, unknown>): Business {
   return { ...(rest as unknown as Business), location: loc }
 }
 
-function normalizeBusinesses(data: unknown[] | null): Business[] {
-  if (!data) return []
-  return data.map((r) => normalizeBusiness(r as Record<string, unknown>))
+async function normalizeBusinesses(data: unknown[] | null): Promise<Business[]> {
+  if (!data || data.length === 0) return []
+  const rows = data.map((row) => row as Record<string, unknown>)
+  let configuredWhatsAppIds = new Set<string>()
+
+  try {
+    configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(
+      createServiceClient(),
+      rows.map((row) => String(row.id ?? '')),
+    )
+  } catch (error) {
+    console.error('[suggest] WhatsApp availability lookup failed:', error)
+  }
+
+  return rows.map((row) =>
+    normalizeBusiness({
+      ...row,
+      accepts_whatsapp_orders: isWhatsAppChannelAvailable(
+        row.accepts_whatsapp_orders,
+        row.id,
+        configuredWhatsAppIds,
+      ),
+    }),
+  )
 }
 
 // ─── Top-rated fallback ───
@@ -77,9 +101,9 @@ const getTopRated = unstable_cache(
       .limit(limit)
 
     if (error) return []
-    return normalizeBusinesses(data)
+    return await normalizeBusinesses(data)
   },
-  ['suggest-top-rated'],
+  ['suggest-top-rated-v2'],
   { revalidate: 300, tags: ['businesses'] },
 )
 
@@ -168,7 +192,7 @@ export async function getSuggestedBusinesses(userId: string | null): Promise<Sug
       .order('is_verified', { ascending: false })
       .limit(MAX_RESULTS)
 
-    const businesses = normalizeBusinesses(data)
+    const businesses = await normalizeBusinesses(data)
     if (businesses.length >= 6) {
       return { businesses, reason: 'new_user' }
     }
@@ -198,7 +222,7 @@ export async function getSuggestedBusinesses(userId: string | null): Promise<Sug
     return { businesses: top, reason: 'trending' }
   }
 
-  const candidates = normalizeBusinesses(data)
+  const candidates = await normalizeBusinesses(data)
   const filtered = candidates.filter((b) => !seenIds.has(b.id)).slice(0, MAX_RESULTS)
 
   // لو أقل من 6 → نكمل من الأعلى تقييماً

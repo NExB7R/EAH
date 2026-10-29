@@ -1,5 +1,7 @@
 'use client'
 
+import { hasUsableWhatsAppDestination } from '@/lib/data/contact-availability-utils'
+
 import { CheckCircleIcon, WhatsAppIcon, UserIcon } from '@/components/icons'
 import type { WizardData, OwnerOption } from './new-business-wizard'
 import styles from './wizard.module.css'
@@ -12,7 +14,8 @@ type Props = {
 
 export default function OptionsStep({ data, owners, update }: Props) {
   const hasWhatsAppContact = data.contacts.some(
-    (contact) => contact.kind === 'whatsapp' && contact.value.trim().length > 0,
+    (contact) =>
+      contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
   )
 
   return (

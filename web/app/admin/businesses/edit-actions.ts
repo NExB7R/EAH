@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
 import { createServiceClient } from '@/lib/supabase/service'
+import { getWhatsAppDestinationBusinessIds } from '@/lib/data/contact-availability'
 import {
   basicsSchema,
   contactsSchema,
@@ -502,20 +503,14 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
     return { ok: false, error: 'تاريخ انتهاء التمييز أو علامة «جديد» غير صحيح' }
   }
 
-  // WhatsApp gate: لا يمكن تفعيل استلام الأوردرات بدون رقم واتساب
+  // WhatsApp gate: accept a valid public contact-method number or a valid active-branch number.
   if (parsed.data.accepts_whatsapp_orders) {
-    const { data: wa, error: waError } = await adminDb
-      .from('business_contact_methods')
-      .select('value')
-      .eq('business_id', businessId)
-      .eq('method_type', 'whatsapp')
-      .limit(1)
-    if (waError) return { ok: false, error: 'تعذر التحقق من رقم واتساب للنشاط' }
-    if (!wa || wa.length === 0) {
+    const configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(adminDb, [businessId])
+    if (!configuredWhatsAppIds.has(businessId)) {
       return {
         ok: false,
         error:
-          'مينفعش تفعّل استلام أوردرات واتساب قبل إضافة رقم واتساب. ضيف الرقم من قسم التواصل الأول.',
+          'مينفعش تفعّل استقبال واتساب قبل إضافة رقم واتساب صالح في قسم التواصل أو أحد الفروع النشطة.',
       }
     }
   }

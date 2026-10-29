@@ -1,5 +1,7 @@
 'use client'
 
+import { hasUsableWhatsAppDestination } from '@/lib/data/contact-availability-utils'
+
 import type { WizardData, OwnerOption } from './new-business-wizard'
 import styles from './wizard.module.css'
 
@@ -48,7 +50,8 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
   const needsTypeApproval =
     data.business_type === 'misc' && data.custom_business_type.trim().length > 0
   const hasWhatsAppContact = data.contacts.some(
-    (contact) => contact.kind === 'whatsapp' && contact.value.trim().length > 0,
+    (contact) =>
+      contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
   )
   const whatsappOrdersEnabled = hasWhatsAppContact && data.accepts_whatsapp_orders
   const publishStatus = needsTypeApproval

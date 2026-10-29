@@ -2,6 +2,8 @@ import 'server-only'
 import { createPublicClient } from '@/lib/supabase/public'
 import { createServiceClient } from '@/lib/supabase/service'
 import { createClient } from '@/lib/supabase/server'
+import { getWhatsAppDestinationBusinessIds } from '@/lib/data/contact-availability'
+import { isWhatsAppChannelAvailable } from '@/lib/data/contact-availability-utils'
 import type { ToolDefinition } from './providers'
 
 // ═══════════════════════════════════════════════════════════
@@ -208,7 +210,7 @@ async function toolGetBusinessDetails(args: { slug: string }) {
   const { data, error } = await supabase
     .from('businesses')
     .select(
-      'name, slug, business_type, description, hook, area, address_text, is_open, is_verified, rating_avg, rating_count, successful_orders, working_hours, accepts_whatsapp_orders',
+      'id, name, slug, business_type, description, hook, area, address_text, is_open, is_verified, rating_avg, rating_count, successful_orders, working_hours, accepts_whatsapp_orders',
     )
     .eq('slug', slug)
     .eq('is_published', true)
@@ -219,6 +221,18 @@ async function toolGetBusinessDetails(args: { slug: string }) {
     return { ok: false, error: 'حصلت مشكلة — جرب تاني' }
   }
   if (!data) return { ok: false, error: 'النشاط مش موجود' }
+
+  let acceptsWhatsApp = false
+  try {
+    const configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(createServiceClient(), [data.id])
+    acceptsWhatsApp = isWhatsAppChannelAvailable(
+      data.accepts_whatsapp_orders,
+      data.id,
+      configuredWhatsAppIds,
+    )
+  } catch (availabilityError) {
+    console.error('[AI Tool] WhatsApp availability lookup failed:', availabilityError)
+  }
 
   return {
     ok: true,
@@ -235,7 +249,7 @@ async function toolGetBusinessDetails(args: { slug: string }) {
       rating_count: data.rating_count,
       is_verified: data.is_verified,
       successful_orders: data.successful_orders,
-      accepts_whatsapp: data.accepts_whatsapp_orders,
+      accepts_whatsapp: acceptsWhatsApp,
       working_hours: data.working_hours,
     },
   }
