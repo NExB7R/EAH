@@ -21,6 +21,7 @@ import {
   ArrowLeftIcon,
 } from './icons'
 import styles from './site-footer.module.css'
+import GlobalShareAction from './global-share-action'
 import { APP_VERSION } from '@/lib/version'
 import { getAppTexts } from '@/lib/data/app-texts'
 import { getPublicContactSettings } from '@/lib/data/site-settings'
@@ -143,6 +144,10 @@ export default async function SiteFooter() {
             <Link href="/help">مركز المساعدة</Link>
           </div>
         )}
+
+        <div className={styles.sharePlatform}>
+          <GlobalShareAction className={styles.shareAction} label="شارك منصة EAH ورمز QR" />
+        </div>
 
         {/* ─── Columns ─── */}
         <nav className={styles.columns} aria-label="روابط الفوتر">
