@@ -1,31 +1,79 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
+import { logAudit } from '@/lib/logging/audit'
+import { createServiceClient } from '@/lib/supabase/service'
 import { createClient } from '@/lib/supabase/server'
 
-// ═══════════════════════════════════════════════════════════
-// EAH — Merchant Ads Actions
-// ═══════════════════════════════════════════════════════════
-
 type Result = { ok: true; id?: string } | { ok: false; error: string }
+
+function isSafeHttpUrl(value: string | undefined): boolean {
+  if (!value) return true
+  try {
+    const url = new URL(value)
+    return (
+      (url.protocol === 'http:' || url.protocol === 'https:') &&
+      url.hostname.length > 0 &&
+      !url.username &&
+      !url.password
+    )
+  } catch {
+    return false
+  }
+}
+
+const optionalHttpUrl = z
+  .string()
+  .max(500)
+  .optional()
+  .or(z.literal(''))
+  .refine(isSafeHttpUrl, { message: 'الرابط لازم يكون رابط ويب يبدأ بـ http أو https' })
+
+const optionalDateTime = z
+  .string()
+  .optional()
+  .or(z.literal(''))
+  .refine((value) => !value || Number.isFinite(Date.parse(value)), {
+    message: 'صيغة التاريخ غير صحيحة',
+  })
+
+const adIdSchema = z.string().uuid('معرّف الإعلان غير صحيح')
 
 const schema = z
   .object({
     slotId: z.string().uuid('اختر مكان الإعلان'),
-    title: z.string().min(2, 'العنوان قصير').max(80),
-    imageUrl: z.string().max(500).optional().or(z.literal('')),
-    linkUrl: z.string().max(500).optional().or(z.literal('')),
-    startsAt: z.string().optional().or(z.literal('')),
-    endsAt: z.string().optional().or(z.literal('')),
+    title: z.string().trim().min(2, 'العنوان قصير').max(80),
+    imageUrl: optionalHttpUrl,
+    linkUrl: optionalHttpUrl,
+    startsAt: optionalDateTime,
+    endsAt: optionalDateTime,
   })
   .refine(
-    (v) => {
-      if (!v.startsAt || !v.endsAt) return true
-      return new Date(v.endsAt) >= new Date(v.startsAt)
+    (value) => {
+      const startsAt = value.startsAt ? Date.parse(value.startsAt) : Date.now()
+      if (!Number.isFinite(startsAt)) return false
+      if (!value.endsAt) return true
+      const endsAt = Date.parse(value.endsAt)
+      return Number.isFinite(endsAt) && endsAt > startsAt
     },
-    { message: 'تاريخ الانتهاء لازم يكون بعد البداية' },
+    { message: 'موعد الانتهاء لازم يكون بعد بداية الإعلان' },
   )
+
+async function recordAdAudit(input: {
+  actorUserId: string
+  action: string
+  entityId: string
+  beforeData?: Record<string, unknown> | null
+  afterData?: Record<string, unknown> | null
+}) {
+  try {
+    // Service role is used only for audit after identity/ownership checks.
+    await logAudit(createServiceClient(), { ...input, entityType: 'advertisement' })
+  } catch {
+    // Do not report a completed mutation as failed only because its audit write failed.
+  }
+}
 
 async function myBiz() {
   const supabase = await createClient()
@@ -34,13 +82,14 @@ async function myBiz() {
   } = await supabase.auth.getUser()
   if (!user) return { ok: false as const, error: 'لازم تسجل دخول' }
 
-  const { data: biz } = await supabase
+  const { data: biz, error } = await supabase
     .from('businesses')
     .select('id, slug')
     .eq('owner_profile_id', user.id)
     .limit(1)
     .maybeSingle()
 
+  if (error) return { ok: false as const, error: 'تعذر التحقق من نشاطك. حاول مرة تانية.' }
   if (!biz) return { ok: false as const, error: 'مفيش نشاط مرتبط بحسابك' }
   return { ok: true as const, supabase, biz, userId: user.id }
 }
@@ -63,6 +112,19 @@ export async function requestAd(formData: FormData): Promise<Result> {
   }
 
   const d = parsed.data
+  const { data: slot, error: slotError } = await ctx.supabase
+    .from('ad_slots')
+    .select('id')
+    .eq('id', d.slotId)
+    .eq('is_active', true)
+    .maybeSingle()
+
+  if (slotError) return { ok: false, error: 'تعذر التحقق من مكان الإعلان. حاول مرة تانية.' }
+  if (!slot) return { ok: false, error: 'مكان الإعلان غير متاح حاليًا. اختار مكانًا آخر.' }
+
+  // The live schema requires starts_at; do not send NULL for an empty form field.
+  const startsAt = d.startsAt ? new Date(d.startsAt).toISOString() : new Date().toISOString()
+  const endsAt = d.endsAt ? new Date(d.endsAt).toISOString() : null
 
   const { data, error } = await ctx.supabase
     .from('ads')
@@ -73,16 +135,24 @@ export async function requestAd(formData: FormData): Promise<Result> {
       title: d.title,
       image_url: d.imageUrl || null,
       link_url: d.linkUrl || null,
-      starts_at: d.startsAt || null,
-      ends_at: d.endsAt || null,
+      starts_at: startsAt,
+      ends_at: endsAt,
       status: 'pending',
     })
     .select('id')
     .single()
 
-  if (error) return { ok: false, error: error.message }
+  if (error || !data) {
+    return { ok: false, error: 'تعذر حفظ طلب الإعلان. راجع البيانات وحاول مرة تانية.' }
+  }
 
-  // Notify admins about new ad request
+  await recordAdAudit({
+    actorUserId: ctx.userId,
+    action: 'ad.request',
+    entityId: data.id,
+    afterData: { business_id: ctx.biz.id, slot_id: d.slotId, status: 'pending' },
+  })
+
   const { createNotification } = await import('@/lib/notifications/server')
   const { data: admins } = await ctx.supabase
     .from('user_roles')
@@ -104,34 +174,55 @@ export async function requestAd(formData: FormData): Promise<Result> {
 
   revalidatePath('/merchant/ads')
   revalidatePath('/admin/ads')
+  revalidateTag('ads', 'default')
   return { ok: true, id: data.id }
 }
 
 export async function cancelMyAd(id: string): Promise<Result> {
+  const parsedId = adIdSchema.safeParse(id)
+  if (!parsedId.success) return { ok: false, error: 'معرّف الإعلان غير صحيح' }
+
   const ctx = await myBiz()
   if (!ctx.ok) return { ok: false, error: ctx.error }
 
-  // يقدر يمسح بس pending أو rejected
-  const { data: ad } = await ctx.supabase
+  const { data: ad, error: lookupError } = await ctx.supabase
     .from('ads')
     .select('status')
-    .eq('id', id)
+    .eq('id', parsedId.data)
     .eq('business_id', ctx.biz.id)
     .maybeSingle()
 
+  if (lookupError) return { ok: false, error: 'تعذر التحقق من حالة الإعلان. حاول مرة تانية.' }
   if (!ad) return { ok: false, error: 'الإعلان مش موجود' }
   if (ad.status !== 'pending' && ad.status !== 'rejected') {
     return { ok: false, error: 'مش ممكن تمسح إعلان نشط أو موافق عليه' }
   }
 
-  const { error } = await ctx.supabase
+  // Recheck id, activity and cancellable state in the DELETE itself to avoid a race.
+  const { data: deleted, error } = await ctx.supabase
     .from('ads')
     .delete()
-    .eq('id', id)
+    .eq('id', parsedId.data)
     .eq('business_id', ctx.biz.id)
+    .in('status', ['pending', 'rejected'])
+    .select('id')
+    .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر إلغاء طلب الإعلان. حاول مرة تانية.' }
+  if (!deleted) {
+    // Production RLS currently restricts DELETE to the admin; don't report false success.
+    return { ok: false, error: 'تعذر إلغاء الإعلان بسبب صلاحيات قاعدة البيانات. تم تسجيل المشكلة للمراجعة.' }
+  }
+
+  await recordAdAudit({
+    actorUserId: ctx.userId,
+    action: 'ad.cancel',
+    entityId: deleted.id,
+    beforeData: { business_id: ctx.biz.id, status: ad.status },
+  })
 
   revalidatePath('/merchant/ads')
+  revalidatePath('/admin/ads')
+  revalidateTag('ads', 'default')
   return { ok: true }
 }
