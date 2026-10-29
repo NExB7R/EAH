@@ -30,7 +30,7 @@ import styles from './about.module.css'
 // ═══════════════════════════════════════════════════════════
 
 export const metadata: Metadata = {
-  'من نحن',
+  title: 'من نحن',
   description: 'EAH — منصة اكتشاف محلية مصرية. مجانية للمشتري، بدون عمولة على البايع.',
 }
 

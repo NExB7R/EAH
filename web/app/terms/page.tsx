@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import LegalPage, { type LegalSection } from '@/components/legal-page'
 
 export const metadata: Metadata = {
-  'الشروط والأحكام',
+  title: 'الشروط والأحكام',
   description: 'شروط استخدام منصة EAH — للعملاء وأصحاب الأنشطة',
 }
 
