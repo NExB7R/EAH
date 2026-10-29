@@ -8,7 +8,7 @@ import { fairOrder } from '@/lib/fair-ranking'
 import styles from './suggest.module.css'
 
 export const metadata: Metadata = {
-  title: 'ارشحلك · EAH',
+  'ارشحلك',
   description: 'ترشيحات على مزاجك — من قلب شبين القناطر',
 }
 
