@@ -19,6 +19,7 @@ export type UserDetail = {
     is_premium: boolean
     premium_until: string | null
     verified_at: string | null
+    is_paid_member: boolean
     bio: string | null
   }
   role: string
@@ -54,7 +55,7 @@ export async function getAdminUserDetail(userId: string): Promise<UserDetail | n
 
   if (!profile) return null
 
-  const [rolesRes, auditRes, bizRes, reviewsRes] = await Promise.all([
+  const [rolesRes, auditRes, bizRes, reviewsRes, adsRes] = await Promise.all([
     supabase.from('user_roles').select('role').eq('user_id', userId).maybeSingle(),
     supabase
       .from('audit_logs')
@@ -65,7 +66,7 @@ export async function getAdminUserDetail(userId: string): Promise<UserDetail | n
     supabase
       .from('businesses')
       .select('id, name, slug, is_published, created_at')
-      .eq('owner_id', userId)
+      .eq('owner_profile_id', userId)
       .order('created_at', { ascending: false })
       .limit(20),
     supabase
@@ -74,6 +75,12 @@ export async function getAdminUserDetail(userId: string): Promise<UserDetail | n
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(10),
+    supabase
+      .from('ads')
+      .select('starts_at, ends_at, slot:ad_slots(base_price_egp)')
+      .eq('owner_profile_id', userId)
+      .eq('status', 'active')
+      .limit(50),
   ])
 
   const reviews = (reviewsRes.data ?? []).map((r) => {
@@ -89,8 +96,60 @@ export async function getAdminUserDetail(userId: string): Promise<UserDetail | n
     }
   })
 
+  const businessIds = (bizRes.data ?? []).map((business) => business.id)
+  const { data: subscriptionsData } = businessIds.length
+    ? await supabase
+        .from('business_subscriptions')
+        .select('starts_at, expires_at, plan:subscription_plans(price_egp)')
+        .in('business_id', businessIds)
+        .eq('status', 'active')
+        .eq('is_trial', false)
+        .limit(100)
+    : { data: [] }
+
+  const nowMs = Date.now()
+  const isWithinActiveDates = (startsAt: string | null, endsAt: string | null) => {
+    const startMs = startsAt ? new Date(startsAt).getTime() : Number.NEGATIVE_INFINITY
+    const endMs = endsAt ? new Date(endsAt).getTime() : Number.POSITIVE_INFINITY
+    return (
+      (startsAt === null || Number.isFinite(startMs)) &&
+      (endsAt === null || Number.isFinite(endMs)) &&
+      startMs <= nowMs &&
+      endMs > nowMs
+    )
+  }
+
+  const activeAds = (adsRes.data ?? []) as unknown as Array<{
+    starts_at: string | null
+    ends_at: string | null
+    slot: { base_price_egp?: string | number | null } | null
+  }>
+  const hasActivePaidAd = activeAds.some(
+    (ad) =>
+      isWithinActiveDates(ad.starts_at, ad.ends_at) && Number(ad.slot?.base_price_egp ?? 0) > 0,
+  )
+
+  const activeSubscriptions = (subscriptionsData ?? []) as unknown as Array<{
+    starts_at: string | null
+    expires_at: string | null
+    plan: { price_egp?: string | number | null } | null
+  }>
+  const hasActivePaidBusinessSubscription = activeSubscriptions.some(
+    (subscription) =>
+      isWithinActiveDates(subscription.starts_at, subscription.expires_at) &&
+      Number(subscription.plan?.price_egp ?? 0) > 0,
+  )
+
+  const premiumUntil = profile.premium_until as string | null
+  const hasActivePremium =
+    !!profile.is_premium &&
+    (!premiumUntil ||
+      (Number.isFinite(new Date(premiumUntil).getTime()) &&
+        new Date(premiumUntil).getTime() > nowMs))
+  const isPaidMember = hasActivePremium || hasActivePaidAd || hasActivePaidBusinessSubscription
+
   return {
-    profile: profile as UserDetail['profile'],
+    profile: { ...profile, is_paid_member: isPaidMember } as UserDetail['profile'],
     role: (rolesRes.data?.role as string) ?? 'customer',
     auditLogs: (auditRes.data ?? []).map((l) => ({
       id: l.id as string,
