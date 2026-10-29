@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { createServiceClient } from '@/lib/supabase/service'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Merchant Data
@@ -385,7 +386,31 @@ export type MerchantBranch = {
 
 export async function getMyBranches(businessId: string): Promise<MerchantBranch[]> {
   const supabase = await createClient()
-  const { data } = await supabase
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return []
+
+  // Prove ownership with the signed-in session before using service-role access
+  // to read private phone/WhatsApp fields that must not be publicly selectable.
+  const { data: ownedBusiness, error: ownershipError } = await supabase
+    .from('businesses')
+    .select('id')
+    .eq('id', businessId)
+    .eq('owner_profile_id', user.id)
+    .maybeSingle()
+
+  if (ownershipError || !ownedBusiness) return []
+
+  let adminDb: ReturnType<typeof createServiceClient>
+  try {
+    adminDb = createServiceClient()
+  } catch {
+    console.error('[merchant-data] branch contacts unavailable: service client is not configured')
+    return []
+  }
+
+  const { data, error } = await adminDb
     .from('business_branches')
     .select(
       'id, business_id, name, area, address_text, latitude, longitude, phone, whatsapp, is_primary, is_active, sort_order',
@@ -394,6 +419,10 @@ export async function getMyBranches(businessId: string): Promise<MerchantBranch[
     .order('is_primary', { ascending: false })
     .order('sort_order', { ascending: true })
 
+  if (error) {
+    console.error('[merchant-data] failed to load own branches:', error.message)
+    return []
+  }
   return (data ?? []) as MerchantBranch[]
 }
 

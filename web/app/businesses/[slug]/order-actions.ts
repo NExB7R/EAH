@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/service'
 import { orderSchema, orderHasContent } from '@/lib/validations/order'
 import { createNotification } from '@/lib/notifications/server'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
@@ -122,7 +123,16 @@ export async function submitOrder(
   // Branch/contact for the already-validated activity
   // ═══════════════════════════════════════════════════════════════════
 
-  const { data: branch, error: branchError } = await supabase
+  // The buyer may submit an order, but must never query private branch
+  // contacts directly through their authenticated Supabase client.
+  let contactDb: ReturnType<typeof createServiceClient>
+  try {
+    contactDb = createServiceClient()
+  } catch {
+    return { ok: false, error: 'بيانات تواصل النشاط غير متاحة مؤقتًا. جرّب تاني.' }
+  }
+
+  const { data: branch, error: branchError } = await contactDb
     .from('business_branches')
     .select('phone, whatsapp')
     .eq('business_id', businessId)
@@ -140,7 +150,7 @@ export async function submitOrder(
   // record exists. Prefer an active branch, then fall back to saved contact methods.
   let merchantPhone = branch?.whatsapp || branch?.phone || ''
   if (!merchantPhone) {
-    const { data: contactRows, error: contactError } = await supabase
+    const { data: contactRows, error: contactError } = await contactDb
       .from('business_contact_methods')
       .select('method_type, value, is_primary')
       .eq('business_id', businessId)
