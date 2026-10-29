@@ -53,8 +53,8 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     { data: profile },
     { data: roleRow },
     { count },
-    { data: ownedBusinesses },
     { data: activeAds },
+    { data: activeSubscriptions },
   ] = await Promise.all([
     supabase
       .from('profiles')
@@ -70,25 +70,19 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
       .eq('user_id', user.id)
       .is('read_at', null)
       .not('notification_type', 'in', '("system","admin","announcement")'),
-    supabase.from('businesses').select('id').eq('owner_profile_id', user.id).limit(20),
     supabase
       .from('ads')
       .select('id, starts_at, ends_at, slot:ad_slots(base_price_egp)')
       .eq('owner_profile_id', user.id)
       .eq('status', 'active')
       .limit(20),
-  ])
-
-  const businessIds = (ownedBusinesses ?? []).map((business) => business.id)
-  const { data: activeSubscriptions } = businessIds.length
-    ? await supabase
-        .from('business_subscriptions')
-        .select('id, is_trial, starts_at, expires_at, plan:subscription_plans(price_egp)')
-        .in('business_id', businessIds)
-        .eq('status', 'active')
-        .eq('is_trial', false)
-        .limit(20)
-    : { data: [] }
+    supabase
+      .from('business_subscriptions')
+      .select('id, is_trial, starts_at, expires_at, plan:subscription_plans(price_egp), business:businesses!inner(owner_profile_id)')
+      .eq('status', 'active')
+      .eq('is_trial', false)
+      .eq('business.owner_profile_id', user.id)
+      .limit(20),
 
   const isWithinActiveDates = (startsAt: string | null, endsAt: string | null) => {
     const nowMs = now.getTime()
