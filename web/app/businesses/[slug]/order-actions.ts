@@ -122,7 +122,7 @@ export async function submitOrder(
   // Branch/contact for the already-validated activity
   // ═══════════════════════════════════════════════════════════════════
 
-  const { data: branch } = await supabase
+  const { data: branch, error: branchError } = await supabase
     .from('business_branches')
     .select('phone, whatsapp')
     .eq('business_id', businessId)
@@ -131,12 +131,43 @@ export async function submitOrder(
     .limit(1)
     .maybeSingle()
 
-  if (!branch?.whatsapp && !branch?.phone) {
-    return { ok: false, error: 'النشاط مش بيستقبل طلبات' }
+  if (branchError) {
+    console.error('[submitOrder] branch lookup failed:', branchError.message)
+    return { ok: false, error: 'تعذر التحقق من بيانات تواصل النشاط. جرّب تاني.' }
+  }
+
+  // Simple activities may have business-level contacts before a separate branch
+  // record exists. Prefer an active branch, then fall back to saved contact methods.
+  let merchantPhone = branch?.whatsapp || branch?.phone || ''
+  if (!merchantPhone) {
+    const { data: contactRows, error: contactError } = await supabase
+      .from('business_contact_methods')
+      .select('method_type, value, is_primary')
+      .eq('business_id', businessId)
+      .in('method_type', ['whatsapp', 'phone'])
+      .order('is_primary', { ascending: false })
+      .limit(10)
+
+    if (contactError) {
+      console.error('[submitOrder] contact fallback lookup failed:', contactError.message)
+      return { ok: false, error: 'تعذر جلب بيانات تواصل النشاط. جرّب تاني.' }
+    }
+
+    merchantPhone =
+      (contactRows ?? []).find(
+        (row) => row.method_type === 'whatsapp' && typeof row.value === 'string' && row.value.trim(),
+      )?.value ??
+      (contactRows ?? []).find(
+        (row) => row.method_type === 'phone' && typeof row.value === 'string' && row.value.trim(),
+      )?.value ??
+      ''
+  }
+
+  if (!merchantPhone.trim()) {
+    return { ok: false, error: 'النشاط مش مسجل له رقم لاستقبال الطلبات' }
   }
 
   const orderCode = genOrderCode()
-  const merchantPhone = branch.whatsapp || branch.phone || ''
 
   // ═══════════════════════════════════════════════════════════════════
   // 3. Optional new fields (v2)
