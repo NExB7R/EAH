@@ -36,6 +36,7 @@ import {
 import Avatar from './avatar'
 import Logo from './logo'
 import type { UserSession } from '@/lib/data/user'
+import type { PublicContactLinks } from '@/lib/data/site-settings'
 import { getTrustTierMeta } from '@/lib/trust'
 import styles from './menu-drawer.module.css'
 
@@ -43,6 +44,7 @@ type Props = {
   open: boolean
   onClose: () => void
   session: UserSession | null
+  contactLinks: PublicContactLinks
 }
 
 type MenuItem = {
@@ -109,7 +111,7 @@ const LEGAL_ITEMS: MenuItem[] = [
   { href: '/cookies', label: 'ملفات الكوكيز', Icon: CookieIcon },
 ]
 
-export default function MenuDrawer({ open, onClose, session }: Props) {
+export default function MenuDrawer({ open, onClose, session, contactLinks }: Props) {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -134,7 +136,7 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
   }, [open, onClose])
 
   const isLoggedIn = !!session
-  const isAdmin = session?.role === 'admin' || session?.role === 'super_admin'
+  const isAdmin = session?.role === 'super_admin'
   const isMerchant = session?.role === 'merchant'
 
   const handleShare = async () => {
@@ -406,58 +408,48 @@ export default function MenuDrawer({ open, onClose, session }: Props) {
             ))}
           </ul>
 
-          {/* Social */}
-          <div className={styles.divider} />
-          <ul className={styles.list}>
-            <li>
-              <a
-                href="https://facebook.com/eah.eg"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.item}
-              >
-                <span className={styles.itemIcon}>
-                  <FacebookIcon size={20} />
-                </span>
-                <span>فيسبوك</span>
-                <span className={styles.externalIcon}>
-                  <ExternalLinkIcon size={14} />
-                </span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://whatsapp.com/channel/eaH"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.item}
-              >
-                <span className={styles.itemIcon}>
-                  <WhatsAppIcon size={20} />
-                </span>
-                <span>قناة واتساب</span>
-                <span className={styles.externalIcon}>
-                  <ExternalLinkIcon size={14} />
-                </span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://wa.me/201012892806"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.item}
-              >
-                <span className={styles.itemIcon}>
-                  <WhatsAppIcon size={20} />
-                </span>
-                <span>كلم المسؤول</span>
-                <span className={styles.externalIcon}>
-                  <ExternalLinkIcon size={14} />
-                </span>
-              </a>
-            </li>
-          </ul>
+          {contactLinks.enabled && (
+            <>
+              <div className={styles.divider} />
+              <ul className={styles.list} aria-label="قنوات التواصل الرسمية">
+                {contactLinks.facebookUrl && (
+                  <li>
+                    <a href={contactLinks.facebookUrl} target="_blank" rel="noopener noreferrer" className={styles.item}>
+                      <span className={styles.itemIcon}><FacebookIcon size={20} /></span>
+                      <span>فيسبوك</span>
+                      <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
+                    </a>
+                  </li>
+                )}
+                {contactLinks.whatsappChannelUrl && (
+                  <li>
+                    <a href={contactLinks.whatsappChannelUrl} target="_blank" rel="noopener noreferrer" className={styles.item}>
+                      <span className={styles.itemIcon}><WhatsAppIcon size={20} /></span>
+                      <span>قناة واتساب</span>
+                      <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
+                    </a>
+                  </li>
+                )}
+                {contactLinks.supportWhatsappUrl && (
+                  <li>
+                    <a href={contactLinks.supportWhatsappUrl} target="_blank" rel="noopener noreferrer" className={styles.item}>
+                      <span className={styles.itemIcon}><WhatsAppIcon size={20} /></span>
+                      <span>تواصل مع الدعم</span>
+                      <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
+                    </a>
+                  </li>
+                )}
+                {contactLinks.email && (
+                  <li>
+                    <a href={`mailto:${contactLinks.email}`} className={styles.item}>
+                      <span className={styles.itemIcon}><FileTextIcon size={20} /></span>
+                      <span>إيميل الدعم</span>
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </>
+          )}
 
           {/* Login/Logout */}
           {isLoggedIn ? (

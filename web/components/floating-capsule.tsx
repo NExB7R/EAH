@@ -10,6 +10,7 @@ import MenuDrawer from './menu-drawer'
 import HeaderWeather from './header-weather'
 import { BellIcon, MenuIcon, InstallIcon, LockIcon } from './icons'
 import type { UserSession } from '@/lib/data/user'
+import type { PublicContactLinks } from '@/lib/data/site-settings'
 import styles from './floating-capsule.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -19,9 +20,10 @@ import styles from './floating-capsule.module.css'
 
 type Props = {
   session: UserSession | null
+  contactLinks: PublicContactLinks
 }
 
-export default function FloatingCapsule({ session }: Props) {
+export default function FloatingCapsule({ session, contactLinks }: Props) {
   const mounted = useMounted()
   const [scrolled, setScrolled] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -98,7 +100,7 @@ export default function FloatingCapsule({ session }: Props) {
               <>
                 <Link
                   href={
-                    session.role === 'admin' || session.role === 'super_admin'
+                    session.role === 'super_admin'
                       ? '/admin/notifications'
                       : '/notifications'
                   }
@@ -145,7 +147,7 @@ export default function FloatingCapsule({ session }: Props) {
         </div>
       </header>
 
-      <MenuDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} session={session} />
+      <MenuDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} session={session} contactLinks={contactLinks} />
     </>
   )
 }
