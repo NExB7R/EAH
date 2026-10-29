@@ -51,7 +51,8 @@ export async function getInAppOrderAvailableBusinessIds(
       .from('business_contact_methods')
       .select('business_id, method_type, value')
       .in('business_id', ids)
-      .eq('method_type', 'whatsapp'),
+      .eq('method_type', 'whatsapp')
+      .eq('is_public', true),
   ])
 
   if (settingsResult.error || branchesResult.error || contactsResult.error) {
