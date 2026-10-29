@@ -84,6 +84,7 @@ const MERCHANT_SECTION: MenuItem[] = [
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
   { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon },
   { href: '/merchant/subscription', label: 'الباقة والاشتراك', Icon: CrownGoldIcon },
+  { href: '/merchant/ads', label: 'إعلانات نشاطي', Icon: TagIcon }
 ]
 
 // ─── Merchant onboarding (للزائر أو العميل الذي ليس لديه نشاط) ───
