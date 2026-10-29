@@ -56,7 +56,7 @@ const INITIAL: WizardData = {
   address_text: '',
   contacts: [{ tempId: 'c1', kind: 'phone', value: '', is_primary: true }],
   is_open: true,
-  accepts_whatsapp_orders: true,
+  accepts_whatsapp_orders: false,
   owner_user_id: '',
   custom_business_type: '',
 }

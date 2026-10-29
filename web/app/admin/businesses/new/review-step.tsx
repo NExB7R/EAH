@@ -47,6 +47,10 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
   const owner = owners.find((o) => o.id === data.owner_user_id)
   const needsTypeApproval =
     data.business_type === 'misc' && data.custom_business_type.trim().length > 0
+  const hasWhatsAppContact = data.contacts.some(
+    (contact) => contact.kind === 'whatsapp' && contact.value.trim().length > 0,
+  )
+  const whatsappOrdersEnabled = hasWhatsAppContact && data.accepts_whatsapp_orders
   const publishStatus = needsTypeApproval
     ? owner
       ? 'سينشر تحت «أخرى» — النوع المخصص قيد المراجعة'
@@ -99,7 +103,13 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
         <Item label="الحالة" value={data.is_open ? 'مفتوح الآن' : 'مغلق'} step={2} goTo={goTo} />
         <Item
           label="واتساب أوردرز"
-          value={data.accepts_whatsapp_orders ? 'يستقبل' : 'لا يستقبل'}
+          value={
+            whatsappOrdersEnabled
+              ? 'يستقبل'
+              : hasWhatsAppContact
+                ? 'موقوف'
+                : 'غير متاح — لا يوجد رقم واتساب'
+          }
           step={2}
           goTo={goTo}
         />

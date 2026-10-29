@@ -11,6 +11,10 @@ type Props = {
 }
 
 export default function OptionsStep({ data, owners, update }: Props) {
+  const hasWhatsAppContact = data.contacts.some(
+    (contact) => contact.kind === 'whatsapp' && contact.value.trim().length > 0,
+  )
+
   return (
     <div>
       <div className={styles.cardHead}>
@@ -43,7 +47,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
 
         {owners.length === 0 && (
           <p className={styles.gpsHint}>
-            مفيش حساب مشتري مسجل متاح للربط حاليًا. تقدر تكمل إنشاء النشاط من غير بايع مرتبط، أو تسجل حساب المشتري أولًا.
+            لا توجد حسابات مشتري أو بايع مؤهلة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير بايع مرتبط، وتربطه لاحقًا من الإدارة.
           </p>
         )}
 
@@ -64,11 +68,13 @@ export default function OptionsStep({ data, owners, update }: Props) {
             </label>
 
             <label
-              className={`${styles.typeCard} ${data.accepts_whatsapp_orders ? styles.typeCardActive : ''}`}
+              className={`${styles.typeCard} ${hasWhatsAppContact && data.accepts_whatsapp_orders ? styles.typeCardActive : ''}`}
+              aria-disabled={!hasWhatsAppContact}
             >
               <input
                 type="checkbox"
-                checked={data.accepts_whatsapp_orders}
+                checked={hasWhatsAppContact && data.accepts_whatsapp_orders}
+                disabled={!hasWhatsAppContact}
                 onChange={(e) => update({ accepts_whatsapp_orders: e.target.checked })}
                 style={{ display: 'none' }}
               />
@@ -76,10 +82,19 @@ export default function OptionsStep({ data, owners, update }: Props) {
                 <WhatsAppIcon size={16} />
               </span>
               <span className={styles.typeCardLabel}>
-                {data.accepts_whatsapp_orders ? 'يستقبل واتساب' : 'لا يستقبل'}
+                {!hasWhatsAppContact
+                  ? 'أضف رقم واتساب أولًا'
+                  : data.accepts_whatsapp_orders
+                    ? 'يستقبل واتساب'
+                    : 'لا يستقبل'}
               </span>
             </label>
           </div>
+          {!hasWhatsAppContact && (
+            <p className={styles.hint}>
+              علشان تفعّل التواصل عبر واتساب، أضف رقمًا من نوع «واتساب» في خطوة الموقع والتواصل.
+            </p>
+          )}
         </div>
 
         <p className={styles.gpsHint}>
