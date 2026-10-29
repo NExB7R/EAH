@@ -3,6 +3,7 @@ import { createPublicClient } from '@/lib/supabase/public'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { getWhatsAppDestinationBusinessIds } from './contact-availability'
+import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
 import type { Business, BusinessType } from './businesses'
 
@@ -21,12 +22,12 @@ const MAX_RESULTS = 12
 const AREA_DEFAULT = 'شبين القناطر'
 
 const BUSINESS_COLUMNS = `
-  id, slug, name, business_type, description, hook,
+  id, slug, name, owner_profile_id, business_type, description, hook,
   area, city, address_text, map_url, cover_image_url,
   is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   successful_orders,
   featured_order, featured_until, featured_pin,
-  new_until, working_hours, accepts_whatsapp_orders,
+  new_until, working_hours, accepts_whatsapp_orders, accepts_orders,
   response_time_avg_seconds, response_rate,
   last_activity_at, created_at, updated_at,
   branches_count, offers_count, rating_avg, rating_count,
@@ -55,6 +56,7 @@ function normalizeBusiness(raw: Record<string, unknown>): Business {
   const loc = pickPrimaryLocation(raw.business_locations)
   const rest: Record<string, unknown> = { ...raw }
   delete rest.business_locations
+  delete rest.owner_profile_id
   return { ...(rest as unknown as Business), location: loc }
 }
 
@@ -63,18 +65,32 @@ async function normalizeBusinesses(data: unknown[] | null): Promise<Business[]> 
   const rows = data.map((row) => row as Record<string, unknown>)
   let configuredWhatsAppIds = new Set<string>()
 
+  let configuredInAppOrderIds = new Set<string>()
+
   try {
-    configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(
-      createServiceClient(),
-      rows.map((row) => String(row.id ?? '')),
-    )
+    const service = createServiceClient()
+    const ids = rows.map((row) => String(row.id ?? ''))
+    const [whatsappIds, inAppOrderIds] = await Promise.all([
+      getWhatsAppDestinationBusinessIds(service, ids),
+      getInAppOrderAvailableBusinessIds(
+        service,
+        rows.map((row) => ({
+          id: String(row.id ?? ''),
+          accepts_orders: row.accepts_orders,
+          owner_profile_id: row.owner_profile_id,
+        })),
+      ),
+    ])
+    configuredWhatsAppIds = whatsappIds
+    configuredInAppOrderIds = inAppOrderIds
   } catch (error) {
-    console.error('[suggest] WhatsApp availability lookup failed:', error)
+    console.error('[suggest] availability lookup failed:', error)
   }
 
   return rows.map((row) =>
     normalizeBusiness({
       ...row,
+      accepts_orders: configuredInAppOrderIds.has(String(row.id ?? '')),
       accepts_whatsapp_orders: isWhatsAppChannelAvailable(
         row.accepts_whatsapp_orders,
         row.id,
