@@ -42,7 +42,7 @@ export const getLiveStats = unstable_cache(
     ] = await Promise.all([
       supabase
         .from('businesses')
-        .select('*', { count: 'exact', head: true })
+        .select('id', { count: 'exact', head: true })
         .eq('is_published', true),
       supabase.from('profiles').select('*', { count: 'exact', head: true }),
       supabase

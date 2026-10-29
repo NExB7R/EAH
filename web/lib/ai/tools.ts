@@ -1,5 +1,6 @@
 import 'server-only'
 import { createPublicClient } from '@/lib/supabase/public'
+import { createServiceClient } from '@/lib/supabase/service'
 import { createClient } from '@/lib/supabase/server'
 import type { ToolDefinition } from './providers'
 
@@ -335,7 +336,7 @@ async function toolGetOffers(args: { limit?: number }) {
 // ─── Trending (الأكثر تفاعلاً) ───
 
 async function toolGetTrending(args: { limit?: number }) {
-  const supabase = createPublicClient()
+  const supabase = createServiceClient()
   const limit = Math.min(Math.max(args.limit ?? 8, 1), 10)
 
   const { data, error } = await supabase
