@@ -71,7 +71,7 @@ export async function createBranch(formData: FormData): Promise<Result> {
   // لو ده أول فرع، يبقى primary
   const { count } = await ctx.supabase
     .from('business_branches')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
     .eq('business_id', ctx.biz.id)
 
   const isPrimary = !count || count === 0
