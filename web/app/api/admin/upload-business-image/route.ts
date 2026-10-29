@@ -254,7 +254,7 @@ export async function DELETE(req: NextRequest) {
   if (hasResourcePath) {
     const { data: business, error: businessError } = await admin
       .from('businesses')
-      .select('id, cover_image_url')
+      .select('id, logo_url, cover_image_url')
       .eq('id', businessId)
       .maybeSingle()
 
@@ -275,7 +275,25 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: 'فشل التحقق من الصورة الحالية' }, { status: 500 })
     }
     if (category === 'logo' && (!mediaRows || mediaRows.length === 0)) {
-      return NextResponse.json({ error: 'الصورة مش موجودة' }, { status: 404 })
+      // Support legacy rows whose logo lived only on businesses.logo_url.
+      if (!business.logo_url) {
+        return NextResponse.json({ error: 'الصورة مش موجودة' }, { status: 404 })
+      }
+
+      const { data: cleared, error: clearError } = await admin
+        .from('businesses')
+        .update({ logo_url: null })
+        .eq('id', businessId)
+        .select('id')
+        .maybeSingle()
+
+      if (clearError || !cleared) {
+        return NextResponse.json({ error: 'فشل حذف لوجو النشاط' }, { status: 500 })
+      }
+
+      revalidatePath(`/admin/businesses/${businessId}`)
+      revalidateTag('businesses', 'default')
+      return NextResponse.json({ ok: true })
     }
 
     if (category === 'cover') {
