@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CloseIcon, ShareIcon, CheckCircleIcon, WhatsAppIcon } from './icons'
 import styles from './business-share-modal.module.css'
 
@@ -22,8 +22,46 @@ type Tab = 'share' | 'qr'
 export default function BusinessShareModal({ open, onClose, url, title }: Props) {
   const [tab, setTab] = useState<Tab>('share')
   const [copied, setCopied] = useState(false)
+  const [qr, setQr] = useState<{ url: string; dataUrl: string } | null>(null)
+  const [qrErrorUrl, setQrErrorUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!open || tab !== 'qr') return
+
+    let cancelled = false
+    void import('qrcode')
+      .then(({ default: QRCode }) =>
+        QRCode.toDataURL(url, {
+          width: 400,
+          margin: 2,
+          errorCorrectionLevel: 'M',
+          color: { dark: '#07020D', light: '#FFFFFF' },
+        }),
+      )
+      .then((dataUrl) => {
+        if (!cancelled) setQr({ url, dataUrl })
+      })
+      .catch(() => {
+        if (!cancelled) setQrErrorUrl(url)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [open, tab, url])
+
+  useEffect(() => {
+    if (!open) return
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [open, onClose])
 
   if (!open) return null
+  const qrDataUrl = qr?.url === url ? qr.dataUrl : null
+  const qrFailed = qrErrorUrl === url
 
   const encodedUrl = encodeURIComponent(url)
   const encodedTitle = encodeURIComponent(title)
@@ -35,7 +73,6 @@ export default function BusinessShareModal({ open, onClose, url, title }: Props)
     telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedTitle}`,
   }
 
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=10&data=${encodedUrl}`
 
   const copy = async () => {
     try {
@@ -48,14 +85,14 @@ export default function BusinessShareModal({ open, onClose, url, title }: Props)
   }
 
   return (
-    <div
-      className={styles.backdrop}
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label="مشاركة النشاط"
-    >
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+    <div className={styles.backdrop} onClick={onClose}>
+      <div
+        className={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`مشاركة ${title}`}
+      >
         <header className={styles.header}>
           <h2 className={styles.title}>شارك {title}</h2>
           <button type="button" className={styles.close} onClick={onClose} aria-label="إغلاق">
@@ -137,18 +174,31 @@ export default function BusinessShareModal({ open, onClose, url, title }: Props)
         {tab === 'qr' && (
           <div className={styles.qrWrap}>
             <div className={styles.qrFrame}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={qrUrl} alt="QR" className={styles.qrImg} width={280} height={280} />
+              {qrDataUrl ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={qrDataUrl}
+                  alt={`رمز QR لصفحة ${title}`}
+                  className={styles.qrImg}
+                  width={280}
+                  height={280}
+                />
+              ) : qrFailed ? (
+                <p className={styles.qrHint} role="alert">تعذر إنشاء الرمز. حاول مرة تانية.</p>
+              ) : (
+                <p className={styles.qrHint} role="status">جارٍ تجهيز رمز QR…</p>
+              )}
             </div>
-            <p className={styles.qrHint}>امسح الكود يفتح صفحة النشاط</p>
-            <a
-              href={qrUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.downloadBtn}
-            >
-              فتح / تحميل الكود
-            </a>
+            <p className={styles.qrHint}>امسح الكود لفتح الصفحة مباشرة</p>
+            {qrDataUrl && (
+              <a
+                href={qrDataUrl}
+                download="eah-qr.png"
+                className={styles.downloadBtn}
+              >
+                تحميل رمز QR
+              </a>
+            )}
           </div>
         )}
       </div>

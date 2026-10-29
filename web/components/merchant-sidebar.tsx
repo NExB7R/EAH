@@ -18,6 +18,7 @@ import {
 } from './icons'
 import Logo from './logo'
 import styles from './merchant-sidebar.module.css'
+import GlobalShareAction from './global-share-action'
 
 type Props = {
   newOrders?: number
@@ -132,6 +133,9 @@ export default function MerchantSidebar({ newOrders = 0, hasBusiness = true }: P
             </ul>
           </div>
         ))}
+        <ul className={styles.list}>
+          <li><GlobalShareAction className={styles.item} label="شارك المنصة + QR" /></li>
+        </ul>
       </nav>
     </aside>
   )

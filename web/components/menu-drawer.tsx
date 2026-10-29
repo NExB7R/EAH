@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
@@ -12,7 +12,6 @@ import {
   SparklesIcon,
   BellIcon,
   InfoIcon,
-  ShareIcon,
   InstallIcon,
   LogoutIcon,
   CloseIcon,
@@ -35,6 +34,7 @@ import {
 } from './icons'
 import Avatar from './avatar'
 import Logo from './logo'
+import GlobalShareAction from './global-share-action'
 import type { UserSession } from '@/lib/data/user'
 import type { PublicContactLinks } from '@/lib/data/site-settings'
 import { getTrustTierMeta } from '@/lib/trust'
@@ -116,7 +116,6 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
   const router = useRouter()
 
   const onCloseRef = useRef(onClose)
-  const [shareCopied, setShareCopied] = useState(false)
 
   useEffect(() => {
     onCloseRef.current = onClose
@@ -138,29 +137,6 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
   const isLoggedIn = !!session
   const isAdmin = session?.role === 'super_admin'
   const isMerchant = session?.role === 'merchant'
-
-  const handleShare = async () => {
-    const url =
-      typeof window !== 'undefined'
-        ? window.location.origin
-        : (process.env.NEXT_PUBLIC_SITE_URL ?? '')
-    const title = 'EAH — اللي نفسك فيه ؟'
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      try {
-        await navigator.share({ title, url })
-        return
-      } catch {
-        // cancelled — fall through to copy
-      }
-    }
-    try {
-      await navigator.clipboard.writeText(url)
-      setShareCopied(true)
-      setTimeout(() => setShareCopied(false), 2000)
-    } catch {
-      window.prompt('انسخ الرابط:', url)
-    }
-  }
 
   const handleInstall = () => {
     window.dispatchEvent(new CustomEvent('eah:show-install'))
@@ -321,7 +297,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
                 <StoreIcon size={14} />
-                <span>للتجار</span>
+                <span>للبايع</span>
               </div>
               <ul className={styles.list}>
                 {MERCHANT_APPLY.map(({ href, label, Icon }) => (
@@ -384,14 +360,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               </button>
             </li>
 
-            <li>
-              <button type="button" className={styles.item} onClick={handleShare}>
-                <span className={styles.itemIcon}>
-                  <ShareIcon size={20} />
-                </span>
-                <span>{shareCopied ? 'اتنسخ الرابط ✓' : 'شارك المنصة'}</span>
-              </button>
-            </li>
+            <li><GlobalShareAction className={styles.item} label="شارك المنصة + QR" /></li>
           </ul>
 
           {/* Legal */}

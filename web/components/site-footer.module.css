@@ -448,3 +448,53 @@
     gap: 6px;
   }
 }
+
+
+/* Shared platform share + locally generated QR action */
+.sharePlatform {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.shareAction {
+  display: inline-flex;
+  max-width: 100%;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 10px 18px;
+  border: 1px solid rgba(232, 199, 154, 0.32);
+  border-radius: 999px;
+  color: var(--gold-light);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.13), rgba(232, 199, 154, 0.06));
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 850;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.shareAction:hover {
+  border-color: rgba(232, 199, 154, 0.7);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(232, 199, 154, 0.1));
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.12);
+}
+
+@media (max-width: 640px) {
+  .sharePlatform {
+    width: 100%;
+  }
+
+  .shareAction {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shareAction {
+    transition: none;
+  }
+}
