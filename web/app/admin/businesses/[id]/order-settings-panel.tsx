@@ -16,9 +16,11 @@ type Settings = {
 
 export default function OrderSettingsPanel({
   businessId,
+  ownerProfileId,
   settings,
 }: {
   businessId: string
+  ownerProfileId: string | null
   settings: Settings
 }) {
   const router = useRouter()
@@ -29,7 +31,9 @@ export default function OrderSettingsPanel({
   const [deadline, setDeadline] = useState(settings?.deadline_minutes ?? 10)
   const [eta, setEta] = useState(settings?.delivery_eta_minutes ?? 45)
 
-  const isEnabled = !!settings?.orders_enabled
+  const ownerMissing = !ownerProfileId
+  const settingsEnabled = !!settings?.orders_enabled
+  const isEnabled = settingsEnabled && !ownerMissing
 
   const doEnable = () => {
     setError(null)
@@ -67,13 +71,27 @@ export default function OrderSettingsPanel({
           <div className={styles.panelInfo}>
             <h3 className={styles.panelTitle}>استلام الطلبات</h3>
             <p className={styles.panelSub}>
-              {isEnabled ? `مفعّل — الرد خلال ${settings?.deadline_minutes} دقايق` : 'مش مفعّل'}
+              {ownerMissing
+                ? 'اربط بايعًا لتفعيل الطلب الداخلي'
+                : isEnabled
+                  ? `مفعّل — الرد خلال ${settings?.deadline_minutes} دقايق`
+                  : 'مش مفعّل'}
             </p>
           </div>
           <span className={`${styles.badge} ${isEnabled ? styles.badgeOn : styles.badgeOff}`}>
-            {isEnabled ? 'مفعّل' : 'موقوف'}
+            {isEnabled ? 'مفعّل' : ownerMissing ? 'يتطلب بايعًا' : 'موقوف'}
           </span>
         </div>
+
+        {ownerMissing && (
+          <div className={styles.ownerNotice} role="status">
+            <AlertIcon size={14} />
+            <span>
+              النشاط يظل ظاهرًا للناس، لكن الطلب الداخلي يحتاج ربط بايع أولًا. قنوات الاتصال المباشر
+              تظل منفصلة.
+            </span>
+          </div>
+        )}
 
         {error && (
           <div className={styles.error}>
@@ -83,7 +101,7 @@ export default function OrderSettingsPanel({
         )}
 
         <div className={styles.actions}>
-          {isEnabled ? (
+          {settingsEnabled ? (
             <button
               type="button"
               onClick={() => setShowDisable(true)}
@@ -92,6 +110,11 @@ export default function OrderSettingsPanel({
             >
               <CloseIcon size={14} />
               <span>إيقاف الاستلام</span>
+            </button>
+          ) : ownerMissing ? (
+            <button type="button" disabled className={styles.primaryBtn}>
+              <CheckCircleIcon size={14} />
+              <span>اربط بايعًا أولًا</span>
             </button>
           ) : (
             <button
