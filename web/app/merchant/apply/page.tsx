@@ -11,7 +11,7 @@ import ApplyWizard from './apply-wizard'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  'سجّل نشاطك',
+  title: 'سجّل نشاطك',
   description: 'سجّل نشاطك مجاناً — تطبيقك الخاص على EAH',
 }
 
