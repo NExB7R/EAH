@@ -10,9 +10,9 @@
   gap: 4px;
   padding: 10px;
   border-radius: 18px;
-  background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.8));
-  border: 1px solid rgba(232, 199, 154, 0.18);
-  box-shadow: 0 0 24px rgba(232, 199, 154, 0.06);
+  background: linear-gradient(160deg, rgba(20, 14, 34, 0.78), rgba(10, 7, 20, 0.92));
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22), 0 0 22px rgba(168, 85, 247, 0.06);
 }
 
 .item {
@@ -33,25 +33,26 @@
 }
 
 .item:hover {
-  background: rgba(232, 199, 154, 0.08);
-  color: var(--gold-light);
+  background: rgba(168, 85, 247, 0.1);
+  color: var(--text-primary);
 }
 
 .active {
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.18), rgba(199, 125, 255, 0.1));
-  color: var(--gold-light);
-  border: 1px solid rgba(232, 199, 154, 0.35);
+  background: linear-gradient(115deg, rgba(168, 85, 247, 0.26), rgba(157, 78, 221, 0.15));
+  color: #e5c5ff;
+  border: 1px solid rgba(199, 125, 255, 0.42);
+  box-shadow: inset 0 0 0 1px rgba(199, 125, 255, 0.07), 0 0 16px rgba(168, 85, 247, 0.08);
 }
 
 .active::before {
   content: '';
   position: absolute;
-  inset-inline-end: -10px;
+  inset-inline-start: -1px;
   inset-block: 20%;
   width: 3px;
   border-radius: 2px;
-  background: linear-gradient(180deg, var(--gold-primary), var(--gold-light));
-  box-shadow: 0 0 10px rgba(232, 199, 154, 0.6);
+  background: linear-gradient(180deg, var(--purple-light), var(--gold-primary));
+  box-shadow: 0 0 10px rgba(199, 125, 255, 0.45);
 }
 
 .iconWrap {
@@ -61,13 +62,13 @@
   width: 30px;
   height: 30px;
   border-radius: 9px;
-  background: rgba(232, 199, 154, 0.06);
+  background: rgba(168, 85, 247, 0.1);
   color: currentColor;
   flex-shrink: 0;
 }
 
 .active .iconWrap {
-  background: rgba(232, 199, 154, 0.15);
+  background: rgba(168, 85, 247, 0.17);
 }
 
 .label {
@@ -90,13 +91,19 @@
 
 @media (max-width: 900px) {
   .sidebar {
+    min-width: 0;
+    max-width: 100%;
     position: static;
     top: auto;
     margin-bottom: 16px;
   }
   .nav {
+    width: 100%;
+    min-width: 0;
     flex-direction: row;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding: 8px;

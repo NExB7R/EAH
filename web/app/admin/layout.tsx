@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
+import Logo from '@/components/logo'
 import SecondaryHero from '@/components/secondary-hero'
 import AdminSidebar from '@/components/admin-sidebar'
 import CommandPalette from '@/components/ui/command-palette'
@@ -14,7 +14,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const session = await getUserSession()
 
   if (!session) redirect('/auth?next=/admin')
-  if (session.role !== 'admin' && session.role !== 'super_admin') redirect('/')
+  if (session.role !== 'super_admin') redirect('/')
 
   const counts = await getAdminBadges()
 
@@ -33,16 +33,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <div className={styles.shell}>
         <aside className={styles.sidebarRail} aria-label="التنقل الرئيسي">
           <Link href="/admin" className={styles.brand} aria-label="EAH — لوحة الإدارة">
-            <Image
-              src="/icon-192.png"
-              alt=""
-              width={36}
-              height={36}
-              className={styles.brandLogo}
-              priority
-            />
+            <Logo size="xs" variant="compact" href={null} />
             <span className={styles.brandText}>
-              <strong className={styles.brandScript}>EAH</strong>
+              <strong>EAH</strong>
               <small>إدارة المنصة</small>
             </span>
           </Link>

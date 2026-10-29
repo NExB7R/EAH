@@ -52,46 +52,15 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 12px;
   padding: 2px 8px 14px;
   color: var(--admin-text);
   text-decoration: none;
 }
 
-.brandLogo {
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
-  border-radius: 10px;
-  object-fit: contain;
-}
-
-.brandScript {
-  font-family: var(--font-script), var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-}
-
-.brandMark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 43px;
-  height: 43px;
-  flex-shrink: 0;
-  border: 1px solid var(--admin-accent-line);
-  border-radius: 14px;
-  background: linear-gradient(145deg, rgba(var(--purple-neon-rgb), 0.27), rgba(157, 78, 221, 0.12));
-  color: var(--purple-light);
-  box-shadow: 0 0 22px rgba(var(--purple-neon-rgb), 0.16);
-  font-size: 0.95rem;
-  font-weight: 950;
-  letter-spacing: -0.05em;
-}
-
 .brandText {
   display: flex;
+  min-width: 0;
   flex-direction: column;
   gap: 1px;
 }
