@@ -4,6 +4,34 @@
   align-self: start;
 }
 
+.brand {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  margin: 0 2px 10px;
+  padding: 4px 10px 13px;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.16);
+  text-decoration: none;
+}
+
+.brand > span:first-child {
+  flex: 0 0 auto;
+}
+
+.brandText {
+  min-width: 0;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 850;
+  line-height: 1.4;
+}
+
+.brand:focus-visible {
+  border-radius: 12px;
+}
+
 .nav {
   display: flex;
   flex-direction: column;

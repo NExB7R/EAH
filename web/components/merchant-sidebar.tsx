@@ -16,6 +16,7 @@ import {
   ShieldCheckIcon,
   BellIcon,
 } from './icons'
+import Logo from './logo'
 import styles from './merchant-sidebar.module.css'
 
 type Props = {
@@ -90,7 +91,11 @@ export default function MerchantSidebar({ newOrders = 0, hasBusiness = true }: P
       ]
 
   return (
-    <aside className={styles.sidebar}>
+    <aside className={styles.sidebar} aria-label="لوحة البايع">
+      <Link href="/merchant" className={styles.brand} aria-label="EAH — لوحة البايع">
+        <Logo size="xs" variant="compact" href={null} />
+        <span className={styles.brandText}>لوحة البايع</span>
+      </Link>
       <nav className={styles.nav} aria-label="إدارة نشاطك">
         {sections.map((section) => (
           <div key={section.title} className={styles.section}>
