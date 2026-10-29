@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { getAvatarImageUrl } from '@/lib/avatar-url'
 import type { AppRole } from '@/lib/data/user'
 import { BadgeCheckIcon, CrownGoldIcon } from './icons'
 import styles from './avatar.module.css'
@@ -17,56 +18,50 @@ type AvatarProps = {
   displayName: string
   avatarUrl: string | null
   role: AppRole
+  /** Verified EAH profile; phone verification alone does not grant this badge. */
+  isVerified?: boolean
+  /** Active paid membership or active paid ad placement. */
+  isPaidMember?: boolean
+  /** Prioritize the one avatar that must appear immediately (e.g. the global header). */
+  priority?: boolean
+  /** Kept temporarily for compatibility with older callers. */
   phoneVerified?: boolean
   size?: 'xs' | 'sm' | 'md' | 'lg'
-}
-
-// Cloudinary URL builder — small optimized variant
-function optimizeAvatar(url: string, width: number): string {
-  if (!url.includes('res.cloudinary.com')) return url
-  // Insert transformations: /upload/w_96,h_96,c_fill,f_auto,q_auto/
-  return url.replace(/\/upload\/(v\d+\/)?/, `/upload/w_${width},h_${width},c_fill,f_auto,q_auto/`)
 }
 
 export default function Avatar({
   displayName,
   avatarUrl,
   role,
-  phoneVerified = false,
+  isVerified = false,
+  isPaidMember = false,
+  priority = false,
   size = 'md',
 }: AvatarProps) {
   const initial = displayName.trim().charAt(0) || '؟'
-  const [imgError, setImgError] = useState(false)
+  // Tie failures to the source URL: a newly uploaded URL gets a fresh load attempt.
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
 
   const sizeCls = styles[size]
-  const roleCls =
-    role === 'super_admin'
-      ? styles.admin
-      : role === 'merchant'
-        ? styles.merchant
-        : phoneVerified
-          ? styles.verified
-          : ''
-
+  const roleCls = role === 'super_admin' ? styles.admin : isPaidMember ? styles.paid : ''
   const cls = [styles.avatar, sizeCls, roleCls].filter(Boolean).join(' ')
-  const showImage = !!avatarUrl && !imgError
-
   const targetWidth = size === 'lg' ? 160 : size === 'md' ? 96 : size === 'sm' ? 64 : 48
-  const optimizedSrc = avatarUrl ? optimizeAvatar(avatarUrl, targetWidth) : ''
+  const imageSrc = getAvatarImageUrl(avatarUrl, targetWidth)
+  const showImage = !!imageSrc && failedSrc !== imageSrc
 
   return (
     <div className={cls}>
       {showImage ? (
         <Image
-          src={optimizedSrc}
+          src={imageSrc!}
           alt={displayName}
           className={styles.img}
-          onError={() => setImgError(true)}
+          onError={() => setFailedSrc(imageSrc)}
           width={targetWidth}
           height={targetWidth}
-          loading="eager"
+          loading={priority ? 'eager' : 'lazy'}
           decoding="async"
-          priority
+          priority={priority}
           unoptimized
         />
       ) : (
@@ -79,7 +74,7 @@ export default function Avatar({
         </span>
       )}
 
-      {phoneVerified && role !== 'super_admin' && (
+      {isVerified && role !== 'super_admin' && (
         <span className={styles.check} aria-hidden>
           <BadgeCheckIcon size={12} />
         </span>
