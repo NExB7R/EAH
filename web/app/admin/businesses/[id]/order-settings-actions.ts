@@ -42,6 +42,7 @@ export async function enableOrders(
       business_id: businessId,
       orders_enabled: true,
       deadline_minutes: safeDeadline,
+      delivery_eta_minutes: safeEta,
       orders_enabled_at: new Date().toISOString(),
       offline_mode: false,
       offline_until: null,
