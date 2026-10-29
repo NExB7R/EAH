@@ -18,8 +18,8 @@ import styles from './pricing.module.css'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'الباقات · EAH',
-  description: 'باقات لأصحاب الأنشطة — ابدأ مجاناً 30 يوم',
+  title: 'الباقات',
+  description: 'باقات للبايع — ابدأ مجاناً 30 يوم',
 }
 
 export default async function PricingPage() {

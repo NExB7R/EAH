@@ -502,7 +502,7 @@ function SlideTeam() {
         <p className={styles.teamRole}>المؤسس · Owner</p>
         <div className={styles.teamLine} aria-hidden />
         <p className={styles.teamText}>
-          بدأت EAH من حلم بسيط: نوصّل الناس بأماكنهم، ونوقف استغلال التجار.
+          بدأت EAH من حلم بسيط: نوصّل الناس بأماكنهم، ونوقف استغلال البايعين.
         </p>
       </div>
     </div>

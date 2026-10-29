@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import PresentationClient from './presentation-client'
 
 export const metadata: Metadata = {
-  title: 'اعرض EAH · Presentation',
+  title: 'عرض تقديمي',
   description: 'عرض تقديمي لمنصة EAH — من قلب شبين القناطر',
 }
 

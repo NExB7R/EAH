@@ -16,8 +16,8 @@ import styles from './advertise.module.css'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'أعلن معانا · EAH',
-  description: 'إعلانات توصل لعملاء حقيقيين في شبين القناطر',
+  title: 'أعلن معانا',
+  description: 'إعلانات توصل للمشترين الحقيقيين في شبين القناطر',
 }
 
 const SLOT_ICON: Record<string, typeof HomeIcon> = {
