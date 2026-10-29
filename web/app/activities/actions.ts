@@ -73,7 +73,7 @@ async function toggleActivity(
       void createNotification({
         userId: biz.owner_profile_id,
         type: 'follow_new',
-        title: 'عميل جديد تابعك',
+        title: 'مشتري جديد تابعك',
         body: `حد تابع ${biz.name} — أول ما تنزل عرض جديد هيوصله إشعار فوري`,
         deepLink: `/businesses/${slug}`,
         pushTag: 'follow',

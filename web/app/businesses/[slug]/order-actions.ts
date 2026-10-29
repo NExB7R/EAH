@@ -112,7 +112,7 @@ export async function submitOrder(
 
   const etaMinutes = settings.delivery_eta_minutes
   if (!etaMinutes) {
-    return { ok: false, error: 'التاجر مش محدد مدة التسليم — كلمه مباشرة' }
+    return { ok: false, error: 'البايع مش محدد مدة التسليم — تواصل معاه مباشرة' }
   }
 
   const deadlineAt = new Date(nowMs + settings.deadline_minutes * 60 * 1000).toISOString()

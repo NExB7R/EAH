@@ -136,7 +136,7 @@ export default function BusinessRow({
             <span
               className={`${styles.sourceChip} ${b.source === 'admin' ? styles.sourceAdmin : ''}`}
             >
-              {b.source === 'admin' ? 'بإدارة الأدمن' : 'بإدارة التاجر'}
+              {b.source === 'admin' ? 'بإدارة الأدمن' : 'بإدارة البايع'}
             </span>
           </div>
         </div>

@@ -34,7 +34,7 @@ export default async function NotificationsPage() {
           title="مفيش إشعارات لسه"
           description={
             session.role === 'merchant'
-              ? 'أول ما عميل يطلب، هيوصلك إشعار فوري هنا'
+              ? 'أول ما المشتري يطلب، هيوصلك إشعار فوري هنا'
               : 'تابع نشاط أو تفاعل، وهتلاقي إشعاراته هنا'
           }
         />
