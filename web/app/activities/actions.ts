@@ -27,7 +27,7 @@ async function toggleActivity(
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return { ok: false, error: 'لازم تسجل دخول الأول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
   // Rate limit — 60 تفاعل / دقيقة (خفيف)
   const rl = await checkRateLimit(apiLimiter, `activity:${user.id}`, { failClosed: true })
