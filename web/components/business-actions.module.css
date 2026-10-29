@@ -136,6 +136,45 @@
   background: rgba(232, 199, 154, 0.17);
 }
 
+.contactChoices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  background: rgba(16, 9, 27, 0.96);
+}
+
+.contactChoice,
+.contactChoiceClose {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 12px;
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: 10px;
+  color: var(--text-primary);
+  background: rgba(28, 18, 43, 0.92);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-align: start;
+  cursor: pointer;
+}
+
+.contactChoice:hover,
+.contactChoice:focus-visible {
+  border-color: var(--purple-light);
+}
+
+.contactChoiceClose {
+  color: var(--text-secondary);
+  background: transparent;
+}
+
 .contactMessage {
   margin: 0;
   color: var(--text-secondary);

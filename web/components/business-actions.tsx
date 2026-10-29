@@ -15,6 +15,8 @@ import OrderModal from './order-modal'
 import BusinessShareModal from './business-share-modal'
 import { toggleFollow, toggleFavorite } from '@/app/activities/actions'
 import { enqueue } from '@/lib/offline/queue'
+import type { ContactOption } from '@/lib/data/business-detail'
+import { normalizePhoneDestination, normalizeWhatsAppDestination } from '@/lib/data/contact-availability-utils'
 import styles from './business-actions.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -27,7 +29,7 @@ type Props = {
   businessName: string
   isLoggedIn: boolean
   isOpen: boolean
-  acceptsWhatsapp: boolean
+  contactOptions: ContactOption[]
   ordersEnabled: boolean
   isFavorite?: boolean
   isFollowing?: boolean
@@ -43,7 +45,7 @@ export default function BusinessActions({
   businessName,
   isLoggedIn,
   isOpen,
-  acceptsWhatsapp,
+  contactOptions,
   ordersEnabled,
   isFavorite = false,
   isFollowing = false,
@@ -58,6 +60,9 @@ export default function BusinessActions({
   const [pending, setPending] = useState(false)
   const [contactPending, setContactPending] = useState<'phone' | 'whatsapp' | null>(null)
   const [contactMessage, setContactMessage] = useState<string | null>(null)
+  const [contactMenuType, setContactMenuType] = useState<'phone' | 'whatsapp' | null>(null)
+  const phoneOptions = contactOptions.filter((option) => option.method === 'phone')
+  const whatsappOptions = contactOptions.filter((option) => option.method === 'whatsapp')
   const [orderOpen, setOrderOpen] = useState(false)
   const [orderKey, setOrderKey] = useState(0)
   const [shareOpen, setShareOpen] = useState(false)
@@ -69,44 +74,40 @@ export default function BusinessActions({
     return true
   }
 
-  const handleContact = async (method: 'phone' | 'whatsapp') => {
+  const handleContact = async (method: 'phone' | 'whatsapp', option?: ContactOption) => {
     if (requireAuth(method === 'phone' ? 'تتصل بالنشاط مباشرة' : 'تتواصل على واتساب')) return
     if (contactPending) return
-
     setContactMessage(null)
     setContactPending(method)
     try {
       const response = await fetch('/api/track-contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ businessId, method }),
+        body: JSON.stringify({
+          businessId,
+          method,
+          ...(option?.contactId ? { contactId: option.contactId } : {}),
+          ...(option?.branchId ? { branchId: option.branchId } : {}),
+        }),
       })
       const result = (await response.json().catch(() => null)) as
         | { ok?: boolean; value?: string; error?: string }
         | null
-
       if (!response.ok || typeof result?.value !== 'string' || !result.value.trim()) {
         setContactMessage('بيانات التواصل مش متاحة حالياً.')
         return
       }
-
       if (method === 'phone') {
-        const safePhone = result.value.replace(/[^0-9+]/g, '')
-        if (!/^\+?\d{8,15}$/.test(safePhone)) {
+        const safePhone = normalizePhoneDestination(result.value)
+        if (!safePhone) {
           setContactMessage('رقم التواصل غير صحيح.')
           return
         }
         window.location.href = `tel:${safePhone}`
         return
       }
-
-      const digits = result.value.replace(/\D/g, '')
-      const normalized = digits.startsWith('20')
-        ? digits
-        : digits.startsWith('0')
-          ? `20${digits.slice(1)}`
-          : `20${digits}`
-      if (normalized.length < 11 || normalized.length > 15) {
+      const normalized = normalizeWhatsAppDestination(result.value)
+      if (!normalized) {
         setContactMessage('رقم واتساب غير صحيح.')
         return
       }
@@ -116,6 +117,22 @@ export default function BusinessActions({
     } finally {
       setContactPending(null)
     }
+  }
+
+  const handleContactButton = (method: 'phone' | 'whatsapp') => {
+    if (requireAuth(method === 'phone' ? 'تتصل بالنشاط مباشرة' : 'تتواصل على واتساب')) return
+    const options = method === 'phone' ? phoneOptions : whatsappOptions
+    if (options.length === 0) {
+      setContactMessage('مفيش رقم صالح متاح بالطريقة دي حالياً.')
+      return
+    }
+    if (options.length > 1) {
+      setContactMessage(null)
+      setContactMenuType((current) => (current === method ? null : method))
+      return
+    }
+    setContactMenuType(null)
+    void handleContact(method, options[0])
   }
 
   // ─── Order Modal (in-app, مرتبط بـ merchant_order_settings) ───
@@ -197,7 +214,7 @@ export default function BusinessActions({
 
   return (
     <>
-      <div className={`${styles.actions} ${!acceptsWhatsapp ? styles.actionsWithoutWhatsapp : ''}`}>
+      <div className={styles.actions}>
         {/* Order (in-app) */}
         <button
           type="button"
@@ -213,32 +230,17 @@ export default function BusinessActions({
           </span>
         </button>
 
-        {/* Phone */}
-        <button
-          type="button"
-          onClick={() => void handleContact('phone')}
-          disabled={contactPending !== null}
-          className={`${styles.action} ${styles.phone}`}
-        >
-          <span className={styles.actionIcon}>
-            <PhoneIcon size={20} />
-          </span>
-          <span className={styles.actionLabel}>
-            {contactPending === 'phone' ? 'بيفتح…' : 'اتصال'}
-          </span>
-        </button>
+        {phoneOptions.length > 0 && (
+          <button type="button" onClick={() => handleContactButton('phone')} disabled={contactPending !== null} aria-expanded={contactMenuType === 'phone'} className={`${styles.action} ${styles.phone}`}>
+            <span className={styles.actionIcon}><PhoneIcon size={20} /></span>
+            <span className={styles.actionLabel}>{contactPending === 'phone' ? 'بيفتح…' : phoneOptions.length > 1 ? `أرقام اتصال (${phoneOptions.length})` : 'اتصال'}</span>
+          </button>
+        )}
 
-        {acceptsWhatsapp && (
-          <button
-            type="button"
-            onClick={() => void handleContact('whatsapp')}
-            disabled={contactPending !== null}
-            className={`${styles.action} ${styles.whatsapp}`}
-          >
+        {whatsappOptions.length > 0 && (
+          <button type="button" onClick={() => handleContactButton('whatsapp')} disabled={contactPending !== null} aria-expanded={contactMenuType === 'whatsapp'} className={`${styles.action} ${styles.whatsapp}`}>
             <span className={styles.actionIcon}><WhatsAppIcon size={20} /></span>
-            <span className={styles.actionLabel}>
-              {contactPending === 'whatsapp' ? 'بيفتح…' : 'واتساب'}
-            </span>
+            <span className={styles.actionLabel}>{contactPending === 'whatsapp' ? 'بيفتح…' : whatsappOptions.length > 1 ? `أرقام واتساب (${whatsappOptions.length})` : 'واتساب'}</span>
           </button>
         )}
 
@@ -286,6 +288,19 @@ export default function BusinessActions({
           <span className={styles.actionLabel}>شارك</span>
         </button>
       </div>
+      {contactMenuType && (
+        <div className={styles.contactChoices} role="group" aria-label={contactMenuType === 'phone' ? 'اختيار رقم الاتصال' : 'اختيار رقم واتساب'}>
+          {(contactMenuType === 'phone' ? phoneOptions : whatsappOptions).map((option) => (
+            <button key={option.contactId ?? option.branchId ?? option.label} type="button" className={styles.contactChoice} onClick={() => {
+              setContactMenuType(null)
+              void handleContact(contactMenuType, option)
+            }}>
+              {option.isPrimary ? 'الرئيسي — ' : ''}{option.label}
+            </button>
+          ))}
+          <button type="button" className={styles.contactChoiceClose} onClick={() => setContactMenuType(null)}>إغلاق الاختيار</button>
+        </div>
+      )}
       {contactMessage && (
         <p role="status" className={styles.contactMessage}>
           {contactMessage}
