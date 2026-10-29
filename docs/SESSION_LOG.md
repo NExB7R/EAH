@@ -1518,3 +1518,15 @@ Admin list:
 - تحديث Vercel: commit `f6be01fd2aaace81a9ea9e7398d4e6c2234e8d65`، deployment `dpl_A9aQo1XQvWSUfWnwtUmnKSfLK6Np` وصل `READY`. السجل أكد `Compiled successfully` في 23.4 ثانية، `Finished TypeScript` في 8.6 ثانية، وتوليد 54 صفحة.
 - فحص production أكد HTTP 200 على `/explore` و`/businesses/eah-qa-test-20261029`، مع ظهور اسم نشاط QA وتنبيه «لا تتعامل». لا يُعد هذا اختبارًا تفاعليًا لكروت الموبايل أو لوحة الأدمن/البايع.
 - GitHub Actions على commit نفسه ما زالت تتوقف قبل أي خطوة (`runner_id=0`, `steps=[]`). لا توجد نتائج TypeScript/Vitest/Playwright/RLS من GitHub؛ يلزم حل Runner من إعدادات الحساب أو Runner مملوك.
+
+
+## 2026-10-29 — مراجعة شاملة ثانية: اتساق قنوات التواصل
+
+- راجعت اختلاف حالة واتساب بين الكروت والصفحة العامة والاقتراحات ومساعد المنصة وإعدادات الأدمن والبايع.
+- أضيف `web/lib/data/contact-availability.ts` كمصدر خادمي مجمّع لاستخراج معرّفات الأنشطة التي لديها رقم واتساب صالح في فرع نشط أو وسيلة عامة معلنة؛ لا يُرجع أرقام الهاتف إلى الحمولات العامة.
+- أضيف `web/lib/data/contact-availability-utils.ts` للتطبيع والتحقق المشترك، مع اختبارات `web/lib/data/contact-availability.test.ts` لرقم مصري، وصيغة دولية، وغياب الرقم، والمدخلات غير الصالحة، وعلم التفعيل.
+- تم تطبيق القاعدة على `web/lib/data/businesses.ts` و`web/lib/data/business-detail.ts` و`web/lib/data/suggest.ts` و`web/lib/ai/tools.ts` وعلى معالجات إعدادات الأدمن والبايع ومعالج إنشاء نشاط الأدمن. `/api/track-contact` يتحقق من المصادقة وتحديد المعدل ويشترط `is_public=true` عند الرجوع لوسيلة عامة، كما يعيد رقم واتساب بصيغة موحدة.
+- فحصت الإنتاج بعد النشر: `/explore` و`/businesses/tapooosh` وصفحة نشاط QA كلها HTTP 200؛ العناوين صحيحة ولا توجد أرقام هاتف/واتساب مكشوفة في HTML العام. شارة واتساب ظاهرة لطبوش لأن فرعًا نشطًا يحتوي رقمًا صالحًا، ومخفية عن نشاط QA لأنه بلا جهة تواصل.
+- Vercel deployment `dpl_CX1wnQgLgf5iBPMtucVBun6t433W` وصل `READY` على commit `b16cea5` بعد نجاح TypeScript والبناء وتوليد 54 صفحة.
+- اختبارات وحدة واتساب لم تُشغّل؛ GitHub Actions لا تزال تفشل قبل تخصيص Runner (`runner_id=0`, `steps=[]`). لا يوجد إثبات لـ E2E أو pgTAP أو تفاعل الموبايل.
+- لم تتغير بيانات نشاط طبوش ولا سياسات Supabase في هذه الدفعة. نشاط QA المؤقت يحتاج إلغاء نشر/حذف قبل 5 نوفمبر 2026.
