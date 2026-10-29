@@ -24,6 +24,8 @@ type Props = {
     hideFavorites: boolean
     hideFollowing: boolean
     role: 'customer' | 'merchant' | 'super_admin'
+    isVerified: boolean
+    isPaidMember: boolean
     phoneVerified: boolean
   }
 }
@@ -149,7 +151,8 @@ export default function EditProfileForm({ initial }: Props) {
               displayName={displayName}
               avatarUrl={avatarUrl}
               role={initial.role}
-              phoneVerified={initial.phoneVerified}
+              isVerified={initial.isVerified}
+              isPaidMember={initial.isPaidMember}
               size="lg"
             />
             <span className={styles.avatarOverlay}>{uploading ? '...' : 'تغيير'}</span>
