@@ -6,8 +6,8 @@ SELECT is(
   (SELECT count(*)::int FROM pg_policies
    WHERE schemaname = 'public'
      AND position('registered_account_only_' in policyname) = 1),
-  53,
-  'all 53 mutation-only registered-account policies are installed'
+  60,
+  'all 60 mutation-only registered-account policies are installed'
 );
 
 SELECT is(
@@ -15,7 +15,7 @@ SELECT is(
    WHERE schemaname = 'public'
      AND position('registered_account_only_' in policyname) = 1
      AND permissive = 'RESTRICTIVE'),
-  53,
+  60,
   'every registered-account guard is RESTRICTIVE'
 );
 
@@ -39,8 +39,8 @@ SELECT is(
   (SELECT count(DISTINCT tablename)::int FROM pg_policies
    WHERE schemaname = 'public'
      AND position('registered_account_only_' in policyname) = 1),
-  25,
-  'mutation guards cover all 25 intended interaction and account tables'
+  28,
+  'mutation guards cover all 28 intended interaction and account tables'
 );
 
 SELECT ok(
