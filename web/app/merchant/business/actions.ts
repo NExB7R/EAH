@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { logAudit } from '@/lib/logging/audit'
+import { hasUsableWhatsAppDestination } from '@/lib/data/contact-availability-utils'
 
 type Result = { ok: true } | { ok: false; error: string }
 
@@ -109,6 +110,22 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
   }
 
   const d = parsed.data
+  let hasActiveBranchWhatsApp = false
+  if (d.accepts_whatsapp_orders && !hasUsableWhatsAppDestination(d.whatsapp)) {
+    const { data: activeBranches, error: branchLookupError } = await admin
+      .from('business_branches')
+      .select('whatsapp')
+      .eq('business_id', ctx.biz.id)
+      .eq('is_active', true)
+
+    if (branchLookupError) {
+      return { ok: false, error: 'تعذر التحقق من أرقام واتساب للفروع — لم يتم حفظ التعديلات' }
+    }
+    hasActiveBranchWhatsApp = (activeBranches ?? []).some((branch) =>
+      hasUsableWhatsAppDestination(branch.whatsapp),
+    )
+  }
+
   const patch = {
     name: d.name,
     business_type: d.business_type,
@@ -117,7 +134,9 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
     hook: d.hook || null,
     address_text: d.address_text || null,
     is_open: d.is_open,
-    accepts_whatsapp_orders: d.accepts_whatsapp_orders && !!d.whatsapp,
+    accepts_whatsapp_orders:
+      d.accepts_whatsapp_orders &&
+      (hasUsableWhatsAppDestination(d.whatsapp) || hasActiveBranchWhatsApp),
   }
 
   // businesses currently has an owner SELECT policy but no owner UPDATE policy.
