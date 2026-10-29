@@ -318,10 +318,11 @@ async function toolGetOffers(args: { limit?: number }) {
     .select(
       `
       id, title, price,
-      business:businesses(slug, name, area)
+      business:businesses!inner(slug, name, area)
     `,
     )
     .eq('is_published', true)
+    .not('business.slug', 'like', 'eah-qa-test-%')
     .or(`ends_at.is.null,ends_at.gt.${now}`)
     .order('created_at', { ascending: false })
     .limit(limit)
