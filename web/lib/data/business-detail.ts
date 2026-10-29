@@ -3,8 +3,8 @@ import { createClient } from '@/lib/supabase/server'
 import { createPublicClient } from '@/lib/supabase/public'
 import { createServiceClient } from '@/lib/supabase/service'
 import { isBusinessOpen, isOpenNow, type Business, type WorkingHours } from './businesses'
-import { canAcceptInAppOrders } from './order-availability'
 import { getWhatsAppDestinationBusinessIds } from './contact-availability'
+import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
 import {
   isWhatsAppChannelAvailable,
   normalizePhoneDestination,
@@ -21,10 +21,18 @@ async function normalizeBusinessRows(
 ): Promise<Business[]> {
   if (!data || data.length === 0) return []
   const rows = data.map((row) => ({ ...(row as Record<string, unknown>) }))
-  const configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(
-    supabase,
-    rows.map((row) => String(row.id ?? '')),
-  )
+  const ids = rows.map((row) => String(row.id ?? ''))
+  const [configuredWhatsAppIds, configuredInAppOrderIds] = await Promise.all([
+    getWhatsAppDestinationBusinessIds(supabase, ids),
+    getInAppOrderAvailableBusinessIds(
+      supabase,
+      rows.map((row) => ({
+        id: String(row.id ?? ''),
+        accepts_orders: row.accepts_orders,
+        owner_profile_id: row.owner_profile_id,
+      })),
+    ),
+  ])
   return rows.map((raw) => {
     const locRaw = raw.business_locations
     const locArr = Array.isArray(locRaw)
@@ -35,7 +43,7 @@ async function normalizeBusinessRows(
       primaryLoc && Number.isFinite(primaryLoc.latitude) && Number.isFinite(primaryLoc.longitude)
         ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
         : null
-    const acceptsOrders = canAcceptInAppOrders(raw.accepts_orders, raw.owner_profile_id)
+    const acceptsOrders = configuredInAppOrderIds.has(String(raw.id ?? ''))
     const acceptsWhatsApp = isWhatsAppChannelAvailable(
       raw.accepts_whatsapp_orders,
       raw.id,
@@ -214,8 +222,15 @@ export const getBusinessDetail = unstable_cache(
       primaryLoc && Number.isFinite(primaryLoc.latitude) && Number.isFinite(primaryLoc.longitude)
         ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
         : null
-    const acceptsOrders = canAcceptInAppOrders(rawBiz.accepts_orders, rawBiz.owner_profile_id)
-    const configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(supabase, [String(rawBiz.id)])
+    const [configuredWhatsAppIds, configuredInAppOrderIds] = await Promise.all([
+      getWhatsAppDestinationBusinessIds(supabase, [String(rawBiz.id)]),
+      getInAppOrderAvailableBusinessIds(supabase, [{
+        id: String(rawBiz.id),
+        accepts_orders: rawBiz.accepts_orders,
+        owner_profile_id: rawBiz.owner_profile_id,
+      }]),
+    ])
+    const acceptsOrders = configuredInAppOrderIds.has(String(rawBiz.id))
     const acceptsWhatsApp = isWhatsAppChannelAvailable(
       rawBiz.accepts_whatsapp_orders,
       rawBiz.id,

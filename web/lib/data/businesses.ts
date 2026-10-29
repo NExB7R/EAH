@@ -6,6 +6,7 @@ import { getBusinessReputationScore } from '@/lib/reputation'
 import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
 import { canAcceptInAppOrders } from './order-availability'
 import { getWhatsAppDestinationBusinessIds } from './contact-availability'
+import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
 
 // ═══════════════════════════════════════════════════════════
@@ -148,14 +149,23 @@ async function normalizeBusinesses(
   if (!data || data.length === 0) return []
 
   const rows = data.map((row) => row as Record<string, unknown>)
-  const configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(
-    supabase,
-    rows.map((row) => String(row.id ?? '')),
-  )
+  const ids = rows.map((row) => String(row.id ?? ''))
+  const [configuredWhatsAppIds, configuredInAppOrderIds] = await Promise.all([
+    getWhatsAppDestinationBusinessIds(supabase, ids),
+    getInAppOrderAvailableBusinessIds(
+      supabase,
+      rows.map((row) => ({
+        id: String(row.id ?? ''),
+        accepts_orders: row.accepts_orders,
+        owner_profile_id: row.owner_profile_id,
+      })),
+    ),
+  ])
 
   return rows.map((row) =>
     normalizeBusiness({
       ...row,
+      accepts_orders: configuredInAppOrderIds.has(String(row.id ?? '')),
       accepts_whatsapp_orders: isWhatsAppChannelAvailable(
         row.accepts_whatsapp_orders,
         row.id,
