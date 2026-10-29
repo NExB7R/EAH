@@ -5,6 +5,10 @@ import { sortByTrend } from '@/lib/ranking'
 import { getBusinessReputationScore } from '@/lib/reputation'
 import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
 import { canAcceptInAppOrders } from './order-availability'
+import {
+  getWhatsAppDestinationBusinessIds,
+  isWhatsAppChannelAvailable,
+} from './contact-availability'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Data Fetching Layer
@@ -139,9 +143,28 @@ function normalizeBusiness(raw: Record<string, unknown>): Business {
   }
 }
 
-function normalizeBusinesses(data: unknown[] | null): Business[] {
-  if (!data) return []
-  return data.map((r) => normalizeBusiness(r as Record<string, unknown>))
+async function normalizeBusinesses(
+  data: unknown[] | null,
+  supabase: ReturnType<typeof createServiceClient>,
+): Promise<Business[]> {
+  if (!data || data.length === 0) return []
+
+  const rows = data.map((row) => row as Record<string, unknown>)
+  const configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(
+    supabase,
+    rows.map((row) => String(row.id ?? '')),
+  )
+
+  return rows.map((row) =>
+    normalizeBusiness({
+      ...row,
+      accepts_whatsapp_orders: isWhatsAppChannelAvailable(
+        row.accepts_whatsapp_orders,
+        row.id,
+        configuredWhatsAppIds,
+      ),
+    }),
+  )
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -165,12 +188,12 @@ export const getPublishedBusinesses = unstable_cache(
       console.error('[data] getPublishedBusinesses error:', error.message)
       return []
     }
-    const normalized = normalizeBusinesses(data)
+    const normalized = await normalizeBusinesses(data, supabase)
     return normalized.sort(
       (a, b) => getBusinessReputationScore(b) - getBusinessReputationScore(a),
     )
   },
-  ['businesses-published-v2'],
+  ['businesses-published-v3'],
   { revalidate: 300, tags: ['businesses'] },
 )
 
@@ -198,9 +221,9 @@ export const getFeaturedBusinesses = unstable_cache(
       console.error('[data] getFeaturedBusinesses error:', error.message)
       return []
     }
-    return normalizeBusinesses(data)
+    return await normalizeBusinesses(data, supabase)
   },
-  ['businesses-featured-v2'],
+  ['businesses-featured-v3'],
   { revalidate: 300, tags: ['businesses', 'featured'] },
 )
 
@@ -224,9 +247,9 @@ export const getNewBusinesses = unstable_cache(
       console.error('[data] getNewBusinesses error:', error.message)
       return []
     }
-    return normalizeBusinesses(data)
+    return await normalizeBusinesses(data, supabase)
   },
-  ['businesses-new-v2'],
+  ['businesses-new-v3'],
   { revalidate: 300, tags: ['businesses', 'new'] },
 )
 
@@ -252,9 +275,9 @@ export const getBusinessesByType = unstable_cache(
       console.error('[data] getBusinessesByType error:', error.message)
       return []
     }
-    return normalizeBusinesses(data)
+    return await normalizeBusinesses(data, supabase)
   },
-  ['businesses-by-type-v2'],
+  ['businesses-by-type-v3'],
   { revalidate: 300, tags: ['businesses'] },
 )
 
@@ -288,9 +311,9 @@ export const getTrendingBusinesses = unstable_cache(
       console.error('[data] getTrendingBusinesses error:', error.message)
       return []
     }
-    return sortByTrend(normalizeBusinesses(data)).slice(0, limit)
+    return sortByTrend(await normalizeBusinesses(data, supabase)).slice(0, limit)
   },
-  ['businesses-trending-v2'],
+  ['businesses-trending-v3'],
   { revalidate: 300, tags: ['businesses', 'trending'] },
 )
 
@@ -364,8 +387,8 @@ export const getNearbyBusinesses = unstable_cache(
       console.error('[data] getNearbyBusinesses error:', error.message)
       return []
     }
-    return normalizeBusinesses(data)
+    return await normalizeBusinesses(data, supabase)
   },
-  ['businesses-nearby-v2'],
+  ['businesses-nearby-v3'],
   { revalidate: 300, tags: ['businesses'] },
 )

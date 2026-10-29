@@ -4,15 +4,26 @@ import { createPublicClient } from '@/lib/supabase/public'
 import { createServiceClient } from '@/lib/supabase/service'
 import { isBusinessOpen, isOpenNow, type Business, type WorkingHours } from './businesses'
 import { canAcceptInAppOrders } from './order-availability'
+import {
+  getWhatsAppDestinationBusinessIds,
+  isWhatsAppChannelAvailable,
+} from './contact-availability'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Detail (Full Page Data)
 // ═══════════════════════════════════════════════════════════
 
-function normalizeBusinessRows(data: unknown[] | null): Business[] {
-  if (!data) return []
-  return data.map((row) => {
-    const raw = { ...(row as Record<string, unknown>) }
+async function normalizeBusinessRows(
+  data: unknown[] | null,
+  supabase: ReturnType<typeof createServiceClient>,
+): Promise<Business[]> {
+  if (!data || data.length === 0) return []
+  const rows = data.map((row) => ({ ...(row as Record<string, unknown>) }))
+  const configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(
+    supabase,
+    rows.map((row) => String(row.id ?? '')),
+  )
+  return rows.map((raw) => {
     const locRaw = raw.business_locations
     const locArr = Array.isArray(locRaw)
       ? (locRaw as { latitude: number; longitude: number; is_primary: boolean }[])
@@ -23,6 +34,11 @@ function normalizeBusinessRows(data: unknown[] | null): Business[] {
         ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
         : null
     const acceptsOrders = canAcceptInAppOrders(raw.accepts_orders, raw.owner_profile_id)
+    const acceptsWhatsApp = isWhatsAppChannelAvailable(
+      raw.accepts_whatsapp_orders,
+      raw.id,
+      configuredWhatsAppIds,
+    )
     const isOpen = isBusinessOpen({
       working_hours: (raw.working_hours as WorkingHours | null) ?? null,
       open_now_override:
@@ -37,6 +53,7 @@ function normalizeBusinessRows(data: unknown[] | null): Business[] {
       location,
       is_open: isOpen,
       accepts_orders: acceptsOrders,
+      accepts_whatsapp_orders: acceptsWhatsApp,
       orders_enabled: acceptsOrders,
     }
   })
@@ -187,6 +204,12 @@ export const getBusinessDetail = unstable_cache(
         ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
         : null
     const acceptsOrders = canAcceptInAppOrders(rawBiz.accepts_orders, rawBiz.owner_profile_id)
+    const configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(supabase, [String(rawBiz.id)])
+    const acceptsWhatsApp = isWhatsAppChannelAvailable(
+      rawBiz.accepts_whatsapp_orders,
+      rawBiz.id,
+      configuredWhatsAppIds,
+    )
     delete rawBiz.business_locations
     // Owner IDs are private linkage data; return only the derived availability flag.
     delete rawBiz.owner_profile_id
@@ -200,6 +223,7 @@ export const getBusinessDetail = unstable_cache(
         is_open: typeof rawBiz.is_open === 'boolean' ? rawBiz.is_open : null,
       }),
       accepts_orders: acceptsOrders,
+      accepts_whatsapp_orders: acceptsWhatsApp,
       orders_enabled: acceptsOrders,
     }
 
@@ -262,7 +286,7 @@ export const getBusinessDetail = unstable_cache(
       openNowOverride,
     }
   },
-  ['business-detail-v2'],
+  ['business-detail-v3'],
   { revalidate: 120, tags: ['businesses'] },
 )
 
@@ -384,9 +408,9 @@ export const getSimilarBusinesses = unstable_cache(
       .order('successful_orders', { ascending: false })
       .limit(limit)
 
-    return normalizeBusinessRows(data)
+    return await normalizeBusinessRows(data, supabase)
   },
-  ['business-similar-v2'],
+  ['business-similar-v3'],
   { revalidate: 300, tags: ['businesses'] },
 )
 
