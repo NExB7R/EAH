@@ -83,6 +83,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
       .eq('is_trial', false)
       .eq('business.owner_profile_id', user.id)
       .limit(20),
+  ])
 
   const isWithinActiveDates = (startsAt: string | null, endsAt: string | null) => {
     const nowMs = now.getTime()
