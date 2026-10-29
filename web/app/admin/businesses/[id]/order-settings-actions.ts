@@ -33,6 +33,9 @@ export async function enableOrders(
     .eq('id', businessId)
     .maybeSingle()
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
+  if (!biz.owner_profile_id) {
+    return { ok: false, error: 'اربط بايعًا بالنشاط أولًا قبل تفعيل استلام الطلبات' }
+  }
 
   const { error: updErr } = await ctx.supabase.from('merchant_order_settings').upsert(
     {

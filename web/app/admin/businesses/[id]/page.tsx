@@ -56,6 +56,7 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
 
       <OrderSettingsPanel
         businessId={biz.id}
+        ownerProfileId={biz.owner_profile_id || null}
         settings={
           orderSettings
             ? {
