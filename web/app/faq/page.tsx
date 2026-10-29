@@ -5,7 +5,7 @@ import { UserIcon, StoreIcon, ShieldCheckIcon, GiftIcon, WhatsAppIcon } from '@/
 import styles from './faq.module.css'
 
 export const metadata: Metadata = {
-  title: 'الأسئلة الشائعة · EAH',
+  'الأسئلة الشائعة',
   description: 'أسئلة متكررة عن EAH — للعملاء وأصحاب الأنشطة',
 }
 

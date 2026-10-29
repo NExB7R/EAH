@@ -21,7 +21,7 @@ import { isFeatureEnabled } from '@/lib/features'
 import styles from './help.module.css'
 
 export const metadata: Metadata = {
-  title: 'المساعدة · EAH',
+  'المساعدة',
   description: 'دليل استخدام EAH — للعملاء وأصحاب الأنشطة',
 }
 
