@@ -5,7 +5,7 @@ import { ShieldCheckIcon, StoreIcon, StarIcon, CheckCircleIcon, AlertIcon, UserI
 import styles from './trust.module.css'
 
 export const metadata: Metadata = {
-  title: 'السمعة والتوثيق · EAH',
+  'السمعة والتوثيق',
   description: 'كيف نعرض توثيق الأنشطة وتقييماتها وسجل التعاملات بعدل وشفافية على EAH.',
 }
 
