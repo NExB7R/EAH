@@ -21,7 +21,7 @@ export async function requireAdmin(): Promise<AdminContext> {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return { ok: false, error: 'غير مصرح' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'غير مصرح' }
 
   try {
     const { data: row, error } = await supabase

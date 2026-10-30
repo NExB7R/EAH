@@ -10,7 +10,7 @@ export async function generateBusinessQr(slug: string): Promise<QrResult> {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'غير مصرح' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'غير مصرح' }
 
   // تأكد من ملكية النشاط
   const { data: biz } = await supabase
