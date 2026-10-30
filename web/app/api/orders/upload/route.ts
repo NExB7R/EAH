@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ ok: false, error: 'لازم تسجل دخول' }, { status: 401 })
+  if (!user || user.is_anonymous) return NextResponse.json({ ok: false, error: 'لازم تسجل دخول' }, { status: 401 })
 
   const rl = await checkRateLimit(strictLimiter, `order-upload:${user.id}`, {
     failClosed: true,
