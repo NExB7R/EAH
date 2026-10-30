@@ -116,6 +116,22 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
 // ─── Contacts ───
 export async function getMyContacts(businessId: string): Promise<MerchantContacts> {
   const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user || user.is_anonymous) return { phone: null, whatsapp: null }
+
+  // Contact methods are private: prove this registered account owns
+  // the requested activity before reading phone/WhatsApp values.
+  const { data: ownedBusiness, error: ownershipError } = await supabase
+    .from('businesses')
+    .select('id')
+    .eq('id', businessId)
+    .eq('owner_profile_id', user.id)
+    .maybeSingle()
+
+  if (ownershipError || !ownedBusiness) return { phone: null, whatsapp: null }
+
   const { data } = await supabase
     .from('business_contact_methods')
     .select('method_type, value')
@@ -263,7 +279,7 @@ type MerchantOrderRow = Omit<MerchantOrder, 'buyerAccountLinked' | 'buyerPhoneVe
 export async function getMerchantOrders(businessId: string, limit = 50): Promise<MerchantOrder[]> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return []
+  if (!user || user.is_anonymous) return []
 
   // Verify ownership before any privileged lookup of buyer verification/history.
   const { data: ownedBusiness } = await supabase
@@ -388,9 +404,9 @@ export async function getMyBranches(businessId: string): Promise<MerchantBranch[
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return []
+  if (!user || user.is_anonymous) return []
 
-  // Prove ownership with the signed-in session before using service-role access
+  // Prove ownership with the registered signed-in session before using service-role access
   // to read private phone/WhatsApp fields that must not be publicly selectable.
   const { data: ownedBusiness, error: ownershipError } = await supabase
     .from('businesses')
