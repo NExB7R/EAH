@@ -197,7 +197,7 @@ async function main() {
   writeFileSync(credentialsPath, JSON.stringify(credentials, null, 2), { encoding: 'utf8', mode: 0o600 })
   chmodSync(credentialsPath, 0o600)
   console.log(`QA buyer and seller accounts are ready. Credentials were written locally to: ${credentialsPath}`)
-  console.log('The seller is linked only to the clearly labeled QA activity; online orders remain disabled.')
+  console.log('The seller is linked only to the clearly labeled QA activity; online ordering and fictional WhatsApp choices are enabled only for that QA activity.')
 }
 
 main().catch((error) => {
