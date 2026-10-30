@@ -158,6 +158,33 @@
   transition: transform 240ms var(--ease-out);
 }
 
+
+.disabledCard {
+  cursor: default;
+  opacity: 0.66;
+}
+
+.disabledCard:hover {
+  transform: none;
+  background: rgba(20, 14, 34, 0.55);
+  box-shadow: none;
+}
+
+.disabledCard:hover::before {
+  opacity: 0.06;
+}
+
+.disabledCard:hover .cardIcon {
+  transform: none;
+}
+
+.disabledStatus {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 0.66rem;
+  font-weight: 750;
+}
+
 .card:hover .cardIcon {
   transform: scale(1.08);
 }
