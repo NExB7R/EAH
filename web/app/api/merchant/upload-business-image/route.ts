@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return jsonError('Unauthorized', 401)
+  if (!user || user.is_anonymous) return jsonError('Unauthorized', 401)
 
   const ip = await getClientIp()
   const rateLimit = await checkRateLimit(strictLimiter, `merchant-image:${user.id}:${ip}`, {
