@@ -30,7 +30,7 @@ export async function GET(req: Request) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
+  if (!user || user.is_anonymous) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
