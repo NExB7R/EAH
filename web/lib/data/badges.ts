@@ -24,7 +24,7 @@ export async function getBadgeCatalogWithStatus(userId: string): Promise<BadgeCa
   const {
     data: { user },
   } = await authClient.auth.getUser()
-  if (!user) return []
+  if (!user || user.is_anonymous) return []
 
   if (user.id !== userId) {
     const { data: roleRow } = await authClient
@@ -69,6 +69,11 @@ export async function getBadgeCatalogWithStatus(userId: string): Promise<BadgeCa
 // ─── Helper: ربط الشارات بأحداث معينة ───
 export async function runBadgeChecks(userId: string): Promise<void> {
   const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user || user.is_anonymous || user.id !== userId) return
+
   await Promise.all([
     supabase.rpc('check_streak_badges', { p_user_id: userId }),
     supabase.rpc('check_reviewer_badges', { p_user_id: userId }),
