@@ -72,8 +72,8 @@ export default function ApplyWizard({ areas }: Props) {
       const phones = phoneNumbers.map((value) => value.trim()).filter(Boolean)
       const whatsapps = whatsappNumbers.map((value) => value.trim()).filter(Boolean)
       const validEgyptianNumber = (value: string) => /^01[0125][0-9]{8}$/.test(value)
-      const phoneDigits = phones.map((value) => value.replace(/\\D/g, ''))
-      const whatsappDigits = whatsapps.map((value) => value.replace(/\\D/g, ''))
+      const phoneDigits = phones.map((value) => value.replace(/\D/g, ''))
+      const whatsappDigits = whatsapps.map((value) => value.replace(/\D/g, ''))
       return (
         phones.length > 0 &&
         phones.every(validEgyptianNumber) &&
@@ -270,7 +270,7 @@ export default function ApplyWizard({ areas }: Props) {
                     onChange={(e) =>
                       setPhoneNumbers((current) =>
                         current.map((value, itemIndex) =>
-                          itemIndex === index ? e.target.value.replace(/\\D/g, '').slice(0, 11) : value,
+                          itemIndex === index ? e.target.value.replace(/\D/g, '').slice(0, 11) : value,
                         ),
                       )
                     }
@@ -320,7 +320,7 @@ export default function ApplyWizard({ areas }: Props) {
                     onChange={(e) =>
                       setWhatsappNumbers((current) =>
                         current.map((value, itemIndex) =>
-                          itemIndex === index ? e.target.value.replace(/\\D/g, '').slice(0, 11) : value,
+                          itemIndex === index ? e.target.value.replace(/\D/g, '').slice(0, 11) : value,
                         ),
                       )
                     }
