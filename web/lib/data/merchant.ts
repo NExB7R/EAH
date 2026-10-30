@@ -48,7 +48,7 @@ export type MerchantSubscription = {
     price_egp: number
     features: string[]
   } | null
-  /** التجربة متاحة لو النشاط لسه مستخدمهاش + النشاط بتاع التاجر مش admin */
+  /** التجربة متاحة لو النشاط لسه مستخدمهاش + النشاط بتاع البايع مش admin */
   trial_available?: boolean
 }
 
@@ -62,7 +62,7 @@ export type MerchantStats = {
   reviewsCount: number
 }
 
-// ─── Business (ملك التاجر) ───
+// ─── Business (ملك البايع) ───
 export async function getMyBusiness(userId: string): Promise<MerchantBusiness | null> {
   const supabase = await createClient()
   const { data, error } = await supabase
