@@ -93,3 +93,32 @@ WHERE NOT EXISTS (
   WHERE business_id='e04c39f4-8cc4-4e13-8b28-0ccf8a13b303'
     AND title='⚠️ اختبار EAH — عرض توصيل اختباري 20261030 (لا تستخدم)'
 );
+
+
+-- Two explicitly labeled QA branches. All 555-01xx destinations are fictional test numbers.
+INSERT INTO public.business_branches (
+  id, business_id, name, area, address_text, phone, whatsapp,
+  is_primary, is_active, sort_order
+)
+VALUES
+  ('4a3a2c1d-0111-4111-8111-100000000001','6e44ebf5-3b5b-4d7f-91c5-2b80aa7aaf06','فرع اختبار EAH الرئيسي','اختبار الفلاتر','عنوان تجريبي — لا تتعامل','+12125550121','+12125550131',true,true,1),
+  ('4a3a2c1d-0111-4111-8111-100000000002','6e44ebf5-3b5b-4d7f-91c5-2b80aa7aaf06','فرع اختبار EAH الثاني','اختبار الفلاتر','عنوان تجريبي — لا تتعامل','+12125550122','+12125550132',false,true,2)
+ON CONFLICT (id) DO UPDATE SET
+  business_id=EXCLUDED.business_id,
+  name=EXCLUDED.name,
+  area=EXCLUDED.area,
+  address_text=EXCLUDED.address_text,
+  phone=EXCLUDED.phone,
+  whatsapp=EXCLUDED.whatsapp,
+  is_primary=EXCLUDED.is_primary,
+  is_active=EXCLUDED.is_active,
+  sort_order=EXCLUDED.sort_order,
+  updated_at=now();
+
+UPDATE public.businesses
+SET description='نشاط اختبار اصطناعي لواجهة اختيار عدة أرقام اتصال وواتساب، واختبار استقبال الطلبات داخل EAH. كل الأرقام خيالية؛ لا ترسل رسائل فعلية أو بيانات شخصية.',
+    hook='اختبار تعدد الأرقام والطلبات الأونلاين — لا تتعامل فعليًا',
+    important_notice='نشاط اختبار معلن: الأرقام خيالية ومخصصة للاختبار فقط. لا ترسل رسائل فعلية أو بيانات شخصية ولا تطلب خدمة حقيقية.',
+    notice_expires_at=now()+interval '6 days',
+    notice_severity='warning'
+WHERE slug='eah-qa-test-multi-contact-20261030';

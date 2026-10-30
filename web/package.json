@@ -21,7 +21,8 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "qa:seed:accounts": "node scripts/seed-qa-accounts.mjs"
   },
   "dependencies": {
     "@fontsource-variable/cairo": "^5.3.0",
