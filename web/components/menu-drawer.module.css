@@ -111,6 +111,17 @@
   transform: translateX(2px);
 }
 
+
+.item[aria-current='page'] {
+  color: var(--gold-light);
+  background: linear-gradient(115deg, rgba(168, 85, 247, 0.17), rgba(232, 199, 154, 0.055));
+}
+
+.item[aria-current='page'] .itemIcon {
+  color: var(--gold-light);
+  background: rgba(232, 199, 154, 0.11);
+}
+
 .item:active {
   transform: translateX(0);
 }
