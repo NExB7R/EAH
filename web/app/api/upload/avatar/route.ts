@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
+  if (!user || user.is_anonymous) {
     return NextResponse.json({ error: 'لازم تسجل دخول' }, { status: 401 })
   }
 
