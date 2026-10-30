@@ -5,7 +5,7 @@
 ## المبدأ
 
 - **المنصة = مصدر الحقيقة.** كل طلب، كل رد فعل، كل تقييم = صف في DB.
-- **التاجر يوافق/يرفض داخل المنصة** (مش على واتساب).
+- **البايع يوافق/يرفض داخل المنصة** (مش على واتساب).
 - **مفيش auto-accept** — كل طلب يحتاج قرار يدوي.
 - **كل رد مسجّل** في `order_reactions`.
 
@@ -64,7 +64,7 @@
 
 ## Triggers
 
-1. **`trg_prevent_toggle_orders_enabled`** — يمنع التاجر من تغيير `orders_enabled`
+1. **`trg_prevent_toggle_orders_enabled`** — يمنع البايع من تغيير `orders_enabled`
 2. **`trg_customer_stats_insert`** — يحدّث `customer_order_stats.total_orders`
 3. **`trg_customer_stats_delivered`** — يحدّث `successful_orders` + `is_vip`
 4. **`trg_update_business_rating`** — syncs `businesses.rating_avg/count` عند feedback

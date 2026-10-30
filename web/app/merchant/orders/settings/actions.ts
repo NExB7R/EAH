@@ -107,7 +107,7 @@ export async function setDeliveryEta(etaMinutes: number): Promise<Result> {
 
 // ═══════════════════════════════════════════════════════════════════
 // Merchant: toggle order receiving (master switch)
-//   - upsert (لو التاجر مش عنده صف، ننشئه)
+//   - upsert (لو البايع مش عنده صف، ننشئه)
 //   - لو enabled=true بدون merchant_order_settings → defaults (10/30)
 // ═══════════════════════════════════════════════════════════════════
 
