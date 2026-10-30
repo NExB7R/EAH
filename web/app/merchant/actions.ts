@@ -105,6 +105,38 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
   const lat = formData.get('latitude')
   const lng = formData.get('longitude')
 
+  const parseContactList = (key: string): { ok: true; values: string[] } | { ok: false } => {
+    const rawValue = formData.get(key)
+    if (rawValue === null) return { ok: true, values: [] }
+    try {
+      const parsedValue: unknown = JSON.parse(rawValue.toString())
+      if (!Array.isArray(parsedValue) || parsedValue.some((value) => typeof value !== 'string')) {
+        return { ok: false }
+      }
+      return {
+        ok: true,
+        values: parsedValue.map((value: string) => value.trim()).filter(Boolean),
+      }
+    } catch {
+      return { ok: false }
+    }
+  }
+
+  const submittedPhones = parseContactList('phone_numbers_json')
+  const submittedWhatsapps = parseContactList('whatsapp_numbers_json')
+  if (!submittedPhones.ok || !submittedWhatsapps.ok) {
+    return { ok: false, error: 'قائمة أرقام التواصل غير صحيحة — راجع الأرقام وحاول تاني' }
+  }
+
+  const legacyPhone = formData.get('phone')?.toString().trim() ?? ''
+  const legacyWhatsapp = formData.get('whatsapp')?.toString().trim() ?? ''
+  const phoneNumbers = submittedPhones.values.length
+    ? submittedPhones.values
+    : legacyPhone ? [legacyPhone] : []
+  const whatsappNumbers = submittedWhatsapps.values.length
+    ? submittedWhatsapps.values
+    : legacyWhatsapp ? [legacyWhatsapp] : []
+
   const raw = {
     name: formData.get('name')?.toString() ?? '',
     business_type: formData.get('business_type')?.toString() ?? '',
@@ -112,8 +144,10 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
     city: formData.get('city')?.toString() || 'شبين القناطر',
     description: formData.get('description')?.toString() ?? '',
     hook: formData.get('hook')?.toString() || null,
-    phone: formData.get('phone')?.toString() ?? '',
-    whatsapp: formData.get('whatsapp')?.toString() || null,
+    phone: phoneNumbers[0] ?? legacyPhone,
+    whatsapp: whatsappNumbers[0] ?? null,
+    phoneNumbers,
+    whatsappNumbers,
     facebook: formData.get('facebook')?.toString() || null,
     instagram: formData.get('instagram')?.toString() || null,
     address_text: formData.get('address_text')?.toString() ?? '',
@@ -186,9 +220,12 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
 
   // 5. أضف طرق التواصل
   const contacts: Array<{ method_type: string; value: string; is_primary: boolean }> = []
-  if (data.phone) contacts.push({ method_type: 'phone', value: data.phone, is_primary: true })
-  if (data.whatsapp)
-    contacts.push({ method_type: 'whatsapp', value: data.whatsapp, is_primary: false })
+  for (const [index, value] of (data.phoneNumbers ?? [data.phone]).entries()) {
+    contacts.push({ method_type: 'phone', value, is_primary: index === 0 })
+  }
+  for (const value of data.whatsappNumbers ?? (data.whatsapp ? [data.whatsapp] : [])) {
+    contacts.push({ method_type: 'whatsapp', value, is_primary: false })
+  }
   if (data.facebook)
     contacts.push({ method_type: 'facebook', value: data.facebook, is_primary: false })
   if (data.instagram)

@@ -53,8 +53,8 @@ export default function ApplyWizard({ areas }: Props) {
   const [description, setDescription] = useState('')
   const [hook, setHook] = useState('')
 
-  const [phone, setPhone] = useState('')
-  const [whatsapp, setWhatsapp] = useState('')
+  const [phoneNumbers, setPhoneNumbers] = useState<string[]>([''])
+  const [whatsappNumbers, setWhatsappNumbers] = useState<string[]>([])
   const [facebook, setFacebook] = useState('')
   const [instagram, setInstagram] = useState('')
 
@@ -69,7 +69,18 @@ export default function ApplyWizard({ areas }: Props) {
       return name.trim().length >= 2 && area.length > 0 && description.trim().length >= 10
     }
     if (step === 1) {
-      return /^01[0125][0-9]{8}$/.test(phone.trim())
+      const phones = phoneNumbers.map((value) => value.trim()).filter(Boolean)
+      const whatsapps = whatsappNumbers.map((value) => value.trim()).filter(Boolean)
+      const validEgyptianNumber = (value: string) => /^01[0125][0-9]{8}$/.test(value)
+      const phoneDigits = phones.map((value) => value.replace(/\\D/g, ''))
+      const whatsappDigits = whatsapps.map((value) => value.replace(/\\D/g, ''))
+      return (
+        phones.length > 0 &&
+        phones.every(validEgyptianNumber) &&
+        whatsapps.every(validEgyptianNumber) &&
+        new Set(phoneDigits).size === phoneDigits.length &&
+        new Set(whatsappDigits).size === whatsappDigits.length
+      )
     }
     if (step === 2) {
       return addressText.trim().length >= 5
@@ -110,8 +121,12 @@ export default function ApplyWizard({ areas }: Props) {
     fd.set('city', 'شبين القناطر')
     fd.set('description', description)
     fd.set('hook', hook)
-    fd.set('phone', phone)
-    fd.set('whatsapp', whatsapp)
+    const phones = phoneNumbers.map((value) => value.trim()).filter(Boolean)
+    const whatsapps = whatsappNumbers.map((value) => value.trim()).filter(Boolean)
+    fd.set('phone', phones[0] ?? '')
+    fd.set('whatsapp', whatsapps[0] ?? '')
+    fd.set('phone_numbers_json', JSON.stringify(phones))
+    fd.set('whatsapp_numbers_json', JSON.stringify(whatsapps))
     fd.set('facebook', facebook)
     fd.set('instagram', instagram)
     fd.set('address_text', addressText)
@@ -242,29 +257,101 @@ export default function ApplyWizard({ areas }: Props) {
             <h2 className={styles.stepTitle}>التواصل</h2>
             <p className={styles.stepDesc}>عشان العملاء يوصلك بسهولة</p>
 
-            <label className={styles.field}>
-              <span className={styles.label}>رقم الموبايل * (11 رقم)</span>
-              <input
-                className={styles.input}
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="01xxxxxxxxx"
-                inputMode="tel"
-                maxLength={11}
-              />
-            </label>
+            <div className={styles.contactGroup}>
+              <div className={styles.contactGroupHeader}>
+                <span className={styles.label}>أرقام الاتصال *</span>
+                <span className={styles.contactHint}>أول رقم هو الأساسي</span>
+              </div>
+              {phoneNumbers.map((number, index) => (
+                <div className={styles.contactRow} key={`phone-${index}`}>
+                  <input
+                    className={styles.input}
+                    value={number}
+                    onChange={(e) =>
+                      setPhoneNumbers((current) =>
+                        current.map((value, itemIndex) =>
+                          itemIndex === index ? e.target.value.replace(/\\D/g, '').slice(0, 11) : value,
+                        ),
+                      )
+                    }
+                    placeholder="01xxxxxxxxx"
+                    inputMode="tel"
+                    maxLength={11}
+                    aria-label={index === 0 ? 'رقم الاتصال الأساسي' : `رقم اتصال إضافي ${index}`}
+                    dir="ltr"
+                  />
+                  {index === 0 ? (
+                    <span className={styles.primaryNumber}>أساسي</span>
+                  ) : (
+                    <button
+                      type="button"
+                      className={styles.removeNumber}
+                      onClick={() =>
+                        setPhoneNumbers((current) => current.filter((_, itemIndex) => itemIndex !== index))
+                      }
+                      aria-label="حذف رقم الاتصال"
+                    >
+                      حذف
+                    </button>
+                  )}
+                </div>
+              ))}
+              {phoneNumbers.length < 8 && (
+                <button
+                  type="button"
+                  className={styles.addContactButton}
+                  onClick={() => setPhoneNumbers((current) => [...current, ''])}
+                >
+                  + إضافة رقم اتصال
+                </button>
+              )}
+            </div>
 
-            <label className={styles.field}>
-              <span className={styles.label}>رقم الواتساب (لو مختلف)</span>
-              <input
-                className={styles.input}
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
-                placeholder="01xxxxxxxxx"
-                inputMode="tel"
-                maxLength={11}
-              />
-            </label>
+            <div className={styles.contactGroup}>
+              <div className={styles.contactGroupHeader}>
+                <span className={styles.label}>أرقام واتساب</span>
+                <span className={styles.contactHint}>اختياري — لا يعني قبول طلبات واتساب</span>
+              </div>
+              {whatsappNumbers.map((number, index) => (
+                <div className={styles.contactRow} key={`whatsapp-${index}`}>
+                  <input
+                    className={styles.input}
+                    value={number}
+                    onChange={(e) =>
+                      setWhatsappNumbers((current) =>
+                        current.map((value, itemIndex) =>
+                          itemIndex === index ? e.target.value.replace(/\\D/g, '').slice(0, 11) : value,
+                        ),
+                      )
+                    }
+                    placeholder="01xxxxxxxxx"
+                    inputMode="tel"
+                    maxLength={11}
+                    aria-label={`رقم واتساب ${index + 1}`}
+                    dir="ltr"
+                  />
+                  <button
+                    type="button"
+                    className={styles.removeNumber}
+                    onClick={() =>
+                      setWhatsappNumbers((current) => current.filter((_, itemIndex) => itemIndex !== index))
+                    }
+                    aria-label="حذف رقم واتساب"
+                  >
+                    حذف
+                  </button>
+                </div>
+              ))}
+              {whatsappNumbers.length < 8 && (
+                <button
+                  type="button"
+                  className={styles.addContactButton}
+                  onClick={() => setWhatsappNumbers((current) => [...current, ''])}
+                >
+                  + إضافة رقم واتساب
+                </button>
+              )}
+            </div>
 
             <label className={styles.field}>
               <span className={styles.label}>صفحة فيسبوك (اختياري)</span>
@@ -344,8 +431,14 @@ export default function ApplyWizard({ areas }: Props) {
               </div>
               <div className={styles.summaryRow}>
                 <span className={styles.summaryLabel}>الموبايل</span>
-                <span className={styles.summaryValue}>{phone}</span>
+                <span className={styles.summaryValue}>{phoneNumbers.map((value) => value.trim()).filter(Boolean).join('، ')}</span>
               </div>
+              {whatsappNumbers.some((value) => value.trim()) && (
+                <div className={styles.summaryRow}>
+                  <span className={styles.summaryLabel}>واتساب</span>
+                  <span className={styles.summaryValue}>{whatsappNumbers.map((value) => value.trim()).filter(Boolean).join('، ')}</span>
+                </div>
+              )}
               <div className={styles.summaryRow}>
                 <span className={styles.summaryLabel}>العنوان</span>
                 <span className={styles.summaryValue}>{addressText}</span>

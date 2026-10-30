@@ -48,6 +48,8 @@ export const applySchema = z.object({
   // Step 2 — التواصل
   phone: phoneSchema,
   whatsapp: optionalPhoneSchema,
+  phoneNumbers: z.array(phoneSchema).min(1).max(8).optional(),
+  whatsappNumbers: z.array(phoneSchema).max(8).optional(),
   facebook: optionalUrlSchema,
   instagram: optionalUrlSchema,
 
@@ -60,4 +62,18 @@ export const applySchema = z.object({
   agree_terms: z.literal(true, {
     message: 'لازم توافق على الشروط',
   }),
+}).superRefine((data, ctx) => {
+  for (const [field, numbers] of [
+    ['phoneNumbers', data.phoneNumbers ?? []],
+    ['whatsappNumbers', data.whatsappNumbers ?? []],
+  ] as const) {
+    const normalized = numbers.map((value) => value.replace(/\\D/g, ''))
+    if (new Set(normalized).size !== normalized.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: [field],
+        message: 'فيه رقم مكرر داخل نفس نوع التواصل',
+      })
+    }
+  }
 })
