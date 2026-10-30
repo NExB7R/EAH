@@ -266,7 +266,7 @@ async function toolGetMyStats(): Promise<{
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'المستخدم مش مسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل بحساب مسجل الأول' }
 
   const [
     { data: pointsRow },
