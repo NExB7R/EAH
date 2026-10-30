@@ -8,6 +8,7 @@ import { getOrderMetricsForBusiness } from '@/lib/data/reports-orders'
 import { analyzeBusiness } from '@/lib/ai/business-advisor'
 import { saveInsight } from '@/lib/ai/storage'
 import { generateNarrative } from '@/lib/ai/narrative'
+import { getInsightDateRange } from '@/lib/ai/insight-period'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Insights Server Actions
@@ -21,7 +22,7 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل بحساب مسجل الأول' }
 
   // فحص إن المستخدم هو صاحب النشاط أو أدمن
   const { data: biz } = await supabase
@@ -54,7 +55,8 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
     return { ok: false, error: rateLimit.error }
   }
 
-  const safeDays = Math.max(1, Math.min(90, Math.trunc(Number.isFinite(days) ? days : 30)))
+  const period = getInsightDateRange(days, 90)
+  const safeDays = period.days
 
   // 1. اجمع البيانات
   const [metrics, comparison] = await Promise.all([
@@ -65,8 +67,8 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
   // 2. حلّل
   const orderMetrics = await getOrderMetricsForBusiness(
     businessId,
-    new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString(),
-    new Date().toISOString(),
+    period.start,
+    period.end,
   )
 
   const analysis = analyzeBusiness(metrics, comparison)
