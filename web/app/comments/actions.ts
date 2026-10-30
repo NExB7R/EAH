@@ -24,7 +24,36 @@ export async function createComment(
   const rl = await checkRateLimit(strictLimiter, `comment:${user.id}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
 
+  const { data: business, error: businessError } = await supabase
+    .from('businesses')
+    .select('id')
+    .eq('id', businessId)
+    .eq('slug', slug)
+    .eq('is_published', true)
+    .maybeSingle()
+
+  if (businessError) {
+    console.error('[comment] business availability lookup failed:', businessError.message)
+    return { ok: false, error: 'تعذر التحقق من إتاحة التعليق دلوقتي. حاول مرة أخرى.' }
+  }
+  if (!business) return { ok: false, error: 'التعليق متاح على الأنشطة المنشورة فقط' }
+
   const parentId = formData.get('parent_id')?.toString() || null
+  if (parentId) {
+    const { data: parent, error: parentError } = await supabase
+      .from('business_comments')
+      .select('id')
+      .eq('id', parentId)
+      .eq('business_id', businessId)
+      .eq('status', 'approved')
+      .maybeSingle()
+
+    if (parentError) {
+      console.error('[comment] parent validation failed:', parentError.message)
+      return { ok: false, error: 'تعذر التحقق من التعليق الأصلي. حاول مرة أخرى.' }
+    }
+    if (!parent) return { ok: false, error: 'الرد متاح على تعليق معتمد في نفس النشاط فقط' }
+  }
   const imageUrlsRaw = formData.get('image_urls')?.toString() ?? '[]'
   let imageUrls: string[] = []
   try {

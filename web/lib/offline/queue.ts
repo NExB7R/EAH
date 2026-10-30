@@ -67,7 +67,7 @@ export async function flushQueue(): Promise<{ flushed: number; failed: number; d
           const payload = (await res.json().catch(() => null)) as
             | { code?: string; discard?: boolean }
             | null
-          if (payload?.code === 'review_requires_delivered_order' && payload.discard === true) {
+          if (typeof payload?.code === 'string' && payload.discard === true) {
             if (action.id) await idbDelete(STORES.pending, action.id)
             discarded++
             failed++
