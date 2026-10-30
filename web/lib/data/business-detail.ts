@@ -348,7 +348,7 @@ export const getBusinessDetail = unstable_cache(
         method === 'whatsapp'
           ? normalizeWhatsAppDestination(value)
           : normalizePhoneDestination(value)
-      if (!normalized || (method === 'whatsapp' && !acceptsWhatsApp)) return
+      if (!normalized) return
       const destinationKey = method + ':' + normalized
       if (seenDestinations.has(destinationKey)) return
       seenDestinations.add(destinationKey)

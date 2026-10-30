@@ -125,7 +125,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
               {business.accepts_whatsapp_orders && (
                 <span className={styles.trust}>
                   <WhatsAppIcon size={13} />
-                  تواصل واتساب
+                  يستقبل طلبات واتساب
                 </span>
               )}
             </div>

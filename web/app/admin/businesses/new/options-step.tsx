@@ -88,14 +88,14 @@ export default function OptionsStep({ data, owners, update }: Props) {
                 {!hasWhatsAppContact
                   ? 'أضف رقم واتساب أولًا'
                   : data.accepts_whatsapp_orders
-                    ? 'يستقبل واتساب'
+                    ? 'يستقبل طلبات واتساب'
                     : 'لا يستقبل'}
               </span>
             </label>
           </div>
           {!hasWhatsAppContact && (
             <p className={styles.hint}>
-              علشان تفعّل التواصل عبر واتساب، أضف رقمًا من نوع «واتساب» في خطوة الموقع والتواصل.
+              علشان تفعّل استقبال طلبات واتساب، أضف رقمًا صالحًا من نوع «واتساب» في خطوة الموقع والتواصل. وجود رقم للتواصل وحده لا يفعّل استقبال الطلبات تلقائيًا.
             </p>
           )}
         </div>
