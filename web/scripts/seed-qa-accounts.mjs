@@ -166,7 +166,7 @@ async function linkSellerQaActivity(sellerId) {
     .update({
       owner_profile_id: sellerId,
       accepts_orders: true,
-      accepts_whatsapp_orders: true,
+      accepts_whatsapp_orders: false,
     })
     .eq('id', business.id)
     .select('id')
@@ -197,7 +197,7 @@ async function main() {
   writeFileSync(credentialsPath, JSON.stringify(credentials, null, 2), { encoding: 'utf8', mode: 0o600 })
   chmodSync(credentialsPath, 0o600)
   console.log(`QA buyer and seller accounts are ready. Credentials were written locally to: ${credentialsPath}`)
-  console.log('The seller is linked only to the clearly labeled QA activity; online ordering and fictional WhatsApp choices are enabled only for that QA activity.')
+  console.log('The seller is linked only to the clearly labeled QA activity; online ordering is enabled for the QA activity, while WhatsApp contacts remain available without enabling WhatsApp orders.')
 }
 
 main().catch((error) => {

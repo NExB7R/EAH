@@ -435,7 +435,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     (contact) =>
       contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
   )
-  const effectiveAcceptsWhatsapp = hasWhatsappContact ? (d.accepts_whatsapp_orders ?? true) : false
+  const effectiveAcceptsWhatsapp = hasWhatsappContact && d.accepts_whatsapp_orders === true
 
   const { data: created, error } = await privileged
     .from('businesses')
