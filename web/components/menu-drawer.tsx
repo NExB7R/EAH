@@ -493,48 +493,38 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             ))}
           </ul>
 
-          {contactLinks.enabled && (
-            <>
-              <div className={styles.divider} />
-              <ul className={styles.list} aria-label="قنوات التواصل الرسمية">
-                {contactLinks.facebookUrl && (
-                  <li>
-                    <a href={contactLinks.facebookUrl} target="_blank" rel="noopener noreferrer" className={styles.item}>
-                      <span className={styles.itemIcon}><FacebookIcon size={20} /></span>
-                      <span>فيسبوك</span>
-                      <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
+          <>
+            <div className={styles.divider} />
+            <ul className={styles.list} aria-label="قنوات التواصل الرسمية">
+              {[
+                { key: 'facebook', label: 'فيسبوك', href: contactLinks.facebookUrl, Icon: FacebookIcon, external: true },
+                { key: 'whatsapp-channel', label: 'قناة واتساب', href: contactLinks.whatsappChannelUrl, Icon: WhatsAppIcon, external: true },
+                { key: 'support-whatsapp', label: 'تواصل مع الدعم', href: contactLinks.supportWhatsappUrl, Icon: WhatsAppIcon, external: true },
+                { key: 'support-email', label: 'إيميل الدعم', href: contactLinks.email ? `mailto:${contactLinks.email}` : null, Icon: FileTextIcon, external: false },
+              ].map(({ key, label, href, Icon, external }) => (
+                <li key={key}>
+                  {href ? (
+                    <a
+                      href={href}
+                      target={external ? '_blank' : undefined}
+                      rel={external ? 'noopener noreferrer' : undefined}
+                      className={styles.item}
+                    >
+                      <span className={styles.itemIcon}><Icon size={20} /></span>
+                      <span>{label}</span>
+                      {external && <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>}
                     </a>
-                  </li>
-                )}
-                {contactLinks.whatsappChannelUrl && (
-                  <li>
-                    <a href={contactLinks.whatsappChannelUrl} target="_blank" rel="noopener noreferrer" className={styles.item}>
-                      <span className={styles.itemIcon}><WhatsAppIcon size={20} /></span>
-                      <span>قناة واتساب</span>
-                      <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
-                    </a>
-                  </li>
-                )}
-                {contactLinks.supportWhatsappUrl && (
-                  <li>
-                    <a href={contactLinks.supportWhatsappUrl} target="_blank" rel="noopener noreferrer" className={styles.item}>
-                      <span className={styles.itemIcon}><WhatsAppIcon size={20} /></span>
-                      <span>تواصل مع الدعم</span>
-                      <span className={styles.externalIcon}><ExternalLinkIcon size={14} /></span>
-                    </a>
-                  </li>
-                )}
-                {contactLinks.email && (
-                  <li>
-                    <a href={`mailto:${contactLinks.email}`} className={styles.item}>
-                      <span className={styles.itemIcon}><FileTextIcon size={20} /></span>
-                      <span>إيميل الدعم</span>
-                    </a>
-                  </li>
-                )}
-              </ul>
-            </>
-          )}
+                  ) : (
+                    <div className={`${styles.item} ${styles.itemDisabled}`} aria-disabled="true">
+                      <span className={styles.itemIcon}><Icon size={20} /></span>
+                      <span>{label}</span>
+                      <span className={styles.availabilityHint}>قريبًا</span>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </>
 
           {/* Login/Logout */}
           {isLoggedIn ? (
