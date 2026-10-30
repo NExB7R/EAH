@@ -70,6 +70,8 @@ export default function FloatingCapsule({ session, contactLinks }: Props) {
               className={`${styles.iconBtn} ${styles.iconPrimary}`}
               onClick={() => setDrawerOpen(true)}
               aria-label="القائمة"
+              aria-haspopup="dialog"
+              aria-expanded={drawerOpen}
             >
               <MenuIcon size={20} />
             </button>
