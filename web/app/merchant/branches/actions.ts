@@ -76,25 +76,56 @@ export async function createBranch(formData: FormData): Promise<Result> {
 
   const isPrimary = !count || count === 0
 
-  const { data, error } = await ctx.supabase
+  const branchRow = {
+    business_id: ctx.biz.id,
+    name: d.name,
+    area: d.area,
+    address_text: d.address_text || null,
+    phone: d.phone || null,
+    whatsapp: d.whatsapp || null,
+    latitude: d.latitude ?? null,
+    longitude: d.longitude ?? null,
+    is_primary: isPrimary,
+    is_active: true,
+    sort_order: count ?? 0,
+  }
+
+  let { data, error } = await ctx.supabase
     .from('business_branches')
-    .insert({
-      business_id: ctx.biz.id,
-      name: d.name,
-      area: d.area,
-      address_text: d.address_text || null,
-      phone: d.phone || null,
-      whatsapp: d.whatsapp || null,
-      latitude: d.latitude ?? null,
-      longitude: d.longitude ?? null,
-      is_primary: isPrimary,
-      is_active: true,
-      sort_order: count ?? 0,
-    })
+    .insert(branchRow)
     .select('id')
     .single()
 
-  if (error) return { ok: false, error: error.message }
+  // Two concurrent first-branch submissions can both observe a zero count.
+  // The database's partial unique index decides which one is primary; retry
+  // the losing request as a regular branch rather than failing the creation.
+  if (
+    error?.code === '23505' &&
+    error.message.includes('business_branches_one_primary_per_business') &&
+    isPrimary
+  ) {
+    const { data: lastBranch } = await ctx.supabase
+      .from('business_branches')
+      .select('sort_order')
+      .eq('business_id', ctx.biz.id)
+      .order('sort_order', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    const retry = await ctx.supabase
+      .from('business_branches')
+      .insert({ ...branchRow, is_primary: false, sort_order: (lastBranch?.sort_order ?? 0) + 1 })
+      .select('id')
+      .single()
+
+    data = retry.data
+    error = retry.error
+  }
+
+  if (error || !data) {
+    console.error('[merchant-branches] branch creation failed:', error?.message ?? 'No row returned')
+    return { ok: false, error: 'تعذر حفظ الفرع. حدّث الصفحة وحاول مرة أخرى.' }
+  }
 
   revalidatePath('/merchant/branches')
   revalidateTag('businesses', 'default')
