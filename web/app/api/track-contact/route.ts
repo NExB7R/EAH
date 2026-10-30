@@ -106,7 +106,7 @@ export async function POST(request: Request) {
 
   const { data: business, error: businessError } = await privileged
     .from('businesses')
-    .select('id, is_published, accepts_whatsapp_orders')
+    .select('id, is_published')
     .eq('id', parsed.data.businessId)
     .maybeSingle()
   if (businessError) {
@@ -116,13 +116,6 @@ export async function POST(request: Request) {
   if (!business?.is_published) {
     return NextResponse.json({ ok: false, error: 'النشاط مش متاح' }, { status: 404 })
   }
-  if (parsed.data.method === 'whatsapp' && !business.accepts_whatsapp_orders) {
-    return NextResponse.json(
-      { ok: false, error: 'النشاط مش بيستقبل واتساب حالياً' },
-      { status: 403 },
-    )
-  }
-
   const normalizeCandidate = (candidate: unknown): string | null =>
     parsed.data.method === 'whatsapp'
       ? normalizeWhatsAppDestination(candidate)
