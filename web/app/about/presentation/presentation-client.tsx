@@ -275,7 +275,7 @@ function SlideProblem() {
       <div className={styles.trioGrid}>
         <TrioCard num="01" title="مفيش دليل موحد" text="كل نشاط في حتة — مفيش مكان يجمعهم." />
         <TrioCard num="02" title="تقييمات مبعترة" text="مفيش طريقة موثوقة تعرف منها الكويس." />
-        <TrioCard num="03" title="التجار بيغرقوا" text="محتاجين يوصلوا للناس — بدون عمولات." />
+        <TrioCard num="03" title="البياعين محتاجين ظهور" text="محتاجين يوصلوا للمشترين — بدون عمولات." />
       </div>
     </div>
   )
