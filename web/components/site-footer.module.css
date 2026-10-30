@@ -136,6 +136,20 @@
   color: #25d366;
   border-color: rgba(37, 211, 102, 0.28);
 }
+
+.email {
+  color: #a5b4fc;
+  border-color: rgba(165, 180, 252, 0.28);
+}
+
+.email:hover {
+  border-color: rgba(165, 180, 252, 0.7);
+  box-shadow:
+    0 0 0 1px rgba(165, 180, 252, 0.25),
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(165, 180, 252, 0.16);
+}
+
 .whatsapp:hover {
   border-color: rgba(37, 211, 102, 0.7);
   box-shadow:
@@ -158,32 +172,6 @@
   transition: transform 240ms var(--ease-out);
 }
 
-
-.disabledCard {
-  cursor: default;
-  opacity: 0.66;
-}
-
-.disabledCard:hover {
-  transform: none;
-  background: rgba(20, 14, 34, 0.55);
-  box-shadow: none;
-}
-
-.disabledCard:hover::before {
-  opacity: 0.06;
-}
-
-.disabledCard:hover .cardIcon {
-  transform: none;
-}
-
-.disabledStatus {
-  flex-shrink: 0;
-  color: var(--text-muted);
-  font-size: 0.66rem;
-  font-weight: 750;
-}
 
 .card:hover .cardIcon {
   transform: scale(1.08);
@@ -226,6 +214,33 @@
   color: currentColor;
   transform: translateX(-4px);
 }
+
+.disabledCard {
+  cursor: default;
+  opacity: 0.66;
+}
+
+.disabledCard:hover {
+  transform: none;
+  background: rgba(20, 14, 34, 0.55);
+  box-shadow: none;
+}
+
+.disabledCard:hover::before {
+  opacity: 0.06;
+}
+
+.disabledCard:hover .cardIcon {
+  transform: none;
+}
+
+.disabledStatus {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 0.66rem;
+  font-weight: 750;
+}
+
 
 /* ─── Columns (centered + premium neon) ─── */
 .columns {
