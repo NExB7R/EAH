@@ -121,8 +121,31 @@ const LEGAL_ITEMS: MenuItem[] = [
   { href: '/cookies', label: 'ملفات الكوكيز', Icon: CookieIcon },
 ]
 
+
+const ALL_MENU_ITEMS: MenuItem[] = [
+  ...PUBLIC_ITEMS,
+  ...ACCOUNT_ITEMS,
+  ...SELLER_SECTION,
+  ...SELLER_ONBOARDING_ITEMS,
+  ...ADMIN_ITEMS,
+  ...BOTTOM_ITEMS,
+  ...LEGAL_ITEMS,
+]
+
+function getActiveMenuHref(pathname: string): string | null {
+  const candidates = [...new Set(ALL_MENU_ITEMS.map(({ href }) => href.split('?')[0] || href))]
+  const matching = candidates
+    .filter((path) =>
+      path === '/' ? pathname === '/' : pathname === path || pathname.startsWith(`${path}/`),
+    )
+    .sort((a, b) => b.length - a.length)
+
+  return matching[0] ?? null
+}
+
 export default function MenuDrawer({ open, onClose, session, contactLinks }: Props) {
   const pathname = usePathname()
+  const activeHref = getActiveMenuHref(pathname)
   const router = useRouter()
 
   const onCloseRef = useRef(onClose)
@@ -222,7 +245,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
           <ul className={styles.list}>
             {PUBLIC_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
-                <Link href={href} className={styles.item} onClick={onClose}>
+                <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
                   <span className={styles.itemIcon}>
                     <Icon size={20} />
                   </span>
@@ -243,7 +266,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <ul className={styles.list}>
                 {ACCOUNT_ITEMS.filter(({ href }) => !(isSeller && href === '/account/notifications')).map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item} onClick={onClose}>
+                    <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
                       <span className={styles.itemIcon}>
                         <Icon size={20} />
                       </span>
@@ -266,7 +289,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <ul className={styles.list}>
                 {SELLER_SECTION.map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item} onClick={onClose}>
+                    <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
                       <span className={styles.itemIcon}>
                         <Icon size={20} />
                       </span>
@@ -289,7 +312,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <ul className={styles.list}>
                 {SELLER_ONBOARDING_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item} onClick={onClose}>
+                    <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
                       <span className={styles.itemIcon}>
                         <Icon size={20} />
                       </span>
@@ -312,7 +335,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <ul className={styles.list}>
                 {SELLER_ONBOARDING_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item} onClick={onClose}>
+                    <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
                       <span className={styles.itemIcon}>
                         <Icon size={20} />
                       </span>
@@ -335,7 +358,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <ul className={styles.list}>
                 {ADMIN_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item} onClick={onClose}>
+                    <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
                       <span className={styles.itemIcon}>
                         <Icon size={20} />
                       </span>
@@ -352,7 +375,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
           <ul className={styles.list}>
             {BOTTOM_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
-                <Link href={href} className={styles.item} onClick={onClose}>
+                <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
                   <span className={styles.itemIcon}>
                     <Icon size={20} />
                   </span>
@@ -378,7 +401,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
           <ul className={styles.list}>
             {LEGAL_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
-                <Link href={href} className={styles.item} onClick={onClose}>
+                <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
                   <span className={styles.itemIcon}>
                     <Icon size={20} />
                   </span>
