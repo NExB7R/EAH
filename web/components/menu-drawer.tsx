@@ -245,7 +245,12 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
           <ul className={styles.list}>
             {PUBLIC_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
-                <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
+                <Link
+                  href={href}
+                  className={styles.item}
+                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  onClick={onClose}
+                >
                   <span className={styles.itemIcon}>
                     <Icon size={20} />
                   </span>
@@ -266,7 +271,12 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <ul className={styles.list}>
                 {ACCOUNT_ITEMS.filter(({ href }) => !(isSeller && href === '/account/notifications')).map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
+                    <Link
+                  href={href}
+                  className={styles.item}
+                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  onClick={onClose}
+                >
                       <span className={styles.itemIcon}>
                         <Icon size={20} />
                       </span>
@@ -289,7 +299,12 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <ul className={styles.list}>
                 {SELLER_SECTION.map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
+                    <Link
+                  href={href}
+                  className={styles.item}
+                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  onClick={onClose}
+                >
                       <span className={styles.itemIcon}>
                         <Icon size={20} />
                       </span>
@@ -312,7 +327,12 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <ul className={styles.list}>
                 {SELLER_ONBOARDING_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
+                    <Link
+                  href={href}
+                  className={styles.item}
+                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  onClick={onClose}
+                >
                       <span className={styles.itemIcon}>
                         <Icon size={20} />
                       </span>
@@ -335,7 +355,12 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <ul className={styles.list}>
                 {SELLER_ONBOARDING_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
+                    <Link
+                  href={href}
+                  className={styles.item}
+                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  onClick={onClose}
+                >
                       <span className={styles.itemIcon}>
                         <Icon size={20} />
                       </span>
@@ -358,7 +383,12 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <ul className={styles.list}>
                 {ADMIN_ITEMS.map(({ href, label, Icon }) => (
                   <li key={href}>
-                    <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
+                    <Link
+                  href={href}
+                  className={styles.item}
+                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  onClick={onClose}
+                >
                       <span className={styles.itemIcon}>
                         <Icon size={20} />
                       </span>
@@ -375,7 +405,12 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
           <ul className={styles.list}>
             {BOTTOM_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
-                <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
+                <Link
+                  href={href}
+                  className={styles.item}
+                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  onClick={onClose}
+                >
                   <span className={styles.itemIcon}>
                     <Icon size={20} />
                   </span>
@@ -401,7 +436,12 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
           <ul className={styles.list}>
             {LEGAL_ITEMS.map(({ href, label, Icon }) => (
               <li key={href}>
-                <Link href={href} className={styles.item} aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined} onClick={onClose}>
+                <Link
+                  href={href}
+                  className={styles.item}
+                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  onClick={onClose}
+                >
                   <span className={styles.itemIcon}>
                     <Icon size={20} />
                   </span>
