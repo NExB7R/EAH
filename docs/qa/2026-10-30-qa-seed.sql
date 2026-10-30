@@ -130,3 +130,14 @@ SET description='نشاط اختبار اصطناعي لواجهة اختيار 
     notice_expires_at=now()+interval '6 days',
     notice_severity='warning'
 WHERE slug='eah-qa-test-multi-contact-20261030';
+
+-- Keep test offer cards visual on both the homepage slider and the offers index.
+UPDATE public.offers o
+SET image_url = b.cover_image_url,
+    teaser_image_url = b.cover_image_url
+FROM public.businesses b
+WHERE b.id = o.business_id
+  AND b.slug LIKE 'eah-qa-test-%'
+  AND o.is_published = true
+  AND (o.title LIKE '%اختبار EAH%' OR o.title LIKE '%اختباري%');
+
