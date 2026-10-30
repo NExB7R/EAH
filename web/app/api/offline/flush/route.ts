@@ -193,6 +193,46 @@ export async function POST(req: NextRequest) {
 
     // ─── Comment ───
     if (type === 'comment') {
+      const { data: business, error: businessError } = await supabase
+        .from('businesses')
+        .select('id')
+        .eq('id', payload.businessId)
+        .eq('slug', payload.slug)
+        .eq('is_published', true)
+        .maybeSingle()
+
+      if (businessError) {
+        console.error('[offline/flush] comment business lookup failed:', businessError.message)
+        return NextResponse.json({ error: 'تعذر التحقق من النشاط' }, { status: 503 })
+      }
+      if (!business) {
+        return NextResponse.json(
+          { error: 'النشاط لم يعد متاحًا للتعليق', code: 'comment_business_unavailable', discard: true },
+          { status: 409 },
+        )
+      }
+
+      if (payload.parentId) {
+        const { data: parent, error: parentError } = await supabase
+          .from('business_comments')
+          .select('id')
+          .eq('id', payload.parentId)
+          .eq('business_id', payload.businessId)
+          .eq('status', 'approved')
+          .maybeSingle()
+
+        if (parentError) {
+          console.error('[offline/flush] comment parent lookup failed:', parentError.message)
+          return NextResponse.json({ error: 'تعذر التحقق من التعليق الأصلي' }, { status: 503 })
+        }
+        if (!parent) {
+          return NextResponse.json(
+            { error: 'التعليق الأصلي لم يعد متاحًا في نفس النشاط', code: 'comment_parent_unavailable', discard: true },
+            { status: 409 },
+          )
+        }
+      }
+
       const { error } = await supabase.from('business_comments').insert({
         business_id: payload.businessId,
         user_id: user.id,
