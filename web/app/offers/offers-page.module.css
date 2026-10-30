@@ -1,0 +1,94 @@
+/* EAH — Offers index */
+.page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: 88px;
+}
+
+.content {
+  width: min(100% - 40px, 1240px);
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+.empty {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 20px;
+  text-align: center;
+}
+
+.emptyIcon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  color: var(--purple-light);
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid var(--border-purple-soft);
+}
+
+.emptyTitle {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.emptyText {
+  max-width: 340px;
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+  line-height: 1.7;
+}
+
+.emptyLink {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  margin-top: 8px;
+  border-radius: var(--radius-full);
+  color: #fff;
+  background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .content {
+    width: calc(100% - 24px);
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emptyLink {
+    transition: none;
+  }
+}
