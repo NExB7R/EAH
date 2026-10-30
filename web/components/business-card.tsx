@@ -187,12 +187,12 @@ export default function BusinessCard({
             ].join(' ')}
             aria-label={
               business.accepts_orders
-                ? 'يستقبل طلبات أونلاين داخل EAH'
-                : 'لا يستقبل طلبات أونلاين داخل EAH'
+                ? 'يستقبل طلبات أونلاين'
+                : 'لا يستقبل طلبات أونلاين'
             }
           >
             {business.accepts_orders ? <StoreIcon size={13} /> : <AlertIcon size={13} />}
-            {business.accepts_orders ? 'طلبات أونلاين: متاحة' : 'طلبات أونلاين: غير متاحة'}
+            {business.accepts_orders ? 'يستقبل طلبات أونلاين' : 'لا يستقبل طلبات أونلاين'}
           </span>
 
         </div>
