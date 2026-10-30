@@ -95,55 +95,77 @@ export default async function SiteFooter() {
       </div>
 
       <div className={styles.container}>
-        {contacts.enabled ? (
-          <div className={styles.contacts} aria-label="قنوات التواصل الرسمية">
-            {contacts.whatsappChannelUrl && (
-              <a href={contacts.whatsappChannelUrl} target="_blank" rel="noopener noreferrer" className={`${styles.card} ${styles.channel}`}>
-                <span className={styles.cardIcon}><BroadcastIcon size={22} /></span>
+        <div className={styles.contacts} role="group" aria-label="قنوات التواصل الرسمية">
+          {[
+            {
+              key: 'whatsapp-channel',
+              href: contacts.whatsappChannelUrl,
+              title: 'قناة واتساب الرسمية',
+              description: contacts.whatsappChannelUrl ? 'تحديثات المنصة والإعلانات' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
+              Icon: BroadcastIcon,
+              tone: styles.channel,
+              external: true,
+            },
+            {
+              key: 'facebook',
+              href: contacts.facebookUrl,
+              title: 'صفحة EAH الرسمية',
+              description: contacts.facebookUrl ? 'الأخبار والمحتوى المنشور' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
+              Icon: FacebookIcon,
+              tone: styles.facebook,
+              external: true,
+            },
+            {
+              key: 'support-whatsapp',
+              href: contacts.supportWhatsappUrl,
+              title: 'تواصل مع الدعم',
+              description: contacts.supportWhatsappUrl ? 'قناة التواصل المعتمدة للمنصة' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
+              Icon: WhatsAppIcon,
+              tone: styles.whatsapp,
+              external: true,
+            },
+            {
+              key: 'support-email',
+              href: contacts.email ? `mailto:${contacts.email}` : null,
+              title: 'إيميل الدعم',
+              description: contacts.email ?? 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
+              Icon: PhoneIcon,
+              tone: styles.email,
+              external: false,
+            },
+          ].map(({ key, href, title, description, Icon, tone, external }) => {
+            const className = [styles.card, tone, !href && styles.disabledCard]
+              .filter(Boolean)
+              .join(' ')
+            const content = (
+              <>
+                <span className={styles.cardIcon}><Icon size={22} /></span>
                 <span className={styles.cardBody}>
-                  <strong className={styles.cardTitle}>قناة واتساب الرسمية</strong>
-                  <small className={styles.cardSub}>تحديثات المنصة والإعلانات</small>
+                  <strong className={styles.cardTitle}>{title}</strong>
+                  <small className={styles.cardSub}>{description}</small>
                 </span>
+              </>
+            )
+
+            return href ? (
+              <a
+                key={key}
+                href={href}
+                target={external ? '_blank' : undefined}
+                rel={external ? 'noopener noreferrer' : undefined}
+                className={className}
+              >
+                {content}
                 <ArrowLeftIcon size={14} className={styles.cardArrow} />
               </a>
-            )}
-            {contacts.facebookUrl && (
-              <a href={contacts.facebookUrl} target="_blank" rel="noopener noreferrer" className={`${styles.card} ${styles.facebook}`}>
-                <span className={styles.cardIcon}><FacebookIcon size={22} /></span>
-                <span className={styles.cardBody}>
-                  <strong className={styles.cardTitle}>صفحة EAH الرسمية</strong>
-                  <small className={styles.cardSub}>الأخبار والمحتوى المنشور</small>
-                </span>
-                <ArrowLeftIcon size={14} className={styles.cardArrow} />
-              </a>
-            )}
-            {contacts.supportWhatsappUrl && (
-              <a href={contacts.supportWhatsappUrl} target="_blank" rel="noopener noreferrer" className={`${styles.card} ${styles.whatsapp}`}>
-                <span className={styles.cardIcon}><WhatsAppIcon size={22} /></span>
-                <span className={styles.cardBody}>
-                  <strong className={styles.cardTitle}>تواصل مع الدعم</strong>
-                  <small className={styles.cardSub}>قناة التواصل المعتمدة للمنصة</small>
-                </span>
-                <ArrowLeftIcon size={14} className={styles.cardArrow} />
-              </a>
-            )}
-            {contacts.email && (
-              <a href={`mailto:${contacts.email}`} className={`${styles.card} ${styles.email}`}>
-                <span className={styles.cardIcon}><PhoneIcon size={22} /></span>
-                <span className={styles.cardBody}>
-                  <strong className={styles.cardTitle}>إيميل الدعم</strong>
-                  <small className={styles.cardSub}>{contacts.email}</small>
-                </span>
-                <ArrowLeftIcon size={14} className={styles.cardArrow} />
-              </a>
-            )}
-          </div>
-        ) : (
-          <div className={styles.contactNotice}>
-            <span>قنوات التواصل الرسمية هتظهر هنا بعد اعتماد بياناتها.</span>
-            <Link href="/help">مركز المساعدة</Link>
-          </div>
-        )}
+            ) : (
+              <div key={key} className={className} aria-disabled="true">
+                {content}
+                <span className={styles.disabledStatus}>قريبًا</span>
+              </div>
+            )
+          })}
+        </div>
 
         <div className={styles.sharePlatform}>
           <GlobalShareAction className={styles.shareAction} label="شارك منصة EAH ورمز QR" />
