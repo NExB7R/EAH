@@ -12,7 +12,7 @@ export async function savePreferences(prefs: Pref[]): Promise<Result> {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'غير مصرح' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'غير مصرح' }
 
   const { error } = await supabase
     .from('profiles')

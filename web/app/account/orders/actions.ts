@@ -33,7 +33,7 @@ export async function submitOrderFeedback(input: {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل دخول' }
 
   const parsed = schema.safeParse(input)
   if (!parsed.success) {
