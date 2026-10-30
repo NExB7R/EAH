@@ -138,6 +138,7 @@ jobs:
             docs/migrations/2026-10-30-registered-interaction-auth.sql \
             docs/migrations/2026-10-30-registered-interaction-auth-expansion.sql \
             docs/migrations/2026-10-30-comment-parent-integrity.sql \
+            docs/migrations/2026-10-30-business-branch-primary-unique.sql \
           do
             echo "::group::Applying $migration to the isolated test database"
             psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f "$migration"
@@ -145,7 +146,7 @@ jobs:
           done
 
       - name: Run RLS and admin policy regression tests
-        run: supabase test db supabase/tests/rls.test.sql supabase/tests/reputation-policy.test.sql supabase/tests/admin-policy-alignment.test.sql supabase/tests/legacy-ads-rls.test.sql supabase/tests/registered-interaction-auth.test.sql supabase/tests/comment-parent-integrity.test.sql --db-url "$SUPABASE_DB_URL"
+        run: supabase test db supabase/tests/rls.test.sql supabase/tests/reputation-policy.test.sql supabase/tests/admin-policy-alignment.test.sql supabase/tests/legacy-ads-rls.test.sql supabase/tests/registered-interaction-auth.test.sql supabase/tests/comment-parent-integrity.test.sql supabase/tests/business-branch-primary.test.sql --db-url "$SUPABASE_DB_URL"
 
       - name: RLS Audit (comprehensive)
         run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/tests/rls-audit.sql
