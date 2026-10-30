@@ -16,7 +16,7 @@ export async function setOfflineMode(offline: boolean, untilIso?: string): Promi
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل دخول' }
 
   const { data: biz } = await supabase
     .from('businesses')
@@ -68,7 +68,7 @@ export async function setDeliveryEta(etaMinutes: number): Promise<Result> {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل دخول' }
 
   const safeEta = Math.max(15, Math.min(240, Math.trunc(etaMinutes) || 0))
   if (safeEta < 15) return { ok: false, error: 'حدد مدة التسليم (15-240 دقيقة)' }
@@ -116,7 +116,7 @@ export async function setOrdersEnabled(enabled: boolean, etaMinutes?: number): P
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل دخول' }
 
   const { data: roleRow, error: roleError } = await supabase
     .from('user_roles')

@@ -21,7 +21,7 @@ export async function getRoleContext(): Promise<RoleContext> {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
+  if (!user || user.is_anonymous) {
     return { role: 'guest', userId: null, isAdmin: false, isMerchant: false, hasBusiness: false }
   }
 
