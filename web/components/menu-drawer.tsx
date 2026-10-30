@@ -148,6 +148,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
   const activeHref = getActiveMenuHref(pathname)
   const router = useRouter()
 
+  const drawerRef = useRef<HTMLElement>(null)
   const onCloseRef = useRef(onClose)
 
   useEffect(() => {
@@ -160,12 +161,53 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
 
   useEffect(() => {
     if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+
+    const previouslyFocusedElement =
+      document.activeElement instanceof HTMLElement && document.activeElement !== document.body
+        ? document.activeElement
+        : null
+    const drawer = drawerRef.current
+    const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    const getFocusableElements = () =>
+      Array.from(drawer?.querySelectorAll<HTMLElement>(focusableSelector) ?? []).filter(
+        (element) => element.getAttribute('aria-disabled') !== 'true',
+      )
+
+    getFocusableElements()[0]?.focus()
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onCloseRef.current()
+        return
+      }
+
+      if (event.key !== 'Tab') return
+
+      const focusableElements = getFocusableElements()
+      const firstElement = focusableElements[0]
+      const lastElement = focusableElements[focusableElements.length - 1]
+
+      if (!firstElement || !lastElement) {
+        event.preventDefault()
+        drawer?.focus()
+        return
+      }
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault()
+        lastElement.focus()
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault()
+        firstElement.focus()
+      }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      previouslyFocusedElement?.focus()
+    }
+  }, [open])
 
   const isLoggedIn = !!session
   const isAdmin = session?.role === 'super_admin'
@@ -193,7 +235,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
     <>
       <div className={styles.backdrop} onClick={onClose} aria-hidden />
 
-      <aside className={styles.drawer} role="dialog" aria-modal="true">
+      <aside ref={drawerRef} className={styles.drawer} role="dialog" aria-modal="true" aria-label="القائمة الرئيسية" tabIndex={-1}>
         <div className={styles.header}>
           <Link href="/" onClick={onClose} aria-label="EAH">
             <Logo size="xs" variant="compact" href={null} />
