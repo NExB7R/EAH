@@ -34,7 +34,7 @@ async function requireUser() {
 
 export async function updateProfile(formData: FormData): Promise<ActionResult> {
   const { supabase, user } = await requireUser()
-  if (!user) return { ok: false, error: 'غير مصرح' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'غير مصرح' }
 
   const display_name = String(formData.get('display_name') ?? '').trim()
   const alias_raw = String(formData.get('alias') ?? '').trim()
@@ -72,7 +72,7 @@ export async function updateProfile(formData: FormData): Promise<ActionResult> {
 
 export async function updatePrivacy(formData: FormData): Promise<ActionResult> {
   const { supabase, user } = await requireUser()
-  if (!user) return { ok: false, error: 'غير مصرح' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'غير مصرح' }
 
   const hide_avatar = formData.get('hide_avatar') === 'on'
   const hide_favorites = formData.get('hide_favorites') === 'on'

@@ -32,7 +32,7 @@ export async function submitReport(formData: FormData): Promise<Result> {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل دخول' }
 
   // Rate limit — 5 بلاغات / 15 دقيقة
   const ip = await getClientIp()

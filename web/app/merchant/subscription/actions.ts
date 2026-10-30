@@ -21,7 +21,7 @@ export async function requestSubscription(formData: FormData): Promise<Result> {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل دخول' }
 
   // نشاطي
   const { data: biz } = await supabase
@@ -111,7 +111,7 @@ export async function startFreeTrial(): Promise<Result> {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل دخول' }
 
   // نشاطي
   const { data: biz } = await supabase
