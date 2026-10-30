@@ -49,7 +49,7 @@ async function myBiz() {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return { ok: false as const, error: 'لازم تسجل دخول' }
+  if (!user || user.is_anonymous) return { ok: false as const, error: 'لازم تسجل بحساب مسجل الأول' }
 
   const { data: biz, error } = await supabase
     .from('businesses')
