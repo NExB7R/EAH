@@ -1,8 +1,6 @@
 -- EAH QA-only fixtures. Every public fixture is clearly labeled and expires within six days.
 -- Safe to rerun: activities upsert by slug, contact rows by unique value, offers by business+title.
--- Before enabling WhatsApp on the multi-contact fixture, deploy the labeled multi-number UI:
--- UPDATE public.businesses SET accepts_whatsapp_orders = true
--- WHERE slug = 'eah-qa-test-multi-contact-20261030';
+-- The multi-contact fixture deliberately enables WhatsApp detail choices only; cards show online-order status, not WhatsApp.
 
 INSERT INTO public.businesses (
   id, name, slug, business_type, area, city, source, owner_profile_id,
@@ -18,7 +16,7 @@ VALUES
   ('e04c39f4-8cc4-4e13-8b28-0ccf8a13b303','اختبار EAH — نشاط جديد توصيل (لا تتعامل)','eah-qa-test-new-delivery-20261030','delivery_office','شبين القناطر','شبين القناطر','admin',NULL,'نشاط اصطناعي لاختبار شريط الجديد وبطاقات التوصيل. لا يمثل مكتب توصيل حقيقيًا.','نشاط اختبار جديد — لا تتعامل',true,true,false,false,true,false,NULL,NULL,0,NULL,false,now()+interval '6 days',false,false,0,0,0,'نشاط اختبار معلن: لا يمثل نشاطًا حقيقيًا. لا تتواصل أو تطلب أي خدمة.',now()+interval '6 days','warning','approved'),
   ('d7e67323-8e4b-4b20-9f4f-ec9bc45f8404','اختبار EAH — صيدلية جديدة (لا تتعامل)','eah-qa-test-new-pharmacy-20261030','pharmacy','اختبار الفلاتر','اختبار EAH','admin',NULL,'نشاط اصطناعي لاختبار فلتر المنطقة والنوع وشريط الجديد. لا يمثل صيدلية حقيقية.','نشاط اختبار للفلاتر — لا تتعامل',true,false,false,false,true,false,NULL,NULL,0,NULL,false,now()+interval '6 days',false,false,0,0,0,'نشاط اختبار معلن: لا يمثل نشاطًا حقيقيًا. لا تتواصل أو تطلب أي خدمة.',now()+interval '6 days','warning','approved'),
   ('d0e13049-3ac9-4232-9f95-3f8d03a57505','اختبار EAH — نشاط متنوع للفلترة (لا تتعامل)','eah-qa-test-filter-misc-20261030','misc','اختبار الفلاتر','اختبار EAH','admin',NULL,'نشاط اصطناعي لاختبار فلتر الأنشطة المتنوعة وحالة الفرع المغلق. لا يمثل نشاطًا حقيقيًا.','بطاقة اختبار للفلترة — لا تتعامل',true,false,false,false,false,true,now()+interval '6 days','فرصة اختبار مرئية فقط — ليست فرصة تجارية',0,NULL,false,NULL,false,false,0,0,0,'نشاط اختبار معلن: لا يمثل نشاطًا حقيقيًا. لا تتواصل أو تطلب أي خدمة.',now()+interval '6 days','warning','approved'),
-  ('6e44ebf5-3b5b-4d7f-91c5-2b80aa7aaf06','اختبار EAH — أرقام تواصل متعددة (لا تتعامل)','eah-qa-test-multi-contact-20261030','restaurant','اختبار الفلاتر','اختبار EAH','admin',NULL,'نشاط اصطناعي لاختبار اختيار رقم اتصال ورقم واتساب من عدة خيارات. كل الأرقام المستخدمة خيالية للاختبار فقط.','اختبار اختيار أرقام متعددة — لا تتعامل',true,true,false,false,false,false,NULL,NULL,0,NULL,false,NULL,false,false,0,0,0,'نشاط اختبار معلن: لا يمثل نشاطًا حقيقيًا. لا تتواصل أو تطلب أي خدمة.',now()+interval '6 days','warning','approved')
+  ('6e44ebf5-3b5b-4d7f-91c5-2b80aa7aaf06','اختبار EAH — أرقام تواصل متعددة (لا تتعامل)','eah-qa-test-multi-contact-20261030','restaurant','اختبار الفلاتر','اختبار EAH','admin',NULL,'نشاط اصطناعي لاختبار اختيار رقم اتصال ورقم واتساب من عدة خيارات. كل الأرقام المستخدمة خيالية للاختبار فقط.','اختبار اختيار أرقام متعددة — لا تتعامل',true,true,false,false,false,false,NULL,NULL,0,NULL,false,NULL,false,true,0,0,0,'نشاط اختبار معلن: أرقام خيالية للاختبار فقط. لا ترسل رسائل فعلية أو بيانات شخصية ولا تطلب خدمة حقيقية.',now()+interval '6 days','warning','approved')
 ON CONFLICT (slug) DO UPDATE SET
   name=EXCLUDED.name,
   business_type=EXCLUDED.business_type,
