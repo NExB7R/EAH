@@ -25,7 +25,7 @@ function monthLabel(dateStr: string): string {
 export default async function MerchantArchivePage() {
   const supabase = await createClient()
   const { data: auth } = await supabase.auth.getUser()
-  if (!auth.user) redirect('/auth/login')
+  if (!auth.user || auth.user.is_anonymous) redirect('/auth/login')
 
   const { data: biz } = await supabase
     .from('businesses')
