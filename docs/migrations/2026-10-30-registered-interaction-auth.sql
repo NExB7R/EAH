@@ -25,6 +25,7 @@ BEGIN
       ('comment_thread_follows', 'UPDATE'),
       ('comment_thread_follows', 'DELETE'),
       ('business_reviews', 'INSERT'),
+      ('business_change_requests', 'INSERT'),
       ('business_reviews', 'UPDATE'),
       ('order_reactions', 'INSERT'),
       ('order_requests', 'INSERT'),
@@ -46,6 +47,9 @@ BEGIN
       ('customer_locations', 'INSERT'),
       ('customer_locations', 'UPDATE'),
       ('customer_locations', 'DELETE'),
+      ('exclusions', 'INSERT'),
+      ('exclusions', 'UPDATE'),
+      ('exclusions', 'DELETE'),
       ('coupons', 'INSERT'),
       ('coupons', 'UPDATE'),
       ('coupons', 'DELETE'),
@@ -64,6 +68,9 @@ BEGIN
       ('merchant_order_settings', 'INSERT'),
       ('merchant_order_settings', 'UPDATE'),
       ('profiles', 'UPDATE'),
+      ('user_preferences', 'INSERT'),
+      ('user_preferences', 'UPDATE'),
+      ('user_preferences', 'DELETE'),
       ('notifications', 'UPDATE')
     ) AS policies(table_name, command_name)
   LOOP

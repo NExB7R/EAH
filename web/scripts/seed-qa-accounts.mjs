@@ -1,10 +1,12 @@
 import { createClient } from '@supabase/supabase-js'
+import { loadEnvConfig } from '@next/env'
 import { randomBytes } from 'node:crypto'
 import { chmodSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url))
+loadEnvConfig(resolve(scriptDirectory, '..'))
 const credentialsPath = resolve(scriptDirectory, '../.qa-test-credentials.local.json')
 const enabled = process.env.EAH_ALLOW_QA_ACCOUNT_SEED === 'yes'
 const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -141,17 +143,39 @@ async function linkSellerQaActivity(sellerId) {
     }
   }
 
+  const { error: settingsError } = await supabase.from('merchant_order_settings').upsert(
+    {
+      business_id: business.id,
+      orders_enabled: true,
+      deadline_minutes: 10,
+      delivery_eta_minutes: 30,
+      offline_mode: false,
+      offline_until: null,
+      auto_accept: false,
+      suspended_until: null,
+      suspension_reason: null,
+    },
+    { onConflict: 'business_id' },
+  )
+  if (settingsError) {
+    throw new Error(`Could not prepare isolated QA order settings: ${settingsError.message}`)
+  }
+
   const { data: updated, error: updateError } = await supabase
     .from('businesses')
     .update({
       owner_profile_id: sellerId,
-      accepts_orders: false,
-      accepts_whatsapp_orders: false,
+      accepts_orders: true,
+      accepts_whatsapp_orders: true,
     })
     .eq('id', business.id)
     .select('id')
     .maybeSingle()
   if (updateError || !updated) {
+    await supabase
+      .from('merchant_order_settings')
+      .update({ orders_enabled: false })
+      .eq('business_id', business.id)
     throw new Error(`Could not link seller to QA activity: ${updateError?.message ?? 'no row updated'}`)
   }
 }
