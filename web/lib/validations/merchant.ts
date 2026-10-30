@@ -67,7 +67,7 @@ export const applySchema = z.object({
     ['phoneNumbers', data.phoneNumbers ?? []],
     ['whatsappNumbers', data.whatsappNumbers ?? []],
   ] as const) {
-    const normalized = numbers.map((value) => value.replace(/\\D/g, ''))
+    const normalized = numbers.map((value) => value.replace(/\D/g, ''))
     if (new Set(normalized).size !== normalized.length) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
