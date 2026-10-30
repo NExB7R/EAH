@@ -20,7 +20,7 @@ describe('getInsightDateRange', () => {
   })
 
   it('falls back safely for non-numeric, NaN and infinite inputs', () => {
-    expect(getInsightDateRange('30', 90, NOW).days).toBe(30)
+    expect(getInsightDateRange('7', 90, NOW).days).toBe(30)
     expect(getInsightDateRange(Number.NaN, 90, NOW).days).toBe(30)
     expect(getInsightDateRange(Number.POSITIVE_INFINITY, 90, NOW).days).toBe(30)
   })
