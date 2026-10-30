@@ -45,11 +45,12 @@ export default function OffersStrip({ offers }: Props) {
   )
 }
 
-function OfferCard({ offer }: { offer: Offer }) {
-  const href = offer.business?.slug ? `/businesses/${offer.business.slug}` : '#'
+export function OfferCard({ offer, layout = 'carousel' }: { offer: Offer; layout?: 'carousel' | 'grid' }) {
+  const href = offer.business?.slug ? `/businesses/${offer.business.slug}` : '/offers'
+  const isTestOffer = offer.title.includes('اختبار EAH') || offer.description?.includes('اصطناعي')
 
   return (
-    <Link href={href} className={styles.card}>
+    <Link href={href} className={`${styles.card} ${layout === "grid" ? styles.gridCard : ""}`}>
       <div className={styles.imageWrap}>
         {offer.image_url ? (
           <WmImage
@@ -68,7 +69,7 @@ function OfferCard({ offer }: { offer: Offer }) {
 
         <span className={styles.badge}>
           <TagIcon size={11} />
-          عرض
+          {isTestOffer ? 'عرض اختبار' : 'عرض'}
         </span>
 
         {offer.price !== null && offer.price > 0 && (
@@ -78,6 +79,9 @@ function OfferCard({ offer }: { offer: Offer }) {
 
       <div className={styles.body}>
         <h3 className={styles.name}>{offer.title}</h3>
+        {offer.description?.trim() && (
+          <p className={styles.description}>{offer.description}</p>
+        )}
         {offer.business && (
           <p className={styles.meta}>
             <span className={styles.biz}>{offer.business.name}</span>
