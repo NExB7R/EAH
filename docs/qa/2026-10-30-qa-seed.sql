@@ -1,4 +1,14 @@
 -- EAH QA-only fixtures. Every public fixture is clearly labeled and expires within six days.
+-- QA card art only. These local, unmistakably labeled illustrations are not real business photography.
+UPDATE public.businesses
+SET cover_image_url = CASE
+  WHEN business_type = 'restaurant' THEN 'https://eah-sq.vercel.app/qa/eah-qa-restaurant.svg'
+  WHEN business_type = 'pharmacy' THEN 'https://eah-sq.vercel.app/qa/eah-qa-pharmacy.svg'
+  WHEN business_type = 'delivery_office' THEN 'https://eah-sq.vercel.app/qa/eah-qa-delivery.svg'
+  ELSE 'https://eah-sq.vercel.app/qa/eah-qa-misc.svg'
+END
+WHERE slug LIKE 'eah-qa-test-%';
+
 -- Safe to rerun: activities upsert by slug, contact rows by unique value, offers by business+title.
 -- The multi-contact fixture deliberately enables WhatsApp detail choices only; cards show online-order status, not WhatsApp.
 

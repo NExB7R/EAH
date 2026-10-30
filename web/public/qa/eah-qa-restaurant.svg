@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">مطعم اختباري — اختبار EAH</title>
+  <desc id="desc">Illustration for QA only. Not a real business. Do not contact or order.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#39154e"/>
+      <stop offset="1" stop-color="#160d2b"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#e8a4ff" stop-opacity=".52"/>
+      <stop offset="1" stop-color="#e8a4ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width="1"/>
+      <circle cx="1" cy="1" r="1.5" fill="#fff" fill-opacity=".18"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <rect width="1200" height="800" fill="url(#grid)"/>
+  <circle cx="930" cy="330" r="390" fill="url(#glow)"/>
+  <circle cx="930" cy="330" r="245" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="2"/>
+  <circle cx="930" cy="330" r="185" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="2"/>
+  <path d="M0 600C230 520 360 760 630 660S1010 550 1200 640V800H0Z" fill="#080512" fill-opacity=".28"/>
+  <g transform="translate(115 125)">
+    <rect width="206" height="52" rx="26" fill="#fff" fill-opacity=".12" stroke="#fff" stroke-opacity=".36"/>
+    <circle cx="28" cy="26" r="8" fill="#e8a4ff"/>
+    <text x="50" y="34" fill="#fff" font-family="Cairo,Arial,sans-serif" font-size="21" font-weight="700" letter-spacing="2">EAH • QA</text>
+    <text x="0" y="220" fill="#fff" font-family="Cairo,Arial,sans-serif" font-size="74" font-weight="900">مطعم اختباري</text>
+    <text x="3" y="282" fill="#fff" fill-opacity=".82" font-family="Cairo,Arial,sans-serif" font-size="32" font-weight="600">اختبار بطاقات المطاعم والعروض</text>
+  </g>
+  <g transform="translate(775 180)" fill="none" stroke="#fff" stroke-opacity=".82" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="155" cy="150" r="120" stroke-opacity=".16" stroke-width="2"/>
+    <circle cx="155" cy="150" r="88" stroke-opacity=".24" stroke-width="2"/>
+    <path d="M155 76v148M81 150h148" stroke-opacity=".6"/>
+    <path d="M112 107l86 86M198 107l-86 86" stroke-opacity=".18"/>
+    <circle cx="155" cy="150" r="34" fill="#e8a4ff" stroke="none"/>
+  </g>
+  <g transform="translate(115 670)">
+    <rect width="410" height="66" rx="14" fill="#1a0b25" fill-opacity=".72" stroke="#fff" stroke-opacity=".28"/>
+    <text x="26" y="43" fill="#fff" font-family="Cairo,Arial,sans-serif" font-size="25" font-weight="900">نشاط تجريبي — لا تتعامل</text>
+  </g>
+  <text x="1080" y="750" fill="#fff" fill-opacity=".38" font-family="Arial,sans-serif" font-size="18" text-anchor="end">TEST FIXTURE • NOT REAL</text>
+</svg>
