@@ -2,7 +2,7 @@
 
 > منصة اكتشاف محلية مصرية — تبدأ من شبين القناطر والقرى حواليها.
 
-**آخر تحديث:** 2026-10-27
+**آخر تحديث:** 2026-10-30
 **الإصدار:** v2.0 (fresh start)
 **المالك:** NourEldin B7R — nexb7r@gmail.com
 
@@ -21,24 +21,21 @@
 
 ---
 
-## 📚 اقرأ الأول
+## 📚 ابدأ من هنا
 
-**لو أنت AI / مطور جديد:**
+**لأي مطور أو مساعد AI يعمل على المشروع:**
 
-1. **[docs/PROJECT_OPERATING_GUIDE.md](./docs/PROJECT_OPERATING_GUIDE.md)** — الحالة الحالية، ترتيب التنفيذ، والمعايير التشغيلية
-2. **[docs/ROLES_MATRIX.md](./docs/ROLES_MATRIX.md)
-- **[docs/REPUTATION_POLICY.md](./docs/REPUTATION_POLICY.md)** — سياسة السمعة والتوثيق وخصوصية المشتري** — الأدوار والصلاحيات ودورة النشاط
-3. **[docs/MASTER_BRIEF.md](./docs/MASTER_BRIEF.md)** — الرؤية والهوية والأهداف
-4. **[docs/AI_CONTRACT.md](./docs/AI_CONTRACT.md)** — القواعد الإجبارية
-5. **[docs/SACRED.md](./docs/SACRED.md)** — المقدسات
-6. **[docs/ROADMAP.md](./docs/ROADMAP.md)** — خطة التنفيذ
+1. [`docs/PROJECT_OPERATING_GUIDE.md`](./docs/PROJECT_OPERATING_GUIDE.md) — قواعد العمل، ترتيب التنفيذ، ومعايير الأمان.
+2. [`docs/PROGRESS.md`](./docs/PROGRESS.md) — آخر حالة موثقة وما تم وما لم يتم التحقق منه.
+3. [`docs/PRODUCT_SPEC.md`](./docs/PRODUCT_SPEC.md) — مواصفات المنتج وقرارات المالك المؤكدة والأسئلة المؤجلة.
+4. [`docs/ERROR_REGISTER.md`](./docs/ERROR_REGISTER.md) — سجل المشكلات والأدلة المطلوبة لإغلاقها.
+5. [`docs/ROLES_MATRIX.md`](./docs/ROLES_MATRIX.md) — الأدوار والصلاحيات ودورة النشاط.
+6. [`docs/MASTER_BRIEF.md`](./docs/MASTER_BRIEF.md) — الرؤية والهوية والأهداف.
+7. [`docs/AI_CONTRACT.md`](./docs/AI_CONTRACT.md) و[`docs/SACRED.md`](./docs/SACRED.md) — قواعد المشروع غير القابلة للتجاوز.
+8. [`docs/ROADMAP.md`](./docs/ROADMAP.md) — خطة العمل طويلة المدى.
 
-**بعدها قول:** "قرأت. جاهز." واستنى التعليمات.
+**قبل أي تعديل:** راجع حالة `main` والاختبارات الفعلية، لا تعتمد على ملاحظات تاريخية وحدها، ولا تنفذ تغييرًا على قاعدة الإنتاج دون مراجعة وبيئة اختبار وموافقة لازمة.
 
-**لو أنت شريك / مستثمر:**
-
-- اقرأ **MASTER_BRIEF.md** فقط (10 دقايق)
-- فيه: الرؤية، الأهداف، النموذج الربحي، خطة التوسع
 
 ---
 
