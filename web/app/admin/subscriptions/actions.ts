@@ -72,7 +72,7 @@ export async function approveSubscription(id: string, formData: FormData): Promi
 
   if (error) return { ok: false, error: error.message }
 
-  // إشعار لصاحب النشاط
+  // إشعار للتاجر المرتبط بالنشاط
   const biz = sub.business as unknown as { name: string; owner_profile_id: string } | null
   if (biz?.owner_profile_id) {
     await createNotification({
