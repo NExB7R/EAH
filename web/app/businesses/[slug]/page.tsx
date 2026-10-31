@@ -204,7 +204,7 @@ export default async function BusinessPage({ params }: Props) {
         {/* ─── Owner Banner ─── */}
         {isOwner && (
           <div className={styles.ownerBanner}>
-            <span className={styles.ownerLabel}>إنت صاحب النشاط ده</span>
+            <span className={styles.ownerLabel}>النشاط ده مرتبط بحسابك</span>
             <Link href="/merchant/business" className={styles.ownerLink}>
               <span>إدارة النشاط</span>
               <ArrowLeftIcon size={14} />
