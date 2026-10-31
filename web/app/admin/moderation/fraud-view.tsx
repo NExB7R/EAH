@@ -3,7 +3,7 @@ import { ShieldCheckIcon, AlertIcon, UserIcon, CrownGoldIcon } from '@/component
 import {
   getFraudStats,
   getFlaggedReviews,
-  getRecentTrustEvents,
+  getRecentالثقةEvents,
   getFlaggedUsers,
   getMultiAccountIps,
 } from '@/lib/data/fraud'
@@ -36,7 +36,7 @@ export default async function FraudView() {
   const [stats, flaggedReviews, events, flaggedUsers, multiIps] = await Promise.all([
     getFraudStats(),
     getFlaggedReviews(),
-    getRecentTrustEvents(30),
+    getRecentالثقةEvents(30),
     getFlaggedUsers(20),
     getMultiAccountIps(30),
   ])
@@ -132,7 +132,7 @@ export default async function FraudView() {
         )}
       </section>
 
-      {/* Multi-Account IPs */}
+      {/* Multi-Account عنوان الإنترنتs */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>عناوين إنترنت مرتبطة بثلاثة حسابات أو أكثر (30 يوم)</h2>
         {multiIps.length === 0 ? (
@@ -156,7 +156,7 @@ export default async function FraudView() {
         )}
       </section>
 
-      {/* Trust Events */}
+      {/* الثقة Events */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>آخر أحداث الثقة</h2>
         {events.length === 0 ? (
