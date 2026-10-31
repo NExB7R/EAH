@@ -84,7 +84,7 @@ export async function createOffer(formData: FormData): Promise<ActionResult> {
     .select('id')
     .single()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   // إشعار المتابعين (لو منشور)
   if (d.isPublished) {
@@ -125,7 +125,7 @@ export async function deleteOffer(offerId: string): Promise<ActionResult> {
     .eq('id', offerId)
     .eq('business_id', ctx.biz.id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   revalidatePath('/merchant/offers')
   revalidatePath('/offers')
@@ -144,7 +144,7 @@ export async function toggleOfferPublish(offerId: string, publish: boolean): Pro
     .eq('id', offerId)
     .eq('business_id', ctx.biz.id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   revalidatePath('/merchant/offers')
   revalidatePath('/offers')
