@@ -31,7 +31,7 @@ export async function GET(req: Request) {
   } = await supabase.auth.getUser()
 
   if (!user || user.is_anonymous) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'غير مصرح' }, { status: 401 })
   }
 
   const rateLimit = await checkRateLimit(
@@ -58,7 +58,7 @@ export async function GET(req: Request) {
     .maybeSingle()
 
   if (!biz) {
-    return NextResponse.json({ error: 'No business' }, { status: 404 })
+    return NextResponse.json({ error: 'لا يوجد نشاط مرتبط بهذا الحساب' }, { status: 404 })
   }
 
   const url = new URL(req.url)
@@ -109,7 +109,7 @@ export async function GET(req: Request) {
 
   const rows: Row[] = (data ?? []).map((r) => ({
     order_code: r.order_code,
-    status: STATUS_LABEL[r.status as string] ?? r.status,
+    status: STATUS_LABEL[r.status as string] ?? 'حالة غير محددة',
     customer_name: r.customer_name,
     customer_phone: r.customer_phone,
     items: r.items,
@@ -130,5 +130,5 @@ export async function GET(req: Request) {
   ]
 
   const date = new Date().toISOString().slice(0, 10)
-  return csvResponse(buildCsv(rows, columns), `orders-${biz.name ?? 'merchant'}-${date}`)
+  return csvResponse(buildCsv(rows, columns), `طلبات-${biz.name ?? 'النشاط'}-${date}`)
 }
