@@ -28,7 +28,7 @@ type ModerationTargetResult =
 async function validateModerationTarget(
   admin: ReturnType<typeof createServiceClient>,
   userId: string,
-  actorRole: 'admin' | 'super_admin',
+  actorRole: 'super_admin',
 ): Promise<ModerationTargetResult> {
   const { data: profile, error: profileError } = await admin
     .from('profiles')
@@ -48,12 +48,8 @@ async function validateModerationTarget(
   if (roleError) return { ok: false, error: 'تعذر التحقق من صلاحيات المستخدم' }
   if (!roleRow?.role) return { ok: false, error: 'حساب المستخدم ليس له دور مهيأ داخل النظام' }
   if (roleRow.role === 'super_admin') {
-    return { ok: false, error: 'لا يمكن حظر الأدمن الأعلى أو فك حظره من هذه الشاشة' }
+    return { ok: false, error: 'لا يمكن حظر حساب الأدمن من هذه الشاشة أو فك حظره' }
   }
-  if (roleRow.role === 'admin' && actorRole !== 'super_admin') {
-    return { ok: false, error: 'إدارة حظر حسابات الأدمن متاحة للأدمن الأعلى فقط' }
-  }
-
   return { ok: true, role: roleRow.role }
 }
 
@@ -195,7 +191,7 @@ export async function changeUserRole(userId: string, role: string): Promise<Resu
     return { ok: false, error: 'تعذر التحقق من الدور الحالي للمستخدم' }
   }
   if (targetRole?.role === 'super_admin') {
-    return { ok: false, error: 'ده حساب الأدمن الأعلى الوحيد؛ ممنوع تغيير دوره من شاشة المستخدمين' }
+    return { ok: false, error: 'ده حساب الأدمن المحمي الوحيد؛ ممنوع تغيير دوره من شاشة المستخدمين' }
   }
 
   const { data: profile, error: profileError } = await admin
