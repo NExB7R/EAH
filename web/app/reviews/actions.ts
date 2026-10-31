@@ -134,7 +134,7 @@ export async function submitReview(
   return { ok: true }
 }
 
-// ─── رد البايع ───
+// ─── رد التاجر ───
 export async function replyToReview(
   reviewId: string,
   businessSlug: string,
