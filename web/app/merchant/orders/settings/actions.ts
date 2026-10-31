@@ -107,7 +107,7 @@ export async function setDeliveryEta(etaMinutes: number): Promise<Result> {
 
 // ═══════════════════════════════════════════════════════════════════
 // Merchant: toggle order receiving (master switch)
-//   - upsert (لو البايع مش عنده صف، ننشئه)
+//   - upsert (لو التاجر مش عنده صف، ننشئه)
 //   - لو enabled=true بدون merchant_order_settings → defaults (10/30)
 // ═══════════════════════════════════════════════════════════════════
 
@@ -125,7 +125,7 @@ export async function setOrdersEnabled(enabled: boolean, etaMinutes?: number): P
     .maybeSingle()
   if (roleError) return { ok: false, error: 'تعذر التحقق من دور الحساب' }
   if (roleRow?.role !== 'merchant') {
-    return { ok: false, error: 'تفعيل الطلبات متاح للبايع المرتبط بالنشاط فقط' }
+    return { ok: false, error: 'تفعيل الطلبات متاح للتاجر المرتبط بالنشاط فقط' }
   }
 
   const { data: biz, error: businessError } = await supabase
