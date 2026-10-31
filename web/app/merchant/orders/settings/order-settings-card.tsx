@@ -95,7 +95,7 @@ export default function OrderSettingsCard({ settings, status }: Props) {
             <AlertIcon size={16} />
             <div>
               <strong>استلام الطلبات مش مفعّل</strong>
-              <p>فعّله دلوقتي عشان تبدأ تستقبل طلبات من المشترين. حدد مدة التسليم وابدأ.</p>
+              <p>فعّله دلوقتي عشان تبدأ تستقبل طلبات من العملاء. حدد مدة التسليم وابدأ.</p>
             </div>
           </div>
 
