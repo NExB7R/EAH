@@ -285,7 +285,7 @@ export async function adjustTrust(userId: string, formData: FormData): Promise<R
     .update({ trust_score: next, trust_updated_at: new Date().toISOString() })
     .eq('id', userId)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تحديث نقاط المشاركة. حاول مرة أخرى.' }
 
   // سجل في audit
   await ctx.supabase.from('audit_logs').insert({
@@ -322,7 +322,7 @@ export async function togglePremium(userId: string): Promise<Result> {
     .update({ is_premium: next, premium_until: until })
     .eq('id', userId)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تحديث حالة التميز. حاول مرة أخرى.' }
 
   revalidatePath('/admin/users')
   return { ok: true }
