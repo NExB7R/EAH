@@ -85,7 +85,7 @@ export async function createComment(
     .select('id')
     .single()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر حفظ التعليق. حاول مرة أخرى.' }
 
   // ─── Auto-subscribe: كاتب التعليق يتابع الـ thread تلقائياً ───
   const rootId = parsed.data.parent_id
@@ -191,7 +191,7 @@ export async function likeComment(commentId: string, slug: string): Promise<Acti
     .insert({ comment_id: commentId, user_id: user.id })
 
   if (error && !error.message.includes('duplicate')) {
-    return { ok: false, error: error.message }
+    return { ok: false, error: 'تعذر تسجيل الإعجاب. حاول مرة أخرى.' }
   }
 
   revalidatePath(`/businesses/${slug}`)
@@ -226,7 +226,7 @@ export async function deleteComment(commentId: string, slug: string): Promise<Ac
     .eq('id', commentId)
     .eq('user_id', user.id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر حذف التعليق. حاول مرة أخرى.' }
 
   revalidatePath(`/businesses/${slug}`)
   return { ok: true }
@@ -276,7 +276,7 @@ export async function editComment(
     .eq('id', commentId)
     .eq('user_id', user.id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تعديل التعليق. حاول مرة أخرى.' }
 
   revalidatePath(`/businesses/${slug}`)
   return { ok: true }
@@ -329,7 +329,7 @@ export async function toggleFollowThread(
   })
 
   if (error && !error.message.includes('duplicate')) {
-    return { ok: false, error: error.message }
+    return { ok: false, error: 'تعذر متابعة التعليق. حاول مرة أخرى.' }
   }
 
   revalidatePath(`/businesses/${slug}`)
