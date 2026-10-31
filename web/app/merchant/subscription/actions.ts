@@ -72,7 +72,7 @@ export async function requestSubscription(formData: FormData): Promise<Result> {
     notes: parsed.data.notes || null,
   })
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   // إشعار لكل الأدمن — service client (user RLS on user_roles ≠ admins visible)
   const { createServiceClient } = await import('@/lib/supabase/service')
