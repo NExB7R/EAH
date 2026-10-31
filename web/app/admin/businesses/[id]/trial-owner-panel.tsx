@@ -44,7 +44,7 @@ const ROLE_LABEL: Record<string, string> = {
   customer: 'العميل',
   merchant: 'التاجر',
   admin: 'غير محدد',
-  super_admin: 'الأدمن',
+  super_admin: 'غير محدد',
 }
 
 export default function TrialOwnerPanel({
