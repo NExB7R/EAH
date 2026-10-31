@@ -58,7 +58,7 @@ export default function AboutFreeApp() {
               <InstallIcon size={24} />
             </span>
             <h3 className={styles.cardTitle}>ثبّته على موبايلك</h3>
-            <p className={styles.cardText}>تطبيق ويب — يشتغل بدون تحميل من App Store.</p>
+            <p className={styles.cardText}>تطبيق ويب — يشتغل دون الحاجة إلى متجر التطبيقات.</p>
           </div>
         </div>
 
