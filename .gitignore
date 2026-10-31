@@ -1,4 +1,12 @@
-.env.local
+# Environment secrets: ignore real env files; commit templates only.
+.env
+.env.*
+!.env.example
+!.env.*.example
+.envrc
+.direnv/
+
+.vercel/
 .vercel/
 node_modules/
 .next/
