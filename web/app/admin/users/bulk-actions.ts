@@ -234,7 +234,7 @@ export async function bulkTogglePremium(ids: string[], enable: boolean): Promise
     .update({ is_premium: enable })
     .in('id', parsed.data)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تحديث حالة التميز للحسابات المحددة. حاول مرة أخرى.' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
