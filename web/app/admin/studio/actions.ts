@@ -27,7 +27,7 @@ export async function saveFeatureFlags(flags: FeatureFlags): Promise<Result> {
     { onConflict: 'key' },
   )
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await ctx.supabase.from('audit_logs').insert({
     actor_user_id: ctx.userId,
@@ -62,7 +62,7 @@ export async function saveAppTexts(texts: AppTexts): Promise<Result> {
     { onConflict: 'key' },
   )
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await ctx.supabase.from('audit_logs').insert({
     actor_user_id: ctx.userId,
