@@ -139,7 +139,7 @@ export default async function AuditSection({ q: qRaw, action, actor }: Props) {
         <div className={styles.list}>
           {filtered.map((log) => {
             const meta = ACTION_LABEL[log.action] ?? {
-              label: log.action,
+              label: 'إجراء إداري',
               tone: 'neutral',
             }
             return (
@@ -162,7 +162,7 @@ export default async function AuditSection({ q: qRaw, action, actor }: Props) {
 
                   {log.entity_type && (
                     <div className={styles.entity}>
-                      <span className={styles.entityLabel}>{log.entity_type}</span>
+                      <span className={styles.entityLabel}>{log.entity_type === 'business' ? 'نشاط' : log.entity_type === 'profile' ? 'حساب' : log.entity_type === 'advertisement' ? 'إعلان' : log.entity_type === 'business_insight' ? 'تقرير' : 'سجل إداري'}</span>
                       {log.entity_id && (
                         <code className={styles.entityId}>{log.entity_id.slice(0, 8)}</code>
                       )}
@@ -173,7 +173,7 @@ export default async function AuditSection({ q: qRaw, action, actor }: Props) {
                 {Object.keys(log.metadata).length > 0 && (
                   <details className={styles.meta}>
                     <summary>التفاصيل</summary>
-                    <pre className={styles.metaPre}>{JSON.stringify(log.metadata, null, 2)}</pre>
+                    <pre className={styles.metaPre}>{'تفاصيل العملية محفوظة في سجل التدقيق.'}</pre>
                   </details>
                 )}
               </article>
