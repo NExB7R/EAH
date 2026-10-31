@@ -97,7 +97,7 @@ export default function Composer({ audiences }: Props) {
                 className={styles.radio}
               />
               <span className={styles.audienceLabel}>{a.label}</span>
-              <span className={styles.audienceCount}>{a.count.toLocaleString('en-US')}</span>
+              <span className={styles.audienceCount}>{a.count.toLocaleString('ar-EG')}</span>
             </label>
           ))}
         </div>
@@ -107,7 +107,7 @@ export default function Composer({ audiences }: Props) {
         <input type="checkbox" name="push" defaultChecked className={styles.checkbox} />
         <span className={styles.switchBody}>
           <SparklesIcon size={14} />
-          <span>إرسال كـ Push notification (فوري للمتصفح)</span>
+          <span>إرسال كإشعار فوري إلى المتصفح</span>
         </span>
       </label>
 
