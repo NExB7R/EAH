@@ -15,7 +15,6 @@ on:
       - '**/*.md'
       - 'LICENSE'
       - '.gitignore'
-      - '.github/workflows/**'
       - 'web/scripts/ignore-vercel-build.sh'
   pull_request:
     branches: [main]
@@ -24,7 +23,6 @@ on:
       - '**/*.md'
       - 'LICENSE'
       - '.gitignore'
-      - '.github/workflows/**'
       - 'web/scripts/ignore-vercel-build.sh'
   workflow_dispatch:
 
