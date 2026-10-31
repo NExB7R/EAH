@@ -81,7 +81,7 @@ export async function submitOrder(
   if (typeof biz.owner_profile_id !== 'string' || !biz.owner_profile_id.trim()) {
     return {
       ok: false,
-      error: 'النشاط لسه ما اتربطش ببايع، والطلب الداخلي غير متاح حالياً — كلمه مباشرة.',
+      error: 'النشاط لسه ما اتربطش بتاجر، والطلب الداخلي غير متاح حالياً — كلمه مباشرة.',
     }
   }
   if (!canAcceptInAppOrders(biz.accepts_orders, biz.owner_profile_id)) {
@@ -114,7 +114,7 @@ export async function submitOrder(
 
   const etaMinutes = settings.delivery_eta_minutes
   if (!etaMinutes) {
-    return { ok: false, error: 'البايع مش محدد مدة التسليم — تواصل معاه مباشرة' }
+    return { ok: false, error: 'التاجر مش محدد مدة التسليم — تواصل معاه مباشرة' }
   }
 
   const deadlineAt = new Date(nowMs + settings.deadline_minutes * 60 * 1000).toISOString()
