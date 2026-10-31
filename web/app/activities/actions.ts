@@ -46,7 +46,7 @@ async function toggleActivity(
     // احذف
     const { error } = await supabase.from('business_activities').delete().eq('id', existing.id)
 
-    if (error) return { ok: false, error: error.message }
+    if (error) return { ok: false, error: 'تعذر تحديث التفاعل. حاول مرة أخرى.' }
 
     revalidatePath(`/businesses/${slug}`)
     return { ok: true, active: false }
@@ -59,7 +59,7 @@ async function toggleActivity(
     activity_type: type,
   })
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تحديث التفاعل. حاول مرة أخرى.' }
 
   // إشعار لصاحب النشاط (فقط لو متابعة جديدة)
   if (type === 'follow') {
@@ -73,7 +73,7 @@ async function toggleActivity(
       void createNotification({
         userId: biz.owner_profile_id,
         type: 'follow_new',
-        title: 'مشتري جديد تابعك',
+        title: 'عميل جديد تابع نشاطك',
         body: `حد تابع ${biz.name} — أول ما تنزل عرض جديد هيوصله إشعار فوري`,
         deepLink: `/businesses/${slug}`,
         pushTag: 'follow',
