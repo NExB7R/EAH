@@ -102,7 +102,7 @@ export default function QrGenerator({ slug, businessName }: Props) {
               className={styles.qrImg}
               style={{ backgroundImage: `url(${qr})` }}
               role="img"
-              aria-label={`QR — ${businessName}`}
+              aria-label={`رمز الاستجابة السريعة — ${businessName}`}
             />
           </div>
 
