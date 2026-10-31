@@ -19,7 +19,7 @@ export async function savePreferences(prefs: Pref[]): Promise<Result> {
     .update({ notif_prefs: Object.fromEntries(prefs.map((p) => [p.key, p.value])) })
     .eq('id', user.id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   revalidatePath('/account/notifications/preferences')
   return { ok: true }
