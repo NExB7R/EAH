@@ -81,7 +81,7 @@ export const FEATURE_META: Record<
     group: 'features',
   },
   qr_enabled: {
-    label: 'QR للبايع',
+    label: 'QR للتاجر',
     desc: 'توليد QR للنشاط',
     group: 'features',
   },
