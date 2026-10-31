@@ -125,7 +125,7 @@ export default async function AdminNotificationsPage({
             <BellIcon size={20} />
           </span>
           <p className={notifStyles.introText}>
-            الرسالة توصل في صفحة الإشعارات + Push فوري للمتصفح (لو مفعّل عند المستخدم).
+            الرسالة تظهر في صفحة الإشعارات، ويمكن إرسال إشعار فوري للمتصفح عند تفعيله.
           </p>
         </section>
 
