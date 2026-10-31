@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — Roles (Central Authority) — 2026-10-08
-// ROLES_MATRIX.md — single source of truth for role logic
+// EAH — Roles (Central Authority)
+// The stored account role is independent from business ownership.
 // ═══════════════════════════════════════════════════════════
 
 export type Role = 'guest' | 'customer' | 'merchant' | 'super_admin'
@@ -25,39 +25,26 @@ export async function getRoleContext(): Promise<RoleContext> {
     return { role: 'guest', userId: null, isAdmin: false, isMerchant: false, hasBusiness: false }
   }
 
-  const { data: roleRow } = await supabase
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', user.id)
-    .maybeSingle()
+  const [{ data: roleRow }, { data: biz }] = await Promise.all([
+    supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle(),
+    supabase.from('businesses').select('id').eq('owner_profile_id', user.id).limit(1).maybeSingle(),
+  ])
 
-  if (roleRow?.role === 'super_admin') {
-    return { role: 'super_admin', userId: user.id, isAdmin: true, isMerchant: false, hasBusiness: false }
-  }
-
-  const { data: biz } = await supabase
-    .from('businesses')
-    .select('id')
-    .eq('owner_profile_id', user.id)
-    .limit(1)
-    .maybeSingle()
-
-  if (biz) {
-    return {
-      role: 'merchant',
-      userId: user.id,
-      isAdmin: false,
-      isMerchant: true,
-      hasBusiness: true,
-    }
-  }
+  // Only the stored account role grants the matching workspace permissions.
+  // A linked business is tracked separately and never promotes the account role.
+  const role: Role =
+    roleRow?.role === 'super_admin'
+      ? 'super_admin'
+      : roleRow?.role === 'merchant'
+        ? 'merchant'
+        : 'customer'
 
   return {
-    role: 'customer',
+    role,
     userId: user.id,
-    isAdmin: false,
-    isMerchant: false,
-    hasBusiness: false,
+    isAdmin: role === 'super_admin',
+    isMerchant: role === 'merchant',
+    hasBusiness: !!biz,
   }
 }
 
