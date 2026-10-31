@@ -31,7 +31,7 @@ const PREFS: Pref[] = [
   {
     key: 'review_reply',
     label: 'ردود على تقييماتي',
-    desc: 'لما صاحب نشاط يرد على تقييمك',
+    desc: 'لما التاجر المرتبط بالنشاط يرد على تقييمك',
     Icon: MessageCircleIcon,
     defaultOn: true,
   },
