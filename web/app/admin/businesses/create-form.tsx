@@ -43,7 +43,7 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
 
         <div className={styles.field}>
           <label className={styles.label} htmlFor="slug">
-            Slug (English)
+            الرابط المختصر
           </label>
           <input
             id="slug"
@@ -55,7 +55,7 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
             className={styles.input}
             dir="ltr"
           />
-          <span className={styles.hint}>حروف صغيرة وأرقام وشرطات فقط</span>
+          <span className={styles.hint}>استخدم حروفًا لاتينية صغيرة وأرقامًا وشرطات فقط</span>
         </div>
 
         <div className={styles.field}>
@@ -114,7 +114,7 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
 
         <div className={styles.field}>
           <label className={styles.label} htmlFor="hook">
-            Hook (سطر قصير)
+            عبارة تعريفية قصيرة
           </label>
           <input id="hook" name="hook" maxLength={120} className={styles.input} dir="rtl" />
         </div>
@@ -136,7 +136,7 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="owner_profile_id">
-          صاحب النشاط
+          التاجر المرتبط بالنشاط
         </label>
         <select
           id="owner_profile_id"
@@ -144,7 +144,7 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
           className={styles.select}
           defaultValue=""
         >
-          <option value="">بدون مالك مرتبط</option>
+          <option value="">بدون تاجر مرتبط</option>
           {owners.map((o) => (
             <option key={o.id} value={o.id}>
               {o.display_name} {o.phone ? `— ${o.phone}` : ''}
@@ -152,7 +152,7 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
           ))}
         </select>
         <span className={styles.hint}>
-          اختيار المالك اختياري. تقدر تنشر النشاط بدون حساب مالك وتربطه لاحقًا من الإدارة.
+          اختيار التاجر المرتبط اختياري. يمكن نشر النشاط دون ربط حساب تاجر، ثم ربطه لاحقًا من لوحة الإدارة.
         </span>
       </div>
 
