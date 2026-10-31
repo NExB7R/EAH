@@ -19,10 +19,43 @@ import styles from './user-detail.module.css'
 export const dynamic = 'force-dynamic'
 
 const ROLE_LABEL: Record<string, string> = {
-  customer: 'المشتري',
-  merchant: 'البايع',
-  admin: 'الأدمن',
+  customer: 'العميل',
+  merchant: 'التاجر',
+  admin: 'العميل',
   super_admin: 'الأدمن',
+}
+
+const REVIEW_STATUS_LABEL: Record<string, string> = {
+  pending: 'قيد المراجعة',
+  approved: 'معتمد',
+  rejected: 'مرفوض',
+  hidden: 'مخفي',
+}
+
+const AUDIT_ACTION_LABEL: Record<string, string> = {
+  'user.ban': 'حظر الحساب',
+  'user.unban': 'إلغاء حظر الحساب',
+  'user.role.change': 'تغيير الدور',
+  'user.premium.toggle': 'تغيير حالة التميز',
+  'business.approve': 'اعتماد نشاط',
+  'business.reject': 'رفض نشاط',
+  'business.create': 'إنشاء نشاط',
+  'business.update': 'تعديل نشاط',
+  'business.archive': 'أرشفة نشاط',
+  'business.owner.assign': 'ربط التاجر بالنشاط',
+  'business.owner.remove': 'فك ربط التاجر بالنشاط',
+}
+
+function getReviewStatusLabel(status: string): string {
+  return REVIEW_STATUS_LABEL[status] ?? 'حالة غير محددة'
+}
+
+function getAuditActionLabel(action: string): string {
+  const normalized = action.toLowerCase()
+  if (AUDIT_ACTION_LABEL[normalized]) return AUDIT_ACTION_LABEL[normalized]
+  if (normalized.startsWith('business.')) return 'إجراء على نشاط'
+  if (normalized.startsWith('user.')) return 'إجراء على حساب'
+  return 'إجراء إداري'
 }
 
 function timeAgo(iso: string): string {
@@ -72,11 +105,11 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
           <div className={styles.headerInfo}>
             <h2 className={styles.name}>{u.display_name}</h2>
             <div className={styles.badges}>
-              <span className={styles.badge}>{ROLE_LABEL[detail.role] ?? detail.role}</span>
+              <span className={styles.badge}>{ROLE_LABEL[detail.role] ?? 'غير محدد'}</span>
               {u.is_premium &&
                 (!u.premium_until || new Date(u.premium_until).getTime() > Date.now()) && (
                 <span className={`${styles.badge} ${styles.badgeGold}`}>
-                  <CrownGoldIcon size={11} /> Premium
+                  <CrownGoldIcon size={11} /> مميز
                 </span>
               )}
               {u.verified_at && (
@@ -113,9 +146,9 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
           </div>
           {u.premium_until && (
             <div className={styles.metaItem}>
-              <span className={styles.metaLabel}>Premium حتى</span>
+              <span className={styles.metaLabel}>مميز حتى</span>
               <span className={styles.metaValue}>
-                {new Date(u.premium_until).toLocaleDateString('en-US', {
+                {new Date(u.premium_until).toLocaleDateString('ar-EG', {
                   year: 'numeric',
                   month: 'short',
                   day: 'numeric',
@@ -183,7 +216,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
                     {'★'.repeat(r.rating)}
                     {'☆'.repeat(5 - r.rating)}
                   </span>
-                  <span className={styles.reviewStatus}>{r.status}</span>
+                  <span className={styles.reviewStatus}>{getReviewStatusLabel(r.status)}</span>
                   <span className={styles.reviewTime}>{timeAgo(r.created_at)}</span>
                 </div>
                 {r.comment && <p className={styles.reviewComment}>{r.comment}</p>}
@@ -208,7 +241,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
             {detail.auditLogs.map((l) => (
               <li key={l.id} className={styles.listItem}>
                 <div className={styles.auditRow}>
-                  <code className={styles.auditAction}>{l.action}</code>
+                  <code className={styles.auditAction}>{getAuditActionLabel(l.action)}</code>
                   <span className={styles.auditTime}>{timeAgo(l.created_at)}</span>
                 </div>
               </li>
