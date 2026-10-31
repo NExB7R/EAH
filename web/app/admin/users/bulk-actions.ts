@@ -21,7 +21,7 @@ const bulkBanSchema = z.object({
   reason: z.string().trim().min(5, 'السبب قصير').max(300),
 })
 
-type BulkModerationContext = { userId: string; role: 'admin' | 'super_admin' }
+type BulkModerationContext = { userId: string; role: 'super_admin' }
 type PreparedTargets =
   | {
       ok: true
@@ -65,12 +65,8 @@ async function prepareModerationTargets(
     return { ok: false, error: 'بعض الحسابات ليس لها دور مهيأ — أصلح بيانات الحساب أولًا' }
   }
   if (roles.some((item) => item.role === 'super_admin')) {
-    return { ok: false, error: 'لا يمكن الحظر الجماعي أو فك الحظر عن حساب الأدمن الأعلى' }
+    return { ok: false, error: 'لا يمكن الحظر الجماعي أو فك الحظر عن حساب الأدمن' }
   }
-  if (ctx.role !== 'super_admin' && roles.some((item) => item.role === 'admin')) {
-    return { ok: false, error: 'إدارة حظر حسابات الأدمن متاحة للأدمن الأعلى فقط' }
-  }
-
   return { ok: true, admin, ids, roles }
 }
 
@@ -179,7 +175,7 @@ export async function bulkChangeRole(ids: string[], role: string): Promise<Resul
 
   if (rolesError) return { ok: false, error: 'تعذر التحقق من الأدوار الحالية' }
   if ((existingRoles ?? []).some((item) => item.role === 'super_admin')) {
-    return { ok: false, error: 'لا يمكن تغيير دور الأدمن الأعلى من التعديل الجماعي' }
+    return { ok: false, error: 'لا يمكن تغيير دور الأدمن من التعديل الجماعي' }
   }
 
   if (parsed.data.role !== 'merchant') {
