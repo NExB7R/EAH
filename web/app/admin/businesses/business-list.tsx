@@ -170,7 +170,7 @@ export default function BusinessList({ businesses, status }: Props) {
       {showReject && (
         <form onSubmit={handleBulkReject} className={styles.bulkRejectForm}>
           <p className={styles.bulkRejectLabel}>
-            رفض {selected.size} نشاط — اكتب السبب (هيوصل لكل صاحب نشاط):
+            رفض {selected.size} نشاط — اكتب السبب (هيوصل لكل تاجر مرتبط بالنشاط):
           </p>
           <textarea
             name="reason"
