@@ -156,7 +156,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
 
       {ownerSearchLimited && q && (
         <p className={styles.searchNotice} role="status">
-          البحث عن المالكين واسع أو غير متاح مؤقتًا. ضيّق اسم المالك أو رقم الهاتف لتحصل على نتائج
+          البحث عن التجار المرتبطين واسع أو غير متاح مؤقتًا. ضيّق الاسم أو رقم الهاتف لتحصل على نتائج
           أدق.
         </p>
       )}
