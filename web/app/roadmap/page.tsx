@@ -55,7 +55,7 @@ const PHASES: {
         status: 'current',
       },
       { title: 'كشف وسيلة التواصل', body: 'كشف رقم التاجر بعد التحقق', status: 'current' },
-      { title: 'المساعد الذكي', body: 'AI Advisor لكل تاجر', status: 'next' },
+      { title: 'المساعد الذكي', body: 'مساعد ذكي لكل تاجر', status: 'next' },
     ],
   },
   {
