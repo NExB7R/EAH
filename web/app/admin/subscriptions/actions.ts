@@ -70,7 +70,7 @@ export async function approveSubscription(id: string, formData: FormData): Promi
     })
     .eq('id', id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   // إشعار للتاجر المرتبط بالنشاط
   const biz = sub.business as unknown as { name: string; owner_profile_id: string } | null
@@ -125,7 +125,7 @@ export async function rejectSubscription(id: string, formData: FormData): Promis
     .update({ status: 'rejected' })
     .eq('id', id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   const biz = sub.business as unknown as { name: string; owner_profile_id: string } | null
   if (biz?.owner_profile_id) {
@@ -172,7 +172,7 @@ export async function extendSubscription(id: string, days: number): Promise<Resu
     .update({ expires_at: next.toISOString(), status: 'active' })
     .eq('id', id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(ctx.supabase, 'subscription.extend', id, { days })
 
@@ -191,7 +191,7 @@ export async function cancelSubscription(id: string): Promise<Result> {
     .update({ status: 'cancelled' })
     .eq('id', id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(ctx.supabase, 'subscription.cancel', id)
 
