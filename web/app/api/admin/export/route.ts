@@ -16,7 +16,7 @@ type Row = Record<string, unknown>
 export async function GET(req: NextRequest) {
   const ctx = await requireAdmin()
   if (!ctx.ok) {
-    return new Response('Unauthorized', { status: 403 })
+    return new Response('غير مصرح', { status: 403 })
   }
 
   const rateLimit = await checkRateLimit(
@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
 
     const columns: CsvColumn<Row>[] = [
       { key: 'name', label: 'الاسم' },
-      { key: 'slug', label: 'Slug' },
+      { key: 'slug', label: 'الرابط المختصر' },
       { key: 'business_type', label: 'النوع' },
       { key: 'area', label: 'المنطقة' },
       { key: 'city', label: 'المدينة' },
@@ -117,7 +117,7 @@ export async function GET(req: NextRequest) {
     if (status === 'merchants') rows = rows.filter((r) => r.role === 'merchant')
     else if (status === 'customers') rows = rows.filter((r) => r.role === 'customer')
     else if (status === 'admins')
-      rows = rows.filter((r) => r.role === 'admin' || r.role === 'super_admin')
+      rows = rows.filter((r) => r.role === 'super_admin')
     else if (status === 'premium') rows = rows.filter((r) => r.is_premium)
     else if (status === 'banned') {
       const now = Date.now()
@@ -135,12 +135,24 @@ export async function GET(req: NextRequest) {
       )
     }
 
+    rows = rows.map((row) => ({
+      ...row,
+      role:
+        row.role === 'super_admin'
+          ? 'الأدمن'
+          : row.role === 'merchant'
+            ? 'التاجر'
+            : row.role === 'customer'
+              ? 'العميل'
+              : 'غير محدد',
+    }))
+
     const columns: CsvColumn<Row>[] = [
       { key: 'display_name', label: 'الاسم' },
       { key: 'phone', label: 'الرقم' },
       { key: 'role', label: 'الدور' },
       { key: 'trust_score', label: 'نقاط المشاركة' },
-      { key: 'is_premium', label: 'Premium' },
+      { key: 'is_premium', label: 'التميز' },
       { key: 'banned_until', label: 'محظور حتى' },
       { key: 'created_at', label: 'تاريخ التسجيل' },
     ]
@@ -210,7 +222,7 @@ export async function GET(req: NextRequest) {
     const columns: CsvColumn<Row>[] = [
       { key: 'featured_order', label: 'الترتيب' },
       { key: 'name', label: 'الاسم' },
-      { key: 'slug', label: 'Slug' },
+      { key: 'slug', label: 'الرابط المختصر' },
       { key: 'business_type', label: 'النوع' },
       { key: 'area', label: 'المنطقة' },
       { key: 'featured_pin', label: 'مثبّت' },
@@ -342,5 +354,5 @@ export async function GET(req: NextRequest) {
     return csvResponse(buildCsv(rows, columns), `health-${status || 'all'}-${timestamp}`)
   }
 
-  return new Response('Unknown export type', { status: 400 })
+  return new Response('نوع التصدير غير معروف', { status: 400 })
 }
