@@ -20,7 +20,7 @@ const ROLES = [
 ]
 
 function getRoleLabel(role: string): string {
-  return ROLES.find((item) => item.value === role)?.label ?? (role === 'super_admin' ? 'الأدمن الأعلى' : role === 'admin' ? 'دور إداري قديم' : role)
+  return ROLES.find((item) => item.value === role)?.label ?? (role === 'super_admin' ? 'الأدمن' : role === 'admin' ? 'العميل' : 'غير محدد')
 }
 
 type Modal = 'ban' | 'role' | 'trust' | null
