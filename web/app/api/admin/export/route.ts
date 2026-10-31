@@ -172,7 +172,7 @@ export async function GET(req: NextRequest) {
       phone: p.phone,
       role: roleMap.get(p.id as string) ?? 'customer',
       trust_score: p.trust_score,
-      is_premium: YES_NO(p.is_premium),
+      is_premium: p.is_premium,
       banned_until: p.banned_until,
       created_at: p.created_at,
     }))
@@ -200,6 +200,7 @@ export async function GET(req: NextRequest) {
 
     rows = rows.map((row) => ({
       ...row,
+      is_premium: YES_NO(row.is_premium),
       role:
         row.role === 'super_admin'
           ? 'الأدمن'
@@ -402,13 +403,7 @@ export async function GET(req: NextRequest) {
       else qb = qb.eq('severity', status)
     }
     const { data } = await qb
-    let rows: Row[] = (data ?? []).map((row) => ({
-      ...row,
-      severity: ({ critical: 'حرج', error: 'خطأ', warning: 'تحذير', info: 'معلومة' } as Record<string, string>)[String(row.severity)] ?? 'غير محدد',
-      source: 'مصدر داخلي',
-      path: 'مسار داخلي',
-      message: 'تفاصيل الخطأ محفوظة داخليًا.',
-    }))
+    let rows: Row[] = (data ?? []) as Row[]
     if (q) {
       rows = rows.filter(
         (r) =>
@@ -419,6 +414,13 @@ export async function GET(req: NextRequest) {
             .includes(q),
       )
     }
+    rows = rows.map((row) => ({
+      ...row,
+      severity: ({ critical: 'حرج', error: 'خطأ', warning: 'تحذير', info: 'معلومة' } as Record<string, string>)[String(row.severity)] ?? 'غير محدد',
+      source: 'مصدر داخلي',
+      path: 'مسار داخلي',
+      message: 'تفاصيل الخطأ محفوظة داخليًا.',
+    }))
 
     const columns: CsvColumn<Row>[] = [
       { key: 'severity', label: 'الخطورة' },
