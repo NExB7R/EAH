@@ -417,13 +417,13 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       .maybeSingle()
 
     if (roleLookupError) {
-      return { ok: false, error: 'تعذر التحقق من دور حساب المالك — حاول تاني' }
+      return { ok: false, error: 'تعذر التحقق من دور الحساب المرتبط بالنشاط — حاول تاني' }
     }
     if (!roleRow) {
-      return { ok: false, error: 'حساب المالك غير مهيأ داخل النظام — راجع حسابه قبل الربط' }
+      return { ok: false, error: 'الحساب المرتبط بالنشاط غير مهيأ داخل النظام — راجع حسابه قبل الربط' }
     }
     if (roleRow.role !== 'customer' && roleRow.role !== 'merchant') {
-      return { ok: false, error: 'اختر حساب مشتري أو بايع، ولا تربط النشاط بحساب إداري' }
+      return { ok: false, error: 'اختر حساب عميل أو تاجر، ولا تربط النشاط بحساب إداري' }
     }
     selectedOwnerRole = roleRow.role
   }
@@ -564,14 +564,14 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         return {
           ok: false,
           error:
-            'تعذّر تفعيل حساب المالك وتعذّر إلغاء الإنشاء بالكامل. راجع النشاط في لوحة الإدارة قبل إعادة المحاولة.',
+            'تعذّر تفعيل الحساب المرتبط بالنشاط وتعذّر إلغاء الإنشاء بالكامل. راجع النشاط في لوحة الإدارة قبل إعادة المحاولة.',
         }
       }
 
       return {
         ok: false,
         error:
-          'تعذّر تفعيل حساب المالك كبايع، وتم إلغاء إنشاء النشاط. حاول مرة أخرى أو راجع صلاحيات النظام.',
+          'تعذّر تفعيل الحساب المرتبط بالنشاط كتاجر، وتم إلغاء إنشاء النشاط. حاول مرة أخرى أو راجع صلاحيات النظام.',
       }
     }
   }
@@ -582,7 +582,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         userId: d.owner_profile_id,
         type: 'admin',
         title: 'تم ربط نشاط بحسابك',
-        body: `نشاط "${d.name}" اتربط بحسابك — تقدر تديره من لوحة البايع`,
+        body: `نشاط "${d.name}" اتربط بحسابك — تقدر تديره من لوحة التاجر`,
         deepLink: '/merchant',
       })
     } catch {
@@ -760,7 +760,7 @@ export async function findUserByPhone(phone: string): Promise<UserLookup> {
   try {
     admin = createServiceClient()
   } catch {
-    return { ok: false, error: 'البحث عن حساب المالك غير متاح مؤقتًا — حاول تاني' }
+    return { ok: false, error: 'البحث عن الحساب المرتبط بالنشاط غير متاح مؤقتًا — حاول تاني' }
   }
 
   const { data: profile, error: profileError } = await admin
@@ -781,10 +781,10 @@ export async function findUserByPhone(phone: string): Promise<UserLookup> {
   ])
 
   if (bizRes.error || roleRes.error) {
-    return { ok: false, error: 'تعذر تحميل بيانات حساب المالك — حاول تاني' }
+    return { ok: false, error: 'تعذر تحميل بيانات الحساب المرتبط بالنشاط — حاول تاني' }
   }
   if (!roleRes.data || (roleRes.data.role !== 'customer' && roleRes.data.role !== 'merchant')) {
-    return { ok: false, error: 'حساب المستخدم غير مهيأ لدور مشتري أو بايع' }
+    return { ok: false, error: 'حساب المستخدم غير مهيأ لدور عميل أو تاجر' }
   }
 
   return {
@@ -936,7 +936,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
         })
         return {
           ok: false,
-          error: 'النشاط ما زال مربوطًا بالحساب، لكن تعذّر تفعيل دور البايع. أوقفنا الطلبات لحماية النشاط؛ راجع الدور وإعدادات الطلب.',
+          error: 'النشاط ما زال مربوطًا بالحساب، لكن تعذّر تفعيل دور التاجر. أوقفنا الطلبات لحماية النشاط؛ راجع الدور وإعدادات الطلب.',
         }
       }
 
@@ -965,13 +965,13 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
         })
         return {
           ok: false,
-          error: 'تعذّر تفعيل حساب المالك وتعذّر التراجع عن الربط. راجع النشاط قبل إعادة المحاولة.',
+          error: 'تعذّر تفعيل الحساب المرتبط بالنشاط وتعذّر التراجع عن الربط. راجع النشاط قبل إعادة المحاولة.',
         }
       }
 
       return {
         ok: false,
-        error: 'تعذّر تفعيل حساب المالك كبايع، وتم التراجع عن الربط. حاول تاني.',
+        error: 'تعذّر تفعيل الحساب المرتبط بالنشاط كتاجر، وتم التراجع عن الربط. حاول تاني.',
       }
     }
   }
