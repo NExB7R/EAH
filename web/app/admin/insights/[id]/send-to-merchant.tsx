@@ -34,7 +34,7 @@ export default function SendToMerchant({ insightId }: Props) {
       onClick={send}
       disabled={pending || state === 'ok'}
       className={styles.btn}
-      title={error ?? 'إرسال إشعار لصاحب النشاط'}
+      title={error ?? 'إرسال إشعار لالتاجر المرتبط بالنشاط'}
     >
       {state === 'ok' ? (
         <>
@@ -49,7 +49,7 @@ export default function SendToMerchant({ insightId }: Props) {
       ) : (
         <>
           <BellIcon size={13} />
-          <span>{pending ? '…' : 'إرسال لصاحب النشاط'}</span>
+          <span>{pending ? '…' : 'إرسال لالتاجر المرتبط بالنشاط'}</span>
         </>
       )}
     </button>
