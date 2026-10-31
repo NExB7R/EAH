@@ -231,7 +231,7 @@ export async function getAudienceCounts(): Promise<AudienceCount[]> {
 
   return [
     { type: 'all', label: 'كل المستخدمين', count: all ?? 0 },
-    { type: 'customers', label: 'المشترين', count: customers ?? 0 },
+    { type: 'customers', label: 'العملاء', count: customers ?? 0 },
     { type: 'merchants', label: 'البياعين', count: merchants ?? 0 },
     { type: 'verified', label: 'الموثقين', count: verified ?? 0 },
     { type: 'premium', label: 'المميزين', count: premium ?? 0 },
