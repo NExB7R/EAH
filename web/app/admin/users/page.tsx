@@ -16,9 +16,9 @@ type Props = {
 
 const TABS: { key: UserFilter; label: string }[] = [
   { key: 'all', label: 'الكل' },
-  { key: 'customers', label: 'المشترون' },
-  { key: 'merchants', label: 'البايعون' },
-  { key: 'admins', label: 'الأدمن الأعلى' },
+  { key: 'customers', label: 'العملاء' },
+  { key: 'merchants', label: 'التجار' },
+  { key: 'admins', label: 'الأدمن' },
   { key: 'premium', label: 'مميز' },
   { key: 'banned', label: 'محظورين' },
 ]
