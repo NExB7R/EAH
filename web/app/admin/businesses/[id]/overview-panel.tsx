@@ -60,7 +60,7 @@ export default function OverviewPanel({ biz }: { biz: AdminBusiness }) {
       </section>
 
       {biz.owner && (
-        <Panel title="صاحب النشاط">
+        <Panel title="التاجر المرتبط بالنشاط">
           <div className={styles.ownerRow}>
             <span className={styles.ownerName}>{biz.owner.display_name}</span>
             {biz.owner.phone && <span className={styles.ownerPhone}>{biz.owner.phone}</span>}
