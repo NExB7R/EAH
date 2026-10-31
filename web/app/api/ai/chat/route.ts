@@ -127,9 +127,11 @@ export async function POST(request: Request) {
     const res = await runAgent(message, safeHistory)
 
     if (!res.ok) {
-      const isDev = process.env.NODE_ENV !== 'production'
-      const errMsg = isDev && res.error ? `[DEV] ${res.error}` : res.error
-      return NextResponse.json({ ok: false, error: errMsg }, { status: 500 })
+      console.error('[AI Chat API] agent failed:', res.error)
+      return NextResponse.json(
+        { ok: false, error: 'المساعد غير متاح مؤقتًا. حاول مرة أخرى.' },
+        { status: 500 },
+      )
     }
     return NextResponse.json(res)
   } catch (err) {
