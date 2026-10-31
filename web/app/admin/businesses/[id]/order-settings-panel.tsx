@@ -72,14 +72,14 @@ export default function OrderSettingsPanel({
             <h3 className={styles.panelTitle}>استلام الطلبات</h3>
             <p className={styles.panelSub}>
               {ownerMissing
-                ? 'اربط بايعًا لتفعيل الطلب الداخلي'
+                ? 'اربط تاجرًا لتفعيل الطلب الداخلي'
                 : isEnabled
                   ? `مفعّل — الرد خلال ${settings?.deadline_minutes} دقايق`
                   : 'مش مفعّل'}
             </p>
           </div>
           <span className={`${styles.badge} ${isEnabled ? styles.badgeOn : styles.badgeOff}`}>
-            {isEnabled ? 'مفعّل' : ownerMissing ? 'يتطلب بايعًا' : 'موقوف'}
+            {isEnabled ? 'مفعّل' : ownerMissing ? 'يتطلب تاجرًا' : 'موقوف'}
           </span>
         </div>
 
@@ -87,7 +87,7 @@ export default function OrderSettingsPanel({
           <div className={styles.ownerNotice} role="status">
             <AlertIcon size={14} />
             <span>
-              النشاط يظل ظاهرًا للناس، لكن الطلب الداخلي يحتاج ربط بايع أولًا. قنوات الاتصال المباشر
+              النشاط يظل ظاهرًا للناس، لكن الطلب الداخلي يحتاج ربط تاجر أولًا. قنوات الاتصال المباشر
               تظل منفصلة.
             </span>
           </div>
@@ -114,7 +114,7 @@ export default function OrderSettingsPanel({
           ) : ownerMissing ? (
             <button type="button" disabled className={styles.primaryBtn}>
               <CheckCircleIcon size={14} />
-              <span>اربط بايعًا أولًا</span>
+              <span>اربط تاجرًا أولًا</span>
             </button>
           ) : (
             <button
@@ -133,7 +133,7 @@ export default function OrderSettingsPanel({
       {showEnable && (
         <Modal onClose={() => !pending && setShowEnable(false)}>
           <h3 className={styles.modalTitle}>تفعيل استلام الطلبات</h3>
-          <p className={styles.modalText}>البايع هيستقبل إشعار بالالتزامات دي:</p>
+          <p className={styles.modalText}>التاجر هيستقبل إشعار بالالتزامات دي:</p>
           <ul className={styles.modalList}>
             <li>
               <ClockIcon size={13} />
@@ -195,7 +195,7 @@ export default function OrderSettingsPanel({
         <Modal onClose={() => !pending && setShowDisable(false)}>
           <h3 className={styles.modalTitle}>إيقاف استلام الطلبات</h3>
           <p className={styles.modalText}>
-            هيتولّد <strong>تقرير ملخص</strong> لفترة الاستلام + إشعار للبايع بالنتائج. الاستمرار؟
+            هيتولّد <strong>تقرير ملخص</strong> لفترة الاستلام + إشعار للتاجر بالنتائج. الاستمرار؟
           </p>
           <div className={styles.modalActions}>
             <button
