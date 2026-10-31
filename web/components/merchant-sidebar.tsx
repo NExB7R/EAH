@@ -56,7 +56,7 @@ const SECTIONS: Section[] = [
       { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon, badge: 'orders' },
       { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
       { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
-      { href: '/merchant/qr', label: 'رمز QR للنشاط', Icon: QrCodeIcon },
+      { href: '/merchant/qr', label: 'رمز الاستجابة السريعة للنشاط', Icon: QrCodeIcon },
     ],
   },
   {
@@ -92,10 +92,10 @@ export default function MerchantSidebar({ newOrders = 0, hasBusiness = true }: P
       ]
 
   return (
-    <aside className={styles.sidebar} aria-label="لوحة البايع">
-      <Link href="/merchant" className={styles.brand} aria-label="EAH — لوحة البايع">
+    <aside className={styles.sidebar} aria-label="لوحة التاجر">
+      <Link href="/merchant" className={styles.brand} aria-label="EAH — لوحة التاجر">
         <Logo size="xs" variant="compact" href={null} />
-        <span className={styles.brandText}>لوحة البايع</span>
+        <span className={styles.brandText}>لوحة التاجر</span>
       </Link>
       <nav className={styles.nav} aria-label="إدارة نشاطك">
         {sections.map((section) => (
@@ -134,7 +134,7 @@ export default function MerchantSidebar({ newOrders = 0, hasBusiness = true }: P
           </div>
         ))}
         <ul className={styles.list}>
-          <li><GlobalShareAction className={styles.item} label="شارك المنصة + QR" /></li>
+          <li><GlobalShareAction className={styles.item} label="شارك المنصة ورمزها السريع" /></li>
         </ul>
       </nav>
     </aside>
