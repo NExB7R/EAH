@@ -32,7 +32,7 @@ export async function approveBusinessType(businessId: string): Promise<Result> {
     .select('id, name, slug, owner_profile_id')
     .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!business)
     return { ok: false, error: 'الطلب لم يعد بانتظار الموافقة، حدّث القائمة وحاول تاني' }
 
@@ -86,7 +86,7 @@ export async function rejectBusinessType(businessId: string, reason: string): Pr
     .select('id, name, owner_profile_id')
     .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!business)
     return { ok: false, error: 'الطلب لم يعد بانتظار الموافقة، حدّث القائمة وحاول تاني' }
 
