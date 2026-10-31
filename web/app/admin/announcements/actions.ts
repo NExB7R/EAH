@@ -60,7 +60,7 @@ export async function createAnnouncement(formData: FormData): Promise<ActionResu
     .select('id')
     .single()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(auth.supabase, {
     actorUserId: auth.userId,
@@ -84,7 +84,7 @@ export async function toggleAnnouncement(id: string, active: boolean): Promise<A
     .update({ is_active: active, updated_at: new Date().toISOString() })
     .eq('id', id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(auth.supabase, {
     actorUserId: auth.userId,
@@ -104,7 +104,7 @@ export async function deleteAnnouncement(id: string): Promise<ActionResult> {
 
   const { error } = await auth.supabase.from('announcements').delete().eq('id', id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(auth.supabase, {
     actorUserId: auth.userId,
