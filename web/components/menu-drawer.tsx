@@ -69,7 +69,7 @@ const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/trust', label: 'السمعة والتوثيق', Icon: ShieldCheckIcon },
 ]
 
-// ─── روابط الحساب المشتركة (المشتري والبايع) ───
+// ─── روابط الحساب المشتركة (العميل والتاجر) ───
 const ACCOUNT_ITEMS: MenuItem[] = [
   { href: '/account', label: 'حسابي', Icon: LayoutDashboardIcon },
   { href: '/account/orders', label: 'طلباتي', Icon: FileTextIcon },
@@ -79,7 +79,7 @@ const ACCOUNT_ITEMS: MenuItem[] = [
   { href: '/account/points', label: 'النقاط', Icon: GiftIcon },
 ]
 
-// ─── مساحة عمل البايع: تطابق الروابط قائمة MerchantSidebar ───
+// ─── مساحة عمل التاجر: تطابق الروابط قائمة MerchantSidebar ───
 const SELLER_SECTION: MenuItem[] = [
   { href: '/merchant', label: 'نظرة عامة', Icon: LayoutDashboardIcon },
   { href: '/merchant/business', label: 'بيانات النشاط', Icon: StoreIcon },
@@ -87,7 +87,7 @@ const SELLER_SECTION: MenuItem[] = [
   { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon },
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
   { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
-  { href: '/merchant/qr', label: 'رمز QR للنشاط', Icon: QrCodeIcon },
+  { href: '/merchant/qr', label: 'رمز الاستجابة السريعة للنشاط', Icon: QrCodeIcon },
   { href: '/merchant/insights', label: 'المساعد الذكي', Icon: SparklesIcon },
   { href: '/merchant/trust', label: 'سمعة النشاط', Icon: ShieldCheckIcon },
   { href: '/merchant/subscription', label: 'الباقة والاشتراك', Icon: CrownGoldIcon },
@@ -95,7 +95,7 @@ const SELLER_SECTION: MenuItem[] = [
   { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
 ]
 
-// ─── بداية البايع (للزائر أو المشتري الذي ليس لديه نشاط) ───
+// ─── بداية التاجر (للزائر أو العميل الذي ليس لديه نشاط) ───
 const SELLER_ONBOARDING_ITEMS: MenuItem[] = [
   { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
   { href: '/pricing', label: 'الباقات', Icon: GiftIcon },
@@ -302,7 +302,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             ))}
           </ul>
 
-          {/* روابط الحساب للمشتري والبايع المسجلين */}
+          {/* روابط الحساب للعميل والتاجر المسجلين */}
           {isLoggedIn && !isAdmin && (
             <>
               <div className={styles.divider} />
@@ -330,7 +330,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             </>
           )}
 
-          {/* مساحة عمل البايع المرتبط بنشاط */}
+          {/* مساحة عمل التاجر المرتبط بنشاط */}
           {isSeller && (
             <>
               <div className={styles.divider} />
@@ -358,7 +358,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             </>
           )}
 
-          {/* تسجيل نشاط للمشتري المسجل الذي لا يملك نشاطًا */}
+          {/* تسجيل نشاط للعميل المسجل الذي لا يملك نشاطًا */}
           {isLoggedIn && !isSeller && !isAdmin && (
             <>
               <div className={styles.divider} />
@@ -392,7 +392,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
                 <StoreIcon size={14} />
-                <span>للبايع</span>
+                <span>للتاجر</span>
               </div>
               <ul className={styles.list}>
                 {SELLER_ONBOARDING_ITEMS.map(({ href, label, Icon }) => (
@@ -470,7 +470,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               </button>
             </li>
 
-            <li><GlobalShareAction className={styles.item} label="شارك المنصة + QR" /></li>
+            <li><GlobalShareAction className={styles.item} label="شارك المنصة ورمزها السريع" /></li>
           </ul>
 
           {/* Legal */}
