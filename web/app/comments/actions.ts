@@ -148,7 +148,7 @@ export async function createComment(
     }
   }
 
-  // إشعار لصاحب النشاط (لو مش هو الكاتب)
+  // إشعار للتاجر المرتبط بالنشاط (إذا لم يكن هو كاتب التعليق)
   const { data: biz } = await supabase
     .from('businesses')
     .select('owner_profile_id, name')
