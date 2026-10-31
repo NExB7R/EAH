@@ -224,7 +224,7 @@ export default function OrdersList({ orders }: Props) {
                     {order.status === 'rejected'
                       ? 'النشاط معتذر عن الطلب — كلمه على واتساب لو محتاج'
                       : order.status === 'expired'
-                        ? 'البايع مردش في الوقت — جرّب تطلب من مكان تاني'
+                        ? 'التاجر مردش في الوقت — جرّب تطلب من مكان تاني'
                         : 'الطلب اتلغى'}
                     {order.business && (
                       <Link href="/explore" className={styles.similarLink}>
