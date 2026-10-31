@@ -12,7 +12,7 @@ type Props = {
 }
 
 export default function GlobalShareAction({
-  label = 'شارك المنصة + QR',
+  label = 'شارك المنصة ورمز الاستجابة السريعة',
   className = '',
 }: Props) {
   const [mounted, setMounted] = useState(false)
