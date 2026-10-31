@@ -147,7 +147,7 @@ export async function reorderFeatured(ids: string[]): Promise<ActionResult> {
 
   const results = await Promise.all(updates)
   const failed = results.find((r) => r.error)
-  if (failed?.error) return { ok: false, error: failed.error.message }
+  if (failed?.error) return { ok: false, error: 'تعذر حفظ ترتيب الأنشطة المميزة. حاول مرة أخرى.' }
 
   await logAudit(ctx.supabase, 'featured.reorder_bulk', '', {
     count: parsed.data.ids.length,
