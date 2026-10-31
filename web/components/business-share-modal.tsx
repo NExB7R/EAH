@@ -114,7 +114,7 @@ export default function BusinessShareModal({ open, onClose, url, title }: Props)
             className={tab === 'qr' ? styles.tabActive : styles.tab}
             onClick={() => setTab('qr')}
           >
-            <span>QR</span>
+            <span>الرمز</span>
           </button>
         </div>
 
@@ -166,7 +166,7 @@ export default function BusinessShareModal({ open, onClose, url, title }: Props)
               onClick={() => setTab('qr')}
             >
               <span className={styles.platform}>▦</span>
-              <span>QR</span>
+              <span>الرمز</span>
             </button>
           </div>
         )}
@@ -178,7 +178,7 @@ export default function BusinessShareModal({ open, onClose, url, title }: Props)
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={qrDataUrl}
-                  alt={`رمز QR لصفحة ${title}`}
+                  alt={`رمز الاستجابة السريعة لصفحة ${title}`}
                   className={styles.qrImg}
                   width={280}
                   height={280}
@@ -186,7 +186,7 @@ export default function BusinessShareModal({ open, onClose, url, title }: Props)
               ) : qrFailed ? (
                 <p className={styles.qrHint} role="alert">تعذر إنشاء الرمز. حاول مرة تانية.</p>
               ) : (
-                <p className={styles.qrHint} role="status">جارٍ تجهيز رمز QR…</p>
+                <p className={styles.qrHint} role="status">جارٍ تجهيز رمز الاستجابة السريعة…</p>
               )}
             </div>
             <p className={styles.qrHint}>امسح الكود لفتح الصفحة مباشرة</p>
@@ -196,7 +196,7 @@ export default function BusinessShareModal({ open, onClose, url, title }: Props)
                 download="eah-qr.png"
                 className={styles.downloadBtn}
               >
-                تحميل رمز QR
+                تحميل الرمز
               </a>
             )}
           </div>
