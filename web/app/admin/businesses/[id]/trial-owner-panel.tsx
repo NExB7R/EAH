@@ -19,7 +19,7 @@ import {
 import styles from './trial-owner-panel.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// Admin Panel — إدارة التجربة + ربط المالك
+// Admin Panel — إدارة التجربة + ربط التاجر المرتبط
 // ═══════════════════════════════════════════════════════════
 
 type UserFound = {
@@ -148,7 +148,7 @@ export default function TrialOwnerPanel({
           </span>
         </div>
         <div className={styles.statusItem}>
-          <span className={styles.statusLabel}>المالك</span>
+          <span className={styles.statusLabel}>التاجر المرتبط</span>
           <span className={styles.ownerText}>{ownerDisplayName ?? '— غير مربوط —'}</span>
         </div>
       </div>
@@ -263,7 +263,7 @@ export default function TrialOwnerPanel({
             </span>
             <div>
               <strong className={styles.sectionTitle}>
-                المالك الحالي: {ownerDisplayName ?? '—'}
+                التاجر المرتبط حاليًا: {ownerDisplayName ?? '—'}
               </strong>
               {ownerPhone && (
                 <p className={styles.sectionDesc} dir="ltr">
