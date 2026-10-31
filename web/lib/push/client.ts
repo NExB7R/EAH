@@ -62,7 +62,7 @@ export async function subscribeToPush(): Promise<{ ok: true } | { ok: false; err
     if (!res.ok) return { ok: false, error: 'فشل الحفظ' }
     return { ok: true }
   } catch (err) {
-    return { ok: false, error: (err as Error).message }
+    return { ok: false, error: 'تعذر إتمام إعداد الإشعارات. حاول مرة أخرى.' }
   }
 }
 
@@ -87,6 +87,6 @@ export async function unsubscribeFromPush(): Promise<{ ok: true } | { ok: false;
 
     return { ok: true }
   } catch (err) {
-    return { ok: false, error: (err as Error).message }
+    return { ok: false, error: 'تعذر إيقاف الإشعارات. حاول مرة أخرى.' }
   }
 }
