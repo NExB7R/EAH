@@ -9,6 +9,39 @@ import styles from './audit.module.css'
 // EAH — Audit Filters (search + action + actor)
 // ═══════════════════════════════════════════════════════════
 
+const ACTION_LABEL: Record<string, string> = {
+  'featured.enable': 'تفعيل التمييز',
+  'featured.disable': 'إلغاء التمييز',
+  'featured.pin': 'تثبيت نشاط',
+  'featured.unpin': 'إلغاء تثبيت نشاط',
+  'featured.reorder': 'إعادة ترتيب الأنشطة',
+  'featured.extend': 'تمديد التمييز',
+  'notifications.broadcast': 'إرسال إشعار جماعي',
+  'review.moderate': 'مراجعة تقييم',
+  'user.ban': 'حظر حساب',
+  'user.unban': 'إلغاء حظر حساب',
+  'business.approve': 'اعتماد نشاط',
+  'business.reject': 'رفض نشاط',
+  'business.archive': 'أرشفة نشاط',
+  'business.republish': 'إعادة نشر نشاط',
+  'business.delete': 'حذف نشاط',
+  'subscription.approve': 'اعتماد اشتراك',
+  'subscription.reject': 'رفض اشتراك',
+  'subscription.extend': 'تمديد اشتراك',
+  'subscription.cancel': 'إلغاء اشتراك',
+  'ad.approve': 'اعتماد إعلان',
+  'ad.reject': 'رفض إعلان',
+  'ad.pause': 'إيقاف إعلان',
+  'ad.resume': 'استئناف إعلان',
+  'ad.delete': 'حذف إعلان',
+  'features.update': 'تحديث الميزات',
+  'texts.update': 'تحديث النصوص',
+}
+
+function getActionLabel(action: string): string {
+  return ACTION_LABEL[action] ?? 'إجراء إداري'
+}
+
 type Props = {
   actions: string[]
   actors: { id: string; name: string }[]
@@ -57,7 +90,7 @@ export default function AuditFilters({ actions, actors }: Props) {
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="ابحث بالـ action، الاسم، النوع..."
+          placeholder="ابحث بالإجراء أو الاسم أو النوع..."
           className={styles.searchInput}
           dir="rtl"
         />
@@ -77,12 +110,12 @@ export default function AuditFilters({ actions, actors }: Props) {
         value={actionFilter}
         onChange={(e) => update('action', e.target.value)}
         className={styles.select}
-        aria-label="فلترة بالـ action"
+        aria-label="فلترة بالإجراء"
       >
         <option value="">كل الإجراءات</option>
         {actions.map((a) => (
           <option key={a} value={a}>
-            {a}
+            {getActionLabel(a)}
           </option>
         ))}
       </select>
