@@ -305,7 +305,7 @@ function SlideIdea() {
           </span>
           <div>
             <strong className={styles.ideaStrong}>بدون عمولة على التاجر</strong>
-            <p className={styles.ideaText}>كل الأرباح لصاحب النشاط</p>
+            <p className={styles.ideaText}>كل الأرباح للتاجر</p>
           </div>
         </div>
         <div className={styles.ideaRow}>
@@ -366,7 +366,7 @@ function SlideCustomer() {
         <IconTile Icon={GiftIcon} label="نقاط" />
         <IconTile Icon={BellIcon} label="إشعارات" />
         <IconTile Icon={NavigationIcon} label="قريب منك" />
-        <IconTile Icon={InstallIcon} label="تطبيق PWA" />
+        <IconTile Icon={InstallIcon} label="تطبيق قابل للتثبيت" />
       </div>
     </div>
   )
@@ -416,7 +416,7 @@ function SlideTrust() {
       <div className={styles.trioGrid}>
         <TrioCard
           num="🛡️"
-          title="RLS كامل"
+          title="حماية كاملة للبيانات"
           text="كل جدول محمي. صفر تسريب."
           icon={<ShieldCheckIcon size={22} />}
         />
@@ -428,8 +428,8 @@ function SlideTrust() {
         />
         <TrioCard
           num="✨"
-          title="صفر Dark Patterns"
-          text="مفيش إعلانات مزعجة. مفيش auto-subscribe."
+          title="لا حيل تصميمية مضللة"
+          text="مفيش إعلانات مزعجة. لا اشتراك تلقائي."
           icon={<LampIcon size={22} />}
         />
       </div>
@@ -443,13 +443,13 @@ function SlideVision() {
     <div className={styles.slide}>
       <span className={styles.slideBadge}>الرؤية</span>
       <h2 className={styles.slideTitle}>
-        <span className={styles.accent}>500K</span> مستخدم خلال 5 سنين
+        <span className={styles.accent}>500 ألف</span> مستخدم خلال 5 سنين
       </h2>
       <div className={styles.visionRow}>
         <VisionStat num="100" label="نشاط" sub="سنة 1" />
         <VisionStat num="1,000" label="نشاط" sub="سنوات 2-3" />
         <VisionStat num="5,000+" label="نشاط" sub="سنة 5" />
-        <VisionStat num="500K+" label="مستخدم" sub="سنة 5" />
+        <VisionStat num="500 ألف+" label="مستخدم" sub="سنة 5" />
       </div>
       <div className={styles.visionLine} aria-hidden />
       <div className={styles.trioGrid}>
@@ -499,7 +499,7 @@ function SlideTeam() {
       <div className={styles.teamCard}>
         <div className={styles.teamAvatar}>N</div>
         <h3 className={styles.teamName}>NourEldin B7R</h3>
-        <p className={styles.teamRole}>المؤسس · Owner</p>
+        <p className={styles.teamRole}>المؤسس · </p>
         <div className={styles.teamLine} aria-hidden />
         <p className={styles.teamText}>
           بدأت EAH من حلم بسيط: نوصّل الناس بأماكنهم، ونوقف استغلال التجار.
