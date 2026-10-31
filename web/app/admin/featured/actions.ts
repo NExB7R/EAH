@@ -51,7 +51,7 @@ export async function toggleFeatured(
       }
 
   const { error } = await supabase.from('businesses').update(patch).eq('id', businessId)
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(supabase, isFeatured ? 'featured.disable' : 'featured.enable', businessId)
   revalidatePath('/admin/featured')
@@ -71,7 +71,7 @@ export async function togglePin(businessId: string, pinned: boolean): Promise<Ac
     .update({ featured_pin: !pinned })
     .eq('id', businessId)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(supabase, pinned ? 'featured.unpin' : 'featured.pin', businessId)
   revalidatePath('/admin/featured')
@@ -92,7 +92,7 @@ export async function setFeaturedOrder(businessId: string, order: number): Promi
     .update({ featured_order: safe })
     .eq('id', businessId)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(supabase, 'featured.reorder', businessId, { order: safe })
   revalidatePath('/admin/featured')
@@ -114,7 +114,7 @@ export async function extendFeaturedUntil(businessId: string, days: number): Pro
     .update({ featured_until: until })
     .eq('id', businessId)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(supabase, 'featured.extend', businessId, { days: safeDays })
   revalidatePath('/admin/featured')
