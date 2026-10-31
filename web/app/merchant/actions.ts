@@ -79,8 +79,8 @@ export async function submitMerchantApplication(formData: FormData): Promise<Act
   if (roleLookupError || !currentRole) {
     return { ok: false, error: 'تعذر التحقق من صلاحيات الحساب — حاول تاني' }
   }
-  if (currentRole.role === 'admin' || currentRole.role === 'super_admin') {
-    return { ok: false, error: 'الحسابات الإدارية تنشئ الأنشطة من لوحة الإدارة' }
+  if (currentRole.role === 'super_admin') {
+    return { ok: false, error: 'الأدمن ينشئ الأنشطة من لوحة الإدارة' }
   }
   if (currentRole.role !== 'customer' && currentRole.role !== 'merchant') {
     return { ok: false, error: 'الحساب غير مؤهل لتقديم طلب نشاط' }
