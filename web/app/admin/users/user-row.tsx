@@ -340,7 +340,7 @@ export default function UserRow({
           <ShieldCheckIcon size={12} />
           <span>
             موثّق منذ{' '}
-            {new Date(u.verified_at).toLocaleDateString('en-US', {
+            {new Date(u.verified_at).toLocaleDateString('ar-EG', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
