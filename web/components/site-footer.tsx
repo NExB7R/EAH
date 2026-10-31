@@ -35,7 +35,7 @@ import { getPublicContactSettings } from '@/lib/data/site-settings'
 const COLUMNS = [
   {
     key: 'customers',
-    title: 'للمشتري',
+    title: 'للعميل',
     Icon: TargetIcon,
     links: [
       { href: '/', label: 'الرئيسية', Icon: TargetIcon },
@@ -48,7 +48,7 @@ const COLUMNS = [
   },
   {
     key: 'merchants',
-    title: 'للبايع',
+    title: 'للتاجر',
     Icon: StoreIcon,
     links: [
       { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
@@ -168,7 +168,7 @@ export default async function SiteFooter() {
         </div>
 
         <div className={styles.sharePlatform}>
-          <GlobalShareAction className={styles.shareAction} label="شارك منصة EAH ورمز QR" />
+          <GlobalShareAction className={styles.shareAction} label="شارك منصة EAH ورمز الاستجابة السريعة" />
         </div>
 
         {/* ─── Columns ─── */}
