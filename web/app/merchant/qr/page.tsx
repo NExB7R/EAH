@@ -29,11 +29,11 @@ export default async function QrPage() {
   if (!business) {
     return (
       <div>
-        <AccountPageHeader title="QR النشاط" description="كود QR قابل للطباعة" />
+        <AccountPageHeader title="رمز الاستجابة السريعة للنشاط" description="رمز قابل للطباعة" />
         <EmptyState
           Icon={StoreIcon}
           title="مفيش نشاط"
-          description="سجّل نشاطك الأول عشان تحصل على QR"
+          description="سجّل نشاطك الأول عشان تحصل على الرمز"
         />
       </div>
     )
@@ -42,7 +42,7 @@ export default async function QrPage() {
   return (
     <div>
       <AccountPageHeader
-        title="QR النشاط"
+        title="رمز الاستجابة السريعة للنشاط"
         description="حمّل الكود واطبعه — العملاء يمسحوه ويفتحوا صفحتك فوراً"
       />
 
