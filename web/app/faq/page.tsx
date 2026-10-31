@@ -6,7 +6,7 @@ import styles from './faq.module.css'
 
 export const metadata: Metadata = {
   title: 'الأسئلة الشائعة',
-  description: 'أسئلة متكررة عن EAH — للمشتري والبايع',
+  description: 'أسئلة متكررة عن EAH — للعميل والتاجر',
 }
 
 export const revalidate = 3600
@@ -16,7 +16,7 @@ type QA = { q: string; a: string; link?: { href: string; label: string } }
 const CUSTOMER_FAQ: QA[] = [
   {
     q: 'هل EAH مجانية؟',
-    a: 'أيوه، 100% مجانية للمشتري. مفيش رسوم، مفيش اشتراكات، مفيش عمولات على الطلبات.',
+    a: 'أيوه، 100% مجانية للعميل. مفيش رسوم، مفيش اشتراكات، مفيش عمولات على الطلبات.',
   },
   {
     q: 'إزاي أطلب من نشاط؟',
@@ -59,11 +59,11 @@ const MERCHANT_FAQ: QA[] = [
   },
   {
     q: 'بتاخدوا عمولة على الطلبات؟',
-    a: 'لا، صفر عمولة. كل أرباح الطلبات ليك. EAH مش وسيط — بس بتوصلك بالمشتري مباشرة.',
+    a: 'لا، صفر عمولة. كل أرباح الطلبات ليك. EAH مش وسيط — بس بتوصلك بالعميل مباشرة.',
   },
   {
     q: 'إزاي أستقبل طلبات؟',
-    a: 'المشتري يدوس "اطلب على واتساب"، بيدخل بياناته، والنظام يبعتلك إشعار فوري. افتح /merchant/orders وأكّد الطلب.',
+    a: 'العميل يدوس "اطلب على واتساب"، بيدخل بياناته، والنظام يبعتلك إشعار فوري. افتح /merchant/orders وأكّد الطلب.',
     link: { href: '/merchant/orders', label: 'شوف الطلبات' },
   },
   {
@@ -73,8 +73,8 @@ const MERCHANT_FAQ: QA[] = [
   },
   {
     q: 'عايز QR للنشاط — إزاي؟',
-    a: 'من /merchant/qr — ولّد الكود، حمّله PNG، واطبعه على واجهة المحل أو المنيو. لما المشتري يمسحه بيفتح صفحتك فوراً.',
-    link: { href: '/merchant/qr', label: 'QR' },
+    a: 'من /merchant/qr — ولّد الكود، حمّله PNG، واطبعه على واجهة المحل أو المنيو. لما العميل يمسحه بيفتح صفحتك فوراً.',
+    link: { href: '/merchant/qr', label: 'رمز الاستجابة السريعة' },
   },
   {
     q: 'إيه فايدة المساعد الذكي؟',
@@ -119,7 +119,7 @@ const GENERAL_FAQ: QA[] = [
 
 const CATEGORIES = [
   { key: 'customer', title: 'للعملاء', Icon: UserIcon, items: CUSTOMER_FAQ, tone: 'purple' },
-  { key: 'merchant', title: 'للبايع', Icon: StoreIcon, items: MERCHANT_FAQ, tone: 'gold' },
+  { key: 'merchant', title: 'للتاجر', Icon: StoreIcon, items: MERCHANT_FAQ, tone: 'gold' },
   { key: 'general', title: 'عام', Icon: ShieldCheckIcon, items: GENERAL_FAQ, tone: 'teal' },
 ] as const
 
@@ -136,7 +136,7 @@ export default function FaqPage() {
           </span>
           <h1 className={styles.introTitle}>كل اللي محتاج تعرفه عن EAH</h1>
           <p className={styles.introText}>
-            جمّعنا هنا الأسئلة الأكثر شيوعاً — للمشتري، والبايع، وأسئلة عامة.
+            جمّعنا هنا الأسئلة الأكثر شيوعاً — للعميل، والتاجر، وأسئلة عامة.
           </p>
         </section>
 
