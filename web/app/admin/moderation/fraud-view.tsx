@@ -78,7 +78,7 @@ export default async function FraudView() {
                 <div className={styles.itemHead}>
                   <span className={styles.badge}>
                     <AlertIcon size={12} />
-                    {r.flagged_reason ? 'مراجعة آلية' : 'مراجعة آلية'}
+                    مراجعة آلية
                   </span>
                   <span className={styles.time}>{timeAgo(r.created_at)}</span>
                 </div>
