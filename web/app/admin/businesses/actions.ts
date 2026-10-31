@@ -57,7 +57,7 @@ export async function approveBusiness(businessId: string): Promise<Result> {
     .select('id')
     .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!updated)
     return { ok: false, error: 'تعذر نشر النشاط — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
 
@@ -137,7 +137,7 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
     .select('id')
     .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!updated)
     return { ok: false, error: 'تعذر حفظ قرار الرفض — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
 
@@ -191,7 +191,7 @@ export async function archiveBusiness(businessId: string): Promise<Result> {
     .select('id')
     .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!archived) return { ok: false, error: 'النشاط مش موجود أو تم تحديثه بالفعل' }
 
   await logAudit(admin, {
@@ -234,7 +234,7 @@ export async function republishBusiness(businessId: string): Promise<Result> {
     .select('id')
     .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!republished) return { ok: false, error: 'تعذر إعادة نشر النشاط — حدّث القائمة وحاول تاني' }
 
   await logAudit(admin, {
@@ -273,7 +273,7 @@ export async function deleteBusiness(businessId: string): Promise<Result> {
     .select('id')
     .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!deleted) return { ok: false, error: 'تعذر حذف النشاط — حدّث القائمة وحاول تاني' }
 
   await logAudit(admin, {
@@ -660,7 +660,7 @@ export async function updateBusiness(businessId: string, formData: FormData): Pr
     .select('id')
     .maybeSingle()
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!updated) return { ok: false, error: 'تعذر حفظ النشاط — حدّث الصفحة وحاول تاني' }
 
   await logAudit(admin, {
@@ -897,7 +897,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
       })
       .eq('id', businessId)
 
-    if (error) return { ok: false, error: error.message }
+    if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   }
 
   // Newly registered users start as customers; promote only after the business
@@ -1073,7 +1073,7 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
     })
     .eq('id', businessId)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(admin, {
     actorUserId: ctx.userId,
