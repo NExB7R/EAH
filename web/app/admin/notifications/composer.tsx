@@ -122,7 +122,7 @@ export default function Composer({ audiences }: Props) {
             <>
               <CheckCircleIcon size={16} />
               <span>
-                تم الإرسال — {result.inserted} إشعار، {result.pushed} Push
+                تم الإرسال — {result.inserted} إشعار، {result.pushed} إشعار فوري
               </span>
             </>
           ) : (
