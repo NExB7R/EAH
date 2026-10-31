@@ -57,14 +57,14 @@ export default async function FraudView() {
           <div className={styles.cardValue}>{stats.banned}</div>
         </div>
         <div className={styles.card}>
-          <div className={styles.cardLabel}>أحداث trust (24س)</div>
+          <div className={styles.cardLabel}>أحداث الثقة (24س)</div>
           <div className={styles.cardValue}>{stats.trustEvents24h}</div>
         </div>
       </div>
 
       {/* التقييمات المُعلّمة */}
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>تقييمات مُعلّمة (Velocity / Auto-flag)</h2>
+        <h2 className={styles.sectionTitle}>تقييمات مرصودة (سرعة التقييم والرصد التلقائي)</h2>
         {flaggedReviews.length === 0 ? (
           <EmptyState
             Icon={ShieldCheckIcon}
@@ -134,12 +134,12 @@ export default async function FraudView() {
 
       {/* Multi-Account IPs */}
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>عناوين IP فيها 3+ حسابات (30 يوم)</h2>
+        <h2 className={styles.sectionTitle}>عناوين إنترنت مرتبطة بثلاثة حسابات أو أكثر (30 يوم)</h2>
         {multiIps.length === 0 ? (
           <EmptyState
             Icon={ShieldCheckIcon}
             title="مفيش عناوين مريبة"
-            description="مفيش عناوين IP فيها حسابات متعددة."
+            description="مفيش عناوين إنترنت مرتبطة بحسابات متعددة."
           />
         ) : (
           <ul className={styles.list}>
@@ -158,7 +158,7 @@ export default async function FraudView() {
 
       {/* Trust Events */}
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>آخر أحداث Trust</h2>
+        <h2 className={styles.sectionTitle}>آخر أحداث الثقة</h2>
         {events.length === 0 ? (
           <EmptyState Icon={CrownGoldIcon} title="مفيش أحداث" description="مفيش حركة trust لسه." />
         ) : (
