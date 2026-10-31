@@ -13,6 +13,64 @@ export const dynamic = 'force-dynamic'
 
 type Row = Record<string, unknown>
 
+const YES_NO = (value: unknown) => (value ? 'نعم' : 'لا')
+const BUSINESS_SOURCE_LABEL: Record<string, string> = {
+  admin: 'الأدمن',
+  merchant: 'التاجر',
+}
+const SUBSCRIPTION_STATUS_LABEL: Record<string, string> = {
+  pending: 'قيد المراجعة',
+  active: 'ساري',
+  trial: 'تجريبي',
+  expired: 'منتهي',
+  cancelled: 'ملغي',
+  rejected: 'مرفوض',
+  suspended: 'موقوف',
+}
+const AD_STATUS_LABEL: Record<string, string> = {
+  pending: 'قيد المراجعة',
+  approved: 'معتمد',
+  active: 'نشط',
+  paused: 'متوقف مؤقتًا',
+  rejected: 'مرفوض',
+  expired: 'منتهي',
+  draft: 'مسودة',
+}
+const AUDIT_ACTION_LABEL: Record<string, string> = {
+  'featured.enable': 'تفعيل التمييز',
+  'featured.disable': 'إلغاء التمييز',
+  'featured.pin': 'تثبيت نشاط',
+  'featured.unpin': 'إلغاء تثبيت نشاط',
+  'featured.reorder': 'إعادة ترتيب الأنشطة',
+  'featured.extend': 'تمديد التمييز',
+  'notifications.broadcast': 'إرسال إشعار جماعي',
+  'review.moderate': 'مراجعة تقييم',
+  'user.ban': 'حظر حساب',
+  'user.unban': 'إلغاء حظر حساب',
+  'user.role.change': 'تغيير دور الحساب',
+  'business.approve': 'اعتماد نشاط',
+  'business.reject': 'رفض نشاط',
+  'business.archive': 'أرشفة نشاط',
+  'business.republish': 'إعادة نشر نشاط',
+  'business.delete': 'حذف نشاط',
+  'subscription.approve': 'اعتماد اشتراك',
+  'subscription.reject': 'رفض اشتراك',
+  'subscription.extend': 'تمديد اشتراك',
+  'subscription.cancel': 'إلغاء اشتراك',
+  'ad.approve': 'اعتماد إعلان',
+  'ad.reject': 'رفض إعلان',
+  'ad.pause': 'إيقاف إعلان',
+  'ad.resume': 'استئناف إعلان',
+  'ad.delete': 'حذف إعلان',
+}
+const ENTITY_TYPE_LABEL: Record<string, string> = {
+  business: 'نشاط',
+  profile: 'حساب',
+  advertisement: 'إعلان',
+  ad: 'إعلان',
+  subscription: 'اشتراك',
+}
+
 export async function GET(req: NextRequest) {
   const ctx = await requireAdmin()
   if (!ctx.ok) {
@@ -64,7 +122,12 @@ export async function GET(req: NextRequest) {
     else if (status === 'admin_owned') qb = qb.eq('source', 'admin')
 
     const { data } = await qb
-    let rows = (data ?? []) as Row[]
+    let rows: Row[] = (data ?? []).map((row) => ({
+      ...row,
+      is_published: YES_NO(row.is_published),
+      is_featured: YES_NO(row.is_featured),
+      source: BUSINESS_SOURCE_LABEL[String(row.source)] ?? 'غير محدد',
+    }))
     if (q)
       rows = rows.filter((r) =>
         String(r.name ?? '')
@@ -88,7 +151,7 @@ export async function GET(req: NextRequest) {
       { key: 'source', label: 'المصدر' },
       { key: 'created_at', label: 'تاريخ الإنشاء' },
     ]
-    return csvResponse(buildCsv(rows, columns), `businesses-${status || 'all'}-${timestamp}`)
+    return csvResponse(buildCsv(rows, columns), `تصدير-الأنشطة-${timestamp}`)
   }
 
   // ─── Users ───
@@ -109,7 +172,7 @@ export async function GET(req: NextRequest) {
       phone: p.phone,
       role: roleMap.get(p.id as string) ?? 'customer',
       trust_score: p.trust_score,
-      is_premium: p.is_premium,
+      is_premium: YES_NO(p.is_premium),
       banned_until: p.banned_until,
       created_at: p.created_at,
     }))
@@ -156,7 +219,7 @@ export async function GET(req: NextRequest) {
       { key: 'banned_until', label: 'محظور حتى' },
       { key: 'created_at', label: 'تاريخ التسجيل' },
     ]
-    return csvResponse(buildCsv(rows, columns), `users-${status || 'all'}-${timestamp}`)
+    return csvResponse(buildCsv(rows, columns), `تصدير-الحسابات-${timestamp}`)
   }
 
   // ─── Subscriptions ───
@@ -177,7 +240,7 @@ export async function GET(req: NextRequest) {
         plan: plan?.name_ar ?? '',
         price: plan?.price_egp ?? 0,
         status: r.status,
-        is_trial: r.is_trial,
+        is_trial: YES_NO(r.is_trial),
         starts_at: r.starts_at,
         expires_at: r.expires_at,
         created_at: r.created_at,
@@ -186,6 +249,10 @@ export async function GET(req: NextRequest) {
 
     if (status && status !== 'all') rows = rows.filter((r) => r.status === status)
     if (q) rows = rows.filter((r) => String(r.business).toLowerCase().includes(q))
+    rows = rows.map((row) => ({
+      ...row,
+      status: SUBSCRIPTION_STATUS_LABEL[String(row.status)] ?? 'حالة غير محددة',
+    }))
 
     const columns: CsvColumn<Row>[] = [
       { key: 'business', label: 'النشاط' },
@@ -197,7 +264,7 @@ export async function GET(req: NextRequest) {
       { key: 'expires_at', label: 'ينتهي' },
       { key: 'created_at', label: 'تاريخ الإنشاء' },
     ]
-    return csvResponse(buildCsv(rows, columns), `subscriptions-${status || 'all'}-${timestamp}`)
+    return csvResponse(buildCsv(rows, columns), `تصدير-الاشتراكات-${timestamp}`)
   }
 
   // ─── Featured ───
@@ -211,7 +278,7 @@ export async function GET(req: NextRequest) {
       .order('featured_order', { ascending: true })
       .limit(1000)
 
-    let rows = (data ?? []) as Row[]
+    let rows: Row[] = (data ?? []).map((row) => ({ ...row, featured_pin: YES_NO(row.featured_pin) }))
     if (q)
       rows = rows.filter((r) =>
         String(r.name ?? '')
@@ -229,7 +296,7 @@ export async function GET(req: NextRequest) {
       { key: 'featured_until', label: 'ينتهي' },
       { key: 'trust_score', label: 'نقاط المشاركة' },
     ]
-    return csvResponse(buildCsv(rows, columns), `featured-${timestamp}`)
+    return csvResponse(buildCsv(rows, columns), `تصدير-الأنشطة-المميزة-${timestamp}`)
   }
 
   // ─── Ads ───
@@ -264,6 +331,10 @@ export async function GET(req: NextRequest) {
         (r) =>
           String(r.title).toLowerCase().includes(q) || String(r.business).toLowerCase().includes(q),
       )
+    rows = rows.map((row) => ({
+      ...row,
+      status: AD_STATUS_LABEL[String(row.status)] ?? 'حالة غير محددة',
+    }))
 
     const columns: CsvColumn<Row>[] = [
       { key: 'title', label: 'العنوان' },
@@ -276,7 +347,7 @@ export async function GET(req: NextRequest) {
       { key: 'ends_at', label: 'ينتهي' },
       { key: 'created_at', label: 'تاريخ الإنشاء' },
     ]
-    return csvResponse(buildCsv(rows, columns), `ads-${status || 'all'}-${timestamp}`)
+    return csvResponse(buildCsv(rows, columns), `تصدير-الإعلانات-${timestamp}`)
   }
 
   // ─── Audit Logs ───
@@ -298,10 +369,10 @@ export async function GET(req: NextRequest) {
     let rows: Row[] = (data ?? []).map((l) => ({
       created_at: l.created_at,
       actor: l.actor_user_id ? (namesMap.get(l.actor_user_id) ?? '—') : 'نظام',
-      action: l.action,
-      entity_type: l.entity_type ?? '',
+      action: AUDIT_ACTION_LABEL[l.action] ?? 'إجراء إداري',
+      entity_type: ENTITY_TYPE_LABEL[String(l.entity_type ?? '')] ?? 'سجل إداري',
       entity_id: l.entity_id ?? '',
-      metadata: JSON.stringify(l.metadata ?? {}),
+      metadata: 'تفاصيل العملية محفوظة داخليًا لأغراض التدقيق',
     }))
 
     if (q) rows = rows.filter((r) => String(r.action).toLowerCase().includes(q))
@@ -314,7 +385,7 @@ export async function GET(req: NextRequest) {
       { key: 'entity_id', label: 'المعرّف' },
       { key: 'metadata', label: 'التفاصيل' },
     ]
-    return csvResponse(buildCsv(rows, columns), `audit-${timestamp}`)
+    return csvResponse(buildCsv(rows, columns), `تصدير-سجل-التدقيق-${timestamp}`)
   }
 
   // ─── Health (system_errors) ───
@@ -331,7 +402,13 @@ export async function GET(req: NextRequest) {
       else qb = qb.eq('severity', status)
     }
     const { data } = await qb
-    let rows = (data ?? []) as Row[]
+    let rows: Row[] = (data ?? []).map((row) => ({
+      ...row,
+      severity: ({ critical: 'حرج', error: 'خطأ', warning: 'تحذير', info: 'معلومة' } as Record<string, string>)[String(row.severity)] ?? 'غير محدد',
+      source: 'مصدر داخلي',
+      path: 'مسار داخلي',
+      message: 'تفاصيل الخطأ محفوظة داخليًا.',
+    }))
     if (q) {
       rows = rows.filter(
         (r) =>
@@ -351,7 +428,7 @@ export async function GET(req: NextRequest) {
       { key: 'resolved_at', label: 'محلول في' },
       { key: 'created_at', label: 'التاريخ' },
     ]
-    return csvResponse(buildCsv(rows, columns), `health-${status || 'all'}-${timestamp}`)
+    return csvResponse(buildCsv(rows, columns), `تصدير-حالة-النظام-${timestamp}`)
   }
 
   return new Response('نوع التصدير غير معروف', { status: 400 })
