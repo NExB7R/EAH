@@ -133,6 +133,7 @@ jobs:
             docs/migrations/2026-10-29-prelaunch-access-control.sql \
             docs/migrations/2026-10-29-restore-rls-helper-execute.sql \
             docs/migrations/2026-10-29-legacy-ads-rls-hardening.sql \
+            docs/migrations/2026-11-01-contact-reveals-super-admin-only.sql \
             docs/migrations/2026-10-30-registered-interaction-auth.sql \
             docs/migrations/2026-10-30-registered-interaction-auth-expansion.sql \
             docs/migrations/2026-10-30-comment-parent-integrity.sql \
