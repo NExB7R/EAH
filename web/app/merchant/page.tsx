@@ -44,7 +44,7 @@ const QUICK_ACTIONS = [
     Icon: ClockIcon,
   },
   { href: '/merchant/offers', label: 'العروض', desc: 'خصوماتك', Icon: TagIcon },
-  { href: '/merchant/qr', label: 'QR Code', desc: 'كود نشاطك', Icon: ShareIcon },
+  { href: '/merchant/qr', label: 'رمز الاستجابة السريعة', desc: 'كود نشاطك', Icon: ShareIcon },
   { href: '/merchant/insights', label: 'التحليلات', desc: 'تقارير ذكية', Icon: SparklesIcon },
   { href: '/merchant/settings', label: 'الإعدادات', desc: 'تخصيص النشاط', Icon: SettingsIcon },
   { href: '/merchant/subscription', label: 'الاشتراك', desc: 'الباقة', Icon: CrownGoldIcon },
