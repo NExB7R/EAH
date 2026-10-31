@@ -7,7 +7,7 @@ export default function PrintButton() {
   return (
     <button type="button" onClick={() => window.print()} className={styles.printBtn}>
       <PrinterIcon size={16} />
-      <span>طبع / PDF</span>
+      <span>طباعة التقرير</span>
     </button>
   )
 }
