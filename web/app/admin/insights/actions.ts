@@ -104,7 +104,7 @@ export async function generateAdminInsight(
     }
     if (orderMetrics.feedback_count > 0 && orderMetrics.avg_feedback_rating !== null) {
       orderPoints.push(
-        `⭐ رضا المشترين ${orderMetrics.avg_feedback_rating}/5 (${orderMetrics.feedback_count} تقييم)`,
+        `⭐ رضا العملاء ${orderMetrics.avg_feedback_rating}/5 (${orderMetrics.feedback_count} تقييم)`,
       )
     }
     const issues = Object.entries(orderMetrics.issue_breakdown)
