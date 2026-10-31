@@ -707,7 +707,7 @@ export async function adminStartTrial(businessId: string, days = 30): Promise<Re
   const result = data as { ok: boolean; error?: string } | null
   if (!result?.ok) return { ok: false, error: result?.error ?? 'فشل بدء التجربة' }
 
-  // إشعار لصاحب النشاط (لو موجود)
+  // إشعار للتاجر المرتبط بالنشاط (إذا كان مرتبطًا)
   const { data: biz } = await admin
     .from('businesses')
     .select('name, owner_profile_id')
