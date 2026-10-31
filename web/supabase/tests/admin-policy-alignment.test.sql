@@ -1,7 +1,7 @@
 -- EAH targeted regression checks for the 2026-10-29 admin/RLS migrations.
 -- Run only on a dedicated non-production database after applying the migration set.
 BEGIN;
-SELECT plan(38);
+SELECT plan(43);
 
 SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.businesses'::regclass), true, 'RLS remains enabled on businesses');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='businesses' AND policyname='businesses_admin_all'), 'admin activity policy uses shared admin authorization');
@@ -88,6 +88,12 @@ SELECT is((
 
 SELECT ok(EXISTS(SELECT 1 FROM pg_policies WHERE schemaname='public' AND tablename='reports' AND policyname='reports_self_insert'), 'reporters can still submit their own reports');
 SELECT ok((SELECT qual LIKE '%owner_profile_id%' FROM pg_policies WHERE schemaname='public' AND tablename='ads' AND policyname='ads_read'), 'ad owners retain visibility to their own ads');
+
+SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.contact_reveals'::regclass), true, 'RLS remains enabled on contact reveal audit rows');
+SELECT ok((SELECT qual LIKE '%super_admin%' AND qual NOT LIKE '%''admin''::app_role%' FROM pg_policies WHERE schemaname='public' AND tablename='contact_reveals' AND policyname='super_admin_read_contact_reveals'), 'contact reveal audit reads are restricted to super_admin');
+SELECT is((SELECT count(*)::int FROM pg_policies WHERE schemaname='public' AND tablename='contact_reveals' AND policyname='admin_read_contact_reveals'), 0, 'legacy admin policy is removed');
+SELECT is(has_table_privilege('anon','public.contact_reveals','SELECT'), false, 'anonymous visitors cannot read contact reveal audit rows');
+SELECT is(has_table_privilege('authenticated','public.contact_reveals','SELECT'), true, 'authenticated sessions can query contact reveal rows subject to super_admin-only RLS');
 
 SELECT * FROM finish();
 ROLLBACK;
