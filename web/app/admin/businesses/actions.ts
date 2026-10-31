@@ -861,7 +861,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     .update({ accepts_orders: false })
     .eq('id', businessId)
   if (closePublicOrdersError) {
-    return { ok: false, error: 'تعذر إيقاف الطلبات قبل تغيير المالك؛ لم يتغير ربط النشاط.' }
+    return { ok: false, error: 'تعذر إيقاف الطلبات قبل تغيير التاجر المرتبط؛ لم يتغير ارتباط النشاط.' }
   }
 
   const { error: closeOrderSettingsError } = await privileged
@@ -1030,7 +1030,7 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
 
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
-  if (!biz.owner_profile_id) return { ok: false, error: 'النشاط مش مربوط بأي حساب' }
+  if (!biz.owner_profile_id) return { ok: false, error: 'النشاط غير مرتبط بحساب تاجر' }
 
   // Unlinking must close both order flags before the activity becomes ownerless.
   const { error: closePublicOrdersError } = await admin
