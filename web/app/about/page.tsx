@@ -245,7 +245,7 @@ export default async function AboutPage() {
             <FeatureCard
               Icon={CrownGoldIcon}
               title="ترقيات اختيارية"
-              text="ظهور أعلى، شارات، CRM متقدم."
+              text="ظهور أعلى، شارات، إدارة متقدمة لعلاقات العملاء."
             />
           </div>
 
