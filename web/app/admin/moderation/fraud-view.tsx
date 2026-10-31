@@ -3,7 +3,7 @@ import { ShieldCheckIcon, AlertIcon, UserIcon, CrownGoldIcon } from '@/component
 import {
   getFraudStats,
   getFlaggedReviews,
-  getRecentالثقةEvents,
+  getRecentTrustEvents,
   getFlaggedUsers,
   getMultiAccountIps,
 } from '@/lib/data/fraud'
@@ -36,7 +36,7 @@ export default async function FraudView() {
   const [stats, flaggedReviews, events, flaggedUsers, multiIps] = await Promise.all([
     getFraudStats(),
     getFlaggedReviews(),
-    getRecentالثقةEvents(30),
+    getRecentTrustEvents(30),
     getFlaggedUsers(20),
     getMultiAccountIps(30),
   ])
@@ -78,7 +78,7 @@ export default async function FraudView() {
                 <div className={styles.itemHead}>
                   <span className={styles.badge}>
                     <AlertIcon size={12} />
-                    {r.flagged_reason ?? 'مُعلّم'}
+                    {r.flagged_reason ? 'مراجعة آلية' : 'مراجعة آلية'}
                   </span>
                   <span className={styles.time}>{timeAgo(r.created_at)}</span>
                 </div>
@@ -94,7 +94,7 @@ export default async function FraudView() {
         )}
       </section>
 
-      {/* Wanted Users */}
+      {/* الحسابات محل المراجعة */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>إشارات مخاطر داخلية</h2>
         {flaggedUsers.length === 0 ? (
@@ -132,7 +132,7 @@ export default async function FraudView() {
         )}
       </section>
 
-      {/* Multi-Account عنوان الإنترنتs */}
+      {/* الحسابات المرتبطة بعناوين إنترنت مشتركة */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>عناوين إنترنت مرتبطة بثلاثة حسابات أو أكثر (30 يوم)</h2>
         {multiIps.length === 0 ? (
@@ -156,11 +156,11 @@ export default async function FraudView() {
         )}
       </section>
 
-      {/* الثقة Events */}
+      {/* أحداث الثقة */}
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>آخر أحداث الثقة</h2>
         {events.length === 0 ? (
-          <EmptyState Icon={CrownGoldIcon} title="مفيش أحداث" description="مفيش حركة trust لسه." />
+          <EmptyState Icon={CrownGoldIcon} title="مفيش أحداث" description="مفيش أحداث ثقة مسجلة حتى الآن." />
         ) : (
           <ul className={styles.eventList}>
             {events.map((e) => {
@@ -175,7 +175,7 @@ export default async function FraudView() {
                   </span>
                   <div className={styles.eventBody}>
                     <span className={styles.eventLabel}>
-                      {EVENT_LABEL[e.event_type] ?? e.event_type}
+                      {EVENT_LABEL[e.event_type] ?? 'حدث متعلق بالثقة'}
                     </span>
                     <span className={styles.eventMeta}>
                       {e.score_before} → {e.score_after}
