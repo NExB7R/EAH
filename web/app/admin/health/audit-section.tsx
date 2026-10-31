@@ -37,6 +37,114 @@ const ACTION_LABEL: Record<string, { label: string; tone: string }> = {
   'texts.update': { label: 'تحديث النصوص', tone: 'purple' },
 }
 
+const METADATA_LABEL: Record<string, string> = {
+  name: 'الاسم',
+  title: 'العنوان',
+  reason: 'السبب',
+  admin_note: 'ملاحظة الأدمن',
+  days: 'عدد الأيام',
+  delta: 'التغيير في نقاط المشاركة',
+  from: 'القيمة السابقة',
+  to: 'القيمة الجديدة',
+  target_role: 'الدور',
+  count: 'العدد',
+  inserted: 'عدد الإشعارات المضافة',
+  pushed: 'عدد الإشعارات الفورية',
+  total: 'عدد المستهدفين',
+  notified: 'تم إرسال إشعار',
+  ids: 'عدد الحسابات المحددة',
+  owner_profile_id: 'حساب التاجر المرتبط',
+  business_id: 'النشاط المرتبط',
+  business_type_status: 'حالة تصنيف النشاط',
+  offline_until: 'موعد انتهاء التوقف',
+  minutes_added: 'الدقائق المضافة',
+  enabled: 'التفعيل',
+  source: 'مصدر العملية',
+  theme: 'نمط العرض',
+  audience: 'الفئة المستهدفة',
+  status: 'الحالة',
+  fields: 'البيانات التي تم تحديثها',
+  keys: 'الإعدادات التي تم تحديثها',
+  price: 'السعر',
+  severity: 'درجة الأهمية',
+  rating: 'التقييم',
+  has_text: 'يوجد نص مرفق',
+}
+
+const METADATA_VALUE_LABEL: Record<string, string> = {
+  super_admin: 'الأدمن',
+  merchant: 'التاجر',
+  customer: 'العميل',
+  admin: 'غير محدد',
+  pending: 'قيد المراجعة',
+  approved: 'معتمد',
+  rejected: 'مرفوض',
+  active: 'نشط',
+  inactive: 'غير نشط',
+  cancelled: 'ملغي',
+  expired: 'منتهي',
+  paused: 'متوقف مؤقتًا',
+  enabled: 'مفعل',
+  disabled: 'معطل',
+  true: 'نعم',
+  false: 'لا',
+  admin_self: 'من لوحة الأدمن',
+  merchant_self: 'من حساب التاجر',
+}
+
+const FIELD_LABEL: Record<string, string> = {
+  name: 'الاسم',
+  business_type: 'نوع النشاط',
+  location: 'الموقع',
+  contacts: 'بيانات التواصل',
+  is_open: 'حالة الفتح',
+  site_name: 'اسم المنصة',
+  support_email: 'بريد الدعم',
+  support_whatsapp: 'رقم واتساب الدعم',
+  support_facebook_url: 'صفحة فيسبوك',
+  whatsapp_channel_url: 'قناة واتساب',
+  public_contacts_enabled: 'إظهار وسائل التواصل',
+}
+
+function formatMetadata(metadata: Record<string, unknown>): string {
+  const entries = Object.entries(metadata).flatMap(([key, value]) => {
+    const label = METADATA_LABEL[key]
+    if (!label || value === null || value === undefined) return []
+
+    if (key === 'ids' && Array.isArray(value)) {
+      return [`${label}: ${value.length.toLocaleString('ar-EG')}`]
+    }
+
+    if ((key === 'fields' || key === 'keys') && Array.isArray(value)) {
+      const names = value
+        .map((item) => (typeof item === 'string' ? FIELD_LABEL[item] : undefined))
+        .filter((item): item is string => Boolean(item))
+      return names.length ? [`${label}: ${names.join('، ')}`] : []
+    }
+
+    if (typeof value === 'boolean') {
+      return [`${label}: ${value ? 'نعم' : 'لا'}`]
+    }
+
+    if (typeof value === 'number') {
+      return [`${label}: ${value.toLocaleString('ar-EG')}`]
+    }
+
+    if (typeof value === 'string') {
+      if (/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(value)) {
+        return [`${label}: محفوظ`]
+      }
+      const translated = METADATA_VALUE_LABEL[value]
+      if (translated) return [`${label}: ${translated}`]
+      if (value.length > 0 && value.length <= 120) return [`${label}: ${value}`]
+    }
+
+    return []
+  })
+
+  return entries.length ? entries.join('\n') : 'تفاصيل العملية محفوظة في سجل التدقيق.'
+}
+
 function fmtDate(iso: string): string {
   return new Date(iso).toLocaleString('ar-EG', {
     day: '2-digit',
@@ -173,7 +281,7 @@ export default async function AuditSection({ q: qRaw, action, actor }: Props) {
                 {Object.keys(log.metadata).length > 0 && (
                   <details className={styles.meta}>
                     <summary>التفاصيل</summary>
-                    <pre className={styles.metaPre}>{'تفاصيل العملية محفوظة في سجل التدقيق.'}</pre>
+                    <pre className={styles.metaPre}>{formatMetadata(log.metadata)}</pre>
                   </details>
                 )}
               </article>
