@@ -61,7 +61,7 @@ export async function approveBusiness(businessId: string): Promise<Result> {
   if (!updated)
     return { ok: false, error: 'تعذر نشر النشاط — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
 
-  // إشعار المالك لا يجب أن يحوّل عملية نشر ناجحة إلى فشل ظاهر.
+  // إشعار التاجر المرتبط لا يجب أن يحوّل عملية نشر ناجحة إلى فشل ظاهر.
   if (biz.owner_profile_id) {
     try {
       await createNotification({
@@ -141,7 +141,7 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
   if (!updated)
     return { ok: false, error: 'تعذر حفظ قرار الرفض — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
 
-  // إشعار المالك لا يجب أن يحوّل قرارًا محفوظًا إلى فشل ظاهر.
+  // إشعار التاجر المرتبط لا يجب أن يحوّل قرارًا محفوظًا إلى فشل ظاهر.
   if (biz.owner_profile_id) {
     try {
       await createNotification({
@@ -814,7 +814,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     // role and activity metadata are not fully readable under self/public RLS.
     privileged = createServiceClient()
   } catch {
-    return { ok: false, error: 'تعذر تجهيز خدمة ربط المالك — حاول تاني' }
+    return { ok: false, error: 'تعذر تجهيز خدمة ربط التاجر المرتبط — حاول تاني' }
   }
 
   const { data: profile, error: profileError } = await privileged
@@ -882,7 +882,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     })
     return {
       ok: false,
-      error: 'تم إيقاف زر الطلب لحماية النشاط، لكن تعذر حفظ إعداداته. لم يتغير ربط المالك؛ راجع الإعدادات وحاول تاني.',
+      error: 'تم إيقاف زر الطلب لحماية النشاط، لكن تعذر حفظ إعداداته. لم يتغير ربط التاجر المرتبط؛ راجع الإعدادات وحاول تاني.',
     }
   }
 
@@ -1038,7 +1038,7 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
     .update({ accepts_orders: false })
     .eq('id', businessId)
   if (closePublicOrdersError) {
-    return { ok: false, error: 'تعذر إيقاف الطلبات قبل فك ربط المالك؛ لم يتغير الربط.' }
+    return { ok: false, error: 'تعذر إيقاف الطلبات قبل فك ربط التاجر المرتبط؛ لم يتغير الربط.' }
   }
 
   const { error: closeOrderSettingsError } = await admin
