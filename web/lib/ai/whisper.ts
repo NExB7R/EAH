@@ -9,7 +9,7 @@ export type TranscribeResult = { ok: true; text: string } | { ok: false; error: 
 
 export async function transcribeAudio(blob: Blob, language = 'ar'): Promise<TranscribeResult> {
   const key = process.env.GROQ_API_KEY
-  if (!key) return { ok: false, error: 'GROQ_API_KEY مش مضبوط' }
+  if (!key) return { ok: false, error: 'خدمة تحويل الصوت غير متاحة حاليًا.' }
 
   const formData = new FormData()
   formData.append('file', blob, 'audio.webm')
@@ -27,7 +27,8 @@ export async function transcribeAudio(blob: Blob, language = 'ar'): Promise<Tran
 
     if (!res.ok) {
       const t = await res.text().catch(() => '')
-      return { ok: false, error: `${res.status}: ${t.slice(0, 200)}` }
+      console.error('[Whisper] provider request failed:', res.status, t.slice(0, 200))
+      return { ok: false, error: 'تعذر تحويل الصوت إلى نص. حاول مرة أخرى.' }
     }
 
     const data = (await res.json()) as { text?: string }
@@ -36,6 +37,7 @@ export async function transcribeAudio(blob: Blob, language = 'ar'): Promise<Tran
     }
     return { ok: true, text: data.text.trim() }
   } catch (e) {
-    return { ok: false, error: (e as Error).message }
+    console.error('[Whisper] request failed:', (e as Error).message)
+    return { ok: false, error: 'تعذر تحويل الصوت إلى نص. حاول مرة أخرى.' }
   }
 }
