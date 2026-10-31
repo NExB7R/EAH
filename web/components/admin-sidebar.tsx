@@ -189,7 +189,7 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
           </div>
         ))}
         <ul className={styles.list}>
-          <li><GlobalShareAction className={styles.item} label="شارك المنصة + QR" /></li>
+          <li><GlobalShareAction className={styles.item} label="شارك المنصة ورمز الاستجابة السريعة" /></li>
         </ul>
       </nav>
     </aside>
