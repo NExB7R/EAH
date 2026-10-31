@@ -108,7 +108,7 @@ export default async function AboutPage() {
               <span className={styles.problemNum}>03</span>
               <h3 className={styles.problemTitle}>التجار محتاجين ظهور</h3>
               <p className={styles.problemText}>
-                صاحب النشاط محتاج يوصل للناس، بس مش عايز يدفع عمولات كل طلب.
+                التاجر محتاج يوصل للناس، بس مش عايز يدفع عمولات كل طلب.
               </p>
             </div>
           </div>
