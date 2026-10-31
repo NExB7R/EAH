@@ -26,13 +26,13 @@ import styles from './about.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — About / Pitch
-//   • بيتش كامل للمنصة (للمشتري + للبايع)
+//   • بيتش كامل للمنصة (للعميل + للتاجر)
 //   • صفر JS — Server Component
 // ═══════════════════════════════════════════════════════════
 
 export const metadata: Metadata = {
   title: 'من نحن',
-  description: 'EAH — منصة اكتشاف محلية مصرية. مجانية للمشتري، بدون عمولة على البايع.',
+  description: 'EAH — منصة اكتشاف محلية مصرية. مجانية للعميل، بدون عمولة على التاجر.',
 }
 
 export default async function AboutPage() {
@@ -61,7 +61,7 @@ export default async function AboutPage() {
 
           <p className={styles.heroText}>
             منصة اكتشاف محلية مصرية، بتوصّل أهل شبين القناطر والقرى حواليها بأماكنهم المفضلة. مجانية
-            للمشتري، بدون عمولة على البايع.
+            للعميل، بدون عمولة على التاجر.
           </p>
 
           <div className={styles.heroActions}>
@@ -106,7 +106,7 @@ export default async function AboutPage() {
             </div>
             <div className={styles.problemCard}>
               <span className={styles.problemNum}>03</span>
-              <h3 className={styles.problemTitle}>البايعين محتاجين ظهور</h3>
+              <h3 className={styles.problemTitle}>التجار محتاجين ظهور</h3>
               <p className={styles.problemText}>
                 صاحب النشاط محتاج يوصل للناس، بس مش عايز يدفع عمولات كل طلب.
               </p>
@@ -139,7 +139,7 @@ export default async function AboutPage() {
               </span>
               <h3 className={styles.solutionTitle}>طلب مباشر</h3>
               <p className={styles.solutionText}>
-                بدون وسيط. المشتري يطلب واتساب مباشرة، والبايع يرد في دقائق.
+                بدون وسيط. العميل يطلب واتساب مباشرة، والتاجر يرد في دقائق.
               </p>
             </div>
             <div className={styles.solutionCard}>
@@ -148,7 +148,7 @@ export default async function AboutPage() {
               </span>
               <h3 className={styles.solutionTitle}>تقييم موثوق</h3>
               <p className={styles.solutionText}>
-                تقييمات بعد التجربة، Trust Score لكل نشاط، شفافية كاملة.
+                تقييمات بعد التجربة، معلومات واضحة عن كل نشاط بشفافية كاملة.
               </p>
             </div>
           </div>
@@ -157,11 +157,11 @@ export default async function AboutPage() {
 
       <AboutFreeApp />
 
-      {/* ═══ 4. للمشتري ═══ */}
+      {/* ═══ 4. للعميل ═══ */}
       <section className={styles.section}>
         <div className={styles.container}>
           <header className={styles.sectionHeader}>
-            <span className={`${styles.sectionBadge} ${styles.badgePurple}`}>للمشتري</span>
+            <span className={`${styles.sectionBadge} ${styles.badgePurple}`}>للعميل</span>
             <h2 className={styles.sectionTitle}>مجاناً 100%</h2>
             <p className={styles.sectionText}>
               كل حاجة تحتاجها عشان تكتشف وتطلب، بدون رسوم ولا اشتراكات.
@@ -201,11 +201,11 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* ═══ 5. للبايع ═══ */}
+      {/* ═══ 5. للتاجر ═══ */}
       <section className={styles.section}>
         <div className={styles.container}>
           <header className={styles.sectionHeader}>
-            <span className={`${styles.sectionBadge} ${styles.badgeGold}`}>للبايع</span>
+            <span className={`${styles.sectionBadge} ${styles.badgeGold}`}>للتاجر</span>
             <h2 className={styles.sectionTitle}>ظهور مجاني. بدون عمولة.</h2>
             <p className={styles.sectionText}>سجّل نشاطك في 5 دقايق. مش بناخد أي نسبة من طلباتك.</p>
           </header>
@@ -219,7 +219,7 @@ export default async function AboutPage() {
             <FeatureCard
               Icon={WhatsAppIcon}
               title="طلبات واتساب"
-              text="المشتري يكلمك مباشرة — بدون وسيط."
+              text="العميل يكلمك مباشرة — بدون وسيط."
             />
             <FeatureCard
               Icon={LayoutDashboardIcon}
@@ -234,14 +234,14 @@ export default async function AboutPage() {
             <FeatureCard
               Icon={StarIcon}
               title="تقييمات موثوقة"
-              text="رد على المشترين، وحسّن سمعتك."
+              text="رد على العملاء، وحسّن سمعتك."
             />
             <FeatureCard
               Icon={ShieldCheckIcon}
               title="شارة الثقة"
               text="كل ما تتفاعل، تترقّى في التصنيف."
             />
-            <FeatureCard Icon={GiftIcon} title="عروض وقسائم" text="اعمل عروض لجذب مشترين جدد." />
+            <FeatureCard Icon={GiftIcon} title="عروض وقسائم" text="اعمل عروض لجذب عميلن جدد." />
             <FeatureCard
               Icon={CrownGoldIcon}
               title="ترقيات اختيارية"
@@ -269,8 +269,8 @@ export default async function AboutPage() {
               num={publishedCount === null ? '—' : String(publishedCount)}
               label={publishedCount === null ? 'عدد الأنشطة غير متاح' : 'نشاط منشور'}
             />
-            <StatCard num="100%" label="مجاني للمشتري" />
-            <StatCard num="0%" label="عمولة على البايع" />
+            <StatCard num="100%" label="مجاني للعميل" />
+            <StatCard num="0%" label="عمولة على التاجر" />
             <StatCard num="24/7" label="متاح دايماً" />
           </div>
         </div>
