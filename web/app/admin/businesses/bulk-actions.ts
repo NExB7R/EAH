@@ -43,7 +43,7 @@ export async function bulkApproveBusinesses(ids: string[]): Promise<Result> {
     .in('id', parsed.data)
     .select('id')
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!updated || updated.length !== selectedBusinesses.length) {
     return {
       ok: false,
@@ -122,7 +122,7 @@ export async function bulkRejectBusinesses(ids: string[], reason: string): Promi
     .in('id', parsed.data.ids)
     .select('id')
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!updated || updated.length !== businesses.length) {
     return {
       ok: false,
@@ -178,7 +178,7 @@ export async function bulkArchiveBusinesses(ids: string[]): Promise<Result> {
     .in('id', parsed.data)
     .select('id')
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!archived || archived.length !== parsed.data.length) {
     return { ok: false, error: 'لم يتم إخفاء كل الأنشطة المحددة. حدّث القائمة وحاول تاني' }
   }
