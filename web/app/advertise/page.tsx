@@ -17,7 +17,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'أعلن معانا',
-  description: 'إعلانات توصل للمشترين الحقيقيين في شبين القناطر',
+  description: 'إعلانات توصل للعملاء الفعليين في شبين القناطر',
 }
 
 const SLOT_ICON: Record<string, typeof HomeIcon> = {
