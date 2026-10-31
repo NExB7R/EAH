@@ -122,7 +122,7 @@ export async function updateOrderStatus(
     })
     .eq('id', orderId)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   // Audit reaction
   await ctx.supabase.from('order_reactions').insert({
