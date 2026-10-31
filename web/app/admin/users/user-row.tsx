@@ -24,10 +24,10 @@ type Props = {
 }
 
 const ROLE_LABEL: Record<string, string> = {
-  customer: 'المشتري',
-  merchant: 'البايع',
-  admin: 'دور إداري قديم',
-  super_admin: 'الأدمن الأعلى',
+  customer: 'العميل',
+  merchant: 'التاجر',
+  admin: 'العميل',
+  super_admin: 'الأدمن',
 }
 
 const ROLES = ['customer', 'merchant'] as const
@@ -121,7 +121,7 @@ export default function UserRow({
           <div className={styles.nameRow}>
             <span className={styles.name}>{u.display_name}</span>
             <span className={`${styles.role} ${styles['role_' + (u.role ?? 'customer')]}`}>
-              {ROLE_LABEL[u.role ?? 'customer'] ?? u.role}
+              {ROLE_LABEL[u.role ?? 'customer'] ?? 'غير محدد'}
             </span>
             {u.is_premium && (
               <span className={styles.premium}>
@@ -167,7 +167,7 @@ export default function UserRow({
       {u.role === 'super_admin' ? (
         <div className={styles.protectedNotice} role="note">
           <ShieldCheckIcon size={15} />
-          <span>الأدمن الأعلى الوحيد — حساب محمي لا يمكن حظره أو تغيير دوره من هنا.</span>
+          <span>حساب الأدمن الوحيد — حساب محمي لا يمكن حظره أو تغيير دوره من هنا.</span>
         </div>
       ) : (
         <div className={styles.actions}>
@@ -294,7 +294,7 @@ export default function UserRow({
 
       {modal === 'trust' && (
         <form onSubmit={handleTrustSubmit} className={styles.modalForm}>
-          <h4 className={styles.modalTitle}>تعديل Trust Score</h4>
+          <h4 className={styles.modalTitle}>تعديل نقاط المشاركة</h4>
           <label className={styles.field}>
             <span>التغيير (-100 إلى +100)</span>
             <input
