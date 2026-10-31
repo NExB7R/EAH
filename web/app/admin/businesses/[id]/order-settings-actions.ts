@@ -50,7 +50,7 @@ export async function enableOrders(
     .maybeSingle()
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
   if (!biz.owner_profile_id) {
-    return { ok: false, error: 'اربط بايعًا بالنشاط أولًا قبل تفعيل استلام الطلبات' }
+    return { ok: false, error: 'اربط حساب التاجر بالنشاط أولًا قبل تفعيل استلام الطلبات' }
   }
 
   const { data: activeBranches, error: branchError } = await adminDb
