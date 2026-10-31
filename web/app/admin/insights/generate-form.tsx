@@ -160,7 +160,7 @@ export default function GenerateForm({ businesses }: Props) {
                   onChange={(e) => setNotify(e.target.checked)}
                   disabled={pending}
                 />
-                <span>أبلغ صاحب النشاط بإشعار</span>
+                <span>أبلغ التاجر المرتبط بالنشاط بإشعار</span>
               </label>
 
               {error && (
