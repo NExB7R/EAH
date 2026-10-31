@@ -196,7 +196,7 @@ export async function setOrdersEnabled(enabled: boolean, etaMinutes?: number): P
     if (!hasOrderContact) {
       return {
         ok: false,
-        error: 'ضيف رقم هاتف أو واتساب للنشاط نفسه قبل تفعيل استقبال الطلبات. رقم المالك الشخصي مش مطلوب.',
+        error: 'ضيف رقم هاتف أو واتساب للنشاط نفسه قبل تفعيل استقبال الطلبات. رقم التاجر الشخصي غير مطلوب.',
       }
     }
   
