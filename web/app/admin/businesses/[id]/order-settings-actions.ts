@@ -90,7 +90,7 @@ export async function enableOrders(
   if (!hasOrderContact) {
     return {
       ok: false,
-      error: 'ضيف رقم هاتف أو واتساب للنشاط نفسه قبل تفعيل استقبال الطلبات. رقم المالك الشخصي مش مطلوب.',
+      error: 'ضيف رقم هاتف أو واتساب للنشاط نفسه قبل تفعيل استقبال الطلبات. رقم التاجر الشخصي مش مطلوب.',
     }
   }
   const { error: updErr } = await adminDb.from('merchant_order_settings').upsert(
