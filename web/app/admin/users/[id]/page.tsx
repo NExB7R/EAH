@@ -160,7 +160,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
             <div className={styles.metaItem}>
               <span className={styles.metaLabel}>محظور حتى</span>
               <span className={styles.metaValue}>
-                {new Date(u.banned_until).toLocaleDateString('en-US', {
+                {new Date(u.banned_until).toLocaleDateString('ar-EG', {
                   year: 'numeric',
                   month: 'short',
                   day: 'numeric',
