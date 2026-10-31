@@ -195,7 +195,7 @@ export async function bulkChangeRole(ids: string[], role: string): Promise<Resul
     if (ownedBusinesses?.length) {
       return {
         ok: false,
-        error: 'لا يمكن تغيير دور بايع مرتبط بنشاط. انقل ملكية الأنشطة أو فك ربطها أولًا.',
+        error: 'لا يمكن تغيير دور تاجر مرتبط بنشاط. انقل ملكية الأنشطة أو فك ربطها أولًا.',
       }
     }
   }
