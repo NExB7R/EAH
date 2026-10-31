@@ -102,7 +102,7 @@ export async function saveBasics(businessId: string, formData: FormData): Promis
     .eq('id', businessId)
     .select('id')
     .maybeSingle()
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!updated) return { ok: false, error: 'تعذر حفظ بيانات النشاط — حدّث الصفحة وحاول تاني' }
 
   await logAudit(adminDb, {
@@ -463,7 +463,7 @@ export async function saveHours(businessId: string, formData: FormData): Promise
     .from('businesses')
     .update({ working_hours: parsed.data })
     .eq('id', businessId)
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(adminDb, {
     actorUserId: ctx.userId,
@@ -546,7 +546,7 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
     .eq('id', businessId)
     .select('id')
     .maybeSingle()
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
   if (!updated) return { ok: false, error: 'تعذر حفظ الإعدادات — حدّث الصفحة وحاول تاني' }
 
   await logAudit(adminDb, {
