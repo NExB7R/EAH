@@ -19,10 +19,10 @@ export type HistoryItem = {
 
 const AUDIENCE_LABEL: Record<string, string> = {
   all: 'الكل',
-  customers: 'المشترين',
+  customers: 'العملاء',
   merchants: 'البياعين',
   verified: 'الموثّقون',
-  premium: 'Premium',
+  premium: 'مميز',
 }
 
 export default function HistoryList({ items }: { items: HistoryItem[] }) {
