@@ -57,9 +57,10 @@ function buildPrompt(metrics: BusinessMetrics, analysis: AnalysisResult): string
 - نقاط القوة: ${analysis.strengths.slice(0, 3).join(' | ') || 'مفيش'}
 - نقاط الضعف: ${analysis.weaknesses.slice(0, 3).join(' | ') || 'مفيش'}
 - الفرص: ${analysis.opportunities.slice(0, 2).join(' | ') || 'مفيش'}
-- Score: ${analysis.score}/100 (${analysis.scoreLabel})
+- الدرجة: ${analysis.score}/100 (${analysis.scoreLabel})
 
 📝 المطلوب:
+اكتب بالعربية المصرية فقط. ممنوع استخدام أي كلمة أو عبارة أو اختصار إنجليزي في النص النهائي.
 اكتب 3-4 جمل قصيرة بالعامية المصرية:
 1. جملة عن الوضع الحالي (رقم الزيارات أو الطلبات)
 2. جملة عن الذروة (امتى الناس بتزور)
