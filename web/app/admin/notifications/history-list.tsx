@@ -62,7 +62,7 @@ export default function HistoryList({ items }: { items: HistoryItem[] }) {
             <div className={styles.historyStats}>
               <span>مستهدفون: {it.total}</span>
               <span>أُرسل: {it.inserted}</span>
-              <span>Push: {it.pushed}</span>
+              <span>الإشعارات الفورية: {it.pushed}</span>
             </div>
           </div>
         )
