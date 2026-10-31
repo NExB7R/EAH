@@ -91,7 +91,7 @@ export default async function AdminNotificationsPage({
       <div>
         <AccountPageHeader
           title="الإشعارات والرسائل"
-          description={`${session.notifCount.toLocaleString('en-US')} إشعار غير مقروء في وارد حسابك`}
+          description={`${session.notifCount.toLocaleString('ar-EG')} إشعار غير مقروء في وارد حسابك`}
         />
         <NotificationsTabs />
         <section className={notifStyles.intro}>
