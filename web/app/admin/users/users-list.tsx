@@ -20,8 +20,8 @@ type Props = {
 type Modal = 'ban' | 'role' | null
 
 const ROLES = [
-  { value: 'customer', label: 'المشتري' },
-  { value: 'merchant', label: 'البايع' },
+  { value: 'customer', label: 'العميل' },
+  { value: 'merchant', label: 'التاجر' },
 ] as const
 
 export default function UsersList({ users, filter }: Props) {
@@ -82,12 +82,12 @@ export default function UsersList({ users, filter }: Props) {
   }
 
   const handlePremiumOn = () => {
-    if (!confirm(`تفعيل Premium لـ ${selected.size} مستخدم؟`)) return
+    if (!confirm(`تفعيل الميزة لـ ${selected.size} مستخدم؟`)) return
     run(() => bulkTogglePremium(Array.from(selected), true))
   }
 
   const handlePremiumOff = () => {
-    if (!confirm(`إلغاء Premium من ${selected.size} مستخدم؟`)) return
+    if (!confirm(`إلغاء الميزة من ${selected.size} مستخدم؟`)) return
     run(() => bulkTogglePremium(Array.from(selected), false))
   }
 
@@ -146,7 +146,7 @@ export default function UsersList({ users, filter }: Props) {
               className={styles.goldBtn}
             >
               <CrownGoldIcon size={14} />
-              <span>Premium +</span>
+              <span>مميز +</span>
             </button>
 
             <button
@@ -155,7 +155,7 @@ export default function UsersList({ users, filter }: Props) {
               disabled={pending}
               className={styles.secondaryBtn}
             >
-              Premium −
+              مميز −
             </button>
           </div>
         </div>
