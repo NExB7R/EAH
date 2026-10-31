@@ -28,7 +28,7 @@ export async function approveReview(reviewId: string): Promise<Result> {
     })
     .eq('id', reviewId)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
@@ -77,7 +77,7 @@ export async function rejectReview(reviewId: string, formData: FormData): Promis
     })
     .eq('id', reviewId)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   // إشعار للمستخدم
   if (review?.user_id) {
@@ -111,7 +111,7 @@ export async function deleteReview(reviewId: string): Promise<Result> {
 
   const { error } = await ctx.supabase.from('business_reviews').delete().eq('id', reviewId)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   await logAudit(ctx.supabase, {
     actorUserId: ctx.userId,
