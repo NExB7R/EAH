@@ -61,7 +61,7 @@ async function toggleActivity(
 
   if (error) return { ok: false, error: 'تعذر تحديث التفاعل. حاول مرة أخرى.' }
 
-  // إشعار لصاحب النشاط (فقط لو متابعة جديدة)
+  // إشعار للتاجر المرتبط بالنشاط (عند إضافة متابعة جديدة)
   if (type === 'follow') {
     const { data: biz } = await supabase
       .from('businesses')
