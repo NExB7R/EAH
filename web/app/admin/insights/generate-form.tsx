@@ -148,7 +148,7 @@ export default function GenerateForm({ businesses }: Props) {
                       }
                       disabled={pending}
                     />
-                    <span>تحليل مفصل (AI)</span>
+                    <span>تحليل مفصل بالذكاء الاصطناعي</span>
                   </label>
                 </div>
               </div>
