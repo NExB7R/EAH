@@ -224,7 +224,7 @@ export async function changeUserRole(userId: string, role: string): Promise<Resu
     if (ownedBusiness) {
       return {
         ok: false,
-        error: 'لا يمكن تغيير دور البايع المرتبط بنشاط. انقل ملكية النشاط أو فك ربطه أولًا.',
+        error: 'لا يمكن تغيير دور التاجر المرتبط بنشاط. انقل ملكية النشاط أو فك ربطه أولًا.',
       }
     }
   }
