@@ -157,7 +157,7 @@ export async function updateBranch(id: string, formData: FormData): Promise<Resu
     .eq('id', id)
     .eq('business_id', ctx.biz.id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   revalidatePath('/merchant/branches')
   revalidateTag('businesses', 'default')
@@ -187,7 +187,7 @@ export async function deleteBranch(id: string): Promise<Result> {
     .eq('id', id)
     .eq('business_id', ctx.biz.id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   // Re-number sort_order (best-effort)
   const { data: remaining } = await ctx.supabase
@@ -261,7 +261,7 @@ export async function toggleBranchActive(id: string, active: boolean): Promise<R
     .eq('id', id)
     .eq('business_id', ctx.biz.id)
 
-  if (error) return { ok: false, error: error.message }
+  if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
 
   revalidatePath('/merchant/branches')
   revalidateTag('businesses', 'default')
