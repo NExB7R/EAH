@@ -40,7 +40,7 @@ const PHASES: {
       { title: 'لوحة التاجر', body: 'إحصائيات وتقارير ورمز الاستجابة السريعة', status: 'done' },
       { title: 'لوحة الأدمن', body: 'إدارة كاملة، مراجعة، إشعارات', status: 'done' },
       { title: 'نظام التقييمات', body: 'تقييمات مرتبطة بطلب مكتمل + رد التاجر + سمعة مبنية على الأدلة', status: 'done' },
-      { title: 'Push Notifications', body: 'إشعارات فورية للمتصفح', status: 'done' },
+      { title: 'الإشعارات الفورية', body: 'إشعارات فورية للمتصفح', status: 'done' },
     ],
   },
   {
@@ -63,10 +63,10 @@ const PHASES: {
     title: 'الإصدار 2 — خطة متوسطة',
     Icon: LampIcon,
     items: [
-      { title: 'تطبيق موبايل', body: 'iOS + Android (PWA-first)', status: 'next' },
+      { title: 'تطبيق موبايل', body: 'تطبيق للهواتف مع البدء بنسخة قابلة للتثبيت', status: 'next' },
       { title: 'الدفع الإلكتروني', body: 'طلبات مباشرة داخل المنصة', status: 'next' },
       { title: 'نظام سائقين', body: 'توصيل منظم', status: 'future' },
-      { title: 'Live tracking', body: 'تتبع مباشر للطلبات', status: 'future' },
+      { title: 'التتبع المباشر', body: 'تتبع مباشر للطلبات', status: 'future' },
     ],
   },
   {
@@ -75,9 +75,9 @@ const PHASES: {
     Icon: TrendingUpIcon,
     items: [
       { title: 'التوسع الجغرافي', body: 'القليوبية → الدلتا', status: 'future' },
-      { title: 'AI كامل', body: 'توصيات ذكية + كشف احتيال', status: 'future' },
-      { title: 'نظام شريك', body: 'نموذج franchise', status: 'future' },
-      { title: '10K+ نشاط', body: '500K مستخدم', status: 'future' },
+      { title: 'مساعد ذكي متكامل', body: 'توصيات ذكية + كشف احتيال', status: 'future' },
+      { title: 'نظام شريك', body: 'نموذج امتياز تجاري', status: 'future' },
+      { title: '10 آلاف نشاط', body: '500 ألف مستخدم', status: 'future' },
     ],
   },
 ]
