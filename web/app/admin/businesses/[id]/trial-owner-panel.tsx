@@ -43,7 +43,7 @@ type Props = {
 const ROLE_LABEL: Record<string, string> = {
   customer: 'العميل',
   merchant: 'التاجر',
-  admin: 'الأدمن',
+  admin: 'غير محدد',
   super_admin: 'الأدمن',
 }
 
@@ -222,7 +222,7 @@ export default function TrialOwnerPanel({
                 <div className={styles.userMeta}>
                   <span dir="ltr">{userFound.phone}</span>
                   <span className={styles.dot}>·</span>
-                  <span>{ROLE_LABEL[userFound.role] ?? userFound.role}</span>
+                  <span>{ROLE_LABEL[userFound.role] ?? 'غير محدد'}</span>
                   <span className={styles.dot}>·</span>
                   <span>{userFound.businessesCount} نشاط</span>
                 </div>
