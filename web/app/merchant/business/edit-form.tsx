@@ -24,8 +24,8 @@ type Props = {
     address: string
     isOpen: boolean
     acceptsWhatsapp: boolean
-    phone: string
-    whatsapp: string
+    phone: string[] | string
+    whatsapp: string[] | string
     businessType: string
     latitude: number | null
     longitude: number | null
@@ -41,9 +41,35 @@ const TYPES: { value: string; label: string }[] = [
   { value: 'misc', label: 'نشاط آخر' },
 ]
 
+type ContactInput = { id: string; value: string }
+
+function initialContactInputs(values: string[] | string, prefix: string): ContactInput[] {
+  const entries = Array.isArray(values) ? values : values ? [values] : ['']
+  return entries.map((value, index) => ({ id: `${prefix}-${index}`, value }))
+}
+
 export default function BusinessEditForm({ initial }: Props) {
   const [pending, startTransition] = useTransition()
   const [msg, setMsg] = useState<{ type: 'ok' | 'err'; text: string } | null>(null)
+  const [phoneNumbers, setPhoneNumbers] = useState<ContactInput[]>(() =>
+    initialContactInputs(initial.phone, 'phone'),
+  )
+  const [whatsappNumbers, setWhatsappNumbers] = useState<ContactInput[]>(() =>
+    initialContactInputs(initial.whatsapp, 'whatsapp'),
+  )
+
+  const addContactInput = (setter: React.Dispatch<React.SetStateAction<ContactInput[]>>) => {
+    setter((current) =>
+      current.length >= 10 ? current : [...current, { id: crypto.randomUUID(), value: '' }],
+    )
+  }
+
+  const removeContactInput = (
+    setter: React.Dispatch<React.SetStateAction<ContactInput[]>>,
+    id: string,
+  ) => {
+    setter((current) => current.length <= 1 ? current : current.filter((item) => item.id !== id))
+  }
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -241,30 +267,80 @@ export default function BusinessEditForm({ initial }: Props) {
           <span>التواصل</span>
         </legend>
 
-        <div className={styles.row}>
-          <label className={styles.field}>
-            <span className={styles.label}>رقم التليفون</span>
-            <input
-              className={styles.input}
-              name="phone"
-              type="tel"
-              defaultValue={initial.phone}
-              placeholder="010xxxxxxxx"
-              dir="ltr"
-            />
-          </label>
+        <div className={styles.field}>
+          <div className={styles.actions}>
+            <span className={styles.label}>أرقام الاتصال</span>
+            <button type="button" onClick={() => addContactInput(setPhoneNumbers)} className={styles.gpsBtn} disabled={phoneNumbers.length >= 10}>
+              + إضافة رقم
+            </button>
+          </div>
+          {phoneNumbers.map((contact, index) => (
+            <div className={styles.row} key={contact.id}>
+              <label className={styles.field}>
+                <span className={styles.label}>
+                  {index === 0 ? 'رقم الاتصال الأساسي' : `رقم اتصال إضافي ${index}`}
+                </span>
+                <input
+                  className={styles.input}
+                  name="phone_numbers"
+                  type="tel"
+                  value={contact.value}
+                  onChange={(event) =>
+                    setPhoneNumbers((current) =>
+                      current.map((item) =>
+                        item.id === contact.id ? { ...item, value: event.target.value } : item,
+                      ),
+                    )
+                  }
+                  placeholder="010xxxxxxxx"
+                  dir="ltr"
+                  autoComplete="tel"
+                />
+              </label>
+              {phoneNumbers.length > 1 && (
+                <button type="button" onClick={() => removeContactInput(setPhoneNumbers, contact.id)} className={styles.gpsBtn} aria-label={`حذف رقم الاتصال ${index + 1}`}>
+                  حذف
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
 
-          <label className={styles.field}>
-            <span className={styles.label}>رقم الواتساب</span>
-            <input
-              className={styles.input}
-              name="whatsapp"
-              type="tel"
-              defaultValue={initial.whatsapp}
-              placeholder="010xxxxxxxx"
-              dir="ltr"
-            />
-          </label>
+        <div className={styles.field}>
+          <div className={styles.actions}>
+            <span className={styles.label}>أرقام واتساب</span>
+            <button type="button" onClick={() => addContactInput(setWhatsappNumbers)} className={styles.gpsBtn} disabled={whatsappNumbers.length >= 10}>
+              + إضافة رقم
+            </button>
+          </div>
+          {whatsappNumbers.map((contact, index) => (
+            <div className={styles.row} key={contact.id}>
+              <label className={styles.field}>
+                <span className={styles.label}>واتساب {index + 1}</span>
+                <input
+                  className={styles.input}
+                  name="whatsapp_numbers"
+                  type="tel"
+                  value={contact.value}
+                  onChange={(event) =>
+                    setWhatsappNumbers((current) =>
+                      current.map((item) =>
+                        item.id === contact.id ? { ...item, value: event.target.value } : item,
+                      ),
+                    )
+                  }
+                  placeholder="010xxxxxxxx"
+                  dir="ltr"
+                  autoComplete="tel"
+                />
+              </label>
+              {whatsappNumbers.length > 1 && (
+                <button type="button" onClick={() => removeContactInput(setWhatsappNumbers, contact.id)} className={styles.gpsBtn} aria-label={`حذف رقم واتساب ${index + 1}`}>
+                  حذف
+                </button>
+              )}
+            </div>
+          ))}
         </div>
       </fieldset>
 

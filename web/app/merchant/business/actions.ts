@@ -24,8 +24,8 @@ const schema = z
     description: z.string().max(500),
     hook: z.string().max(120),
     address_text: z.string().max(200),
-    phone: phoneSchema,
-    whatsapp: phoneSchema,
+    phoneNumbers: z.array(phoneSchema).max(10),
+    whatsappNumbers: z.array(phoneSchema).max(10),
     is_open: z.boolean(),
     accepts_whatsapp_orders: z.boolean(),
     business_type: z.enum(['restaurant', 'pharmacy', 'delivery_office', 'misc']),
@@ -42,7 +42,31 @@ const schema = z
         message: 'لازم تدخل خط العرض وخط الطول مع بعض، أو تسيب الاتنين فاضيين',
       })
     }
+    const allNumbers = [...data.phoneNumbers, ...data.whatsappNumbers]
+    if (allNumbers.length > 15) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['phoneNumbers'],
+        message: 'الحد الأقصى 15 رقم تواصل للنشاط',
+      })
+    }
+    if (new Set(allNumbers).size !== allNumbers.length) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['phoneNumbers'],
+        message: 'فيه رقم مكرر بين الهاتف والواتساب',
+      })
+    }
   })
+
+function readContactNumbers(formData: FormData, listKey: string, legacyKey: string): unknown[] {
+  const submitted = formData.getAll(listKey)
+  const values = submitted.length > 0 ? submitted : [formData.get(legacyKey)]
+  return values
+    .filter((value) => value !== null)
+    .map((value) => (typeof value === 'string' ? value.trim() : value))
+    .filter((value) => value !== '')
+}
 
 async function myBiz() {
   const supabase = await createClient()
@@ -87,8 +111,8 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
     description: String(formData.get('description') ?? '').trim(),
     hook: String(formData.get('hook') ?? '').trim(),
     address_text: String(formData.get('address_text') ?? '').trim(),
-    phone: String(formData.get('phone') ?? '').trim(),
-    whatsapp: String(formData.get('whatsapp') ?? '').trim(),
+    phoneNumbers: readContactNumbers(formData, 'phone_numbers', 'phone'),
+    whatsappNumbers: readContactNumbers(formData, 'whatsapp_numbers', 'whatsapp'),
     is_open: formData.get('is_open') === 'on',
     accepts_whatsapp_orders: formData.get('accepts_whatsapp_orders') === 'on',
     business_type: String(formData.get('business_type') ?? '').trim(),
@@ -136,7 +160,7 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
     is_open: d.is_open,
     accepts_whatsapp_orders:
       d.accepts_whatsapp_orders &&
-      (hasUsableWhatsAppDestination(d.whatsapp) || hasActiveBranchWhatsApp),
+      (d.whatsappNumbers.some(hasUsableWhatsAppDestination) || hasActiveBranchWhatsApp),
   }
 
   // businesses currently has an owner SELECT policy but no owner UPDATE policy.
@@ -232,82 +256,89 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
     }
   }
 
-  // RLS intentionally exposes contact methods for reading but does not let a
-  // merchant insert/update them directly. Verify ownership first, then scope each
-  // service-role operation to this business and these two editable contact kinds.
-  const contactMethods = [
-    { method_type: 'phone', value: d.phone, is_primary: true },
-    { method_type: 'whatsapp', value: d.whatsapp, is_primary: false },
-  ] as const
+  // RLS keeps contact writes out of ordinary sessions. Ownership was verified
+  // by myBiz() above; scope the privileged replacement to this exact business.
+  const { data: previousContacts, error: contactsLookupError } = await admin
+    .from('business_contact_methods')
+    .select('id, business_id, method_type, value, is_primary, is_public, label, sort_order')
+    .eq('business_id', ctx.biz.id)
+    .in('method_type', ['phone', 'whatsapp'])
 
-  for (const contact of contactMethods) {
-    const { data: existingRows, error: contactLookupError } = await admin
+  if (contactsLookupError) {
+    invalidateBusiness(ctx.biz.slug)
+    return { ok: false, error: 'اتحفظت البيانات الأساسية، لكن تعذر قراءة أرقام التواصل' }
+  }
+
+  const previousByKey = new Map(
+    (previousContacts ?? []).map((contact) => [`${contact.method_type}:${contact.value}`, contact]),
+  )
+  const previousPhones = (previousContacts ?? [])
+    .filter((contact) => contact.method_type === 'phone')
+    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+  const previousWhatsapps = (previousContacts ?? [])
+    .filter((contact) => contact.method_type === 'whatsapp')
+    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+  const nextContacts = [
+    ...d.phoneNumbers.map((value, index) => {
+      const previous = previousByKey.get(`phone:${value}`) ?? previousPhones[index]
+      return {
+        business_id: ctx.biz.id,
+        method_type: 'phone',
+        value,
+        is_primary: index === 0,
+        is_public: previous?.is_public ?? true,
+        label: previous?.label ?? null,
+        sort_order: previous?.sort_order ?? index,
+      }
+    }),
+    ...d.whatsappNumbers.map((value, index) => {
+      const previous = previousByKey.get(`whatsapp:${value}`) ?? previousWhatsapps[index]
+      return {
+        business_id: ctx.biz.id,
+        method_type: 'whatsapp',
+        value,
+        is_primary: false,
+        is_public: previous?.is_public ?? true,
+        label: previous?.label ?? null,
+        sort_order: previous?.sort_order ?? index,
+      }
+    }),
+  ]
+
+  const { error: clearContactsError } = await admin
+    .from('business_contact_methods')
+    .delete()
+    .eq('business_id', ctx.biz.id)
+    .in('method_type', ['phone', 'whatsapp'])
+
+  if (clearContactsError) {
+    invalidateBusiness(ctx.biz.slug)
+    return { ok: false, error: 'اتحفظت البيانات الأساسية، لكن تعذر تجهيز أرقام التواصل للحفظ' }
+  }
+
+  if (nextContacts.length > 0) {
+    const { error: saveContactsError } = await admin
       .from('business_contact_methods')
-      .select('id')
-      .eq('business_id', ctx.biz.id)
-      .eq('method_type', contact.method_type)
+      .insert(nextContacts)
 
-    if (contactLookupError) {
-      invalidateBusiness(ctx.biz.slug)
-      return { ok: false, error: 'اتحفظت البيانات الأساسية، لكن تعذر قراءة أرقام التواصل' }
-    }
-
-    if (!contact.value) {
-      const { error } = await admin
+    if (saveContactsError) {
+      const { error: clearPartialError } = await admin
         .from('business_contact_methods')
         .delete()
         .eq('business_id', ctx.biz.id)
-        .eq('method_type', contact.method_type)
+        .in('method_type', ['phone', 'whatsapp'])
+      const { error: restoreContactsError } =
+        previousContacts && previousContacts.length > 0
+          ? await admin.from('business_contact_methods').insert(previousContacts)
+          : { error: null }
 
-      if (error) {
-        invalidateBusiness(ctx.biz.slug)
-        return { ok: false, error: 'اتحفظت البيانات الأساسية، لكن تعذر حذف رقم التواصل الفارغ' }
-      }
-      continue
-    }
-
-    const [existing, ...duplicates] = existingRows ?? []
-    if (existing) {
-      const { error } = await admin
-        .from('business_contact_methods')
-        .update({
-          value: contact.value,
-          is_public: true,
-          is_primary: contact.is_primary,
-        })
-        .eq('id', existing.id)
-        .eq('business_id', ctx.biz.id)
-
-      if (error) {
-        invalidateBusiness(ctx.biz.slug)
-        return { ok: false, error: 'اتحفظت البيانات الأساسية، لكن تعذر حفظ رقم التواصل' }
-      }
-
-      if (duplicates.length > 0) {
-        const { error: cleanupError } = await admin
-          .from('business_contact_methods')
-          .delete()
-          .in(
-            'id',
-            duplicates.map((item) => item.id),
-          )
-        if (cleanupError) {
-          invalidateBusiness(ctx.biz.slug)
-          return { ok: false, error: 'رقم التواصل اتحفظ، لكن تعذر تنظيف السجلات المكررة' }
-        }
-      }
-    } else {
-      const { error } = await admin.from('business_contact_methods').insert({
-        business_id: ctx.biz.id,
-        method_type: contact.method_type,
-        value: contact.value,
-        is_public: true,
-        is_primary: contact.is_primary,
-      })
-
-      if (error) {
-        invalidateBusiness(ctx.biz.slug)
-        return { ok: false, error: 'اتحفظت البيانات الأساسية، لكن تعذر إضافة رقم التواصل' }
+      invalidateBusiness(ctx.biz.slug)
+      return {
+        ok: false,
+        error:
+          clearPartialError || restoreContactsError
+            ? 'تعذر حفظ أرقام التواصل ولم يكتمل الاسترجاع التلقائي. راجع النشاط قبل إعادة المحاولة'
+            : 'تعذر حفظ أرقام التواصل، وتمت استعادة الأرقام السابقة. تأكد أن الرقم غير مستخدم في نشاط آخر',
       }
     }
   }
