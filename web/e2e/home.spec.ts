@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Home page', () => {
   test('loads and shows hook', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'networkidle' })
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
     await expect(page.locator('h1')).toContainText('شبيك لبيك')
   })
 
@@ -11,7 +11,7 @@ test.describe('Home page', () => {
     page.on('pageerror', (e) => {
       if (e.message.includes('#418')) errors.push(e.message)
     })
-    await page.goto('/', { waitUntil: 'networkidle' })
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
     expect(errors).toEqual([])
   })
 

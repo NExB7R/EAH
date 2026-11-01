@@ -21,7 +21,7 @@ test.describe('About page', () => {
       errors.push(err.message)
     })
 
-    await page.goto('/about', { waitUntil: 'networkidle' })
+    await page.goto('/about', { waitUntil: 'domcontentloaded' })
 
     // لازم العنوان يظهر
     await expect(page.locator('h1')).toContainText('شبيك لبيك')
