@@ -170,7 +170,7 @@ export async function GET(req: NextRequest) {
       id: p.id,
       display_name: p.display_name,
       phone: p.phone,
-      role: roleMap.get(p.id as string) ?? 'customer',
+      role: roleMap.get(p.id as string) ?? 'unknown',
       trust_score: p.trust_score,
       is_premium: p.is_premium,
       banned_until: p.banned_until,
@@ -417,9 +417,9 @@ export async function GET(req: NextRequest) {
     rows = rows.map((row) => ({
       ...row,
       severity: ({ critical: 'حرج', error: 'خطأ', warning: 'تحذير', info: 'معلومة' } as Record<string, string>)[String(row.severity)] ?? 'غير محدد',
-      source: 'مصدر داخلي',
-      path: 'مسار داخلي',
-      message: 'تفاصيل الخطأ محفوظة داخليًا.',
+      source: String(row.source ?? 'مصدر غير محدد'),
+      path: String(row.path ?? ''),
+      message: String(row.message ?? 'لا توجد تفاصيل'),
     }))
 
     const columns: CsvColumn<Row>[] = [
