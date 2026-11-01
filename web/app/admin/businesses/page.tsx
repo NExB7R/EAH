@@ -69,8 +69,8 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
         title="إدارة الأنشطة"
         description={
           total === counts.all
-            ? `${counts.all.toLocaleString('en-US')} نشاط إجمالي`
-            : `${counts.all.toLocaleString('en-US')} نشاط إجمالي — ${total.toLocaleString('en-US')} في الحالة الحالية`
+            ? `${counts.all.toLocaleString('ar-EG')} نشاط إجمالي`
+            : `${counts.all.toLocaleString('ar-EG')} نشاط إجمالي — ${total.toLocaleString('ar-EG')} في الحالة الحالية`
         }
       />
 
@@ -81,7 +81,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <AlertIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{counts.pending.toLocaleString('en-US')}</span>
+            <span className={styles.statValue}>{counts.pending.toLocaleString('ar-EG')}</span>
             <span className={styles.statLabel}>بانتظار موافقة</span>
           </div>
         </div>
@@ -90,7 +90,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <CheckCircleIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{counts.published.toLocaleString('en-US')}</span>
+            <span className={styles.statValue}>{counts.published.toLocaleString('ar-EG')}</span>
             <span className={styles.statLabel}>منشور</span>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <CloseIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{counts.rejected.toLocaleString('en-US')}</span>
+            <span className={styles.statValue}>{counts.rejected.toLocaleString('ar-EG')}</span>
             <span className={styles.statLabel}>مرفوض</span>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
             <CrownGoldIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{counts.adminOwned.toLocaleString('en-US')}</span>
+            <span className={styles.statValue}>{counts.adminOwned.toLocaleString('ar-EG')}</span>
             <span className={styles.statLabel}>بإدارة الأدمن</span>
           </div>
         </div>
@@ -179,8 +179,8 @@ export default async function AdminBusinessesPage({ searchParams }: Props) {
           {total > businessPage.pageSize && (
             <nav className={styles.pagination} aria-label="صفحات الأنشطة">
               <span className={styles.pageSummary}>
-                صفحة {businessPage.page.toLocaleString('en-US')} من{' '}
-                {Math.ceil(total / businessPage.pageSize).toLocaleString('en-US')}
+                صفحة {businessPage.page.toLocaleString('ar-EG')} من{' '}
+                {Math.ceil(total / businessPage.pageSize).toLocaleString('ar-EG')}
               </span>
               <div className={styles.pageActions}>
                 {businessPage.page > 1 && (
