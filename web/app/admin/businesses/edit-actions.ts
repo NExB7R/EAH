@@ -185,14 +185,44 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
   const adminDb = createAdminDb()
   if (!adminDb) return { ok: false, error: 'عمليات تعديل النشاط غير متاحة مؤقتًا — حاول تاني' }
 
+  const readNumbers = (jsonKey: string, legacyKey: string): string[] | null => {
+    const raw = formData.get(jsonKey)
+    if (typeof raw === 'string') {
+      try {
+        const value: unknown = JSON.parse(raw)
+        if (!Array.isArray(value) || !value.every((item) => typeof item === 'string')) return null
+        return value.map((item) => item.trim()).filter(Boolean)
+      } catch {
+        return null
+      }
+    }
+    const legacy = fd(formData, legacyKey)
+    return legacy ? [legacy] : []
+  }
+  const phoneNumbers = readNumbers('phone_numbers_json', 'phone')
+  const whatsappNumbers = readNumbers('whatsapp_numbers_json', 'whatsapp')
+  if (!phoneNumbers || !whatsappNumbers) {
+    return { ok: false, error: 'قائمة أرقام التواصل غير صالحة — راجع الأرقام وحاول تاني' }
+  }
+
   const parsed = contactsSchema.safeParse({
-    phone: fd(formData, 'phone'),
-    whatsapp: fd(formData, 'whatsapp'),
+    phone: phoneNumbers[0] ?? '',
+    whatsapp: whatsappNumbers[0] ?? '',
     facebook: fd(formData, 'facebook'),
     instagram: fd(formData, 'instagram'),
     website: fd(formData, 'website'),
   })
   if (!parsed.success) return parseError(parsed)
+  const allNumbers = [...phoneNumbers, ...whatsappNumbers]
+  if (phoneNumbers.length > 10 || whatsappNumbers.length > 10 || allNumbers.length > 15) {
+    return { ok: false, error: 'الحد الأقصى 15 رقم تواصل للنشاط' }
+  }
+  if (allNumbers.some((value) => !/^01[0125][0-9]{8}$/.test(value))) {
+    return { ok: false, error: 'كل أرقام التواصل لازم تكون أرقام مصرية صحيحة' }
+  }
+  if (new Set(allNumbers).size !== allNumbers.length) {
+    return { ok: false, error: 'فيه رقم مكرر بين أرقام الاتصال والواتساب' }
+  }
 
   const { data: business } = await adminDb
     .from('businesses')
@@ -240,68 +270,101 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
     .in('method_type', managedTypes)
   if (deleteError) return { ok: false, error: 'تعذر حذف جهات الاتصال القديمة' }
 
+  const previousByKey = new Map(
+    (previousRows ?? []).map((row) => [`${row.method_type}:${row.value}`, row]),
+  )
+  const previousPhones = (previousRows ?? [])
+    .filter((row) => row.method_type === 'phone')
+    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+  const previousWhatsapps = (previousRows ?? [])
+    .filter((row) => row.method_type === 'whatsapp')
+    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
   const rows: {
     business_id: string
     method_type: string
     value: string
     is_primary: boolean
     is_public: boolean
+    label: string | null
+    sort_order: number
   }[] = []
-  if (parsed.data.phone) {
-    rows.push({
-      business_id: businessId,
-      method_type: 'phone',
-      value: parsed.data.phone,
-      is_primary: true,
-      is_public: true,
+
+  const appendNumberRows = (
+    kind: 'phone' | 'whatsapp',
+    values: string[],
+    previousOfType: typeof previousPhones,
+  ) => {
+    values.forEach((value, index) => {
+      const previous = previousByKey.get(`${kind}:${value}`) ?? previousOfType[index]
+      rows.push({
+        business_id: businessId,
+        method_type: kind,
+        value,
+        is_primary: kind === 'phone' && index === 0,
+        is_public: previous?.is_public ?? true,
+        label: previous?.label ?? null,
+        sort_order: previous?.sort_order ?? index,
+      })
     })
   }
-  if (parsed.data.whatsapp) {
-    rows.push({
-      business_id: businessId,
-      method_type: 'whatsapp',
-      value: parsed.data.whatsapp,
-      is_primary: false,
-      is_public: true,
-    })
-  }
+  appendNumberRows('phone', phoneNumbers, previousPhones)
+  appendNumberRows('whatsapp', whatsappNumbers, previousWhatsapps)
   if (parsed.data.facebook) {
-    rows.push({
-      business_id: businessId,
-      method_type: 'facebook',
-      value: parsed.data.facebook,
-      is_primary: false,
-      is_public: true,
-    })
+    {
+      const previous = previousByKey.get(`facebook:${parsed.data.facebook}`)
+      rows.push({
+        business_id: businessId,
+        method_type: 'facebook',
+        value: parsed.data.facebook,
+        is_primary: false,
+        is_public: previous?.is_public ?? true,
+        label: previous?.label ?? null,
+        sort_order: previous?.sort_order ?? 20,
+      })
+    }
   }
   if (parsed.data.instagram) {
-    rows.push({
-      business_id: businessId,
-      method_type: 'instagram',
-      value: parsed.data.instagram,
-      is_primary: false,
-      is_public: true,
-    })
+    {
+      const previous = previousByKey.get(`instagram:${parsed.data.instagram}`)
+      rows.push({
+        business_id: businessId,
+        method_type: 'instagram',
+        value: parsed.data.instagram,
+        is_primary: false,
+        is_public: previous?.is_public ?? true,
+        label: previous?.label ?? null,
+        sort_order: previous?.sort_order ?? 21,
+      })
+    }
   }
   if (parsed.data.website) {
-    rows.push({
-      business_id: businessId,
-      method_type: 'website',
-      value: parsed.data.website,
-      is_primary: false,
-      is_public: true,
-    })
+    {
+      const previous = previousByKey.get(`website:${parsed.data.website}`)
+      rows.push({
+        business_id: businessId,
+        method_type: 'website',
+        value: parsed.data.website,
+        is_primary: false,
+        is_public: previous?.is_public ?? true,
+        label: previous?.label ?? null,
+        sort_order: previous?.sort_order ?? 22,
+      })
+    }
   }
   for (const type of extendedTypes) {
     const value = extendedValues[type]
-    if (value)
+    if (value) {
+      const previous = previousByKey.get(`${type}:${value}`)
       rows.push({
         business_id: businessId,
         method_type: type,
         value,
         is_primary: false,
-        is_public: true,
+        is_public: previous?.is_public ?? true,
+        label: previous?.label ?? null,
+        sort_order: previous?.sort_order ?? 30 + extendedTypes.indexOf(type),
       })
+    }
   }
 
   if (rows.length > 0) {

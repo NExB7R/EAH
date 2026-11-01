@@ -32,8 +32,8 @@ export type MerchantBusiness = {
 }
 
 export type MerchantContacts = {
-  phone: string | null
-  whatsapp: string | null
+  phone: string[]
+  whatsapp: string[]
 }
 
 export type MerchantSubscription = {
@@ -119,7 +119,7 @@ export async function getMyContacts(businessId: string): Promise<MerchantContact
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user || user.is_anonymous) return { phone: null, whatsapp: null }
+  if (!user || user.is_anonymous) return { phone: [], whatsapp: [] }
 
   // Contact methods are private: prove this registered account owns
   // the requested activity before reading phone/WhatsApp values.
@@ -130,16 +130,26 @@ export async function getMyContacts(businessId: string): Promise<MerchantContact
     .eq('owner_profile_id', user.id)
     .maybeSingle()
 
-  if (ownershipError || !ownedBusiness) return { phone: null, whatsapp: null }
+  if (ownershipError || !ownedBusiness) return { phone: [], whatsapp: [] }
 
-  const { data } = await supabase
+  const { data, error: contactsError } = await supabase
     .from('business_contact_methods')
-    .select('method_type, value')
+    .select('method_type, value, is_primary, sort_order')
     .eq('business_id', businessId)
     .in('method_type', ['phone', 'whatsapp'])
+    .order('sort_order', { ascending: true })
 
-  const phone = data?.find((c) => c.method_type === 'phone')?.value ?? null
-  const whatsapp = data?.find((c) => c.method_type === 'whatsapp')?.value ?? null
+  if (contactsError) return { phone: [], whatsapp: [] }
+
+  const rows = data ?? []
+  const phone = rows
+    .filter((contact) => contact.method_type === 'phone')
+    .sort((a, b) => Number(b.is_primary) - Number(a.is_primary))
+    .map((contact) => contact.value)
+  const whatsapp = rows
+    .filter((contact) => contact.method_type === 'whatsapp')
+    .map((contact) => contact.value)
+
   return { phone, whatsapp }
 }
 

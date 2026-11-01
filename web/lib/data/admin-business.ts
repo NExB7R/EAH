@@ -44,7 +44,7 @@ export type AdminBusiness = {
   notice_expires_at: string | null
   notice_severity: 'info' | 'warning' | 'critical'
   owner: { id: string; display_name: string; phone: string | null } | null
-  contacts: { method_type: string; value: string; is_primary: boolean }[]
+  contacts: { method_type: string; value: string; is_primary: boolean; sort_order?: number | null }[]
   branches: {
     id: string
     name: string
@@ -100,8 +100,9 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
       : Promise.resolve({ data: null }),
     supabase
       .from('business_contact_methods')
-      .select('method_type, value, is_primary')
-      .eq('business_id', id),
+      .select('method_type, value, is_primary, sort_order')
+      .eq('business_id', id)
+      .order('sort_order', { ascending: true }),
     supabase
       .from('business_branches')
       .select(
