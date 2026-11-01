@@ -50,7 +50,7 @@ export default async function AdminInsightsPage({
     <div>
       <AccountPageHeader
         title="تقارير الأنشطة"
-        description={`${totalReports.toLocaleString('en-US')} تقرير عبر ${uniqueBusinesses.toLocaleString('en-US')} نشاط`}
+        description={`${totalReports.toLocaleString('ar-EG')} تقرير عبر ${uniqueBusinesses.toLocaleString('ar-EG')} نشاط`}
       />
 
       <div className={styles.toolbar}>
@@ -84,28 +84,28 @@ export default async function AdminInsightsPage({
           <span className={styles.summaryIcon}>
             <FileTextIcon size={20} />
           </span>
-          <span className={styles.summaryValue}>{totalReports.toLocaleString('en-US')}</span>
+          <span className={styles.summaryValue}>{totalReports.toLocaleString('ar-EG')}</span>
           <span className={styles.summaryLabel}>تقرير</span>
         </div>
         <div className={styles.summaryCard}>
           <span className={styles.summaryIcon}>
             <StoreIcon size={20} />
           </span>
-          <span className={styles.summaryValue}>{uniqueBusinesses.toLocaleString('en-US')}</span>
+          <span className={styles.summaryValue}>{uniqueBusinesses.toLocaleString('ar-EG')}</span>
           <span className={styles.summaryLabel}>نشاط</span>
         </div>
         <div className={styles.summaryCard}>
           <span className={styles.summaryIcon}>
             <SparklesIcon size={20} />
           </span>
-          <span className={styles.summaryValue}>{avgScore.toLocaleString('en-US')}</span>
+          <span className={styles.summaryValue}>{avgScore.toLocaleString('ar-EG')}</span>
           <span className={styles.summaryLabel}>متوسط التقييم</span>
         </div>
         <div className={styles.summaryCard}>
           <span className={styles.summaryIcon}>
             <CrownGoldIcon size={20} />
           </span>
-          <span className={styles.summaryValue}>{businesses.length.toLocaleString('en-US')}</span>
+          <span className={styles.summaryValue}>{businesses.length.toLocaleString('ar-EG')}</span>
           <span className={styles.summaryLabel}>نشاط متاح</span>
         </div>
       </div>
