@@ -425,6 +425,23 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     if (roleRow.role !== 'customer' && roleRow.role !== 'merchant') {
       return { ok: false, error: 'اختر حساب عميل أو تاجر، ولا تربط النشاط بحساب إداري' }
     }
+
+    // The current merchant workspace supports one linked business per account.
+    // Enforce the same rule for admin-created ownership links, not only the picker.
+    const { data: existingOwnedBusiness, error: ownerBusinessLookupError } = await privileged
+      .from('businesses')
+      .select('id')
+      .eq('owner_profile_id', d.owner_profile_id)
+      .limit(1)
+      .maybeSingle()
+
+    if (ownerBusinessLookupError) {
+      return { ok: false, error: 'تعذر التحقق من الأنشطة المرتبطة بهذا الحساب — حاول مرة أخرى' }
+    }
+    if (existingOwnedBusiness) {
+      return { ok: false, error: 'هذا الحساب مرتبط بالفعل بنشاط آخر. فك ارتباطه أولًا قبل ربط نشاط جديد.' }
+    }
+
     selectedOwnerRole = roleRow.role
   }
 
