@@ -23,7 +23,7 @@ export default async function AdminOrdersPage() {
     <div>
       <AccountPageHeader
         title="الطلبات"
-        description={`${stats.total.toLocaleString('en-US')} طلب — ${stats.today.toLocaleString('en-US')} اليوم`}
+        description={`${stats.total.toLocaleString('ar-EG')} طلب — ${stats.today.toLocaleString('ar-EG')} اليوم`}
       />
 
       <div
