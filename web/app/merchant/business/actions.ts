@@ -135,7 +135,7 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
 
   const d = parsed.data
   let hasActiveBranchWhatsApp = false
-  if (d.accepts_whatsapp_orders && !hasUsableWhatsAppDestination(d.whatsapp)) {
+  if (d.accepts_whatsapp_orders && !d.whatsappNumbers.some(hasUsableWhatsAppDestination)) {
     const { data: activeBranches, error: branchLookupError } = await admin
       .from('business_branches')
       .select('whatsapp')
