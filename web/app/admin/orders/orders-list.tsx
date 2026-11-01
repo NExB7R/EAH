@@ -117,7 +117,7 @@ export default function AdminOrdersList({ orders }: { orders: Order[] }) {
         ))}
       </div>
 
-      <div className={styles.resultCount}>{filtered.length.toLocaleString('en-US')} نتيجة</div>
+      <div className={styles.resultCount}>{filtered.length.toLocaleString('ar-EG')} نتيجة</div>
 
       <div className={styles.list}>
         {filtered.map((o) => (
