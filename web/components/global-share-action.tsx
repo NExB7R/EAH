@@ -1,10 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import BusinessShareModal from './business-share-modal'
 import { ShareIcon } from './icons'
 import styles from './global-share-action.module.css'
+
+const subscribeToMountState = () => () => {}
+const getClientMountSnapshot = () => true
+const getServerMountSnapshot = () => false
 
 type Props = {
   label?: string
@@ -15,13 +19,13 @@ export default function GlobalShareAction({
   label = 'شارك المنصة ورمز الاستجابة السريعة',
   className = '',
 }: Props) {
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    subscribeToMountState,
+    getClientMountSnapshot,
+    getServerMountSnapshot,
+  )
   const [open, setOpen] = useState(false)
   const [url, setUrl] = useState<string | null>(null)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const openShare = () => {
     setUrl(`${window.location.origin}/`)

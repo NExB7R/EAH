@@ -72,7 +72,7 @@ SELECT is((
 ), false, 'trigger-only functions are not callable through anonymous RPC');
 SELECT is((
   SELECT count(*)::int FROM pg_proc AS p JOIN pg_namespace AS n ON n.oid=p.pronamespace
-  WHERE n.nspname='public' AND p.prosecdef=true
+  WHERE n.nspname='public'
     AND p.proname IN ('get_trust_tier','set_new_until','prevent_merchant_toggle_orders_enabled')
     AND EXISTS (SELECT 1 FROM unnest(coalesce(p.proconfig,ARRAY[]::text[])) AS setting WHERE setting LIKE 'search_path=%')
 ), 3, 'mutable search_path functions have explicit settings');
