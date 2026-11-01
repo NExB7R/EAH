@@ -56,7 +56,7 @@ export default async function MerchantArchivePage() {
     <div>
       <AccountPageHeader
         title="أرشيف التقارير"
-        description={`${reports.length.toLocaleString('en-US')} تقرير لنشاط "${biz.name}"`}
+        description={`${reports.length.toLocaleString('ar-EG')} تقرير لنشاط "${biz.name}"`}
       />
 
       {reports.length === 0 ? (
