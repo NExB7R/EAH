@@ -108,7 +108,7 @@ export default function TrialOwnerPanel({
   }
 
   const handleLink = () => {
-    if (!userFound) return
+    if (!userFound || userFound.businessesCount > 0) return
     if (
       !confirm(
         `تربط النشاط "${businessName}" بالحساب "${userFound.displayName}" (${userFound.phone})؟`,
@@ -226,12 +226,17 @@ export default function TrialOwnerPanel({
                   <span className={styles.dot}>·</span>
                   <span>{userFound.businessesCount} نشاط</span>
                 </div>
+                {userFound.businessesCount > 0 && (
+                  <p className={styles.sectionDesc}>
+                    هذا الحساب مرتبط بالفعل بنشاط آخر. فك ارتباطه أولًا قبل ربط نشاط جديد.
+                  </p>
+                )}
               </div>
               <div className={styles.userActions}>
                 <button
                   type="button"
                   onClick={handleLink}
-                  disabled={pending}
+                  disabled={pending || userFound.businessesCount > 0}
                   className={styles.primaryBtnSm}
                 >
                   <CheckCircleIcon size={14} />
