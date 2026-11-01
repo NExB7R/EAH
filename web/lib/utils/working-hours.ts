@@ -43,7 +43,7 @@ function cairoClock(now: Date): { dayIndex: number; minuteOfDay: number } | null
 }
 
 function toMinutes(value: string): number | null {
-  const match = /^([01]\d|2[0-3]):[0-5]\d$/.exec(value)
+  const match = /^([01]\d|2[0-3]):([0-5]\d)$/.exec(value)
   if (!match) return null
   return Number(match[1]) * 60 + Number(match[2])
 }
@@ -93,7 +93,7 @@ type BusinessHoursSource = {
   is_open?: boolean | null
 }
 
-export function isBusinessOpen(business: BusinessHoursSource): boolean {
+export function isBusinessOpen(business: BusinessHoursSource, now = new Date()): boolean {
   if (typeof business.open_now_override === 'boolean') return business.open_now_override
 
   // Admin-created activities may not have a weekly schedule yet. In that case,
@@ -102,5 +102,5 @@ export function isBusinessOpen(business: BusinessHoursSource): boolean {
     return business.is_open === true
   }
 
-  return isOpenNow(business.working_hours)
+  return isOpenAt(business.working_hours, now)
 }
