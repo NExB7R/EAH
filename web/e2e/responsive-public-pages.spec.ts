@@ -12,10 +12,11 @@ test.describe('Mobile-first public surfaces', () => {
       test(`${pageCase.label} has no horizontal overflow at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 844 })
         await page.goto(pageCase.path, { waitUntil: 'domcontentloaded' })
-        await expect(page.locator('main')).toBeVisible()
+        await expect(page.locator('main:visible').first()).toBeVisible()
 
         const dimensions = await page.evaluate(() => {
           const viewport = document.documentElement.clientWidth
+          const documentWidth = document.documentElement.scrollWidth
           const selectors = [
             'main',
             '[class*="capsule"] [class*="inner"]',
@@ -23,19 +24,30 @@ test.describe('Mobile-first public surfaces', () => {
             'main [class*="grid"]',
           ]
 
-          return selectors.flatMap((selector) =>
-            Array.from(document.querySelectorAll<HTMLElement>(selector)).map((element) => ({
-              selector,
-              viewport,
-              clientWidth: element.clientWidth,
-              scrollWidth: element.scrollWidth,
-              left: element.getBoundingClientRect().left,
-              right: element.getBoundingClientRect().right,
-            })),
-          )
+          return {
+            documentWidth,
+            viewport,
+            elements: selectors.flatMap((selector) =>
+              Array.from(document.querySelectorAll<HTMLElement>(selector))
+                .filter((element) => element.getClientRects().length > 0)
+                .map((element) => ({
+                  selector,
+                  viewport,
+                  clientWidth: element.clientWidth,
+                  scrollWidth: element.scrollWidth,
+                  left: element.getBoundingClientRect().left,
+                  right: element.getBoundingClientRect().right,
+                })),
+            ),
+          }
         })
 
-        for (const item of dimensions) {
+        expect(
+          dimensions.documentWidth,
+          `${pageCase.path} document scrollWidth at ${width}px`,
+        ).toBeLessThanOrEqual(dimensions.viewport + 1)
+
+        for (const item of dimensions.elements) {
           expect(
             item.scrollWidth,
             `${pageCase.path} ${item.selector} scrollWidth at ${width}px`,

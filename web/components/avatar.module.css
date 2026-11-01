@@ -117,9 +117,3 @@
   pointer-events: none;
 }
 
-/* ═══════════════════════════════════════════════════
-   EAH — Mobile Hardening (≤640px)
-   Auto-appended · safe no-ops on non-matching elements
-   ═══════════════════════════════════════════════════ */
-@media (max-width: 640px) {
-}

@@ -15,8 +15,12 @@ test.describe('Support Bot', () => {
 
   test('appears on /help page', async ({ page }) => {
     await page.goto('/help')
-    await expect(page.getByText('محتاج مساعدة فورية؟')).toBeVisible()
-    await expect(page.getByText('مساعد الدعم الفني')).toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: 'محتاج مساعدة فورية؟', exact: true }),
+    ).toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: 'مساعد الدعم الفني', exact: true }),
+    ).toBeVisible()
   })
 
   test('shows 4 suggestions', async ({ page }) => {
@@ -29,6 +33,9 @@ test.describe('Support Bot', () => {
 
   test('has input field', async ({ page }) => {
     await page.goto('/help')
-    await expect(page.locator('textarea[placeholder="اكتب سؤالك…"]')).toBeVisible()
+    const supportSection = page
+      .locator('section')
+      .filter({ has: page.getByRole('heading', { name: 'محتاج مساعدة فورية؟', exact: true }) })
+    await expect(supportSection.locator('textarea[placeholder="اكتب سؤالك…"]')).toBeVisible()
   })
 })
