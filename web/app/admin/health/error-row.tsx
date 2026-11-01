@@ -66,7 +66,7 @@ export default function ErrorRow({ error: e }: { error: SystemError }) {
     >
       <div className={styles.errorHead}>
         <span className={`${styles.severity} ${sevClass(e.severity)}`}>
-          {SEVERITY_LABEL[e.severity] ?? e.severity}
+          {SEVERITY_LABEL[e.severity] ?? 'غير محدد'}
         </span>
         <span className={styles.source}>{e.source}</span>
         {e.path && <code className={styles.errorPath}>{e.path}</code>}
