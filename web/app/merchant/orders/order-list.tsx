@@ -175,7 +175,7 @@ export default function OrderList({ orders, isEnabled }: Props) {
         </div>
       </div>
 
-      <div className={styles.resultCount}>{filtered.length.toLocaleString('en-US')} نتيجة</div>
+      <div className={styles.resultCount}>{filtered.length.toLocaleString('ar-EG')} نتيجة</div>
 
       {filtered.length === 0 ? (
         <div className={styles.empty}>
