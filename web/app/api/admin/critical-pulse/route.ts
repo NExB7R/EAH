@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   const ctx = await requireAdmin()
   if (!ctx.ok) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    return NextResponse.json({ error: 'غير مصرح' }, { status: 403 })
   }
 
   const svc = createServiceClient()
