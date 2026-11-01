@@ -49,7 +49,7 @@ export default async function AdminHealthPage({
         >
           <span>الأخطاء</span>
           {summary.unresolved > 0 && (
-            <span className={styles.tabBadge}>{summary.unresolved.toLocaleString('en-US')}</span>
+            <span className={styles.tabBadge}>{summary.unresolved.toLocaleString('ar-EG')}</span>
           )}
         </Link>
         <Link
@@ -97,23 +97,23 @@ async function ErrorsTab({
       <section className={styles.grid} aria-label="ملخص صحة النظام">
         <article className={styles.card}>
           <div className={styles.cardLabel}>أخطاء آخر 24 ساعة</div>
-          <div className={styles.cardValue}>{summary.last24h.toLocaleString('en-US')}</div>
+          <div className={styles.cardValue}>{summary.last24h.toLocaleString('ar-EG')}</div>
         </article>
         <article className={styles.card}>
           <div className={styles.cardLabel}>أخطاء آخر 7 أيام</div>
-          <div className={styles.cardValue}>{summary.last7d.toLocaleString('en-US')}</div>
+          <div className={styles.cardValue}>{summary.last7d.toLocaleString('ar-EG')}</div>
         </article>
         <article
           className={summary.unresolved > 0 ? `${styles.card} ${styles.cardWarn}` : styles.card}
         >
           <div className={styles.cardLabel}>غير محلولة</div>
-          <div className={styles.cardValue}>{summary.unresolved.toLocaleString('en-US')}</div>
+          <div className={styles.cardValue}>{summary.unresolved.toLocaleString('ar-EG')}</div>
         </article>
         <article
           className={summary.critical24h > 0 ? `${styles.card} ${styles.cardDanger}` : styles.card}
         >
           <div className={styles.cardLabel}>حرجة خلال 24 ساعة</div>
-          <div className={styles.cardValue}>{summary.critical24h.toLocaleString('en-US')}</div>
+          <div className={styles.cardValue}>{summary.critical24h.toLocaleString('ar-EG')}</div>
         </article>
       </section>
 
@@ -126,7 +126,7 @@ async function ErrorsTab({
             {summary.topPaths.map((item) => (
               <li key={item.path} className={styles.pathItem}>
                 <code className={styles.pathCode}>{item.path}</code>
-                <span className={styles.pathCount}>{item.count.toLocaleString('en-US')}</span>
+                <span className={styles.pathCount}>{item.count.toLocaleString('ar-EG')}</span>
               </li>
             ))}
           </ul>
