@@ -58,6 +58,10 @@ function getAuditActionLabel(action: string): string {
   return 'إجراء إداري'
 }
 
+function hasActivePremium(isPremium: boolean, premiumUntil: string | null): boolean {
+  return isPremium && (!premiumUntil || new Date(premiumUntil).getTime() > Date.now())
+}
+
 function timeAgo(iso: string): string {
   const diff = Date.now() - new Date(iso).getTime()
   const m = Math.floor(diff / 60000)
@@ -106,8 +110,7 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
             <h2 className={styles.name}>{u.display_name}</h2>
             <div className={styles.badges}>
               <span className={styles.badge}>{ROLE_LABEL[detail.role] ?? 'غير محدد'}</span>
-              {u.is_premium &&
-                (!u.premium_until || new Date(u.premium_until).getTime() > Date.now()) && (
+              {hasActivePremium(u.is_premium, u.premium_until) && (
                 <span className={`${styles.badge} ${styles.badgeGold}`}>
                   <CrownGoldIcon size={11} /> مميز
                 </span>
