@@ -58,6 +58,8 @@ jobs:
         run: npx eslint .
 
       - name: Prettier
+        id: prettier
+        continue-on-error: true
         run: npx prettier --check "**/*.{ts,tsx,css,json}"
 
       - name: Stylelint (CSS)
@@ -83,6 +85,14 @@ jobs:
 
       - name: jscpd (duplicates)
         run: npx jscpd .
+
+      # Keep diagnostics running even when formatting fails, but retain a failing
+      # Quality Gate result until the repository formatting debt is resolved.
+      - name: Report formatting failure after all quality checks
+        if: ${{ always() && steps.prettier.outcome == 'failure' }}
+        run: |
+          echo "::error::Prettier found unformatted files. The remaining quality checks have still completed."
+          exit 1
 
   rls-tests:
     runs-on: ubuntu-latest
