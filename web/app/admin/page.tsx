@@ -138,7 +138,7 @@ export default async function AdminDashboard() {
                   <Icon size={18} />
                 </span>
                 <div className={styles.alertBody}>
-                  <strong>{count.toLocaleString('en-US')}</strong>
+                  <strong>{count.toLocaleString('ar-EG')}</strong>
                   <span>{label}</span>
                 </div>
                 <ArrowLeftIcon size={14} className={styles.alertArrow} />
