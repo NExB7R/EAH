@@ -1,6 +1,6 @@
 // EAH — Discovery filters. Public filters must never depend on gamification points.
 import type { Business, BusinessType } from '@/lib/data/businesses'
-import { isOpenNow } from '@/lib/data/businesses'
+import { isBusinessOpen } from '@/lib/utils/working-hours'
 import { getBusinessReputationScore } from '@/lib/reputation'
 import { distanceKm, type LatLng } from '@/lib/utils/distance'
 
@@ -69,7 +69,7 @@ export function applyFilters(businesses: Business[], filters: Filters): Business
   if (filters.types.length > 0) result = result.filter((b) => filters.types.includes(b.business_type))
   if (filters.verifiedOnly) result = result.filter((b) => b.is_verified === true)
   if (filters.area) result = result.filter((b) => b.area === filters.area)
-  if (filters.openNow) result = result.filter((b) => isOpenNow(b.working_hours))
+  if (filters.openNow) result = result.filter((business) => isBusinessOpen(business))
   if (filters.online) result = result.filter((b) => b.accepts_whatsapp_orders === true)
   if (filters.hasOffers) result = result.filter((b) => (b.offers_count ?? 0) > 0)
   if (filters.isNew) result = result.filter((b) => b.is_new_project === true)

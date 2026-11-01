@@ -22,8 +22,8 @@ describe('working hours use Africa/Cairo local time', () => {
 
     expect(isBusinessOpen({ working_hours: closedSchedule, open_now_override: true })).toBe(true)
     expect(isBusinessOpen({ working_hours: openSchedule, open_now_override: false })).toBe(false)
-    expect(isBusinessOpen({ working_hours: openSchedule, open_now_override: null })).toBe(true)
-    expect(isBusinessOpen({ working_hours: closedSchedule })).toBe(false)
+    expect(isBusinessOpen({ working_hours: openSchedule, open_now_override: null }, now)).toBe(true)
+    expect(isBusinessOpen({ working_hours: closedSchedule }, now)).toBe(false)
   })
 
   it('uses the saved manual state when no weekly schedule is configured', () => {

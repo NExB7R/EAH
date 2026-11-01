@@ -63,7 +63,7 @@ describe('TRUST_TIERS', () => {
 
 describe('getTrustTierMeta', () => {
   it('يرجع الاسم الصحيح', () => {
-    expect(getTrustTierMeta(50).label).toBe('زي الفل')
+    expect(getTrustTierMeta(50).label).toBe('نشط')
   })
   it('يرجع الـ emoji', () => {
     expect(getTrustTierMeta(90).emoji).toBe('👑')
