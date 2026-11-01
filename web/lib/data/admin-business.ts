@@ -224,10 +224,31 @@ export async function getBusinessOwnerCandidates(): Promise<BusinessOwnerOption[
   const userIds = [...new Set(roleRows.map((row) => row.user_id).filter(Boolean))]
   if (userIds.length === 0) return []
 
+  // The merchant workspace and merchant application currently support one
+  // linked business per account. Do not offer accounts that already own one.
+  const { data: linkedOwners, error: linkedOwnersError } = await supabase
+    .from('businesses')
+    .select('owner_profile_id')
+    .in('owner_profile_id', userIds)
+
+  if (linkedOwnersError) {
+    console.error('[admin-business] failed to check existing business links:', linkedOwnersError.message)
+    return []
+  }
+
+  const linkedOwnerIds = new Set(
+    (linkedOwners ?? [])
+      .map((business) => business.owner_profile_id)
+      .filter((id): id is string => typeof id === 'string' && id.length > 0),
+  )
+  const availableRoleRows = roleRows.filter((row) => !linkedOwnerIds.has(row.user_id))
+  const availableUserIds = [...new Set(availableRoleRows.map((row) => row.user_id))]
+  if (availableUserIds.length === 0) return []
+
   const { data: profileData, error: profileError } = await supabase
     .from('profiles')
     .select('id, display_name, phone')
-    .in('id', userIds)
+    .in('id', availableUserIds)
 
   if (profileError) {
     console.error('[admin-business] failed to load owner profiles:', profileError.message)
@@ -236,7 +257,7 @@ export async function getBusinessOwnerCandidates(): Promise<BusinessOwnerOption[
 
   const profilesById = new Map((profileData ?? []).map((profile) => [profile.id, profile]))
 
-  return roleRows.flatMap((row) => {
+  return availableRoleRows.flatMap((row) => {
     const profile = profilesById.get(row.user_id)
     return profile
       ? [
