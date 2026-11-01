@@ -11,11 +11,9 @@ import styles from './activity-feed.module.css'
 
 type FeedItem = {
   id: string
-  action: string
   label: string
   actor: string
   created_at: string
-  metadata: Record<string, unknown>
 }
 
 function timeAgo(iso: string): string {
@@ -104,7 +102,7 @@ export default function ActivityFeed() {
       <div className={styles.header}>
         <span className={styles.pulse} />
         <h3 className={styles.title}>النشاط الحي</h3>
-        <span className={styles.live}>LIVE</span>
+        <span className={styles.live}>مباشر</span>
       </div>
       <ul className={styles.list}>
         {items.map((it) => (
