@@ -870,6 +870,26 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     return { ok: true }
   }
 
+  // The current merchant workspace supports one linked business per account.
+  // When linking an unowned/different business, reject accounts already linked
+  // elsewhere rather than creating an activity that their dashboard cannot select.
+  if (!alreadyLinked) {
+    const { data: otherOwnedBusiness, error: otherOwnerLookupError } = await privileged
+      .from('businesses')
+      .select('id')
+      .eq('owner_profile_id', userId)
+      .neq('id', businessId)
+      .limit(1)
+      .maybeSingle()
+
+    if (otherOwnerLookupError) {
+      return { ok: false, error: 'تعذر التحقق من الأنشطة المرتبطة بهذا الحساب — حاول مرة أخرى' }
+    }
+    if (otherOwnedBusiness) {
+      return { ok: false, error: 'هذا الحساب مرتبط بالفعل بنشاط آخر. فك ارتباطه أولًا قبل ربط نشاط جديد.' }
+    }
+  }
+
   // Ownership changes must never carry an old order-acceptance setting to a
   // newly linked owner. Public visibility remains unchanged; only ordering is
   // disabled until the new/current seller explicitly re-enables it.
