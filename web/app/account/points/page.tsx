@@ -47,7 +47,7 @@ export default async function PointsPage() {
           <span className={styles.balanceIcon}>
             <GiftIcon size={28} />
           </span>
-          <span className={styles.balanceValue}>{stats.pointsBalance.toLocaleString('en-US')}</span>
+          <span className={styles.balanceValue}>{stats.pointsBalance.toLocaleString('ar-EG')}</span>
           <span className={styles.balanceLabel}>رصيد النقاط</span>
         </div>
 
