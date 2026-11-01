@@ -23,7 +23,7 @@ export default function StatCard({ icon: Icon, label, value, hint, href, tone = 
         {href && <ArrowLeftIcon size={13} className={styles.arrow} />}
       </div>
       <span className={styles.value}>
-        {typeof value === 'number' ? value.toLocaleString('en-US') : value}
+        {typeof value === 'number' ? value.toLocaleString('ar-EG') : value}
       </span>
       <span className={styles.label}>{label}</span>
       {hint && <span className={styles.hint}>{hint}</span>}
