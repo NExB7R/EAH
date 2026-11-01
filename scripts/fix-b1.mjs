@@ -3,7 +3,7 @@
  * EAH - B1 Auto-Fixer (AP-06) — v2
  * ==================================
  * Fixes: `.eq('owner_profile_id', X)` chain that ends in `.maybeSingle()`
- *        WITHOUT a `.limit(1)` guard.
+ *        WITHOUT a `.limit(1)` guard or a businesses.id primary-key filter.
  *
  * v2 changes (2026-10-20):
  *   - Two-step match (no regex backtracking) — no more double .limit(1).
@@ -44,6 +44,21 @@ async function* walk(dir) {
   }
 }
 
+function hasPrimaryKeyBoundBusinessQuery(content, ownerFilterIndex) {
+  const before = content.slice(0, ownerFilterIndex);
+  const fromRe = /\\.from\\(\\s*(['"])([^'"]+)\\1\\s*\\)/g;
+  let lastFrom = null;
+  let match;
+  while ((match = fromRe.exec(before)) !== null) lastFrom = match;
+  if (!lastFrom || lastFrom[2] !== 'businesses') return false;
+
+  // businesses.id is the primary key; require it in this same query chain.
+  const chainPrefix = before.slice(lastFrom.index);
+  const stripped = chainPrefix.replace(/\\([^)]*\\)/g, '');
+  if (/[,;]/.test(stripped)) return false;
+  return /\\.eq\\(\\s*['"]id['"]\\s*,/.test(chainPrefix);
+}
+
 /**
  * Finds chain: .eq('owner_profile_id', X) [.method(args)]* .maybeSingle(
  * Returns list of { eqEnd, mbStart, middle } for chains WITHOUT .limit().
@@ -64,7 +79,7 @@ function findViolations(content) {
     const stripped = middle.replace(/\([^)]*\)/g, '');
     const hasBreak = /[,;]/.test(stripped);
     const hasLimit = /\.limit\s*\(/.test(middle);
-    if (!hasBreak && !hasLimit) {
+    if (!hasBreak && !hasLimit && !hasPrimaryKeyBoundBusinessQuery(content, m.index)) {
       out.push({ eqEnd, mbStart: eqEnd + mbIdx, middle });
     }
     if (m.index === eqRe.lastIndex) eqRe.lastIndex++;

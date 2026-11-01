@@ -109,12 +109,26 @@ function lineAt(content, index) {
   return line;
 }
 
+function hasPrimaryKeyBoundBusinessQuery(content, ownerFilterIndex) {
+  const before = content.slice(0, ownerFilterIndex);
+  const fromRe = /\\.from\\(\\s*(['"])([^'"]+)\\1\\s*\\)/g;
+  let lastFrom = null;
+  let match;
+  while ((match = fromRe.exec(before)) !== null) lastFrom = match;
+  if (!lastFrom || lastFrom[2] !== 'businesses') return false;
+
+  // businesses.id is the primary key; require it in this same query chain.
+  const chainPrefix = before.slice(lastFrom.index);
+  const stripped = chainPrefix.replace(/\\([^)]*\\)/g, '');
+  if (/[,;]/.test(stripped)) return false;
+  return /\\.eq\\(\\s*['"]id['"]\\s*,/.test(chainPrefix);
+}
+
 // ── Checks ───────────────────────────────────────────────────
 const CHECKS = [
   {
     id: 'B1:owner-maybeSingle',
-    // Excludes `.limit(...)` between `.eq('owner_profile_id'` and `.maybeSingle(`
-    // — that pattern is already AP-06 compliant.
+    // Excludes `.limit(...)` and businesses.id-primary-key-scoped lookups before `.maybeSingle(`.
     apply(c, f) {
       if (isCss(f) || isTest(f) || isDeclaration(f)) return [];
       const eqRe = /\.eq\(\s*['"]owner_profile_id['"][^)]*\)(?=\s*\.)/g;
@@ -128,7 +142,7 @@ const CHECKS = [
           const stripped = middle.replace(/\([^)]*\)/g, '');
           const hasBreak = /[,;]/.test(stripped);
           const hasLimit = /\.limit\s*\(/.test(middle);
-          if (!hasBreak && !hasLimit) {
+          if (!hasBreak && !hasLimit && !hasPrimaryKeyBoundBusinessQuery(c, m.index)) {
             out.push({ line: lineAt(c, m.index), snippet: (m[0] + middle.slice(0, 40) + '.maybeSingle(').slice(0, 100) });
           }
         }
