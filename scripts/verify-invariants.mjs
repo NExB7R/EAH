@@ -111,7 +111,7 @@ function lineAt(content, index) {
 
 function hasPrimaryKeyBoundBusinessQuery(content, ownerFilterIndex) {
   const before = content.slice(0, ownerFilterIndex);
-  const fromRe = /\\.from\\(\\s*(['"])([^'"]+)\\1\\s*\\)/g;
+  const fromRe = /\.from\(\s*(['"])([^'"]+)\1\s*\)/g;
   let lastFrom = null;
   let match;
   while ((match = fromRe.exec(before)) !== null) lastFrom = match;
@@ -119,9 +119,9 @@ function hasPrimaryKeyBoundBusinessQuery(content, ownerFilterIndex) {
 
   // businesses.id is the primary key; require it in this same query chain.
   const chainPrefix = before.slice(lastFrom.index);
-  const stripped = chainPrefix.replace(/\\([^)]*\\)/g, '');
+  const stripped = chainPrefix.replace(/\([^)]*\)/g, '');
   if (/[,;]/.test(stripped)) return false;
-  return /\\.eq\\(\\s*['"]id['"]\\s*,/.test(chainPrefix);
+  return /\.eq\(\s*['"]id['"]\s*,/.test(chainPrefix);
 }
 
 // ── Checks ───────────────────────────────────────────────────
