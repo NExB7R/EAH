@@ -11,6 +11,13 @@ export const dynamic = 'force-dynamic'
 
 const ACTION_LABEL: Record<string, string> = {
   'business.approve': 'اعتماد نشاط',
+  'business.create': 'إنشاء نشاط',
+  'business.update': 'تعديل نشاط',
+  'business.owner.assign': 'ربط تاجر بالنشاط',
+  'business.owner.remove': 'فك ربط التاجر بالنشاط',
+  'business.archive': 'أرشفة نشاط',
+  'business.republish': 'إعادة نشر نشاط',
+  'business.delete': 'حذف نشاط',
   'business.reject': 'رفض نشاط',
   'business.bulk_approve': 'اعتماد جماعي',
   'business.bulk_reject': 'رفض جماعي',
@@ -19,9 +26,21 @@ const ACTION_LABEL: Record<string, string> = {
   'user.bulk_ban': 'حظر جماعي',
   'user.bulk_unban': 'إلغاء حظر',
   'user.bulk_role': 'تغيير دور',
+  'user.role.change': 'تغيير دور حساب',
+  'user.ban': 'حظر حساب',
+  'user.unban': 'إلغاء حظر حساب',
   'user.bulk_premium_on': 'تفعيل التميز',
   'user.bulk_premium_off': 'إلغاء التميز',
   'notifications.broadcast': 'إشعار جماعي',
+  'subscription.approve': 'اعتماد اشتراك',
+  'subscription.reject': 'رفض اشتراك',
+  'subscription.extend': 'تمديد اشتراك',
+  'subscription.cancel': 'إلغاء اشتراك',
+  'ad.approve': 'اعتماد إعلان',
+  'ad.reject': 'رفض إعلان',
+  'ad.pause': 'إيقاف إعلان',
+  'ad.resume': 'استئناف إعلان',
+  'ad.delete': 'حذف إعلان',
   'health.resolve_error': 'حل خطأ',
   'health.unresolve_error': 'إعادة فتح خطأ',
   'health.resolve_all_by_severity': 'حل أخطاء بالجملة',
@@ -32,22 +51,20 @@ const ACTION_LABEL: Record<string, string> = {
 
 type FeedItem = {
   id: string
-  action: string
   label: string
   actor: string
   created_at: string
-  metadata: Record<string, unknown>
 }
 
 export async function GET() {
   const ctx = await requireAdmin()
   if (!ctx.ok) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
+    return NextResponse.json({ error: 'غير مصرح' }, { status: 403 })
   }
 
   const { data } = await ctx.supabase
     .from('audit_logs')
-    .select('id, action, actor_user_id, created_at, metadata')
+    .select('id, action, actor_user_id, created_at')
     .order('created_at', { ascending: false })
     .limit(20)
 
@@ -65,11 +82,9 @@ export async function GET() {
 
   const items: FeedItem[] = data.map((l) => ({
     id: l.id,
-    action: l.action,
-    label: ACTION_LABEL[l.action] ?? l.action,
+    label: ACTION_LABEL[l.action] ?? 'إجراء إداري',
     actor: l.actor_user_id ? (names.get(l.actor_user_id) ?? '—') : 'نظام',
     created_at: l.created_at,
-    metadata: (l.metadata ?? {}) as Record<string, unknown>,
   }))
 
   return NextResponse.json({ items })
