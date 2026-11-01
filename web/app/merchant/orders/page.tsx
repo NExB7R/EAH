@@ -37,7 +37,7 @@ export default async function MerchantOrdersPage() {
         <div className={styles.headerText}>
           <h1 className={styles.title}>الطلبات</h1>
           <p className={styles.subtitle}>
-            {orders.length.toLocaleString('en-US')} طلب
+            {orders.length.toLocaleString('ar-EG')} طلب
             {isEnabled && settings && ` · الرد خلال ${settings.deadline_minutes} دقايق`}
           </p>
         </div>
