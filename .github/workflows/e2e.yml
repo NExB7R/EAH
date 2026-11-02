@@ -48,7 +48,7 @@ jobs:
       # ── Cache Playwright browsers (~150MB) ──
       - name: Cache Playwright browsers
         id: pw-cache
-        uses: actions/cache@a7833574556fa59680c1b7cb190c1735db73ebf0 # v5.0.0
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
           key: pw-chrome-${{ runner.os }}-${{ hashFiles('web/package-lock.json') }}
