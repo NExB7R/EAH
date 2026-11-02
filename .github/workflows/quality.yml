@@ -149,6 +149,7 @@ jobs:
             docs/migrations/2026-10-30-comment-parent-integrity.sql \
             docs/migrations/2026-10-30-business-branch-primary-unique.sql \
             docs/migrations/2026-11-01-business-owner-single-activity.sql \
+            docs/migrations/2026-11-02-admin-owner-rpc-server-only.sql \
           do
             echo "::group::Applying $migration to the isolated test database"
             psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f "$migration"
