@@ -1,7 +1,7 @@
 -- EAH targeted regression checks for the 2026-10-29 admin/RLS migrations.
 -- Run only on a dedicated non-production database after applying the migration set.
 BEGIN;
-SELECT plan(43);
+SELECT plan(45);
 
 SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.businesses'::regclass), true, 'RLS remains enabled on businesses');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='businesses' AND policyname='businesses_admin_all'), 'admin activity policy uses shared admin authorization');
@@ -53,6 +53,23 @@ SELECT is((
   AND has_function_privilege('service_role','public.reveal_contact(uuid, text, text)','EXECUTE')
   AND has_function_privilege('service_role','public.validate_coupon(text, uuid)','EXECUTE')
 ), true, 'service_role retains sensitive RPC execution');
+SELECT is((
+  has_function_privilege('authenticated','public.can_signup_with_phone(text)','EXECUTE')
+  OR has_function_privilege('authenticated','public.check_business_name_unique(text, uuid)','EXECUTE')
+  OR has_function_privilege('authenticated','public.get_business_view_stats(text[], integer)','EXECUTE')
+  OR has_function_privilege('authenticated','public.reveal_contact(uuid, text, text)','EXECUTE')
+  OR has_function_privilege('authenticated','public.validate_coupon(text, uuid)','EXECUTE')
+), false, 'sensitive RPCs cannot be called directly by authenticated browser sessions');
+
+SELECT ok(
+  has_function_privilege('service_role','public.admin_set_business_owner(uuid, uuid)','EXECUTE')
+  AND has_function_privilege('service_role','private.admin_set_business_owner(uuid, uuid)','EXECUTE')
+  AND NOT has_function_privilege('anon','public.admin_set_business_owner(uuid, uuid)','EXECUTE')
+  AND NOT has_function_privilege('authenticated','public.admin_set_business_owner(uuid, uuid)','EXECUTE')
+  AND NOT has_function_privilege('anon','private.admin_set_business_owner(uuid, uuid)','EXECUTE')
+  AND NOT has_function_privilege('authenticated','private.admin_set_business_owner(uuid, uuid)','EXECUTE'),
+  'activity-owner mutation RPCs are server-role only'
+);
 SELECT is((
   has_function_privilege('anon','public.comment_rate_limit()','EXECUTE')
   OR has_function_privilege('anon','public.detect_review_velocity()','EXECUTE')
