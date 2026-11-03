@@ -5,6 +5,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { getWhatsAppDestinationBusinessIds } from './contact-availability'
 import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
+import { isPromotionActive } from './promotion-status'
 import type { Business, BusinessType } from './businesses'
 
 // ═══════════════════════════════════════════════════════════
@@ -57,7 +58,12 @@ function normalizeBusiness(raw: Record<string, unknown>): Business {
   const rest: Record<string, unknown> = { ...raw }
   delete rest.business_locations
   delete rest.owner_profile_id
-  return { ...(rest as unknown as Business), location: loc }
+  return {
+    ...(rest as unknown as Business),
+    location: loc,
+    is_featured: isPromotionActive(raw.is_featured === true, raw.featured_until),
+    is_new_project: isPromotionActive(raw.is_new_project === true, raw.new_until),
+  }
 }
 
 async function normalizeBusinesses(data: unknown[] | null): Promise<Business[]> {
