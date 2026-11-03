@@ -79,13 +79,13 @@
 
 The connected project reported:
 
-- **35** `SECURITY DEFINER` functions executable by `anon` and **107** executable by `authenticated` in the Supabase advisor. Each function must be classified as intentionally public, authenticated-user, admin-only, or trigger-only. The counts alone do not prove each function is exploitable; do not revoke all grants without inventorying callers and tests.
+- **33** `SECURITY DEFINER` functions executable by `anon` and **103** executable by `authenticated` in the Supabase advisor. Each function must be classified as intentionally public, authenticated-user, admin-only, or trigger-only. The counts alone do not prove each function is exploitable; do not revoke all grants without inventorying callers and tests.
 - **6** RLS-enabled tables with no policies: `ad_events`, `badge_catalog`, `business_insights`, `loyalty_tiers`, `order_counters`, `rate_limits`. This may be deliberate deny-by-default for server-only data; verify every intended client read/write.
-- **2** functions with mutable `search_path`: `public.set_new_until`, `public.get_trust_tier`.
+- **3** functions with mutable `search_path`: `public.set_new_until`, `public.get_trust_tier`, and `public.prevent_merchant_toggle_orders_enabled`.
 - One Auth warning for leaked/compromised-password protection being disabled.
 - Performance advisories: 13 foreign keys without covering indexes, 13 RLS policies with per-row auth-initplan patterns, 137 multiple-permissive-policy findings, 74 unused indexes, and one duplicate index pair on `trust_badges`.
 
-These require individual review against current function definitions and application call sites. No SQL, grants, RLS policies, indexes, migrations, or Production records were changed as part of this audit.
+A read-only call-site review found `record_ad_event`, `record_page_view`, and `heartbeat_page_session` have no direct browser caller in current code. The prepared prelaunch migration now restricts these analytics write RPCs and `generate_referral_code` to trusted server/trigger use, alongside the five sensitive RPCs. `admin-policy-alignment.test.sql` contains 50 pgTAP assertions. These changes are prepared only: no grants, RLS policies, indexes, migrations, or Production records were changed.
 
 ## Production-data baseline observed
 
