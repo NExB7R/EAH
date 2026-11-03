@@ -124,15 +124,7 @@ export default async function SiteFooter() {
               tone: styles.whatsapp,
               external: true,
             },
-            {
-              key: 'support-email',
-              href: contacts.email ? `mailto:${contacts.email}` : null,
-              title: 'إيميل الدعم',
-              description: contacts.email ?? 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
-              Icon: PhoneIcon,
-              tone: styles.email,
-              external: false,
-            },
+
           ].map(({ key, href, title, description, Icon, tone, external }) => {
             const className = [styles.card, tone, !href && styles.disabledCard]
               .filter(Boolean)
