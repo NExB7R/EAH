@@ -237,12 +237,11 @@ export const getFeaturedBusinesses = unstable_cache(
       .select(BUSINESS_COLUMNS)
       .eq('is_published', true)
       .eq('is_featured', true)
-      .order('featured_pin', { ascending: false })
-      .order('featured_order', { ascending: true })
-      .order('rating_count', { ascending: false })
-      .order('rating_avg', { ascending: false })
-      .order('successful_orders', { ascending: false })
-      .order('is_verified', { ascending: false })
+      .or(`featured_until.is.null,featured_until.gt.${new Date().toISOString()}`)
+      // Featured eligibility is controlled by the administrator and payment status.
+      // Ranking fields and manual pins must never create a permanent first place;
+      // the visitor-side cycle shuffles the entire eligible set without repetition.
+      .order('created_at', { ascending: true })
       .limit(limit)
 
     if (error) {
@@ -267,7 +266,8 @@ export const getNewBusinesses = unstable_cache(
       .select(BUSINESS_COLUMNS)
       .eq('is_published', true)
       .eq('is_new_project', true)
-      .order('new_until', { ascending: false, nullsFirst: false })
+      .gt('new_until', new Date().toISOString())
+      .order('new_until', { ascending: true, nullsFirst: false })
       .order('created_at', { ascending: false })
       .limit(limit)
 
@@ -365,6 +365,12 @@ export type Offer = {
     area: string | null
     is_verified: boolean
     rating_avg: number
+    rating_count?: number
+    successful_orders?: number
+    velocity_score?: number
+    engagement_score?: number
+    diversity_score?: number
+    last_activity_at?: string | null
   } | null
 }
 
@@ -377,10 +383,11 @@ export const getActiveOffers = unstable_cache(
       .select(
         `
         id, title, description, price, image_url, starts_at, ends_at, created_at,
-        business:businesses(id, slug, name, area, is_verified, rating_avg, rating_count, successful_orders)
+        business:businesses(id, slug, name, area, is_verified, rating_avg, rating_count, successful_orders, velocity_score, engagement_score, diversity_score, last_activity_at)
       `,
       )
       .eq('is_published', true)
+      .or(`starts_at.is.null,starts_at.lte.${now}`)
       .or(`ends_at.is.null,ends_at.gt.${now}`)
       .order('created_at', { ascending: false })
       .limit(limit)
