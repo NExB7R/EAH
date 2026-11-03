@@ -8,6 +8,7 @@ import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
 import { createServiceClient } from '@/lib/supabase/service'
 import { hasUsableWhatsAppDestination } from '@/lib/data/contact-availability-utils'
+import { isEgyptianMobileNumber } from '@/lib/phone-validation'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Businesses Actions
@@ -322,7 +323,7 @@ const createSchema = z.object({
           'shift_evening',
           'additional',
         ]),
-        value: z.string().regex(/^0\d{9,12}$/),
+        value: z.string().refine(isEgyptianMobileNumber, 'رقم مصري غير صحيح — 11 رقم يبدأ بـ 010 أو 011 أو 012 أو 015'),
         is_primary: z.boolean().optional().default(false),
       }),
     )
