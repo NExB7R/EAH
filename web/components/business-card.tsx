@@ -77,8 +77,15 @@ export default function BusinessCard({
       ? business.area + '، ' + business.city
       : business.area || business.city
   const summary = business.hook?.trim() || business.description?.trim() || ''
-  const showFeatured = ctx === 'featured' || business.is_featured
-  const showNew = ctx === 'new' || business.is_new_project
+  const now = Date.now()
+  const featuredUntil = business.featured_until ? new Date(business.featured_until).getTime() : null
+  const newUntil = business.new_until ? new Date(business.new_until).getTime() : null
+  const featuredEligible =
+    business.is_featured && (featuredUntil === null || (Number.isFinite(featuredUntil) && featuredUntil > now))
+  const newEligible =
+    business.is_new_project && newUntil !== null && Number.isFinite(newUntil) && newUntil > now
+  const showFeatured = ctx === 'featured' || featuredEligible
+  const showNew = ctx === 'new' || newEligible
   const rankClass =
     rank === 1
       ? styles.rankGold
