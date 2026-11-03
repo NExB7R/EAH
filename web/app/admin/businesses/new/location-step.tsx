@@ -103,15 +103,22 @@ export default function LocationStep({ data, errors, update }: Props) {
                   value={contact.kind}
                   onChange={(e) => {
                     const kind = e.target.value as ContactKind
-                    const anotherPrimaryPhoneExists = data.contacts.some(
-                      (c) => c.tempId !== contact.tempId && c.kind === 'phone' && c.is_primary,
+                    const changedContacts = data.contacts.map((c) =>
+                      c.tempId === contact.tempId
+                        ? { ...c, kind, is_primary: kind === 'phone' && c.is_primary }
+                        : c,
                     )
-                    const isPrimary =
-                      kind === 'phone' && (contact.is_primary || !anotherPrimaryPhoneExists)
+                    const hasPrimaryPhone = changedContacts.some(
+                      (c) => c.kind === 'phone' && c.is_primary,
+                    )
+                    const firstPhone = changedContacts.find((c) => c.kind === 'phone')
                     update({
-                      contacts: data.contacts.map((c) =>
-                        c.tempId === contact.tempId ? { ...c, kind, is_primary: isPrimary } : c,
-                      ),
+                      contacts:
+                        !hasPrimaryPhone && firstPhone
+                          ? changedContacts.map((c) =>
+                              c.tempId === firstPhone.tempId ? { ...c, is_primary: true } : c,
+                            )
+                          : changedContacts,
                     })
                   }}
                   className={styles.contactKind}
