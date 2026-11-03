@@ -6,6 +6,7 @@ import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
 import { createServiceClient } from '@/lib/supabase/service'
 import { getWhatsAppDestinationBusinessIds } from '@/lib/data/contact-availability'
+import { hasPaidFeaturedHomeSubscription } from '@/lib/data/featured-eligibility'
 import {
   basicsSchema,
   contactsSchema,
@@ -574,20 +575,28 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
   const nowMs = now.getTime()
   const currentFeaturedUntil = currentRow.featured_until ? new Date(currentRow.featured_until).getTime() : 0
   const currentNewUntil = currentRow.new_until ? new Date(currentRow.new_until).getTime() : 0
+  const featuredPeriodStillActive =
+    !!currentRow.is_featured &&
+    (!currentRow.featured_until || currentFeaturedUntil > nowMs)
 
-  const requestedFeaturedUntil = toOptionalIsoDate(parsed.data.featured_until ?? undefined)
-  if (requestedFeaturedUntil === undefined) {
-    return { ok: false, error: 'تاريخ انتهاء التمييز غير صحيح' }
+  // A fresh Featured activation/renewal requires a paid, active plan with
+  // featured_home. A badge-only plan or free trial is not a homepage placement.
+  if (parsed.data.is_featured && !featuredPeriodStillActive) {
+    const eligible = await hasPaidFeaturedHomeSubscription(businessId)
+    if (!eligible) {
+      return {
+        ok: false,
+        error: 'الظهور في قسم المميزين يحتاج اشتراكًا مدفوعًا ساريًا يتضمن «ظهور في الرئيسية». باقة الشارة فقط أو التجربة المجانية لا تكفي.',
+      }
+    }
   }
 
   // Enabling Featured for the first time (or after expiry) starts a fresh
-  // 30-day period. Saving unrelated settings never silently extends it.
+  // 30-day period from server time. Saving unrelated settings never extends it.
   const featuredUntil = parsed.data.is_featured
-    ? currentRow.is_featured && (!currentRow.featured_until || currentFeaturedUntil > nowMs)
+    ? featuredPeriodStillActive
       ? currentRow.featured_until
-      : requestedFeaturedUntil && new Date(requestedFeaturedUntil).getTime() > nowMs
-        ? requestedFeaturedUntil
-        : new Date(nowMs + 30 * 24 * 60 * 60 * 1000).toISOString()
+      : new Date(nowMs + 30 * 24 * 60 * 60 * 1000).toISOString()
     : null
 
   // New-project exposure is a one-month support window. An expired flag stays
