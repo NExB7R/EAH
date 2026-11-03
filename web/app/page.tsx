@@ -12,6 +12,7 @@ import ChipScrollHandler from '@/components/chip-scroll-handler'
 import {
   getPublishedBusinesses,
   getFeaturedBusinesses,
+  getTrendingBusinesses,
   getActiveOffers,
 } from '@/lib/data'
 import { getFeatureFlags } from '@/lib/features'
@@ -48,10 +49,11 @@ export default async function Home({ searchParams }: Props) {
 
 async function HomeSections({ typeFilter }: { typeFilter?: string }) {
   const session = await getUserSession()
-  const [allRaw, featuredRaw, rawOffers, flags, homeBanner, homeFeed, favoriteIds] =
+  const [allRaw, featuredRaw, trendingRaw, rawOffers, flags, homeBanner, homeFeed, favoriteIds] =
     await Promise.all([
       getPublishedBusinesses(),
       getFeaturedBusinesses(),
+      getTrendingBusinesses(80),
       getActiveOffers(30),
       getFeatureFlags(),
       getActiveAdsForSlot('home_banner', 1),
@@ -83,7 +85,11 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
     { topWindow: 8, maxPerType: 2 },
   )
 
-  const trending = fairOrder(all, 'trending', {}, { topWindow: 8, maxPerType: 2 })
+  // Use the global trend-scored candidate pool, not only the first 100 general listings.
+  const trending = fairOrder(applyHomeFilter(trendingRaw), 'trending', {}, {
+    topWindow: 8,
+    maxPerType: 2,
+  })
 
   const newOnes = fairOrder(
     all.filter((b) => b.is_new_project),
