@@ -206,5 +206,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: 'تعذر تسجيل العملية' }, { status: 500 })
   }
 
+  // Feed the trend engine with an intentional, authenticated contact action.
+  // The contact reveal remains successful even if analytics storage is unavailable.
+  const salt = process.env.EAH_VISITOR_SALT
+  const ipHash = salt
+    ? createHash('sha256').update(`${salt}:${ip}`).digest('hex').slice(0, 16)
+    : null
+  const { error: eventError } = await privileged.from('engagement_events').insert({
+    business_id: parsed.data.businessId,
+    user_id: user.id,
+    action: parsed.data.method === 'phone' ? 'phone_reveal' : 'whatsapp',
+    ip_hash: ipHash,
+    user_agent: request.headers.get('user-agent')?.slice(0, 200) ?? null,
+  })
+  if (eventError) {
+    console.error('[track-contact] engagement event insert failed:', eventError.message)
+  }
+
   return NextResponse.json({ ok: true, value })
 }
