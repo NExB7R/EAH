@@ -16,7 +16,7 @@ import { getMyBusiness } from '@/lib/data/merchant'
 import { getFavoriteIds, getFullProfile } from '@/lib/data/account'
 import { getActiveAdsForSlot } from '@/lib/data/ads'
 import { fairOrder, fairOrderOffers } from '@/lib/fair-ranking'
-import { distanceKm } from '@/lib/utils/distance'
+import { distanceKm, isValidLatLng } from '@/lib/utils/distance'
 import { getHomeRecommendations } from '@/lib/data/home-recommendations'
 
 export const dynamic = 'force-dynamic'
@@ -31,11 +31,12 @@ export default async function Home({ searchParams }: Props) {
   const [business, profile] = session
     ? await Promise.all([getMyBusiness(session.userId), getFullProfile(session.userId)])
     : [null, null]
-  const viewerLocation =
+  const candidateLocation =
     profile?.default_latitude !== null && profile?.default_latitude !== undefined &&
     profile?.default_longitude !== null && profile?.default_longitude !== undefined
       ? { lat: profile.default_latitude, lng: profile.default_longitude }
       : null
+  const viewerLocation = isValidLatLng(candidateLocation) ? candidateLocation : null
 
   return (
     <main>
@@ -76,7 +77,7 @@ async function HomeSections({
     recommendations,
   ] = await Promise.all([
     getFeaturedBusinesses(1000),
-    getTrendingBusinesses(200),
+    getTrendingBusinesses(1000),
     getNewBusinesses(1000),
     getActiveOffers(1000),
     isLoggedIn ? getNearbyBusinesses(viewerLocation ? undefined : viewerArea ?? undefined, 1000) : Promise.resolve([]),
@@ -130,11 +131,6 @@ async function HomeSections({
           />
         </div>
       )}
-      {homeBanner.length > 0 && (
-        <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 20px' }}>
-          <AdSlot ads={homeBanner} variant="banner" />
-        </div>
-      )}
       {flags.trends_enabled && trending.length >= 1 && (
         <div id="trending">
           <TrendingRow businesses={trending} favoriteIds={favoriteIds} viewerLocation={viewerLocation} />
@@ -143,11 +139,6 @@ async function HomeSections({
       {flags.offers_enabled && (
         <div id="offers">
           <OffersStrip offers={offers} viewerLocation={viewerLocation} />
-        </div>
-      )}
-      {homeFeed.length > 0 && (
-        <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 20px' }}>
-          <AdSlot ads={homeFeed} variant="banner" />
         </div>
       )}
       {flags.new_enabled && (
@@ -163,6 +154,16 @@ async function HomeSections({
           viewerLocation={viewerLocation}
         />
       </div>
+      {homeBanner.length > 0 && (
+        <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 20px' }}>
+          <AdSlot ads={homeBanner} variant="banner" />
+        </div>
+      )}
+      {homeFeed.length > 0 && (
+        <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 20px' }}>
+          <AdSlot ads={homeFeed} variant="banner" />
+        </div>
+      )}
     </>
   )
 }
