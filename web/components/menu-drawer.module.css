@@ -108,7 +108,7 @@
 .item:hover {
   color: var(--purple-light);
   background: var(--purple-soft);
-  transform: translateX(2px);
+  transform: translateX(-2px);
 }
 
 
