@@ -199,12 +199,6 @@
   animation: eahHeroIn 240ms var(--ease-out) 120ms both;
 }
 
-/* ─── Chips wrapper ─── */
-.chipsWrap {
-  width: 100%;
-  animation: eahHeroIn 240ms var(--ease-out) 160ms both;
-}
-
 /* ═══════════════════════════════════════════════════════════
    Entrance keyframe — LCP-safe (starts at 0.88, never 0)
    ═══════════════════════════════════════════════════════════ */
@@ -224,9 +218,6 @@
   .shibinSign,
   .hook,
   .searchWrap,
-  .chipsWrap {
-    animation: none;
-  }
 }
 
 /* ─── Mobile: constrain logo + reduce hero height ─── */
