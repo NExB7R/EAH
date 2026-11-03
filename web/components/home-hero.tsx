@@ -1,14 +1,10 @@
-import { Suspense } from 'react'
 import Logo from './logo'
 import HomeSearchForm from './home-search-form'
-import CategoryChips from './category-chips'
 import { CrownIcon, LocationIcon } from './icons'
 import { getAppTexts } from '@/lib/data/app-texts'
 import styles from './home-hero.module.css'
 
-// ═══════════════════════════════════════════════════════════
 // EAH — Home Hero
-// ═══════════════════════════════════════════════════════════
 
 type Props = {
   isLoggedIn: boolean
@@ -23,12 +19,10 @@ export default async function HomeHero({ isLoggedIn, hasBusiness }: Props) {
       <div className={styles.grid} aria-hidden />
 
       <div className={styles.content}>
-        {/* اللوجو */}
         <div className={styles.logoWrap}>
           <Logo size="lg" />
         </div>
 
-        {/* لافتة دولة شبين القناطر — فوق الهوك */}
         <div className={styles.shibinSign}>
           <span className={styles.signIcon} aria-hidden>
             <LocationIcon size={14} />
@@ -36,7 +30,6 @@ export default async function HomeHero({ isLoggedIn, hasBusiness }: Props) {
           <span className={styles.signText}>{texts.hero_sign}</span>
         </div>
 
-        {/* الهوك — جملة واحدة */}
         <h1 className={styles.hook} elementtiming="hero-h1">
           <span className={styles.hookAccent} data-text={texts.hero_hook_line_1}>
             {texts.hero_hook_line_1}
@@ -49,16 +42,8 @@ export default async function HomeHero({ isLoggedIn, hasBusiness }: Props) {
           </span>
         </h1>
 
-        {/* Search */}
         <div className={styles.searchWrap}>
           <HomeSearchForm />
-        </div>
-
-        {/* Chips */}
-        <div className={styles.chipsWrap}>
-          <Suspense fallback={null}>
-            <CategoryChips />
-          </Suspense>
         </div>
       </div>
     </section>
