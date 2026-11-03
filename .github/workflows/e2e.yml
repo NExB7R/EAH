@@ -125,7 +125,7 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_SERVER: '1'
           PLAYWRIGHT_BASE_URL: ${{ steps.target.outputs.url }}
-        run: npx playwright test --reporter=list,github
+        run: npx playwright test --reporter=list,github,html
 
       - name: Upload report
         if: always()
