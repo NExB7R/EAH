@@ -17,7 +17,7 @@ const sellerSignals = [
 const excludedSignals = [
   'المشاهدات والإعجابات والمتابعات والتعليقات وتسجيل الدخول اليومي لا ترفع سمعة النشاط.',
   'البلاغات المعلقة لا تخفض السمعة. أي إجراء سلبي يحتاج مراجعة إدارية ودليلًا واضحًا ومسار اعتراض.',
-  'إلغاء الطلب وحده لا يثبت أن العميل هو السبب؛ نحتاج تحديد الطرف المسؤول قبل استخدامه في أي تقييم.',
+  'إلغاء الطلب وحده لا يثبت أن المشتري هو السبب؛ نحتاج تحديد الطرف المسؤول قبل استخدامه في أي تقييم.',
 ]
 
 export default function TrustPage() {
@@ -39,7 +39,7 @@ export default function TrustPage() {
         </div>
       </section>
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}><StoreIcon size={18} /> سمعة التاجر والنشاط</h2>
+        <h2 className={styles.sectionTitle}><StoreIcon size={18} /> سمعة البايع والنشاط</h2>
         <div className={styles.tiersGrid}>
           <article className={styles.tierCard}>
             <span className={styles.tierEmoji}><ShieldCheckIcon size={24} /></span>
@@ -65,9 +65,9 @@ export default function TrustPage() {
         </div>
       </section>
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}><UserIcon size={18} /> موثوقية العميل</h2>
+        <h2 className={styles.sectionTitle}><UserIcon size={18} /> موثوقية المشتري</h2>
         <p className={styles.sectionText}>
-          لا نعرض درجة عامة للعميل عبر البحث برقم هاتفه. عند وجود طلب مرتبط بحساب، يستطيع التاجر رؤية حقائق محدودة تساعده على فهم سياق الطلب، مثل توثيق الهاتف وعدد الطلبات المكتملة المسجلة على EAH. هذه المعلومات ليست حكمًا نهائيًا على الشخص، ولا يُعتبر غياب السجل نقطة سلبية.
+          لا نعرض درجة عامة للمشتري عبر البحث برقم هاتفه. عند وجود طلب مرتبط بحساب، يستطيع البايع رؤية حقائق محدودة تساعده على فهم سياق الطلب، مثل توثيق الهاتف وعدد الطلبات المكتملة المسجلة على EAH. هذه المعلومات ليست حكمًا نهائيًا على الشخص، ولا يُعتبر غياب السجل نقطة سلبية.
         </p>
       </section>
       <section className={styles.section}>
@@ -94,7 +94,7 @@ export default function TrustPage() {
       </section>
       <section className={styles.cta}>
         <Link href="/explore" className={styles.ctaBtn}>اكتشف الأنشطة</Link>
-        <Link href="/merchant/trust" className={styles.ctaSecondary}>عندك نشاط؟ راجع سمعة نشاطك من لوحة التاجر</Link>
+        <Link href="/merchant/trust" className={styles.ctaSecondary}>عندك نشاط؟ راجع سمعة نشاطك من لوحة البايع</Link>
       </section>
     </main>
   )
