@@ -51,7 +51,7 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
   const [allRaw, featuredRaw, rawOffers, flags, homeBanner, homeFeed, favoriteIds] =
     await Promise.all([
       getPublishedBusinesses(),
-      getFeaturedBusinesses(200),
+      getFeaturedBusinesses(),
       getActiveOffers(30),
       getFeatureFlags(),
       getActiveAdsForSlot('home_banner', 1),
