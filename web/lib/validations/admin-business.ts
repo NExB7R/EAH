@@ -169,7 +169,7 @@ export const settingsSchema = z.object({
 
 // ─── 8. المالك ───
 export const ownerSchema = z.object({
-  owner_profile_id: z.string().uuid('اختر حساب التاجر المرتبط'),
+  owner_profile_id: z.string().uuid('اختر حساب البايع المرتبط'),
 })
 
 // ─── الأنواع المستخرجة ───
