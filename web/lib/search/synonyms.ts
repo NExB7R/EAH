@@ -100,7 +100,7 @@ const TYPE_KEYWORDS: Record<BusinessType, string[]> = {
     'سواق',
     'توصيل طلبات',
   ],
-  misc: [
+  supermarket: [
     'ماركت',
     'سوبر ماركت',
     'سوبرماركت',
@@ -113,6 +113,8 @@ const TYPE_KEYWORDS: Record<BusinessType, string[]> = {
     'ميني ماركت',
     'grocery',
     'supermarket',
+  ],
+  misc: [
     'خدمات',
     'متنوع',
     'اخري',
