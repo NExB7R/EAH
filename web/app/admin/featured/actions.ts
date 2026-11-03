@@ -3,6 +3,7 @@
 import { revalidatePath, revalidateTag } from 'next/cache'
 import type { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/auth/admin'
+import { hasPaidFeaturedHomeSubscription } from '@/lib/data/featured-eligibility'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Featured Actions
@@ -38,6 +39,13 @@ export async function toggleFeatured(
   if (!ctx.ok) return { ok: false, error: ctx.error }
   const { supabase } = ctx
 
+  if (!isFeatured && !(await hasPaidFeaturedHomeSubscription(businessId))) {
+    return {
+      ok: false,
+      error: 'الظهور في الرئيسية يحتاج اشتراكًا مدفوعًا ساريًا يتضمن «ظهور في الرئيسية».',
+    }
+  }
+
   const patch = isFeatured
     ? {
         is_featured: false,
@@ -66,6 +74,13 @@ export async function extendFeaturedUntil(businessId: string, days: number): Pro
   const ctx = await requireAdmin()
   if (!ctx.ok) return { ok: false, error: ctx.error }
   const { supabase } = ctx
+
+  if (!(await hasPaidFeaturedHomeSubscription(businessId))) {
+    return {
+      ok: false,
+      error: 'لا يمكن تجديد الظهور قبل وجود اشتراك مدفوع ساري يتضمن «ظهور في الرئيسية».',
+    }
+  }
 
   const safeDays = Math.max(1, Math.min(365, Math.floor(days)))
   const until = new Date(Date.now() + safeDays * 24 * 60 * 60 * 1000).toISOString()
