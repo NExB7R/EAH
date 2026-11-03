@@ -12,8 +12,10 @@ import {
   PillIcon,
   BikeIcon,
   SparklesIcon,
+  StoreIcon as MarketIcon,
 } from '@/components/icons'
 import { submitMerchantApplication } from '../actions'
+import type { BusinessType } from '@/lib/data/businesses'
 import styles from './apply-wizard.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -23,8 +25,6 @@ import styles from './apply-wizard.module.css'
 type Props = {
   areas: readonly string[]
 }
-
-type BusinessType = 'restaurant' | 'pharmacy' | 'delivery_office' | 'misc'
 
 const STEPS = [
   { key: 'basic', label: 'الأساسيات', Icon: StoreIcon },
@@ -36,6 +36,7 @@ const STEPS = [
 const TYPES: Array<{ value: BusinessType; label: string; Icon: typeof UtensilsIcon }> = [
   { value: 'restaurant', label: 'مطعم', Icon: UtensilsIcon },
   { value: 'pharmacy', label: 'صيدلية', Icon: PillIcon },
+  { value: 'supermarket', label: 'ماركت', Icon: MarketIcon },
   { value: 'delivery_office', label: 'توصيل', Icon: BikeIcon },
   { value: 'misc', label: 'أنشطة أخرى', Icon: SparklesIcon },
 ]
