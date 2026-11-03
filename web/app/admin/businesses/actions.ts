@@ -330,7 +330,6 @@ const createSchema = z.object({
     .optional(),
   is_open: z.boolean().optional(),
   accepts_whatsapp_orders: z.boolean().optional(),
-  is_featured: z.boolean().optional(),
   is_new_project: z.boolean().optional(),
   is_published: z.boolean().optional(),
 })
@@ -380,7 +379,6 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     })(),
     is_open: formData.get('is_open') === 'on',
     accepts_whatsapp_orders: formData.get('accepts_whatsapp_orders') === 'on',
-    is_featured: formData.get('is_featured') === 'on',
     is_new_project: formData.get('is_new_project') === 'on',
     is_published: formData.has('is_published') ? formData.get('is_published') === 'on' : true,
   })
@@ -478,7 +476,8 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       hook: d.hook || null,
       is_open: d.is_open ?? true,
       accepts_whatsapp_orders: effectiveAcceptsWhatsapp,
-      is_featured: d.is_featured ?? false,
+      // Featured is activated only after a qualifying paid subscription exists.
+      is_featured: false,
       featured_order: 0,
       featured_pin: false,
       featured_until: null,
