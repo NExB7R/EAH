@@ -12,6 +12,7 @@ import ChipScrollHandler from '@/components/chip-scroll-handler'
 import {
   getPublishedBusinesses,
   getFeaturedBusinesses,
+  getNewBusinesses,
   getTrendingBusinesses,
   getActiveOffers,
 } from '@/lib/data'
@@ -49,10 +50,11 @@ export default async function Home({ searchParams }: Props) {
 
 async function HomeSections({ typeFilter }: { typeFilter?: string }) {
   const session = await getUserSession()
-  const [allRaw, featuredRaw, trendingRaw, rawOffers, flags, homeBanner, homeFeed, favoriteIds] =
+  const [allRaw, featuredRaw, newRaw, trendingRaw, rawOffers, flags, homeBanner, homeFeed, favoriteIds] =
     await Promise.all([
       getPublishedBusinesses(),
       getFeaturedBusinesses(),
+      getNewBusinesses(80),
       getTrendingBusinesses(80),
       getActiveOffers(30),
       getFeatureFlags(),
@@ -92,7 +94,7 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
   })
 
   const newOnes = fairOrder(
-    all.filter((b) => b.is_new_project),
+    applyHomeFilter(newRaw),
     'new',
     {},
     { topWindow: 8, maxPerType: 2 },
