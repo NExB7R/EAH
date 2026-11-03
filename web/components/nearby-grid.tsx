@@ -67,7 +67,7 @@ export default function NearbyGrid({
                 {useGrid ? <div className={styles.centeredGrid}>{cards}</div> : <RowCarousel accent="#55E7D1">{cards}</RowCarousel>}
               </div>
             )}
-            <NearbyLocationPrompt isLoggedIn />
+            <NearbyLocationPrompt isLoggedIn currentArea={viewerArea} />
           </div>
         ) : visible.length > 0 ? (
           useGrid ? (
