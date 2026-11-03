@@ -118,7 +118,7 @@ async function HomeSections({
 
   return (
     <>
-      {flags.featured_enabled && <FeaturedBento businesses={featured} />}
+      {flags.featured_enabled && <FeaturedBento businesses={featured} viewerLocation={viewerLocation} />}
       {flags.nearby_enabled && (
         <div id="nearby">
           <NearbyGrid
