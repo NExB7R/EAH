@@ -45,13 +45,17 @@ export default function BusinessViewTracker({ businessId }: { businessId: string
       // session id remains tab-scoped. This limits multi-tab view inflation
       // without creating a long-lived cross-day browsing identifier.
       const day = new Date().toISOString().slice(0, 10)
-      const visitorKey = `eah:visitor-id:${day}`
+      const visitorKey = 'eah:daily-visitor'
       let visitorId: string | null = null
       try {
-        visitorId = localStorage.getItem(visitorKey)
+        const stored = localStorage.getItem(visitorKey)
+        if (stored) {
+          const parsed = JSON.parse(stored) as { day?: string; id?: string }
+          if (parsed.day === day && parsed.id) visitorId = parsed.id
+        }
         if (!visitorId) {
           visitorId = createUuid()
-          if (visitorId) localStorage.setItem(visitorKey, visitorId)
+          if (visitorId) localStorage.setItem(visitorKey, JSON.stringify({ day, id: visitorId }))
         }
       } catch {
         visitorId = getSessionUuid('eah:visitor-id')
