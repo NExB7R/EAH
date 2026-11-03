@@ -11,6 +11,7 @@ const credentialsPath = resolve(scriptDirectory, '../.qa-test-credentials.local.
 const enabled = process.env.EAH_ALLOW_QA_ACCOUNT_SEED === 'yes'
 const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_KEY
+const allowedProjectRef = process.env.EAH_QA_ALLOWED_PROJECT_REF?.trim()
 
 if (!enabled) {
   throw new Error(
@@ -23,11 +24,34 @@ if (!supabaseUrl || !serviceRoleKey) {
   )
 }
 
+let targetProjectRef
+try {
+  const targetUrl = new URL(supabaseUrl)
+  if (targetUrl.protocol !== 'https:') throw new Error('HTTPS required')
+  targetProjectRef = targetUrl.hostname.split('.')[0]
+} catch {
+  throw new Error('QA seeding requires a valid HTTPS Supabase project URL.')
+}
+
+if (targetProjectRef === 'npmpiivmdksdirrumbmt') {
+  throw new Error('Refusing to seed QA accounts or activities into the EAH production project.')
+}
+if (!allowedProjectRef || allowedProjectRef !== targetProjectRef) {
+  throw new Error(
+    `Refusing to seed an unapproved project. Set EAH_QA_ALLOWED_PROJECT_REF=${targetProjectRef} only after confirming this is the dedicated non-production test project.`,
+  )
+}
+
 const supabase = createClient(supabaseUrl, serviceRoleKey, {
   auth: { autoRefreshToken: false, persistSession: false },
 })
 
 const qaAccounts = [
+  {
+    email: 'eah.qa.admin@example.com',
+    role: 'super_admin',
+    displayName: 'أدمن اختبار EAH',
+  },
   {
     email: 'eah.qa.buyer@example.com',
     role: 'customer',
