@@ -115,7 +115,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
           <p className={styles.hint}>
             يظهر النشاط في قسم الجديد لمدة 30 يومًا من وقت الإنشاء. اختيار «مميز» يتم بعد ربط اشتراك مدفوع يمنح ظهور الرئيسية، من صفحة تعديل النشاط.
           </p>
-        </div>>
+        </div>
 
         <p className={styles.gpsHint}>
           صور الغلاف والشعار والمعرض تقدر تضيفها بعد إنشاء النشاط من صفحة التعديل.
