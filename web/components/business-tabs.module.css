@@ -410,6 +410,23 @@
 
 /* ─── Mobile ─── */
 @media (max-width: 640px) {
+  .tabs {
+    justify-content: flex-start;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+    min-height: 44px;
+    white-space: nowrap;
+  }
+
   .block {
     padding: 14px 16px;
   }
