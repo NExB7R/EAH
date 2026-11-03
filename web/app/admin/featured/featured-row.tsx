@@ -2,8 +2,8 @@
 
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
-import { ExternalLinkIcon, CheckCircleIcon, CloseIcon, ClockIcon } from '@/components/icons'
-import { toggleFeatured, extendFeaturedUntil } from './actions'
+import { ExternalLinkIcon, CheckCircleIcon, CloseIcon } from '@/components/icons'
+import { toggleFeatured } from './actions'
 import styles from './featured.module.css'
 
 type Props = {
@@ -12,20 +12,22 @@ type Props = {
     name: string
     slug: string
     area: string | null
-    featured_until: string | null
     is_published: boolean
     paid_featured_home_eligible: boolean
+    paid_featured_home_expires_at: string | null
   }
 }
 
 export default function FeaturedRow({ business }: Props) {
   const [pending, startTransition] = useTransition()
   const [msg, setMsg] = useState<string | null>(null)
-  const untilMs = business.featured_until ? new Date(business.featured_until).getTime() : 0
-  const expired = !!business.featured_until && (!Number.isFinite(untilMs) || untilMs <= Date.now())
-  const until = business.featured_until
-    ? new Date(business.featured_until).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' })
-    : 'بدون انتهاء'
+  const subscriptionExpiry = business.paid_featured_home_expires_at
+    ? new Date(business.paid_featured_home_expires_at).toLocaleDateString('ar-EG', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      })
+    : 'بدون تاريخ انتهاء محدد'
 
   const handleToggle = () => {
     if (!confirm(`إيقاف ظهور "${business.name}" في المميزون؟`)) return
@@ -35,12 +37,6 @@ export default function FeaturedRow({ business }: Props) {
     })
   }
 
-  const handleExtend = (days: number) => {
-    startTransition(async () => {
-      const result = await extendFeaturedUntil(business.id, days)
-      setMsg(result.ok ? `تم تجديد الميزة لمدة ${days} يومًا` : result.error)
-    })
-  }
 
   return (
     <div className={styles.row}>
@@ -48,25 +44,14 @@ export default function FeaturedRow({ business }: Props) {
         <div className={styles.nameWrap}>
           <h3 className={styles.name}>{business.name}</h3>
           {!business.is_published && <span className={styles.meta}>غير منشور</span>}
-          {expired && <span className={styles.meta}>انتهت مدة التمييز — متوقف عن الظهور</span>}
           {!business.paid_featured_home_eligible && <span className={styles.meta}>محدد إداريًا — لا يوجد اشتراك ساري يمنح ظهور الرئيسية</span>}
         </div>
         <p className={styles.meta}>
-          {business.area ?? '—'} · {expired ? 'انتهى التمييز' : `ينتهي: ${until}`}
+          {business.area ?? '—'} · {business.paid_featured_home_eligible ? `اشتراك الرئيسية: ${subscriptionExpiry}` : 'لا يوجد استحقاق نشط لظهور الرئيسية'}
         </p>
       </div>
 
       <div className={styles.actions}>
-        {business.paid_featured_home_eligible && expired && (
-          <button type="button" onClick={() => handleExtend(30)} disabled={pending} className={styles.btn}>
-            <ClockIcon size={13} /> تجديد 30 يوم
-          </button>
-        )}
-        {business.paid_featured_home_eligible && !expired && (
-          <button type="button" onClick={() => handleExtend(90)} disabled={pending} className={styles.btn}>
-            +90 يوم
-          </button>
-        )}
         <Link href={`/businesses/${business.slug}`} target="_blank" className={styles.btn} title="فتح الصفحة">
           <ExternalLinkIcon size={14} />
         </Link>
