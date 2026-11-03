@@ -140,32 +140,31 @@ export default function LocationStep({ data, errors, update }: Props) {
                   dir="ltr"
                 />
 
-                {contact.kind === 'phone' && contact.is_primary ? (
+                {contact.kind === 'phone' && contact.is_primary && (
                   <span className={styles.primaryBadge}>أساسي</span>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const remaining = data.contacts.filter((c) => c.tempId !== contact.tempId)
-                      const removedPrimaryPhone =
-                        contact.kind === 'phone' && contact.is_primary
-                      const promotedPhone = removedPrimaryPhone
-                        ? remaining.find((c) => c.kind === 'phone')
-                        : undefined
-                      update({
-                        contacts: promotedPhone
-                          ? remaining.map((c) =>
-                              c.tempId === promotedPhone.tempId ? { ...c, is_primary: true } : c,
-                            )
-                          : remaining,
-                      })
-                    }}
-                    className={styles.contactRemove}
-                    aria-label="حذف"
-                  >
-                    <CloseIcon size={14} />
-                  </button>
                 )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const remaining = data.contacts.filter((c) => c.tempId !== contact.tempId)
+                    const removedPrimaryPhone =
+                      contact.kind === 'phone' && contact.is_primary
+                    const promotedPhone = removedPrimaryPhone
+                      ? remaining.find((c) => c.kind === 'phone')
+                      : undefined
+                    update({
+                      contacts: promotedPhone
+                        ? remaining.map((c) =>
+                            c.tempId === promotedPhone.tempId ? { ...c, is_primary: true } : c,
+                          )
+                        : remaining,
+                    })
+                  }}
+                  className={styles.contactRemove}
+                  aria-label="حذف"
+                >
+                  <CloseIcon size={14} />
+                </button>
               </div>
             ))}
           </div>
