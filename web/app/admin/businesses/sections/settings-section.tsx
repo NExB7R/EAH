@@ -53,11 +53,7 @@ export default function SettingsSection() {
           id="is_featured"
           type="checkbox"
           checked={ctx.isFeatured}
-          onChange={(e) => {
-            if (e.target.checked && !ctx.isFeatured) ctx.setRenewFeaturedRequested(true)
-            if (!e.target.checked) ctx.setRenewFeaturedRequested(false)
-            ctx.setIsFeatured(e.target.checked)
-          }}
+          onChange={(e) => ctx.setIsFeatured(e.target.checked)}
         />
         <label htmlFor="is_featured">مميز (Featured)</label>
       </div>
@@ -76,7 +72,7 @@ export default function SettingsSection() {
         لا يظهر النشاط في قسم المميزين بالرئيسية إلا بعد اعتماد اشتراك مدفوع ساري يتضمن «ظهور في الرئيسية». باقة الشارة فقط أو التجربة المجانية لا تكفي. بعد تحقق الاستحقاق يختار الأدمن الأنشطة، وتظهر كلها بكروت متساوية ودون ترتيب أول.
       </p>
       <p className={styles.hint}>
-        يبدأ عرض الميزة 30 يومًا من تفعيلها. بعد انتهاء المدة يتوقف الظهور؛ لتجديدها أوقف الاختيار واحفظ، ثم فعّله واحفظ مرة أخرى. الحفظ العادي لا يمدد المدة.
+        يستمر الظهور طوال مدة الاشتراك المدفوع الذي يمنح «ظهور في الرئيسية»، ويتوقف تلقائيًا عند انتهائه. يمكن للأدمن إيقاف الاختيار فورًا، ولا يحتاج تجديده إلى مدة منفصلة عن الباقة.
       </p>
 
       <div className={styles.checkRow}>
