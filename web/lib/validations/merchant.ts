@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { AREAS } from '@/lib/data/areas'
+import { isEgyptianMobileNumber } from '@/lib/phone-validation'
 
 const AREAS_LIST = AREAS as unknown as [string, ...string[]]
 
@@ -7,19 +8,17 @@ const AREAS_LIST = AREAS as unknown as [string, ...string[]]
 // EAH — Merchant Application Validation
 // ═══════════════════════════════════════════════════════════
 
-const EGYPT_PHONE_REGEX = /^01[0125][0-9]{8}$/
-
 const phoneSchema = z
   .string()
   .trim()
-  .regex(EGYPT_PHONE_REGEX, 'الرقم مش صح — 11 رقم يبدأ بـ 010/011/012/015')
+  .refine(isEgyptianMobileNumber, 'الرقم مش صح — 11 رقم يبدأ بـ 010/011/012/015')
 
 const optionalPhoneSchema = z
   .string()
   .trim()
   .optional()
   .nullable()
-  .refine((v) => !v || EGYPT_PHONE_REGEX.test(v), 'الرقم مش صح — 11 رقم يبدأ بـ 010/011/012/015')
+  .refine((v) => !v || isEgyptianMobileNumber(v), 'الرقم مش صح — 11 رقم يبدأ بـ 010/011/012/015')
 
 const optionalUrlSchema = z
   .string()
