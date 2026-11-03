@@ -481,7 +481,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       is_featured: d.is_featured ?? false,
       featured_order: 0,
       featured_pin: false,
-      featured_until: d.is_featured ? promotionEnd : null,
+      featured_until: null,
       is_new_project: d.is_new_project ?? false,
       new_until: d.is_new_project ? promotionEnd : null,
       // Publication is independent from owner assignment and custom-type review.
