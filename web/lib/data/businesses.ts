@@ -67,6 +67,10 @@ export type Business = {
   response_time_avg_seconds: number | null
   response_rate: number | null
   last_activity_at: string | null
+  /** Server-computed rolling trend signals; never persisted as reputation or paid boosts. */
+  trend_activity_count?: number
+  trend_recent_orders?: number
+  trend_recent_reviews?: number
   branches_count: number
   offers_count: number
   rating_avg: number
@@ -332,17 +336,188 @@ export const getTrendingBusinesses = unstable_cache(
       .from('businesses')
       .select(BUSINESS_COLUMNS)
       .eq('is_published', true)
-      .order('successful_orders', { ascending: false })
-      .limit(limit * 3)
+      // Do not pre-filter by featured status, verification, rating or sales.
+      // Every published activity gets a chance to enter the candidate set.
+      .order('created_at', { ascending: false })
+      .limit(1000)
 
     if (error) {
-      console.error('[data] getTrendingBusinesses error:', error.message)
+      console.error('[data] getTrendingBusinesses candidates failed:', error.message)
       return []
     }
-    return sortByTrend(await normalizeBusinesses(data, supabase)).slice(0, limit)
+
+    const candidates = await normalizeBusinesses(data, supabase)
+    if (candidates.length === 0) return []
+
+    const ids = candidates.map((business) => business.id)
+    const now = Date.now()
+    const since30 = new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString()
+    const since7 = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString()
+
+    const [
+      { data: activities, error: activitiesError },
+      { data: contactEvents, error: contactEventsError },
+      { data: deliveredOrders, error: ordersError },
+      { data: approvedReviews, error: reviewsError },
+    ] = await Promise.all([
+      supabase
+        .from('business_activities')
+        .select('business_id, user_id, activity_type, created_at')
+        .in('business_id', ids)
+        .gte('created_at', since30)
+        .order('created_at', { ascending: false })
+        .limit(20000),
+      supabase
+        .from('engagement_events')
+        .select('business_id, user_id, action, created_at')
+        .in('business_id', ids)
+        .gte('created_at', since30)
+        .order('created_at', { ascending: false })
+        .limit(20000),
+      supabase
+        .from('order_requests')
+        .select('business_id, customer_profile_id, created_at')
+        .in('business_id', ids)
+        .eq('status', 'delivered')
+        .gte('created_at', since30)
+        .order('created_at', { ascending: false })
+        .limit(20000),
+      supabase
+        .from('business_reviews')
+        .select('business_id, user_id, created_at')
+        .in('business_id', ids)
+        .eq('status', 'approved')
+        .gte('created_at', since30)
+        .order('created_at', { ascending: false })
+        .limit(20000),
+    ])
+
+    if (activitiesError || contactEventsError || ordersError || reviewsError) {
+      console.error('[data] trend signals partially unavailable:', {
+        activities: activitiesError?.message,
+        contacts: contactEventsError?.message,
+        orders: ordersError?.message,
+        reviews: reviewsError?.message,
+      })
+    }
+
+    type Signal = {
+      recentWeight: number
+      weeklyWeight: number
+      users: Set<string>
+      lastActivityAt: string | null
+      recentOrders: number
+      recentReviews: number
+      activityCount: number
+    }
+    const signalByBusiness = new Map<string, Signal>()
+    for (const id of ids) {
+      signalByBusiness.set(id, {
+        recentWeight: 0,
+        weeklyWeight: 0,
+        users: new Set<string>(),
+        lastActivityAt: null,
+        recentOrders: 0,
+        recentReviews: 0,
+        activityCount: 0,
+      })
+    }
+
+    const seen = new Set<string>()
+    const addSignal = (
+      businessId: string,
+      userId: string | null,
+      action: string,
+      createdAt: string,
+      weight: number,
+    ) => {
+      const signal = signalByBusiness.get(businessId)
+      const timestamp = new Date(createdAt).getTime()
+      if (!signal || !Number.isFinite(timestamp) || timestamp > now || timestamp < now - 30 * 86400000) return
+
+      const day = new Date(timestamp).toISOString().slice(0, 10)
+      if (userId) {
+        const key = `${businessId}:${userId}:${action}:${day}`
+        if (seen.has(key)) return
+        seen.add(key)
+        signal.users.add(userId)
+      }
+
+      signal.recentWeight += weight
+      signal.activityCount += 1
+      if (timestamp >= now - 7 * 86400000) signal.weeklyWeight += weight
+      if (!signal.lastActivityAt || timestamp > new Date(signal.lastActivityAt).getTime()) {
+        signal.lastActivityAt = new Date(timestamp).toISOString()
+      }
+    }
+
+    const activityWeights: Record<string, number> = {
+      follow: 2.5,
+      favorite: 2.5,
+      share: 3.5,
+      rating: 3,
+      comment: 2,
+      reply: 1.5,
+      like: 0.5,
+    }
+    for (const event of activities ?? []) {
+      addSignal(
+        event.business_id,
+        event.user_id,
+        `activity:${event.activity_type}`,
+        event.created_at,
+        activityWeights[event.activity_type] ?? 0,
+      )
+    }
+
+    const contactWeights: Record<string, number> = {
+      phone_reveal: 0.8,
+      whatsapp: 1.2,
+    }
+    for (const event of contactEvents ?? []) {
+      addSignal(
+        event.business_id,
+        event.user_id,
+        `contact:${event.action}`,
+        event.created_at,
+        contactWeights[event.action] ?? 0,
+      )
+    }
+
+    for (const order of deliveredOrders ?? []) {
+      addSignal(order.business_id, order.customer_profile_id, 'delivered_order', order.created_at, 4)
+      const signal = signalByBusiness.get(order.business_id)
+      if (signal) signal.recentOrders += 1
+    }
+
+    for (const review of approvedReviews ?? []) {
+      addSignal(review.business_id, review.user_id, 'approved_review', review.created_at, 3)
+      const signal = signalByBusiness.get(review.business_id)
+      if (signal) signal.recentReviews += 1
+    }
+
+    const rankedCandidates = candidates.map((business) => {
+      const signal = signalByBusiness.get(business.id)
+      if (!signal) return business
+      return {
+        ...business,
+        velocity_score: 50 * (1 - Math.exp(-signal.weeklyWeight / 8)),
+        engagement_score: 100 * (1 - Math.exp(-signal.recentWeight / 28)),
+        diversity_score: 50 * (1 - Math.exp(-signal.users.size / 8)),
+        last_activity_at: signal.lastActivityAt,
+        trend_activity_count: signal.activityCount,
+        trend_recent_orders: signal.recentOrders,
+        trend_recent_reviews: signal.recentReviews,
+      }
+    })
+
+    // An activity without verified recent customer signals is not a "trend".
+    // It remains discoverable in its other sections, but cannot be promoted here.
+    return sortByTrend(rankedCandidates.filter((business) => (business.trend_activity_count ?? 0) > 0))
+      .slice(0, Math.max(0, Math.min(1000, Math.floor(limit))))
   },
-  ['businesses-trending-v3'],
-  { revalidate: 300, tags: ['businesses', 'trending'] },
+  ['businesses-trending-v4'],
+  { revalidate: 180, tags: ['businesses', 'trending'] },
 )
 
 // ═══════════════════════════════════════════════════════════
