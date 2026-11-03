@@ -58,9 +58,14 @@ export function sliceVisible<T>(order: T[], start: number, size: number): T[] {
   return order.slice(safeStart, safeStart + size)
 }
 
-export function nextPageStart(cursor: number, length: number, size: number): number {
+export function nextPageStart(
+  cursor: number,
+  length: number,
+  size: number,
+  coveredUntil = cursor + size,
+): number {
   if (length <= 0 || size <= 0) return 0
-  const next = Math.max(0, cursor) + size
+  const next = Math.max(Math.max(0, cursor) + size, coveredUntil)
   return next >= length ? 0 : next
 }
 
@@ -92,6 +97,7 @@ export function useFairRotation<T extends { id: string }>({
   const containerRef = useRef<HTMLElement | null>(null)
   const orderRef = useRef<T[]>([])
   const cursorRef = useRef(0)
+  const coveredUntilRef = useRef(0)
   const itemsRef = useRef<T[]>(items)
   const pageSizeRef = useRef(pageSize)
   const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -108,6 +114,7 @@ export function useFairRotation<T extends { id: string }>({
         JSON.stringify({
           ids: orderRef.current.map((b) => b.id),
           cursor: cursorRef.current,
+          coveredUntil: coveredUntilRef.current,
         }),
       )
     } catch {
@@ -119,12 +126,19 @@ export function useFairRotation<T extends { id: string }>({
     const order = orderRef.current
     if (order.length === 0) return
     const size = pageSizeRef.current
-    const nextCursor = nextPageStart(cursorRef.current, order.length, size)
+    const nextCursor = nextPageStart(
+      cursorRef.current,
+      order.length,
+      size,
+      coveredUntilRef.current,
+    )
     if (nextCursor === 0) {
       orderRef.current = fisherYates(itemsRef.current)
       cursorRef.current = 0
+      coveredUntilRef.current = Math.min(orderRef.current.length, size)
     } else {
       cursorRef.current = nextCursor
+      coveredUntilRef.current = Math.min(order.length, nextCursor + size)
     }
     setCursor(cursorRef.current)
     setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
@@ -165,15 +179,30 @@ export function useFairRotation<T extends { id: string }>({
     try {
       const raw = sessionStorage.getItem(storageKey)
       if (raw) {
-        const parsed = JSON.parse(raw) as { ids?: string[]; cursor?: number }
+        const parsed = JSON.parse(raw) as {
+          ids?: string[]
+          cursor?: number
+          coveredUntil?: number
+        }
         const ids = parsed.ids ?? []
         const byId = new Map(items.map((b) => [b.id, b]))
         const restored = ids.map((id) => byId.get(id)).filter((b): b is T => !!b)
         const missing = items.filter((b) => !ids.includes(b.id))
         if (restored.length === items.length && missing.length === 0) {
           nextOrder = restored
-          const c = typeof parsed.cursor === 'number' ? parsed.cursor : 0
-          nextCursor = items.length > 0 ? c % items.length : 0
+          const savedCursor =
+            typeof parsed.cursor === 'number' && Number.isFinite(parsed.cursor)
+              ? Math.floor(parsed.cursor)
+              : 0
+          nextCursor = Math.min(Math.max(0, savedCursor), Math.max(0, items.length - 1))
+          const savedCovered =
+            typeof parsed.coveredUntil === 'number' && Number.isFinite(parsed.coveredUntil)
+              ? Math.floor(parsed.coveredUntil)
+              : nextCursor + pageSize
+          coveredUntilRef.current = Math.min(
+            items.length,
+            Math.max(nextCursor + pageSize, nextCursor, savedCovered),
+          )
         }
       }
     } catch {
@@ -183,6 +212,7 @@ export function useFairRotation<T extends { id: string }>({
     if (!nextOrder) {
       nextOrder = fisherYates(items)
       nextCursor = 0
+      coveredUntilRef.current = Math.min(nextOrder.length, pageSize)
     }
 
     orderRef.current = nextOrder
@@ -190,9 +220,14 @@ export function useFairRotation<T extends { id: string }>({
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mount
     setMounted(true)
     setCursor(nextCursor)
+    coveredUntilRef.current = Math.max(
+      coveredUntilRef.current,
+      Math.min(nextOrder.length, nextCursor + pageSize),
+    )
     setVisible(sliceVisible(nextOrder, nextCursor, pageSize))
+    persist()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemsKey, storageKey, disabled])
+  }, [itemsKey, storageKey, disabled, pageSize, persist])
 
   // IntersectionObserver مع rootMargin
   useEffect(() => {
@@ -239,8 +274,16 @@ export function useFairRotation<T extends { id: string }>({
 
   useEffect(() => {
     if (!mounted) return
+    const nextCoveredUntil = Math.min(
+      orderRef.current.length,
+      cursorRef.current + pageSize,
+    )
+    if (nextCoveredUntil > coveredUntilRef.current) {
+      coveredUntilRef.current = nextCoveredUntil
+      persist()
+    }
     setVisible(sliceVisible(orderRef.current, cursorRef.current, pageSize))
-  }, [pageSize, mounted])
+  }, [pageSize, mounted, persist])
 
   return {
     visible,
