@@ -1,7 +1,7 @@
 -- EAH targeted regression checks for the 2026-10-29 admin/RLS migrations.
 -- Run only on a dedicated non-production database after applying the migration set.
 BEGIN;
-SELECT plan(50);
+SELECT plan(53);
 
 SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.businesses'::regclass), true, 'RLS remains enabled on businesses');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='businesses' AND policyname='businesses_admin_all'), 'admin activity policy uses shared admin authorization');
@@ -129,6 +129,19 @@ SELECT ok((SELECT qual LIKE '%super_admin%' AND qual NOT LIKE '%''admin''::app_r
 SELECT is((SELECT count(*)::int FROM pg_policies WHERE schemaname='public' AND tablename='contact_reveals' AND policyname='admin_read_contact_reveals'), 0, 'legacy admin policy is removed');
 SELECT is(has_table_privilege('anon','public.contact_reveals','SELECT'), false, 'anonymous visitors cannot read contact reveal audit rows');
 SELECT is(has_table_privilege('authenticated','public.contact_reveals','SELECT'), true, 'authenticated sessions can query contact reveal rows subject to super_admin-only RLS');
+
+
+SELECT ok(
+  pg_get_functiondef('public.request_promo_post(uuid, text, text)'::regprocedure) LIKE '%owner_profile_id%'
+  AND pg_get_functiondef('public.request_promo_post(uuid, text, text)'::regprocedure) LIKE '%not_owner%',
+  'promo request RPC enforces linked business ownership'
+);
+SELECT ok(
+  pg_get_functiondef('public.redeem_reward(uuid)'::regprocedure) LIKE '%reward_catalog%FOR UPDATE%'
+  AND pg_get_functiondef('public.redeem_reward(uuid)'::regprocedure) LIKE '%profiles%FOR UPDATE%',
+  'reward redemption locks reward stock and user balance rows'
+);
+SELECT is(has_function_privilege('anon','public.request_promo_post(uuid, text, text)','EXECUTE'), false, 'anonymous users cannot request promo posts');
 
 SELECT * FROM finish();
 ROLLBACK;
