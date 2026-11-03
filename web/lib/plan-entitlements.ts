@@ -21,8 +21,12 @@ export function hasActivePaidPlanFeature(
   const plan = subscription.plan
   const features = Array.isArray(plan?.features) ? plan.features : []
   const price = Number(plan?.price_egp ?? 0)
-  const startsAt = subscription.starts_at ? new Date(subscription.starts_at).getTime() : Number.NEGATIVE_INFINITY
-  const expiresAt = subscription.expires_at ? new Date(subscription.expires_at).getTime() : Number.POSITIVE_INFINITY
+  const startsAt = subscription.starts_at ? new Date(subscription.starts_at).getTime() : null
+  const expiresAt = subscription.expires_at ? new Date(subscription.expires_at).getTime() : null
+  const hasStarted =
+    startsAt === null || (Number.isFinite(startsAt) && startsAt <= nowMs)
+  const hasNotExpired =
+    expiresAt === null || (Number.isFinite(expiresAt) && expiresAt > nowMs)
 
   return (
     subscription.status === 'active' &&
@@ -30,10 +34,8 @@ export function hasActivePaidPlanFeature(
     plan?.is_active === true &&
     Number.isFinite(price) &&
     price > 0 &&
-    Number.isFinite(startsAt) &&
-    Number.isFinite(expiresAt) &&
-    startsAt <= nowMs &&
-    expiresAt > nowMs &&
+    hasStarted &&
+    hasNotExpired &&
     features.includes(feature)
   )
 }
