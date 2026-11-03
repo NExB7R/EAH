@@ -17,7 +17,6 @@ import {
   SparklesIcon,
 } from './icons'
 import styles from './admin-sidebar.module.css'
-import GlobalShareAction from './global-share-action'
 
 type Props = {
   onNavigate?: () => void
@@ -188,9 +187,6 @@ export default function AdminSidebar({ counts, onNavigate }: Props) {
             </ul>
           </div>
         ))}
-        <ul className={styles.list}>
-          <li><GlobalShareAction className={styles.item} label="شارك المنصة ورمز الاستجابة السريعة" /></li>
-        </ul>
       </nav>
     </aside>
   )
