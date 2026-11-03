@@ -6,8 +6,8 @@ import styles from './featured.module.css'
 
 type Props = { businesses: FeaturedBusiness[] }
 
-// Featured activities have equal public priority. Admin can activate, pause,
-// or extend eligibility, but cannot assign a public rank or pin.
+// Featured activities have equal public priority. Admin can pause visibility,
+// while the paid subscription itself controls the placement duration.
 export default function FeaturedList({ businesses }: Props) {
   return (
     <div className={styles.list}>
