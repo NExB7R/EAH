@@ -108,3 +108,28 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 4. تشغيل TypeScript وESLint وPrettier وStylelint وVitest وBuild وE2E على الفرع؛ لم تتوفر نتيجة تشغيل بعد.
 5. التأكد من أن تفعيل ميزات Featured/New من لوحة الأدمن يعكس الأهلية الفعلية/الاشتراك المطلوب حسب قواعد الباقات قبل الاعتماد النهائي.
 
+
+
+---
+
+## 2026-11-03 — Follow-up: paid eligibility, session views and test coverage
+
+### تم استكماله على `feat/home-local-discovery-2026`
+- **Featured paid entitlement:** فصل `featured_badge` عن `featured_home`. الظهور العام لا يتم إلا مع `business_subscriptions.status=active` و`is_trial=false` وخطة مدفوعة فعالة تشمل الميزة؛ وتظل `businesses.is_featured` اختيار الأدمن الإضافي. فحص الإنتاج أظهر عدم وجود اشتراكات حاليًا، لذا القسم يظل فارغًا حتى وجود استحقاق فعلي.
+- **Nearby:** استعادة اختيار المنطقة اليدوي داخل البطاقة نفسها باستخدام `AreaDropdown` مع حفظ المنطقة ومسح GPS قديم؛ لا يظهر رقم مسافة من منطقة تقريبية.
+- **Page view signal:** توصيل tracker آمن نسبيًا للزيارة إلى صفحة النشاط، session-scoped، rate-limited، بلا IP أو account ID محفوظ في سجل الزيارة. الإحالة تحفظ hostname فقط.
+- **Trending:** وزن الزيارة 0.35، ولا تكفي وحدها؛ الحد الأدنى للعرض وزن حديث >=1 أو طلب مكتمل أو تقييم معتمد. إلغاء احتساب الإشارة غير المعروفة، وإرجاع حالة قبول من `addSignal` لمنع تكرار الطلب/التقييم عبر المصادر.
+- **Offers:** الصفحة الرئيسية وصفحة `/offers` تستخدمان نفس ranking بحسب نشاط النشاط التجاري المرفق؛ لا يزال ذلك proxy وليس offer-level analytics.
+- **Supermarket:** union/labels/synonyms/filters/merchant/admin forms محدثة. تمت إضافة migration وقاعدة pgTAP واختبارها إلى Quality workflow. لم تُطبّق migration على الإنتاج.
+- **Unit tests:** اختبارات fair rotation، subscription entitlements، minimum trend signal، supermarket filter/label.
+
+### ما بقي مفتوحًا قبل الدمج/الإطلاق
+1. تشغيل Quality Gate كاملًا على آخر HEAD: TypeScript، ESLint، Prettier، Stylelint، Vitest، Build، npm audit، Knip، jscpd.
+2. تشغيل E2E على Vercel Preview صالح؛ التشغيل السابق فشل في انتظار preview ولم يصل إلى Playwright.
+3. تشغيل DB/pgTAP على قاعدة staging غير إنتاجية مخصصة. لم تُكتب أي تغييرات على قاعدة الإنتاج.
+4. ترحيل `get_business_funnel` لتوحيد قيم `event_scope` مع القيد الحالي؛ لا يُستخدم هذا الجزء حاليًا لترتيب الترند.
+5. بناء offer-level tracking عند الحاجة إلى ترتيب حسب أداء العرض نفسه.
+6. مراقبة الأحداث الحقيقية قبل تعديل أوزان الترند؛ لا توجد عينة إنتاجية حديثة وقت الفحص.
+
+**الحالة:** التغييرات على Draft PR #39 فقط؛ لم يتم الدمج أو النشر، ولا يجوز وصفها بأنها اجتازت الاختبارات قبل تشغيلها على الـHEAD الحالي.
+
