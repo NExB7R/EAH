@@ -38,11 +38,20 @@ function makeBusiness(overrides: Partial<Business> = {}): Business {
 }
 
 describe('trendScore', () => {
-  it('بيرجع قيمة بين 0 و 2 للحالات العادية', () => {
-    const b = makeBusiness({ trust_score: 50, successful_orders: 10 })
+  it('بيرجع درجة بين صفر وواحد مبنية على الإشارات الحديثة', () => {
+    const b = makeBusiness({
+      velocity_score: 30,
+      engagement_score: 60,
+      diversity_score: 20,
+      rating_avg: 4.5,
+      rating_count: 8,
+      trend_recent_orders: 2,
+      trend_recent_reviews: 1,
+      last_activity_at: new Date().toISOString(),
+    })
     const score = trendScore(b)
     expect(score).toBeGreaterThan(0)
-    expect(score).toBeLessThan(2)
+    expect(score).toBeLessThanOrEqual(1)
   })
 
   it('نقاط المشاركة وحدها لا ترفع ترتيب النشاط', () => {
@@ -52,11 +61,19 @@ describe('trendScore', () => {
     expect(trendScore(high)).toBe(trendScore(low))
   })
 
-  it('التوثيق والتقييم والطلبات المكتملة ترفع دليل السمعة', () => {
-    const newBusiness = makeBusiness({ is_verified: false, rating_count: 0, successful_orders: 0 })
-    const provenBusiness = makeBusiness({ is_verified: true, rating_avg: 4.8, rating_count: 12, successful_orders: 25 })
-    expect(getBusinessReputationScore(provenBusiness)).toBeGreaterThan(getBusinessReputationScore(newBusiness))
-    expect(trendScore(provenBusiness)).toBeGreaterThan(trendScore(newBusiness))
+  it('التقييمات الحقيقية ترفع جودة الترند، لكن شارة التوثيق لا تضيف نقاطًا', () => {
+    const unrated = makeBusiness({ is_verified: false, rating_avg: 0, rating_count: 0 })
+    const rated = makeBusiness({ is_verified: false, rating_avg: 4.8, rating_count: 12 })
+    const verifiedRated = makeBusiness({ is_verified: true, rating_avg: 4.8, rating_count: 12 })
+    expect(trendScore(rated)).toBeGreaterThan(trendScore(unrated))
+    expect(trendScore(verifiedRated)).toBe(trendScore(rated))
+    expect(getBusinessReputationScore(verifiedRated)).toBeGreaterThan(getBusinessReputationScore(rated))
+  })
+
+  it('التمويل وميزات الظهور الإداري لا ترفع درجة الترند وحدها', () => {
+    const ordinary = makeBusiness({ id: 'ordinary', is_featured: false, is_new_project: false, is_verified: false })
+    const promoted = makeBusiness({ id: 'promoted', is_featured: true, is_new_project: true, is_verified: true })
+    expect(trendScore(promoted)).toBe(trendScore(ordinary))
   })
 
   it('velocity أعلى = score أعلى', () => {
