@@ -6,6 +6,7 @@ import { defineConfig, devices } from '@playwright/test'
 // ═══════════════════════════════════════════════════════════
 
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000'
+const VERCEL_BYPASS_SECRET = process.env.VERCEL_AUTOMATION_BYPASS_SECRET
 
 export default defineConfig({
   testDir: './e2e',
@@ -21,6 +22,12 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'off',
+    ...(VERCEL_BYPASS_SECRET
+      ? { extraHTTPHeaders: { 'x-vercel-protection-bypass': VERCEL_BYPASS_SECRET } }
+      : {}),
+    // A Vercel protection bypass is a credential. Do not persist it in Playwright
+    // traces or upload it as part of failure artifacts.
+    trace: VERCEL_BYPASS_SECRET ? 'off' : 'retain-on-failure',
   },
 
   projects: [
