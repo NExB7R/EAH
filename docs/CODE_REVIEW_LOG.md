@@ -133,3 +133,12 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 
 **الحالة:** التغييرات على Draft PR #39 فقط؛ لم يتم الدمج أو النشر، ولا يجوز وصفها بأنها اجتازت الاختبارات قبل تشغيلها على الـHEAD الحالي.
 
+
+
+### 2026-11-03 — Final entitlement duration correction
+- Featured homepage placement now follows the qualifying paid `featured_home` subscription's real `expires_at` (monthly/quarterly/yearly), rather than a fixed 30-day `featured_until`.
+- `featured_badge` is independent from `featured_home`: a badge-only paid plan shows the badge but does not enter the homepage Featured section; a homepage entitlement + admin selection drives the section.
+- Admin Featured dashboard displays the actual subscription expiry, allows pause, and no longer offers arbitrary +90-day extensions beyond the plan.
+- New Activities remains the only one-month placement window, with an explicit admin off-save-on-save renewal flow after expiry.
+- Production DB remains read-only; no subscription or promotion records were changed.
+
