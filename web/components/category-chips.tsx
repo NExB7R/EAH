@@ -1,85 +1,45 @@
 'use client'
 
-import { useTransition } from 'react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { CHIPS, EXPLORE_CHIP } from '@/lib/chips-config'
 import styles from './category-chips.module.css'
 
-// ═══════════════════════════════════════════════════════════
-// EAH — Category Chips (Pyramid, 2026)
-// 9 chips في صفوف + استكشف الكل في القمة
-// ═══════════════════════════════════════════════════════════
-
+// Home categories are business types only. Discovery and feature filters stay separate.
 export default function CategoryChips() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [isPending, startTransition] = useTransition()
-
-  const activeKey = searchParams.get('chip') ?? ''
-
-  function handleChip(key: string, action: { type: string; value: string }) {
-    if (activeKey === key && action.type === 'filter') {
-      router.push(`/explore?type=${action.value}`)
-      return
-    }
-
-    const params = new URLSearchParams(searchParams.toString())
-    params.delete('scroll')
-
-    if (activeKey === key) {
-      params.delete('chip')
-      params.delete('type')
-    } else {
-      params.set('chip', key)
-      if (action.type === 'filter') {
-        params.set('type', action.value)
-      } else {
-        params.set('scroll', action.value)
-      }
-    }
-
-    startTransition(() => {
-      router.push(`?${params.toString()}`, { scroll: false })
-    })
-  }
-
-  const rows: (typeof CHIPS)[] = []
-  for (let i = 0; i < CHIPS.length; i += 3) {
-    rows.push(CHIPS.slice(i, i + 3))
-  }
+  const categories = CHIPS.filter(
+    (chip) => chip.group === 'types' && chip.action.type === 'filter',
+  )
 
   return (
-    <div className={styles.wrap} data-pending={isPending} aria-label="تصفية سريعة">
-      <Link href={EXPLORE_CHIP.href} className={`${styles.chip} ${styles.gold}`}>
-        <span className={styles.chipIcon}>
-          <EXPLORE_CHIP.Icon size={15} />
-        </span>
-        <span>{EXPLORE_CHIP.label}</span>
-      </Link>
-      <div className={styles.rows}>
-        {rows.map((row, i) => (
-          <div key={i} className={styles.row}>
-            {row.map((chip) => {
-              const active = activeKey === chip.key
-              return (
-                <button
-                  key={chip.key}
-                  type="button"
-                  className={`${styles.chip} ${styles[chip.tone]} ${active ? styles.active : ''}`}
-                  onClick={() => handleChip(chip.key, chip.action)}
-                  aria-pressed={active}
-                >
-                  <span className={styles.chipIcon} style={{ color: chip.iconColor }}>
-                    <chip.Icon size={15} />
-                  </span>
-                  <span>{chip.label}</span>
-                </button>
-              )
-            })}
+    <section className={styles.section} aria-labelledby="home-categories-title">
+      <div className={styles.inner}>
+        <header className={styles.header}>
+          <div>
+            <h2 id="home-categories-title" className={styles.title}>
+              اكتشف حسب التصنيف
+            </h2>
+            <p className={styles.subtitle}>اختار نوع النشاط اللي بتدور عليه</p>
           </div>
-        ))}
+          <Link href={EXPLORE_CHIP.href} className={styles.viewAll}>
+            استكشف الكل
+          </Link>
+        </header>
+
+        <nav className={styles.grid} aria-label="تصنيفات الأنشطة">
+          {categories.map((chip) => (
+            <Link
+              key={chip.key}
+              href={`/explore?type=${encodeURIComponent(chip.action.value)}`}
+              className={styles.category}
+            >
+              <span className={styles.iconWrap} aria-hidden="true">
+                <chip.Icon size={22} />
+              </span>
+              <span className={styles.label}>{chip.label}</span>
+            </Link>
+          ))}
+        </nav>
       </div>
-    </div>
+    </section>
   )
 }
