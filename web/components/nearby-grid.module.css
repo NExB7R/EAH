@@ -284,7 +284,7 @@
 
   /* Mobile: outer padding so sections don't touch screen edges */
   .section {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 12px;
+    padding-right: 12px;
   }
 }
