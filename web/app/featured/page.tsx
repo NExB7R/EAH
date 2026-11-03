@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 }
 
 export default async function FeaturedPage() {
-  const all = await getFeaturedBusinesses(200)
+  const all = await getFeaturedBusinesses()
 
   return (
     <main className={styles.page}>
