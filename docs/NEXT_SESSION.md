@@ -3,7 +3,7 @@
 - Active branch: `feat/home-local-discovery-2026`
 - Draft PR: #39 to `main`.
 - Not merged, not deployed, and no production database writes or migrations performed.
-- The home discovery redesign, paid Featured entitlement checks, manual Nearby area picker, session view signal, and supermarket category are in this branch.
+- The home discovery redesign, subscription-duration Featured entitlements (`featured_home` versus `featured_badge`), manual Nearby area picker, session view signal, and supermarket category are in this branch. New Activities alone has a 30-day admin-controlled window.
 - Do not merge until Quality Gate, Preview E2E, and isolated pgTAP succeed on the current branch HEAD.
 - Open technical items: legacy `get_business_funnel` scope mismatch; offer-level tracking; real trend weights need live event data; supermarket migration still needs staging then normal production release.
 - Read `docs/CRITERIA.md`, `docs/CODE_REVIEW_LOG.md`, `docs/SESSION_LOG.md`, and `docs/PROGRESS.md` for current rules and evidence.
