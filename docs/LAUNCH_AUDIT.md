@@ -85,7 +85,7 @@ The connected project reported:
 - One Auth warning for leaked/compromised-password protection being disabled.
 - Performance advisories: 13 foreign keys without covering indexes, 13 RLS policies with per-row auth-initplan patterns, 137 multiple-permissive-policy findings, 74 unused indexes, and one duplicate index pair on `trust_badges`.
 
-A read-only call-site review found `record_ad_event`, `record_page_view`, and `heartbeat_page_session` have no direct browser caller in current code. The prepared prelaunch migration now restricts these analytics write RPCs and `generate_referral_code` to trusted server/trigger use, alongside the five sensitive RPCs. `admin-policy-alignment.test.sql` contains 50 pgTAP assertions. These changes are prepared only: no grants, RLS policies, indexes, migrations, or Production records were changed.
+A read-only call-site review found `record_ad_event`, `record_page_view`, and `heartbeat_page_session` have no direct browser caller in current code. The prepared prelaunch migration now restricts these analytics write RPCs and `generate_referral_code` to trusted server/trigger use, alongside the five sensitive RPCs. It also adds owner validation to `request_promo_post` and row locks to `redeem_reward`. `admin-policy-alignment.test.sql` contains 50 pgTAP assertions. These changes are prepared only: no grants, RLS policies, indexes, migrations, or Production records were changed.
 
 ## Production-data baseline observed
 
