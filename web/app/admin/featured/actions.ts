@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import type { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/auth/admin'
 
@@ -56,6 +56,8 @@ export async function toggleFeatured(
   revalidatePath('/admin/featured')
   revalidatePath('/')
   revalidatePath('/featured')
+  revalidateTag('businesses', 'default')
+  revalidateTag('featured', 'default')
   return { ok: true }
 }
 
@@ -77,6 +79,10 @@ export async function extendFeaturedUntil(businessId: string, days: number): Pro
 
   await logAudit(supabase, 'featured.extend', businessId, { days: safeDays })
   revalidatePath('/admin/featured')
+  revalidatePath('/')
+  revalidatePath('/featured')
+  revalidateTag('businesses', 'default')
+  revalidateTag('featured', 'default')
   return { ok: true }
 }
 
