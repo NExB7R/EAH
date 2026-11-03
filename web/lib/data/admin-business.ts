@@ -25,6 +25,12 @@ export type AdminBusiness = {
   is_open: boolean
   is_featured: boolean
   is_verified: boolean
+  accepts_whatsapp_orders: boolean
+  featured_order: number
+  featured_pin: boolean
+  featured_until: string | null
+  is_new_project: boolean
+  new_until: string | null
   verified_at: string | null
   trust_score: number
   trust_tier: string
@@ -150,6 +156,12 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     is_open: !!b.is_open,
     is_featured: !!b.is_featured,
     is_verified: !!b.is_verified,
+    accepts_whatsapp_orders: !!b.accepts_whatsapp_orders,
+    featured_order: Number(b.featured_order ?? 0),
+    featured_pin: !!b.featured_pin,
+    featured_until: (b.featured_until as string | null) ?? null,
+    is_new_project: !!b.is_new_project,
+    new_until: (b.new_until as string | null) ?? null,
     verified_at: (b.verified_at as string | null) ?? null,
     trust_score: (b.trust_score as number) ?? 50,
     trust_tier: (b.trust_tier as string) ?? 'fel',
