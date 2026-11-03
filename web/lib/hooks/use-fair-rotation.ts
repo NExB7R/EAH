@@ -163,8 +163,9 @@ export function useFairRotation<T extends { id: string }>({
         const missing = items.filter((b) => !ids.includes(b.id))
         if (restored.length === items.length && missing.length === 0) {
           nextOrder = restored
-          const c = typeof parsed.cursor === 'number' ? parsed.cursor : 0
-          nextCursor = Math.max(0, Math.min(c, Math.max(0, items.length - 1)))
+          const c = typeof parsed.cursor === 'number' && Number.isFinite(parsed.cursor) ? parsed.cursor : 0
+          const bounded = Math.max(0, Math.min(c, Math.max(0, items.length - 1)))
+          nextCursor = Math.floor(bounded / pageSize) * pageSize
         }
       }
     } catch {
@@ -181,8 +182,15 @@ export function useFairRotation<T extends { id: string }>({
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mount
     setMounted(true)
     setVisible(sliceVisible(nextOrder, nextCursor, pageSize))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemsKey, storageKey, disabled])
+    try {
+      sessionStorage.setItem(
+        storageKey,
+        JSON.stringify({ ids: nextOrder.map((item) => item.id), cursor: nextCursor }),
+      )
+    } catch {
+      // Rotation remains functional when storage is unavailable.
+    }
+  }, [itemsKey, storageKey, disabled, pageSize])
 
   // IntersectionObserver مع rootMargin
   useEffect(() => {
