@@ -1,5 +1,6 @@
 'use server'
 
+import { parseCairoLocalDateTime } from '@/lib/utils/timezone'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
@@ -58,45 +59,10 @@ function fdBool(formData: FormData, key: string): boolean {
 /** Convert an HTML date input to the end of that calendar day in Egypt. */
 function toOptionalIsoDate(value: string | undefined): string | null | undefined {
   if (!value?.trim()) return null
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return undefined
-
-  const [year, month, day] = value.split('-').map(Number)
-  if (!year || !month || !day) return undefined
-  const validDate = new Date(Date.UTC(year, month - 1, day))
-  if (validDate.toISOString().slice(0, 10) !== value) return undefined
-
-  // Convert 23:59:59.999 Africa/Cairo to UTC without assuming a fixed UTC offset.
-  const targetUtc = Date.UTC(year, month - 1, day, 23, 59, 59, 999)
-  let guess = targetUtc
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const date = new Date(guess)
-    const parts = Object.fromEntries(
-      new Intl.DateTimeFormat('en-GB', {
-        timeZone: 'Africa/Cairo',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hourCycle: 'h23',
-      })
-        .formatToParts(date)
-        .filter((part) => part.type !== 'literal')
-        .map((part) => [part.type, Number(part.value)]),
-    ) as Record<string, number>
-    const localAsUtc = Date.UTC(
-      parts.year!,
-      parts.month! - 1,
-      parts.day!,
-      parts.hour!,
-      parts.minute!,
-      parts.second!,
-      date.getUTCMilliseconds(),
-    )
-    guess += targetUtc - localAsUtc
-  }
-  return new Date(guess).toISOString()
+  const endOfDay = parseCairoLocalDateTime(value.trim() + 'T23:59')
+  if (!endOfDay) return undefined
+  endOfDay.setUTCSeconds(59, 999)
+  return endOfDay.toISOString()
 }
 
 // ═══ 1. الأساسيات ═══
