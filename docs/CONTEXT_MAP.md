@@ -208,7 +208,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (103)
+## Lib (104)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -288,6 +288,7 @@
 | `offline/db.ts` | STORES, openDB, idbGet, idbSet, idbDelete, … | EAH — Offline DB (IndexedDB wrapper) |
 | `offline/mutations.ts` | offlineOrQueue | EAH — Offline-aware Mutations |
 | `offline/queue.ts` | enqueue, getPending, clearPending, flushQueue, registerBackgroundSync | EAH — Pending Actions Queue (Offline → Sync) |
+| `phone-validation.ts` | isEgyptianMobileNumber | Validate an Egyptian mobile number stored in local 01xxxxxxxxx form. |
 | `plan-entitlements.ts` | hasActivePaidPlanFeature | Pure eligibility rule shared by public placement and admin controls. |
 | `push/client.ts` | isPushSupported, getPushStatus, subscribeToPush, unsubscribeFromPush | EAH — Push Notifications (Client) |
 | `push/server.ts` | sendPushToUser, sendPushToUsers | EAH — Push Notifications (Server) |
