@@ -18,7 +18,7 @@ export default function NearbyLocationPrompt({ isLoggedIn, currentArea = '' }: P
   const [pending, setPending] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [showAreaPicker, setShowAreaPicker] = useState(false)
-  const [area, setArea] = useState(currentArea)
+  const [area, setArea] = useState<string>(currentArea ?? '')
 
   const requestAndSave = () => {
     if (!isLoggedIn || pending) return
