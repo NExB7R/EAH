@@ -87,6 +87,15 @@ describe('public reputation filters', () => {
     expect(result[0]?.id).toBe('proven')
   })
 
+  it('accepts the dedicated supermarket type filter', () => {
+    const filters = parseFilters({ type: 'supermarket' })
+    expect(filters.types).toEqual(['supermarket'])
+    const market = makeBusiness({ id: 'market', business_type: 'supermarket' })
+    const restaurant = makeBusiness({ id: 'restaurant', business_type: 'restaurant' })
+    const result = applyFilters([restaurant, market], filters)
+    expect(result.map((business) => business.id)).toEqual(['market'])
+  })
+
   it('min rating excludes activities without ratings rather than treating them as zero-star reviews', () => {
     const unrated = makeBusiness({ id: 'unrated', rating_avg: 0, rating_count: 0 })
     const rated = makeBusiness({ id: 'rated', rating_avg: 4.4, rating_count: 3 })
