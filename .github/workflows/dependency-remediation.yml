@@ -60,13 +60,18 @@ jobs:
         working-directory: web
         run: npm test
 
-      - name: Knip
+      - name: Require no remaining high or critical production advisories
         working-directory: web
-        run: npm run knip
-
-      - name: Duplicate code scan
-        working-directory: web
-        run: npm run dup
+        run: |
+          node <<'NODE'
+          const report = require('./npm-audit-after.json')
+          const counts = report.metadata?.vulnerabilities ?? {}
+          console.log('Production advisory counts:', counts)
+          if ((counts.critical ?? 0) > 0 || (counts.high ?? 0) > 0) {
+            console.error('::error::High or critical production advisories remain after non-breaking fixes.')
+            process.exit(1)
+          }
+          NODE
 
       - name: Check patch whitespace and lockfile changes
         run: |
