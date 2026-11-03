@@ -211,7 +211,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (101)
+## Lib (102)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -251,6 +251,7 @@
 | `data/contact-availability-utils.ts` | normalizeWhatsAppDestination, normalizePhoneDestination, hasUsablePhoneDestination, hasUsableWhatsAppDestination, isWhatsAppChannelAvailable | Do not guess a country code for ambiguous local numbers. |
 | `data/contact-availability.ts` | getWhatsAppDestinationBusinessIds | Return only the business IDs with at least one usable WhatsApp destination. |
 | `data/contact-options.ts` | safeContactOptionLabel, buildContactOptions | Combines every valid public contact and active-branch destination. |
+| `data/featured-eligibility.ts` | getPaidBusinessFeatureEntitlements, getPaidBusinessIdsWithFeature, getPaidFeaturedHomeBusinessIds, getPaidFeaturedHomeEntitlements, hasPaidFeaturedHomeSubscription | Return active paid entitlements, preserving the plan's actual expiry. |
 | `data/fraud.ts` | getFlaggedReviews, getRecentTrustEvents, getFlaggedUsers, getFraudStats, getMultiAccountIps | EAH — Fraud Data |
 | `data/health.ts` | getHealthSummary, getRecentErrors, getErrorsWithFilters | EAH — System Health data |
 | `data/in-app-order-availability-core.ts` | isInAppOrderOperational | The shared product rule for showing in-platform orders as currently available. |
