@@ -14,6 +14,7 @@ import {
   SparklesIcon,
 } from '@/components/icons'
 import { submitMerchantApplication } from '../actions'
+import { isEgyptianMobileNumber } from '@/lib/phone-validation'
 import styles from './apply-wizard.module.css'
 
 // ═══════════════════════════════════════════════════════════
