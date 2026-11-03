@@ -251,7 +251,8 @@ export const getFeaturedBusinesses = unstable_cache(
       .eq('is_published', true)
       .eq('is_featured', true)
       .in('id', [...eligiblePaidIds])
-      .or(`featured_until.is.null,featured_until.gt.${new Date().toISOString()}`)
+      // Featured duration follows the active paid plan expiry, not the
+      // 30-day New Activities window or a fixed placement timeout.
       // Featured eligibility is controlled by the administrator and payment status.
       // Ranking fields and manual pins must never create a permanent first place;
       // the visitor-side cycle shuffles the entire eligible set without repetition.
@@ -264,7 +265,7 @@ export const getFeaturedBusinesses = unstable_cache(
     }
     return await normalizeBusinesses(data, supabase)
   },
-  ['businesses-featured-v4'],
+  ['businesses-featured-v5'],
   { revalidate: 300, tags: ['businesses', 'featured'] },
 )
 
