@@ -208,7 +208,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (102)
+## Lib (103)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -261,6 +261,7 @@
 | `data/orders-expire.ts` | expireStaleOrders | Lazy expire — no cron needed. |
 | `data/orders-settings.ts` | getMerchantOrderSettings, getOrderSettingsForAdmin, isOrderAcceptanceActive | EAH — Orders Settings: data access |
 | `data/orders.ts` | ORDER_STATUSES, PAYMENT_METHODS, PAYMENT_LABEL, PAYMENT_WARNINGS, FEEDBACK_ISSUE_TYPES, … | EAH — Orders System v2: Types |
+| `data/promotion-status.ts` | isPromotionActive | True when an enabled, optional time-bounded placement is still active. |
 | `data/referrals.ts` | getReferralStats, getReferralList | EAH — Referral Data |
 | `data/reports-orders.ts` | getOrderMetricsForBusiness | Reports: orders + ETA + feedback aggregation |
 | `data/site-settings.ts` | SITE_SETTINGS_DEFAULTS, getSiteSettingsForAdmin, getPublicContactSettings | — |
