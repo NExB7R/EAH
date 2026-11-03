@@ -173,8 +173,6 @@ export type FeaturedBusiness = {
   cover_image_url: string | null
   is_published: boolean
   is_featured: boolean
-  featured_pin: boolean
-  featured_order: number
   featured_until: string | null
   created_at: string
 }
