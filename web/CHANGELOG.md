@@ -19,7 +19,7 @@
 ### feat — 2026-11-03 (Home Local Discovery)
 - فصل تصنيفات الأنشطة عن الهيرو وإنشاء شبكة مستقلة متجاوبة.
 - ترتيب Home: Featured / Nearby / Trending / Offers / New Activities / Recommendations.
-- Featured: equal-size cards، دورة خلط لا تكرر العناصر حتى اكتمال القائمة، واستحقاق منفصل لـ `featured_badge` و`featured_home` عبر اشتراك مدفوع ساري واختيار الأدمن.
+- Featured: equal-size cards ودورة خلط لا تكرر العناصر حتى اكتمال القائمة؛ `featured_home` يستمر طوال مدة الاشتراك المدفوع الفعلية، و`featured_badge` استحقاق مستقل للشارة.
 - Nearby: GPS بموافقة صريحة أو اختيار منطقة يدويًا داخل القسم؛ لا مسافات تقديرية، ولا استعلام قرب بلا موقع/منطقة.
 - Trending: إشارات آخر 30 يومًا، إزالة boosts الدفع والتوثيق الإداري ونقاط المشاركة، dedupe عبر المصادر، ومشاهدات جلسة خفيفة الوزن لا تكفي وحدها.
 - Offers: نفس ترتيب نشاط النشاط التجاري في الرئيسية وصفحة /offers (proxy، ليس offer-level analytics).
