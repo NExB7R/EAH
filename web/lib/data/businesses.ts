@@ -407,8 +407,8 @@ export const getTrendingBusinesses = unstable_cache(
         .select('business_id, customer_profile_id, delivered_at, created_at')
         .in('business_id', ids)
         .eq('status', 'delivered')
-        .gte('delivered_at', since30)
-        .order('delivered_at', { ascending: false })
+        .or(`delivered_at.gte.${since30},and(delivered_at.is.null,created_at.gte.${since30})`)
+        .order('delivered_at', { ascending: false, nullsFirst: false })
         .limit(20000),
       supabase
         .from('business_reviews')
