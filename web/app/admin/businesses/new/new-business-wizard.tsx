@@ -4,6 +4,7 @@ import { Fragment, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeftIcon, AlertIcon, CheckCircleIcon } from '@/components/icons'
 import { useDraft } from '@/lib/hooks/use-draft'
+import { isEgyptianMobileNumber } from '@/lib/phone-validation'
 import { createBusiness } from '../actions'
 import BasicsStep from './basics-step'
 import LocationStep from './location-step'
@@ -109,14 +110,14 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
       const primary = data.contacts.find((c) => c.kind === 'phone' && c.is_primary)
       if (!primary || !primary.value.trim()) {
         errs.contacts = 'لازم رقم هاتف أساسي واحد على الأقل'
-      } else if (!/^0\d{9,12}$/.test(primary.value.trim())) {
+      } else if (!isEgyptianMobileNumber(primary.value.trim())) {
         errs.contacts = 'رقم الهاتف الأساسي غير صحيح'
       }
       const seen = new Set<string>()
       for (const c of data.contacts) {
         const v = c.value.trim()
         if (!v) continue
-        if (!/^0\d{9,12}$/.test(v)) {
+        if (!isEgyptianMobileNumber(v)) {
           errs.contacts = 'رقم غير صحيح (يبدأ بـ 0 و10-13 رقم)'
           break
         }
