@@ -264,7 +264,17 @@ export const getBusinessDetail = unstable_cache(
         .select('method_type, value, is_primary')
         .eq('business_id', business.id)
         .eq('is_public', true)
-        .in('method_type', ['facebook', 'instagram', 'website'])
+        .in('method_type', [
+          'phone',
+          'whatsapp',
+          'complaints',
+          'facebook',
+          'instagram',
+          'website',
+          'manager',
+          'shift_morning',
+          'shift_evening',
+        ])
         .order('is_primary', { ascending: false }),
       supabase
         .from('business_media')
