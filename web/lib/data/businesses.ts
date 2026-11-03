@@ -390,20 +390,11 @@ export const getTrendingBusinesses = unstable_cache(
       for (const result of pageResults) rows.push(...(result.data ?? []))
     }
 
-    const normalized: Business[] = []
-    for (let index = 0; index < rows.length; index += pageSize * concurrency) {
-      const batches = await Promise.all(
-        Array.from({ length: concurrency }, (_, batchIndex) => {
-          const start = index + batchIndex * pageSize
-          return start < rows.length
-            ? normalizeBusinesses(rows.slice(start, start + pageSize), supabase)
-            : Promise.resolve([] as Business[])
-        }),
-      )
-      normalized.push(...batches.flat())
-    }
-
-    return sortByTrend(normalized).slice(0, Math.max(0, Math.floor(limit)))
+    // Every published row participates in scoring, but only the winning candidates
+    // need the additional contact/order-availability lookups performed by normalization.
+    const safeLimit = Number.isFinite(limit) ? Math.max(0, Math.floor(limit)) : 10
+    const ranked = sortByTrend(rows as Business[])
+    return normalizeBusinesses(ranked.slice(0, safeLimit), supabase)
   },
   ['businesses-trending-v4'],
   { revalidate: 60, tags: ['businesses', 'trending'] },
