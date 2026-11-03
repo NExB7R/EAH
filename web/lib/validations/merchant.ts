@@ -31,7 +31,6 @@ const optionalUrlSchema = z
 export const BUSINESS_TYPES = [
   'restaurant',
   'pharmacy',
-  'supermarket',
   'delivery_office',
   'misc',
 ] as const
