@@ -134,7 +134,7 @@ export default function LocationStep({ data, errors, update }: Props) {
                   type="tel"
                   value={contact.value}
                   onChange={(e) => {
-                    const v = e.target.value.replace(/[^0-9]/g, '').slice(0, 13)
+                    const v = e.target.value.replace(/[^0-9]/g, '').slice(0, 11)
                     update({
                       contacts: data.contacts.map((c) =>
                         c.tempId === contact.tempId ? { ...c, value: v } : c,
@@ -143,7 +143,7 @@ export default function LocationStep({ data, errors, update }: Props) {
                   }}
                   className={styles.contactInput}
                   placeholder="01xxxxxxxxx"
-                  maxLength={13}
+                  maxLength={11}
                   dir="ltr"
                 />
 
