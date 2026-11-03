@@ -152,3 +152,11 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - **E2E:** the prior run failed in the Vercel Preview wait step before Playwright. The cause was the action's hard-coded `vercel[bot]` creator filter, while this project's deployment records are created under the connected owner account. `.github/workflows/e2e.yml` now polls GitHub deployments for the PR-head and merge SHAs, accepts any creator, and validates the URL as a non-production Vercel Preview. This workflow revision has not yet been executed.
 - **Dependency risk:** CI `npm ci` reported 25 vulnerabilities (19 moderate, 5 high, 1 critical). `npm audit --omit=dev --audit-level=high` has not completed on this branch because TypeScript stopped the earlier quality job. Treat audit status as unresolved, not passed.
 - **No production DB writes/DDL or production deployment were performed.** The supermarket migration and pgTAP test still require an isolated staging DB run.
+
+
+### 2026-11-03 — E2E Preview discovery correction
+- Replaced the Vercel preview wait action that filtered exclusively for `vercel[bot]`.
+- The E2E workflow now queries GitHub deployment records for both the PR head SHA and merge SHA, accepts any creator, polls pending status repeatedly, and only accepts a successful HTTPS `.vercel.app` non-production URL.
+- Requires `deployments: read` permission.
+- **Not executed yet** after this workflow change; validate it on a newly triggered PR run.
+
