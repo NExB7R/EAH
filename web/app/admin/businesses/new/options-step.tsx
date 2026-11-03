@@ -2,7 +2,7 @@
 
 import { hasUsableWhatsAppDestination } from '@/lib/data/contact-availability-utils'
 
-import { CheckCircleIcon, WhatsAppIcon, UserIcon, CrownGoldIcon, SparklesIcon } from '@/components/icons'
+import { CheckCircleIcon, WhatsAppIcon, UserIcon, SparklesIcon } from '@/components/icons'
 import type { WizardData, OwnerOption } from './new-business-wizard'
 import styles from './wizard.module.css'
 
@@ -101,33 +101,21 @@ export default function OptionsStep({ data, owners, update }: Props) {
         </div>
 
         <div className={styles.field}>
-          <span className={styles.label}>ميزات الظهور — مسؤول عنها الأدمن</span>
-          <div className={styles.row}>
-            <label className={`${styles.typeCard} ${data.is_featured ? styles.typeCardActive : ''}`}>
-              <input
-                type="checkbox"
-                checked={data.is_featured}
-                onChange={(e) => update({ is_featured: e.target.checked })}
-                style={{ display: 'none' }}
-              />
-              <span className={styles.typeCardIcon}><CrownGoldIcon size={16} /></span>
-              <span className={styles.typeCardLabel}>{data.is_featured ? 'مفعّل في المميزون' : 'إضافة للمميزون'}</span>
-            </label>
-            <label className={`${styles.typeCard} ${data.is_new_project ? styles.typeCardActive : ''}`}>
-              <input
-                type="checkbox"
-                checked={data.is_new_project}
-                onChange={(e) => update({ is_new_project: e.target.checked })}
-                style={{ display: 'none' }}
-              />
-              <span className={styles.typeCardIcon}><SparklesIcon size={16} /></span>
-              <span className={styles.typeCardLabel}>{data.is_new_project ? 'جديد لمدة شهر' : 'أنشطة جديدة'}</span>
-            </label>
-          </div>
+          <span className={styles.label}>الظهور بعد الإنشاء</span>
+          <label className={`${styles.typeCard} ${data.is_new_project ? styles.typeCardActive : ''}`}>
+            <input
+              type="checkbox"
+              checked={data.is_new_project}
+              onChange={(e) => update({ is_new_project: e.target.checked })}
+              style={{ display: 'none' }}
+            />
+            <span className={styles.typeCardIcon}><SparklesIcon size={16} /></span>
+            <span className={styles.typeCardLabel}>{data.is_new_project ? 'جديد لمدة شهر' : 'أنشطة جديدة'}</span>
+          </label>
           <p className={styles.hint}>
-            المميزون للرئيسية لا يظهرون إلا بعد اعتماد اشتراك مدفوع يمنح «ظهور في الرئيسية»؛ الأدمن يحدد النشاط بعد التأكد من الدفع، وكل الأنشطة تظهر بحجم وأهمية متساويين. والجديد يبدأ دعمه 30 يومًا من الإنشاء ثم يتوقف عن قسم الجديد دون إلغاء النشر.
+            يظهر النشاط في قسم الجديد لمدة 30 يومًا من وقت الإنشاء. اختيار «مميز» يتم بعد ربط اشتراك مدفوع يمنح ظهور الرئيسية، من صفحة تعديل النشاط.
           </p>
-        </div>
+        </div>>
 
         <p className={styles.gpsHint}>
           صور الغلاف والشعار والمعرض تقدر تضيفها بعد إنشاء النشاط من صفحة التعديل.
