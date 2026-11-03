@@ -2,7 +2,7 @@
 
 import { hasUsableWhatsAppDestination } from '@/lib/data/contact-availability-utils'
 
-import { CheckCircleIcon, WhatsAppIcon, UserIcon } from '@/components/icons'
+import { CheckCircleIcon, WhatsAppIcon, UserIcon, CrownGoldIcon, SparklesIcon } from '@/components/icons'
 import type { WizardData, OwnerOption } from './new-business-wizard'
 import styles from './wizard.module.css'
 
@@ -98,6 +98,35 @@ export default function OptionsStep({ data, owners, update }: Props) {
               علشان تفعّل استقبال طلبات واتساب، أضف رقمًا صالحًا من نوع «واتساب» في خطوة الموقع والتواصل. وجود رقم للتواصل وحده لا يفعّل استقبال الطلبات تلقائيًا.
             </p>
           )}
+        </div>
+
+        <div className={styles.field}>
+          <span className={styles.label}>ميزات الظهور — مسؤول عنها الأدمن</span>
+          <div className={styles.row}>
+            <label className={`${styles.typeCard} ${data.is_featured ? styles.typeCardActive : ''}`}>
+              <input
+                type="checkbox"
+                checked={data.is_featured}
+                onChange={(e) => update({ is_featured: e.target.checked })}
+                style={{ display: 'none' }}
+              />
+              <span className={styles.typeCardIcon}><CrownGoldIcon size={16} /></span>
+              <span className={styles.typeCardLabel}>{data.is_featured ? 'مفعّل في المميزون' : 'إضافة للمميزون'}</span>
+            </label>
+            <label className={`${styles.typeCard} ${data.is_new_project ? styles.typeCardActive : ''}`}>
+              <input
+                type="checkbox"
+                checked={data.is_new_project}
+                onChange={(e) => update({ is_new_project: e.target.checked })}
+                style={{ display: 'none' }}
+              />
+              <span className={styles.typeCardIcon}><SparklesIcon size={16} /></span>
+              <span className={styles.typeCardLabel}>{data.is_new_project ? 'جديد لمدة شهر' : 'أنشطة جديدة'}</span>
+            </label>
+          </div>
+          <p className={styles.hint}>
+            المميزون يظهرون بأهمية وحجم متساويين. كل ميزة تبدأ مدتها تلقائيًا من لحظة الإنشاء؛ والجديد يتوقف بعد 30 يومًا ويظل النشاط منشورًا عاديًا.
+          </p>
         </div>
 
         <p className={styles.gpsHint}>
