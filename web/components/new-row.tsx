@@ -3,6 +3,7 @@ import BusinessCard from './business-card'
 import { SunriseIcon, ArrowLeftIcon } from './icons'
 import RowCarousel from './row-carousel'
 import type { Business } from '@/lib/data'
+import type { LatLng } from '@/lib/utils/distance'
 import styles from './new-row.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -11,16 +12,16 @@ import styles from './new-row.module.css'
 //   • Smart layout: ≤3 items → centered grid, >3 → carousel
 // ═══════════════════════════════════════════════════════════
 
-type Props = { businesses: Business[]; favoriteIds?: Set<string>; limit?: number }
+type Props = { businesses: Business[]; favoriteIds?: Set<string>; limit?: number; viewerLocation: LatLng | null }
 
-export default function NewRow({ businesses, limit = 12, favoriteIds = new Set() }: Props) {
+export default function NewRow({ businesses, limit = 12, favoriteIds = new Set(), viewerLocation }: Props) {
   if (businesses.length === 0) return null
   const visible = businesses.slice(0, limit)
   const useGrid = visible.length <= 3
 
   const cards = visible.map((b) => (
     <div key={b.id} className={styles.cardWrap}>
-      <BusinessCard business={b} tone="pink" context="new" isFavorite={favoriteIds.has(b.id)} />
+      <BusinessCard business={b} tone="pink" context="new" isFavorite={favoriteIds.has(b.id)} viewerLocation={viewerLocation} showDistance={!!viewerLocation} />
     </div>
   ))
 
