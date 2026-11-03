@@ -233,32 +233,51 @@ export const getPublishedBusinessCount = unstable_cache(
 // ═══════════════════════════════════════════════════════════
 
 export const getFeaturedBusinesses = unstable_cache(
-  async (limit = 6): Promise<Business[]> => {
+  async (limit?: number): Promise<Business[]> => {
     const supabase = createServiceClient()
-    const { data, error } = await supabase
-      .from('businesses')
-      .select(BUSINESS_COLUMNS)
-      .eq('is_published', true)
-      .eq('is_featured', true)
-      .or(`featured_until.is.null,featured_until.gte.${new Date().toISOString()}`)
-      .order('featured_pin', { ascending: false })
-      .order('featured_order', { ascending: true })
-      .order('rating_count', { ascending: false })
-      .order('rating_avg', { ascending: false })
-      .order('successful_orders', { ascending: false })
-      .order('is_verified', { ascending: false })
-      .limit(limit)
+    const pageSize = 200
+    const rows: unknown[] = []
 
-    if (error) {
-      console.error('[data] getFeaturedBusinesses error:', error.message)
-      return []
+    for (let offset = 0; ; offset += pageSize) {
+      let query = supabase
+        .from('businesses')
+        .select(BUSINESS_COLUMNS)
+        .eq('is_published', true)
+        .eq('is_featured', true)
+        .or(`featured_until.is.null,featured_until.gte.${new Date().toISOString()}`)
+        .order('featured_pin', { ascending: false })
+        .order('featured_order', { ascending: true })
+        .order('rating_count', { ascending: false })
+        .order('rating_avg', { ascending: false })
+        .order('successful_orders', { ascending: false })
+        .order('is_verified', { ascending: false })
+        .order('id', { ascending: true })
+        .range(offset, offset + pageSize - 1)
+
+      if (typeof limit === 'number' && Number.isFinite(limit) && limit > 0) {
+        query = query.limit(Math.min(pageSize, Math.max(1, Math.ceil(limit - rows.length))))
+      }
+
+      const { data, error } = await query
+      if (error) {
+        console.error('[data] getFeaturedBusinesses error:', error.message)
+        return []
+      }
+
+      rows.push(...(data ?? []))
+      if (!data || data.length < pageSize || (typeof limit === 'number' && rows.length >= limit)) {
+        break
+      }
     }
-    return await normalizeBusinesses(data, supabase)
+
+    const selected = typeof limit === 'number' && Number.isFinite(limit) && limit > 0
+      ? rows.slice(0, Math.floor(limit))
+      : rows
+    return await normalizeBusinesses(selected, supabase)
   },
-  ['businesses-featured-v3'],
+  ['businesses-featured-v4'],
   { revalidate: 300, tags: ['businesses', 'featured'] },
 )
-
 // ═══════════════════════════════════════════════════════════
 // 3. بدايات (New projects — مشاريع لسه فاتحة)
 // ═══════════════════════════════════════════════════════════
