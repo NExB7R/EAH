@@ -1,7 +1,7 @@
 -- EAH targeted regression checks for the 2026-10-29 admin/RLS migrations.
 -- Run only on a dedicated non-production database after applying the migration set.
 BEGIN;
-SELECT plan(47);
+SELECT plan(50);
 
 SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.businesses'::regclass), true, 'RLS remains enabled on businesses');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='businesses' AND policyname='businesses_admin_all'), 'admin activity policy uses shared admin authorization');
@@ -89,6 +89,21 @@ SELECT is((
 ), false, 'trigger-only functions are not callable through anonymous RPC');
 SELECT is(has_function_privilege('anon','public.generate_referral_code()','EXECUTE'), false, 'referral-code generator is not callable anonymously');
 SELECT is(has_function_privilege('authenticated','public.generate_referral_code()','EXECUTE'), false, 'referral-code generator is not callable by authenticated browser sessions');
+SELECT is((
+  has_function_privilege('anon','public.record_ad_event(uuid, text, uuid, uuid, text)','EXECUTE')
+  OR has_function_privilege('anon','public.record_page_view(text, uuid, uuid, uuid, text, text)','EXECUTE')
+  OR has_function_privilege('anon','public.heartbeat_page_session(uuid, text, uuid)','EXECUTE')
+), false, 'anonymous clients cannot call analytics write RPCs directly');
+SELECT is((
+  has_function_privilege('authenticated','public.record_ad_event(uuid, text, uuid, uuid, text)','EXECUTE')
+  OR has_function_privilege('authenticated','public.record_page_view(text, uuid, uuid, uuid, text, text)','EXECUTE')
+  OR has_function_privilege('authenticated','public.heartbeat_page_session(uuid, text, uuid)','EXECUTE')
+), false, 'authenticated browser clients cannot call analytics write RPCs directly');
+SELECT is((
+  has_function_privilege('service_role','public.record_ad_event(uuid, text, uuid, uuid, text)','EXECUTE')
+  AND has_function_privilege('service_role','public.record_page_view(text, uuid, uuid, uuid, text, text)','EXECUTE')
+  AND has_function_privilege('service_role','public.heartbeat_page_session(uuid, text, uuid)','EXECUTE')
+), true, 'trusted server retains analytics RPC execution');
 
 SELECT is((
   SELECT count(*)::int FROM pg_proc AS p JOIN pg_namespace AS n ON n.oid=p.pronamespace
