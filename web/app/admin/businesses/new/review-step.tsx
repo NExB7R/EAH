@@ -104,6 +104,18 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
           goTo={goTo}
         />
         <Item label="حالة النشر" value={publishStatus} step={2} goTo={goTo} />
+        <Item
+          label="الأنشطة المميزة"
+          value={data.is_featured ? 'مفعّل لمدة 30 يومًا من الإنشاء' : 'غير مفعّل'}
+          step={2}
+          goTo={goTo}
+        />
+        <Item
+          label="الأنشطة الجديدة"
+          value={data.is_new_project ? 'مفعّل لمدة 30 يومًا من الإنشاء' : 'غير مفعّل'}
+          step={2}
+          goTo={goTo}
+        />
         <Item label="الحالة" value={data.is_open ? 'مفتوح الآن' : 'مغلق'} step={2} goTo={goTo} />
         <Item
           label="استقبال طلبات واتساب"
