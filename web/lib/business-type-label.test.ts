@@ -30,6 +30,10 @@ describe('getBusinessTypeLabel', () => {
     ).toBe('مغسلة ملابس')
   })
 
+  it('shows the dedicated supermarket label', () => {
+    expect(getBusinessTypeLabel({ business_type: 'supermarket' })).toBe('ماركت')
+  })
+
   it('uses built-in labels and falls back safely for unknown categories', () => {
     expect(getBusinessTypeLabel({ business_type: 'pharmacy' })).toBe('صيدلية')
     expect(getBusinessTypeLabel({ business_type: 'future-type' })).toBe('أخرى')
