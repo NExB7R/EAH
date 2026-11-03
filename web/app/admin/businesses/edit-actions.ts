@@ -565,7 +565,7 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
 
   const { data: currentRow, error: currentError } = await adminDb
     .from('businesses')
-    .select('is_featured, featured_until, is_new_project, new_until, is_verified')
+    .select('is_featured, is_new_project, new_until, is_verified')
     .eq('id', businessId)
     .maybeSingle()
   if (currentError) return { ok: false, error: 'تعذر قراءة إعدادات النشاط قبل الحفظ' }
@@ -573,7 +573,6 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
 
   const now = new Date()
   const nowMs = now.getTime()
-  const currentFeaturedUntil = currentRow.featured_until ? new Date(currentRow.featured_until).getTime() : 0
   const currentNewUntil = currentRow.new_until ? new Date(currentRow.new_until).getTime() : 0
   // Homepage placement remains active for the paid plan's actual duration.
   // A fresh admin enable is allowed only when the business has that entitlement.
