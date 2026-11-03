@@ -118,8 +118,8 @@ const GENERAL_FAQ: QA[] = [
 ]
 
 const CATEGORIES = [
-  { key: 'customer', title: 'للعملاء', Icon: UserIcon, items: CUSTOMER_FAQ, tone: 'purple' },
-  { key: 'merchant', title: 'للتاجر', Icon: StoreIcon, items: MERCHANT_FAQ, tone: 'gold' },
+  { key: 'customer', title: 'للمشترين', Icon: UserIcon, items: CUSTOMER_FAQ, tone: 'purple' },
+  { key: 'merchant', title: 'للبايع', Icon: StoreIcon, items: MERCHANT_FAQ, tone: 'gold' },
   { key: 'general', title: 'عام', Icon: ShieldCheckIcon, items: GENERAL_FAQ, tone: 'teal' },
 ] as const
 
