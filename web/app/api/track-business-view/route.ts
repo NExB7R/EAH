@@ -116,15 +116,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: false, error: 'النشاط مش متاح' }, { status: 404 })
     }
 
-    const since = new Date(Date.now() - 30 * 60 * 1000).toISOString()
+    const now = new Date()
+    const dayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString()
     const { data: existing, error: duplicateError } = await supabase
       .from('page_view_events')
       .select('id')
       .eq('business_id', business.id)
       .eq('visitor_id', parsed.data.visitorId)
-      .eq('session_id', parsed.data.sessionId)
       .eq('event_scope', 'business')
-      .gte('occurred_at', since)
+      .gte('occurred_at', dayStart)
       .limit(1)
       .maybeSingle()
 
