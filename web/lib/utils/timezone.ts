@@ -137,3 +137,12 @@ export function parseCairoLocalDateTime(value: string): Date | null {
 
   return resolved
 }
+
+
+/** Interpret an HTML date input as 23:59:59.999 in Cairo local time. */
+export function parseCairoLocalDateEndOfDay(value: string): Date | null {
+  const date = parseCairoLocalDateTime(value.trim() + 'T23:59')
+  if (!date) return null
+  date.setUTCSeconds(59, 999)
+  return date
+}
