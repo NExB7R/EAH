@@ -1,12 +1,12 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { strictLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
+import { isEgyptianMobileNumber } from '@/lib/phone-validation'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Find by Phone (Truecaller Style)
 // ═══════════════════════════════════════════════════════════
 
-const EGYPT_PHONE_REGEX = /^01[0125][0-9]{8}$/
 const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
 
 type TurnstileResult = { ok: true } | { ok: false; unavailable: boolean }
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'الرقم فاضي' }, { status: 400 })
   }
 
-  if (!EGYPT_PHONE_REGEX.test(phone)) {
+  if (!isEgyptianMobileNumber(phone)) {
     return NextResponse.json(
       { error: 'الرقم مش صح — لازم يبدأ بـ 010/011/012/015', status: 'invalid' },
       { status: 400 },
