@@ -109,7 +109,9 @@ export default function ContactsSection() {
         <button
           type="button"
           className={styles.submitBtn}
-          disabled={phoneNumbers.length >= 10 || phoneNumbers.length + whatsappNumbers.length >= 15}
+          disabled={
+            phoneNumbers.length >= 10 || phoneNumbers.length + whatsappNumbers.length >= 15
+          }
           onClick={() => addNumber(setPhoneNumbers, whatsappNumbers.length)}
         >
           + إضافة رقم اتصال
@@ -150,7 +152,9 @@ export default function ContactsSection() {
         <button
           type="button"
           className={styles.submitBtn}
-          disabled={whatsappNumbers.length >= 10 || phoneNumbers.length + whatsappNumbers.length >= 15}
+          disabled={
+            whatsappNumbers.length >= 10 || phoneNumbers.length + whatsappNumbers.length >= 15
+          }
           onClick={() => addNumber(setWhatsappNumbers, phoneNumbers.length)}
         >
           + إضافة رقم واتساب
