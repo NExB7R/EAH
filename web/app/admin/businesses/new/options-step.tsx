@@ -22,35 +22,35 @@ export default function OptionsStep({ data, owners, update }: Props) {
     <div>
       <div className={styles.cardHead}>
         <h2 className={styles.cardTitle}>الخيارات والحالة</h2>
-        <p className={styles.cardHint}>اضبط الحالة الافتراضية وحدد التاجر إن وجد</p>
+        <p className={styles.cardHint}>اضبط الحالة الافتراضية وحدد البايع إن وجد</p>
       </div>
 
       <div className={styles.fields}>
         <label className={styles.field}>
-          <span className={styles.label}>حساب التاجر المرتبط (اختياري)</span>
+          <span className={styles.label}>حساب البايع المرتبط (اختياري)</span>
           <select
             value={data.owner_user_id}
             onChange={(e) => update({ owner_user_id: e.target.value })}
             className={styles.input}
           >
-            <option value="">— بدون تاجر مرتبط —</option>
+            <option value="">— بدون بايع مرتبط —</option>
             {owners.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.display_name}
                 {o.phone ? ` — ${o.phone}` : ''}
-                {o.role === 'merchant' ? ' — تاجر' : ' — عميل'}
+                {o.role === 'merchant' ? ' — بايع' : ' — مشتري'}
               </option>
             ))}
           </select>
           <span className={styles.hint}>
-            <UserIcon size={11} /> اختيار الحساب اختياري. لو اخترت حساب عميل، سيحوّله النظام إلى تاجر ويمنحه وحده صلاحية إدارة النشاط المرتبط به.
-            ولو سيبت الاختيار فاضي، النشاط هيتنشر ويظهر للزوار من غير تاجر مرتبط.
+            <UserIcon size={11} /> اختيار الحساب اختياري. لو اخترت حساب مشتري، سيحوّله النظام إلى بايع ويمنحه وحده صلاحية إدارة النشاط المرتبط به.
+            ولو سيبت الاختيار فاضي، النشاط هيتنشر ويظهر للزوار من غير بايع مرتبط.
           </span>
         </label>
 
         {owners.length === 0 && (
           <p className={styles.gpsHint}>
-            لا توجد حسابات عميل أو تاجر متاحة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير تاجر مرتبط، وتربطه لاحقًا من الإدارة.
+            لا توجد حسابات مشتري أو بايع متاحة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير بايع مرتبط، وتربطه لاحقًا من الإدارة.
           </p>
         )}
 
