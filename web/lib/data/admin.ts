@@ -182,17 +182,19 @@ export type FeaturedBusiness = {
 export async function getFeaturedBusinesses(): Promise<FeaturedBusiness[]> {
   const supabase = await createClient()
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('businesses')
     .select(
-      'id, name, slug, business_type, area, cover_image_url, is_published, is_featured, featured_pin, featured_order, featured_until, created_at',
+      'id, name, slug, business_type, area, cover_image_url, is_published, is_featured, featured_until, created_at',
     )
-    .or('is_featured.eq.true,is_published.eq.true')
-    .order('is_featured', { ascending: false })
-    .order('featured_pin', { ascending: false })
-    .order('featured_order', { ascending: true })
+    .eq('is_featured', true)
     .order('created_at', { ascending: false })
-    .limit(200)
+    .limit(1000)
+
+  if (error) {
+    console.error('[admin] getFeaturedBusinesses error:', error.message)
+    return []
+  }
 
   return (data ?? []) as FeaturedBusiness[]
 }
