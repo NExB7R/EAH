@@ -16,6 +16,21 @@
 
 ## [Unreleased]
 
+### feat — 2026-11-03 (Home Local Discovery)
+- فصل تصنيفات الأنشطة عن الهيرو وإنشاء شبكة مستقلة متجاوبة.
+- ترتيب Home: Featured / Nearby / Trending / Offers / New Activities / Recommendations.
+- Featured equal-card rotation بدون pin/order، مع دورة لا تكرر الأنشطة قبل اكتمال العرض.
+- Nearby يستخدم الموقع المحفوظ أو المنطقة اليدوية، ولا يعرض مسافات غير حقيقية.
+- Trending يعتمد إشارات آخر 30 يومًا ولا يستفيد من الدفع أو نقاط المشاركة.
+- Offers يطبق نافذة البداية/النهاية ويستخدم نشاط النشاط المرتبط كـproxy (لا يوجد offer-level tracking حتى الآن).
+- New Activities: مدة 30 يومًا من تفعيل الأدمن ثم توقف تلقائي عن القسم.
+- Recommendations تختفي حتى تتوفر إشارات اهتمام صريحة كافية.
+- إزالة مشاركة المنصة المكررة وبطاقة بريد الدعم غير المضبوطة.
+- Insights: استخدام `page_view_events.occurred_at` الفعلي.
+
+**Status:** feature branch only; CI/build/E2E pending; not merged or deployed.
+
+
 ### feat — 2026-10-08 (Session 23)
 - Roles Authority: lib/auth/roles.ts + docs/ROLES_MATRIX.md
 - Admin Redirects: /account, /merchant -> /admin (ما عدا /account/edit)
