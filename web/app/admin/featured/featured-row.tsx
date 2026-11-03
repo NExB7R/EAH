@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ExternalLinkIcon, CheckCircleIcon, CloseIcon } from '@/components/icons'
 import { toggleFeatured } from './actions'
@@ -19,6 +20,7 @@ type Props = {
 }
 
 export default function FeaturedRow({ business }: Props) {
+  const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [msg, setMsg] = useState<string | null>(null)
   const subscriptionExpiry = business.paid_featured_home_expires_at
@@ -33,7 +35,8 @@ export default function FeaturedRow({ business }: Props) {
     if (!confirm(`إيقاف ظهور "${business.name}" في المميزون؟`)) return
     startTransition(async () => {
       const result = await toggleFeatured(business.id, true)
-      setMsg(result.ok ? 'تم إيقاف الميزة' : result.error)
+      if (result.ok) router.refresh()
+      else setMsg(result.error)
     })
   }
 
