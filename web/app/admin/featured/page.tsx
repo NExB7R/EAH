@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
-import { CrownGoldIcon, PlusIcon, ClockIcon, SparklesIcon } from '@/components/icons'
+import { CrownGoldIcon, PlusIcon, ClockIcon, CheckCircleIcon } from '@/components/icons'
 import { getFeaturedBusinesses } from '@/lib/data/admin'
 import FeaturedList from './featured-list'
 import FeaturedFilters from './featured-filters'
@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic'
 
 type Stats = {
   total: number
-  pinned: number
+  active: number
   expiringSoon: number
 }
 
@@ -27,7 +27,7 @@ function computeStats(businesses: Awaited<ReturnType<typeof getFeaturedBusinesse
   const featured = businesses.filter((b) => b.is_featured)
   return {
     total: featured.length,
-    pinned: featured.filter((b) => b.featured_pin).length,
+    active: featured.filter((b) => !b.featured_until || new Date(b.featured_until).getTime() > Date.now()).length,
     expiringSoon: featured.filter((b) => isExpiringSoon(b.featured_until)).length,
   }
 }
@@ -48,7 +48,6 @@ export default async function AdminFeaturedPage({
   const stats = computeStats(businesses)
 
   let filtered = featured
-  if (filter === 'pinned') filtered = filtered.filter((b) => b.featured_pin)
   if (filter === 'expiring') {
     filtered = filtered.filter((b) => isExpiringSoon(b.featured_until))
   }
@@ -74,11 +73,11 @@ export default async function AdminFeaturedPage({
         </div>
         <div className={styles.statCard}>
           <span className={styles.statIcon}>
-            <SparklesIcon size={20} />
+            <CheckCircleIcon size={20} />
           </span>
           <div>
-            <span className={styles.statValue}>{stats.pinned}</span>
-            <span className={styles.statLabel}>مثبّت في المقدمة</span>
+            <span className={styles.statValue}>{stats.active}</span>
+            <span className={styles.statLabel}>مؤهل للظهور الآن</span>
           </div>
         </div>
         <div className={`${styles.statCard} ${stats.expiringSoon > 0 ? styles.statWarn : ''}`}>
