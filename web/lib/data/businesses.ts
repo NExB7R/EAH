@@ -366,6 +366,7 @@ export const getTrendingBusinesses = unstable_cache(
     const [
       { data: activities, error: activitiesError },
       { data: contactEvents, error: contactEventsError },
+      { data: approvedComments, error: commentsError },
       { data: pageViews, error: pageViewsError },
       { data: deliveredOrders, error: ordersError },
       { data: approvedReviews, error: reviewsError },
@@ -381,6 +382,15 @@ export const getTrendingBusinesses = unstable_cache(
         .from('engagement_events')
         .select('business_id, user_id, action, ip_hash, created_at')
         .in('business_id', ids)
+        .in('action', ['phone_reveal', 'whatsapp'])
+        .gte('created_at', since30)
+        .order('created_at', { ascending: false })
+        .limit(20000),
+      supabase
+        .from('business_comments')
+        .select('business_id, user_id, parent_id, created_at')
+        .in('business_id', ids)
+        .eq('status', 'approved')
         .gte('created_at', since30)
         .order('created_at', { ascending: false })
         .limit(20000),
@@ -410,10 +420,11 @@ export const getTrendingBusinesses = unstable_cache(
         .limit(20000),
     ])
 
-    if (activitiesError || contactEventsError || pageViewsError || ordersError || reviewsError) {
+    if (activitiesError || contactEventsError || commentsError || pageViewsError || ordersError || reviewsError) {
       console.error('[data] trend signals partially unavailable:', {
         activities: activitiesError?.message,
         contacts: contactEventsError?.message,
+        comments: commentsError?.message,
         pageViews: pageViewsError?.message,
         orders: ordersError?.message,
         reviews: reviewsError?.message,
@@ -482,8 +493,6 @@ export const getTrendingBusinesses = unstable_cache(
       follow: 2.5,
       favorite: 2.5,
       share: 3.5,
-      rating: 3,
-      comment: 2,
       reply: 1.5,
       like: 0.5,
     }
@@ -500,8 +509,6 @@ export const getTrendingBusinesses = unstable_cache(
     const contactWeights: Record<string, number> = {
       phone_reveal: 0.8,
       whatsapp: 1.2,
-      review: 3,
-      comment: 2,
     }
     for (const event of contactEvents ?? []) {
       addSignal(
@@ -516,6 +523,16 @@ export const getTrendingBusinesses = unstable_cache(
 
     // Session-level page views are low-weight momentum signals. The same
     // visitor contributes at most once per business/action/day after server dedupe.
+    for (const comment of approvedComments ?? []) {
+      addSignal(
+        comment.business_id,
+        comment.user_id,
+        comment.parent_id ? 'reply' : 'comment',
+        comment.created_at,
+        comment.parent_id ? 1.5 : 2,
+      )
+    }
+
     for (const event of pageViews ?? []) {
       if (!event.business_id) continue
       addSignal(
