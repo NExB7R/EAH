@@ -70,7 +70,7 @@ export default function FeaturedBento({ businesses, viewerLocation }: Props) {
             </button>
           )}
 
-          <div className={styles.grid}>
+          <div className={`${styles.grid} ${styles[`count${Math.min(visible.length, 8)}`] ?? ''}`}>
             {visible.map((b) => (
               <BusinessCard
                 key={b.id}
