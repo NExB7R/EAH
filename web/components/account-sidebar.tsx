@@ -16,7 +16,6 @@ import {
   SparkleStarIcon,
 } from './icons'
 import styles from './account-sidebar.module.css'
-import GlobalShareAction from './global-share-action'
 
 type Props = {
   unreadNotifs?: number
@@ -112,9 +111,6 @@ export default function AccountSidebar({ unreadNotifs = 0 }: Props) {
             </ul>
           </div>
         ))}
-        <ul className={styles.list}>
-          <li><GlobalShareAction className={styles.item} label="شارك المنصة ورمز الاستجابة السريعة" /></li>
-        </ul>
       </nav>
     </aside>
   )
