@@ -139,13 +139,14 @@ export function useFormState(business: AdminBusiness | null): FormState {
   const [isVerified, setIsVerified] = useState(!!business?.is_verified)
   const [featuredOrder, setFeaturedOrder] = useState(0)
   const [featuredPin, setFeaturedPin] = useState(false)
-  const [featuredUntil, setFeaturedUntil] = useState(
-    featuredUntilValue ? new Date(featuredUntilValue).toISOString().slice(0, 10) : '',
-  )
+  const toDateInput = (value: string | null) => {
+    if (!value) return ''
+    const timestamp = new Date(value).getTime()
+    return Number.isFinite(timestamp) ? new Date(timestamp).toISOString().slice(0, 10) : ''
+  }
+  const [featuredUntil, setFeaturedUntil] = useState(toDateInput(featuredUntilValue))
   const [isNewProject, setIsNewProject] = useState(newProjectStillActive)
-  const [newUntil, setNewUntil] = useState(
-    newUntilValue ? new Date(newUntilValue).toISOString().slice(0, 10) : '',
-  )
+  const [newUntil, setNewUntil] = useState(toDateInput(newUntilValue))
 
   const [hours, setHours] = useState<Record<DayKey, DayHours>>(() =>
     readFileAsHours(
