@@ -89,7 +89,7 @@ async function HomeSections({
       : Promise.resolve({ businesses: [], description: '' }),
   ])
 
-  const offers = fairOrderOffers(rawOffers, 16)
+  const offers = fairOrderOffers(rawOffers, 16, trendingRaw)
 
   // Featured eligibility is independent of public trend/reputation ranking.
   // The client rotation sees the complete eligible set and never prioritizes pins/order.
