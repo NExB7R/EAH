@@ -217,7 +217,9 @@
   .logoWrap,
   .shibinSign,
   .hook,
-  .searchWrap,
+  .searchWrap {
+    animation: none;
+  }
 }
 
 /* ─── Mobile: constrain logo + reduce hero height ─── */
