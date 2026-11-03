@@ -40,7 +40,7 @@ export default function AuthForm({ nonce }: { nonce: string }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const refCode = searchParams.get('ref') ?? ''
-  const [tab, setTab] = useState<Tab>(refCode ? 'signup' : 'login')
+  const [tab, setTab] = useState<Tab>(refCode || searchParams.get('mode') === 'signup' ? 'signup' : 'login')
   const [gender, setGender] = useState<Gender>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirm, setShowConfirm] = useState(false)
