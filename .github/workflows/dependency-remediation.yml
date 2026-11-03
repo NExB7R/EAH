@@ -1,0 +1,107 @@
+name: Dependency Remediation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: dependency-remediation
+  cancel-in-progress: false
+
+jobs:
+  remediate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install current lockfile
+        working-directory: web
+        run: npm ci
+
+      - name: Apply non-breaking production dependency fixes
+        working-directory: web
+        run: |
+          set +e
+          npm audit fix --omit=dev 2>&1 | tee npm-audit-fix.log
+          FIX_EXIT=${PIPESTATUS[0]}
+          set -e
+          echo "npm audit fix exit code: $FIX_EXIT" >> npm-audit-fix.log
+          npm audit --omit=dev --json > npm-audit-after.json || true
+
+      - name: TypeScript
+        working-directory: web
+        run: npm run typecheck
+
+      - name: ESLint
+        working-directory: web
+        run: npm run lint
+
+      - name: Stylelint
+        working-directory: web
+        run: npx stylelint "**/*.css" --allow-empty-input
+
+      - name: Build
+        working-directory: web
+        run: npm run build
+
+      - name: Unit tests
+        working-directory: web
+        run: npm test
+
+      - name: Knip
+        working-directory: web
+        run: npm run knip
+
+      - name: Duplicate code scan
+        working-directory: web
+        run: npm run dup
+
+      - name: Check patch whitespace and lockfile changes
+        run: |
+          git diff --check
+          git diff --stat -- web/package.json web/package-lock.json
+          if git diff --quiet -- web/package.json web/package-lock.json; then
+            echo "::error::npm audit fix produced no dependency changes; inspect npm-audit-after.json."
+            exit 1
+          fi
+
+      - name: Create review branch and pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          BRANCH="security/production-audit-fix-$RUN_ID"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
+          git add web/package.json web/package-lock.json
+          git commit -m "security(deps): apply non-breaking production audit fixes"
+          git push --set-upstream origin "$BRANCH"
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "security(deps): patch production audit findings" \
+            --body "Automated non-breaking `npm audit fix --omit=dev` candidate. No `--force` was used. TypeScript, ESLint, Stylelint, Next.js build, Vitest, Knip and jscpd must pass before merge. Review the `npm-audit-after.json` artifact for any residual advisories; this workflow does not merge automatically."
+
+      - name: Upload audit evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dependency-remediation-evidence-${{ github.run_id }}
+          path: |
+            web/npm-audit-fix.log
+            web/npm-audit-after.json
+          retention-days: 14
+          if-no-files-found: ignore
