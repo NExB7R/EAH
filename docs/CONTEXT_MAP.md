@@ -274,7 +274,7 @@
 | `features.ts` | getFeatureFlags, isFeatureEnabled | EAH — Feature Flags (Server reader) |
 | `hooks/use-distance.ts` | useDistance | EAH — useDistance |
 | `hooks/use-draft.ts` | useDraft | EAH — Draft persistence (localStorage, TTL 7d, versioned) |
-| `hooks/use-fair-rotation.ts` | sliceVisible, useFairRotation | EAH — useFairRotation (Performance Optimized) |
+| `hooks/use-fair-rotation.ts` | sliceVisible, nextPageStart, previousPageStart, useFairRotation | EAH — useFairRotation (Performance Optimized) |
 | `hooks/use-mounted.ts` | useMounted, useMediaQuery | useMounted — يعمل false على server + أول render على client |
 | `hooks/use-online-status.ts` | useOnlineStatus | EAH — Online Status Hook (2026) |
 | `hooks/use-voice-search.ts` | useVoiceSearch | EAH — Voice Search Hook (Hybrid) |
