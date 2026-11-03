@@ -7,7 +7,7 @@ import styles from './row-carousel.module.css'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — RowCarousel
-// صف واحد أفقي + أسهم مخفية + auto-scroll
+// صف واحد أفقي + أسهم؛ الحركة التلقائية اختيارية ولا تعمل إلا بطلب صريح
 // يتوقف: hover / touch / خارج الشاشة / tab مخفي
 // ═══════════════════════════════════════════════════════════
 
@@ -15,9 +15,10 @@ type Props = {
   children: React.ReactNode
   accent: string
   intervalMs?: number
+  auto?: boolean
 }
 
-export default function RowCarousel({ children, accent, intervalMs = 10000 }: Props) {
+export default function RowCarousel({ children, accent, intervalMs = 10000, auto = false }: Props) {
   const trackRef = useRef<HTMLDivElement | null>(null)
   const [paused, setPaused] = useState(false)
   const [inView, setInView] = useState(true)
@@ -74,10 +75,10 @@ export default function RowCarousel({ children, accent, intervalMs = 10000 }: Pr
   }, [step])
 
   useEffect(() => {
-    if (!mounted || reduced || paused || !inView || !hasOverflow) return
+    if (!auto || !mounted || reduced || paused || !inView || !hasOverflow) return
     const t = setInterval(autoStep, intervalMs)
     return () => clearInterval(t)
-  }, [mounted, reduced, paused, inView, hasOverflow, intervalMs, autoStep])
+  }, [auto, mounted, reduced, paused, inView, hasOverflow, intervalMs, autoStep])
 
   return (
     <div
