@@ -1,4 +1,3 @@
-import { createHash } from 'crypto'
 import { NextResponse, type NextRequest } from 'next/server'
 import { z } from 'zod'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -106,14 +105,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: false, error: 'تعذر تسجيل الزيارة' }, { status: 500 })
     }
 
-    // The hash is intentionally not persisted. It only makes duplicate route
-    // requests visible in structured diagnostics without exposing the raw IP.
-    const requestKey = createHash('sha256')
-      .update(`${parsed.data.visitorId}:${parsed.data.sessionId}:${business.id}`)
-      .digest('hex')
-      .slice(0, 12)
-
-    return NextResponse.json({ ok: true, recorded: true, requestKey })
+    return NextResponse.json({ ok: true, recorded: true }))
   } catch (error) {
     console.error('[track-business-view] request failed:', (error as Error).message)
     return NextResponse.json({ ok: false, error: 'تعذر تسجيل الزيارة' }, { status: 500 })
