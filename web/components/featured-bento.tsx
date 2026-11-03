@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import type { Business } from '@/lib/data'
+import type { LatLng } from '@/lib/utils/distance'
 import BusinessCard from './business-card'
 import { CrownGoldIcon, ArrowLeftIcon } from './icons'
 import { useFairRotation } from '@/lib/hooks/use-fair-rotation'
@@ -16,13 +17,14 @@ import styles from './featured-bento.module.css'
 
 type Props = {
   businesses: Business[]
+  viewerLocation: LatLng | null
 }
 
 const PAGE_SIZES = { mobile: 4, tablet: 6, desktop: 8 }
 const INTERVAL_MS = 8000
 
-export default function FeaturedBento({ businesses }: Props) {
-  const { visible, containerRef, setPaused, next, prev } = useFairRotation<Business>({
+export default function FeaturedBento({ businesses, viewerLocation }: Props) {
+  const { visible, containerRef, setPaused, next, prev, pageSize } = useFairRotation<Business>({
     items: businesses,
     pageSizes: PAGE_SIZES,
     intervalMs: INTERVAL_MS,
@@ -31,7 +33,7 @@ export default function FeaturedBento({ businesses }: Props) {
 
   if (businesses.length === 0) return null
 
-  const hasMore = businesses.length > PAGE_SIZES.mobile
+  const hasMore = businesses.length > pageSize
 
   return (
     <section ref={containerRef as React.RefObject<HTMLElement>} className={styles.section}>
@@ -76,6 +78,8 @@ export default function FeaturedBento({ businesses }: Props) {
                 tone="gold"
                 variant="featured"
                 context="featured"
+                viewerLocation={viewerLocation}
+                showDistance={!!viewerLocation}
               />
             ))}
           </div>
