@@ -30,6 +30,12 @@ jobs:
         working-directory: web
         run: npm ci
 
+      - name: Remove unused font packages and pin patched zod
+        working-directory: web
+        run: |
+          npm uninstall @fontsource-variable/cairo @fontsource/great-vibes @fontsource/tajawal
+          npm pkg set overrides.zod=4.6.6
+
       - name: Apply non-breaking production dependency fixes
         working-directory: web
         run: |
@@ -59,6 +65,14 @@ jobs:
       - name: Unit tests
         working-directory: web
         run: npm test
+
+      - name: Knip unused-file and dependency scan
+        working-directory: web
+        run: npm run knip
+
+      - name: Duplicate code scan
+        working-directory: web
+        run: npm run dup
 
       - name: Require no remaining high or critical production advisories
         working-directory: web
