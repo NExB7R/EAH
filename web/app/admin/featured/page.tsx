@@ -27,7 +27,7 @@ function computeStats(businesses: Awaited<ReturnType<typeof getFeaturedBusinesse
   const featured = businesses.filter((b) => b.is_featured)
   return {
     total: featured.length,
-    active: featured.filter((b) => !b.featured_until || new Date(b.featured_until).getTime() > Date.now()).length,
+    active: featured.filter((b) => b.is_published && (!b.featured_until || new Date(b.featured_until).getTime() > Date.now())).length,
     expiringSoon: featured.filter((b) => isExpiringSoon(b.featured_until)).length,
   }
 }
