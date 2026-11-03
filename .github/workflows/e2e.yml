@@ -23,6 +23,7 @@ concurrency:
 
 jobs:
   e2e:
+    if: github.event_name != 'deployment_status' || (github.event.deployment_status.state == 'success' && (github.event.deployment.ref == 'main' || github.event.deployment.ref == 'v2'))
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
