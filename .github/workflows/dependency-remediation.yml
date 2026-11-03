@@ -46,6 +46,12 @@ jobs:
           echo "npm audit fix exit code: $FIX_EXIT" >> npm-audit-fix.log
           npm audit --omit=dev --json > npm-audit-after.json || true
 
+      - name: Normalize formatting
+        working-directory: web
+        run: |
+          npx prettier --write "**/*.{ts,tsx,css,json}"
+          npx prettier --check "**/*.{ts,tsx,css,json}"
+
       - name: TypeScript
         working-directory: web
         run: npm run typecheck
@@ -90,9 +96,9 @@ jobs:
       - name: Check patch whitespace and lockfile changes
         run: |
           git diff --check
-          git diff --stat -- web/package.json web/package-lock.json
-          if git diff --quiet -- web/package.json web/package-lock.json; then
-            echo "::error::npm audit fix produced no dependency changes; inspect npm-audit-after.json."
+          git diff --stat -- web
+          if git diff --quiet -- web; then
+            echo "::error::Remediation produced no changes; inspect npm-audit-after.json."
             exit 1
           fi
 
@@ -105,14 +111,15 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$BRANCH"
+          git add -u web
           git add web/package.json web/package-lock.json
-          git commit -m "security(deps): apply non-breaking production audit fixes"
+          git commit -m "chore(quality): patch dependencies and normalize formatting"
           git push --set-upstream origin "$BRANCH"
           gh pr create \
             --base main \
             --head "$BRANCH" \
-            --title "security(deps): patch production audit findings" \
-            --body "Automated non-breaking `npm audit fix --omit=dev` candidate. No `--force` was used. TypeScript, ESLint, Stylelint, Next.js build, Vitest, Knip and jscpd must pass before merge. Review the `npm-audit-after.json` artifact for any residual advisories; this workflow does not merge automatically."
+            --title "chore(quality): dependency and formatting cleanup" \
+            --body "Automated non-breaking production dependency remediation, unused font package removal, patched zod override, and Prettier normalization. No `--force` was used. TypeScript, ESLint, Prettier, Stylelint, Next.js build, Vitest, Knip and jscpd must pass before merge. Review the `npm-audit-after.json` artifact for any residual advisories; this workflow does not merge automatically."
 
       - name: Upload audit evidence
         if: always()
