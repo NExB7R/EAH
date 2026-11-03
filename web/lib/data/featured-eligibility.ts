@@ -21,7 +21,8 @@ type SubscriptionRow = {
  * the featured_home feature is eligible. Admins still choose which eligible
  * activities receive the slot through businesses.is_featured.
  */
-export async function getPaidFeaturedHomeBusinessIds(
+export async function getPaidBusinessIdsWithFeature(
+  feature: 'featured_badge' | 'featured_home',
   businessIds?: readonly string[],
 ): Promise<Set<string>> {
   if (businessIds && businessIds.length === 0) return new Set()
@@ -67,13 +68,19 @@ export async function getPaidFeaturedHomeBusinessIds(
       plan?.is_active === true &&
       Number.isFinite(price) &&
       price > 0 &&
-      features.includes('featured_home')
+      features.includes(feature)
     ) {
       eligible.add(row.business_id)
     }
   }
 
   return eligible
+}
+
+export async function getPaidFeaturedHomeBusinessIds(
+  businessIds?: readonly string[],
+): Promise<Set<string>> {
+  return getPaidBusinessIdsWithFeature('featured_home', businessIds)
 }
 
 export async function hasPaidFeaturedHomeSubscription(businessId: string): Promise<boolean> {
