@@ -167,6 +167,8 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
         ? document.activeElement
         : null
     const drawer = drawerRef.current
+    const previousBodyOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     const focusableSelector = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
     const getFocusableElements = () =>
       Array.from(drawer?.querySelectorAll<HTMLElement>(focusableSelector) ?? []).filter(
@@ -205,6 +207,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
     window.addEventListener('keydown', onKeyDown)
     return () => {
       window.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = previousBodyOverflow
       previouslyFocusedElement?.focus()
     }
   }, [open])
