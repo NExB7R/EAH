@@ -352,20 +352,60 @@ export const getBusinessesByType = unstable_cache(
 export const getTrendingBusinesses = unstable_cache(
   async (limit = 10): Promise<Business[]> => {
     const supabase = createServiceClient()
-    const { data, error } = await supabase
+    const pageSize = 200
+    const concurrency = 4
+    const { count, error: countError } = await supabase
       .from('businesses')
-      .select(BUSINESS_COLUMNS)
+      .select('id', { count: 'exact', head: true })
       .eq('is_published', true)
-      .order('successful_orders', { ascending: false })
-      .limit(limit * 3)
 
-    if (error) {
-      console.error('[data] getTrendingBusinesses error:', error.message)
+    if (countError || count === null) {
+      console.error('[data] getTrendingBusinesses count error:', countError?.message)
       return []
     }
-    return sortByTrend(await normalizeBusinesses(data, supabase)).slice(0, limit)
+    if (count === 0) return []
+
+    const offsets = Array.from(
+      { length: Math.ceil(count / pageSize) },
+      (_, index) => index * pageSize,
+    )
+    const rows: unknown[] = []
+
+    for (let index = 0; index < offsets.length; index += concurrency) {
+      const pageResults = await Promise.all(
+        offsets.slice(index, index + concurrency).map((offset) =>
+          supabase
+            .from('businesses')
+            .select(BUSINESS_COLUMNS)
+            .eq('is_published', true)
+            .order('id', { ascending: true })
+            .range(offset, offset + pageSize - 1),
+        ),
+      )
+      const failedPage = pageResults.find((result) => result.error)
+      if (failedPage?.error) {
+        console.error('[data] getTrendingBusinesses page error:', failedPage.error.message)
+        return []
+      }
+      for (const result of pageResults) rows.push(...(result.data ?? []))
+    }
+
+    const normalized: Business[] = []
+    for (let index = 0; index < rows.length; index += pageSize * concurrency) {
+      const batches = await Promise.all(
+        Array.from({ length: concurrency }, (_, batchIndex) => {
+          const start = index + batchIndex * pageSize
+          return start < rows.length
+            ? normalizeBusinesses(rows.slice(start, start + pageSize), supabase)
+            : Promise.resolve([] as Business[])
+        }),
+      )
+      normalized.push(...batches.flat())
+    }
+
+    return sortByTrend(normalized).slice(0, Math.max(0, Math.floor(limit)))
   },
-  ['businesses-trending-v3'],
+  ['businesses-trending-v4'],
   { revalidate: 60, tags: ['businesses', 'trending'] },
 )
 
