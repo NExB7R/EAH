@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { AREAS } from '@/lib/data/areas'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Account Edit Server Actions
@@ -93,6 +94,31 @@ export async function saveNearbyLocation(formData: FormData): Promise<ActionResu
   revalidatePath('/')
   revalidatePath('/nearby')
   revalidatePath('/account/edit')
+  return { ok: true }
+}
+
+export async function saveNearbyArea(formData: FormData): Promise<ActionResult> {
+  const { supabase, user } = await requireUser()
+  if (!user || user.is_anonymous) return { ok: false, error: 'سجّل دخولك الأول عشان نحفظ منطقتك' }
+
+  const area = String(formData.get('area') ?? '').trim()
+  if (!area || !(AREAS as readonly string[]).includes(area)) {
+    return { ok: false, error: 'اختار منطقة صحيحة من القائمة' }
+  }
+
+  // A manual area choice replaces stale GPS coordinates; no distance is shown
+  // until the member explicitly grants precise location again.
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({ default_area: area, default_latitude: null, default_longitude: null })
+    .eq('id', user.id)
+    .select('id')
+    .maybeSingle()
+
+  if (error || !data) return { ok: false, error: 'تعذر حفظ المنطقة. جرّب مرة تانية' }
+
+  revalidatePath('/')
+  revalidatePath('/nearby')
   return { ok: true }
 }
 
