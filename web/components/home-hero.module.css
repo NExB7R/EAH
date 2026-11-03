@@ -8,9 +8,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: 104px 16px 40px;
+  min-height: clamp(560px, 82svh, 760px);
+  padding: 104px 16px 48px;
   padding-top: calc(104px + env(safe-area-inset-top));
   overflow: hidden;
   isolation: isolate;
@@ -25,15 +24,15 @@
 
 @media (min-width: 1024px) {
   .hero {
-    min-height: 100vh;
-    padding: 112px 24px 64px;
+    min-height: clamp(600px, 84svh, 780px);
+    padding: 112px 24px 56px;
     padding-top: calc(112px + env(safe-area-inset-top));
   }
 }
 
 @media (min-width: 1440px) {
   .hero {
-    padding: 152px 32px 104px;
+    padding: 132px 32px 72px;
     padding-top: calc(152px + env(safe-area-inset-top));
   }
 }
@@ -72,20 +71,20 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 32px;
+  gap: clamp(22px, 3.2vw, 32px);
 }
 
 @media (min-width: 640px) {
   .content {
     max-width: 640px;
-    gap: 40px;
+    gap: 32px;
   }
 }
 
 @media (min-width: 1024px) {
   .content {
     max-width: 760px;
-    gap: 36px;
+    gap: 30px;
   }
 }
 
@@ -231,10 +230,10 @@
   .hero {
     min-height: auto;
     padding-top: calc(88px + env(safe-area-inset-top));
-    padding-bottom: 32px;
+    padding-bottom: 28px;
   }
   .content {
-    gap: 20px;
+    gap: 18px;
   }
   .hook {
     font-size: clamp(1.3rem, 5vw, 1.9rem);
