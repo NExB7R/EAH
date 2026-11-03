@@ -26,6 +26,10 @@ jobs:
         working-directory: web
         run: npm install --package-lock-only --ignore-scripts --no-audit
 
+      - name: Verify production dependency audit
+        working-directory: web
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Commit lockfile to source branch
         shell: bash
         run: |
