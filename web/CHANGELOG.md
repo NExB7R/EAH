@@ -28,6 +28,7 @@
 - Supermarket: توحيد التصنيفات والفلاتر ومسارات إنشاء/تعديل النشاط؛ أضيف migration وpgTAP test للبيئة المعزولة.
 - Privacy: توضيح قياس المشاهدات المؤقتة في سياسة الخصوصية.
 - Insights: استخدام `page_view_events.occurred_at` الفعلي.
+- E2E: البحث عن Vercel Preview المرتبط بالـPR SHA عبر GitHub deployment status دون افتراض حساب منشئ محدد.
 
 **Status:** Draft PR #39, feature branch only. CI/E2E/isolated DB tests still required on latest HEAD; not merged or deployed.
 
