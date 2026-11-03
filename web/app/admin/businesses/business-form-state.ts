@@ -123,16 +123,20 @@ export function useFormState(business: AdminBusiness | null): FormState {
 
   const [isPublished, setIsPublished] = useState(business?.is_published ?? false)
   const [isOpen, setIsOpen] = useState(business?.is_open ?? true)
-  const [acceptsWhatsapp, setAcceptsWhatsapp] = useState(false)
+  const [acceptsWhatsapp, setAcceptsWhatsapp] = useState(business?.accepts_whatsapp_orders ?? false)
   const [isFeatured, setIsFeatured] = useState(
     business?.is_featured ?? false,
   )
   const [isVerified, setIsVerified] = useState(!!business?.is_verified)
-  const [featuredOrder, setFeaturedOrder] = useState(0)
-  const [featuredPin, setFeaturedPin] = useState(false)
-  const [featuredUntil, setFeaturedUntil] = useState('')
-  const [isNewProject, setIsNewProject] = useState(false)
-  const [newUntil, setNewUntil] = useState('')
+  const [featuredOrder, setFeaturedOrder] = useState(business?.featured_order ?? 0)
+  const [featuredPin, setFeaturedPin] = useState(business?.featured_pin ?? false)
+  const [featuredUntil, setFeaturedUntil] = useState(
+    business?.featured_until ? new Date(business.featured_until).toISOString().slice(0, 16) : '',
+  )
+  const [isNewProject, setIsNewProject] = useState(business?.is_new_project ?? false)
+  const [newUntil, setNewUntil] = useState(
+    business?.new_until ? new Date(business.new_until).toISOString().slice(0, 16) : '',
+  )
 
   const [hours, setHours] = useState<Record<DayKey, DayHours>>(() =>
     readFileAsHours(
