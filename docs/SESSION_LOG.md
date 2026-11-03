@@ -1593,3 +1593,11 @@ Admin list:
 - Previous PR runs belonged to older SHA `1fae164...`: Invariants and CodeQL passed; TypeScript failed on duplicate supermarket label, missing supermarket synonyms and missing reputation import (fixed later); E2E did not reach Playwright because the Vercel Preview wait failed.
 - These results do not certify the current HEAD. Run/review current CI and E2E before merge.
 
+
+
+### 2026-11-03 — Featured duration is now subscription-driven
+- Paid homepage placement lasts exactly while an active non-trial paid plan with `featured_home` remains valid; monthly/quarterly/yearly durations are honored.
+- Paid `featured_badge` is independent. Public activity cards show the badge for the badge entitlement even when the activity is not selected for the homepage section.
+- Admin can immediately pause the homepage selection. There is no arbitrary extension beyond the paid subscription.
+- New Activities alone has a server-started 30-day window and an explicit off/save → on/save renewal after expiry.
+
