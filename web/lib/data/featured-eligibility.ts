@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { createServiceClient } from '@/lib/supabase/service'
+import { hasActivePaidPlanFeature } from '@/lib/plan-entitlements'
 
 type SubscriptionRow = {
   business_id: string
@@ -58,20 +59,7 @@ export async function getPaidBusinessIdsWithFeature(
   const eligible = new Set<string>()
 
   for (const row of rows) {
-    const plan = row.plan
-    const features = Array.isArray(plan?.features) ? plan.features : []
-    const price = Number(plan?.price_egp ?? 0)
-
-    if (
-      row.status === 'active' &&
-      !row.is_trial &&
-      plan?.is_active === true &&
-      Number.isFinite(price) &&
-      price > 0 &&
-      features.includes(feature)
-    ) {
-      eligible.add(row.business_id)
-    }
+    if (hasActivePaidPlanFeature(row, feature)) eligible.add(row.business_id)
   }
 
   return eligible
