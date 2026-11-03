@@ -121,13 +121,8 @@ export function useFairRotation<T extends { id: string }>({
     const order = orderRef.current
     if (order.length === 0) return
     const size = pageSizeRef.current
-    const prevCursor = cursorRef.current - size
-    if (prevCursor < 0) {
-      const lastPage = Math.max(0, Math.floor((order.length - 1) / size))
-      cursorRef.current = lastPage * size
-    } else {
-      cursorRef.current = prevCursor
-    }
+    // Do not wrap backward from page one: that could skip unseen items before the cycle resets.
+    cursorRef.current = Math.max(0, cursorRef.current - size)
     setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
     persist()
   }, [persist])
