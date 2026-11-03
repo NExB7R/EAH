@@ -53,7 +53,11 @@ export default function SettingsSection() {
           id="is_featured"
           type="checkbox"
           checked={ctx.isFeatured}
-          onChange={(e) => ctx.setIsFeatured(e.target.checked)}
+          onChange={(e) => {
+            if (e.target.checked && !ctx.isFeatured) ctx.setRenewFeaturedRequested(true)
+            if (!e.target.checked) ctx.setRenewFeaturedRequested(false)
+            ctx.setIsFeatured(e.target.checked)
+          }}
         />
         <label htmlFor="is_featured">مميز (Featured)</label>
       </div>
@@ -72,7 +76,7 @@ export default function SettingsSection() {
         لا يظهر النشاط في قسم المميزين بالرئيسية إلا بعد اعتماد اشتراك مدفوع ساري يتضمن «ظهور في الرئيسية». باقة الشارة فقط أو التجربة المجانية لا تكفي. بعد تحقق الاستحقاق يختار الأدمن الأنشطة، وتظهر كلها بكروت متساوية ودون ترتيب أول.
       </p>
       <p className={styles.hint}>
-        يبدأ عرض الميزة 30 يومًا من تفعيلها. بعد انتهاء المدة يتوقف الظهور حتى تجديدها، مع استمرار ظهور النشاط بشكل عادي على المنصة.
+        يبدأ عرض الميزة 30 يومًا من تفعيلها. بعد انتهاء المدة يتوقف الظهور؛ لتجديدها أوقف الاختيار واحفظ، ثم فعّله واحفظ مرة أخرى. الحفظ العادي لا يمدد المدة.
       </p>
 
       <div className={styles.checkRow}>
@@ -80,12 +84,16 @@ export default function SettingsSection() {
           id="is_new_project"
           type="checkbox"
           checked={ctx.isNewProject}
-          onChange={(e) => ctx.setIsNewProject(e.target.checked)}
+          onChange={(e) => {
+            if (e.target.checked && !ctx.isNewProject) ctx.setRenewNewProjectRequested(true)
+            if (!e.target.checked) ctx.setRenewNewProjectRequested(false)
+            ctx.setIsNewProject(e.target.checked)
+          }}
         />
         <label htmlFor="is_new_project">إظهار في قسم الأنشطة الجديدة لمدة شهر</label>
       </div>
       <p className={styles.hint}>
-        عند التفعيل تبدأ 30 يومًا تلقائيًا. بعد انتهائها يتوقف الظهور في هذا القسم، ويظل النشاط منشورًا عاديًا. فعّل الاختيار مرة أخرى لتجديد شهر جديد.
+        عند التفعيل تبدأ 30 يومًا تلقائيًا. بعد انتهائها يتوقف الظهور في هذا القسم، ويظل النشاط منشورًا عاديًا. لتجديد شهر جديد أوقف الاختيار واحفظ، ثم فعّله واحفظ مرة أخرى؛ الحفظ العادي لا يجدد الميزة.
       </p>
 
       <SaveBar
