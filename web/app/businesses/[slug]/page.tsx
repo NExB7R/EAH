@@ -21,6 +21,7 @@ import BusinessHero from '@/components/business-hero'
 import BusinessActions from '@/components/business-actions'
 import BusinessTabs from '@/components/business-tabs'
 import BusinessCache from '@/components/business-cache'
+import BusinessViewTracker from '@/components/business-view-tracker'
 import FixedCta from '@/components/fixed-cta'
 import BusinessCard from '@/components/business-card'
 import { CrownGoldIcon, ArrowLeftIcon } from '@/components/icons'
@@ -179,6 +180,7 @@ export default async function BusinessPage({ params }: Props) {
 
   return (
     <main className={styles.page}>
+      <BusinessViewTracker businessId={business.id} />
       <BusinessCache slug={business.slug} detail={detail} />
       <script
         type="application/ld+json"
