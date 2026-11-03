@@ -39,8 +39,9 @@ export function trendScore(b: Business): number {
     0.7 * (1 - Math.exp(-Math.max(0, b.trend_recent_orders ?? 0) / 3)) +
     0.3 * (1 - Math.exp(-Math.max(0, b.trend_recent_reviews ?? 0) / 3))
 
-  // Recent, unique, intentional customer actions lead. No paid Featured flag,
-  // admin pin/order, participation points, raw impressions or follower totals.
+  // Recent, deduplicated customer actions lead. Low-weight session views can
+  // measure opening interest, but no paid Featured flag, admin pin/order,
+  // participation points, or raw unbounded impression count enters the score.
   return (
     velocity * 0.3 +
     engagement * 0.2 +
