@@ -575,32 +575,19 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
   const nowMs = now.getTime()
   const currentFeaturedUntil = currentRow.featured_until ? new Date(currentRow.featured_until).getTime() : 0
   const currentNewUntil = currentRow.new_until ? new Date(currentRow.new_until).getTime() : 0
-  const featuredPeriodStillActive =
-    !!currentRow.is_featured &&
-    (!currentRow.featured_until || currentFeaturedUntil > nowMs)
-  const renewFeatured = fdBool(formData, 'renew_featured')
-
-  // A fresh Featured activation/renewal requires a paid, active plan with
-  // featured_home. A stale form left open across expiry cannot renew by itself.
-  const requestingFreshFeatured =
-    parsed.data.is_featured &&
-    (!currentRow.is_featured || (currentRow.featured_until && currentFeaturedUntil <= nowMs && renewFeatured))
-  if (requestingFreshFeatured && !(await hasPaidFeaturedHomeSubscription(businessId))) {
+  // Homepage placement remains active for the paid plan's actual duration.
+  // A fresh admin enable is allowed only when the business has that entitlement.
+  if (parsed.data.is_featured && !currentRow.is_featured &&
+      !(await hasPaidFeaturedHomeSubscription(businessId))) {
     return {
       ok: false,
       error: 'الظهور في قسم المميزين يحتاج اشتراكًا مدفوعًا ساريًا يتضمن «ظهور في الرئيسية». باقة الشارة فقط أو التجربة المجانية لا تكفي.',
     }
   }
 
-  // If the form was opened while active and left open past expiry, preserve the
-  // old expired timestamp. Only a fresh explicit activation/renewal starts 30 days.
-  const featuredUntil = !parsed.data.is_featured
-    ? null
-    : featuredPeriodStillActive
-      ? currentRow.featured_until
-      : requestingFreshFeatured
-        ? new Date(nowMs + 30 * 24 * 60 * 60 * 1000).toISOString()
-        : currentRow.featured_until
+  // No fixed 30-day cap here: getFeaturedBusinesses checks active paid plan
+  // status and expiry directly. New Activities alone has the one-month window.
+  const featuredUntil = null
 
   const renewNewProject = fdBool(formData, 'renew_new_project')
   const newPeriodStillActive = !!currentRow.is_new_project && currentNewUntil > nowMs
