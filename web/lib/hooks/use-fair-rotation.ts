@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { clampFairRotationCursor, getNextFairRotationCursor, sliceFairRotation } from '@/lib/fair-rotation'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — useFairRotation (Performance Optimized)
@@ -50,11 +51,6 @@ function pickPageSize(w: number, s: PageSizes, bp: Breakpoints): number {
   if (w >= bp.desktop) return s.desktop
   if (w >= bp.tablet) return s.tablet
   return s.mobile
-}
-
-function sliceVisible<T>(order: T[], start: number, size: number): T[] {
-  if (order.length === 0 || start >= order.length) return []
-  return order.slice(Math.max(0, start), Math.max(0, start) + size)
 }
 
 export function useFairRotation<T extends { id: string }>({
@@ -115,19 +111,22 @@ export function useFairRotation<T extends { id: string }>({
     const order = orderRef.current
     if (order.length === 0) return
     const size = pageSizeRef.current
-    // Advance from the number of items actually shown, not the current breakpoint.
-    // This preserves the unseen tail when a visitor resizes the browser mid-cycle.
-    const nextCursor = cursorRef.current + visibleRef.current.length
-    if (nextCursor >= order.length) {
+    // Advance by the number of cards actually shown, not the current breakpoint.
+    const next = getNextFairRotationCursor(
+      order.length,
+      cursorRef.current,
+      visibleRef.current.length,
+    )
+    if (next.restart) {
       orderRef.current = fisherYates(itemsRef.current)
       cursorRef.current = 0
       pageHistoryRef.current = []
     } else {
-      cursorRef.current = nextCursor
+      cursorRef.current = next.cursor
     }
 
     hasAdvancedRef.current = true
-    const nextVisible = sliceVisible(orderRef.current, cursorRef.current, size)
+    const nextVisible = sliceFairRotation(orderRef.current, cursorRef.current, size)
     showVisible(nextVisible)
     pageHistoryRef.current.push({ cursor: cursorRef.current, size: nextVisible.length })
     persist()
@@ -140,7 +139,7 @@ export function useFairRotation<T extends { id: string }>({
     const previous = history[history.length - 1]
     if (!previous) return
     cursorRef.current = previous.cursor
-    showVisible(sliceVisible(orderRef.current, previous.cursor, previous.size))
+    showVisible(sliceFairRotation(orderRef.current, previous.cursor, previous.size))
     hasAdvancedRef.current = true
     persist()
   }, [persist, showVisible])
@@ -176,7 +175,7 @@ export function useFairRotation<T extends { id: string }>({
         if (restored.length === items.length && missing.length === 0) {
           nextOrder = restored
           const c = typeof parsed.cursor === 'number' && Number.isFinite(parsed.cursor) ? parsed.cursor : 0
-          nextCursor = Math.max(0, Math.min(Math.floor(c), Math.max(0, items.length - 1)))
+          nextCursor = clampFairRotationCursor(items.length, c)
         }
       }
     } catch {
@@ -203,7 +202,7 @@ export function useFairRotation<T extends { id: string }>({
         return null
       }
     })()
-    const initialVisible = visibleIds ?? sliceVisible(nextOrder, nextCursor, pageSizeRef.current)
+    const initialVisible = visibleIds ?? sliceFairRotation(nextOrder, nextCursor, pageSizeRef.current)
     hasAdvancedRef.current = !!visibleIds
     pageHistoryRef.current = [{ cursor: nextCursor, size: initialVisible.length }]
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration
@@ -271,7 +270,7 @@ export function useFairRotation<T extends { id: string }>({
   // the next page, so no card repeats early after a breakpoint change.
   useEffect(() => {
     if (!mounted || hasAdvancedRef.current || orderRef.current.length === 0) return
-    const initialVisible = sliceVisible(orderRef.current, cursorRef.current, pageSize)
+    const initialVisible = sliceFairRotation(orderRef.current, cursorRef.current, pageSize)
     showVisible(initialVisible)
     pageHistoryRef.current = [{ cursor: cursorRef.current, size: initialVisible.length }]
     persist()
