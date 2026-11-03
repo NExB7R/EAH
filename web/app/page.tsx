@@ -9,7 +9,11 @@ import NearbyGrid from '@/components/nearby-grid'
 import SuggestedSection from '@/components/suggested-section'
 import AdSlot from '@/components/ad-slot'
 import ChipScrollHandler from '@/components/chip-scroll-handler'
-import { getPublishedBusinesses, getFeaturedBusinesses, getActiveOffers } from '@/lib/data'
+import {
+  getPublishedBusinesses,
+  getFeaturedBusinesses,
+  getActiveOffers,
+} from '@/lib/data'
 import { getFeatureFlags } from '@/lib/features'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness } from '@/lib/data/merchant'
@@ -46,14 +50,14 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
   const session = await getUserSession()
   const [allRaw, featuredRaw, rawOffers, flags, homeBanner, homeFeed, favoriteIds] =
     await Promise.all([
-    getPublishedBusinesses(),
-    getFeaturedBusinesses(200),
-    getActiveOffers(30),
-    getFeatureFlags(),
-    getActiveAdsForSlot('home_banner', 1),
-    getActiveAdsForSlot('home_feed', 1),
-    session ? getFavoriteIds(session.userId) : Promise.resolve(new Set<string>()),
-  ])
+      getPublishedBusinesses(),
+      getFeaturedBusinesses(200),
+      getActiveOffers(30),
+      getFeatureFlags(),
+      getActiveAdsForSlot('home_banner', 1),
+      getActiveAdsForSlot('home_feed', 1),
+      session ? getFavoriteIds(session.userId) : Promise.resolve(new Set<string>()),
+    ])
 
   // ─── الفلترة ───
   const applyHomeFilter = (businesses: Business[]) => {
