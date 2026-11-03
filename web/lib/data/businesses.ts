@@ -521,8 +521,7 @@ export const getTrendingBusinesses = unstable_cache(
       )
     }
 
-    // Session-level page views are low-weight momentum signals. The same
-    // visitor contributes at most once per business/action/day after server dedupe.
+    // Only approved comments and replies count; pending/hidden/deleted content is excluded.
     for (const comment of approvedComments ?? []) {
       addSignal(
         comment.business_id,
@@ -533,6 +532,8 @@ export const getTrendingBusinesses = unstable_cache(
       )
     }
 
+    // Session-level page views are low-weight momentum signals. The same
+    // visitor contributes at most once per business/action/day after server dedupe.
     for (const event of pageViews ?? []) {
       if (!event.business_id) continue
       addSignal(
