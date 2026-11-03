@@ -44,9 +44,14 @@ export default function ContactsSection() {
     getInitialNumbers(ctx.business.contacts, 'whatsapp'),
   )
 
-  const addNumber = (setter: React.Dispatch<React.SetStateAction<ContactInput[]>>) => {
+  const addNumber = (
+    setter: React.Dispatch<React.SetStateAction<ContactInput[]>>,
+    otherCount: number,
+  ) => {
     setter((current) =>
-      current.length >= 10 ? current : [...current, { id: crypto.randomUUID(), value: '' }],
+      current.length >= 10 || current.length + otherCount >= 15
+        ? current
+        : [...current, { id: crypto.randomUUID(), value: '' }],
     )
   }
 
@@ -104,11 +109,12 @@ export default function ContactsSection() {
         <button
           type="button"
           className={styles.submitBtn}
-          disabled={phoneNumbers.length >= 10}
-          onClick={() => addNumber(setPhoneNumbers)}
+          disabled={phoneNumbers.length >= 10 || phoneNumbers.length + whatsappNumbers.length >= 15}
+          onClick={() => addNumber(setPhoneNumbers, whatsappNumbers.length)}
         >
           + إضافة رقم اتصال
         </button>
+        <p className={styles.hint}>الحد الأقصى 10 أرقام لكل نوع و15 رقمًا إجمالًا.</p>
       </div>
 
       <div className={styles.field}>
@@ -144,8 +150,8 @@ export default function ContactsSection() {
         <button
           type="button"
           className={styles.submitBtn}
-          disabled={whatsappNumbers.length >= 10}
-          onClick={() => addNumber(setWhatsappNumbers)}
+          disabled={whatsappNumbers.length >= 10 || phoneNumbers.length + whatsappNumbers.length >= 15}
+          onClick={() => addNumber(setWhatsappNumbers, phoneNumbers.length)}
         >
           + إضافة رقم واتساب
         </button>
