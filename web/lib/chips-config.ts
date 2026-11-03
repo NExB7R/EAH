@@ -61,6 +61,15 @@ export const CHIPS: Chip[] = [
     iconColor: 'rgba(199, 125, 255, 0.85)',
     action: { type: 'filter', value: 'delivery_office' },
   },
+  {
+    key: 'misc',
+    label: 'أنشطة أخرى',
+    Icon: SparklesIcon,
+    tone: 'purple',
+    group: 'types',
+    iconColor: 'rgba(232, 199, 154, 0.75)',
+    action: { type: 'filter', value: 'misc' },
+  },
   // ─── الاكتشاف ───
   {
     key: 'offers',
