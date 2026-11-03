@@ -7,6 +7,7 @@
 
 import type { Business, Offer } from '@/lib/data/businesses'
 import { trendScore } from '@/lib/ranking'
+import { getBusinessReputationScore } from '@/lib/reputation'
 
 export type FairWeights = {
   quality: number
