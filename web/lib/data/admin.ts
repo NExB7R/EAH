@@ -1,5 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { getPaidFeaturedHomeBusinessIds } from './featured-eligibility'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Data
@@ -175,6 +176,7 @@ export type FeaturedBusiness = {
   is_featured: boolean
   featured_until: string | null
   created_at: string
+  paid_featured_home_eligible: boolean
 }
 
 export async function getFeaturedBusinesses(): Promise<FeaturedBusiness[]> {
@@ -194,7 +196,12 @@ export async function getFeaturedBusinesses(): Promise<FeaturedBusiness[]> {
     return []
   }
 
-  return (data ?? []) as FeaturedBusiness[]
+  const rows = (data ?? []) as Omit<FeaturedBusiness, 'paid_featured_home_eligible'>[]
+  const eligibleIds = await getPaidFeaturedHomeBusinessIds(rows.map((row) => row.id))
+  return rows.map((row) => ({
+    ...row,
+    paid_featured_home_eligible: eligibleIds.has(row.id),
+  }))
 }
 
 // ═══════════════════════════════════════════════════════════
