@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import BusinessCard from './business-card'
 import NearbyLocationPrompt from './nearby-location-prompt'
