@@ -1,4 +1,14 @@
-> تحديث 2026-11-03: توجد دفعة Home Discovery معزولة على `feat/home-local-discovery-2026` مبنية على `main`. لا تُدمج ولا تُنشر قبل اجتياز Quality Gate وBuild وE2E ومراجعة PR. لم تُنفّذ DB migrations أو كتابات إنتاجية. راجع `docs/SESSION_LOG.md` و`docs/CODE_REVIEW_LOG.md` و`docs/CRITERIA.md` للحدود والاختبارات المفتوحة.
+# Current implementation state — 2026-11-03
+
+- Active branch: `feat/home-local-discovery-2026`
+- Draft PR: #39 to `main`.
+- Not merged, not deployed, and no production database writes or migrations performed.
+- The home discovery redesign, paid Featured entitlement checks, manual Nearby area picker, session view signal, and supermarket category are in this branch.
+- Do not merge until Quality Gate, Preview E2E, and isolated pgTAP succeed on the current branch HEAD.
+- Open technical items: legacy `get_business_funnel` scope mismatch; offer-level tracking; real trend weights need live event data; supermarket migration still needs staging then normal production release.
+- Read `docs/CRITERIA.md`, `docs/CODE_REVIEW_LOG.md`, `docs/SESSION_LOG.md`, and `docs/PROGRESS.md` for current rules and evidence.
+
+---
 
 # EAH — NEXT_SESSION.md
 
