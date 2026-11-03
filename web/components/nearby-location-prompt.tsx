@@ -30,14 +30,19 @@ export default function NearbyLocationPrompt({ isLoggedIn }: Props) {
         const formData = new FormData()
         formData.set('latitude', String(position.coords.latitude))
         formData.set('longitude', String(position.coords.longitude))
-        const result = await saveNearbyLocation(formData)
-        setPending(false)
-        if (!result.ok) {
-          setMessage(result.error)
-          return
+        try {
+          const result = await saveNearbyLocation(formData)
+          if (!result.ok) {
+            setMessage(result.error)
+            return
+          }
+          setMessage('اتحفظ موقعك — بنرتب الأقرب ليك دلوقتي')
+          router.refresh()
+        } catch {
+          setMessage('حصلت مشكلة في حفظ الموقع. حاول مرة تانية.')
+        } finally {
+          setPending(false)
         }
-        setMessage('اتحفظ موقعك — بنرتب الأقرب ليك دلوقتي')
-        router.refresh()
       },
       () => {
         setPending(false)
