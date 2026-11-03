@@ -1,3 +1,12 @@
+## Release gates (2026-11-03)
+
+- Current branch and Draft PR #39 are not merged.
+- A Vercel Preview for older commit `faceb47de01b96c34cc6531eb0566f8e925b258f` is `READY`, with successful compilation, TypeScript and 55/55 static pages. It is not the current HEAD.
+- Creating a preview for the newest SHA was blocked by Vercel's daily deployment API limit (>100/day; 24-hour retry). Do not modify billing automatically.
+- Current HEAD has no completed Quality Gate or E2E result. Earlier TypeScript findings were fixed afterward; E2E previously stopped before Playwright because of the vercel[bot]-only preview wait. The workflow now polls deployment status for the PR SHA; it still needs a fresh execution.
+- `npm ci` reported 25 dependency advisories (5 high, 1 critical); npm audit has not completed.
+- No production DB migration/write or production deploy. Supermarket migration/pgTAP require isolated staging.
+- Remaining product/analytics gaps: legacy funnel SQL scope mismatch; no offer-level click/view tracking; trend weights need live event data (production had 8 published businesses and no activity/page-view events in the prior 30 days at initial audit).
 # Current implementation state — 2026-11-03
 
 - Active branch: `feat/home-local-discovery-2026`
