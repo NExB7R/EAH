@@ -64,6 +64,7 @@ async function HomeSections({
   viewerArea: string | null
 }) {
   const session = await getUserSession()
+  const flagsPromise = getFeatureFlags()
   const [
     featuredRaw,
     trendingRaw,
@@ -76,12 +77,16 @@ async function HomeSections({
     favoriteIds,
     recommendations,
   ] = await Promise.all([
-    getFeaturedBusinesses(1000),
-    getTrendingBusinesses(1000),
-    getNewBusinesses(1000),
-    getActiveOffers(1000),
-    isLoggedIn ? getNearbyBusinesses(viewerLocation ? undefined : viewerArea ?? undefined, 1000) : Promise.resolve([]),
-    getFeatureFlags(),
+    flagsPromise.then((value) => value.featured_enabled ? getFeaturedBusinesses(1000) : Promise.resolve([])),
+    flagsPromise.then((value) => value.trends_enabled || value.offers_enabled
+      ? getTrendingBusinesses(1000)
+      : Promise.resolve([])),
+    flagsPromise.then((value) => value.new_enabled ? getNewBusinesses(1000) : Promise.resolve([])),
+    flagsPromise.then((value) => value.offers_enabled ? getActiveOffers(1000) : Promise.resolve([])),
+    flagsPromise.then((value) => value.nearby_enabled && isLoggedIn
+      ? getNearbyBusinesses(viewerLocation ? undefined : viewerArea ?? undefined, 1000)
+      : Promise.resolve([])),
+    flagsPromise,
     getActiveAdsForSlot('home_banner', 1),
     getActiveAdsForSlot('home_feed', 1),
     session ? getFavoriteIds(session.userId) : Promise.resolve(new Set<string>()),
