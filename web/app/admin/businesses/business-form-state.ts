@@ -20,22 +20,35 @@ type Setter<T> = Dispatch<SetStateAction<T>>
 
 export type FormActionResult = { ok: boolean; error?: string; id?: string }
 
+function getCairoDateParts(value: string): Record<string, string> | null {
+  const date = new Date(value)
+  if (!Number.isFinite(date.getTime())) return null
+  return Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Africa/Cairo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    })
+      .formatToParts(date)
+      .filter((part) => part.type !== 'literal')
+      .map((part) => [part.type, part.value]),
+  )
+}
+
 function toDateInputValue(value: string | null | undefined): string {
   if (!value) return ''
-  const date = new Date(value)
-  return Number.isFinite(date.getTime()) ? date.toISOString().slice(0, 10) : ''
+  const parts = getCairoDateParts(value)
+  return parts ? `${parts.year}-${parts.month}-${parts.day}` : ''
 }
 
 function toDateTimeLocalValue(value: string | null | undefined): string {
   if (!value) return ''
-  const date = new Date(value)
-  if (!Number.isFinite(date.getTime())) return ''
-  const pad = (part: number) => String(part).padStart(2, '0')
-  return [
-    date.getFullYear(),
-    pad(date.getMonth() + 1),
-    pad(date.getDate()),
-  ].join('-') + 'T' + [pad(date.getHours()), pad(date.getMinutes())].join(':')
+  const parts = getCairoDateParts(value)
+  return parts ? `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}` : ''
 }
 
 export type FormState = {
