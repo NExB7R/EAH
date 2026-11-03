@@ -8,6 +8,7 @@ import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
 import { buildContactOptions, safeContactOptionLabel, type ContactOption } from './contact-options'
 export type { ContactOption } from './contact-options'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
+import { isPromotionActive } from './promotion-status'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Detail (Full Page Data)
@@ -60,6 +61,8 @@ async function normalizeBusinessRows(
       ...(raw as unknown as Business),
       location,
       is_open: isOpen,
+      is_featured: isPromotionActive(raw.is_featured === true, raw.featured_until),
+      is_new_project: isPromotionActive(raw.is_new_project === true, raw.new_until),
       accepts_orders: acceptsOrders,
       accepts_whatsapp_orders: acceptsWhatsApp,
       orders_enabled: acceptsOrders,
@@ -238,6 +241,8 @@ export const getBusinessDetail = unstable_cache(
           typeof rawBiz.open_now_override === 'boolean' ? rawBiz.open_now_override : null,
         is_open: typeof rawBiz.is_open === 'boolean' ? rawBiz.is_open : null,
       }),
+      is_featured: isPromotionActive(rawBiz.is_featured === true, rawBiz.featured_until),
+      is_new_project: isPromotionActive(rawBiz.is_new_project === true, rawBiz.new_until),
       accepts_orders: acceptsOrders,
       accepts_whatsapp_orders: acceptsWhatsApp,
       orders_enabled: acceptsOrders,
@@ -351,8 +356,8 @@ export const getBusinessDetail = unstable_cache(
       openNowOverride,
     }
   },
-  ['business-detail-v4'],
-  { revalidate: 120, tags: ['businesses'] },
+  ['business-detail-v5'],
+  { revalidate: 60, tags: ['businesses'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -475,8 +480,8 @@ export const getSimilarBusinesses = unstable_cache(
 
     return await normalizeBusinessRows(data, supabase)
   },
-  ['business-similar-v3'],
-  { revalidate: 300, tags: ['businesses'] },
+  ['business-similar-v4'],
+  { revalidate: 60, tags: ['businesses'] },
 )
 
 // ═══════════════════════════════════════════════════════════
