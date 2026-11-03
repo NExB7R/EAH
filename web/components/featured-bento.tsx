@@ -26,7 +26,7 @@ export default function FeaturedBento({ businesses }: Props) {
     items: businesses,
     pageSizes: PAGE_SIZES,
     intervalMs: INTERVAL_MS,
-    storageKey: 'eah:featured:home:v2',
+    storageKey: 'eah:featured:home:v3',
   })
 
   if (businesses.length === 0) return null
