@@ -120,7 +120,7 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (86)
+## Components (83)
 
 | File | Export | Purpose |
 |------|--------|---------|
@@ -208,7 +208,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (103)
+## Lib (102)
 
 | File | Exports | Purpose |
 |------|---------|---------|
