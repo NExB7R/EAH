@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { AREAS } from '@/lib/data/areas'
+import { isEgyptianMobileNumber } from '@/lib/phone-validation'
 
 const AREAS_LIST = AREAS as unknown as [string, ...string[]]
 
@@ -8,20 +9,18 @@ const AREAS_LIST = AREAS as unknown as [string, ...string[]]
 // 8 أقسام — كل قسم Zod schema منفصل
 // ═══════════════════════════════════════════════════════════
 
-const EGYPT_PHONE_REGEX = /^01[0125][0-9]{8}$/
-
 const optionalPhone = z
   .string()
   .trim()
   .optional()
   .nullable()
   .transform((v) => (v === '' ? null : v))
-  .refine((v) => !v || EGYPT_PHONE_REGEX.test(v), 'الرقم مش صح — 11 رقم يبدأ بـ 010/011/012/015')
+  .refine((v) => !v || isEgyptianMobileNumber(v), 'الرقم مش صح — 11 رقم يبدأ بـ 010/011/012/015')
 
 const requiredPhone = z
   .string()
   .trim()
-  .regex(EGYPT_PHONE_REGEX, 'الرقم مش صح — 11 رقم يبدأ بـ 010/011/012/015')
+  .refine(isEgyptianMobileNumber, 'الرقم مش صح — 11 رقم يبدأ بـ 010/011/012/015')
 
 const optionalUrl = z
   .string()
