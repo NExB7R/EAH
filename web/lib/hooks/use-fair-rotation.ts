@@ -51,15 +51,10 @@ function pickPageSize(w: number, s: PageSizes, bp: Breakpoints): number {
   return s.mobile
 }
 
-function sliceVisible<T>(order: T[], start: number, size: number): T[] {
-  if (order.length === 0) return []
-  if (order.length <= size) return [...order]
-  const out: T[] = []
-  for (let i = 0; i < size; i++) {
-    const item = order[(start + i) % order.length]
-    if (item) out.push(item)
-  }
-  return out
+export function sliceVisible<T>(order: T[], start: number, size: number): T[] {
+  if (order.length === 0 || size <= 0) return []
+  const safeStart = Math.min(Math.max(0, start), order.length)
+  return order.slice(safeStart, safeStart + size)
 }
 
 export function useFairRotation<T extends { id: string }>({
