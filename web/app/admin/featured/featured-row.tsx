@@ -14,6 +14,7 @@ type Props = {
     area: string | null
     featured_until: string | null
     is_published: boolean
+    paid_featured_home_eligible: boolean
   }
 }
 
@@ -47,7 +48,8 @@ export default function FeaturedRow({ business }: Props) {
         <div className={styles.nameWrap}>
           <h3 className={styles.name}>{business.name}</h3>
           {!business.is_published && <span className={styles.meta}>غير منشور</span>}
-          {expired && <span className={styles.meta}>انتهت المدة — متوقف عن الظهور</span>}
+          {expired && <span className={styles.meta}>انتهت مدة التمييز — متوقف عن الظهور</span>}
+          {!business.paid_featured_home_eligible && <span className={styles.meta}>لا يوجد اشتراك مدفوع ساري يمنح ظهور الرئيسية</span>}
         </div>
         <p className={styles.meta}>
           {business.area ?? '—'} · {expired ? 'انتهى التمييز' : `ينتهي: ${until}`}
@@ -55,14 +57,16 @@ export default function FeaturedRow({ business }: Props) {
       </div>
 
       <div className={styles.actions}>
-        {expired && (
+        {business.paid_featured_home_eligible && expired && (
           <button type="button" onClick={() => handleExtend(30)} disabled={pending} className={styles.btn}>
             <ClockIcon size={13} /> تجديد 30 يوم
           </button>
         )}
-        <button type="button" onClick={() => handleExtend(90)} disabled={pending} className={styles.btn}>
-          +90 يوم
-        </button>
+        {business.paid_featured_home_eligible && !expired && (
+          <button type="button" onClick={() => handleExtend(90)} disabled={pending} className={styles.btn}>
+            +90 يوم
+          </button>
+        )}
         <Link href={`/businesses/${business.slug}`} target="_blank" className={styles.btn} title="فتح الصفحة">
           <ExternalLinkIcon size={14} />
         </Link>
