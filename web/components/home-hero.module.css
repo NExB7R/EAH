@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
    EAH — Home Hero
-   Fills viewport, centered, responsive, staggered entrance
+   Compact identity/search hero; categories live in their own section
    ═══════════════════════════════════════════════════════════ */
 
 .hero {
@@ -8,33 +8,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: 104px 16px 40px;
-  padding-top: calc(104px + env(safe-area-inset-top));
+  min-height: auto;
+  padding: calc(104px + env(safe-area-inset-top)) 16px 32px;
   overflow: hidden;
   isolation: isolate;
 }
 
 @media (min-width: 640px) {
   .hero {
-    padding: 104px 24px 64px;
-    padding-top: calc(104px + env(safe-area-inset-top));
+    padding: calc(104px + env(safe-area-inset-top)) 24px 40px;
   }
 }
 
 @media (min-width: 1024px) {
   .hero {
-    min-height: 100vh;
-    padding: 112px 24px 64px;
-    padding-top: calc(112px + env(safe-area-inset-top));
+    padding: calc(112px + env(safe-area-inset-top)) 24px 48px;
   }
 }
 
 @media (min-width: 1440px) {
   .hero {
-    padding: 152px 32px 104px;
-    padding-top: calc(152px + env(safe-area-inset-top));
+    padding: calc(128px + env(safe-area-inset-top)) 32px 56px;
   }
 }
 
@@ -72,20 +66,20 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 32px;
+  gap: 24px;
 }
 
 @media (min-width: 640px) {
   .content {
     max-width: 640px;
-    gap: 40px;
+    gap: 28px;
   }
 }
 
 @media (min-width: 1024px) {
   .content {
     max-width: 760px;
-    gap: 36px;
+    gap: 28px;
   }
 }
 
@@ -199,12 +193,6 @@
   animation: eahHeroIn 240ms var(--ease-out) 120ms both;
 }
 
-/* ─── Chips wrapper ─── */
-.chipsWrap {
-  width: 100%;
-  animation: eahHeroIn 240ms var(--ease-out) 160ms both;
-}
-
 /* ═══════════════════════════════════════════════════════════
    Entrance keyframe — LCP-safe (starts at 0.88, never 0)
    ═══════════════════════════════════════════════════════════ */
@@ -224,9 +212,6 @@
   .shibinSign,
   .hook,
   .searchWrap,
-  .chipsWrap {
-    animation: none;
-  }
 }
 
 /* ─── Mobile: constrain logo + reduce hero height ─── */
@@ -236,9 +221,8 @@
     width: 100%;
   }
   .hero {
-    min-height: auto;
     padding-top: calc(88px + env(safe-area-inset-top));
-    padding-bottom: 32px;
+    padding-bottom: 28px;
   }
   .content {
     gap: 20px;
