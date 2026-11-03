@@ -9,10 +9,9 @@ import styles from './nearby-location-prompt.module.css'
 
 type Props = {
   isLoggedIn: boolean
-  onLocationSaved?: () => void
 }
 
-export default function NearbyLocationPrompt({ isLoggedIn, onLocationSaved }: Props) {
+export default function NearbyLocationPrompt({ isLoggedIn }: Props) {
   const router = useRouter()
   const [pending, setPending] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
@@ -38,7 +37,6 @@ export default function NearbyLocationPrompt({ isLoggedIn, onLocationSaved }: Pr
           return
         }
         setMessage('اتحفظ موقعك — بنرتب الأقرب ليك دلوقتي')
-        onLocationSaved?.()
         router.refresh()
       },
       () => {
