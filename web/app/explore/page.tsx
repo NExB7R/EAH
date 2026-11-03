@@ -39,6 +39,7 @@ type SearchParams = {
 const TYPE_TITLES: Record<string, string> = {
   restaurant: 'مطاعم',
   pharmacy: 'صيدليات',
+  supermarket: 'ماركت',
 
   delivery_office: 'توصيل',
   misc: 'أنشطة أخرى',
@@ -85,6 +86,7 @@ export default async function ExplorePage({
     types: {
       restaurant: allBusinesses.filter((b) => b.business_type === 'restaurant').length,
       pharmacy: allBusinesses.filter((b) => b.business_type === 'pharmacy').length,
+      supermarket: allBusinesses.filter((b) => b.business_type === 'supermarket').length,
 
       delivery_office: allBusinesses.filter((b) => b.business_type === 'delivery_office').length,
       misc: allBusinesses.filter((b) => b.business_type === 'misc').length,
