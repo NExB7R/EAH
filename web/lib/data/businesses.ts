@@ -357,6 +357,7 @@ export const getTrendingBusinesses = unstable_cache(
     const [
       { data: activities, error: activitiesError },
       { data: contactEvents, error: contactEventsError },
+      { data: pageViews, error: pageViewsError },
       { data: deliveredOrders, error: ordersError },
       { data: approvedReviews, error: reviewsError },
     ] = await Promise.all([
@@ -373,6 +374,14 @@ export const getTrendingBusinesses = unstable_cache(
         .in('business_id', ids)
         .gte('created_at', since30)
         .order('created_at', { ascending: false })
+        .limit(20000),
+      supabase
+        .from('page_view_events')
+        .select('business_id, visitor_id, occurred_at')
+        .in('business_id', ids)
+        .eq('event_scope', 'business')
+        .gte('occurred_at', since30)
+        .order('occurred_at', { ascending: false })
         .limit(20000),
       supabase
         .from('order_requests')
@@ -392,10 +401,11 @@ export const getTrendingBusinesses = unstable_cache(
         .limit(20000),
     ])
 
-    if (activitiesError || contactEventsError || ordersError || reviewsError) {
+    if (activitiesError || contactEventsError || pageViewsError || ordersError || reviewsError) {
       console.error('[data] trend signals partially unavailable:', {
         activities: activitiesError?.message,
         contacts: contactEventsError?.message,
+        pageViews: pageViewsError?.message,
         orders: ordersError?.message,
         reviews: reviewsError?.message,
       })
@@ -488,8 +498,22 @@ export const getTrendingBusinesses = unstable_cache(
       )
     }
 
+    // Session-level page views are low-weight momentum signals. The same
+    // visitor contributes at most once per business/action/day after server dedupe.
+    for (const event of pageViews ?? []) {
+      if (!event.business_id) continue
+      addSignal(
+        event.business_id,
+        null,
+        'page_view',
+        event.occurred_at,
+        0.35,
+        event.visitor_id,
+      )
+    }
+
     for (const order of deliveredOrders ?? []) {
-      addSignal(order.business_id, order.customer_profile_id, 'delivered_order', order.delivered_at, 4)
+      addSignal(order.business_id, order.customer_profile_id, 'delivered_order', order.delivered_at ?? order.created_at, 4)
       const signal = signalByBusiness.get(order.business_id)
       if (signal) signal.recentOrders += 1
     }
