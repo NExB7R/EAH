@@ -16,7 +16,7 @@
   inset-inline-start: 0;
   bottom: 0;
   z-index: 201;
-  width: min(340px, 88vw);
+  width: min(360px, 88vw);
   display: flex;
   flex-direction: column;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
@@ -28,6 +28,8 @@
   padding-bottom: env(safe-area-inset-bottom);
   animation: eah-slide-in-start 280ms var(--ease-out);
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .header {
@@ -53,8 +55,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: var(--radius-full);
   color: var(--text-secondary);
   background: transparent;
@@ -63,9 +67,17 @@
   transition: all var(--motion-fast) var(--ease);
 }
 
-.closeBtn:hover {
+ .closeBtn:hover {
   color: var(--purple-light);
   background: var(--purple-soft);
+}
+
+.closeBtn:focus-visible,
+.item:focus-visible,
+.profileSection:focus-visible,
+.loginCta:focus-visible {
+  outline: 2px solid var(--gold-light);
+  outline-offset: 2px;
 }
 
 /* ─── Nav ─── */
@@ -192,7 +204,7 @@
 /* ─── Mobile ─── */
 @media (max-width: 480px) {
   .drawer {
-    width: 92vw;
+    width: min(92vw, 420px);
   }
 
   .item {
