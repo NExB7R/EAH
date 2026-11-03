@@ -7,6 +7,11 @@ const EARTH_RADIUS_KM = 6371
 
 export type LatLng = { lat: number; lng: number }
 
+export function isValidLatLng(value: LatLng | null | undefined): value is LatLng {
+  return !!value && Number.isFinite(value.lat) && Number.isFinite(value.lng) &&
+    value.lat >= -90 && value.lat <= 90 && value.lng >= -180 && value.lng <= 180
+}
+
 function toRad(deg: number): number {
   return (deg * Math.PI) / 180
 }
