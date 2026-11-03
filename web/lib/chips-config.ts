@@ -54,7 +54,7 @@ export const CHIPS: Chip[] = [
     action: { type: 'filter', value: 'pharmacy' },
   },
   {
-    key: 'delivery',
+    key: 'supermarket',
     label: 'ماركت',
     Icon: StoreIcon,
     tone: 'purple',
