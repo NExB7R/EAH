@@ -126,13 +126,10 @@ export function useFormState(business: AdminBusiness | null): FormState {
   const [isPublished, setIsPublished] = useState(business?.is_published ?? false)
   const [isOpen, setIsOpen] = useState(business?.is_open ?? true)
   const [acceptsWhatsapp, setAcceptsWhatsapp] = useState(false)
-  const now = Date.now()
   const featuredUntilValue = business?.featured_until ?? null
   const newUntilValue = business?.new_until ?? null
-  const newProjectStillActive =
-    !!business?.is_new_project &&
-    !!newUntilValue &&
-    new Date(newUntilValue).getTime() > now
+  // getBusinessById returns the current, expiry-checked New Activities state.
+  const newProjectStillActive = !!business?.is_new_project
 
   const [isFeatured, setIsFeatured] = useState(!!business?.is_featured)
   const [isVerified, setIsVerified] = useState(!!business?.is_verified)

@@ -77,12 +77,10 @@ export default function BusinessCard({
       ? business.area + '، ' + business.city
       : business.area || business.city
   const summary = business.hook?.trim() || business.description?.trim() || ''
-  const now = Date.now()
-  const newUntil = business.new_until ? new Date(business.new_until).getTime() : null
-  // normalizeBusinesses has already checked the independent paid featured_badge entitlement.
+  // New Activities eligibility is computed in the server data layer.
+  // normalizeBusinesses also checks the independent paid featured_badge entitlement.
   const featuredEligible = business.is_featured
-  const newEligible =
-    business.is_new_project && newUntil !== null && Number.isFinite(newUntil) && newUntil > now
+  const newEligible = business.is_new_project
   const showFeatured = featuredEligible
   const showNew = newEligible
   const rankClass =

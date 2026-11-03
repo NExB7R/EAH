@@ -94,6 +94,9 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
   if (!biz) return null
 
   const b = biz as Record<string, unknown>
+  const newUntil = (b.new_until as string | null) ?? null
+  const newProjectStillActive =
+    !!b.is_new_project && !!newUntil && Date.parse(newUntil) > Date.now()
 
   const [ownerRes, contactsRes, branchesRes, mediaRes, locationRes, offersRes] = await Promise.all([
     b.owner_profile_id
@@ -157,8 +160,8 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     featured_until: (b.featured_until as string | null) ?? null,
     featured_order: (b.featured_order as number) ?? 0,
     featured_pin: !!b.featured_pin,
-    is_new_project: !!b.is_new_project,
-    new_until: (b.new_until as string | null) ?? null,
+    is_new_project: newProjectStillActive,
+    new_until: newUntil,
     is_verified: !!b.is_verified,
     verified_at: (b.verified_at as string | null) ?? null,
     trust_score: (b.trust_score as number) ?? 50,

@@ -140,10 +140,14 @@ function normalizeBusiness(raw: Record<string, unknown>): Business {
       typeof raw.open_now_override === 'boolean' ? raw.open_now_override : null,
     is_open: typeof raw.is_open === 'boolean' ? raw.is_open : null,
   })
+  const newUntil = typeof raw.new_until === 'string' ? Date.parse(raw.new_until) : Number.NaN
+  const isNewProjectActive =
+    raw.is_new_project === true && Number.isFinite(newUntil) && newUntil > Date.now()
   return {
     ...(rest as unknown as Business),
     location: loc,
     is_open: isOpen,
+    is_new_project: isNewProjectActive,
     accepts_orders: acceptsOrders,
     orders_enabled: acceptsOrders,
   }

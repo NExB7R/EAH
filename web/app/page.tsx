@@ -108,10 +108,8 @@ async function HomeSections({
   // generic fair-order score or paid featured status.
   const trending = trendingRaw
 
-  const now = Date.now()
-  const newOnes = newRaw.filter((b) =>
-    b.is_new_project && !!b.new_until && new Date(b.new_until).getTime() > now,
-  )
+  // getNewBusinesses and normalizeBusiness return only currently eligible projects.
+  const newOnes = newRaw.filter((business) => business.is_new_project)
 
   const nearby = viewerLocation
     ? nearbyRaw

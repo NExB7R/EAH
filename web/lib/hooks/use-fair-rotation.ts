@@ -71,6 +71,7 @@ export function useFairRotation<T extends { id: string }>({
   const [reduced, setReduced] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [scrolling, setScrolling] = useState(false)
+  const [canPrev, setCanPrev] = useState(false)
 
   const containerRef = useRef<HTMLElement | null>(null)
   const orderRef = useRef<T[]>([])
@@ -129,6 +130,7 @@ export function useFairRotation<T extends { id: string }>({
     const nextVisible = sliceFairRotation(orderRef.current, cursorRef.current, size)
     showVisible(nextVisible)
     pageHistoryRef.current.push({ cursor: cursorRef.current, size: nextVisible.length })
+    setCanPrev(pageHistoryRef.current.length > 1)
     persist()
   }, [persist, showVisible])
 
@@ -136,6 +138,7 @@ export function useFairRotation<T extends { id: string }>({
     const history = pageHistoryRef.current
     if (history.length <= 1) return
     history.pop()
+    setCanPrev(history.length > 1)
     const previous = history[history.length - 1]
     if (!previous) return
     cursorRef.current = previous.cursor
@@ -205,6 +208,8 @@ export function useFairRotation<T extends { id: string }>({
     const initialVisible = visibleIds ?? sliceFairRotation(nextOrder, nextCursor, pageSizeRef.current)
     hasAdvancedRef.current = !!visibleIds
     pageHistoryRef.current = [{ cursor: nextCursor, size: initialVisible.length }]
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset rendered history during rotation hydration
+    setCanPrev(false)
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration
     setMounted(true)
     showVisible(initialVisible)
@@ -273,6 +278,8 @@ export function useFairRotation<T extends { id: string }>({
     const initialVisible = sliceFairRotation(orderRef.current, cursorRef.current, pageSize)
     showVisible(initialVisible)
     pageHistoryRef.current = [{ cursor: cursorRef.current, size: initialVisible.length }]
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- reset rendered history when the first page size changes
+    setCanPrev(false)
     persist()
   }, [pageSize, mounted, persist, showVisible])
 
@@ -284,6 +291,6 @@ export function useFairRotation<T extends { id: string }>({
     next,
     prev,
     pageSize,
-    canPrev: pageHistoryRef.current.length > 1,
+    canPrev,
   }
 }
