@@ -135,6 +135,152 @@ USING (
   )
 );
 
+
+-- Harden legacy authenticated RPCs whose current bodies did not enforce the
+-- caller's business ownership or serialize reward stock/balance updates.
+CREATE OR REPLACE FUNCTION public.request_promo_post(
+  p_business uuid,
+  p_url text,
+  p_note text DEFAULT NULL
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog
+AS $function$
+DECLARE
+  v_user uuid := auth.uid();
+  v_count integer;
+  v_owner uuid;
+  v_url text := trim(coalesce(p_url, ''));
+BEGIN
+  IF v_user IS NULL THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'unauth');
+  END IF;
+
+  IF p_business IS NULL
+     OR length(v_url) < 10
+     OR length(v_url) > 2048
+     OR v_url !~* '^https://[a-z0-9.-]+(:[0-9]+)?(/|$)' THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'invalid_url');
+  END IF;
+
+  IF p_note IS NOT NULL AND length(p_note) > 500 THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'invalid_note');
+  END IF;
+
+  SELECT owner_profile_id
+  INTO v_owner
+  FROM public.businesses
+  WHERE id = p_business;
+
+  IF NOT FOUND OR v_owner IS DISTINCT FROM v_user THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'not_owner');
+  END IF;
+
+  SELECT count(*) INTO v_count
+  FROM public.promo_posts
+  WHERE business_id = p_business AND status = 'pending';
+
+  IF v_count > 0 THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'has_pending');
+  END IF;
+
+  SELECT count(*) INTO v_count
+  FROM public.promo_posts
+  WHERE business_id = p_business AND status = 'approved';
+
+  IF v_count > 0 THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'already_used');
+  END IF;
+
+  INSERT INTO public.promo_posts (business_id, owner_id, post_url, note)
+  VALUES (p_business, v_user, v_url, nullif(trim(coalesce(p_note, '')), ''));
+
+  RETURN jsonb_build_object('ok', true);
+END;
+$function$;
+
+CREATE OR REPLACE FUNCTION public.redeem_reward(p_reward_id uuid)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog
+AS $function$
+DECLARE
+  v_user uuid := auth.uid();
+  v_reward record;
+  v_balance integer;
+  v_streak integer;
+  v_code text;
+  v_stock integer;
+BEGIN
+  IF v_user IS NULL THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'not_authenticated');
+  END IF;
+
+  -- Serialize redemptions for the same reward before checking its stock.
+  SELECT *
+  INTO v_reward
+  FROM public.reward_catalog
+  WHERE id = p_reward_id AND is_active = true
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'reward_not_found');
+  END IF;
+
+  IF v_reward.stock IS NOT NULL THEN
+    SELECT count(*) INTO v_stock
+    FROM public.reward_redemptions
+    WHERE reward_id = p_reward_id AND status != 'rejected';
+
+    IF v_stock >= v_reward.stock THEN
+      RETURN jsonb_build_object('ok', false, 'reason', 'out_of_stock');
+    END IF;
+  END IF;
+
+  -- Serialize balance changes for this account across concurrent redemptions.
+  SELECT coalesce(trust_score, 0), coalesce(streak_count, 0)
+  INTO v_balance, v_streak
+  FROM public.profiles
+  WHERE id = v_user
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'profile_not_found');
+  END IF;
+
+  IF v_balance < v_reward.points_cost THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'insufficient_points', 'balance', v_balance, 'needed', v_reward.points_cost);
+  END IF;
+
+  IF v_streak < coalesce(v_reward.min_streak, 0) THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'streak_too_low', 'streak', v_streak, 'needed', v_reward.min_streak);
+  END IF;
+
+  v_code := upper(substring(md5(v_user::text || p_reward_id::text || clock_timestamp()::text), 1, 8));
+
+  UPDATE public.profiles
+  SET trust_score = trust_score - v_reward.points_cost
+  WHERE id = v_user;
+
+  INSERT INTO public.reward_redemptions (user_id, reward_id, points_spent, code, status)
+  VALUES (v_user, p_reward_id, v_reward.points_cost, v_code, 'pending');
+
+  INSERT INTO public.notifications (user_id, type, title, body, link)
+  VALUES (v_user, 'points', '🎁 استبدلت مكافأة', 'كود: ' || v_code || ' — ' || v_reward.title, '/account/points');
+
+  RETURN jsonb_build_object('ok', true, 'code', v_code, 'new_balance', v_balance - v_reward.points_cost, 'reward_title', v_reward.title);
+END;
+$function$;
+
+REVOKE ALL PRIVILEGES ON FUNCTION public.request_promo_post(uuid, text, text) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.request_promo_post(uuid, text, text) TO authenticated, service_role;
+
+REVOKE ALL PRIVILEGES ON FUNCTION public.redeem_reward(uuid) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.redeem_reward(uuid) TO authenticated, service_role;
+
 -- Post-migration verification:
 -- 1) anon cannot read insight rows or execute the sensitive RPCs above.
 -- 2) an authenticated owner can only CRUD reports for their own business.
