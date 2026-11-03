@@ -205,7 +205,7 @@ export const getPublishedBusinesses = unstable_cache(
     )
   },
   ['businesses-published-v3'],
-  { revalidate: 300, tags: ['businesses'] },
+  { revalidate: 60, tags: ['businesses'] },
 )
 
 /** Count published production activities for public marketing copy; exclude QA fixtures. */
@@ -276,7 +276,7 @@ export const getFeaturedBusinesses = unstable_cache(
     return await normalizeBusinesses(selected, supabase)
   },
   ['businesses-featured-v4'],
-  { revalidate: 300, tags: ['businesses', 'featured'] },
+  { revalidate: 60, tags: ['businesses', 'featured'] },
 )
 // ═══════════════════════════════════════════════════════════
 // 3. بدايات (New projects — مشاريع لسه فاتحة)
@@ -302,7 +302,7 @@ export const getNewBusinesses = unstable_cache(
     return await normalizeBusinesses(data, supabase)
   },
   ['businesses-new-v3'],
-  { revalidate: 300, tags: ['businesses', 'new'] },
+  { revalidate: 60, tags: ['businesses', 'new'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -330,7 +330,7 @@ export const getBusinessesByType = unstable_cache(
     return await normalizeBusinesses(data, supabase)
   },
   ['businesses-by-type-v3'],
-  { revalidate: 300, tags: ['businesses'] },
+  { revalidate: 60, tags: ['businesses'] },
 )
 
 // ═══════════════════════════════════════════════════════════
@@ -366,7 +366,7 @@ export const getTrendingBusinesses = unstable_cache(
     return sortByTrend(await normalizeBusinesses(data, supabase)).slice(0, limit)
   },
   ['businesses-trending-v3'],
-  { revalidate: 300, tags: ['businesses', 'trending'] },
+  { revalidate: 60, tags: ['businesses', 'trending'] },
 )
 
 // ═══════════════════════════════════════════════════════════
