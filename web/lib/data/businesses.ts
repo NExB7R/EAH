@@ -8,6 +8,7 @@ import { canAcceptInAppOrders } from './order-availability'
 import { getWhatsAppDestinationBusinessIds } from './contact-availability'
 import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
+import { isPromotionActive } from './promotion-status'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Data Fetching Layer
@@ -137,6 +138,8 @@ function normalizeBusiness(raw: Record<string, unknown>): Business {
     ...(rest as unknown as Business),
     location: loc,
     is_open: isOpen,
+    is_featured: isPromotionActive(raw.is_featured === true, raw.featured_until),
+    is_new_project: isPromotionActive(raw.is_new_project === true, raw.new_until),
     accepts_orders: acceptsOrders,
     orders_enabled: acceptsOrders,
   }
