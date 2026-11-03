@@ -578,34 +578,45 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
   const featuredPeriodStillActive =
     !!currentRow.is_featured &&
     (!currentRow.featured_until || currentFeaturedUntil > nowMs)
+  const renewFeatured = fdBool(formData, 'renew_featured')
 
   // A fresh Featured activation/renewal requires a paid, active plan with
-  // featured_home. A badge-only plan or free trial is not a homepage placement.
-  if (parsed.data.is_featured && !featuredPeriodStillActive) {
-    const eligible = await hasPaidFeaturedHomeSubscription(businessId)
-    if (!eligible) {
-      return {
-        ok: false,
-        error: 'الظهور في قسم المميزين يحتاج اشتراكًا مدفوعًا ساريًا يتضمن «ظهور في الرئيسية». باقة الشارة فقط أو التجربة المجانية لا تكفي.',
-      }
+  // featured_home. A stale form left open across expiry cannot renew by itself.
+  const requestingFreshFeatured =
+    parsed.data.is_featured &&
+    (!currentRow.is_featured || (currentRow.featured_until && currentFeaturedUntil <= nowMs && renewFeatured))
+  if (requestingFreshFeatured && !(await hasPaidFeaturedHomeSubscription(businessId))) {
+    return {
+      ok: false,
+      error: 'الظهور في قسم المميزين يحتاج اشتراكًا مدفوعًا ساريًا يتضمن «ظهور في الرئيسية». باقة الشارة فقط أو التجربة المجانية لا تكفي.',
     }
   }
 
-  // Enabling Featured for the first time (or after expiry) starts a fresh
-  // 30-day period from server time. Saving unrelated settings never extends it.
-  const featuredUntil = parsed.data.is_featured
-    ? featuredPeriodStillActive
+  // If the form was opened while active and left open past expiry, preserve the
+  // old expired timestamp. Only a fresh explicit activation/renewal starts 30 days.
+  const featuredUntil = !parsed.data.is_featured
+    ? null
+    : featuredPeriodStillActive
       ? currentRow.featured_until
-      : new Date(nowMs + 30 * 24 * 60 * 60 * 1000).toISOString()
-    : null
+      : requestingFreshFeatured
+        ? new Date(nowMs + 30 * 24 * 60 * 60 * 1000).toISOString()
+        : currentRow.featured_until
 
-  // New-project exposure is a one-month support window. An expired flag stays
-  // paused until the admin explicitly enables it again from this settings form.
-  const newUntil = parsed.data.is_new_project
-    ? currentRow.is_new_project && currentNewUntil > nowMs
+  const renewNewProject = fdBool(formData, 'renew_new_project')
+  const newPeriodStillActive = !!currentRow.is_new_project && currentNewUntil > nowMs
+  const requestingFreshNewProject =
+    parsed.data.is_new_project &&
+    (!currentRow.is_new_project || (currentNewUntil <= nowMs && renewNewProject))
+
+  // A new-project placement is renewed only after an explicit toggle from an
+  // expired/off state, never as a side effect of saving unrelated settings.
+  const newUntil = !parsed.data.is_new_project
+    ? null
+    : newPeriodStillActive
       ? currentRow.new_until
-      : new Date(nowMs + 30 * 24 * 60 * 60 * 1000).toISOString()
-    : null
+      : requestingFreshNewProject
+        ? new Date(nowMs + 30 * 24 * 60 * 60 * 1000).toISOString()
+        : currentRow.new_until
 
   // WhatsApp gate: accept a valid public contact-method number or a valid active-branch number.
   if (parsed.data.accepts_whatsapp_orders) {
@@ -625,6 +636,10 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
 
   const settings = {
     ...parsed.data,
+    is_featured: !!parsed.data.is_featured && !!featuredUntil && new Date(featuredUntil).getTime() > nowMs ||
+      (!!parsed.data.is_featured && !!currentRow.is_featured && !!featuredUntil),
+    is_new_project: !!parsed.data.is_new_project && !!newUntil && new Date(newUntil).getTime() > nowMs ||
+      (!!parsed.data.is_new_project && !!currentRow.is_new_project && !!newUntil),
     featured_order: 0,
     featured_pin: false,
     featured_until: featuredUntil,
