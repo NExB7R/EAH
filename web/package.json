@@ -36,14 +36,14 @@
     "@upstash/redis": "^1.39.0",
     "@vercel/analytics": "^2.0.1",
     "html-to-image": "^1.11.13",
-    "next": "^16.3.8",
+    "next": "^16.4.4",
     "qrcode": "^1.5.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "server-only": "^0.0.1",
     "serwist": "^9.5.13",
     "web-push": "^3.6.7",
-    "zod": "^4.6.5"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",
@@ -56,7 +56,7 @@
     "@types/serviceworker": "^0.0.203",
     "@types/web-push": "^3.6.4",
     "eslint": "^9",
-    "eslint-config-next": "16.3.8",
+    "eslint-config-next": "16.4.4",
     "jscpd": "^5.3.3",
     "knip": "^6.38.0",
     "lefthook": "^2.1.15",
@@ -67,5 +67,9 @@
     "typescript": "^5",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^5.0.3"
+  },
+  "overrides": {
+    "glob": "14.0.2",
+    "zod": "$zod"
   }
 }
