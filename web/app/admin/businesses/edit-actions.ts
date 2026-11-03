@@ -1,6 +1,7 @@
 'use server'
 
 import { parseCairoLocalDateEndOfDay } from '@/lib/utils/timezone'
+import { isEgyptianMobileNumber } from '@/lib/phone-validation'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
@@ -216,7 +217,7 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
   if (phoneNumbers.length > 10 || whatsappNumbers.length > 10 || allNumbers.length > 15) {
     return { ok: false, error: 'الحد الأقصى 15 رقم تواصل للنشاط' }
   }
-  if (allNumbers.some((value) => !/^01[0125][0-9]{8}$/.test(value))) {
+  if (allNumbers.some((value) => !isEgyptianMobileNumber(value))) {
     return { ok: false, error: 'كل أرقام التواصل لازم تكون أرقام مصرية صحيحة' }
   }
   if (new Set(allNumbers).size !== allNumbers.length) {
