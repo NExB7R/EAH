@@ -48,6 +48,7 @@ REVOKE ALL PRIVILEGES ON FUNCTION public.refresh_business_scores() FROM PUBLIC, 
 REVOKE ALL PRIVILEGES ON FUNCTION public.refresh_comment_likes() FROM PUBLIC, anon, authenticated;
 REVOKE ALL PRIVILEGES ON FUNCTION public.set_comment_depth() FROM PUBLIC, anon, authenticated;
 REVOKE ALL PRIVILEGES ON FUNCTION public.set_referral_code() FROM PUBLIC, anon, authenticated;
+REVOKE ALL PRIVILEGES ON FUNCTION public.generate_referral_code() FROM PUBLIC, anon, authenticated;
 REVOKE ALL PRIVILEGES ON FUNCTION public.update_customer_stats_on_delivered() FROM PUBLIC, anon, authenticated;
 REVOKE ALL PRIVILEGES ON FUNCTION public.update_customer_stats_on_insert() FROM PUBLIC, anon, authenticated;
 
