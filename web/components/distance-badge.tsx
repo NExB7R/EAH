@@ -2,6 +2,7 @@
 
 import { MapPinIcon } from './icons'
 import { useDistance } from '@/lib/hooks/use-distance'
+import type { LatLng } from '@/lib/utils/distance'
 import styles from './distance-badge.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -15,12 +16,14 @@ type Props = {
   lng: number | null
   className?: string
   showHere?: boolean
+  userLocation?: LatLng | null
+  enabled?: boolean
 }
 
-export default function DistanceBadge({ lat, lng, className = '', showHere = true }: Props) {
-  const d = useDistance(lat, lng)
+export default function DistanceBadge({ lat, lng, className = '', showHere = true, userLocation, enabled = true }: Props) {
+  const d = useDistance(lat, lng, userLocation)
 
-  if (d.status !== 'available') return null
+  if (!enabled || d.status !== 'available') return null
 
   return (
     <span
