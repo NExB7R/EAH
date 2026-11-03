@@ -1,3 +1,5 @@
+> تحديث 2026-11-03: توجد دفعة Home Discovery معزولة على `feat/home-local-discovery-2026` مبنية على `main`. لا تُدمج ولا تُنشر قبل اجتياز Quality Gate وBuild وE2E ومراجعة PR. لم تُنفّذ DB migrations أو كتابات إنتاجية. راجع `docs/SESSION_LOG.md` و`docs/CODE_REVIEW_LOG.md` و`docs/CRITERIA.md` للحدود والاختبارات المفتوحة.
+
 # EAH — NEXT_SESSION.md
 
 > اقرأ AI_PLAYBOOK.md + BRAIN.md + ERROR_REGISTER.md قبل أي عمل.
