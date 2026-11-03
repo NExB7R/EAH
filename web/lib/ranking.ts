@@ -52,6 +52,14 @@ export function trendScore(b: Business): number {
   )
 }
 
+export function hasSufficientTrendActivity(business: Business): boolean {
+  return (
+    (business.trend_activity_weight ?? 0) >= 1 ||
+    (business.trend_recent_orders ?? 0) > 0 ||
+    (business.trend_recent_reviews ?? 0) > 0
+  )
+}
+
 export function sortByTrend(businesses: Business[]): Business[] {
   const scored = [...businesses]
     .map((business) => ({ business, score: trendScore(business) }))
