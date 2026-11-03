@@ -474,6 +474,8 @@ export const getTrendingBusinesses = unstable_cache(
     const contactWeights: Record<string, number> = {
       phone_reveal: 0.8,
       whatsapp: 1.2,
+      review: 3,
+      comment: 2,
     }
     for (const event of contactEvents ?? []) {
       addSignal(
