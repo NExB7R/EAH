@@ -132,26 +132,47 @@ export function fairOrder(
 }
 
 export function fairOrderOffers(offers: Offer[], limit = 20): Offer[] {
-  if (offers.length <= limit) {
-    return dedupeOffersByBiz(offers, 8)
-  }
+  if (offers.length === 0 || limit <= 0) return []
 
   const seed = daySeed()
-  const scored = offers.map((o) => {
-    const reputation = o.business ? getBusinessReputationScore(o.business) / 100 : 0
-    const created = new Date(o.created_at).getTime()
-    const days = created ? (Date.now() - created) / 86400000 : 60
-    const fresh = Math.max(0.2, 1 - days / 60)
-    const fairness = fairnessBoost(o.id, seed)
-    return {
-      o,
-      score: reputation * 0.35 + fresh * 0.4 + fairness * 0.25,
-    }
-  })
-  scored.sort((a, b) => b.score - a.score)
-  const sorted = scored.map((x) => x.o)
+  const scored = offers.map((offer) => {
+    const business = offer.business
+    const velocity = Math.min(1, Math.max(0, Number(business?.velocity_score ?? 0)) / 50)
+    const engagement = Math.min(1, Math.max(0, Number(business?.engagement_score ?? 0)) / 100)
+    const diversity = Math.min(1, Math.max(0, Number(business?.diversity_score ?? 0)) / 50)
+    const lastActivity = business?.last_activity_at ? new Date(business.last_activity_at).getTime() : 0
+    const daysSinceActivity = lastActivity > 0 ? Math.max(0, (Date.now() - lastActivity) / 86400000) : 90
+    const recency = 1 / (1 + daysSinceActivity / 14)
+    const reputation = business ? getBusinessReputationScore(business) / 100 : 0
+    const offerAge = offer.created_at ? Math.max(0, (Date.now() - new Date(offer.created_at).getTime()) / 86400000) : 90
+    const offerFreshness = 1 / (1 + offerAge / 30)
 
-  return dedupeOffersByBiz(sorted, 8).slice(0, limit)
+    // Activity leads. Freshness and reputation refine close candidates but never
+    // let a new offer from a dormant business outrank a genuinely active one.
+    const activity = velocity * 0.4 + engagement * 0.3 + diversity * 0.1 + recency * 0.2
+    const score = activity * 0.8 + offerFreshness * 0.12 + reputation * 0.08
+    return { offer, score, activity }
+  })
+
+  scored.sort((a, b) => b.score - a.score)
+
+  // Randomize only within near-equal activity bands. Higher-activity bands remain
+  // ahead, while similarly active businesses share exposure without fixed positions.
+  const mixed: typeof scored = []
+  for (let index = 0; index < scored.length;) {
+    const anchor = scored[index]!.activity
+    let end = index + 1
+    while (end < scored.length && anchor - scored[end]!.activity <= 0.04) end++
+    const band = scored.slice(index, end)
+    for (let i = band.length - 1; i > 0; i--) {
+      const j = hash(`${band[i]!.offer.id}:${seed}:${i}`) % (i + 1)
+      ;[band[i], band[j]] = [band[j]!, band[i]!]
+    }
+    mixed.push(...band)
+    index = end
+  }
+
+  return dedupeOffersByBiz(mixed.map((item) => item.offer), Math.min(8, limit)).slice(0, limit)
 }
 
 function dedupeOffersByBiz(offers: Offer[], firstWindow: number): Offer[] {
