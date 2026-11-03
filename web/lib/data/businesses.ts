@@ -180,7 +180,7 @@ async function normalizeBusinesses(
 // ═══════════════════════════════════════════════════════════
 
 export const getPublishedBusinesses = unstable_cache(
-  async (): Promise<Business[]> => {
+  async (limit = 100): Promise<Business[]> => {
     const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('businesses')
@@ -190,7 +190,7 @@ export const getPublishedBusinesses = unstable_cache(
       .order('rating_avg', { ascending: false })
       .order('successful_orders', { ascending: false })
       .order('is_verified', { ascending: false })
-      .limit(100)
+      .limit(Math.max(1, Math.min(1000, Math.floor(limit))))
 
     if (error) {
       console.error('[data] getPublishedBusinesses error:', error.message)
@@ -201,7 +201,7 @@ export const getPublishedBusinesses = unstable_cache(
       (a, b) => getBusinessReputationScore(b) - getBusinessReputationScore(a),
     )
   },
-  ['businesses-published-v3'],
+  ['businesses-published-v4'],
   { revalidate: 300, tags: ['businesses'] },
 )
 
@@ -230,7 +230,7 @@ export const getPublishedBusinessCount = unstable_cache(
 // ═══════════════════════════════════════════════════════════
 
 export const getFeaturedBusinesses = unstable_cache(
-  async (limit = 6): Promise<Business[]> => {
+  async (limit = 1000): Promise<Business[]> => {
     const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('businesses')
@@ -259,7 +259,7 @@ export const getFeaturedBusinesses = unstable_cache(
 // ═══════════════════════════════════════════════════════════
 
 export const getNewBusinesses = unstable_cache(
-  async (limit = 10): Promise<Business[]> => {
+  async (limit = 1000): Promise<Business[]> => {
     const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('businesses')
