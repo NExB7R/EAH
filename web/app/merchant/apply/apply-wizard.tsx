@@ -71,13 +71,12 @@ export default function ApplyWizard({ areas }: Props) {
     if (step === 1) {
       const phones = phoneNumbers.map((value) => value.trim()).filter(Boolean)
       const whatsapps = whatsappNumbers.map((value) => value.trim()).filter(Boolean)
-      const validEgyptianNumber = (value: string) => /^01[0125][0-9]{8}$/.test(value)
       const phoneDigits = phones.map((value) => value.replace(/\D/g, ''))
       const whatsappDigits = whatsapps.map((value) => value.replace(/\D/g, ''))
       return (
         phones.length > 0 &&
-        phones.every(validEgyptianNumber) &&
-        whatsapps.every(validEgyptianNumber) &&
+        phones.every(isEgyptianMobileNumber) &&
+        whatsapps.every(isEgyptianMobileNumber) &&
         new Set(phoneDigits).size === phoneDigits.length &&
         new Set(whatsappDigits).size === whatsappDigits.length
       )
