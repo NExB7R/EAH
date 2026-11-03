@@ -152,13 +152,39 @@ async function ensureQaAccount(account) {
 }
 
 async function linkSellerQaActivity(sellerId) {
-  const { data: business, error: lookupError } = await supabase
+  const qaSlug = 'eah-qa-test-multi-contact-20261030'
+  const qaMarker = '[EAH QA FIXTURE — NONPRODUCTION ONLY]'
+  let { data: business, error: lookupError } = await supabase
     .from('businesses')
-    .select('id, owner_profile_id')
-    .eq('slug', 'eah-qa-test-multi-contact-20261030')
+    .select('id, owner_profile_id, description, source')
+    .eq('slug', qaSlug)
     .maybeSingle()
-  if (lookupError || !business) {
-    throw new Error(`Could not find the QA seller activity: ${lookupError?.message ?? 'not found'}`)
+  if (lookupError) {
+    throw new Error(`Could not inspect the QA seller activity: ${lookupError.message}`)
+  }
+  if (!business) {
+    const { data: created, error: createError } = await supabase
+      .from('businesses')
+      .insert({
+        name: 'نشاط اختبار EAH',
+        slug: qaSlug,
+        business_type: 'misc',
+        custom_business_type: 'نشاط اختبار',
+        business_type_status: 'approved',
+        source: 'admin',
+        description: qaMarker,
+        is_open: true,
+        is_published: false,
+      })
+      .select('id, owner_profile_id, description, source')
+      .single()
+    if (createError || !created) {
+      throw new Error(`Could not create the isolated QA activity: ${createError?.message ?? 'no row returned'}`)
+    }
+    business = created
+  }
+  if (business.description !== qaMarker || business.source !== 'admin') {
+    throw new Error('Refusing to link a seller to a business that is not the isolated QA fixture.')
   }
   if (business.owner_profile_id && business.owner_profile_id !== sellerId) {
     const { data: existingOwner, error } = await supabase.auth.admin.getUserById(business.owner_profile_id)
