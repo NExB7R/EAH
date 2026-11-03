@@ -3,6 +3,7 @@ import { createPublicClient } from '@/lib/supabase/public'
 import { createServiceClient } from '@/lib/supabase/service'
 import { sortByTrend, trendScore } from '@/lib/ranking'
 import { getBusinessReputationScore } from '@/lib/reputation'
+import { getPaidBusinessIdsWithFeature, getPaidFeaturedHomeBusinessIds } from './featured-eligibility'
 import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
 import { canAcceptInAppOrders } from './order-availability'
 import { getWhatsAppDestinationBusinessIds } from './contact-availability'
@@ -155,7 +156,7 @@ async function normalizeBusinesses(
 
   const rows = data.map((row) => row as Record<string, unknown>)
   const ids = rows.map((row) => String(row.id ?? ''))
-  const [configuredWhatsAppIds, configuredInAppOrderIds] = await Promise.all([
+  const [configuredWhatsAppIds, configuredInAppOrderIds, paidFeaturedBadgeIds] = await Promise.all([
     getWhatsAppDestinationBusinessIds(supabase, ids),
     getInAppOrderAvailableBusinessIds(
       supabase,
@@ -165,6 +166,7 @@ async function normalizeBusinesses(
         owner_profile_id: row.owner_profile_id,
       })),
     ),
+    getPaidBusinessIdsWithFeature('featured_badge', ids),
   ])
 
   return rows.map((row) =>
@@ -176,6 +178,8 @@ async function normalizeBusinesses(
         row.id,
         configuredWhatsAppIds,
       ),
+      // The public badge requires an active paid plan that includes it.
+      is_featured: !!row.is_featured && paidFeaturedBadgeIds.has(String(row.id ?? '')),
     }),
   )
 }
@@ -237,11 +241,15 @@ export const getPublishedBusinessCount = unstable_cache(
 export const getFeaturedBusinesses = unstable_cache(
   async (limit = 1000): Promise<Business[]> => {
     const supabase = createServiceClient()
+    const eligiblePaidIds = await getPaidFeaturedHomeBusinessIds()
+    if (eligiblePaidIds.size === 0) return []
+
     const { data, error } = await supabase
       .from('businesses')
       .select(BUSINESS_COLUMNS)
       .eq('is_published', true)
       .eq('is_featured', true)
+      .in('id', [...eligiblePaidIds])
       .or(`featured_until.is.null,featured_until.gt.${new Date().toISOString()}`)
       // Featured eligibility is controlled by the administrator and payment status.
       // Ranking fields and manual pins must never create a permanent first place;
@@ -255,7 +263,7 @@ export const getFeaturedBusinesses = unstable_cache(
     }
     return await normalizeBusinesses(data, supabase)
   },
-  ['businesses-featured-v3'],
+  ['businesses-featured-v4'],
   { revalidate: 300, tags: ['businesses', 'featured'] },
 )
 
