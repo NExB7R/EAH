@@ -15,7 +15,11 @@ export type DistanceResult =
 
 export function useDistance(lat: number | null, lng: number | null, locationOverride?: LatLng | null): DistanceResult {
   const geo = useGeo()
-  const location = locationOverride ?? (geo.status === 'granted' ? geo.location : null)
+  const location = locationOverride !== undefined
+    ? locationOverride
+    : geo.status === 'granted'
+      ? geo.location
+      : null
 
   if (!location) {
     return { status: geo.status === 'loading' ? 'loading' : 'unavailable' }
