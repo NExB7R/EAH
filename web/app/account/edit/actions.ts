@@ -70,6 +70,32 @@ export async function updateProfile(formData: FormData): Promise<ActionResult> {
   return { ok: true }
 }
 
+export async function saveNearbyLocation(formData: FormData): Promise<ActionResult> {
+  const { supabase, user } = await requireUser()
+  if (!user || user.is_anonymous) return { ok: false, error: 'سجّل دخولك الأول عشان نحفظ موقعك' }
+
+  const latitude = Number(formData.get('latitude'))
+  const longitude = Number(formData.get('longitude'))
+  if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90 ||
+      !Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
+    return { ok: false, error: 'إحداثيات الموقع غير صحيحة' }
+  }
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .update({ default_latitude: latitude, default_longitude: longitude })
+    .eq('id', user.id)
+    .select('id')
+    .maybeSingle()
+
+  if (error || !data) return { ok: false, error: 'تعذر حفظ موقعك. جرّب مرة تانية' }
+
+  revalidatePath('/')
+  revalidatePath('/nearby')
+  revalidatePath('/account/edit')
+  return { ok: true }
+}
+
 export async function updatePrivacy(formData: FormData): Promise<ActionResult> {
   const { supabase, user } = await requireUser()
   if (!user || user.is_anonymous) return { ok: false, error: 'غير مصرح' }
