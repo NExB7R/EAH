@@ -33,8 +33,8 @@ export default function NewRow({ businesses, limit = 12, favoriteIds = new Set()
               <SunriseIcon size={22} />
             </span>
             <div className={styles.titleText}>
-              <h2 className={styles.title}>بدايات</h2>
-              <p className={styles.subtitle}>مشاريع لسه فاتحة — ادعمهم</p>
+              <h2 className={styles.title}>الأنشطة الجديدة</h2>
+              <p className={styles.subtitle}>مساحة دعم لأول شهر من انطلاق النشاط</p>
             </div>
           </div>
 
