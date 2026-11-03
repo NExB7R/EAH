@@ -4,7 +4,6 @@ import {
   StoreIcon,
   CheckCircleIcon,
   MapPinIcon,
-  StoreIcon,
   GiftIcon,
   CrownGoldIcon,
   PhoneIcon,
