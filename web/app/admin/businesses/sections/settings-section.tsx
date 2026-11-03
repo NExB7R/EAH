@@ -68,39 +68,9 @@ export default function SettingsSection() {
         <label htmlFor="is_verified">☑️ موثق (Verified) — شهادة EAH الرسمية</label>
       </div>
 
-      {ctx.isFeatured && (
-        <>
-          <div className={styles.field}>
-            <label className={styles.label}>ترتيب المميز (0-999)</label>
-            <input
-              type="number"
-              min={0}
-              max={999}
-              value={ctx.featuredOrder}
-              onChange={(e) => ctx.setFeaturedOrder(parseInt(e.target.value) || 0)}
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.checkRow}>
-            <input
-              id="featured_pin"
-              type="checkbox"
-              checked={ctx.featuredPin}
-              onChange={(e) => ctx.setFeaturedPin(e.target.checked)}
-            />
-            <label htmlFor="featured_pin">مثبّت في المقدمة</label>
-          </div>
-          <div className={styles.field}>
-            <label className={styles.label}>ينتهي التمييز في</label>
-            <input
-              type="date"
-              value={ctx.featuredUntil}
-              onChange={(e) => ctx.setFeaturedUntil(e.target.value)}
-              className={styles.input}
-            />
-          </div>
-        </>
-      )}
+      <p className={styles.hint}>
+        المميزون يظهرون بكروت متساوية؛ لا يوجد ترتيب أول أو تثبيت يدوي. عند تفعيل الميزة لأول مرة تبدأ مدة 30 يومًا، ويمكنك إيقافها فورًا.
+      </p>
 
       <div className={styles.checkRow}>
         <input
@@ -109,20 +79,11 @@ export default function SettingsSection() {
           checked={ctx.isNewProject}
           onChange={(e) => ctx.setIsNewProject(e.target.checked)}
         />
-        <label htmlFor="is_new_project">بدايات (مشروع جديد)</label>
+        <label htmlFor="is_new_project">إظهار في قسم الأنشطة الجديدة لمدة شهر</label>
       </div>
-
-      {ctx.isNewProject && (
-        <div className={styles.field}>
-          <label className={styles.label}>ينتهي في</label>
-          <input
-            type="date"
-            value={ctx.newUntil}
-            onChange={(e) => ctx.setNewUntil(e.target.value)}
-            className={styles.input}
-          />
-        </div>
-      )}
+      <p className={styles.hint}>
+        عند التفعيل تبدأ 30 يومًا تلقائيًا. بعد انتهائها يتوقف الظهور في هذا القسم، ويظل النشاط منشورًا عاديًا. فعّل الاختيار مرة أخرى لتجديد شهر جديد.
+      </p>
 
       <SaveBar
         onClick={ctx.saveSettings}
