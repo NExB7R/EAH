@@ -15,8 +15,8 @@ type Props = {
 }
 
 const ROLES = [
-  { value: 'customer', label: 'العميل' },
-  { value: 'merchant', label: 'التاجر' },
+  { value: 'customer', label: 'المشتري' },
+  { value: 'merchant', label: 'البايع' },
 ]
 
 function getRoleLabel(role: string): string {
