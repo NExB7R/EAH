@@ -367,6 +367,7 @@ export type Offer = {
     rating_avg: number
     rating_count?: number
     successful_orders?: number
+    location?: { lat: number; lng: number } | null
     velocity_score?: number
     engagement_score?: number
     diversity_score?: number
@@ -383,7 +384,7 @@ export const getActiveOffers = unstable_cache(
       .select(
         `
         id, title, description, price, image_url, starts_at, ends_at, created_at,
-        business:businesses(id, slug, name, area, is_verified, rating_avg, rating_count, successful_orders, velocity_score, engagement_score, diversity_score, last_activity_at)
+        business:businesses(id, slug, name, area, is_verified, rating_avg, rating_count, successful_orders, velocity_score, engagement_score, diversity_score, last_activity_at, business_locations(latitude, longitude, is_primary))
       `,
       )
       .eq('is_published', true)
@@ -396,7 +397,29 @@ export const getActiveOffers = unstable_cache(
       console.error('[data] getActiveOffers error:', error.message)
       return []
     }
-    return (data ?? []) as unknown as Offer[]
+    return (data ?? []).map((row) => {
+      const raw = row as unknown as {
+        business?: (Omit<NonNullable<Offer['business']>, 'location'> & {
+          business_locations?: { latitude: number; longitude: number; is_primary: boolean }[] | null
+        }) | null
+      } & Record<string, unknown>
+      const locations = raw.business?.business_locations ?? []
+      const primary = locations.find((item) => item.is_primary) ?? locations[0]
+      const location =
+        primary &&
+        Number.isFinite(primary.latitude) &&
+        Number.isFinite(primary.longitude) &&
+        primary.latitude >= -90 &&
+        primary.latitude <= 90 &&
+        primary.longitude >= -180 &&
+        primary.longitude <= 180
+          ? { lat: primary.latitude, lng: primary.longitude }
+          : null
+      const business = raw.business
+        ? { ...raw.business, location }
+        : null
+      return { ...raw, business } as unknown as Offer
+    })
   },
   ['offers-active'],
   { revalidate: 300, tags: ['offers'] },
