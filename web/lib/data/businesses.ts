@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { createPublicClient } from '@/lib/supabase/public'
 import { createServiceClient } from '@/lib/supabase/service'
-import { sortByTrend } from '@/lib/ranking'
+import { sortByTrend, trendScore } from '@/lib/ranking'
 import { getBusinessReputationScore } from '@/lib/reputation'
 import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
 import { canAcceptInAppOrders } from './order-availability'
@@ -71,6 +71,7 @@ export type Business = {
   trend_activity_count?: number
   trend_recent_orders?: number
   trend_recent_reviews?: number
+  trend_score?: number
   branches_count: number
   offers_count: number
   rating_avg: number
@@ -352,7 +353,6 @@ export const getTrendingBusinesses = unstable_cache(
     const ids = candidates.map((business) => business.id)
     const now = Date.now()
     const since30 = new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString()
-    const since7 = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString()
 
     const [
       { data: activities, error: activitiesError },
@@ -369,7 +369,7 @@ export const getTrendingBusinesses = unstable_cache(
         .limit(20000),
       supabase
         .from('engagement_events')
-        .select('business_id, user_id, action, created_at')
+        .select('business_id, user_id, action, ip_hash, created_at')
         .in('business_id', ids)
         .gte('created_at', since30)
         .order('created_at', { ascending: false })
@@ -430,18 +430,19 @@ export const getTrendingBusinesses = unstable_cache(
       action: string,
       createdAt: string,
       weight: number,
+      anonymousKey?: string | null,
     ) => {
       const signal = signalByBusiness.get(businessId)
       const timestamp = new Date(createdAt).getTime()
       if (!signal || !Number.isFinite(timestamp) || timestamp > now || timestamp < now - 30 * 86400000) return
 
       const day = new Date(timestamp).toISOString().slice(0, 10)
-      if (userId) {
-        const key = `${businessId}:${userId}:${action}:${day}`
-        if (seen.has(key)) return
-        seen.add(key)
-        signal.users.add(userId)
-      }
+      const actorKey = userId ?? anonymousKey ?? null
+      if (!actorKey) return
+      const key = `${businessId}:${actorKey}:${action}:${day}`
+      if (seen.has(key)) return
+      seen.add(key)
+      signal.users.add(actorKey)
 
       signal.recentWeight += weight
       signal.activityCount += 1
@@ -481,6 +482,7 @@ export const getTrendingBusinesses = unstable_cache(
         `contact:${event.action}`,
         event.created_at,
         contactWeights[event.action] ?? 0,
+        event.ip_hash,
       )
     }
 
@@ -514,6 +516,7 @@ export const getTrendingBusinesses = unstable_cache(
     // An activity without verified recent customer signals is not a "trend".
     // It remains discoverable in its other sections, but cannot be promoted here.
     return sortByTrend(rankedCandidates.filter((business) => (business.trend_activity_count ?? 0) > 0))
+      .map((business) => ({ ...business, trend_score: trendScore(business) }))
       .slice(0, Math.max(0, Math.min(1000, Math.floor(limit))))
   },
   ['businesses-trending-v4'],
