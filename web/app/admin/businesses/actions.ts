@@ -378,7 +378,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     })(),
     is_open: formData.get('is_open') === 'on',
     accepts_whatsapp_orders: formData.get('accepts_whatsapp_orders') === 'on',
-    is_published: formData.has('is_published') ? formData.get('is_published') === 'on' : true,
+    is_published: formData.get('is_published') === 'on',
   })
 
   if (!parsed.success) {
