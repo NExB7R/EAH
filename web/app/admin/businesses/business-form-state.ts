@@ -124,15 +124,28 @@ export function useFormState(business: AdminBusiness | null): FormState {
   const [isPublished, setIsPublished] = useState(business?.is_published ?? false)
   const [isOpen, setIsOpen] = useState(business?.is_open ?? true)
   const [acceptsWhatsapp, setAcceptsWhatsapp] = useState(false)
-  const [isFeatured, setIsFeatured] = useState(
-    business?.is_featured ?? false,
-  )
+  const now = Date.now()
+  const featuredUntilValue = business?.featured_until ?? null
+  const newUntilValue = business?.new_until ?? null
+  const featuredStillActive =
+    !!business?.is_featured &&
+    (!featuredUntilValue || new Date(featuredUntilValue).getTime() > now)
+  const newProjectStillActive =
+    !!business?.is_new_project &&
+    !!newUntilValue &&
+    new Date(newUntilValue).getTime() > now
+
+  const [isFeatured, setIsFeatured] = useState(featuredStillActive)
   const [isVerified, setIsVerified] = useState(!!business?.is_verified)
   const [featuredOrder, setFeaturedOrder] = useState(0)
   const [featuredPin, setFeaturedPin] = useState(false)
-  const [featuredUntil, setFeaturedUntil] = useState('')
-  const [isNewProject, setIsNewProject] = useState(false)
-  const [newUntil, setNewUntil] = useState('')
+  const [featuredUntil, setFeaturedUntil] = useState(
+    featuredUntilValue ? new Date(featuredUntilValue).toISOString().slice(0, 10) : '',
+  )
+  const [isNewProject, setIsNewProject] = useState(newProjectStillActive)
+  const [newUntil, setNewUntil] = useState(
+    newUntilValue ? new Date(newUntilValue).toISOString().slice(0, 10) : '',
+  )
 
   const [hours, setHours] = useState<Record<DayKey, DayHours>>(() =>
     readFileAsHours(
