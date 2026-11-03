@@ -2,7 +2,9 @@ import Link from 'next/link'
 import WmImage from './wm-image'
 import { TagIcon, ArrowLeftIcon, MapPinIcon } from './icons'
 import RowCarousel from './row-carousel'
+import DistanceBadge from './distance-badge'
 import type { Offer } from '@/lib/data'
+import type { LatLng } from '@/lib/utils/distance'
 import styles from './offers-strip.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -11,9 +13,10 @@ import styles from './offers-strip.module.css'
 
 type Props = {
   offers: Offer[]
+  viewerLocation: LatLng | null
 }
 
-export default function OffersStrip({ offers }: Props) {
+export default function OffersStrip({ offers, viewerLocation }: Props) {
   if (offers.length === 0) return null
 
   return (
@@ -37,7 +40,7 @@ export default function OffersStrip({ offers }: Props) {
 
         <RowCarousel accent="#C77DFF">
           {offers.map((offer) => (
-            <OfferCard key={offer.id} offer={offer} />
+            <OfferCard key={offer.id} offer={offer} viewerLocation={viewerLocation} />
           ))}
         </RowCarousel>
       </div>
@@ -45,7 +48,7 @@ export default function OffersStrip({ offers }: Props) {
   )
 }
 
-export function OfferCard({ offer, layout = 'carousel' }: { offer: Offer; layout?: 'carousel' | 'grid' }) {
+export function OfferCard({ offer, layout = 'carousel', viewerLocation = null }: { offer: Offer; layout?: 'carousel' | 'grid'; viewerLocation?: LatLng | null }) {
   const href = offer.business?.slug ? `/businesses/${offer.business.slug}` : '/offers'
   const isTestOffer = offer.title.includes('اختبار EAH') || offer.description?.includes('اصطناعي')
 
@@ -66,6 +69,13 @@ export function OfferCard({ offer, layout = 'carousel' }: { offer: Offer; layout
           </div>
         )}
         <div className={styles.imageOverlay} aria-hidden />
+        {viewerLocation && offer.business?.location && (
+          <DistanceBadge
+            lat={offer.business.location.lat}
+            lng={offer.business.location.lng}
+            userLocation={viewerLocation}
+          />
+        )}
 
         <span className={styles.badge}>
           <TagIcon size={11} />
