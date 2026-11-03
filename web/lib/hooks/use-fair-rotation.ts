@@ -52,14 +52,8 @@ function pickPageSize(w: number, s: PageSizes, bp: Breakpoints): number {
 }
 
 function sliceVisible<T>(order: T[], start: number, size: number): T[] {
-  if (order.length === 0) return []
-  if (order.length <= size) return [...order]
-  const out: T[] = []
-  for (let i = 0; i < size; i++) {
-    const item = order[(start + i) % order.length]
-    if (item) out.push(item)
-  }
-  return out
+  if (order.length === 0 || start >= order.length) return []
+  return order.slice(Math.max(0, start), Math.max(0, start) + size)
 }
 
 export function useFairRotation<T extends { id: string }>({
@@ -111,12 +105,14 @@ export function useFairRotation<T extends { id: string }>({
     const order = orderRef.current
     if (order.length === 0) return
     const size = pageSizeRef.current
-    const nextCursor = cursorRef.current + size
-    if (nextCursor >= order.length) {
+    // Show the final partial page before starting a fresh shuffled cycle.
+    // Never wrap the tail to the beginning: that repeated earlier items and
+    // skipped the last items whenever the list length was not a page-size multiple.
+    if (cursorRef.current + size >= order.length) {
       orderRef.current = fisherYates(itemsRef.current)
       cursorRef.current = 0
     } else {
-      cursorRef.current = nextCursor
+      cursorRef.current += size
     }
     setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
     persist()
@@ -168,7 +164,7 @@ export function useFairRotation<T extends { id: string }>({
         if (restored.length === items.length && missing.length === 0) {
           nextOrder = restored
           const c = typeof parsed.cursor === 'number' ? parsed.cursor : 0
-          nextCursor = items.length > 0 ? c % items.length : 0
+          nextCursor = Math.max(0, Math.min(c, Math.max(0, items.length - 1)))
         }
       }
     } catch {
