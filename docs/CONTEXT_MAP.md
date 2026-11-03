@@ -144,7 +144,7 @@
 | `business-share-modal.tsx` | BusinessShareModal | EAH — Business Share Modal |
 | `business-tabs.tsx` | BusinessTabs | — |
 | `card-image.tsx` | CardImage | The cover is the card's primary image. The logo is a small brand marker, |
-| `category-chips.tsx` | CategoryChips | EAH — Category Chips (Pyramid, 2026) |
+| `category-chips.tsx` | CategoryChips | Home categories are business types only. Discovery and feature filters stay separate. |
 | `chip-scroll-handler.tsx` | ChipScrollHandler | EAH — Chip Scroll Handler |
 | `comment-item.tsx` | CommentItem | — |
 | `comments-list.tsx` | CommentsList | — |
