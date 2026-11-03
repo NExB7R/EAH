@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { getCairoDateParts, parseCairoLocalDateTime } from './timezone'
+import {
+  getCairoDateParts,
+  parseCairoLocalDateTime,
+  parseCairoLocalDateEndOfDay,
+} from './timezone'
 
 describe('Cairo business timezone helpers', () => {
   it('uses Egypt daylight-saving time when it is active', () => {
@@ -51,5 +55,25 @@ describe('Cairo business timezone helpers', () => {
   it('fails closed for invalid timestamps', () => {
     expect(getCairoDateParts('not-a-date')).toBeNull()
     expect(getCairoDateParts(new Date(Number.NaN))).toBeNull()
+  })
+})
+
+
+describe('Cairo local expiry dates', () => {
+  it('expires at the end of the selected Cairo calendar day in standard time', () => {
+    expect(parseCairoLocalDateEndOfDay('2026-11-03')?.toISOString()).toBe(
+      '2026-11-03T21:59:59.999Z',
+    )
+  })
+
+  it('uses the daylight-saving offset for a selected summer date', () => {
+    expect(parseCairoLocalDateEndOfDay('2026-07-03')?.toISOString()).toBe(
+      '2026-07-03T20:59:59.999Z',
+    )
+  })
+
+  it('rejects malformed or impossible date-only values', () => {
+    expect(parseCairoLocalDateEndOfDay('2026-02-31')).toBeNull()
+    expect(parseCairoLocalDateEndOfDay('not-a-date')).toBeNull()
   })
 })
