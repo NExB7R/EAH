@@ -94,11 +94,8 @@ export function useSaveHandlers(state: FormState, business: AdminBusiness | null
     fd.set('accepts_whatsapp_orders', String(s.acceptsWhatsapp))
     fd.set('is_featured', String(s.isFeatured))
     fd.set('is_verified', String(s.isVerified))
-    fd.set('featured_order', String(s.featuredOrder))
-    fd.set('featured_pin', String(s.featuredPin))
     fd.set('featured_until', s.featuredUntil)
     fd.set('is_new_project', String(s.isNewProject))
-    fd.set('new_until', s.newUntil)
     s.handleSaveSection('settings', () => saveSettingsAction(business.id, fd))
   }
 
