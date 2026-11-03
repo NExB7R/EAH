@@ -61,7 +61,7 @@ async function toggleActivity(
 
   if (error) return { ok: false, error: 'تعذر تحديث التفاعل. حاول مرة أخرى.' }
 
-  // إشعار للتاجر المرتبط بالنشاط (عند إضافة متابعة جديدة)
+  // إشعار للبايع المرتبط بالنشاط (عند إضافة متابعة جديدة)
   if (type === 'follow') {
     const { data: biz } = await supabase
       .from('businesses')
@@ -73,7 +73,7 @@ async function toggleActivity(
       void createNotification({
         userId: biz.owner_profile_id,
         type: 'follow_new',
-        title: 'عميل جديد تابع نشاطك',
+        title: 'مشتري جديد تابع نشاطك',
         body: `حد تابع ${biz.name} — أول ما تنزل عرض جديد هيوصله إشعار فوري`,
         deepLink: `/businesses/${slug}`,
         pushTag: 'follow',
