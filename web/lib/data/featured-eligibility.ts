@@ -37,7 +37,6 @@ export async function getPaidBusinessFeatureEntitlements(
     return new Map()
   }
 
-  const now = new Date().toISOString()
   let query = supabase
     .from('business_subscriptions')
     .select(
@@ -45,8 +44,6 @@ export async function getPaidBusinessFeatureEntitlements(
     )
     .eq('status', 'active')
     .eq('is_trial', false)
-    .or(`starts_at.is.null,starts_at.lte.${now}`)
-    .or(`expires_at.is.null,expires_at.gt.${now}`)
     .limit(5000)
 
   if (businessIds) query = query.in('business_id', [...businessIds])
