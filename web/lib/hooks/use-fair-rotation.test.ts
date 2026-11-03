@@ -37,4 +37,17 @@ describe('featured rotation page cursor', () => {
     expect(previousPageStart(0, 4)).toBe(0)
     expect(previousPageStart(8, 4)).toBe(4)
   })
+
+  it('keeps unseen progress when the viewport shrinks from eight cards to four', () => {
+    expect(nextPageStart(0, 10, 4, 8)).toBe(8)
+    expect(nextPageStart(8, 10, 4, 10)).toBe(0)
+  })
+
+  it('accounts for newly visible cards when the viewport grows', () => {
+    expect(nextPageStart(0, 10, 8, 8)).toBe(8)
+  })
+
+  it('does not replay previously seen cards after navigating backward', () => {
+    expect(nextPageStart(4, 10, 4, 8)).toBe(8)
+  })
 })
