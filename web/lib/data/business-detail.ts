@@ -65,7 +65,7 @@ async function normalizeBusinessRows(
       accepts_orders: acceptsOrders,
       accepts_whatsapp_orders: acceptsWhatsApp,
       orders_enabled: acceptsOrders,
-      is_featured: !!raw.is_featured && paidFeaturedBadgeIds.has(String(raw.id ?? '')),
+      is_featured: paidFeaturedBadgeIds.has(String(raw.id ?? '')),
     }
   })
 }
@@ -245,7 +245,7 @@ export const getBusinessDetail = unstable_cache(
       accepts_orders: acceptsOrders,
       accepts_whatsapp_orders: acceptsWhatsApp,
       orders_enabled: acceptsOrders,
-      is_featured: !!rawBiz.is_featured && paidFeaturedBadgeIds.has(String(rawBiz.id)),
+      is_featured: paidFeaturedBadgeIds.has(String(rawBiz.id)),
     }
 
     const noticeText = ((rawBiz.important_notice as string | null) ?? '').trim()
