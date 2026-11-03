@@ -3,6 +3,7 @@ import BusinessCard from './business-card'
 import { TrendingUpIcon, ArrowLeftIcon } from './icons'
 import RowCarousel from './row-carousel'
 import type { Business } from '@/lib/data'
+import type { LatLng } from '@/lib/utils/distance'
 import styles from './trending-row.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -11,9 +12,9 @@ import styles from './trending-row.module.css'
 //   • Smart layout: ≤3 items → centered grid, >3 → carousel
 // ═══════════════════════════════════════════════════════════
 
-type Props = { businesses: Business[]; favoriteIds?: Set<string>; limit?: number }
+type Props = { businesses: Business[]; favoriteIds?: Set<string>; limit?: number; viewerLocation: LatLng | null }
 
-export default function TrendingRow({ businesses, limit = 12, favoriteIds = new Set() }: Props) {
+export default function TrendingRow({ businesses, limit = 12, favoriteIds = new Set(), viewerLocation }: Props) {
   if (businesses.length === 0) return null
   const visible = businesses.slice(0, limit)
   const useGrid = visible.length <= 3
@@ -26,6 +27,8 @@ export default function TrendingRow({ businesses, limit = 12, favoriteIds = new 
         context="trending"
         rank={i + 1}
         isFavorite={favoriteIds.has(b.id)}
+        viewerLocation={viewerLocation}
+        showDistance={!!viewerLocation}
       />
     </div>
   ))
