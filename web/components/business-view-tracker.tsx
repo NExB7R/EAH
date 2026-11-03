@@ -41,7 +41,21 @@ export default function BusinessViewTracker({ businessId }: { businessId: string
         return created
       }
 
-      const visitorId = getSessionUuid('eah:visitor-id')
+      // Same random visitor key across tabs for the current UTC day; the
+      // session id remains tab-scoped. This limits multi-tab view inflation
+      // without creating a long-lived cross-day browsing identifier.
+      const day = new Date().toISOString().slice(0, 10)
+      const visitorKey = `eah:visitor-id:${day}`
+      let visitorId: string | null = null
+      try {
+        visitorId = localStorage.getItem(visitorKey)
+        if (!visitorId) {
+          visitorId = createUuid()
+          if (visitorId) localStorage.setItem(visitorKey, visitorId)
+        }
+      } catch {
+        visitorId = getSessionUuid('eah:visitor-id')
+      }
       const sessionId = getSessionUuid('eah:session-id')
       if (!visitorId || !sessionId) return
 
