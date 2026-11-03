@@ -47,7 +47,7 @@ export default function NearbyGrid({
             <div>
               <h2 className={styles.title}>قريب منك</h2>
               <p className={styles.subtitle}>
-                {viewerLocation ? 'مرتبة حسب المسافة الفعلية' : viewerArea ? `أنشطة في ${viewerArea}` : 'اكتشف الأنشطة الأقرب لمكانك'}
+                {viewerLocation ? 'مرتبة حسب المسافة المباشرة من موقعك' : viewerArea ? `أنشطة في ${viewerArea}` : 'اكتشف الأنشطة الأقرب لمكانك'}
               </p>
             </div>
           </div>
