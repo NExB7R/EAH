@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import HomeHero from '@/components/home-hero'
+import CategoryChips from '@/components/category-chips'
 import FeaturedBento from '@/components/featured-bento'
 import TrendingRow from '@/components/trending-row'
 import OffersStrip from '@/components/offers-strip'
@@ -33,6 +34,7 @@ export default async function Home({ searchParams }: Props) {
     <main>
       <ChipScrollHandler target={params.scroll} />
       <HomeHero isLoggedIn={!!session} hasBusiness={!!business} />
+      <CategoryChips />
       <Suspense fallback={null}>
         <HomeSections typeFilter={params.type} />
       </Suspense>
