@@ -84,8 +84,8 @@ export default function BusinessTabs({
   const { business, contacts, branches, menu, gallery } = detail
   const featured = business.is_featured
 
-  const phone = contacts.find((c) => c.method_type === 'phone')
-  const whatsapp = contacts.find((c) => c.method_type === 'whatsapp')
+  const phones = contacts.filter((c) => c.method_type === 'phone')
+  const whatsapps = contacts.filter((c) => c.method_type === 'whatsapp')
   const facebook = contacts.find((c) => c.method_type === 'facebook')
   const instagram = contacts.find((c) => c.method_type === 'instagram')
   const website = contacts.find((c) => c.method_type === 'website')
@@ -157,8 +157,8 @@ export default function BusinessTabs({
       {tab === 'info' && (
         <div className={styles.content}>
           {/* Contacts */}
-          {(phone ||
-            whatsapp ||
+          {(phones.length > 0 ||
+            whatsapps.length > 0 ||
             complaints ||
             manager ||
             shiftMorning ||
@@ -169,26 +169,32 @@ export default function BusinessTabs({
             <div className={styles.block}>
               <h3 className={styles.blockTitle}>التواصل</h3>
               <div className={styles.contactList}>
-                {whatsapp && (
+                {whatsapps.map((contact, index) => (
                   <a
-                    href={`https://wa.me/2${whatsapp.value.replace(/^0/, '').replace(/^20/, '')}`}
+                    key={`whatsapp-${contact.value}-${index}`}
+                    href={`https://wa.me/2${contact.value.replace(/^0/, '').replace(/^20/, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`${styles.contactItem} ${styles.contactWhatsapp}`}
+                    dir="ltr"
                   >
                     <WhatsAppIcon size={16} />
-                    <span>{whatsapp.value}</span>
+                    <span>{contact.value}</span>
+                    {contact.is_primary && <span>الأساسي</span>}
                   </a>
-                )}
-                {phone && (
+                ))}
+                {phones.map((contact, index) => (
                   <a
-                    href={`tel:${phone.value}`}
+                    key={`phone-${contact.value}-${index}`}
+                    href={`tel:${contact.value}`}
                     className={`${styles.contactItem} ${styles.contactPhone}`}
+                    dir="ltr"
                   >
                     <PhoneIcon size={16} />
-                    <span>{phone.value}</span>
+                    <span>{contact.value}</span>
+                    {contact.is_primary && <span>الأساسي</span>}
                   </a>
-                )}
+                ))}
                 {facebook && (
                   <a
                     href={facebook.value}
