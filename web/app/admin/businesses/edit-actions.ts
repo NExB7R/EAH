@@ -552,19 +552,51 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
     accepts_whatsapp_orders: fdBool(formData, 'accepts_whatsapp_orders'),
     is_featured: fdBool(formData, 'is_featured'),
     is_verified: fdBool(formData, 'is_verified'),
-    featured_order: fd(formData, 'featured_order') || '0',
-    featured_pin: fdBool(formData, 'featured_pin'),
+    // Ranking position and pin are intentionally not admin controls:
+    // all eligible featured activities receive equal visual weight.
+    featured_order: '0',
+    featured_pin: false,
     featured_until: fd(formData, 'featured_until'),
     is_new_project: fdBool(formData, 'is_new_project'),
-    new_until: fd(formData, 'new_until'),
+    new_until: '',
   })
   if (!parsed.success) return parseError(parsed)
 
-  const featuredUntil = toOptionalIsoDate(parsed.data.featured_until ?? undefined)
-  const newUntil = toOptionalIsoDate(parsed.data.new_until ?? undefined)
-  if (featuredUntil === undefined || newUntil === undefined) {
-    return { ok: false, error: 'تاريخ انتهاء التمييز أو علامة «جديد» غير صحيح' }
+  const { data: currentRow, error: currentError } = await adminDb
+    .from('businesses')
+    .select('is_featured, featured_until, is_new_project, new_until, is_verified')
+    .eq('id', businessId)
+    .maybeSingle()
+  if (currentError) return { ok: false, error: 'تعذر قراءة إعدادات النشاط قبل الحفظ' }
+  if (!currentRow) return { ok: false, error: 'النشاط مش موجود' }
+
+  const now = new Date()
+  const nowMs = now.getTime()
+  const currentFeaturedUntil = currentRow.featured_until ? new Date(currentRow.featured_until).getTime() : 0
+  const currentNewUntil = currentRow.new_until ? new Date(currentRow.new_until).getTime() : 0
+
+  const requestedFeaturedUntil = toOptionalIsoDate(parsed.data.featured_until ?? undefined)
+  if (requestedFeaturedUntil === undefined) {
+    return { ok: false, error: 'تاريخ انتهاء التمييز غير صحيح' }
   }
+
+  // Enabling Featured for the first time (or after expiry) starts a fresh
+  // 30-day period. Saving unrelated settings never silently extends it.
+  const featuredUntil = parsed.data.is_featured
+    ? currentRow.is_featured && (!currentRow.featured_until || currentFeaturedUntil > nowMs)
+      ? currentRow.featured_until
+      : requestedFeaturedUntil && new Date(requestedFeaturedUntil).getTime() > nowMs
+        ? requestedFeaturedUntil
+        : new Date(nowMs + 30 * 24 * 60 * 60 * 1000).toISOString()
+    : null
+
+  // New-project exposure is a one-month support window. An expired flag stays
+  // paused until the admin explicitly enables it again from this settings form.
+  const newUntil = parsed.data.is_new_project
+    ? currentRow.is_new_project && currentNewUntil > nowMs
+      ? currentRow.new_until
+      : new Date(nowMs + 30 * 24 * 60 * 60 * 1000).toISOString()
+    : null
 
   // WhatsApp gate: accept a valid public contact-method number or a valid active-branch number.
   if (parsed.data.accepts_whatsapp_orders) {
@@ -578,26 +610,20 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
     }
   }
 
-  // Publication is controlled by the admin's explicit visibility setting.
-  // Custom-type approval affects the label only, never whether a business can be listed.
-  // ═══ Verification change tracking ═══
-  const { data: currentRow } = await adminDb
-    .from('businesses')
-    .select('is_verified')
-    .eq('id', businessId)
-    .maybeSingle()
-  const wasVerified = !!currentRow?.is_verified
   const nowVerified = parsed.data.is_verified ?? false
+  const wasVerified = !!currentRow.is_verified
   const verificationChange = wasVerified !== nowVerified
 
   const settings = {
     ...parsed.data,
+    featured_order: 0,
+    featured_pin: false,
     featured_until: featuredUntil,
     new_until: newUntil,
     ...(verificationChange
       ? {
           is_verified: nowVerified,
-          verified_at: nowVerified ? new Date().toISOString() : null,
+          verified_at: nowVerified ? now.toISOString() : null,
           verified_by: nowVerified ? ctx.userId : null,
         }
       : {}),
@@ -620,7 +646,10 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
     metadata: settings as Record<string, unknown>,
   })
   revalidatePath(`/admin/businesses/${businessId}`)
+  revalidatePath('/')
+  revalidatePath('/featured')
   revalidateTag('businesses', 'default')
+  revalidateTag('featured', 'default')
   revalidateTag('admin-badges', 'default')
   return { ok: true }
 }
