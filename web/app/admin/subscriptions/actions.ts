@@ -29,6 +29,17 @@ async function logAudit(
   })
 }
 
+
+function revalidateSubscriptionEntitlements() {
+  revalidatePath('/admin/subscriptions')
+  revalidatePath('/admin/featured')
+  revalidatePath('/')
+  revalidatePath('/featured')
+  revalidateTag('admin-badges', 'default')
+  revalidateTag('businesses', 'default')
+  revalidateTag('featured', 'default')
+}
+
 // ─── قبول اشتراك معلّق ───
 
 const approveSchema = z.object({
@@ -91,8 +102,7 @@ export async function approveSubscription(id: string, formData: FormData): Promi
     days: parsed.data.days,
   })
 
-  revalidatePath('/admin/subscriptions')
-  revalidateTag('admin-badges', 'default')
+  revalidateSubscriptionEntitlements()
   return { ok: true }
 }
 
@@ -176,7 +186,7 @@ export async function extendSubscription(id: string, days: number): Promise<Resu
 
   await logAudit(ctx.supabase, 'subscription.extend', id, { days })
 
-  revalidatePath('/admin/subscriptions')
+  revalidateSubscriptionEntitlements()
   return { ok: true }
 }
 
