@@ -140,14 +140,24 @@ export default function LocationStep({ data, errors, update }: Props) {
                   dir="ltr"
                 />
 
-                {contact.kind === 'phone' && idx === 0 ? (
+                {contact.kind === 'phone' && contact.is_primary ? (
                   <span className={styles.primaryBadge}>أساسي</span>
                 ) : (
                   <button
                     type="button"
                     onClick={() => {
+                      const remaining = data.contacts.filter((c) => c.tempId !== contact.tempId)
+                      const removedPrimaryPhone =
+                        contact.kind === 'phone' && contact.is_primary
+                      const promotedPhone = removedPrimaryPhone
+                        ? remaining.find((c) => c.kind === 'phone')
+                        : undefined
                       update({
-                        contacts: data.contacts.filter((c) => c.tempId !== contact.tempId),
+                        contacts: promotedPhone
+                          ? remaining.map((c) =>
+                              c.tempId === promotedPhone.tempId ? { ...c, is_primary: true } : c,
+                            )
+                          : remaining,
                       })
                     }}
                     className={styles.contactRemove}
