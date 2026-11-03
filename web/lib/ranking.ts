@@ -29,7 +29,12 @@ export function trendScore(b: Business): number {
   const engagement = Math.max(0, Math.min(1, (b.engagement_score ?? 0) / 100))
   const diversity = Math.max(0, Math.min(1, (b.diversity_score ?? 0) / 50))
   const recency = b.last_activity_at ? decay(daysSince(b.last_activity_at)) : 0
-  const quality = getBusinessReputationScore(b) / 100
+  // Use customer-rated quality only. Admin-set verification is a public trust
+  // badge, not an admin-controlled trend-ranking boost.
+  const ratingCount = Math.max(0, Math.floor(b.rating_count ?? 0))
+  const ratingAverage = Math.max(0, Math.min(5, b.rating_avg ?? 0))
+  const ratingConfidence = ratingCount / (ratingCount + 5)
+  const quality = (ratingAverage / 5) * ratingConfidence
   const conversion =
     0.7 * (1 - Math.exp(-Math.max(0, b.trend_recent_orders ?? 0) / 3)) +
     0.3 * (1 - Math.exp(-Math.max(0, b.trend_recent_reviews ?? 0) / 3))
