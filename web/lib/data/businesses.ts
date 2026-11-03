@@ -70,6 +70,7 @@ export type Business = {
   last_activity_at: string | null
   /** Server-computed rolling trend signals; never persisted as reputation or paid boosts. */
   trend_activity_count?: number
+  trend_activity_weight?: number
   trend_recent_orders?: number
   trend_recent_reviews?: number
   trend_score?: number
@@ -449,16 +450,22 @@ export const getTrendingBusinesses = unstable_cache(
       createdAt: string,
       weight: number,
       anonymousKey?: string | null,
-    ) => {
+    ): boolean => {
       const signal = signalByBusiness.get(businessId)
       const timestamp = new Date(createdAt).getTime()
-      if (!signal || !Number.isFinite(timestamp) || timestamp > now || timestamp < now - 30 * 86400000) return
+      if (
+        !signal ||
+        weight <= 0 ||
+        !Number.isFinite(timestamp) ||
+        timestamp > now ||
+        timestamp < now - 30 * 86400000
+      ) return false
 
       const day = new Date(timestamp).toISOString().slice(0, 10)
       const actorKey = userId ?? anonymousKey ?? null
-      if (!actorKey) return
+      if (!actorKey) return false
       const key = `${businessId}:${actorKey}:${action}:${day}`
-      if (seen.has(key)) return
+      if (seen.has(key)) return false
       seen.add(key)
       signal.users.add(actorKey)
 
@@ -468,6 +475,7 @@ export const getTrendingBusinesses = unstable_cache(
       if (!signal.lastActivityAt || timestamp > new Date(signal.lastActivityAt).getTime()) {
         signal.lastActivityAt = new Date(timestamp).toISOString()
       }
+      return true
     }
 
     const activityWeights: Record<string, number> = {
@@ -521,15 +529,21 @@ export const getTrendingBusinesses = unstable_cache(
     }
 
     for (const order of deliveredOrders ?? []) {
-      addSignal(order.business_id, order.customer_profile_id, 'delivered_order', order.delivered_at ?? order.created_at, 4)
+      const counted = addSignal(
+        order.business_id,
+        order.customer_profile_id,
+        'delivered_order',
+        order.delivered_at ?? order.created_at,
+        4,
+      )
       const signal = signalByBusiness.get(order.business_id)
-      if (signal) signal.recentOrders += 1
+      if (counted && signal) signal.recentOrders += 1
     }
 
     for (const review of approvedReviews ?? []) {
-      addSignal(review.business_id, review.user_id, 'review', review.created_at, 3)
+      const counted = addSignal(review.business_id, review.user_id, 'review', review.created_at, 3)
       const signal = signalByBusiness.get(review.business_id)
-      if (signal) signal.recentReviews += 1
+      if (counted && signal) signal.recentReviews += 1
     }
 
     const rankedCandidates = candidates.map((business) => {
@@ -542,6 +556,7 @@ export const getTrendingBusinesses = unstable_cache(
         diversity_score: 50 * (1 - Math.exp(-signal.users.size / 8)),
         last_activity_at: signal.lastActivityAt,
         trend_activity_count: signal.activityCount,
+        trend_activity_weight: signal.recentWeight,
         trend_recent_orders: signal.recentOrders,
         trend_recent_reviews: signal.recentReviews,
       }
@@ -549,7 +564,11 @@ export const getTrendingBusinesses = unstable_cache(
 
     // An activity without verified recent customer signals is not a "trend".
     // It remains discoverable in its other sections, but cannot be promoted here.
-    return sortByTrend(rankedCandidates.filter((business) => (business.trend_activity_count ?? 0) > 0))
+    return sortByTrend(rankedCandidates.filter((business) =>
+      (business.trend_activity_weight ?? 0) >= 1 ||
+      (business.trend_recent_orders ?? 0) > 0 ||
+      (business.trend_recent_reviews ?? 0) > 0,
+    ))
       .map((business) => ({ ...business, trend_score: trendScore(business) }))
       .slice(0, Math.max(0, Math.min(1000, Math.floor(limit))))
   },
