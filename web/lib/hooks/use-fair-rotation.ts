@@ -30,6 +30,7 @@ type Result<T> = {
   next: () => void
   prev: () => void
   pageSize: number
+  canPrev: boolean
 }
 
 const DEFAULT_BP: Breakpoints = { tablet: 640, desktop: 1024 }
@@ -80,7 +81,15 @@ export function useFairRotation<T extends { id: string }>({
   const cursorRef = useRef(0)
   const itemsRef = useRef<T[]>(items)
   const pageSizeRef = useRef(pageSize)
+  const visibleRef = useRef<T[]>(items.slice(0, pageSizes.desktop))
+  const pageHistoryRef = useRef<Array<{ cursor: number; size: number }>>([])
+  const hasAdvancedRef = useRef(false)
   const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const showVisible = useCallback((nextVisible: T[]) => {
+    visibleRef.current = nextVisible
+    setVisible(nextVisible)
+  }, [])
 
   useEffect(() => {
     itemsRef.current = items
@@ -94,6 +103,7 @@ export function useFairRotation<T extends { id: string }>({
         JSON.stringify({
           ids: orderRef.current.map((b) => b.id),
           cursor: cursorRef.current,
+          visibleIds: visibleRef.current.map((item) => item.id),
         }),
       )
     } catch {
@@ -105,33 +115,35 @@ export function useFairRotation<T extends { id: string }>({
     const order = orderRef.current
     if (order.length === 0) return
     const size = pageSizeRef.current
-    // Show the final partial page before starting a fresh shuffled cycle.
-    // Never wrap the tail to the beginning: that repeated earlier items and
-    // skipped the last items whenever the list length was not a page-size multiple.
-    if (cursorRef.current + size >= order.length) {
+    // Advance from the number of items actually shown, not the current breakpoint.
+    // This preserves the unseen tail when a visitor resizes the browser mid-cycle.
+    const nextCursor = cursorRef.current + visibleRef.current.length
+    if (nextCursor >= order.length) {
       orderRef.current = fisherYates(itemsRef.current)
       cursorRef.current = 0
+      pageHistoryRef.current = []
     } else {
-      cursorRef.current += size
+      cursorRef.current = nextCursor
     }
-    setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
+
+    hasAdvancedRef.current = true
+    const nextVisible = sliceVisible(orderRef.current, cursorRef.current, size)
+    showVisible(nextVisible)
+    pageHistoryRef.current.push({ cursor: cursorRef.current, size: nextVisible.length })
     persist()
-  }, [persist])
+  }, [persist, showVisible])
 
   const prev = useCallback(() => {
-    const order = orderRef.current
-    if (order.length === 0) return
-    const size = pageSizeRef.current
-    const prevCursor = cursorRef.current - size
-    if (prevCursor < 0) {
-      const lastPage = Math.max(0, Math.floor((order.length - 1) / size))
-      cursorRef.current = lastPage * size
-    } else {
-      cursorRef.current = prevCursor
-    }
-    setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
+    const history = pageHistoryRef.current
+    if (history.length <= 1) return
+    history.pop()
+    const previous = history[history.length - 1]
+    if (!previous) return
+    cursorRef.current = previous.cursor
+    showVisible(sliceVisible(orderRef.current, previous.cursor, previous.size))
+    hasAdvancedRef.current = true
     persist()
-  }, [persist])
+  }, [persist, showVisible])
 
   useLayoutEffect(() => {
     const calc = () => {
@@ -156,7 +168,7 @@ export function useFairRotation<T extends { id: string }>({
     try {
       const raw = sessionStorage.getItem(storageKey)
       if (raw) {
-        const parsed = JSON.parse(raw) as { ids?: string[]; cursor?: number }
+        const parsed = JSON.parse(raw) as { ids?: string[]; cursor?: number; visibleIds?: string[] }
         const ids = parsed.ids ?? []
         const byId = new Map(items.map((b) => [b.id, b]))
         const restored = ids.map((id) => byId.get(id)).filter((b): b is T => !!b)
@@ -164,8 +176,7 @@ export function useFairRotation<T extends { id: string }>({
         if (restored.length === items.length && missing.length === 0) {
           nextOrder = restored
           const c = typeof parsed.cursor === 'number' && Number.isFinite(parsed.cursor) ? parsed.cursor : 0
-          const bounded = Math.max(0, Math.min(c, Math.max(0, items.length - 1)))
-          nextCursor = Math.floor(bounded / pageSize) * pageSize
+          nextCursor = Math.max(0, Math.min(Math.floor(c), Math.max(0, items.length - 1)))
         }
       }
     } catch {
@@ -179,18 +190,38 @@ export function useFairRotation<T extends { id: string }>({
 
     orderRef.current = nextOrder
     cursorRef.current = nextCursor
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mount
+    hasAdvancedRef.current = false
+    const visibleIds = (() => {
+      try {
+        const raw = sessionStorage.getItem(storageKey)
+        if (!raw) return null
+        const parsed = JSON.parse(raw) as { visibleIds?: string[] }
+        if (!Array.isArray(parsed.visibleIds)) return null
+        const byId = new Map(nextOrder!.map((item) => [item.id, item]))
+        const restored = parsed.visibleIds.map((id) => byId.get(id)).filter((item): item is T => !!item)
+        return restored.length === parsed.visibleIds.length && restored.length > 0 ? restored : null
+      } catch {
+        return null
+      }
+    })()
+    const initialVisible = visibleIds ?? sliceVisible(nextOrder, nextCursor, pageSizeRef.current)
+    pageHistoryRef.current = [{ cursor: nextCursor, size: initialVisible.length }]
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration
     setMounted(true)
-    setVisible(sliceVisible(nextOrder, nextCursor, pageSize))
+    showVisible(initialVisible)
     try {
       sessionStorage.setItem(
         storageKey,
-        JSON.stringify({ ids: nextOrder.map((item) => item.id), cursor: nextCursor }),
+        JSON.stringify({
+          ids: nextOrder.map((item) => item.id),
+          cursor: nextCursor,
+          visibleIds: initialVisible.map((item) => item.id),
+        }),
       )
     } catch {
       // Rotation remains functional when storage is unavailable.
     }
-  }, [itemsKey, storageKey, disabled, pageSize])
+  }, [itemsKey, storageKey, disabled, showVisible])
 
   // IntersectionObserver مع rootMargin
   useEffect(() => {
@@ -235,10 +266,16 @@ export function useFairRotation<T extends { id: string }>({
     return () => clearInterval(t)
   }, [auto, mounted, reduced, disabled, paused, inView, scrolling, pageSize, intervalMs, next])
 
+  // The first responsive measurement may resize the initial page. Once a
+  // visitor advances, retain the current items and use the new size only for
+  // the next page, so no card repeats early after a breakpoint change.
   useEffect(() => {
-    if (!mounted) return
-    setVisible(sliceVisible(orderRef.current, cursorRef.current, pageSize))
-  }, [pageSize, mounted])
+    if (!mounted || hasAdvancedRef.current || orderRef.current.length === 0) return
+    const initialVisible = sliceVisible(orderRef.current, cursorRef.current, pageSize)
+    showVisible(initialVisible)
+    pageHistoryRef.current = [{ cursor: cursorRef.current, size: initialVisible.length }]
+    persist()
+  }, [pageSize, mounted, persist, showVisible])
 
   return {
     visible,
@@ -248,5 +285,6 @@ export function useFairRotation<T extends { id: string }>({
     next,
     prev,
     pageSize,
+    canPrev: pageHistoryRef.current.length > 1,
   }
 }
