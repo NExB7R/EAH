@@ -58,7 +58,7 @@ function fdBool(formData: FormData, key: string): boolean {
 /** Convert an HTML date input to the end of that calendar day in Egypt. */
 function toOptionalIsoDate(value: string | undefined): string | null | undefined {
   if (!value?.trim()) return null
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return undefined
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return undefined
 
   const [year, month, day] = value.split('-').map(Number)
   if (!year || !month || !day) return undefined
