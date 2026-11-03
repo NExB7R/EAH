@@ -30,6 +30,7 @@ type Result<T> = {
   next: () => void
   prev: () => void
   pageSize: number
+  canPrev: boolean
 }
 
 const DEFAULT_BP: Breakpoints = { tablet: 640, desktop: 1024 }
@@ -80,6 +81,7 @@ export function useFairRotation<T extends { id: string }>({
   const itemsKey = items.map((b) => b.id).join(',')
 
   const [pageSize, setPageSize] = useState(pageSizes.desktop)
+  const [cursor, setCursor] = useState(0)
   const [visible, setVisible] = useState<T[]>(() => items.slice(0, pageSizes.desktop))
   const [paused, setPaused] = useState(false)
   const [inView, setInView] = useState(true)
@@ -124,6 +126,7 @@ export function useFairRotation<T extends { id: string }>({
     } else {
       cursorRef.current = nextCursor
     }
+    setCursor(cursorRef.current)
     setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
     persist()
   }, [persist])
@@ -134,6 +137,7 @@ export function useFairRotation<T extends { id: string }>({
     const size = pageSizeRef.current
     // Do not wrap backward from page one: that could skip unseen items before the cycle resets.
     cursorRef.current = previousPageStart(cursorRef.current, size)
+    setCursor(cursorRef.current)
     setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
     persist()
   }, [persist])
@@ -185,6 +189,7 @@ export function useFairRotation<T extends { id: string }>({
     cursorRef.current = nextCursor
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time mount
     setMounted(true)
+    setCursor(nextCursor)
     setVisible(sliceVisible(nextOrder, nextCursor, pageSize))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemsKey, storageKey, disabled])
@@ -245,5 +250,6 @@ export function useFairRotation<T extends { id: string }>({
     next,
     prev,
     pageSize,
+    canPrev: cursor > 0,
   }
 }
