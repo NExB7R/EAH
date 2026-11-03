@@ -78,21 +78,40 @@ jobs:
         run: npx vitest run --reporter=dot
 
       - name: npm audit (production only)
+        id: audit
+        continue-on-error: true
         run: npm audit --omit=dev --audit-level=high
 
       - name: Knip (dead code)
+        id: knip
+        continue-on-error: true
         run: npx knip --include files,dependencies
 
       - name: jscpd (duplicates)
+        id: jscpd
+        continue-on-error: true
         run: npx jscpd .
 
-      # Keep diagnostics running even when formatting fails, but retain a failing
-      # Quality Gate result until the repository formatting debt is resolved.
-      - name: Report formatting failure after all quality checks
-        if: ${{ always() && steps.prettier.outcome == 'failure' }}
+      # Run every diagnostic even when one check finds debt, then fail the gate
+      # once all results are available. No finding is silently waived.
+      - name: Report quality findings after all checks
+        if: ${{ always() }}
+        env:
+          PRETTIER_OUTCOME: ${{ steps.prettier.outcome }}
+          AUDIT_OUTCOME: ${{ steps.audit.outcome }}
+          KNIP_OUTCOME: ${{ steps.knip.outcome }}
+          JSCPD_OUTCOME: ${{ steps.jscpd.outcome }}
         run: |
-          echo "::error::Prettier found unformatted files. The remaining quality checks have still completed."
-          exit 1
+          failed=0
+          for check in PRETTIER AUDIT KNIP JSCPD; do
+            key="${check}_OUTCOME"
+            outcome="${!key}"
+            if [[ "$outcome" == "failure" ]]; then
+              echo "::error::${check} reported findings; inspect its step log."
+              failed=1
+            fi
+          done
+          exit "$failed"
 
   rls-tests:
     runs-on: ubuntu-latest
