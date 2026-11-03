@@ -9,7 +9,7 @@ import NearbyGrid from '@/components/nearby-grid'
 import SuggestedSection from '@/components/suggested-section'
 import AdSlot from '@/components/ad-slot'
 import ChipScrollHandler from '@/components/chip-scroll-handler'
-import { getPublishedBusinesses, getActiveOffers } from '@/lib/data'
+import { getPublishedBusinesses, getFeaturedBusinesses, getActiveOffers } from '@/lib/data'
 import { getFeatureFlags } from '@/lib/features'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness } from '@/lib/data/merchant'
@@ -44,8 +44,10 @@ export default async function Home({ searchParams }: Props) {
 
 async function HomeSections({ typeFilter }: { typeFilter?: string }) {
   const session = await getUserSession()
-  const [allRaw, rawOffers, flags, homeBanner, homeFeed, favoriteIds] = await Promise.all([
+  const [allRaw, featuredRaw, rawOffers, flags, homeBanner, homeFeed, favoriteIds] =
+    await Promise.all([
     getPublishedBusinesses(),
+    getFeaturedBusinesses(200),
     getActiveOffers(30),
     getFeatureFlags(),
     getActiveAdsForSlot('home_banner', 1),
@@ -54,19 +56,24 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
   ])
 
   // ─── الفلترة ───
-  let all = allRaw
-  if (typeFilter === 'open') {
-    all = all.filter((b) => isOpenNow(b.working_hours))
-  } else if (typeFilter === 'online') {
-    all = all.filter((b) => b.accepts_whatsapp_orders)
-  } else if (typeFilter && typeFilter !== 'all') {
-    all = all.filter((b) => b.business_type === typeFilter)
+  const applyHomeFilter = (businesses: Business[]) => {
+    if (typeFilter === 'open') {
+      return businesses.filter((b) => isOpenNow(b.working_hours))
+    }
+    if (typeFilter === 'online') {
+      return businesses.filter((b) => b.accepts_whatsapp_orders)
+    }
+    if (typeFilter && typeFilter !== 'all') {
+      return businesses.filter((b) => b.business_type === typeFilter)
+    }
+    return businesses
   }
+  const all = applyHomeFilter(allRaw)
 
   const offers = fairOrderOffers(rawOffers, 8)
 
   const featured = fairOrder(
-    all.filter((b) => b.is_featured),
+    applyHomeFilter(featuredRaw),
     'featured',
     {},
     { topWindow: 8, maxPerType: 2 },
