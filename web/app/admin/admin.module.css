@@ -24,12 +24,11 @@
 
 .shell {
   display: grid;
-  grid-template-columns: 252px minmax(0, 1fr);
+  grid-template-columns: 240px minmax(0, 1fr);
   align-items: start;
-  gap: 18px;
+  gap: 24px;
   width: min(100%, 1240px);
   margin: 24px auto 0;
-  margin: 0 auto;
 }
 
 .sidebarRail {
