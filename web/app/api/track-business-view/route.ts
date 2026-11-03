@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: false, error: 'تعذر تسجيل الزيارة' }, { status: 500 })
     }
 
-    return NextResponse.json({ ok: true, recorded: true }))
+    return NextResponse.json({ ok: true, recorded: true })
   } catch (error) {
     console.error('[track-business-view] request failed:', (error as Error).message)
     return NextResponse.json({ ok: false, error: 'تعذر تسجيل الزيارة' }, { status: 500 })
