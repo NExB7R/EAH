@@ -6,7 +6,7 @@ import { createHash } from 'crypto'
 import { strictLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 const schema = z.object({
-  action: z.enum(['phone_reveal', 'whatsapp', 'review', 'comment']),
+  action: z.enum(['phone_reveal', 'whatsapp']),
   businessId: z.string().uuid(),
 })
 
@@ -48,6 +48,13 @@ export async function POST(req: NextRequest) {
 
     const browserClient = await createClient()
     const { data: { user } } = await browserClient.auth.getUser()
+    if (!user || user.is_anonymous) {
+      return NextResponse.json(
+        { ok: false, error: 'registered_login_required' },
+        { status: 401 },
+      )
+    }
+
     const supabase = createServiceClient()
     const { data: business, error: businessError } = await supabase
       .from('businesses')
@@ -65,7 +72,7 @@ export async function POST(req: NextRequest) {
 
     const { error } = await supabase.from('engagement_events').insert({
       business_id: parsed.data.businessId,
-      user_id: user && !user.is_anonymous ? user.id : null,
+      user_id: user.id,
       action: parsed.data.action,
       ip_hash: hashIp(ip),
       user_agent: req.headers.get('user-agent')?.slice(0, 200) ?? null,
