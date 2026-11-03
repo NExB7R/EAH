@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { getTrendingBusinesses } from '@/lib/data'
-import { fairOrder } from '@/lib/fair-ranking'
 import { TrendingUpIcon } from '@/components/icons'
 import SectionLayout from '@/components/section-layout'
 import AdSlot from '@/components/ad-slot'
@@ -18,7 +17,7 @@ export default async function TrendsPage() {
     getTrendingBusinesses(200),
     getActiveAdsForSlot('trend_pin', 1),
   ])
-  const businesses = fairOrder(raw, 'trending', {}, { topWindow: 10, maxPerType: 3 })
+  const businesses = raw
 
   return (
     <>
