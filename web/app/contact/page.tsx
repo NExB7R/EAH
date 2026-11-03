@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import SecondaryHero from '@/components/secondary-hero'
-import { WhatsAppIcon, FacebookIcon, BroadcastIcon, PhoneIcon, FileTextIcon } from '@/components/icons'
+import { WhatsAppIcon, FacebookIcon, BroadcastIcon, PhoneIcon } from '@/components/icons'
 import { getPublicContactSettings } from '@/lib/data/site-settings'
 import styles from './contact.module.css'
 
