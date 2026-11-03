@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { trendScore, sortByTrend, sortByTrust, dailyShuffle } from './ranking'
+import { trendScore, sortByTrend, sortByTrust, dailyShuffle, hasSufficientTrendActivity } from './ranking'
 import { getBusinessReputationScore } from './reputation'
 import type { Business } from '@/lib/data'
 
@@ -92,6 +92,18 @@ describe('trendScore', () => {
     const low = makeBusiness({ diversity_score: 5 })
     const high = makeBusiness({ diversity_score: 45 })
     expect(trendScore(high)).toBeGreaterThan(trendScore(low))
+  })
+})
+
+describe('hasSufficientTrendActivity', () => {
+  it('does not promote one isolated low-weight page view', () => {
+    expect(hasSufficientTrendActivity(makeBusiness({ trend_activity_weight: 0.35 }))).toBe(false)
+  })
+
+  it('allows repeated opening interest or a completed order/review signal', () => {
+    expect(hasSufficientTrendActivity(makeBusiness({ trend_activity_weight: 1.05 }))).toBe(true)
+    expect(hasSufficientTrendActivity(makeBusiness({ trend_recent_orders: 1 }))).toBe(true)
+    expect(hasSufficientTrendActivity(makeBusiness({ trend_recent_reviews: 1 }))).toBe(true)
   })
 })
 
