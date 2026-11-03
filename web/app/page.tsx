@@ -83,9 +83,11 @@ async function HomeSections({
       : Promise.resolve([])),
     flagsPromise.then((value) => value.new_enabled ? getNewBusinesses(1000) : Promise.resolve([])),
     flagsPromise.then((value) => value.offers_enabled ? getActiveOffers(1000) : Promise.resolve([])),
-    flagsPromise.then((value) => value.nearby_enabled && isLoggedIn
-      ? getNearbyBusinesses(viewerLocation ? undefined : viewerArea ?? undefined, 1000)
-      : Promise.resolve([])),
+    flagsPromise.then((value) =>
+      value.nearby_enabled && isLoggedIn && (viewerLocation !== null || !!viewerArea)
+        ? getNearbyBusinesses(viewerLocation ? undefined : viewerArea ?? undefined, 1000)
+        : Promise.resolve([]),
+    ),
     flagsPromise,
     getActiveAdsForSlot('home_banner', 1),
     getActiveAdsForSlot('home_feed', 1),
