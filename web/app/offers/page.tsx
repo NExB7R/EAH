@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getActiveOffers } from '@/lib/data'
+import { getActiveOffers, getTrendingBusinesses, getFullProfile } from '@/lib/data'
+import { getUserSession } from '@/lib/data/user'
+import { isValidLatLng, type LatLng } from '@/lib/utils/distance'
 import { fairOrderOffers } from '@/lib/fair-ranking'
 import { GiftIcon, TargetIcon } from '@/components/icons'
 import SecondaryHero from '@/components/secondary-hero'
@@ -15,8 +17,19 @@ export const metadata: Metadata = {
 }
 
 export default async function OffersPage() {
-  const all = await getActiveOffers(500)
-  const offers = fairOrderOffers(all, all.length)
+  const session = await getUserSession()
+  const [all, trending, profile] = await Promise.all([
+    getActiveOffers(1000),
+    getTrendingBusinesses(1000),
+    session ? getFullProfile(session.userId) : Promise.resolve(null),
+  ])
+  const offers = fairOrderOffers(all, all.length, trending)
+  const candidateLocation =
+    profile?.default_latitude !== null && profile?.default_latitude !== undefined &&
+    profile?.default_longitude !== null && profile?.default_longitude !== undefined
+      ? { lat: profile.default_latitude, lng: profile.default_longitude }
+      : null
+  const viewerLocation = isValidLatLng(candidateLocation) ? candidateLocation : null
 
   return (
     <main className={styles.page}>
@@ -33,7 +46,7 @@ export default async function OffersPage() {
         {offers.length > 0 ? (
           <div className={styles.grid}>
             {offers.map((offer) => (
-              <OfferCard key={offer.id} offer={offer} layout="grid" />
+              <OfferCard key={offer.id} offer={offer} layout="grid" viewerLocation={viewerLocation} />
             ))}
           </div>
         ) : (
