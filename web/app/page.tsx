@@ -142,7 +142,7 @@ async function HomeSections({
       )}
       {flags.offers_enabled && (
         <div id="offers">
-          <OffersStrip offers={offers} />
+          <OffersStrip offers={offers} viewerLocation={viewerLocation} />
         </div>
       )}
       {homeFeed.length > 0 && (
