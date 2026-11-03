@@ -47,6 +47,16 @@ function isNonEmpty(s: string | null | undefined): s is string {
   return s.replace(/[\p{P}\p{S}\s]/gu, '').length > 0
 }
 
+function toWhatsAppHref(value: string): string {
+  const digits = value.replace(/\D/g, '')
+  const international = digits.startsWith('20')
+    ? digits
+    : digits.startsWith('0')
+      ? `2${digits}`
+      : `20${digits}`
+  return `https://wa.me/${international}`
+}
+
 function toMinutes(value: string): number | null {
   const match = /^([01]\d|2[0-3]):[0-5]\d$/.exec(value)
   if (!match) return null
@@ -172,7 +182,7 @@ export default function BusinessTabs({
                 {whatsapps.map((contact, index) => (
                   <a
                     key={`whatsapp-${contact.value}-${index}`}
-                    href={`https://wa.me/2${contact.value.replace(/^0/, '').replace(/^20/, '')}`}
+                    href={toWhatsAppHref(contact.value)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={`${styles.contactItem} ${styles.contactWhatsapp}`}
