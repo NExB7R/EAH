@@ -27,8 +27,14 @@ function computeStats(businesses: Awaited<ReturnType<typeof getFeaturedBusinesse
   const featured = businesses.filter((b) => b.is_featured)
   return {
     total: featured.length,
-    active: featured.filter((b) => b.is_published && (!b.featured_until || new Date(b.featured_until).getTime() > Date.now())).length,
-    expiringSoon: featured.filter((b) => isExpiringSoon(b.featured_until)).length,
+    active: featured.filter((b) =>
+      b.is_published &&
+      b.paid_featured_home_eligible &&
+      (!b.featured_until || new Date(b.featured_until).getTime() > Date.now()),
+    ).length,
+    expiringSoon: featured.filter((b) =>
+      b.paid_featured_home_eligible && isExpiringSoon(b.featured_until),
+    ).length,
   }
 }
 
@@ -57,7 +63,7 @@ export default async function AdminFeaturedPage({
     <div>
       <AccountPageHeader
         title="إدارة المميزين"
-        description={`${stats.total} نشاط مميز من ${businesses.length}`}
+        description={`${stats.active} مؤهل للظهور من ${stats.total} محدد إداريًا`}
       />
 
       {/* ─── Stats ─── */}
