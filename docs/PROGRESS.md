@@ -13,6 +13,7 @@
 
 ### تحديث 2026-11-03 — Runner عاد للعمل ونتائج Quality Gate الحقيقية
 
+- حالة Quality Gate الحالية على commit `a2fb00d`: Runner حقيقي (`1000008103`)؛ TypeScript وESLint وPrettier وStylelint اكتملت بنجاح. Next.js build ما زال قيد التشغيل، وبعده Vitest وnpm audit وKnip وjscpd. وظيفة RLS انتهت مبكرًا بالفشل المقصود لأن `SUPABASE_DB_URL` غير مضبوط؛ لم تُشغّل migrations أو pgTAP.
 - تم حل عطل تخصيص GitHub-hosted Runner الذي كان مسجلًا في Issue #22؛ أُغلق بعد إثبات تشغيل وظائف فعلية على commit `262684552927b3a971c3aa413c9333eee0f26f2d`: Runner IDs غير صفرية، وبدأت الخطوات في Quality Gate وE2E وCodeQL وInvariants.
 - E2E نجح بـ49/49 اختبارًا، وCodeQL نجح، وInvariants نجح. Quality Gate ما زال أحمر لأسباب داخل الوظائف وليست Runner: `npm audit` كشف 8 ثغرات إنتاج (2 moderate و5 high و1 critical)، وPrettier كشف 119 ملفًا غير منسق. ESLint وTypeScript وStylelint وWebpack build وVitest نجحت على هذا الالتزام.
 - Knip وjscpd لم يُشغّلا في هذا الـrun لأن `npm audit` فشل وأوقف تسلسل الخطوات. يجب جعل فحوص التشخيص اللاحقة تعمل حتى عند فشل فحص سابق، مع تجميع النتيجة في خطوة أخيرة.
