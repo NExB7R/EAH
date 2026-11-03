@@ -180,7 +180,7 @@ async function normalizeBusinesses(
         configuredWhatsAppIds,
       ),
       // The public badge requires an active paid plan that includes it.
-      is_featured: !!row.is_featured && paidFeaturedBadgeIds.has(String(row.id ?? '')),
+      is_featured: paidFeaturedBadgeIds.has(String(row.id ?? '')),
     }),
   )
 }
