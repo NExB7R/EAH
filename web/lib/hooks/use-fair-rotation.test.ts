@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { sliceVisible } from './use-fair-rotation'
+import { nextPageStart, previousPageStart, sliceVisible } from './use-fair-rotation'
 
 describe('sliceVisible', () => {
   it('does not wrap the last partial page to already-shown items', () => {
@@ -18,5 +18,23 @@ describe('sliceVisible', () => {
 
   it('keeps a full last page when the list divides evenly', () => {
     expect(sliceVisible([1, 2, 3, 4, 5, 6, 7, 8], 4, 4)).toEqual([5, 6, 7, 8])
+  })
+})
+
+
+describe('featured rotation page cursor', () => {
+  it('reaches the final partial page before starting a new cycle', () => {
+    const length = 10
+    const size = 4
+    const starts = [0]
+    for (let index = 0; index < 3; index++) {
+      starts.push(nextPageStart(starts[starts.length - 1]!, length, size))
+    }
+    expect(starts).toEqual([0, 4, 8, 0])
+  })
+
+  it('does not wrap backward from the first page', () => {
+    expect(previousPageStart(0, 4)).toBe(0)
+    expect(previousPageStart(8, 4)).toBe(4)
   })
 })
