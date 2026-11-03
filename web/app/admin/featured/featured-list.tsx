@@ -19,9 +19,9 @@ export default function FeaturedList({ businesses }: Props) {
             name: business.name,
             slug: business.slug,
             area: business.area,
-            featured_until: business.featured_until,
             is_published: business.is_published,
             paid_featured_home_eligible: business.paid_featured_home_eligible,
+            paid_featured_home_expires_at: business.paid_featured_home_expires_at,
           }}
         />
       ))}
