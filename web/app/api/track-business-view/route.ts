@@ -9,6 +9,48 @@ const schema = z.object({
   sessionId: z.string().uuid(),
 })
 
+async function readLimitedJson(
+  request: Request,
+): Promise<{ ok: true; value: unknown } | { ok: false; tooLarge: boolean }> {
+  const contentLength = Number(request.headers.get('content-length') ?? '0')
+  if (Number.isFinite(contentLength) && contentLength > 2048) {
+    return { ok: false, tooLarge: true }
+  }
+
+  const reader = request.body?.getReader()
+  if (!reader) return { ok: false, tooLarge: false }
+
+  const chunks: Uint8Array[] = []
+  let totalBytes = 0
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      totalBytes += value.byteLength
+      if (totalBytes > 2048) {
+        await reader.cancel().catch(() => undefined)
+        return { ok: false, tooLarge: true }
+      }
+      chunks.push(value)
+    }
+  } catch {
+    return { ok: false, tooLarge: false }
+  }
+
+  const bytes = new Uint8Array(totalBytes)
+  let offset = 0
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset)
+    offset += chunk.byteLength
+  }
+
+  try {
+    return { ok: true, value: JSON.parse(new TextDecoder().decode(bytes)) }
+  } catch {
+    return { ok: false, tooLarge: false }
+  }
+}
+
 function getDeviceType(userAgent: string): string {
   if (/ipad|tablet|kindle|silk/i.test(userAgent)) return 'tablet'
   if (/mobile|android|iphone|ipod/i.test(userAgent)) return 'mobile'
@@ -30,13 +72,15 @@ function safeReferrer(value: string | null): string | null {
 
 export async function POST(request: NextRequest) {
   try {
-    const contentLength = Number(request.headers.get('content-length') ?? '0')
-    if (Number.isFinite(contentLength) && contentLength > 2048) {
-      return NextResponse.json({ ok: false, error: 'payload_too_large' }, { status: 413 })
+    const body = await readLimitedJson(request)
+    if (!body.ok) {
+      return NextResponse.json(
+        { ok: false, error: body.tooLarge ? 'payload_too_large' : 'invalid_payload' },
+        { status: body.tooLarge ? 413 : 400 },
+      )
     }
 
-    const body = await request.json().catch(() => null)
-    const parsed = schema.safeParse(body)
+    const parsed = schema.safeParse(body.value)
     if (!parsed.success) {
       return NextResponse.json({ ok: false, error: 'invalid_payload' }, { status: 400 })
     }
