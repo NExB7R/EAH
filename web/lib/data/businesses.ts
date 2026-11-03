@@ -483,7 +483,7 @@ export const getTrendingBusinesses = unstable_cache(
       addSignal(
         event.business_id,
         event.user_id,
-        event.activity_type,
+        event.activity_type === 'rating' ? 'review' : event.activity_type,
         event.created_at,
         activityWeights[event.activity_type] ?? 0,
       )
@@ -527,7 +527,7 @@ export const getTrendingBusinesses = unstable_cache(
     }
 
     for (const review of approvedReviews ?? []) {
-      addSignal(review.business_id, review.user_id, 'approved_review', review.created_at, 3)
+      addSignal(review.business_id, review.user_id, 'review', review.created_at, 3)
       const signal = signalByBusiness.get(review.business_id)
       if (signal) signal.recentReviews += 1
     }
