@@ -1,14 +1,7 @@
 name: E2E
 
 on:
-  push:
-    branches: [main, v2]
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
-      - 'LICENSE'
-      - '.gitignore'
-      - 'web/scripts/ignore-vercel-build.sh'
+  deployment_status:
   pull_request:
     branches: [main]
     paths-ignore:
@@ -73,7 +66,7 @@ jobs:
       # Resolve target URL:
       #   workflow_dispatch + input → manual URL
       #   pull_request             → Vercel preview (CI-02)
-      #   push to main/v2          → production     (CI-01)
+      #   successful Vercel deployment → exact deployed URL
       # ═══════════════════════════════════════════════════════
       - name: Validate manual URL
         if: github.event_name == 'workflow_dispatch' && inputs.preview_url != ''
@@ -100,19 +93,30 @@ jobs:
           max_timeout: 300
           check_interval: 10
 
-      - name: Set production URL (push)
-        if: github.event_name == 'push'
-        id: prod
-        run: echo "url=https://eah-sq.vercel.app" >> $GITHUB_OUTPUT
+      - name: Set deployed Vercel URL
+        if: github.event_name == 'deployment_status'
+        id: deployed
+        env:
+          DEPLOYMENT_STATE: ${{ github.event.deployment_status.state }}
+          ENVIRONMENT_URL: ${{ github.event.deployment_status.environment_url }}
+          TARGET_URL: ${{ github.event.deployment_status.target_url }}
+        run: |
+          if [ "$DEPLOYMENT_STATE" != "success" ]; then
+            echo "::error::Vercel deployment did not succeed; refusing to test a stale alias."
+            exit 1
+          fi
+          URL="${ENVIRONMENT_URL:-$TARGET_URL}"
+          node -e "const u=new URL(process.argv[1]); if(u.protocol!=='https:' || !u.hostname.endsWith('.vercel.app')) process.exit(1)" "$URL"
+          echo "url=$URL" >> $GITHUB_OUTPUT
 
       - name: Compute target URL
         id: target
         env:
           MANUAL_URL: ${{ steps.manual.outputs.url }}
           VERCEL_URL: ${{ steps.vercel.outputs.url }}
-          PROD_URL: ${{ steps.prod.outputs.url }}
+          DEPLOYED_URL: ${{ steps.deployed.outputs.url }}
         run: |
-          URL="${MANUAL_URL:-${VERCEL_URL:-${PROD_URL:-}}}"
+          URL="${MANUAL_URL:-${VERCEL_URL:-${DEPLOYED_URL:-}}}"
           if [ -z "$URL" ]; then
             echo "::error::No target URL — Vercel preview not ready or unavailable"
             exit 1
