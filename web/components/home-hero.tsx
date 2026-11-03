@@ -1,7 +1,5 @@
-import { Suspense } from 'react'
 import Logo from './logo'
 import HomeSearchForm from './home-search-form'
-import CategoryChips from './category-chips'
 import { CrownIcon, LocationIcon } from './icons'
 import { getAppTexts } from '@/lib/data/app-texts'
 import styles from './home-hero.module.css'
@@ -54,12 +52,6 @@ export default async function HomeHero({ isLoggedIn, hasBusiness }: Props) {
           <HomeSearchForm />
         </div>
 
-        {/* Chips */}
-        <div className={styles.chipsWrap}>
-          <Suspense fallback={null}>
-            <CategoryChips />
-          </Suspense>
-        </div>
       </div>
     </section>
   )
