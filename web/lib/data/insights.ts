@@ -113,16 +113,16 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
 
     supabase
       .from('page_view_events')
-      .select('visitor_id, created_at')
+      .select('visitor_id, occurred_at')
       .eq('business_id', businessId)
-      .gte('created_at', since),
+      .gte('occurred_at', since),
 
     supabase
       .from('page_view_events')
-      .select('created_at', { count: 'exact', head: false })
+      .select('occurred_at', { count: 'exact', head: false })
       .eq('business_id', businessId)
-      .gte('created_at', prevSince)
-      .lt('created_at', since),
+      .gte('occurred_at', prevSince)
+      .lt('occurred_at', since),
 
     supabase
       .from('order_requests')
@@ -186,7 +186,7 @@ export async function getBusinessMetrics(businessId: string, days = 30): Promise
   }
 
   for (const v of pageViews ?? []) {
-    const cairoTime = getCairoDateParts(v.created_at)
+    const cairoTime = getCairoDateParts(v.occurred_at)
     if (!cairoTime) continue
 
     viewsByDayMap[cairoTime.dateKey] = (viewsByDayMap[cairoTime.dateKey] ?? 0) + 1
