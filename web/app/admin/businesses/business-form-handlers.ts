@@ -93,9 +93,11 @@ export function useSaveHandlers(state: FormState, business: AdminBusiness | null
     fd.set('is_open', String(s.isOpen))
     fd.set('accepts_whatsapp_orders', String(s.acceptsWhatsapp))
     fd.set('is_featured', String(s.isFeatured))
+    fd.set('renew_featured', String(s.isFeatured && !s.featuredWasActiveAtLoad))
     fd.set('is_verified', String(s.isVerified))
     fd.set('featured_until', s.featuredUntil)
     fd.set('is_new_project', String(s.isNewProject))
+    fd.set('renew_new_project', String(s.isNewProject && !s.newProjectWasActiveAtLoad))
     s.handleSaveSection('settings', () => saveSettingsAction(business.id, fd))
   }
 
