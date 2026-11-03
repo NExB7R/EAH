@@ -57,6 +57,17 @@ export function sliceVisible<T>(order: T[], start: number, size: number): T[] {
   return order.slice(safeStart, safeStart + size)
 }
 
+export function nextPageStart(cursor: number, length: number, size: number): number {
+  if (length <= 0 || size <= 0) return 0
+  const next = Math.max(0, cursor) + size
+  return next >= length ? 0 : next
+}
+
+export function previousPageStart(cursor: number, size: number): number {
+  if (size <= 0) return Math.max(0, cursor)
+  return Math.max(0, cursor - size)
+}
+
 export function useFairRotation<T extends { id: string }>({
   items,
   pageSizes,
@@ -106,8 +117,8 @@ export function useFairRotation<T extends { id: string }>({
     const order = orderRef.current
     if (order.length === 0) return
     const size = pageSizeRef.current
-    const nextCursor = cursorRef.current + size
-    if (nextCursor >= order.length) {
+    const nextCursor = nextPageStart(cursorRef.current, order.length, size)
+    if (nextCursor === 0) {
       orderRef.current = fisherYates(itemsRef.current)
       cursorRef.current = 0
     } else {
@@ -122,7 +133,7 @@ export function useFairRotation<T extends { id: string }>({
     if (order.length === 0) return
     const size = pageSizeRef.current
     // Do not wrap backward from page one: that could skip unseen items before the cycle resets.
-    cursorRef.current = Math.max(0, cursorRef.current - size)
+    cursorRef.current = previousPageStart(cursorRef.current, size)
     setVisible(sliceVisible(orderRef.current, cursorRef.current, size))
     persist()
   }, [persist])
