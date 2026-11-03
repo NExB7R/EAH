@@ -12,7 +12,6 @@ import styles from './featured.module.css'
 
 const TABS = [
   { key: 'all', label: 'الكل' },
-  { key: 'pinned', label: 'مثبّت' },
   { key: 'expiring', label: 'تنتهي قريب' },
 ] as const
 
