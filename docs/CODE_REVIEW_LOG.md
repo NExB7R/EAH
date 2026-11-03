@@ -142,3 +142,13 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - New Activities remains the only one-month placement window, with an explicit admin off-save-on-save renewal flow after expiry.
 - Production DB remains read-only; no subscription or promotion records were changed.
 
+
+### Quality / Preview evidence — 2026-11-03 (latest review)
+
+- **Current branch/PR head at review start:** `045737222b8a49399805f7002b9ebf6c26ce628b`; Draft PR #39 remains open and is not merged.
+- **Earlier Vercel Preview:** deployment `dpl_63Hn2jSpTyEcnxuL6tUtbg5wyLJf` for commit `faceb47de01b96c34cc6531eb0566f8e925b258f` reached `READY`. Its build log reports `Compiled successfully`, `Finished TypeScript`, and static page generation `55/55`. This is an older commit than the current head; it does not certify the latest route/CI changes.
+- **Latest-head deployment attempt:** Vercel API rejected a new preview with `402 payment_required` because the project/team reached the free daily API deployment limit (>100; retry after 86400 seconds). No billing or plan settings were changed.
+- **GitHub Actions:** Invariants and CodeQL passed on an earlier feature-branch SHA. The last complete Quality Gate run before the latest fixes failed TypeScript on duplicate `StoreIcon`, missing renewal context properties, and nullable Nearby area type; those have been corrected in later commits. That run stopped before ESLint/Prettier/Stylelint/Build/Vitest/audit/Knip/jscpd. No completed Quality Gate result exists for the current head.
+- **E2E:** the prior run failed in the Vercel Preview wait step before Playwright. The cause was the action's hard-coded `vercel[bot]` creator filter, while this project's deployment records are created under the connected owner account. `.github/workflows/e2e.yml` now polls GitHub deployments for the PR-head and merge SHAs, accepts any creator, and validates the URL as a non-production Vercel Preview. This workflow revision has not yet been executed.
+- **Dependency risk:** CI `npm ci` reported 25 vulnerabilities (19 moderate, 5 high, 1 critical). `npm audit --omit=dev --audit-level=high` has not completed on this branch because TypeScript stopped the earlier quality job. Treat audit status as unresolved, not passed.
+- **No production DB writes/DDL or production deployment were performed.** The supermarket migration and pgTAP test still require an isolated staging DB run.
