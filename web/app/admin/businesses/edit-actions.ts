@@ -1,6 +1,6 @@
 'use server'
 
-import { parseCairoLocalDateTime } from '@/lib/utils/timezone'
+import { parseCairoLocalDateEndOfDay } from '@/lib/utils/timezone'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
@@ -59,10 +59,7 @@ function fdBool(formData: FormData, key: string): boolean {
 /** Convert an HTML date input to the end of that calendar day in Egypt. */
 function toOptionalIsoDate(value: string | undefined): string | null | undefined {
   if (!value?.trim()) return null
-  const endOfDay = parseCairoLocalDateTime(value.trim() + 'T23:59')
-  if (!endOfDay) return undefined
-  endOfDay.setUTCSeconds(59, 999)
-  return endOfDay.toISOString()
+  return parseCairoLocalDateEndOfDay(value.trim())?.toISOString()
 }
 
 // ═══ 1. الأساسيات ═══
