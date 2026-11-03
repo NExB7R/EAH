@@ -150,6 +150,7 @@ jobs:
             docs/migrations/2026-10-30-business-branch-primary-unique.sql \
             docs/migrations/2026-11-01-business-owner-single-activity.sql \
             docs/migrations/2026-11-02-admin-owner-rpc-server-only.sql \
+            docs/migrations/2026-11-03-function-search-path-hardening.sql \
           do
             echo "::group::Applying $migration to the isolated test database"
             psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f "$migration"
@@ -157,7 +158,7 @@ jobs:
           done
 
       - name: Run RLS and admin policy regression tests
-        run: supabase test db supabase/tests/rls.test.sql supabase/tests/reputation-policy.test.sql supabase/tests/admin-policy-alignment.test.sql supabase/tests/legacy-ads-rls.test.sql supabase/tests/registered-interaction-auth.test.sql supabase/tests/comment-parent-integrity.test.sql supabase/tests/business-branch-primary.test.sql supabase/tests/business-owner-single-activity.test.sql --db-url "$SUPABASE_DB_URL"
+        run: supabase test db supabase/tests/rls.test.sql supabase/tests/reputation-policy.test.sql supabase/tests/admin-policy-alignment.test.sql supabase/tests/legacy-ads-rls.test.sql supabase/tests/registered-interaction-auth.test.sql supabase/tests/comment-parent-integrity.test.sql supabase/tests/business-branch-primary.test.sql supabase/tests/business-owner-single-activity.test.sql supabase/tests/function-search-path.test.sql --db-url "$SUPABASE_DB_URL"
 
       - name: RLS Audit (comprehensive)
         run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/tests/rls-audit.sql
