@@ -20,6 +20,24 @@ type Setter<T> = Dispatch<SetStateAction<T>>
 
 export type FormActionResult = { ok: boolean; error?: string; id?: string }
 
+function toDateInputValue(value: string | null | undefined): string {
+  if (!value) return ''
+  const date = new Date(value)
+  return Number.isFinite(date.getTime()) ? date.toISOString().slice(0, 10) : ''
+}
+
+function toDateTimeLocalValue(value: string | null | undefined): string {
+  if (!value) return ''
+  const date = new Date(value)
+  if (!Number.isFinite(date.getTime())) return ''
+  const pad = (part: number) => String(part).padStart(2, '0')
+  return [
+    date.getFullYear(),
+    pad(date.getMonth() + 1),
+    pad(date.getDate()),
+  ].join('-') + 'T' + [pad(date.getHours()), pad(date.getMinutes())].join(':')
+}
+
 export type FormState = {
   pending: boolean
   error: string | null
@@ -131,11 +149,11 @@ export function useFormState(business: AdminBusiness | null): FormState {
   const [featuredOrder, setFeaturedOrder] = useState(business?.featured_order ?? 0)
   const [featuredPin, setFeaturedPin] = useState(business?.featured_pin ?? false)
   const [featuredUntil, setFeaturedUntil] = useState(
-    business?.featured_until ? new Date(business.featured_until).toISOString().slice(0, 16) : '',
+    toDateInputValue(business?.featured_until),
   )
   const [isNewProject, setIsNewProject] = useState(business?.is_new_project ?? false)
   const [newUntil, setNewUntil] = useState(
-    business?.new_until ? new Date(business.new_until).toISOString().slice(0, 16) : '',
+    toDateInputValue(business?.new_until),
   )
 
   const [hours, setHours] = useState<Record<DayKey, DayHours>>(() =>
@@ -161,9 +179,7 @@ export function useFormState(business: AdminBusiness | null): FormState {
 
   const [importantNotice, setImportantNotice] = useState(business?.important_notice ?? '')
   const [noticeExpiresAt, setNoticeExpiresAt] = useState(
-    business?.notice_expires_at
-      ? new Date(business.notice_expires_at).toISOString().slice(0, 16)
-      : '',
+    toDateTimeLocalValue(business?.notice_expires_at),
   )
   const [noticeSeverity, setNoticeSeverity] = useState<'info' | 'warning' | 'critical'>(
     business?.notice_severity ?? 'info',
