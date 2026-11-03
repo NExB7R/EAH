@@ -22,16 +22,16 @@ const PAGE_SIZES = { mobile: 4, tablet: 6, desktop: 8 }
 const INTERVAL_MS = 8000
 
 export default function FeaturedBento({ businesses }: Props) {
-  const { visible, containerRef, setPaused, next, prev } = useFairRotation<Business>({
+  const { visible, containerRef, setPaused, next, prev, pageSize } = useFairRotation<Business>({
     items: businesses,
     pageSizes: PAGE_SIZES,
     intervalMs: INTERVAL_MS,
-    storageKey: 'eah:featured:home',
+    storageKey: 'eah:featured:home:v2',
   })
 
   if (businesses.length === 0) return null
 
-  const hasMore = businesses.length > PAGE_SIZES.mobile
+  const hasMore = businesses.length > pageSize
 
   return (
     <section ref={containerRef as React.RefObject<HTMLElement>} className={styles.section}>
