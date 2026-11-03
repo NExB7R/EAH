@@ -4,12 +4,12 @@
 
 .section {
   width: 100%;
-  padding: 48px 0;
+  padding: 28px 20px;
 }
 
 .frame {
   position: relative;
-  max-width: 1240px;
+  width: min(100%, 1240px);
   margin: 0 auto;
   padding: 22px 20px 18px;
   border-radius: 22px;
@@ -217,7 +217,7 @@
 
 @media (max-width: 640px) {
   .section {
-    padding: 36px 0;
+    padding: 22px 12px;
   }
   .frame {
     padding: 18px 14px 14px;
@@ -284,7 +284,7 @@
 
   /* Mobile: outer padding so sections don't touch screen edges */
   .section {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
