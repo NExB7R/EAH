@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { z } from 'zod'
 import { createServiceClient } from '@/lib/supabase/service'
-import { checkRateLimit, getClientIp, strictLimiter } from '@/lib/rate-limit'
+import { apiLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 const schema = z.object({
   businessId: z.string().uuid(),
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     const ip = await getClientIp()
-    const rateLimit = await checkRateLimit(strictLimiter, `business-view:${ip}`, {
+    const rateLimit = await checkRateLimit(apiLimiter, `business-view:${ip}`, {
       failClosed: true,
     })
     if (!rateLimit.ok) {
