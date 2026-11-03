@@ -127,7 +127,7 @@ const getTopRated = unstable_cache(
     return await normalizeBusinesses(data)
   },
   ['suggest-top-rated-v2'],
-  { revalidate: 300, tags: ['businesses'] },
+  { revalidate: 60, tags: ['businesses'] },
 )
 
 // ─── Building suggestions from user's profile ───
