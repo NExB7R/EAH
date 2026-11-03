@@ -6,7 +6,7 @@
 // ═══════════════════════════════════════════════════════════
 
 import type { Business, Offer } from '@/lib/data/businesses'
-import { getBusinessReputationScore } from '@/lib/reputation'
+import { trendScore } from '@/lib/ranking'
 
 export type FairWeights = {
   quality: number
@@ -131,48 +131,44 @@ export function fairOrder(
   return applyDiversity(sorted, options.topWindow ?? 8, options.maxPerType ?? 2)
 }
 
-export function fairOrderOffers(offers: Offer[], limit = 20): Offer[] {
+export function fairOrderOffers(
+  offers: Offer[],
+  limit = 20,
+  trendingBusinesses: Business[] = [],
+): Offer[] {
   if (offers.length === 0 || limit <= 0) return []
 
-  const seed = daySeed()
+  const scoreByBusiness = new Map(
+    trendingBusinesses.map((business) => [business.id, business.trend_score ?? trendScore(business)]),
+  )
   const scored = offers.map((offer) => {
-    const business = offer.business
-    const velocity = Math.min(1, Math.max(0, Number(business?.velocity_score ?? 0)) / 50)
-    const engagement = Math.min(1, Math.max(0, Number(business?.engagement_score ?? 0)) / 100)
-    const diversity = Math.min(1, Math.max(0, Number(business?.diversity_score ?? 0)) / 50)
-    const lastActivity = business?.last_activity_at ? new Date(business.last_activity_at).getTime() : 0
-    const daysSinceActivity = lastActivity > 0 ? Math.max(0, (Date.now() - lastActivity) / 86400000) : 90
-    const recency = 1 / (1 + daysSinceActivity / 14)
-    const reputation = business ? getBusinessReputationScore(business) / 100 : 0
-    const offerAge = offer.created_at ? Math.max(0, (Date.now() - new Date(offer.created_at).getTime()) / 86400000) : 90
-    const offerFreshness = 1 / (1 + offerAge / 30)
-
-    // Activity leads. Freshness and reputation refine close candidates but never
-    // let a new offer from a dormant business outrank a genuinely active one.
-    const activity = velocity * 0.4 + engagement * 0.3 + diversity * 0.1 + recency * 0.2
-    const score = activity * 0.8 + offerFreshness * 0.12 + reputation * 0.08
-    return { offer, score, activity }
+    const businessId = offer.business?.id
+    const activity = businessId ? scoreByBusiness.get(businessId) ?? 0 : 0
+    return { offer, activity }
   })
 
-  scored.sort((a, b) => b.score - a.score)
+  scored.sort((a, b) => b.activity - a.activity)
 
-  // Randomize only within near-equal activity bands. Higher-activity bands remain
-  // ahead, while similarly active businesses share exposure without fixed positions.
-  const mixed: typeof scored = []
+  // The activity score sets each tier. Only close scores are shuffled,
+  // so more-active businesses remain ahead without a permanent fixed position.
+  const mixed: Offer[] = []
   for (let index = 0; index < scored.length;) {
     const anchor = scored[index]!.activity
     let end = index + 1
-    while (end < scored.length && anchor - scored[end]!.activity <= 0.04) end++
-    const band = scored.slice(index, end)
+    while (end < scored.length && anchor - scored[end]!.activity <= 0.025) end++
+
+    const band = scored.slice(index, end).map((item) => item.offer)
+    const seed = daySeed()
     for (let i = band.length - 1; i > 0; i--) {
-      const j = hash(`${band[i]!.offer.id}:${seed}:${i}`) % (i + 1)
+      const j = hash(`${band[i]!.id}:${seed}:${i}`) % (i + 1)
       ;[band[i], band[j]] = [band[j]!, band[i]!]
     }
     mixed.push(...band)
     index = end
   }
 
-  return dedupeOffersByBiz(mixed.map((item) => item.offer), Math.min(8, limit)).slice(0, limit)
+  // Different businesses get the first exposure slots before duplicate offers.
+  return dedupeOffersByBiz(mixed, Math.min(8, limit)).slice(0, limit)
 }
 
 function dedupeOffersByBiz(offers: Offer[], firstWindow: number): Offer[] {
