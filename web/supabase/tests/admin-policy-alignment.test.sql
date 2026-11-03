@@ -1,7 +1,7 @@
 -- EAH targeted regression checks for the 2026-10-29 admin/RLS migrations.
 -- Run only on a dedicated non-production database after applying the migration set.
 BEGIN;
-SELECT plan(45);
+SELECT plan(47);
 
 SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.businesses'::regclass), true, 'RLS remains enabled on businesses');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='businesses' AND policyname='businesses_admin_all'), 'admin activity policy uses shared admin authorization');
@@ -87,6 +87,9 @@ SELECT is((
   OR has_function_privilege('anon','public.update_customer_stats_on_delivered()','EXECUTE')
   OR has_function_privilege('anon','public.update_customer_stats_on_insert()','EXECUTE')
 ), false, 'trigger-only functions are not callable through anonymous RPC');
+SELECT is(has_function_privilege('anon','public.generate_referral_code()','EXECUTE'), false, 'referral-code generator is not callable anonymously');
+SELECT is(has_function_privilege('authenticated','public.generate_referral_code()','EXECUTE'), false, 'referral-code generator is not callable by authenticated browser sessions');
+
 SELECT is((
   SELECT count(*)::int FROM pg_proc AS p JOIN pg_namespace AS n ON n.oid=p.pronamespace
   WHERE n.nspname='public'
