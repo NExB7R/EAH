@@ -104,7 +104,7 @@ export default function FloatingCapsule({ session, contactLinks }: Props) {
                   href={
                     session.role === 'super_admin'
                       ? '/admin/notifications'
-                      : '/notifications'
+                      : '/account/notifications'
                   }
                   className={styles.iconBtn}
                   aria-label="الإشعارات"
