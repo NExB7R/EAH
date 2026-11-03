@@ -190,7 +190,6 @@ export function useFairRotation<T extends { id: string }>({
 
     orderRef.current = nextOrder
     cursorRef.current = nextCursor
-    hasAdvancedRef.current = false
     const visibleIds = (() => {
       try {
         const raw = sessionStorage.getItem(storageKey)
@@ -205,6 +204,7 @@ export function useFairRotation<T extends { id: string }>({
       }
     })()
     const initialVisible = visibleIds ?? sliceVisible(nextOrder, nextCursor, pageSizeRef.current)
+    hasAdvancedRef.current = !!visibleIds
     pageHistoryRef.current = [{ cursor: nextCursor, size: initialVisible.length }]
     // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time hydration
     setMounted(true)
