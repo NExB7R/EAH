@@ -74,6 +74,8 @@ export type BusinessFormCtx = {
   setFeaturedUntil: Setter<string>
   isNewProject: boolean
   setIsNewProject: Setter<boolean>
+  renewNewProjectRequested: boolean
+  setRenewNewProjectRequested: Setter<boolean>
   newUntil: string
   setNewUntil: Setter<string>
 
