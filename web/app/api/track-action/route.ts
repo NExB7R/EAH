@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { z } from 'zod'
 import { createServiceClient } from '@/lib/supabase/service'
+import { createClient } from '@/lib/supabase/server'
 import { createHash } from 'crypto'
 import { strictLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
@@ -45,9 +46,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: 'invalid_payload' }, { status: 400 })
     }
 
+    const browserClient = await createClient()
+    const { data: { user } } = await browserClient.auth.getUser()
     const supabase = createServiceClient()
+    const { data: business, error: businessError } = await supabase
+      .from('businesses')
+      .select('id')
+      .eq('id', parsed.data.businessId)
+      .eq('is_published', true)
+      .maybeSingle()
+    if (businessError) {
+      console.error('[track-action] business lookup failed:', businessError.message)
+      return NextResponse.json({ ok: false, error: 'تعذر التحقق من النشاط' }, { status: 500 })
+    }
+    if (!business) {
+      return NextResponse.json({ ok: false, error: 'النشاط مش متاح' }, { status: 404 })
+    }
+
     const { error } = await supabase.from('engagement_events').insert({
       business_id: parsed.data.businessId,
+      user_id: user && !user.is_anonymous ? user.id : null,
       action: parsed.data.action,
       ip_hash: hashIp(ip),
       user_agent: req.headers.get('user-agent')?.slice(0, 200) ?? null,
