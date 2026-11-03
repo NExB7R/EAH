@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { createPublicClient } from '@/lib/supabase/public'
 import { createServiceClient } from '@/lib/supabase/service'
-import { sortByTrend, trendScore } from '@/lib/ranking'
+import { hasSufficientTrendActivity, sortByTrend, trendScore } from '@/lib/ranking'
 import { getBusinessReputationScore } from '@/lib/reputation'
 import { getPaidBusinessIdsWithFeature, getPaidFeaturedHomeBusinessIds } from './featured-eligibility'
 import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
@@ -564,11 +564,7 @@ export const getTrendingBusinesses = unstable_cache(
 
     // An activity without verified recent customer signals is not a "trend".
     // It remains discoverable in its other sections, but cannot be promoted here.
-    return sortByTrend(rankedCandidates.filter((business) =>
-      (business.trend_activity_weight ?? 0) >= 1 ||
-      (business.trend_recent_orders ?? 0) > 0 ||
-      (business.trend_recent_reviews ?? 0) > 0,
-    ))
+    return sortByTrend(rankedCandidates.filter(hasSufficientTrendActivity))
       .map((business) => ({ ...business, trend_score: trendScore(business) }))
       .slice(0, Math.max(0, Math.min(1000, Math.floor(limit))))
   },
