@@ -1,6 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { getPaidFeaturedHomeBusinessIds } from './featured-eligibility'
+import { getPaidFeaturedHomeEntitlements } from './featured-eligibility'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Data
@@ -174,9 +174,9 @@ export type FeaturedBusiness = {
   cover_image_url: string | null
   is_published: boolean
   is_featured: boolean
-  featured_until: string | null
   created_at: string
   paid_featured_home_eligible: boolean
+  paid_featured_home_expires_at: string | null
 }
 
 export async function getFeaturedBusinesses(): Promise<FeaturedBusiness[]> {
@@ -185,7 +185,7 @@ export async function getFeaturedBusinesses(): Promise<FeaturedBusiness[]> {
   const { data, error } = await supabase
     .from('businesses')
     .select(
-      'id, name, slug, business_type, area, cover_image_url, is_published, is_featured, featured_until, created_at',
+      'id, name, slug, business_type, area, cover_image_url, is_published, is_featured, created_at',
     )
     .eq('is_featured', true)
     .order('created_at', { ascending: false })
@@ -196,12 +196,16 @@ export async function getFeaturedBusinesses(): Promise<FeaturedBusiness[]> {
     return []
   }
 
-  const rows = (data ?? []) as Omit<FeaturedBusiness, 'paid_featured_home_eligible'>[]
-  const eligibleIds = await getPaidFeaturedHomeBusinessIds(rows.map((row) => row.id))
-  return rows.map((row) => ({
-    ...row,
-    paid_featured_home_eligible: eligibleIds.has(row.id),
-  }))
+  const rows = (data ?? []) as Omit<FeaturedBusiness, 'paid_featured_home_eligible' | 'paid_featured_home_expires_at'>[]
+  const entitlements = await getPaidFeaturedHomeEntitlements(rows.map((row) => row.id))
+  return rows.map((row) => {
+    const entitlement = entitlements.get(row.id)
+    return {
+      ...row,
+      paid_featured_home_eligible: !!entitlement,
+      paid_featured_home_expires_at: entitlement?.expiresAt ?? null,
+    }
+  })
 }
 
 // ═══════════════════════════════════════════════════════════
