@@ -84,8 +84,8 @@ export default function BusinessCard({
     business.is_featured && (featuredUntil === null || (Number.isFinite(featuredUntil) && featuredUntil > now))
   const newEligible =
     business.is_new_project && newUntil !== null && Number.isFinite(newUntil) && newUntil > now
-  const showFeatured = ctx === 'featured' || featuredEligible
-  const showNew = ctx === 'new' || newEligible
+  const showFeatured = featuredEligible
+  const showNew = newEligible
   const rankClass =
     rank === 1
       ? styles.rankGold
