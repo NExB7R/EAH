@@ -1560,3 +1560,36 @@ Admin list:
 - لم يُشغّل TypeScript/ESLint/Stylelint/Vitest/Build/Playwright بعد. يلزم Draft PR ونتائج Quality Gate قبل اعتباره جاهزًا.
 - لم يُنشر Vercel Preview أو Production من هذا الفرع.
 
+
+
+---
+
+## 2026-11-03 — Home Discovery follow-up
+
+**Current branch:** `feat/home-local-discovery-2026`  
+**Draft PR:** #39 → `main`  
+**Latest checks required:** must run against the current branch HEAD; prior workflow run was for an older commit.
+
+### Added after initial implementation
+- Paid entitlements split: `featured_badge` and `featured_home`; homepage selection needs both admin flag and active paid non-trial subscription whose plan contains `featured_home`.
+- Admin featured list distinguishes selected from actually eligible; server actions block new activation/renewal without the right paid plan.
+- Nearby manual AreaDropdown now saves inside Nearby section, and clears old GPS coords. GPS remains explicit consent only.
+- Anonymous session business view tracker + rate-limited endpoint; page view weight is 0.35 and no single view is enough for Trending.
+- Trending source signals deduped across event tables for reviews/orders; unknown/zero-weight actions do not count.
+- New activity cold-start helper is bounded by `new_until`; it does not affect the trend score.
+- Offers standalone page now uses the same business-activity proxy ranking and real saved location distance.
+- Supermarket is supported by merchant/admin/apply/search/category flows, with a DB migration and pgTAP test wired to isolated CI DB job.
+- Added unit tests for fair rotation, subscription entitlements, activity thresholds, supermarket labels and filters.
+
+### Production / release safety
+- Supabase was queried read-only. No production inserts/updates/DDL were executed.
+- `businesses_business_type_check` currently allows restaurant/pharmacy/delivery_office/misc only. The supermarket migration is committed to the branch and must run on a dedicated staging DB before normal production migration release.
+- `page_view_events.event_scope` live constraint allows only site/business, while the old `get_business_funnel` SQL function still references unsupported scopes; this remains an independent migration task.
+- 8 published activities and zero recent engagement/page-view event rows at time of initial audit (2026-11-03); there is no live data sample yet to validate the long-term trend weights.
+- No offer-level ID or click/view event exists; Offers rank using associated business momentum as a documented proxy.
+- No merge, no Vercel deploy, no production DB writes were performed.
+
+### CI
+- Previous PR runs belonged to older SHA `1fae164...`: Invariants and CodeQL passed; TypeScript failed on duplicate supermarket label, missing supermarket synonyms and missing reputation import (fixed later); E2E did not reach Playwright because the Vercel Preview wait failed.
+- These results do not certify the current HEAD. Run/review current CI and E2E before merge.
+
