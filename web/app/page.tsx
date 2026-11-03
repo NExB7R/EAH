@@ -17,6 +17,7 @@ import { getFavoriteIds, getFullProfile } from '@/lib/data/account'
 import { getActiveAdsForSlot } from '@/lib/data/ads'
 import { fairOrder, fairOrderOffers } from '@/lib/fair-ranking'
 import { distanceKm } from '@/lib/utils/distance'
+import { getHomeRecommendations } from '@/lib/data/home-recommendations'
 
 export const dynamic = 'force-dynamic'
 
@@ -62,16 +63,30 @@ async function HomeSections({
   viewerArea: string | null
 }) {
   const session = await getUserSession()
-  const [featuredRaw, trendingRaw, newRaw, rawOffers, nearbyRaw, flags, homeBanner, homeFeed, favoriteIds] = await Promise.all([
-    getFeaturedBusinesses(200),
-    getTrendingBusinesses(60),
-    getNewBusinesses(100),
-    getActiveOffers(60),
-    isLoggedIn ? getNearbyBusinesses(viewerLocation ? undefined : viewerArea ?? undefined, 500) : Promise.resolve([]),
+  const [
+    featuredRaw,
+    trendingRaw,
+    newRaw,
+    rawOffers,
+    nearbyRaw,
+    flags,
+    homeBanner,
+    homeFeed,
+    favoriteIds,
+    recommendations,
+  ] = await Promise.all([
+    getFeaturedBusinesses(1000),
+    getTrendingBusinesses(200),
+    getNewBusinesses(1000),
+    getActiveOffers(1000),
+    isLoggedIn ? getNearbyBusinesses(viewerLocation ? undefined : viewerArea ?? undefined, 1000) : Promise.resolve([]),
     getFeatureFlags(),
     getActiveAdsForSlot('home_banner', 1),
     getActiveAdsForSlot('home_feed', 1),
     session ? getFavoriteIds(session.userId) : Promise.resolve(new Set<string>()),
+    session
+      ? getHomeRecommendations(session.userId, viewerArea)
+      : Promise.resolve({ businesses: [], description: '' }),
   ])
 
   const offers = fairOrderOffers(rawOffers, 16)
@@ -122,7 +137,7 @@ async function HomeSections({
       )}
       {flags.trends_enabled && trending.length >= 1 && (
         <div id="trending">
-          <TrendingRow businesses={trending} favoriteIds={favoriteIds} />
+          <TrendingRow businesses={trending} favoriteIds={favoriteIds} viewerLocation={viewerLocation} />
         </div>
       )}
       {flags.offers_enabled && (
@@ -137,11 +152,16 @@ async function HomeSections({
       )}
       {flags.new_enabled && (
         <div id="new">
-          <NewRow businesses={newOnes} favoriteIds={favoriteIds} />
+          <NewRow businesses={newOnes} favoriteIds={favoriteIds} viewerLocation={viewerLocation} />
         </div>
       )}
       <div id="suggested">
-        <SuggestedSection />
+        <SuggestedSection
+          businesses={recommendations.businesses}
+          description={recommendations.description}
+          favoriteIds={favoriteIds}
+          viewerLocation={viewerLocation}
+        />
       </div>
     </>
   )
