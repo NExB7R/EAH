@@ -67,9 +67,10 @@ export type FormState = {
   acceptsWhatsapp: boolean
   setAcceptsWhatsapp: Setter<boolean>
   isFeatured: boolean
-  featuredWasActiveAtLoad: boolean
   isVerified: boolean
   setIsFeatured: Setter<boolean>
+  renewFeaturedRequested: boolean
+  setRenewFeaturedRequested: Setter<boolean>
   setIsVerified: Setter<boolean>
   featuredOrder: number
   setFeaturedOrder: Setter<number>
@@ -78,8 +79,9 @@ export type FormState = {
   featuredUntil: string
   setFeaturedUntil: Setter<string>
   isNewProject: boolean
-  newProjectWasActiveAtLoad: boolean
   setIsNewProject: Setter<boolean>
+  renewNewProjectRequested: boolean
+  setRenewNewProjectRequested: Setter<boolean>
   newUntil: string
   setNewUntil: Setter<string>
 
@@ -138,6 +140,7 @@ export function useFormState(business: AdminBusiness | null): FormState {
     new Date(newUntilValue).getTime() > now
 
   const [isFeatured, setIsFeatured] = useState(featuredStillActive)
+  const [renewFeaturedRequested, setRenewFeaturedRequested] = useState(false)
   const [isVerified, setIsVerified] = useState(!!business?.is_verified)
   const [featuredOrder, setFeaturedOrder] = useState(0)
   const [featuredPin, setFeaturedPin] = useState(false)
@@ -148,6 +151,7 @@ export function useFormState(business: AdminBusiness | null): FormState {
   }
   const [featuredUntil, setFeaturedUntil] = useState(toDateInput(featuredUntilValue))
   const [isNewProject, setIsNewProject] = useState(newProjectStillActive)
+  const [renewNewProjectRequested, setRenewNewProjectRequested] = useState(false)
   const [newUntil, setNewUntil] = useState(toDateInput(newUntilValue))
 
   const [hours, setHours] = useState<Record<DayKey, DayHours>>(() =>
@@ -255,10 +259,11 @@ export function useFormState(business: AdminBusiness | null): FormState {
     acceptsWhatsapp,
     setAcceptsWhatsapp,
     isFeatured,
-    featuredWasActiveAtLoad: featuredStillActive,
     isVerified,
     setIsVerified,
     setIsFeatured,
+    renewFeaturedRequested,
+    setRenewFeaturedRequested,
     featuredOrder,
     setFeaturedOrder,
     featuredPin,
@@ -266,8 +271,9 @@ export function useFormState(business: AdminBusiness | null): FormState {
     featuredUntil,
     setFeaturedUntil,
     isNewProject,
-    newProjectWasActiveAtLoad: newProjectStillActive,
     setIsNewProject,
+    renewNewProjectRequested,
+    setRenewNewProjectRequested,
     newUntil,
     setNewUntil,
     hours,
