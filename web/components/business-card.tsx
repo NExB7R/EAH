@@ -2,6 +2,7 @@ import Link from 'next/link'
 import CardImage from './card-image'
 import DistanceBadge from './distance-badge'
 import type { Business } from '@/lib/data/businesses'
+import type { LatLng } from '@/lib/utils/distance'
 import { isBusinessOpen } from '@/lib/utils/working-hours'
 import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import {
@@ -33,6 +34,8 @@ type Props = {
   context?: CardContext
   rank?: number
   isFavorite?: boolean
+  viewerLocation?: LatLng | null
+  showDistance?: boolean
 }
 
 type TypeMeta = { label: string; Icon: typeof UtensilsIcon }
@@ -59,6 +62,8 @@ export default function BusinessCard({
   context,
   rank,
   isFavorite = false,
+  viewerLocation,
+  showDistance = true,
 }: Props) {
   const typeMeta = TYPE_META[business.business_type] ?? TYPE_META.misc!
   const TypeIcon = typeMeta.Icon
@@ -162,6 +167,8 @@ export default function BusinessCard({
           <DistanceBadge
             lat={business.location?.lat ?? null}
             lng={business.location?.lng ?? null}
+            userLocation={viewerLocation}
+            enabled={showDistance}
           />
         </div>
 
