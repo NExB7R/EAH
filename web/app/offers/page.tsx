@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getActiveOffers, getTrendingBusinesses, getFullProfile } from '@/lib/data'
+import { getActiveOffers, getTrendingBusinesses } from '@/lib/data'
+import { getFullProfile } from '@/lib/data/account'
 import { getUserSession } from '@/lib/data/user'
 import { isValidLatLng } from '@/lib/utils/distance'
 import { fairOrderOffers } from '@/lib/fair-ranking'
