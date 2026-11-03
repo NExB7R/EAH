@@ -302,7 +302,7 @@ const createSchema = z.object({
     .max(80)
     .regex(/^[a-z0-9-]+$/, 'الحروف الصغيرة والأرقام والشرطة فقط')
     .optional(),
-  business_type: z.enum(['restaurant', 'pharmacy', 'delivery_office', 'misc']),
+  business_type: z.enum(['restaurant', 'pharmacy', 'supermarket', 'delivery_office', 'misc']),
   custom_business_type: z.string().max(50).or(z.literal('')).optional(),
   owner_profile_id: z.string().uuid().optional().or(z.literal('')),
   area: z.string().max(60).or(z.literal('')).optional(),
@@ -330,6 +330,8 @@ const createSchema = z.object({
     .optional(),
   is_open: z.boolean().optional(),
   accepts_whatsapp_orders: z.boolean().optional(),
+  is_featured: z.boolean().optional(),
+  is_new_project: z.boolean().optional(),
   is_published: z.boolean().optional(),
 })
 
@@ -378,6 +380,8 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     })(),
     is_open: formData.get('is_open') === 'on',
     accepts_whatsapp_orders: formData.get('accepts_whatsapp_orders') === 'on',
+    is_featured: formData.get('is_featured') === 'on',
+    is_new_project: formData.get('is_new_project') === 'on',
     is_published: formData.has('is_published') ? formData.get('is_published') === 'on' : true,
   })
 
@@ -446,6 +450,8 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   }
 
   const finalSlug = d.slug ?? `${slugify(d.name)}-${randomBytes(8).toString('hex')}`
+  const promotionStart = new Date()
+  const promotionEnd = new Date(promotionStart.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
 
   // WhatsApp gate: auto-disable orders if no whatsapp contact provided
   const hasWhatsappContact = (d.contacts ?? []).some(
@@ -472,6 +478,12 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       hook: d.hook || null,
       is_open: d.is_open ?? true,
       accepts_whatsapp_orders: effectiveAcceptsWhatsapp,
+      is_featured: d.is_featured ?? false,
+      featured_order: 0,
+      featured_pin: false,
+      featured_until: d.is_featured ? promotionEnd : null,
+      is_new_project: d.is_new_project ?? false,
+      new_until: d.is_new_project ? promotionEnd : null,
       // Publication is independent from owner assignment and custom-type review.
       // Unapproved custom types use the public fallback category "أخرى".
       is_published: d.is_published ?? true,
