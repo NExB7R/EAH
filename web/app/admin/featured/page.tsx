@@ -28,12 +28,10 @@ function computeStats(businesses: Awaited<ReturnType<typeof getFeaturedBusinesse
   return {
     total: featured.length,
     active: featured.filter((b) =>
-      b.is_published &&
-      b.paid_featured_home_eligible &&
-      (!b.featured_until || new Date(b.featured_until).getTime() > Date.now()),
+      b.is_published && b.paid_featured_home_eligible,
     ).length,
     expiringSoon: featured.filter((b) =>
-      b.paid_featured_home_eligible && isExpiringSoon(b.featured_until),
+      b.paid_featured_home_eligible && isExpiringSoon(b.paid_featured_home_expires_at),
     ).length,
   }
 }
@@ -55,7 +53,7 @@ export default async function AdminFeaturedPage({
 
   let filtered = featured
   if (filter === 'expiring') {
-    filtered = filtered.filter((b) => isExpiringSoon(b.featured_until))
+    filtered = filtered.filter((b) => isExpiringSoon(b.paid_featured_home_expires_at))
   }
   if (q) filtered = filtered.filter((b) => b.name.toLowerCase().includes(q))
 
