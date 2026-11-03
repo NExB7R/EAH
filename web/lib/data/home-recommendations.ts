@@ -3,7 +3,6 @@ import 'server-only'
 import { getFavorites, getFollowing, getOrders } from './account'
 import { getPublishedBusinesses, type Business } from './businesses'
 import { getBusinessReputationScore } from '@/lib/reputation'
-import { trendScore } from '@/lib/ranking'
 
 const LEARNING_WINDOW_MS = 180 * 24 * 60 * 60 * 1000
 const HOME_RECOMMENDATION_LIMIT = 6
@@ -77,7 +76,9 @@ export async function getHomeRecommendations(
   const recentFavorites = favorites.filter((item) => isRecent(item.created_at, now))
   const recentFollowing = following.filter((item) => isRecent(item.created_at, now))
   const completedOrders = orders.filter(
-    (item) => item.status === 'delivered' && isRecent(item.created_at, now) && !!item.business?.slug,
+    (item) => item.status === 'delivered' &&
+      isRecent(item.delivered_at ?? item.created_at, now) &&
+      !!item.business?.slug,
   )
 
   // Repeated page visits and account creation alone are not recommendation signals.
@@ -158,12 +159,10 @@ export async function getHomeRecommendations(
       if (typeAffinity === 0 && areaAffinity === 0) return null
 
       const reputation = getBusinessReputationScore(business) / 100
-      const activity = Math.max(0, Math.min(1, trendScore(business)))
       const score =
-        typeAffinity * 0.48 +
-        areaAffinity * 0.22 +
-        activity * 0.18 +
-        reputation * 0.12
+        typeAffinity * 0.58 +
+        areaAffinity * 0.27 +
+        reputation * 0.15
 
       return { business, score }
     })
