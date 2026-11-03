@@ -8,6 +8,7 @@ import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
 import { buildContactOptions, safeContactOptionLabel, type ContactOption } from './contact-options'
 export type { ContactOption } from './contact-options'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
+import { getPaidBusinessIdsWithFeature } from './featured-eligibility'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Detail (Full Page Data)
@@ -20,7 +21,7 @@ async function normalizeBusinessRows(
   if (!data || data.length === 0) return []
   const rows = data.map((row) => ({ ...(row as Record<string, unknown>) }))
   const ids = rows.map((row) => String(row.id ?? ''))
-  const [configuredWhatsAppIds, configuredInAppOrderIds] = await Promise.all([
+  const [configuredWhatsAppIds, configuredInAppOrderIds, paidFeaturedBadgeIds] = await Promise.all([
     getWhatsAppDestinationBusinessIds(supabase, ids),
     getInAppOrderAvailableBusinessIds(
       supabase,
@@ -30,6 +31,7 @@ async function normalizeBusinessRows(
         owner_profile_id: row.owner_profile_id,
       })),
     ),
+    getPaidBusinessIdsWithFeature('featured_badge', ids),
   ])
   return rows.map((raw) => {
     const locRaw = raw.business_locations
@@ -63,6 +65,7 @@ async function normalizeBusinessRows(
       accepts_orders: acceptsOrders,
       accepts_whatsapp_orders: acceptsWhatsApp,
       orders_enabled: acceptsOrders,
+      is_featured: !!raw.is_featured && paidFeaturedBadgeIds.has(String(raw.id ?? '')),
     }
   })
 }
@@ -212,13 +215,14 @@ export const getBusinessDetail = unstable_cache(
       primaryLoc && Number.isFinite(primaryLoc.latitude) && Number.isFinite(primaryLoc.longitude)
         ? { lat: primaryLoc.latitude, lng: primaryLoc.longitude }
         : null
-    const [configuredWhatsAppIds, configuredInAppOrderIds] = await Promise.all([
+    const [configuredWhatsAppIds, configuredInAppOrderIds, paidFeaturedBadgeIds] = await Promise.all([
       getWhatsAppDestinationBusinessIds(supabase, [String(rawBiz.id)]),
       getInAppOrderAvailableBusinessIds(supabase, [{
         id: String(rawBiz.id),
         accepts_orders: rawBiz.accepts_orders,
         owner_profile_id: rawBiz.owner_profile_id,
       }]),
+      getPaidBusinessIdsWithFeature('featured_badge', [String(rawBiz.id)]),
     ])
     const acceptsOrders = configuredInAppOrderIds.has(String(rawBiz.id))
     const acceptsWhatsApp = isWhatsAppChannelAvailable(
@@ -241,6 +245,7 @@ export const getBusinessDetail = unstable_cache(
       accepts_orders: acceptsOrders,
       accepts_whatsapp_orders: acceptsWhatsApp,
       orders_enabled: acceptsOrders,
+      is_featured: !!rawBiz.is_featured && paidFeaturedBadgeIds.has(String(rawBiz.id)),
     }
 
     const noticeText = ((rawBiz.important_notice as string | null) ?? '').trim()
