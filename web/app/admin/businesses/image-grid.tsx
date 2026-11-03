@@ -36,6 +36,9 @@ export default function ImageGrid({
   const add = (newItem: GridItem) => setItems((prev) => [...prev, newItem])
 
   const remove = async (item: GridItem) => {
+    if (pending) return
+    setError(null)
+    setPending(true)
     try {
       const params = new URLSearchParams({
         businessId,
@@ -45,14 +48,16 @@ export default function ImageGrid({
       const res = await fetch(`/api/admin/upload-business-image?${params.toString()}`, {
         method: 'DELETE',
       })
-      if (!res.ok) {
-        const json = (await res.json()) as { error?: string }
+      const json = (await res.json()) as { ok?: boolean; error?: string }
+      if (!res.ok || !json.ok) {
         setError(json.error ?? 'فشل الحذف')
         return
       }
       setItems((prev) => prev.filter((i) => i.id !== item.id))
     } catch {
       setError('فشل الحذف')
+    } finally {
+      setPending(false)
     }
   }
 
@@ -149,7 +154,8 @@ export default function ImageGrid({
             <button
               type="button"
               className={styles.imageGridRemove}
-              onClick={() => remove(item)}
+              onClick={() => void remove(item)}
+              disabled={pending}
               aria-label="حذف"
             >
               <CloseIcon size={12} />
