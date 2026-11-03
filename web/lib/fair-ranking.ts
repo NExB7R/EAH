@@ -62,10 +62,12 @@ function fairnessBoost(id: string, seed: number): number {
 }
 
 function coldStartBoost(b: Business): number {
-  if (!b.is_new_project) return 0
+  if (!b.is_new_project || !b.new_until) return 0
+  const now = Date.now()
   const created = new Date(b.created_at).getTime()
-  if (!created) return 0
-  const days = (Date.now() - created) / 86400000
+  const expires = new Date(b.new_until).getTime()
+  if (!Number.isFinite(created) || !Number.isFinite(expires) || expires <= now) return 0
+  const days = Math.max(0, (now - created) / 86400000)
   if (days > 30) return 0
   return 0.3 * (1 - days / 30)
 }
