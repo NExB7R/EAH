@@ -60,10 +60,13 @@ export default function NearbyLocationPrompt({ isLoggedIn }: Props) {
         {message && <span className={styles.message} role="status">{message}</span>}
       </div>
       {isLoggedIn ? (
-        <button type="button" className={styles.action} onClick={requestAndSave} disabled={pending}>
-          <MapPinIcon size={15} />
-          {pending ? 'بنحدد موقعك…' : 'حدد موقعي'}
-        </button>
+        <div className={styles.actions}>
+          <button type="button" className={styles.action} onClick={requestAndSave} disabled={pending}>
+            <MapPinIcon size={15} />
+            {pending ? 'بنحدد موقعك…' : 'حدد موقعي'}
+          </button>
+          <Link href="/account/edit" className={styles.manualLink}>اختار منطقتك يدويًا</Link>
+        </div>
       ) : (
         <Link href="/auth?mode=signup" className={styles.action}>
           <CheckCircleIcon size={15} />
