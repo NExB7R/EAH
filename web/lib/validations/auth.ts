@@ -1,13 +1,10 @@
 import { z } from 'zod'
 import { AREAS } from '@/lib/data/areas'
+import { isEgyptianMobileNumber } from '@/lib/phone-validation'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Auth Validation Schemas
 // ═══════════════════════════════════════════════════════════
-
-// ─── الرقم المصري (11 رقم) ───
-// 010, 011, 012, 015 — مقدمات فودافون + اتصالات + أورنج + وي
-const EGYPT_PHONE_REGEX = /^01[0125][0-9]{8}$/
 
 // ─── تحويل الرقم لصيغة E.164 ───
 // مثال: 01012892806 → +201012892806
@@ -26,7 +23,7 @@ const displayNameSchema = z
 const phoneSchema = z
   .string()
   .trim()
-  .regex(EGYPT_PHONE_REGEX, 'الرقم مش صح — لازم 11 رقم يبدأ بـ 010/011/012/015')
+  .refine(isEgyptianMobileNumber, 'الرقم مش صح — لازم 11 رقم يبدأ بـ 010/011/012/015')
 
 // ─── كلمة السر ───
 const passwordSchema = z
