@@ -302,7 +302,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             ))}
           </ul>
 
-          {/* روابط الحساب للعميل والتاجر المسجلين */}
+          {/* روابط الحساب للمشتري والبايع المسجلين */}
           {isLoggedIn && !isAdmin && (
             <>
               <div className={styles.divider} />
@@ -358,7 +358,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             </>
           )}
 
-          {/* تسجيل نشاط للعميل المسجل الذي لا يملك نشاطًا */}
+          {/* تسجيل نشاط للمشتري المسجل الذي لا يملك نشاطًا */}
           {isLoggedIn && !isSeller && !isAdmin && (
             <>
               <div className={styles.divider} />
@@ -392,7 +392,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
                 <StoreIcon size={14} />
-                <span>للتاجر</span>
+                <span>للبايع</span>
               </div>
               <ul className={styles.list}>
                 {SELLER_ONBOARDING_ITEMS.map(({ href, label, Icon }) => (
