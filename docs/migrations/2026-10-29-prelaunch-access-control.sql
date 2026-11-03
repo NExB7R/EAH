@@ -20,6 +20,17 @@ GRANT EXECUTE ON FUNCTION public.get_business_view_stats(text[], integer) TO ser
 REVOKE ALL PRIVILEGES ON FUNCTION public.reveal_contact(uuid, text, text) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.reveal_contact(uuid, text, text) TO service_role;
 
+-- Analytics write RPCs have no browser call sites in the current app. Keep them server-only;
+-- future browser tracking must go through a rate-limited API route with server validation.
+REVOKE ALL PRIVILEGES ON FUNCTION public.record_ad_event(uuid, text, uuid, uuid, text) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.record_ad_event(uuid, text, uuid, uuid, text) TO service_role;
+
+REVOKE ALL PRIVILEGES ON FUNCTION public.record_page_view(text, uuid, uuid, uuid, text, text) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.record_page_view(text, uuid, uuid, uuid, text, text) TO service_role;
+
+REVOKE ALL PRIVILEGES ON FUNCTION public.heartbeat_page_session(uuid, text, uuid) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.heartbeat_page_session(uuid, text, uuid) TO service_role;
+
 -- Coupon details are consumed through trusted server-side flows, not as an unauthenticated
 -- coupon-enumeration endpoint.
 REVOKE ALL PRIVILEGES ON FUNCTION public.validate_coupon(text, uuid) FROM PUBLIC, anon, authenticated;
