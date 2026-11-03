@@ -130,7 +130,6 @@
 | `ad-slot.tsx` | AdSlot | EAH — Ad Slot (display) |
 | `admin-sidebar.tsx` | AdminSidebar | — |
 | `admin/activity-feed.tsx` | ActivityFeed | EAH — Live Activity Feed |
-| `admin/error-pulse.tsx` | ErrorPulse | EAH — Critical Error Pulse |
 | `ai-widget.tsx` | AiWidget | EAH — AI Widget (Floating Assistant) |
 | `announcements-banner.tsx` | AnnouncementsBanner | EAH — Announcements Banner |
 | `area-dropdown.tsx` | AreaDropdown | — |
@@ -172,9 +171,7 @@
 | `menu-drawer.tsx` | MenuDrawer | — |
 | `menu-slider.tsx` | MenuSlider | EAH — Menu Slider (داخل OrderModal) |
 | `merchant-sidebar.tsx` | MerchantSidebar | — |
-| `nearby-cta.tsx` | NearbyCta | EAH — Nearby CTA (Location) — يظهر جوه Nearby Grid |
 | `nearby-grid.tsx` | NearbyGrid | EAH — Nearby Grid (Home) |
-| `nearby-location-prompt.tsx` | NearbyLocationPrompt | — |
 | `new-row.tsx` | NewRow | EAH — New Row (Home) |
 | `offers-strip.tsx` | OffersStrip, OfferCard | EAH — Offers Strip (Home — Single Row Carousel) |
 | `offline-badge.tsx` | OfflineBadge | EAH — Offline Badge |
@@ -251,7 +248,6 @@
 | `data/contact-availability-utils.ts` | normalizeWhatsAppDestination, normalizePhoneDestination, hasUsablePhoneDestination, hasUsableWhatsAppDestination, isWhatsAppChannelAvailable | Do not guess a country code for ambiguous local numbers. |
 | `data/contact-availability.ts` | getWhatsAppDestinationBusinessIds | Return only the business IDs with at least one usable WhatsApp destination. |
 | `data/contact-options.ts` | safeContactOptionLabel, buildContactOptions | Combines every valid public contact and active-branch destination. |
-| `data/featured-eligibility.ts` | getPaidBusinessFeatureEntitlements, getPaidBusinessIdsWithFeature, getPaidFeaturedHomeBusinessIds, getPaidFeaturedHomeEntitlements, hasPaidFeaturedHomeSubscription | Return active paid entitlements, preserving the plan's actual expiry. |
 | `data/fraud.ts` | getFlaggedReviews, getRecentTrustEvents, getFlaggedUsers, getFraudStats, getMultiAccountIps | EAH — Fraud Data |
 | `data/health.ts` | getHealthSummary, getRecentErrors, getErrorsWithFilters | EAH — System Health data |
 | `data/in-app-order-availability-core.ts` | isInAppOrderOperational | The shared product rule for showing in-platform orders as currently available. |
