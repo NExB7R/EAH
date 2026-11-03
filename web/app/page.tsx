@@ -9,7 +9,7 @@ import NearbyGrid from '@/components/nearby-grid'
 import SuggestedSection from '@/components/suggested-section'
 import AdSlot from '@/components/ad-slot'
 import ChipScrollHandler from '@/components/chip-scroll-handler'
-import { getPublishedBusinesses, getFeaturedBusinesses, getTrendingBusinesses, getNewBusinesses, getActiveOffers, getNearbyBusinesses } from '@/lib/data'
+import { getFeaturedBusinesses, getTrendingBusinesses, getNewBusinesses, getActiveOffers, getNearbyBusinesses } from '@/lib/data'
 import { getFeatureFlags } from '@/lib/features'
 import { getUserSession } from '@/lib/data/user'
 import { getMyBusiness } from '@/lib/data/merchant'
@@ -17,13 +17,12 @@ import { getFavoriteIds, getFullProfile } from '@/lib/data/account'
 import { getActiveAdsForSlot } from '@/lib/data/ads'
 import { fairOrder, fairOrderOffers } from '@/lib/fair-ranking'
 import { distanceKm } from '@/lib/utils/distance'
-import { isOpenNow } from '@/lib/data/businesses'
 import type { Business } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
 
 type Props = {
-  searchParams: Promise<{ type?: string; scroll?: string; chip?: string }>
+  searchParams: Promise<{ scroll?: string; chip?: string }>
 }
 
 export default async function Home({ searchParams }: Props) {
@@ -45,7 +44,6 @@ export default async function Home({ searchParams }: Props) {
       <CategoryChips />
       <Suspense fallback={null}>
         <HomeSections
-          typeFilter={params.type}
           isLoggedIn={!!session}
           viewerLocation={viewerLocation}
           viewerArea={profile?.default_area ?? null}
@@ -56,19 +54,16 @@ export default async function Home({ searchParams }: Props) {
 }
 
 async function HomeSections({
-  typeFilter,
   isLoggedIn,
   viewerLocation,
   viewerArea,
 }: {
-  typeFilter?: string
   isLoggedIn: boolean
   viewerLocation: { lat: number; lng: number } | null
   viewerArea: string | null
 }) {
   const session = await getUserSession()
-  const [allRaw, featuredRaw, trendingRaw, newRaw, rawOffers, nearbyRaw, flags, homeBanner, homeFeed, favoriteIds] = await Promise.all([
-    getPublishedBusinesses(),
+  const [featuredRaw, trendingRaw, newRaw, rawOffers, nearbyRaw, flags, homeBanner, homeFeed, favoriteIds] = await Promise.all([
     getFeaturedBusinesses(200),
     getTrendingBusinesses(60),
     getNewBusinesses(100),
@@ -80,16 +75,6 @@ async function HomeSections({
     session ? getFavoriteIds(session.userId) : Promise.resolve(new Set<string>()),
   ])
 
-  // ─── الفلترة ───
-  let all = allRaw
-  if (typeFilter === 'open') {
-    all = all.filter((b) => isOpenNow(b.working_hours))
-  } else if (typeFilter === 'online') {
-    all = all.filter((b) => b.accepts_whatsapp_orders)
-  } else if (typeFilter && typeFilter !== 'all') {
-    all = all.filter((b) => b.business_type === typeFilter)
-  }
-
   const offers = fairOrderOffers(rawOffers, 16)
 
   // Featured eligibility is independent of public trend/reputation ranking.
@@ -99,7 +84,7 @@ async function HomeSections({
   // Use the dedicated trend score (velocity, verified engagement diversity,
   // recency, evidence-based reputation, quality and response) rather than the
   // generic fair-order score or paid featured status.
-  const trending = trendingRaw.filter((b) => b.is_published)
+  const trending = trendingRaw
 
   const now = Date.now()
   const newOnes = newRaw.filter((b) =>
@@ -116,11 +101,10 @@ async function HomeSections({
       ? fairOrder(nearbyRaw, 'nearby', { area: viewerArea }, { topWindow: 12, maxPerType: 3 })
       : []
 
-  const featuredMerged: Business[] = featured
 
   return (
     <>
-      {flags.featured_enabled && <FeaturedBento businesses={featuredMerged} />}
+      {flags.featured_enabled && <FeaturedBento businesses={featured} />}
       {flags.nearby_enabled && (
         <div id="nearby">
           <NearbyGrid
