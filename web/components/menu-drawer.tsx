@@ -500,7 +500,6 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                 { key: 'facebook', label: 'فيسبوك', href: contactLinks.facebookUrl, Icon: FacebookIcon, external: true },
                 { key: 'whatsapp-channel', label: 'قناة واتساب', href: contactLinks.whatsappChannelUrl, Icon: WhatsAppIcon, external: true },
                 { key: 'support-whatsapp', label: 'تواصل مع الدعم', href: contactLinks.supportWhatsappUrl, Icon: WhatsAppIcon, external: true },
-                { key: 'support-email', label: 'إيميل الدعم', href: contactLinks.email ? `mailto:${contactLinks.email}` : null, Icon: FileTextIcon, external: false },
               ].map(({ key, label, href, Icon, external }) => (
                 <li key={key}>
                   {href ? (
