@@ -19,8 +19,10 @@ function safeReferrer(value: string | null): string | null {
   if (!value) return null
   try {
     const url = new URL(value)
-    // Store only origin + path. Query strings and fragments may contain tokens.
-    return `${url.origin}${url.pathname}`.slice(0, 500)
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') return null
+    // Retain only the referring hostname; paths and query strings may contain
+    // sensitive identifiers or tokens and are not needed for this signal.
+    return url.hostname.slice(0, 255)
   } catch {
     return null
   }
