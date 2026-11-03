@@ -69,8 +69,6 @@ export type FormState = {
   isFeatured: boolean
   isVerified: boolean
   setIsFeatured: Setter<boolean>
-  renewFeaturedRequested: boolean
-  setRenewFeaturedRequested: Setter<boolean>
   setIsVerified: Setter<boolean>
   featuredOrder: number
   setFeaturedOrder: Setter<number>
@@ -131,16 +129,12 @@ export function useFormState(business: AdminBusiness | null): FormState {
   const now = Date.now()
   const featuredUntilValue = business?.featured_until ?? null
   const newUntilValue = business?.new_until ?? null
-  const featuredStillActive =
-    !!business?.is_featured &&
-    (!featuredUntilValue || new Date(featuredUntilValue).getTime() > now)
   const newProjectStillActive =
     !!business?.is_new_project &&
     !!newUntilValue &&
     new Date(newUntilValue).getTime() > now
 
-  const [isFeatured, setIsFeatured] = useState(featuredStillActive)
-  const [renewFeaturedRequested, setRenewFeaturedRequested] = useState(false)
+  const [isFeatured, setIsFeatured] = useState(!!business?.is_featured)
   const [isVerified, setIsVerified] = useState(!!business?.is_verified)
   const [featuredOrder, setFeaturedOrder] = useState(0)
   const [featuredPin, setFeaturedPin] = useState(false)
@@ -262,8 +256,6 @@ export function useFormState(business: AdminBusiness | null): FormState {
     isVerified,
     setIsVerified,
     setIsFeatured,
-    renewFeaturedRequested,
-    setRenewFeaturedRequested,
     featuredOrder,
     setFeaturedOrder,
     featuredPin,
