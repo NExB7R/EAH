@@ -307,7 +307,7 @@
 | `trust.ts` | TRUST_MIN, TRUST_MAX, TRUST_DEFAULT, TRUST_TIERS, TRUST_TIER_ORDER, … | EAH — Participation Points (2026-10-06). This is gamification, not reliability. |
 | `utils/csv.ts` | buildCsv, csvResponse | EAH — CSV Builder (UTF-8 with BOM for Arabic in Excel) |
 | `utils/distance.ts` | distanceKm, formatDistance, distanceMeters | EAH — Distance Utility |
-| `utils/timezone.ts` | getCairoDateParts, parseCairoLocalDateTime | Convert a timestamp into the platform's business timezone. |
+| `utils/timezone.ts` | getCairoDateParts, parseCairoLocalDateTime, parseCairoLocalDateEndOfDay | Convert a timestamp into the platform's business timezone. |
 | `utils/working-hours.ts` | isOpenAt, isOpenNow, isBusinessOpen | — |
 | `validations/admin-business.ts` | BUSINESS_TYPES, basicsSchema, imagesSchema, contactsSchema, locationSchema, … | EAH — Admin Business Validation (Full Control) |
 | `validations/auth.ts` | toE164, signupSchema, loginSchema, recoverSchema | EAH — Auth Validation Schemas |
