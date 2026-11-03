@@ -8,7 +8,6 @@ import styles from './wizard.module.css'
 const TYPE_LABEL: Record<string, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
-  supermarket: 'ماركت',
   delivery_office: 'توصيل',
   misc: 'أخرى',
 }

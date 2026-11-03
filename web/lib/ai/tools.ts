@@ -407,7 +407,6 @@ async function toolGetCategories() {
   const TYPE_LABEL: Record<string, string> = {
     restaurant: 'مطاعم',
     pharmacy: 'صيدليات',
-    supermarket: 'ماركت',
     delivery_office: 'توصيل',
     misc: 'أنشطة أخرى',
   }

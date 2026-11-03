@@ -7,7 +7,6 @@ export type BusinessTypeLabelInput = {
 const BUILT_IN_LABELS: Record<string, string> = {
   restaurant: 'مطعم',
   pharmacy: 'صيدلية',
-  supermarket: 'ماركت',
   delivery_office: 'توصيل',
   misc: 'أخرى',
 }
