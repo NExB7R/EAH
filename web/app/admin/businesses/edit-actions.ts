@@ -636,10 +636,10 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
 
   const settings = {
     ...parsed.data,
-    is_featured: !!parsed.data.is_featured && !!featuredUntil && new Date(featuredUntil).getTime() > nowMs ||
-      (!!parsed.data.is_featured && !!currentRow.is_featured && !!featuredUntil),
-    is_new_project: !!parsed.data.is_new_project && !!newUntil && new Date(newUntil).getTime() > nowMs ||
-      (!!parsed.data.is_new_project && !!currentRow.is_new_project && !!newUntil),
+    // Keep the admin-selected flag; the public query separately checks the
+    // expiry timestamp. Expired selections remain hidden until explicit renewal.
+    is_featured: !!parsed.data.is_featured,
+    is_new_project: !!parsed.data.is_new_project,
     featured_order: 0,
     featured_pin: false,
     featured_until: featuredUntil,
