@@ -150,8 +150,7 @@ export async function rejectSubscription(id: string, formData: FormData): Promis
 
   await logAudit(ctx.supabase, 'subscription.reject', id, { reason: parsed.data.reason })
 
-  revalidatePath('/admin/subscriptions')
-  revalidateTag('admin-badges', 'default')
+  revalidateSubscriptionEntitlements()
   return { ok: true }
 }
 
