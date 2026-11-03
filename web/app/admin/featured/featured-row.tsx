@@ -49,7 +49,7 @@ export default function FeaturedRow({ business }: Props) {
           <h3 className={styles.name}>{business.name}</h3>
           {!business.is_published && <span className={styles.meta}>غير منشور</span>}
           {expired && <span className={styles.meta}>انتهت مدة التمييز — متوقف عن الظهور</span>}
-          {!business.paid_featured_home_eligible && <span className={styles.meta}>لا يوجد اشتراك مدفوع ساري يمنح ظهور الرئيسية</span>}
+          {!business.paid_featured_home_eligible && <span className={styles.meta}>محدد إداريًا — لا يوجد اشتراك ساري يمنح ظهور الرئيسية</span>}
         </div>
         <p className={styles.meta}>
           {business.area ?? '—'} · {expired ? 'انتهى التمييز' : `ينتهي: ${until}`}
