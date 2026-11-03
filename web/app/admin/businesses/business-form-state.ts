@@ -67,6 +67,7 @@ export type FormState = {
   acceptsWhatsapp: boolean
   setAcceptsWhatsapp: Setter<boolean>
   isFeatured: boolean
+  featuredWasActiveAtLoad: boolean
   isVerified: boolean
   setIsFeatured: Setter<boolean>
   setIsVerified: Setter<boolean>
@@ -77,6 +78,7 @@ export type FormState = {
   featuredUntil: string
   setFeaturedUntil: Setter<string>
   isNewProject: boolean
+  newProjectWasActiveAtLoad: boolean
   setIsNewProject: Setter<boolean>
   newUntil: string
   setNewUntil: Setter<string>
@@ -253,6 +255,7 @@ export function useFormState(business: AdminBusiness | null): FormState {
     acceptsWhatsapp,
     setAcceptsWhatsapp,
     isFeatured,
+    featuredWasActiveAtLoad: featuredStillActive,
     isVerified,
     setIsVerified,
     setIsFeatured,
@@ -263,6 +266,7 @@ export function useFormState(business: AdminBusiness | null): FormState {
     featuredUntil,
     setFeaturedUntil,
     isNewProject,
+    newProjectWasActiveAtLoad: newProjectStillActive,
     setIsNewProject,
     newUntil,
     setNewUntil,
