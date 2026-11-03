@@ -17,7 +17,6 @@ import { getFavoriteIds, getFullProfile } from '@/lib/data/account'
 import { getActiveAdsForSlot } from '@/lib/data/ads'
 import { fairOrder, fairOrderOffers } from '@/lib/fair-ranking'
 import { distanceKm } from '@/lib/utils/distance'
-import type { Business } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
 
