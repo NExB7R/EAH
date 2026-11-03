@@ -101,7 +101,7 @@ async function HomeSections({
 
   // Featured eligibility is independent of public trend/reputation ranking.
   // The client rotation sees the complete eligible set and never prioritizes pins/order.
-  const featured = featuredRaw.filter((b) => b.is_featured)
+  const featured = featuredRaw
 
   // Use the dedicated trend score (velocity, verified engagement diversity,
   // recency, evidence-based reputation, quality and response) rather than the
