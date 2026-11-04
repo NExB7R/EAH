@@ -23,6 +23,7 @@ import { getFavoriteIds } from '@/lib/data/account'
 import { getActiveAdsForSlot } from '@/lib/data/ads'
 import { fairOrder, fairOrderOffers } from '@/lib/fair-ranking'
 import { isOpenNow } from '@/lib/data/businesses'
+import { filterInAppOrderBusinesses } from '@/lib/search/online-orders'
 import type { Business } from '@/lib/data'
 
 export const dynamic = 'force-dynamic'
@@ -69,7 +70,7 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
       return businesses.filter((b) => isOpenNow(b.working_hours))
     }
     if (typeFilter === 'online') {
-      return businesses.filter((b) => b.accepts_orders === true)
+      return filterInAppOrderBusinesses(businesses)
     }
     if (typeFilter && typeFilter !== 'all') {
       return businesses.filter((b) => b.business_type === typeFilter)
