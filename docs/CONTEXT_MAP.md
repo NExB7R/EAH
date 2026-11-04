@@ -9,7 +9,7 @@
 
 ---
 
-## Routes (106)
+## Routes (107)
 
 | Route | File |
 |-------|------|
@@ -66,6 +66,7 @@
 | `/api/cron/trial-notifications` | `app/api/cron/trial-notifications/route.ts` |
 | `/api/cron/trust-decay` | `app/api/cron/trust-decay/route.ts` |
 | `/api/csp-report` | `app/api/csp-report/route.ts` |
+| `/api/deployment-info` | `app/api/deployment-info/route.ts` |
 | `/api/find-by-phone` | `app/api/find-by-phone/route.ts` |
 | `/api/log-error` | `app/api/log-error/route.ts` |
 | `/api/merchant/orders/export` | `app/api/merchant/orders/export/route.ts` |
