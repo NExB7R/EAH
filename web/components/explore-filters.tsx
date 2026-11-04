@@ -9,6 +9,7 @@ import {
   TargetIcon,
   LocationIcon,
   ClockIcon,
+  CartIcon,
   SparklesIcon,
   StarIcon,
   CloseIcon,
@@ -175,7 +176,8 @@ export default function ExploreFilters({ area, counts, activeAreas, sort, hasQue
           className={`${styles.trigger} ${online ? styles.triggerActive : ''}`}
           onClick={() => toggleBool('online')}
         >
-          <span>واتساب</span>
+          <CartIcon size={14} />
+          <span>طلبات أونلاين</span>
         </button>
 
         <button

@@ -87,6 +87,31 @@ describe('public reputation filters', () => {
     expect(result[0]?.id).toBe('proven')
   })
 
+  it('online filter follows in-app order availability, not the WhatsApp channel', () => {
+    const inAppOrders = makeBusiness({
+      id: 'in-app-orders',
+      accepts_orders: true,
+      accepts_whatsapp_orders: false,
+    })
+    const whatsappOnly = makeBusiness({
+      id: 'whatsapp-only',
+      accepts_orders: false,
+      accepts_whatsapp_orders: true,
+    })
+    const unavailable = makeBusiness({
+      id: 'unavailable',
+      accepts_orders: false,
+      accepts_whatsapp_orders: false,
+    })
+
+    const result = applyFilters(
+      [whatsappOnly, unavailable, inAppOrders],
+      { ...DEFAULT_FILTERS, online: true },
+    )
+
+    expect(result.map((business) => business.id)).toEqual(['in-app-orders'])
+  })
+
   it('min rating excludes activities without ratings rather than treating them as zero-star reviews', () => {
     const unrated = makeBusiness({ id: 'unrated', rating_avg: 0, rating_count: 0 })
     const rated = makeBusiness({ id: 'rated', rating_avg: 4.4, rating_count: 3 })

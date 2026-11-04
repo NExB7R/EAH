@@ -69,7 +69,7 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
       return businesses.filter((b) => isOpenNow(b.working_hours))
     }
     if (typeFilter === 'online') {
-      return businesses.filter((b) => b.accepts_whatsapp_orders)
+      return businesses.filter((b) => b.accepts_orders === true)
     }
     if (typeFilter && typeFilter !== 'all') {
       return businesses.filter((b) => b.business_type === typeFilter)
