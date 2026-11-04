@@ -6,5 +6,6 @@ test.describe('Public version badge', () => {
     await page.goto('/', { waitUntil: 'domcontentloaded' })
     const versionBadge = page.locator('footer').getByText(`v${appPackage.version}`, { exact: true })
     await expect(versionBadge).toBeVisible()
+    await expect(versionBadge).toHaveAttribute('aria-label', `إصدار المنصة v${appPackage.version}`)
   })
 })

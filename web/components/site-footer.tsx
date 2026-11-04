@@ -208,7 +208,9 @@ export default async function SiteFooter() {
         {/* ─── Bottom ─── */}
         <div className={styles.bottom}>
           <p className={styles.copyright}>{texts.footer_copyright}</p>
-          <span className={styles.version}>{APP_VERSION}</span>
+          <span className={styles.version} aria-label={`إصدار المنصة ${APP_VERSION}`} title={`إصدار المنصة ${APP_VERSION}`}>
+            {APP_VERSION}
+          </span>
         </div>
       </div>
     </footer>
