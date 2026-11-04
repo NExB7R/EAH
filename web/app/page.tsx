@@ -100,12 +100,9 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
     { topWindow: 8, maxPerType: 2 },
   )
 
-  const nearby = fairOrder(
-    all.filter((b) => b.area === 'شبين القناطر'),
-    'nearby',
-    { area: 'شبين القناطر' },
-    { topWindow: 8, maxPerType: 2 },
-  )
+  // NearbyGrid applies the visitor's location when permission is granted;
+  // without location access it keeps the existing Shibin El-Qanater fallback.
+  const nearby = fairOrder(all, 'nearby', {}, { topWindow: 8, maxPerType: 2 })
 
   const featuredMerged: Business[] = featured
 
