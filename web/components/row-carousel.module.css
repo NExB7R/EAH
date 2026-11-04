@@ -126,7 +126,7 @@
 
 /* Touch layouts: keep carousel controls below cards instead of covering content. */
 @media (max-width: 640px) {
-  .wrapper {
+  .hasOverflow {
     padding-bottom: 46px;
   }
 
