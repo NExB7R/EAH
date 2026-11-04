@@ -122,3 +122,36 @@
     -webkit-backdrop-filter: none;
   }
 }
+
+
+/* Touch layouts: keep carousel controls below cards instead of covering content. */
+@media (max-width: 640px) {
+  .wrapper {
+    padding-bottom: 46px;
+  }
+
+  .arrow {
+    top: auto;
+    bottom: 0;
+    width: 34px;
+    height: 34px;
+    opacity: 1;
+    transform: none;
+  }
+
+  .arrowPrev {
+    inset-inline-start: calc(50% - 42px);
+  }
+
+  .arrowNext {
+    inset-inline-end: calc(50% - 42px);
+  }
+
+  .arrow:hover {
+    transform: scale(1.04);
+  }
+
+  .arrow:active {
+    transform: scale(0.96);
+  }
+}
