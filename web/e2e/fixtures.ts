@@ -3,7 +3,7 @@ import { request as playwrightRequest, test as base, expect } from '@playwright/
 const trustedToken = process.env.VERCEL_TRUSTED_OIDC_TOKEN
 const targetUrl = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000'
 const targetOrigin = new URL(targetUrl).origin
-const trustedHeaders = trustedToken
+const trustedHeaders: Record<string, string> = trustedToken
   ? { 'x-vercel-trusted-oidc-idp-token': trustedToken }
   : {}
 
