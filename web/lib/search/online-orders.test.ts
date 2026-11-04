@@ -15,7 +15,7 @@ describe('in-app order availability', () => {
   })
 
   it('fails closed for null or undefined in-app flags', () => {
-    expect(canReceiveInAppOrders({ accepts_orders: null } as never)).toBe(false)
-    expect(canReceiveInAppOrders({ accepts_orders: undefined } as never)).toBe(false)
+    expect(canReceiveInAppOrders({ accepts_orders: null })).toBe(false)
+    expect(canReceiveInAppOrders({ accepts_orders: undefined })).toBe(false)
   })
 })
