@@ -252,10 +252,10 @@
 
 @media (max-width: 640px) {
   .section {
-    padding: 22px 12px;
+    padding: 16px 12px;
   }
   .frame {
-    padding: 18px 14px 14px;
+    padding: 16px 12px 12px;
     border-radius: 18px;
   }
   .card {
