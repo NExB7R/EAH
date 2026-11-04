@@ -374,8 +374,13 @@
 }
 
 .weatherIcon {
-  font-size: 1rem;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--gold-light);
 }
 
 .weatherTemp {
