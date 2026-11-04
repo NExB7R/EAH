@@ -120,7 +120,7 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (83)
+## Components (84)
 
 | File | Export | Purpose |
 |------|--------|---------|
@@ -171,7 +171,8 @@
 | `menu-drawer.tsx` | MenuDrawer | — |
 | `menu-slider.tsx` | MenuSlider | EAH — Menu Slider (داخل OrderModal) |
 | `merchant-sidebar.tsx` | MerchantSidebar | — |
-| `nearby-grid.tsx` | NearbyGrid | EAH — Nearby Grid (Home) |
+| `nearby-directory.tsx` | NearbyDirectory | — |
+| `nearby-grid.tsx` | NearbyGrid | EAH — Homepage nearby section. |
 | `new-row.tsx` | NewRow | EAH — New Row (Home) |
 | `offers-strip.tsx` | OffersStrip, OfferCard | EAH — Offers Strip (Home — Single Row Carousel) |
 | `offline-badge.tsx` | OfflineBadge | EAH — Offline Badge |
@@ -208,7 +209,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (104)
+## Lib (105)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -307,6 +308,7 @@
 | `trust.ts` | TRUST_MIN, TRUST_MAX, TRUST_DEFAULT, TRUST_TIERS, TRUST_TIER_ORDER, … | EAH — Participation Points (2026-10-06). This is gamification, not reliability. |
 | `utils/csv.ts` | buildCsv, csvResponse | EAH — CSV Builder (UTF-8 with BOM for Arabic in Excel) |
 | `utils/distance.ts` | distanceKm, formatDistance, distanceMeters | EAH — Distance Utility |
+| `utils/nearby.ts` | filterAndRankNearbyBusinesses | Use real coordinates when the visitor has granted location access. |
 | `utils/timezone.ts` | getCairoDateParts, parseCairoLocalDateTime, parseCairoLocalDateEndOfDay | Convert a timestamp into the platform's business timezone. |
 | `utils/working-hours.ts` | isOpenAt, isOpenNow, isBusinessOpen | — |
 | `validations/admin-business.ts` | BUSINESS_TYPES, basicsSchema, imagesSchema, contactsSchema, locationSchema, … | EAH — Admin Business Validation (Full Control) |
