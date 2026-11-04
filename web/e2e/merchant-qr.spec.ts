@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test.describe('Merchant QR page', () => {
   test('redirects to auth if not logged in', async ({ page }) => {

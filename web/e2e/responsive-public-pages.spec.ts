@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 const WIDTHS = [320, 360, 375, 390, 414, 430] as const
 const PAGES = [

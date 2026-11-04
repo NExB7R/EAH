@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test.describe('Account loyalty page', () => {
   test('redirects to auth if not logged in', async ({ page }) => {

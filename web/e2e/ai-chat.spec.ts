@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test.describe('AI Chat API', () => {
   test('rejects invalid body', async ({ request }) => {
