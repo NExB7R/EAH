@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test.describe('AI Widget', () => {
   test('floating button is visible', async ({ page }) => {

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test.describe('Support Bot', () => {
   test('rejects empty message', async ({ request }) => {

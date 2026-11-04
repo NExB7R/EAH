@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test.describe('Public version badge', () => {
   test('shows the current application version in the public footer', async ({ page }) => {

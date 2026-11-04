@@ -32,6 +32,7 @@ jobs:
       contents: read
       checks: read
       pull-requests: read
+      id-token: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -130,11 +131,27 @@ jobs:
           echo "url=$URL" >> $GITHUB_OUTPUT
           echo "::notice::E2E target = $URL"
 
+      - name: Request GitHub OIDC token for Vercel Trusted Sources
+        if: github.event_name == 'deployment_status'
+        id: vercel-oidc
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const token = await core.getIDToken('https://vercel.com')
+            const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'))
+            core.info(`OIDC issuer: ${payload.iss}`)
+            core.info(`OIDC audience: ${payload.aud}`)
+            core.info(`OIDC subject: ${payload.sub}`)
+            core.info(`OIDC workflow: ${payload.workflow_ref}`)
+            core.setSecret(token)
+            core.setOutput('token', token)
+
       - name: Run E2E
         working-directory: web
         env:
           PLAYWRIGHT_SKIP_SERVER: '1'
           PLAYWRIGHT_BASE_URL: ${{ steps.target.outputs.url }}
+          VERCEL_TRUSTED_OIDC_TOKEN: ${{ steps.vercel-oidc.outputs.token }}
         run: npx playwright test --reporter=list,github,html
 
       - name: Upload report

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect } from './fixtures'
 
 test.describe('Published business discovery', () => {
   test('explore search returns a published business and its public page opens', async ({ page }) => {
