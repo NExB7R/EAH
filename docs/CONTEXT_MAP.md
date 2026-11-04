@@ -210,7 +210,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (105)
+## Lib (106)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -302,6 +302,7 @@
 | `search/history.ts` | getHistory, addToHistory, removeFromHistory, clearHistory | EAH — Search History (localStorage) |
 | `search/index.ts` | smartSearch | EAH — Smart Search v2 |
 | `search/normalize.ts` | normalizeArabic, tokenize, cachedNormalize | EAH — Text Normalization (Arabic + Egyptian) |
+| `search/online-orders.ts` | canReceiveInAppOrders, filterInAppOrderBusinesses | The public in-app order flag is independent from direct WhatsApp contact. |
 | `search/synonyms.ts` | extractTypes | EAH — Synonyms Dictionary (Egyptian Dialect) |
 | `supabase/public.ts` | createPublicClient | عميل عام للقراءات بدون auth |
 | `supabase/server.ts` | createClient | عميل السيرفر مع cookies (auth-aware) |
