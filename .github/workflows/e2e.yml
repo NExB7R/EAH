@@ -97,26 +97,43 @@ jobs:
           max_timeout: 300
           check_interval: 10
 
-      - name: Set deployed Vercel URL
+      - name: Resolve successful Vercel deployment
         if: github.event_name == 'deployment_status'
         id: deployed
-        env:
-          DEPLOYMENT_STATE: ${{ github.event.deployment_status.state }}
-          ENVIRONMENT_URL: ${{ github.event.deployment_status.environment_url }}
         run: |
-          if [ "$DEPLOYMENT_STATE" != "success" ]; then
-            echo "::error::Vercel deployment did not succeed; refusing to test a stale alias."
-            exit 1
-          fi
-          if [ -z "$ENVIRONMENT_URL" ]; then
-            echo "::error::Vercel deployment status did not include an environment URL."
-            exit 1
-          fi
-          URL="$ENVIRONMENT_URL"
-          node -e "const u=new URL(process.argv[1]); if(u.protocol!=='https:' || !u.hostname.endsWith('.vercel.app')) process.exit(1)" "$URL"
-          echo "url=$URL" >> $GITHUB_OUTPUT
+          node --input-type=module <<'NODE'
+          import { appendFileSync, readFileSync } from 'node:fs'
+
+          const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'))
+          const state = String(event.deployment_status?.state ?? '').toLowerCase()
+          const environment = String(event.deployment?.environment ?? '').toLowerCase()
+          const sha = String(event.deployment?.sha ?? '').toLowerCase()
+
+          if (state !== 'success') {
+            console.error('::error::Vercel deployment did not succeed.')
+            process.exit(1)
+          }
+
+          if (!['production', 'prod'].includes(environment)) {
+            console.log(`Skipping deployment-status E2E for non-production environment: ${environment || 'unknown'}.`)
+            appendFileSync(process.env.GITHUB_OUTPUT, 'skip=true\\n')
+            process.exit(0)
+          }
+
+          if (!/^[a-f0-9]{40}$/.test(sha)) {
+            console.error('::error::Production deployment event is missing a valid commit SHA.')
+            process.exit(1)
+          }
+
+          appendFileSync(
+            process.env.GITHUB_OUTPUT,
+            `url=https://eah-sq.vercel.app\\nsha=${sha}\\nskip=false\\n`,
+          )
+          console.log('Production E2E target pinned to the public EAH domain.')
+          NODE
 
       - name: Compute target URL
+        if: github.event_name != 'deployment_status' || steps.deployed.outputs.skip != 'true'
         id: target
         env:
           MANUAL_URL: ${{ steps.manual.outputs.url }}
@@ -132,7 +149,7 @@ jobs:
           echo "::notice::E2E target = $URL"
 
       - name: Request GitHub OIDC token for Vercel Trusted Sources
-        if: github.event_name == 'deployment_status'
+        if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.preview_url != '')
         id: vercel-oidc
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
@@ -150,8 +167,41 @@ jobs:
             core.setSecret(token)
             core.setOutput('token', token)
 
-      - name: Verify protected deployment access
-        if: github.event_name == 'deployment_status'
+      - name: Verify production deployment SHA
+        if: github.event_name == 'deployment_status' && steps.deployed.outputs.skip != 'true'
+        working-directory: web
+        env:
+          TARGET_URL: ${{ steps.deployed.outputs.url }}
+          EXPECTED_SHA: ${{ steps.deployed.outputs.sha }}
+        run: |
+          node --input-type=module <<'NODE'
+          const target = process.env.TARGET_URL;
+          const expectedSha = process.env.EXPECTED_SHA;
+
+          if (!target || !/^[a-f0-9]{40}$/.test(expectedSha ?? '')) {
+            console.error('::error::Missing public production target or expected deployment SHA.');
+            process.exit(1);
+          }
+
+          const infoUrl = new URL('/api/deployment-info', target);
+          infoUrl.searchParams.set('sha', expectedSha);
+          const response = await fetch(infoUrl, {
+            redirect: 'manual',
+            signal: AbortSignal.timeout(15000),
+            cache: 'no-store',
+          });
+          const result = await response.json().catch(() => null);
+
+          if (!response.ok || result?.matches !== true || result?.environment !== 'production') {
+            console.error(`::error::Production alias does not match deployment SHA (HTTP ${response.status}). Refusing to test a stale or non-production build.`);
+            process.exit(1);
+          }
+
+          console.log('Public production domain matches the successful deployment SHA.');
+          NODE
+
+      - name: Verify protected preview access
+        if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.preview_url != '')
         working-directory: web
         env:
           TARGET_URL: ${{ steps.target.outputs.url }}
@@ -161,7 +211,7 @@ jobs:
           const target = process.env.TARGET_URL;
           const token = process.env.VERCEL_TRUSTED_OIDC_TOKEN;
           if (!target || !token) {
-            console.error('::error::Missing deployment URL or short-lived OIDC token.');
+            console.error('::error::Missing preview URL or short-lived OIDC token.');
             process.exit(1);
           }
 
@@ -176,14 +226,15 @@ jobs:
             /Vercel Authentication|Log in to Vercel|Deployment Protection/i.test(body);
 
           if (!response.ok || response.status >= 300 || isProtectionPage || !contentType.includes('text/html')) {
-            console.error(`::error::Protected deployment preflight failed (HTTP ${response.status}, ${contentType || 'unknown content type'}). Check the narrowly scoped Vercel Trusted Source for this GitHub workflow.`);
+            console.error(`::error::Protected preview preflight failed (HTTP ${response.status}, ${contentType || 'unknown content type'}). Check the preview-only Vercel Trusted Source.`);
             process.exit(1);
           }
 
-          console.log(`Protected deployment access preflight passed (HTTP ${response.status}).`);
+          console.log(`Protected preview access preflight passed (HTTP ${response.status}).`);
           NODE
 
       - name: Run E2E
+        if: github.event_name != 'deployment_status' || steps.deployed.outputs.skip != 'true'
         working-directory: web
         env:
           PLAYWRIGHT_SKIP_SERVER: '1'
