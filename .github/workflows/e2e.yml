@@ -116,7 +116,7 @@ jobs:
 
           if (!['production', 'prod'].includes(environment)) {
             console.log(`Skipping deployment-status E2E for non-production environment: ${environment || 'unknown'}.`)
-            appendFileSync(process.env.GITHUB_OUTPUT, 'skip=true\\n')
+            appendFileSync(process.env.GITHUB_OUTPUT, 'skip=true\n')
             process.exit(0)
           }
 
@@ -127,7 +127,7 @@ jobs:
 
           appendFileSync(
             process.env.GITHUB_OUTPUT,
-            `url=https://eah-sq.vercel.app\\nsha=${sha}\\nskip=false\\n`,
+            `url=https://eah-sq.vercel.app\nsha=${sha}\nskip=false\n`,
           )
           console.log('Production E2E target pinned to the public EAH domain.')
           NODE
