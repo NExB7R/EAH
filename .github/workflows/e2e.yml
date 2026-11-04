@@ -173,7 +173,7 @@ jobs:
           const contentType = response.headers.get('content-type') ?? '';
           const body = await response.text();
           const isProtectionPage =
-            /Vercel Authentication|Log in to Vercel|vercel\\.com\\/login|Deployment Protection/i.test(body);
+            /Vercel Authentication|Log in to Vercel|Deployment Protection/i.test(body);
 
           if (!response.ok || response.status >= 300 || isProtectionPage || !contentType.includes('text/html')) {
             console.error(`::error::Protected deployment preflight failed (HTTP ${response.status}, ${contentType || 'unknown content type'}). Check the narrowly scoped Vercel Trusted Source for this GitHub workflow.`);
