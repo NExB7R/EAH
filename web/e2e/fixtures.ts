@@ -5,7 +5,7 @@ const targetUrl = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000'
 const targetOrigin = new URL(targetUrl).origin
 
 export const test = base.extend({
-  page: async ({ page, context }, use) => {
+  page: async ({ page, context }, applyFixture) => {
     if (trustedToken) {
       await context.route('**/*', async (route) => {
         let requestOrigin: string
@@ -32,7 +32,7 @@ export const test = base.extend({
       })
     }
 
-    await use(page)
+    await applyFixture(page)
   },
 })
 

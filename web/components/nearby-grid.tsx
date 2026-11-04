@@ -20,7 +20,7 @@ export default function NearbyGrid({ businesses, favoriteIds = new Set() }: Prop
   const userLocation = geo.status === 'granted' ? geo.location : null
   const nearby = useMemo(
     () => filterAndRankNearbyBusinesses(businesses, userLocation),
-    [businesses, userLocation?.lat, userLocation?.lng],
+    [businesses, userLocation],
   )
   const visible = nearby.slice(0, 12)
   const useGrid = visible.length <= 3

@@ -20,7 +20,7 @@ export default function NearbyDirectory({ businesses, children }: Props) {
   const userLocation = geo.status === 'granted' ? geo.location : null
   const nearby = useMemo(
     () => filterAndRankNearbyBusinesses(businesses, userLocation),
-    [businesses, userLocation?.lat, userLocation?.lng],
+    [businesses, userLocation],
   )
 
   const statusText =
