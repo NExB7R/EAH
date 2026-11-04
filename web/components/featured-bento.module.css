@@ -181,28 +181,46 @@
 /* ─── Mobile ─── */
 @media (max-width: 640px) {
   .section {
-    padding: 22px 0;
+    padding: 16px 12px;
   }
+
   .frame {
-    padding: 18px 14px 16px;
+    padding: 16px 12px 14px;
     border-radius: 18px;
   }
+
   .arrow {
+    top: auto;
+    bottom: 0;
     width: 34px;
     height: 34px;
+    opacity: 1;
+    transform: none;
   }
+
+  .arrow:hover {
+    transform: scale(1.04);
+  }
+
+  .arrow:active {
+    transform: scale(0.96);
+  }
+
   .arrow svg {
     width: 16px;
     height: 16px;
   }
-  .grid {
-    gap: 10px;
+
+  .carousel {
+    padding-bottom: 42px;
   }
 
-  /* Mobile: outer padding so sections don't touch screen edges */
-  .section {
-    padding-left: 12px;
-    padding-right: 12px;
+  .arrowPrev {
+    inset-inline-start: calc(50% - 42px);
+  }
+
+  .arrowNext {
+    inset-inline-end: calc(50% - 42px);
   }
 }
 
