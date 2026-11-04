@@ -942,6 +942,60 @@ export function SunIcon({ size = 24, className }: IconProps) {
   )
 }
 
+export function CloudIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M20 18H7a4 4 0 0 1-.5-7.97A6 6 0 0 1 18.2 8.8 4.5 4.5 0 0 1 20 18Z" />
+    </svg>
+  )
+}
+
+export function CloudSunIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
+      <circle cx="8" cy="8" r="3" />
+      <path d="M8 2v1M8 13v1M2 8h1M13 8h1M3.76 3.76l.7.7M11.54 11.54l.7.7" />
+      <path d="M20 18H8a4 4 0 0 1-.5-7.97A6 6 0 0 1 18.2 8.8 4.5 4.5 0 0 1 20 18Z" />
+    </svg>
+  )
+}
+
+export function CloudRainIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M20 15H7a4 4 0 0 1-.5-7.97A6 6 0 0 1 18.2 5.8 4.5 4.5 0 0 1 20 15Z" />
+      <path d="m9 18-1 3M15 18l-1 3M20 18l-1 3" />
+    </svg>
+  )
+}
+
+export function CloudSnowIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M20 14H7a4 4 0 0 1-.5-7.97A6 6 0 0 1 18.2 4.8 4.5 4.5 0 0 1 20 14Z" />
+      <path d="M8 18v3M6.5 19.5h3M7 18.5l2 2M9 18.5l-2 2M16 18v3M14.5 19.5h3M15 18.5l2 2M17 18.5l-2 2" />
+    </svg>
+  )
+}
+
+export function CloudLightningIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M20 14H7a4 4 0 0 1-.5-7.97A6 6 0 0 1 18.2 4.8 4.5 4.5 0 0 1 20 14Z" />
+      <path d="m13 15-4 5h3l-1 3 5-6h-3l1-2" />
+    </svg>
+  )
+}
+
+export function CloudFogIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
+      <path d="M20 13H7a4 4 0 0 1-.5-7.97A6 6 0 0 1 18.2 3.8 4.5 4.5 0 0 1 20 13Z" />
+      <path d="M3 17h17M5 21h14" />
+    </svg>
+  )
+}
+
 export function MoonIcon({ size = 24, className }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" className={className} {...base}>
