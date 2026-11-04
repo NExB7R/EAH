@@ -81,7 +81,7 @@ export default function RowCarousel({ children, accent, intervalMs = 10000 }: Pr
 
   return (
     <div
-      className={styles.wrapper}
+      className={`${styles.wrapper} ${hasOverflow ? styles.hasOverflow : ''}`}
       style={{ ['--carousel-accent' as string]: accent } as React.CSSProperties}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}

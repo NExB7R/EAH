@@ -53,7 +53,7 @@ export default function FeaturedBento({ businesses }: Props) {
         <div className={styles.neonLine} aria-hidden />
 
         <div
-          className={styles.carousel}
+          className={`${styles.carousel} ${hasMore ? styles.carouselScrollable : ''}`}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
