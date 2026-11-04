@@ -296,6 +296,25 @@
   }
 }
 
+/* Compact weather presentation prevents header overflow on narrow phones. */
+@media (min-width: 381px) and (max-width: 420px) {
+  .right,
+  .left {
+    gap: 4px;
+  }
+
+  .weather {
+    width: 30px;
+    justify-content: center;
+    gap: 0;
+    padding-inline: 0;
+  }
+
+  .weatherTemp {
+    display: none;
+  }
+}
+
 /* ─── Small Mobile ─── */
 @media (max-width: 380px) {
   .iconBtn[data-tooltip]::after {
