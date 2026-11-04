@@ -70,7 +70,7 @@ export function applyFilters(businesses: Business[], filters: Filters): Business
   if (filters.verifiedOnly) result = result.filter((b) => b.is_verified === true)
   if (filters.area) result = result.filter((b) => b.area === filters.area)
   if (filters.openNow) result = result.filter((business) => isBusinessOpen(business))
-  if (filters.online) result = result.filter((b) => b.accepts_whatsapp_orders === true)
+  if (filters.online) result = result.filter((b) => b.accepts_orders === true)
   if (filters.hasOffers) result = result.filter((b) => (b.offers_count ?? 0) > 0)
   if (filters.isNew) result = result.filter((b) => b.is_new_project === true)
   if (filters.minRating !== null) result = result.filter((b) => b.rating_count > 0 && b.rating_avg >= filters.minRating!)
