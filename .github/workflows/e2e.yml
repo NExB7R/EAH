@@ -142,9 +142,46 @@ jobs:
             core.info(`OIDC issuer: ${payload.iss}`)
             core.info(`OIDC audience: ${payload.aud}`)
             core.info(`OIDC subject: ${payload.sub}`)
-            core.info(`OIDC workflow: ${payload.workflow_ref}`)
+            core.info(`OIDC repository_id: ${payload.repository_id}`)
+            core.info(`OIDC repository_owner_id: ${payload.repository_owner_id}`)
+            core.info(`OIDC event_name: ${payload.event_name}`)
+            core.info(`OIDC workflow: ${payload.workflow}`)
+            core.info(`OIDC workflow_ref: ${payload.workflow_ref}`)
             core.setSecret(token)
             core.setOutput('token', token)
+
+      - name: Verify protected deployment access
+        if: github.event_name == 'deployment_status'
+        working-directory: web
+        env:
+          TARGET_URL: ${{ steps.target.outputs.url }}
+          VERCEL_TRUSTED_OIDC_TOKEN: ${{ steps.vercel-oidc.outputs.token }}
+        run: |
+          node --input-type=module <<'NODE'
+          const target = process.env.TARGET_URL;
+          const token = process.env.VERCEL_TRUSTED_OIDC_TOKEN;
+          if (!target || !token) {
+            console.error('::error::Missing deployment URL or short-lived OIDC token.');
+            process.exit(1);
+          }
+
+          const response = await fetch(target, {
+            redirect: 'manual',
+            signal: AbortSignal.timeout(15000),
+            headers: { 'x-vercel-trusted-oidc-idp-token': token },
+          });
+          const contentType = response.headers.get('content-type') ?? '';
+          const body = await response.text();
+          const isProtectionPage =
+            /Vercel Authentication|Log in to Vercel|vercel\\.com\\/login|Deployment Protection/i.test(body);
+
+          if (!response.ok || response.status >= 300 || isProtectionPage || !contentType.includes('text/html')) {
+            console.error(`::error::Protected deployment preflight failed (HTTP ${response.status}, ${contentType || 'unknown content type'}). Check the narrowly scoped Vercel Trusted Source for this GitHub workflow.`);
+            process.exit(1);
+          }
+
+          console.log(`Protected deployment access preflight passed (HTTP ${response.status}).`);
+          NODE
 
       - name: Run E2E
         working-directory: web
