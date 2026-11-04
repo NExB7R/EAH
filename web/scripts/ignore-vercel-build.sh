@@ -23,6 +23,8 @@ if git diff --quiet "$previous" "$current" -- . \
   ':(top,exclude).gitignore' \
   ':(top,exclude)**/.gitignore' \
   ':(top,exclude).github/workflows/**' \
+  ':(top,exclude)web/e2e/**' \
+  ':(top,exclude)web/playwright.config.ts' \
   ':(top,exclude)web/scripts/ignore-vercel-build.sh'; then
   echo "Only docs/CI housekeeping changed; skipping the app build."
   exit 0
