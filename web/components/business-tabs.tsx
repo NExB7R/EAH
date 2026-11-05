@@ -93,7 +93,12 @@ export default function BusinessTabs({
     lightboxCloseRef.current?.focus()
 
     const handleLightboxKeyDown = (event: globalThis.KeyboardEvent) => {
-      if (event.key === 'Escape') setLightbox(null)
+      if (event.key === 'Escape') {
+        setLightbox(null)
+      } else if (event.key === 'Tab') {
+        event.preventDefault()
+        lightboxCloseRef.current?.focus()
+      }
     }
 
     document.addEventListener('keydown', handleLightboxKeyDown)
