@@ -78,7 +78,7 @@ export default async function AdminFeaturedPage({
           </span>
           <div>
             <span className={styles.statValue}>{stats.pinned}</span>
-            <span className={styles.statLabel}>مثبّت في المقدمة</span>
+            <span className={styles.statLabel}>مثبّت في فهرس المميزين</span>
           </div>
         </div>
         <div className={`${styles.statCard} ${stats.expiringSoon > 0 ? styles.statWarn : ''}`}>
@@ -91,6 +91,11 @@ export default async function AdminFeaturedPage({
           </div>
         </div>
       </section>
+
+      <p className={styles.rotationNote} role="note">
+        الرئيسية بتعرض كل الأنشطة المؤهلة بترتيب عشوائي عادل، وبتكمل الدورة قبل إعادة الخلط.
+        التثبيت والترتيب هنا بيأثروا على فهرس «كل المميزين» فقط، مش على فرص الظهور في الرئيسية.
+      </p>
 
       {/* ─── Action Bar ─── */}
       <div className={styles.actionBar}>

@@ -115,7 +115,7 @@ export default function FeaturedList({ businesses: initial }: Props) {
 
       <p className={styles.dragHint}>
         <SettingsIcon size={12} />
-        <span>اسحب الصفوف لإعادة الترتيب — من الأعلى (1) للأقل</span>
+        <span>اسحب الصفوف لإعادة ترتيب فهرس «كل المميزين» — لا يغيّر الدوران العشوائي في الرئيسية</span>
       </p>
 
       <div className={styles.list}>

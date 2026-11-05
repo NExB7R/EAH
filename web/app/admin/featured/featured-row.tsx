@@ -70,7 +70,7 @@ export default function FeaturedRow({ business }: Props) {
           {business.featured_pin && (
             <span className={styles.pinBadge}>
               <PinIcon size={11} />
-              مثبّت
+              مثبّت في الفهرس
             </span>
           )}
           <h3 className={styles.name}>{business.name}</h3>
@@ -101,7 +101,8 @@ export default function FeaturedRow({ business }: Props) {
           onClick={handlePin}
           disabled={pending}
           className={`${styles.btn} ${business.featured_pin ? styles.btnActive : ''}`}
-          title={business.featured_pin ? 'إلغاء التثبيت' : 'تثبيت'}
+          title={business.featured_pin ? 'إلغاء التثبيت من الفهرس' : 'تثبيت داخل الفهرس'}
+          aria-label={business.featured_pin ? 'إلغاء التثبيت من فهرس المميزين' : 'تثبيت داخل فهرس المميزين'}
         >
           <PinIcon size={14} />
         </button>

@@ -274,6 +274,17 @@
    Action Bar (filters + add button)
    ═══════════════════════════════════════════════════════════ */
 
+.rotationNote {
+  margin: 0 0 16px;
+  padding: 11px 14px;
+  border: 1px solid var(--purple-line);
+  border-radius: var(--radius-lg);
+  background: rgba(20, 14, 34, 0.34);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.75;
+}
+
 .actionBar {
   display: flex;
   align-items: center;
