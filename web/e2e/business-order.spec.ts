@@ -5,10 +5,12 @@ test.describe('Published business discovery (isolated QA data)', () => {
     const publishedSlug = process.env.EAH_E2E_PUBLISHED_BUSINESS_SLUG?.trim()
     const draftName = process.env.EAH_E2E_DRAFT_BUSINESS_NAME?.trim()
 
-    expect(publishedSlug, 'Set EAH_E2E_PUBLISHED_BUSINESS_SLUG to a published QA fixture slug.').toMatch(
-      /^eah-qa-test-[a-z0-9-]+$/,
-    )
-    expect(draftName, 'Set EAH_E2E_DRAFT_BUSINESS_NAME to the exact name of an unpublished QA fixture.').toBeTruthy()
+    if (!publishedSlug || !/^eah-qa-test-[a-z0-9-]+$/.test(publishedSlug)) {
+      throw new Error('Set EAH_E2E_PUBLISHED_BUSINESS_SLUG to a published QA fixture slug.')
+    }
+    if (!draftName) {
+      throw new Error('Set EAH_E2E_DRAFT_BUSINESS_NAME to the exact name of an unpublished QA fixture.')
+    }
 
     await page.goto(`/businesses/${publishedSlug}`, { waitUntil: 'domcontentloaded' })
     const publishedPage = page.locator('main')
@@ -25,7 +27,7 @@ test.describe('Published business discovery (isolated QA data)', () => {
     const matchingResult = page.locator(`a[href="/businesses/${publishedSlug}"]`).first()
     await expect(matchingResult).toBeVisible()
 
-    await search.fill(draftName!)
+    await search.fill(draftName)
     await search.press('Enter')
     await expect(page).toHaveURL(/\/explore\?q=/)
     await expect(page.locator('a[href^="/businesses/"]')).toHaveCount(0)
