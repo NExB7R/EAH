@@ -105,6 +105,16 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
         <Item label="حالة النشر" value={publishStatus} step={2} goTo={goTo} />
         <Item label="الحالة" value={data.is_open ? 'مفتوح الآن' : 'مغلق'} step={2} goTo={goTo} />
         <Item
+          label="طلبات أونلاين داخل EAH"
+          value={
+            owner
+              ? 'تتفعّل بعد الإنشاء من إعدادات الطلبات'
+              : 'غير متاحة قبل ربط بايع — يمكن استكمالها لاحقًا'
+          }
+          step={2}
+          goTo={goTo}
+        />
+        <Item
           label="استقبال طلبات واتساب"
           value={
             whatsappOrdersEnabled
