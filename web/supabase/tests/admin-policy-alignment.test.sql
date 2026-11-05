@@ -1,7 +1,7 @@
 -- EAH targeted regression checks for the 2026-10-29 admin/RLS migrations.
 -- Run only on a dedicated non-production database after applying the migration set.
 BEGIN;
-SELECT plan(57);
+SELECT plan(58);
 
 SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.businesses'::regclass), true, 'RLS remains enabled on businesses');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='businesses' AND policyname='businesses_admin_all'), 'admin activity policy uses shared admin authorization');
@@ -163,6 +163,14 @@ SELECT is((
   AND has_function_privilege('service_role','public.request_promo_post(uuid, text, text)','EXECUTE')
   AND has_function_privilege('service_role','public.redeem_reward(uuid)','EXECUTE')
 ), true, 'registered users and trusted servers retain allowed promo/reward execution');
+
+SELECT is((
+  SELECT count(*)::int
+  FROM public.businesses AS b
+  LEFT JOIN public.merchant_order_settings AS mos ON mos.business_id = b.id
+  WHERE b.owner_profile_id IS NULL
+    AND (b.accepts_orders IS TRUE OR COALESCE(mos.orders_enabled, false) IS TRUE)
+), 0, 'ownerless activities cannot retain enabled in-app order settings');
 
 SELECT * FROM finish();
 ROLLBACK;
