@@ -1688,3 +1688,10 @@ Admin list:
 - تم قصر `contacts` العامة على روابط Facebook/Instagram/website فقط، وإضافة whitelist pure helper واختبارات phone/WhatsApp/complaints/manager/shift.
 - أزيلت روابط tel/wa.me التي كانت تستهلك الأرقام الخام. بقيت خيارات الاتصال الآمنة التي لا تحتوي على القيمة، وتستعمل endpoint المصادق عليه وRPC `reveal_contact`.
 - لا تعديل على schema أو قاعدة الإنتاج. Vercel Production وصل READY على `e12f18c` مع Compile/TypeScript/54 صفحة ناجحة. إغلاق الحالة ما زال ينتظر فحص payload العام واختبار reveal للمستخدم المسجل.
+
+
+## 2026-11-05 — تحقق نشر إصلاحات النشاط والأمان
+
+- Deployment Production للـcommit `e12f18c74185570db041d074474644416fefe0a9` أصبح READY؛ Compile وTypeScript وتوليد 54 صفحة نجحت.
+- يتضمن النشر إصلاح مساحة FixedCta الموحدة، تفاعل FeaturedBento باللمس، ومنع تسريب بيانات الهاتف من `getBusinessDetail` و`BusinessTabs`.
+- لم يتم تنفيذ Vitest/Playwright بسبب عدم تخصيص GitHub Runner؛ تبقى اختبارات الخصوصية وكشف الرقم والتفاعل اليدوي مفتوحة.
