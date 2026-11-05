@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { filterPublicContactMethods } from './public-contacts'
+import { filterPublicContactMethods, normalizePublicContactUrl } from './public-contacts'
 
 describe('filterPublicContactMethods', () => {
   it('keeps only social and website links in public payloads', () => {
@@ -19,6 +19,29 @@ describe('filterPublicContactMethods', () => {
       { method_type: 'facebook', value: 'https://facebook.com/eah', is_primary: true },
       { method_type: 'instagram', value: 'https://instagram.com/eah', is_primary: false },
       { method_type: 'website', value: 'https://eah.example', is_primary: false },
+    ])
+  })
+
+  it('rejects unsafe or malformed public URLs', () => {
+    expect(normalizePublicContactUrl('javascript:alert(1)')).toBeNull()
+    expect(normalizePublicContactUrl('data:text/html,<script>alert(1)</script>')).toBeNull()
+    expect(normalizePublicContactUrl('//example.com/profile')).toBeNull()
+    expect(normalizePublicContactUrl('/relative/path')).toBeNull()
+    expect(normalizePublicContactUrl('https://user:pass@example.com')).toBeNull()
+    expect(normalizePublicContactUrl('not a url')).toBeNull()
+    expect(normalizePublicContactUrl('https://example.com/profile')).toBe(
+      'https://example.com/profile',
+    )
+  })
+
+  it('drops unsafe social links from public payloads', () => {
+    expect(
+      filterPublicContactMethods([
+        { method_type: 'facebook', value: 'javascript:alert(1)', is_primary: true },
+        { method_type: 'website', value: 'https://eah.example', is_primary: false },
+      ]),
+    ).toEqual([
+      { method_type: 'website', value: 'https://eah.example/', is_primary: false },
     ])
   })
 
