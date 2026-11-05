@@ -111,13 +111,15 @@ export default function BusinessTabs({
   const { business, contacts, branches, menu, gallery } = detail
   const featured = business.is_featured
 
-  const visibleBranches = branches.filter(
-    (branch) =>
-      isNonEmpty(branch.name) ||
+  const visibleBranches = branches.filter((branch) => {
+    const fallbackName = branch.is_primary ? 'الفرع الرئيسي' : 'فرع النشاط'
+    return (
+      (isNonEmpty(branch.name) && branch.name !== fallbackName) ||
       isNonEmpty(branch.address_text) ||
       isNonEmpty(branch.area) ||
-      (typeof branch.latitude === 'number' && typeof branch.longitude === 'number'),
-  )
+      (typeof branch.latitude === 'number' && typeof branch.longitude === 'number')
+    )
+  })
 
   const activeTabId =
     tab === 'reviews'
