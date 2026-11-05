@@ -57,6 +57,14 @@ describe('business detail contact options', () => {
     expect(options.filter((option) => option.branchId !== null)).toHaveLength(4)
     expect(options.filter((option) => option.contactId !== null)).toHaveLength(4)
     expect(options.map((option) => option.label)).not.toContain('+12125550121')
+    expect(options.every((option) => Object.keys(option).sort().join(',') === 'branchId,contactId,isPrimary,label,method')).toBe(true)
+    const serialized = JSON.stringify(options)
+    for (const number of [
+      '+12125550121', '+12125550131', '+12125550122', '+12125550132',
+      '+12125550101', '+12125550102', '+12125550111', '+12125550112',
+    ]) {
+      expect(serialized).not.toContain(number)
+    }
   })
 
   it('removes duplicate destinations after number normalization without mixing phone and WhatsApp', () => {
