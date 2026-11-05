@@ -61,7 +61,10 @@ export default function FeaturedBento({ businesses }: Props) {
           onFocus={() => setPaused(true)}
           onBlur={(event) => {
             const nextTarget = event.relatedTarget as Node | null
-            if (!event.currentTarget.contains(nextTarget) && !event.currentTarget.matches(':hover')) {
+            if (
+              !event.currentTarget.contains(nextTarget) &&
+              !event.currentTarget.matches(':hover')
+            ) {
               setPaused(false)
             }
           }}

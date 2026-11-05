@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { nextPageStart, previousPageStart, refreshOrderItems, sliceVisible } from './use-fair-rotation'
+import {
+  nextPageStart,
+  previousPageStart,
+  refreshOrderItems,
+  sliceVisible,
+} from './use-fair-rotation'
 
 function collectOneRotationCycle<T>(ids: T[], pageSize: number): T[][] {
   const pages = [sliceVisible(ids, 0, pageSize)]
