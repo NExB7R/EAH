@@ -17,11 +17,11 @@ type Props = {
  * fails to load, fall back to the logo and then the activity initial.
  */
 export default function CardImage({ logoUrl, coverUrl, alt, initial }: Props) {
-  const [logoFailed, setLogoFailed] = useState(false)
-  const [coverFailed, setCoverFailed] = useState(false)
+  const [failedLogoUrl, setFailedLogoUrl] = useState<string | null>(null)
+  const [failedCoverUrl, setFailedCoverUrl] = useState<string | null>(null)
 
-  const showCover = Boolean(coverUrl && !coverFailed)
-  const showLogo = Boolean(logoUrl && !logoFailed)
+  const showCover = Boolean(coverUrl && coverUrl !== failedCoverUrl)
+  const showLogo = Boolean(logoUrl && logoUrl !== failedLogoUrl)
 
   if (showCover) {
     return (
@@ -33,7 +33,7 @@ export default function CardImage({ logoUrl, coverUrl, alt, initial }: Props) {
           loading="lazy"
           sizes="auto, (max-width: 400px) 200px, (max-width: 640px) 220px, 280px"
           className={styles.cover}
-          onError={() => setCoverFailed(true)}
+          onError={() => setFailedCoverUrl(coverUrl)}
         />
         {showLogo && (
           <span className={styles.logoBadge} aria-hidden="true">
@@ -43,7 +43,7 @@ export default function CardImage({ logoUrl, coverUrl, alt, initial }: Props) {
               fill
               sizes="44px"
               className={styles.logoBadgeImg}
-              onError={() => setLogoFailed(true)}
+              onError={() => setFailedLogoUrl(logoUrl)}
             />
           </span>
         )}
@@ -60,7 +60,7 @@ export default function CardImage({ logoUrl, coverUrl, alt, initial }: Props) {
         loading="lazy"
         sizes="auto, (max-width: 400px) 200px, (max-width: 640px) 220px, 280px"
         className={styles.logo}
-        onError={() => setLogoFailed(true)}
+        onError={() => setFailedLogoUrl(logoUrl)}
       />
     )
   }
