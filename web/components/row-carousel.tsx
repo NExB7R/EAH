@@ -89,8 +89,10 @@ export default function RowCarousel({ children, accent, intervalMs = 10000 }: Pr
       }}
       onFocus={() => setPaused(true)}
       onBlur={(event) => {
-        const nextTarget = event.relatedTarget as Node | null
-        if (!event.currentTarget.contains(nextTarget) && !event.currentTarget.matches(':hover')) {
+        const nextTarget = event.relatedTarget
+        const focusRemainsInside =
+          nextTarget instanceof Node && event.currentTarget.contains(nextTarget)
+        if (!focusRemainsInside && !event.currentTarget.matches(':hover')) {
           setPaused(false)
         }
       }}
