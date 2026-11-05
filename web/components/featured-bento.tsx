@@ -67,6 +67,13 @@ export default function FeaturedBento({ businesses }: Props) {
               setPaused(false)
             }
           }}
+          onTouchStart={() => setPaused(true)}
+          onTouchEnd={(event) => {
+            if (!event.currentTarget.contains(document.activeElement)) setPaused(false)
+          }}
+          onTouchCancel={(event) => {
+            if (!event.currentTarget.contains(document.activeElement)) setPaused(false)
+          }}
         >
           {hasMore && canPrev && (
             <button
