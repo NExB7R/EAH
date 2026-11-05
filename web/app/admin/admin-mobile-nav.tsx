@@ -14,27 +14,68 @@ type Props = {
   }
 }
 
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+
 export default function AdminMobileNav({ counts }: Props) {
   const [open, setOpen] = useState(false)
   const toggleRef = useRef<HTMLButtonElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
+  const drawerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const toggle = toggleRef.current
-
     if (!open) return
+
+    const previouslyFocused =
+      document.activeElement instanceof HTMLElement ? document.activeElement : toggleRef.current
     const previousOverflow = document.body.style.overflow
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
-    }
+    const drawer = drawerRef.current
+
     document.body.style.overflow = 'hidden'
-    window.addEventListener('keydown', closeOnEscape)
     closeRef.current?.focus()
 
+    const getFocusableElements = () =>
+      Array.from(drawer?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR) ?? []).filter(
+        (element) =>
+          element.getAttribute('aria-disabled') !== 'true' &&
+          !element.hasAttribute('hidden') &&
+          element.getAttribute('aria-hidden') !== 'true',
+      )
+
+    const closeOnEscapeAndTrapFocus = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        setOpen(false)
+        return
+      }
+
+      if (event.key !== 'Tab') return
+
+      const focusableElements = getFocusableElements()
+      const firstElement = focusableElements[0]
+      const lastElement = focusableElements[focusableElements.length - 1]
+
+      if (!firstElement || !lastElement) {
+        event.preventDefault()
+        drawer?.focus()
+        return
+      }
+
+      if (event.shiftKey && (document.activeElement === firstElement || !drawer?.contains(document.activeElement))) {
+        event.preventDefault()
+        lastElement.focus()
+      } else if (!event.shiftKey && (document.activeElement === lastElement || !drawer?.contains(document.activeElement))) {
+        event.preventDefault()
+        firstElement.focus()
+      }
+    }
+
+    window.addEventListener('keydown', closeOnEscapeAndTrapFocus)
+
     return () => {
+      window.removeEventListener('keydown', closeOnEscapeAndTrapFocus)
       document.body.style.overflow = previousOverflow
-      window.removeEventListener('keydown', closeOnEscape)
-      toggle?.focus()
+      previouslyFocused?.focus()
     }
   }, [open])
 
@@ -56,11 +97,13 @@ export default function AdminMobileNav({ counts }: Props) {
         <>
           <div className={styles.backdrop} onClick={() => setOpen(false)} aria-hidden="true" />
           <div
+            ref={drawerRef}
             id="admin-mobile-nav-drawer"
             className={styles.drawer}
             role="dialog"
             aria-modal="true"
             aria-labelledby="admin-mobile-nav-title"
+            tabIndex={-1}
           >
             <button
               ref={closeRef}
