@@ -96,36 +96,12 @@
   }
 }
 
+/* Mobile touch controls stay below cards, away from the scrollable content. */
 @media (max-width: 640px) {
   .track {
     gap: 10px;
   }
-  .arrow {
-    width: 44px;
-    height: 44px;
-  }
-  .arrow svg {
-    width: 18px;
-    height: 18px;
-  }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .track {
-    scroll-behavior: auto;
-  }
-  .arrow {
-    transition: none;
-  }
-  .arrow {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-}
-
-
-/* Touch layouts: keep carousel controls below cards instead of covering content. */
-@media (max-width: 640px) {
   .hasOverflow {
     padding-bottom: 54px;
   }
@@ -137,6 +113,11 @@
     height: 44px;
     opacity: 1;
     transform: none;
+  }
+
+  .arrow svg {
+    width: 18px;
+    height: 18px;
   }
 
   .arrowPrev {
@@ -155,3 +136,19 @@
     transform: scale(0.96);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    scroll-behavior: auto;
+  }
+  .arrow {
+    transition: none;
+  }
+  .arrow {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+
+
