@@ -241,8 +241,7 @@
 }
 
 .status,
-.channelBadge,
-.tier {
+.channelBadge {
   display: inline-flex;
   max-width: 100%;
   min-height: 28px;
@@ -276,12 +275,6 @@
   border-color: #694092;
 }
 
-.channelWhatsapp {
-  color: #a7f2d0;
-  background: #10392d;
-  border-color: #267657;
-}
-
 .channelUnavailable {
   color: #ffc0c5;
   background: #351923;
@@ -297,16 +290,6 @@
   color: #b9abc9;
   font-size: 0.68rem;
   font-weight: 750;
-}
-
-.tier_bade2 { color: #d3c5e2; border-color: #59416e; }
-.tier_mashey { color: #a3f5dc; border-color: #277b69; }
-.tier_fel { color: #e2caff; border-color: #694092; }
-.tier_harif { color: #ffdf9b; border-color: #8b6a2a; }
-.tier_ostora {
-  color: #ffe69b;
-  background: #36250e;
-  border-color: #a17a31;
 }
 
 .hook,
@@ -492,8 +475,7 @@
   }
 
   .status,
-  .channelBadge,
-  .tier {
+  .channelBadge {
     min-height: 26px;
     padding: 4px 7px;
     font-size: 0.64rem;
@@ -585,8 +567,7 @@
   }
 
   .status,
-  .channelBadge,
-  .tier {
+  .channelBadge {
     min-height: 24px;
     gap: 4px;
     padding: 3px 6px;
