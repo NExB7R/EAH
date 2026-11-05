@@ -12,6 +12,7 @@ import {
 } from '@/components/icons'
 import { approveBusiness, rejectBusiness, archiveBusiness, republishBusiness } from '../actions'
 import styles from '../businesses.module.css'
+import { getPublishedBusinessHref } from '@/lib/utils/published-business-href'
 
 type Props = {
   businessId: string
@@ -67,6 +68,7 @@ export default function BusinessActionsBar({
   }
 
   const status = isPublished ? 'published' : isRejected ? 'rejected' : 'pending'
+  const publicHref = getPublishedBusinessHref(isPublished, businessSlug)
 
   return (
     <div className={styles.actionsBar}>
@@ -160,9 +162,9 @@ export default function BusinessActionsBar({
               <span className={styles.moreChevron}>▾</span>
             </summary>
             <div className={styles.moreMenu}>
-              {isPublished && (
+              {publicHref && (
                 <Link
-                  href={`/businesses/${businessSlug}`}
+                  href={publicHref}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.moreItem}

@@ -11,6 +11,7 @@ import OrderSettingsPanel from './order-settings-panel'
 import OverviewPanel from './overview-panel'
 import TrialOwnerPanel from './trial-owner-panel'
 import tabsStyles from './detail-tabs.module.css'
+import { getPublishedBusinessHref } from '@/lib/utils/published-business-href'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,7 +42,8 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
   ])
   if (!biz) notFound()
 
-  const logoUrl = biz.media.find((m) => m.media_type === 'logo')?.storage_path ?? null
+  const logoUrl = biz.media.find((m) => m.media_type === 'logo')?.storage_path ?? biz.logo_url
+  const publicBusinessHref = getPublishedBusinessHref(biz.is_published, biz.slug)
   const coverUrl =
     biz.cover_image_url ?? biz.media.find((m) => m.media_type === 'cover')?.storage_path ?? null
 
@@ -52,7 +54,7 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
         <span>الأنشطة</span>
       </Link>
 
-      <BusinessHero biz={biz} />
+      <BusinessHero biz={biz} logoUrl={logoUrl} />
 
       <OrderSettingsPanel
         businessId={biz.id}
@@ -124,9 +126,9 @@ export default async function AdminBusinessDetailPage({ params, searchParams }: 
             isFeatured={biz.is_featured}
             isNew={false}
           />
-          {biz.is_published ? (
+          {publicBusinessHref ? (
             <Link
-              href={`/businesses/${biz.slug}`}
+              href={publicBusinessHref}
               target="_blank"
               rel="noopener noreferrer"
               className={tabsStyles.previewLink}

@@ -2,12 +2,21 @@ import Link from 'next/link'
 import type { AdminBusiness } from '@/lib/data/admin-business'
 import { ExternalLinkIcon, StarIcon } from '@/components/icons'
 import { typeLabel, statusOf } from './type-label'
+import DetailLogo from '@/components/detail-logo'
+import { getPublishedBusinessHref } from '@/lib/utils/published-business-href'
 import styles from './business-hero.module.css'
 
-export default function BusinessHero({ biz }: { biz: AdminBusiness }) {
+export default function BusinessHero({
+  biz,
+  logoUrl,
+}: {
+  biz: AdminBusiness
+  logoUrl: string | null
+}) {
   const coverUrl = biz.cover_image_url ?? null
   const status = statusOf(biz)
   const initial = biz.name.charAt(0)
+  const publicHref = getPublishedBusinessHref(biz.is_published, biz.slug)
 
   const coverStyle = coverUrl
     ? {
@@ -19,7 +28,9 @@ export default function BusinessHero({ biz }: { biz: AdminBusiness }) {
     <section className={styles.hero}>
       <div className={styles.heroCover} style={coverStyle} />
       <div className={styles.heroBody}>
-        <div className={styles.heroLogo}>{initial}</div>
+        <div className={styles.heroLogo}>
+          <DetailLogo src={logoUrl} alt={`شعار ${biz.name}`} initial={initial} />
+        </div>
         <div className={styles.heroInfo}>
           <h1 className={styles.heroName}>{biz.name}</h1>
           <div className={styles.heroMeta}>
@@ -45,15 +56,21 @@ export default function BusinessHero({ biz }: { biz: AdminBusiness }) {
               </>
             )}
           </div>
-          <Link
-            href={`/businesses/${biz.slug}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.heroSlug}
-          >
-            <span>{biz.slug}</span>
-            <ExternalLinkIcon size={10} />
-          </Link>
+          {publicHref ? (
+            <Link
+              href={publicHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.heroSlug}
+            >
+              <span>{biz.slug}</span>
+              <ExternalLinkIcon size={10} />
+            </Link>
+          ) : (
+            <span className={styles.heroSlug} aria-label="معرّف النشاط — الصفحة العامة غير منشورة">
+              {biz.slug}
+            </span>
+          )}
         </div>
       </div>
     </section>

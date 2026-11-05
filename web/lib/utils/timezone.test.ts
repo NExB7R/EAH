@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   getCairoDateParts,
+  getCairoDayStart,
   parseCairoLocalDateTime,
   parseCairoLocalDateEndOfDay,
 } from './timezone'
@@ -44,6 +45,22 @@ describe('Cairo business timezone helpers', () => {
     expect(parseCairoLocalDateTime('2026-11-02T00:30')?.toISOString()).toBe(
       '2026-11-01T22:30:00.000Z',
     )
+  })
+
+  it('returns the Cairo day boundary during daylight-saving time', () => {
+    expect(getCairoDayStart('2026-07-01T22:30:00.000Z')?.toISOString()).toBe(
+      '2026-07-01T21:00:00.000Z',
+    )
+  })
+
+  it('returns the Cairo day boundary during standard time', () => {
+    expect(getCairoDayStart('2026-11-01T22:30:00.000Z')?.toISOString()).toBe(
+      '2026-11-01T22:00:00.000Z',
+    )
+  })
+
+  it('returns null for an invalid Cairo day-boundary input', () => {
+    expect(getCairoDayStart('not-a-date')).toBeNull()
   })
 
   it('rejects impossible local datetimes', () => {

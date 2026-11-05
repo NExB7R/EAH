@@ -65,6 +65,16 @@ export function getCairoDateParts(value: string | Date): CairoDateParts | null {
 
 
 /**
+ * Return the UTC instant that begins the Cairo calendar day containing value.
+ * Uses the IANA timezone conversion so the boundary follows Egypt DST rules.
+ */
+export function getCairoDayStart(value: string | Date): Date | null {
+  const parts = getCairoDateParts(value)
+  if (!parts) return null
+  return parseCairoLocalDateTime(`${parts.dateKey}T00:00`)
+}
+
+/**
  * Interpret a datetime-local input as Cairo wall time and convert it to UTC.
  * Returns null for malformed calendar values and local times skipped by DST.
  */

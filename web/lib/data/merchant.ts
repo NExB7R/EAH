@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
+import { getCairoDayStart } from '@/lib/utils/timezone'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Merchant Data
@@ -208,7 +209,9 @@ export async function getMerchantStats(businessId: string): Promise<MerchantStat
   const supabase = await createClient()
 
   const now = new Date()
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
+  // Dashboard "today" follows Cairo business time, not the Vercel runtime timezone.
+  // If conversion fails, fail closed at now instead of including earlier events.
+  const todayStart = (getCairoDayStart(now) ?? now).toISOString()
   const weekStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
   const monthStart = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString()
 
