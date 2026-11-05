@@ -30,6 +30,30 @@ function createAdminServiceClient() {
   }
 }
 
+function isOwnerUniqueConflict(
+  error:
+    | {
+        code?: string
+        message?: string
+        details?: string | null
+        hint?: string | null
+      }
+    | null
+    | undefined,
+): boolean {
+  if (error?.code !== '23505') return false
+
+  const context = [error.message, error.details, error.hint]
+    .filter((value): value is string => Boolean(value))
+    .join(' ')
+    .toLowerCase()
+
+  return (
+    context.includes('businesses_one_owner_per_account_idx') ||
+    context.includes('(owner_profile_id)')
+  )
+}
+
 // ─── موافقة ───
 
 export async function approveBusiness(businessId: string): Promise<Result> {
@@ -482,6 +506,14 @@ export async function createBusiness(formData: FormData): Promise<Result> {
 
   if (error || !created) {
     console.error('[admin-business-create] insert failed:', error?.message ?? 'No row returned')
+
+    if (isOwnerUniqueConflict(error)) {
+      return {
+        ok: false,
+        error: 'الحساب المختار مرتبط بالفعل بنشاط آخر. اختر حسابًا غير مرتبط أو أنشئ النشاط دون مالك.',
+      }
+    }
+
     return {
       ok: false,
       error:
@@ -935,7 +967,14 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
       })
       .eq('id', businessId)
 
-    if (error) return { ok: false, error: 'تعذر تنفيذ العملية. حاول مرة أخرى.' }
+    if (error) {
+      return {
+        ok: false,
+        error: isOwnerUniqueConflict(error)
+          ? 'هذا الحساب مرتبط بالفعل بنشاط آخر. فك ارتباطه أولًا قبل ربط نشاط جديد.'
+          : 'تعذر تنفيذ العملية. حاول مرة أخرى.',
+      }
+    }
   }
 
   // Newly registered users start as customers; promote only after the business
