@@ -30,7 +30,8 @@ export default function CardImage({ logoUrl, coverUrl, alt, initial }: Props) {
           src={coverUrl!}
           alt={alt}
           fill
-          sizes="(max-width: 640px) calc(100vw - 48px), 560px"
+          loading="lazy"
+          sizes="auto, (max-width: 400px) 200px, (max-width: 640px) 220px, 280px"
           className={styles.cover}
           onError={() => setCoverFailed(true)}
         />
@@ -56,7 +57,8 @@ export default function CardImage({ logoUrl, coverUrl, alt, initial }: Props) {
         src={logoUrl!}
         alt={alt}
         fill
-        sizes="(max-width: 640px) calc(100vw - 48px), 560px"
+        loading="lazy"
+        sizes="auto, (max-width: 400px) 200px, (max-width: 640px) 220px, 280px"
         className={styles.logo}
         onError={() => setLogoFailed(true)}
       />
