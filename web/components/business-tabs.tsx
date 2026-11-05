@@ -5,8 +5,6 @@ import WmImage from './wm-image'
 import BranchList from './branch-list'
 import {
   MapPinIcon,
-  PhoneIcon,
-  WhatsAppIcon,
   ClockIcon,
   FacebookIcon,
   GlobeIcon,
@@ -49,16 +47,6 @@ function isNonEmpty(s: string | null | undefined): s is string {
   return s.replace(/[\p{P}\p{S}\s]/gu, '').length > 0
 }
 
-function toWhatsAppHref(value: string): string {
-  const digits = value.replace(/\D/g, '')
-  const international = digits.startsWith('20')
-    ? digits
-    : digits.startsWith('0')
-      ? `2${digits}`
-      : `20${digits}`
-  return `https://wa.me/${international}`
-}
-
 function toMinutes(value: string): number | null {
   const match = /^([01]\d|2[0-3]):[0-5]\d$/.exec(value)
   if (!match) return null
@@ -98,15 +86,9 @@ export default function BusinessTabs({
   const { business, contacts, branches, menu, gallery } = detail
   const featured = business.is_featured
 
-  const phones = contacts.filter((c) => c.method_type === 'phone')
-  const whatsapps = contacts.filter((c) => c.method_type === 'whatsapp')
   const facebook = contacts.find((c) => c.method_type === 'facebook')
   const instagram = contacts.find((c) => c.method_type === 'instagram')
   const website = contacts.find((c) => c.method_type === 'website')
-  const complaints = contacts.find((c) => c.method_type === 'complaints')
-  const manager = contacts.find((c) => c.method_type === 'manager')
-  const shiftMorning = contacts.find((c) => c.method_type === 'shift_morning')
-  const shiftEvening = contacts.find((c) => c.method_type === 'shift_evening')
 
   return (
     <div className={`${styles.wrap} ${featured ? styles.wrapFeatured : ''}`}>
@@ -170,45 +152,11 @@ export default function BusinessTabs({
       {/* ─── Info Tab ─── */}
       {tab === 'info' && (
         <div className={styles.content}>
-          {/* Contacts */}
-          {(phones.length > 0 ||
-            whatsapps.length > 0 ||
-            complaints ||
-            manager ||
-            shiftMorning ||
-            shiftEvening ||
-            facebook ||
-            instagram ||
-            website) && (
+          {/* Public social links only; phone and WhatsApp use the protected reveal flow. */}
+          {(facebook || instagram || website) && (
             <div className={styles.block}>
-              <h3 className={styles.blockTitle}>التواصل</h3>
+              <h3 className={styles.blockTitle}>روابط النشاط</h3>
               <div className={styles.contactList}>
-                {whatsapps.map((contact, index) => (
-                  <a
-                    key={`whatsapp-${contact.value}-${index}`}
-                    href={toWhatsAppHref(contact.value)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${styles.contactItem} ${styles.contactWhatsapp}`}
-                    dir="ltr"
-                  >
-                    <WhatsAppIcon size={16} />
-                    <span>{contact.value}</span>
-                    {contact.is_primary && <span>الأساسي</span>}
-                  </a>
-                ))}
-                {phones.map((contact, index) => (
-                  <a
-                    key={`phone-${contact.value}-${index}`}
-                    href={`tel:${contact.value}`}
-                    className={`${styles.contactItem} ${styles.contactPhone}`}
-                    dir="ltr"
-                  >
-                    <PhoneIcon size={16} />
-                    <span>{contact.value}</span>
-                    {contact.is_primary && <span>الأساسي</span>}
-                  </a>
-                ))}
                 {facebook && (
                   <a
                     href={facebook.value}
@@ -240,30 +188,6 @@ export default function BusinessTabs({
                   >
                     <GlobeIcon size={16} />
                     <span>الموقع الرسمي</span>
-                  </a>
-                )}
-                {manager && (
-                  <a href={`tel:${manager.value}`} className={styles.contactItem}>
-                    <PhoneIcon size={16} />
-                    <span>مسئول النشاط: {manager.value}</span>
-                  </a>
-                )}
-                {shiftMorning && (
-                  <a href={`tel:${shiftMorning.value}`} className={styles.contactItem}>
-                    <ClockIcon size={16} />
-                    <span>شفت صباحي: {shiftMorning.value}</span>
-                  </a>
-                )}
-                {shiftEvening && (
-                  <a href={`tel:${shiftEvening.value}`} className={styles.contactItem}>
-                    <ClockIcon size={16} />
-                    <span>شفت مسائي: {shiftEvening.value}</span>
-                  </a>
-                )}
-                {complaints && (
-                  <a href={`tel:${complaints.value}`} className={styles.contactItem}>
-                    <MessageCircleIcon size={16} />
-                    <span>شكاوى واقتراحات: {complaints.value}</span>
                   </a>
                 )}
               </div>
