@@ -171,7 +171,7 @@ export const getBusinessDetail = unstable_cache(
       .select(
         `
         id, slug, name, owner_profile_id, business_type, custom_business_type, business_type_status, description, hook,
-        area, city, address_text, map_url, cover_image_url,
+        area, city, address_text, map_url, cover_image_url, logo_url,
         is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         successful_orders,
         featured_order, featured_until, featured_pin,
@@ -332,7 +332,7 @@ export const getBusinessDetail = unstable_cache(
       openNowOverride,
     }
   },
-  ['business-detail-v5'],
+  ['business-detail-v6'],
   { revalidate: 60, tags: ['businesses'] },
 )
 
