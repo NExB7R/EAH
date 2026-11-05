@@ -227,15 +227,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .viewAll {
-    transition: none;
-  }
-  .arrow {
-    transition: none;
-  }
-}
-
 /* ─── Arrows Hover (تظهر عند الهوفر فقط) ─── */
 .carousel:hover .arrow,
 .carousel:focus-within .arrow {
@@ -252,11 +243,4 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .viewAll {
-    transition: none;
-  }
-  .arrow {
-    transition: none;
-  }
-}
+
