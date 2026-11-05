@@ -7,9 +7,13 @@ export function getPublishedBusinessLimit(requested = DEFAULT_PUBLISHED_BUSINESS
   return Math.min(MAX_PUBLISHED_BUSINESSES, Math.max(1, Math.floor(requested)))
 }
 
-/** Defense in depth: drafts must never enter any public discovery/search pool. */
-export function onlyPublishedBusinessRows<T extends { is_published?: unknown }>(
-  rows: T[] | null,
-): T[] {
-  return (rows ?? []).filter((row) => row.is_published === true)
+/**
+ * Defense in depth: drafts must never enter any public discovery/search pool.
+ * The query selects is_published explicitly; the generated Supabase row type
+ * does not currently expose that column, so inspect it through a narrow runtime cast.
+ */
+export function onlyPublishedBusinessRows<T extends object>(rows: T[] | null): T[] {
+  return (rows ?? []).filter(
+    (row) => (row as { is_published?: unknown }).is_published === true,
+  )
 }
