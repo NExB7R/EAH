@@ -8,6 +8,7 @@ import OrderModal from './order-modal'
 import styles from './fixed-cta.module.css'
 import type { ContactOption } from '@/lib/data/business-detail'
 import { normalizeWhatsAppDestination } from '@/lib/data/contact-availability-utils'
+import { shouldRenderFixedBusinessCta } from '@/lib/utils/business-cta'
 
 type Props = {
   businessId: string
@@ -46,6 +47,8 @@ export default function FixedCta({
   const [showWhatsappChoices, setShowWhatsappChoices] = useState(false)
   const whatsappOptions = contactOptions.filter((option) => option.method === 'whatsapp')
 
+  if (!shouldRenderFixedBusinessCta({ isOwner, ordersEnabled, contactOptions })) return null
+
   if (isOwner) {
     return (
       <div className={styles.bar}>
@@ -56,8 +59,6 @@ export default function FixedCta({
       </div>
     )
   }
-
-  if (!ordersEnabled && whatsappOptions.length === 0) return null
 
   const handleClick = (option?: ContactOption) => {
     if (!isLoggedIn) {
