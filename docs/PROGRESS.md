@@ -892,3 +892,10 @@
 - تم حذف كتلة reduced-motion المكررة في `FeaturedBento`.
 - القيم النهائية ومساحة اللمس لم تتغير عن الالتزام السابق.
 
+
+
+## 2026-11-05 — تصحيح reduced motion للسلايدر
+
+- تم التأكد من وجود كتلة واحدة `prefers-reduced-motion` في FeaturedBento وRowCarousel.
+- تم دمج خصائص سهم RowCarousel في قاعدة واحدة، مع استمرار `scroll-behavior: auto` عند طلب تقليل الحركة.
+
