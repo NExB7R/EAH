@@ -25,6 +25,8 @@
 }
 
 .heroLogo {
+  position: relative;
+  overflow: hidden;
   width: 80px;
   height: 80px;
   border-radius: 14px;

@@ -21,6 +21,7 @@ export type AdminBusiness = {
   map_url: string | null
   location: { lat: number; lng: number } | null
   cover_image_url: string | null
+  logo_url: string | null
   is_published: boolean
   is_open: boolean
   is_featured: boolean
@@ -152,6 +153,7 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     address_text: (b.address_text as string | null) ?? null,
     map_url: (b.map_url as string | null) ?? null,
     cover_image_url: (b.cover_image_url as string | null) ?? null,
+    logo_url: (b.logo_url as string | null) ?? null,
     is_published: !!b.is_published,
     is_open: !!b.is_open,
     is_featured: !!b.is_featured,
