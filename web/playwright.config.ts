@@ -1,10 +1,10 @@
+import { loadEnvConfig } from '@next/env'
 import { defineConfig, devices } from '@playwright/test'
 
-// ═══════════════════════════════════════════════════════════
-// EAH — Playwright Config
-// يستخدم Chrome المثبت على الجهاز (بدون تحميل Chromium)
-// ═══════════════════════════════════════════════════════════
+loadEnvConfig(process.cwd())
 
+// EAH E2E must run against a local app configured with a dedicated non-production
+// Supabase project. Production and remote deployments are intentionally rejected.
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:3000'
 
 export default defineConfig({
