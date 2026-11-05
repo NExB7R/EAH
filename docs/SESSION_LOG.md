@@ -1633,3 +1633,14 @@ Admin list:
 - يمنع تمرير EventTarget غير DOM إلى `contains` عند خروج التركيز من نافذة المتصفح.
 - لا تغيير في حالات pause أو resume المرئية.
 
+
+
+## 2026-11-05 — صفحة النشاط: مشابهة/فروع/صور
+
+- تمت مراجعة `businesses/[slug]/page.tsx` ومكونات BusinessHero وBranchList وDetailCover.
+- استخرجت `seededShuffle` إلى `lib/utils` واستخدمته لاختيار 4 أنشطة من كامل قائمة المشابهة بترتيب ثابت لكل نشاط.
+- تم توحيد المسافة للفرع الأقرب مع helper Haversine المستخدم في `useDistance`.
+- أصلحت قواعد موبايل قائمة الفروع التي كانت توسع iconWrap وتطبق grid-template على flex list.
+- ربطت فشل DetailCover بعنوان الصورة، وأضفت DetailLogo مع fallback أول حرف؛ تحديث رابط صورة جديد يعيد تجربة التحميل دون remount.
+- اختبارات seededShuffle أضيفت للمشروع؛ تنفيذ Vitest وE2E ما زال محجوبًا بعطل تخصيص Runner في GitHub Actions.
+

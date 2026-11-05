@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import DetailLogo from './detail-logo'
 import DetailCover from './detail-cover'
 import {
   StarIcon,
@@ -48,19 +48,11 @@ export default function BusinessHero({ detail, isOpen }: Props) {
       {/* ─── Content ─── */}
       <div className={styles.body}>
         <div className={styles.logoWrap}>
-          {logo ? (
-            <Image
-              src={logo.storage_path}
-              alt={business.name}
-              fill
-              sizes="120px"
-              className={styles.logoImg}
-            />
-          ) : (
-            <div className={styles.logoFallback} aria-hidden>
-              {business.name.charAt(0)}
-            </div>
-          )}
+          <DetailLogo
+            src={logo?.storage_path ?? null}
+            alt={`شعار ${business.name}`}
+            initial={business.name.charAt(0)}
+          />
         </div>
 
         <div className={styles.info}>
