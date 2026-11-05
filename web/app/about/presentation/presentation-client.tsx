@@ -259,7 +259,7 @@ function SlideCover() {
       <p className={styles.coverText}>
         منصة اكتشاف محلية مصرية
         <br />
-        مجانية للعميل · بدون عمولة على التاجر
+        مجانية للمشتري · بدون عمولة على البايع
       </p>
     </div>
   )
@@ -295,7 +295,7 @@ function SlideIdea() {
             <CheckCircleIcon size={22} />
           </span>
           <div>
-            <strong className={styles.ideaStrong}>مجانية للعميل</strong>
+            <strong className={styles.ideaStrong}>مجانية للمشتري</strong>
             <p className={styles.ideaText}>صفر رسوم · صفر اشتراكات</p>
           </div>
         </div>
@@ -305,7 +305,7 @@ function SlideIdea() {
           </span>
           <div>
             <strong className={styles.ideaStrong}>بدون عمولة على التاجر</strong>
-            <p className={styles.ideaText}>كل الأرباح للتاجر</p>
+            <p className={styles.ideaText}>كل الأرباح للبايع</p>
           </div>
         </div>
         <div className={styles.ideaRow}>
