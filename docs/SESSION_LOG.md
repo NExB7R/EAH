@@ -1713,4 +1713,4 @@ Admin list:
 - أضيفت اختبارات timezone للصيف والشتاء والمدخل غير الصالح، واختبارات getPublishedBusinessHref للنشر والمسودة والـslug الفارغ.
 - Hero إدارة النشاط يعرض شعار الوسائط أو logo_url عبر DetailLogo، ويحافظ على الحرف كـfallback.
 - روابط الصفحة العامة في Hero والمعاينة وقائمة الإجراءات موحدة؛ لا رابط قابل للنقر للمسودة/المرفوض، مع بقاء تبويب المعاينة الداخلية للأدمن.
-- لم تتغير قاعدة البيانات أو صلاحيات النشر أو قواعد الأدوار. Vitest وBuild لم يُشغّلا بعد؛ GitHub Runner كان متوقفًا قبل بدء الخطوات عند آخر تحقق.
+- لم تتغير قاعدة البيانات أو صلاحيات النشر أو قواعد الأدوار. Vercel Production deployment dpl_Emk61syQkV6kqHEiX3diEmSyabw8 على 808d9c9 وصل READY؛ Compile 16.3s، TypeScript 10.4s، وتوليد 54/54 صفحة. GitHub Actions ما زالت تفشل قبل تخصيص Runner (runner_id=0, steps=[]), لذلك Vitest وE2E لم يُنفذا.
