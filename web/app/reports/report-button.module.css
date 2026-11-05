@@ -1,6 +1,7 @@
 .iconBtn,
 .menuBtn {
   display: inline-flex;
+  min-height: 44px;
   align-items: center;
   gap: 6px;
   padding: 6px 10px;

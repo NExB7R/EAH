@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useEffect, useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { AlertIcon, CloseIcon, CheckCircleIcon } from '@/components/icons'
 import { submitReport } from './actions'
@@ -33,6 +33,60 @@ export default function ReportButton({
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
   const router = useRouter()
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    const modal = modalRef.current
+    const getFocusable = () =>
+      Array.from(
+        modal?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      ).filter((element) => element.getAttribute('aria-hidden') !== 'true')
+
+    getFocusable()[0]?.focus()
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        setOpen(false)
+        return
+      }
+
+      if (event.key !== 'Tab') return
+      const focusable = getFocusable()
+      if (focusable.length === 0) return
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last?.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first?.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      previousFocus?.focus()
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (!open || !done) return
+    const timeout = window.setTimeout(() => {
+      setOpen(false)
+      setDone(false)
+      router.refresh()
+    }, 1500)
+    return () => window.clearTimeout(timeout)
+  }, [done, open, router])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -42,16 +96,15 @@ export default function ReportButton({
     fd.set('entityId', entityId)
 
     startTransition(async () => {
-      const res = await submitReport(fd)
-      if (res.ok) {
-        setDone(true)
-        setTimeout(() => {
-          setOpen(false)
-          setDone(false)
-          router.refresh()
-        }, 1500)
-      } else {
-        setError(res.error)
+      try {
+        const res = await submitReport(fd)
+        if (res.ok) {
+          setDone(true)
+        } else {
+          setError(res.error)
+        }
+      } catch {
+        setError('تعذر إرسال البلاغ بسبب مشكلة اتصال. حاول مرة أخرى.')
       }
     })
   }
@@ -60,7 +113,11 @@ export default function ReportButton({
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setError(null)
+          setDone(false)
+          setOpen(true)
+        }}
         className={variant === 'icon' ? styles.iconBtn : styles.menuBtn}
         aria-label="إبلاغ"
       >
@@ -69,8 +126,14 @@ export default function ReportButton({
       </button>
 
       {open && (
-        <div className={styles.overlay} role="dialog" aria-modal="true">
-          <div className={styles.modal}>
+        <div
+          className={styles.overlay}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="report-dialog-title"
+          aria-describedby={done ? undefined : 'report-dialog-description'}
+        >
+          <div className={styles.modal} ref={modalRef}>
             <button
               type="button"
               onClick={() => setOpen(false)}
@@ -83,13 +146,13 @@ export default function ReportButton({
             {done ? (
               <div className={styles.doneBox}>
                 <CheckCircleIcon size={32} />
-                <p>وصلنا بلاغك — شكراً</p>
+                <p role="status" aria-live="polite">وصلنا بلاغك — شكراً</p>
                 <small>هيتم المراجعة خلال 24-48 ساعة</small>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className={styles.form}>
-                <h3 className={styles.title}>إبلاغ</h3>
-                <p className={styles.subtitle}>اختار السبب:</p>
+                <h3 className={styles.title} id="report-dialog-title">إبلاغ</h3>
+                <p className={styles.subtitle} id="report-dialog-description">اختار السبب:</p>
 
                 <div className={styles.reasons}>
                   {REASONS.map((r) => (
@@ -109,7 +172,7 @@ export default function ReportButton({
                   dir="rtl"
                 />
 
-                {error && <div className={styles.error}>{error}</div>}
+                {error && <div className={styles.error} role="alert">{error}</div>}
 
                 <button type="submit" disabled={pending} className={styles.submitBtn}>
                   {pending ? 'جاري الإرسال...' : 'إرسال البلاغ'}
