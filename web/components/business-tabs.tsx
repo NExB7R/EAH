@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type KeyboardEvent } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import WmImage from './wm-image'
 import BranchList from './branch-list'
 import {
@@ -82,6 +82,26 @@ export default function BusinessTabs({
 }: Props) {
   const [tab, setTab] = useState<Tab>(initialTab)
   const [lightbox, setLightbox] = useState<string | null>(null)
+
+  const lightboxCloseRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!lightbox) return
+
+    const previouslyFocused =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null
+    lightboxCloseRef.current?.focus()
+
+    const handleLightboxKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') setLightbox(null)
+    }
+
+    document.addEventListener('keydown', handleLightboxKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleLightboxKeyDown)
+      previouslyFocused?.focus()
+    }
+  }, [lightbox])
 
   const { business, contacts, branches, menu, gallery } = detail
   const featured = business.is_featured
@@ -495,8 +515,10 @@ export default function BusinessTabs({
           onClick={() => setLightbox(null)}
           role="dialog"
           aria-modal="true"
+          aria-label="معاينة صورة النشاط"
         >
           <button
+            ref={lightboxCloseRef}
             type="button"
             className={styles.lightboxClose}
             onClick={() => setLightbox(null)}
@@ -504,7 +526,7 @@ export default function BusinessTabs({
           >
             ✕
           </button>
-          <div className={styles.lightboxImg}>
+          <div className={styles.lightboxImg} onClick={(event) => event.stopPropagation()}>
             <WmImage
               src={lightbox}
               alt="صورة"
