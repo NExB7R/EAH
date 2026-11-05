@@ -53,6 +53,7 @@ export default function ReviewForm({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [done, setDone] = useState(false)
+  const [queued, setQueued] = useState(false)
 
   const setRating = (key: string, v: number) =>
     setRatings((r) => ({ ...r, [key]: v === r[key] ? 0 : v }))
@@ -84,22 +85,24 @@ export default function ReviewForm({
       if (v && v > 0) dimensionsObj[d.key] = v
     }
 
-    const res = await offlineOrQueue(() => submitReview(businessId, slug, fd), 'review', {
-      businessId,
-      slug,
-      dimensions: dimensionsObj,
-      comment,
-    })
-    setLoading(false)
-
-    if (!res.ok) {
-      setError(res.error)
-      return
+    try {
+      const res = await offlineOrQueue(() => submitReview(businessId, slug, fd), 'review', {
+        businessId,
+        slug,
+        dimensions: dimensionsObj,
+        comment,
+      })
+      if (!res.ok) {
+        setError(res.error)
+        return
+      }
+      setQueued(res.queued)
+      setDone(true)
+    } catch {
+      setError('تعذر إرسال التقييم أو حفظه على الجهاز. جرّب مرة أخرى.')
+    } finally {
+      setLoading(false)
     }
-    if (res.queued) {
-      setError('في انتظار النت — تقييمك هيتحفظ ولو النت قطع')
-    }
-    setDone(true)
   }
 
   if (done) {
@@ -107,8 +110,12 @@ export default function ReviewForm({
       <div className={styles.wrap}>
         <div className={styles.success}>
           <StarIcon size={44} className={styles.successIcon} />
-          <h3>شكراً لتقييمك!</h3>
-          <p>تقييمك هيظهر بعد المراجعة</p>
+          <h3>{queued ? 'التقييم محفوظ على جهازك' : 'شكراً لتقييمك!'}</h3>
+          <p>
+            {queued
+              ? 'سيتم إرساله تلقائيًا عند عودة الاتصال، وبعدها يدخل مراجعة الإدارة.'
+              : 'تقييمك هيظهر بعد المراجعة'}
+          </p>
           <button type="button" onClick={onClose} className={styles.closeBtn}>
             تمام
           </button>

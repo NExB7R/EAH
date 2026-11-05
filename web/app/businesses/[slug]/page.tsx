@@ -7,6 +7,7 @@ import {
   getBusinessReviews,
   getSimilarBusinesses,
   getUserReview,
+  hasDeliveredOrderForReview,
   getUserActivity,
   computeReviewStats,
   getBusinessOffers,
@@ -31,6 +32,7 @@ export const dynamic = 'force-dynamic'
 
 type Props = {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ review?: string | string[] }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -133,8 +135,9 @@ function buildJsonLd(
   return schema
 }
 
-export default async function BusinessPage({ params }: Props) {
-  const { slug } = await params
+export default async function BusinessPage({ params, searchParams }: Props) {
+  const [{ slug }, { review: reviewQuery }] = await Promise.all([params, searchParams])
+  const shouldOpenReviews = reviewQuery === '1'
 
   const detail = await getBusinessDetail(slug)
   if (!detail) notFound()
@@ -150,7 +153,12 @@ export default async function BusinessPage({ params }: Props) {
     getComments(business.id),
   ])
 
-  const reviewStats = computeReviewStats(reviews)
+  const computedReviewStats = computeReviewStats(reviews)
+  const reviewStats = {
+    ...computedReviewStats,
+    count: business.rating_count,
+    avg: business.rating_avg,
+  }
   const isLoggedIn = !!session
   const [isOwner, isFavorite, isFollowing] = session
     ? await Promise.all([
@@ -164,6 +172,8 @@ export default async function BusinessPage({ params }: Props) {
     session && comments.length > 0 ? await getMyFollowingRootIds(business.id, session.userId) : []
   const userReview = session && isLoggedIn ? await getUserReview(business.id, session.userId) : null
   const hasReviewed = !!userReview
+  const canReview =
+    session && !isOwner ? await hasDeliveredOrderForReview(business.id, session.userId) : false
 
   // Deterministic Fisher–Yates: choose four from the full similar-business pool.
   const seededSimilar = seededShuffle(similar, business.id).slice(0, 4)
@@ -238,6 +248,9 @@ export default async function BusinessPage({ params }: Props) {
         {/* ─── Tabs ─── */}
         <div className={styles.tabsWrap}>
           <BusinessTabs
+            key={`${business.id}:${flags.reviews_enabled && shouldOpenReviews ? 'reviews' : 'info'}`}
+            initialTab={flags.reviews_enabled && shouldOpenReviews ? 'reviews' : 'info'}
+            canReview={canReview}
             detail={detail}
             reviews={reviews}
             reviewStats={reviewStats}

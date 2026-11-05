@@ -31,6 +31,24 @@ export async function submitReview(
   const rl = await checkRateLimit(strictLimiter, `review:${user.id}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
 
+  const { data: publishedBusiness, error: businessError } = await supabase
+    .from('businesses')
+    .select('id')
+    .eq('id', businessId)
+    .eq('is_published', true)
+    .maybeSingle()
+  if (businessError) return { ok: false, error: 'تعذر التحقق من النشاط. حاول مرة أخرى.' }
+  if (!publishedBusiness) return { ok: false, error: 'التقييم متاح على الأنشطة المنشورة فقط.' }
+
+  const { data: ownedBusiness, error: ownerError } = await supabase
+    .from('businesses')
+    .select('id')
+    .eq('id', businessId)
+    .eq('owner_profile_id', user.id)
+    .maybeSingle()
+  if (ownerError) return { ok: false, error: 'تعذر التحقق من ملكية النشاط. حاول مرة أخرى.' }
+  if (ownedBusiness) return { ok: false, error: 'مينفعش تقيّم نشاطك بنفسك.' }
+
   const { data: existing } = await supabase
     .from('business_reviews')
     .select('id')

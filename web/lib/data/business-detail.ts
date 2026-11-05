@@ -371,8 +371,7 @@ export const getBusinessReviews = unstable_cache(
       .from('business_reviews')
       .select(
         `
-        id, user_id, taste, value_for_money, speed, experience,
-        comment, status, created_at,
+        id, user_id, dimensions, comment, status, created_at,
         merchant_reply, merchant_reply_at,
         reviewer:profiles(display_name, avatar_url)
       `,
@@ -432,6 +431,24 @@ export function computeReviewStats(reviews: Review[]): ReviewStats {
     avg: overallCount > 0 ? Math.round((overallTotal / overallCount) * 10) / 10 : 0,
     breakdown,
   }
+}
+
+// ─── Eligibility: only a delivered platform order can unlock a review ───
+export async function hasDeliveredOrderForReview(
+  businessId: string,
+  userId: string,
+): Promise<boolean> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('order_requests')
+    .select('id')
+    .eq('business_id', businessId)
+    .eq('customer_profile_id', userId)
+    .eq('status', 'delivered')
+    .limit(1)
+    .maybeSingle()
+
+  return !error && !!data
 }
 
 // ─── فحص هل المستخدم قيّم قبل كده ───
