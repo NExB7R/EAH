@@ -180,12 +180,14 @@ export default async function BusinessPage({ params, searchParams }: Props) {
 
   const isOpen = business.is_open
   const ordersEnabled = flags.orders_enabled && business.accepts_orders
+  const hasFixedCta =
+    isOwner || ordersEnabled || detail.contactOptions.some((option) => option.method === 'whatsapp')
 
   const menuImages = detail.menu.map((m) => m.storage_path)
   const offersList = offers.map((o) => ({ title: o.title, image: o.image_url }))
 
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} ${hasFixedCta ? styles.withFixedCta : ''}`}>
       <BusinessCache slug={business.slug} detail={detail} />
       <script
         type="application/ld+json"
