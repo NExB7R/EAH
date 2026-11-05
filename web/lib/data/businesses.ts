@@ -9,6 +9,11 @@ import { getWhatsAppDestinationBusinessIds } from './contact-availability'
 import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
 import { isPromotionActive } from './promotion-status'
+import {
+  getPublishedBusinessLimit,
+  onlyPublishedBusinessRows,
+} from './published-business-pool'
+
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Data Fetching Layer
@@ -181,11 +186,6 @@ async function normalizeBusinesses(
 // ═══════════════════════════════════════════════════════════
 // 1. كل الأنشطة المنشورة (للـ Home)
 // ═══════════════════════════════════════════════════════════
-
-import {
-  getPublishedBusinessLimit,
-  onlyPublishedBusinessRows,
-} from './published-business-pool'
 
 const DEFAULT_PUBLISHED_BUSINESSES = 100
 
