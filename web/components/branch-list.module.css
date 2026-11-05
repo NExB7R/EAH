@@ -117,13 +117,7 @@
    Auto-appended · safe no-ops on non-matching elements
    ═══════════════════════════════════════════════════ */
 @media (max-width: 640px) {
-  /* Stack grids to single column */
-  .list {
-    grid-template-columns: 1fr;
-  }
-  /* Reduce container padding */
-  .iconWrap {
-    padding-left: 12px;
-    padding-right: 12px;
+  .item {
+    padding: 10px;
   }
 }

@@ -12,6 +12,7 @@ import {
   getBusinessOffers,
 } from '@/lib/data/business-detail'
 import { getBusinessTypeLabel } from '@/lib/business-type-label'
+import { seededShuffle } from '@/lib/utils/seeded-shuffle'
 import BusinessNotice from '@/components/business-notice'
 import { getFeatureFlags } from '@/lib/features'
 import type { BusinessDetail } from '@/lib/data/business-detail'
@@ -164,12 +165,8 @@ export default async function BusinessPage({ params }: Props) {
   const userReview = session && isLoggedIn ? await getUserReview(business.id, session.userId) : null
   const hasReviewed = !!userReview
 
-  // Fisher-Yates shuffle (client-stable seed from business.id)
-  const seededSimilar = similar.slice(0, 4).sort((a, b) => {
-    const h1 = (a.id.charCodeAt(0) + business.id.charCodeAt(0)) % 1000
-    const h2 = (b.id.charCodeAt(0) + business.id.charCodeAt(0)) % 1000
-    return h1 - h2
-  })
+  // Deterministic Fisher–Yates: choose four from the full similar-business pool.
+  const seededSimilar = seededShuffle(similar, business.id).slice(0, 4)
 
   const isOpen = business.is_open
   const ordersEnabled = flags.orders_enabled && business.accepts_orders

@@ -3,6 +3,7 @@
 import { StoreIcon, MapPinIcon, CheckCircleIcon } from './icons'
 import { useDistance } from '@/lib/hooks/use-distance'
 import { useGeo } from '@/lib/contexts/geo-context'
+import { distanceKm } from '@/lib/utils/distance'
 import type { Branch } from '@/lib/data/business-detail'
 import styles from './branch-list.module.css'
 
@@ -59,13 +60,10 @@ export default function BranchList({ branches }: Props) {
     let minKm = Infinity
     for (const b of branches) {
       if (b.latitude === null || b.longitude === null) continue
-      const km = Math.sqrt(
-        Math.pow((b.latitude - geo.location.lat) * 111, 2) +
-          Math.pow(
-            (b.longitude - geo.location.lng) * 111 * Math.cos((geo.location.lat * Math.PI) / 180),
-            2,
-          ),
-      )
+      const km = distanceKm(geo.location, {
+        lat: b.latitude,
+        lng: b.longitude,
+      })
       if (km < minKm) {
         minKm = km
         closestId = b.id

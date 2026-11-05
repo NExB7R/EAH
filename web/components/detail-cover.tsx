@@ -15,9 +15,9 @@ type Props = {
 }
 
 export default function DetailCover({ src, alt }: Props) {
-  const [failed, setFailed] = useState(false)
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
 
-  if (!src || failed) {
+  if (!src || src === failedSrc) {
     return <div className={styles.coverFallback} aria-hidden />
   }
 
@@ -29,7 +29,7 @@ export default function DetailCover({ src, alt }: Props) {
       sizes="(max-width: 768px) 100vw, 900px"
       className={styles.coverImg}
       priority
-      onError={() => setFailed(true)}
+      onError={() => setFailedSrc(src)}
     />
   )
 }
