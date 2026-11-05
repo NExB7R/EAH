@@ -32,6 +32,9 @@ import {
   QrCodeIcon,
   SettingsIcon,
   StoreIcon,
+  UserIcon,
+  LockIcon,
+  ShareIcon,
   GiftIcon,
   HelpCircleIcon,
 } from './icons'
@@ -71,12 +74,18 @@ const PUBLIC_ITEMS: MenuItem[] = [
 
 // ─── روابط الحساب المشتركة (العميل والتاجر) ───
 const ACCOUNT_ITEMS: MenuItem[] = [
-  { href: '/account', label: 'حسابي', Icon: LayoutDashboardIcon },
-  { href: '/account/orders', label: 'طلباتي', Icon: FileTextIcon },
+  { href: '/account', label: 'نظرة عامة', Icon: LayoutDashboardIcon },
+  { href: '/account/edit', label: 'بياناتي الشخصية', Icon: UserIcon },
+  { href: '/account/security', label: 'الأمان', Icon: LockIcon },
+  { href: '/account/verify', label: 'التوثيق', Icon: ShieldCheckIcon },
+  { href: '/account/orders', label: 'الطلبات', Icon: FileTextIcon },
   { href: '/account/favorites', label: 'المفضلات', Icon: StarIcon },
   { href: '/account/following', label: 'المتابعات', Icon: StoreIcon },
   { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
   { href: '/account/points', label: 'النقاط', Icon: GiftIcon },
+  { href: '/account/loyalty', label: 'الولاء', Icon: CrownGoldIcon },
+  { href: '/account/badges', label: 'الشارات', Icon: SparklesIcon },
+  { href: '/account/referral', label: 'دعوة أصدقاء', Icon: ShareIcon },
 ]
 
 // ─── مساحة عمل التاجر: تطابق الروابط قائمة MerchantSidebar ───
@@ -85,6 +94,7 @@ const SELLER_SECTION: MenuItem[] = [
   { href: '/merchant/business', label: 'بيانات النشاط', Icon: StoreIcon },
   { href: '/merchant/branches', label: 'الفروع', Icon: MapPinIcon },
   { href: '/merchant/orders', label: 'الطلبات', Icon: FileTextIcon },
+  { href: '/merchant/orders/settings', label: 'إعدادات الطلبات', Icon: SettingsIcon },
   { href: '/merchant/offers', label: 'العروض', Icon: GiftIcon },
   { href: '/merchant/ads', label: 'الإعلانات', Icon: TagIcon },
   { href: '/merchant/qr', label: 'رمز الاستجابة السريعة للنشاط', Icon: QrCodeIcon },
