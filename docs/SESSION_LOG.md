@@ -1687,4 +1687,4 @@ Admin list:
 - اكتُشف أن `getBusinessDetail` يمرر أرقام الاتصال من service-role query إلى `BusinessTabs` رغم منع القراءة المباشرة عبر anon RLS.
 - تم قصر `contacts` العامة على روابط Facebook/Instagram/website فقط، وإضافة whitelist pure helper واختبارات phone/WhatsApp/complaints/manager/shift.
 - أزيلت روابط tel/wa.me التي كانت تستهلك الأرقام الخام. بقيت خيارات الاتصال الآمنة التي لا تحتوي على القيمة، وتستعمل endpoint المصادق عليه وRPC `reveal_contact`.
-- لا تعديل على schema أو قاعدة الإنتاج. حالة الإغلاق تنتظر Vercel READY واختبار عدم التسريب من payload العام واختبار reveal للمستخدم المسجل.
+- لا تعديل على schema أو قاعدة الإنتاج. Vercel Production وصل READY على `e12f18c` مع Compile/TypeScript/54 صفحة ناجحة. إغلاق الحالة ما زال ينتظر فحص payload العام واختبار reveal للمستخدم المسجل.
