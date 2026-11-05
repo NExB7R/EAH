@@ -1,7 +1,7 @@
 -- EAH targeted regression checks for the 2026-10-29 admin/RLS migrations.
 -- Run only on a dedicated non-production database after applying the migration set.
 BEGIN;
-SELECT plan(55);
+SELECT plan(56);
 
 SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.businesses'::regclass), true, 'RLS remains enabled on businesses');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='businesses' AND policyname='businesses_admin_all'), 'admin activity policy uses shared admin authorization');
@@ -148,7 +148,16 @@ SELECT ok(
   AND pg_get_functiondef('public.redeem_reward(uuid)'::regprocedure) LIKE '%registered_account_required%',
   'reward redemption rejects anonymous accounts and locks stock and balance rows'
 );
-SELECT is(has_function_privilege('anon','public.request_promo_post(uuid, text, text)','EXECUTE'), false, 'anonymous users cannot request promo posts');
+SELECT is((
+  has_function_privilege('anon','public.request_promo_post(uuid, text, text)','EXECUTE')
+  OR has_function_privilege('anon','public.redeem_reward(uuid)','EXECUTE')
+), false, 'anonymous users cannot request promo posts or redeem rewards');
+SELECT is((
+  has_function_privilege('authenticated','public.request_promo_post(uuid, text, text)','EXECUTE')
+  AND has_function_privilege('authenticated','public.redeem_reward(uuid)','EXECUTE')
+  AND has_function_privilege('service_role','public.request_promo_post(uuid, text, text)','EXECUTE')
+  AND has_function_privilege('service_role','public.redeem_reward(uuid)','EXECUTE')
+), true, 'registered users and trusted servers retain allowed promo/reward execution');
 
 SELECT * FROM finish();
 ROLLBACK;
