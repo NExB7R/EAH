@@ -1,5 +1,15 @@
 # EAH — PROGRESS.md
 
+### تحديث 2026-11-05 — مراجعة RPCs وقاعدة الإنتاج
+
+- آخر نشر للتطبيق ما زال Commit `12c495f` على Vercel بحالة READY وAlias `eah-sq.vercel.app`. آخر Commit على `main` هو `42dd31f` ويحتوي مسودة SQL واختبارات فقط، وليس تغيير واجهة/Runtime.
+- قراءة Supabase الإنتاجية (قراءة فقط) أكدت `60` سياسة RLS تقييدية باسم `registered_account_only_*` على `28` جدولًا لعمليات INSERT/UPDATE/DELETE؛ الزائر غير المسجل والحساب anonymous ممنوعان من التفاعلات عبر قاعدة البيانات، وليس عبر إخفاء الأزرار فقط.
+- ستة جداول ظهر عليها RLS بلا سياسات: خمسة لا تمنح anon/authenticated صلاحيات مباشرة، و`business_insights` يمنح authenticated GRANT لكن RLS بلا policy يرفض الوصول افتراضيًا. لا توجد قراءة عامة لهذه الجداول. Migration استعادة owner/admin policies ما زالت pending.
+- دالتا `request_promo_post` و`redeem_reward` في إنتاج Supabase لا تطابقان النسخة الآمنة المقترحة: الأولى تسمح لحساب مسجل بإنشاء طلب ترويج لنشاط لا يملكه ولا تتحقق من HTTPS، والثانية لا تقفل صف المكافأة أو رصيد المستخدم أثناء الاستبدال. لم تُنفذ أية تغييرات على DB الإنتاج.
+- في `42dd31f` تم تحسين المسودة: `request_promo_post` يرفض `is_anonymous`, يتحقق من الملكية والرابط، ويقفل صف النشاط `FOR UPDATE` لمنع طلبين متزامنين؛ `redeem_reward` يرفض anonymous ويقفل صف reward وprofile. تم تحديث pgTAP ليثبت هذه الضوابط. يلزم تشغيل Quality/RLS على DB غير إنتاجية قبل التطبيق.
+- عمليات GitHub Actions على `12c495f` (E2E/CodeQL/Invariants/Context Map/Quality) انتهت قبل تعيين Runner: `runner_id=0`, و`runner_name` فارغ، و`steps=[]` خلال نحو ثانيتين. السبب الدقيق (quota/payment/policy/hosted runner) لم يتأكد عبر API المتاح؛ لا تعتبرها فشل اختبارات التطبيق.
+- تم تحديث `web/scripts/ignore-vercel-build.sh` ليستثني `web/supabase/tests/**` مع الوثائق والـCI، لأن SQL regression files لا تغيّر runtime. هذا التغيير يُفترض أن يسمح بتخطي Vercel build لهذه الدفعة فقط؛ لا يُخفي تغييرات التطبيق.
+
 ### تحديث 2026-11-05 — تحسين إتاحة قائمة الأدمن على الهاتف
 
 - آخر Commit تطبيق: `e41be8e0f02983b6bd672da8375e19c689f8c340` — Vercel READY، والـAlias `eah-sq.vercel.app` أعاد HTTP 200 و`matches=true` و`environment=production` لنفس SHA.
