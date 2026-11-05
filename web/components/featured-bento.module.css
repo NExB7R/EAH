@@ -244,3 +244,11 @@
 }
 
 
+
+
+@media (prefers-reduced-motion: reduce) {
+  .viewAll,
+  .arrow {
+    transition: none;
+  }
+}
