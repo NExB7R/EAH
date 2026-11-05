@@ -1625,3 +1625,11 @@ Admin list:
 - أضيف اختبار يرفض ترتيبًا مكررًا حتى لا يختفي نشاط مؤهل من دورة العرض.
 - لا تغيير في قواعد الترتيب أو حجم الصفحة أو توقيت التبديل.
 
+
+
+## 2026-11-05 — حراسة relatedTarget في عناصر السلايدر
+
+- تم إضافة type guard فعلي لـ `relatedTarget instanceof Node` قبل استدعاء `contains` في FeaturedBento وRowCarousel.
+- يمنع تمرير EventTarget غير DOM إلى `contains` عند خروج التركيز من نافذة المتصفح.
+- لا تغيير في حالات pause أو resume المرئية.
+
