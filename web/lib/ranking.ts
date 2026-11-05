@@ -8,6 +8,18 @@ import { getBusinessReputationScore } from '@/lib/reputation'
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
+function unitSignal(value: unknown, fallback = 0): number {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < 0 || value > 1) {
+    return fallback
+  }
+  return value
+}
+
+function scaledSignal(value: unknown, scale: number): number {
+  if (typeof value !== 'number' || !Number.isFinite(value) || scale <= 0) return 0
+  return Math.min(1, Math.max(0, value / scale))
+}
+
 // كم يوم من آخر نشاط؟
 function daysSince(iso: string | null): number {
   if (!iso) return 365
@@ -25,26 +37,29 @@ function decay(days: number): number {
 // Trend Score — 7 معايير (CRITERIA §2)
 // ═══════════════════════════════════════════════════════════
 export function trendScore(b: Business): number {
+  // All seven inputs are normalized to [0, 1] before applying their weights.
   // 1) Velocity (25%) — نشاط الأسبوع الأخير
-  const velocity = Math.min(1, (b.velocity_score ?? 0) / 50)
+  const velocity = scaledSignal(b.velocity_score, 50)
 
   // 2) Evidence-based public business reputation (20%); participation points are excluded.
-  const reputation = getBusinessReputationScore(b) / 100
+  const reputation = unitSignal(getBusinessReputationScore(b) / 100)
 
   // 3) Recency (15%) — آخر نشاط
-  const recency = decay(daysSince(b.last_activity_at))
+  const recency = unitSignal(decay(daysSince(b.last_activity_at)))
 
   // 4) Diversity (15%) — عدد المستخدمين الفريدين
-  const diversity = Math.min(1, (b.diversity_score ?? 0) / 50)
+  const diversity = scaledSignal(b.diversity_score, 50)
 
   // 5) Quality (10%) — التقييم
-  const quality = b.rating_count > 0 ? Math.min(1, b.rating_avg / 5) : 0.5
+  const quality = b.rating_count > 0 ? unitSignal((b.rating_avg ?? 0) / 5, 0.5) : 0.5
 
   // 6) Engagement (10%) — تفاعل 30 يوم
-  const engagement = Math.min(1, (b.engagement_score ?? 0) / 100)
+  const engagement = scaledSignal(b.engagement_score, 100)
 
-  // 7) Response Rate (5%) — سرعة الاستجابة
-  const response = b.response_rate ?? 0.5
+  // 7) Response Rate (5%) — contract: a fraction in [0, 1].
+  // The production column currently has default zeros and no application writer;
+  // missing, malformed or differently-scaled values stay neutral until its data source is defined.
+  const response = unitSignal(b.response_rate, 0.5)
 
   return (
     velocity * 0.25 +
