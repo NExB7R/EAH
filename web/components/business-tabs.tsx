@@ -111,6 +111,14 @@ export default function BusinessTabs({
   const { business, contacts, branches, menu, gallery } = detail
   const featured = business.is_featured
 
+  const visibleBranches = branches.filter(
+    (branch) =>
+      isNonEmpty(branch.name) ||
+      isNonEmpty(branch.address_text) ||
+      isNonEmpty(branch.area) ||
+      (typeof branch.latitude === 'number' && typeof branch.longitude === 'number'),
+  )
+
   const activeTabId =
     tab === 'reviews'
       ? 'reviews-section'
@@ -365,19 +373,12 @@ export default function BusinessTabs({
           ) : null}
 
           {/* Branches — show only if at least one has meaningful data */}
-          {branches.length > 0 &&
-            branches.some(
-              (b) =>
-                isNonEmpty(b.name) ||
-                isNonEmpty(b.address_text) ||
-                isNonEmpty(b.area) ||
-                (typeof b.latitude === 'number' && typeof b.longitude === 'number'),
-            ) && (
-              <div className={styles.block}>
-                <h3 className={styles.blockTitle}>الفروع ({branches.length})</h3>
-                <BranchList branches={branches} />
-              </div>
-            )}
+          {visibleBranches.length > 0 && (
+            <div className={styles.block}>
+              <h3 className={styles.blockTitle}>الفروع ({visibleBranches.length})</h3>
+              <BranchList branches={visibleBranches} />
+            </div>
+          )}
 
           {/* Gallery */}
           {gallery.length > 0 && (
