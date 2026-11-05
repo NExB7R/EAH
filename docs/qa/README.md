@@ -90,7 +90,7 @@ EAH_ALLOW_QA_ACCOUNT_SEED=yes EAH_QA_ALLOWED_PROJECT_REF=<TEST_PROJECT_REF> npm 
 - توجد نتيجة E2E تاريخية ناجحة بـ49/49، لكنها لا تثبت حالة التشغيل الحالية. آخر مراجعة للـworkflow commits لم تُظهر runs مرتبطة بالـSHA الذي فُحص، وسجل الأخطاء الأحدث يوثق فشلًا قبل تخصيص Runner (`runner_id=0`, `runner_name` فارغ، و`steps=[]`). لذلك حالة Runner الحالية غير مغلقة، ولا يُسجل E2E كناجح حتى يظهر تشغيل حديث بـRunner حقيقي.
 - Quality Gate ما زال غير أخضر بسبب ثغرات اعتماديات الإنتاج و119 ملفًا يحتاج Prettier؛ وKnip/jscpd جرى ربطهما لتشغيلهما قبل قرار الفشل النهائي.
 - pgTAP/RLS لم يبدأ لأن `SUPABASE_DB_URL` لقاعدة غير إنتاجية غير مضبوط. اختبار business-media-sync أضيف إلى Quality Gate.
-- آخر كود تم التحقق من نشره على Production أثناء مراجعة 2026-11-05 هو commit `e6da8c9e8f4a98b816180d9ad6b553f81be93099`، وحالته Vercel `READY` مع alias `eah-sq.vercel.app` ونجاح TypeScript/Compile. commit `f6b55b26164215855046daaef82c4319f373ce24` يحتوي تصحيح تعليق فقط وكان `BUILDING` عند آخر فحص؛ لا يُعد منشورًا حتى يصبح `READY` ويتطابق SHA.
+- آخر كود تم التحقق من نشره على Production أثناء مراجعة 2026-11-05 هو commit `e6da8c9e8f4a98b816180d9ad6b553f81be93099`، وحالته Vercel `READY` مع alias `eah-sq.vercel.app` ونجاح TypeScript/Compile. commit `f6b55b26164215855046daaef82c4319f373ce24` (تصحيح تعليق فقط) وصل لاحقًا إلى `READY` أيضًا، ونجح Compile وTypeScript وتوليد 54 صفحة؛ alias الإنتاج مطابق له.
 - استجابات HTML والبناء لا تثبت النقر والتفاعل الحقيقيين. يلزم تشغيل حسابات QA على قاعدة الاختبار ثم إجراء Playwright للمسارات المصادق عليها.
 
 ## مراجعة تنظيف QA — 2026-11-05
