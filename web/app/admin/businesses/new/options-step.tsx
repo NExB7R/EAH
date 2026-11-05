@@ -2,7 +2,7 @@
 
 import { hasUsableWhatsAppDestination } from '@/lib/data/contact-availability-utils'
 
-import { CheckCircleIcon, WhatsAppIcon, UserIcon } from '@/components/icons'
+import { CartIcon, CheckCircleIcon, WhatsAppIcon, UserIcon } from '@/components/icons'
 import type { WizardData, OwnerOption } from './new-business-wizard'
 import styles from './wizard.module.css'
 
@@ -98,6 +98,20 @@ export default function OptionsStep({ data, owners, update }: Props) {
               علشان تفعّل استقبال طلبات واتساب، أضف رقمًا صالحًا من نوع «واتساب» في خطوة الموقع والتواصل. وجود رقم للتواصل وحده لا يفعّل استقبال الطلبات تلقائيًا.
             </p>
           )}
+        </div>
+
+        <div className={styles.orderNotice} role="note">
+          <span className={styles.orderNoticeIcon}>
+            <CartIcon size={16} />
+          </span>
+          <div className={styles.orderNoticeBody}>
+            <strong className={styles.orderNoticeTitle}>طلبات أونلاين داخل EAH</strong>
+            <p className={styles.orderNoticeText}>
+              دي قناة مستقلة عن واتساب. بعد إنشاء النشاط، اربط بايعًا وتأكد من وجود رقم تواصل للنشاط،
+              ثم فعّل استقبال الطلبات من تبويب «إعدادات الطلبات». النشاط يفضل ظاهرًا للعامة حتى لو لم
+              يتم تفعيل الطلبات.
+            </p>
+          </div>
         </div>
 
         <p className={styles.gpsHint}>
