@@ -55,10 +55,12 @@ export default async function ExplorePage({
   const filters = parseFilters(params as Record<string, string | undefined>)
   const resultSort = resolveResultSort(Boolean(q), params.sort, filters)
 
-  let businesses = await getPublishedBusinesses()
+  // Discovery gets a larger, bounded pool; the home page keeps the 100-item default.
+  const allBusinesses = await getPublishedBusinesses(500)
+  let businesses = [...allBusinesses]
 
   if (q) {
-    businesses = smartSearch(businesses, q).map((r) => r.business)
+    businesses = smartSearch(businesses, q, 500).map((r) => r.business)
     businesses = applyFilters(businesses, { ...filters, sort: resultSort })
   } else {
     businesses = applyFilters(businesses, filters)
@@ -79,7 +81,6 @@ export default async function ExplorePage({
   const totalCount = businesses.length
 
   // Counts لكل فلتر (من المجموعة الكاملة قبل الفلترة — عشان يعرض "المتاح دلوقتي")
-  const allBusinesses = await getPublishedBusinesses()
   const activeAreas = await getActiveAreas()
   const counts = {
     types: {
