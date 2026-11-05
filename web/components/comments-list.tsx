@@ -30,6 +30,7 @@ export default function CommentsList({
   const [text, setText] = useState('')
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
   const [images, setImages] = useState<string[]>([])
   const [uploading, setUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
@@ -72,23 +73,36 @@ export default function CommentsList({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setNotice(null)
     if (!text.trim()) return
     startTransition(async () => {
       const fd = new FormData()
       fd.set('content', text)
       fd.set('image_urls', JSON.stringify(images))
-      const res = await offlineOrQueue(() => createComment(businessId, slug, fd), 'comment', {
-        businessId,
-        slug,
-        content: text,
-        parentId: null,
-      })
-      if (!res.ok) {
-        setError(res.error)
-        return
+
+      try {
+        const res = await offlineOrQueue(() => createComment(businessId, slug, fd), 'comment', {
+          businessId,
+          slug,
+          content: text,
+          parentId: null,
+          imageUrls: images,
+        })
+        if (!res.ok) {
+          setError(res.error)
+          return
+        }
+
+        setText('')
+        setImages([])
+        setNotice(
+          res.queued
+            ? 'التعليق وصوره محفوظين على جهازك وسيتم إرسالهم عند عودة الاتصال.'
+            : 'تم إرسال تعليقك بنجاح.',
+        )
+      } catch {
+        setError('تعذر إرسال التعليق أو حفظه على الجهاز. جرّب مرة أخرى.')
       }
-      setText('')
-      setImages([])
     })
   }
 
@@ -158,6 +172,11 @@ export default function CommentsList({
             </button>
           </div>
           {error && <div className={styles.error}>{error}</div>}
+          {notice && (
+            <p className={styles.notice} role="status">
+              {notice}
+            </p>
+          )}
         </form>
       ) : (
         <div className={styles.loginPrompt}>سجّل دخول عشان تعلّق</div>

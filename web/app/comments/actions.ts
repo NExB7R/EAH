@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { commentSchema } from '@/lib/validations/comment'
+import { commentImageUrlsSchema, commentSchema } from '@/lib/validations/comment'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { createNotification } from '@/lib/notifications/server'
 import { getRootCommentId, getThreadFollowers } from '@/lib/data/comments'
@@ -55,14 +55,16 @@ export async function createComment(
     if (!parent) return { ok: false, error: 'الرد متاح على تعليق معتمد في نفس النشاط فقط' }
   }
   const imageUrlsRaw = formData.get('image_urls')?.toString() ?? '[]'
-  let imageUrls: string[] = []
+  let imageUrls: string[]
   try {
-    const parsedJson = JSON.parse(imageUrlsRaw)
-    if (Array.isArray(parsedJson)) {
-      imageUrls = parsedJson.filter((u): u is string => typeof u === 'string').slice(0, 3)
+    const parsedJson: unknown = JSON.parse(imageUrlsRaw)
+    const parsedImages = commentImageUrlsSchema.safeParse(parsedJson)
+    if (!parsedImages.success) {
+      return { ok: false, error: 'صور التعليق غير صحيحة أو تجاوزت الحد المسموح.' }
     }
+    imageUrls = parsedImages.data
   } catch {
-    imageUrls = []
+    return { ok: false, error: 'بيانات صور التعليق غير صحيحة.' }
   }
 
   const parsed = commentSchema.safeParse({

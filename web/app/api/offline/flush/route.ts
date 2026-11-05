@@ -43,6 +43,10 @@ const schema = z.discriminatedUnion('type', [
         .regex(/^[a-zA-Z0-9\u0600-\u06FF-]+$/),
       content: z.string().min(1).max(500),
       parentId: z.string().uuid().nullable().optional(),
+      imageUrls: z
+        .array(z.string().url().refine((value) => value.startsWith('https://')))
+        .max(3)
+        .optional(),
     }),
   }),
   z.object({
@@ -123,8 +127,45 @@ export async function POST(req: NextRequest) {
       }
       if (existing) return NextResponse.json({ ok: true, skipped: 'already_reviewed' })
 
+      const { data: publishedBusiness, error: businessError } = await supabase
+        .from('businesses')
+        .select('id')
+        .eq('id', payload.businessId)
+        .eq('is_published', true)
+        .maybeSingle()
+      if (businessError) {
+        return NextResponse.json(
+          { error: 'تعذر التحقق من النشاط', code: 'business_lookup_failed' },
+          { status: 503 },
+        )
+      }
+      if (!publishedBusiness) {
+        return NextResponse.json(
+          { error: 'النشاط غير منشور', code: 'business_unavailable', discard: true },
+          { status: 409 },
+        )
+      }
+
+      const { data: ownedBusiness, error: ownerError } = await supabase
+        .from('businesses')
+        .select('id')
+        .eq('id', payload.businessId)
+        .eq('owner_profile_id', user.id)
+        .maybeSingle()
+      if (ownerError) {
+        return NextResponse.json(
+          { error: 'تعذر التحقق من ملكية النشاط', code: 'owner_lookup_failed' },
+          { status: 503 },
+        )
+      }
+      if (ownedBusiness) {
+        return NextResponse.json(
+          { error: 'لا يمكن تقييم نشاطك بنفسك', code: 'self_review', discard: true },
+          { status: 409 },
+        )
+      }
+
       // Offline review sync must enforce the same delivered-order requirement as online review.
-      const { data: deliveredOrder, error: orderLookupError } = await supabase
         .from('order_requests')
         .select('id')
         .eq('business_id', payload.businessId)
@@ -238,6 +279,7 @@ export async function POST(req: NextRequest) {
         user_id: user.id,
         parent_id: payload.parentId ?? null,
         content: payload.content,
+        image_urls: payload.imageUrls ?? [],
       })
       if (error) {
         console.error('[offline/flush] comment insert failed:', error.message)
