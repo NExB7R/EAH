@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import {
   HomeIcon,
   CompassIcon,
@@ -11,6 +11,7 @@ import {
   TrendingUpIcon,
   SparklesIcon,
   BellIcon,
+  BroadcastIcon,
   InfoIcon,
   InstallIcon,
   LogoutIcon,
@@ -114,8 +115,24 @@ const SELLER_ONBOARDING_ITEMS: MenuItem[] = [
 
 // ─── Admin ───
 const ADMIN_ITEMS: MenuItem[] = [
-  { href: '/admin', label: 'لوحة الأدمن', Icon: ShieldCheckIcon },
+  { href: '/admin', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
+  { href: '/admin/analytics', label: 'التحليلات', Icon: TrendingUpIcon },
+  { href: '/admin/health', label: 'صحة النظام', Icon: ShieldCheckIcon },
+  { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
+  { href: '/admin/businesses', label: 'كل الأنشطة', Icon: StoreIcon },
   { href: '/admin/businesses/new', label: 'إضافة نشاط', Icon: StoreIcon },
+  { href: '/admin/featured', label: 'الأنشطة المميزة', Icon: CrownGoldIcon },
+  { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
+  { href: '/admin/insights', label: 'تقارير الأنشطة', Icon: FileTextIcon },
+  { href: '/admin/users', label: 'المستخدمون', Icon: UserIcon },
+  { href: '/admin/subscriptions', label: 'الاشتراكات', Icon: CrownGoldIcon },
+  { href: '/admin/ads', label: 'الإعلانات', Icon: TagIcon },
+  { href: '/admin/moderation', label: 'التقييمات', Icon: ShieldCheckIcon },
+  { href: '/admin/moderation?tab=reports', label: 'البلاغات', Icon: FileTextIcon },
+  { href: '/admin/moderation?tab=fraud', label: 'كشف الاحتيال', Icon: ShieldIcon },
+  { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
+  { href: '/admin/notifications?tab=announcements', label: 'الإعلانات العامة', Icon: BroadcastIcon },
+  { href: '/admin/profile', label: 'بروفايلي', Icon: UserIcon },
 ]
 
 const BOTTOM_ITEMS: MenuItem[] = [
@@ -142,20 +159,40 @@ const ALL_MENU_ITEMS: MenuItem[] = [
   ...LEGAL_ITEMS,
 ]
 
-function getActiveMenuHref(pathname: string): string | null {
-  const candidates = [...new Set(ALL_MENU_ITEMS.map(({ href }) => href.split('?')[0] || href))]
-  const matching = candidates
-    .filter((path) =>
-      path === '/' ? pathname === '/' : pathname === path || pathname.startsWith(`${path}/`),
-    )
-    .sort((a, b) => b.length - a.length)
+function getActiveMenuHref(
+  pathname: string,
+  searchParams: { get: (key: string) => string | null; has: (key: string) => boolean },
+): string | null {
+  const matching = ALL_MENU_ITEMS.filter(({ href }) => {
+    const [baseHref = href, queryString] = href.split('?')
+    const pathMatches =
+      baseHref === '/' ? pathname === '/' : pathname === baseHref || pathname.startsWith(`${baseHref}/`)
+    if (!pathMatches) return false
 
-  return matching[0] ?? null
+    if (queryString) {
+      const expected = new URLSearchParams(queryString)
+      return [...expected.entries()].every(([key, value]) => searchParams.get(key) === value)
+    }
+
+    // The default moderation/notifications pages represent the unfiltered first tab.
+    if (baseHref === '/admin/moderation' || baseHref === '/admin/notifications') {
+      return !searchParams.has('tab')
+    }
+
+    return true
+  }).sort((a, b) => {
+    const aPath = a.href.split('?')[0] ?? a.href
+    const bPath = b.href.split('?')[0] ?? b.href
+    return bPath.length - aPath.length || Number(b.href.includes('?')) - Number(a.href.includes('?'))
+  })
+
+  return matching[0]?.href ?? null
 }
 
 export default function MenuDrawer({ open, onClose, session, contactLinks }: Props) {
   const pathname = usePathname()
-  const activeHref = getActiveMenuHref(pathname)
+  const searchParams = useSearchParams()
+  const activeHref = getActiveMenuHref(pathname, searchParams)
   const router = useRouter()
 
   const drawerRef = useRef<HTMLElement>(null)
@@ -306,7 +343,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                 <Link
                   href={href}
                   className={styles.item}
-                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  aria-current={activeHref === href ? 'page' : undefined}
                   onClick={onClose}
                 >
                   <span className={styles.itemIcon}>
@@ -332,7 +369,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                     <Link
                   href={href}
                   className={styles.item}
-                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  aria-current={activeHref === href ? 'page' : undefined}
                   onClick={onClose}
                 >
                       <span className={styles.itemIcon}>
@@ -360,7 +397,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                     <Link
                   href={href}
                   className={styles.item}
-                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  aria-current={activeHref === href ? 'page' : undefined}
                   onClick={onClose}
                 >
                       <span className={styles.itemIcon}>
@@ -388,7 +425,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                     <Link
                   href={href}
                   className={styles.item}
-                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  aria-current={activeHref === href ? 'page' : undefined}
                   onClick={onClose}
                 >
                       <span className={styles.itemIcon}>
@@ -416,7 +453,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                     <Link
                   href={href}
                   className={styles.item}
-                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  aria-current={activeHref === href ? 'page' : undefined}
                   onClick={onClose}
                 >
                       <span className={styles.itemIcon}>
@@ -444,7 +481,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                     <Link
                   href={href}
                   className={styles.item}
-                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  aria-current={activeHref === href ? 'page' : undefined}
                   onClick={onClose}
                 >
                       <span className={styles.itemIcon}>
@@ -466,7 +503,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                 <Link
                   href={href}
                   className={styles.item}
-                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  aria-current={activeHref === href ? 'page' : undefined}
                   onClick={onClose}
                 >
                   <span className={styles.itemIcon}>
@@ -497,7 +534,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
                 <Link
                   href={href}
                   className={styles.item}
-                  aria-current={activeHref === (href.split('?')[0] || href) ? 'page' : undefined}
+                  aria-current={activeHref === href ? 'page' : undefined}
                   onClick={onClose}
                 >
                   <span className={styles.itemIcon}>
