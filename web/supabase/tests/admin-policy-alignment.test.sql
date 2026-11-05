@@ -1,7 +1,7 @@
 -- EAH targeted regression checks for the 2026-10-29 admin/RLS migrations.
 -- Run only on a dedicated non-production database after applying the migration set.
 BEGIN;
-SELECT plan(53);
+SELECT plan(55);
 
 SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.businesses'::regclass), true, 'RLS remains enabled on businesses');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='businesses' AND policyname='businesses_admin_all'), 'admin activity policy uses shared admin authorization');
@@ -39,6 +39,8 @@ SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemanam
 
 SELECT is(has_function_privilege('anon','public.auth_is_admin()','EXECUTE'), true, 'anon can evaluate boolean helper used by PUBLIC RLS policies');
 SELECT is(has_function_privilege('anon','public.is_admin()','EXECUTE'), true, 'anon can evaluate boolean super-admin helper used by PUBLIC RLS policies');
+SELECT is(public.auth_is_admin(), false, 'admin RLS helper returns false without an authenticated UID');
+SELECT is(public.is_admin(), false, 'super-admin RLS helper returns false without an authenticated UID');
 SELECT is((
   has_function_privilege('anon','public.can_signup_with_phone(text)','EXECUTE')
   OR has_function_privilege('anon','public.check_business_name_unique(text, uuid)','EXECUTE')
