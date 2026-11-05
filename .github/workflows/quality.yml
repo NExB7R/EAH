@@ -168,6 +168,7 @@ jobs:
             docs/migrations/2026-10-30-comment-parent-integrity.sql \
             docs/migrations/2026-10-30-business-branch-primary-unique.sql \
             docs/migrations/2026-11-01-business-owner-single-activity.sql \
+            docs/migrations/2026-11-05-disable-ownerless-in-app-orders.sql \
             docs/migrations/2026-11-02-admin-owner-rpc-server-only.sql \
             docs/migrations/2026-10-29-business-media-image-sync.sql \
             docs/migrations/2026-11-03-function-search-path-hardening.sql \
