@@ -84,9 +84,20 @@ export default function RowCarousel({ children, accent, intervalMs = 10000 }: Pr
       className={`${styles.wrapper} ${hasOverflow ? styles.hasOverflow : ''}`}
       style={{ ['--carousel-accent' as string]: accent } as React.CSSProperties}
       onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      onMouseLeave={(event) => {
+        if (!event.currentTarget.contains(document.activeElement)) setPaused(false)
+      }}
+      onFocus={() => setPaused(true)}
+      onBlur={(event) => {
+        const nextTarget = event.relatedTarget as Node | null
+        if (!event.currentTarget.contains(nextTarget) && !event.currentTarget.matches(':hover')) {
+          setPaused(false)
+        }
+      }}
       onTouchStart={() => setPaused(true)}
-      onTouchEnd={() => setPaused(false)}
+      onTouchEnd={(event) => {
+        if (!event.currentTarget.contains(document.activeElement)) setPaused(false)
+      }}
     >
       {hasOverflow && (
         <button
