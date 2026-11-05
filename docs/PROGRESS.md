@@ -1079,3 +1079,12 @@
 - فحص قائمة مشاريع Supabase المتصلة أظهر مشروعًا واحدًا فقط: `EAH` بالمرجع `npmpiivmdksdirrumbmt`، وهو مشروع الإنتاج المحظور على E2E/seeding.
 - لم يتم إنشاء مشروع أو فرع Supabase جديد، ولم تُنفذ أي SQL أو عمليات كتابة؛ إنشاء بيئة جديدة قد يترتب عليه تكلفة ويحتاج قرار المالك.
 - لا يمكن بدء دورة E2E الكاملة بأمان قبل توفير مشروع اختبار منفصل وحساباته/بياناته التجريبية. لا ترسل مفاتيح service-role في المحادثة؛ يكفي مشاركة Project Ref بعد إعداد البيئة محليًا أو عبر أسرار CI المخصصة.
+
+
+## 2026-11-05 — منع E2E من استهداف Production
+
+- اكتشفت أن `.github/workflows/e2e.yml` القديم كان يطلق Playwright بعد نجاح deployment إلى `eah-sq.vercel.app` (Production)، وهو مخالف لشرط الاختبار على بيانات معزولة.
+- أعدت بناء الـworkflow ليعمل يدويًا فقط (`workflow_dispatch`) ويشغّل التطبيق محليًا على Runner عبر `127.0.0.1`. أزلت triggers الخاصة بـ`deployment_status` وPull Request، وأزلت Vercel OIDC/preview/prod target resolution.
+- أضيف تحقق قبل التثبيت من وجود Secrets/Variables المطلوبة، وأن Supabase URL يستخدم HTTPS وأن project ref يطابق ref المسموح ولا يساوي مشروع EAH الإنتاجي. لا يبدأ الاختبار دون slug منشور من بادئة QA واسم مسودة QA.
+- أضيفت تعليمات إعداد GitHub Actions Secrets/Variables إلى `docs/qa/README.md`.
+- **لم يُشغّل E2E**؛ لا يوجد مشروع Supabase غير إنتاجي ظاهر في الحساب حاليًا، كما أن GitHub Actions runner ما زال لا يبدأ. لا توجد عمليات كتابة أو seeding على قاعدة البيانات.
