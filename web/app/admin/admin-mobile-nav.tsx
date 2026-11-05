@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { MenuIcon, CloseIcon } from '@/components/icons'
 import AdminSidebar from '@/components/admin-sidebar'
+import { getFocusWrapTarget } from '@/lib/a11y/focus-trap'
 import styles from './admin-mobile-nav.module.css'
 
 type Props = {
@@ -52,23 +53,26 @@ export default function AdminMobileNav({ counts }: Props) {
       if (event.key !== 'Tab') return
 
       const focusableElements = getFocusableElements()
-      const firstElement = focusableElements[0]
-      const lastElement = focusableElements[focusableElements.length - 1]
-      const activeElement = document.activeElement
+      const activeElement =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null
       const focusIsOutsideDrawer = !drawer?.contains(activeElement)
 
-      if (!firstElement || !lastElement) {
+      if (focusableElements.length === 0) {
         event.preventDefault()
         drawer?.focus()
         return
       }
 
-      if (event.shiftKey && (activeElement === firstElement || focusIsOutsideDrawer)) {
+      const wrapTarget = getFocusWrapTarget(
+        focusableElements,
+        activeElement,
+        event.shiftKey,
+        focusIsOutsideDrawer,
+      )
+
+      if (wrapTarget) {
         event.preventDefault()
-        lastElement.focus()
-      } else if (!event.shiftKey && (activeElement === lastElement || focusIsOutsideDrawer)) {
-        event.preventDefault()
-        firstElement.focus()
+        wrapTarget.focus()
       }
     }
 
