@@ -36,13 +36,15 @@ GRANT EXECUTE ON FUNCTION public.heartbeat_page_session(uuid, text, uuid) TO ser
 REVOKE ALL PRIVILEGES ON FUNCTION public.validate_coupon(text, uuid) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.validate_coupon(text, uuid) TO service_role;
 
--- These authorization helpers are required by authenticated RLS policies and triggers,
--- but should not be callable by anonymous clients.
+-- These boolean-only helpers are also referenced by existing RLS policies
+-- whose role target is PUBLIC. An anonymous request must be able to evaluate the
+-- predicate (which returns false when auth.uid() is null), while table RLS still
+-- enforces row access. Keep the grant narrow to anon, not PUBLIC.
 REVOKE ALL PRIVILEGES ON FUNCTION public.auth_is_admin() FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.auth_is_admin() TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.auth_is_admin() TO anon, authenticated, service_role;
 
 REVOKE ALL PRIVILEGES ON FUNCTION public.is_admin() FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.is_admin() TO anon, authenticated, service_role;
 
 -- Trigger functions are invoked by PostgreSQL's trigger executor, not by PostgREST RPC.
 -- Remove default PUBLIC/anon/authenticated EXECUTE grants while preserving installed triggers.
