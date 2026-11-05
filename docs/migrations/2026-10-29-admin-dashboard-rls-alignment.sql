@@ -1,10 +1,10 @@
 -- EAH — Align session-backed admin features with requireAdmin().
 -- Date: 2026-10-29
 --
--- In this app requireAdmin() authorizes both admin and super_admin. Several existing
--- RLS policies used private.is_admin(), which authorizes only super_admin. The features
--- below use the user's session client (not the service-role client), so an ordinary admin
--- passed the app guard but could not perform the same work in PostgreSQL.
+-- In this app requireAdmin() authorizes only super_admin. The legacy app_role value
+-- 'admin' is retired and is not a separate platform administrator. Existing policies
+-- used private.is_admin(); this migration standardizes the same super_admin-only decision
+-- through public.auth_is_admin(). The helper must not broaden access to the retired role.
 --
 -- Test on a dedicated non-production Supabase project first. This file is additive to
 -- the other 2026-10-29 migrations and must not be applied to production without staging
@@ -39,9 +39,9 @@ TO authenticated
 USING ((SELECT public.auth_is_admin()))
 WITH CHECK ((SELECT public.auth_is_admin()));
 
--- Audit trails: normal admins can append entries and read admin audit records, but this
--- deliberately does NOT give them update/delete rights. The existing super_admin-only
--- ALL policy stays in place for high-privilege operations.
+-- Audit trails: the sole platform administrator (super_admin) can append and read
+-- admin audit records, but this deliberately does NOT give update/delete rights through
+-- these policies. The existing super_admin-only ALL policy remains in place.
 DROP POLICY IF EXISTS audit_logs_admin_insert ON public.audit_logs;
 CREATE POLICY audit_logs_admin_insert
 ON public.audit_logs
@@ -174,11 +174,11 @@ TO authenticated
 USING ((SELECT public.auth_is_admin()));
 
 -- Verification checklist on staging:
--- 1) admin (not super_admin): sees unpublished activities and can create/update/publish.
--- 2) admin: can view/approve/reject reviews, resolve reports, moderate ads, manage
+-- 1) super_admin: sees unpublished activities and can create/update/publish.
+-- 2) super_admin: can view/approve/reject reviews, resolve reports, moderate ads, manage
 --    subscriptions, and view analytics. Audit inserts/selects succeed; audit update/delete
---    remains forbidden.
--- 3) super_admin: retains all existing capabilities.
+--    remains forbidden through these policies.
+-- 3) legacy admin: does not receive platform-admin access.
 -- 4) seller: can only access own permitted activity data and owner ad records.
 -- 5) buyer: cannot access admin queues or mutate another user's records.
 -- 6) anon: can view active public ads only; cannot view pending/rejected ads or admin data.

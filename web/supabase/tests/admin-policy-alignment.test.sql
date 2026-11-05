@@ -1,7 +1,7 @@
 -- EAH targeted regression checks for the 2026-10-29 admin/RLS migrations.
 -- Run only on a dedicated non-production database after applying the migration set.
 BEGIN;
-SELECT plan(56);
+SELECT plan(57);
 
 SELECT is((SELECT relrowsecurity FROM pg_class WHERE oid='public.businesses'::regclass), true, 'RLS remains enabled on businesses');
 SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemaname='public' AND tablename='businesses' AND policyname='businesses_admin_all'), 'admin activity policy uses shared admin authorization');
@@ -39,6 +39,11 @@ SELECT ok((SELECT qual LIKE '%auth_is_admin()%' FROM pg_policies WHERE schemanam
 
 SELECT is(has_function_privilege('anon','public.auth_is_admin()','EXECUTE'), true, 'anon can evaluate boolean helper used by PUBLIC RLS policies');
 SELECT is(has_function_privilege('anon','public.is_admin()','EXECUTE'), true, 'anon can evaluate boolean super-admin helper used by PUBLIC RLS policies');
+SELECT ok(
+  pg_get_functiondef('public.auth_is_admin()'::regprocedure) LIKE '%role::text = ''super_admin''%'
+  AND pg_get_functiondef('public.auth_is_admin()'::regprocedure) NOT LIKE '%role::text = ''admin''%',
+  'the only platform administrator role is super_admin; legacy admin is not accepted'
+);
 SELECT is(public.auth_is_admin(), false, 'admin RLS helper returns false without an authenticated UID');
 SELECT is(public.is_admin(), false, 'super-admin RLS helper returns false without an authenticated UID');
 SELECT is((
