@@ -95,7 +95,7 @@ export { isBusinessOpen, isOpenNow }
 // ═══════════════════════════════════════════════════════════
 
 const BUSINESS_COLUMNS = `
-  id, slug, name, owner_profile_id, business_type, custom_business_type, business_type_status, subcategory, description, hook,
+  id, slug, name, is_published, owner_profile_id, business_type, custom_business_type, business_type_status, subcategory, description, hook,
   area, city, address_text, map_url, cover_image_url, logo_url,
   is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   velocity_score, engagement_score, diversity_score, successful_orders,
@@ -130,6 +130,8 @@ function normalizeBusiness(raw: Record<string, unknown>): Business {
   const loc = pickPrimaryLocation(raw.business_locations)
   const rest: Record<string, unknown> = { ...raw }
   delete rest.business_locations
+  // Publication state is checked before normalization and is not part of the public card payload.
+  delete rest.is_published
   // Owner IDs are only used on the server to derive order availability; never serialize them.
   delete rest.owner_profile_id
   const acceptsOrders = canAcceptInAppOrders(raw.accepts_orders, raw.owner_profile_id)
