@@ -215,6 +215,9 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
   const isLoggedIn = !!session
   const isAdmin = session?.role === 'super_admin'
   const isSeller = session?.role === 'merchant'
+  const hasSellerWorkspace = isSeller && session?.hasBusiness === true
+  const canStartSellerOnboarding =
+    isLoggedIn && !isAdmin && !hasSellerWorkspace && !session?.hasBusiness
 
   const handleInstall = () => {
     window.dispatchEvent(new CustomEvent('eah:show-install'))
@@ -334,7 +337,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
           )}
 
           {/* مساحة عمل التاجر المرتبط بنشاط */}
-          {isSeller && (
+          {hasSellerWorkspace && (
             <>
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
@@ -362,7 +365,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
           )}
 
           {/* تسجيل نشاط للمشتري المسجل الذي لا يملك نشاطًا */}
-          {isLoggedIn && !isSeller && !isAdmin && (
+          {canStartSellerOnboarding && (
             <>
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
