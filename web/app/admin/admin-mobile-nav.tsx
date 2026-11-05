@@ -54,6 +54,8 @@ export default function AdminMobileNav({ counts }: Props) {
       const focusableElements = getFocusableElements()
       const firstElement = focusableElements[0]
       const lastElement = focusableElements[focusableElements.length - 1]
+      const activeElement = document.activeElement
+      const focusIsOutsideDrawer = !drawer?.contains(activeElement)
 
       if (!firstElement || !lastElement) {
         event.preventDefault()
@@ -61,10 +63,10 @@ export default function AdminMobileNav({ counts }: Props) {
         return
       }
 
-      if (event.shiftKey && (document.activeElement === firstElement || !drawer?.contains(document.activeElement))) {
+      if (event.shiftKey && (activeElement === firstElement || focusIsOutsideDrawer)) {
         event.preventDefault()
         lastElement.focus()
-      } else if (!event.shiftKey && (document.activeElement === lastElement || !drawer?.contains(document.activeElement))) {
+      } else if (!event.shiftKey && (activeElement === lastElement || focusIsOutsideDrawer)) {
         event.preventDefault()
         firstElement.focus()
       }
@@ -87,6 +89,7 @@ export default function AdminMobileNav({ counts }: Props) {
         className={styles.toggle}
         onClick={() => setOpen(true)}
         aria-label="فتح قائمة الإدارة"
+        aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls="admin-mobile-nav-drawer"
       >
