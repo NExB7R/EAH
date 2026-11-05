@@ -135,5 +135,12 @@ describe('refreshOrderItems', () => {
 
     expect(refreshOrderItems(oldOrder, latestItems)).toBeNull()
   })
+
+  it('rejects an order with duplicate IDs so no eligible activity is lost', () => {
+    const duplicateOrder = [{ id: 'business-a' }, { id: 'business-a' }]
+    const latestItems = [{ id: 'business-a' }, { id: 'business-b' }]
+
+    expect(refreshOrderItems(duplicateOrder, latestItems)).toBeNull()
+  })
 })
 

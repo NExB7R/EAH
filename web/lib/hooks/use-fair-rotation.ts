@@ -58,6 +58,9 @@ export function refreshOrderItems<T extends { id: string }>(
 ): T[] | null {
   if (order.length !== items.length) return null
 
+  const orderedIds = new Set(order.map((item) => item.id))
+  if (orderedIds.size !== order.length) return null
+
   const latestById = new Map(items.map((item) => [item.id, item] as const))
   if (latestById.size !== items.length) return null
 
