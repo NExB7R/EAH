@@ -10,8 +10,30 @@ type ContactMethodRecord = {
   is_primary: boolean
 }
 
+/** Accept only absolute HTTP(S) URLs for links rendered in public pages. */
+export function normalizePublicContactUrl(value: string | null | undefined): string | null {
+  const candidate = value?.trim()
+  if (!candidate) return null
+
+  try {
+    const url = new URL(candidate)
+    if (
+      (url.protocol !== 'https:' && url.protocol !== 'http:') ||
+      !url.hostname ||
+      url.username ||
+      url.password
+    ) {
+      return null
+    }
+
+    return url.toString()
+  } catch {
+    return null
+  }
+}
+
 /**
- * Only social/profile URLs are safe in the public business-detail payload.
+ * Only validated social/profile URLs are safe in the public business-detail payload.
  * Phone-like methods must go through the authenticated reveal_contact flow.
  */
 export function filterPublicContactMethods(
@@ -26,9 +48,12 @@ export function filterPublicContactMethods(
       return []
     }
 
+    const value = normalizePublicContactUrl(contact.value)
+    if (!value) return []
+
     return [{
       method_type: contact.method_type,
-      value: contact.value,
+      value,
       is_primary: contact.is_primary,
     }]
   })
