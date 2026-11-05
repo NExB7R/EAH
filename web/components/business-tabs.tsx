@@ -31,6 +31,8 @@ type Props = {
   detail: BusinessDetail
   reviews: Review[]
   reviewStats: ReviewStats
+  initialTab: 'info' | 'reviews'
+  canReview: boolean
   isLoggedIn: boolean
   hasReviewed: boolean
   isOwner: boolean
@@ -79,6 +81,8 @@ export default function BusinessTabs({
   detail,
   reviews,
   reviewStats,
+  initialTab,
+  canReview,
   isLoggedIn,
   hasReviewed,
   isOwner,
@@ -88,7 +92,7 @@ export default function BusinessTabs({
   followingRootIds = [],
   offers = [],
 }: Props) {
-  const [tab, setTab] = useState<Tab>('info')
+  const [tab, setTab] = useState<Tab>(initialTab)
   const [lightbox, setLightbox] = useState<string | null>(null)
 
   const { business, contacts, branches, menu, gallery } = detail
@@ -441,6 +445,7 @@ export default function BusinessTabs({
             reviews={reviews}
             stats={reviewStats}
             isLoggedIn={isLoggedIn}
+            canReview={canReview}
             hasReviewed={hasReviewed}
             isOwner={isOwner}
           />

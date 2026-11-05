@@ -18,6 +18,7 @@ type Props = {
   reviews: Review[]
   stats: ReviewStats
   isLoggedIn: boolean
+  canReview: boolean
   hasReviewed: boolean
   isOwner: boolean
 }
@@ -30,6 +31,7 @@ export default function ReviewsList({
   reviews,
   stats,
   isLoggedIn,
+  canReview,
   hasReviewed,
   isOwner,
 }: Props) {
@@ -44,17 +46,22 @@ export default function ReviewsList({
     setReplyError(null)
     const fd = new FormData()
     fd.set('reply', replyText)
-    const res = await replyToReview(reviewId, slug, fd)
-    setReplyLoading(false)
-    if (!res.ok) {
-      setReplyError(res.error)
-      return
+    try {
+      const res = await replyToReview(reviewId, slug, fd)
+      if (!res.ok) {
+        setReplyError(res.error)
+        return
+      }
+      setReplyTo(null)
+      setReplyText('')
+    } catch {
+      setReplyError('تعذر إرسال الرد الآن. جرّب مرة أخرى.')
+    } finally {
+      setReplyLoading(false)
     }
-    setReplyTo(null)
-    setReplyText('')
   }
 
-  const canShowForm = isLoggedIn && !hasReviewed && !isOwner
+  const canShowForm = isLoggedIn && canReview && !hasReviewed && !isOwner
 
   return (
     <div className={styles.wrap}>
@@ -98,6 +105,12 @@ export default function ReviewsList({
           <StarIcon size={16} />
           اكتب تقييمك
         </button>
+      )}
+
+      {isLoggedIn && !canReview && !hasReviewed && !isOwner && (
+        <div className={styles.infoBox}>
+          <span>التقييم متاح بعد اكتمال طلب مسجل على EAH.</span>
+        </div>
       )}
 
       {hasReviewed && (
