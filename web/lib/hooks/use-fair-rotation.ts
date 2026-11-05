@@ -52,6 +52,25 @@ function pickPageSize(w: number, s: PageSizes, bp: Breakpoints): number {
   return s.mobile
 }
 
+export function refreshOrderItems<T extends { id: string }>(
+  order: readonly T[],
+  items: readonly T[],
+): T[] | null {
+  if (order.length !== items.length) return null
+
+  const latestById = new Map(items.map((item) => [item.id, item] as const))
+  if (latestById.size !== items.length) return null
+
+  const refreshed: T[] = []
+  for (const item of order) {
+    const latest = latestById.get(item.id)
+    if (!latest) return null
+    refreshed.push(latest)
+  }
+
+  return refreshed
+}
+
 export function sliceVisible<T>(order: T[], start: number, size: number): T[] {
   if (order.length === 0 || size <= 0) return []
   const safeStart = Math.min(Math.max(0, start), order.length)
@@ -105,6 +124,14 @@ export function useFairRotation<T extends { id: string }>({
   useEffect(() => {
     itemsRef.current = items
     pageSizeRef.current = pageSize
+
+    // Keep the randomized ID order, but refresh each item from the latest server data.
+    // A changed set of IDs is handled by the session restoration/reinitialization effect below.
+    const refreshedOrder = refreshOrderItems(orderRef.current, items)
+    if (refreshedOrder) {
+      orderRef.current = refreshedOrder
+      setVisible(sliceVisible(refreshedOrder, cursorRef.current, pageSize))
+    }
   }, [items, pageSize])
 
   const persist = useCallback(() => {

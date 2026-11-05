@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { nextPageStart, previousPageStart, sliceVisible } from './use-fair-rotation'
+import { nextPageStart, previousPageStart, refreshOrderItems, sliceVisible } from './use-fair-rotation'
 
 function collectOneRotationCycle<T>(ids: T[], pageSize: number): T[][] {
   const pages = [sliceVisible(ids, 0, pageSize)]
@@ -105,3 +105,30 @@ describe('fair rotation cycle coverage', () => {
     expect(nextDesktopCursor).toBe(8)
   })
 })
+
+
+describe('refreshOrderItems', () => {
+  it('keeps the randomized order while replacing stale records with current data', () => {
+    const oldOrder = [
+      { id: 'business-b', name: 'Old B' },
+      { id: 'business-a', name: 'Old A' },
+    ]
+    const latestItems = [
+      { id: 'business-a', name: 'Updated A' },
+      { id: 'business-b', name: 'Updated B' },
+    ]
+
+    expect(refreshOrderItems(oldOrder, latestItems)).toEqual([
+      latestItems[1],
+      latestItems[0],
+    ])
+  })
+
+  it('returns null when the eligible item set changes', () => {
+    const oldOrder = [{ id: 'business-a' }, { id: 'business-b' }]
+    const latestItems = [{ id: 'business-a' }, { id: 'business-c' }]
+
+    expect(refreshOrderItems(oldOrder, latestItems)).toBeNull()
+  })
+})
+
