@@ -240,3 +240,10 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 | التصنيف | الملاحظة | الأثر | الإجراء |
 |---|---|---|---|
 | 🔒 تسريب بيانات اتصال | `getBusinessDetail` كان يجلب أرقام phone/whatsapp والحقول الهاتفية الموسعة عبر service role ثم يرسلها في `detail.contacts` إلى BusinessTabs؛ حماية RLS المباشرة لا تمنع تسريبًا من server component. | الأرقام تظهر في React/Flight payload وHTML ويمكن استخراجها دون تسجيل دخول أو استدعاء `reveal_contact`. | تقييد الاستعلام العام إلى social/website، whitelist مستقلة واختبار regression، إزالة روابط `tel:` و`wa.me` المباشرة من BusinessTabs، والإبقاء على contactOptions الآمنة ومسار track-contact المحمي. نشر Production على `e12f18c` أصبح READY بعد نجاح Compile وTypeScript و54 صفحة؛ اختبار E2E وفحص payload ما زالا مطلوبين. |
+
+
+## تحقق نشر 2026-11-05 — إصلاحات FixedCta وخصوصية التواصل
+
+- Deployment `dpl_HikD8Etrr8HjpbRnEwMjdonfzrZz` وصل `READY` على Production commit `e12f18c74185570db041d074474644416fefe0a9`، وظهر نجاح Compile وTypeScript وتوليد 54 صفحة.
+- يتضمن هذا SHA توحيد شرط FixedCta، whitelist بيانات التواصل العامة، إزالة روابط الاتصال المباشرة من BusinessTabs، واختبارات Vitest الجديدة ضمن TypeScript compilation.
+- لم تُشغّل اختبارات Vitest أو Playwright في GitHub Actions؛ أحدث بيانات jobs التي فُحصت أظهرت `steps=[]`، لذلك تظل اختبارات التفاعل والأمان معلقة.
