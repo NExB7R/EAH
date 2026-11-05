@@ -135,13 +135,18 @@ SELECT is(has_table_privilege('authenticated','public.contact_reveals','SELECT')
 
 SELECT ok(
   pg_get_functiondef('public.request_promo_post(uuid, text, text)'::regprocedure) LIKE '%owner_profile_id%'
-  AND pg_get_functiondef('public.request_promo_post(uuid, text, text)'::regprocedure) LIKE '%not_owner%',
-  'promo request RPC enforces linked business ownership'
+  AND pg_get_functiondef('public.request_promo_post(uuid, text, text)'::regprocedure) LIKE '%not_owner%'
+  AND pg_get_functiondef('public.request_promo_post(uuid, text, text)'::regprocedure) LIKE '%FOR UPDATE%'
+  AND pg_get_functiondef('public.request_promo_post(uuid, text, text)'::regprocedure) LIKE '%is_anonymous%'
+  AND pg_get_functiondef('public.request_promo_post(uuid, text, text)'::regprocedure) LIKE '%invalid_url%',
+  'promo request validates registered owner, locks the activity, and validates HTTPS URLs'
 );
 SELECT ok(
   pg_get_functiondef('public.redeem_reward(uuid)'::regprocedure) LIKE '%reward_catalog%FOR UPDATE%'
-  AND pg_get_functiondef('public.redeem_reward(uuid)'::regprocedure) LIKE '%profiles%FOR UPDATE%',
-  'reward redemption locks reward stock and user balance rows'
+  AND pg_get_functiondef('public.redeem_reward(uuid)'::regprocedure) LIKE '%profiles%FOR UPDATE%'
+  AND pg_get_functiondef('public.redeem_reward(uuid)'::regprocedure) LIKE '%is_anonymous%'
+  AND pg_get_functiondef('public.redeem_reward(uuid)'::regprocedure) LIKE '%registered_account_required%',
+  'reward redemption rejects anonymous accounts and locks stock and balance rows'
 );
 SELECT is(has_function_privilege('anon','public.request_promo_post(uuid, text, text)','EXECUTE'), false, 'anonymous users cannot request promo posts');
 
