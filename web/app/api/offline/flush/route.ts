@@ -166,6 +166,7 @@ export async function POST(req: NextRequest) {
       }
 
       // Offline review sync must enforce the same delivered-order requirement as online review.
+      const { data: deliveredOrder, error: orderLookupError } = await supabase
         .from('order_requests')
         .select('id')
         .eq('business_id', payload.businessId)
