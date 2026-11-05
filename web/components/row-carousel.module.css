@@ -33,8 +33,8 @@
 .arrow {
   position: absolute;
   top: 50%;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -101,8 +101,8 @@
     gap: 10px;
   }
   .arrow {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
   }
   .arrow svg {
     width: 18px;
@@ -127,24 +127,24 @@
 /* Touch layouts: keep carousel controls below cards instead of covering content. */
 @media (max-width: 640px) {
   .hasOverflow {
-    padding-bottom: 46px;
+    padding-bottom: 54px;
   }
 
   .arrow {
     top: auto;
     bottom: 0;
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
     opacity: 1;
     transform: none;
   }
 
   .arrowPrev {
-    inset-inline-start: calc(50% - 42px);
+    inset-inline-start: calc(50% - 48px);
   }
 
   .arrowNext {
-    inset-inline-end: calc(50% - 42px);
+    inset-inline-end: calc(50% - 48px);
   }
 
   .arrow:hover {

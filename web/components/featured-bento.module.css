@@ -55,13 +55,16 @@
 
 .viewAll {
   display: inline-flex;
+  min-height: 44px;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 800;
   color: var(--gold-light);
   text-decoration: none;
+  box-sizing: border-box;
   padding: 7px 13px;
   border-radius: var(--radius-full);
   background: rgba(232, 199, 154, 0.08);
@@ -192,8 +195,8 @@
   .arrow {
     top: auto;
     bottom: 0;
-    width: 34px;
-    height: 34px;
+    width: 44px;
+    height: 44px;
     opacity: 1;
     transform: none;
   }
@@ -212,15 +215,15 @@
   }
 
   .carouselScrollable {
-    padding-bottom: 42px;
+    padding-bottom: 52px;
   }
 
   .arrowPrev {
-    inset-inline-start: calc(50% - 42px);
+    inset-inline-start: calc(50% - 48px);
   }
 
   .arrowNext {
-    inset-inline-end: calc(50% - 42px);
+    inset-inline-end: calc(50% - 48px);
   }
 }
 
