@@ -1,5 +1,7 @@
--- EAH — Preserve RLS helper execution for public-role policies.
+-- EAH — Compatibility repair: preserve RLS helper execution for public-role policies.
 -- Date: 2026-10-29
+-- The same narrow grants are included in the consolidated prelaunch access-control script.
+-- Keep this file as an idempotent repair for databases that applied an earlier revision.
 --
 -- Some existing policies whose role target is PUBLIC call auth_is_admin() or is_admin()
 -- as part of their row predicate (customer_order_stats, order_reactions,
