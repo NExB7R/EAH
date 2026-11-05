@@ -1657,3 +1657,11 @@ Admin list:
 - تم فصل رسالة «محفوظ على الجهاز» عن «تم الإرسال»، وإضافة catch/finally في نماذج التقييم والرد والتعليق.
 - اختبارات GitHub Actions ما زالت محجوبة عن التنفيذ بسبب فشل تخصيص Runner؛ نجاح Vercel Build لا يعني أن Vitest نُفّذ.
 
+
+
+## 2026-11-05 — تنظيف comments-list styles
+
+- `comments-list.module.css` كان يحتوي كتلتين متطابقتين لقواعد المرفقات ومعاينة الصور؛ تم الإبقاء على واحدة.
+- أزيل `grid-template-columns` غير المستخدم داخل قائمة flex.
+- قواعد reduced motion وتعديلات mobile hardening الفعالة بقيت كما هي.
+
