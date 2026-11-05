@@ -256,7 +256,7 @@ export default function BusinessEditForm({ initial }: Props) {
         </button>
 
         <p className={styles.gpsHint}>
-          الإحداثيات بتساعد العملاء يلاقوك على الخريطة وفي قسم &quot;قريب مني&quot;.
+          الإحداثيات بتساعد المشترين يلاقوك على الخريطة وفي قسم &quot;قريب مني&quot;.
         </p>
       </fieldset>
 
