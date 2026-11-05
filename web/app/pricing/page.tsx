@@ -19,7 +19,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'الباقات',
-  description: 'باقات للتاجر — ابدأ مجاناً 30 يوم',
+  description: 'باقات للبايع — ابدأ مجاناً 30 يوم',
 }
 
 export default async function PricingPage() {
