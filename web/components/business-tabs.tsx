@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type KeyboardEvent } from 'react'
 import WmImage from './wm-image'
 import BranchList from './branch-list'
 import {
@@ -86,6 +86,36 @@ export default function BusinessTabs({
   const { business, contacts, branches, menu, gallery } = detail
   const featured = business.is_featured
 
+  const activeTabId =
+    tab === 'reviews'
+      ? 'reviews-section'
+      : tab === 'comments'
+        ? 'comments-section'
+        : 'business-tab-' + tab
+
+  const handleTabKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const isRtl = getComputedStyle(event.currentTarget).direction === 'rtl'
+    const tabs = Array.from(
+      event.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+    )
+    if (tabs.length === 0) return
+
+    const currentIndex = tabs.indexOf(document.activeElement as HTMLButtonElement)
+    let nextIndex = currentIndex
+
+    if (event.key === 'Home') nextIndex = 0
+    else if (event.key === 'End') nextIndex = tabs.length - 1
+    else if (event.key === 'ArrowRight') nextIndex += isRtl ? -1 : 1
+    else if (event.key === 'ArrowLeft') nextIndex += isRtl ? 1 : -1
+    else return
+
+    event.preventDefault()
+    nextIndex = (nextIndex + tabs.length) % tabs.length
+    const nextTab = tabs[nextIndex]
+    nextTab?.focus()
+    nextTab?.click()
+  }
+
   const facebook = contacts.find((c) => c.method_type === 'facebook')
   const instagram = contacts.find((c) => c.method_type === 'instagram')
   const website = contacts.find((c) => c.method_type === 'website')
@@ -93,9 +123,12 @@ export default function BusinessTabs({
   return (
     <div className={`${styles.wrap} ${featured ? styles.wrapFeatured : ''}`}>
       {/* ─── Tabs Bar ─── */}
-      <div className={styles.tabs} role="tablist">
+      <div className={styles.tabs} role="tablist" aria-label="محتوى النشاط" onKeyDown={handleTabKeyDown}>
         <button
           role="tab"
+          id="business-tab-info"
+          aria-controls="business-tabpanel"
+          tabIndex={tab === 'info' ? 0 : -1}
           aria-selected={tab === 'info'}
           className={`${styles.tab} ${tab === 'info' ? styles.active : ''}`}
           onClick={() => setTab('info')}
@@ -105,6 +138,9 @@ export default function BusinessTabs({
         </button>
         <button
           role="tab"
+          id="business-tab-offers"
+          aria-controls="business-tabpanel"
+          tabIndex={tab === 'offers' ? 0 : -1}
           aria-selected={tab === 'offers'}
           className={`${styles.tab} ${tab === 'offers' ? styles.active : ''}`}
           onClick={() => setTab('offers')}
@@ -115,6 +151,9 @@ export default function BusinessTabs({
 
         <button
           role="tab"
+          id="business-tab-menu"
+          aria-controls="business-tabpanel"
+          tabIndex={tab === 'menu' ? 0 : -1}
           aria-selected={tab === 'menu'}
           className={`${styles.tab} ${tab === 'menu' ? styles.active : ''}`}
           onClick={() => setTab('menu')}
@@ -126,6 +165,8 @@ export default function BusinessTabs({
         {reviewsEnabled && (
           <button
             role="tab"
+            aria-controls="business-tabpanel"
+            tabIndex={tab === 'reviews' ? 0 : -1}
             aria-selected={tab === 'reviews'}
             className={`${styles.tab} ${tab === 'reviews' ? styles.active : ''}`}
             onClick={() => setTab('reviews')}
@@ -138,6 +179,8 @@ export default function BusinessTabs({
         )}
         <button
           role="tab"
+          aria-controls="business-tabpanel"
+          tabIndex={tab === 'comments' ? 0 : -1}
           aria-selected={tab === 'comments'}
           className={`${styles.tab} ${tab === 'comments' ? styles.active : ''}`}
           onClick={() => setTab('comments')}
@@ -151,7 +194,7 @@ export default function BusinessTabs({
 
       {/* ─── Info Tab ─── */}
       {tab === 'info' && (
-        <div className={styles.content}>
+        <div className={styles.content} role="tabpanel" id="business-tabpanel" aria-labelledby={activeTabId} tabIndex={0}>
           {/* Public social links only; phone and WhatsApp use the protected reveal flow. */}
           {(facebook || instagram || website) && (
             <div className={styles.block}>
@@ -329,7 +372,7 @@ export default function BusinessTabs({
 
       {/* ─── Offers Tab ─── */}
       {tab === 'offers' && (
-        <div className={styles.content}>
+        <div className={styles.content} role="tabpanel" id="business-tabpanel" aria-labelledby={activeTabId} tabIndex={0}>
           {offers.length === 0 ? (
             <div className={styles.empty}>
               <StoreIcon size={40} />
@@ -384,7 +427,7 @@ export default function BusinessTabs({
 
       {/* ─── Menu Tab ─── */}
       {tab === 'menu' && (
-        <div className={styles.content}>
+        <div className={styles.content} role="tabpanel" id="business-tabpanel" aria-labelledby={activeTabId} tabIndex={0}>
           {menu.length === 0 ? (
             <div className={styles.empty}>
               <ImageIcon size={40} />
@@ -415,7 +458,7 @@ export default function BusinessTabs({
 
       {/* ─── Reviews Tab ─── */}
       {reviewsEnabled && tab === 'reviews' && (
-        <div className={styles.content}>
+        <div className={styles.content} role="tabpanel" id="business-tabpanel" aria-labelledby={activeTabId} tabIndex={0}>
           <ReviewsList
             businessId={business.id}
             businessType={business.business_type}
@@ -433,7 +476,7 @@ export default function BusinessTabs({
 
       {/* ─── Comments Tab ─── */}
       {tab === 'comments' && (
-        <div className={styles.content}>
+        <div className={styles.content} role="tabpanel" id="business-tabpanel" aria-labelledby={activeTabId} tabIndex={0}>
           <CommentsList
             businessId={business.id}
             slug={business.slug}
