@@ -182,8 +182,24 @@ async function normalizeBusinesses(
 // 1. كل الأنشطة المنشورة (للـ Home)
 // ═══════════════════════════════════════════════════════════
 
+const MAX_PUBLISHED_BUSINESSES = 500
+const DEFAULT_PUBLISHED_BUSINESSES = 100
+
+export function getPublishedBusinessLimit(requested = DEFAULT_PUBLISHED_BUSINESSES): number {
+  if (!Number.isFinite(requested)) return DEFAULT_PUBLISHED_BUSINESSES
+  return Math.min(MAX_PUBLISHED_BUSINESSES, Math.max(1, Math.floor(requested)))
+}
+
+/** Defense in depth: drafts must never enter any public discovery/search pool. */
+export function onlyPublishedBusinessRows<T extends { is_published?: unknown }>(
+  rows: T[] | null,
+): T[] {
+  return (rows ?? []).filter((row) => row.is_published === true)
+}
+
 export const getPublishedBusinesses = unstable_cache(
-  async (): Promise<Business[]> => {
+  async (requestedLimit = DEFAULT_PUBLISHED_BUSINESSES): Promise<Business[]> => {
+    const limit = getPublishedBusinessLimit(requestedLimit)
     const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('businesses')
@@ -193,18 +209,20 @@ export const getPublishedBusinesses = unstable_cache(
       .order('rating_avg', { ascending: false })
       .order('successful_orders', { ascending: false })
       .order('is_verified', { ascending: false })
-      .limit(100)
+      .order('id', { ascending: true })
+      .limit(limit)
 
     if (error) {
       console.error('[data] getPublishedBusinesses error:', error.message)
       return []
     }
-    const normalized = await normalizeBusinesses(data, supabase)
+    const publishedRows = onlyPublishedBusinessRows(data)
+    const normalized = await normalizeBusinesses(publishedRows, supabase)
     return normalized.sort(
       (a, b) => getBusinessReputationScore(b) - getBusinessReputationScore(a),
     )
   },
-  ['businesses-published-v3'],
+  ['businesses-published-v4'],
   { revalidate: 60, tags: ['businesses'] },
 )
 
