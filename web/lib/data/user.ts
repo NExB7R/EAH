@@ -17,6 +17,7 @@ export type UserSession = {
   phone: string | null
   avatarUrl: string | null
   role: AppRole
+  hasBusiness: boolean
   notifCount: number
   phoneVerified: boolean
   isVerified: boolean
@@ -55,6 +56,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     { count },
     { data: activeAds },
     { data: activeSubscriptions },
+    { data: ownedBusiness },
   ] = await Promise.all([
     supabase
       .from('profiles')
@@ -83,6 +85,12 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
       .eq('is_trial', false)
       .eq('business.owner_profile_id', user.id)
       .limit(20),
+    supabase
+      .from('businesses')
+      .select('id')
+      .eq('owner_profile_id', user.id)
+      .limit(1)
+      .maybeSingle(),
   ])
 
   const isWithinActiveDates = (startsAt: string | null, endsAt: string | null) => {
@@ -130,6 +138,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     displayName: profile?.display_name ?? 'مستخدم EAH',
     avatarUrl: profile?.avatar_url ?? null,
     role: roleRow?.role === 'admin' ? 'customer' : ((roleRow?.role as AppRole) ?? 'customer'),
+    hasBusiness: !!ownedBusiness,
     notifCount: count ?? 0,
     phone: (profile?.phone as string | null) ?? null,
     phoneVerified: !!profile?.phone_verified_at,
