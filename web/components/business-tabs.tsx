@@ -148,7 +148,12 @@ export default function BusinessTabs({
   return (
     <div className={`${styles.wrap} ${featured ? styles.wrapFeatured : ''}`}>
       {/* ─── Tabs Bar ─── */}
-      <div className={styles.tabs} role="tablist" aria-label="محتوى النشاط" onKeyDown={handleTabKeyDown}>
+      <div
+        className={styles.tabs}
+        role="tablist"
+        aria-label="محتوى النشاط"
+        onKeyDown={handleTabKeyDown}
+      >
         <button
           role="tab"
           id="business-tab-info"
@@ -219,7 +224,13 @@ export default function BusinessTabs({
 
       {/* ─── Info Tab ─── */}
       {tab === 'info' && (
-        <div className={styles.content} role="tabpanel" id="business-tabpanel" aria-labelledby={activeTabId} tabIndex={0}>
+        <div
+          className={styles.content}
+          role="tabpanel"
+          id="business-tabpanel"
+          aria-labelledby={activeTabId}
+          tabIndex={0}
+        >
           {/* Public social links only; phone and WhatsApp use the protected reveal flow. */}
           {(facebook || instagram || website) && (
             <div className={styles.block}>
@@ -397,7 +408,13 @@ export default function BusinessTabs({
 
       {/* ─── Offers Tab ─── */}
       {tab === 'offers' && (
-        <div className={styles.content} role="tabpanel" id="business-tabpanel" aria-labelledby={activeTabId} tabIndex={0}>
+        <div
+          className={styles.content}
+          role="tabpanel"
+          id="business-tabpanel"
+          aria-labelledby={activeTabId}
+          tabIndex={0}
+        >
           {offers.length === 0 ? (
             <div className={styles.empty}>
               <StoreIcon size={40} />
@@ -452,7 +469,13 @@ export default function BusinessTabs({
 
       {/* ─── Menu Tab ─── */}
       {tab === 'menu' && (
-        <div className={styles.content} role="tabpanel" id="business-tabpanel" aria-labelledby={activeTabId} tabIndex={0}>
+        <div
+          className={styles.content}
+          role="tabpanel"
+          id="business-tabpanel"
+          aria-labelledby={activeTabId}
+          tabIndex={0}
+        >
           {menu.length === 0 ? (
             <div className={styles.empty}>
               <ImageIcon size={40} />
@@ -483,7 +506,13 @@ export default function BusinessTabs({
 
       {/* ─── Reviews Tab ─── */}
       {reviewsEnabled && tab === 'reviews' && (
-        <div className={styles.content} role="tabpanel" id="business-tabpanel" aria-labelledby={activeTabId} tabIndex={0}>
+        <div
+          className={styles.content}
+          role="tabpanel"
+          id="business-tabpanel"
+          aria-labelledby={activeTabId}
+          tabIndex={0}
+        >
           <ReviewsList
             businessId={business.id}
             businessType={business.business_type}
@@ -501,7 +530,13 @@ export default function BusinessTabs({
 
       {/* ─── Comments Tab ─── */}
       {tab === 'comments' && (
-        <div className={styles.content} role="tabpanel" id="business-tabpanel" aria-labelledby={activeTabId} tabIndex={0}>
+        <div
+          className={styles.content}
+          role="tabpanel"
+          id="business-tabpanel"
+          aria-labelledby={activeTabId}
+          tabIndex={0}
+        >
           <CommentsList
             businessId={business.id}
             slug={business.slug}
