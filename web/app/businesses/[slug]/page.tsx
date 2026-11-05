@@ -14,6 +14,7 @@ import {
 } from '@/lib/data/business-detail'
 import { getBusinessTypeLabel } from '@/lib/business-type-label'
 import { seededShuffle } from '@/lib/utils/seeded-shuffle'
+import { shouldRenderFixedBusinessCta } from '@/lib/utils/business-cta'
 import BusinessNotice from '@/components/business-notice'
 import { getFeatureFlags } from '@/lib/features'
 import type { BusinessDetail } from '@/lib/data/business-detail'
@@ -180,8 +181,11 @@ export default async function BusinessPage({ params, searchParams }: Props) {
 
   const isOpen = business.is_open
   const ordersEnabled = flags.orders_enabled && business.accepts_orders
-  const hasFixedCta =
-    isOwner || ordersEnabled || detail.contactOptions.some((option) => option.method === 'whatsapp')
+  const hasFixedCta = shouldRenderFixedBusinessCta({
+    isOwner,
+    ordersEnabled,
+    contactOptions: detail.contactOptions,
+  })
 
   const menuImages = detail.menu.map((m) => m.storage_path)
   const offersList = offers.map((o) => ({ title: o.title, image: o.image_url }))
