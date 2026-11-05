@@ -1,5 +1,13 @@
 # EAH — PROGRESS.md
 
+### تحديث 2026-11-05 — إغلاق تسريب أرقام التواصل من صفحة النشاط
+
+- المراجعة الأمنية وجدت أن `getBusinessDetail` كان يقرأ ويرسل `phone`, `whatsapp`, `complaints`, `manager`, `shift_morning`, و`shift_evening` ضمن `detail.contacts`، وكانت `BusinessTabs` تعرضها كرابط `tel:` أو `wa.me`. هذا يتجاوز حماية RLS لأن الجلب يتم عبر service role ثم تُمرر البيانات للعميل.
+- تم تقييد استعلام contacts العامة إلى `facebook`, `instagram`, `website` فقط، وإضافة whitelist مستقلة `filterPublicContactMethods` واختبار يستبعد كل أنواع الأرقام الخاصة.
+- أزيل عرض أرقام الهاتف/واتساب والأرقام الإضافية من `BusinessTabs`. أزرار الاتصال وواتساب الموجودة في `BusinessActions` و`FixedCta` ما زالت تستخدم `contactOptions` الآمنة بلا أرقام، ثم تكشف الرقم عبر `/api/track-contact` بعد تسجيل الدخول و`reveal_contact`.
+- تم التأكد من أن `branches` لا تُرجع phone/whatsapp وأن `buildContactOptions` لا يرجع القيم الخام. لم تُجرَ أي تغييرات على قاعدة البيانات.
+- Commit إصلاح المصدر: `3d16dde4ec728ec7347bcb5bc61bcddc0d8502c7`; تبسيط العرض: `476f1a291ed3a56040309b4513ff6021a1875c43`; تنظيف CSS: `e12f18c74185570db041d074474644416fefe0a9`. يلزم Vercel build وE2E/فحص Flight payload قبل إغلاق الحالة.
+
 ### تحديث 2026-11-05 — توحيد شرط ظهور شريط الإجراء واختباره
 
 - لاحظت أن صفحة النشاط تحسب مساحة الشريط الثابت في `page.tsx`، بينما مكوّن `FixedCta` يقرر ظهوره بشرط منفصل. الشرطان متطابقان حاليًا لكن قابلان للانحراف مستقبلًا.
