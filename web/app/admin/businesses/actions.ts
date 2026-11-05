@@ -8,6 +8,7 @@ import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
 import { createServiceClient } from '@/lib/supabase/service'
 import { hasUsableWhatsAppDestination } from '@/lib/data/contact-availability-utils'
+import { isBusinessOwnerUniqueConflict } from '@/lib/data/business-owner-constraint'
 import { isEgyptianMobileNumber } from '@/lib/phone-validation'
 
 // ═══════════════════════════════════════════════════════════
@@ -28,30 +29,6 @@ function createAdminServiceClient() {
   } catch {
     return null
   }
-}
-
-function isOwnerUniqueConflict(
-  error:
-    | {
-        code?: string
-        message?: string
-        details?: string | null
-        hint?: string | null
-      }
-    | null
-    | undefined,
-): boolean {
-  if (error?.code !== '23505') return false
-
-  const context = [error.message, error.details, error.hint]
-    .filter((value): value is string => Boolean(value))
-    .join(' ')
-    .toLowerCase()
-
-  return (
-    context.includes('businesses_one_owner_per_account_idx') ||
-    context.includes('(owner_profile_id)')
-  )
 }
 
 // ─── موافقة ───
@@ -507,7 +484,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   if (error || !created) {
     console.error('[admin-business-create] insert failed:', error?.message ?? 'No row returned')
 
-    if (isOwnerUniqueConflict(error)) {
+    if (isBusinessOwnerUniqueConflict(error)) {
       return {
         ok: false,
         error: 'الحساب المختار مرتبط بالفعل بنشاط آخر. اختر حسابًا غير مرتبط أو أنشئ النشاط دون مالك.',
@@ -970,7 +947,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     if (error) {
       return {
         ok: false,
-        error: isOwnerUniqueConflict(error)
+        error: isBusinessOwnerUniqueConflict(error)
           ? 'هذا الحساب مرتبط بالفعل بنشاط آخر. فك ارتباطه أولًا قبل ربط نشاط جديد.'
           : 'تعذر تنفيذ العملية. حاول مرة أخرى.',
       }
