@@ -1,5 +1,12 @@
 # EAH — PROGRESS.md
 
+### تحديث 2026-11-05 — إغلاق الطلبات القديمة للأنشطة غير المملوكة
+
+- القراءة الحية للإنتاج أظهرت نشاطًا واحدًا `owner_profile_id IS NULL` مع `businesses.accepts_orders=true`، وسجل إعدادات واحدًا مطابقًا لديه `merchant_order_settings.orders_enabled=true`.
+- طبقة القراءة الحالية تمنع ظهور الطلبات لهذا النشاط: `getInAppOrderAvailableBusinessIds` لا تقبل مرشحًا دون مالك، و`isInAppOrderOperational` يشترط `accepts_orders=true` ومالكًا وإعدادات تشغيل صالحة وواتساب صالحًا. `submitOrder` يتحقق مجددًا على الخادم ويرفض النشاط غير المملوك قبل قراءة إعدادات الطلب أو الإدخال.
+- أُضيفت `docs/migrations/2026-11-05-disable-ownerless-in-app-orders.sql` لتعطيل علم الطلبات في `businesses` والإعداد المقابل في `merchant_order_settings` عند غياب المالك، مع إبقاء النشر والقنوات المباشرة كما هي. أضيف assertion إلى `admin-policy-alignment.test.sql` وارتفع `plan` إلى 58؛ 58/58 assertions متطابقة. الـMigration مضافة إلى `.github/workflows/quality.yml` لكنها لم تُشغّل بسبب Runner، ولم تُطبق على الإنتاج.
+- فحص triggers الحية: `check_business_location` يكتب WARNING فقط؛ `businesses_grant_trial` يشتغل عند تغيير `owner_profile_id` فقط، وليس عند تحديث `accepts_orders`. Trigger إعدادات الطلب يرفض تغيير `orders_enabled` فقط عندما يوجد auth.uid ولا يكون المستخدم admin؛ ترحيل psql لا يمرر جلسة مستخدم. لا توجد بيانات إنتاجية تغيرت.
+
 ### تصحيح 2026-11-05 — العقد الوحيد للأدوار واختبارات RLS
 
 - تأكد من وثائق المنتج والكود والقراءة الحية أن الأدوار الثلاثة فقط هي: الأدمن `super_admin`، البايع `merchant`، المشتري `customer`. الزائر `guest` حالة وصول. القيمة القديمة `admin` متقاعدة؛ `getUserSession` يطبعها كمشتري، وحارس قاعدة البيانات يمنع إنشاءها، و`requireAdmin()` لا يقبل إلا `super_admin`.
