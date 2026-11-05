@@ -49,7 +49,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
       <div className={styles.body}>
         <div className={styles.logoWrap}>
           <DetailLogo
-            src={logo?.storage_path ?? null}
+            src={logo?.storage_path ?? business.logo_url ?? null}
             alt={`شعار ${business.name}`}
             initial={business.name.charAt(0)}
           />
