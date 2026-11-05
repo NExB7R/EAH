@@ -38,11 +38,31 @@ function makeBusiness(overrides: Partial<Business> = {}): Business {
 }
 
 describe('trendScore', () => {
-  it('بيرجع قيمة بين 0 و 2 للحالات العادية', () => {
+  it('keeps the weighted score inside the normalized 0–1 range', () => {
     const b = makeBusiness({ trust_score: 50, successful_orders: 10 })
     const score = trendScore(b)
-    expect(score).toBeGreaterThan(0)
-    expect(score).toBeLessThan(2)
+    expect(score).toBeGreaterThanOrEqual(0)
+    expect(score).toBeLessThanOrEqual(1)
+  })
+
+  it('clamps malformed signal values and keeps the trend score bounded', () => {
+    const malformed = makeBusiness({
+      velocity_score: -50,
+      diversity_score: -10,
+      engagement_score: Number.POSITIVE_INFINITY,
+      rating_avg: 25,
+      rating_count: 10,
+      response_rate: 100,
+    })
+    const score = trendScore(malformed)
+    expect(score).toBeGreaterThanOrEqual(0)
+    expect(score).toBeLessThanOrEqual(1)
+  })
+
+  it('treats an out-of-range response rate as neutral instead of letting it dominate', () => {
+    const missing = makeBusiness({ response_rate: null })
+    const malformed = makeBusiness({ response_rate: 100 })
+    expect(trendScore(malformed)).toBeCloseTo(trendScore(missing), 10)
   })
 
   it('نقاط المشاركة وحدها لا ترفع ترتيب النشاط', () => {

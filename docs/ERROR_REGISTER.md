@@ -417,3 +417,5 @@ If any Pre-Launch blocker is open, fix it before adding features.
 ## E-021: CSS Modules purity
 
 Build break fix. See scripts/check-css-modules-purity.mjs.
+
+| TREND-RESPONSE-RATE-01 | OPEN — DATA SOURCE/UNIT CONTRACT MISSING | `businesses.response_rate` يُستهلك في `trendScore` لكنه لا يملك مسار تحديث في التطبيق، ومقياسه لم يكن موثقًا؛ عموده في الإنتاج `numeric(5,2)` وDefault `0`، وكل 8 سجلات كانت `0.00` في 2026-11-05. القيم الشاذة كان يمكن أن تكبر الوزن 5% دون حد. | تم حصر كل إشارات الترند في `[0,1]`، والقيم المفقودة/الخارجية لـ`response_rate` أصبحت محايدة `0.5` بدل تضخيم النتيجة. لا تعتبر معدل الاستجابة مقياسًا فعليًا حتى يُعرّف مصدر البيانات، البسط/المقام، نافذة القياس، وطريقة تحديث موثوقة مع اختبارات. |

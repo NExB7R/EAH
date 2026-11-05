@@ -1,6 +1,22 @@
 import { describe, expect, it } from 'vitest'
 import { nextPageStart, previousPageStart, sliceVisible } from './use-fair-rotation'
 
+function collectOneRotationCycle<T>(ids: T[], pageSize: number): T[][] {
+  const pages = [sliceVisible(ids, 0, pageSize)]
+  let cursor = 0
+  let coveredUntil = Math.min(ids.length, pageSize)
+
+  for (let step = 0; step <= ids.length; step++) {
+    const next = nextPageStart(cursor, ids.length, pageSize, coveredUntil)
+    if (next === 0) return pages
+
+    cursor = next
+    pages.push(sliceVisible(ids, cursor, pageSize))
+    coveredUntil = Math.min(ids.length, cursor + pageSize)
+  }
+
+  throw new Error('Rotation cycle did not complete')
+}
 describe('sliceVisible', () => {
   it('does not wrap the last partial page to already-shown items', () => {
     const order = Array.from({ length: 10 }, (_, index) => index + 1)
@@ -49,5 +65,43 @@ describe('featured rotation page cursor', () => {
 
   it('does not replay previously seen cards after navigating backward', () => {
     expect(nextPageStart(4, 10, 4, 8)).toBe(8)
+  })
+})
+
+
+describe('fair rotation cycle coverage', () => {
+  it('shows every eligible item exactly once before resetting across mobile, tablet and desktop sizes', () => {
+    for (const pageSize of [4, 6, 8]) {
+      for (let count = 0; count <= 40; count++) {
+        const ids = Array.from({ length: count }, (_, index) => 'business-' + index)
+        const pages = collectOneRotationCycle(ids, pageSize)
+        const flattened = pages.flat()
+
+        expect(flattened).toEqual(ids)
+        expect(new Set(flattened).size).toBe(count)
+        expect(pages.every((page) => page.length <= pageSize)).toBe(true)
+      }
+    }
+  })
+
+  it('preserves already-covered items when a desktop page shrinks to mobile', () => {
+    const ids = Array.from({ length: 20 }, (_, index) => index)
+    const firstDesktopPage = sliceVisible(ids, 0, 8)
+    const coveredUntil = firstDesktopPage.length
+    const nextMobileCursor = nextPageStart(0, ids.length, 4, coveredUntil)
+    const nextMobilePage = sliceVisible(ids, nextMobileCursor, 4)
+
+    expect(firstDesktopPage).toEqual([0, 1, 2, 3, 4, 5, 6, 7])
+    expect(nextMobilePage).toEqual([8, 9, 10, 11])
+  })
+
+  it('extends covered progress when a mobile page grows to desktop', () => {
+    const ids = Array.from({ length: 20 }, (_, index) => index)
+    const firstMobilePage = sliceVisible(ids, 0, 4)
+    const coveredUntil = Math.max(firstMobilePage.length, 8)
+    const nextDesktopCursor = nextPageStart(0, ids.length, 8, coveredUntil)
+
+    expect(firstMobilePage).toEqual([0, 1, 2, 3])
+    expect(nextDesktopCursor).toBe(8)
   })
 })
