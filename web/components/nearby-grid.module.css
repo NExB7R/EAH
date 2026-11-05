@@ -54,13 +54,16 @@
 
 .viewAll {
   display: inline-flex;
+  min-height: 44px;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 800;
   color: #7c3aed;
   text-decoration: none;
+  box-sizing: border-box;
   padding: 7px 13px;
   border-radius: var(--radius-full);
   background: rgba(124, 58, 237, 0.08);
@@ -176,7 +179,7 @@
 
 .locationAction {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 5px;
@@ -238,7 +241,7 @@
   }
 
   .locationAction {
-    min-height: 36px;
+    min-height: 44px;
     padding: 5px 8px;
     font-size: 0.63rem;
   }

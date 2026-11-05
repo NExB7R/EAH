@@ -54,13 +54,16 @@
 
 .viewAll {
   display: inline-flex;
+  min-height: 44px;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 800;
   color: #fdba74;
   text-decoration: none;
+  box-sizing: border-box;
   padding: 7px 13px;
   border-radius: var(--radius-full);
   background: rgba(253, 186, 116, 0.08);
