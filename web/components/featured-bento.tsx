@@ -55,7 +55,16 @@ export default function FeaturedBento({ businesses }: Props) {
         <div
           className={`${styles.carousel} ${hasMore ? styles.carouselScrollable : ''}`}
           onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
+          onMouseLeave={(event) => {
+            if (!event.currentTarget.contains(document.activeElement)) setPaused(false)
+          }}
+          onFocus={() => setPaused(true)}
+          onBlur={(event) => {
+            const nextTarget = event.relatedTarget as Node | null
+            if (!event.currentTarget.contains(nextTarget) && !event.currentTarget.matches(':hover')) {
+              setPaused(false)
+            }
+          }}
         >
           {hasMore && canPrev && (
             <button
