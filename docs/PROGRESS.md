@@ -1,5 +1,14 @@
 # EAH — PROGRESS.md
 
+### تحديث 2026-11-05 — تحسين إتاحة قائمة الأدمن على الهاتف
+
+- آخر Commit تطبيق: `e41be8e0f02983b6bd672da8375e19c689f8c340` — Vercel READY، والـAlias `eah-sq.vercel.app` أعاد HTTP 200 و`matches=true` و`environment=production` لنفس SHA.
+- درج قائمة الأدمن على الموبايل أصبح يحبس التركيز داخل `role=dialog`, يغلق بـEscape، يلف Tab/Shift+Tab بين أول/آخر عنصر، يعيد التركيز للعنصر السابق، ويقفل تمرير الخلفية طوال فتحه.
+- استُخرجت قاعدة الالتفاف إلى `web/lib/a11y/focus-trap.ts` وأضيف `focus-trap.test.ts` بست حالات Vitest pure-node (الاتجاهان، هروب التركيز، عدم التدخل بالعناصر الوسطى، والقائمة الفارغة). الاختبار لم يُشغّل بعد لأن GitHub Actions لا يخصص Runner؛ لا تسجل نتيجته PASS قبل تشغيل `npm test`.
+- Build الحالي على Vercel: Next.js 16.3.8 / webpack، `Compiled successfully in 17.8s`, TypeScript finished، و54/54 static pages، deployment READY.
+- E2E على نفس Commit `e41be8e` انتهى قبل تشغيل أي خطوة: `runner_id=0`, `runner_name` فارغ، و`steps=[]`. Quality Gate وCodeQL وInvariants وContext Map على نفس SHA كذلك فشلت قبل Runner. هذا عائق بنية Actions، وليس نتيجة فشل الاختبار.
+- آخر E2E مثبت النجاح سابقًا يبقى 50/50 على الإنتاج `39f260f`؛ لا تعمم النتيجة على النسخة الحالية.
+
 ### تحديث ختامي 2026-11-05 — نشر مساعد الدعم والمستشار
 
 - آخر Commit برمجي: `c3471e56f93c08153c5d5d1e2590b7872aef530d` — Vercel READY، و`eah-sq.vercel.app/api/deployment-info?sha=<commit>` أعاد HTTP 200 و`matches=true` و`environment=production`.
