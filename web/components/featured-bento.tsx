@@ -11,7 +11,7 @@ import styles from './featured-bento.module.css'
 // EAH — Featured Bento (Home) — Premium 2026
 //   • عدالة 100% (Fisher-Yates + sessionStorage)
 //   • 8/6/4 حسب الشاشة
-//   • تبديل يدوي بأسهم + تلقائي كل 5 ثواني
+//   • تبديل يدوي بأسهم + تلقائي كل 8 ثواني
 // ═══════════════════════════════════════════════════════════
 
 type Props = {
