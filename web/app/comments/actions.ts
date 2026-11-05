@@ -192,7 +192,8 @@ export async function likeComment(commentId: string, slug: string): Promise<Acti
     .from('comment_likes')
     .insert({ comment_id: commentId, user_id: user.id })
 
-  if (error && !error.message.includes('duplicate')) {
+  if (error && error.code !== '23505') {
+    console.error('[comment-like] insert failed:', error.message)
     return { ok: false, error: 'تعذر تسجيل الإعجاب. حاول مرة أخرى.' }
   }
 
@@ -208,7 +209,16 @@ export async function unlikeComment(commentId: string, slug: string): Promise<Ac
   } = await supabase.auth.getUser()
   if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
-  await supabase.from('comment_likes').delete().eq('comment_id', commentId).eq('user_id', user.id)
+  const { error } = await supabase
+    .from('comment_likes')
+    .delete()
+    .eq('comment_id', commentId)
+    .eq('user_id', user.id)
+
+  if (error) {
+    console.error('[comment-like] delete failed:', error.message)
+    return { ok: false, error: 'تعذر إلغاء الإعجاب. حاول مرة أخرى.' }
+  }
 
   revalidatePath(`/businesses/${slug}`)
   return { ok: true }
@@ -222,13 +232,31 @@ export async function deleteComment(commentId: string, slug: string): Promise<Ac
   } = await supabase.auth.getUser()
   if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
-  const { error } = await supabase
+  const { data: existing, error: lookupError } = await supabase
     .from('business_comments')
-    .update({ status: 'deleted' })
+    .select('id')
     .eq('id', commentId)
     .eq('user_id', user.id)
+    .maybeSingle()
 
-  if (error) return { ok: false, error: 'تعذر حذف التعليق. حاول مرة أخرى.' }
+  if (lookupError) {
+    console.error('[comment] delete lookup failed:', lookupError.message)
+    return { ok: false, error: 'تعذر التحقق من التعليق. حاول مرة أخرى.' }
+  }
+  if (!existing) return { ok: false, error: 'التعليق مش موجود أو مش بتاعك' }
+
+  const { count, error } = await supabase
+    .from('business_comments')
+    .update({ status: 'deleted' }, { count: 'exact' })
+    .eq('id', commentId)
+    .eq('user_id', user.id)
+    .eq('status', 'approved')
+
+  if (error) {
+    console.error('[comment] soft delete failed:', error.message)
+    return { ok: false, error: 'تعذر حذف التعليق. حاول مرة أخرى.' }
+  }
+  if (count !== 1) return { ok: false, error: 'التعليق مش متاح للحذف دلوقتي.' }
 
   revalidatePath(`/businesses/${slug}`)
   return { ok: true }
@@ -246,17 +274,21 @@ export async function editComment(
   } = await supabase.auth.getUser()
   if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل أو تدخل بحساب مسجل الأول' }
 
-  const { data: existing } = await supabase
+  const { data: existing, error: existingError } = await supabase
     .from('business_comments')
     .select('user_id, created_at')
     .eq('id', commentId)
     .maybeSingle()
 
+  if (existingError) {
+    console.error('[comment] edit lookup failed:', existingError.message)
+    return { ok: false, error: 'تعذر التحقق من التعليق. حاول مرة أخرى.' }
+  }
   if (!existing) return { ok: false, error: 'التعليق مش موجود' }
   if (existing.user_id !== user.id) return { ok: false, error: 'مش تعليقك' }
 
   const ageMs = Date.now() - new Date(existing.created_at).getTime()
-  if (ageMs > 15 * 60 * 1000) {
+  if (!Number.isFinite(ageMs) || ageMs < 0 || ageMs > 15 * 60 * 1000) {
     return { ok: false, error: 'التعديل مسموح خلال 15 دقيقة فقط' }
   }
 
@@ -268,17 +300,21 @@ export async function editComment(
     return { ok: false, error: parsed.error.issues[0]?.message ?? 'بيانات غلط' }
   }
 
-  const { error } = await supabase
+  const { data: updatedComment, error } = await supabase
     .from('business_comments')
-    .update({
-      content: parsed.data.content,
-      is_edited: true,
-      edited_at: new Date().toISOString(),
-    })
+    .update({ content: parsed.data.content })
     .eq('id', commentId)
     .eq('user_id', user.id)
+    .eq('status', 'approved')
+    .gt('created_at', new Date(Date.now() - 15 * 60 * 1000).toISOString())
+    .select('id')
+    .maybeSingle()
 
-  if (error) return { ok: false, error: 'تعذر تعديل التعليق. حاول مرة أخرى.' }
+  if (error) {
+    console.error('[comment] edit update failed:', error.message)
+    return { ok: false, error: 'تعذر تعديل التعليق. حاول مرة أخرى.' }
+  }
+  if (!updatedComment) return { ok: false, error: 'انتهت مهلة التعديل أو لم يعد التعليق متاحًا.' }
 
   revalidatePath(`/businesses/${slug}`)
   return { ok: true }
@@ -299,29 +335,45 @@ export async function toggleFollowThread(
   if (!rootId) return { ok: false, error: 'التعليق مش موجود' }
 
   // فحص إنه متابع حالياً
-  const { data: existing } = await supabase
+  const { data: existing, error: followLookupError } = await supabase
     .from('comment_thread_follows')
     .select('id')
     .eq('user_id', user.id)
     .eq('root_comment_id', rootId)
     .maybeSingle()
 
+  if (followLookupError) {
+    console.error('[comment-follow] lookup failed:', followLookupError.message)
+    return { ok: false, error: 'تعذر التحقق من متابعة النقاش. حاول مرة أخرى.' }
+  }
+
   if (existing) {
-    await supabase
+    const { error } = await supabase
       .from('comment_thread_follows')
       .delete()
       .eq('user_id', user.id)
       .eq('root_comment_id', rootId)
+
+    if (error) {
+      console.error('[comment-follow] delete failed:', error.message)
+      return { ok: false, error: 'تعذر إلغاء متابعة النقاش. حاول مرة أخرى.' }
+    }
+
     revalidatePath(`/businesses/${slug}`)
     return { ok: true, following: false }
   }
 
-  const { data: comment } = await supabase
+  const { data: comment, error: commentError } = await supabase
     .from('business_comments')
     .select('business_id')
     .eq('id', rootId)
+    .eq('status', 'approved')
     .maybeSingle()
 
+  if (commentError) {
+    console.error('[comment-follow] comment lookup failed:', commentError.message)
+    return { ok: false, error: 'تعذر التحقق من النقاش. حاول مرة أخرى.' }
+  }
   if (!comment) return { ok: false, error: 'التعليق مش موجود' }
 
   const { error } = await supabase.from('comment_thread_follows').insert({
@@ -330,7 +382,8 @@ export async function toggleFollowThread(
     business_id: (comment as { business_id: string }).business_id,
   })
 
-  if (error && !error.message.includes('duplicate')) {
+  if (error && error.code !== '23505') {
+    console.error('[comment-follow] insert failed:', error.message)
     return { ok: false, error: 'تعذر متابعة التعليق. حاول مرة أخرى.' }
   }
 

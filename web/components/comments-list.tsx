@@ -33,37 +33,44 @@ export default function CommentsList({
   const [notice, setNotice] = useState<string | null>(null)
   const [images, setImages] = useState<string[]>([])
   const [uploading, setUploading] = useState(false)
+  const uploadingRef = useRef(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const handleFiles = async (files: FileList | null) => {
-    if (!files) return
+    if (!files || uploadingRef.current) return
     setError(null)
     const remaining = 3 - images.length
     if (remaining <= 0) {
       setError('أقصى 3 صور')
       return
     }
+
     const toUpload = Array.from(files).slice(0, remaining)
+    uploadingRef.current = true
     setUploading(true)
-    for (const f of toUpload) {
-      const fd = new FormData()
-      fd.append('file', f)
-      try {
-        const res = await fetch('/api/upload/comment-image', { method: 'POST', body: fd })
-        const data = (await res.json()) as { url?: string; error?: string }
-        if (data.url) {
+
+    try {
+      for (const f of toUpload) {
+        const fd = new FormData()
+        fd.append('file', f)
+        try {
+          const res = await fetch('/api/upload/comment-image', { method: 'POST', body: fd })
+          const data = (await res.json()) as { url?: string; error?: string }
+          if (!res.ok || !data.url) {
+            setError(data.error ?? 'فشل رفع الصورة')
+            break
+          }
           setImages((prev) => [...prev, data.url!])
-        } else {
-          setError(data.error ?? 'فشل رفع الصورة')
+        } catch {
+          setError('فشل الاتصال')
           break
         }
-      } catch {
-        setError('فشل الاتصال')
-        break
       }
+    } finally {
+      uploadingRef.current = false
+      setUploading(false)
+      if (fileRef.current) fileRef.current.value = ''
     }
-    setUploading(false)
-    if (fileRef.current) fileRef.current.value = ''
   }
 
   const removeImage = (url: string) => {
@@ -150,13 +157,15 @@ export default function CommentsList({
                 type="file"
                 accept="image/*"
                 multiple
+                disabled={uploading || images.length >= 3}
                 onChange={(e) => handleFiles(e.target.files)}
                 style={{ display: 'none' }}
                 id="comment-images"
               />
               <label
                 htmlFor="comment-images"
-                className={`${styles.attachBtn} ${images.length >= 3 ? styles.attachDisabled : ''}`}
+                className={`${styles.attachBtn} ${uploading || images.length >= 3 ? styles.attachDisabled : ''}`}
+                aria-disabled={uploading || images.length >= 3}
               >
                 <ImageIcon size={14} />
                 <span>{uploading ? '...' : `صورة (${images.length}/3)`}</span>

@@ -58,6 +58,7 @@ export default function CommentItem({
   const [lightbox, setLightbox] = useState<string | null>(null)
   const [content, setContent] = useState(comment.content)
   const [isEdited, setIsEdited] = useState(comment.is_edited)
+  const [actionError, setActionError] = useState<string | null>(null)
 
   const name = comment.author?.display_name ?? 'مستخدم'
   const isMine = currentUserId === comment.user_id
@@ -74,17 +75,25 @@ export default function CommentItem({
   const handleLike = () => {
     if (!isLoggedIn) return
     const next = !liked
+    setActionError(null)
     setLiked(next)
     setLikesCount((c) => c + (next ? 1 : -1))
     startTransition(async () => {
-      const res = await offlineOrQueue(
-        () => (next ? likeComment(comment.id, slug) : unlikeComment(comment.id, slug)),
-        'like',
-        { commentId: comment.id, action: next ? 'add' : 'remove' },
-      )
-      if (!res.ok) {
+      try {
+        const res = await offlineOrQueue(
+          () => (next ? likeComment(comment.id, slug) : unlikeComment(comment.id, slug)),
+          'like',
+          { commentId: comment.id, action: next ? 'add' : 'remove' },
+        )
+        if (!res.ok) {
+          setLiked(!next)
+          setLikesCount((c) => c + (next ? -1 : 1))
+          setActionError(res.error)
+        }
+      } catch {
         setLiked(!next)
         setLikesCount((c) => c + (next ? -1 : 1))
+        setActionError('تعذر تحديث الإعجاب. حاول مرة أخرى.')
       }
     })
   }
@@ -92,36 +101,56 @@ export default function CommentItem({
   const handleFollow = () => {
     if (!isLoggedIn) return
     const next = !following
+    setActionError(null)
     setFollowing(next)
     startTransition(async () => {
-      const res = await toggleFollowThread(comment.id, slug)
-      if (!res.ok) {
+      try {
+        const res = await toggleFollowThread(comment.id, slug)
+        if (!res.ok) {
+          setFollowing(!next)
+          setActionError(res.error)
+        } else {
+          setFollowing(res.following)
+        }
+      } catch {
         setFollowing(!next)
-      } else {
-        setFollowing(res.following)
+        setActionError('تعذر تحديث متابعة النقاش. حاول مرة أخرى.')
       }
     })
   }
 
   const handleDelete = () => {
     if (!confirm('متأكد تحذف التعليق؟')) return
+    setActionError(null)
     startTransition(async () => {
-      await deleteComment(comment.id, slug)
+      try {
+        const res = await deleteComment(comment.id, slug)
+        if (!res.ok) setActionError(res.error)
+      } catch {
+        setActionError('تعذر حذف التعليق. حاول مرة أخرى.')
+      }
     })
   }
 
   const handleReplySubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!replyText.trim()) return
+    setActionError(null)
     startTransition(async () => {
-      const fd = new FormData()
-      fd.set('content', replyText)
-      fd.set('parent_id', comment.id)
-      const res = await createComment(businessId, slug, fd)
-      if (res.ok) {
-        setReplyText('')
-        setShowReply(false)
-        setShowReplies(true)
+      try {
+        const fd = new FormData()
+        fd.set('content', replyText)
+        fd.set('parent_id', comment.id)
+        const res = await createComment(businessId, slug, fd)
+        if (res.ok) {
+          setReplyText('')
+          setShowReply(false)
+          setShowReplies(true)
+        } else {
+          setActionError(res.error)
+        }
+      } catch {
+        setActionError('تعذر إرسال الرد. حاول مرة أخرى.')
       }
     })
   }
@@ -150,14 +179,21 @@ export default function CommentItem({
           onSubmit={(e) => {
             e.preventDefault()
             if (!editText.trim()) return
+            setActionError(null)
             startTransition(async () => {
-              const fd = new FormData()
-              fd.set('content', editText)
-              const res = await editComment(comment.id, slug, fd)
-              if (res.ok) {
-                setContent(editText)
-                setIsEdited(true)
-                setEditMode(false)
+              try {
+                const fd = new FormData()
+                fd.set('content', editText)
+                const res = await editComment(comment.id, slug, fd)
+                if (res.ok) {
+                  setContent(editText)
+                  setIsEdited(true)
+                  setEditMode(false)
+                } else {
+                  setActionError(res.error)
+                }
+              } catch {
+                setActionError('تعذر تعديل التعليق. حاول مرة أخرى.')
               }
             })
           }}
@@ -284,6 +320,12 @@ export default function CommentItem({
           </button>
         )}
       </div>
+
+      {actionError && (
+        <p className={styles.actionError} role="alert">
+          {actionError}
+        </p>
+      )}
 
       {showReply && (
         <form className={styles.replyForm} onSubmit={handleReplySubmit}>

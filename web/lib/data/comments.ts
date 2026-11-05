@@ -99,23 +99,23 @@ export async function getComments(businessId: string): Promise<CommentNode[]> {
 export async function getRootCommentId(commentId: string): Promise<string | null> {
   const supabase = await createClient()
   let currentId: string | null = commentId
-  let hops = 0
 
-  while (currentId && hops < 5) {
-    const result = await supabase
+  // Comment depth is constrained to 0–2, so at most three reads are valid.
+  for (let hops = 0; currentId && hops <= 2; hops++) {
+    const { data, error } = await supabase
       .from('business_comments')
       .select('id, parent_id')
       .eq('id', currentId)
+      .eq('status', 'approved')
       .maybeSingle()
 
-    const data = result.data as { id: string; parent_id: string | null } | null
-
-    if (!data) return null
+    if (error || !data) return null
     if (!data.parent_id) return data.id
     currentId = data.parent_id
-    hops++
   }
-  return currentId
+
+  // Never treat a truncated parent chain as a root.
+  return null
 }
 
 // ─── هل المستخدم متابع الـ thread؟ ───
