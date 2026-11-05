@@ -1,11 +1,12 @@
 # EAH — ERROR_REGISTER.md
 
-## الحالة الحالية — فحص 2026-11-04
+## الحالة الحالية — فحص 2026-11-05
 
 > أُضيفت هذه الحالة فوق السجل التاريخي. لا تغيّر حالات البنود التاريخية إلا بعد إعادة الاختبار.
 
 | ID | الحالة | الملاحظة المثبتة | الإجراء المطلوب / دليل الإغلاق |
 |---|---|---|---|
+| LIVE-COMMENTS-RLS-2026-11-05 | FIXES PREPARED IN MAIN — PRODUCTION DB MIGRATION PENDING | القراءة الحية أثبتت أن سياسة `comments_self_update` تسمح لصاحب التعليق بتغيير الحقول الإدارية والملكية والربط، وأن `comments_self_delete` تسمح بالحذف الفعلي؛ كما أن trigger `set_comment_depth` لا يتحقق من النشاط المنشور أو تطابق النشاط مع التعليق الأصلي. | ضُيّقت إجراءات الخادم لتتحقق من الصف المتأثر وتفشل عند أخطاء Supabase، وأصبح وقت تعديل النص 15 دقيقة على الخادم وقاعدة البيانات. Migration `2026-10-30-comment-parent-integrity.sql` تضيف guards للإنشاء والتعديل، وتقيّد الصور إلى 3 HTTPS، وتمنع hard delete. لم تُطبّق على الإنتاج؛ اختبار pgTAP مضاف إلى الـQuality Gate المعزول، لكن لا يوجد تنفيذ فعلي بسبب runner/قاعدة الاختبار. |
 | ADMIN-MOBILE-FOCUS-TRAP-2026-11-05 | DEPLOYED — UNIT TEST NOT RUN | درج الأدمن على الهاتف كان يعلن `aria-modal=true` ويقفل تمرير الجسم لكنه لا يحبس Tab داخل الحوار. | أضيف focus trap كامل، Escape close، واستعادة التركيز، ثم استُخرجت دالة pure-node بست اختبارات Vitest. `e41be8e` Vercel READY وProduction SHA matches. الاختبارات لم تُنفذ لأن Runner `id=0`; أغلق بعد تشغيل Vitest/E2E فعليًا. |
 | ROLE-LABEL-AR-2026-11-05 | DEPLOYED — VERCEL READY | واجهات متعددة كانت تستخدم «تاجر/عميل» بدل تسميات المنتج «بايع/مشتري»، بما في ذلك الطلبات والبحث والإدارة والباقات والإعلان وصفحات تعريفية. | تم توحيد النصوص الظاهرة للمستخدم في `67875e6`؛ بقيت المفاتيح الداخلية كما هي. Vercel READY وProduction SHA matches. مراجعة المصطلحات تمت على الملفات المعنية مباشرة، ولا يغلق التعريب الكامل قبل مسح كل النصوص الديناميكية والمراجعة البصرية. |
 | CI-RUNNER-ASSIGNMENT-2026-11-05 | OPEN — PRE-RUNNER FAILURE REPRODUCED ON 2b32699 | E2E run for prior deployment and push workflows on `2b32699` (`41952769184`, `41952769185`, `41952769220`, `41952769236`) ended before Runner assignment: `runner_id=0`, empty runner name, `steps=[]`. Vercel deployment for same SHA is READY with matching production alias. | راجع من حساب مالك المستودع: Settings → Billing & licensing → Usage (Actions compute/storage)، spending budget/payment method، وActions permissions. quota/payment/hosted-runner provisioning احتمالات غير مؤكدة من API المتاح. أغلق بعد Runner assignment حقيقي ثم نجاح Playwright/Quality/pgTAP. |
