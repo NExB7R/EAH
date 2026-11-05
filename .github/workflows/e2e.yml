@@ -1,252 +1,96 @@
-name: E2E
+name: E2E (isolated QA only)
 
 on:
-  deployment_status:
-  pull_request:
-    branches: [main]
-    paths-ignore:
-      - 'docs/**'
-      - '**.md'
-      - 'LICENSE'
-      - '.gitignore'
-      - 'web/scripts/ignore-vercel-build.sh'
   workflow_dispatch:
-    inputs:
-      preview_url:
-        description: 'Manual URL override (optional, HTTPS .vercel.app, not production)'
-        required: false
-        type: string
 
 concurrency:
-  group: e2e-${{ github.ref }}-${{ github.event.deployment.sha || github.sha }}
-  cancel-in-progress: true
+  group: e2e-isolated-qa
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
   e2e:
-    if: >-
-      github.event_name != 'deployment_status' ||
-      github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    permissions:
-      contents: read
-      checks: read
-      pull-requests: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: web
+    env:
+      NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.QA_SUPABASE_URL }}
+      SUPABASE_URL: ${{ secrets.QA_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.QA_SUPABASE_PUBLISHABLE_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.QA_SUPABASE_SERVICE_ROLE_KEY }}
+      EAH_QA_ALLOWED_PROJECT_REF: ${{ vars.EAH_QA_ALLOWED_PROJECT_REF }}
+      EAH_E2E_ALLOW_NONPROD: 'yes'
+      EAH_E2E_PUBLISHED_BUSINESS_SLUG: ${{ vars.EAH_E2E_PUBLISHED_BUSINESS_SLUG }}
+      EAH_E2E_DRAFT_BUSINESS_NAME: ${{ vars.EAH_E2E_DRAFT_BUSINESS_NAME }}
+      PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: npm
           cache-dependency-path: web/package-lock.json
 
-      # ── Cache Playwright browsers (~150MB) ──
-      - name: Cache Playwright browsers
-        id: pw-cache
-        uses: actions/cache@a7833574556fa59680c1b7cb190c1735db73ebf0 # v5.0.0
-        with:
-          path: ~/.cache/ms-playwright
-          key: pw-chrome-${{ runner.os }}-${{ hashFiles('web/package-lock.json') }}
-          restore-keys: |
-            pw-chrome-${{ runner.os }}-
+      - name: Validate isolated QA configuration
+        run: |
+          node --input-type=module <<'NODE'
+          const required = [
+            'NEXT_PUBLIC_SUPABASE_URL',
+            'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
+            'SUPABASE_SERVICE_ROLE_KEY',
+            'EAH_QA_ALLOWED_PROJECT_REF',
+            'EAH_E2E_PUBLISHED_BUSINESS_SLUG',
+            'EAH_E2E_DRAFT_BUSINESS_NAME',
+          ];
+          const missing = required.filter((key) => !process.env[key]?.trim());
+          if (missing.length) {
+            console.error('::error::Missing isolated QA configuration: ' + missing.join(', '));
+            process.exit(1);
+          }
 
-      - name: Install deps
-        working-directory: web
+          const url = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL);
+          const projectRef = url.hostname.split('.')[0];
+          if (
+            url.protocol !== 'https:' ||
+            projectRef === 'npmpiivmdksdirrumbmt' ||
+            projectRef !== process.env.EAH_QA_ALLOWED_PROJECT_REF
+          ) {
+            console.error('::error::Refusing E2E: Supabase must be the explicitly approved non-production project.');
+            process.exit(1);
+          }
+
+          if (!/^eah-qa-test-[a-z0-9-]+$/.test(process.env.EAH_E2E_PUBLISHED_BUSINESS_SLUG)) {
+            console.error('::error::Published fixture slug must use the eah-qa-test- prefix.');
+            process.exit(1);
+          }
+          console.log('Isolated QA configuration validated.');
+          NODE
+
+      - name: Install dependencies
         run: npm ci
 
       - name: Install Chrome for Playwright
-        if: steps.pw-cache.outputs.cache-hit != 'true'
-        working-directory: web
         run: npx playwright install --with-deps chrome
 
-      - name: Install Chrome system deps (cache hit)
-        if: steps.pw-cache.outputs.cache-hit == 'true'
-        working-directory: web
-        run: npx playwright install-deps chrome
-
-      # ═══════════════════════════════════════════════════════
-      # Resolve target URL:
-      #   workflow_dispatch + input → manual URL
-      #   pull_request             → Vercel preview (CI-02)
-      #   successful Vercel deployment → exact deployed URL
-      # ═══════════════════════════════════════════════════════
-      - name: Validate manual URL
-        if: github.event_name == 'workflow_dispatch' && inputs.preview_url != ''
-        id: manual
-        env:
-          INPUT_URL: ${{ inputs.preview_url }}
-        run: |
-          node <<'NODE'
-          const u = new URL(process.env.INPUT_URL);
-          if (u.protocol !== 'https:' || !u.hostname.endsWith('.vercel.app') || u.hostname === 'eah-sq.vercel.app') {
-            console.error('::error::Manual URL must be HTTPS Vercel Preview (not production)');
-            process.exit(1);
-          }
-          console.log('Manual URL OK: ' + u.toString());
-          NODE
-          echo "url=$INPUT_URL" >> $GITHUB_OUTPUT
-
-      - name: Wait for Vercel preview (PR only)
-        if: github.event_name == 'pull_request'
-        id: vercel
-        uses: patrickedqvist/wait-for-vercel-preview@06c79330064b0e6ef7a2574603b62d3c98789125 # v1.3.2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          max_timeout: 300
-          check_interval: 10
-
-      - name: Resolve successful Vercel deployment
-        if: github.event_name == 'deployment_status'
-        id: deployed
-        run: |
-          node --input-type=module <<'NODE'
-          import { appendFileSync, readFileSync } from 'node:fs'
-
-          const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'))
-          const state = String(event.deployment_status?.state ?? '').toLowerCase()
-          const environment = String(event.deployment?.environment ?? '').toLowerCase()
-          const sha = String(event.deployment?.sha ?? '').toLowerCase()
-
-          if (state !== 'success') {
-            console.error('::error::Vercel deployment did not succeed.')
-            process.exit(1)
-          }
-
-          if (!['production', 'prod'].includes(environment)) {
-            console.log(`Skipping deployment-status E2E for non-production environment: ${environment || 'unknown'}.`)
-            appendFileSync(process.env.GITHUB_OUTPUT, 'skip=true\n')
-            process.exit(0)
-          }
-
-          if (!/^[a-f0-9]{40}$/.test(sha)) {
-            console.error('::error::Production deployment event is missing a valid commit SHA.')
-            process.exit(1)
-          }
-
-          appendFileSync(
-            process.env.GITHUB_OUTPUT,
-            `url=https://eah-sq.vercel.app\nsha=${sha}\nskip=false\n`,
-          )
-          console.log('Production E2E target pinned to the public EAH domain.')
-          NODE
-
-      - name: Compute target URL
-        if: github.event_name != 'deployment_status' || steps.deployed.outputs.skip != 'true'
-        id: target
-        env:
-          MANUAL_URL: ${{ steps.manual.outputs.url }}
-          VERCEL_URL: ${{ steps.vercel.outputs.url }}
-          DEPLOYED_URL: ${{ steps.deployed.outputs.url }}
-        run: |
-          URL="${MANUAL_URL:-${VERCEL_URL:-${DEPLOYED_URL:-}}}"
-          if [ -z "$URL" ]; then
-            echo "::error::No target URL — Vercel preview not ready or unavailable"
-            exit 1
-          fi
-          echo "url=$URL" >> $GITHUB_OUTPUT
-          echo "::notice::E2E target = $URL"
-
-      - name: Request GitHub OIDC token for Vercel Trusted Sources
-        if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.preview_url != '')
-        id: vercel-oidc
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        with:
-          script: |
-            const token = await core.getIDToken('https://vercel.com')
-            const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'))
-            core.info(`OIDC issuer: ${payload.iss}`)
-            core.info(`OIDC audience: ${payload.aud}`)
-            core.info(`OIDC subject: ${payload.sub}`)
-            core.info(`OIDC repository_id: ${payload.repository_id}`)
-            core.info(`OIDC repository_owner_id: ${payload.repository_owner_id}`)
-            core.info(`OIDC event_name: ${payload.event_name}`)
-            core.info(`OIDC workflow: ${payload.workflow}`)
-            core.info(`OIDC workflow_ref: ${payload.workflow_ref}`)
-            core.setSecret(token)
-            core.setOutput('token', token)
-
-      - name: Verify production deployment SHA
-        if: github.event_name == 'deployment_status' && steps.deployed.outputs.skip != 'true'
-        working-directory: web
-        env:
-          TARGET_URL: ${{ steps.deployed.outputs.url }}
-          EXPECTED_SHA: ${{ steps.deployed.outputs.sha }}
-        run: |
-          node --input-type=module <<'NODE'
-          const target = process.env.TARGET_URL;
-          const expectedSha = process.env.EXPECTED_SHA;
-
-          if (!target || !/^[a-f0-9]{40}$/.test(expectedSha ?? '')) {
-            console.error('::error::Missing public production target or expected deployment SHA.');
-            process.exit(1);
-          }
-
-          const infoUrl = new URL('/api/deployment-info', target);
-          infoUrl.searchParams.set('sha', expectedSha);
-          const response = await fetch(infoUrl, {
-            redirect: 'manual',
-            signal: AbortSignal.timeout(15000),
-            cache: 'no-store',
-          });
-          const result = await response.json().catch(() => null);
-
-          if (!response.ok || result?.matches !== true || result?.environment !== 'production') {
-            console.error(`::error::Production alias does not match deployment SHA (HTTP ${response.status}). Refusing to test a stale or non-production build.`);
-            process.exit(1);
-          }
-
-          console.log('Public production domain matches the successful deployment SHA.');
-          NODE
-
-      - name: Verify protected preview access
-        if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.preview_url != '')
-        working-directory: web
-        env:
-          TARGET_URL: ${{ steps.target.outputs.url }}
-          VERCEL_TRUSTED_OIDC_TOKEN: ${{ steps.vercel-oidc.outputs.token }}
-        run: |
-          node --input-type=module <<'NODE'
-          const target = process.env.TARGET_URL;
-          const token = process.env.VERCEL_TRUSTED_OIDC_TOKEN;
-          if (!target || !token) {
-            console.error('::error::Missing preview URL or short-lived OIDC token.');
-            process.exit(1);
-          }
-
-          const response = await fetch(target, {
-            redirect: 'manual',
-            signal: AbortSignal.timeout(15000),
-            headers: { 'x-vercel-trusted-oidc-idp-token': token },
-          });
-          const contentType = response.headers.get('content-type') ?? '';
-          const body = await response.text();
-          const isProtectionPage =
-            /Vercel Authentication|Log in to Vercel|Deployment Protection/i.test(body);
-
-          if (!response.ok || response.status >= 300 || isProtectionPage || !contentType.includes('text/html')) {
-            console.error(`::error::Protected preview preflight failed (HTTP ${response.status}, ${contentType || 'unknown content type'}). Check the preview-only Vercel Trusted Source.`);
-            process.exit(1);
-          }
-
-          console.log(`Protected preview access preflight passed (HTTP ${response.status}).`);
-          NODE
-
-      - name: Run E2E
-        if: github.event_name != 'deployment_status' || steps.deployed.outputs.skip != 'true'
-        working-directory: web
-        env:
-          PLAYWRIGHT_SKIP_SERVER: '1'
-          PLAYWRIGHT_BASE_URL: ${{ steps.target.outputs.url }}
-          VERCEL_TRUSTED_OIDC_TOKEN: ${{ steps.vercel-oidc.outputs.token }}
+      - name: Run isolated E2E
         run: npx playwright test --reporter=list,github,html
 
       - name: Upload report
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: e2e-report-${{ github.run_id }}
+          name: isolated-e2e-report-${{ github.run_id }}
           path: |
             web/test-results/
             web/playwright-report/
