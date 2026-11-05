@@ -12,7 +12,7 @@ describe('filterPublicContactMethods', () => {
       { method_type: 'shift_evening', value: '01055556666', is_primary: false },
       { method_type: 'facebook', value: 'https://facebook.com/eah', is_primary: true },
       { method_type: 'instagram', value: 'https://instagram.com/eah', is_primary: false },
-      { method_type: 'website', value: 'https://eah.example', is_primary: false },
+      { method_type: 'website', value: 'https://eah.example/', is_primary: false },
     ])
 
     expect(result).toEqual([
