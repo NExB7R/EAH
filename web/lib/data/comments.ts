@@ -102,16 +102,18 @@ export async function getRootCommentId(commentId: string): Promise<string | null
 
   // Comment depth is constrained to 0–2, so at most three reads are valid.
   for (let hops = 0; currentId && hops <= 2; hops++) {
-    const { data, error } = await supabase
+    const result = await supabase
       .from('business_comments')
       .select('id, parent_id')
       .eq('id', currentId)
       .eq('status', 'approved')
       .maybeSingle()
 
-    if (error || !data) return null
-    if (!data.parent_id) return data.id
-    currentId = data.parent_id
+    if (result.error || !result.data) return null
+
+    const row: { id: string; parent_id: string | null } = result.data
+    if (!row.parent_id) return row.id
+    currentId = row.parent_id
   }
 
   // Never treat a truncated parent chain as a root.
