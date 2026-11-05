@@ -1,5 +1,12 @@
 # EAH — NEXT_SESSION.md
 
+## متابعة 2026-11-05 — أحدث حالة بعد e0fa9f5
+
+- آخر `main`: `e0fa9f5`; Vercel READY، TypeScript/build/54 pages passed. Helper كشف تعارض ملكية النشاط أُضيف مع 5 Vitest tests لكن لم تُشغّل.
+- آخر Playwright على النسخة المنشورة لم يبدأ: `runner_id=0`, `steps=[]`. آخر Playwright pass سابق يبقى 50/50 على commit `39f260f` فقط؛ لا تعمم النتيجة على `e0fa9f5`.
+- قاعدة الإنتاج: منع التفاعل المجهول مثبت بـ60 restrictive RLS policies/28 جدولًا. لا تطبق مسودة RPC/RLS/unique-owner migrations على production حتى تشغيل pgTAP في Supabase DB غير إنتاجية.
+- الأولويات: (1) حل GitHub Actions runner allocation من Billing/Actions settings أو إعداد self-hosted runner، (2) موافقة منفصلة على تكلفة Supabase QA branch `$0.01344/hour` إن رغبت، (3) تشغيل 56 pgTAP assertions ومigrations المراجعة على DB معزولة، (4) دورة نشاط أدمن كاملة بحسابي أدمن/بايع QA وصور وظهور عام، (5) متابعة RPC/SECURITY DEFINER وnpm vulnerabilities وPrettier/Knip/jscpd debt.
+
 ## الحالة الحالية — تحديث 2026-11-04 (بعد فلتر الطلبات)
 
 - آخر نشر تطبيق على `main`: `39f260f` — Vercel READY.

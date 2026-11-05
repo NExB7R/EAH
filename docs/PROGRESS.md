@@ -1,5 +1,14 @@
 # EAH — PROGRESS.md
 
+### تحديث 2026-11-05 — تأكيد أخطاء الملكية وبناء النسخة
+
+- آخر Commit على `main`: `e0fa9f5`، ونشر Vercel `dpl_3AiSp58EimSaZ4KEL7Yr5xTWQcy4` وصل READY. Next.js 16.3.8/webpack: compile successful خلال 16.4s، TypeScript finished خلال 7.5s، و54/54 صفحة ثابتة. Alias `eah-sq.vercel.app/api/deployment-info?sha=e0fa9f5...` رجع HTTP 200 و`matches=true` و`environment=production`.
+- إصلاح Server Actions: تعارض قيد مالك النشاط أصبح يميّز عن تعارض الاسم/slug في الإنشاء والربط اليدوي. helper مستقل `web/lib/data/business-owner-constraint.ts` مع 5 اختبارات (constraint name، owner_profile_id detail، duplicate slug، non-23505، null/undefined). الاختبارات أضيفت فقط ولم تُشغّل لأن GitHub Runner لا يبدأ.
+- فحص pgTAP: `admin-policy-alignment.test.sql` يحتوي `plan(56)` و56 assertion فعلية؛ يتضمن الآن اختبار صلاحيات anon/authenticated/service_role على `request_promo_post` و`redeem_reward`. Quality Workflow يشغّل المسودة وجميع migrations المطلوبة على `SUPABASE_DB_URL` مستقل فقط.
+- E2E على نفس نشر `e0fa9f5` فشل قبل Runner: run `41951219890`, job `126995352124`, `runner_id=0`, `runner_name` فارغ، و`steps=[]` خلال ثانيتين. Quality run `41951099458` وRLS job كذلك `runner_id=0`, بدون أي خطوات. لا توجد نتيجة Playwright أو pgTAP جديدة لهذه النسخة.
+- Supabase production قراءة فقط: 60 restrictive `registered_account_only_*` policies على 28 جدولًا؛ 8 نشاطات بلا مالك و0 نشاطات مملوكة، ولا duplicate owner IDs. يوجد `idx_businesses_owner` غير فريد؛ partial unique index الخاص بنشاط واحد لكل بايع ما زال migration pending. لا تزال دوال `request_promo_post` و`redeem_reward` في DB الإنتاج على النسخة القديمة؛ الإصلاح في المسودة فقط.
+- لم تُنشأ Supabase Branch ولم تُطبق migrations على الإنتاج؛ تكلفة الفرع التي أعادها Supabase سابقًا `0.01344 USD/hour` وتحتاج موافقة صريحة.
+
 ### تحديث 2026-11-05 — مراجعة RPCs وقاعدة الإنتاج
 
 - آخر نشر للتطبيق ما زال Commit `12c495f` على Vercel بحالة READY وAlias `eah-sq.vercel.app`. آخر Commit على `main` هو `42dd31f` ويحتوي مسودة SQL واختبارات فقط، وليس تغيير واجهة/Runtime.
