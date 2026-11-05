@@ -327,6 +327,61 @@ export default function BusinessTabs({
         </div>
       )}
 
+      {/* ─── Offers Tab ─── */}
+      {tab === 'offers' && (
+        <div className={styles.content}>
+          {offers.length === 0 ? (
+            <div className={styles.empty}>
+              <StoreIcon size={40} />
+              <p>مفيش عروض متاحة حاليًا</p>
+            </div>
+          ) : (
+            <div className={styles.offersGrid}>
+              {offers.map((offer) => {
+                const imageSrc = offer.teaser_image_url || offer.image_url
+                const endDate = offer.ends_at ? new Date(offer.ends_at) : null
+                const hasValidEndDate = endDate !== null && Number.isFinite(endDate.getTime())
+
+                return (
+                  <article key={offer.id} className={styles.offerCard}>
+                    {imageSrc && (
+                      <div className={styles.offerImage}>
+                        <WmImage
+                          src={imageSrc}
+                          alt={offer.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, 50vw"
+                        />
+                      </div>
+                    )}
+                    <div className={styles.offerBody}>
+                      <h3 className={styles.offerTitle}>{offer.title}</h3>
+                      {isNonEmpty(offer.description) && (
+                        <p className={styles.offerDesc}>{offer.description.trim()}</p>
+                      )}
+                      {(offer.price !== null && offer.price > 0 || hasValidEndDate) && (
+                        <div className={styles.offerMeta}>
+                          {offer.price !== null && offer.price > 0 && (
+                            <span className={styles.offerPrice}>
+                              {offer.price.toLocaleString('ar-EG')} ج.م
+                            </span>
+                          )}
+                          {hasValidEndDate && (
+                            <span className={styles.offerEnds}>
+                              ينتهي {endDate.toLocaleDateString('ar-EG')}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* ─── Menu Tab ─── */}
       {tab === 'menu' && (
         <div className={styles.content}>
