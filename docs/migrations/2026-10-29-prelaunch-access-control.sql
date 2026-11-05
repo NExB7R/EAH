@@ -156,8 +156,8 @@ DECLARE
   v_owner uuid;
   v_url text := trim(coalesce(p_url, ''));
 BEGIN
-  IF v_user IS NULL THEN
-    RETURN jsonb_build_object('ok', false, 'reason', 'unauth');
+  IF v_user IS NULL OR COALESCE((auth.jwt() ->> 'is_anonymous')::boolean, false) THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'registered_login_required');
   END IF;
 
   IF p_business IS NULL
@@ -171,10 +171,12 @@ BEGIN
     RETURN jsonb_build_object('ok', false, 'reason', 'invalid_note');
   END IF;
 
+  -- Lock the activity row so concurrent requests cannot pass the pending/approved checks together.
   SELECT owner_profile_id
   INTO v_owner
   FROM public.businesses
-  WHERE id = p_business;
+  WHERE id = p_business
+  FOR UPDATE;
 
   IF NOT FOUND OR v_owner IS DISTINCT FROM v_user THEN
     RETURN jsonb_build_object('ok', false, 'reason', 'not_owner');
@@ -217,8 +219,8 @@ DECLARE
   v_code text;
   v_stock integer;
 BEGIN
-  IF v_user IS NULL THEN
-    RETURN jsonb_build_object('ok', false, 'reason', 'not_authenticated');
+  IF v_user IS NULL OR COALESCE((auth.jwt() ->> 'is_anonymous')::boolean, false) THEN
+    RETURN jsonb_build_object('ok', false, 'reason', 'registered_account_required');
   END IF;
 
   -- Serialize redemptions for the same reward before checking its stock.
