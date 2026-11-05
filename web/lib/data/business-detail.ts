@@ -9,6 +9,7 @@ import { buildContactOptions, safeContactOptionLabel, type ContactOption } from 
 export type { ContactOption } from './contact-options'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
 import { isPromotionActive } from './promotion-status'
+import { filterPublicContactMethods, type PublicContactMethod } from './public-contacts'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Business Detail (Full Page Data)
@@ -70,23 +71,6 @@ async function normalizeBusinessRows(
   })
 }
 
-export type ContactMethod = {
-  method_type:
-    | 'phone'
-    | 'whatsapp'
-    | 'complaints'
-    | 'facebook'
-    | 'instagram'
-    | 'website'
-    | 'email'
-    | 'manager'
-    | 'shift_morning'
-    | 'shift_evening'
-    | 'additional'
-  value: string
-  is_primary: boolean
-}
-
 export type MediaItem = {
   id: string
   media_type: 'logo' | 'cover' | 'gallery' | 'menu'
@@ -138,7 +122,7 @@ export function computeIsOpenNow(
 
 export type BusinessDetail = {
   business: Omit<Business, 'owner_profile_id'>
-  contacts: ContactMethod[]
+  contacts: PublicContactMethod[]
   contactOptions: ContactOption[]
   media: MediaItem[]
   branches: Branch[]
@@ -269,17 +253,7 @@ export const getBusinessDetail = unstable_cache(
         .select('method_type, value, is_primary')
         .eq('business_id', business.id)
         .eq('is_public', true)
-        .in('method_type', [
-          'phone',
-          'whatsapp',
-          'complaints',
-          'facebook',
-          'instagram',
-          'website',
-          'manager',
-          'shift_morning',
-          'shift_evening',
-        ])
+        .in('method_type', ['facebook', 'instagram', 'website'])
         .order('is_primary', { ascending: false }),
       supabase
         .from('business_media')
@@ -304,7 +278,9 @@ export const getBusinessDetail = unstable_cache(
         .order('sort_order', { ascending: true }),
     ])
 
-    const contacts = (contactsRes.data ?? []) as ContactMethod[]
+    const contacts = filterPublicContactMethods(
+      (contactsRes.data ?? []) as { method_type: string; value: string; is_primary: boolean }[],
+    )
     const media = (mediaRes.data ?? []) as MediaItem[]
     type RawBranch = Branch & {
       phone: string | null
