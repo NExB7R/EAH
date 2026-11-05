@@ -182,20 +182,12 @@ async function normalizeBusinesses(
 // 1. كل الأنشطة المنشورة (للـ Home)
 // ═══════════════════════════════════════════════════════════
 
-const MAX_PUBLISHED_BUSINESSES = 500
+import {
+  getPublishedBusinessLimit,
+  onlyPublishedBusinessRows,
+} from './published-business-pool'
+
 const DEFAULT_PUBLISHED_BUSINESSES = 100
-
-export function getPublishedBusinessLimit(requested = DEFAULT_PUBLISHED_BUSINESSES): number {
-  if (!Number.isFinite(requested)) return DEFAULT_PUBLISHED_BUSINESSES
-  return Math.min(MAX_PUBLISHED_BUSINESSES, Math.max(1, Math.floor(requested)))
-}
-
-/** Defense in depth: drafts must never enter any public discovery/search pool. */
-export function onlyPublishedBusinessRows<T extends { is_published?: unknown }>(
-  rows: T[] | null,
-): T[] {
-  return (rows ?? []).filter((row) => row.is_published === true)
-}
 
 export const getPublishedBusinesses = unstable_cache(
   async (requestedLimit = DEFAULT_PUBLISHED_BUSINESSES): Promise<Business[]> => {
