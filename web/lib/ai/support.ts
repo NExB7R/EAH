@@ -34,7 +34,7 @@ const SYSTEM_PROMPT = `أنت "مساعد EAH للدعم الفني" — بتس�
 - من /auth — تسجيل برقم الموبايل + باسورد
 - نسيت الباسورد → /auth/recover
 
-### للعميل
+### للمشتري
 - اكتشاف: /explore (فلاتر + بحث)
 - المفضلات: /account/favorites
 - المتابعات: /account/following
@@ -43,7 +43,7 @@ const SYSTEM_PROMPT = `أنت "مساعد EAH للدعم الفني" — بتس�
 - الإشعارات: /account/notifications
 - الأمان: /account/security
 
-### للتاجر
+### للبايع
 - التسجيل: /merchant/apply (5 دقايق)
 - الطلبات: /merchant/orders
 - العروض: /merchant/offers (لازم باقة مدفوعة)
