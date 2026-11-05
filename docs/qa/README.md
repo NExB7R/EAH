@@ -113,3 +113,17 @@ EAH_ALLOW_QA_ACCOUNT_SEED=yes EAH_QA_ALLOWED_PROJECT_REF=<TEST_PROJECT_REF> npm 
 - اختبارات Vitest الجديدة تغطي الحد الافتراضي 100، والحد الأعلى 500، واستبعاد المسودات والقيم غير الصحيحة، وسعة smartSearch فوق 200 نتيجة.
 - لم تُشغّل الاختبارات بعد. دورة E2E المطلوبة (إنشاء أدمن، ربط مالك اختياري، رفع شعار/غلاف، نشر، البحث وفتح الصفحة العامة، والتحقق من بقاء المسودة غير مرئية) يجب أن تستخدم مشروع Supabase غير إنتاجي مخصصًا مع `EAH_QA_ALLOWED_PROJECT_REF` مطابقًا و`EAH_ALLOW_QA_ACCOUNT_SEED=yes`. لا تستخدم إنتاج EAH مطلقًا.
 - لا توجد بيانات اختبار جديدة أو عمليات كتابة/حذف على قاعدة البيانات في هذه الدفعة.
+
+
+## تشغيل E2E على بيئة معزولة فقط
+
+قبل تشغيل Playwright، حمّل متغيرات مشروع Supabase الاختباري غير الإنتاجي في `web/.env.local`، ثم اضبط:
+
+```bash
+EAH_E2E_ALLOW_NONPROD=yes
+EAH_QA_ALLOWED_PROJECT_REF=<TEST_PROJECT_REF>
+EAH_E2E_PUBLISHED_BUSINESS_SLUG=<published-eah-qa-test-slug>
+EAH_E2E_DRAFT_BUSINESS_NAME=<exact-unpublished-qa-business-name>
+```
+
+يقرأ Playwright ملف البيئة عبر `@next/env`، ويتحقق من أن عنوان Supabase HTTPS وأن project ref يطابق القيمة المسموح بها وليس مشروع الإنتاج. كما يرفض أي `PLAYWRIGHT_BASE_URL` بعيد؛ شغّل التطبيق محليًا على قاعدة الاختبار. لا تضع كلمات مرور أو service-role keys في أوامر shell أو سجلات CI. الاختبار الحالي يثبت البحث عن نشاط QA منشور واستبعاد اسم نشاط QA غير منشور؛ ولا يثبت بعد دورة إنشاء النشاط ورفع الصور والنشر من لوحة الأدمن.
