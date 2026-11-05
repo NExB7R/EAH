@@ -275,7 +275,7 @@ function SlideProblem() {
       <div className={styles.trioGrid}>
         <TrioCard num="01" title="مفيش دليل موحد" text="كل نشاط في حتة — مفيش مكان يجمعهم." />
         <TrioCard num="02" title="تقييمات مبعترة" text="مفيش طريقة موثوقة تعرف منها الكويس." />
-        <TrioCard num="03" title="التجار محتاجين ظهور" text="محتاجين يوصلوا للعميلن — بدون عمولات." />
+        <TrioCard num="03" title="البياعين محتاجين ظهور" text="محتاجين يوصلوا للمشترين — بدون عمولات." />
       </div>
     </div>
   )
@@ -304,7 +304,7 @@ function SlideIdea() {
             <CheckCircleIcon size={22} />
           </span>
           <div>
-            <strong className={styles.ideaStrong}>بدون عمولة على التاجر</strong>
+            <strong className={styles.ideaStrong}>بدون عمولة على البايع</strong>
             <p className={styles.ideaText}>كل الأرباح للبايع</p>
           </div>
         </div>
@@ -338,7 +338,7 @@ function SlideSolution() {
         <TrioCard
           num="💬"
           title="طلب مباشر"
-          text="رسالة واتساب جاهزة — والتاجر يرد في دقايق."
+          text="رسالة واتساب جاهزة — والبايع يرد في دقايق."
           icon={<WhatsAppIcon size={22} />}
         />
         <TrioCard
@@ -356,7 +356,7 @@ function SlideSolution() {
 function SlideCustomer() {
   return (
     <div className={styles.slide}>
-      <span className={`${styles.slideBadge} ${styles.badgePurple}`}>للعميل</span>
+      <span className={`${styles.slideBadge} ${styles.badgePurple}`}>للمشتري</span>
       <h2 className={styles.slideTitle}>مجاناً 100%</h2>
       <div className={styles.iconGrid}>
         <IconTile Icon={SearchIcon} label="بحث ذكي" />
@@ -376,7 +376,7 @@ function SlideCustomer() {
 function SlideMerchant() {
   return (
     <div className={styles.slide}>
-      <span className={`${styles.slideBadge} ${styles.badgeGold}`}>للتاجر</span>
+      <span className={`${styles.slideBadge} ${styles.badgeGold}`}>للبايع</span>
       <h2 className={styles.slideTitle}>ظهور مجاني · بدون عمولة</h2>
       <div className={styles.iconGrid}>
         <IconTile Icon={StoreIcon} label="صفحة كاملة" gold />
