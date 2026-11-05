@@ -127,3 +127,22 @@ EAH_E2E_DRAFT_BUSINESS_NAME=<exact-unpublished-qa-business-name>
 ```
 
 يقرأ Playwright ملف البيئة عبر `@next/env`، ويتحقق من أن عنوان Supabase HTTPS وأن project ref يطابق القيمة المسموح بها وليس مشروع الإنتاج. كما يرفض أي `PLAYWRIGHT_BASE_URL` بعيد؛ شغّل التطبيق محليًا على قاعدة الاختبار. لا تضع كلمات مرور أو service-role keys في أوامر shell أو سجلات CI. الاختبار الحالي يثبت البحث عن نشاط QA منشور واستبعاد اسم نشاط QA غير منشور؛ ولا يثبت بعد دورة إنشاء النشاط ورفع الصور والنشر من لوحة الأدمن.
+
+
+## GitHub Actions — E2E المعزول فقط
+
+الـworkflow `.github/workflows/e2e.yml` أصبح يدوي التشغيل فقط عبر `workflow_dispatch`، ويشغّل التطبيق محليًا داخل Runner على `127.0.0.1`. لم يعد يبدأ عند نجاح نشر Production أو عند Pull Request، ولا يرسل Playwright إلى أي عنوان Vercel.
+
+لتهيئة تشغيل CI بعد إنشاء مشروع QA منفصل، أضف GitHub Actions secrets التالية:
+- `QA_SUPABASE_URL`
+- `QA_SUPABASE_PUBLISHABLE_KEY`
+- `QA_SUPABASE_SERVICE_ROLE_KEY`
+
+وأضف Actions variables التالية:
+- `EAH_QA_ALLOWED_PROJECT_REF`
+- `EAH_E2E_PUBLISHED_BUSINESS_SLUG`
+- `EAH_E2E_DRAFT_BUSINESS_NAME`
+
+قبل تثبيت الاعتمادات، يتحقق الـworkflow من أن عنوان Supabase يستخدم HTTPS، وأن project ref يطابق القيمة المسموح بها، ولا يساوي مشروع الإنتاج. كما يتطلب slug يبدأ بـ`eah-qa-test-`. لا تضع أي مفتاح سري في Variables أو ملفات المستودع؛ المفاتيح السرية مكانها Secrets فقط.
+
+هذا الإعداد لا ينشئ مشروع QA ولا يزرع البيانات تلقائيًا. يجب تجهيز نشاط QA منشور ونشاط QA مسودة داخل المشروع المعزول أولًا. لا تشغّل workflow قبل التأكد من أن بيانات Secrets/Variables تشير كلها إلى نفس مشروع الاختبار.
