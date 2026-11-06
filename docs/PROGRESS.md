@@ -1221,3 +1221,10 @@
   - `createComment` (العميل مش هيقدر يعلّق لو مقيد/موقوف)
   - `merchantReply` (التاجر مش هيقدر يرد على تقييمات لو مقيد/موقوف)
 - Cockpit بيعرض: عداد المخالفات (weighted)، شريط تقدم لحد العقوبة الجاية، وسجل كامل مع التاريخ والوقت.
+
+## 2026-11-06 — توحيد الهيدر والقائمة عبر المنصة
+- FloatingCapsule (الهيدر العائم) بيظهر دلوقتي في /admin، /merchant، /account (كان مخفي قبل).
+- تم تبسيط layouts الأدوار: إزالة SecondaryHero + AdminSidebar/MerchantSidebar/AccountSidebar + AdminTopbar + CommandPalette.
+- القائمة الموحدة في MenuDrawer داخل FloatingCapsule، وبتظهر روابط الأدوار حسب صلاحية المستخدم.
+- إضافة padding-top لكل layout لتفادي تداخل المحتوى مع الهيدر.
+- /auth فضل مستقل (بدون هيدر).
