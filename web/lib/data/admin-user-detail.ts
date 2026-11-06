@@ -121,3 +121,28 @@ export async function getStandingEvents(userId: string): Promise<StandingEvent[]
     admin_name: e.admin?.display_name || 'الإدارة'
   }))
 }
+
+
+export type ViolationStats = {
+  total: number
+  weighted: number
+  nextThreshold: { at: number; level: string } | null
+}
+
+export async function getViolationStats(userId: string): Promise<ViolationStats> {
+  const supabase = await createClient()
+  const since = new Date(); since.setDate(since.getDate() - 30)
+  const { data } = await supabase
+    .from("trust_events")
+    .select("event_type")
+    .eq("entity_id", userId)
+    .in("event_type", ["review_rejected", "report_valid"])
+    .gte("created_at", since.toISOString())
+  const events = (data || []) as { event_type: string }[]
+  const weighted = events.reduce((s, e) => s + (e.event_type === "report_valid" ? 2 : 1), 0)
+  let next: ViolationStats["nextThreshold"] = null
+  if (weighted < 3) next = { at: 3, level: "تحذير" }
+  else if (weighted < 6) next = { at: 6, level: "تقييد" }
+  else if (weighted < 10) next = { at: 10, level: "حظر" }
+  return { total: events.length, weighted, nextThreshold: next }
+}

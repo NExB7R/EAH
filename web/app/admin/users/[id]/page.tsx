@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getAdminUserDetail, getStandingEvents } from '@/lib/data/admin-user-detail'
+import { getAdminUserDetail, getStandingEvents, getViolationStats } from '@/lib/data/admin-user-detail'
 import StandingCockpit from './standing-cockpit'
 import UserDetailActions from './user-detail-actions'
 import { ArrowLeftIcon, StarIcon, StoreIcon, ClockIcon } from '@/components/icons'
@@ -26,6 +26,7 @@ export default async function AdminUserPage({ params }: { params: Promise<{ id: 
   const { id } = await params
   const detail = await getAdminUserDetail(id)
   const standingHistory = await getStandingEvents(id)
+  const violationStats = await getViolationStats(id)
 
   if (!detail) notFound()
 
@@ -53,6 +54,7 @@ export default async function AdminUserPage({ params }: { params: Promise<{ id: 
         currentReason={profile.standing_reason}
         expiresAt={profile.standing_expires_at}
         history={standingHistory}
+        violationStats={violationStats}
       />
 
       {/* باقي التفاصيل (الأنشطة، التقييمات، السجلات) */}
