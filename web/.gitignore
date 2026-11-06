@@ -22,3 +22,9 @@ public/swe-worker-*.js
 
 # Local QA account credentials (contains temporary passwords)
 /.qa-test-credentials.local.json
+
+# Env files
+.env
+.env.local
+.env.*.local
+
