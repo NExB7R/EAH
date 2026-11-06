@@ -1,4 +1,4 @@
-import { getSession } from '@/lib/auth/session';
+import { getUserSession } from '@/lib/data/user';
 import { getAccountStats } from '@/lib/data/account';
 import { getBadgeCatalogWithStatus } from '@/lib/data/badges';
 import styles from './account-dashboard.module.css';
@@ -7,7 +7,7 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 export default async function AccountPage() {
-  const session = await getSession();
+  const session = await getUserSession();
   if (!session) return null;
 
   const stats = await getAccountStats(session.user.id);

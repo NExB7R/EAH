@@ -1,4 +1,4 @@
-import { getSession } from '@/lib/auth/session';
+import { getUserSession } from '@/lib/data/user';
 import { redirect } from 'next/navigation';
 import PointsGuide from './points-guide';
 import PageHeader from '@/components/page-header';
@@ -6,7 +6,7 @@ import PageHeader from '@/components/page-header';
 export const dynamic = 'force-dynamic';
 
 export default async function PointsGuidePage() {
-  const session = await getSession();
+  const session = await getUserSession();
   if (!session) redirect('/auth?next=/account/points-guide');
 
   return (
