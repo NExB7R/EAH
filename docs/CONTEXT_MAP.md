@@ -135,7 +135,7 @@
 | `ai-widget.tsx` | AiWidget | EAH — AI Widget (Floating Assistant) |
 | `announcements-banner.tsx` | AnnouncementsBanner | EAH — Announcements Banner |
 | `area-dropdown.tsx` | AreaDropdown | — |
-| `avatar.tsx` | Avatar | EAH — Avatar with Role Frame + Image Fallback |
+| `avatar.tsx` | Avatar | Fallback آمن: لو الاسم فاضي أو مش نص، يرجع '؟' بدل ما يعرض رموز غريبة |
 | `branch-list.tsx` | BranchList | EAH — Branch List (with distances + "الأقرب" badge) |
 | `business-actions.tsx` | BusinessActions | EAH — Business Quick Actions (مع القفل الذكي) |
 | `business-cache.tsx` | BusinessCache | EAH — Business Detail Cache |
@@ -163,7 +163,7 @@
 | `floating-capsule.tsx` | FloatingCapsule | EAH — Floating Capsule |
 | `global-share-action.tsx` | GlobalShareAction | — |
 | `header-weather.tsx` | HeaderWeather | موقع شبين القناطر — fallback لو المستخدم رافض geolocation |
-| `home-hero.tsx` | HomeHero | EAH — Home Hero |
+| `home-hero.tsx` | HomeHero | — |
 | `home-search-form.tsx` | HomeSearchForm | link للفلتر: /explore + نفس البحث + يفتح الفلاتر تلقائياً |
 | `install-prompt.tsx` | InstallPrompt | EAH — Install Prompt (2026) |
 | `legal-page.tsx` | LegalPage | EAH — Legal Page (موحّد للشروط + الخصوصية + الكوكيز) |
@@ -197,7 +197,7 @@
 | `signature.tsx` | Signature | EAH — Signature (HTML text, Great Vibes cursive) |
 | `signup-prompt.tsx` | SignupPrompt | لو مسجل → متظهرش |
 | `site-chrome-gate.tsx` | SiteChromeGate | — |
-| `site-footer.tsx` | SiteFooter | EAH — Site Footer (Premium 2026 — Final) |
+| `site-footer.tsx` | SiteFooter | — |
 | `smart-lock-modal.tsx` | SmartLockModal, useSmartLock | EAH — Smart Lock Modal (مهذّب — يفتح عند محاولة فعل مقفول) |
 | `suggested-section.tsx` | SuggestedSection | EAH — Suggested Section (المرشح لك) |
 | `support-widget.tsx` | SupportWidget | EAH — Support Widget (Inline — للـ /help) |
