@@ -122,7 +122,7 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (85)
+## Components (86)
 
 | File | Export | Purpose |
 |------|--------|---------|
@@ -149,6 +149,7 @@
 | `chip-scroll-handler.tsx` | ChipScrollHandler | EAH — Chip Scroll Handler |
 | `comment-item.tsx` | CommentItem | — |
 | `comments-list.tsx` | CommentsList | — |
+| `dashboard/bento.tsx` | DashboardHeader, BentoGrid, BentoCard | — |
 | `dashboard/panel.tsx` | Panel | — |
 | `dashboard/stat-card.tsx` | StatCard | — |
 | `detail-cover.tsx` | DetailCover | EAH — Detail Cover (client with onError fallback) |
