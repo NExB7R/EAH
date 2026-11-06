@@ -1,0 +1,116 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bento Grid */
+.bentoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .bentoGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .fullWidth {
+    grid-column: span 2;
+  }
+}
+
+.card {
+  background: rgba(20, 15, 30, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(157, 78, 221, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(157, 78, 221, 0.5);
+}
+
+.cardTitle {
+  font-size: 14px;
+  color: #a0a0a0;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardValue {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Level & Progress */
+.levelCard {
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.2) 0%, rgba(20, 15, 30, 0.8) 100%);
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #9D4EDD, #C77DFF);
+  border-radius: 4px;
+  transition: width 1s ease-in-out;
+}
+
+/* Streak */
+.streakCard {
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.1) 0%, rgba(20, 15, 30, 0.8) 100%);
+  border-color: rgba(232, 199, 154, 0.2);
+}
+
+/* Badges */
+.badgesGrid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.badgeItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  font-size: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.badgeLabel {
+  font-size: 10px;
+  color: #a0a0a0;
+  margin-top: 4px;
+  text-align: center;
+}
