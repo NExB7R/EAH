@@ -360,3 +360,12 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - `admin_adjust_points` قُيدت server-only حتى يُوحّد رصيد المشاركة بين trust_score وpoints_log.
 - `award_daily_login`, `claim_referral`, `start_chat` ترفض `is_anonymous=true`. `start_chat` يشترط `businesses.is_published=true`.
 - migration `registered_interaction_rpc_hardening` (version `20261106042324`) نجحت محاكاتها وتطبيقها؛ post-check أثبت ACLs والحراس وعدم بقاء بيانات اختبار.
+
+
+## مراجعة 2026-11-06 — حدود البحث وفهارس FK
+
+- تمت مراجعة كل FK من القائمة الـ14 وربطها بأسماء الأعمدة. لا يوجد فهرس سابق يبدأ بأي عمود من الأعمدة المستهدفة؛ أضيف فهرس مباشر لكل عمود.
+- migration `foreign_key_indexes_and_trust_badges_dedupe` version `20261106042744` أضاف 14 index وأزال فقط `trust_badges_entity_idx` المطابق لـ`idx_trust_badges_entity`; كلاهما غير مرتبط بقيد، وكانا valid وغير مستخدمين وفق pg_stat_user_indexes. أبقينا index واحدًا.
+- Post-check: 14 فهرس FK valid/ready، صفر FK غير مغطاة ضمن القائمة، الفهرس المكرر غير موجود والباقي موجود. Advisor أكد `unindexed_foreign_keys=0` و`duplicate_index=0`.
+- الترحيل `public_search_resource_guard` version `20261106042538` وضع resource bounds لدالة البحث العامة مع الحفاظ على فلتر is_published.
+- لم يحدث تعديل لصفوف الأنشطة أو الحسابات أو جهات الاتصال.

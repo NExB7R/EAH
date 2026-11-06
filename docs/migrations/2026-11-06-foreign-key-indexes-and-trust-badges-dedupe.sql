@@ -1,3 +1,4 @@
+-- Applied to the current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106042744).
 -- Cover the 14 foreign-key columns reported by Supabase Advisor.
 -- The existing indexes were inspected first; none covered these FK columns
 -- as a leading key. The tables are pre-launch/test data and no rows change.

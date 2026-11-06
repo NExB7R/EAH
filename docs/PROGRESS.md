@@ -1185,3 +1185,11 @@
 - أضيف رفض جلسات Supabase anonymous إلى daily login/referral/chat، وفحص أن النشاط منشور قبل إنشاء محادثة.
 - dry-run أظهر `registered_account_required` للدوال الثلاث على is_anonymous=true. Post-apply أكد ACLs؛ chat/referral/points counts ظلت صفرًا بعد rollback.
 - لم يتغير أي سجل مستخدم أو نشاط؛ نقاط المشاركة باقية قيد التوحيد، ولا يوجد backfill.
+
+
+## 2026-11-06 — حماية موارد البحث وتحسين فهارس قاعدة البيانات
+
+- طُبّق `public_search_resource_guard` (version `20261106042538`): طول query ≤120، وlimit ≤100، وoffset ≤5000، مع استمرار فلتر الأنشطة المنشورة فقط. طلب اختباري limit=1,000,000 خضع للحد، ولم يتجاوز 8 أنشطة منشورة موجودة.
+- طُبّق `foreign_key_indexes_and_trust_badges_dedupe` (version `20261106042744`) وأُضيفت الفهارس الـ14 لتغطية مفاتيح FK التي رصدها Advisor.
+- حُذف index مكرر واحد على `trust_badges`; بقي `idx_trust_badges_entity`. لم تتغير بيانات أي جدول.
+- Post-apply Advisor: unindexed_foreign_keys=0, duplicate_index=0؛ 8 أنشطة ما زالت منشورة. ارتفع unused_index من 75 إلى 88 لأن الفهارس الجديدة لم تستخدم بعد، ونؤجل تنظيف أي فهارس أخرى حتى تتوفر إحصاءات تشغيل حقيقية.

@@ -1,3 +1,4 @@
+-- Applied to the current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106042538).
 -- Public SECURITY DEFINER search RPC: clamp user-controlled resource bounds.
 -- Keep the existing public fields and published-only visibility filter.
 -- Applied to the current EAH pre-launch base after a rollback dry-run.
