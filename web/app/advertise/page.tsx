@@ -17,7 +17,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'أعلن معانا',
-  description: 'إعلانات توصل للمشترين الفعليين في شبين القناطر',
+  description: 'إعلانات توصل للعملاء الفعليين في شبين القناطر',
 }
 
 const SLOT_ICON: Record<string, typeof HomeIcon> = {
@@ -53,7 +53,7 @@ export default async function AdvertisePage() {
         <div className={styles.heroContent}>
           <h1 className={styles.heroTitle}>
             إعلانات توصل لـ
-            <span className={styles.accent}> مشترين حقيقيين</span>
+            <span className={styles.accent}> عملاء حقيقيين</span>
           </h1>
           <p className={styles.heroDesc}>
             مش مجرد ظهور — إنت بتوصل لناس في شبين القناطر والقرى حواليها بيدوروا على اللي بتقدمه

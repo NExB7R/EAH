@@ -275,7 +275,7 @@ function SlideProblem() {
       <div className={styles.trioGrid}>
         <TrioCard num="01" title="مفيش دليل موحد" text="كل نشاط في حتة — مفيش مكان يجمعهم." />
         <TrioCard num="02" title="تقييمات مبعترة" text="مفيش طريقة موثوقة تعرف منها الكويس." />
-        <TrioCard num="03" title="البياعين محتاجين ظهور" text="محتاجين يوصلوا للعميلن — بدون عمولات." />
+        <TrioCard num="03" title="التجار محتاجين ظهور" text="محتاجين يوصلوا للعملاء — بدون عمولات." />
       </div>
     </div>
   )
@@ -502,7 +502,7 @@ function SlideTeam() {
         <p className={styles.teamRole}>المؤسس · </p>
         <div className={styles.teamLine} aria-hidden />
         <p className={styles.teamText}>
-          بدأت EAH من حلم بسيط: نوصّل الناس بأماكنهم، ونوقف استغلال البياعين.
+          بدأت EAH من حلم بسيط: نوصّل الناس بأماكنهم، ونوقف استغلال التجار.
         </p>
       </div>
     </div>

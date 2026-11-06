@@ -106,7 +106,7 @@ export default async function AboutPage() {
             </div>
             <div className={styles.problemCard}>
               <span className={styles.problemNum}>03</span>
-              <h3 className={styles.problemTitle}>التاجرين محتاجين ظهور</h3>
+              <h3 className={styles.problemTitle}>التجار محتاجين ظهور</h3>
               <p className={styles.problemText}>
                 التاجر محتاج يوصل للناس، بس مش عايز يدفع عمولات كل طلب.
               </p>
@@ -234,18 +234,18 @@ export default async function AboutPage() {
             <FeatureCard
               Icon={StarIcon}
               title="تقييمات موثوقة"
-              text="رد على العميلن، وحسّن سمعتك."
+              text="رد على العملاء، وحسّن سمعتك."
             />
             <FeatureCard
               Icon={ShieldCheckIcon}
               title="شارة الثقة"
               text="كل ما تتفاعل، تترقّى في التصنيف."
             />
-            <FeatureCard Icon={GiftIcon} title="عروض وقسائم" text="اعمل عروض لجذب عميلن جدد." />
+            <FeatureCard Icon={GiftIcon} title="عروض وقسائم" text="اعمل عروض لجذب عملاء جدد." />
             <FeatureCard
               Icon={CrownGoldIcon}
               title="ترقيات اختيارية"
-              text="ظهور أعلى، شارات، إدارة متقدمة لعلاقات العميلن."
+              text="ظهور أعلى، شارات، إدارة متقدمة لعلاقات العملاء."
             />
           </div>
 

@@ -19,7 +19,7 @@ export default async function MerchantTrustPage() {
     <div>
       <AccountPageHeader
         title="سمعة نشاطك"
-        description="بيانات واضحة تساعد المشترين على فهم نشاطك وسجل التعاملات."
+        description="بيانات واضحة تساعد العملاء على فهم نشاطك وسجل التعاملات."
       />
       <section className={styles.summaryGrid} aria-label="مؤشرات سمعة النشاط">
         <article className={styles.summaryCard}>
@@ -34,7 +34,7 @@ export default async function MerchantTrustPage() {
         </article>
         <article className={styles.summaryCard}>
           <span className={styles.summaryIcon}><StarIcon size={20} /></span>
-          <span className={styles.summaryLabel}>تقييمات المشترين</span>
+          <span className={styles.summaryLabel}>تقييمات العملاء</span>
           <strong className={styles.summaryValue}>
             {business.rating_count > 0 ? `${business.rating_avg.toFixed(1)} / 5` : 'لا توجد تقييمات بعد'}
           </strong>

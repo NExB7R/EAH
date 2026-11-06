@@ -116,7 +116,7 @@ export default async function InsightDetailPage({ params }: { params: Promise<{ 
               )}
               {typeof orderMetricsView.avg_feedback_rating === 'number' && (
                 <div className={styles.metricCell}>
-                  <span className={styles.metricLabel}>رضا المشترين</span>
+                  <span className={styles.metricLabel}>رضا العملاء</span>
                   <span className={styles.metricValue}>
                     ⭐ {orderMetricsView.avg_feedback_rating}/5
                   </span>

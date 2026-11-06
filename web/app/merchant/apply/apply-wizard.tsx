@@ -255,7 +255,7 @@ export default function ApplyWizard({ areas }: Props) {
         {step === 1 && (
           <>
             <h2 className={styles.stepTitle}>التواصل</h2>
-            <p className={styles.stepDesc}>عشان المشترين يوصّلو لك بسهولة</p>
+            <p className={styles.stepDesc}>عشان العملاء يوصّلو لك بسهولة</p>
 
             <div className={styles.contactGroup}>
               <div className={styles.contactGroupHeader}>
@@ -380,7 +380,7 @@ export default function ApplyWizard({ areas }: Props) {
         {step === 2 && (
           <>
             <h2 className={styles.stepTitle}>الموقع</h2>
-            <p className={styles.stepDesc}>عشان المشترين يلاقوك بسهولة</p>
+            <p className={styles.stepDesc}>عشان العملاء يلاقوك بسهولة</p>
 
             <label className={styles.field}>
               <span className={styles.label}>العنوان * (وصف واضح)</span>

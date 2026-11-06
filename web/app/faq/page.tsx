@@ -34,7 +34,7 @@ const CUSTOMER_FAQ: QA[] = [
   },
   {
     q: 'الرقم بيبان لأي حد؟',
-    a: 'لا. رقمك محفوظ ومش بيظهر لأي حد — لا بايعين ولا مشترين. البايع المرتبط بالنشاط يشوف إحصائيات الاتصال بس (كم واحد اتصل).',
+    a: 'لا. رقمك محفوظ ومش بيظهر لأي حد — لا بايعين ولا عملاء. البايع المرتبط بالنشاط يشوف إحصائيات الاتصال بس (كم واحد اتصل).',
   },
   {
     q: 'إزاي أفعّل الإشعارات؟',
@@ -78,7 +78,7 @@ const MERCHANT_FAQ: QA[] = [
   },
   {
     q: 'إيه فايدة المساعد الذكي؟',
-    a: 'بتحلل نشاطك، بتديك توصيات (إيه الأوقات اللي بيجي فيها مشترين أكتر، إيه اللي ينقصك)، وتقارير قابلة للطباعة.',
+    a: 'بتحلل نشاطك، بتديك توصيات (إيه الأوقات اللي بيجي فيها عملاء أكتر، إيه اللي ينقصك)، وتقارير قابلة للطباعة.',
     link: { href: '/merchant/insights', label: 'جربه' },
   },
   {
@@ -118,7 +118,7 @@ const GENERAL_FAQ: QA[] = [
 ]
 
 const CATEGORIES = [
-  { key: 'customer', title: 'للمشترين', Icon: UserIcon, items: CUSTOMER_FAQ, tone: 'purple' },
+  { key: 'customer', title: 'للعملاء', Icon: UserIcon, items: CUSTOMER_FAQ, tone: 'purple' },
   { key: 'merchant', title: 'للبايع', Icon: StoreIcon, items: MERCHANT_FAQ, tone: 'gold' },
   { key: 'general', title: 'عام', Icon: ShieldCheckIcon, items: GENERAL_FAQ, tone: 'teal' },
 ] as const

@@ -43,12 +43,12 @@ export default async function QrPage() {
     <div>
       <AccountPageHeader
         title="رمز الاستجابة السريعة للنشاط"
-        description="حمّل الكود واطبعه — المشترين يمسحوه ويفتحوا صفحتك فورًا"
+        description="حمّل الكود واطبعه — العملاء يمسحوه ويفتحوا صفحتك فورًا"
       />
 
       <section className={styles.hero}>
         <p className={styles.hint}>
-          حط الكود على: واجهة المحل، المنيو، السيارات، أو أي حتة يشوفها المشترين.
+          حط الكود على: واجهة المحل، المنيو، السيارات، أو أي حتة يشوفها العملاء.
         </p>
       </section>
 

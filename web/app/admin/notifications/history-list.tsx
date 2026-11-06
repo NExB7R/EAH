@@ -19,8 +19,8 @@ export type HistoryItem = {
 
 const AUDIENCE_LABEL: Record<string, string> = {
   all: 'الكل',
-  customers: 'المشترين',
-  merchants: 'البياعين',
+  customers: 'العملاء',
+  merchants: 'التجار',
   verified: 'الموثّقون',
   premium: 'مميز',
 }

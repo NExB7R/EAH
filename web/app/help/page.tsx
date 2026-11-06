@@ -88,7 +88,7 @@ const MERCHANT_TOPICS: Topic[] = [
   {
     Icon: QrCodeIcon,
     title: 'رمز الاستجابة السريعة للنشاط',
-    body: 'حمّل الكود واطبعه — المشترين يمسحوه ويوصلوا لصفحتك في ثانية.',
+    body: 'حمّل الكود واطبعه — العملاء يمسحوه ويوصلوا لصفحتك في ثانية.',
     link: { href: '/merchant/qr', label: 'رمز الاستجابة السريعة' },
   },
   {
@@ -122,7 +122,7 @@ export default async function HelpPage() {
           <div className={styles.sectionHead}>
             <span className={styles.sectionBadge}>
               <UserIcon size={12} />
-              للمشترين
+              للعملاء
             </span>
             <h2 className={styles.sectionTitle}>إزاي تستخدم EAH</h2>
           </div>
