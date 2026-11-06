@@ -1110,3 +1110,11 @@
 - فحص ما قبل التطبيق: 8 أنشطة، 0 أنشطة بمالك، 0 مجموعات مالك مكررة. فحص ما بعد التطبيق أثبت `indisunique=true`, `indisvalid=true`, `indisready=true` مع predicate غير-null.
 - لم نُنشئ أو نحذف أو نعدل أي نشاط أو حساب. التغيير كان DDL للقيد فقط.
 - لم يعمل pgTAP لأن `plan(integer)` غير متاحة في قاعدة المشروع؛ تم التحقق من catalog مباشرة. Vitest/CI ما زالت مفتوحة حتى يبدأ GitHub Runner فعليًا. لا توجد حتى الآن حسابات customer/merchant لاختبار ربط مالك حقيقيًا.
+
+
+## 2026-11-06 — إغلاق أعلام الطلبات القديمة للأنشطة غير المملوكة
+
+- قبل التعديل: نشاط واحد بلا مالك مع `accepts_orders=true` وإعداد واحد مطابق مع `orders_enabled=true`.
+- طُبّقت migration `disable_ownerless_in_app_orders`، نسخة `20261106035929`، على قاعدة EAH الحالية. النشر العام لم يتغير.
+- بعد التطبيق: `ownerless_businesses_accepting_orders=0` و`ownerless_enabled_order_settings=0`. إجمالي الأنشطة 8 والمنشور 8 والمرتبط بمالك 0؛ لم نغير أية ملكية أو نرفع/نحذف صورًا أو نعدل بيانات اتصال.
+- اختبار pgTAP لا يعمل لغياب `plan(integer)`؛ نتيجة التحقق SQL المباشر موثقة ولا تُعامل كنجاح pgTAP.

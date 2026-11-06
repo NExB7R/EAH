@@ -1,7 +1,7 @@
 -- EAH — Disable stale in-app order settings on ownerless activities.
 -- Public visibility and direct contact channels remain unchanged.
 -- Internal orders require a linked seller; the runtime already fails closed.
--- This migration normalizes legacy persisted flags and is safe to re-run.
+-- Applied to the current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106035929); safe to re-run.
 
 BEGIN;
 
