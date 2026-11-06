@@ -378,3 +378,8 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - فحص `registered_account_only_*`: 60/60 من نوع RESTRICTIVE؛ لا يمكن تجاوزها عبر policies القديمة permissive. ثلاث عمليات لا تمتلك permissive base policy مستقلة ولذلك تظل ممنوعة عبر RLS، لا مفتوحة.
 - تحقق حقيقي داخل معاملة rollback: anonymous JWT ممنوع من إضافة تعليق وممنوع من إضافة comment_like؛ registered super_admin قادر على الإضافة الذاتية. بعد rollback لا توجد سجلات اختبار، وعدد الأنشطة ظل 8 كلها منشورة.
 - لا تزال 139 حالة `multiple_permissive_policies` وتحتاج إلى مراجعة معنى الـOR لكل جدول، ولا يجري حذفها جماعيًا لأن كثيرًا منها يجمع صلاحيات المالك والأدمن أو العميل.
+
+## 2026-11-06 — مراجعة أمان خصوصية البيانات (Contact Privacy)
+- **الملفات المراجعة:** `business-detail.ts`, `public-contacts.ts`, `contact-options.ts`, `businesses/[slug]/page.tsx`.
+- **النتيجة:** آمنة 100%. الأرقام الخام يتم فلترتها في السيرفر، ويتم تمرير `contactId` و `branchId` فقط للمتصفح.
+- **JSON-LD:** لا يحتوي على أرقام هواتف، ويقتصر على الروابط الاجتماعية.
