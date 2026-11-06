@@ -196,7 +196,7 @@
 | `section-title.tsx` | SectionTitle | EAH — Section Title |
 | `signature.tsx` | Signature | EAH — Signature (HTML text, Great Vibes cursive) |
 | `signup-prompt.tsx` | SignupPrompt | لو مسجل → متظهرش |
-| `site-chrome-gate.tsx` | SiteChromeGate | EAH — Site Chrome Gate |
+| `site-chrome-gate.tsx` | SiteChromeGate | — |
 | `site-footer.tsx` | SiteFooter | EAH — Site Footer (Premium 2026 — Final) |
 | `smart-lock-modal.tsx` | SmartLockModal, useSmartLock | EAH — Smart Lock Modal (مهذّب — يفتح عند محاولة فعل مقفول) |
 | `suggested-section.tsx` | SuggestedSection | EAH — Suggested Section (المرشح لك) |
@@ -291,7 +291,7 @@
 | `logging/client.ts` | reportError | EAH — Client-side error reporter |
 | `logging/errors.ts` | logError, captureException | EAH — System Error Logging |
 | `nav-items.ts` | NAV_ITEMS | EAH — Section Nav Items |
-| `navigation/public-chrome.ts` | shouldRenderPublicChrome | Return false for route families with their own shell, before loading |
+| `navigation/public-chrome.ts` | shouldRenderPublicChrome | — |
 | `notifications/server.ts` | createNotification, createBulkNotifications | EAH — Notifications (Server helper موحّد) |
 | `offline/businesses.ts` | cacheBusinessDetail, getCachedBusiness, getAllCachedSlugs | EAH — Offline Businesses Cache |
 | `offline/db.ts` | STORES, openDB, idbGet, idbSet, idbDelete, … | EAH — Offline DB (IndexedDB wrapper) |
