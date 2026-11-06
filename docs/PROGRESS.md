@@ -1176,3 +1176,12 @@
 - أصبحت `is_business_owner` لا تكشف ارتباط أي UUID آخر لمستخدم عادي؛ تظل صالحة لسياسات RLS التي تمرر `auth.uid()` وللأدمن الأعلى.
 - تم تحديث `invite_partner` لفحص ملكية الشخص المدعو داخليًا. وسُحبت صلاحية RPC المباشرة عن `is_active_partner` للمستخدمين، مع بقاء استخدامها المتداخل من `invite_partner` عبر function owner.
 - Dry-run داخل ROLLBACK أكد عدم-admin probe=false وadmin self lookup=true؛ post-apply أكد ACLs والمصدر وقيد owner unique ما زال صالحًا.
+
+
+## 2026-11-06 — حماية RPCs القديمة من إساءة الاستدعاء والجلسات المجهولة
+
+- طُبّق `registered_interaction_rpc_hardening` بالنسخة `20261106042324`.
+- أصبحت خمس دوال غير مستخدمة/غير مكتملة Server-only (`submit_pending_change`, `redeem_coupon`, `log_unique_visit`, `record_daily_visit`, `admin_adjust_points`). التنفيذ لـservice_role فقط.
+- أضيف رفض جلسات Supabase anonymous إلى daily login/referral/chat، وفحص أن النشاط منشور قبل إنشاء محادثة.
+- dry-run أظهر `registered_account_required` للدوال الثلاث على is_anonymous=true. Post-apply أكد ACLs؛ chat/referral/points counts ظلت صفرًا بعد rollback.
+- لم يتغير أي سجل مستخدم أو نشاط؛ نقاط المشاركة باقية قيد التوحيد، ولا يوجد backfill.

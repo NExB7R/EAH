@@ -1,3 +1,4 @@
+-- Applied to the current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106042324).
 -- EAH — Harden legacy authenticated RPCs before public launch.
 -- Several legacy write RPCs have no application call sites and either bypass
 -- business ownership checks or can mutate rewards without verifying the event.

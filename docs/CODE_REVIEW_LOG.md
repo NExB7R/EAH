@@ -351,3 +351,12 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - لأن `invite_partner` يحتاج فحص target owner، استُبدل استعمال helper العام بفحص مباشر داخل SECURITY DEFINER function بعد التحقق أن caller صاحب/مدير النشاط.
 - `is_active_partner` لا يستخدم في RLS ولا في client code؛ استدعاؤه الداخلي الوحيد من invite_partner. تم قفل direct EXECUTE عن browser roles مع بقاء صلاحية مالك الدالة.
 - ترحيل `owner_helper_identity_guard` version `20261106042050` تم بعد dry-run؛ post-apply أكد القواعد وACLs. لم نغير سجلات النشاط/الشراكة.
+
+
+## مراجعة 2026-11-06 — RPCs غير المكتملة وهوية anonymous
+
+- `submit_pending_change` لا تربط الكيان بالمالك، و`redeem_coupon` لا تتحقق من active/expiry/order ownership، و`log_unique_visit` لا تثبت وقوع الحدث. لا callsites تطبيقية لهذه الدوال؛ عُزلت عن browser roles وأصبحت service-role-only.
+- `record_daily_visit` نسخة يومية قديمة غير مستخدمة بالتطبيق؛ قُيدت server-only لتجنب تكرار منح نقاط مستقل عن daily login.
+- `admin_adjust_points` قُيدت server-only حتى يُوحّد رصيد المشاركة بين trust_score وpoints_log.
+- `award_daily_login`, `claim_referral`, `start_chat` ترفض `is_anonymous=true`. `start_chat` يشترط `businesses.is_published=true`.
+- migration `registered_interaction_rpc_hardening` (version `20261106042324`) نجحت محاكاتها وتطبيقها؛ post-check أثبت ACLs والحراس وعدم بقاء بيانات اختبار.

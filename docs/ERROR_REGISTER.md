@@ -552,3 +552,12 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
 - `invite_partner` كانت تحتاج فحصًا داخليًا لكون المستهدف مالكًا بالفعل؛ عُدلت لتنفذ ذلك الاستعلام داخل SECURITY DEFINER نفسه بدل استعمال helper عام كـoracle.
 - `is_active_partner` لا توجد لها سياسات RLS أو callsites متصفح؛ سُحبت EXECUTE من PUBLIC/anon/authenticated وأبقيت لـservice_role ولـfunction owner حتى يظل استخدامها المتداخل داخل `invite_partner` سليمًا.
 - طُبّق `owner_helper_identity_guard` بالنسخة `20261106042050`. Dry-run rollback أكد: non-admin lookup لشخص آخر=false، admin self lookup=true، function owner يحتفظ بصلاحية is_active_partner؛ post-apply أكد ACLs ووجود guard في المصدر.
+
+
+### تحديث 2026-11-06 — RPCs التفاعل القديمة والجلسات المجهولة
+
+- مراجعة تعريفات/callsites كشفت `submit_pending_change` بلا فحص صلاحية/ملكية على الكيان، و`redeem_coupon` بلا تحقق من صلاحية الكوبون أو ملكية الطلب، و`log_unique_visit` تمنح نقاطًا بمجرد RPC دون إثبات حدث الكشف/الطلب. لم تظهر لهذه الدوال callsites في التطبيق.
+- سُحبت EXECUTE من PUBLIC/anon/authenticated عن `submit_pending_change`, `redeem_coupon`, `log_unique_visit`, `record_daily_visit`, `admin_adjust_points`، وأُبقيت لـservice_role فقط. `admin_adjust_points` مقفولة أيضًا لحين توحيد trust_score وpoints_log.
+- أضيف رفض `auth.jwt()->>'is_anonymous'` إلى `award_daily_login`, `claim_referral`, `start_chat`; وأصبح `start_chat` لا يقبل إلا نشاطًا منشورًا.
+- طُبّق `registered_interaction_rpc_hardening` بالنسخة `20261106042324`. اختبار rollback أكد رسائل `registered_account_required` للدوال الثلاث، وفحص ACL بعد التطبيق أكد أن الخمس دوال server-only. counts بعد الاختبار بقيت: chats=0, referrals=0, points_log=0.
+- لم نغير أي نشاط أو حساب أو نقاط فعلية. ميزات coupon redemption / pending change / unique-visit awards تبقى server-only إلى أن تُبنى لها مسارات متحقق منها.
