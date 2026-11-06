@@ -295,3 +295,12 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - migration `20261106035929` أغلقت العلم في `businesses` والإعداد المقابل في `merchant_order_settings` حيث `owner_profile_id IS NULL`.
 - التحقق بعد التعديل أكد صفر نشاط غير مملوك بعلم طلبات فعال وصفر إعداد طلبات فعال، مع ثبات إجمالي الأنشطة المنشورة عند 8.
 - لم تنفذ اختبارات pgTAP بسبب غياب امتداد pgTAP في القاعدة؛ يلزم استكمال مسار الاختبار دون ادعاء نجاحه.
+
+
+## مراجعة 2026-11-06 — Pre-launch access control على القاعدة الحالية
+
+- حُققت كل مسارات الاستدعاء في التطبيق قبل تضييق الدوال: `reveal_contact` مستخدمة من `/api/track-contact` عبر service client بعد المصادقة وrate-limit؛ `record_ad_event`, `record_page_view`, `heartbeat_page_session` لا تملك caller من المتصفح؛ promo/reward ظلت صلاحياتها للمستخدم المسجل.
+- جرى اختبار SQL كامل داخل معاملة `ROLLBACK`، ثم تطبيق الترحيل `prelaunch_access_control` (version `20261106040142`) على قاعدة EAH الأساسية.
+- post-check أثبت 4 policies على `business_insights`, service-role-only grant لـ`reveal_contact`, authenticated grant (دون anon) لـ`request_promo_post` و`redeem_reward`, واحتفاظ auth helpers المخصصة لتقييم RLS بصلاحية anon.
+- تم التحقق من بقاء 16 trigger مثبتة وضبط search_path للدوال الثلاث. لم تتغير سجلات النشاط أو الحسابات أو جهات الاتصال خلال هذا الترحيل.
+- pgTAP لم يُشغّل لأن دالة `plan(integer)` غير موجودة في المشروع. يلزم تشغيل اختبار pgTAP/Vitest وE2E عندما يُصلح Runner ويُجهز حساب بايع/مشتري؛ لا تدّعي اختبارات آلية ناجحة في الوقت الحالي.

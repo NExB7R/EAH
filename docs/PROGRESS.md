@@ -1118,3 +1118,14 @@
 - طُبّقت migration `disable_ownerless_in_app_orders`، نسخة `20261106035929`، على قاعدة EAH الحالية. النشر العام لم يتغير.
 - بعد التطبيق: `ownerless_businesses_accepting_orders=0` و`ownerless_enabled_order_settings=0`. إجمالي الأنشطة 8 والمنشور 8 والمرتبط بمالك 0؛ لم نغير أية ملكية أو نرفع/نحذف صورًا أو نعدل بيانات اتصال.
 - اختبار pgTAP لا يعمل لغياب `plan(integer)`؛ نتيجة التحقق SQL المباشر موثقة ولا تُعامل كنجاح pgTAP.
+
+
+## 2026-11-06 — تطبيق Pre-launch access control على قاعدة EAH الحالية
+
+- بعد محاكاة الترحيل كاملًا داخل `ROLLBACK`، تم تطبيق `prelaunch_access_control` بنسخة `20261106040142` على القاعدة الحالية كما طلب المستخدم؛ لا فرع ولا مشروع Supabase إضافي.
+- أُنشئت 4 سياسات owner/admin لعمليات SELECT/INSERT/UPDATE/DELETE في `business_insights`، مع إبقاء anon بلا GRANT.
+- تم قصر `reveal_contact` على `service_role`؛ مسار `/api/track-contact` يستخدم service client بعد التحقق من جلسة المستخدم وحدود الطلب، لذلك لا يحتاج المستخدم المتصفح لاستدعاء RPC مباشرة.
+- بقيت `request_promo_post` و`redeem_reward` متاحتين للمستخدم المسجل، مع منع anonymous والتحقق من ملكية النشاط وHTTPS/الطول وقفل الصفوف في عمليات promo/reward.
+- تم الإبقاء على منح helper `auth_is_admin()` و`is_admin()` اللازمة لتقييم سياسات RLS، وعلى وجود الـ16 trigger بعد سحب صلاحية الاستدعاء المباشر من واجهة RPC.
+- تم ضبط search_path للدوال الثلاث المستهدفة إلى `pg_catalog, public`.
+- تحقق post-apply من السياسات وgrants ووجود trigger definitions. pgTAP لم يعمل بسبب غياب `plan(integer)`؛ لم نسجل Quality/RLS على أنها ناجحة. لا يوجد owner/seller/buyer account متاح لتجربة dashboard كاملة بعد.

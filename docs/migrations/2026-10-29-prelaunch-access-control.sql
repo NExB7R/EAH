@@ -1,7 +1,7 @@
 -- EAH — Restrict sensitive RPCs and restore owner/admin access to insight reports.
 -- Date: 2026-10-29
--- Safety: additive privilege/policy changes only. Test against a dedicated non-production
--- database and run the verification queries before applying to production.
+-- Applied to current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106040142).
+-- The migration was dry-run in a ROLLBACK transaction and checked live afterward. pgTAP remains pending because pgTAP is not installed in that database.
 --
 -- Several of these functions return unpublished activity metadata, analytics or contact
 -- reveal counters. Current app code does not call them directly from a browser; the
