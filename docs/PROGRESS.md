@@ -1201,3 +1201,9 @@
 - فحص RLS أكد أن سياسات `registered_account_only_*` وعددها 60 كلها RESTRICTIVE؛ لذلك تتقاطع مع سياسة المستخدم الذاتية ولا تسمح anonymous sessions بالمرور عبر OR. 57 لها base permissive policy، و3 عمليات لا توجد لها قاعدة سماح أخرى وتبقى مقفولة عبر direct RLS.
 - اختبارات rollback: anonymous insert comment blocked؛ anonymous insert comment_like blocked؛ registered account comment insert permitted. جميعها تراجعت، وبعدها comment/comment_like test rows = 0.
 - بعد فحص advisors: `unindexed_foreign_keys=0`, `duplicate_index=0`, `auth_rls_initplan=0`; ما زال `multiple_permissive_policies=139` بحاجة إلى تصنيف فردي، مع `unused_index=88` كـINFO قبل توفر workload.
+
+## 2026-11-06 — التحقق من تصنيفات الأنشطة (PRODUCT_SPEC)
+- تم فحص الكود بالكامل ومطابقته مع `PRODUCT_SPEC.md`.
+- التصنيفات الأربعة فقط موجودة في الـ Validations والـ Labels والـ Types (`restaurant`, `pharmacy`, `delivery_office`, `misc`).
+- لا يوجد تصنيف مستقل للماركت، ويتم التعامل معه عبر `custom_business_type` ضمن `misc`.
+- لا يوجد Drift في هذا الجزء.
