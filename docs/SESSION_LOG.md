@@ -1722,3 +1722,7 @@ Admin list:
 - الـ CI (Quality Gate, CodeQL, RLS, Invariants) يعمل الآن بنجاح بعد الـ Public.
 - تم إضافة `docs/CONSTITUTION.md`, `docs/RESOURCE_BUDGET.md`, `docs/SECRETS_MANAGEMENT.md`.
 - **مهم:** تذكير بتحويل الريبو إلى Private يوم 2026-12-01.
+
+## 2026-11-06 — تصحيح مسميات الأدوار في الواجهات
+- تم تغيير "مشتري" إلى "عميل" و "بايع" إلى "تاجر" في النصوص الظاهرة للمستخدم فقط (About, Terms, Notifications, Errors).
+- المفاتيح التقنية في قاعدة البيانات (customer, merchant) لم تتغير.
