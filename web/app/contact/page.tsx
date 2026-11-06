@@ -55,15 +55,7 @@ export default async function ContactPage() {
                 <span className={styles.cardCta}>تابع الصفحة ←</span>
               </a>
             )}
-            {contacts.email && (
-              <a href={`mailto:${contacts.email}`} className={`${styles.card} ${styles.email}`}>
-                <span className={styles.cardIcon}><FileTextIcon size={22} /></span>
-                <h3 className={styles.cardTitle}>إيميل الدعم</h3>
-                <p className={styles.cardBody}>للاستفسارات الرسمية والتعاون.</p>
-                <span className={styles.cardCta}>{contacts.email}</span>
-              </a>
-            )}
-          </div>
+</div>
         )}
 
         <section className={styles.helpSection}>
