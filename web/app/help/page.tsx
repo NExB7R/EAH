@@ -217,6 +217,15 @@ export default async function HelpPage() {
           </div>
         </section>
       </div>
-    </main>
+    
+import PointsGuide from '../account/points-guide/points-guide';
+
+// ... (داخل الـ return)
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>نظام النقاط والثقة</h2>
+        <PointsGuide />
+      </section>
+
+</main>
   )
 }
