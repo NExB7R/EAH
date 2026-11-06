@@ -212,7 +212,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (113)
+## Lib (114)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -231,6 +231,7 @@
 | `auth/cron.ts` | verifyCron | EAH — Cron auth (fail-closed) |
 | `auth/ip.ts` | getHashedIp | EAH — IP Hashing (privacy-preserving) |
 | `auth/roles.ts` | getRoleContext, getRedirectForRole | EAH — Roles (Central Authority) |
+| `auth/standing.ts` | checkCanInteract, runStandingsExpiry | — |
 | `avatar-url.ts` | getAvatarImageUrl | Build an appropriately sized Cloudinary avatar URL without dropping the |
 | `business-type-label.ts` | getBusinessTypeLabel | A proposed custom label is public-facing only after admin approval. |
 | `chips-config.ts` | CHIPS, EXPLORE_CHIP | EAH — Chips Config (Single Source of Truth) |
@@ -240,7 +241,7 @@
 | `data/admin-business-list.ts` | getAdminBusinessesPage | — |
 | `data/admin-business.ts` | getBusinessById, getBusinessOwnerCandidates | EAH — Admin Business Detail (Service Role — bypass RLS) |
 | `data/admin-orders.ts` | getAdminOrders, computeAdminOrdersStats, getAdminOrderFlowStats | Admin Orders — centralized view across businesses |
-| `data/admin-user-detail.ts` | getAdminUserDetail, getStandingEvents | — |
+| `data/admin-user-detail.ts` | getAdminUserDetail, getStandingEvents, getViolationStats | — |
 | `data/admin.ts` | getAdminStats, getBusinessesByStatus, getAdminRecent, getFeaturedBusinesses, getAudienceCounts, … | EAH — Admin Data |
 | `data/ads.ts` | getActiveAdsForSlot, getMyAds, getAllAds, getAdSlots | EAH — Ads Data |
 | `data/announcements.ts` | getActiveAnnouncements | EAH — Announcements Data |
