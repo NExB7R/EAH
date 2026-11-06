@@ -1,6 +1,6 @@
 -- EAH: contact reveal audit rows are readable by the sole platform administrator only.
 -- The legacy app_role value 'admin' is retired and must not grant data access.
--- Apply only to a dedicated non-production database until explicitly approved.
+-- Applied to current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106040753).
 
 BEGIN;
 

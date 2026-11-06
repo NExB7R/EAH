@@ -469,7 +469,7 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
 | `request_promo_post` | SECURITY DEFINER متاح لـ`authenticated`؛ التعريف الحي لا يتحقق من ملكية النشاط ولا يقيّد الرابط إلى HTTPS | تعريف محصّن يرفض anonymous، ويتحقق من الملكية والرابط ويقفل صف النشاط |
 | `redeem_reward` | SECURITY DEFINER متاح لـ`authenticated`؛ لا يرفض JWT anonymous صراحةً ولا يستخدم `FOR UPDATE` للمخزون/رصيد الحساب | تعريف محصّن يرفض anonymous ويقفل صف المكافأة وصف الحساب قبل التحقق والخصم |
 | `admin_set_business_owner` | النسختان `public` و`private` متاحتان لـ`authenticated`؛ النسخة الداخلية تفحص الأدمن، لكنها مسار قديم لا يفرض كامل قيود الربط الجديدة | `2026-11-02-admin-owner-rpc-server-only.sql` يقصر التنفيذ على `service_role` |
-| `contact_reveals` | Policy قديمة باسم `admin_read_contact_reveals` تقبل `admin` و`super_admin` | `2026-11-01-contact-reveals-super-admin-only.sql` تقصر القراءة على `super_admin` |
+| `contact_reveals` | تم استبدال Policy `admin_read_contact_reveals` | الحالة الحية: Policy واحدة `super_admin_read_contact_reveals` على authenticated؛ `anon` بلا SELECT، و2 سجل تدقيق محفوظان بلا تعديل |
 | Search path | الدوال `get_trust_tier` و`set_new_until` و`prevent_merchant_toggle_orders_enabled` بلا إعداد صريح حاليًا | ترحيل `2026-11-03-function-search-path-hardening.sql` |
 | مالك واحد لكل نشاط | لا يوجد فهرس فريد جزئي على `owner_profile_id` | `2026-11-01-business-owner-single-activity.sql` |
 
@@ -510,3 +510,11 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
 - تمت محاكاة `function_search_path_hardening` داخل `ROLLBACK` قبل التطبيق. التحقق أثبت أن `get_trust_tier`, `set_new_until`, و`prevent_merchant_toggle_orders_enabled` يمكن تشغيلها بـ`search_path=pg_catalog`؛ دالة Trigger مؤهلة لاستدعاء `public.auth_is_admin()` بشكل كامل، والـTrigger ما زال مثبتًا.
 - **تنبيه:** لا تسجل ترحيل `function_search_path_hardening` كتطبيق مكتمل قبل قراءة النسخة الفعلية من سجل Supabase migrations. النتيجة الحية فقط هي أن إعدادات الدوال الثلاث أصبحت `search_path=pg_catalog` وأن Trigger الحارس موجود.
 - pgTAP ما زال غير قابل للتشغيل بسبب غياب `plan(integer)`؛ يلزم تثبيت/تفعيل pgTAP أو اعتماد مسار اختبار SQL بديل قبل إغلاق الاختبارات الآلية.
+
+
+### تحديث 2026-11-06 — قصر سجل كشف الاتصال على الأدمن الأعلى
+
+- بحث callsites في المستودع لم يجد أي شاشة أو action تقرأ `contact_reveals` مباشرة؛ التدفق العام يستعمل `/api/track-contact` وRPC منفصل للتسجيل فقط.
+- بعد محاكاة الترحيل داخل `ROLLBACK` تم تطبيق `contact_reveals_super_admin_only` بالنسخة `20261106040753`.
+- الفحص الحي أكد وجود Policy واحدة `super_admin_read_contact_reveals` لـauthenticated، مع عدم وجود SELECT مباشر لـanon. جدول التدقيق يحتوي سجلين محفوظين ولم تُعدّل أو تُحذف سجلاته.
+- قاعدة السياسة تعتمد على `user_roles.role='super_admin'`، وهو دور الأدمن الفعلي في التطبيق الحالي؛ لا تمنح القيمة القديمة `admin` وصولًا إلى سجلات الكشف.

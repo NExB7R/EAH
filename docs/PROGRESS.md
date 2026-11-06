@@ -1137,3 +1137,11 @@
 - تم تطبيق `function_search_path_hardening` بالنسخة `20261106040503` وضبط search_path للدوال `get_trust_tier`, `set_new_until`, `prevent_merchant_toggle_orders_enabled` إلى `pg_catalog`. تعريف حارس الطلب صار يستدعي `public.auth_is_admin()` بالاسم الكامل؛ Trigger واحد ما زال مثبتًا.
 - تمت محاكاة الترحيل الخاص بالـsearch_path في معاملة ROLLBACK أولًا؛ التحقق الحي يؤكد القيم الحالية، لكن لا تُسجل رقم نسخة migration حتى تؤكده قائمة Supabase migrations.
 - لم يعمل pgTAP لغياب `plan(integer)`، لذلك تبقى اختبارات SQL الآلية مفتوحة. لا توجد E2E أو Vitest ناجحة على آخر SHA بسبب Runner.
+
+
+## 2026-11-06 — قصر قراءة contact_reveals على super_admin
+
+- راجعت استخدامات `contact_reveals`: لا توجد callsites لقراءة الجدول مباشرة من التطبيق؛ مسار تسجيل الكشف يستخدم `/api/track-contact`.
+- طُبّق `contact_reveals_super_admin_only`، نسخة `20261106040753`، بعد dry-run في معاملة ROLLBACK.
+- الحالة بعد التطبيق: Policy واحدة SELECT لـauthenticated بشرط super_admin فقط؛ anon بلا table SELECT؛ سجلان موجودان كما هما ولم يتغيرا.
+- لا تعتمد شاشة أو action في التطبيق على قراءة `contact_reveals` مباشرة وفق بحث callsites؛ يلزم اختبار pgTAP لاحقًا لأن pgTAP غير متاح على قاعدة المشروع حاليًا.
