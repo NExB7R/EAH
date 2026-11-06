@@ -21,16 +21,8 @@ import {
   ArrowLeftIcon,
 } from './icons'
 import styles from './site-footer.module.css'
-import GlobalShareAction from './global-share-action'
-import { APP_VERSION } from '@/lib/version'
 import { getAppTexts } from '@/lib/data/app-texts'
 import { getPublicContactSettings } from '@/lib/data/site-settings'
-
-// ═══════════════════════════════════════════════════════════
-// EAH — Site Footer (Premium 2026 — Final)
-// ═══════════════════════════════════════════════════════════
-
-// §26 — نسخة واحدة من lib/version.ts
 
 const COLUMNS = [
   {
@@ -85,55 +77,49 @@ export default async function SiteFooter() {
   if (!(await shouldRenderPublicChrome())) return null
 
   const [texts, contacts] = await Promise.all([getAppTexts(), getPublicContactSettings()])
+
+  // شيلنا كارت الإيميل — بس واتساب + فيسبوك + قناة واتساب
+  const contactCards = [
+    {
+      key: 'whatsapp-channel',
+      href: contacts.whatsappChannelUrl,
+      title: 'قناة واتساب الرسمية',
+      description: contacts.whatsappChannelUrl ? 'تحديثات المنصة والإعلانات' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
+      Icon: BroadcastIcon,
+      tone: styles.channel,
+      external: true,
+    },
+    {
+      key: 'facebook',
+      href: contacts.facebookUrl,
+      title: 'صفحة EAH الرسمية',
+      description: contacts.facebookUrl ? 'الأخبار والمحتوى المنشور' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
+      Icon: FacebookIcon,
+      tone: styles.facebook,
+      external: true,
+    },
+    {
+      key: 'support-whatsapp',
+      href: contacts.supportWhatsappUrl,
+      title: 'تواصل مع الدعم',
+      description: contacts.supportWhatsappUrl ? 'قناة التواصل المعتمدة للمنصة' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
+      Icon: WhatsAppIcon,
+      tone: styles.whatsapp,
+      external: true,
+    },
+  ]
+
   return (
     <footer className={styles.footer}>
       <div className={styles.glow} aria-hidden />
 
-      {/* ─── Secondary Hero (بدون nav) ─── */}
       <div className={styles.heroWrap}>
         <SecondaryHero showNav={false} compact />
       </div>
 
       <div className={styles.container}>
         <div className={styles.contacts} role="group" aria-label="قنوات التواصل الرسمية">
-          {[
-            {
-              key: 'whatsapp-channel',
-              href: contacts.whatsappChannelUrl,
-              title: 'قناة واتساب الرسمية',
-              description: contacts.whatsappChannelUrl ? 'تحديثات المنصة والإعلانات' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
-              Icon: BroadcastIcon,
-              tone: styles.channel,
-              external: true,
-            },
-            {
-              key: 'facebook',
-              href: contacts.facebookUrl,
-              title: 'صفحة EAH الرسمية',
-              description: contacts.facebookUrl ? 'الأخبار والمحتوى المنشور' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
-              Icon: FacebookIcon,
-              tone: styles.facebook,
-              external: true,
-            },
-            {
-              key: 'support-whatsapp',
-              href: contacts.supportWhatsappUrl,
-              title: 'تواصل مع الدعم',
-              description: contacts.supportWhatsappUrl ? 'قناة التواصل المعتمدة للمنصة' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
-              Icon: WhatsAppIcon,
-              tone: styles.whatsapp,
-              external: true,
-            },
-            {
-              key: 'support-email',
-              href: contacts.email ? `mailto:${contacts.email}` : null,
-              title: 'إيميل الدعم',
-              description: contacts.email ?? 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
-              Icon: PhoneIcon,
-              tone: styles.email,
-              external: false,
-            },
-          ].map(({ key, href, title, description, Icon, tone, external }) => {
+          {contactCards.map(({ key, href, title, description, Icon, tone, external }) => {
             const className = [styles.card, tone, !href && styles.disabledCard]
               .filter(Boolean)
               .join(' ')
@@ -167,11 +153,6 @@ export default async function SiteFooter() {
           })}
         </div>
 
-        <div className={styles.sharePlatform}>
-          <GlobalShareAction className={styles.shareAction} label="شارك منصة EAH ورمز الاستجابة السريعة" />
-        </div>
-
-        {/* ─── Columns ─── */}
         <nav className={styles.columns} aria-label="روابط الفوتر">
           {COLUMNS.map(({ key, title, Icon, links }) => (
             <div key={key} className={styles.col}>
@@ -195,22 +176,16 @@ export default async function SiteFooter() {
           ))}
         </nav>
 
-        {/* ─── Palestine ─── */}
         <div className={styles.palestine}>
           <PalestineHeart />
         </div>
 
-        {/* ─── Signature ─── */}
         <div className={styles.signature}>
           <Signature />
         </div>
 
-        {/* ─── Bottom ─── */}
         <div className={styles.bottom}>
           <p className={styles.copyright}>{texts.footer_copyright}</p>
-          <span className={styles.version} aria-label={`إصدار المنصة ${APP_VERSION}`} title={`إصدار المنصة ${APP_VERSION}`}>
-            {APP_VERSION}
-          </span>
         </div>
       </div>
     </footer>

@@ -1,10 +1,9 @@
 import Logo from './logo'
 import HomeSearchForm from './home-search-form'
+import CategoryChips from './category-chips'
 import { CrownIcon, LocationIcon } from './icons'
 import { getAppTexts } from '@/lib/data/app-texts'
 import styles from './home-hero.module.css'
-
-// EAH — Home Hero
 
 type Props = {
   isLoggedIn: boolean
@@ -44,6 +43,10 @@ export default async function HomeHero({ isLoggedIn, hasBusiness }: Props) {
 
         <div className={styles.searchWrap}>
           <HomeSearchForm />
+        </div>
+
+        <div className={styles.categoryWrap}>
+          <CategoryChips />
         </div>
       </div>
     </section>

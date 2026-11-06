@@ -254,3 +254,17 @@
     font-size: 0.8rem;
   }
 }
+
+
+/* Category chips داخل الـ Hero */
+.categoryWrap {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+@media (min-width: 768px) {
+  .categoryWrap {
+    margin-top: 28px;
+  }
+}
