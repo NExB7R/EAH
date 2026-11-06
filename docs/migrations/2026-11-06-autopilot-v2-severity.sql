@@ -21,7 +21,6 @@ BEGIN
 
   SELECT standing INTO v_current FROM public.profiles WHERE id = NEW.entity_id;
 
-  -- لو آخر مخالفة من 90 يوم أو أكتر، النظام يعتبره تاب ويرجع يبدأ من الأول
   SELECT max(created_at) INTO v_last FROM public.trust_events
   WHERE entity_id = NEW.entity_id
     AND event_type IN ('review_rejected', 'report_valid')
@@ -31,7 +30,6 @@ BEGIN
     v_current := 'good';
   END IF;
 
-  -- النقاط المرجحة: بلاغ صحيح = 2، تقييم مرفوض = 1
   SELECT count(*), COALESCE(sum(CASE
     WHEN event_type = 'report_valid' THEN 2
     WHEN event_type = 'review_rejected' THEN 1
@@ -55,7 +53,6 @@ BEGIN
     RETURN NEW;
   END IF;
 
-  -- النظام بس بيشدّد، مش بيلغي قرارات الأدمن
   IF v_current = 'good'
      OR (v_current = 'warning' AND v_new_standing IN ('restricted','suspended'))
      OR (v_current = 'restricted' AND v_new_standing = 'suspended') THEN
@@ -83,7 +80,6 @@ CREATE TRIGGER trigger_autopilot_penalties
 AFTER INSERT ON public.trust_events
 FOR EACH ROW EXECUTE FUNCTION public.handle_trust_event_autopilot();
 
--- دالة انتهاء الصلاحيات
 CREATE OR REPLACE FUNCTION public.expire_standings()
 RETURNS INT LANGUAGE plpgsql SECURITY DEFINER AS $$
 DECLARE v_count INT;
@@ -106,7 +102,6 @@ BEGIN
   RETURN v_count;
 END; $$;
 
--- دالة الفحص للنظام (تتنادى من الكود قبل أي تفاعل)
 CREATE OR REPLACE FUNCTION public.can_interact(p_user_id uuid)
 RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY DEFINER
 SET search_path = 'public' AS $$
