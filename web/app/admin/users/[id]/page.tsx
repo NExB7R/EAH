@@ -1,7 +1,12 @@
+import StandingCockpit from './standing-cockpit';
 import Link from 'next/link'
+import StandingCockpit from './standing-cockpit';
 import { notFound } from 'next/navigation'
+import StandingCockpit from './standing-cockpit';
 import AccountPageHeader from '@/components/account-page-header'
+import StandingCockpit from './standing-cockpit';
 import Avatar from '@/components/avatar'
+import StandingCockpit from './standing-cockpit';
 import {
   ArrowLeftIcon,
   CloseIcon,
@@ -11,9 +16,13 @@ import {
   StarIcon,
   StoreIcon,
 } from '@/components/icons'
+import StandingCockpit from './standing-cockpit';
 import { getAdminUserDetail } from '@/lib/data/admin-user-detail'
+import StandingCockpit from './standing-cockpit';
 import { getTrustTierMeta } from '@/lib/trust'
+import StandingCockpit from './standing-cockpit';
 import UserDetailActions from './user-detail-actions'
+import StandingCockpit from './standing-cockpit';
 import styles from './user-detail.module.css'
 
 export const dynamic = 'force-dynamic'

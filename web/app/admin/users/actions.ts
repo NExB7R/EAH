@@ -327,3 +327,50 @@ export async function togglePremium(userId: string): Promise<Result> {
   revalidatePath('/admin/users')
   return { ok: true }
 }
+
+// ═══════════════════════════════════════════════════════════
+// Standing Cockpit Actions (Admin Only)
+// ═══════════════════════════════════════════════════════════
+import { revalidatePath } from 'next/cache'
+
+export async function manageStandingAction(formData: FormData) {
+  const userId = formData.get('userId') as string
+  const action = formData.get('action') as string // 'pardon', 'warn', 'restrict', 'suspend'
+  const reason = formData.get('reason') as string
+  const durationDays = parseInt(formData.get('durationDays') as string || '0', 10)
+
+  const supabase = await createClient()
+  
+  // حساب تاريخ الانتهاء لو مؤقت
+  let expiresAt = null
+  if (durationDays > 0) {
+    expiresAt = new Date()
+    expiresAt.setDate(expiresAt.getDate() + durationDays)
+  }
+
+  // تحديد الحالة الجديدة بناءً على الإجراء
+  let newStanding = 'good'
+  if (action === 'warn') newStanding = 'warning'
+  if (action === 'restrict') newStanding = 'restricted'
+  if (action === 'suspend') newStanding = 'suspended'
+  if (action === 'pardon') {
+    newStanding = 'good'
+    expiresAt = null // إعفاء بيمسح التاريخ
+  }
+
+  const { data, error } = await supabase.rpc('admin_manage_standing', {
+    p_user_id: userId,
+    p_action: action,
+    p_new_standing: newStanding,
+    p_expires_at: expiresAt ? expiresAt.toISOString() : null,
+    p_reason: reason || 'تعديل يدوي من الإدارة'
+  })
+
+  if (error) {
+    console.error('Standing action failed:', error)
+    return { ok: false, error: 'حدث خطأ أثناء تنفيذ الإجراء' }
+  }
+
+  revalidatePath(`/admin/users/${userId}`)
+  return { ok: true }
+}
