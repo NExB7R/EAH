@@ -193,7 +193,7 @@
 | DB-14 | 🔴     | migrations: 45 مسجّلة، وDB اتغيرت بعدها وخارج سجل migrations المعتاد                                                                                                                                                               | `supabase db pull` ثم مصالحة التاريخ بدون تعديل migrations مطبّقة                      | `supabase migration list` + مقارنة schema                                                                    |
 | DB-15 | 🔴     | apply_trust_decay بدون حارس أسبوعي                                                                                                                                                                                                 | last_decay_at                                                                          | اختبار SQL                                                                                                   |
 | DB-16 | 🔴     | admin_adjust_points تقرا trust_score كرصيد؛ check_and_award_badges مفاتيح عربية                                                                                                                                                    | مراجعة وتوحيد                                                                          | اقرا الدالة                                                                                                  |
-| DB-17 | ⏳     | set_business_commission ضد مبدأ صفر عمولة                                                                                                                                                                                          | احذف أو وثّق                                                                           | قرار                                                                                                         |
+| DB-17 | ✅     | RPC `set_business_commission` القديمة تناقض مبدأ صفر عمولة، ولم يكن لها callsite في التطبيق | ترحيل `20261106041647` سحب EXECUTE من PUBLIC/anon/authenticated وأبقى service_role فقط؛ الجدول نفسه لم يُحذف | تحقق حي: function privileges؛ جدول `business_commissions` موجود وفارغ |
 | DB-18 | 🟡     | تفريق بين super_admin وadmin في policies + is_admin()                                                                                                                                                                              | وحّد                                                                                   | اختبار بحساب admin                                                                                           |
 | DB-19 | ⏳     | Leaked Password Protection مقفول                                                                                                                                                                                                   | Pro                                                                                    | Dashboard                                                                                                    |
 | DB-20 | ✅     | `find_by_phone` و`is_phone_registered` كانتا قابلتين للاستدعاء مباشرة من anon/authenticated، ما يسهل تعداد الأرقام                                                                                                                 | migration `20261020203959`; routes moved to service client after server-side checks    | تحقق حي: anon=false، authenticated=false، service_role=true للدالتين                                         |
@@ -251,7 +251,7 @@
 | DOC-01 | Verified != مدفوع مقابل توثيق بـ100 ج/سنة | ⏳                       |
 | DOC-02 | الموبايل ما يظهرش مقابل DB-06/07          | ⏳                       |
 | DOC-03 | بدون تتبع مقابل page_view_events          | ⏳                       |
-| DOC-04 | صفر عمولة مقابل set_business_commission   | ⏳                       |
+| DOC-04 | صفر عمولة مقابل set_business_commission   | ✅ — RPC معطلة؛ الجدول الفارغ محفوظ دون حذف |
 | DOC-05 | ARCHITECTURE cron ساعة؛ فعلياً 3 مرات/يوم | ✅ مُصلح (B-7)           |
 | DOC-06 | SECURITY.md قديم                          | 🟡                       |
 | DOC-07 | 4 ترتيبات قراءة                           | ✅ (AI_PLAYBOOK + BRAIN) |
@@ -406,7 +406,7 @@ Rule: component > 300 lines must split before adding features.
 | Table                | Decision             |
 | -------------------- | -------------------- |
 | site_designs         | DELETE               |
-| business_commissions | DELETE (CONFLICT-01) |
+| business_commissions | KEEP TEMPORARILY — EMPTY; obsolete RPC disabled; drop only after migration-history reconciliation |
 | live_page_sessions   | REVIEW               |
 | ads                  | DELETE (superseded)  |
 | ad_campaigns         | KEEP                 |
@@ -528,3 +528,11 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
 - لا توجد callsites مباشرة للدوال الداخلية في واجهة المتصفح؛ الدوال المساعدة التي تستدعيها داخل دوال SECURITY DEFINER أو الـTriggers تستمر بالعمل بصلاحيات مالك الدالة. لم تُعدّل بيانات نشاط أو مستخدم.
 - بعد الترحيل انخفض تنبيه Supabase `authenticated_security_definer_function_executable` من 78 إلى 68. بقيت الدوال الأخرى قيد مراجعة منفصلة، ولا يجوز سحب صلاحياتها جماعيًا.
 - اختبارات pgTAP غير منفذة لغياب `plan(integer)`؛ تم dry-run وفحص catalog/privileges والـtrigger counts مباشرة.
+
+
+### تحديث 2026-11-06 — إيقاف RPC العمولة القديمة
+
+- مرجع المنتج في `docs/BRAIN.md` ينص على صفر عمولة على البايع. لم يوجد callsite داخل التطبيق لـ`set_business_commission`، بينما بقيت EXECUTE متاحة لـauthenticated.
+- تصحيح من فحص المخطط الحي: جدول `business_commissions` موجود فعلًا رغم ما تقوله ملاحظات تاريخية عن إسقاطه؛ يحتوي 0 صفوف، ولم نحذفه.
+- طُبّق `disable_commission_rpc` بالنسخة `20261106041647`: anon/authenticated=false، service_role=true. لا تغيير في صفوف/أعمدة الجدول.
+- بند العمولة مغلق على مستوى RPC والتطبيق؛ يظل قرار إسقاط الجدول منفصلًا ومؤجلًا حتى مصالحة migrations/schema history.

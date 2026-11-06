@@ -329,3 +329,10 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - migration `internal_rpc_grants_hardening` (version `20261106041256`) سحبت التنفيذ من PUBLIC/anon/authenticated واحتفظت بـservice_role. فحص post-apply أكد grants، مع استمرار تثبيت خمسة triggers كل منها مرتبط مرة واحدة.
 - تغيّر Supabase Advisor authenticated SECURITY DEFINER count من 78 إلى 68. الباقي يحتاج تصنيفًا فرديًا؛ لا توجد REVOKE جماعية.
 - لم تعمل pgTAP بسبب عدم وجود `plan(integer)`؛ تحققت من الكتالوج والصلاحيات وارتباطات triggers مباشرة.
+
+
+## مراجعة 2026-11-06 — إزالة وصول الواجهة إلى منطق العمولة القديم
+
+- تأكد أن `docs/BRAIN.md` يقرر صفر عمولة على البايع، وأن `set_business_commission` بلا callsite في التطبيق.
+- أُزيلت صلاحية التنفيذ المباشر من PUBLIC/anon/authenticated بواسطة migration `disable_commission_rpc` (version `20261106041647`)، وبقيت service_role فقط.
+- رُصد أن جدول `business_commissions` ما زال موجودًا في القاعدة الحية لكنه فارغ؛ لم يُحذف. يلزم مصالحة schema/migration history قبل أي إسقاط.

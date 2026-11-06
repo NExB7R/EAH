@@ -2,7 +2,7 @@
 -- The legacy table currently exists but is empty; this migration deliberately
 -- does not drop the table or delete rows. The obsolete RPC is not called by
 -- application code and must not be exposed to browser sessions.
--- Applied to the current EAH pre-launch base on 2026-11-06.
+-- Applied to the current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106041647).
 
 BEGIN;
 

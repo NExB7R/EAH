@@ -1154,3 +1154,10 @@
 - `save_customer_location` لا يزال يعمل SECURITY DEFINER؛ ومالك الدالة ما زال يملك استدعاء helper تنظيف المواقع. `assign_order_code_v2` ما زال مرتبطًا بTrigger واحد لتخصيص كود الطلب؛ وبقية trigger functions الخمسة أيضًا بقيت مرتبطة.
 - Supabase Advisor: عدد authenticated SECURITY DEFINER انخفض من 78 إلى 68، مع استمرار مراجعة البقية؛ لا نعتبر كل WARN ثغرة تلقائيًا، ولا نسحب صلاحياتها بدون call-site/function-body review.
 - pgTAP غير متاح (غياب `plan(integer)`)، لذلك تم توثيق تحقق SQL مباشر فقط. لا توجد سجلات اختبار جديدة.
+
+
+## 2026-11-06 — إيقاف RPC العمولة المخالفة لقاعدة صفر عمولة
+
+- لا يوجد callsite لـ`set_business_commission` في كود التطبيق، والقرار في BRAIN هو صفر عمولة على البايع.
+- طُبّق `disable_commission_rpc` بالنسخة `20261106041647`. بعد التطبيق: anon=false، authenticated=false، service_role=true.
+- الجدول `business_commissions` موجود بالقاعدة الحية لكن 0 صفوف؛ لم نحذفه رغم وجود ملاحظة تاريخية متضاربة. إسقاط الجدول مؤجل لمصالحة migration history.
