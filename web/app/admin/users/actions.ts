@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
 import { createServiceClient } from '@/lib/supabase/service'
 import { logAudit } from '@/lib/logging/audit'
+import { createClient } from '@/lib/supabase/server'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Users Actions

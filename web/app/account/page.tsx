@@ -10,14 +10,12 @@ export default async function AccountPage() {
   const session = await getUserSession();
   if (!session) return null;
 
-  const stats = await getAccountStats(session.user.id);
-  const badges = await getBadgeCatalogWithStatus(session.user.id);
+  const stats = await getAccountStats(session.userId);
+  const badges = await getBadgeCatalogWithStatus(session.userId);
 
-  // استخدام البيانات الحقيقية من الجلسة
   const currentPoints = stats.pointsBalance || 0;
-  const trustTier = session.trustTier || 'fel'; // القيمة الافتراضية
-  
-  // ترجمة المستوى للعربي
+  const trustTier = session.trustTier || 'fel';
+
   const tierLabels: Record<string, string> = {
     'bade2': 'مبتدئ',
     'mashey': 'نشيط',
@@ -26,17 +24,12 @@ export default async function AccountPage() {
     'ostora': 'أسطورة EAH 👑'
   };
   const currentLevel = tierLabels[trustTier] || 'مبتدئ';
-  
-  // حساب النقاط المطلوبة للمستوى القادم (تقديري)
-  const nextLevelPoints = currentPoints + 50; 
-  const progressPercent = 100; // لأننا بنعرض النقاط اللي جمعها فعلاً
-
+  const progressPercent = 100;
   const earnedBadges = badges.filter(b => b.earned);
 
   return (
     <div className={styles.dashboard}>
       <div className={styles.bentoGrid}>
-        {/* كارت المستوى */}
         <div className={`${styles.card} ${styles.levelCard} ${styles.fullWidth}`}>
           <div className={styles.cardTitle}>
             <span>⭐</span> مستواك الحالي
@@ -53,7 +46,6 @@ export default async function AccountPage() {
           </Link>
         </div>
 
-        {/* كارت النقاط */}
         <div className={styles.card}>
           <div className={styles.cardTitle}>
             <span>💎</span> إجمالي النقاط
@@ -61,7 +53,6 @@ export default async function AccountPage() {
           <div className={styles.cardValue}>{currentPoints}</div>
         </div>
 
-        {/* كارت التتابع */}
         <div className={`${styles.card} ${styles.streakCard}`}>
           <div className={styles.cardTitle}>
             <span>🔥</span> أيام متتالية
@@ -72,7 +63,6 @@ export default async function AccountPage() {
           </div>
         </div>
 
-        {/* كارت الشارات */}
         <div className={`${styles.card} ${styles.fullWidth}`}>
           <div className={styles.cardTitle}>
             <span>🏆</span> شاراتك
