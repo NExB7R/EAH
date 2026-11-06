@@ -434,3 +434,45 @@ If any Pre-Launch blocker is open, fix it before adding features.
 Build break fix. See scripts/check-css-modules-purity.mjs.
 
 | TREND-RESPONSE-RATE-01 | GUARDED IN CODE — SOURCE/UNIT CONTRACT OPEN | `businesses.response_rate` يُستهلك في `trendScore` لكنه لا يملك مسار تحديث في التطبيق؛ عموده في الإنتاج `numeric(5,2)`, default `0`, وجميع 8 سجلات `0.00`. الوحدة غير موثقة؛ القيم غير الصالحة أو الخارجة عن 0..1 كانت قادرة سابقًا على تضخيم الوزن 5%. | في `2b32699` كل إشارات الترند أصبحت bounded `[0,1]`، و`response_rate` خارج النطاق/مفقود يعامل محايدًا `0.5`. أضيفت اختبارات. لا تعتبره مقياس استجابة فعليًا حتى يُعرّف البسط/المقام ونافذة القياس ومسار كتابة موثوق. |
+
+
+## تحقق ميداني 2026-11-06 — Runner وVercel وقاعدة الإنتاج
+
+### GitHub Actions — CI-09 ما زال مفتوحًا
+
+- الفرع: `main`، وSHA الذي فُحص: `a2be141da751eb767a29e489003a7799dacf685d`.
+- Quality Gate run `42109786145` وInvariants run `42109786082` وCodeQL run `42109785793` وContext Map run `42109785777` انتهت بالفشل خلال نحو ثانيتين.
+- الوظائف المسجلة لم تعرض خطوات، واسم Runner فارغ. إعادة تشغيل وظيفة Invariants وحدها أنشأت المحاولة الثانية، لكنها انتهت أيضًا بـ`runner_id=0` و`runner_name=""` و`steps=[]`.
+- تنزيل سجلات الوظائف أعاد 404؛ لذلك لا يوجد دليل على بدء أي أمر داخل Runner. لا تصنّف TypeScript/Vitest/Playwright/RLS كفاشلة من هذه التشغيلات، ولا تصنّفها ناجحة.
+- السبب المثبت: الفشل قبل تخصيص Runner. السبب الإداري الدقيق في GitHub (حدود/توفر/إعدادات Runner) ما زال غير محسوم من بيانات API المتاحة.
+
+### Vercel — فصل فشل البناء عن حد الاستخدام
+
+- آخر Production Deployment ظاهر بحالة `READY` هو `dpl_CCg8BpzH7vTGuFKrqh2wYQDZZmbX` على commit `b9bd8c0f295fcd2fcb3eef77185b03a43587ff69`.
+- لم يظهر Deployment للـSHA الأحدث `a2be141`، وحالة Vercel check عليه تشير إلى `build-rate-limit`.
+- Deployment أقدم على `489e16b` انتهى بـ`lint_or_type_error` في خطوة البناء. لا تخلط هذا الخطأ البرمجي السابق مع فشل Runner الحالي أو حد الاستخدام الحالي.
+
+### Supabase Production — نتائج قراءة فقط، لا توجد كتابة
+
+- المشروع الوحيد المتصل هو `EAH`، وحالته `ACTIVE_HEALTHY`. لا يوجد مشروع Supabase منفصل للاختبار، وعدد حسابات الأدوار في الإنتاج وقت الفحص: حساب `super_admin` واحد فقط.
+- قاعدة الإنتاج بها 8 أنشطة، كلها منشورة، بلا مسودات، وجميعها بلا مالك مرتبط. لا يوجد نشاط مرتبط بحساب بايع/مشتري، ولذلك لا يمكن إجراء دورة ربط مالك حقيقية دون حساب اختبار/بيئة معزولة.
+- يوجد مؤشر غير فريد على `owner_profile_id` فقط؛ الفهرس الفريد الجزئي `businesses_one_owner_per_account_idx` غير موجود. الفحص المسبق في Server Action يمنع الحالة العادية، لكنه لا يغلق سباق عمليتي ربط متزامنتين.
+- صفوف الوسائط: شعار واحد وغلاف واحد، وTrigger `business_media_sync_business_images` مفعّل. جهات الاتصال المخزنة: رقما `phone` ورقما `whatsapp`. هذه أعداد إجمالية فقط؛ لم تُقرأ قيم الاتصال ولم تُعدّل.
+- نشاط واحد بلا مالك يحمل `accepts_orders=true` مخزنًا. مسار العرض الحالي يغلق التوافر فعليًا لأن `getInAppOrderAvailableBusinessIds` يشترط مالكًا مرتبطًا وإعدادات تشغيلية ووجهة واتساب صالحة؛ ترحيل تطبيع القيم القديمة ما زال غير مطبق.
+
+### اختلافات DB/المهاجرات التي تحتاج اختبارًا معزولًا وموافقة قبل الإنتاج
+
+| البند | الحالة الحية | المتوقع في الكود/الترحيل |
+|---|---|---|
+| `business_insights` | RLS مفعّل بلا أي Policy؛ `authenticated` لديه GRANT للعمليات الأربع لكن RLS يمنع الوصول الفعلي، و`anon` لا يملك SELECT | أربع Policies للمالك/الأدمن في `2026-10-29-prelaunch-access-control.sql` |
+| `reveal_contact` | SECURITY DEFINER قابل للتنفيذ من `anon` و`authenticated`؛ الدالة تسجل عداد الكشف وتعيد duplicate/total فقط، ولا تعيد رقم الهاتف | Service-role فقط؛ الاستدعاء العام قد يزوّر/يضخّم عدادات الكشف |
+| `request_promo_post` | SECURITY DEFINER متاح لـ`authenticated`؛ التعريف الحي لا يتحقق من ملكية النشاط ولا يقيّد الرابط إلى HTTPS | تعريف محصّن يرفض anonymous، ويتحقق من الملكية والرابط ويقفل صف النشاط |
+| `redeem_reward` | SECURITY DEFINER متاح لـ`authenticated`؛ لا يرفض JWT anonymous صراحةً ولا يستخدم `FOR UPDATE` للمخزون/رصيد الحساب | تعريف محصّن يرفض anonymous ويقفل صف المكافأة وصف الحساب قبل التحقق والخصم |
+| `admin_set_business_owner` | النسختان `public` و`private` متاحتان لـ`authenticated`؛ النسخة الداخلية تفحص الأدمن، لكنها مسار قديم لا يفرض كامل قيود الربط الجديدة | `2026-11-02-admin-owner-rpc-server-only.sql` يقصر التنفيذ على `service_role` |
+| `contact_reveals` | Policy قديمة باسم `admin_read_contact_reveals` تقبل `admin` و`super_admin` | `2026-11-01-contact-reveals-super-admin-only.sql` تقصر القراءة على `super_admin` |
+| Search path | الدوال `get_trust_tier` و`set_new_until` و`prevent_merchant_toggle_orders_enabled` بلا إعداد صريح حاليًا | ترحيل `2026-11-03-function-search-path-hardening.sql` |
+| مالك واحد لكل نشاط | لا يوجد فهرس فريد جزئي على `owner_profile_id` | `2026-11-01-business-owner-single-activity.sql` |
+
+- سجل المهاجرات الحي ينتهي عند `20261029225228`، بينما المهاجرات الموضحة أعلاه أحدث وغير موجودة في سجل التطبيق الحي. طابقت ذلك مع السياسات والصلاحيات والفهارس الفعلية، وليس مع التاريخ وحده.
+- Advisor أظهر 6 جداول RLS بلا Policies. خمسة منها بلا GRANT مباشر لـ`anon` أو `authenticated`؛ أما `business_insights` فلديه GRANT للمستخدم المسجل لكن بلا Policy، ما يغلق الوصول افتراضيًا. لا تُنشئ Policies جماعية ولا تمنح صلاحيات لمجرد إسكات التحذير.
+- لا تُطبّق أيًا من هذه التغييرات على الإنتاج من هذه الجلسة. المطلوب أولًا بيئة Supabase غير إنتاجية، تشغيل Quality/RLS/pgTAP عليها، مراجعة صلاحيات كل RPC، ثم خطة ترحيل/تراجع وموافقة صريحة.

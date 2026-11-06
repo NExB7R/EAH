@@ -1088,3 +1088,16 @@
 - أضيف تحقق قبل التثبيت من وجود Secrets/Variables المطلوبة، وأن Supabase URL يستخدم HTTPS وأن project ref يطابق ref المسموح ولا يساوي مشروع EAH الإنتاجي. لا يبدأ الاختبار دون slug منشور من بادئة QA واسم مسودة QA.
 - أضيفت تعليمات إعداد GitHub Actions Secrets/Variables إلى `docs/qa/README.md`.
 - **لم يُشغّل E2E**؛ لا يوجد مشروع Supabase غير إنتاجي ظاهر في الحساب حاليًا، كما أن GitHub Actions runner ما زال لا يبدأ. لا توجد عمليات كتابة أو seeding على قاعدة البيانات.
+
+
+## 2026-11-06 — تحقق حي من Runner وVercel وProduction Supabase
+
+- تأكد أن `main` ما زال على `a2be141da751eb767a29e489003a7799dacf685d`. Quality Gate وInvariants وCodeQL وContext Map فشلت قبل ظهور Steps؛ إعادة تشغيل Job واحد من Invariants انتهت مجددًا بـ`runner_id=0` و0 steps. لا يوجد إثبات أن TypeScript أو Vitest أو RLS أو E2E بدأ التنفيذ.
+- آخر Production Deployment بحالة READY هو commit `b9bd8c0`. لا يوجد Deployment للـSHA الحالي، وVercel check يذكر `build-rate-limit`. Deployment أقدم على `489e16b` كان خطأ Build/TypeScript منفصلًا.
+- فحص Supabase كان قراءة فقط. المشروع الوحيد المتصل هو EAH Production، ولا توجد بيئة اختبار منفصلة. لا seeding ولا SQL كتابة ولا تعديل لحسابات أو أنشطة الإنتاج.
+- لقطة الإنتاج المجمعة: 8 أنشطة منشورة، صفر مسودات، صفر أنشطة مرتبطة بمالك، حساب دور واحد `super_admin`، شعار واحد وغلاف واحد، وجهتا phone وجهتا whatsapp. لم تُقرأ أرقام أو أسماء أنشطة.
+- مسار الإنشاء الحالي: `requireAdmin`، تحقق Zod، رقم أساسي واحد من نوع phone للنشاط، owner اختياري من دور customer/merchant، وفحص مسبق لعدم ارتباط الحساب بنشاط آخر. النشر مستقل عن الملكية، وتُحفظ جهات الاتصال بعد إنشاء النشاط مع محاولة rollback إذا فشل الحفظ. عند اختيار customer يحوّل المعالج الدور إلى merchant بعد حفظ النشاط وجهات الاتصال. هذه مراجعة ساكنة وليست تجربة إنشاء.
+- الفهرس الذري الفريد لمالك واحد غير موجود في Production رغم وجود ملف migration. لا توجد حسابات buyer/seller في Production لاختبار الربط. يجب عدم اعتبار فحص التطبيق السابق بديلًا عن القيد الفريد في قاعدة البيانات.
+- الكارد يقرأ حالة الطلبات داخل EAH من `accepts_orders` بعد تحقق إعدادات الطلب والمالك والوجهة التشغيلية؛ لا يستبدلها بشارة واتساب. `onlyPublishedBusinessRows` يرفض أي سجل لا يحمل `is_published === true`. أرقام الاتصال لا تدخل payload العام؛ تُعرض خيارات بدون قيمة رقمية ويُكشف الرقم عبر المسار المحمي بعد تسجيل الدخول.
+- تم التأكد من وجود Trigger مزامنة `business_media` إلى حقول الشعار/الغلاف. لم يتم اختبار رفع فعلي أو تحقق صفحة عامة تفاعليًا.
+- ظهرت فروق Production موثقة في ERROR_REGISTER: Policies مفقودة لـbusiness_insights، صلاحيات RPC أوسع من الترحيلات، دوال promo/reward القديمة، Policy contact_reveals القديمة، search_path، وغياب فهرس owner الفريد. تظل هذه بنود DB مفتوحة حتى الاختبار المعزول والموافقة؛ لم تُنفذ أي migration.
