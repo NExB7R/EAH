@@ -44,14 +44,18 @@ export default function StandingCockpit({
     excellent: 'عضو مميز', good: 'عضو', warning: 'تحت المراقبة', restricted: 'مقيد', suspended: 'موقوف',
   }
   const actionLabels: Record<string, string> = {
-    warn: 'تحذير', restrict: 'تقييد', suspend: 'حظر', pardon: 'إعفاء',
+    warn: 'تحذير', restrict: 'تقييد', suspend: 'حظر', pardon: 'إعفاء', auto_penalize: 'عقوبة تلقائية',
   }
 
   return (
     <div style={{ background: 'rgba(20, 15, 30, 0.6)', padding: '20px', borderRadius: '20px', border: '1px solid rgba(157, 78, 221, 0.2)', marginTop: '16px' }}>
-      <h3 style={{ color: '#fff', marginBottom: '16px' }}>لوحة قيادة الالتزام (Cockpit)</h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <h3 style={{ color: '#fff', margin: 0 }}>لوحة قيادة الالتزام (Cockpit)</h3>
+        <span style={{ fontSize: '12px', background: 'rgba(157, 78, 221, 0.2)', color: '#C77DFF', padding: '4px 8px', borderRadius: '8px' }}>
+          🤖 الطيار الآلي مُفعل
+        </span>
+      </div>
       
-      {/* الحالة الحالية */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '12px' }}>
         <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: colors[currentStanding] || '#fff' }}></span>
         <span style={{ color: '#fff', fontWeight: 'bold' }}>{labels[currentStanding] || currentStanding}</span>
@@ -59,7 +63,6 @@ export default function StandingCockpit({
       </div>
       {currentReason && <p style={{ color: '#ffa500', fontSize: '12px', marginBottom: '16px' }}>السبب الأخير: {currentReason}</p>}
 
-      {/* أزرار التحكم */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '16px' }}>
         <button onClick={() => openAction('pardon')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(74, 222, 128, 0.2)', color: '#4ade80', border: '1px solid #4ade80', cursor: 'pointer' }}>إعفاء</button>
         <button onClick={() => openAction('warn')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(250, 204, 21, 0.2)', color: '#facc15', border: '1px solid #facc15', cursor: 'pointer' }}>تحذير</button>
@@ -67,7 +70,6 @@ export default function StandingCockpit({
         <button onClick={() => openAction('suspend')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: '1px solid #ef4444', cursor: 'pointer' }}>حظر</button>
       </div>
 
-      {/* نموذج الإجراء */}
       {showForm && (
         <form onSubmit={handleSubmit} style={{ marginTop: '16px', background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: '12px' }}>
           <h4 style={{ color: '#fff', marginBottom: '12px' }}>تأكيد: {actionLabels[actionType]}</h4>
@@ -88,7 +90,6 @@ export default function StandingCockpit({
         </form>
       )}
 
-      {/* سجل التدقيق (Audit Trail) */}
       <div style={{ marginTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
         <h4 style={{ color: '#a0a0a0', marginBottom: '12px', fontSize: '14px' }}>سجل العقوبات (Audit Trail)</h4>
         {history.length === 0 ? (
@@ -98,11 +99,15 @@ export default function StandingCockpit({
             {history.map((h) => (
               <div key={h.id} style={{ background: 'rgba(255,255,255,0.05)', padding: '10px', borderRadius: '8px', fontSize: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                  <span style={{ color: colors[h.new_standing] || '#fff', fontWeight: 'bold' }}>{actionLabels[h.action] || h.action}</span>
+                  <span style={{ color: colors[h.new_standing] || '#fff', fontWeight: 'bold' }}>
+                    {actionLabels[h.action] || h.action}
+                  </span>
                   <span style={{ color: '#888' }}>{new Date(h.created_at).toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' })}</span>
                 </div>
                 <div style={{ color: '#ccc' }}>السبب: {h.reason}</div>
-                <div style={{ color: '#666', fontSize: '10px', marginTop: '4px' }}>بواسطة: {h.admin_name}</div>
+                <div style={{ color: '#666', fontSize: '10px', marginTop: '4px' }}>
+                  بواسطة: {h.admin_name || '🤖 النظام التلقائي'}
+                </div>
               </div>
             ))}
           </div>
