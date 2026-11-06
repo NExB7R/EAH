@@ -1,3 +1,4 @@
+-- Applied to the current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106042050).
 -- Restrict ownership helper probes to the caller, admin, or trusted service role.
 -- RLS policies call is_business_owner(..., auth.uid()); server-side partner flows
 -- retain their trusted checks. The target-owner check in invite_partner is made

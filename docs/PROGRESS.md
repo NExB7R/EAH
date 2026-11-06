@@ -1168,3 +1168,11 @@
 - في الكود، `get_user_points` و`getAccountStats` يقرآن آخر `points_log.balance_after`؛ بينما `profiles.trust_score` الافتراضي 50 ويُعدل عبر بعض دوال المشاركة/الإحالة دون تسجيل points_log.
 - القاعدة الحالية بها حساب واحد فقط و0 `points_log` rows؛ لا نملك بيانات مشتري/بايع لاختبار التدفق.
 - لم يتم تغيير رصيد أو backfill أو تعديل دالة نقاط؛ تم إبقاء DB-16 مفتوحًا حتى توحيد العقد البرمجي بين trust_score وpoints_log.
+
+
+## 2026-11-06 — تحصين دوال فحص ملكية النشاط والشريك
+
+- طُبّق `owner_helper_identity_guard` بالنسخة `20261106042050` على قاعدة EAH الحالية.
+- أصبحت `is_business_owner` لا تكشف ارتباط أي UUID آخر لمستخدم عادي؛ تظل صالحة لسياسات RLS التي تمرر `auth.uid()` وللأدمن الأعلى.
+- تم تحديث `invite_partner` لفحص ملكية الشخص المدعو داخليًا. وسُحبت صلاحية RPC المباشرة عن `is_active_partner` للمستخدمين، مع بقاء استخدامها المتداخل من `invite_partner` عبر function owner.
+- Dry-run داخل ROLLBACK أكد عدم-admin probe=false وadmin self lookup=true؛ post-apply أكد ACLs والمصدر وقيد owner unique ما زال صالحًا.

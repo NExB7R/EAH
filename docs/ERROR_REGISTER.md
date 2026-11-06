@@ -544,3 +544,11 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
 - `profiles.trust_score` له default=50. القاعدة الحالية بها profile واحد فقط ولا توجد صفوف `points_log`؛ لذلك الرصيد الظاهر في المسارات التي تقرأ points_log يبدأ من 0، ولا يصح تحويل trust_score الافتراضي إلى نقاط فعلية تلقائيًا.
 - `admin_adjust_points` يقرأ trust_score ثم يكتب `points_log`; و`claim_referral`, `award_trust_points`, `record_daily_visit` تكتب trust_score دون كتابة points_log. يلزم قرار مصدر موحد/ترحيل مرحلي واختبارات قبل التعديل.
 - لم نغيّر أي رصيد أو ملف مستخدم أو سجل نقاط. البند DB-16 بقي مفتوحًا عن قصد.
+
+
+### تحديث 2026-11-06 — إغلاق استعلامات الملكية/الشراكة عبر RPC
+
+- دالة `is_business_owner(business_id,user_id)` كانت قابلة للتنفيذ من authenticated وتقبل أي `user_id`، ما يتيح اختبار علاقة ملكية UUIDs أخرى. أصبحت ترجع false للمستخدم العادي عند طلب UUID غير `auth.uid()`، مع السماح للأدمن الأعلى/الخادم الموثوق بالفحص الإداري.
+- `invite_partner` كانت تحتاج فحصًا داخليًا لكون المستهدف مالكًا بالفعل؛ عُدلت لتنفذ ذلك الاستعلام داخل SECURITY DEFINER نفسه بدل استعمال helper عام كـoracle.
+- `is_active_partner` لا توجد لها سياسات RLS أو callsites متصفح؛ سُحبت EXECUTE من PUBLIC/anon/authenticated وأبقيت لـservice_role ولـfunction owner حتى يظل استخدامها المتداخل داخل `invite_partner` سليمًا.
+- طُبّق `owner_helper_identity_guard` بالنسخة `20261106042050`. Dry-run rollback أكد: non-admin lookup لشخص آخر=false، admin self lookup=true، function owner يحتفظ بصلاحية is_active_partner؛ post-apply أكد ACLs ووجود guard في المصدر.

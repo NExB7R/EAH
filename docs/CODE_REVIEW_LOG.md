@@ -343,3 +343,11 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - أكدت `REPUTATION_POLICY.md` أن trust_score/trust_tier نقاط مشاركة تاريخية وليست سمعة عامة، لكن واجهة الحساب و`get_user_points` تعتمد على `points_log.balance_after`.
 - `profiles.trust_score` default=50. writers المتحقق منها تشمل `claim_referral`, `award_trust_points`, `record_daily_visit`, `award_daily_login`, `log_unique_visit`, `admin_adjust_points`; ليس جميعها يكتب points_log.
 - لا يوجد في القاعدة سوى profile واحد و0 سجل points_log. لذلك أي مزامنة أو backfill من قيمة trust_score الافتراضية قد يصنع رصيدًا غير مستحق. لم نعدل أي بيانات؛ يلزم توحيد مصدر الرصيد أولًا.
+
+
+## مراجعة 2026-11-06 — تقييد owner/partner helper RPCs
+
+- `is_business_owner` كان SECURITY DEFINER يسمح للمستدعي بتمرير UUID مختلف. أضيف قيد caller/admin في جسم الدالة؛ واختبار rollback بمالك مؤقت أكد أن الحساب المجهول كدور authenticated لا يستطيع اختبار المالك الآخر.
+- لأن `invite_partner` يحتاج فحص target owner، استُبدل استعمال helper العام بفحص مباشر داخل SECURITY DEFINER function بعد التحقق أن caller صاحب/مدير النشاط.
+- `is_active_partner` لا يستخدم في RLS ولا في client code؛ استدعاؤه الداخلي الوحيد من invite_partner. تم قفل direct EXECUTE عن browser roles مع بقاء صلاحية مالك الدالة.
+- ترحيل `owner_helper_identity_guard` version `20261106042050` تم بعد dry-run؛ post-apply أكد القواعد وACLs. لم نغير سجلات النشاط/الشراكة.
