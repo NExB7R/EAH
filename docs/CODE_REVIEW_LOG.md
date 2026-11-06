@@ -369,3 +369,12 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - Post-check: 14 فهرس FK valid/ready، صفر FK غير مغطاة ضمن القائمة، الفهرس المكرر غير موجود والباقي موجود. Advisor أكد `unindexed_foreign_keys=0` و`duplicate_index=0`.
 - الترحيل `public_search_resource_guard` version `20261106042538` وضع resource bounds لدالة البحث العامة مع الحفاظ على فلتر is_published.
 - لم يحدث تعديل لصفوف الأنشطة أو الحسابات أو جهات الاتصال.
+
+
+## مراجعة 2026-11-06 — RLS scalar-subquery optimization وguest interaction tests
+
+- migration `rls_auth_initplan_optimization` (version `20261106043104`) عدلت 78 policy بتحويل استدعاءات `auth.uid/jwt/role` المباشرة إلى `(SELECT auth.*())`. لم تتغير expressions الدلالية سوى طريقة التقييم، ولا تغير policy command/roles.
+- post-check: 232 policy موجودة، zero raw auth function calls ضمن تعبيرات السياسات، وAdvisor لم يعد يعرض `auth_rls_initplan`.
+- فحص `registered_account_only_*`: 60/60 من نوع RESTRICTIVE؛ لا يمكن تجاوزها عبر policies القديمة permissive. ثلاث عمليات لا تمتلك permissive base policy مستقلة ولذلك تظل ممنوعة عبر RLS، لا مفتوحة.
+- تحقق حقيقي داخل معاملة rollback: anonymous JWT ممنوع من إضافة تعليق وممنوع من إضافة comment_like؛ registered super_admin قادر على الإضافة الذاتية. بعد rollback لا توجد سجلات اختبار، وعدد الأنشطة ظل 8 كلها منشورة.
+- لا تزال 139 حالة `multiple_permissive_policies` وتحتاج إلى مراجعة معنى الـOR لكل جدول، ولا يجري حذفها جماعيًا لأن كثيرًا منها يجمع صلاحيات المالك والأدمن أو العميل.

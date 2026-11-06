@@ -1193,3 +1193,11 @@
 - طُبّق `foreign_key_indexes_and_trust_badges_dedupe` (version `20261106042744`) وأُضيفت الفهارس الـ14 لتغطية مفاتيح FK التي رصدها Advisor.
 - حُذف index مكرر واحد على `trust_badges`; بقي `idx_trust_badges_entity`. لم تتغير بيانات أي جدول.
 - Post-apply Advisor: unindexed_foreign_keys=0, duplicate_index=0؛ 8 أنشطة ما زالت منشورة. ارتفع unused_index من 75 إلى 88 لأن الفهارس الجديدة لم تستخدم بعد، ونؤجل تنظيف أي فهارس أخرى حتى تتوفر إحصاءات تشغيل حقيقية.
+
+
+## 2026-11-06 — تحسين تقييم سياسات RLS والتحقق من شرط التسجيل
+
+- طُبّق `rls_auth_initplan_optimization` بالنسخة `20261106043104` على 78 policy كانت تستدعي auth functions مباشرة. كل الشروط والأدوار والأوامر بقيت كما هي، وأصبحت `auth_rls_initplan=0` في Supabase Advisor.
+- فحص RLS أكد أن سياسات `registered_account_only_*` وعددها 60 كلها RESTRICTIVE؛ لذلك تتقاطع مع سياسة المستخدم الذاتية ولا تسمح anonymous sessions بالمرور عبر OR. 57 لها base permissive policy، و3 عمليات لا توجد لها قاعدة سماح أخرى وتبقى مقفولة عبر direct RLS.
+- اختبارات rollback: anonymous insert comment blocked؛ anonymous insert comment_like blocked؛ registered account comment insert permitted. جميعها تراجعت، وبعدها comment/comment_like test rows = 0.
+- بعد فحص advisors: `unindexed_foreign_keys=0`, `duplicate_index=0`, `auth_rls_initplan=0`; ما زال `multiple_permissive_policies=139` بحاجة إلى تصنيف فردي، مع `unused_index=88` كـINFO قبل توفر workload.

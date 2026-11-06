@@ -1,3 +1,4 @@
+-- Applied to the current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106043104).
 -- Optimize RLS policy auth lookups without changing policy logic.
 -- The migration wraps direct auth.uid()/auth.jwt()/auth.role() calls in
 -- scalar subqueries so Postgres can evaluate them once per statement rather
