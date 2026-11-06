@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { DashboardHeader, BentoGrid, BentoCard } from '@/components/dashboard/bento';
 import { redirect } from 'next/navigation'
 import {
   StoreIcon,
