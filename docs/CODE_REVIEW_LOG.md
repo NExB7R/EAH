@@ -320,3 +320,12 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - استُبدلت السياسة القديمة التي تسمح بدوري `admin` و`super_admin` بسياسة SELECT واحدة تعتمد على `user_roles.role='super_admin'`.
 - Migration version `20261106040753` طُبقت بعد محاكاة ROLLBACK. ما بعد التطبيق: anon بلا SELECT، policy واحدة للأدمن الأعلى، وسجلان باقيان دون تعديل أو حذف.
 - pgTAP غير منفذ لغياب دالة `plan(integer)`؛ نتيجة catalog/privileges فقط متحققة.
+
+
+## مراجعة 2026-11-06 — تقييد دوال RPC الداخلية
+
+- تمت مراجعة تعريفات/callsites لـ`check_and_award_badges`, `cleanup_old_locations`, `cleanup_rate_limits`, `get_next_order_seq`, `get_setting` وخمس دوال trigger-only.
+- ثبت عدم وجود استدعاءات تطبيق مباشرة للدوال الداخلية؛ `cleanup_old_locations` يُستدعى داخل `save_customer_location` كـSECURITY DEFINER، و`get_next_order_seq` داخل `assign_order_code_v2` كـtrigger function.
+- migration `internal_rpc_grants_hardening` (version `20261106041256`) سحبت التنفيذ من PUBLIC/anon/authenticated واحتفظت بـservice_role. فحص post-apply أكد grants، مع استمرار تثبيت خمسة triggers كل منها مرتبط مرة واحدة.
+- تغيّر Supabase Advisor authenticated SECURITY DEFINER count من 78 إلى 68. الباقي يحتاج تصنيفًا فرديًا؛ لا توجد REVOKE جماعية.
+- لم تعمل pgTAP بسبب عدم وجود `plan(integer)`؛ تحققت من الكتالوج والصلاحيات وارتباطات triggers مباشرة.

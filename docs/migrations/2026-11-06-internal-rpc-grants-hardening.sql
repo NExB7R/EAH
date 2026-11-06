@@ -3,8 +3,8 @@
 -- guarded Server Actions/RPCs; trigger functions continue to run when their
 -- trigger fires even after direct EXECUTE is revoked from API roles.
 --
--- Applied to the current EAH pre-launch base only after call-site and function
--- dependency review; service_role retains explicit EXECUTE for trusted tasks.
+-- Applied to the current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106041256)
+-- after call-site and function dependency review; service_role retains explicit EXECUTE.
 
 BEGIN;
 

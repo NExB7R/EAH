@@ -1135,7 +1135,7 @@
 
 - طُبّق `admin_owner_rpc_server_only`، النسخة `20261106040435`. الدالتان `public.admin_set_business_owner` و`private.admin_set_business_owner` لم تعودا قابلتين للتنفيذ من anon أو authenticated؛ بقي التنفيذ لـservice_role. الواجهة الحالية تستعمل `linkBusinessToUser` Server Action بعد `requireAdmin` ولا تستدعي RPC القديمة.
 - تم تطبيق `function_search_path_hardening` بالنسخة `20261106040503` وضبط search_path للدوال `get_trust_tier`, `set_new_until`, `prevent_merchant_toggle_orders_enabled` إلى `pg_catalog`. تعريف حارس الطلب صار يستدعي `public.auth_is_admin()` بالاسم الكامل؛ Trigger واحد ما زال مثبتًا.
-- تمت محاكاة الترحيل الخاص بالـsearch_path في معاملة ROLLBACK أولًا؛ التحقق الحي يؤكد القيم الحالية، لكن لا تُسجل رقم نسخة migration حتى تؤكده قائمة Supabase migrations.
+- تمت محاكاة ترحيل search_path داخل ROLLBACK ثم تطبيقه بالنسخة `20261106040503`؛ تحقق live أكد `search_path=pg_catalog` للدوال الثلاث.
 - لم يعمل pgTAP لغياب `plan(integer)`، لذلك تبقى اختبارات SQL الآلية مفتوحة. لا توجد E2E أو Vitest ناجحة على آخر SHA بسبب Runner.
 
 
@@ -1145,3 +1145,12 @@
 - طُبّق `contact_reveals_super_admin_only`، نسخة `20261106040753`، بعد dry-run في معاملة ROLLBACK.
 - الحالة بعد التطبيق: Policy واحدة SELECT لـauthenticated بشرط super_admin فقط؛ anon بلا table SELECT؛ سجلان موجودان كما هما ولم يتغيرا.
 - لا تعتمد شاشة أو action في التطبيق على قراءة `contact_reveals` مباشرة وفق بحث callsites؛ يلزم اختبار pgTAP لاحقًا لأن pgTAP غير متاح على قاعدة المشروع حاليًا.
+
+
+## 2026-11-06 — تقييد RPCs الداخلية والـTriggers
+
+- تم تطبيق `internal_rpc_grants_hardening`، نسخة `20261106041256`، على قاعدة EAH الحالية بعد مراجعة الاستدعاءات ومحاكاة الترحيل داخل `ROLLBACK`.
+- سُحبت EXECUTE من anon/authenticated عن عشر دوال داخلية/صيانة/trigger، مع GRANT لـservice_role فقط. تحققنا من كل دالة بعد التطبيق ومن استمرار الـ5 triggers المثبتة.
+- `save_customer_location` لا يزال يعمل SECURITY DEFINER؛ ومالك الدالة ما زال يملك استدعاء helper تنظيف المواقع. `assign_order_code_v2` ما زال مرتبطًا بTrigger واحد لتخصيص كود الطلب؛ وبقية trigger functions الخمسة أيضًا بقيت مرتبطة.
+- Supabase Advisor: عدد authenticated SECURITY DEFINER انخفض من 78 إلى 68، مع استمرار مراجعة البقية؛ لا نعتبر كل WARN ثغرة تلقائيًا، ولا نسحب صلاحياتها بدون call-site/function-body review.
+- pgTAP غير متاح (غياب `plan(integer)`)، لذلك تم توثيق تحقق SQL مباشر فقط. لا توجد سجلات اختبار جديدة.

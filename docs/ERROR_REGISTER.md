@@ -508,7 +508,7 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
 
 - تم تطبيق `admin_owner_rpc_server_only` بالنسخة `20261106040435`. بعد الفحص: التنفيذ على الدالتين `public.admin_set_business_owner(uuid, uuid)` و`private.admin_set_business_owner(uuid, uuid)` ممنوع لـanon وauthenticated، ومسموح لـservice_role فقط. واجهة الأدمن الحالية تستخدم Server Action ولا تحتوي على callsite للدالة القديمة.
 - تمت محاكاة `function_search_path_hardening` داخل `ROLLBACK` قبل التطبيق. التحقق أثبت أن `get_trust_tier`, `set_new_until`, و`prevent_merchant_toggle_orders_enabled` يمكن تشغيلها بـ`search_path=pg_catalog`؛ دالة Trigger مؤهلة لاستدعاء `public.auth_is_admin()` بشكل كامل، والـTrigger ما زال مثبتًا.
-- **تنبيه:** لا تسجل ترحيل `function_search_path_hardening` كتطبيق مكتمل قبل قراءة النسخة الفعلية من سجل Supabase migrations. النتيجة الحية فقط هي أن إعدادات الدوال الثلاث أصبحت `search_path=pg_catalog` وأن Trigger الحارس موجود.
+- تم تأكيد تطبيق `function_search_path_hardening` بالنسخة `20261106040503`؛ `search_path=pg_catalog` للدوال الثلاث وTrigger الحارس لا يزال مثبتًا.
 - pgTAP ما زال غير قابل للتشغيل بسبب غياب `plan(integer)`؛ يلزم تثبيت/تفعيل pgTAP أو اعتماد مسار اختبار SQL بديل قبل إغلاق الاختبارات الآلية.
 
 
@@ -518,3 +518,13 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
 - بعد محاكاة الترحيل داخل `ROLLBACK` تم تطبيق `contact_reveals_super_admin_only` بالنسخة `20261106040753`.
 - الفحص الحي أكد وجود Policy واحدة `super_admin_read_contact_reveals` لـauthenticated، مع عدم وجود SELECT مباشر لـanon. جدول التدقيق يحتوي سجلين محفوظين ولم تُعدّل أو تُحذف سجلاته.
 - قاعدة السياسة تعتمد على `user_roles.role='super_admin'`، وهو دور الأدمن الفعلي في التطبيق الحالي؛ لا تمنح القيمة القديمة `admin` وصولًا إلى سجلات الكشف.
+
+
+### تحديث 2026-11-06 — تقييد RPCs الداخلية والصيانة والـTriggers
+
+- طُبّق `internal_rpc_grants_hardening` على قاعدة EAH الحالية بالنسخة `20261106041256` بعد مراجعة callsites واعتماد محاكاة داخل `ROLLBACK`.
+- الدوال العشر المقيدة: `assign_order_code_v2`, `auto_flag_review`, `auto_referral_code`, `grant_trial_on_owner`, `notify_partner_invitation`, `check_and_award_badges`, `cleanup_old_locations`, `cleanup_rate_limits`, `get_next_order_seq`, `get_setting`.
+- الفحص بعد التطبيق أكد لكل واحدة: `anon=false`, `authenticated=false`, `service_role=true`. بقيت الـ5 triggers مثبتة (كل منها trigger واحد). دالة `save_customer_location` ما زالت SECURITY DEFINER ومالكها يملك تنفيذ `cleanup_old_locations` داخليًا.
+- لا توجد callsites مباشرة للدوال الداخلية في واجهة المتصفح؛ الدوال المساعدة التي تستدعيها داخل دوال SECURITY DEFINER أو الـTriggers تستمر بالعمل بصلاحيات مالك الدالة. لم تُعدّل بيانات نشاط أو مستخدم.
+- بعد الترحيل انخفض تنبيه Supabase `authenticated_security_definer_function_executable` من 78 إلى 68. بقيت الدوال الأخرى قيد مراجعة منفصلة، ولا يجوز سحب صلاحياتها جماعيًا.
+- اختبارات pgTAP غير منفذة لغياب `plan(integer)`؛ تم dry-run وفحص catalog/privileges والـtrigger counts مباشرة.
