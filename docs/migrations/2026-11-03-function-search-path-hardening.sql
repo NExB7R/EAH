@@ -1,5 +1,5 @@
 -- EAH — Harden search_path on audited trigger/helper functions.
--- Apply only through the isolated non-production Quality Gate first.
+-- Applied to current EAH pre-launch base on 2026-11-06; the final Supabase migration version is recorded in its migration history.
 BEGIN;
 
 ALTER FUNCTION public.get_trust_tier(integer)

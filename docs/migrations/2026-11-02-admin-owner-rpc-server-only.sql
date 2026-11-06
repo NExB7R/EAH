@@ -1,7 +1,7 @@
 -- EAH — Make direct activity-owner mutation RPC server-only.
 -- The supported admin interface performs ownership changes through reviewed
 -- server actions that validate role, single-activity constraints and order state.
--- This legacy RPC is not called by application code and must not bypass that flow.
+-- Applied to current EAH pre-launch base on 2026-11-06 (Supabase version 20261106040435).
 
 BEGIN;
 

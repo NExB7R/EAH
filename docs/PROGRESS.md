@@ -1129,3 +1129,11 @@
 - تم الإبقاء على منح helper `auth_is_admin()` و`is_admin()` اللازمة لتقييم سياسات RLS، وعلى وجود الـ16 trigger بعد سحب صلاحية الاستدعاء المباشر من واجهة RPC.
 - تم ضبط search_path للدوال الثلاث المستهدفة إلى `pg_catalog, public`.
 - تحقق post-apply من السياسات وgrants ووجود trigger definitions. pgTAP لم يعمل بسبب غياب `plan(integer)`؛ لم نسجل Quality/RLS على أنها ناجحة. لا يوجد owner/seller/buyer account متاح لتجربة dashboard كاملة بعد.
+
+
+## 2026-11-06 — قفل RPC تغيير مالك النشاط وتضييق search_path
+
+- طُبّق `admin_owner_rpc_server_only`، النسخة `20261106040435`. الدالتان `public.admin_set_business_owner` و`private.admin_set_business_owner` لم تعودا قابلتين للتنفيذ من anon أو authenticated؛ بقي التنفيذ لـservice_role. الواجهة الحالية تستعمل `linkBusinessToUser` Server Action بعد `requireAdmin` ولا تستدعي RPC القديمة.
+- تم تطبيق/التحقق من search_path للدوال `get_trust_tier`, `set_new_until`, `prevent_merchant_toggle_orders_enabled` إلى `pg_catalog`. تعريف حارس الطلب صار يستدعي `public.auth_is_admin()` بالاسم الكامل؛ Trigger واحد ما زال مثبتًا.
+- تمت محاكاة الترحيل الخاص بالـsearch_path في معاملة ROLLBACK أولًا؛ التحقق الحي يؤكد القيم الحالية، لكن لا تُسجل رقم نسخة migration حتى تؤكده قائمة Supabase migrations.
+- لم يعمل pgTAP لغياب `plan(integer)`، لذلك تبقى اختبارات SQL الآلية مفتوحة. لا توجد E2E أو Vitest ناجحة على آخر SHA بسبب Runner.

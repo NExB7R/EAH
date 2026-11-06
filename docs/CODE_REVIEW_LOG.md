@@ -304,3 +304,11 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - post-check أثبت 4 policies على `business_insights`, service-role-only grant لـ`reveal_contact`, authenticated grant (دون anon) لـ`request_promo_post` و`redeem_reward`, واحتفاظ auth helpers المخصصة لتقييم RLS بصلاحية anon.
 - تم التحقق من بقاء 16 trigger مثبتة وضبط search_path للدوال الثلاث. لم تتغير سجلات النشاط أو الحسابات أو جهات الاتصال خلال هذا الترحيل.
 - pgTAP لم يُشغّل لأن دالة `plan(integer)` غير موجودة في المشروع. يلزم تشغيل اختبار pgTAP/Vitest وE2E عندما يُصلح Runner ويُجهز حساب بايع/مشتري؛ لا تدّعي اختبارات آلية ناجحة في الوقت الحالي.
+
+
+## مراجعة 2026-11-06 — تضييق RPC تغيير المالك ودوال trigger
+
+- تم حصر استخدام دالة `reveal_contact` في API خادمي ذي service-role بعد auth/rate-limit، وإيقاف تنفيذها من جلسات anon/authenticated عبر migration access control السابقة.
+- `admin_set_business_owner` القديم لا يملك callsite داخل التطبيق؛ الواجهة تستعمل `linkBusinessToUser`. بعد dry-run طُبّق الترحيل `admin_owner_rpc_server_only`، وتأكد أن public/private functions service_role-only.
+- تمت محاكاة migration search_path في ROLLBACK؛ ثم أصبحت الدوال الثلاث تستخدم `search_path=pg_catalog`. حارس إعداد الطلب يستخدم `public.auth_is_admin()` بشكل مؤهل، والـtrigger ما زال مثبتًا.
+- لا تدّع pgTAP ناجحًا: القاعدة لا تتضمن دالة `plan(integer)`. اختبارات الصلاحيات والـfunction source تبقى بحاجة إلى مسار اختبار آلي يعمل.
