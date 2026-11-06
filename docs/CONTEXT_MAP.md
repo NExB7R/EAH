@@ -240,7 +240,7 @@
 | `data/admin-business-list.ts` | getAdminBusinessesPage | — |
 | `data/admin-business.ts` | getBusinessById, getBusinessOwnerCandidates | EAH — Admin Business Detail (Service Role — bypass RLS) |
 | `data/admin-orders.ts` | getAdminOrders, computeAdminOrdersStats, getAdminOrderFlowStats | Admin Orders — centralized view across businesses |
-| `data/admin-user-detail.ts` | getAdminUserDetail, getStandingEvents | EAH — Admin User Detail data |
+| `data/admin-user-detail.ts` | getAdminUserDetail, getStandingEvents | — |
 | `data/admin.ts` | getAdminStats, getBusinessesByStatus, getAdminRecent, getFeaturedBusinesses, getAudienceCounts, … | EAH — Admin Data |
 | `data/ads.ts` | getActiveAdsForSlot, getMyAds, getAllAds, getAdSlots | EAH — Ads Data |
 | `data/announcements.ts` | getActiveAnnouncements | EAH — Announcements Data |
