@@ -167,3 +167,39 @@ export async function getAdminUserDetail(userId: string): Promise<UserDetail | n
     reviews,
   }
 }
+
+// ═══════════════════════════════════════════════════════════
+// Standing Audit Trail (History)
+// ═══════════════════════════════════════════════════════════
+export type StandingEvent = {
+  id: string
+  action: string
+  previous_standing: string | null
+  new_standing: string | null
+  reason: string | null
+  expires_at: string | null
+  created_at: string
+  admin_name: string | null
+}
+
+export async function getStandingEvents(userId: string): Promise<StandingEvent[]> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('standing_events')
+    .select(`
+      id, action, previous_standing, new_standing, reason, expires_at, created_at,
+      admin:admin_id(display_name)
+    `)
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Failed to fetch standing events:', error)
+    return []
+  }
+
+  return (data || []).map((e: any) => ({
+    ...e,
+    admin_name: e.admin?.display_name || 'الإدارة'
+  }))
+}

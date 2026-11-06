@@ -6,12 +6,14 @@ export default function StandingCockpit({
   userId, 
   currentStanding, 
   currentReason, 
-  expiresAt 
+  expiresAt,
+  history
 }: { 
   userId: string, 
   currentStanding: string, 
   currentReason: string | null, 
-  expiresAt: string | null 
+  expiresAt: string | null,
+  history: any[]
 }) {
   const [loading, setLoading] = useState(false)
   const [showForm, setShowForm] = useState(false)
@@ -27,7 +29,6 @@ export default function StandingCockpit({
     await manageStandingAction(formData)
     setLoading(false)
     setShowForm(false)
-    // إعادة تحميل الصفحة لتحديث البيانات
     window.location.reload()
   }
 
@@ -36,66 +37,77 @@ export default function StandingCockpit({
     setShowForm(true)
   }
 
-  // ألوان الحالة
   const colors: Record<string, string> = {
-    excellent: '#4ade80', // أخضر
-    good: '#a0a0a0',      // رمادي
-    warning: '#facc15',   // أصفر
-    restricted: '#f97316',// برتقالي
-    suspended: '#ef4444', // أحمر
+    excellent: '#4ade80', good: '#a0a0a0', warning: '#facc15', restricted: '#f97316', suspended: '#ef4444',
   }
-
   const labels: Record<string, string> = {
-    excellent: 'عضو مميز',
-    good: 'عضو',
-    warning: 'تحت المراقبة',
-    restricted: 'مقيد',
-    suspended: 'موقوف',
+    excellent: 'عضو مميز', good: 'عضو', warning: 'تحت المراقبة', restricted: 'مقيد', suspended: 'موقوف',
+  }
+  const actionLabels: Record<string, string> = {
+    warn: 'تحذير', restrict: 'تقييد', suspend: 'حظر', pardon: 'إعفاء',
   }
 
   return (
     <div style={{ background: 'rgba(20, 15, 30, 0.6)', padding: '20px', borderRadius: '20px', border: '1px solid rgba(157, 78, 221, 0.2)', marginTop: '16px' }}>
       <h3 style={{ color: '#fff', marginBottom: '16px' }}>لوحة قيادة الالتزام (Cockpit)</h3>
       
-      {/* عرض الحالة الحالية */}
+      {/* الحالة الحالية */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '12px' }}>
         <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: colors[currentStanding] || '#fff' }}></span>
         <span style={{ color: '#fff', fontWeight: 'bold' }}>{labels[currentStanding] || currentStanding}</span>
-        {expiresAt && <span style={{ color: '#a0a0a0', fontSize: '12px' }}>(ينتهي في: {new Date(expiresAt).toLocaleDateString('ar-EG')})</span>}
+        {expiresAt && <span style={{ color: '#a0a0a0', fontSize: '12px' }}>(ينتهي: {new Date(expiresAt).toLocaleString('ar-EG')})</span>}
       </div>
-      {currentReason && <p style={{ color: '#ffa500', fontSize: '12px', marginBottom: '16px' }}>السبب: {currentReason}</p>}
+      {currentReason && <p style={{ color: '#ffa500', fontSize: '12px', marginBottom: '16px' }}>السبب الأخير: {currentReason}</p>}
 
       {/* أزرار التحكم */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-        <button onClick={() => openAction('pardon')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(74, 222, 128, 0.2)', color: '#4ade80', border: '1px solid #4ade80', cursor: 'pointer' }}>إعفاء (Pardon)</button>
-        <button onClick={() => openAction('warn')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(250, 204, 21, 0.2)', color: '#facc15', border: '1px solid #facc15', cursor: 'pointer' }}>تحذير (Warn)</button>
-        <button onClick={() => openAction('restrict')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(249, 115, 22, 0.2)', color: '#f97316', border: '1px solid #f97316', cursor: 'pointer' }}>تقييد (Restrict)</button>
-        <button onClick={() => openAction('suspend')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: '1px solid #ef4444', cursor: 'pointer' }}>حظر (Suspend)</button>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '16px' }}>
+        <button onClick={() => openAction('pardon')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(74, 222, 128, 0.2)', color: '#4ade80', border: '1px solid #4ade80', cursor: 'pointer' }}>إعفاء</button>
+        <button onClick={() => openAction('warn')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(250, 204, 21, 0.2)', color: '#facc15', border: '1px solid #facc15', cursor: 'pointer' }}>تحذير</button>
+        <button onClick={() => openAction('restrict')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(249, 115, 22, 0.2)', color: '#f97316', border: '1px solid #f97316', cursor: 'pointer' }}>تقييد</button>
+        <button onClick={() => openAction('suspend')} style={{ padding: '10px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: '1px solid #ef4444', cursor: 'pointer' }}>حظر</button>
       </div>
 
-      {/* نموذج الإدخال */}
+      {/* نموذج الإجراء */}
       {showForm && (
         <form onSubmit={handleSubmit} style={{ marginTop: '16px', background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: '12px' }}>
-          <h4 style={{ color: '#fff', marginBottom: '12px' }}>تأكيد الإجراء: {labels[actionType === 'pardon' ? 'good' : actionType === 'warn' ? 'warning' : actionType === 'restrict' ? 'restricted' : 'suspended']}</h4>
-          
+          <h4 style={{ color: '#fff', marginBottom: '12px' }}>تأكيد: {actionLabels[actionType]}</h4>
           {actionType !== 'pardon' && (
             <div style={{ marginBottom: '12px' }}>
-              <label style={{ color: '#a0a0a0', fontSize: '12px', display: 'block', marginBottom: '4px' }}>المدة (بالأيام) - اتركه 0 للحظر الدائم</label>
+              <label style={{ color: '#a0a0a0', fontSize: '12px', display: 'block', marginBottom: '4px' }}>المدة (أيام) - 0 يعني دائم</label>
               <input type="number" name="durationDays" defaultValue={actionType === 'warn' ? 7 : actionType === 'restrict' ? 30 : 0} style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #333', background: '#111', color: '#fff' }} />
             </div>
           )}
-
           <div style={{ marginBottom: '12px' }}>
             <label style={{ color: '#a0a0a0', fontSize: '12px', display: 'block', marginBottom: '4px' }}>السبب</label>
-            <input type="text" name="reason" required placeholder="اكتب السبب هنا..." style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #333', background: '#111', color: '#fff' }} />
+            <input type="text" name="reason" required style={{ width: '100%', padding: '8px', borderRadius: '8px', border: '1px solid #333', background: '#111', color: '#fff' }} />
           </div>
-
           <div style={{ display: 'flex', gap: '8px' }}>
             <button type="submit" disabled={loading} style={{ flex: 1, padding: '10px', borderRadius: '8px', background: '#9D4EDD', color: '#fff', border: 'none', cursor: 'pointer' }}>{loading ? 'جاري...' : 'تنفيذ'}</button>
             <button type="button" onClick={() => setShowForm(false)} style={{ flex: 1, padding: '10px', borderRadius: '8px', background: '#333', color: '#fff', border: 'none', cursor: 'pointer' }}>إلغاء</button>
           </div>
         </form>
       )}
+
+      {/* سجل التدقيق (Audit Trail) */}
+      <div style={{ marginTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
+        <h4 style={{ color: '#a0a0a0', marginBottom: '12px', fontSize: '14px' }}>سجل العقوبات (Audit Trail)</h4>
+        {history.length === 0 ? (
+          <p style={{ color: '#666', fontSize: '12px' }}>لا توجد عقوبات سابقة.</p>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {history.map((h) => (
+              <div key={h.id} style={{ background: 'rgba(255,255,255,0.05)', padding: '10px', borderRadius: '8px', fontSize: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <span style={{ color: colors[h.new_standing] || '#fff', fontWeight: 'bold' }}>{actionLabels[h.action] || h.action}</span>
+                  <span style={{ color: '#888' }}>{new Date(h.created_at).toLocaleString('ar-EG', { dateStyle: 'short', timeStyle: 'short' })}</span>
+                </div>
+                <div style={{ color: '#ccc' }}>السبب: {h.reason}</div>
+                <div style={{ color: '#666', fontSize: '10px', marginTop: '4px' }}>بواسطة: {h.admin_name}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
