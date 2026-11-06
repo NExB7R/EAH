@@ -2,6 +2,7 @@ import { getSession } from '@/lib/auth/session';
 import { getAccountStats } from '@/lib/data/account';
 import { getBadgeCatalogWithStatus } from '@/lib/data/badges';
 import styles from './account-dashboard.module.css';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,12 +13,24 @@ export default async function AccountPage() {
   const stats = await getAccountStats(session.user.id);
   const badges = await getBadgeCatalogWithStatus(session.user.id);
 
-  // حساب المستوى الحالي (نظام مؤقت للعرض)
+  // استخدام البيانات الحقيقية من الجلسة
   const currentPoints = stats.pointsBalance || 0;
-  const nextLevelPoints = 150;
-  const progressPercent = Math.min((currentPoints / nextLevelPoints) * 100, 100);
+  const trustTier = session.trustTier || 'fel'; // القيمة الافتراضية
   
-  // شارات مكتسبة
+  // ترجمة المستوى للعربي
+  const tierLabels: Record<string, string> = {
+    'bade2': 'مبتدئ',
+    'mashey': 'نشيط',
+    'fel': 'محترف',
+    'harif': 'خبير',
+    'ostora': 'أسطورة EAH 👑'
+  };
+  const currentLevel = tierLabels[trustTier] || 'مبتدئ';
+  
+  // حساب النقاط المطلوبة للمستوى القادم (تقديري)
+  const nextLevelPoints = currentPoints + 50; 
+  const progressPercent = 100; // لأننا بنعرض النقاط اللي جمعها فعلاً
+
   const earnedBadges = badges.filter(b => b.earned);
 
   return (
@@ -28,13 +41,16 @@ export default async function AccountPage() {
           <div className={styles.cardTitle}>
             <span>⭐</span> مستواك الحالي
           </div>
-          <div className={styles.cardValue}>نشيط</div>
+          <div className={styles.cardValue}>{currentLevel}</div>
           <div style={{ color: '#a0a0a0', fontSize: '14px', marginTop: '8px' }}>
-            فاضلك {nextLevelPoints - currentPoints} نقطة توصل لـ "محترف"
+            إجمالي نقاطك: {currentPoints} نقطة
           </div>
           <div className={styles.progressBar}>
             <div className={styles.progressFill} style={{ width: `${progressPercent}%` }}></div>
           </div>
+          <Link href="/account/points-guide" style={{ fontSize: '12px', color: '#C77DFF', textDecoration: 'underline', marginTop: '12px', display: 'inline-block' }}>
+            إزاي أزود نقاطي؟
+          </Link>
         </div>
 
         {/* كارت النقاط */}
@@ -50,9 +66,9 @@ export default async function AccountPage() {
           <div className={styles.cardTitle}>
             <span>🔥</span> أيام متتالية
           </div>
-          <div className={styles.cardValue}>3</div>
+          <div className={styles.cardValue}>{session.streakDays || 0}</div>
           <div style={{ color: '#E8C79A', fontSize: '12px', marginTop: '8px' }}>
-            كمل 4 أيام وخد شارة "الوفي"
+            دخلت {session.streakDays || 0} أيام ورا بعض!
           </div>
         </div>
 
