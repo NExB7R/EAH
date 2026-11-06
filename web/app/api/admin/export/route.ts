@@ -16,7 +16,7 @@ type Row = Record<string, unknown>
 const YES_NO = (value: unknown) => (value ? 'نعم' : 'لا')
 const BUSINESS_SOURCE_LABEL: Record<string, string> = {
   admin: 'الأدمن',
-  merchant: 'البايع',
+  merchant: 'التاجر',
 }
 const SUBSCRIPTION_STATUS_LABEL: Record<string, string> = {
   pending: 'قيد المراجعة',
@@ -205,9 +205,9 @@ export async function GET(req: NextRequest) {
         row.role === 'super_admin'
           ? 'الأدمن'
           : row.role === 'merchant'
-            ? 'البايع'
+            ? 'التاجر'
             : row.role === 'customer'
-              ? 'المشتري'
+              ? 'العميل'
               : 'غير محدد',
     }))
 

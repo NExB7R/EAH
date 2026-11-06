@@ -286,15 +286,15 @@ export default function OrderModal({
               <CheckCircleIcon size={36} />
             </span>
             <h2 className={styles.successTitle}>تم!</h2>
-            <p className={styles.successText}>طلبك #{successCode} وصل للبايع ✓</p>
+            <p className={styles.successText}>طلبك #{successCode} وصل للتاجر ✓</p>
             <p className={styles.successHint}>
-              هيتم فتح واتساب الآن لإشعار البايع. لو ما فتحش، كلم النشاط من صفحته.
+              هيتم فتح واتساب الآن لإشعار التاجر. لو ما فتحش، كلم النشاط من صفحته.
             </p>
             <div className={styles.timelinePreview}>
               <p className={styles.timelinePreviewTitle}>الخطوات القادمة:</p>
               <ol className={styles.timelineList}>
                 <li className={styles.timelineDone}>✓ استلمنا طلبك</li>
-                <li>⏳ بانتظار رد البايع (≤10 دقايق)</li>
+                <li>⏳ بانتظار رد التاجر (≤10 دقايق)</li>
                 <li>🍳 تجهيز الطلب</li>
                 <li>🚗 في الطريق</li>
                 <li>✅ التسليم</li>

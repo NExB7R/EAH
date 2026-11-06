@@ -20,8 +20,8 @@ type Props = {
 type Modal = 'ban' | 'role' | null
 
 const ROLES = [
-  { value: 'customer', label: 'المشتري' },
-  { value: 'merchant', label: 'البايع' },
+  { value: 'customer', label: 'العميل' },
+  { value: 'merchant', label: 'التاجر' },
 ] as const
 
 export default function UsersList({ users, filter }: Props) {

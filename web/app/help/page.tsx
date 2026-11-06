@@ -22,7 +22,7 @@ import styles from './help.module.css'
 
 export const metadata: Metadata = {
   title: 'المساعدة',
-  description: 'دليل استخدام EAH — للمشتري والبايع',
+  description: 'دليل استخدام EAH — للعميل والتاجر',
 }
 
 export const revalidate = 3600
@@ -44,7 +44,7 @@ const CUSTOMER_TOPICS: Topic[] = [
   {
     Icon: WhatsAppIcon,
     title: 'اطلب على واتساب',
-    body: 'افتح صفحة النشاط واضغط "اطلب على واتساب" — رسالة جاهزة بتوصل للبايع مباشرة، بدون وسيط.',
+    body: 'افتح صفحة النشاط واضغط "اطلب على واتساب" — رسالة جاهزة بتوصل للتاجر مباشرة، بدون وسيط.',
   },
   {
     Icon: GiftIcon,
@@ -82,7 +82,7 @@ const MERCHANT_TOPICS: Topic[] = [
   {
     Icon: BellIcon,
     title: 'استقبل الطلبات',
-    body: 'المشتري يكلمك واتساب مباشرة. أكّد الطلب خلال 10 دقايق (الافتراضي).',
+    body: 'العميل يكلمك واتساب مباشرة. أكّد الطلب خلال 10 دقايق (الافتراضي).',
     link: { href: '/merchant/orders', label: 'شوف الطلبات' },
   },
   {
@@ -148,7 +148,7 @@ export default async function HelpPage() {
           <div className={styles.sectionHead}>
             <span className={`${styles.sectionBadge} ${styles.badgeGold}`}>
               <StoreIcon size={12} />
-              للبايع
+              للتاجر
             </span>
             <h2 className={styles.sectionTitle}>إزاي تنمّي نشاطك</h2>
           </div>
@@ -188,7 +188,7 @@ export default async function HelpPage() {
           <details className={styles.faqItem}>
             <summary>هل EAH مجانية؟</summary>
             <p>
-              أيوه — 100% مجانية للمشتري. وبدون عمولة على البايع. الربح من باقات اختيارية + إعلانات.
+              أيوه — 100% مجانية للعميل. وبدون عمولة على التاجر. الربح من باقات اختيارية + إعلانات.
             </p>
           </details>
           <details className={styles.faqItem}>
@@ -200,7 +200,7 @@ export default async function HelpPage() {
           <details className={styles.faqItem}>
             <summary>الرقم بيبان لأي حد؟</summary>
             <p>
-              لا. الرقم محمي — أي حد يشوف نشاطك لازم يكون مسجل. البايع المرتبط بالنشاط يشوف إحصائيات الاتصال
+              لا. الرقم محمي — أي حد يشوف نشاطك لازم يكون مسجل. التاجر المرتبط بالنشاط يشوف إحصائيات الاتصال
               بس.
             </p>
           </details>

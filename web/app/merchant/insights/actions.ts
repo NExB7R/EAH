@@ -24,7 +24,7 @@ export async function generateInsight(businessId: string, days = 30): Promise<Ac
   } = await supabase.auth.getUser()
   if (!user || user.is_anonymous) return { ok: false, error: 'لازم تسجل بحساب مسجل الأول' }
 
-  // فحص إن المستخدم هو البايع المرتبط بالنشاط أو أدمن
+  // فحص إن المستخدم هو التاجر المرتبط بالنشاط أو أدمن
   const { data: biz } = await supabase
     .from('businesses')
     .select('owner_profile_id')

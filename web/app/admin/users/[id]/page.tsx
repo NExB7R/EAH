@@ -19,8 +19,8 @@ import styles from './user-detail.module.css'
 export const dynamic = 'force-dynamic'
 
 const ROLE_LABEL: Record<string, string> = {
-  customer: 'المشتري',
-  merchant: 'البايع',
+  customer: 'العميل',
+  merchant: 'التاجر',
   admin: 'غير محدد',
   super_admin: 'الأدمن',
 }
@@ -42,8 +42,8 @@ const AUDIT_ACTION_LABEL: Record<string, string> = {
   'business.create': 'إنشاء نشاط',
   'business.update': 'تعديل نشاط',
   'business.archive': 'أرشفة نشاط',
-  'business.owner.assign': 'ربط البايع بالنشاط',
-  'business.owner.remove': 'فك ربط البايع بالنشاط',
+  'business.owner.assign': 'ربط التاجر بالنشاط',
+  'business.owner.remove': 'فك ربط التاجر بالنشاط',
 }
 
 function getReviewStatusLabel(status: string): string {

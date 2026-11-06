@@ -104,12 +104,12 @@ export function analyzeBusiness(
   }
   if (metrics.avgResponseTimeMin !== null && metrics.avgResponseTimeMin <= 15)
     strengths.push(`سرعة رد ممتازة (${metrics.avgResponseTimeMin} دقيقة)`)
-  if (metrics.isVerified) strengths.push('نشاط موثّق — بيعزز ثقة المشترين')
+  if (metrics.isVerified) strengths.push('نشاط موثّق — بيعزز ثقة العملاء')
   if (metrics.mediaCount >= 5) strengths.push(`محتوى غني (${metrics.mediaCount} صورة)`)
   if (metrics.uniqueVisitors >= 30) strengths.push(`تفاعل جيد (${metrics.uniqueVisitors} زائر)`)
 
   // الضعف
-  if (metrics.reviewsTotal === 0) weaknesses.push('مفيش تقييمات لسه — شجّع المشترين')
+  if (metrics.reviewsTotal === 0) weaknesses.push('مفيش تقييمات لسه — شجّع العملاء')
   else if (metrics.avgRating < 3.5 && metrics.reviewsTotal >= 3)
     weaknesses.push(`التقييم متوسط (${metrics.avgRating}) — راجع الشكاوى`)
   if (metrics.ordersTotal > 0) {
@@ -170,7 +170,7 @@ function getScoreLabel(score: number): {
 
 function generateSummary(score: number, metrics: BusinessMetrics, sc: number, wc: number): string {
   if (metrics.pageViews === 0 && metrics.ordersTotal === 0 && metrics.reviewsTotal === 0) {
-    return 'نشاطك جديد — ابدأ بنشر صور، تفعيل الواتساب، ودعوة المشترين للتفاعل.'
+    return 'نشاطك جديد — ابدأ بنشر صور، تفعيل الواتساب، ودعوة العملاء للتفاعل.'
   }
   if (score >= 85) return `أداءك ممتاز! ${sc} نقاط قوة vs ${wc} ضعف. حافظ على المستوى.`
   if (score >= 70) return `أداءك جيد جداً. عندك ${sc} نقاط قوة، بس ${wc} محتاجة تحسين.`
@@ -186,8 +186,8 @@ function generateInsights(metrics: BusinessMetrics, comparison: ComparisonData |
       id: 'no-reviews',
       severity: 'warning',
       title: 'مفيش تقييمات لسه',
-      description: 'التقييمات بتساعد 90% من المشترين ياخدوا قرارهم.',
-      action: 'اطلب من 3 مشترين يكتبوا تقييم',
+      description: 'التقييمات بتساعد 90% من العملاء ياخدوا قرارهم.',
+      action: 'اطلب من 3 عملاء يكتبوا تقييم',
     })
   } else if (metrics.avgRating >= 4.5) {
     insights.push({
@@ -321,7 +321,7 @@ function generateInsights(metrics: BusinessMetrics, comparison: ComparisonData |
       id: 'no-engagement',
       severity: 'info',
       title: 'مفيش متابعين',
-      description: 'شجّع المشترين على الحفظ والمتابعة.',
+      description: 'شجّع العملاء على الحفظ والمتابعة.',
       action: 'أضف CTA واضح',
     })
   }

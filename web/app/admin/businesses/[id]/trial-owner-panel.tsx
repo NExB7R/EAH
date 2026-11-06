@@ -19,7 +19,7 @@ import {
 import styles from './trial-owner-panel.module.css'
 
 // ═══════════════════════════════════════════════════════════
-// Admin Panel — إدارة التجربة + ربط البايع المرتبط
+// Admin Panel — إدارة التجربة + ربط التاجر المرتبط
 // ═══════════════════════════════════════════════════════════
 
 type UserFound = {
@@ -41,8 +41,8 @@ type Props = {
 }
 
 const ROLE_LABEL: Record<string, string> = {
-  customer: 'المشتري',
-  merchant: 'البايع',
+  customer: 'العميل',
+  merchant: 'التاجر',
   admin: 'غير محدد',
   super_admin: 'الأدمن',
 }
@@ -138,7 +138,7 @@ export default function TrialOwnerPanel({
           <span
             className={`${styles.chip} ${source === 'admin' ? styles.chipAdmin : styles.chipMerchant}`}
           >
-            {source === 'admin' ? 'الأدمن' : 'البايع'}
+            {source === 'admin' ? 'الأدمن' : 'التاجر'}
           </span>
         </div>
         <div className={styles.statusItem}>
@@ -148,7 +148,7 @@ export default function TrialOwnerPanel({
           </span>
         </div>
         <div className={styles.statusItem}>
-          <span className={styles.statusLabel}>البايع المرتبط</span>
+          <span className={styles.statusLabel}>التاجر المرتبط</span>
           <span className={styles.ownerText}>{ownerDisplayName ?? '— غير مربوط —'}</span>
         </div>
       </div>
@@ -268,7 +268,7 @@ export default function TrialOwnerPanel({
             </span>
             <div>
               <strong className={styles.sectionTitle}>
-                البايع المرتبط حاليًا: {ownerDisplayName ?? '—'}
+                التاجر المرتبط حاليًا: {ownerDisplayName ?? '—'}
               </strong>
               {ownerPhone && (
                 <p className={styles.sectionDesc} dir="ltr">

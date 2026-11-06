@@ -24,8 +24,8 @@ type Props = {
 }
 
 const ROLE_LABEL: Record<string, string> = {
-  customer: 'المشتري',
-  merchant: 'البايع',
+  customer: 'العميل',
+  merchant: 'التاجر',
   admin: 'غير محدد',
   super_admin: 'الأدمن',
 }

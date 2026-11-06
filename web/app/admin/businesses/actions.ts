@@ -63,7 +63,7 @@ export async function approveBusiness(businessId: string): Promise<Result> {
   if (!updated)
     return { ok: false, error: 'تعذر نشر النشاط — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
 
-  // إشعار البايع المرتبط لا يجب أن يحوّل عملية نشر ناجحة إلى فشل ظاهر.
+  // إشعار التاجر المرتبط لا يجب أن يحوّل عملية نشر ناجحة إلى فشل ظاهر.
   if (biz.owner_profile_id) {
     try {
       await createNotification({
@@ -143,7 +143,7 @@ export async function rejectBusiness(businessId: string, formData: FormData): Pr
   if (!updated)
     return { ok: false, error: 'تعذر حفظ قرار الرفض — حدّث القائمة وتأكد إن النشاط ما زال موجودًا' }
 
-  // إشعار البايع المرتبط لا يجب أن يحوّل قرارًا محفوظًا إلى فشل ظاهر.
+  // إشعار التاجر المرتبط لا يجب أن يحوّل قرارًا محفوظًا إلى فشل ظاهر.
   if (biz.owner_profile_id) {
     try {
       await createNotification({
@@ -425,7 +425,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       return { ok: false, error: 'الحساب المرتبط بالنشاط غير مهيأ داخل النظام — راجع حسابه قبل الربط' }
     }
     if (roleRow.role !== 'customer' && roleRow.role !== 'merchant') {
-      return { ok: false, error: 'اختر حساب مشتري أو بايع، ولا تربط النشاط بحساب إداري' }
+      return { ok: false, error: 'اختر حساب عميل أو تاجر، ولا تربط النشاط بحساب إداري' }
     }
 
     // The current merchant workspace supports one linked business per account.
@@ -598,7 +598,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       return {
         ok: false,
         error:
-          'تعذّر تفعيل الحساب المرتبط بالنشاط كبايع، وتم إلغاء إنشاء النشاط. حاول مرة أخرى أو راجع صلاحيات النظام.',
+          'تعذّر تفعيل الحساب المرتبط بالنشاط كتاجر، وتم إلغاء إنشاء النشاط. حاول مرة أخرى أو راجع صلاحيات النظام.',
       }
     }
   }
@@ -609,7 +609,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
         userId: d.owner_profile_id,
         type: 'admin',
         title: 'تم ربط نشاط بحسابك',
-        body: `نشاط "${d.name}" اتربط بحسابك — تقدر تديره من لوحة البايع`,
+        body: `نشاط "${d.name}" اتربط بحسابك — تقدر تديره من لوحة التاجر`,
         deepLink: '/merchant',
       })
     } catch {
@@ -734,7 +734,7 @@ export async function adminStartTrial(businessId: string, days = 30): Promise<Re
   const result = data as { ok: boolean; error?: string } | null
   if (!result?.ok) return { ok: false, error: result?.error ?? 'فشل بدء التجربة' }
 
-  // إشعار للبايع المرتبط بالنشاط (إذا كان مرتبطًا)
+  // إشعار للتاجر المرتبط بالنشاط (إذا كان مرتبطًا)
   const { data: biz } = await admin
     .from('businesses')
     .select('name, owner_profile_id')
@@ -811,7 +811,7 @@ export async function findUserByPhone(phone: string): Promise<UserLookup> {
     return { ok: false, error: 'تعذر تحميل بيانات الحساب المرتبط بالنشاط — حاول تاني' }
   }
   if (!roleRes.data || (roleRes.data.role !== 'customer' && roleRes.data.role !== 'merchant')) {
-    return { ok: false, error: 'حساب المستخدم غير مهيأ لدور مشتري أو بايع' }
+    return { ok: false, error: 'حساب المستخدم غير مهيأ لدور عميل أو تاجر' }
   }
 
   return {
@@ -841,7 +841,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     // role and activity metadata are not fully readable under self/public RLS.
     privileged = createServiceClient()
   } catch {
-    return { ok: false, error: 'تعذر تجهيز خدمة ربط البايع المرتبط — حاول تاني' }
+    return { ok: false, error: 'تعذر تجهيز خدمة ربط التاجر المرتبط — حاول تاني' }
   }
 
   const { data: profile, error: profileError } = await privileged
@@ -908,7 +908,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     .update({ accepts_orders: false })
     .eq('id', businessId)
   if (closePublicOrdersError) {
-    return { ok: false, error: 'تعذر إيقاف الطلبات قبل تغيير البايع المرتبط؛ لم يتغير ارتباط النشاط.' }
+    return { ok: false, error: 'تعذر إيقاف الطلبات قبل تغيير التاجر المرتبط؛ لم يتغير ارتباط النشاط.' }
   }
 
   const { error: closeOrderSettingsError } = await privileged
@@ -929,7 +929,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     })
     return {
       ok: false,
-      error: 'تم إيقاف زر الطلب لحماية النشاط، لكن تعذر حفظ إعداداته. لم يتغير ربط البايع المرتبط؛ راجع الإعدادات وحاول تاني.',
+      error: 'تم إيقاف زر الطلب لحماية النشاط، لكن تعذر حفظ إعداداته. لم يتغير ربط التاجر المرتبط؛ راجع الإعدادات وحاول تاني.',
     }
   }
 
@@ -990,7 +990,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
         })
         return {
           ok: false,
-          error: 'النشاط ما زال مربوطًا بالحساب، لكن تعذّر تفعيل دور البايع. أوقفنا الطلبات لحماية النشاط؛ راجع الدور وإعدادات الطلب.',
+          error: 'النشاط ما زال مربوطًا بالحساب، لكن تعذّر تفعيل دور التاجر. أوقفنا الطلبات لحماية النشاط؛ راجع الدور وإعدادات الطلب.',
         }
       }
 
@@ -1025,7 +1025,7 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
 
       return {
         ok: false,
-        error: 'تعذّر تفعيل الحساب المرتبط بالنشاط كبايع، وتم التراجع عن الربط. حاول تاني.',
+        error: 'تعذّر تفعيل الحساب المرتبط بالنشاط كتاجر، وتم التراجع عن الربط. حاول تاني.',
       }
     }
   }
@@ -1084,7 +1084,7 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
 
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
 
-  if (!biz.owner_profile_id) return { ok: false, error: 'النشاط غير مرتبط بحساب بايع' }
+  if (!biz.owner_profile_id) return { ok: false, error: 'النشاط غير مرتبط بحساب تاجر' }
 
   // Unlinking must close both order flags before the activity becomes ownerless.
   const { error: closePublicOrdersError } = await admin
@@ -1092,7 +1092,7 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
     .update({ accepts_orders: false })
     .eq('id', businessId)
   if (closePublicOrdersError) {
-    return { ok: false, error: 'تعذر إيقاف الطلبات قبل فك ربط البايع المرتبط؛ لم يتغير الربط.' }
+    return { ok: false, error: 'تعذر إيقاف الطلبات قبل فك ربط التاجر المرتبط؛ لم يتغير الربط.' }
   }
 
   const { error: closeOrderSettingsError } = await admin

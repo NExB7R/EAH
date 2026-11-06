@@ -136,7 +136,7 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="owner_profile_id">
-          البايع المرتبط بالنشاط
+          التاجر المرتبط بالنشاط
         </label>
         <select
           id="owner_profile_id"
@@ -144,7 +144,7 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
           className={styles.select}
           defaultValue=""
         >
-          <option value="">بدون بايع مرتبط</option>
+          <option value="">بدون تاجر مرتبط</option>
           {owners.map((o) => (
             <option key={o.id} value={o.id}>
               {o.display_name} {o.phone ? `— ${o.phone}` : ''}
@@ -152,7 +152,7 @@ export default function CreateForm({ owners }: { owners: BusinessOwnerOption[] }
           ))}
         </select>
         <span className={styles.hint}>
-          اختيار البايع المرتبط اختياري. يمكن نشر النشاط دون ربط حساب بايع، ثم ربطه لاحقًا من لوحة الإدارة.
+          اختيار التاجر المرتبط اختياري. يمكن نشر النشاط دون ربط حساب تاجر، ثم ربطه لاحقًا من لوحة الإدارة.
         </span>
       </div>
 
