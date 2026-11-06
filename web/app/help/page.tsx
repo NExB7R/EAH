@@ -217,6 +217,11 @@ export default async function HelpPage() {
             </p>
           </div>
         </section>
-      </div></main>
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>نظام النقاط والثقة</h2>
+          <PointsGuide />
+        </section>
+      </div>
+    </main>
   )
 }
