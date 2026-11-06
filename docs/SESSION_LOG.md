@@ -1714,3 +1714,11 @@ Admin list:
 - Hero إدارة النشاط يعرض شعار الوسائط أو logo_url عبر DetailLogo، ويحافظ على الحرف كـfallback.
 - روابط الصفحة العامة في Hero والمعاينة وقائمة الإجراءات موحدة؛ لا رابط قابل للنقر للمسودة/المرفوض، مع بقاء تبويب المعاينة الداخلية للأدمن.
 - لم تتغير قاعدة البيانات أو صلاحيات النشر أو قواعد الأدوار. Vercel Production deployment dpl_Emk61syQkV6kqHEiX3diEmSyabw8 على 808d9c9 وصل READY؛ Compile 16.3s، TypeScript 10.4s، وتوليد 54/54 صفحة. GitHub Actions ما زالت تفشل قبل تخصيص Runner (runner_id=0, steps=[]), لذلك Vitest وE2E لم يُنفذا.
+
+## 2026-11-06 — استعادة CI وحل أزمة الفواتير
+- تم تحويل الريبو إلى Public مؤقتًا لحل أزمة GitHub Actions (Billing Failed).
+- تم تنظيف تاريخ Git بالكامل من التوكنات (VERCEL_OIDC_TOKEN) باستخدام filter-repo.
+- تم حذف 14 فرع قديم/ميت من الريموت لتنظيف المساحة.
+- الـ CI (Quality Gate, CodeQL, RLS, Invariants) يعمل الآن بنجاح بعد الـ Public.
+- تم إضافة `docs/CONSTITUTION.md`, `docs/RESOURCE_BUDGET.md`, `docs/SECRETS_MANAGEMENT.md`.
+- **مهم:** تذكير بتحويل الريبو إلى Private يوم 2026-12-01.
