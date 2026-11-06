@@ -310,5 +310,5 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 
 - تم حصر استخدام دالة `reveal_contact` في API خادمي ذي service-role بعد auth/rate-limit، وإيقاف تنفيذها من جلسات anon/authenticated عبر migration access control السابقة.
 - `admin_set_business_owner` القديم لا يملك callsite داخل التطبيق؛ الواجهة تستعمل `linkBusinessToUser`. بعد dry-run طُبّق الترحيل `admin_owner_rpc_server_only`، وتأكد أن public/private functions service_role-only.
-- تمت محاكاة migration search_path في ROLLBACK؛ ثم أصبحت الدوال الثلاث تستخدم `search_path=pg_catalog`. حارس إعداد الطلب يستخدم `public.auth_is_admin()` بشكل مؤهل، والـtrigger ما زال مثبتًا.
+- تمت محاكاة migration search_path في ROLLBACK؛ ثم طُبّق `function_search_path_hardening` بالنسخة `20261106040503` وأصبحت الدوال الثلاث تستخدم `search_path=pg_catalog`. حارس إعداد الطلب يستخدم `public.auth_is_admin()` بشكل مؤهل، والـtrigger ما زال مثبتًا.
 - لا تدّع pgTAP ناجحًا: القاعدة لا تتضمن دالة `plan(integer)`. اختبارات الصلاحيات والـfunction source تبقى بحاجة إلى مسار اختبار آلي يعمل.

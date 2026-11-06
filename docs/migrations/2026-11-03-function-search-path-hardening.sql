@@ -1,5 +1,5 @@
 -- EAH — Harden search_path on audited trigger/helper functions.
--- Applied to current EAH pre-launch base on 2026-11-06; the final Supabase migration version is recorded in its migration history.
+-- Applied to current EAH pre-launch base on 2026-11-06 (Supabase migration version 20261106040503).
 BEGIN;
 
 ALTER FUNCTION public.get_trust_tier(integer)
