@@ -19,6 +19,7 @@ import {
 import SupportWidget from '@/components/support-widget'
 import { isFeatureEnabled } from '@/lib/features'
 import styles from './help.module.css'
+import PointsGuide from '../account/points-guide/points-guide'
 
 export const metadata: Metadata = {
   title: 'المساعدة',
@@ -216,16 +217,6 @@ export default async function HelpPage() {
             </p>
           </div>
         </section>
-      </div>
-    
-import PointsGuide from '../account/points-guide/points-guide';
-
-// ... (داخل الـ return)
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>نظام النقاط والثقة</h2>
-        <PointsGuide />
-      </section>
-
-</main>
+      </div></main>
   )
 }
