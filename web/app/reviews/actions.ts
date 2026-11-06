@@ -178,6 +178,14 @@ export async function replyToReview(
   const rl = await checkRateLimit(strictLimiter, `reply:${user.id}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
 
+  // Standing check: restricted/suspended merchants cannot reply
+  const standing = await checkCanInteract(user.id)
+  if (!standing.can) {
+    const expiry = standing.expiresAt ? (" لحد " + new Date(standing.expiresAt).toLocaleDateString("ar-EG")) : ""
+    const statusLabel = standing.standing === "suspended" ? "موقوف" : "مقيد"
+    return { ok: false, error: "حسابك " + statusLabel + " من التفاعل" + expiry + ". السبب: " + (standing.reason ?? "مخالفة الشروط") }
+  }
+
   const parsed = merchantReplySchema.safeParse({
     reply: formData.get('reply')?.toString() ?? '',
   })
