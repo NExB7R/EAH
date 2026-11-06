@@ -6,6 +6,7 @@ import { commentImageUrlsSchema, commentSchema } from '@/lib/validations/comment
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { createNotification } from '@/lib/notifications/server'
 import { getRootCommentId, getThreadFollowers } from '@/lib/data/comments'
+import { checkCanInteract } from '@/lib/auth/standing'
 
 type ActionResult = { ok: true } | { ok: false; error: string }
 
@@ -23,6 +24,14 @@ export async function createComment(
 
   const rl = await checkRateLimit(strictLimiter, `comment:${user.id}`, { failClosed: true })
   if (!rl.ok) return { ok: false, error: rl.error }
+
+  // Standing check: restricted/suspended users cannot interact
+  const standing = await checkCanInteract(user.id)
+  if (!standing.can) {
+    const expiry = standing.expiresAt ? (" لحد " + new Date(standing.expiresAt).toLocaleDateString("ar-EG")) : ""
+    const statusLabel = standing.standing === "suspended" ? "موقوف" : "مقيد"
+    return { ok: false, error: "حسابك " + statusLabel + " من التفاعل" + expiry + ". السبب: " + (standing.reason ?? "مخالفة الشروط") }
+  }
 
   const { data: business, error: businessError } = await supabase
     .from('businesses')
