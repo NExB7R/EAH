@@ -9,7 +9,7 @@
 
 ---
 
-## Routes (107)
+## Routes (108)
 
 | Route | File |
 |-------|------|
@@ -26,6 +26,7 @@
 | `/account/notifications/preferences` | `app/account/notifications/preferences/page.tsx` |
 | `/account/orders` | `app/account/orders/page.tsx` |
 | `/account/points` | `app/account/points/page.tsx` |
+| `/account/points-guide` | `app/account/points-guide/page.tsx` |
 | `/account/referral` | `app/account/referral/page.tsx` |
 | `/account/security` | `app/account/security/page.tsx` |
 | `/account/verify` | `app/account/verify/page.tsx` |
