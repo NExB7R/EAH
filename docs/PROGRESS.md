@@ -1161,3 +1161,10 @@
 - لا يوجد callsite لـ`set_business_commission` في كود التطبيق، والقرار في BRAIN هو صفر عمولة على البايع.
 - طُبّق `disable_commission_rpc` بالنسخة `20261106041647`. بعد التطبيق: anon=false، authenticated=false، service_role=true.
 - الجدول `business_commissions` موجود بالقاعدة الحية لكن 0 صفوف؛ لم نحذفه رغم وجود ملاحظة تاريخية متضاربة. إسقاط الجدول مؤجل لمصالحة migration history.
+
+
+## 2026-11-06 — نقاط المشاركة: رصد عدم اتساق المصدر دون تعديل الأرصدة
+
+- في الكود، `get_user_points` و`getAccountStats` يقرآن آخر `points_log.balance_after`؛ بينما `profiles.trust_score` الافتراضي 50 ويُعدل عبر بعض دوال المشاركة/الإحالة دون تسجيل points_log.
+- القاعدة الحالية بها حساب واحد فقط و0 `points_log` rows؛ لا نملك بيانات مشتري/بايع لاختبار التدفق.
+- لم يتم تغيير رصيد أو backfill أو تعديل دالة نقاط؛ تم إبقاء DB-16 مفتوحًا حتى توحيد العقد البرمجي بين trust_score وpoints_log.

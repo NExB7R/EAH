@@ -336,3 +336,10 @@ _(يُحدَّث باستمرار أثناء التطوير)_
 - تأكد أن `docs/BRAIN.md` يقرر صفر عمولة على البايع، وأن `set_business_commission` بلا callsite في التطبيق.
 - أُزيلت صلاحية التنفيذ المباشر من PUBLIC/anon/authenticated بواسطة migration `disable_commission_rpc` (version `20261106041647`)، وبقيت service_role فقط.
 - رُصد أن جدول `business_commissions` ما زال موجودًا في القاعدة الحية لكنه فارغ؛ لم يُحذف. يلزم مصالحة schema/migration history قبل أي إسقاط.
+
+
+## مراجعة 2026-11-06 — عدم اتساق trust_score وpoints_log
+
+- أكدت `REPUTATION_POLICY.md` أن trust_score/trust_tier نقاط مشاركة تاريخية وليست سمعة عامة، لكن واجهة الحساب و`get_user_points` تعتمد على `points_log.balance_after`.
+- `profiles.trust_score` default=50. writers المتحقق منها تشمل `claim_referral`, `award_trust_points`, `record_daily_visit`, `award_daily_login`, `log_unique_visit`, `admin_adjust_points`; ليس جميعها يكتب points_log.
+- لا يوجد في القاعدة سوى profile واحد و0 سجل points_log. لذلك أي مزامنة أو backfill من قيمة trust_score الافتراضية قد يصنع رصيدًا غير مستحق. لم نعدل أي بيانات؛ يلزم توحيد مصدر الرصيد أولًا.
