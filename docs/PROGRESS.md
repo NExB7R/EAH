@@ -1270,3 +1270,11 @@
 - تصغير الأيقونات الثانوية من 82px إلى 68px على الموبايل.
 - Primary button: row layout (icon + label أفقي) بدل عمودي.
 - Aesthetic: order أخضر teal، whatsapp أخضر، primary border أوضح.
+
+## 2026-11-08 — تحسين Business Tabs
+- Tabs أصبحت sticky (تلتصق تحت الهيدر العائم عند scroll).
+- خلفية Tabs أقوى (0.92 opacity + backdrop blur 14px) لمنع تشويش المحتوى.
+- Active tab: إضافة underline ذهبي + ظل أقوى + خلفية أفتح.
+- Mobile: scroll-snap-x proximity لتنقل أسلس + top محسوب على 74px.
+- شاشات ≤390px: إخفاء الأيقونات من التابات (مساحة أوسع للنص).
+- شاشات ≤340px: تصغير الخط والـ counter.
