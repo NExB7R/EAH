@@ -1242,3 +1242,9 @@
 - إزالة كارت الإيميل من صفحة /contact (لأن المنصة مش عندها إيميل رسمي حالياً).
 - إزالة رابط "إيميل الدعم" من MenuDrawer.
 - Feature Flags كلها مفعّلة (true) — الأقسام المفقودة (Featured/Offers/New) سببها مفيش بيانات في الداتا، وده طبيعي في مرحلة ما قبل الإطلاق.
+
+## 2026-11-06 — تحسينات المسافات والـ Spacing على الصفحة الرئيسية
+- إضافة demo-businesses.sql لملء الأقسام الفارغة (Featured, Offers, New, Trending) ببيانات تجريبية.
+- تحسين Hero spacing على الموبايل (padding-top أقل، line-height أفضل، خط أوضح).
+- إضافة margin-top موحد لكل الأقسام (32px موبايل / 48px ديسكتوب).
+- إنشاء home-sections.module.css كـ container موحد للأقسام.

@@ -164,3 +164,14 @@
     padding-right: 12px;
   }
 }
+
+
+/* EAH_SPACING_PATCH — New Section */
+.section {
+  margin-top: 32px;
+}
+@media (min-width: 768px) {
+  .section {
+    margin-top: 48px;
+  }
+}

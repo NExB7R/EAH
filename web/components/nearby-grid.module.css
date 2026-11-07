@@ -257,3 +257,14 @@
     transition: none;
   }
 }
+
+
+/* EAH_SPACING_PATCH — Nearby Section */
+.section {
+  margin-top: 32px;
+}
+@media (min-width: 768px) {
+  .section {
+    margin-top: 48px;
+  }
+}

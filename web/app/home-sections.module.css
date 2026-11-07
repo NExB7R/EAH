@@ -1,0 +1,23 @@
+/* EAH — Home Sections Spacing (2026) */
+
+.sectionWrap {
+  margin: 32px 0;
+}
+
+@media (min-width: 768px) {
+  .sectionWrap {
+    margin: 48px 0;
+  }
+}
+
+.sectionInner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+  .sectionInner {
+    padding: 0 24px;
+  }
+}
