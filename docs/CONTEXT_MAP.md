@@ -140,7 +140,7 @@
 | `business-actions.tsx` | BusinessActions | EAH — Business Quick Actions (مع القفل الذكي) |
 | `business-cache.tsx` | BusinessCache | EAH — Business Detail Cache |
 | `business-card.tsx` | BusinessCard | — |
-| `business-hero.tsx` | BusinessHero | — |
+| `business-hero.tsx` | BusinessHero | نستخدم hook كـ tagline فقط (مش address)، أو description |
 | `business-notice.tsx` | BusinessNotice | EAH — Business Notice Banner |
 | `business-share-modal.tsx` | BusinessShareModal | EAH — Business Share Modal |
 | `business-tabs.tsx` | BusinessTabs | — |
