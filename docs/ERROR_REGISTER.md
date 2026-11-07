@@ -593,3 +593,12 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
 - **المشكلة:** استخدام sed لإدخال مكون React (`<StandingCockpit>`) فشل لأن sed لا يدعم النصوص متعددة الأسطر أو الرموز الخاصة (`<`, `>`).
 - **الإجراء:** تم إصلاح الصفحة يدويًا (باستخدام cat) وربط المكون بشكل صحيح.
 - **الدرس المستفاد (قاعدة إجبارية):** يُمنع منعًا باتًا استخدام `sed` لتعديل ملفات `.tsx` أو `.jsx`. التعديل الوحيد المسموح به هو عبر `cat > file.tsx << 'EOF'` (كتابة الملف بالكامل) أو `python` لعمل `str_replace` بسيط جداً.
+
+## 2026-11-08 — notify_merchant_on_review: أعمدة غير موجودة (type, link)
+- **المشكلة:** Trigger `trg_notify_merchant_on_review` كان بيحاول يحط في أعمدة `type` و`link`، لكن جدول `notifications` بيستخدم `notification_type` و`deep_link`. أي INSERT في `business_reviews` لنشاط عنده owner كان بيفشل تمامًا، والنظام كان بيرجع error للمستخدم.
+- **التأثير:** منع التقييمات لأي نشاط مربوط بتاجر. لو حصل في الإنتاج، أي عميل كان هيشوف خطأ.
+- **الإصلاح:** Migration `2026-11-08-fix-notify-merchant-on-review.sql` (CREATE OR REPLACE FUNCTION).
+- **الدرس (قاعدة إجبارية):** أي trigger بيكتب في جدول لازم يتحقق من أعمدة الجدول الحقيقية. قبل أي migration بيضيف/يعدل trigger:
+  1. Run `\d public.<table>` أو استعلام `information_schema.columns`.
+  2. تأكد إن كل عمود في INSERT موجود.
+  3. جرّب في `BEGIN; ... ROLLBACK;` أولاً.
