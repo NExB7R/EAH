@@ -27,7 +27,8 @@ export default function BusinessHero({ detail, isOpen }: Props) {
 
   const hasRating = business.rating_count > 0
   const ratingValue = hasRating ? business.rating_avg.toFixed(1) : null
-  const summary = business.hook?.trim() || business.description?.trim() || ''
+  // نستخدم hook كـ tagline فقط (مش address)، أو description
+  const tagline = business.hook?.trim() || business.description?.trim() || ''
   const locationLabel =
     business.area && business.city && business.area !== business.city
       ? business.area + '، ' + business.city
@@ -45,7 +46,7 @@ export default function BusinessHero({ detail, isOpen }: Props) {
         <div className={styles.coverOverlay} aria-hidden />
       </div>
 
-      {/* ─── Content ─── */}
+      {/* ─── Body ─── */}
       <div className={styles.body}>
         <div className={styles.logoWrap}>
           <DetailLogo
@@ -60,8 +61,8 @@ export default function BusinessHero({ detail, isOpen }: Props) {
             <h1 className={styles.name}>{business.name}</h1>
             {business.is_verified && (
               <span className={styles.verified} title="تحققت إدارة EAH من بيانات النشاط">
-                <BadgeCheckIcon size={15} />
-                موثّق من الإدارة
+                <BadgeCheckIcon size={13} />
+                موثّق
               </span>
             )}
           </div>
@@ -72,14 +73,14 @@ export default function BusinessHero({ detail, isOpen }: Props) {
               <>
                 <span className={styles.dot}>·</span>
                 <span className={styles.area}>
-                  <MapPinIcon size={12} />
+                  <MapPinIcon size={11} />
                   {locationLabel}
                 </span>
               </>
             )}
             <span className={styles.dot}>·</span>
             <span className={`${styles.status} ${isOpen ? styles.open : styles.closed}`}>
-              {isOpen ? <CheckCircleIcon size={11} /> : <AlertIcon size={11} />}
+              {isOpen ? <CheckCircleIcon size={10} /> : <AlertIcon size={10} />}
               {isOpen ? 'مفتوح' : 'مغلق'}
             </span>
             {business.location && (
@@ -98,44 +99,38 @@ export default function BusinessHero({ detail, isOpen }: Props) {
             <div className={styles.badges} aria-label="مميزات النشاط وطرق الطلب">
               {business.is_featured && (
                 <span className={[styles.tier, styles.tier_gold].join(' ')}>
-                  <CrownGoldIcon size={13} />
-                  نشاط مميز
+                  <CrownGoldIcon size={11} />
+                  مميز
                 </span>
               )}
               {business.is_new_project && (
                 <span className={[styles.tier, styles.tier_teal].join(' ')}>
-                  <SunriseIcon size={13} />
-                  مشروع جديد
+                  <SunriseIcon size={11} />
+                  جديد
                 </span>
               )}
               {business.accepts_orders && (
                 <span className={[styles.tier, styles.tier_purple].join(' ')}>
-                  <StoreIcon size={13} />
-                  طلبات داخل المنصة
+                  <StoreIcon size={11} />
+                  طلبات داخلية
                 </span>
               )}
               {business.accepts_whatsapp_orders && (
                 <span className={styles.trust}>
-                  <WhatsAppIcon size={13} />
-                  يستقبل طلبات واتساب
+                  <WhatsAppIcon size={11} />
+                  طلبات واتساب
                 </span>
               )}
             </div>
           )}
 
-          {addressText && addressText !== locationLabel && (
-            <p className={styles.hook}>
-              <MapPinIcon size={14} /> {addressText}
-            </p>
-          )}
-
-          {/* Rating + Stats */}
+          {/* Stats: rating + orders + branches in one row */}
           <div className={styles.stats}>
             {hasRating ? (
               <div className={styles.ratingBig}>
                 <span className={styles.ratingValue}>{ratingValue}</span>
                 <span className={styles.ratingStars}>
-                  <StarIcon size={16} />
+                  <StarIcon size={14} />
                 </span>
                 <span className={styles.ratingCount}>({business.rating_count})</span>
               </div>
@@ -158,7 +153,15 @@ export default function BusinessHero({ detail, isOpen }: Props) {
             )}
           </div>
 
-          {summary && <p className={styles.hook}>{summary}</p>}
+          {/* Tagline: hook أو description */}
+          {tagline && <p className={styles.hook}>{tagline}</p>}
+
+          {/* Address: بس لو مختلف عن location */}
+          {addressText && addressText !== locationLabel && (
+            <p className={styles.hook} style={{ marginTop: '6px' }}>
+              <MapPinIcon size={13} /> {addressText}
+            </p>
+          )}
         </div>
       </div>
     </section>
