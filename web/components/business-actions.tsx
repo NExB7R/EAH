@@ -215,20 +215,19 @@ export default function BusinessActions({
   return (
     <>
       <div className={styles.actions}>
-        {/* Order (in-app) */}
-        <button
-          type="button"
-          onClick={handleOrder}
-          disabled={!ordersEnabled || !isOpen}
-          className={`${styles.action} ${styles.order}`}
-        >
-          <span className={styles.actionIcon}>
-            <StoreIcon size={20} />
-          </span>
-          <span className={styles.actionLabel}>
-            {!ordersEnabled ? 'الطلب غير متاح' : isOpen ? 'اطلب دلوقتي' : 'اطلب — مغلق حالياً'}
-          </span>
-        </button>
+        {/* Order (in-app) — only if available */}
+        {ordersEnabled && isOpen && (
+          <button
+            type="button"
+            onClick={handleOrder}
+            className={`${styles.action} ${styles.order} ${styles.primary}`}
+          >
+            <span className={styles.actionIcon}>
+              <StoreIcon size={22} />
+            </span>
+            <span className={styles.actionLabel}>اطلب دلوقتي</span>
+          </button>
+        )}
 
         {phoneOptions.length > 0 && (
           <button type="button" onClick={() => handleContactButton('phone')} disabled={contactPending !== null} aria-expanded={contactMenuType === 'phone'} className={`${styles.action} ${styles.phone}`}>
@@ -238,7 +237,7 @@ export default function BusinessActions({
         )}
 
         {whatsappOptions.length > 0 && (
-          <button type="button" onClick={() => handleContactButton('whatsapp')} disabled={contactPending !== null} aria-expanded={contactMenuType === 'whatsapp'} className={`${styles.action} ${styles.whatsapp}`}>
+          <button type="button" onClick={() => handleContactButton('whatsapp')} disabled={contactPending !== null} aria-expanded={contactMenuType === 'whatsapp'} className={`${styles.action} ${styles.whatsapp} ${!ordersEnabled || !isOpen ? styles.primary : ''}`}>
             <span className={styles.actionIcon}><WhatsAppIcon size={20} /></span>
             <span className={styles.actionLabel}>{contactPending === 'whatsapp' ? 'بيفتح…' : whatsappOptions.length > 1 ? `أرقام واتساب (${whatsappOptions.length})` : 'واتساب'}</span>
           </button>

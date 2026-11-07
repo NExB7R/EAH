@@ -1262,3 +1262,11 @@
 - دمج الـ stats في صف أفقي مضغوط (rating + orders + branches).
 - تصغير الـ badges (24px height بدل 27px) وحذف كلمة "نشاط" من "نشاط مميز".
 - تحسينات mobile: تصغير الإضافات، مسافات أضيق، line-height أفضل.
+
+## 2026-11-08 — تحسين Action Buttons (ترتيب هرمي + Grid)
+- إخفاء زر الطلب عند عدم توفره (بدل ما يظهر disabled ويأخذ مساحة).
+- WhatsApp يصبح Primary (زر كبير بعرض كامل) عند عدم توفر الطلب.
+- Grid 4 أعمدة على الموبايل + Flex على الديسكتوب.
+- تصغير الأيقونات الثانوية من 82px إلى 68px على الموبايل.
+- Primary button: row layout (icon + label أفقي) بدل عمودي.
+- Aesthetic: order أخضر teal، whatsapp أخضر، primary border أوضح.
