@@ -32,3 +32,5 @@ web@1.0.0
 
 # Local-only test credentials. Never commit.
 /web/.qa-test-credentials.local.json
+.hexiel/imported
+.hexiel/pastes
