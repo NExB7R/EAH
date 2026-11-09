@@ -9,7 +9,7 @@
 
 ---
 
-## Routes (108)
+## Routes (109)
 
 | Route | File |
 |-------|------|
@@ -57,6 +57,7 @@
 | `/advertise` | `app/advertise/page.tsx` |
 | `/api/admin/critical-pulse` | `app/api/admin/critical-pulse/route.ts` |
 | `/api/admin/export` | `app/api/admin/export/route.ts` |
+| `/api/admin/health-checks` | `app/api/admin/health-checks/route.ts` |
 | `/api/admin/live-feed` | `app/api/admin/live-feed/route.ts` |
 | `/api/admin/upload-business-image` | `app/api/admin/upload-business-image/route.ts` |
 | `/api/ai/chat` | `app/api/ai/chat/route.ts` |
@@ -212,7 +213,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (114)
+## Lib (115)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -256,6 +257,7 @@
 | `data/contact-availability.ts` | getWhatsAppDestinationBusinessIds | Return only the business IDs with at least one usable WhatsApp destination. |
 | `data/contact-options.ts` | safeContactOptionLabel, buildContactOptions | Combines every valid public contact and active-branch destination. |
 | `data/fraud.ts` | getFlaggedReviews, getRecentTrustEvents, getFlaggedUsers, getFraudStats, getMultiAccountIps | EAH — Fraud Data |
+| `data/health-checks.ts` | runHealthChecks | EAH — System Health Checks (2026-11-09) |
 | `data/health.ts` | getHealthSummary, getRecentErrors, getErrorsWithFilters | EAH — System Health data |
 | `data/in-app-order-availability-core.ts` | isInAppOrderOperational | The shared product rule for showing in-platform orders as currently available. |
 | `data/in-app-order-availability.ts` | getInAppOrderAvailableBusinessIds | Returns only activity IDs whose in-platform order workflow is currently usable. |
