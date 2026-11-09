@@ -20,6 +20,13 @@ export type AdminBusiness = {
   address_text: string | null
   map_url: string | null
   location: { lat: number; lng: number } | null
+  latitude?: number | null
+  longitude?: number | null
+  working_hours?: Record<string, unknown> | null
+  accepts_orders?: boolean
+  accepts_whatsapp_orders: boolean
+  branches_count?: number
+  offers_count?: number
   cover_image_url: string | null
   logo_url: string | null
   is_published: boolean
