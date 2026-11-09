@@ -34,3 +34,6 @@ web@1.0.0
 /web/.qa-test-credentials.local.json
 .hexiel/imported
 .hexiel/pastes
+
+# hexiel (abandoned tool) — full folder
+.hexiel/
