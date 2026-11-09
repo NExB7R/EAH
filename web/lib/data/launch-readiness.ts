@@ -14,7 +14,7 @@ export type ReadinessItem = {
   label: string
   status: 'ready' | 'warning' | 'blocker'
   detail: string
-  weight: number  // 1 = low, 2 = medium, 3 = high
+  weight: number
 }
 
 export type ReadinessResult = {
@@ -46,7 +46,7 @@ export async function computeLaunchReadiness(): Promise<ReadinessResult> {
   const svc = createServiceClient()
   const items: ReadinessItem[] = []
 
-  // ─── 1. Infrastructure ───
+  // ─── 1. DB Connection ───
   try {
     const { error } = await svc.from('profiles').select('id', { count: 'exact', head: true }).limit(1)
     items.push({
@@ -61,13 +61,12 @@ export async function computeLaunchReadiness(): Promise<ReadinessResult> {
     items.push({ id: 'db', category: 'بنية تحتية', label: 'قاعدة البيانات متصلة', status: 'blocker', detail: 'Connection failed', weight: 3 })
   }
 
-  // ─── 2. RLS ───
+  // ─── 2. RLS check ───
   try {
     const tables = ['profiles', 'businesses', 'order_requests', 'business_reviews']
     let missingRls = 0
     for (const t of tables) {
       const { count } = await svc.from(t).select('*', { count: 'exact', head: true }).limit(1)
-      // Can't check RLS directly but can check table exists
       if (count === null) missingRls++
     }
     items.push({
@@ -82,35 +81,35 @@ export async function computeLaunchReadiness(): Promise<ReadinessResult> {
     items.push({ id: 'rls', category: 'بنية تحتية', label: 'RLS على الجداول الحرجة', status: 'warning', detail: 'تعذر الفحص', weight: 3 })
   }
 
-  // ─── 3. Content: Businesses ───
+  // ─── 3. Published businesses ───
   try {
-    const { count: published } = await svc
+    const { count: publishedCount } = await svc
       .from('businesses')
       .select('*', { count: 'exact', head: true })
       .eq('is_published', true)
-    const count = published ?? 0
+    const n = publishedCount ?? 0
     let status: 'ready' | 'warning' | 'blocker' = 'ready'
-    let detail = `${count} نشاط منشور`
-    if (count === 0) { status = 'blocker'; detail = 'مفيش أنشطة منشورة' }
-    else if (count < 5) { status = 'warning'; detail = `${count} نشاط (ينصح بـ 5+)` }
+    let detail = `${n} نشاط منشور`
+    if (n === 0) { status = 'blocker'; detail = 'مفيش أنشطة منشورة' }
+    else if (n < 5) { status = 'warning'; detail = `${n} نشاط (ينصح بـ 5+)` }
     items.push({ id: 'businesses', category: 'محتوى', label: 'أنشطة منشورة', status, detail, weight: 3 })
   } catch {
     items.push({ id: 'businesses', category: 'محتوى', label: 'أنشطة منشورة', status: 'warning', detail: 'تعذر الفحص', weight: 3 })
   }
 
-  // ─── 4. Reviews ───
+  // ─── 4. Approved reviews ───
   try {
-    const { count } = await svc
+    const { count: reviewsCount } = await svc
       .from('business_reviews')
       .select('*', { count: 'exact', head: true })
       .eq('status', 'approved')
-    const count = count ?? 0
+    const n = reviewsCount ?? 0
     items.push({
       id: 'reviews',
       category: 'محتوى',
       label: 'تقييمات معتمدة',
-      status: count > 0 ? 'ready' : 'warning',
-      detail: count > 0 ? `${count} تقييم` : 'مفيش تقييمات — العملاء الجدد هيشوفوا نشاط بدون مراجعات',
+      status: n > 0 ? 'ready' : 'warning',
+      detail: n > 0 ? `${n} تقييم` : 'مفيش تقييمات — العملاء الجدد هيشوفوا نشاط بدون مراجعات',
       weight: 2,
     })
   } catch {
@@ -119,19 +118,19 @@ export async function computeLaunchReadiness(): Promise<ReadinessResult> {
 
   // ─── 5. Real (non-demo) businesses ───
   try {
-    const { count } = await svc
+    const { count: realCount } = await svc
       .from('businesses')
       .select('*', { count: 'exact', head: true })
       .eq('is_published', true)
       .not('slug', 'like', 'demo-%')
       .not('slug', 'like', 'eah-qa-test-%')
-    const count = count ?? 0
+    const n = realCount ?? 0
     items.push({
       id: 'real-businesses',
       category: 'محتوى',
       label: 'أنشطة حقيقية (مش demo)',
-      status: count >= 3 ? 'ready' : count >= 1 ? 'warning' : 'blocker',
-      detail: count >= 1 ? `${count} نشاط حقيقي` : 'مفيش أنشطة حقيقية — لسه demo فقط',
+      status: n >= 3 ? 'ready' : n >= 1 ? 'warning' : 'blocker',
+      detail: n >= 1 ? `${n} نشاط حقيقي` : 'مفيش أنشطة حقيقية — لسه demo فقط',
       weight: 3,
     })
   } catch {
@@ -140,17 +139,17 @@ export async function computeLaunchReadiness(): Promise<ReadinessResult> {
 
   // ─── 6. Merchant accounts ───
   try {
-    const { count } = await svc
+    const { count: merchantCount } = await svc
       .from('user_roles')
       .select('*', { count: 'exact', head: true })
       .eq('role', 'merchant')
-    const count = count ?? 0
+    const n = merchantCount ?? 0
     items.push({
       id: 'merchants',
       category: 'مستخدمين',
       label: 'حسابات تجار',
-      status: count >= 1 ? 'ready' : 'warning',
-      detail: count >= 1 ? `${count} تاجر` : 'مفيش تجار مسجلين',
+      status: n >= 1 ? 'ready' : 'warning',
+      detail: n >= 1 ? `${n} تاجر` : 'مفيش تجار مسجلين',
       weight: 2,
     })
   } catch {
@@ -193,18 +192,18 @@ export async function computeLaunchReadiness(): Promise<ReadinessResult> {
 
   // ─── 9. Contact Privacy ───
   try {
-    const { count } = await svc
+    const { count: leakedCount } = await svc
       .from('business_contact_methods')
       .select('*', { count: 'exact', head: true })
       .eq('is_public', true)
       .in('method_type', ['phone', 'whatsapp'])
-    const count = count ?? 0
+    const n = leakedCount ?? 0
     items.push({
       id: 'contact-privacy',
       category: 'أمان',
       label: 'أرقام التواصل العامة (يجب 0)',
-      status: count === 0 ? 'ready' : 'blocker',
-      detail: count === 0 ? 'محمي (0 رقم عام)' : `${count} رقم مكشوف!`,
+      status: n === 0 ? 'ready' : 'blocker',
+      detail: n === 0 ? 'محمي (0 رقم عام)' : `${n} رقم مكشوف!`,
       weight: 3,
     })
   } catch {
@@ -213,35 +212,36 @@ export async function computeLaunchReadiness(): Promise<ReadinessResult> {
 
   // ─── 10. Orphan branches ───
   try {
-    const { count } = await svc
+    const { count: orphanCount } = await svc
       .from('business_branches')
       .select('*', { count: 'exact', head: true })
       .is('business_id', null)
+    const n = orphanCount ?? 0
     items.push({
       id: 'orphan-branches',
       category: 'جودة البيانات',
       label: 'فروع يتيمة',
-      status: (count ?? 0) === 0 ? 'ready' : 'warning',
-      detail: (count ?? 0) === 0 ? 'مفيش' : `${count} فرع`,
+      status: n === 0 ? 'ready' : 'warning',
+      detail: n === 0 ? 'مفيش' : `${n} فرع`,
       weight: 1,
     })
   } catch {
     items.push({ id: 'orphan-branches', category: 'جودة البيانات', label: 'فروع يتيمة', status: 'warning', detail: 'تعذر الفحص', weight: 1 })
   }
 
-  // ─── 11. Environment (demo data presence) ───
+  // ─── 11. Demo data presence ───
   try {
-    const { count } = await svc
+    const { count: demoCount } = await svc
       .from('businesses')
       .select('*', { count: 'exact', head: true })
       .like('slug', 'demo-%')
-    const count = count ?? 0
+    const n = demoCount ?? 0
     items.push({
       id: 'demo-data',
       category: 'جودة البيانات',
       label: 'بيانات demo (يجب 0 قبل الإطلاق)',
-      status: count === 0 ? 'ready' : 'warning',
-      detail: count === 0 ? 'نظيف' : `${count} نشاط demo`,
+      status: n === 0 ? 'ready' : 'warning',
+      detail: n === 0 ? 'نظيف' : `${n} نشاط demo`,
       weight: 2,
     })
   } catch {
@@ -253,9 +253,11 @@ export async function computeLaunchReadiness(): Promise<ReadinessResult> {
   const warnCount = items.filter((i) => i.status === 'warning').length
   const blockerCount = items.filter((i) => i.status === 'blocker').length
 
-  // Overall percent (weighted)
   const totalWeight = items.reduce((s, i) => s + i.weight, 0)
-  const readyWeight = items.reduce((s, i) => s + (i.status === 'ready' ? i.weight : i.status === 'warning' ? i.weight * 0.5 : 0), 0)
+  const readyWeight = items.reduce(
+    (s, i) => s + (i.status === 'ready' ? i.weight : i.status === 'warning' ? i.weight * 0.5 : 0),
+    0,
+  )
   const overallPercent = totalWeight > 0 ? Math.round((readyWeight / totalWeight) * 100) : 0
 
   const categories = Array.from(new Set(items.map((i) => i.category)))
