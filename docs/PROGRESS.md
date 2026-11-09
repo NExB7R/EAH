@@ -1331,3 +1331,8 @@
 - 1159 تحويل (purple/gold/teal opacity + radius).
 - الهدف: توحيد كل القيم في مكان واحد (globals.css).
 - ملاحظة: commit كبير لأول مرة، لكن متسق. الـ rollback سهل.
+
+## 2026-11-09 — تحسين صفحة الحساب (Account)
+- تبسيط account.module.css (إزالة grid العمودين + 240px sidebar الفاضي).
+- account-dashboard.module.css: تحويل لـ design tokens + welcome header + empty state.
+- page.tsx: Header ترحيبي ديناميكي + progress bar يتحسب من threshold التالي.
