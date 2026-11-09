@@ -218,7 +218,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (118)
+## Lib (119)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -254,6 +254,7 @@
 | `data/app-texts.ts` | getAppTexts | EAH — App Texts Reader (cached 60s) |
 | `data/areas.ts` | AREAS, getActiveAreas | EAH — Areas (قرى وعزب في نطاق 15 كم من شبين القناطر) |
 | `data/badges.ts` | getBadgeCatalogWithStatus, runBadgeChecks | EAH — Badges Data |
+| `data/business-completeness.ts` | computeBusinessCompleteness, getGradeLabel | EAH — Business Completeness (2026-11-09) |
 | `data/business-detail.ts` | computeIsOpenNow, isBusinessOwner, getBusinessDetail, getBusinessReviews, computeReviewStats, … | EAH — Business Detail (Full Page Data) |
 | `data/business-owner-constraint.ts` | isBusinessOwnerUniqueConflict | Identifies the database-level one-business-per-owner constraint. |
 | `data/businesses.ts` | getPublishedBusinesses, getPublishedBusinessCount, getFeaturedBusinesses, getNewBusinesses, getBusinessesByType, … | EAH — Data Fetching Layer |
