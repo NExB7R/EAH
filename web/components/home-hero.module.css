@@ -45,7 +45,7 @@
   pointer-events: none;
   background:
     radial-gradient(ellipse 80% 50% at 50% 0%, rgba(168, 85, 247, 0.18), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(232, 199, 154, 0.06), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, var(--gold-06), transparent 60%),
     radial-gradient(ellipse 60% 40% at 20% 100%, rgba(157, 78, 221, 0.1), transparent 60%);
 }
 
@@ -168,11 +168,11 @@
   gap: 8px;
   padding: 9px 20px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), rgba(168, 85, 247, 0.08));
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), var(--purple-2-08));
   border: 1px solid rgba(232, 199, 154, 0.35);
   box-shadow:
-    0 0 0 1px rgba(232, 199, 154, 0.08),
-    0 0 20px rgba(232, 199, 154, 0.15),
+    0 0 0 1px var(--gold-08),
+    0 0 20px var(--gold-15),
     inset 0 0 20px rgba(232, 199, 154, 0.05);
   animation: eahHeroIn 240ms var(--ease-out) 40ms both;
 }

@@ -1314,3 +1314,9 @@
 - branch-list.module.css: تحويل كل rgba يدوي إلى var(--purple-*, --gold-*, --teal-*) + radius tokens.
 - business-actions.module.css: نفس التحويل.
 - الهدف: اختبار إن الـ tokens شغالة قبل التطبيق على باقي الملفات.
+
+## 2026-11-09 — توسيع تطبيق Design Tokens
+- business-hero.module.css: تحويل rgba + radius
+- business-tabs.module.css: تحويل rgba + radius
+- home-hero.module.css: تحويل rgba + radius
+- استخدام mappings دقيقة (0.55، 0.11، 0.14 إلخ لم تُلمس لأنها مش tokens).

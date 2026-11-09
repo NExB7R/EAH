@@ -12,11 +12,11 @@
   display: flex;
   gap: 6px;
   padding: 6px;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: rgba(16, 10, 26, 0.92);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(168, 85, 247, 0.25);
+  border: 1px solid var(--purple-2-25);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
 }
 
@@ -27,7 +27,7 @@
   justify-content: center;
   gap: 6px;
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 800;
@@ -86,14 +86,14 @@
 /* ─── Blocks ─── */
 .block {
   padding: 18px 20px;
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   background: linear-gradient(155deg, rgba(22, 15, 36, 0.6), rgba(16, 10, 26, 0.55));
   border: 1px solid rgba(168, 85, 247, 0.14);
   transition: border-color 200ms ease;
 }
 
 .block:hover {
-  border-color: rgba(168, 85, 247, 0.22);
+  border-color: var(--purple-2-22);
 }
 
 .blockTitle {
@@ -125,8 +125,8 @@
   font-size: 0.78rem;
   font-weight: 800;
   color: var(--text-secondary);
-  background: rgba(168, 85, 247, 0.06);
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  background: var(--purple-2-06);
+  border: 1px solid var(--purple-2-22);
   text-decoration: none;
   transition: all 200ms var(--ease);
   font-variant-numeric: tabular-nums;
@@ -157,7 +157,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 6px 0;
-  border-bottom: 1px dashed rgba(232, 199, 154, 0.08);
+  border-bottom: 1px dashed var(--gold-08);
 }
 .hoursRow:last-child {
   border-bottom: none;
@@ -251,9 +251,9 @@
   display: flex;
   gap: 10px;
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: rgba(168, 85, 247, 0.04);
-  border: 1px solid rgba(168, 85, 247, 0.12);
+  border: 1px solid var(--purple-2-12);
 }
 .branchItem svg {
   color: var(--purple-light);
@@ -277,7 +277,7 @@
 .primaryBadge {
   padding: 1px 7px;
   border-radius: 999px;
-  background: rgba(232, 199, 154, 0.15);
+  background: var(--gold-15);
   color: var(--gold-light);
   font-size: 0.58rem;
   font-weight: 900;
@@ -297,10 +297,10 @@
 .galleryItem {
   position: relative;
   aspect-ratio: 1;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   overflow: hidden;
-  background: rgba(168, 85, 247, 0.06);
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  background: var(--purple-2-06);
+  border: 1px solid var(--purple-2-15);
   cursor: pointer;
   padding: 0;
 }
@@ -321,9 +321,9 @@
 .menuItem {
   position: relative;
   aspect-ratio: 3 / 4;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   overflow: hidden;
-  background: rgba(168, 85, 247, 0.06);
+  background: var(--purple-2-06);
   border: 1px solid rgba(232, 199, 154, 0.2);
   cursor: pointer;
   padding: 0;
@@ -344,9 +344,9 @@
   gap: 12px;
   padding: 48px 24px;
   text-align: center;
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   background: rgba(20, 14, 34, 0.35);
-  border: 1px dashed rgba(168, 85, 247, 0.22);
+  border: 1px dashed var(--purple-2-22);
 }
 .empty svg {
   color: var(--purple-light);
@@ -366,7 +366,7 @@
   gap: 12px;
   padding: 48px 24px;
   text-align: center;
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   background: rgba(20, 14, 34, 0.35);
   border: 1px dashed rgba(232, 199, 154, 0.22);
 }
@@ -408,7 +408,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(232, 199, 154, 0.15);
+  background: var(--gold-15);
   border: 1px solid rgba(232, 199, 154, 0.4);
   color: var(--gold-light);
   font-size: 1.2rem;
@@ -522,7 +522,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: rgba(157, 78, 221, 0.04);
   border: 1px solid rgba(157, 78, 221, 0.15);
 }
@@ -578,7 +578,7 @@
   align-items: center;
   padding: 3px 10px;
   border-radius: 999px;
-  background: rgba(232, 199, 154, 0.15);
+  background: var(--gold-15);
   color: var(--gold-light);
   font-size: 0.75rem;
   font-weight: 900;
@@ -600,9 +600,9 @@
   margin: 0;
   padding: 12px 14px;
   color: var(--text-secondary);
-  background: rgba(168, 85, 247, 0.06);
+  background: var(--purple-2-06);
   border: 1px solid rgba(168, 85, 247, 0.18);
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   font-size: 0.82rem;
   font-weight: 650;
   line-height: 1.7;
@@ -646,7 +646,7 @@
   font-size: 0.62rem;
   font-weight: 900;
   color: #a3f5dc;
-  background: rgba(85, 231, 209, 0.15);
+  background: var(--teal-15);
   border: 1px solid rgba(85, 231, 209, 0.42);
 }
 
@@ -676,7 +676,7 @@
   font-weight: 900;
   color: #a3f5dc;
   background: rgba(85, 231, 209, 0.1);
-  border: 1px solid rgba(85, 231, 209, 0.32);
+  border: 1px solid var(--teal-32);
 }
 
 /* ─── Gallery zoom overlay ─── */
