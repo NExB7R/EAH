@@ -615,3 +615,94 @@
     font-size: 0.55rem;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   2026-11-08 — Hours & Gallery improvements
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── Open Now badge ─── */
+.openNowBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-inline-start: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 900;
+  color: #a3f5dc;
+  background: rgba(85, 231, 209, 0.15);
+  border: 1px solid rgba(85, 231, 209, 0.42);
+}
+
+.openNowBadge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #55e7d1;
+  box-shadow: 0 0 8px rgba(85, 231, 209, 0.85);
+  animation: openPulse 2s ease-in-out infinite;
+}
+
+@keyframes openPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.9); }
+}
+
+/* ─── 24 hours display ─── */
+.hours24 {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #a3f5dc;
+  background: rgba(85, 231, 209, 0.1);
+  border: 1px solid rgba(85, 231, 209, 0.32);
+}
+
+/* ─── Gallery zoom overlay ─── */
+.galleryZoom {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(7, 2, 13, 0.55);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.galleryItem:hover .galleryZoom,
+.galleryItem:focus-visible .galleryZoom {
+  opacity: 1;
+}
+
+/* Touch devices: subtle bottom gradient hint */
+@media (hover: none) {
+  .galleryZoom {
+    opacity: 1;
+    background: linear-gradient(180deg, transparent 60%, rgba(7, 2, 13, 0.55) 100%);
+    align-items: flex-end;
+    padding-bottom: 8px;
+  }
+  .galleryZoom svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .openNowBadge::before {
+    animation: none;
+  }
+  .galleryZoom {
+    transition: none;
+  }
+}

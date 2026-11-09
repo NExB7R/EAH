@@ -1278,3 +1278,9 @@
 - Mobile: scroll-snap-x proximity لتنقل أسلس + top محسوب على 74px.
 - شاشات ≤390px: إخفاء الأيقونات من التابات (مساحة أوسع للنص).
 - شاشات ≤340px: تصغير الخط والـ counter.
+
+## 2026-11-08 — تحسين Info Blocks (مواعيد + معرض)
+- إضافة "مفتوح الآن" badge متحرك في عنوان "مواعيد العمل" (لما `is_open = true`).
+- تحويل عرض 00:00-23:59 إلى "24 ساعة" تلقائيًا (أنضف للعرض).
+- Gallery: إضافة zoom icon عند hover (وفي mobile overlay subtle gradient).
+- إضافة aria-label للـ Gallery buttons للـ accessibility.

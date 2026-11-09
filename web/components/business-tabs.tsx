@@ -65,6 +65,12 @@ const DAY_LABEL: Record<string, string> = {
 
 const DAY_ORDER = ['sat', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri']
 
+/** Treat 00:00 → 23:59 (or 00:00) as "all day". */
+function isAllDay(h: { open: string; close: string } | null | undefined): boolean {
+  if (!h) return false
+  return h.open === '00:00' && (h.close === '23:59' || h.close === '00:00')
+}
+
 export default function BusinessTabs({
   detail,
   reviews,
@@ -289,6 +295,7 @@ export default function BusinessTabs({
               <h3 className={styles.blockTitle}>
                 <ClockIcon size={14} />
                 مواعيد العمل
+                {business.is_open && <span className={styles.openNowBadge}>مفتوح الآن</span>}
               </h3>
               <ul className={styles.hoursList}>
                 {DAY_ORDER.map((day) => {
@@ -309,16 +316,20 @@ export default function BusinessTabs({
                     <li key={day} className={styles.hoursRow}>
                       <span className={styles.hoursDay}>{DAY_LABEL[day]}</span>
                       {h ? (
-                        <span className={styles.hoursRange} dir="ltr">
-                          <span className={styles.hoursTime}>{h.open}</span>
-                          <span className={styles.hoursSeparator} aria-hidden="true">–</span>
-                          <span className={styles.hoursTime}>{h.close}</span>
-                          {overnight && (
-                            <span className={styles.overnightNote} dir="rtl">
-                              لليوم التالي
-                            </span>
-                          )}
-                        </span>
+                        isAllDay(h) ? (
+                          <span className={styles.hours24}>24 ساعة</span>
+                        ) : (
+                          <span className={styles.hoursRange} dir="ltr">
+                            <span className={styles.hoursTime}>{h.open}</span>
+                            <span className={styles.hoursSeparator} aria-hidden="true">–</span>
+                            <span className={styles.hoursTime}>{h.close}</span>
+                            {overnight && (
+                              <span className={styles.overnightNote} dir="rtl">
+                                لليوم التالي
+                              </span>
+                            )}
+                          </span>
+                        )
                       ) : (
                         <span className={styles.hoursTime}>مغلق</span>
                       )}
@@ -393,6 +404,7 @@ export default function BusinessTabs({
                     type="button"
                     className={styles.galleryItem}
                     onClick={() => setLightbox(g.storage_path)}
+                    aria-label="عرض الصورة بحجم كامل"
                   >
                     <WmImage
                       src={g.storage_path}
@@ -401,6 +413,14 @@ export default function BusinessTabs({
                       sizes="200px"
                       className={styles.galleryImg}
                     />
+                    <span className={styles.galleryZoom} aria-hidden="true">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        <line x1="11" y1="8" x2="11" y2="14"/>
+                        <line x1="8" y1="11" x2="14" y2="11"/>
+                      </svg>
+                    </span>
                   </button>
                 ))}
               </div>
