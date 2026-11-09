@@ -40,8 +40,51 @@ export default async function AdminHealthPage({
     <div>
       <AccountPageHeader
         title="صحة النظام والتدقيق"
-        description="مراقبة الأخطاء + سجل التدقيق في مكان واحد."
+        description="مراقبة الأخطاء + سجل التدقيق + جاهزية الإطلاق."
       />
+
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+        <Link
+          href="https://github.com/NExB7R/EAH/blob/main/docs/LAUNCH_CHECKLIST.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '8px 16px',
+            borderRadius: 10,
+            background: 'rgba(157, 78, 221, 0.15)',
+            border: '1px solid rgba(168, 85, 247, 0.4)',
+            color: '#C77DFF',
+            fontSize: '0.8rem',
+            fontWeight: 800,
+            textDecoration: 'none',
+          }}
+        >
+          📋 Launch Checklist
+        </Link>
+        <Link
+          href="https://github.com/NExB7R/EAH/blob/main/docs/TESTING_GUIDE.md"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '8px 16px',
+            borderRadius: 10,
+            background: 'rgba(232, 199, 154, 0.1)',
+            border: '1px solid rgba(232, 199, 154, 0.35)',
+            color: '#f5d9a7',
+            fontSize: '0.8rem',
+            fontWeight: 800,
+            textDecoration: 'none',
+          }}
+        >
+          🧪 Testing Guide
+        </Link>
+      </div>
 
       <LaunchReadiness initialResult={null} />
 

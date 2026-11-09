@@ -1379,3 +1379,8 @@
 - Component: gauge (نسبة دائرية) + items مصنفة (بنية تحتية، محتوى، مستخدمين، أنظمة، أمان، جودة البيانات).
 - الأوزان: high (3) = blockers محتملة، medium (2)، low (1).
 - معايير: DB، RLS، أنشطة منشورة، تقييمات، أنشطة حقيقية (مش demo)، تجار، Standing، Autopilot، Contact Privacy، Orphan Branches، Demo Data.
+
+## 2026-11-09 — Launch Checklist
+- docs/LAUNCH_CHECKLIST.md: 9 أقسام شاملة (بنية تحتية، أنظمة، صفحات، لوحات، أمان، جودة بيانات، وثائق، اختبارات، ما قبل الإطلاق).
+- معايير إطلاق محددة: Launch Readiness ≥90%، Health Checks 0 blockers، ≥3 real businesses، 0 demo data، Lighthouse ≥90، RLS 100%.
+- روابط في `/admin/health` للوصول السريع.
