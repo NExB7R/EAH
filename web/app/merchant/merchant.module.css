@@ -1,27 +1,27 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Merchant Layout (2026-11-09)
+   Simplified: no sidebar (uses FloatingCapsule)
+   ═══════════════════════════════════════════════════════════ */
+
 .page {
   min-height: 100vh;
   padding-bottom: 96px;
 }
 
-.wrap {
-  max-width: 1240px;
-  margin: 24px auto 0;
-  padding: 0 24px;
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 24px;
-  align-items: start;
-}
-
 .content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 24px 0;
   min-width: 0;
 }
 
-@media (max-width: 900px) {
-  .wrap {
-    grid-template-columns: 1fr;
-    padding: 0 16px;
-    margin-top: 16px;
-    gap: 16px;
+@media (max-width: 640px) {
+  .content {
+    padding: 16px 12px 0;
   }
+}
+
+/* Kept for backward compat — layout.tsx still wraps with .wrap */
+.wrap {
+  display: contents;
 }

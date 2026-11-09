@@ -1336,3 +1336,8 @@
 - تبسيط account.module.css (إزالة grid العمودين + 240px sidebar الفاضي).
 - account-dashboard.module.css: تحويل لـ design tokens + welcome header + empty state.
 - page.tsx: Header ترحيبي ديناميكي + progress bar يتحسب من threshold التالي.
+
+## 2026-11-09 — تبسيط Layouts Merchant + Admin
+- merchant.module.css: إزالة grid 240px sidebar (مستخدمش بعد تحويل FloatingCapsule).
+- admin.module.css: إعادة كتابة كاملة (من 196 سطر → ~50)، إزالة dead code (shell, sidebarRail, brand, sidebarDivider, sidebarBottom, statusDot, version, workspace).
+- تنظيف مساحات فاضية في اللوحتين.

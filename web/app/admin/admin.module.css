@@ -1,196 +1,52 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Admin Layout (2026-11-09)
+   Simplified: no sidebar (uses FloatingCapsule)
+   Removed dead code: shell, sidebarRail, brand, sidebarDivider,
+   sidebarBottom, statusDot, version, workspace
+   ═══════════════════════════════════════════════════════════ */
+
 .page {
-  /* Reuse EAH's canonical design tokens; the admin gets layout hierarchy, not a new palette. */
-  --admin-canvas: var(--bg-base);
-  --admin-surface: var(--bg-elevated);
-  --admin-surface-raised: var(--bg-surface);
-  --admin-border: rgba(var(--purple-neon-rgb), 0.28);
-  --admin-border-strong: rgba(var(--purple-light-rgb), 0.52);
-  --admin-text: var(--text-primary);
-  --admin-text-muted: var(--text-secondary);
-  --admin-text-subtle: var(--text-muted);
-  --admin-accent: var(--purple-light);
-  --admin-accent-strong: var(--purple-primary);
-  --admin-accent-soft: rgba(var(--purple-neon-rgb), 0.19);
-  --admin-accent-line: rgba(var(--purple-light-rgb), 0.42);
-  --admin-success: var(--teal);
-  --admin-warning: var(--gold-primary);
-  --admin-danger: var(--red);
-  --admin-shadow-sm: var(--shadow-sm);
   min-height: 100vh;
-  padding: 0 24px 96px;
-  color: var(--admin-text);
-  background: var(--admin-canvas);
-}
-
-.shell {
-  display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  align-items: start;
-  gap: 24px;
-  width: min(100%, 1240px);
-  margin: 24px auto 0;
-}
-
-.sidebarRail {
-  position: sticky;
-  top: 22px;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  height: calc(100vh - 44px);
-  max-height: 1040px;
-  padding: 18px 12px 12px;
-  border: 1px solid var(--admin-border);
-  border-radius: var(--radius-20);
-  background: linear-gradient(180deg, rgba(25, 14, 42, 0.98), rgba(12, 6, 23, 0.99));
-  box-shadow:
-    0 16px 42px rgba(0, 0, 0, 0.36),
-    0 0 0 1px rgba(var(--purple-neon-rgb), 0.08);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 2px 8px 14px;
-  color: var(--admin-text);
-  text-decoration: none;
-}
-
-.brandText {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.brandText small {
-  color: var(--admin-text-muted);
-  font-size: 0.7rem;
-  font-weight: 650;
-}
-
-.sidebarDivider {
-  height: 1px;
-  margin: 0 8px 12px;
-  background: var(--admin-border);
-}
-
-.sidebarRail > aside {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.sidebarRail nav {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--admin-border-strong) transparent;
-}
-
-.sidebarBottom {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding: 12px 9px 2px;
-  border-top: 1px solid var(--admin-border);
-  color: var(--admin-text-muted);
-  font-size: 0.68rem;
-  font-weight: 650;
-}
-
-.statusDot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--admin-success);
-  box-shadow: 0 0 0 3px rgba(97, 199, 165, 0.1);
-}
-
-.version {
-  margin-inline-start: auto;
-  color: var(--admin-text-subtle);
-  direction: ltr;
-  font-size: 0.62rem;
-}
-
-.workspace {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  min-width: 0;
+  padding-bottom: 96px;
 }
 
 .content {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px 24px 0;
   min-width: 0;
-  padding: clamp(18px, 2vw, 30px);
-  border: 1px solid var(--admin-border);
-  border-radius: var(--radius-20);
-  background: var(--surface-gradient-strong);
-  box-shadow:
-    0 18px 44px rgba(0, 0, 0, 0.28),
-    0 0 30px rgba(var(--purple-neon-rgb), 0.055);
 }
 
-@media (max-width: 1080px) {
-  .page {
-    padding: 12px;
-  }
-
-  .shell {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-  }
-
-  .sidebarRail {
-    display: none;
-  }
-
-  .workspace {
-    gap: 12px;
-  }
-
+@media (max-width: 640px) {
   .content {
-    padding: 18px;
-    border-radius: var(--radius-16);
+    padding: 16px 12px 0;
   }
 }
 
-@media (max-width: 520px) {
-  .page {
-    padding: 8px;
-  }
-
-  .content {
-    padding: 14px 12px;
-  }
+/* Kept for backward compat — layout.tsx still references it */
+.wrap {
+  display: contents;
 }
 
-/* ─── Skip link — يظهر فقط عند keyboard focus ─── */
+/* ─── Skip Link (accessibility) ─── */
 .skipLink {
-  position: fixed;
-  top: -100px;
+  position: absolute;
+  top: -40px;
   left: 8px;
   z-index: 9999;
-  padding: 10px 18px;
-  border-radius: var(--radius-10);
-  background: var(--purple-primary);
-  color: rgb(255, 255, 255);
-  font-family: var(--font-body);
-  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: var(--radius-8);
+  background: var(--purple-primary, #9d4edd);
+  color: #fff;
   font-size: 0.85rem;
+  font-weight: 800;
   text-decoration: none;
-  transition: top 150ms ease;
-  box-shadow: 0 4px 20px rgba(157, 78, 221, 0.4);
+  transition: top 180ms ease;
 }
 
 .skipLink:focus,
 .skipLink:focus-visible {
   top: 8px;
-  outline: 2px solid var(--gold-light);
+  outline: 2px solid var(--purple-light, #c77dff);
   outline-offset: 2px;
 }
