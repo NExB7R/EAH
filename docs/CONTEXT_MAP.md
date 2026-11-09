@@ -9,7 +9,7 @@
 
 ---
 
-## Routes (110)
+## Routes (111)
 
 | Route | File |
 |-------|------|
@@ -59,6 +59,7 @@
 | `/api/admin/export` | `app/api/admin/export/route.ts` |
 | `/api/admin/health-checks` | `app/api/admin/health-checks/route.ts` |
 | `/api/admin/health-checks/fix` | `app/api/admin/health-checks/fix/route.ts` |
+| `/api/admin/launch-readiness` | `app/api/admin/launch-readiness/route.ts` |
 | `/api/admin/live-feed` | `app/api/admin/live-feed/route.ts` |
 | `/api/admin/upload-business-image` | `app/api/admin/upload-business-image/route.ts` |
 | `/api/ai/chat` | `app/api/ai/chat/route.ts` |
@@ -214,7 +215,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (116)
+## Lib (117)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -265,6 +266,7 @@
 | `data/in-app-order-availability.ts` | getInAppOrderAvailableBusinessIds | Returns only activity IDs whose in-platform order workflow is currently usable. |
 | `data/index.ts` | — | EAH — Data Layer (re-exports) |
 | `data/insights.ts` | getBusinessMetrics, getCategoryComparison, getAllInsights, getAllInsightsForAdmin | EAH — Business Insights (AI Analysis Data Layer) |
+| `data/launch-readiness.ts` | computeLaunchReadiness | EAH — Launch Readiness (2026-11-09) |
 | `data/live-stats.ts` | getLiveStats, getAllLiveStats | EAH — Live Stats (Footer counters) |
 | `data/merchant.ts` | getMyBusiness, getMyContacts, getMySubscription, getMerchantStats, getMerchantOrders, … | EAH — Merchant Data |
 | `data/order-availability.ts` | canAcceptInAppOrders | In-platform ordering requires both an enabled setting and a linked platform owner. |
