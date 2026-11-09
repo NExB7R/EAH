@@ -1428,3 +1428,6 @@
 - إخفاء "لا يستقبل طلبات أونلاين" badge السلبي (بيزهد الزائر).
 - إظهار "طلبات أونلاين" فقط لو النشاط فعلاً بيستقبل.
 - تحويل بعض hex colors → design tokens (purple, gold, teal).
+
+## 2026-11-09 — Launch Day Runbook
+- docs/LAUNCH_DAY_RUNBOOK.md: timeline (T-7 → T+7) + rollback + metrics.
