@@ -5,6 +5,7 @@ import {
   websiteJsonLd,
 } from './home-metadata'
 import HomeHero from '@/components/home-hero'
+import TrustBar from '@/components/trust-bar'
 import FeaturedBento from '@/components/featured-bento'
 import TrendingRow from '@/components/trending-row'
 import OffersStrip from '@/components/offers-strip'
@@ -55,6 +56,7 @@ export default async function Home({ searchParams }: Props) {
       />
       <ChipScrollHandler target={params.scroll} />
       <HomeHero isLoggedIn={!!session} hasBusiness={!!business} />
+      <TrustBar />
       <Suspense fallback={null}>
         <HomeSections typeFilter={params.type} />
       </Suspense>

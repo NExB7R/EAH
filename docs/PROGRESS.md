@@ -1417,3 +1417,9 @@
 - <VerifyLaunchButton />: قسم في /admin/health مع زر "تشغيل" + نتيجة مرئية.
 - يستخدم Service Client، محمي بـ requireAdmin.
 - النتيجة: 16/16 ✅ (verified via SQL Script يدويًا).
+
+## 2026-11-09 — Trust Bar على الصفحة الرئيسية
+- 4 مؤشرات ثقة حقيقية: أرقام محمية، تقييمات موثقة، تواصل مباشر، بدون عمولة.
+- Server Component (بدون JS) — لا تؤثر على bundle size.
+- تحت الهيرو مباشرة (قبل الأقسام).
+- Mobile: 2x2 grid، Desktop: 4 columns.
