@@ -1293,3 +1293,11 @@
 - Hover: تأثير بسيط على كل فرع (lift خفيف).
 - Mobile: padding 12px، أيقونة أصغر (32px)، font أنسب.
 - 380px-: head بتتحول لعمود (المسافة تحت الاسم بدل جانبها).
+
+## 2026-11-08 — Spacing + Typography pass على صفحة النشاط
+- business.module.css: تحسين المسافات (container 12px على موبايل، similar gap 14px، similar margin 40px على desktop).
+- business-tabs.module.css: تحسين Block (gradient background، border 16px، hover transition).
+- blockTitle: إضافة border-bottom ذهبي شفاف + padding-bottom (فصل بصري).
+- Empty states: padding 48px بدل 60px، border-radius 16px (أنسب).
+- mapBtn: hover effect (lift + shadow أقوى).
+- contactItem: تحسينات بسيطة (border-radius 11px، transition 200ms).

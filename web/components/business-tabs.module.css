@@ -86,20 +86,28 @@
 /* ─── Blocks ─── */
 .block {
   padding: 18px 20px;
-  border-radius: 18px;
-  background: rgba(20, 14, 34, 0.5);
-  border: 1px solid rgba(232, 199, 154, 0.15);
+  border-radius: 16px;
+  background: linear-gradient(155deg, rgba(22, 15, 36, 0.6), rgba(16, 10, 26, 0.55));
+  border: 1px solid rgba(168, 85, 247, 0.14);
+  transition: border-color 200ms ease;
+}
+
+.block:hover {
+  border-color: rgba(168, 85, 247, 0.22);
 }
 
 .blockTitle {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(232, 199, 154, 0.1);
   font-family: var(--font-display);
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 900;
   color: var(--gold-light);
+  letter-spacing: 0.01em;
 }
 
 /* ─── Contacts ─── */
@@ -113,14 +121,14 @@
   align-items: center;
   gap: 7px;
   padding: 9px 14px;
-  border-radius: 12px;
+  border-radius: 11px;
   font-size: 0.78rem;
   font-weight: 800;
   color: var(--text-secondary);
-  background: rgba(168, 85, 247, 0.05);
-  border: 1px solid rgba(168, 85, 247, 0.2);
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.22);
   text-decoration: none;
-  transition: all 180ms var(--ease);
+  transition: all 200ms var(--ease);
   font-variant-numeric: tabular-nums;
   direction: ltr;
 }
@@ -204,23 +212,30 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 14px;
+  padding: 9px 16px;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 900;
   color: var(--bg-base);
   background: linear-gradient(135deg, #55e7d1, #2bb8a4);
   text-decoration: none;
-  box-shadow: 0 0 14px rgba(85, 231, 209, 0.35);
+  box-shadow: 0 4px 14px rgba(85, 231, 209, 0.28);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.mapBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(85, 231, 209, 0.4);
 }
 
 /* ─── Description ─── */
 .desc {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 600;
   color: var(--text-secondary);
-  line-height: 1.8;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
 }
 
 /* ─── Branches ─── */
@@ -326,12 +341,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 60px 20px;
+  gap: 12px;
+  padding: 48px 24px;
   text-align: center;
-  border-radius: 18px;
-  background: rgba(20, 14, 34, 0.4);
-  border: 1px dashed rgba(168, 85, 247, 0.25);
+  border-radius: 16px;
+  background: rgba(20, 14, 34, 0.35);
+  border: 1px dashed rgba(168, 85, 247, 0.22);
 }
 .empty svg {
   color: var(--purple-light);
@@ -348,12 +363,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 60px 20px;
+  gap: 12px;
+  padding: 48px 24px;
   text-align: center;
-  border-radius: 18px;
-  background: rgba(20, 14, 34, 0.4);
-  border: 1px dashed rgba(232, 199, 154, 0.25);
+  border-radius: 16px;
+  background: rgba(20, 14, 34, 0.35);
+  border: 1px dashed rgba(232, 199, 154, 0.22);
 }
 .reviewsPlaceholder svg {
   color: var(--gold-light);

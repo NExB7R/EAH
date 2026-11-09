@@ -1,3 +1,8 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Business Page Layout
+   Mobile-first, 8px grid, generous desktop breathing
+   ═══════════════════════════════════════════════════════════ */
+
 .page {
   min-height: 100vh;
   padding-bottom: 32px;
@@ -5,7 +10,7 @@
 
 @media (max-width: 768px) {
   .withFixedCta {
-    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    padding-bottom: calc(104px + env(safe-area-inset-bottom));
   }
 }
 
@@ -21,9 +26,10 @@
   padding: 0;
 }
 
+/* Similar section */
 .similar {
   padding: 0;
-  margin-top: 32px;
+  margin-top: 40px;
 }
 
 .similarHeader {
@@ -49,7 +55,7 @@
 
 .similarTitle {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 900;
   color: var(--text-primary);
   margin: 0;
@@ -58,25 +64,31 @@
 .similarGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
 @media (min-width: 1024px) {
   .similarGrid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
   }
 }
 
 @media (max-width: 640px) {
-  .container { padding: 0 10px; }
-  .similar { margin-top: 24px; }
-  .similarGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .container { padding: 0 12px; }
+  .similar { margin-top: 28px; }
+  .similarGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .similarTitle { font-size: 1.05rem; }
 }
 
 @media (max-width: 360px) {
   .similarGrid { grid-template-columns: 1fr; }
 }
 
+/* Owner Banner */
 .ownerBanner {
   display: flex;
   flex-wrap: wrap;
@@ -134,8 +146,7 @@
   color: var(--text-primary);
 }
 
-
-/* Simple, predictable way back to discovery from a detail page. */
+/* Breadcrumb */
 .breadcrumb {
   display: flex;
   min-width: 0;
@@ -168,17 +179,14 @@
 }
 
 @media (max-width: 640px) {
-  .container {
-    padding: 0 12px;
-  }
-
   .breadcrumb {
-    padding: 12px 0 8px;
+    padding: 10px 0 6px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .breadcrumbLink {
+  .breadcrumbLink,
+  .ownerLink {
     transition: none;
   }
 }
