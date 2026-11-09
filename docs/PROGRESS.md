@@ -1320,3 +1320,9 @@
 - business-tabs.module.css: تحويل rgba + radius
 - home-hero.module.css: تحويل rgba + radius
 - استخدام mappings دقيقة (0.55، 0.11، 0.14 إلخ لم تُلمس لأنها مش tokens).
+
+## 2026-11-09 — تطبيق Design Tokens على الملفات المتبقية
+- explore-filters.module.css
+- menu-drawer.module.css
+- floating-capsule.module.css
+- explore/explore.module.css

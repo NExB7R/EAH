@@ -18,7 +18,7 @@
   padding: 0 14px;
   border-radius: var(--radius-full);
   background: rgba(20, 14, 34, 0.6);
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  border: 1px solid var(--purple-2-22);
   color: var(--text-secondary);
   font-family: var(--font-body);
   font-size: 0.8rem;
@@ -35,7 +35,7 @@
 }
 
 .triggerActive {
-  background: linear-gradient(135deg, rgba(157, 78, 221, 0.25), rgba(168, 85, 247, 0.15));
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.25), var(--purple-2-15));
   border-color: var(--purple-neon);
   color: var(--purple-light);
 }
@@ -83,7 +83,7 @@
   padding: 18px;
   margin-bottom: 20px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.9), rgba(10, 7, 20, 0.95));
-  border: 1px solid rgba(168, 85, 247, 0.25);
+  border: 1px solid var(--purple-2-25);
   border-radius: var(--radius-lg);
   animation: panelIn 220ms var(--ease-out);
 }
@@ -129,7 +129,7 @@
   padding: 0 14px;
   border-radius: var(--radius-full);
   background: rgba(20, 14, 34, 0.5);
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  border: 1px solid var(--purple-2-22);
   color: var(--text-secondary);
   font-family: var(--font-body);
   font-size: 0.78rem;
@@ -201,7 +201,7 @@
   padding: 0 14px;
   border-radius: var(--radius-base);
   background: rgba(20, 14, 34, 0.6);
-  border: 1px solid rgba(168, 85, 247, 0.25);
+  border: 1px solid var(--purple-2-25);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 0.85rem;
@@ -288,7 +288,7 @@
   .panel {
     padding: 14px;
     gap: 16px;
-    border-radius: 16px;
+    border-radius: var(--radius-16);
   }
   .section {
     gap: 8px;

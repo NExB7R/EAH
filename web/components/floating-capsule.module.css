@@ -39,9 +39,9 @@
   background: var(--surface-gradient-strong);
   border-color: var(--border-purple);
   box-shadow:
-    0 0 0 1px rgba(168, 85, 247, 0.08),
+    0 0 0 1px var(--purple-2-08),
     0 4px 20px rgba(0, 0, 0, 0.4),
-    0 0 30px rgba(168, 85, 247, 0.12);
+    0 0 30px var(--purple-2-12);
 }
 
 /* logo مخفي قبل scroll */
@@ -118,12 +118,12 @@
 /* مميز — القائمة */
 .iconPrimary {
   color: var(--purple-neon);
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   border: 1px solid rgba(168, 85, 247, 0.2);
 }
 
 .iconPrimary:hover {
-  background: rgba(168, 85, 247, 0.15);
+  background: var(--purple-2-15);
   border-color: var(--purple-neon);
   box-shadow: var(--glow-purple-sm);
 }
@@ -131,12 +131,12 @@
 /* مميز — التثبيت (ذهبي + نبض) */
 .iconGold {
   color: var(--gold-light);
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.15), rgba(232, 199, 154, 0.05));
+  background: linear-gradient(135deg, var(--gold-15), rgba(232, 199, 154, 0.05));
   border: 1px solid rgba(232, 199, 154, 0.3);
 }
 
 .iconGold:hover {
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.25), rgba(232, 199, 154, 0.1));
+  background: linear-gradient(135deg, var(--gold-25), rgba(232, 199, 154, 0.1));
   border-color: var(--gold-primary);
   box-shadow: var(--glow-gold-sm);
 }
@@ -217,7 +217,7 @@
   min-height: 48px;
   padding: 0 16px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.22), rgba(232, 199, 154, 0.08));
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.22), var(--gold-08));
   border: 1px solid rgba(232, 199, 154, 0.55);
   color: var(--gold-light);
   font-family: var(--font-body);
@@ -231,7 +231,7 @@
 }
 
 .loginBtn:hover {
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.35), rgba(232, 199, 154, 0.15));
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.35), var(--gold-15));
   border-color: rgba(232, 199, 154, 0.8);
   box-shadow:
     0 0 0 1px rgba(232, 199, 154, 0.2),
