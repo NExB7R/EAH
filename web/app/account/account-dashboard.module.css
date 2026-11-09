@@ -1,8 +1,11 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Account Dashboard (Bento Grid + Design Tokens)
+   ═══════════════════════════════════════════════════════════ */
+
 .dashboard {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 16px;
+  gap: 20px;
   animation: fadeIn 0.4s ease-out;
 }
 
@@ -11,28 +14,59 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Bento Grid */
+/* ─── Welcome Header ─── */
+.welcomeHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.welcomeTitle {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.welcomeSubtitle {
+  font-size: 0.88rem;
+  color: #a0a0a0;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .welcomeTitle { font-size: 1.25rem; }
+  .welcomeSubtitle { font-size: 0.82rem; }
+}
+
+/* ─── Bento Grid ─── */
 .bentoGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .bentoGrid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
   .fullWidth {
     grid-column: span 2;
   }
 }
 
+/* ─── Card ─── */
 .card {
-  background: rgba(20, 15, 30, 0.6);
+  background: linear-gradient(155deg, rgba(22, 15, 36, 0.7), rgba(16, 10, 26, 0.6));
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(157, 78, 221, 0.2);
-  border-radius: var(--radius-20);
-  padding: 20px;
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--purple-2-20);
+  border-radius: var(--radius-18);
+  padding: 18px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -42,34 +76,43 @@
 
 .card:hover {
   transform: translateY(-2px);
-  border-color: rgba(157, 78, 221, 0.5);
+  border-color: var(--purple-2-50);
 }
 
 .cardTitle {
-  font-size: 14px;
+  font-size: 13px;
   color: #a0a0a0;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  font-weight: 700;
 }
 
 .cardValue {
-  font-size: 28px;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 900;
   color: #fff;
+  line-height: 1.2;
 }
 
-/* Level & Progress */
+/* ─── Level Card ─── */
 .levelCard {
-  background: linear-gradient(135deg, rgba(157, 78, 221, 0.2) 0%, rgba(20, 15, 30, 0.8) 100%);
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.25) 0%, rgba(20, 15, 30, 0.85) 100%);
+  border-color: var(--purple-2-50);
+  padding: 22px;
+}
+
+.levelCard .cardValue {
+  font-size: 32px;
 }
 
 .progressBar {
   width: 100%;
   height: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
   margin-top: 16px;
   overflow: hidden;
 }
@@ -77,20 +120,48 @@
 .progressFill {
   height: 100%;
   background: linear-gradient(90deg, #9D4EDD, #C77DFF);
-  border-radius: 4px;
+  border-radius: var(--radius-full);
   transition: width 1s ease-in-out;
+  box-shadow: 0 0 12px rgba(157, 78, 221, 0.5);
 }
 
-/* Streak */
+.levelLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #C77DFF;
+  text-decoration: none;
+  margin-top: 12px;
+  font-weight: 700;
+  transition: color 180ms ease;
+}
+
+.levelLink:hover {
+  color: #E0B0FF;
+}
+
+/* ─── Streak Card ─── */
 .streakCard {
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.1) 0%, rgba(20, 15, 30, 0.8) 100%);
-  border-color: rgba(232, 199, 154, 0.2);
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.12) 0%, rgba(20, 15, 30, 0.85) 100%);
+  border-color: var(--gold-25);
 }
 
-/* Badges */
+.streakCard .cardValue {
+  color: #E8C79A;
+}
+
+.streakHint {
+  color: #E8C79A;
+  font-size: 0.75rem;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+/* ─── Badges ─── */
 .badgesGrid {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
   margin-top: 8px;
 }
@@ -100,12 +171,18 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
-  background: rgba(255, 255, 255, 0.05);
+  width: 76px;
+  height: 76px;
+  background: rgba(255, 255, 255, 0.04);
   border-radius: var(--radius-16);
-  font-size: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 26px;
+  border: 1px solid var(--purple-2-20);
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.badgeItem:hover {
+  transform: scale(1.05);
+  border-color: var(--purple-2-50);
 }
 
 .badgeLabel {
@@ -113,4 +190,38 @@
   color: #a0a0a0;
   margin-top: 4px;
   text-align: center;
+  font-weight: 700;
+}
+
+.badgeEmpty {
+  padding: 16px;
+  text-align: center;
+  color: #666;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px dashed var(--purple-2-20);
+  border-radius: var(--radius-14);
+  width: 100%;
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .dashboard {
+    gap: 14px;
+  }
+  .card {
+    padding: 16px;
+    border-radius: var(--radius-16);
+  }
+  .levelCard {
+    padding: 18px;
+  }
+  .levelCard .cardValue {
+    font-size: 26px;
+  }
+  .badgeItem {
+    width: 68px;
+    height: 68px;
+    font-size: 22px;
+  }
 }

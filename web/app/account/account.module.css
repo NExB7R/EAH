@@ -1,27 +1,28 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Account Layout (2026-11-09)
+   Simplified: no sidebar (uses FloatingCapsule)
+   ═══════════════════════════════════════════════════════════ */
+
 .page {
   min-height: 100vh;
   padding-bottom: 96px;
 }
 
-.wrap {
-  max-width: 1240px;
+.content {
+  max-width: 960px;
   margin: 24px auto 0;
   padding: 0 24px;
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 24px;
-  align-items: start;
-}
-
-.content {
   min-width: 0;
 }
 
-@media (max-width: 900px) {
-  .wrap {
-    grid-template-columns: 1fr;
-    padding: 0 16px;
+@media (max-width: 640px) {
+  .content {
     margin-top: 16px;
-    gap: 16px;
+    padding: 0 12px;
   }
+}
+
+/* Kept for backward compat — layout.tsx still wraps with .wrap */
+.wrap {
+  display: contents;
 }
