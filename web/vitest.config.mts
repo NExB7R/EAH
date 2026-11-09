@@ -4,9 +4,10 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
-    environment: 'node',
+    environment: 'jsdom',
     include: ['**/*.test.{ts,tsx}'],
     exclude: ['node_modules', '.next'],
     globals: true,
+    setupFiles: ['./vitest.setup.ts'],
   },
 })
