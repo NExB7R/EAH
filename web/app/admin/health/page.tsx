@@ -3,9 +3,11 @@ import AccountPageHeader from '@/components/account-page-header'
 import EmptyState from '@/components/empty-state'
 import { AlertIcon, CheckCircleIcon } from '@/components/icons'
 import { getErrorsWithFilters, getHealthSummary } from '@/lib/data/health'
+import { runHealthChecks } from '@/lib/data/health-checks'
 import ErrorRow from './error-row'
 import HealthFilters from './health-filters'
 import AuditSection from './audit-section'
+import HealthChecks from './health-checks'
 import styles from './health.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -39,6 +41,8 @@ export default async function AdminHealthPage({
         title="صحة النظام والتدقيق"
         description="مراقبة الأخطاء + سجل التدقيق في مكان واحد."
       />
+
+      <HealthChecks initialResult={null} />
 
       {/* Tabs */}
       <nav className={styles.tabs} aria-label="تبويبات صحة النظام">

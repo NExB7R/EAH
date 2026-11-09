@@ -1341,3 +1341,9 @@
 - merchant.module.css: إزالة grid 240px sidebar (مستخدمش بعد تحويل FloatingCapsule).
 - admin.module.css: إعادة كتابة كاملة (من 196 سطر → ~50)، إزالة dead code (shell, sidebarRail, brand, sidebarDivider, sidebarBottom, statusDot, version, workspace).
 - تنظيف مساحات فاضية في اللوحتين.
+
+## 2026-11-09 — فحوصات النظام (Health Checks)
+- lib/data/health-checks.ts: 10 فحوصات (DB، جداول، triggers، orphans، stale orders).
+- app/admin/health/health-checks.tsx: مكون UI مع زر تشغيل.
+- app/api/admin/health-checks/route.ts: API endpoint.
+- يُستخدم قبل الإطلاق وبعده للمراقبة الاستباقية.
