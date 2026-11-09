@@ -43,7 +43,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid rgba(168, 85, 247, 0.25);
+  border: 1px solid var(--purple-2-25);
   background: rgba(20, 14, 34, 0.85);
   color: #c9c2db;
   cursor: pointer;
@@ -53,7 +53,7 @@
 }
 
 .closeBtn:hover {
-  background: rgba(168, 85, 247, 0.15);
+  background: var(--purple-2-15);
   color: #f4f2fa;
 }
 
@@ -65,10 +65,10 @@
   max-width: 900px;
   aspect-ratio: 4 / 5;
   max-height: 70vh;
-  border-radius: 20px;
+  border-radius: var(--radius-20);
   overflow: hidden;
   background: #0a0514;
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  border: 1px solid var(--purple-2-22);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
 }
 
@@ -153,7 +153,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.08), rgba(10, 5, 20, 0.9));
+  background: linear-gradient(135deg, var(--gold-08), rgba(10, 5, 20, 0.9));
   overflow-y: auto;
   animation: slide-fade 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -168,7 +168,7 @@
   align-self: flex-start;
   padding: 3px 10px;
   border-radius: 999px;
-  background: rgba(232, 199, 154, 0.15);
+  background: var(--gold-15);
   color: #e8c79a;
   font-size: 0.65rem;
   font-weight: 900;
@@ -197,7 +197,7 @@
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: rgba(10, 5, 20, 0.7);
   border: 1px solid rgba(232, 199, 154, 0.18);
 }
@@ -206,7 +206,7 @@
   position: relative;
   width: 48px;
   height: 48px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   overflow: hidden;
   flex-shrink: 0;
   background: rgba(168, 85, 247, 0.1);
@@ -219,7 +219,7 @@
 .offerNoImg {
   width: 48px;
   height: 48px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -251,7 +251,7 @@
   height: 8px;
   border-radius: 999px;
   border: none;
-  background: rgba(168, 85, 247, 0.25);
+  background: var(--purple-2-25);
   cursor: pointer;
   padding: 0;
   transition:
@@ -281,7 +281,7 @@
   align-items: center;
   gap: 8px;
   padding: 11px 24px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   border: 1px solid rgba(199, 125, 255, 0.4);
   background: linear-gradient(135deg, #9d4edd, #a855f7);
   color: rgb(255, 255, 255);
@@ -361,7 +361,7 @@
   .sliderWrap {
     aspect-ratio: 3 / 4;
     max-height: 65vh;
-    border-radius: 16px;
+    border-radius: var(--radius-16);
   }
 
   .navPrev,

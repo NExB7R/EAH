@@ -32,7 +32,7 @@
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.95), rgba(10, 7, 20, 0.98));
   border: 1px solid rgba(168, 85, 247, 0.35);
   border-radius: 24px;
-  box-shadow: 0 0 60px rgba(168, 85, 247, 0.25);
+  box-shadow: 0 0 60px var(--purple-2-25);
 }
 
 .close {
@@ -66,7 +66,7 @@
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(168, 85, 247, 0.15));
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), var(--purple-2-15));
   border: 2px solid rgba(168, 85, 247, 0.4);
   color: var(--purple-light);
   transition: all 200ms var(--ease);

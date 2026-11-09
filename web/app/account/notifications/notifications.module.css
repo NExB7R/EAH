@@ -14,9 +14,9 @@
   display: flex;
   gap: 12px;
   padding: 14px 16px;
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   background: rgba(20, 14, 34, 0.5);
-  border: 1px solid rgba(168, 85, 247, 0.12);
+  border: 1px solid var(--purple-2-12);
   text-decoration: none;
   color: inherit;
   transition: all 180ms var(--ease);
@@ -85,7 +85,7 @@
     rgba(10, 7, 20, 0.95) 100%
   );
   box-shadow:
-    0 0 0 1px rgba(232, 199, 154, 0.15),
+    0 0 0 1px var(--gold-15),
     0 4px 20px rgba(0, 0, 0, 0.4),
     0 0 32px rgba(232, 199, 154, 0.1);
   overflow: hidden;
@@ -98,7 +98,7 @@
   pointer-events: none;
   background:
     radial-gradient(ellipse 70% 50% at 20% 0%, rgba(232, 199, 154, 0.12), transparent 60%),
-    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(232, 199, 154, 0.06), transparent 60%);
+    radial-gradient(ellipse 60% 40% at 100% 100%, var(--gold-06), transparent 60%);
   border-radius: inherit;
 }
 
@@ -120,8 +120,8 @@
   width: 42px;
   height: 42px;
   flex-shrink: 0;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.18), rgba(232, 199, 154, 0.06));
+  border-radius: var(--radius-12);
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.18), var(--gold-06));
   border: 1px solid rgba(232, 199, 154, 0.35);
   color: var(--gold-light);
   filter: drop-shadow(0 0 8px rgba(232, 199, 154, 0.3));
@@ -188,7 +188,7 @@
   gap: 6px;
   flex-wrap: wrap;
   padding-top: 8px;
-  border-top: 1px solid rgba(232, 199, 154, 0.15);
+  border-top: 1px solid var(--gold-15);
 }
 
 .announcementAuthor {
@@ -197,7 +197,7 @@
   font-weight: 700;
   color: var(--gold-primary);
   letter-spacing: 0.3px;
-  filter: drop-shadow(0 0 6px rgba(232, 199, 154, 0.25));
+  filter: drop-shadow(0 0 6px var(--gold-25));
 }
 
 .announcementSep {

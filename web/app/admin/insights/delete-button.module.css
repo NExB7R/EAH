@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   font-family: var(--font-body);
   font-size: 0.72rem;
   font-weight: 800;

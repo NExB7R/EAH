@@ -20,7 +20,7 @@
   border: 1.5px solid rgba(85, 231, 209, 0.35);
   box-shadow:
     0 0 0 1px rgba(85, 231, 209, 0.08),
-    0 0 50px rgba(85, 231, 209, 0.15),
+    0 0 50px var(--teal-15),
     inset 0 1px 0 rgba(85, 231, 209, 0.1);
   text-align: center;
 }
@@ -64,7 +64,7 @@
   flex-direction: column;
   gap: 4px;
   padding: 14px 20px;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: rgba(85, 231, 209, 0.05);
   border: 1px dashed rgba(85, 231, 209, 0.4);
   color: #8ff0e1;
@@ -126,7 +126,7 @@
 .btnGhost:hover {
   color: var(--purple-light);
   border-color: var(--purple-light);
-  background: rgba(168, 85, 247, 0.06);
+  background: var(--purple-2-06);
 }
 
 @media (max-width: 640px) {

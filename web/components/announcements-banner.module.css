@@ -28,7 +28,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: var(--accent-soft, rgba(232, 199, 154, 0.15));
+  background: var(--accent-soft, var(--gold-15));
   color: var(--accent, #e8c79a);
 }
 
@@ -66,7 +66,7 @@
   gap: 4px;
   padding: 5px 12px;
   border-radius: 999px;
-  background: var(--accent-soft, rgba(232, 199, 154, 0.15));
+  background: var(--accent-soft, var(--gold-15));
   border: 1px solid var(--accent-border, rgba(232, 199, 154, 0.3));
   color: var(--accent, #e8c79a);
   font-size: 0.72rem;
@@ -111,7 +111,7 @@
 
 .purple {
   --accent: #c77dff;
-  --accent-soft: rgba(168, 85, 247, 0.12);
+  --accent-soft: var(--purple-2-12);
   --accent-border: rgba(168, 85, 247, 0.35);
 }
 
@@ -123,7 +123,7 @@
 
 .teal {
   --accent: #55e7d1;
-  --accent-soft: rgba(85, 231, 209, 0.12);
+  --accent-soft: var(--teal-12);
   --accent-border: rgba(85, 231, 209, 0.35);
 }
 

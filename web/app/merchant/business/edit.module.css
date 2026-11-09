@@ -248,7 +248,7 @@
 
 .imageSlot {
   position: relative;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   border: 1.5px dashed rgba(168, 85, 247, 0.35);
   background: rgba(10, 7, 20, 0.4);
   cursor: pointer;
@@ -261,7 +261,7 @@
 
 .imageSlot:hover {
   border-color: rgba(199, 125, 255, 0.6);
-  background: rgba(168, 85, 247, 0.06);
+  background: var(--purple-2-06);
 }
 
 .imageSquare {
@@ -336,7 +336,7 @@
 .select {
   width: 100%;
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   border: 1px solid rgba(168, 85, 247, 0.2);
   background: rgba(7, 2, 13, 0.4);
   color: var(--text-primary);
@@ -355,8 +355,8 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  border-radius: 10px;
-  background: rgba(168, 85, 247, 0.08);
+  border-radius: var(--radius-10);
+  background: var(--purple-2-08);
   border: 1px solid rgba(168, 85, 247, 0.3);
   color: var(--purple-light);
   font-family: var(--font-body);
@@ -368,7 +368,7 @@
 }
 
 .gpsBtn:hover {
-  background: rgba(168, 85, 247, 0.15);
+  background: var(--purple-2-15);
 }
 
 .gpsHint {

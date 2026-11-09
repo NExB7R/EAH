@@ -12,7 +12,7 @@
   gap: 6px;
   padding: 6px 12px;
   margin-bottom: 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   font-size: 0.75rem;
   font-weight: 800;
   color: var(--text-muted);
@@ -23,7 +23,7 @@
 }
 
 .backLink:hover {
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   color: var(--text-secondary);
 }
 
@@ -38,7 +38,7 @@
   display: flex;
   gap: 0;
   margin-bottom: 20px;
-  border-bottom: 1px solid rgba(168, 85, 247, 0.12);
+  border-bottom: 1px solid var(--purple-2-12);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -85,8 +85,8 @@
   align-items: center;
   gap: 6px;
   padding: 10px 16px;
-  border-radius: 8px;
-  background: rgba(168, 85, 247, 0.15);
+  border-radius: var(--radius-8);
+  background: var(--purple-2-15);
   color: var(--purple-light);
   font-size: 0.82rem;
   font-weight: 800;
@@ -96,7 +96,7 @@
 }
 
 .previewLink:hover {
-  background: rgba(168, 85, 247, 0.25);
+  background: var(--purple-2-25);
 }
 
 .previewHint {
@@ -165,7 +165,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(168, 85, 247, 0.06);
+  border-bottom: 1px solid var(--purple-2-06);
   font-size: 0.82rem;
 }
 
@@ -192,7 +192,7 @@
   border-radius: 999px;
   font-size: 0.62rem;
   font-weight: 900;
-  background: rgba(85, 231, 209, 0.15);
+  background: var(--teal-15);
   color: #55e7d1;
 }
 
@@ -216,7 +216,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 16px;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: rgba(252, 165, 165, 0.04);
   border: 1px solid rgba(252, 165, 165, 0.25);
 }

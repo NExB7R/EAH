@@ -42,7 +42,7 @@
 
 .order {
   color: #8ff0e1;
-  background: linear-gradient(135deg, rgba(85, 231, 209, 0.2), rgba(85, 231, 209, 0.06));
+  background: linear-gradient(135deg, rgba(85, 231, 209, 0.2), var(--teal-06));
   border: 1px solid rgba(85, 231, 209, 0.45);
   box-shadow: 0 0 20px rgba(85, 231, 209, 0.22);
 }
@@ -53,7 +53,7 @@
   margin-top: 8px;
   padding: 10px;
   border: 1px solid rgba(37, 211, 102, 0.35);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: rgba(7, 2, 13, 0.97);
 }
 
@@ -63,7 +63,7 @@
   min-height: 44px;
   padding: 10px 12px;
   border: 1px solid rgba(37, 211, 102, 0.25);
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   color: var(--text-primary);
   background: rgba(18, 55, 42, 0.95);
   font: inherit;
@@ -117,8 +117,8 @@
   justify-content: center;
   gap: 8px;
   padding: 14px 20px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.18), rgba(232, 199, 154, 0.06));
+  border-radius: var(--radius-14);
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.18), var(--gold-06));
   border: 1px solid rgba(232, 199, 154, 0.4);
   color: var(--gold-light, #f5d9a7);
   font-size: 0.9rem;

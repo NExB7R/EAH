@@ -39,8 +39,8 @@
   align-items: center;
   gap: 6px;
   padding: 10px 14px;
-  border-radius: 10px;
-  background: rgba(168, 85, 247, 0.08);
+  border-radius: var(--radius-10);
+  background: var(--purple-2-08);
   border: 1px solid rgba(168, 85, 247, 0.2);
   color: var(--purple-light);
   font-family: var(--font-body);
@@ -72,7 +72,7 @@
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: rgba(253, 186, 116, 0.08);
   border: 1px solid rgba(253, 186, 116, 0.3);
   color: #fdba74;
@@ -124,7 +124,7 @@
 .searchInput {
   width: 100%;
   padding: 12px 44px 12px 44px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   border: 1px solid rgba(168, 85, 247, 0.2);
   background: rgba(7, 2, 13, 0.6);
   color: var(--text-primary);
@@ -146,7 +146,7 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: rgba(168, 85, 247, 0.1);
   border: none;
   color: var(--text-secondary);
@@ -233,7 +233,7 @@
 
 .dateTab {
   padding: 6px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: transparent;
   border: none;
   color: var(--text-muted);
@@ -276,7 +276,7 @@
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.65), rgba(10, 7, 20, 0.9));
   border: 1px solid rgba(168, 85, 247, 0.18);
   transition: border-color 200ms ease;
@@ -320,7 +320,7 @@
   color: var(--text-muted);
   padding: 2px 6px;
   border-radius: 5px;
-  background: rgba(168, 85, 247, 0.06);
+  background: var(--purple-2-06);
 }
 
 .statusBadge {
@@ -332,12 +332,12 @@
 }
 
 .pending {
-  background: rgba(232, 199, 154, 0.15);
+  background: var(--gold-15);
   color: #e8c79a;
 }
 
 .ok {
-  background: rgba(85, 231, 209, 0.15);
+  background: var(--teal-15);
   color: #55e7d1;
 }
 
@@ -371,7 +371,7 @@
 }
 
 .countdown {
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
   color: var(--purple-light);
 }
 
@@ -438,7 +438,7 @@
 .message {
   margin: 0;
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(7, 2, 13, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.1);
   color: var(--text-secondary);
@@ -450,9 +450,9 @@
 .notes {
   margin: 0;
   padding: 8px 12px;
-  border-radius: 10px;
-  background: rgba(232, 199, 154, 0.06);
-  border: 1px solid rgba(232, 199, 154, 0.15);
+  border-radius: var(--radius-10);
+  background: var(--gold-06);
+  border: 1px solid var(--gold-15);
   color: #e8c79a;
   font-size: 0.82rem;
   line-height: 1.5;
@@ -471,7 +471,7 @@
   justify-content: center;
   gap: 5px;
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   font-family: var(--font-body);
   font-size: 0.78rem;
   font-weight: 800;
@@ -484,7 +484,7 @@
 }
 
 .actionContact {
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   border: 1px solid rgba(168, 85, 247, 0.2);
   color: var(--text-secondary);
 }
@@ -509,7 +509,7 @@
   justify-content: center;
   gap: 6px;
   padding: 14px 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 900;
@@ -549,7 +549,7 @@
 .rowMsg {
   margin: 0;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: rgba(85, 231, 209, 0.08);
   border: 1px solid rgba(85, 231, 209, 0.2);
   color: #55e7d1;
@@ -566,7 +566,7 @@
   gap: 10px;
   padding: 48px 24px;
   text-align: center;
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   background: rgba(20, 14, 34, 0.4);
   border: 1px dashed rgba(168, 85, 247, 0.2);
 }
@@ -578,7 +578,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   color: var(--purple-light);
 }
 

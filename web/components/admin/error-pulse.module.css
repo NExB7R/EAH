@@ -8,7 +8,7 @@
   gap: 12px;
   padding: 12px 14px;
   max-width: 380px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: linear-gradient(160deg, rgba(60, 10, 20, 0.95), rgba(30, 5, 10, 0.98));
   border: 1.5px solid rgba(252, 165, 165, 0.5);
   box-shadow:

@@ -33,7 +33,7 @@
   width: 76px;
   height: 76px;
   border-radius: 50%;
-  background: rgba(232, 199, 154, 0.08);
+  background: var(--gold-08);
   border: 1px solid rgba(232, 199, 154, 0.22);
 }
 
