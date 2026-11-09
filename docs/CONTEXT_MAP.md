@@ -125,7 +125,7 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (85)
+## Components (86)
 
 | File | Export | Purpose |
 |------|--------|---------|
@@ -157,6 +157,7 @@
 | `detail-cover.tsx` | DetailCover | EAH — Detail Cover (client with onError fallback) |
 | `detail-logo.tsx` | DetailLogo | — |
 | `distance-badge.tsx` | DistanceBadge | EAH — Distance Badge (v3) |
+| `empty-state.test.tsx` | — | — |
 | `empty-state.tsx` | EmptyState | Optional secondary action (e.g. "مسح الفلاتر") |
 | `explore-filters.tsx` | ExploreFilters | EAH — Explore Filters |
 | `explore-search.tsx` | ExploreSearch | EAH — Explore Search (with voice + history) |
@@ -215,7 +216,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (117)
+## Lib (118)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -293,6 +294,7 @@
 | `hooks/use-mounted.ts` | useMounted, useMediaQuery | useMounted — يعمل false على server + أول render على client |
 | `hooks/use-online-status.ts` | useOnlineStatus | EAH — Online Status Hook (2026) |
 | `hooks/use-voice-search.ts` | useVoiceSearch | EAH — Voice Search Hook (Hybrid) |
+| `launch-readiness-utils.ts` | getReadinessGrade, computeWeightedPercent | EAH — Launch Readiness Utils (pure, testable) |
 | `logging/audit.ts` | logAudit | EAH — Audit Log Helper (Admin actions) |
 | `logging/client.ts` | reportError | EAH — Client-side error reporter |
 | `logging/errors.ts` | logError, captureException | EAH — System Error Logging |
