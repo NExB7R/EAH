@@ -255,7 +255,183 @@ export async function runHealthChecks(): Promise<HealthChecksResult> {
     })
   }
 
+
+  // ─── 6. Standing System ───
+  try {
+    const { data, error } = await svc.rpc('can_interact' as never, {
+      p_user_id: '00000000-0000-0000-0000-000000000000',
+    } as never)
+    checks.push({
+      id: 'standing-system',
+      label: 'نظام الالتزام (Standing System)',
+      status: error ? 'error' : 'ok',
+      message: error ? 'RPC can_interact مش موجود أو بيفشل' : 'شغال',
+      details: error?.message,
+    })
+  } catch (e) {
+    checks.push({
+      id: 'standing-system',
+      label: 'نظام الالتزام (Standing System)',
+      status: 'error',
+      message: 'فشل فحص RPC can_interact',
+      details: e instanceof Error ? e.message : 'Unknown',
+    })
+  }
+
+  // ─── 7. Autopilot Trigger ───
+  try {
+    const { data, error } = await svc.rpc('check_trigger_status' as never, {
+      p_table: 'public.trust_events',
+      p_trigger: 'trigger_autopilot_penalties',
+    } as never)
+    if (error) {
+      checks.push({
+        id: 'autopilot-trigger',
+        label: 'Autopilot (عقوبات تلقائية)',
+        status: 'warning',
+        message: 'RPC check_trigger_status غير متاح',
+        details: error.message,
+      })
+    } else {
+      const d = data as { exists?: boolean; enabled?: boolean } | null
+      checks.push({
+        id: 'autopilot-trigger',
+        label: 'Autopilot (عقوبات تلقائية)',
+        status: d?.exists && d?.enabled ? 'ok' : 'error',
+        message: d?.exists
+          ? d?.enabled
+            ? 'trigger موجود ومفعّل'
+            : 'trigger موجود لكن معطل'
+          : 'trigger مش موجود',
+      })
+    }
+  } catch (e) {
+    checks.push({
+      id: 'autopilot-trigger',
+      label: 'Autopilot (عقوبات تلقائية)',
+      status: 'error',
+      message: 'فشل الفحص',
+      details: e instanceof Error ? e.message : 'Unknown',
+    })
+  }
+
+  // ─── 8. Points System ───
+  try {
+    const { error } = await svc.rpc('get_user_points' as never, {
+      p_user: '00000000-0000-0000-0000-000000000000',
+    } as never)
+    checks.push({
+      id: 'points-system',
+      label: 'نظام النقاط (Points System)',
+      status: error ? 'error' : 'ok',
+      message: error ? 'RPC get_user_points مش موجود' : 'شغال',
+      details: error?.message,
+    })
+  } catch (e) {
+    checks.push({
+      id: 'points-system',
+      label: 'نظام النقاط (Points System)',
+      status: 'error',
+      message: 'فشل فحص RPC',
+    })
+  }
+
+  // ─── 9. Notifications System ───
+  try {
+    const { count, error } = await svc
+      .from('notifications')
+      .select('*', { count: 'exact', head: true })
+      .limit(1)
+    checks.push({
+      id: 'notifications-system',
+      label: 'نظام الإشعارات',
+      status: error ? 'error' : 'ok',
+      message: error ? 'جدول notifications مش متاح' : 'شغال',
+      details: error ? error.message : `إجمالي إشعارات: ${count ?? 0}`,
+    })
+  } catch (e) {
+    checks.push({
+      id: 'notifications-system',
+      label: 'نظام الإشعارات',
+      status: 'error',
+      message: 'فشل الفحص',
+    })
+  }
+
+  // ─── 10. Feature Flags ───
+  try {
+    const { data, error } = await svc
+      .from('feature_flags')
+      .select('key, enabled')
+      .limit(50)
+    if (error) {
+      checks.push({
+        id: 'feature-flags',
+        label: 'Feature Flags',
+        status: 'warning',
+        message: 'جدول feature_flags غير متاح (يستخدم defaults)',
+      })
+    } else {
+      const total = data?.length ?? 0
+      const enabled = (data ?? []).filter((f) => f.enabled).length
+      checks.push({
+        id: 'feature-flags',
+        label: 'Feature Flags',
+        status: 'ok',
+        message: `${enabled}/${total} مفعلة`,
+      })
+    }
+  } catch {
+    checks.push({
+      id: 'feature-flags',
+      label: 'Feature Flags',
+      status: 'warning',
+      message: 'تعذر الفحص (يستخدم defaults)',
+    })
+  }
+
+  // ─── 11. Business Owner Uniqueness (One merchant per business) ───
+  try {
+    const { data: dupOwners, error } = await svc
+      .from('businesses')
+      .select('owner_profile_id')
+      .not('owner_profile_id', 'is', null)
+    
+    if (error) {
+      checks.push({
+        id: 'owner-uniqueness',
+        label: 'تفرد مالك النشاط',
+        status: 'warning',
+        message: 'تعذر الفحص',
+      })
+    } else {
+      const counts: Record<string, number> = {}
+      for (const b of dupOwners ?? []) {
+        const id = (b as { owner_profile_id: string }).owner_profile_id
+        counts[id] = (counts[id] ?? 0) + 1
+      }
+      const duplicates = Object.entries(counts).filter(([, n]) => n > 1)
+      checks.push({
+        id: 'owner-uniqueness',
+        label: 'تفرد مالك النشاط',
+        status: duplicates.length === 0 ? 'ok' : 'error',
+        message:
+          duplicates.length === 0
+            ? 'كل حساب مرتبط بنشاط واحد'
+            : `${duplicates.length} حساب مرتبط بأكتر من نشاط`,
+      })
+    }
+  } catch {
+    checks.push({
+      id: 'owner-uniqueness',
+      label: 'تفرد مالك النشاط',
+      status: 'warning',
+      message: 'تعذر الفحص',
+    })
+  }
+
   // ─── ملخص ───
+
   const okCount = checks.filter((c) => c.status === 'ok').length
   const warnCount = checks.filter((c) => c.status === 'warning').length
   const errCount = checks.filter((c) => c.status === 'error').length

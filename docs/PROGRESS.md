@@ -1347,3 +1347,7 @@
 - app/admin/health/health-checks.tsx: مكون UI مع زر تشغيل.
 - app/api/admin/health-checks/route.ts: API endpoint.
 - يُستخدم قبل الإطلاق وبعده للمراقبة الاستباقية.
+
+## 2026-11-09 — توسيع فحوصات النظام
+- +6 فحوصات: Standing System, Autopilot, Points RPC, Notifications, Feature Flags, Owner Uniqueness.
+- إجمالي 13 فحص (7 أساسية + 6 متقدمة).
