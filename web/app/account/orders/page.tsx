@@ -27,9 +27,10 @@ export default async function OrdersPage() {
         <EmptyState
           Icon={FileTextIcon}
           title="مفيش طلبات لسه"
-          description="لما تطلب من أي نشاط، الطلب هيظهر هنا"
+          description="لما تطلب من أي نشاط، هتلاقي تفاصيل الطلب هنا — تقدر تتابع حالته في الوقت الفعلي"
           ctaHref="/explore"
           ctaLabel="اكتشف أنشطة"
+          variant="info"
         />
       ) : (
         <OrdersList orders={orders} />

@@ -1357,3 +1357,12 @@
 - API route: POST /api/admin/health-checks/fix
 - UI: زر "🔧 إصلاح تلقائي" يظهر للفحوصات القابلة للإصلاح عند وجود مشكلة.
 - إعادة فحص تلقائية بعد الإصلاح.
+
+## 2026-11-09 — تحسين EmptyState (28 صفحة)
+- إضافة 4 variants: default (purple), warning (gold), success (teal), info (blue).
+- إضافة secondary CTA (اختياري).
+- icon glow (خلفية متوهجة) + float animation.
+- fade-in animation عند الدخول.
+- Mobile: padding أفضل، أزرار full-width، max-width 280px.
+- تحسين نصوص 3 صفحات: favorites (warning)، following (info)، orders (info).
+- backward compatible: أي EmptyState قديم شغال زي ما هو.

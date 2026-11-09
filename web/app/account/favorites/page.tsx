@@ -20,9 +20,10 @@ export default async function FavoritesPage() {
         <EmptyState
           Icon={CrownGoldIcon}
           title="مفيش أنشطة محفوظة لسه"
-          description="ابدأ تكتشف الأنشطة واحفظ اللي يعجبك"
+          description="احفظ الأنشطة اللي بتحبها عشان ترجعلها بسرعة — اضغط قلب في أي نشاط"
           ctaHref="/explore"
           ctaLabel="اكتشف أنشطة"
+          variant="warning"
         />
       ) : (
         <div className={styles.grid}>

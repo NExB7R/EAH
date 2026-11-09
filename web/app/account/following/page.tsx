@@ -20,9 +20,10 @@ export default async function FollowingPage() {
         <EmptyState
           Icon={StoreIcon}
           title="مفيش متابعات لسه"
-          description="تابع الأنشطة اللي بتحبها وهتوصلك أخبارهم"
+          description="تابع الأنشطة اللي بتحبها — أول ما ينزل عرض أو إعلان جديد هيوصلك إشعار"
           ctaHref="/explore"
           ctaLabel="اكتشف أنشطة"
+          variant="info"
         />
       ) : (
         <div className={styles.grid}>

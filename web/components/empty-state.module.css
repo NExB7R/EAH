@@ -1,60 +1,255 @@
+/* ═══════════════════════════════════════════════════════════
+   EAH — Empty State (2026-11-09)
+   28 pages share this component. Variants: default, warning,
+   success, info. Always backward compatible.
+   ═══════════════════════════════════════════════════════════ */
+
 .wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 60px 20px;
+  gap: 12px;
+  padding: 56px 24px;
   text-align: center;
   border-radius: var(--radius-20);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.4), rgba(10, 7, 20, 0.6));
   border: 1px dashed var(--purple-2-22);
+  animation: emptyFadeIn 320ms var(--ease-out);
 }
+
+@keyframes emptyFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Variants (border tint) ─── */
+.wrap-warning {
+  border-color: var(--gold-30);
+  background: linear-gradient(160deg, rgba(232, 199, 154, 0.04), rgba(10, 7, 20, 0.6));
+}
+
+.wrap-success {
+  border-color: var(--teal-30);
+  background: linear-gradient(160deg, rgba(85, 231, 209, 0.04), rgba(10, 7, 20, 0.6));
+}
+
+.wrap-info {
+  border-color: rgba(110, 168, 255, 0.3);
+  background: linear-gradient(160deg, rgba(110, 168, 255, 0.04), rgba(10, 7, 20, 0.6));
+}
+
+/* ─── Icon ─── */
 .icon {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
   background: var(--purple-2-08);
   border: 1px solid var(--purple-2-25);
   color: var(--purple-light);
-  opacity: 0.85;
+  animation: iconFloat 3s ease-in-out infinite;
 }
+
+.icon-glow {
+  display: none;
+}
+
+.iconGlow {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--purple-2-25), transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+.icon-warning {
+  background: var(--gold-08);
+  border-color: var(--gold-30);
+  color: var(--gold-light, #f5d9a7);
+}
+
+.icon-warning + .iconGlow,
+.icon-warning .iconGlow {
+  background: radial-gradient(circle, var(--gold-25), transparent 70%);
+}
+
+.icon-success {
+  background: var(--teal-10);
+  border-color: var(--teal-30);
+  color: #55e7d1;
+}
+
+.icon-success .iconGlow {
+  background: radial-gradient(circle, var(--teal-20), transparent 70%);
+}
+
+.icon-info {
+  background: rgba(110, 168, 255, 0.1);
+  border-color: rgba(110, 168, 255, 0.3);
+  color: #7eb3ff;
+}
+
+.icon-info .iconGlow {
+  background: radial-gradient(circle, rgba(110, 168, 255, 0.2), transparent 70%);
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ─── Text ─── */
 .title {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 900;
   color: var(--text-primary);
   margin: 8px 0 0;
+  line-height: 1.4;
 }
+
 .desc {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-tertiary);
-  max-width: 320px;
-  line-height: 1.6;
+  max-width: 360px;
+  line-height: 1.7;
 }
+
+/* ─── Actions ─── */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
 .cta {
-  margin-top: 8px;
-  padding: 10px 22px;
-  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 24px;
+  border-radius: var(--radius-full);
   font-family: var(--font-body);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 900;
   color: var(--bg-base);
   background: linear-gradient(135deg, var(--purple-light), var(--purple-primary));
   text-decoration: none;
-  box-shadow: 0 0 18px rgba(168, 85, 247, 0.4);
-  transition: transform 180ms var(--ease);
+  box-shadow: 0 4px 18px rgba(168, 85, 247, 0.35);
+  transition: transform 180ms var(--ease), box-shadow 180ms var(--ease);
 }
+
 .cta:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(168, 85, 247, 0.5);
 }
+
+.cta-warning {
+  background: linear-gradient(135deg, #f5d9a7, #e8c79a);
+  color: #1a0f05;
+  box-shadow: 0 4px 18px rgba(232, 199, 154, 0.35);
+}
+
+.cta-warning:hover {
+  box-shadow: 0 6px 24px rgba(232, 199, 154, 0.5);
+}
+
+.cta-success {
+  background: linear-gradient(135deg, #55e7d1, #2bb8a4);
+  color: #0a1414;
+  box-shadow: 0 4px 18px rgba(85, 231, 209, 0.35);
+}
+
+.cta-success:hover {
+  box-shadow: 0 6px 24px rgba(85, 231, 209, 0.5);
+}
+
+.cta-info {
+  background: linear-gradient(135deg, #7eb3ff, #5588e5);
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(110, 168, 255, 0.35);
+}
+
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--purple-2-25);
+  text-decoration: none;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.ctaSecondary:hover {
+  border-color: var(--purple-2-50);
+  color: var(--purple-light);
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+  .wrap {
+    padding: 40px 16px;
+    gap: 10px;
+    border-radius: var(--radius-16);
+  }
+
+  .icon {
+    width: 72px;
+    height: 72px;
+  }
+
+  .title {
+    font-size: 1.05rem;
+  }
+
+  .desc {
+    font-size: 0.8rem;
+    max-width: 280px;
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .cta,
+  .ctaSecondary {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+/* ─── Reduced motion ─── */
 @media (prefers-reduced-motion: reduce) {
+  .wrap {
+    animation: none;
+  }
+  .icon {
+    animation: none;
+  }
   .cta {
     transition: none;
+  }
+  .cta:hover {
+    transform: none;
   }
 }
