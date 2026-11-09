@@ -602,3 +602,9 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
   1. Run `\d public.<table>` أو استعلام `information_schema.columns`.
   2. تأكد إن كل عمود في INSERT موجود.
   3. جرّب في `BEGIN; ... ROLLBACK;` أولاً.
+
+## 2026-11-09 — phone/whatsapp كانوا ممكن يتخزنوا بـ is_public = true
+- **المشكلة:** جدول `business_contact_methods` كان يسمح بـ `method_type = 'phone' OR 'whatsapp'` مع `is_public = true`.
+- **التأثير:** 4 أرقام test على QA business ظهرت كـ LEAK في verify-launch.sql.
+- **الإصلاح:** Migration `2026-11-09-enforce-contact-privacy.sql` (CHECK + trigger).
+- **الدرس:** أي حقل حساس (phone, whatsapp, email) لازم يكون عليه CHECK constraint، مش بس فلترة في الكود.

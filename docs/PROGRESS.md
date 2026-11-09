@@ -1402,3 +1402,8 @@
 - icon-512.png: ضغط (176KB → أصغر) عبر ImageMagick (لو متاح).
 - next.config.ts: إزالة unsplash/fbcdn من remotePatterns (كانت للـ demo).
 - TODO: صور demo في DB محتاجة مسح قبل الإطلاق (cleanup.sql).
+
+## 2026-11-09 — إغلاق ثغرتين في Launch Verification
+- #11 Contact privacy: Migration جديدة (CHECK + trigger) تمنع phone/whatsapp من is_public=true نهائيًا.
+- #8 customer1 reviews: كانت pending، تمت الموافقة عليها (approved) عبر SQL.
+- **النتيجة المتوقعة:** 16/16 ✅ (لا LEAK، لا LOW).
