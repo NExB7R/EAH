@@ -126,7 +126,7 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (86)
+## Components (87)
 
 | File | Export | Purpose |
 |------|--------|---------|
@@ -208,6 +208,7 @@
 | `support-widget.tsx` | SupportWidget | EAH — Support Widget (Inline — للـ /help) |
 | `sw-register.tsx` | SwRegister | EAH — Service Worker Registration + Queue Flusher |
 | `trending-row.tsx` | TrendingRow | EAH — Trending Row (Home) |
+| `trust-bar.tsx` | TrustBar | EAH — Trust Bar (2026-11-09) |
 | `trust-card.tsx` | TrustCard | EAH — Participation Points (not a reputation or verification score) |
 | `ui/command-palette.tsx` | CommandPalette | EAH — Command Palette (⌘K / Ctrl+K) |
 | `ui/confirm-modal.tsx` | ConfirmModal | EAH — Confirm Modal (reusable) |
