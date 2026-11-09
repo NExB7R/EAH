@@ -1284,3 +1284,12 @@
 - تحويل عرض 00:00-23:59 إلى "24 ساعة" تلقائيًا (أنضف للعرض).
 - Gallery: إضافة zoom icon عند hover (وفي mobile overlay subtle gradient).
 - إضافة aria-label للـ Gallery buttons للـ accessibility.
+
+## 2026-11-08 — تحسين Branch Cards
+- تمييز بصري للفرع الرئيسي: خلفية gold gradient + إطار gold + أيقونة ذهبية + badge "رئيسي" بلون بارز.
+- تمييز الفرع الأقرب: خلفية teal + إطار teal (لو مش رئيسي في نفس الوقت).
+- المسافة (كم): badge أكبر وأوضح (padding 3px 8px، font 0.68rem).
+- Address + Area: دمج في سطر واحد مع فاصل "·" (إزالة التكرار لو مش مختلفين).
+- Hover: تأثير بسيط على كل فرع (lift خفيف).
+- Mobile: padding 12px، أيقونة أصغر (32px)، font أنسب.
+- 380px-: head بتتحول لعمود (المسافة تحت الاسم بدل جانبها).
