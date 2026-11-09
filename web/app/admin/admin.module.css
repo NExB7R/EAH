@@ -41,7 +41,7 @@
   max-height: 1040px;
   padding: 18px 12px 12px;
   border: 1px solid var(--admin-border);
-  border-radius: var(--radius-20);
+  border-radius: 20px;
   background: linear-gradient(180deg, rgba(25, 14, 42, 0.98), rgba(12, 6, 23, 0.99));
   box-shadow:
     0 16px 42px rgba(0, 0, 0, 0.36),
@@ -129,7 +129,7 @@
   min-width: 0;
   padding: clamp(18px, 2vw, 30px);
   border: 1px solid var(--admin-border);
-  border-radius: var(--radius-20);
+  border-radius: 20px;
   background: var(--surface-gradient-strong);
   box-shadow:
     0 18px 44px rgba(0, 0, 0, 0.28),
@@ -156,7 +156,7 @@
 
   .content {
     padding: 18px;
-    border-radius: var(--radius-16);
+    border-radius: 16px;
   }
 }
 
@@ -177,7 +177,7 @@
   left: 8px;
   z-index: 9999;
   padding: 10px 18px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: var(--purple-primary);
   color: rgb(255, 255, 255);
   font-family: var(--font-body);

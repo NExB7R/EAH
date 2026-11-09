@@ -8,9 +8,9 @@
   justify-content: space-between;
   gap: 12px;
   padding: 10px 14px;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: rgba(85, 231, 209, 0.05);
-  border: 1px dashed var(--teal-32);
+  border: 1px dashed rgba(85, 231, 209, 0.32);
   margin-bottom: 12px;
 }
 
@@ -28,7 +28,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: var(--teal-12);
+  background: rgba(85, 231, 209, 0.12);
   border: 1px solid rgba(85, 231, 209, 0.35);
   color: #7c3aed;
   flex-shrink: 0;

@@ -26,8 +26,8 @@
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 0%, var(--purple-2-22), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 20% 100%, var(--gold-08), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(168, 85, 247, 0.22), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 20% 100%, rgba(232, 199, 154, 0.08), transparent 60%),
     radial-gradient(ellipse 60% 40% at 80% 100%, rgba(157, 78, 221, 0.12), transparent 60%);
 }
 
@@ -68,7 +68,7 @@
   font-size: 0.72rem;
   font-weight: 800;
   color: var(--gold-light);
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), var(--purple-2-08));
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), rgba(168, 85, 247, 0.08));
   border: 1px solid rgba(232, 199, 154, 0.32);
 }
 
@@ -246,7 +246,7 @@
   width: 56px;
   height: 56px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.18), var(--purple-2-12));
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.18), rgba(168, 85, 247, 0.12));
   border: 1px solid rgba(232, 199, 154, 0.35);
   color: var(--gold-light);
   margin-bottom: 14px;
@@ -439,8 +439,8 @@
 .palestine {
   position: relative;
   padding: 48px 24px;
-  border-radius: var(--radius-22);
-  background: linear-gradient(160deg, rgba(85, 231, 209, 0.08), var(--purple-2-06));
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(85, 231, 209, 0.08), rgba(168, 85, 247, 0.06));
   border: 1.5px solid rgba(85, 231, 209, 0.3);
   overflow: hidden;
   isolation: isolate;
@@ -453,7 +453,7 @@
   pointer-events: none;
   background: radial-gradient(
     ellipse 60% 70% at 50% 50%,
-    var(--teal-15),
+    rgba(85, 231, 209, 0.15),
     transparent 70%
   );
 }
@@ -494,7 +494,7 @@
 .cta {
   position: relative;
   padding: 56px 24px;
-  border-radius: var(--radius-22);
+  border-radius: 22px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.75), rgba(10, 7, 20, 0.9));
   border: 1.5px solid rgba(232, 199, 154, 0.32);
   overflow: hidden;
@@ -513,7 +513,7 @@
   pointer-events: none;
   background:
     radial-gradient(ellipse 60% 70% at 50% 50%, rgba(232, 199, 154, 0.14), transparent 70%),
-    radial-gradient(ellipse 60% 70% at 30% 80%, var(--purple-2-12), transparent 70%);
+    radial-gradient(ellipse 60% 70% at 30% 80%, rgba(168, 85, 247, 0.12), transparent 70%);
 }
 
 .ctaTitle {
@@ -609,7 +609,7 @@
 .btnGhost:hover {
   color: var(--text-primary);
   border-color: rgba(168, 85, 247, 0.6);
-  background: var(--purple-2-06);
+  background: rgba(168, 85, 247, 0.06);
 }
 
 /* ─── Mobile ─── */
@@ -631,7 +631,7 @@
   .palestine,
   .cta {
     padding: 36px 18px;
-    border-radius: var(--radius-18);
+    border-radius: 18px;
   }
 }
 

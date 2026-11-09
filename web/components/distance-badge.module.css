@@ -18,7 +18,7 @@
 }
 
 .here {
-  background: linear-gradient(135deg, var(--teal-15), rgba(85, 231, 209, 0.05));
+  background: linear-gradient(135deg, rgba(85, 231, 209, 0.15), rgba(85, 231, 209, 0.05));
   border-color: rgba(85, 231, 209, 0.4);
   color: #a8f0d8;
 }

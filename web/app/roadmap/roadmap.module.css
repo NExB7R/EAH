@@ -166,7 +166,7 @@
 }
 
 .done {
-  background: var(--teal-12);
+  background: rgba(85, 231, 209, 0.12);
   border: 1px solid var(--teal);
   color: var(--teal);
 }

@@ -25,7 +25,7 @@
   width: 100%;
   max-width: 560px;
   max-height: 70vh;
-  border-radius: var(--radius-16);
+  border-radius: 16px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
   border: 1.5px solid rgba(168, 85, 247, 0.35);
   box-shadow:
@@ -54,7 +54,7 @@
   gap: 10px;
   padding: 0 16px;
   height: 56px;
-  border-bottom: 1px solid var(--purple-2-15);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.15);
   flex-shrink: 0;
 }
 
@@ -130,7 +130,7 @@
   gap: 12px;
   width: 100%;
   padding: 10px 12px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: transparent;
   border: 1px solid transparent;
   cursor: pointer;
@@ -153,7 +153,7 @@
   width: 32px;
   height: 32px;
   border-radius: 9px;
-  background: var(--purple-2-12);
+  background: rgba(168, 85, 247, 0.12);
   color: var(--purple-light);
   flex-shrink: 0;
 }
@@ -186,8 +186,8 @@
 .itemGroup {
   padding: 3px 8px;
   border-radius: 999px;
-  background: var(--purple-2-08);
-  border: 1px solid var(--purple-2-15);
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.15);
   color: var(--text-tertiary);
   font-size: 0.62rem;
   font-weight: 800;
@@ -199,7 +199,7 @@
   align-items: center;
   gap: 14px;
   padding: 10px 16px;
-  border-top: 1px solid var(--purple-2-12);
+  border-top: 1px solid rgba(168, 85, 247, 0.12);
   background: rgba(10, 7, 20, 0.5);
   font-size: 0.68rem;
   color: var(--text-muted);
@@ -222,8 +222,8 @@
   height: 20px;
   padding: 0 5px;
   border-radius: 5px;
-  background: var(--purple-2-12);
-  border: 1px solid var(--purple-2-25);
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.25);
   color: var(--purple-light);
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.62rem;

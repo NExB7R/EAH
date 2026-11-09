@@ -20,9 +20,9 @@
   padding: 40px 28px;
   text-align: center;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.9), rgba(10, 7, 20, 0.95));
-  border: 1px solid var(--purple-2-25);
+  border: 1px solid rgba(168, 85, 247, 0.25);
   border-radius: 24px;
-  box-shadow: 0 0 40px var(--purple-2-15);
+  box-shadow: 0 0 40px rgba(168, 85, 247, 0.15);
 }
 
 .iconWrap {
@@ -89,14 +89,14 @@
 }
 
 .secondary {
-  background: var(--purple-2-08);
-  border: 1px solid var(--purple-2-25);
+  background: rgba(168, 85, 247, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.25);
   color: var(--purple-light);
 }
 
 .secondary:hover {
   border-color: var(--purple-neon);
-  background: var(--purple-2-15);
+  background: rgba(168, 85, 247, 0.15);
 }
 
 .tip {

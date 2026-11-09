@@ -12,7 +12,7 @@
 .codeGlow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 80% at 50% 0%, var(--purple-2-15), transparent 70%);
+  background: radial-gradient(ellipse 60% 80% at 50% 0%, rgba(168, 85, 247, 0.15), transparent 70%);
   pointer-events: none;
 }
 
@@ -32,7 +32,7 @@
   margin-bottom: 20px;
   border: 2px dashed var(--purple-line);
   border-radius: var(--radius-md);
-  background: var(--purple-2-06);
+  background: rgba(168, 85, 247, 0.06);
 }
 
 .code {
@@ -221,7 +221,7 @@
 
 .statCard {
   padding: 14px 10px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(232, 199, 154, 0.05);
   border: 1px solid rgba(232, 199, 154, 0.18);
   text-align: center;
@@ -260,16 +260,16 @@
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(168, 85, 247, 0.04);
-  border: 1px solid var(--purple-2-12);
+  border: 1px solid rgba(168, 85, 247, 0.12);
 }
 
 .friendAvatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--purple-2-12);
+  background: rgba(168, 85, 247, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;

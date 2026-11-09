@@ -33,7 +33,7 @@
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.96), rgba(10, 7, 20, 0.98));
   border: 1px solid rgba(232, 199, 154, 0.35);
   box-shadow:
-    0 0 0 1px var(--gold-08),
+    0 0 0 1px rgba(232, 199, 154, 0.08),
     0 8px 32px rgba(0, 0, 0, 0.55),
     0 0 40px rgba(232, 199, 154, 0.12);
 }
@@ -67,7 +67,7 @@
   width: 40px;
   height: 40px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--gold-25), var(--purple-2-15));
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.25), rgba(168, 85, 247, 0.15));
   border: 1px solid rgba(232, 199, 154, 0.4);
   color: var(--gold-light);
   flex-shrink: 0;

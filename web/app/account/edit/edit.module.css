@@ -15,7 +15,7 @@
   flex-direction: column;
   gap: 18px;
   padding: 24px;
-  border-radius: var(--radius-20);
+  border-radius: 20px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.8));
   border: 1px solid rgba(168, 85, 247, 0.18);
 }
@@ -25,7 +25,7 @@
   flex-direction: column;
   gap: 4px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--purple-2-12);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.12);
 }
 
 .cardTitle {
@@ -154,9 +154,9 @@
 .input,
 .textarea {
   padding: 12px 14px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(10, 7, 20, 0.6);
-  border: 1px solid var(--purple-2-22);
+  border: 1px solid rgba(168, 85, 247, 0.22);
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 0.88rem;
@@ -176,7 +176,7 @@
 .input:focus,
 .textarea:focus {
   border-color: var(--purple-light);
-  box-shadow: 0 0 0 3px var(--purple-2-15);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
 }
 
 .counter {
@@ -199,9 +199,9 @@
 .radio {
   flex: 1;
   padding: 10px 14px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(10, 7, 20, 0.5);
-  border: 1px solid var(--purple-2-22);
+  border: 1px solid rgba(168, 85, 247, 0.22);
   color: var(--text-secondary);
   font-family: var(--font-body);
   font-size: 0.82rem;
@@ -229,7 +229,7 @@
   flex-direction: column;
   gap: 3px;
   padding: 12px 14px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(10, 7, 20, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.18);
   text-align: start;
@@ -279,7 +279,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 14px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(10, 7, 20, 0.4);
   border: 1px solid rgba(168, 85, 247, 0.14);
   text-align: start;
@@ -321,8 +321,8 @@
   width: 44px;
   height: 24px;
   border-radius: 999px;
-  background: var(--purple-2-15);
-  border: 1px solid var(--purple-2-25);
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.25);
   transition: all 220ms var(--ease);
 }
 
@@ -389,7 +389,7 @@
 @media (max-width: 640px) {
   .card {
     padding: 18px;
-    border-radius: var(--radius-16);
+    border-radius: 16px;
   }
 
   .avatarRow {

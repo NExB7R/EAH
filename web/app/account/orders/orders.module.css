@@ -46,7 +46,7 @@
 }
 
 .ok {
-  background: var(--teal-12);
+  background: rgba(85, 231, 209, 0.12);
   border-color: var(--teal);
   color: var(--teal);
 }
@@ -241,7 +241,7 @@
 .searchInput {
   width: 100%;
   padding: 12px 44px 12px 44px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   border: 1px solid var(--purple-line);
   background: rgba(7, 2, 13, 0.6);
   color: var(--text-primary);
@@ -263,7 +263,7 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   background: var(--purple-soft);
   border: none;
   color: var(--text-secondary);
@@ -330,7 +330,7 @@
 .emptyFilter {
   padding: 32px 20px;
   text-align: center;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: rgba(20, 14, 34, 0.4);
   border: 1px dashed var(--purple-line);
 }
@@ -360,7 +360,7 @@
   flex-direction: column;
   gap: 4px;
   padding: 10px 12px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(252, 165, 165, 0.06);
   border: 1px solid rgba(252, 165, 165, 0.2);
   color: var(--red);
@@ -406,9 +406,9 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  border-radius: var(--radius-10);
-  background: var(--gold-08);
-  border: 1px solid var(--gold-25);
+  border-radius: 10px;
+  background: rgba(232, 199, 154, 0.08);
+  border: 1px solid rgba(232, 199, 154, 0.25);
   font-size: 0.78rem;
   font-weight: 700;
   color: var(--gold-light);
@@ -424,7 +424,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(85, 231, 209, 0.08);
   border: 1px solid rgba(85, 231, 209, 0.25);
   color: #55e7d1;

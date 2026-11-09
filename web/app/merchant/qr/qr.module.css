@@ -98,9 +98,9 @@
 .qrUrl {
   margin: 8px auto 0;
   padding: 8px 12px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   background: rgba(7, 2, 13, 0.5);
-  border: 1px solid var(--purple-2-15);
+  border: 1px solid rgba(168, 85, 247, 0.15);
   color: var(--text-muted);
   font-family: var(--font-mono, monospace);
   font-size: 0.72rem;
@@ -137,12 +137,12 @@
   align-items: center;
   gap: 6px;
   padding: 10px 16px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   font-family: var(--font-body);
   font-size: 0.8rem;
   font-weight: 800;
   color: var(--text-secondary);
-  background: var(--purple-2-06);
+  background: rgba(168, 85, 247, 0.06);
   border: 1px solid rgba(168, 85, 247, 0.2);
   cursor: pointer;
   min-height: 40px;
@@ -171,5 +171,5 @@
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
 }

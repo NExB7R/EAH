@@ -3,19 +3,19 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   font-family: var(--font-body);
   font-size: 0.78rem;
   font-weight: 800;
   color: var(--purple-light);
-  background: var(--purple-2-12);
+  background: rgba(168, 85, 247, 0.12);
   border: 1px solid rgba(168, 85, 247, 0.3);
   cursor: pointer;
   transition: background 160ms ease;
 }
 
 .btn:hover:not(:disabled) {
-  background: var(--purple-2-22);
+  background: rgba(168, 85, 247, 0.22);
 }
 
 .btn:disabled {

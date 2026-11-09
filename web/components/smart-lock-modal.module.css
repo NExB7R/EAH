@@ -29,8 +29,8 @@
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.98));
   border: 1.5px solid rgba(232, 199, 154, 0.35);
   box-shadow:
-    0 0 0 1px var(--gold-08),
-    0 0 60px var(--gold-15),
+    0 0 0 1px rgba(232, 199, 154, 0.08),
+    0 0 60px rgba(232, 199, 154, 0.15),
     0 20px 60px rgba(0, 0, 0, 0.6);
   z-index: 101;
   display: flex;
@@ -76,7 +76,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: var(--purple-2-08);
+  background: rgba(168, 85, 247, 0.08);
   border: 1px solid rgba(168, 85, 247, 0.2);
   color: var(--text-secondary);
   display: inline-flex;
@@ -89,7 +89,7 @@
 .close:hover {
   color: var(--purple-light);
   border-color: var(--purple-light);
-  background: var(--purple-2-12);
+  background: rgba(168, 85, 247, 0.12);
 }
 
 .icon {
@@ -151,9 +151,9 @@
   margin: 8px 0 4px;
   padding: 14px 16px;
   width: 100%;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: rgba(232, 199, 154, 0.04);
-  border: 1px dashed var(--gold-25);
+  border: 1px dashed rgba(232, 199, 154, 0.25);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -213,14 +213,14 @@
   font-weight: 800;
   color: var(--text-secondary);
   background: transparent;
-  border: 1px solid var(--purple-2-25);
+  border: 1px solid rgba(168, 85, 247, 0.25);
   cursor: pointer;
   transition: all 160ms var(--ease);
 }
 .ghost:hover {
   color: var(--purple-light);
   border-color: var(--purple-light);
-  background: var(--purple-2-06);
+  background: rgba(168, 85, 247, 0.06);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1326,8 +1326,3 @@
 - menu-drawer.module.css
 - floating-capsule.module.css
 - explore/explore.module.css
-
-## 2026-11-09 — تطبيق شامل للـ Design Tokens على 138 ملف
-- 1159 تحويل (purple/gold/teal opacity + radius).
-- الهدف: توحيد كل القيم في مكان واحد (globals.css).
-- ملاحظة: commit كبير لأول مرة، لكن متسق. الـ rollback سهل.

@@ -7,8 +7,8 @@
 
 .card {
   padding: 16px;
-  border-radius: var(--radius-14);
-  background: var(--purple-2-06);
+  border-radius: 14px;
+  background: rgba(168, 85, 247, 0.06);
   border: 1px solid rgba(168, 85, 247, 0.18);
 }
 
@@ -61,9 +61,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(168, 85, 247, 0.04);
-  border: 1px solid var(--purple-2-12);
+  border: 1px solid rgba(168, 85, 247, 0.12);
 }
 
 .pathCode {
@@ -90,9 +90,9 @@
 
 .errorItem {
   padding: 12px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(168, 85, 247, 0.04);
-  border: 1px solid var(--purple-2-15);
+  border: 1px solid rgba(168, 85, 247, 0.15);
   border-inline-start-width: 3px;
 }
 
@@ -122,7 +122,7 @@
   font-weight: 800;
   padding: 2px 8px;
   border-radius: 999px;
-  background: var(--purple-2-12);
+  background: rgba(168, 85, 247, 0.12);
   color: var(--text-primary);
 }
 
@@ -175,9 +175,9 @@
   display: flex;
   gap: 4px;
   padding: 4px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(10, 5, 20, 0.5);
-  border: 1px solid var(--purple-2-12);
+  border: 1px solid rgba(168, 85, 247, 0.12);
 }
 
 .filterTab {
@@ -192,12 +192,12 @@
 }
 
 .filterTab:hover {
-  background: var(--purple-2-08);
+  background: rgba(168, 85, 247, 0.08);
   color: var(--text-primary);
 }
 
 .filterTabActive {
-  background: linear-gradient(135deg, rgba(199, 125, 255, 0.25), var(--purple-2-12));
+  background: linear-gradient(135deg, rgba(199, 125, 255, 0.25), rgba(168, 85, 247, 0.12));
   color: var(--purple-light);
 }
 
@@ -210,7 +210,7 @@
   min-width: 220px;
   flex: 1;
   max-width: 400px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(20, 14, 34, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.18);
 }
@@ -323,7 +323,7 @@
 .metadata {
   margin-top: 8px;
   padding: 10px 12px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(168, 85, 247, 0.1);
   color: var(--text-secondary);
@@ -351,7 +351,7 @@
   gap: 4px;
   margin-bottom: 16px;
   padding-bottom: 4px;
-  border-bottom: 1px solid var(--purple-2-12);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.12);
 }
 
 .tab {
@@ -359,7 +359,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 18px;
-  border-radius: var(--radius-10) 10px 0 0;
+  border-radius: 10px 10px 0 0;
   font-size: 0.85rem;
   font-weight: 800;
   color: var(--text-muted);
@@ -375,7 +375,7 @@
 }
 
 .tab:hover {
-  background: var(--purple-2-06);
+  background: rgba(168, 85, 247, 0.06);
   color: var(--text-secondary);
 }
 

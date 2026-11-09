@@ -30,7 +30,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(20, 14, 34, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.14);
   text-decoration: none;
@@ -100,16 +100,16 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   font-size: 0.78rem;
   font-weight: 800;
   color: var(--text-secondary);
-  background: var(--purple-2-06);
+  background: rgba(168, 85, 247, 0.06);
   text-decoration: none;
 }
 
 .backLink:hover {
-  background: var(--purple-2-12);
+  background: rgba(168, 85, 247, 0.12);
 }
 
 /* ═══ EAH Mobile Hardening (≤640px) ═══ */

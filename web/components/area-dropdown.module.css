@@ -71,7 +71,7 @@
   border-radius: var(--radius-base);
   box-shadow:
     0 12px 32px rgba(0, 0, 0, 0.5),
-    0 0 24px var(--purple-2-12);
+    0 0 24px rgba(168, 85, 247, 0.12);
   z-index: 20;
   animation: dropIn 180ms var(--ease-out);
 }

@@ -1,6 +1,6 @@
 .wrap {
   padding: 16px;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.8));
   border: 1px solid rgba(168, 85, 247, 0.18);
 }
@@ -11,7 +11,7 @@
   gap: 8px;
   margin-bottom: 12px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--purple-2-12);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.12);
   color: var(--text-secondary);
 }
 
@@ -136,9 +136,9 @@
   border-radius: 6px;
   background: linear-gradient(
     90deg,
-    var(--purple-2-08) 25%,
-    var(--purple-2-15) 50%,
-    var(--purple-2-08) 75%
+    rgba(168, 85, 247, 0.08) 25%,
+    rgba(168, 85, 247, 0.15) 50%,
+    rgba(168, 85, 247, 0.08) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.4s infinite;

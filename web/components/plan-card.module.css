@@ -8,9 +8,9 @@
   flex-direction: column;
   gap: 16px;
   padding: 28px 22px 22px;
-  border-radius: var(--radius-22);
+  border-radius: 22px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.9));
-  border: 1.5px solid var(--purple-2-22);
+  border: 1.5px solid rgba(168, 85, 247, 0.22);
   transition: all 240ms var(--ease);
 }
 
@@ -24,14 +24,14 @@
   border-color: rgba(232, 199, 154, 0.5);
   box-shadow:
     0 0 0 1px rgba(232, 199, 154, 0.12),
-    0 0 40px var(--gold-15);
+    0 0 40px rgba(232, 199, 154, 0.15);
 }
 
 .featured:hover {
   border-color: rgba(232, 199, 154, 0.8);
   box-shadow:
     0 0 0 1px rgba(232, 199, 154, 0.2),
-    0 0 50px var(--gold-25);
+    0 0 50px rgba(232, 199, 154, 0.25);
 }
 
 .ribbon {
@@ -144,7 +144,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border-top: 1px solid var(--purple-2-12);
+  border-top: 1px solid rgba(168, 85, 247, 0.12);
 }
 
 .feature {
@@ -222,7 +222,7 @@
   content: '';
   position: absolute;
   inset: -1px;
-  border-radius: var(--radius-22);
+  border-radius: 22px;
   padding: 1.5px;
   background: linear-gradient(
     135deg,
@@ -241,12 +241,12 @@
 .free:hover {
   border-color: rgba(85, 231, 209, 0.7);
   box-shadow:
-    0 0 0 1px var(--teal-15),
+    0 0 0 1px rgba(85, 231, 209, 0.15),
     0 0 40px rgba(85, 231, 209, 0.2);
 }
 
 .free .icon {
-  background: var(--teal-12);
+  background: rgba(85, 231, 209, 0.12);
   border-color: rgba(85, 231, 209, 0.45);
   color: #55e7d1;
 }
@@ -347,8 +347,8 @@
 .extraAI {
   color: var(--gold-light);
   padding: 6px 10px;
-  border-radius: var(--radius-8);
-  background: var(--gold-06);
+  border-radius: 8px;
+  background: rgba(232, 199, 154, 0.06);
   border: 1px dashed rgba(232, 199, 154, 0.35);
 }
 

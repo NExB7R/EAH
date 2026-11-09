@@ -74,8 +74,8 @@
   font-size: 0.72rem;
   font-weight: 800;
   color: var(--text-secondary);
-  background: var(--gold-06);
-  border: 1px solid var(--gold-25);
+  background: rgba(232, 199, 154, 0.06);
+  border: 1px solid rgba(232, 199, 154, 0.25);
 }
 
 .pill svg {
@@ -108,7 +108,7 @@
   display: flex;
   gap: 16px;
   padding: 22px 24px;
-  border-radius: var(--radius-20);
+  border-radius: 20px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
   border: 1px dashed rgba(232, 199, 154, 0.35);
 }

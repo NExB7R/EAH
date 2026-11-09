@@ -5,7 +5,7 @@
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   background: transparent;
   border: 1px solid rgba(252, 165, 165, 0.2);
   color: var(--text-tertiary);
@@ -43,7 +43,7 @@
   width: 100%;
   max-width: 420px;
   padding: 20px;
-  border-radius: var(--radius-16);
+  border-radius: 16px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.98));
   border: 1px solid rgba(168, 85, 247, 0.28);
 }
@@ -94,9 +94,9 @@
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(168, 85, 247, 0.04);
-  border: 1px solid var(--purple-2-15);
+  border: 1px solid rgba(168, 85, 247, 0.15);
   cursor: pointer;
   transition: all 180ms ease;
   font-size: 0.82rem;
@@ -104,7 +104,7 @@
 }
 
 .reasonItem:hover {
-  background: var(--purple-2-08);
+  background: rgba(168, 85, 247, 0.08);
   border-color: rgba(168, 85, 247, 0.3);
 }
 
@@ -115,7 +115,7 @@
 
 .note {
   padding: 10px 12px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(7, 2, 13, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.2);
   color: var(--text-primary);
@@ -132,7 +132,7 @@
 
 .error {
   padding: 8px 12px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   background: rgba(252, 165, 165, 0.1);
   border: 1px solid rgba(252, 165, 165, 0.3);
   color: #ffc8c8;
@@ -142,7 +142,7 @@
 
 .submitBtn {
   padding: 10px 14px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(252, 165, 165, 0.15);
   border: 1px solid rgba(252, 165, 165, 0.4);
   color: #ffc8c8;

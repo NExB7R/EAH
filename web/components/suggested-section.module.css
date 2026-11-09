@@ -12,7 +12,7 @@
   width: min(100%, 1240px);
   margin: 0 auto;
   padding: 22px 20px 24px;
-  border-radius: var(--radius-22);
+  border-radius: 22px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.82));
   border: 1.5px solid rgba(224, 184, 255, 0.32);
   box-shadow:
@@ -134,7 +134,7 @@
   }
   .frame {
     padding: 18px 14px 20px;
-    border-radius: var(--radius-18);
+    border-radius: 18px;
   }
   .bigIcon {
     width: 60px;

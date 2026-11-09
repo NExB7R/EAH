@@ -3,7 +3,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 18px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 800;
@@ -32,7 +32,7 @@
 .modal {
   width: 100%;
   max-width: 440px;
-  border-radius: var(--radius-16);
+  border-radius: 16px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
   border: 1px solid rgba(168, 85, 247, 0.3);
   color: var(--text-primary);
@@ -44,7 +44,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 14px 18px;
-  border-bottom: 1px solid var(--purple-2-12);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.12);
 }
 
 .title {
@@ -60,9 +60,9 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   background: rgba(168, 85, 247, 0.1);
-  border: 1px solid var(--purple-2-25);
+  border: 1px solid rgba(168, 85, 247, 0.25);
   color: var(--text-secondary);
   cursor: pointer;
 }
@@ -89,7 +89,7 @@
 .input {
   width: 100%;
   padding: 10px 12px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   border: 1px solid rgba(168, 85, 247, 0.2);
   background: rgba(7, 2, 13, 0.5);
   color: var(--text-primary);
@@ -105,12 +105,12 @@
 .dayBtn {
   flex: 1;
   padding: 8px 10px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 800;
-  background: var(--purple-2-06);
-  border: 1px solid var(--purple-2-15);
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.15);
   color: var(--text-secondary);
   cursor: pointer;
 }
@@ -137,7 +137,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   font-size: 0.78rem;
   font-weight: 700;
 }
@@ -163,7 +163,7 @@
 .submit,
 .cancel {
   padding: 10px 18px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 800;
@@ -189,7 +189,7 @@
 }
 
 .cancel:hover:not(:disabled) {
-  background: var(--purple-2-08);
+  background: rgba(168, 85, 247, 0.08);
 }
 
 .toggles {
@@ -197,9 +197,9 @@
   flex-direction: column;
   gap: 6px;
   padding: 8px 10px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(168, 85, 247, 0.04);
-  border: 1px solid var(--purple-2-12);
+  border: 1px solid rgba(168, 85, 247, 0.12);
 }
 
 .toggleRow {

@@ -38,7 +38,7 @@
   pointer-events: none;
   background:
     radial-gradient(ellipse 70% 50% at 50% 0%, rgba(232, 199, 154, 0.12), transparent 60%),
-    radial-gradient(ellipse 60% 40% at 50% 100%, var(--teal-06), transparent 70%);
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(85, 231, 209, 0.06), transparent 70%);
 }
 
 .heroFlag {
@@ -153,7 +153,7 @@
   border-color: var(--gold-primary);
   box-shadow:
     0 8px 24px rgba(0, 0, 0, 0.4),
-    0 0 32px var(--gold-15);
+    0 0 32px rgba(232, 199, 154, 0.15);
 }
 
 .commitIcon {
@@ -162,7 +162,7 @@
   justify-content: center;
   width: 48px;
   height: 48px;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: var(--gold-soft);
   color: var(--gold-light);
   margin-bottom: 4px;
@@ -307,7 +307,7 @@
   pointer-events: none;
   background: radial-gradient(
     ellipse 60% 50% at 50% 0%,
-    var(--gold-15),
+    rgba(232, 199, 154, 0.15),
     transparent 70%
   );
 }

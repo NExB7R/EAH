@@ -9,7 +9,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: linear-gradient(135deg, #9d4edd, #a855f7);
   border: 1px solid rgba(199, 125, 255, 0.4);
   color: rgb(255, 255, 255);
@@ -28,9 +28,9 @@
 
 .form {
   padding: 20px;
-  border-radius: var(--radius-16);
+  border-radius: 16px;
   background: rgba(20, 14, 34, 0.85);
-  border: 1px solid var(--purple-2-22);
+  border: 1px solid rgba(168, 85, 247, 0.22);
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
@@ -90,8 +90,8 @@
 .field input {
   width: 100%;
   padding: 9px 12px;
-  border-radius: var(--radius-10);
-  border: 1px solid var(--purple-2-22);
+  border-radius: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.22);
   background: rgba(10, 5, 20, 0.6);
   color: #f4f2fa;
   font-size: 0.82rem;
@@ -104,7 +104,7 @@
 
 .field input:focus {
   border-color: rgba(168, 85, 247, 0.6);
-  box-shadow: 0 0 0 3px var(--purple-2-15);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
 }
 
 .row {
@@ -116,7 +116,7 @@
 .error {
   margin: 0;
   padding: 10px 12px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(252, 165, 165, 0.1);
   border: 1px solid rgba(252, 165, 165, 0.3);
   color: #fca5a5;
@@ -133,7 +133,7 @@
 .primaryBtn,
 .secondaryBtn {
   padding: 10px 20px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   font-size: 0.82rem;
   font-weight: 800;
   cursor: pointer;
@@ -150,7 +150,7 @@
 .secondaryBtn {
   background: transparent;
   color: #c9c2db;
-  border-color: var(--purple-2-25);
+  border-color: rgba(168, 85, 247, 0.25);
 }
 
 .primaryBtn:disabled,
@@ -174,9 +174,9 @@
 
 .branch {
   padding: 16px;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: rgba(20, 14, 34, 0.6);
-  border: 1px solid var(--purple-2-15);
+  border: 1px solid rgba(168, 85, 247, 0.15);
   transition:
     border-color 180ms ease,
     opacity 180ms ease;
@@ -273,13 +273,13 @@
   color: var(--text-muted);
   padding: 2px 8px;
   border-radius: 6px;
-  background: var(--purple-2-06);
+  background: rgba(168, 85, 247, 0.06);
 }
 
 .rowError {
   margin: 0 0 10px;
   padding: 8px 10px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   background: rgba(252, 165, 165, 0.08);
   color: #fca5a5;
   font-size: 0.72rem;
@@ -297,12 +297,12 @@
   align-items: center;
   gap: 5px;
   padding: 6px 12px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   font-size: 0.72rem;
   font-weight: 800;
   cursor: pointer;
-  border: 1px solid var(--purple-2-22);
-  background: var(--purple-2-08);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  background: rgba(168, 85, 247, 0.08);
   color: #c77dff;
   transition:
     transform 180ms ease,
@@ -312,7 +312,7 @@
 
 .actionBtn:not(:disabled):hover {
   transform: translateY(-1px);
-  background: var(--purple-2-15);
+  background: rgba(168, 85, 247, 0.15);
   border-color: rgba(168, 85, 247, 0.4);
 }
 
@@ -359,7 +359,7 @@
 
 .statCard {
   padding: 12px 14px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
   border: 1px solid rgba(168, 85, 247, 0.18);
   display: flex;
@@ -413,7 +413,7 @@
   padding: 0 12px;
   height: 40px;
   margin-bottom: 10px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(20, 14, 34, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.18);
 }
@@ -464,7 +464,7 @@
   gap: 4px;
   margin-bottom: 14px;
   padding: 4px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(10, 5, 20, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.1);
   flex-wrap: wrap;
@@ -484,7 +484,7 @@
 }
 
 .filterTab:hover {
-  background: var(--purple-2-08);
+  background: rgba(168, 85, 247, 0.08);
   color: var(--text-primary);
 }
 
@@ -502,7 +502,7 @@
   padding: 0 5px;
   margin-inline-start: 4px;
   border-radius: 999px;
-  background: var(--purple-2-15);
+  background: rgba(168, 85, 247, 0.15);
   font-size: 0.62rem;
   font-variant-numeric: tabular-nums;
 }

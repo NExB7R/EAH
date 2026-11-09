@@ -6,7 +6,7 @@
 
 /* ─── Hero ─── */
 .hero {
-  border-radius: var(--radius-16);
+  border-radius: 16px;
   overflow: hidden;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
   border: 1px solid rgba(168, 85, 247, 0.18);
@@ -14,10 +14,10 @@
 
 .heroCover {
   height: 100px;
-  background: linear-gradient(135deg, var(--purple-2-25), rgba(10, 7, 20, 0.7));
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(10, 7, 20, 0.7));
   background-size: cover;
   background-position: center;
-  border-bottom: 1px solid var(--purple-2-12);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.12);
 }
 
 .heroBody {
@@ -32,7 +32,7 @@
 .heroLogo {
   width: 72px;
   height: 72px;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   border: 2px solid rgba(168, 85, 247, 0.4);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.95), rgba(10, 7, 20, 0.95));
   color: var(--purple-light);
@@ -86,12 +86,12 @@
 }
 
 .status_published {
-  background: var(--teal-15);
+  background: rgba(85, 231, 209, 0.15);
   color: #55e7d1;
 }
 
 .status_pending {
-  background: var(--gold-15);
+  background: rgba(232, 199, 154, 0.15);
   color: #e8c79a;
 }
 
@@ -118,8 +118,8 @@
   font-size: 0.68rem;
   font-weight: 700;
   color: var(--text-muted);
-  background: var(--purple-2-06);
-  border: 1px solid var(--purple-2-12);
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(168, 85, 247, 0.12);
   text-decoration: none;
   transition: background 160ms ease;
 }

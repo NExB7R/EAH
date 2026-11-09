@@ -207,14 +207,14 @@
   align-items: center;
   gap: 12px;
   padding: 16px 18px;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
   border: 1px solid rgba(168, 85, 247, 0.18);
 }
 
 .statGold {
   border-color: rgba(232, 199, 154, 0.3);
-  background: linear-gradient(160deg, var(--gold-06), rgba(10, 7, 20, 0.75));
+  background: linear-gradient(160deg, rgba(232, 199, 154, 0.06), rgba(10, 7, 20, 0.75));
 }
 
 .statWarn {
@@ -228,7 +228,7 @@
   justify-content: center;
   width: 42px;
   height: 42px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(168, 85, 247, 0.1);
   color: var(--purple-light);
   flex-shrink: 0;
@@ -308,8 +308,8 @@
   align-items: center;
   gap: 6px;
   padding: 9px 16px;
-  border-radius: var(--radius-10);
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.2), var(--gold-08));
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.2), rgba(232, 199, 154, 0.08));
   border: 1px solid rgba(232, 199, 154, 0.4);
   color: var(--gold-light);
   font-family: var(--font-body);
@@ -321,7 +321,7 @@
 }
 
 .addBtn:hover {
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.3), var(--gold-15));
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.3), rgba(232, 199, 154, 0.15));
   box-shadow: var(--glow-gold-sm);
   transform: translateY(-1px);
 }
@@ -334,15 +334,15 @@
   display: flex;
   gap: 6px;
   padding: 4px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(10, 5, 20, 0.5);
-  border: 1px solid var(--purple-2-12);
+  border: 1px solid rgba(168, 85, 247, 0.12);
   flex-shrink: 0;
 }
 
 .tab {
   padding: 8px 14px;
-  border-radius: var(--radius-8);
+  border-radius: 8px;
   background: transparent;
   border: 1px solid transparent;
   color: var(--text-secondary);
@@ -356,12 +356,12 @@
 }
 
 .tab:hover {
-  background: var(--purple-2-08);
+  background: rgba(168, 85, 247, 0.08);
   color: var(--text-primary);
 }
 
 .tabActive {
-  background: linear-gradient(135deg, var(--gold-25), rgba(232, 199, 154, 0.12));
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.25), rgba(232, 199, 154, 0.12));
   border-color: rgba(232, 199, 154, 0.4);
   color: var(--gold-light);
   box-shadow: var(--glow-gold-sm);
@@ -381,7 +381,7 @@
   min-width: 220px;
   flex: 1;
   max-width: 320px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(20, 14, 34, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.18);
   transition: border-color 180ms var(--ease);
@@ -462,7 +462,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 12px 16px;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.95), rgba(10, 7, 20, 0.98));
   border: 1px solid rgba(232, 199, 154, 0.4);
   box-shadow:
@@ -492,7 +492,7 @@
 .dragDirty {
   padding: 4px 12px;
   border-radius: 999px;
-  background: var(--gold-15);
+  background: rgba(232, 199, 154, 0.15);
   color: var(--gold-light);
   font-size: 0.75rem;
   font-weight: 900;
@@ -509,7 +509,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   font-size: 0.78rem;
   font-weight: 700;
 }
@@ -532,7 +532,7 @@
   gap: 6px;
   margin: 0;
   padding: 8px 12px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   background: rgba(168, 85, 247, 0.05);
   border: 1px dashed rgba(168, 85, 247, 0.2);
   color: var(--text-muted);
@@ -546,7 +546,7 @@
   align-items: center;
   gap: 10px;
   padding: 8px 12px 8px 8px;
-  border-radius: var(--radius-16);
+  border-radius: 16px;
   background: rgba(20, 14, 34, 0.4);
   border: 1px solid rgba(168, 85, 247, 0.1);
   transition: all 180ms var(--ease);
@@ -593,8 +593,8 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: var(--radius-10);
-  background: linear-gradient(135deg, var(--gold-15), var(--gold-06));
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(232, 199, 154, 0.15), rgba(232, 199, 154, 0.06));
   border: 1px solid rgba(232, 199, 154, 0.3);
   color: var(--gold-light);
   font-family: var(--font-display);

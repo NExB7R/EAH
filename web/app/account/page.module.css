@@ -7,12 +7,12 @@
 .hero {
   position: relative;
   padding: 24px;
-  border-radius: var(--radius-22);
+  border-radius: 22px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.9));
   border: 1.5px solid rgba(232, 199, 154, 0.28);
   box-shadow:
     0 0 0 1px rgba(232, 199, 154, 0.05),
-    0 0 40px var(--gold-08),
+    0 0 40px rgba(232, 199, 154, 0.08),
     inset 0 1px 0 rgba(232, 199, 154, 0.1);
   overflow: hidden;
 }
@@ -23,7 +23,7 @@
   height: 200px;
   background: radial-gradient(
     ellipse 60% 60% at 50% 0%,
-    var(--gold-15),
+    rgba(232, 199, 154, 0.15),
     transparent 65%
   );
   pointer-events: none;
@@ -79,7 +79,7 @@
   font-size: 0.66rem;
   font-weight: 800;
   color: var(--gold-light);
-  background: var(--gold-08);
+  background: rgba(232, 199, 154, 0.08);
   border: 1px solid rgba(232, 199, 154, 0.28);
 }
 
@@ -99,7 +99,7 @@
   font-size: 0.76rem;
   font-weight: 900;
   color: var(--gold-light);
-  background: var(--gold-08);
+  background: rgba(232, 199, 154, 0.08);
   border: 1px solid rgba(232, 199, 154, 0.32);
   text-decoration: none;
   transition: all 180ms var(--ease);
@@ -124,7 +124,7 @@
   align-items: center;
   gap: 6px;
   padding: 18px 14px;
-  border-radius: var(--radius-18);
+  border-radius: 18px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
   border: 1px solid rgba(168, 85, 247, 0.18);
 }
@@ -175,7 +175,7 @@
 @media (max-width: 640px) {
   .hero {
     padding: 18px;
-    border-radius: var(--radius-18);
+    border-radius: 18px;
   }
   .heroBody {
     flex-wrap: wrap;
@@ -187,7 +187,7 @@
   }
   .statCard {
     padding: 14px 10px;
-    border-radius: var(--radius-16);
+    border-radius: 16px;
   }
   .statIcon {
     width: 36px;
@@ -214,7 +214,7 @@
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   text-decoration: none;
   margin: 16px 0;
   transition: all 180ms ease;
@@ -227,8 +227,8 @@
 }
 
 .merchantApplyCard {
-  background: linear-gradient(135deg, var(--purple-2-08), rgba(168, 85, 247, 0.02));
-  border: 1px solid var(--purple-2-25);
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(168, 85, 247, 0.02));
+  border: 1px solid rgba(168, 85, 247, 0.25);
   color: var(--purple-3, #c77dff);
 }
 
@@ -243,13 +243,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   background: rgba(232, 199, 154, 0.12);
   flex-shrink: 0;
 }
 
 .merchantApplyCard .merchantIcon {
-  background: var(--purple-2-12);
+  background: rgba(168, 85, 247, 0.12);
 }
 
 .merchantBody {

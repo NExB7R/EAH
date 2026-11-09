@@ -12,7 +12,7 @@
   gap: 14px;
   padding: 60px 24px;
   text-align: center;
-  border-radius: var(--radius-22);
+  border-radius: 22px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.85));
   border: 1px dashed rgba(232, 199, 154, 0.4);
 }
@@ -66,10 +66,10 @@
 .scoreCard {
   position: relative;
   padding: 28px;
-  border-radius: var(--radius-22);
+  border-radius: 22px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.7), rgba(10, 7, 20, 0.9));
   border: 1.5px solid rgba(232, 199, 154, 0.3);
-  box-shadow: 0 0 40px var(--gold-08);
+  box-shadow: 0 0 40px rgba(232, 199, 154, 0.08);
   overflow: hidden;
 }
 .scoreGlow {
@@ -78,7 +78,7 @@
   height: 240px;
   background: radial-gradient(
     ellipse 60% 60% at 50% 0%,
-    var(--gold-15),
+    rgba(232, 199, 154, 0.15),
     transparent 65%
   );
   pointer-events: none;
@@ -181,7 +181,7 @@
   gap: 12px;
   margin-top: 20px;
   padding-top: 18px;
-  border-top: 1px solid var(--gold-15);
+  border-top: 1px solid rgba(232, 199, 154, 0.15);
   z-index: 1;
 }
 .lastGenerated {
@@ -215,7 +215,7 @@
   flex-direction: column;
   gap: 8px;
   padding: 16px;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: rgba(20, 14, 34, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.18);
   border-inline-start: 3px solid;
@@ -279,8 +279,8 @@
   font-weight: 800;
   color: var(--gold-light);
   padding: 5px 9px;
-  border-radius: var(--radius-8);
-  background: var(--gold-06);
+  border-radius: 8px;
+  background: rgba(232, 199, 154, 0.06);
   border: 1px dashed rgba(232, 199, 154, 0.3);
   align-self: flex-start;
 }
@@ -297,9 +297,9 @@
   gap: 12px;
   align-items: center;
   padding: 14px 16px;
-  border-radius: var(--radius-14);
+  border-radius: 14px;
   background: rgba(20, 14, 34, 0.5);
-  border: 1px solid var(--gold-15);
+  border: 1px solid rgba(232, 199, 154, 0.15);
   text-decoration: none;
   transition: all 180ms var(--ease);
 }
@@ -314,8 +314,8 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  border-radius: var(--radius-10);
-  background: var(--gold-08);
+  border-radius: 10px;
+  background: rgba(232, 199, 154, 0.08);
   color: var(--gold-light);
   flex-shrink: 0;
 }
@@ -407,12 +407,12 @@
   display: inline-flex;
   align-items: center;
   padding: 10px 18px;
-  border-radius: var(--radius-10);
+  border-radius: 10px;
   font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 800;
   color: var(--text-secondary);
-  background: var(--purple-2-06);
+  background: rgba(168, 85, 247, 0.06);
   border: 1px solid rgba(168, 85, 247, 0.2);
   text-decoration: none;
   transition: background 160ms ease;

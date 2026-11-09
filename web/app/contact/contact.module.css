@@ -26,7 +26,7 @@
   justify-content: center;
   width: 64px;
   height: 64px;
-  border-radius: var(--radius-20);
+  border-radius: 20px;
   background: linear-gradient(135deg, var(--purple-primary), var(--purple-neon));
   color: #fff;
   box-shadow: 0 0 32px rgba(168, 85, 247, 0.4);
@@ -123,7 +123,7 @@
 }
 .channel:hover {
   border-color: var(--purple-primary);
-  box-shadow: 0 0 32px var(--purple-2-15);
+  box-shadow: 0 0 32px rgba(168, 85, 247, 0.15);
 }
 
 .fb {
@@ -150,7 +150,7 @@
 }
 .email:hover {
   border-color: var(--gold-primary);
-  box-shadow: 0 0 32px var(--gold-15);
+  box-shadow: 0 0 32px rgba(232, 199, 154, 0.15);
 }
 .email .cardCta {
   color: var(--gold-light);
@@ -242,7 +242,7 @@
   align-items: center;
   justify-content: center;
   padding: 0 15px;
-  border-radius: var(--radius-12);
+  border-radius: 12px;
   font-size: 0.78rem;
   font-weight: 800;
   transition: background 180ms var(--ease), border-color 180ms var(--ease), transform 180ms var(--ease);
@@ -256,7 +256,7 @@
 
 .helpLinkSecondary {
   border: 1px solid rgba(232, 199, 154, 0.28);
-  background: var(--gold-06);
+  background: rgba(232, 199, 154, 0.06);
   color: var(--gold-light);
 }
 
