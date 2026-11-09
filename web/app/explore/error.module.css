@@ -1,0 +1,140 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 24px 16px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 520px;
+  padding: 40px 28px;
+  text-align: center;
+  border-radius: var(--radius-20);
+  background: linear-gradient(155deg, rgba(22, 15, 36, 0.7), rgba(16, 10, 26, 0.6));
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ff8080;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+}
+
+.desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.7;
+  max-width: 400px;
+}
+
+.code {
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  margin: 0;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-8);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 10px 22px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #9D4EDD, #C77DFF);
+  color: #fff;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(157, 78, 221, 0.35);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(157, 78, 221, 0.5);
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--purple-2-25);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.btnSecondary:hover {
+  border-color: var(--purple-2-50);
+  color: var(--purple-light);
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 32px 20px;
+    border-radius: var(--radius-16);
+  }
+  .icon {
+    width: 72px;
+    height: 72px;
+  }
+  .title {
+    font-size: 1.15rem;
+  }
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btnPrimary,
+  .btnSecondary {
+    width: 100%;
+    justify-content: center;
+  }
+}

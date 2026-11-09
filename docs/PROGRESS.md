@@ -1366,3 +1366,9 @@
 - Mobile: padding أفضل، أزرار full-width، max-width 280px.
 - تحسين نصوص 3 صفحات: favorites (warning)، following (info)، orders (info).
 - backward compatible: أي EmptyState قديم شغال زي ما هو.
+
+## 2026-11-09 — Error Boundaries للصفحات العامة
+- app/explore/error.tsx: رسالة خطأ مخصصة + زر "حاول تاني" + زر "الرئيسية".
+- app/businesses/[slug]/error.tsx: رسالة خطأ + زر "حاول تاني" + زر "اكتشف أنشطة".
+- عرض كود الخطأ (digest) لو موجود لتحسين الـ debugging.
+- CSS مشترك: card, icon, buttons — mobile responsive.
