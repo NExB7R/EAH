@@ -7,8 +7,8 @@
   width: 100%;
   padding: 32px 20px;
   background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.03) 50%, transparent);
-  border-top: 1px solid rgba(168, 85, 247, 0.08);
-  border-bottom: 1px solid rgba(168, 85, 247, 0.08);
+  border-top: 1px solid var(--purple-2-08);
+  border-bottom: 1px solid var(--purple-2-08);
 }
 
 /* ─── Desktop Grid ─── */
@@ -28,9 +28,9 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: rgba(10, 5, 20, 0.55);
-  border: 1px solid rgba(168, 85, 247, 0.12);
+  border: 1px solid var(--purple-2-12);
   transition:
     border-color 200ms ease,
     transform 200ms ease;
@@ -48,7 +48,7 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: rgba(168, 85, 247, 0.1);
   color: #c77dff;
 }
@@ -90,7 +90,7 @@
 /* ─── Accents ─── */
 
 .purple .iconWrap {
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
   color: #c77dff;
 }
 
@@ -104,7 +104,7 @@
 }
 
 .teal .iconWrap {
-  background: rgba(85, 231, 209, 0.12);
+  background: var(--teal-12);
   color: #55e7d1;
 }
 

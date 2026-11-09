@@ -60,7 +60,7 @@
   display: flex;
   flex-direction: column;
   border: 1px solid var(--purple-line);
-  border-radius: 20px;
+  border-radius: var(--radius-20);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
   overflow: hidden;
@@ -82,7 +82,7 @@
   width: 34px;
   height: 34px;
   flex-shrink: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
   color: #1a0f2e;
   box-shadow: 0 0 12px rgba(232, 199, 154, 0.4);
@@ -114,7 +114,7 @@
   align-items: center;
   justify-content: center;
   border: 1px solid var(--purple-line);
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: transparent;
   color: var(--text-tertiary);
   cursor: pointer;
@@ -162,7 +162,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(232, 199, 154, 0.25), transparent 70%);
+  background: radial-gradient(circle, var(--gold-25), transparent 70%);
   color: var(--gold-light);
 }
 
@@ -231,7 +231,7 @@
 
 .bubble {
   padding: 10px 14px;
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   font-size: 0.82rem;
   line-height: 1.7;
   white-space: pre-wrap;
@@ -245,7 +245,7 @@
 }
 
 .msgAi .bubble {
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   border: 1px solid var(--purple-line);
   color: var(--text-primary);
   border-end-start-radius: 4px;
@@ -290,7 +290,7 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(252, 165, 165, 0.08);
   border: 1px solid rgba(252, 165, 165, 0.2);
   color: var(--red);
@@ -310,7 +310,7 @@
   flex: 1;
   padding: 10px 14px;
   border: 1px solid var(--purple-line);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: rgba(10, 7, 20, 0.6);
   color: var(--text-primary);
   font-size: 0.85rem;
@@ -339,7 +339,7 @@
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: linear-gradient(135deg, var(--gold-primary), var(--gold-light));
   color: #1a0f2e;
   cursor: pointer;
@@ -372,7 +372,7 @@
     max-width: 100%;
     height: calc(100vh - 32px);
     height: calc(100svh - 32px);
-    border-radius: 20px 20px 0 0;
+    border-radius: var(--radius-20) 20px 0 0;
     border-bottom: none;
   }
 }

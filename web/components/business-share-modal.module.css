@@ -15,7 +15,7 @@
   width: 100%;
   max-width: 420px;
   padding: 18px;
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
   border: 1px solid rgba(168, 85, 247, 0.3);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
@@ -52,9 +52,9 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: rgba(168, 85, 247, 0.1);
-  border: 1px solid rgba(168, 85, 247, 0.25);
+  border: 1px solid var(--purple-2-25);
   color: var(--text-secondary);
   cursor: pointer;
 }
@@ -64,9 +64,9 @@
   gap: 4px;
   padding: 4px;
   margin-bottom: 14px;
-  border-radius: 10px;
-  background: rgba(168, 85, 247, 0.06);
-  border: 1px solid rgba(168, 85, 247, 0.12);
+  border-radius: var(--radius-10);
+  background: var(--purple-2-06);
+  border: 1px solid var(--purple-2-12);
 }
 
 .tab,
@@ -103,20 +103,20 @@
   align-items: center;
   gap: 8px;
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 800;
   color: var(--text-primary);
   text-decoration: none;
-  background: rgba(168, 85, 247, 0.06);
+  background: var(--purple-2-06);
   border: 1px solid rgba(168, 85, 247, 0.2);
   cursor: pointer;
   transition: background 180ms ease;
 }
 
 .shareBtn:hover {
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
 }
 
 .platform {
@@ -182,7 +182,7 @@
 
 .qrFrame {
   padding: 12px;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: rgb(255, 255, 255);
   border: 1px solid rgba(168, 85, 247, 0.3);
 }
@@ -207,7 +207,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 16px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   font-size: 0.82rem;
   font-weight: 800;
   color: var(--bg-base);

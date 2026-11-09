@@ -344,7 +344,7 @@
 
 .statCard {
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.75));
   border: 1px solid rgba(168, 85, 247, 0.18);
   display: flex;
@@ -390,7 +390,7 @@
   padding: 0 12px;
   height: 40px;
   margin-bottom: 10px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(20, 14, 34, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.18);
 }
@@ -441,7 +441,7 @@
   gap: 4px;
   margin-bottom: 14px;
   padding: 4px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(10, 5, 20, 0.5);
   border: 1px solid rgba(168, 85, 247, 0.1);
   flex-wrap: wrap;
@@ -461,7 +461,7 @@
 }
 
 .filterTab:hover {
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   color: var(--text-primary);
 }
 
@@ -479,7 +479,7 @@
   padding: 0 5px;
   margin-inline-start: 4px;
   border-radius: 999px;
-  background: rgba(168, 85, 247, 0.15);
+  background: var(--purple-2-15);
   font-size: 0.62rem;
   font-variant-numeric: tabular-nums;
 }

@@ -46,8 +46,8 @@
   gap: 5px;
   padding: 6px 14px;
   border-radius: 999px;
-  background: rgba(168, 85, 247, 0.08);
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  background: var(--purple-2-08);
+  border: 1px solid var(--purple-2-22);
   color: var(--text-secondary);
   font-size: 0.75rem;
   font-weight: 700;
@@ -88,8 +88,8 @@
   align-items: center;
   gap: 12px;
   padding: 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  border-radius: var(--radius-12);
+  border: 1px solid var(--purple-2-15);
   background: rgba(168, 85, 247, 0.04);
 }
 
@@ -150,9 +150,9 @@
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: rgba(168, 85, 247, 0.04);
-  border: 1px solid rgba(168, 85, 247, 0.12);
+  border: 1px solid var(--purple-2-12);
 }
 
 .eventIcon {
@@ -174,7 +174,7 @@
   font-weight: 900;
   font-size: 0.85rem;
   padding: 4px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
 }
 
 .eventDeltaPlus {
@@ -196,9 +196,9 @@
 
 .factorCard {
   padding: 12px 8px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(232, 199, 154, 0.05);
-  border: 1px solid rgba(232, 199, 154, 0.15);
+  border: 1px solid var(--gold-15);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -233,7 +233,7 @@
 
 .legendCard {
   padding: 24px;
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   background: linear-gradient(135deg, rgba(232, 199, 154, 0.12), rgba(232, 199, 154, 0.03));
   border: 1px solid rgba(245, 217, 167, 0.4);
   text-align: center;
@@ -285,8 +285,8 @@
   width: 100%;
   max-width: 400px;
   padding: 14px 24px;
-  border-radius: 12px;
-  background: rgba(168, 85, 247, 0.15);
+  border-radius: var(--radius-12);
+  background: var(--purple-2-15);
   border: 1px solid rgba(168, 85, 247, 0.4);
   color: var(--text-primary);
   font-size: 0.9rem;
@@ -296,7 +296,7 @@
 }
 
 .ctaBtn:hover {
-  background: rgba(168, 85, 247, 0.25);
+  background: var(--purple-2-25);
   transform: translateY(-1px);
 }
 

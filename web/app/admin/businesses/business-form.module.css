@@ -24,7 +24,7 @@
 }
 
 .section {
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.6), rgba(10, 7, 20, 0.8));
   border: 1px solid rgba(168, 85, 247, 0.18);
   overflow: hidden;
@@ -60,7 +60,7 @@
   justify-content: center;
   width: 34px;
   height: 34px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(168, 85, 247, 0.1);
   color: var(--purple-light);
   flex-shrink: 0;
@@ -81,7 +81,7 @@
   height: 18px;
   padding: 0 6px;
   border-radius: 999px;
-  background: rgba(168, 85, 247, 0.15);
+  background: var(--purple-2-15);
   color: var(--purple-light);
   font-size: 0.65rem;
   font-weight: 900;
@@ -142,7 +142,7 @@
 .select {
   width: 100%;
   padding: 10px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   border: 1px solid rgba(168, 85, 247, 0.2);
   background: rgba(7, 2, 13, 0.4);
   color: var(--text-primary);
@@ -158,7 +158,7 @@
 .select:focus {
   outline: none;
   border-color: rgba(168, 85, 247, 0.5);
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
+  box-shadow: 0 0 0 3px var(--purple-2-12);
 }
 
 .textarea {
@@ -205,7 +205,7 @@
   justify-content: space-between;
   gap: 10px;
   padding-top: 12px;
-  border-top: 1px dashed rgba(168, 85, 247, 0.15);
+  border-top: 1px dashed var(--purple-2-15);
   flex-wrap: wrap;
 }
 
@@ -214,7 +214,7 @@
   align-items: center;
   gap: 6px;
   padding: 9px 18px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   font-family: var(--font-body);
   font-size: 0.8rem;
   font-weight: 900;
@@ -260,10 +260,10 @@
   position: sticky;
   top: 100px;
   padding: 16px;
-  border-radius: 18px;
+  border-radius: var(--radius-18);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.75), rgba(10, 7, 20, 0.9));
   border: 1px solid rgba(168, 85, 247, 0.2);
-  box-shadow: 0 0 30px rgba(168, 85, 247, 0.08);
+  box-shadow: 0 0 30px var(--purple-2-08);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -285,9 +285,9 @@
 }
 
 .previewCard {
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.9), rgba(10, 7, 20, 0.98));
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  border: 1px solid var(--purple-2-22);
   overflow: hidden;
 }
 
@@ -295,7 +295,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: rgba(168, 85, 247, 0.06);
+  background: var(--purple-2-06);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -315,7 +315,7 @@
   inset-inline-start: 14px;
   width: 56px;
   height: 56px;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   border: 2px solid var(--bg-base);
   background: var(--bg-elevated);
   overflow: hidden;
@@ -383,13 +383,13 @@
 }
 
 .chipGold {
-  background: rgba(232, 199, 154, 0.15);
+  background: var(--gold-15);
   color: var(--gold-light);
   border: 1px solid rgba(232, 199, 154, 0.3);
 }
 
 .chipTeal {
-  background: rgba(85, 231, 209, 0.12);
+  background: var(--teal-12);
   color: var(--teal);
   border: 1px solid rgba(85, 231, 209, 0.28);
 }
@@ -401,7 +401,7 @@
 }
 
 .chipPurple {
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
   color: var(--purple-light);
   border: 1px solid rgba(168, 85, 247, 0.28);
 }
@@ -420,9 +420,9 @@
   justify-content: center;
   gap: 6px;
   padding: 12px 8px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: rgba(168, 85, 247, 0.04);
-  border: 1.5px solid rgba(168, 85, 247, 0.15);
+  border: 1.5px solid var(--purple-2-15);
   cursor: pointer;
   font-family: var(--font-body);
   font-size: 0.75rem;
@@ -433,7 +433,7 @@
 
 .typeCard:hover {
   border-color: rgba(168, 85, 247, 0.35);
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
 }
 
 .typeCardActive {
@@ -454,7 +454,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: rgba(168, 85, 247, 0.05);
   border: 1.5px dashed rgba(168, 85, 247, 0.3);
   display: flex;
@@ -470,7 +470,7 @@
 
 .imageBox:hover {
   border-color: rgba(168, 85, 247, 0.5);
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
 }
 
 .imageBox img {
@@ -506,7 +506,7 @@
   align-items: center;
   gap: 6px;
   padding: 7px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   font-size: 0.72rem;
   font-weight: 900;
   cursor: pointer;
@@ -535,14 +535,14 @@
   font-size: 0.68rem;
   font-weight: 800;
   cursor: pointer;
-  background: rgba(168, 85, 247, 0.06);
+  background: var(--purple-2-06);
   color: var(--text-secondary);
   border: 1px solid rgba(168, 85, 247, 0.2);
   transition: all 180ms var(--ease);
 }
 
 .presetBtn:hover {
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
   color: var(--purple-light);
 }
 
@@ -558,7 +558,7 @@
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(168, 85, 247, 0.03);
 }
 
@@ -571,7 +571,7 @@
 .hoursInput {
   width: 100%;
   padding: 6px 8px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   border: 1px solid rgba(168, 85, 247, 0.2);
   background: rgba(7, 2, 13, 0.4);
   color: var(--text-primary);
@@ -596,7 +596,7 @@
   justify-content: center;
   width: 26px;
   height: 26px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: rgba(252, 165, 165, 0.08);
   color: #fca5a5;
   border: 1px solid rgba(252, 165, 165, 0.2);
@@ -620,9 +620,9 @@
 
 .branchCard {
   padding: 12px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: rgba(168, 85, 247, 0.03);
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  border: 1px solid var(--purple-2-15);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -652,7 +652,7 @@
   justify-content: center;
   width: 28px;
   height: 28px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: transparent;
   border: 1px solid rgba(168, 85, 247, 0.2);
   color: var(--text-secondary);
@@ -676,19 +676,19 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   font-size: 0.78rem;
   font-weight: 900;
   cursor: pointer;
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   color: var(--purple-light);
-  border: 1px solid rgba(168, 85, 247, 0.25);
+  border: 1px solid var(--purple-2-25);
   transition: all 180ms var(--ease);
   align-self: flex-start;
 }
 
 .addBtn:hover {
-  background: rgba(168, 85, 247, 0.15);
+  background: var(--purple-2-15);
   border-color: rgba(168, 85, 247, 0.4);
 }
 
@@ -701,7 +701,7 @@
   justify-content: center;
   gap: 12px;
   padding: 14px 16px;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.95), rgba(10, 7, 20, 0.98));
   border: 1px solid rgba(168, 85, 247, 0.3);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
@@ -712,7 +712,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 26px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   font-family: var(--font-body);
   font-size: 0.88rem;
   font-weight: 900;
@@ -740,7 +740,7 @@
   align-items: center;
   gap: 6px;
   padding: 12px 20px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   font-size: 0.85rem;
   font-weight: 800;
   color: var(--text-secondary);
@@ -786,9 +786,9 @@
   display: inline-flex;
   gap: 2px;
   padding: 2px;
-  border-radius: 8px;
-  background: rgba(168, 85, 247, 0.06);
-  border: 1px solid rgba(168, 85, 247, 0.12);
+  border-radius: var(--radius-8);
+  background: var(--purple-2-06);
+  border: 1px solid var(--purple-2-12);
 }
 
 .imageSlotTab,
@@ -850,10 +850,10 @@
 .imageGridItem {
   position: relative;
   aspect-ratio: 16 / 9;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   overflow: hidden;
   background: rgba(168, 85, 247, 0.05);
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  border: 1px solid var(--purple-2-15);
 }
 
 .imageGridItemSquare {
@@ -906,7 +906,7 @@
 }
 
 .imageGridAdd:hover:not(:disabled) {
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   border-color: rgba(168, 85, 247, 0.5);
   color: var(--purple-light);
 }
@@ -921,9 +921,9 @@
   display: flex;
   gap: 8px;
   padding: 8px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(168, 85, 247, 0.04);
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  border: 1px solid var(--purple-2-15);
 }
 
 .imageGridUrlRow .input {

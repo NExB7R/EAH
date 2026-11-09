@@ -29,7 +29,7 @@
 }
 
 .brand:focus-visible {
-  border-radius: 12px;
+  border-radius: var(--radius-12);
 }
 
 .nav {
@@ -37,10 +37,10 @@
   flex-direction: column;
   gap: 4px;
   padding: 10px;
-  border-radius: 18px;
+  border-radius: var(--radius-18);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.78), rgba(10, 7, 20, 0.92));
-  border: 1px solid rgba(168, 85, 247, 0.25);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22), 0 0 22px rgba(168, 85, 247, 0.06);
+  border: 1px solid var(--purple-2-25);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22), 0 0 22px var(--purple-2-06);
 }
 
 .item {
@@ -50,7 +50,7 @@
   gap: 10px;
   min-height: 48px;
   padding: 8px 12px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   color: var(--text-secondary);
   text-decoration: none;
   font-family: var(--font-body);
@@ -70,7 +70,7 @@
   background: linear-gradient(115deg, rgba(168, 85, 247, 0.26), rgba(157, 78, 221, 0.15));
   color: #e5c5ff;
   border: 1px solid rgba(199, 125, 255, 0.42);
-  box-shadow: inset 0 0 0 1px rgba(199, 125, 255, 0.07), 0 0 16px rgba(168, 85, 247, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(199, 125, 255, 0.07), 0 0 16px var(--purple-2-08);
 }
 
 .active::before {
@@ -161,12 +161,12 @@
 
 /* ─── Gold Highlight (AI Advisor) ─── */
 .itemGold {
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.06), rgba(168, 85, 247, 0.04));
+  background: linear-gradient(135deg, var(--gold-06), rgba(168, 85, 247, 0.04));
   border: 1px solid rgba(232, 199, 154, 0.22);
 }
 
 .itemGold:hover {
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.15), rgba(168, 85, 247, 0.08));
+  background: linear-gradient(135deg, var(--gold-15), var(--purple-2-08));
   border-color: rgba(232, 199, 154, 0.5);
 }
 

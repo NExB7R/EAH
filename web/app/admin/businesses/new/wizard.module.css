@@ -28,7 +28,7 @@
   align-items: center;
   gap: 4px;
   padding: 16px 18px;
-  border-radius: 16px;
+  border-radius: var(--radius-16);
   background: var(--surface-gradient-soft);
   border: 1px solid var(--border-purple-soft);
   overflow-x: auto;
@@ -44,7 +44,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: transparent;
   border: 1px solid transparent;
   color: var(--text-tertiary);
@@ -69,7 +69,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
   border: 1.5px solid rgba(168, 85, 247, 0.3);
   color: var(--text-tertiary);
   font-size: 0.7rem;
@@ -105,7 +105,7 @@
   min-width: 12px;
   height: 2px;
   border-radius: 2px;
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
 }
 
 .stepSepDone {
@@ -115,7 +115,7 @@
 .progressBar {
   height: 4px;
   border-radius: 2px;
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
   overflow: hidden;
 }
 
@@ -148,7 +148,7 @@
 .cardHead {
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(168, 85, 247, 0.12);
+  border-bottom: 1px solid var(--purple-2-12);
 }
 
 .cardTitle {
@@ -211,7 +211,7 @@
   width: 100%;
   padding: 11px 13px;
   border-radius: 11px;
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  border: 1px solid var(--purple-2-22);
   background: rgba(7, 2, 13, 0.65);
   color: var(--text-primary);
   font-family: inherit;
@@ -232,7 +232,7 @@
 .input:focus,
 .textarea:focus {
   border-color: rgba(199, 125, 255, 0.55);
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
+  box-shadow: 0 0 0 3px var(--purple-2-12);
 }
 
 .inputError {
@@ -285,7 +285,7 @@
   align-items: center;
   gap: 6px;
   padding: 14px 8px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: rgba(10, 7, 20, 0.4);
   border: 1.5px solid rgba(168, 85, 247, 0.18);
   color: var(--text-secondary);
@@ -296,12 +296,12 @@
 
 .typeCard:hover {
   border-color: rgba(168, 85, 247, 0.4);
-  background: rgba(168, 85, 247, 0.06);
+  background: var(--purple-2-06);
 }
 
 .typeCardActive {
   border-color: rgba(199, 125, 255, 0.6);
-  background: linear-gradient(160deg, rgba(199, 125, 255, 0.15), rgba(168, 85, 247, 0.06));
+  background: linear-gradient(160deg, rgba(199, 125, 255, 0.15), var(--purple-2-06));
   color: var(--text-primary);
   box-shadow: 0 0 20px rgba(168, 85, 247, 0.18);
 }
@@ -339,8 +339,8 @@
   align-items: center;
   gap: 6px;
   padding: 9px 14px;
-  border-radius: 10px;
-  background: rgba(168, 85, 247, 0.08);
+  border-radius: var(--radius-10);
+  background: var(--purple-2-08);
   border: 1px solid rgba(168, 85, 247, 0.3);
   color: var(--purple-light);
   font-family: var(--font-body);
@@ -351,7 +351,7 @@
 }
 
 .gpsBtn:hover:not(:disabled) {
-  background: rgba(168, 85, 247, 0.15);
+  background: var(--purple-2-15);
 }
 
 .gpsBtn:disabled {
@@ -364,8 +364,8 @@
   align-items: flex-start;
   gap: 10px;
   padding: 12px 14px;
-  border: 1px solid rgba(168, 85, 247, 0.22);
-  border-radius: 12px;
+  border: 1px solid var(--purple-2-22);
+  border-radius: var(--radius-12);
   background: rgba(168, 85, 247, 0.07);
 }
 
@@ -379,7 +379,7 @@
   border: 1px solid rgba(168, 85, 247, 0.3);
   border-radius: 9px;
   color: var(--purple-light);
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
 }
 
 .orderNoticeBody {
@@ -424,9 +424,9 @@
 
 .reviewItem {
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(10, 7, 20, 0.5);
-  border: 1px solid rgba(168, 85, 247, 0.12);
+  border: 1px solid var(--purple-2-12);
   display: flex;
   flex-direction: column;
   gap: 3px;
@@ -479,7 +479,7 @@
   gap: 10px;
   padding-top: 20px;
   margin-top: 20px;
-  border-top: 1px solid rgba(168, 85, 247, 0.12);
+  border-top: 1px solid var(--purple-2-12);
 }
 
 .navRight {
@@ -506,7 +506,7 @@
 
 .btnBack {
   background: transparent;
-  border-color: rgba(168, 85, 247, 0.25);
+  border-color: var(--purple-2-25);
   color: var(--text-secondary);
 }
 
@@ -542,9 +542,9 @@
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-radius: 10px;
-  background: rgba(232, 199, 154, 0.06);
-  border: 1px solid rgba(232, 199, 154, 0.25);
+  border-radius: var(--radius-10);
+  background: var(--gold-06);
+  border: 1px solid var(--gold-25);
   color: var(--gold-light);
   font-size: 0.76rem;
   font-weight: 800;
@@ -581,7 +581,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(252, 165, 165, 0.08);
   border: 1px solid rgba(252, 165, 165, 0.3);
   color: #fca5a5;
@@ -610,7 +610,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.98), rgba(10, 7, 20, 0.99));
   border: 1.5px solid rgba(199, 125, 255, 0.35);
   box-shadow:
@@ -759,9 +759,9 @@
   flex-direction: column;
   gap: 10px;
   padding: 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   background: rgba(168, 85, 247, 0.04);
-  border: 1px solid rgba(168, 85, 247, 0.12);
+  border: 1px solid var(--purple-2-12);
 }
 
 .contactsHeader {
@@ -793,7 +793,7 @@
 .contactKind {
   padding: 10px 12px;
   border-radius: 9px;
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  border: 1px solid var(--purple-2-22);
   background: rgba(7, 2, 13, 0.65);
   color: var(--text-primary);
   font-family: inherit;
@@ -811,7 +811,7 @@
 .contactInput {
   padding: 10px 12px;
   border-radius: 9px;
-  border: 1px solid rgba(168, 85, 247, 0.22);
+  border: 1px solid var(--purple-2-22);
   background: rgba(7, 2, 13, 0.65);
   color: var(--text-primary);
   font-family: inherit;
@@ -832,7 +832,7 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: rgba(252, 165, 165, 0.08);
   border: 1px solid rgba(252, 165, 165, 0.3);
   color: #fca5a5;
@@ -849,7 +849,7 @@
   align-items: center;
   justify-content: center;
   padding: 6px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   background: rgba(20, 184, 166, 0.12);
   border: 1px solid rgba(20, 184, 166, 0.35);
   color: var(--teal-bright);
@@ -861,7 +861,7 @@
   align-self: flex-start;
   padding: 8px 14px;
   border-radius: 9px;
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   border: 1px dashed rgba(168, 85, 247, 0.35);
   color: var(--purple-light);
   font-family: var(--font-body);
@@ -872,7 +872,7 @@
 }
 
 .addContactBtn:hover {
-  background: rgba(168, 85, 247, 0.15);
+  background: var(--purple-2-15);
   border-style: solid;
 }
 

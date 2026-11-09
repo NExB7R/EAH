@@ -24,7 +24,7 @@
   font-size: 0.85rem;
   font-weight: 900;
   color: var(--purple-light);
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
   border: 1px solid rgba(168, 85, 247, 0.3);
   letter-spacing: 0.1em;
 }
@@ -57,7 +57,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   font-family: var(--font-body);
   font-size: 0.88rem;
   font-weight: 800;
@@ -72,7 +72,7 @@
 
 .ghostBtn {
   color: var(--text-secondary);
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   border: 1px solid rgba(168, 85, 247, 0.2);
 }
 

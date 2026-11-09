@@ -21,8 +21,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(168, 85, 247, 0.15), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(232, 199, 154, 0.06), transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% 0%, var(--purple-2-15), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, var(--gold-06), transparent 60%),
     radial-gradient(ellipse 60% 40% at 20% 100%, rgba(157, 78, 221, 0.08), transparent 60%);
   pointer-events: none;
   z-index: 0;
@@ -33,7 +33,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle, rgba(168, 85, 247, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(circle, var(--purple-2-08) 1px, transparent 1px);
   background-size: 24px 24px;
   mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black, transparent 80%);
@@ -48,13 +48,13 @@
   width: 100%;
   max-width: 440px;
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.88), rgba(10, 7, 20, 0.94));
-  border: var(--border-thin) solid rgba(168, 85, 247, 0.25);
+  border: var(--border-thin) solid var(--purple-2-25);
   border-radius: var(--radius-xl);
   padding: var(--space-8) var(--space-6) var(--space-6);
   box-shadow:
     0 0 0 1px rgba(168, 85, 247, 0.05),
     0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 80px rgba(168, 85, 247, 0.08);
+    0 0 80px var(--purple-2-08);
 }
 
 /* ─── Header ─── */
@@ -84,7 +84,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 0;
   background: rgba(10, 5, 20, 0.6);
-  border: var(--border-thin) solid rgba(168, 85, 247, 0.15);
+  border: var(--border-thin) solid var(--purple-2-15);
   border-radius: var(--radius-base);
   padding: 4px;
   margin-bottom: var(--space-5);
@@ -414,7 +414,7 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.25), transparent);
+  background: linear-gradient(90deg, transparent, var(--purple-2-25), transparent);
 }
 
 /* ─── Responsive ─── */
@@ -448,7 +448,7 @@
   margin-top: 4px;
   border-radius: var(--radius-lg);
   background: rgba(10, 5, 20, 0.5);
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  border: 1px solid var(--purple-2-15);
 }
 
 .sectionTitle {
@@ -471,7 +471,7 @@
   font-weight: 700;
   color: var(--text-muted);
   padding: 2px 8px;
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   border-radius: var(--radius-full);
 }
 
@@ -498,7 +498,7 @@
   height: 42px;
   padding: 0 16px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, rgba(157, 78, 221, 0.15), rgba(168, 85, 247, 0.08));
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.15), var(--purple-2-08));
   border: 1px solid rgba(168, 85, 247, 0.35);
   color: var(--purple-light);
   font-family: var(--font-body);
@@ -509,7 +509,7 @@
 }
 
 .gpsBtn:hover:not(:disabled) {
-  background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), rgba(168, 85, 247, 0.15));
+  background: linear-gradient(135deg, rgba(157, 78, 221, 0.3), var(--purple-2-15));
   box-shadow: var(--glow-purple-sm);
   transform: translateY(-1px);
 }

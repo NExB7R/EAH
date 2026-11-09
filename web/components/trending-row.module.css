@@ -12,13 +12,13 @@
   width: min(100%, 1240px);
   margin: 0 auto;
   padding: 22px 20px 18px;
-  border-radius: 22px;
+  border-radius: var(--radius-22);
   background: linear-gradient(160deg, rgba(20, 14, 34, 0.55), rgba(10, 7, 20, 0.82));
   border: 1.5px solid rgba(253, 186, 116, 0.32);
   box-shadow:
     0 0 0 1px rgba(253, 186, 116, 0.06),
     0 0 40px rgba(253, 186, 116, 0.14),
-    0 0 80px rgba(232, 199, 154, 0.06),
+    0 0 80px var(--gold-06),
     inset 0 1px 0 rgba(253, 186, 116, 0.1);
 }
 
@@ -100,7 +100,7 @@
   }
   .frame {
     padding: 16px 12px 12px;
-    border-radius: 18px;
+    border-radius: var(--radius-18);
   }
 }
 

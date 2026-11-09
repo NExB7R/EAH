@@ -48,7 +48,7 @@
 .item:hover {
   color: var(--purple-light);
   border-color: rgba(168, 85, 247, 0.6);
-  background: rgba(168, 85, 247, 0.08);
+  background: var(--purple-2-08);
   box-shadow: 0 0 14px rgba(168, 85, 247, 0.28);
   transform: translateY(-2px);
 }
@@ -142,7 +142,7 @@
   .item {
     width: 60px;
     height: 62px;
-    border-radius: 14px;
+    border-radius: var(--radius-14);
     flex-direction: column;
     gap: 4px;
     padding: 6px 4px;

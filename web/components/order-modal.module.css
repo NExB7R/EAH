@@ -27,7 +27,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(168, 85, 247, 0.12), transparent 60%);
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, var(--purple-2-12), transparent 60%);
 }
 
 .close {
@@ -158,9 +158,9 @@
   gap: 8px;
   width: 100%;
   padding: 11px 20px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   border: 1px solid rgba(232, 199, 154, 0.35);
-  background: rgba(232, 199, 154, 0.08);
+  background: var(--gold-08);
   color: #e8c79a;
   font-size: 0.85rem;
   font-weight: 800;
@@ -218,7 +218,7 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background: rgba(85, 231, 209, 0.12);
+  background: var(--teal-12);
   color: var(--teal);
   animation: pop 400ms ease-out;
 }
@@ -289,11 +289,11 @@
   justify-content: center;
   gap: 6px;
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
   font-family: var(--font-body);
   font-size: 0.85rem;
   font-weight: 800;
-  background: rgba(168, 85, 247, 0.06);
+  background: var(--purple-2-06);
   border: 1px solid rgba(168, 85, 247, 0.2);
   color: var(--text-secondary);
   cursor: pointer;
@@ -328,15 +328,15 @@
   align-items: center;
   gap: 6px;
   padding: 4px;
-  border-radius: 10px;
-  background: rgba(168, 85, 247, 0.06);
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  border-radius: var(--radius-10);
+  background: var(--purple-2-06);
+  border: 1px solid var(--purple-2-15);
 }
 
 .attachmentThumb {
   width: 56px;
   height: 56px;
-  border-radius: 8px;
+  border-radius: var(--radius-8);
   display: block;
   background-size: cover;
   background-position: center;
@@ -348,8 +348,8 @@
   align-items: center;
   gap: 6px;
   padding: 12px 14px;
-  border-radius: 8px;
-  background: rgba(168, 85, 247, 0.08);
+  border-radius: var(--radius-8);
+  background: var(--purple-2-08);
   color: var(--purple-light);
   font-size: 0.8rem;
   font-weight: 800;
@@ -391,9 +391,9 @@
   align-items: flex-start;
   gap: 2px;
   padding: 12px 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(7, 2, 13, 0.4);
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  border: 1px solid var(--purple-2-15);
   cursor: pointer;
   text-align: start;
   font-family: var(--font-body);
@@ -406,7 +406,7 @@
 }
 
 .paymentCardActive {
-  background: rgba(168, 85, 247, 0.12);
+  background: var(--purple-2-12);
   border-color: rgba(199, 125, 255, 0.6);
 }
 
@@ -431,7 +431,7 @@
 
 .reviewSection {
   padding: 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-10);
   background: rgba(7, 2, 13, 0.4);
   border: 1px solid rgba(168, 85, 247, 0.1);
 }
@@ -472,9 +472,9 @@
   gap: 8px;
   margin-top: 8px;
   padding: 8px 10px;
-  border-radius: 8px;
-  background: rgba(232, 199, 154, 0.08);
-  border: 1px solid rgba(232, 199, 154, 0.25);
+  border-radius: var(--radius-8);
+  background: var(--gold-08);
+  border: 1px solid var(--gold-25);
   color: #e8c79a;
   font-size: 0.76rem;
   font-weight: 700;
@@ -486,8 +486,8 @@
   align-items: flex-start;
   gap: 10px;
   padding: 12px;
-  border-radius: 10px;
-  background: rgba(85, 231, 209, 0.06);
+  border-radius: var(--radius-10);
+  background: var(--teal-06);
   border: 1px solid rgba(85, 231, 209, 0.2);
   cursor: pointer;
   font-size: 0.8rem;
@@ -516,8 +516,8 @@
 .backBtn {
   flex: 1;
   padding: 14px;
-  border-radius: 12px;
-  background: rgba(168, 85, 247, 0.08);
+  border-radius: var(--radius-12);
+  background: var(--purple-2-08);
   border: 1px solid rgba(168, 85, 247, 0.2);
   color: var(--text-secondary);
   font-family: var(--font-body);
@@ -535,9 +535,9 @@
 .timelinePreview {
   margin-top: 16px;
   padding: 14px;
-  border-radius: 10px;
-  background: rgba(168, 85, 247, 0.06);
-  border: 1px solid rgba(168, 85, 247, 0.15);
+  border-radius: var(--radius-10);
+  background: var(--purple-2-06);
+  border: 1px solid var(--purple-2-15);
   text-align: start;
 }
 
