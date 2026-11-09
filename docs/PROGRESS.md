@@ -1372,3 +1372,10 @@
 - app/businesses/[slug]/error.tsx: رسالة خطأ + زر "حاول تاني" + زر "اكتشف أنشطة".
 - عرض كود الخطأ (digest) لو موجود لتحسين الـ debugging.
 - CSS مشترك: card, icon, buttons — mobile responsive.
+
+## 2026-11-09 — Launch Readiness Dashboard
+- lib/data/launch-readiness.ts: 11 فحص موزون (weighted) لجاهزية الإطلاق.
+- API: /api/admin/launch-readiness
+- Component: gauge (نسبة دائرية) + items مصنفة (بنية تحتية، محتوى، مستخدمين، أنظمة، أمان، جودة البيانات).
+- الأوزان: high (3) = blockers محتملة، medium (2)، low (1).
+- معايير: DB، RLS، أنشطة منشورة، تقييمات، أنشطة حقيقية (مش demo)، تجار، Standing، Autopilot، Contact Privacy، Orphan Branches، Demo Data.

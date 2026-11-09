@@ -8,6 +8,7 @@ import ErrorRow from './error-row'
 import HealthFilters from './health-filters'
 import AuditSection from './audit-section'
 import HealthChecks from './health-checks'
+import LaunchReadiness from './launch-readiness'
 import styles from './health.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -41,6 +42,8 @@ export default async function AdminHealthPage({
         title="صحة النظام والتدقيق"
         description="مراقبة الأخطاء + سجل التدقيق في مكان واحد."
       />
+
+      <LaunchReadiness initialResult={null} />
 
       <HealthChecks initialResult={null} />
 
