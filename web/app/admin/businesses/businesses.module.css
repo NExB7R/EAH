@@ -1601,3 +1601,57 @@
   background: rgba(168, 85, 247, 0.1);
   color: var(--text-primary);
 }
+
+/* ─── Completeness (2026-11-09) ─── */
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.completenessBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  cursor: pointer;
+}
+
+.completenessBadge:hover {
+  transform: scale(1.1);
+}
+
+.completeness_excellent {
+  color: #0a1a17;
+  background: #55e7d1;
+  box-shadow: 0 0 10px rgba(85, 231, 209, 0.4);
+}
+
+.completeness_good {
+  color: #0a1a17;
+  background: #a3f5dc;
+  box-shadow: 0 0 8px rgba(163, 245, 220, 0.3);
+}
+
+.completeness_fair {
+  color: #2a1d00;
+  background: #facc15;
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
+}
+
+.completeness_poor {
+  color: #fff;
+  background: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}

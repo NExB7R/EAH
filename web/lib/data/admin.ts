@@ -21,10 +21,24 @@ export type PendingBusiness = {
   business_type: string
   custom_business_type?: string | null
   area: string | null
+  city?: string | null
+  address_text?: string | null
+  latitude?: number | null
+  longitude?: number | null
   cover_image_url: string | null
+  logo_url?: string | null
   description: string | null
+  hook?: string | null
+  working_hours?: Record<string, unknown> | null
   created_at: string
   is_published: boolean
+  is_open?: boolean
+  is_verified?: boolean
+  accepts_orders?: boolean
+  accepts_whatsapp_orders?: boolean
+  branches_count?: number
+  offers_count?: number
+  rating_count?: number
   rejection_reason: string | null
   rejected_at: string | null
   business_type_status: 'pending' | 'approved' | 'rejected' | null

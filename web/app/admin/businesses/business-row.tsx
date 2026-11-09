@@ -12,6 +12,7 @@ import {
 } from '@/components/icons'
 import { approveBusiness, rejectBusiness, archiveBusiness, republishBusiness } from './actions'
 import type { PendingBusiness } from '@/lib/data/admin'
+import { computeBusinessCompleteness, getGradeLabel } from '@/lib/data/business-completeness'
 import styles from './businesses.module.css'
 
 // ═══════════════════════════════════════════════════════════
@@ -90,6 +91,30 @@ export default function BusinessRow({
       ? customType
       : (TYPE_LABEL[b.business_type] ?? b.business_type)
 
+  const completeness = computeBusinessCompleteness({
+    name: b.name,
+    business_type: b.business_type,
+    description: b.description,
+    hook: b.hook ?? null,
+    area: b.area,
+    city: b.city ?? null,
+    address_text: b.address_text ?? null,
+    latitude: b.latitude ?? null,
+    longitude: b.longitude ?? null,
+    logo_url: b.logo_url ?? null,
+    cover_image_url: b.cover_image_url,
+    working_hours: b.working_hours ?? null,
+    is_verified: b.is_verified ?? false,
+    is_published: b.is_published,
+    is_open: b.is_open ?? false,
+    accepts_orders: b.accepts_orders ?? false,
+    accepts_whatsapp_orders: b.accepts_whatsapp_orders ?? false,
+    branches_count: b.branches_count ?? 0,
+    offers_count: b.offers_count ?? 0,
+    rating_count: b.rating_count ?? 0,
+  })
+  const grade = getGradeLabel(completeness.grade)
+
   return (
     <div
       className={`${styles.card} ${pending ? styles.pending : ''} ${selected ? styles.cardSelected : ''}`}
@@ -117,7 +142,24 @@ export default function BusinessRow({
 
       <div className={styles.body}>
         <div className={styles.bodyHead}>
-          <h3 className={styles.name}>{b.name}</h3>
+          <div className={styles.nameRow}>
+            <h3 className={styles.name}>{b.name}</h3>
+            <Link
+              href={`/admin/businesses/${b.id}`}
+              className={`${styles.completenessBadge} ${styles[`completeness_${completeness.grade}`]}`}
+              title={
+                completeness.missing.length > 0
+                  ? `ناقص ${completeness.missing.length}: ${completeness.missing
+                      .slice(0, 4)
+                      .map((m) => m.label)
+                      .join(' · ')}`
+                  : 'مكتمل 100%'
+              }
+              aria-label={`اكتمال ${completeness.percent}% — اضغط للتفاصيل`}
+            >
+              {completeness.percent}%
+            </Link>
+          </div>
           <div className={styles.badges}>
             <span className={`${styles.status} ${styles[`status_${status}`]}`}>
               {status === 'pending' && 'بانتظار'}

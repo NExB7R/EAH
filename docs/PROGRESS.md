@@ -1444,3 +1444,11 @@
 - عند 100%: رسالة "النشاط مكتمل — جاهز للجمهور!".
 - 4 درجات لونية: مكتمل (turquoise) / جيد (teal) / ناقص (gold) / ضعيف (red).
 - رابط الـ panel مربوط بأقسام التعديل عشان الإضافة بضغطة.
+
+## 2026-11-09 — Completeness Badge في /admin/businesses
+- توسيع BUSINESS_LIST_COLUMNS (+14 أعمدة: logo, hours, counts, flags).
+- توسيع PendingBusiness type (fields جديدة optional — safe).
+- business-row.tsx: badge صغير بجانب الاسم (44px × 22px).
+- 4 ألوان: مكتمل (turquoise) / جيد (teal) / ناقص (gold) / ضعيف (red).
+- Hover tooltip: يعرض أول 4 عناصر ناقصة.
+- Click → يفتح صفحة التفاصيل.
