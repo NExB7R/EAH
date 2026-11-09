@@ -168,6 +168,22 @@
   font-weight: 600;
 }
 
+/* Subtle scroll hint — right edge gradient */
+.bar::after {
+  content: '';
+  position: sticky;
+  inset-inline-end: 0;
+  width: 24px;
+  margin-inline-start: -24px;
+  background: linear-gradient(90deg, transparent, rgba(10, 5, 20, 0.9));
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+@media (min-width: 641px) {
+  .bar::after { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .panel {
     animation: none;
@@ -247,23 +263,40 @@
    Auto-appended · safe no-ops on non-matching elements
    ═══════════════════════════════════════════════════ */
 @media (max-width: 640px) {
-  /* Allow flex rows to wrap */
+  /* Horizontal scroll — keep one row */
   .bar {
-    flex-wrap: wrap;
-    gap: 8px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    margin-inline: -12px;
+    padding-inline: 12px;
+    -webkit-overflow-scrolling: touch;
   }
-  /* Reduce container padding */
+
+  .bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .trigger,
+  .clearBtn {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
   .panel {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 14px;
+    gap: 16px;
+    border-radius: 16px;
   }
   .section {
-    padding-left: 12px;
-    padding-right: 12px;
+    gap: 8px;
   }
-  .sectionTitle {
-    padding-left: 12px;
-    padding-right: 12px;
+  .chip {
+    height: 36px;
+    padding: 0 12px;
+    font-size: 0.76rem;
   }
   /* Full-width form controls */
   .select input,

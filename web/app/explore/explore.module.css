@@ -15,7 +15,7 @@
 }
 
 .searchWrap {
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .badgeRow {
@@ -28,12 +28,13 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 @media (min-width: 640px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
   }
 }
 

@@ -1301,3 +1301,11 @@
 - Empty states: padding 48px بدل 60px، border-radius 16px (أنسب).
 - mapBtn: hover effect (lift + shadow أقوى).
 - contactItem: تحسينات بسيطة (border-radius 11px، transition 200ms).
+
+## 2026-11-08 — تحسين Explore Filters
+- Mobile: trigger bar بقت horizontal scroll (snap) بدل wrap — صف واحد بدل 3.
+- Mobile: إضافة scroll hint (gradient على اليمين) لتوضيح إن فيه scroll.
+- Panel: padding 14px، border-radius 16px، gap 16px على الموبايل.
+- Chips: height 36px على الموبايل (أنسب للـ touch).
+- Grid: gap 10px موبايل، 14px desktop (متوازن).
+- Search wrapper: margin 16px (تنفس أفضل).
