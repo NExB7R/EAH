@@ -1309,3 +1309,8 @@
 - Chips: height 36px على الموبايل (أنسب للـ touch).
 - Grid: gap 10px موبايل، 14px desktop (متوازن).
 - Search wrapper: margin 16px (تنفس أفضل).
+
+## 2026-11-09 — تطبيق Design Tokens على ملفين (تجربة)
+- branch-list.module.css: تحويل كل rgba يدوي إلى var(--purple-*, --gold-*, --teal-*) + radius tokens.
+- business-actions.module.css: نفس التحويل.
+- الهدف: اختبار إن الـ tokens شغالة قبل التطبيق على باقي الملفات.

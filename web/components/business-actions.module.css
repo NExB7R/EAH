@@ -19,8 +19,8 @@
   justify-content: center;
   gap: 6px;
   padding: 9px 6px;
-  border: 1px solid rgba(168, 85, 247, 0.22);
-  border-radius: 14px;
+  border: 1px solid var(--purple-2-22);
+  border-radius: var(--radius-14);
   color: var(--text-secondary);
   background: linear-gradient(155deg, rgba(28, 18, 43, 0.92), rgba(16, 9, 27, 0.9));
   font-family: inherit;
@@ -65,7 +65,7 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  border-radius: 11px;
+  border-radius: var(--radius-12);
   color: inherit;
   background: rgba(168, 85, 247, 0.1);
   transition:
@@ -76,7 +76,7 @@
 .action.primary .actionIcon {
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: var(--radius-12);
 }
 
 .actionLabel {
@@ -127,9 +127,9 @@
 
 /* ─── Order (in-app) ─── */
 .order {
-  border-color: rgba(85, 231, 209, 0.42);
+  border-color: var(--teal-40);
   color: #8ff0e1;
-  background: linear-gradient(135deg, rgba(85, 231, 209, 0.16), rgba(85, 231, 209, 0.05));
+  background: linear-gradient(135deg, var(--teal-15), rgba(85, 231, 209, 0.05));
 }
 
 .order .actionLabel {
@@ -138,12 +138,12 @@
 
 .order .actionIcon {
   color: #55e7d1;
-  background: rgba(85, 231, 209, 0.22);
+  background: var(--teal-20);
 }
 
 .order:hover:not(:disabled) {
-  border-color: rgba(85, 231, 209, 0.65);
-  box-shadow: 0 0 18px rgba(85, 231, 209, 0.15);
+  border-color: var(--teal-40);
+  box-shadow: 0 0 18px var(--teal-15);
 }
 
 /* ─── Phone ─── */
@@ -153,7 +153,7 @@
 }
 
 .phone:hover:not(:disabled) {
-  border-color: rgba(232, 199, 154, 0.5);
+  border-color: var(--gold-50);
 }
 
 /* ─── Favorite ─── */
@@ -199,7 +199,7 @@
 
 .active .actionIcon {
   color: var(--gold-light);
-  background: rgba(232, 199, 154, 0.17);
+  background: var(--gold-15);
 }
 
 /* ─── Contact choices popover ─── */
@@ -210,7 +210,7 @@
   width: 100%;
   padding: 10px;
   border: 1px solid rgba(168, 85, 247, 0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: rgba(16, 9, 27, 0.96);
 }
 
@@ -221,8 +221,8 @@
   align-items: center;
   justify-content: flex-start;
   padding: 10px 12px;
-  border: 1px solid rgba(168, 85, 247, 0.22);
-  border-radius: 10px;
+  border: 1px solid var(--purple-2-22);
+  border-radius: var(--radius-10);
   color: var(--text-primary);
   background: rgba(28, 18, 43, 0.92);
   font: inherit;
@@ -275,7 +275,7 @@
   .actionIcon {
     width: 42px;
     height: 42px;
-    border-radius: 14px;
+    border-radius: var(--radius-14);
   }
 
   .actionLabel {
@@ -298,7 +298,7 @@
   .actionIcon {
     width: 32px;
     height: 32px;
-    border-radius: 10px;
+    border-radius: var(--radius-10);
   }
 
   .actionLabel {

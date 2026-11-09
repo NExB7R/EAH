@@ -12,31 +12,31 @@
   align-items: flex-start;
   gap: 12px;
   padding: 14px;
-  border-radius: 14px;
-  background: rgba(168, 85, 247, 0.04);
-  border: 1px solid rgba(168, 85, 247, 0.14);
+  border-radius: var(--radius-14);
+  background: var(--purple-2-06);
+  border: 1px solid var(--purple-2-15);
   transition: all 200ms ease;
 }
 
 .item:hover {
-  background: rgba(168, 85, 247, 0.07);
-  border-color: rgba(168, 85, 247, 0.25);
+  background: var(--purple-2-08);
+  border-color: var(--purple-2-25);
 }
 
 /* ─── Primary branch (gold) ─── */
 .item.primary {
-  background: linear-gradient(135deg, rgba(232, 199, 154, 0.08), rgba(232, 199, 154, 0.03));
-  border-color: rgba(232, 199, 154, 0.35);
+  background: linear-gradient(135deg, var(--gold-08), rgba(232, 199, 154, 0.03));
+  border-color: var(--gold-30);
 }
 
 .item.primary:hover {
-  border-color: rgba(232, 199, 154, 0.55);
+  border-color: var(--gold-50);
 }
 
 /* ─── Closest branch (teal) ─── */
 .item.closest {
-  background: rgba(85, 231, 209, 0.06);
-  border-color: rgba(85, 231, 209, 0.32);
+  background: var(--teal-06);
+  border-color: var(--teal-32);
 }
 
 .item.closest:hover {
@@ -50,20 +50,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  background: rgba(168, 85, 247, 0.12);
+  border-radius: var(--radius-10);
+  background: var(--purple-2-12);
   color: var(--purple-2, #a855f7);
   flex-shrink: 0;
 }
 
 .item.primary .iconWrap {
-  background: rgba(232, 199, 154, 0.15);
+  background: var(--gold-15);
   color: var(--gold-light, #f5d9a7);
   border: 1px solid rgba(232, 199, 154, 0.4);
 }
 
 .item.closest .iconWrap {
-  background: rgba(85, 231, 209, 0.15);
+  background: var(--teal-15);
   color: #55e7d1;
   border: 1px solid rgba(85, 231, 209, 0.4);
 }
@@ -144,8 +144,8 @@
 }
 
 .item.closest .distance {
-  background: rgba(85, 231, 209, 0.12);
-  border-color: rgba(85, 231, 209, 0.32);
+  background: var(--teal-12);
+  border-color: var(--teal-32);
   color: #c8f5e5;
 }
 
@@ -167,7 +167,7 @@
 .addr::after {
   content: '·';
   margin-inline-start: 6px;
-  color: rgba(168, 85, 247, 0.35);
+  color: var(--purple-2-35);
 }
 
 .meta:has(.addr:last-child) .addr::after {
@@ -196,7 +196,7 @@
   .iconWrap {
     width: 32px;
     height: 32px;
-    border-radius: 9px;
+    border-radius: var(--radius-10);
   }
 
   .name {
