@@ -544,6 +544,52 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     }
   }
 
+  // Always create one primary branch so the business appears complete from day one
+  // (map, hours, contact flow all read from business_branches).
+  const { error: branchError } = await privileged
+    .from('business_branches')
+    .insert({
+      business_id: created.id,
+      name: d.name,
+      area: d.area || 'شبين القناطر',
+      address_text: d.address_text || null,
+      is_primary: true,
+      is_active: true,
+      working_hours: {},
+    })
+
+  if (branchError) {
+    // Full rollback: contacts + business must be removed to avoid orphans.
+    await privileged.from('business_contact_methods').delete().eq('business_id', created.id)
+    const { error: bizRollbackError } = await privileged
+      .from('businesses')
+      .delete()
+      .eq('id', created.id)
+
+    if (bizRollbackError) {
+      await logAudit(privileged, {
+        actorUserId: ctx.userId,
+        action: 'business.create_branch_failure_partial',
+        entityType: 'business',
+        entityId: created.id,
+        metadata: {
+          name: d.name,
+          branch_error: branchError.message,
+          rollback_error: bizRollbackError.message,
+        },
+      })
+      return {
+        ok: false,
+        error: 'تعذر إنشاء الفرع الأساسي وتعذّر التراجع التلقائي. راجع النشاط في لوحة الإدارة.',
+      }
+    }
+
+    return {
+      ok: false,
+      error: 'تعذر إنشاء الفرع الأساسي، وتم إلغاء إنشاء النشاط. حاول مرة أخرى.',
+    }
+  }
+
   // A newly registered owner normally starts as a customer. Promote only after
   // business + contacts are saved, and roll back the business if the role cannot be changed.
   if (d.owner_profile_id && selectedOwnerRole === 'customer') {
