@@ -1431,3 +1431,9 @@
 
 ## 2026-11-09 — Launch Day Runbook
 - docs/LAUNCH_DAY_RUNBOOK.md: timeline (T-7 → T+7) + rollback + metrics.
+
+## 2026-11-09 — Business Completeness Helper
+- web/lib/data/business-completeness.ts: دوال نقية لحساب جاهزية النشاط.
+- 15 معيار موزون (اسم، وصف، صور، ساعات، توثيق، طلبات، عروض، تقييمات).
+- 4 درجات: excellent (90+) / good (70+) / fair (50+) / poor.
+- جاهز للاستخدام في list + detail + AI advisor.
