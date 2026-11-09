@@ -1351,3 +1351,9 @@
 ## 2026-11-09 — توسيع فحوصات النظام
 - +6 فحوصات: Standing System, Autopilot, Points RPC, Notifications, Feature Flags, Owner Uniqueness.
 - إجمالي 13 فحص (7 أساسية + 6 متقدمة).
+
+## 2026-11-09 — إصلاح تلقائي للفحوصات
+- lib/data/health-fixes.ts: fixHealthIssue() لـ 3 فحوصات (published-without-branch, orphan-branches, stale-orders).
+- API route: POST /api/admin/health-checks/fix
+- UI: زر "🔧 إصلاح تلقائي" يظهر للفحوصات القابلة للإصلاح عند وجود مشكلة.
+- إعادة فحص تلقائية بعد الإصلاح.

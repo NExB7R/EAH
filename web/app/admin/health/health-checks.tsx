@@ -10,6 +10,9 @@ const STATUS_ICON: Record<CheckStatus, string> = {
   error: '❌',
 }
 
+
+const FIXABLE_CHECKS = new Set(['published-without-branch', 'orphan-branches', 'stale-orders'])
+
 const STATUS_LABEL: Record<CheckStatus, string> = {
   ok: 'سليم',
   warning: 'تحذير',
@@ -19,6 +22,7 @@ const STATUS_LABEL: Record<CheckStatus, string> = {
 export default function HealthChecks({ initialResult }: { initialResult: HealthChecksResult | null }) {
   const [result, setResult] = useState<HealthChecksResult | null>(initialResult)
   const [isPending, startTransition] = useTransition()
+  const [fixing, setFixing] = useState<string | null>(null)
 
   const runChecks = () => {
     startTransition(async () => {
@@ -28,6 +32,28 @@ export default function HealthChecks({ initialResult }: { initialResult: HealthC
         setResult(data)
       }
     })
+  }
+
+  const handleFix = async (checkId: string) => {
+    setFixing(checkId)
+    try {
+      const res = await fetch('/api/admin/health-checks/fix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ checkId }),
+      })
+      const data = (await res.json()) as { ok: boolean; message?: string; error?: string }
+      if (data.ok) {
+        // إعادة الفحص بعد الإصلاح
+        runChecks()
+      } else {
+        alert(data.error ?? 'فشل الإصلاح')
+      }
+    } catch {
+      alert('فشل الاتصال')
+    } finally {
+      setFixing(null)
+    }
   }
 
   return (
@@ -88,6 +114,16 @@ export default function HealthChecks({ initialResult }: { initialResult: HealthC
                   </div>
                   <p className={styles.message}>{check.message}</p>
                   {check.details && <p className={styles.details}>{check.details}</p>}
+                  {FIXABLE_CHECKS.has(check.id) && check.status !== 'ok' && (
+                    <button
+                      type="button"
+                      onClick={() => handleFix(check.id)}
+                      disabled={fixing === check.id}
+                      className={styles.fixBtn}
+                    >
+                      {fixing === check.id ? '⏳ جاري الإصلاح...' : '🔧 إصلاح تلقائي'}
+                    </button>
+                  )}
                 </div>
               </li>
             ))}
