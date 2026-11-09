@@ -33,7 +33,6 @@ export type AdminBusiness = {
   is_open: boolean
   is_featured: boolean
   is_verified: boolean
-  accepts_whatsapp_orders: boolean
   featured_order: number
   featured_pin: boolean
   featured_until: string | null
