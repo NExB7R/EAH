@@ -4,6 +4,7 @@ import StatCard from '@/components/dashboard/stat-card'
 import Panel from '@/components/dashboard/panel'
 import { ShieldCheckIcon, StarIcon, CrownGoldIcon, FileTextIcon } from '@/components/icons'
 import DeleteBusinessButton from './delete-button'
+import CompletenessPanel from './completeness-panel'
 import styles from './detail-tabs.module.css'
 
 const CONTACT_LABEL: Record<string, string> = {
@@ -30,6 +31,10 @@ export default function OverviewPanel({ biz }: { biz: AdminBusiness }) {
 
   return (
     <div className={styles.overviewGrid}>
+      <div className={styles.overviewFull}>
+        <CompletenessPanel biz={biz} />
+      </div>
+
       {notice && (
         <div className={styles.overviewFull}>
           <BusinessNotice notice={notice} />
