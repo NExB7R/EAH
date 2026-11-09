@@ -608,3 +608,8 @@ Build break fix. See scripts/check-css-modules-purity.mjs.
 - **التأثير:** 4 أرقام test على QA business ظهرت كـ LEAK في verify-launch.sql.
 - **الإصلاح:** Migration `2026-11-09-enforce-contact-privacy.sql` (CHECK + trigger).
 - **الدرس:** أي حقل حساس (phone, whatsapp, email) لازم يكون عليه CHECK constraint، مش بس فلترة في الكود.
+
+## 2026-11-09 — استخدام reviewed_at بدل moderated_at
+- **المشكلة:** `approve-customer1-reviews.sql` استخدم عمود `reviewed_at` اللي مش موجود في `business_reviews`. العمود الفعلي هو `moderated_at` + `moderated_by`.
+- **السبب:** migration `2026-10-06-review-moderation-fields.sql` أضاف `moderated_at`، لكن `reviewed_at` من migration قديمة (2026-09-30) اتمسح أو مش موجود في الجدول الحالي.
+- **الدرس:** أي seed يكتب في جدول لازم يشوف `information_schema.columns` أولاً، مش يفترض أسماء أعمدة.
