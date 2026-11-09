@@ -30,14 +30,14 @@
   outline-offset: 3px;
 }
 
-.purple { border-color: #56306f; }
-.gold { border-color: #665031; }
-.orange { border-color: #69432b; }
-.teal { border-color: #24594f; }
-.pink { border-color: #642b4d; }
-.blue { border-color: #2e4274; }
+.purple { border-color: var(--purple-2-50); }
+.gold { border-color: var(--gold-50); }
+.orange { border-color: rgba(253, 186, 116, 0.5); }
+.teal { border-color: var(--teal-40); }
+.pink { border-color: rgba(255, 107, 157, 0.4); }
+.blue { border-color: rgba(110, 168, 255, 0.4); }
 
-.featured { border-color: #98702f; }
+.featured { border-color: var(--gold-50); }
 .featured:hover { border-color: #f0c76a; }
 
 .imageWrap {

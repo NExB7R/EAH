@@ -180,20 +180,15 @@ export default function BusinessCard({
               لسه مفيش تقييمات
             </span>
           )}
-          <span
-            className={[
-              styles.channelBadge,
-              business.accepts_orders ? styles.channelOrder : styles.channelUnavailable,
-            ].join(' ')}
-            aria-label={
-              business.accepts_orders
-                ? 'يستقبل طلبات أونلاين'
-                : 'لا يستقبل طلبات أونلاين'
-            }
-          >
-            {business.accepts_orders ? <StoreIcon size={13} /> : <AlertIcon size={13} />}
-            {business.accepts_orders ? 'يستقبل طلبات أونلاين' : 'لا يستقبل طلبات أونلاين'}
-          </span>
+          {business.accepts_orders && (
+            <span
+              className={[styles.channelBadge, styles.channelOrder].join(' ')}
+              aria-label="يستقبل طلبات أونلاين"
+            >
+              <StoreIcon size={13} />
+              طلبات أونلاين
+            </span>
+          )}
 
         </div>
 

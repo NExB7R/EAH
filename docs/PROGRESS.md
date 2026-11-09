@@ -1423,3 +1423,8 @@
 - Server Component (بدون JS) — لا تؤثر على bundle size.
 - تحت الهيرو مباشرة (قبل الأقسام).
 - Mobile: 2x2 grid، Desktop: 4 columns.
+
+## 2026-11-09 — business-card UX improvement
+- إخفاء "لا يستقبل طلبات أونلاين" badge السلبي (بيزهد الزائر).
+- إظهار "طلبات أونلاين" فقط لو النشاط فعلاً بيستقبل.
+- تحويل بعض hex colors → design tokens (purple, gold, teal).
