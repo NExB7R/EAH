@@ -5,7 +5,7 @@
 
 WITH checks AS (
   SELECT '1. Test accounts'::text AS category,
-    '4 accounts exist'::text AS check,
+    '4 accounts exist'::text AS check_name,
     CASE WHEN count(*) = 4 THEN '✅ OK' ELSE '❌ FAIL (' || count(*) || '/4)' END::text AS status
   FROM auth.users WHERE email IN ('customer1@eah.test', 'customer2@eah.test', 'merchant1@eah.test', 'merchant2@eah.test')
 
@@ -106,4 +106,4 @@ WITH checks AS (
     CASE WHEN count(*) = 0 THEN '✅ OK' ELSE '⚠️ ' || count(*) || ' unresolved' END
   FROM public.system_errors WHERE resolved_at IS NULL AND severity IN ('high','critical') AND created_at > now() - interval '24 hours'
 )
-SELECT category, check, status FROM checks ORDER BY category;
+SELECT category, check_name, status FROM checks ORDER BY category;
