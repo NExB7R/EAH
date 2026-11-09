@@ -156,7 +156,7 @@
 | `detail-cover.tsx` | DetailCover | EAH — Detail Cover (client with onError fallback) |
 | `detail-logo.tsx` | DetailLogo | — |
 | `distance-badge.tsx` | DistanceBadge | EAH — Distance Badge (v3) |
-| `empty-state.tsx` | EmptyState | — |
+| `empty-state.tsx` | EmptyState | Optional secondary action (e.g. "مسح الفلاتر") |
 | `explore-filters.tsx` | ExploreFilters | EAH — Explore Filters |
 | `explore-search.tsx` | ExploreSearch | EAH — Explore Search (with voice + history) |
 | `featured-bento.tsx` | FeaturedBento | EAH — Featured Bento (Home) — Premium 2026 |
