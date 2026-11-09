@@ -1,4 +1,9 @@
 import { Suspense } from 'react'
+import {
+  homeMetadata,
+  organizationJsonLd,
+  websiteJsonLd,
+} from './home-metadata'
 import HomeHero from '@/components/home-hero'
 import FeaturedBento from '@/components/featured-bento'
 import TrendingRow from '@/components/trending-row'
@@ -25,6 +30,8 @@ import { isOpenNow } from '@/lib/data/businesses'
 import { filterInAppOrderBusinesses } from '@/lib/search/online-orders'
 import type { Business } from '@/lib/data'
 
+export const metadata = homeMetadata
+
 export const dynamic = 'force-dynamic'
 
 type Props = {
@@ -38,6 +45,14 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd).replace(/</g, '\\u003c') }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd).replace(/</g, '\\u003c') }}
+      />
       <ChipScrollHandler target={params.scroll} />
       <HomeHero isLoggedIn={!!session} hasBusiness={!!business} />
       <Suspense fallback={null}>

@@ -1391,3 +1391,9 @@
 - launch-readiness-utils.test.ts: 10 اختبارات (grade thresholds، weighted calculation، realistic mix).
 - Refactor: launch-readiness.tsx بيستخدم الـ util بدل دالة محلية.
 - المكسب: features جديدة عندها coverage بدل 0.
+
+## 2026-11-09 — إكمال SEO Coverage
+- Home page metadata: title, description, keywords, OG, Twitter, canonical.
+- JSON-LD: Organization + WebSite (SearchAction) — يخلي جوجل يعرض search box.
+- Auth page metadata: title + description + noindex (مش عايزين تظهر في البحث).
+- home-metadata.ts: ملف مستقل عشان يبقى reusable.
