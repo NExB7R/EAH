@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import styles from './launch-readiness.module.css'
 import type { ReadinessResult } from '@/lib/data/launch-readiness'
+import { getReadinessGrade } from '@/lib/launch-readiness-utils'
 
 const STATUS_ICON: Record<string, string> = {
   ready: '✅',
@@ -23,14 +24,7 @@ export default function LaunchReadiness({ initialResult }: { initialResult: Read
     })
   }
 
-  const getGrade = (pct: number): { label: string; color: string } => {
-    if (pct >= 90) return { label: 'جاهز للإطلاق 🚀', color: '#55e7d1' }
-    if (pct >= 75) return { label: 'قريب جدًا', color: '#a3f5dc' }
-    if (pct >= 50) return { label: 'شغل كتير متبقي', color: '#facc15' }
-    return { label: 'محتاج شغل كبير', color: '#ef4444' }
-  }
-
-  return (
+return (
     <section className={styles.section}>
       <div className={styles.header}>
         <div>
@@ -58,7 +52,7 @@ export default function LaunchReadiness({ initialResult }: { initialResult: Read
                 <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="16" />
                 <circle
                   cx="100" cy="100" r="88" fill="none"
-                  stroke={getGrade(result.overallPercent).color}
+                  stroke={getReadinessGrade(result.overallPercent).color}
                   strokeWidth="16"
                   strokeDasharray={`${(result.overallPercent / 100) * 552.92} 552.92`}
                   strokeLinecap="round"
@@ -66,10 +60,10 @@ export default function LaunchReadiness({ initialResult }: { initialResult: Read
                 />
               </svg>
               <div className={styles.gaugeText}>
-                <div className={styles.gaugePercent} style={{ color: getGrade(result.overallPercent).color }}>
+                <div className={styles.gaugePercent} style={{ color: getReadinessGrade(result.overallPercent).color }}>
                   {result.overallPercent}%
                 </div>
-                <div className={styles.gaugeLabel}>{getGrade(result.overallPercent).label}</div>
+                <div className={styles.gaugeLabel}>{getReadinessGrade(result.overallPercent).label}</div>
               </div>
             </div>
           </div>

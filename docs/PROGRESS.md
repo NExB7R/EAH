@@ -1384,3 +1384,10 @@
 - docs/LAUNCH_CHECKLIST.md: 9 أقسام شاملة (بنية تحتية، أنظمة، صفحات، لوحات، أمان، جودة بيانات، وثائق، اختبارات، ما قبل الإطلاق).
 - معايير إطلاق محددة: Launch Readiness ≥90%، Health Checks 0 blockers، ≥3 real businesses، 0 demo data، Lighthouse ≥90، RLS 100%.
 - روابط في `/admin/health` للوصول السريع.
+
+## 2026-11-09 — إضافة اختبارات للـ Features الجديدة
+- empty-state.test.tsx: 10 اختبارات (variants, CTA, secondary CTA، rendering).
+- launch-readiness-utils.ts: فصل منطق الـ gauge (getReadinessGrade, computeWeightedPercent) كـ pure functions.
+- launch-readiness-utils.test.ts: 10 اختبارات (grade thresholds، weighted calculation، realistic mix).
+- Refactor: launch-readiness.tsx بيستخدم الـ util بدل دالة محلية.
+- المكسب: features جديدة عندها coverage بدل 0.
