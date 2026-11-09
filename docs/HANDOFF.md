@@ -236,3 +236,83 @@ git push origin main
 
 **✅ جاهز — ابدأ الشات الجديد بـ:**
 اقرأ docs/HANDOFF.md + CONSTITUTION + AGENTS.md
+
+---
+
+## 🚨 قواعد تقنية صارمة
+
+### ⛔ Hard NOs
+
+| ممنوع | السبب |
+|---|---|
+| `npm run build` محليًا | SIGILL على الجهاز |
+| `npm test` (كامل) | بطيء. استخدم `npx vitest run <file>` |
+| `nano` | بيعلق الترمنال |
+| heredoc > 50 سطر | بيتقطع. قسّم أجزاء |
+| خطوط Poppins/Inter/Roboto | خطوط EAH: Tajawal + Cairo |
+| `git push --force` | يمسح شغل |
+| تعديل migrations قديمة | اعمل جديدة |
+
+### 🔒 RPCs محمية (service_role فقط)
+
+- `get_multi_account_ips`: REVOKED من PUBLIC + anon + authenticated
+- `find_by_phone`: REVOKED من anon/authenticated (service بعد rate-limit)
+- `is_phone_registered`: service_role فقط
+- `can_interact`: authenticated (للتحقق من standing)
+- `check_trigger_status`: authenticated (للـ health)
+
+### 🎨 قواعد التصميم
+
+- خطوط: Tajawal + Cairo + Great Vibes فقط
+- Dark theme فقط، لا light mode
+- RTL كامل: `dir="rtl"` على html
+- Design tokens: `var(--purple-2-20)` بدل rgba يدوي
+- Mobile-first: ابدأ من 320px
+
+### 🗄️ قواعد Database
+
+- RLS إجباري على أي جدول جديد
+- service_role في Server Actions فقط
+- Demo data يبدأ بـ `demo-` أو `eah-qa-test-`
+- CHECK constraints للحقول الحساسة
+- Triggers لازم تتحقق من أعمدة الجدول
+
+### ⚙️ Vercel
+
+- كل push = 1-2 build min
+- `npm ci` على Vercel يحتاج package-lock متزامن
+- Build fail = rollback فوري
+- Env vars في Dashboard فقط
+
+### 🧪 Testing
+
+- `npx vitest run <file>` فقط
+- RLS tests في web/supabase/tests/
+- E2E في web/e2e/ (Playwright على CI)
+
+### 📝 التوثيق
+
+- كل درس → docs/LESSONS.md
+- كل خطأ → docs/ERROR_REGISTER.md
+- كل تغيير → docs/PROGRESS.md
+- كل قرار → docs/CONSTITUTION.md
+
+### 2. افحص الحالة
+
+cd ~/EAH
+git status
+git log -5
+cd web
+npx tsc --noEmit
+cd ~/EAH
+
+### 3. الأولوية الحالية
+المالك يضيف أول نشاط حقيقي من /admin/businesses/new
+
+### 4. دورك
+- تابع خطوة بخطوة
+- ساعد في logo/cover/hours
+- تحقق من النسبة بعد كل خطوة
+- سجّل المشاكل في ERROR_REGISTER
+
+**✅ جاهز — ابدأ الشات الجديد بـ "اقرأ docs/HANDOFF.md"**
