@@ -1397,3 +1397,8 @@
 - JSON-LD: Organization + WebSite (SearchAction) — يخلي جوجل يعرض search box.
 - Auth page metadata: title + description + noindex (مش عايزين تظهر في البحث).
 - home-metadata.ts: ملف مستقل عشان يبقى reusable.
+
+## 2026-11-09 — Performance cleanup
+- icon-512.png: ضغط (176KB → أصغر) عبر ImageMagick (لو متاح).
+- next.config.ts: إزالة unsplash/fbcdn من remotePatterns (كانت للـ demo).
+- TODO: صور demo في DB محتاجة مسح قبل الإطلاق (cleanup.sql).

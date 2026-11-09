@@ -29,9 +29,7 @@ const nextConfig: NextConfig = {
         hostname: SUPABASE_HOST,
         pathname: '/storage/v1/object/public/**',
       },
-      // مؤقت — صور تجريبية
-      { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
-      { protocol: 'https', hostname: 'scontent-iad3-2.xx.fbcdn.net', pathname: '/**' },
+      // TODO(pre-launch): احذف الاتنين دول قبل الإطلاق (صور demo فقط)
     ],
   },
 
