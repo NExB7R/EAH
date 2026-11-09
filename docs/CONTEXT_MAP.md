@@ -9,7 +9,7 @@
 
 ---
 
-## Routes (111)
+## Routes (112)
 
 | Route | File |
 |-------|------|
@@ -62,6 +62,7 @@
 | `/api/admin/launch-readiness` | `app/api/admin/launch-readiness/route.ts` |
 | `/api/admin/live-feed` | `app/api/admin/live-feed/route.ts` |
 | `/api/admin/upload-business-image` | `app/api/admin/upload-business-image/route.ts` |
+| `/api/admin/verify-launch` | `app/api/admin/verify-launch/route.ts` |
 | `/api/ai/chat` | `app/api/ai/chat/route.ts` |
 | `/api/ai/support` | `app/api/ai/support/route.ts` |
 | `/api/ai/transcribe` | `app/api/ai/transcribe/route.ts` |
