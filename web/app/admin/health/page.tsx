@@ -9,6 +9,7 @@ import HealthFilters from './health-filters'
 import AuditSection from './audit-section'
 import HealthChecks from './health-checks'
 import LaunchReadiness from './launch-readiness'
+import VerifyLaunchButton from './verify-launch-button'
 import styles from './health.module.css'
 
 export const dynamic = 'force-dynamic'
@@ -85,6 +86,8 @@ export default async function AdminHealthPage({
           🧪 Testing Guide
         </Link>
       </div>
+
+      <VerifyLaunchButton />
 
       <LaunchReadiness initialResult={null} />
 

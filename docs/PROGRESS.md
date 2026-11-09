@@ -1411,3 +1411,9 @@
 ## 2026-11-09 — إصلاح approve reviews (moderated_at)
 - صححنا العمود: moderated_at (مش reviewed_at).
 - تحديث seed + توثيق الدرس.
+
+## 2026-11-09 — Verify Launch (in-app)
+- /api/admin/verify-launch: 16 checks via Service Client (نفس SQL script بس من المتصفح).
+- <VerifyLaunchButton />: قسم في /admin/health مع زر "تشغيل" + نتيجة مرئية.
+- يستخدم Service Client، محمي بـ requireAdmin.
+- النتيجة: 16/16 ✅ (verified via SQL Script يدويًا).

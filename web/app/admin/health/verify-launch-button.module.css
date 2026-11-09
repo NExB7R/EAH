@@ -1,0 +1,106 @@
+.wrap {
+  margin: 24px 0;
+  padding: 20px;
+  border-radius: var(--radius-20);
+  background: linear-gradient(155deg, rgba(22, 15, 36, 0.7), rgba(16, 10, 26, 0.6));
+  border: 1px solid var(--purple-2-20);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 4px;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  color: #a0a0a0;
+  margin: 0;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: var(--radius-12);
+  background: linear-gradient(135deg, #9D4EDD, #C77DFF);
+  color: #fff;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.summary {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 12px;
+  border-radius: var(--radius-12);
+  background: rgba(255, 255, 255, 0.03);
+  margin-bottom: 16px;
+  font-family: var(--font-display);
+  font-weight: 900;
+}
+
+.statOk { color: #55e7d1; }
+.statWarn { color: #facc15; }
+.statFail { color: #ef4444; }
+.total { color: #a0a0a0; font-size: 0.8rem; }
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-10);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--purple-2-12);
+}
+
+.item-ok { border-color: var(--teal-30); background: var(--teal-06); }
+.item-warn { border-color: var(--gold-30); background: var(--gold-06); }
+.item-fail { border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.06); }
+
+.icon { font-size: 1rem; }
+
+.body { flex: 1; min-width: 0; }
+.category { font-size: 0.7rem; color: #a0a0a0; font-weight: 700; }
+.checkName { font-size: 0.82rem; color: #fff; font-weight: 800; margin-top: 2px; }
+.message { font-size: 0.7rem; color: #888; margin-top: 2px; }
+
+.timestamp {
+  font-size: 0.7rem;
+  color: #666;
+  text-align: center;
+  margin-top: 12px;
+}
+
+@media (max-width: 640px) {
+  .header { flex-direction: column; }
+  .btn { width: 100%; }
+  .summary { flex-wrap: wrap; }
+}
