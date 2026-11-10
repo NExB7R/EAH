@@ -225,7 +225,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (121)
+## Lib (123)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -240,6 +240,7 @@
 | `ai/tools.ts` | TOOL_DEFS, executeTool | EAH — AI Tools |
 | `ai/whisper.ts` | transcribeAudio | EAH — Groq Whisper Client |
 | `app-texts.ts` | DEFAULT_TEXTS, TEXT_META | EAH — App Texts (Shared Client + Server) |
+| `audit/user-event.ts` | logUserEvent | لا نكسر العملية لو التسجيل فشل |
 | `auth/admin.ts` | requireAdmin | EAH — Admin Authorization |
 | `auth/cron.ts` | verifyCron | EAH — Cron auth (fail-closed) |
 | `auth/ip.ts` | getHashedIp | EAH — IP Hashing (privacy-preserving) |
@@ -260,6 +261,7 @@
 | `data/announcements.ts` | getActiveAnnouncements | EAH — Announcements Data |
 | `data/app-texts.ts` | getAppTexts | EAH — App Texts Reader (cached 60s) |
 | `data/areas.ts` | AREAS, getActiveAreas | EAH — Areas (قرى وعزب في نطاق 15 كم من شبين القناطر) |
+| `data/audit.ts` | getUserAuditEvents | — |
 | `data/badges.ts` | getBadgeCatalogWithStatus, runBadgeChecks | EAH — Badges Data |
 | `data/business-completeness.ts` | computeBusinessCompleteness, getGradeLabel | EAH — Business Completeness (2026-11-09) |
 | `data/business-detail.ts` | computeIsOpenNow, isBusinessOwner, getBusinessDetail, getBusinessReviews, computeReviewStats, … | EAH — Business Detail (Full Page Data) |
