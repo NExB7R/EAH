@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { getUserSession } from '@/lib/data/user'
 import { getFullProfile } from '@/lib/data/account'
+import { getUserAuditEvents } from '@/lib/data/audit'
 import { ProfileHeader } from '@/components/profile/profile-header'
 import { ProfileTabs } from '@/components/profile/profile-tabs'
 import type { BadgeKind } from '@/lib/profile/role-theme'
@@ -15,6 +16,7 @@ export default async function AdminProfilePage() {
 
   const profile = await getFullProfile(session.userId)
   if (!profile) redirect('/auth?next=/admin/profile')
+  const events = await getUserAuditEvents(30)
 
   const badges: BadgeKind[] = []
   if (profile.phone_verified_at) badges.push('verified')
@@ -30,6 +32,7 @@ export default async function AdminProfilePage() {
         badges={badges}
       />
       <ProfileTabs
+        auditEvents={events}
         profileContent={
           <AdminProfileForm
             initial={{

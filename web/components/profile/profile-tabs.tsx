@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { UserIcon, LockIcon, ClockIcon } from '@/components/icons'
+import type { AuditEvent } from '@/lib/data/audit'
 import { SecurityTab } from './security-tab'
 import { ActivityTab } from './activity-tab'
 import styles from './profile-tabs.module.css'
@@ -16,9 +17,10 @@ const TABS: { key: Tab; label: string; Icon: typeof UserIcon }[] = [
 
 type Props = {
   profileContent: React.ReactNode
+  auditEvents?: AuditEvent[]
 }
 
-export function ProfileTabs({ profileContent }: Props) {
+export function ProfileTabs({ profileContent, auditEvents = [] }: Props) {
   const [tab, setTab] = useState<Tab>('profile')
   const [toast, setToast] = useState<string | null>(null)
 
@@ -49,7 +51,7 @@ export function ProfileTabs({ profileContent }: Props) {
       <div id={`panel-${tab}`} role="tabpanel" className={styles.panelBody}>
         {tab === 'profile' && profileContent}
         {tab === 'security' && <SecurityTab onComingSoon={onComingSoon} />}
-        {tab === 'activity' && <ActivityTab />}
+        {tab === 'activity' && <ActivityTab events={auditEvents} />}
       </div>
 
       {toast && (

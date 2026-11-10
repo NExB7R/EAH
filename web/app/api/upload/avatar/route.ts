@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { uploadImage, deleteImage } from '@/lib/cloudinary'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { revalidatePath } from 'next/cache'
+import { logUserEvent } from '@/lib/audit/user-event'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -75,7 +76,11 @@ export async function POST(req: NextRequest) {
   revalidatePath('/account/edit')
   revalidatePath('/admin/profile')
   revalidatePath('/', 'layout')
-
+  await logUserEvent({
+    userId: user.id,
+    action: 'profile.avatar_upload',
+    metadata: { url: result.url },
+  })
   return NextResponse.json({ ok: true, url: result.url })
 }
 
@@ -120,5 +125,10 @@ export async function DELETE() {
   revalidatePath('/account/edit')
   revalidatePath('/admin/profile')
   revalidatePath('/', 'layout')
+  await logUserEvent({
+    userId: user.id,
+    action: 'profile.avatar_delete',
+    metadata: currentUrl ? { deleted_url: currentUrl } : {},
+  })
   return NextResponse.json({ ok: true })
 }

@@ -184,3 +184,46 @@
     margin: 0;
   }
 }
+
+/* ═══ Activity Tab ═══ */
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.activityItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(20, 14, 34, 0.4);
+  border: 1px solid rgba(199, 125, 255, 0.1);
+}
+.activityIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: rgba(168, 85, 247, 0.12);
+  color: #c7a6f5;
+}
+.activityBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.activityLabel {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.activityTime {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+}

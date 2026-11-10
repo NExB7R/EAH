@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { requireAdmin } from '@/lib/auth/admin'
+import { logUserEvent } from '@/lib/audit/user-event'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Admin Profile Actions
@@ -29,5 +30,10 @@ export async function updateAdminProfile(formData: FormData): Promise<Result> {
   revalidatePath('/admin/profile')
   revalidatePath('/admin')
   revalidatePath('/', 'layout')
+  await logUserEvent({
+    userId: ctx.userId,
+    action: 'profile.name_update',
+    metadata: { new_name: displayName },
+  })
   return { ok: true }
 }

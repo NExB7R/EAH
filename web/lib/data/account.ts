@@ -211,6 +211,7 @@ export type FullProfile = {
   phone: string | null
   phone_e164: string | null
   phone_verified_at: string | null
+  verified_at?: string | null // RPC قد لا يُرجعه — optional
   avatar_url: string | null
   bio: string | null
   gender: string | null

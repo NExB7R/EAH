@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import type { FullProfile } from './account'
 import { createClient } from '@/lib/supabase/server'
 
 // ═══════════════════════════════════════════════════════════
@@ -52,20 +53,16 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
 
   const now = new Date()
   const [
-    { data: profile },
+    { data: rawProfile },
     { data: roleRow },
     { count },
     { data: activeAds },
     { data: activeSubscriptions },
     { data: ownedBusiness },
   ] = await Promise.all([
-    supabase
-      .from('profiles')
-      .select(
-        'display_name, phone, avatar_url, phone_verified_at, verified_at, trust_score, trust_tier, streak_days, legend_points, is_premium, premium_until, display_name_mode, alias, hide_avatar, hide_favorites, hide_following',
-      )
-      .eq('id', user.id)
-      .maybeSingle(),
+    // RPC يضمن الوصول لبيانات المستخدم عبر SECURITY DEFINER
+    // (query مباشر على profiles كان يرجع null أحيانًا بسبب RLS/cache)
+    supabase.rpc('get_my_profile').maybeSingle(),
     supabase.from('user_roles').select('role').eq('user_id', user.id).maybeSingle(),
     supabase
       .from('notifications')
@@ -90,6 +87,8 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
       .limit(20),
     supabase.from('businesses').select('id').eq('owner_profile_id', user.id).limit(1).maybeSingle(),
   ])
+
+  const profile = rawProfile as FullProfile | null
 
   const isWithinActiveDates = (startsAt: string | null, endsAt: string | null) => {
     const nowMs = now.getTime()
