@@ -79,7 +79,6 @@ export async function uploadImage(
   }
 }
 
-
 const REMOTE_IMAGE_TIMEOUT_MS = 8_000
 const REMOTE_MAX_REDIRECTS = 3
 
@@ -157,16 +156,18 @@ function isPublicAddress(address: string, family: number): boolean {
 
   // Accept global unicast only (2000::/3); block documentation, benchmark,
   // ORCHID, Teredo and 6to4 ranges that should not be used as public origins.
-  if ((value >> 125n) !== 1n) return false
-  if ((value >> 96n) === 0x20010db8n) return false // 2001:db8::/32
-  if ((value >> 80n) === 0x200100020000n) return false // 2001:2::/48
-  if ((value >> 100n) === 0x2001001n || (value >> 100n) === 0x2001002n) return false
-  if ((value >> 96n) === 0x20010000n) return false // 2001::/32 (Teredo)
-  if ((value >> 112n) === 0x2002n) return false // 2002::/16 (6to4)
+  if (value >> 125n !== 1n) return false
+  if (value >> 96n === 0x20010db8n) return false // 2001:db8::/32
+  if (value >> 80n === 0x200100020000n) return false // 2001:2::/48
+  if (value >> 100n === 0x2001001n || value >> 100n === 0x2001002n) return false
+  if (value >> 96n === 0x20010000n) return false // 2001::/32 (Teredo)
+  if (value >> 112n === 0x2002n) return false // 2002::/16 (6to4)
   return true
 }
 
-async function validatePublicHttpsUrl(rawUrl: string): Promise<{ url: URL; addresses: ResolvedAddress[] }> {
+async function validatePublicHttpsUrl(
+  rawUrl: string,
+): Promise<{ url: URL; addresses: ResolvedAddress[] }> {
   if (!rawUrl || rawUrl.length > 500) throw new Error('URL length')
   let url: URL
   try {
@@ -187,9 +188,8 @@ async function validatePublicHttpsUrl(rawUrl: string): Promise<{ url: URL; addre
   }
 
   const hostname = url.hostname.toLowerCase()
-  const unwrappedHost = hostname.startsWith('[') && hostname.endsWith(']')
-    ? hostname.slice(1, -1)
-    : hostname
+  const unwrappedHost =
+    hostname.startsWith('[') && hostname.endsWith(']') ? hostname.slice(1, -1) : hostname
 
   // Do not accept IP literals or special-use/local hostnames.
   if (
@@ -289,7 +289,11 @@ async function downloadRemoteImage(
     const location = Array.isArray(locationHeader) ? locationHeader[0] : locationHeader
     response.resume()
     if (!location || redirectsRemaining <= 0) throw new Error('Too many or invalid redirects')
-    return downloadRemoteImage(new URL(location, url).toString(), maxSizeBytes, redirectsRemaining - 1)
+    return downloadRemoteImage(
+      new URL(location, url).toString(),
+      maxSizeBytes,
+      redirectsRemaining - 1,
+    )
   }
 
   if (status !== 200) {
@@ -332,7 +336,11 @@ async function downloadRemoteImage(
   const contentType = Array.isArray(rawContentType)
     ? rawContentType[0]?.split(';')[0]?.trim().toLowerCase()
     : rawContentType?.split(';')[0]?.trim().toLowerCase()
-  if (contentType && !contentType.startsWith('image/') && contentType !== 'application/octet-stream') {
+  if (
+    contentType &&
+    !contentType.startsWith('image/') &&
+    contentType !== 'application/octet-stream'
+  ) {
     throw new Error('Remote resource is not an image')
   }
 
@@ -354,14 +362,75 @@ export async function uploadRemoteImage(
 
   try {
     const downloaded = await downloadRemoteImage(rawUrl, maxSizeBytes)
-    const file = new File([new Uint8Array(downloaded.bytes)], `remote.${downloaded.type.extension}`, {
-      type: downloaded.type.mimeType,
-    })
+    const file = new File(
+      [new Uint8Array(downloaded.bytes)],
+      `remote.${downloaded.type.extension}`,
+      {
+        type: downloaded.type.mimeType,
+      },
+    )
     return uploadImage(file, folder, maxSizeBytes)
   } catch {
     return {
       ok: false,
       error: 'الرابط غير صالح أو لا يشير لصورة مدعومة؛ استخدم HTTPS وصورة أقل من 5MB',
     }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// EAH — Delete Image (Cloudinary signed destroy)
+// ═══════════════════════════════════════════════════════════
+
+export type DeleteResult = { ok: true } | { ok: false; error: string }
+
+function extractPublicId(url: string): string | null {
+  try {
+    const parsed = new URL(url)
+    if (parsed.hostname !== 'res.cloudinary.com') return null
+    const parts = parsed.pathname.split('/')
+    const uploadIdx = parts.indexOf('upload')
+    if (uploadIdx < 0) return null
+    const rest = parts.slice(uploadIdx + 1).filter(Boolean)
+    if (rest.length === 0) return null
+    const versionIdx = rest.findIndex((s) => /^v\d+$/.test(s))
+    const assetParts = versionIdx >= 0 ? rest.slice(versionIdx + 1) : rest
+    if (assetParts.length === 0) return null
+    const last = assetParts[assetParts.length - 1]
+    if (!last) return null
+    const dot = last.lastIndexOf('.')
+    if (dot > 0) assetParts[assetParts.length - 1] = last.slice(0, dot)
+    return assetParts.join('/')
+  } catch {
+    return null
+  }
+}
+
+export async function deleteImage(url: string): Promise<DeleteResult> {
+  if (!CLOUD_NAME || !API_KEY || !API_SECRET) {
+    return { ok: false, error: 'Cloudinary مش مضبوط' }
+  }
+  const publicId = extractPublicId(url)
+  if (!publicId) return { ok: false, error: 'رابط غير صالح أو ليس من Cloudinary' }
+  const timestamp = Math.floor(Date.now() / 1000)
+  const signature = sign({ public_id: publicId, timestamp }, API_SECRET)
+  const body = new URLSearchParams({
+    public_id: publicId,
+    timestamp: String(timestamp),
+    signature,
+    api_key: API_KEY,
+  })
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/destroy`, {
+      method: 'POST',
+      body,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    })
+    if (!res.ok) return { ok: false, error: `Cloudinary HTTP ${res.status}` }
+    const json = (await res.json()) as { result?: string }
+    if (json.result === 'ok' || json.result === 'not found') return { ok: true }
+    return { ok: false, error: `Cloudinary: ${json.result ?? 'unknown'}` }
+  } catch {
+    return { ok: false, error: 'فشل الاتصال بـ Cloudinary' }
   }
 }

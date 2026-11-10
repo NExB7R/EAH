@@ -23,6 +23,8 @@ import { getAllLiveStats } from '@/lib/data/live-stats'
 import { getPublicContactSettings } from '@/lib/data/site-settings'
 import './globals.css'
 
+export const dynamic = 'force-dynamic'
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 
@@ -105,7 +107,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 async function TopBar() {
   if (!(await shouldRenderPublicChrome())) return null
 
-  const [session, flags, contactLinks] = await Promise.all([getUserSession(), getFeatureFlags(), getPublicContactSettings()])
+  const [session, flags, contactLinks] = await Promise.all([
+    getUserSession(),
+    getFeatureFlags(),
+    getPublicContactSettings(),
+  ])
   return (
     <SiteChromeGate>
       <FloatingCapsule session={session} contactLinks={contactLinks} />

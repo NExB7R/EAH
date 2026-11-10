@@ -1,0 +1,134 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+}
+.sheet {
+  width: 100%;
+  max-width: 480px;
+  background: #0f0717;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(199, 125, 255, 0.15);
+}
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #f5f3ff;
+}
+.closeBtn,
+.spacer {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(199, 125, 255, 0.2);
+  border-radius: 10px;
+  background: transparent;
+  color: #cbb8e8;
+  cursor: pointer;
+}
+.closeBtn:hover {
+  background: rgba(199, 125, 255, 0.12);
+}
+.cropArea {
+  position: relative;
+  width: 100%;
+  height: min(64vw, 380px);
+  background: #000;
+}
+.controls {
+  padding: 14px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sliderLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #cbb8e8;
+  font-size: 0.85rem;
+}
+.slider {
+  flex: 1;
+  accent-color: #a855f7;
+  height: 24px;
+}
+.error {
+  margin: 0;
+  color: #fca5a5;
+  font-size: 0.8rem;
+  text-align: center;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.primaryBtn,
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.primaryBtn {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  color: #fff;
+}
+.primaryBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.secondaryBtn {
+  background: transparent;
+  color: #cbb8e8;
+  border-color: rgba(199, 125, 255, 0.3);
+}
+.secondaryBtn:hover {
+  background: rgba(199, 125, 255, 0.08);
+}
+@media (min-width: 640px) {
+  .backdrop {
+    align-items: center;
+  }
+  .sheet {
+    border-radius: 20px;
+    max-height: 88vh;
+  }
+}
+@media (max-width: 360px) {
+  .cropArea {
+    height: 70vw;
+  }
+  .primaryBtn,
+  .secondaryBtn {
+    padding: 0 14px;
+    font-size: 0.85rem;
+  }
+}

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useTransition, useRef } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import Avatar from '@/components/avatar'
+import { AvatarUploader } from '@/components/profile/avatar-uploader'
 import { updateProfile, updatePrivacy } from './actions'
 import styles from './edit.module.css'
 
@@ -52,45 +52,8 @@ export default function EditProfileForm({ initial }: Props) {
   const [hideFavorites, setHideFavorites] = useState(initial.hideFavorites)
   const [hideFollowing, setHideFollowing] = useState(initial.hideFollowing)
 
-  const [avatarUrl, setAvatarUrl] = useState(initial.avatarUrl)
-  const [uploading, setUploading] = useState(false)
-  const [uploadError, setUploadError] = useState<string | null>(null)
-
   const [profileMsg, setProfileMsg] = useState<string | null>(null)
   const [privacyMsg, setPrivacyMsg] = useState<string | null>(null)
-
-  const fileRef = useRef<HTMLInputElement>(null)
-
-  // ─── رفع الصورة ───
-  const handleAvatarPick = () => fileRef.current?.click()
-
-  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    setUploadError(null)
-    setUploading(true)
-
-    try {
-      const fd = new FormData()
-      fd.append('file', file)
-
-      const res = await fetch('/api/upload/avatar', { method: 'POST', body: fd })
-      const data = await res.json()
-
-      if (!res.ok) {
-        setUploadError(data.error ?? 'فشل رفع الصورة')
-      } else {
-        setAvatarUrl(data.url)
-        router.refresh()
-      }
-    } catch {
-      setUploadError('فشل الاتصال')
-    } finally {
-      setUploading(false)
-      if (fileRef.current) fileRef.current.value = ''
-    }
-  }
 
   // ─── حفظ البيانات ───
   const onProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -139,41 +102,13 @@ export default function EditProfileForm({ initial }: Props) {
           <p className={styles.cardDesc}>اضغط على الصورة لتغييرها — JPG أو PNG · حتى 3MB</p>
         </header>
 
-        <div className={styles.avatarRow}>
-          <button
-            type="button"
-            className={styles.avatarBtn}
-            onClick={handleAvatarPick}
-            disabled={uploading}
-            aria-label="تغيير الصورة"
-          >
-            <Avatar
-              displayName={displayName}
-              avatarUrl={avatarUrl}
-              role={initial.role}
-              isVerified={initial.isVerified}
-              isPaidMember={initial.isPaidMember}
-              size="lg"
-            />
-            <span className={styles.avatarOverlay}>{uploading ? '...' : 'تغيير'}</span>
-          </button>
-
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            onChange={handleAvatarChange}
-            className={styles.hiddenInput}
-            aria-hidden
-            tabIndex={-1}
-          />
-
-          <div className={styles.avatarInfo}>
-            <div className={styles.avatarName}>{displayName}</div>
-            <div className={styles.avatarHint}>{avatarUrl ? 'في صورة حاليًا' : 'مفيش صورة'}</div>
-            {uploadError && <div className={styles.errorMsg}>{uploadError}</div>}
-          </div>
-        </div>
+        <AvatarUploader
+          displayName={displayName}
+          avatarUrl={initial.avatarUrl}
+          role={initial.role}
+          isVerified={initial.isVerified}
+          isPaidMember={initial.isPaidMember}
+        />
       </section>
 
       {/* ═══ Card 2: الهوية ═══ */}

@@ -118,19 +118,12 @@ export default function FloatingCapsule({ session, contactLinks }: Props) {
                 </Link>
 
                 <Link
-                  href={
-                    session.role === 'super_admin'
-                      ? '/admin/profile'
-                      : '/account'
-                  }
+                  href={session.role === 'super_admin' ? '/admin/profile' : '/account'}
                   className={styles.avatarLink}
-                  aria-label={
-                    session.role === 'super_admin'
-                      ? 'بروفايلي'
-                      : 'حسابي'
-                  }
+                  aria-label={session.role === 'super_admin' ? 'بروفايلي' : 'حسابي'}
                 >
                   <Avatar
+                    key={session.avatarUrl ?? 'no-avatar'}
                     displayName={session.displayName}
                     avatarUrl={session.avatarUrl}
                     role={session.role}
@@ -151,7 +144,12 @@ export default function FloatingCapsule({ session, contactLinks }: Props) {
         </div>
       </header>
 
-      <MenuDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} session={session} contactLinks={contactLinks} />
+      <MenuDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        session={session}
+        contactLinks={contactLinks}
+      />
     </>
   )
 }

@@ -18,6 +18,7 @@ export type UserSession = {
   avatarUrl: string | null
   role: AppRole
   hasBusiness: boolean
+  hasActiveAds: boolean
   notifCount: number
   phoneVerified: boolean
   isVerified: boolean
@@ -80,26 +81,21 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
       .limit(20),
     supabase
       .from('business_subscriptions')
-      .select('id, is_trial, starts_at, expires_at, plan:subscription_plans(price_egp), business:businesses!inner(owner_profile_id)')
+      .select(
+        'id, is_trial, starts_at, expires_at, plan:subscription_plans(price_egp), business:businesses!inner(owner_profile_id)',
+      )
       .eq('status', 'active')
       .eq('is_trial', false)
       .eq('business.owner_profile_id', user.id)
       .limit(20),
-    supabase
-      .from('businesses')
-      .select('id')
-      .eq('owner_profile_id', user.id)
-      .limit(1)
-      .maybeSingle(),
+    supabase.from('businesses').select('id').eq('owner_profile_id', user.id).limit(1).maybeSingle(),
   ])
 
   const isWithinActiveDates = (startsAt: string | null, endsAt: string | null) => {
     const nowMs = now.getTime()
     const startMs = startsAt ? new Date(startsAt).getTime() : Number.NEGATIVE_INFINITY
     const endMs = endsAt ? new Date(endsAt).getTime() : Number.POSITIVE_INFINITY
-    return Number.isFinite(startMs) || startsAt === null
-      ? startMs <= nowMs && endMs > nowMs
-      : false
+    return Number.isFinite(startMs) || startsAt === null ? startMs <= nowMs && endMs > nowMs : false
   }
 
   const ads = (activeAds ?? []) as unknown as Array<{
@@ -114,8 +110,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
   }>
   const hasPaidAdPackage = ads.some(
     (ad) =>
-      isWithinActiveDates(ad.starts_at, ad.ends_at) &&
-      Number(ad.slot?.base_price_egp ?? 0) > 0,
+      isWithinActiveDates(ad.starts_at, ad.ends_at) && Number(ad.slot?.base_price_egp ?? 0) > 0,
   )
   const hasPaidBusinessSubscription = subscriptions.some(
     (subscription) =>
@@ -127,7 +122,9 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
   const premiumUntil = profile?.premium_until ?? null
   const isPremium =
     !!profile?.is_premium &&
-    (!premiumUntil || (Number.isFinite(new Date(premiumUntil).getTime()) && new Date(premiumUntil).getTime() > now.getTime()))
+    (!premiumUntil ||
+      (Number.isFinite(new Date(premiumUntil).getTime()) &&
+        new Date(premiumUntil).getTime() > now.getTime()))
   const isVerified = !!profile?.verified_at
   const isPaidMember =
     role !== 'super_admin' && (isPremium || hasPaidAdPackage || hasPaidBusinessSubscription)
@@ -139,6 +136,7 @@ export const getUserSession = cache(async (): Promise<UserSession | null> => {
     avatarUrl: profile?.avatar_url ?? null,
     role: roleRow?.role === 'admin' ? 'customer' : ((roleRow?.role as AppRole) ?? 'customer'),
     hasBusiness: !!ownedBusiness,
+    hasActiveAds: ads.some((a) => isWithinActiveDates(a.starts_at, a.ends_at)),
     notifCount: count ?? 0,
     phone: (profile?.phone as string | null) ?? null,
     phoneVerified: !!profile?.phone_verified_at,

@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation'
 import { getUserSession } from '@/lib/data/user'
 import { getFullProfile } from '@/lib/data/account'
-import AccountPageHeader from '@/components/account-page-header'
+import { ProfileHeader } from '@/components/profile/profile-header'
+import type { BadgeKind, ProfileRole } from '@/lib/profile/role-theme'
 import EditProfileForm from './edit-form'
 
 export const dynamic = 'force-dynamic'
@@ -22,9 +23,28 @@ export default async function EditPage() {
       ? profile.display_name_mode
       : 'real'
 
+  const primaryRole: ProfileRole =
+    session.role === 'super_admin'
+      ? 'super_admin'
+      : session.role === 'merchant'
+        ? 'merchant'
+        : session.hasActiveAds
+          ? 'advertiser'
+          : 'customer'
+
+  const headerBadges: BadgeKind[] = []
+  if (session.isVerified) headerBadges.push('verified')
+  if (session.isPaidMember) headerBadges.push('premium')
+
   return (
     <div>
-      <AccountPageHeader title="تعديل البيانات" description="عدّل بياناتك وخصوصيتك" />
+      <ProfileHeader
+        displayName={profile.display_name}
+        avatarUrl={profile.avatar_url}
+        role={primaryRole}
+        subtitle="تعديل بياناتك وخصوصيتك"
+        badges={headerBadges}
+      />
       <EditProfileForm
         initial={{
           displayName: profile.display_name,

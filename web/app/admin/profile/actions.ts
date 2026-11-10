@@ -28,5 +28,6 @@ export async function updateAdminProfile(formData: FormData): Promise<Result> {
 
   revalidatePath('/admin/profile')
   revalidatePath('/admin')
+  revalidatePath('/', 'layout')
   return { ok: true }
 }

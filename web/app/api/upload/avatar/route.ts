@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { uploadImage } from '@/lib/cloudinary'
+import { uploadImage, deleteImage } from '@/lib/cloudinary'
 import { strictLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { revalidatePath } from 'next/cache'
 
@@ -73,6 +73,52 @@ export async function POST(req: NextRequest) {
 
   revalidatePath('/account')
   revalidatePath('/account/edit')
+  revalidatePath('/admin/profile')
+  revalidatePath('/', 'layout')
 
   return NextResponse.json({ ok: true, url: result.url })
+}
+
+// ═══════════════════════════════════════════════════════════
+// EAH — Avatar Delete (Cloudinary destroy + DB clear)
+// ═══════════════════════════════════════════════════════════
+export async function DELETE() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user || user.is_anonymous)
+    return NextResponse.json({ error: 'لازم تسجل دخول' }, { status: 401 })
+
+  const rl = await checkRateLimit(strictLimiter, `avatar-del:${user.id}`, { failClosed: true })
+  if (!rl.ok)
+    return NextResponse.json(
+      { error: rl.error },
+      { status: rl.error.startsWith('تعذر') ? 503 : 429 },
+    )
+
+  const { data: profile, error: readError } = await supabase
+    .from('profiles')
+    .select('avatar_url')
+    .eq('id', user.id)
+    .maybeSingle()
+  if (readError) return NextResponse.json({ error: 'تعذر قراءة البيانات' }, { status: 500 })
+
+  const currentUrl = (profile?.avatar_url as string | null) ?? null
+  if (currentUrl) {
+    const del = await deleteImage(currentUrl)
+    if (!del.ok) return NextResponse.json({ error: del.error }, { status: 400 })
+  }
+
+  const { error: updateError } = await supabase
+    .from('profiles')
+    .update({ avatar_url: null })
+    .eq('id', user.id)
+  if (updateError) return NextResponse.json({ error: 'فشل تحديث البيانات' }, { status: 500 })
+
+  revalidatePath('/account')
+  revalidatePath('/account/edit')
+  revalidatePath('/admin/profile')
+  revalidatePath('/', 'layout')
+  return NextResponse.json({ ok: true })
 }

@@ -1,8 +1,8 @@
 'use client'
 
-import { useRef, useState, useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import Avatar from '@/components/avatar'
+import { AvatarUploader } from '@/components/profile/avatar-uploader'
 import { updateAdminProfile } from './actions'
 import styles from './profile.module.css'
 
@@ -19,35 +19,7 @@ export default function AdminProfileForm({ initial }: Props) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [displayName, setDisplayName] = useState(initial.displayName)
-  const [avatarUrl, setAvatarUrl] = useState(initial.avatarUrl)
-  const [uploading, setUploading] = useState(false)
-  const [uploadError, setUploadError] = useState<string | null>(null)
   const [msg, setMsg] = useState<string | null>(null)
-  const fileRef = useRef<HTMLInputElement>(null)
-
-  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setUploadError(null)
-    setUploading(true)
-    try {
-      const fd = new FormData()
-      fd.append('file', file)
-      const res = await fetch('/api/upload/avatar', { method: 'POST', body: fd })
-      const data = await res.json()
-      if (!res.ok) {
-        setUploadError(data.error ?? 'فشل رفع الصورة')
-      } else {
-        setAvatarUrl(data.url)
-        router.refresh()
-      }
-    } catch {
-      setUploadError('فشل الاتصال')
-    } finally {
-      setUploading(false)
-      if (fileRef.current) fileRef.current.value = ''
-    }
-  }
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -70,41 +42,14 @@ export default function AdminProfileForm({ initial }: Props) {
       <section className={styles.card}>
         <header className={styles.cardHeader}>
           <h3 className={styles.cardTitle}>الصورة</h3>
-          <p className={styles.cardDesc}>اضغط على الصورة لتغييرها</p>
+          <p className={styles.cardDesc}>اسحب صورة أو اضغط للاختيار — يمكنك قصها ثم حفظها</p>
         </header>
-
-        <div className={styles.avatarRow}>
-          <button
-            type="button"
-            className={styles.avatarBtn}
-            onClick={() => fileRef.current?.click()}
-            disabled={uploading}
-            aria-label="تغيير الصورة"
-          >
-            <Avatar
-              displayName={displayName}
-              avatarUrl={avatarUrl}
-              role={initial.role}
-              phoneVerified={initial.phoneVerified}
-              size="lg"
-            />
-            <span className={styles.avatarOverlay}>{uploading ? '...' : 'تغيير'}</span>
-          </button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            onChange={handleAvatarChange}
-            className={styles.hiddenInput}
-            aria-hidden
-            tabIndex={-1}
-          />
-          <div className={styles.avatarInfo}>
-            <div className={styles.avatarName}>{displayName}</div>
-            <div className={styles.avatarHint}>{avatarUrl ? 'في صورة حاليًا' : 'مفيش صورة'}</div>
-            {uploadError && <div className={styles.errorMsg}>{uploadError}</div>}
-          </div>
-        </div>
+        <AvatarUploader
+          displayName={displayName}
+          avatarUrl={initial.avatarUrl}
+          role={initial.role}
+          compact
+        />
       </section>
 
       <form className={styles.card} onSubmit={onSubmit}>
