@@ -11,6 +11,7 @@ import {
 import type { PhoneSearchResult } from '@/lib/data/phone-search'
 import { searchCustomerByPhone } from '@/lib/data/phone-search'
 import styles from './phone-search-modal.module.css'
+import Avatar from '@/components/avatar'
 
 type Props = { onClose: () => void }
 
@@ -97,11 +98,12 @@ function ResultView({ result }: { result: PhoneSearchResult | null }) {
   return (
     <div className={styles.resultCard}>
       <div className={styles.resultHeader}>
-        {result.avatar_url ? (
-          <img src={result.avatar_url} alt="" className={styles.resultAvatar} />
-        ) : (
-          <span className={styles.resultInitial}>{result.display_name.charAt(0)}</span>
-        )}
+        <Avatar
+          displayName={result.display_name}
+          avatarUrl={result.avatar_url}
+          role="customer"
+          size="sm"
+        />
         <div className={styles.resultName}>
           <strong>{result.display_name}</strong>
           {result.is_verified && <CheckCircleIcon size={14} />}
