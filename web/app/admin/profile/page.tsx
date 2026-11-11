@@ -23,7 +23,14 @@ export default async function AdminProfilePage() {
   if (profile.is_premium) badges.push('premium')
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
+        minHeight: 'calc(100vh - 220px)',
+      }}
+    >
       <ProfileHeader
         displayName={profile.display_name}
         avatarUrl={profile.avatar_url}
@@ -40,6 +47,8 @@ export default async function AdminProfilePage() {
               avatarUrl: profile.avatar_url,
               role: 'super_admin',
               phoneVerified: !!profile.phone_verified_at,
+              email: session.email,
+              createdAt: profile.created_at,
             }}
           />
         }
