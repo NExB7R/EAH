@@ -9,7 +9,7 @@
 
 ---
 
-## Routes (112)
+## Routes (113)
 
 | Route | File |
 |-------|------|
@@ -49,6 +49,7 @@
 | `/admin/orders` | `app/admin/orders/page.tsx` |
 | `/admin/profile` | `app/admin/profile/page.tsx` |
 | `/admin/reports` | `app/admin/reports/page.tsx` |
+| `/admin/search/phone` | `app/admin/search/phone/page.tsx` |
 | `/admin/settings` | `app/admin/settings/page.tsx` |
 | `/admin/studio` | `app/admin/studio/page.tsx` |
 | `/admin/subscriptions` | `app/admin/subscriptions/page.tsx` |
@@ -126,7 +127,7 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (94)
+## Components (95)
 
 | File | Export | Purpose |
 |------|--------|---------|
@@ -192,6 +193,7 @@
 | `profile/avatar-crop-modal.tsx` | AvatarCropModal | — |
 | `profile/avatar-uploader.tsx` | AvatarUploader | — |
 | `profile/badge.tsx` | Badge | — |
+| `profile/phone-search-modal.tsx` | PhoneSearchModal | — |
 | `profile/profile-header.tsx` | ProfileHeader | — |
 | `profile/profile-tabs.tsx` | ProfileTabs | — |
 | `profile/security-tab.tsx` | SecurityTab | — |
@@ -225,7 +227,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (123)
+## Lib (124)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -287,6 +289,7 @@
 | `data/orders-expire.ts` | expireStaleOrders | Lazy expire — no cron needed. |
 | `data/orders-settings.ts` | getMerchantOrderSettings, getOrderSettingsForAdmin, isOrderAcceptanceActive | EAH — Orders Settings: data access |
 | `data/orders.ts` | ORDER_STATUSES, PAYMENT_METHODS, PAYMENT_LABEL, PAYMENT_WARNINGS, FEEDBACK_ISSUE_TYPES, … | EAH — Orders System v2: Types |
+| `data/phone-search.ts` | searchCustomerByPhone | — |
 | `data/promotion-status.ts` | isPromotionActive | True when an enabled, optional time-bounded placement is still active. |
 | `data/public-contacts.ts` | normalizePublicContactUrl, filterPublicContactMethods | Accept only absolute HTTP(S) URLs for links rendered in public pages. |
 | `data/published-business-pool.ts` | getPublishedBusinessLimit, onlyPublishedBusinessRows | Keep broad public discovery bounded; callers such as the home page use the lighter default. |
