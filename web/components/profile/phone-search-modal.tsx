@@ -8,8 +8,8 @@ import {
   CrownGoldIcon,
   CheckCircleIcon,
 } from '@/components/icons'
-import type { PhoneSearchResult } from '@/lib/data/phone-search'
-import { searchCustomerByPhone } from '@/lib/data/phone-search'
+import type { PhoneSearchResult } from '@/lib/types/phone-search'
+import { searchCustomerByPhoneAction } from '@/lib/actions/phone-search'
 import styles from './phone-search-modal.module.css'
 import Avatar from '@/components/avatar'
 
@@ -28,7 +28,7 @@ export function PhoneSearchModal({ onClose }: Props) {
     }
     setLoading(true)
     setResult(null)
-    const res = await searchCustomerByPhone(phone)
+    const res = await searchCustomerByPhoneAction(phone)
     setResult(res)
     setLoading(false)
   }
