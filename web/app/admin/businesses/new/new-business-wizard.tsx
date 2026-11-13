@@ -310,14 +310,6 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
           </div>
         </div>
       </div>
-
-      {step === STEPS.length - 1 && (
-        <div className={styles.mobileSubmit}>
-          <button type="button" onClick={submit} disabled={submitting} className={styles.btnCreate}>
-            {submitting ? 'بيتحفظ…' : 'إنشاء النشاط'}
-          </button>
-        </div>
-      )}
     </div>
   )
 }
