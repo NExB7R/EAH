@@ -121,7 +121,26 @@ where table_schema='public' and table_name='<table>'
 
 ---
 
-## 10. عند فشل Vercel build
+## 10. commit message types (commitlint)
+
+**القائمة المسموحة فقط:**
+`feat | fix | docs | style | refactor | perf | test | chore | ci | build | revert | sec`
+
+**الأمثلة:**
+- `feat(scope): new feature`
+- `fix(scope): bug fix`
+- `style(scope): UI/UX/formatting (no logic change)`
+- `refactor(scope): code restructure`
+- `perf(scope): performance improvement`
+- `chore: cleanup, deps, configs`
+- `docs: documentation only`
+- `sec(scope): security-related fix`
+
+**⚠️ ممنوع:** `ux`, `update`, `change`, `wip`, `temp` — commitlint يرفضها.
+
+---
+
+## 11. عند فشل Vercel build
 
 1. افتح Vercel Dashboard → Deployments → آخر deployment
 2. ابحث عن Failed to compile أو Error:
