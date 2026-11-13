@@ -65,7 +65,9 @@ function ResultView({ result }: { result: PhoneSearchResult }) {
         ? 'تجاوزت 10 عمليات بحث في الساعة — انتظر قليلًا'
         : result.error === 'rate_limit_day'
           ? 'تجاوزت 30 عملية بحث في اليوم — حاول غدًا'
-          : result.error
+          : result.error === 'rpc_exception'
+            ? `خطأ في الخادم: ${result.detail ?? 'غير معروف'}`
+            : result.error
     return <p className={styles.error}>{msg}</p>
   }
   if (!result.found) {

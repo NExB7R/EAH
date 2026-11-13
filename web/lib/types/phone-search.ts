@@ -1,6 +1,6 @@
 // EAH — Phone Search Result Type (shared between server + client)
 export type PhoneSearchResult =
-  | { ok: false; error: string }
+  | { ok: false; error: string; detail?: string; hint?: string }
   | { ok: true; found: false; reason?: string; error?: string }
   | {
       ok: true

@@ -11,6 +11,8 @@ export async function searchCustomerByPhoneAction(phone: string): Promise<PhoneS
   if (!user) return { ok: false, error: 'يجب تسجيل الدخول' }
 
   const { data, error } = await supabase.rpc('search_customer_by_phone', { p_phone: phone })
-  if (error) return { ok: false, error: 'تعذر تنفيذ البحث' }
+  if (error) {
+    return { ok: false, error: 'تعذر تنفيذ البحث', detail: error.message }
+  }
   return (data as PhoneSearchResult) ?? { ok: false, error: 'استجابة غير صالحة' }
 }
