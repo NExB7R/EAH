@@ -28,17 +28,19 @@ export function PhoneResultCard({ result }: Props) {
     return null
   }
 
-  const isAnon = result.privacy_mode === 'anonymous'
+  const hasName = !!result.display_name
+  const hasTrust = result.trust_score !== undefined
 
   return (
     <div className={styles.card} role="status" aria-live="polite">
-      <Header result={result} isAnon={isAnon} />
-      <TrustRow result={result} />
+      <Header result={result} hasName={hasName} hasTrust={hasTrust} />
+      {hasTrust && <TrustRow result={result} />}
       {result.bio && (
         <p className={styles.bio} dir="rtl">
           {result.bio}
         </p>
       )}
+      <Counts result={result} />
       {result.business && <BusinessSection business={result.business} />}
       {result.viewer === 'admin' && result.phone && (
         <div className={styles.phoneRow}>
@@ -50,22 +52,30 @@ export function PhoneResultCard({ result }: Props) {
   )
 }
 
-function Header({ result, isAnon }: { result: PhoneSearchResult; isAnon: boolean }) {
+function Header({
+  result,
+  hasName,
+  hasTrust,
+}: {
+  result: PhoneSearchResult
+  hasName: boolean
+  hasTrust: boolean
+}) {
   if (!result.ok || !result.found) return null
 
-  if (isAnon) {
+  if (!hasName) {
     return (
       <div className={styles.header}>
         <div className={styles.anonIcon}>
           <LockIcon size={20} />
         </div>
         <div className={styles.info}>
-          <div className={styles.name}>
-            <strong>حساب مخفي</strong>
-            {result.is_verified && <CheckCircleIcon size={14} />}
-            {result.is_premium && <CrownGoldIcon size={14} />}
-          </div>
-          <span className={styles.anonHint}>صاحب الرقم اختار إخفاء هويته — لكن حسابه موثّق</span>
+          <strong className={styles.anonTitle}>{hasTrust ? 'حساب مخفي' : 'رقم مسجل'}</strong>
+          <span className={styles.anonHint}>
+            {hasTrust
+              ? 'صاحب الرقم اختار إخفاء هويته — لكن حسابه مسجل'
+              : 'صاحب الرقم اختار عدم عرض تفاصيله'}
+          </span>
         </div>
       </div>
     )
@@ -73,17 +83,15 @@ function Header({ result, isAnon }: { result: PhoneSearchResult; isAnon: boolean
 
   return (
     <div className={styles.header}>
-      {result.display_name && (
-        <Avatar
-          displayName={result.display_name}
-          avatarUrl={result.avatar_url ?? null}
-          role="customer"
-          size="sm"
-        />
-      )}
+      <Avatar
+        displayName={result.display_name!}
+        avatarUrl={result.avatar_url ?? null}
+        role="customer"
+        size="sm"
+      />
       <div className={styles.info}>
         <div className={styles.name}>
-          <strong>{result.display_name ?? 'مستخدم EAH'}</strong>
+          <strong>{result.display_name}</strong>
           {result.role === 'super_admin' && (
             <span className={styles.roleBadgeAdmin}>
               <CrownGoldIcon size={11} />
@@ -106,6 +114,7 @@ function Header({ result, isAnon }: { result: PhoneSearchResult; isAnon: boolean
 
 function TrustRow({ result }: { result: PhoneSearchResult }) {
   if (!result.ok || !result.found) return null
+  if (result.trust_score === undefined || result.trust_tier === undefined) return null
 
   return (
     <dl className={styles.stats}>
@@ -129,6 +138,24 @@ function TrustRow({ result }: { result: PhoneSearchResult }) {
         </div>
       )}
     </dl>
+  )
+}
+
+function Counts({ result }: { result: PhoneSearchResult }) {
+  if (!result.ok || !result.found) return null
+  const hasComments = (result.comment_count ?? 0) > 0
+  const hasReviews = (result.rating_count ?? 0) > 0 && result.rating_avg !== undefined
+  if (!hasComments && !hasReviews) return null
+
+  return (
+    <div className={styles.counts}>
+      {hasReviews && (
+        <span>
+          ⭐ {result.rating_avg!.toFixed(1)} ({result.rating_count})
+        </span>
+      )}
+      {hasComments && <span>💬 {result.comment_count} تعليق</span>}
+    </div>
   )
 }
 

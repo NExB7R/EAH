@@ -1,5 +1,5 @@
 // EAH — Phone Search Result Type (shared between server + client)
-export type PhoneLookupMode = 'full' | 'anonymous'
+export type PhoneLookupMode = 'full' | 'trust_only' | 'anonymous'
 
 export type LinkedBusiness = {
   id: string
@@ -21,7 +21,7 @@ export type PhoneSearchResult =
       found: true
       viewer: 'admin' | 'user'
       privacy_mode?: PhoneLookupMode
-      // admin / full
+      // identity (admin / full)
       id?: string
       display_name?: string
       avatar_url?: string | null
@@ -29,10 +29,14 @@ export type PhoneSearchResult =
       bio?: string | null
       role?: 'super_admin' | 'merchant' | 'customer' | null
       member_since?: string
-      // always present
-      trust_score: number
-      trust_tier: string
-      is_verified: boolean
-      is_premium: boolean
+      // trust (admin / full / trust_only)
+      trust_score?: number
+      trust_tier?: string
+      is_verified?: boolean
+      is_premium?: boolean
+      // counts (admin / full)
+      comment_count?: number
+      rating_avg?: number
+      rating_count?: number
       business?: LinkedBusiness | null
     }
