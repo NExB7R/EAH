@@ -128,3 +128,33 @@ where table_schema='public' and table_name='<table>'
 3. اقرأ السطر بعد ./path/file.ts — هذا مكان الخطأ
 4. تحقق من client/server boundary
 5. أرسل اللوج للـ AI (لا تخمّن)
+
+
+---
+
+## 11. ممنوعات معمارية (قرارات مُلزمة)
+
+### ❌ ممنوع: Command Palette / Ctrl+K
+
+**القرار:** 2026-11-13 — حُذفت command-palette نهائيًا من المنصة.
+
+**السبب:**
+
+- لم تكن مستدعاة في app/layout.tsx — dead code
+- تجربة UX مشوشة (أوامر مخفية خلف Ctrl+K)
+- المنصة تعتمد على بحث /explore + المساعد الذكي العائم
+- زر البحث في admin-topbar كان يستدعي event لا مستمع له
+
+**لا تفعل:**
+
+- لا تُضِف CommandPalette في أي layout
+- لا تستدعِ eah:open-command-palette event
+- لا تُضِف Ctrl+K كاختصار
+- لا تُنشئ components/ui/command-palette.* أو lib/command-palette/*
+
+**البديل المعتمد:**
+
+- بحث المستخدم: /explore مع lib/search/* (fuzzy + synonyms)
+- بحث الهاتف: يُفعَّل تلقائيًا في /explore عند 11 رقم
+- المساعد الذكي: ai-widget.tsx (عائم)
+- التنقل: sidebar + topbar مباشر

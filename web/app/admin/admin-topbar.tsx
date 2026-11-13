@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { SearchIcon, UserIcon, BellIcon } from '@/components/icons'
+import { UserIcon, BellIcon } from '@/components/icons'
 import AdminMobileNav from './admin-mobile-nav'
 import styles from './admin-topbar.module.css'
 
@@ -15,8 +15,6 @@ type Props = {
 }
 
 export default function AdminTopbar({ counts }: Props) {
-  const openSearch = () => window.dispatchEvent(new Event('eah:open-command-palette'))
-
   return (
     <header className={styles.topbar}>
       <div className={styles.mobileMenu}>
@@ -24,17 +22,6 @@ export default function AdminTopbar({ counts }: Props) {
       </div>
 
       <div className={styles.actions}>
-        <button
-          type="button"
-          className={styles.searchButton}
-          onClick={openSearch}
-          aria-label="ابحث عن صفحة أو إجراء"
-        >
-          <SearchIcon size={17} />
-          <span>ابحث عن صفحة أو إجراء</span>
-          <kbd>Ctrl K</kbd>
-        </button>
-
         <Link
           href="/admin/notifications"
           className={styles.iconButton}
