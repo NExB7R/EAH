@@ -127,7 +127,7 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (95)
+## Components (94)
 
 | File | Export | Purpose |
 |------|--------|---------|
@@ -193,7 +193,6 @@
 | `profile/avatar-crop-modal.tsx` | AvatarCropModal | — |
 | `profile/avatar-uploader.tsx` | AvatarUploader | — |
 | `profile/badge.tsx` | Badge | — |
-| `profile/phone-search-modal.tsx` | PhoneSearchModal | — |
 | `profile/profile-header.tsx` | ProfileHeader | — |
 | `profile/profile-tabs.tsx` | ProfileTabs | — |
 | `profile/security-tab.tsx` | SecurityTab | — |
