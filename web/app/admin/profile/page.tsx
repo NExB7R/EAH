@@ -6,6 +6,7 @@ import { getMyPrivacySettings } from '@/lib/data/privacy'
 import { PrivacySection } from '@/components/account/privacy-section'
 import { ProfileHeader } from '@/components/profile/profile-header'
 import { ProfileTabs } from '@/components/profile/profile-tabs'
+import { getTwoFactorState } from '@/lib/data/two-factor'
 import type { BadgeKind } from '@/lib/profile/role-theme'
 import AdminProfileForm from './admin-profile-form'
 
@@ -20,6 +21,7 @@ export default async function AdminProfilePage() {
   if (!profile) redirect('/auth?next=/admin/profile')
   const events = await getUserAuditEvents(30)
   const privacy = await getMyPrivacySettings()
+  const twoFactorState = await getTwoFactorState(session.userId)
 
   const badges: BadgeKind[] = []
   if (profile.phone_verified_at) badges.push('verified')
@@ -43,6 +45,7 @@ export default async function AdminProfilePage() {
       />
       <ProfileTabs
         auditEvents={events}
+        twoFactorState={twoFactorState}
         profileContent={
           <>
             <AdminProfileForm

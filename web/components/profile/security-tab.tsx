@@ -1,13 +1,16 @@
 'use client'
 
 import { LockIcon, ShieldCheckIcon } from '@/components/icons'
+import { TwoFactorSection } from '@/components/account/two-factor-section'
+import type { TwoFactorState } from '@/lib/data/two-factor'
 import styles from './profile-tabs.module.css'
 
 type Props = {
   onComingSoon: (feature: string) => void
+  twoFactorState: TwoFactorState
 }
 
-export function SecurityTab({ onComingSoon }: Props) {
+export function SecurityTab({ onComingSoon, twoFactorState }: Props) {
   return (
     <div className={styles.tabPanel}>
       <div className={styles.panelCard}>
