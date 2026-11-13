@@ -1,5 +1,3 @@
-import Link from 'next/link'
-import { ArrowLeftIcon } from '@/components/icons'
 import { getBusinessOwnerCandidates } from '@/lib/data/admin-business'
 import NewBusinessWizard, { type OwnerOption } from './new-business-wizard'
 import fsStyles from './fullscreen.module.css'
@@ -7,9 +5,10 @@ import fsStyles from './fullscreen.module.css'
 export const dynamic = 'force-dynamic'
 
 // ═══════════════════════════════════════════════════════════
-// EAH — New Business Page (fullscreen wizard)
-// UI-02: renders as a full-viewport overlay to hide admin
-// sidebar/nav — wizard gets full width, focused experience.
+// EAH — New Business Page
+// Normal flow — the platform FloatingCapsule (from admin
+// layout padding 90px) is the only top bar. No overlay, no
+// custom header, single page scroll.
 // ═══════════════════════════════════════════════════════════
 
 export default async function NewBusinessPage() {
@@ -23,18 +22,8 @@ export default async function NewBusinessPage() {
   }))
 
   return (
-    <div className={fsStyles.overlay}>
-      <header className={fsStyles.header}>
-        <Link href="/admin/businesses" className={fsStyles.exitLink}>
-          <ArrowLeftIcon size={14} />
-          <span>رجوع للقائمة</span>
-        </Link>
-        <span className={fsStyles.title}>إضافة نشاط جديد</span>
-        <span className={fsStyles.subtitle}>4 خطوات سريعة</span>
-      </header>
-      <div className={fsStyles.container}>
-        <NewBusinessWizard owners={ownerOptions} />
-      </div>
+    <div className={fsStyles.container}>
+      <NewBusinessWizard owners={ownerOptions} />
     </div>
   )
 }
