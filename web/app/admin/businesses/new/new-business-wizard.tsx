@@ -205,16 +205,16 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
       if (data.owner_user_id) {
         fd.set('owner_profile_id', data.owner_user_id)
       }
-      // Publish independently of ownership: an admin-created business can be public
-      // before a platform account is linked as its owner.
-      fd.set('is_published', 'on')
+      // Admin-created businesses start as drafts. Publish after completing
+      // media/hours/location in the edit tab.
+      fd.set('is_published', 'off')
 
       const res = await createBusiness(fd)
       if (res.ok && res.id) {
         clear()
         // Continue straight to the created record so admin can verify visibility
         // and finish media/owner details without searching the list again.
-        router.push(`/admin/businesses/${res.id}?tab=edit`)
+        router.push(`/admin/businesses/${res.id}?tab=edit&from=create`)
         router.refresh()
       } else {
         setSubmitError(res.ok ? 'النشاط اتعمل لكن تعذر فتح صفحته — افتح قائمة الأنشطة' : res.error)
