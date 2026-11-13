@@ -239,7 +239,22 @@ export async function getFullProfile(_userId: string): Promise<FullProfile | nul
   void _userId // الـ RPC بيعتمد على auth.uid() — مش محتاج userId
   const supabase = await createClient()
   const { data } = await supabase.rpc('get_my_profile').maybeSingle()
-  return (data as FullProfile) ?? null
+  if (!data) return null
+
+  // RPC لا يرجع verified_at — نجلبها باستعلام منفصل
+  const { data: auth } = await supabase.auth.getUser()
+  if (!auth.user) return data as FullProfile
+
+  const { data: extra } = await supabase
+    .from('profiles')
+    .select('verified_at')
+    .eq('id', auth.user.id)
+    .maybeSingle()
+
+  return {
+    ...(data as FullProfile),
+    verified_at: extra?.verified_at ?? null,
+  }
 }
 
 // ─── Favorites Set (for home / cards) ───

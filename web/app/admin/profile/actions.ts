@@ -20,9 +20,12 @@ export async function updateAdminProfile(formData: FormData): Promise<Result> {
   if (!displayName) return { ok: false, error: 'الاسم مطلوب' }
   if (displayName.length > 50) return { ok: false, error: 'الاسم أطول من 50 حرف' }
 
+  const bio = String(formData.get('bio') ?? '').trim()
+  if (bio.length > 200) return { ok: false, error: 'النبذة أطول من 200 حرف' }
+
   const { error } = await ctx.supabase
     .from('profiles')
-    .update({ display_name: displayName })
+    .update({ display_name: displayName, bio: bio || null })
     .eq('id', ctx.userId)
 
   if (error) return { ok: false, error: 'فشل الحفظ — حاول تاني' }
@@ -33,7 +36,7 @@ export async function updateAdminProfile(formData: FormData): Promise<Result> {
   await logUserEvent({
     userId: ctx.userId,
     action: 'profile.name_update',
-    metadata: { new_name: displayName },
+    metadata: { new_name: displayName, bio_updated: bio.length > 0 },
   })
   return { ok: true }
 }

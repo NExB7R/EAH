@@ -268,3 +268,29 @@
     font-size: 0.82rem;
   }
 }
+
+/* ═══ Bio textarea ═══ */
+.textarea {
+  width: 100%;
+  min-height: 88px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: rgba(10, 5, 20, 0.5);
+  border: 1px solid rgba(199, 125, 255, 0.25);
+  border-radius: 10px;
+  resize: vertical;
+}
+.textarea:focus {
+  outline: none;
+  border-color: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+.counter {
+  margin-inline-start: auto;
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}

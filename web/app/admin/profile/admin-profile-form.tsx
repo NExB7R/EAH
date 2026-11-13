@@ -14,6 +14,7 @@ type Props = {
     phoneVerified: boolean
     email: string | null
     createdAt: string
+    bio: string
   }
 }
 
@@ -21,6 +22,7 @@ export default function AdminProfileForm({ initial }: Props) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [displayName, setDisplayName] = useState(initial.displayName)
+  const [bio, setBio] = useState(initial.bio)
   const [msg, setMsg] = useState<string | null>(null)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -111,6 +113,24 @@ export default function AdminProfileForm({ initial }: Props) {
             maxLength={50}
             required
             placeholder="اسمك"
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="bio">
+            نبذة
+            <span className={styles.counter}>{bio.length}/200</span>
+          </label>
+          <textarea
+            id="bio"
+            name="bio"
+            className={styles.textarea}
+            value={bio}
+            onChange={(e) => setBio(e.target.value.slice(0, 200))}
+            maxLength={200}
+            rows={3}
+            dir="rtl"
+            placeholder="اكتب نبذة قصيرة عنك — تظهر في بحث الهاتف"
           />
         </div>
         <div className={styles.actions}>

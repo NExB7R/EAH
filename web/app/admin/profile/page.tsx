@@ -53,6 +53,8 @@ export default async function AdminProfilePage() {
                 phoneVerified: !!profile.phone_verified_at,
                 email: session.email,
                 createdAt: profile.created_at,
+
+                bio: profile.bio ?? '',
               }}
             />
             {privacy && <PrivacySection initial={privacy} context="admin" />}
