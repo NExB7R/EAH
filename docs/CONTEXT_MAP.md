@@ -9,7 +9,7 @@
 
 ---
 
-## Routes (113)
+## Routes (112)
 
 | Route | File |
 |-------|------|
@@ -49,7 +49,6 @@
 | `/admin/orders` | `app/admin/orders/page.tsx` |
 | `/admin/profile` | `app/admin/profile/page.tsx` |
 | `/admin/reports` | `app/admin/reports/page.tsx` |
-| `/admin/search/phone` | `app/admin/search/phone/page.tsx` |
 | `/admin/settings` | `app/admin/settings/page.tsx` |
 | `/admin/studio` | `app/admin/studio/page.tsx` |
 | `/admin/subscriptions` | `app/admin/subscriptions/page.tsx` |
@@ -127,7 +126,7 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (94)
+## Components (95)
 
 | File | Export | Purpose |
 |------|--------|---------|
@@ -163,6 +162,7 @@
 | `empty-state.tsx` | EmptyState | Optional secondary action (e.g. "مسح الفلاتر") |
 | `explore-filters.tsx` | ExploreFilters | EAH — Explore Filters |
 | `explore-search.tsx` | ExploreSearch | EAH — Explore Search (with voice + history) |
+| `explore/phone-result-card.tsx` | PhoneResultCard | — |
 | `featured-bento.tsx` | FeaturedBento | EAH — Featured Bento (Home) — Premium 2026 |
 | `find-by-phone.tsx` | FindByPhone | EAH — Find by Phone (Truecaller Style) |
 | `fixed-cta.tsx` | FixedCta | — |
