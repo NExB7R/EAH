@@ -32,6 +32,7 @@ export default function ImageSlot({
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const cameraRef = useRef<HTMLInputElement | null>(null)
 
   const apply = (newUrl: string) => {
     setUrl(newUrl)
@@ -158,18 +159,35 @@ export default function ImageSlot({
           </button>
         </>
       ) : mode === 'file' ? (
-        <div
-          className={`${styles.imageBox} ${aspect === 'square' ? styles.imageBoxSquare : ''}`}
-          onClick={pending ? undefined : () => inputRef.current?.click()}
-        >
-          <span className={styles.imageBoxText}>اضغط للاختيار</span>
-          <span className={styles.hint}>JPG / PNG / WebP — حتى 5MB</span>
-          {pending && (
-            <div className={styles.uploadProgress}>
-              <span>جاري الرفع…</span>
-            </div>
-          )}
-        </div>
+        <>
+          <div className={`${styles.imageBox} ${aspect === 'square' ? styles.imageBoxSquare : ''}`}>
+            <span className={styles.imageBoxText}>اختر طريقة الرفع</span>
+            <span className={styles.hint}>JPG / PNG / WebP — حتى 5MB</span>
+            {pending && (
+              <div className={styles.uploadProgress}>
+                <span>جاري الرفع…</span>
+              </div>
+            )}
+          </div>
+          <div className={styles.imageSourceBtns}>
+            <button
+              type="button"
+              className={styles.imageSourceBtn}
+              onClick={pending ? undefined : () => cameraRef.current?.click()}
+              disabled={pending}
+            >
+              📷 كاميرا
+            </button>
+            <button
+              type="button"
+              className={styles.imageSourceBtn}
+              onClick={pending ? undefined : () => inputRef.current?.click()}
+              disabled={pending}
+            >
+              📁 من المعرض
+            </button>
+          </div>
+        </>
       ) : (
         <div className={styles.imageUrlRow}>
           <input
@@ -202,6 +220,18 @@ export default function ImageSlot({
         ref={inputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp,image/avif"
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          if (file) void handleFile(file)
+          e.target.value = ''
+        }}
+      />
+      <input
+        ref={cameraRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
         style={{ display: 'none' }}
         onChange={(e) => {
           const file = e.target.files?.[0]

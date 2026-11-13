@@ -939,3 +939,67 @@
     transition: none;
   }
 }
+
+/* ═══ Mobile Speed: image source buttons ═══ */
+.imageSourceBtns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.imageSourceBtn {
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(124, 58, 237, 0.1));
+  border: 1px solid rgba(199, 125, 255, 0.3);
+  color: #e1b7ff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+.imageSourceBtn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(124, 58, 237, 0.18));
+  border-color: rgba(199, 125, 255, 0.5);
+}
+.imageSourceBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ═══ Sticky SaveBar on mobile ═══ */
+@media (max-width: 768px) {
+  .saveBar {
+    position: sticky;
+    bottom: env(safe-area-inset-bottom, 0);
+    background: rgba(15, 7, 23, 0.98);
+    border-top: 1px solid rgba(199, 125, 255, 0.2);
+    margin: 16px -16px 0;
+    padding: 12px 16px;
+    z-index: 10;
+    box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.3);
+  }
+  .saveBtn {
+    min-height: 48px;
+    font-size: 0.95rem;
+  }
+}
+
+/* ═══ Larger touch targets on mobile ═══ */
+@media (max-width: 768px) {
+  .input,
+  .hoursInput {
+    min-height: 48px;
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+  .imageBox {
+    min-height: 180px;
+  }
+  .presetBtn {
+    min-height: 44px;
+  }
+}
