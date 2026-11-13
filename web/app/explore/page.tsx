@@ -10,6 +10,10 @@ import { getPublishedBusinesses } from '@/lib/data/businesses'
 import { smartSearch } from '@/lib/search'
 import { parseFilters, applyFilters, resolveResultSort } from '@/lib/search/filters'
 import { getActiveAreas } from '@/lib/data/areas'
+import { getUserSession } from '@/lib/data/user'
+import { searchCustomerByPhoneAction } from '@/lib/actions/phone-search'
+import { PhoneResultCard } from '@/components/explore/phone-result-card'
+import type { PhoneSearchResult } from '@/lib/types/phone-search'
 import styles from './explore.module.css'
 
 export const metadata: Metadata = {
@@ -66,6 +70,17 @@ export default async function ExplorePage({
     businesses = applyFilters(businesses, filters)
   }
 
+  // Phone search — only for authenticated users + 11-digit query
+  let phoneResult: PhoneSearchResult | null = null
+  const digitsOnly = q.replace(/\D/g, '')
+  const isPhoneQuery = /^0\d{10,13}$/.test(digitsOnly) && digitsOnly.length >= 11
+  if (isPhoneQuery) {
+    const session = await getUserSession()
+    if (session) {
+      phoneResult = await searchCustomerByPhoneAction(digitsOnly)
+    }
+  }
+
   // العنوان
   let title = 'اكتشف'
   if (suggest && !q) {
@@ -117,6 +132,10 @@ export default async function ExplorePage({
             hasQuery={Boolean(q)}
           />
         </Suspense>
+
+        {phoneResult && phoneResult.ok && phoneResult.found && (
+          <PhoneResultCard result={phoneResult} />
+        )}
 
         {businesses.length > 0 ? (
           <LoadMoreGrid businesses={businesses} tone="purple" pageSize={10} />
