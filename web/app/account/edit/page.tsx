@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation'
 import { getUserSession } from '@/lib/data/user'
 import { getFullProfile } from '@/lib/data/account'
+import { getMyPrivacySettings } from '@/lib/data/privacy'
+import { PrivacySection } from '@/components/account/privacy-section'
 import { ProfileHeader } from '@/components/profile/profile-header'
 import type { BadgeKind, ProfileRole } from '@/lib/profile/role-theme'
 import EditProfileForm from './edit-form'
@@ -13,6 +15,8 @@ export default async function EditPage() {
 
   const profile = await getFullProfile(session.userId)
   if (!profile) redirect('/auth?next=/account/edit')
+
+  const privacy = await getMyPrivacySettings()
 
   const role = session.role
   const displayNameMode =
@@ -45,6 +49,8 @@ export default async function EditPage() {
         subtitle="تعديل بياناتك وخصوصيتك"
         badges={headerBadges}
       />
+      {privacy && <PrivacySection initial={privacy} context="user" />}
+
       <EditProfileForm
         initial={{
           displayName: profile.display_name,
