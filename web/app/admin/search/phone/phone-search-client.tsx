@@ -1,21 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  SearchIcon,
-  CloseIcon,
-  ShieldCheckIcon,
-  CrownGoldIcon,
-  CheckCircleIcon,
-} from '@/components/icons'
+import { SearchIcon, CheckCircleIcon, CrownGoldIcon } from '@/components/icons'
+import Avatar from '@/components/avatar'
 import type { PhoneSearchResult } from '@/lib/types/phone-search'
 import { searchCustomerByPhoneAction } from '@/lib/actions/phone-search'
-import styles from './phone-search-modal.module.css'
-import Avatar from '@/components/avatar'
+import styles from './phone-search-page.module.css'
 
-type Props = { onClose: () => void }
-
-export function PhoneSearchModal({ onClose }: Props) {
+export function PhoneSearchClient() {
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<PhoneSearchResult | null>(null)
@@ -34,49 +26,39 @@ export function PhoneSearchModal({ onClose }: Props) {
   }
 
   return (
-    <div className={styles.backdrop} role="dialog" aria-modal="true" onClick={onClose}>
-      <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>
-        <header className={styles.header}>
-          <h2 className={styles.title}>بحث برقم كامل</h2>
-          <button type="button" onClick={onClose} className={styles.closeBtn} aria-label="إغلاق">
-            <CloseIcon size={18} />
-          </button>
-        </header>
-        <div className={styles.body}>
-          <label className={styles.label} htmlFor="phone-input">
-            رقم الموبايل (11 رقم)
-          </label>
-          <input
-            id="phone-input"
-            type="tel"
-            inputMode="numeric"
-            dir="ltr"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 13))}
-            placeholder="01xxxxxxxxx"
-            className={styles.input}
-            maxLength={13}
-            autoFocus
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          />
-          <button
-            type="button"
-            className={styles.searchBtn}
-            onClick={handleSearch}
-            disabled={loading}
-          >
-            <SearchIcon size={16} />
-            {loading ? 'جاري البحث…' : 'بحث'}
-          </button>
-          <ResultView result={result} />
-        </div>
+    <div className={styles.card}>
+      <label htmlFor="phone-input" className={styles.label}>
+        رقم الموبايل (11 رقم)
+      </label>
+      <div className={styles.inputRow}>
+        <input
+          id="phone-input"
+          type="tel"
+          inputMode="numeric"
+          dir="ltr"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 13))}
+          placeholder="01xxxxxxxxx"
+          className={styles.input}
+          maxLength={13}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+        />
+        <button
+          type="button"
+          className={styles.searchBtn}
+          onClick={handleSearch}
+          disabled={loading}
+        >
+          <SearchIcon size={16} />
+          {loading ? '...' : 'بحث'}
+        </button>
       </div>
+      {result && <ResultView result={result} />}
     </div>
   )
 }
 
-function ResultView({ result }: { result: PhoneSearchResult | null }) {
-  if (!result) return null
+function ResultView({ result }: { result: PhoneSearchResult }) {
   if (!result.ok) {
     const msg =
       result.error === 'rate_limit_hour'
@@ -135,10 +117,6 @@ function ResultView({ result }: { result: PhoneSearchResult | null }) {
           </div>
         )}
       </dl>
-      <div className={styles.watermark}>
-        <ShieldCheckIcon size={12} />
-        <span>نتيجة سرية — {result.viewer === 'admin' ? 'سوبر أدمن' : 'طيار'}</span>
-      </div>
     </div>
   )
 }
