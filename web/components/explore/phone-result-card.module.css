@@ -174,3 +174,29 @@
     font-size: 0.68rem;
   }
 }
+
+/* ═══ Role + Bio ═══ */
+.roleBadgeAdmin {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.bio {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(10, 5, 20, 0.4);
+  border-inline-start: 2px solid rgba(168, 85, 247, 0.4);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}

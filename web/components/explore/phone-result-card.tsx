@@ -34,6 +34,11 @@ export function PhoneResultCard({ result }: Props) {
     <div className={styles.card} role="status" aria-live="polite">
       <Header result={result} isAnon={isAnon} />
       <TrustRow result={result} />
+      {result.bio && (
+        <p className={styles.bio} dir="rtl">
+          {result.bio}
+        </p>
+      )}
       {result.business && <BusinessSection business={result.business} />}
       {result.viewer === 'admin' && result.phone && (
         <div className={styles.phoneRow}>
@@ -79,6 +84,12 @@ function Header({ result, isAnon }: { result: PhoneSearchResult; isAnon: boolean
       <div className={styles.info}>
         <div className={styles.name}>
           <strong>{result.display_name ?? 'مستخدم EAH'}</strong>
+          {result.role === 'super_admin' && (
+            <span className={styles.roleBadgeAdmin}>
+              <CrownGoldIcon size={11} />
+              سوبر أدمن
+            </span>
+          )}
           {result.is_verified && <CheckCircleIcon size={14} />}
           {result.is_premium && <CrownGoldIcon size={14} />}
         </div>

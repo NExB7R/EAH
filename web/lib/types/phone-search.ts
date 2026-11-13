@@ -26,6 +26,8 @@ export type PhoneSearchResult =
       display_name?: string
       avatar_url?: string | null
       phone?: string
+      bio?: string | null
+      role?: 'super_admin' | 'merchant' | 'customer' | null
       member_since?: string
       // always present
       trust_score: number
