@@ -227,13 +227,14 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (129)
+## Lib (131)
 
 | File | Exports | Purpose |
 |------|---------|---------|
 | `a11y/focus-trap.ts` | getFocusWrapTarget | — |
 | `actions/phone-search.ts` | searchCustomerByPhoneAction | — |
 | `actions/privacy.ts` | updateMyPrivacySettings | — |
+| `actions/two-factor.ts` | setupTwoFactor, verifyTwoFactor, disableTwoFactor | 1. Setup — توليد secret + QR (لم يُفعّل بعد) |
 | `ai/agent.ts` | runAgent | EAH — AI Agent (loop: chat → tools → chat → final) |
 | `ai/business-advisor.ts` | analyzeBusiness | EAH — AI Business Advisor (Analysis Engine) |
 | `ai/insight-period.ts` | getInsightDateRange | Normalize untrusted insight period input and derive one consistent time window. |
@@ -301,6 +302,7 @@
 | `data/site-settings.ts` | SITE_SETTINGS_DEFAULTS, getSiteSettingsForAdmin, getPublicContactSettings | — |
 | `data/subscriptions.ts` | getSubscriptionPlans, getAdSlots, FEATURE_LABEL | EAH — Subscriptions Data |
 | `data/suggest.ts` | getSuggestedBusinesses | EAH — Suggested Businesses (Recommendation) |
+| `data/two-factor.ts` | getTwoFactorState | — |
 | `data/user.ts` | getUserSession | EAH — User Session Fetcher (Combined Query) |
 | `engagement.ts` | addPendingReview, getDueReview, markReviewDone, markInstallAccepted, isInstallAccepted | EAH — Engagement Tracking |
 | `fair-ranking.ts` | WEIGHTS, fairScore, fairOrder, fairOrderOffers | EAH — Fair Ranking Engine (2026) |
