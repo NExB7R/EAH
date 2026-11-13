@@ -26,6 +26,7 @@ export default async function AdminProfilePage() {
   const badges: BadgeKind[] = []
   if (profile.phone_verified_at) badges.push('verified')
   if (profile.is_premium) badges.push('premium')
+  if (session.hasActiveAds) badges.push('advertiser')
 
   return (
     <div

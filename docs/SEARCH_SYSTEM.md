@@ -89,11 +89,14 @@ TODO: ربط getHistory() في ExploreSearch component (غير مربوط حال
 
 ## Phone Search (بحث بالرقم)
 
-الملفات:
+الملفات (بعد v6):
 - lib/types/phone-search.ts — النوع المشترك
 - lib/actions/phone-search.ts — Server Action
-- app/admin/search/phone/phone-search-client.tsx — UI
-- Migration: docs/migrations/2026-11-11-phone-search-v2.sql
+- components/explore/phone-result-card.tsx — بطاقة النتيجة
+- Migration: docs/migrations/2026-11-11-phone-search-v6-part{1,2}.sql
+- **حُذف**: app/admin/search/phone/ + lib/data/phone-search.ts (مهجور)
+
+**الاستخدام:** مدمج في /explore تلقائيًا عند 11 رقم
 
 RPC: search_customer_by_phone(p_phone text) — role-aware:
 - super_admin: كل شيء (هاتف، بريد، صلاحيات)
