@@ -100,3 +100,77 @@
     padding: 14px;
   }
 }
+
+/* ═══ Anonymous + Business ═══ */
+.anonIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.15);
+  color: #c4b5fd;
+  flex-shrink: 0;
+}
+
+.anonHint {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.businessCard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(168, 85, 247, 0.06);
+  border: 1px solid rgba(199, 125, 255, 0.15);
+  text-decoration: none;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.businessCard:hover {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(199, 125, 255, 0.35);
+}
+
+.businessHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.businessHeader strong {
+  font-weight: 800;
+}
+
+.businessMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+}
+
+.openNow {
+  color: #22c55e;
+  font-weight: 700;
+}
+
+.closed {
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .businessMeta {
+    gap: 6px;
+    font-size: 0.68rem;
+  }
+}
