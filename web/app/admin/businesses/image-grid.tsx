@@ -32,6 +32,7 @@ export default function ImageGrid({
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const cameraRef = useRef<HTMLInputElement | null>(null)
 
   const add = (newItem: GridItem) => setItems((prev) => [...prev, newItem])
 
@@ -61,31 +62,37 @@ export default function ImageGrid({
     }
   }
 
-  const handleFile = async (file: File) => {
+  const handleFiles = async (files: File[]) => {
+    if (files.length === 0) return
     setError(null)
     setPending(true)
-    try {
-      const fd = new FormData()
-      fd.append('file', file)
-      fd.append('category', category)
-      fd.append('businessId', businessId)
-      const res = await fetch('/api/admin/upload-business-image', { method: 'POST', body: fd })
-      const json = (await res.json()) as {
-        ok?: boolean
-        url?: string
-        mediaId?: string
-        error?: string
+    let failed = 0
+    for (const file of files) {
+      try {
+        const fd = new FormData()
+        fd.append('file', file)
+        fd.append('category', category)
+        fd.append('businessId', businessId)
+        const res = await fetch('/api/admin/upload-business-image', { method: 'POST', body: fd })
+        const json = (await res.json()) as {
+          ok?: boolean
+          url?: string
+          mediaId?: string
+          error?: string
+        }
+        if (!res.ok || !json.url || !json.mediaId) {
+          failed++
+        } else {
+          add({ id: json.mediaId, url: json.url })
+        }
+      } catch {
+        failed++
       }
-      if (!res.ok || !json.url || !json.mediaId) {
-        setError(json.error ?? 'فشل الرفع')
-      } else {
-        add({ id: json.mediaId, url: json.url })
-      }
-    } catch {
-      setError('فشل الاتصال')
-    } finally {
-      setPending(false)
     }
+    if (failed > 0) {
+      setError(failed === files.length ? 'فشل رفع الصور' : `فشل رفع ${failed} من ${files.length}`)
+    }
+    setPending(false)
   }
 
   const handleUrl = async () => {
@@ -202,14 +209,48 @@ export default function ImageGrid({
         </span>
       )}
 
+      {mode === 'file' && (
+        <div className={styles.imageSourceBtns}>
+          <button
+            type="button"
+            className={styles.imageSourceBtn}
+            onClick={pending ? undefined : () => cameraRef.current?.click()}
+            disabled={pending}
+          >
+            📷 كاميرا
+          </button>
+          <button
+            type="button"
+            className={styles.imageSourceBtn}
+            onClick={pending ? undefined : () => inputRef.current?.click()}
+            disabled={pending}
+          >
+            📁 معرض (متعدد)
+          </button>
+        </div>
+      )}
+
       <input
         ref={inputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp,image/avif"
+        multiple
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          const files = Array.from(e.target.files ?? [])
+          if (files.length > 0) void handleFiles(files)
+          e.target.value = ''
+        }}
+      />
+      <input
+        ref={cameraRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
         style={{ display: 'none' }}
         onChange={(e) => {
           const file = e.target.files?.[0]
-          if (file) void handleFile(file)
+          if (file) void handleFiles([file])
           e.target.value = ''
         }}
       />
