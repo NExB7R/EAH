@@ -1,9 +1,5 @@
 import { Suspense } from 'react'
-import {
-  homeMetadata,
-  organizationJsonLd,
-  websiteJsonLd,
-} from './home-metadata'
+import { homeMetadata, organizationJsonLd, websiteJsonLd } from './home-metadata'
 import HomeHero from '@/components/home-hero'
 import TrustBar from '@/components/trust-bar'
 import FeaturedBento from '@/components/featured-bento'
@@ -48,7 +44,9 @@ export default async function Home({ searchParams }: Props) {
     <main>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd).replace(/</g, '\\u003c') }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(organizationJsonLd).replace(/</g, '\\u003c'),
+        }}
       />
       <script
         type="application/ld+json"
@@ -66,18 +64,27 @@ export default async function Home({ searchParams }: Props) {
 
 async function HomeSections({ typeFilter }: { typeFilter?: string }) {
   const session = await getUserSession()
-  const [allRaw, featuredRaw, newRaw, trendingRaw, rawOffers, flags, homeBanner, homeFeed, favoriteIds] =
-    await Promise.all([
-      getPublishedBusinesses(),
-      getFeaturedBusinesses(),
-      getNewBusinesses(80),
-      getTrendingBusinesses(80),
-      getActiveOffers(30),
-      getFeatureFlags(),
-      getActiveAdsForSlot('home_banner', 1),
-      getActiveAdsForSlot('home_feed', 1),
-      session ? getFavoriteIds(session.userId) : Promise.resolve(new Set<string>()),
-    ])
+  const [
+    allRaw,
+    featuredRaw,
+    newRaw,
+    trendingRaw,
+    rawOffers,
+    flags,
+    homeBanner,
+    homeFeed,
+    favoriteIds,
+  ] = await Promise.all([
+    getPublishedBusinesses(),
+    getFeaturedBusinesses(),
+    getNewBusinesses(80),
+    getTrendingBusinesses(80),
+    getActiveOffers(30),
+    getFeatureFlags(),
+    getActiveAdsForSlot('home_banner', 1),
+    getActiveAdsForSlot('home_feed', 1),
+    session ? getFavoriteIds(session.userId) : Promise.resolve(new Set<string>()),
+  ])
 
   // ─── الفلترة ───
   const applyHomeFilter = (businesses: Business[]) => {
@@ -104,17 +111,17 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
   )
 
   // Use the global trend-scored candidate pool, not only the first 100 general listings.
-  const trending = fairOrder(applyHomeFilter(trendingRaw), 'trending', {}, {
-    topWindow: 8,
-    maxPerType: 2,
-  })
-
-  const newOnes = fairOrder(
-    applyHomeFilter(newRaw),
-    'new',
+  const trending = fairOrder(
+    applyHomeFilter(trendingRaw),
+    'trending',
     {},
-    { topWindow: 8, maxPerType: 2 },
+    {
+      topWindow: 8,
+      maxPerType: 2,
+    },
   )
+
+  const newOnes = fairOrder(applyHomeFilter(newRaw), 'new', {}, { topWindow: 8, maxPerType: 2 })
 
   // NearbyGrid applies the visitor's location when permission is granted;
   // without location access it keeps the existing Shibin El-Qanater fallback.
@@ -124,7 +131,9 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
 
   return (
     <>
-      {flags.featured_enabled && <FeaturedBento businesses={featuredMerged} />}
+      {flags.featured_enabled && featuredMerged.length > 0 && (
+        <FeaturedBento businesses={featuredMerged} />
+      )}
       {homeBanner.length > 0 && (
         <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 20px' }}>
           <AdSlot ads={homeBanner} variant="banner" />
@@ -135,7 +144,7 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
           <TrendingRow businesses={trending} favoriteIds={favoriteIds} />
         </div>
       )}
-      {flags.offers_enabled && (
+      {flags.offers_enabled && offers.length > 0 && (
         <div id="offers">
           <OffersStrip offers={offers} />
         </div>
@@ -145,12 +154,12 @@ async function HomeSections({ typeFilter }: { typeFilter?: string }) {
           <AdSlot ads={homeFeed} variant="banner" />
         </div>
       )}
-      {flags.new_enabled && (
+      {flags.new_enabled && newOnes.length > 0 && (
         <div id="new">
           <NewRow businesses={newOnes} favoriteIds={favoriteIds} />
         </div>
       )}
-      {flags.nearby_enabled && (
+      {flags.nearby_enabled && nearby.length > 0 && (
         <div id="nearby">
           <NearbyGrid businesses={nearby} favoriteIds={favoriteIds} />
         </div>
