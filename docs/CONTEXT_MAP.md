@@ -126,7 +126,7 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (97)
+## Components (96)
 
 | File | Export | Purpose |
 |------|--------|---------|
@@ -220,7 +220,6 @@
 | `trending-row.tsx` | TrendingRow | EAH — Trending Row (Home) |
 | `trust-bar.tsx` | TrustBar | EAH — Trust Bar (2026-11-09) |
 | `trust-card.tsx` | TrustCard | EAH — Participation Points (not a reputation or verification score) |
-| `ui/command-palette.tsx` | CommandPalette | EAH — Command Palette (⌘K / Ctrl+K) |
 | `ui/confirm-modal.tsx` | ConfirmModal | EAH — Confirm Modal (reusable) |
 | `ui/export-button.tsx` | ExportButton | EAH — Export CSV Button |
 | `voice-search-button.tsx` | VoiceSearchButton | لو موجود → يستخدم callback بدل النقل لـ /explore |
@@ -228,7 +227,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (131)
+## Lib (130)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -256,7 +255,6 @@
 | `business-type-label.ts` | getBusinessTypeLabel | A proposed custom label is public-facing only after admin approval. |
 | `chips-config.ts` | CHIPS, EXPLORE_CHIP | EAH — Chips Config (Single Source of Truth) |
 | `cloudinary.ts` | uploadImage, uploadRemoteImage, deleteImage | Never trust browser-provided MIME type. Inspect the file signature and |
-| `command-palette/commands.ts` | COMMANDS | — |
 | `data/account.ts` | getAccountStats, getFavorites, getFollowing, getOrders, getPointsLog, … | EAH — Account Data Fetchers |
 | `data/admin-business-list.ts` | getAdminBusinessesPage | — |
 | `data/admin-business.ts` | getBusinessById, getBusinessOwnerCandidates | EAH — Admin Business Detail (Service Role — bypass RLS) |
