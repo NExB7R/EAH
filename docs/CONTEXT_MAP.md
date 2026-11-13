@@ -126,13 +126,14 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (95)
+## Components (96)
 
 | File | Export | Purpose |
 |------|--------|---------|
 | `about-free-app.tsx` | AboutFreeApp | EAH — About: Free App Section |
 | `account-page-header.tsx` | AccountPageHeader | — |
 | `account-sidebar.tsx` | AccountSidebar | — |
+| `account/privacy-section.tsx` | PrivacySection | "admin" | "user" — يغير نبرة النصوص |
 | `ad-slot.tsx` | AdSlot | EAH — Ad Slot (display) |
 | `admin-sidebar.tsx` | AdminSidebar | — |
 | `admin/activity-feed.tsx` | ActivityFeed | EAH — Live Activity Feed |
@@ -226,12 +227,13 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (126)
+## Lib (129)
 
 | File | Exports | Purpose |
 |------|---------|---------|
 | `a11y/focus-trap.ts` | getFocusWrapTarget | — |
 | `actions/phone-search.ts` | searchCustomerByPhoneAction | — |
+| `actions/privacy.ts` | updateMyPrivacySettings | — |
 | `ai/agent.ts` | runAgent | EAH — AI Agent (loop: chat → tools → chat → final) |
 | `ai/business-advisor.ts` | analyzeBusiness | EAH — AI Business Advisor (Analysis Engine) |
 | `ai/insight-period.ts` | getInsightDateRange | Normalize untrusted insight period input and derive one consistent time window. |
@@ -290,6 +292,7 @@
 | `data/orders-settings.ts` | getMerchantOrderSettings, getOrderSettingsForAdmin, isOrderAcceptanceActive | EAH — Orders Settings: data access |
 | `data/orders.ts` | ORDER_STATUSES, PAYMENT_METHODS, PAYMENT_LABEL, PAYMENT_WARNINGS, FEEDBACK_ISSUE_TYPES, … | EAH — Orders System v2: Types |
 | `data/phone-search.ts` | searchCustomerByPhone | — |
+| `data/privacy.ts` | getMyPrivacySettings | — |
 | `data/promotion-status.ts` | isPromotionActive | True when an enabled, optional time-bounded placement is still active. |
 | `data/public-contacts.ts` | normalizePublicContactUrl, filterPublicContactMethods | Accept only absolute HTTP(S) URLs for links rendered in public pages. |
 | `data/published-business-pool.ts` | getPublishedBusinessLimit, onlyPublishedBusinessRows | Keep broad public discovery bounded; callers such as the home page use the lighter default. |
@@ -341,6 +344,7 @@
 | `supabase/service.ts` | createServiceClient | عميل service-role — bypass RLS |
 | `trust.ts` | TRUST_MIN, TRUST_MAX, TRUST_DEFAULT, TRUST_TIERS, TRUST_TIER_ORDER, … | EAH — Participation Points (2026-10-06). This is gamification, not reliability. |
 | `types/phone-search.ts` | — | EAH — Phone Search Result Type (shared between server + client) |
+| `types/privacy.ts` | — | EAH — Privacy Settings Types (shared server + client) |
 | `utils/business-cta.ts` | shouldRenderFixedBusinessCta | Keep the page's reserved bottom space in sync with FixedCta's render conditions. |
 | `utils/csv.ts` | buildCsv, csvResponse | EAH — CSV Builder (UTF-8 with BOM for Arabic in Excel) |
 | `utils/distance.ts` | distanceKm, formatDistance, distanceMeters | EAH — Distance Utility |
