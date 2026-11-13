@@ -279,6 +279,7 @@ function SetupView({
       </header>
 
       <div className={styles.qrWrap}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={qr} alt="QR code" className={styles.qr} />
       </div>
 

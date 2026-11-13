@@ -32,26 +32,7 @@ export function SecurityTab({ onComingSoon, twoFactorState }: Props) {
         </button>
       </div>
 
-      <div className={styles.panelCard}>
-        <div className={styles.panelHead}>
-          <span className={styles.panelIcon}>
-            <ShieldCheckIcon size={18} />
-          </span>
-          <div>
-            <h3 className={styles.panelTitle}>المصادقة الثنائية (2FA)</h3>
-            <p className={styles.panelDesc}>
-              طبقة حماية إضافية بجانب كلمة المرور — إجبارية لحسابات الإدارة
-            </p>
-          </div>
-        </div>
-        <button
-          type="button"
-          className={`${styles.panelBtn} ${styles.panelBtnPrimary}`}
-          onClick={() => onComingSoon('المصادقة الثنائية')}
-        >
-          تفعيل 2FA
-        </button>
-      </div>
+      <TwoFactorSection state={twoFactorState} />
 
       <div className={styles.panelCard}>
         <div className={styles.panelHead}>
