@@ -126,7 +126,7 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (96)
+## Components (97)
 
 | File | Export | Purpose |
 |------|--------|---------|
@@ -134,6 +134,7 @@
 | `account-page-header.tsx` | AccountPageHeader | — |
 | `account-sidebar.tsx` | AccountSidebar | — |
 | `account/privacy-section.tsx` | PrivacySection | "admin" | "user" — يغير نبرة النصوص |
+| `account/two-factor-section.tsx` | TwoFactorSection | — |
 | `ad-slot.tsx` | AdSlot | EAH — Ad Slot (display) |
 | `admin-sidebar.tsx` | AdminSidebar | — |
 | `admin/activity-feed.tsx` | ActivityFeed | EAH — Live Activity Feed |
