@@ -1,23 +1,12 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
-import {
-  LayoutDashboardIcon,
-  StoreIcon,
-  UserIcon,
-  CrownGoldIcon,
-  ShieldCheckIcon,
-  TrendingUpIcon,
-  AlertIcon,
-  FileTextIcon,
-  BellIcon,
-  BroadcastIcon,
-  TagIcon,
-  SparklesIcon,
-} from './icons'
-import styles from './admin-sidebar.module.css'
+import { ChevronRightIcon } from './icons'
+import { ADMIN_GROUPS, type NavGroup } from './admin-sidebar-data'
 import GlobalShareAction from './global-share-action'
+import styles from './admin-sidebar.module.css'
 
 type Props = {
   onNavigate?: () => void
@@ -29,169 +18,131 @@ type Props = {
   }
 }
 
-type Item = {
-  href: string
-  label: string
-  Icon: React.ComponentType<{ size?: number }>
-  badgeKey?: keyof NonNullable<Props['counts']>
-}
+function isActive(pathname: string, href: string, currentTab: string | null): boolean {
+  const [baseHref = href, queryString] = href.split('?')
+  const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null
 
-type Section = {
-  key: string
-  title: string
-  items: Item[]
+  if (baseHref === '/admin') return pathname === '/admin' && !currentTab
+  if (href === '/admin/businesses') {
+    return (
+      pathname === href || (pathname.startsWith(`${href}/`) && pathname !== '/admin/businesses/new')
+    )
+  }
+  if (pathname === baseHref) {
+    if (targetTab) return currentTab === targetTab
+    return !currentTab
+  }
+  if (pathname.startsWith(`${baseHref}/`)) {
+    if (targetTab) return currentTab === targetTab
+    return true
+  }
+  return false
 }
-
-const SECTIONS: Section[] = [
-  {
-    key: 'overview',
-    title: 'نظرة عامة',
-    items: [
-      { href: '/admin', label: 'لوحة التحكم', Icon: LayoutDashboardIcon },
-      { href: '/admin/analytics', label: 'التحليلات', Icon: TrendingUpIcon },
-      { href: '/admin/health', label: 'صحة النظام', Icon: AlertIcon },
-      { href: '/admin/studio', label: 'الاستوديو', Icon: SparklesIcon },
-    ],
-  },
-  {
-    key: 'businesses',
-    title: 'الأنشطة',
-    items: [
-      {
-        href: '/admin/businesses',
-        label: 'كل الأنشطة',
-        Icon: StoreIcon,
-        badgeKey: 'pendingBusinesses',
-      },
-      { href: '/admin/businesses/new', label: 'إضافة نشاط', Icon: StoreIcon },
-      { href: '/admin/featured', label: 'الأنشطة المميزة', Icon: CrownGoldIcon },
-      { href: '/admin/business-types', label: 'أنواع الأنشطة', Icon: SparklesIcon },
-    ],
-  },
-  {
-    key: 'reports',
-    title: 'التقارير',
-    items: [{ href: '/admin/insights', label: 'تقارير الأنشطة', Icon: FileTextIcon }],
-  },
-  {
-    key: 'users',
-    title: 'المستخدمون',
-    items: [
-      { href: '/admin/users', label: 'المستخدمون', Icon: UserIcon },
-      {
-        href: '/admin/subscriptions',
-        label: 'الاشتراكات',
-        Icon: CrownGoldIcon,
-        badgeKey: 'pendingSubscriptions',
-      },
-      { href: '/admin/ads', label: 'الإعلانات', Icon: TagIcon },
-    ],
-  },
-  {
-    key: 'moderation',
-    title: 'المراجعة',
-    items: [
-      {
-        href: '/admin/moderation',
-        label: 'التقييمات',
-        Icon: ShieldCheckIcon,
-        badgeKey: 'flaggedReviews',
-      },
-      {
-        href: '/admin/moderation?tab=reports',
-        label: 'البلاغات',
-        Icon: FileTextIcon,
-        badgeKey: 'openReports',
-      },
-      {
-        href: '/admin/moderation?tab=fraud',
-        label: 'كشف الاحتيال',
-        Icon: AlertIcon,
-      },
-    ],
-  },
-  {
-    key: 'comms',
-    title: 'التواصل',
-    items: [
-      { href: '/admin/notifications', label: 'الإشعارات والرسائل', Icon: BellIcon },
-      {
-        href: '/admin/notifications?tab=announcements',
-        label: 'الإعلانات العامة',
-        Icon: BroadcastIcon,
-      },
-    ],
-  },
-  {
-    key: 'account',
-    title: 'حسابي',
-    items: [{ href: '/admin/profile', label: 'بروفايلي', Icon: UserIcon }],
-  },
-]
 
 export default function AdminSidebar({ counts, onNavigate }: Props) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const currentTab = searchParams.get('tab')
 
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(ADMIN_GROUPS.map((g) => [g.key, g.defaultOpen])),
+  )
+
+  const toggle = (key: string) => setOpenGroups((prev) => ({ ...prev, [key]: !prev[key] }))
+
   return (
     <aside className={onNavigate ? styles.drawerSidebar : styles.sidebar}>
       <nav className={styles.nav} aria-label="لوحة الأدمن">
-        {SECTIONS.map((section) => (
-          <div key={section.key} className={styles.section}>
-            <h4 className={styles.sectionTitle}>{section.title}</h4>
-            <ul className={styles.list}>
-              {section.items.map(({ href, label, Icon, badgeKey }) => {
-                const [baseHref = href, queryString] = href.split('?')
-                const targetTab = queryString ? new URLSearchParams(queryString).get('tab') : null
-
-                // Active logic:
-                // - Base item (no tab): active on /admin exact, or when no tab on URL, or on sub-paths
-                // - Tab item: active only when pathname matches base AND tab matches
-                let active = false
-                if (baseHref === '/admin') {
-                  active = pathname === '/admin' && !currentTab
-                } else if (href === '/admin/businesses') {
-                  active =
-                    pathname === href ||
-                    (pathname.startsWith(`${href}/`) && pathname !== '/admin/businesses/new')
-                } else if (pathname === baseHref || pathname.startsWith(`${baseHref}/`)) {
-                  if (targetTab) {
-                    active = pathname === baseHref && currentTab === targetTab
-                  } else {
-                    active = !currentTab || pathname !== baseHref
-                  }
-                }
-
-                const badgeValue = badgeKey ? counts?.[badgeKey] : undefined
-                const showBadge = typeof badgeValue === 'number' && badgeValue > 0
-
-                return (
-                  <li key={href}>
-                    <Link
-                      href={href}
-                      className={`${styles.item} ${active ? styles.active : ''}`}
-                      aria-current={active ? 'page' : undefined}
-                      onClick={onNavigate}
-                    >
-                      <span className={styles.iconWrap}>
-                        <Icon size={16} />
-                      </span>
-                      <span className={styles.label}>{label}</span>
-                      {showBadge && (
-                        <span className={styles.badge}>{badgeValue > 99 ? '99+' : badgeValue}</span>
-                      )}
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
+        {ADMIN_GROUPS.map((group) => (
+          <GroupSection
+            key={group.key}
+            group={group}
+            isOpen={openGroups[group.key] ?? false}
+            onToggle={() => toggle(group.key)}
+            pathname={pathname}
+            currentTab={currentTab}
+            counts={counts}
+            onNavigate={onNavigate}
+          />
         ))}
-        <ul className={styles.list}>
-          <li><GlobalShareAction className={styles.item} label="شارك المنصة ورمز الاستجابة السريعة" /></li>
-        </ul>
       </nav>
     </aside>
+  )
+}
+
+function GroupSection({
+  group,
+  isOpen,
+  onToggle,
+  pathname,
+  currentTab,
+  counts,
+  onNavigate,
+}: {
+  group: NavGroup
+  isOpen: boolean
+  onToggle: () => void
+  pathname: string
+  currentTab: string | null
+  counts?: Props['counts']
+  onNavigate?: () => void
+}) {
+  const GroupIcon = group.Icon
+  const activeCount = group.items.filter((item) => isActive(pathname, item.href, currentTab)).length
+
+  return (
+    <div className={styles.section}>
+      <button
+        type="button"
+        className={styles.groupHeader}
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={`nav-group-${group.key}`}
+      >
+        <span className={styles.groupIcon}>
+          <GroupIcon size={14} />
+        </span>
+        <span className={styles.groupTitle}>{group.title}</span>
+        {activeCount > 0 && <span className={styles.activeDot} aria-label="صفحة نشطة" />}
+        <ChevronRightIcon
+          size={14}
+          className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`}
+        />
+      </button>
+      {isOpen && (
+        <ul id={`nav-group-${group.key}`} className={styles.list}>
+          {group.items.map(({ href, label, Icon, badgeKey, isShare }) => {
+            if (isShare) {
+              return (
+                <li key={`${group.key}-${label}`}>
+                  <GlobalShareAction className={styles.item} label={label} />
+                </li>
+              )
+            }
+            const active = isActive(pathname, href, currentTab)
+            const badgeValue = badgeKey ? counts?.[badgeKey] : undefined
+            const showBadge = typeof badgeValue === 'number' && badgeValue > 0
+            return (
+              <li key={href}>
+                <Link
+                  href={href}
+                  className={`${styles.item} ${active ? styles.active : ''}`}
+                  aria-current={active ? 'page' : undefined}
+                  onClick={onNavigate}
+                >
+                  <span className={styles.iconWrap}>
+                    <Icon size={16} />
+                  </span>
+                  <span className={styles.label}>{label}</span>
+                  {showBadge && (
+                    <span className={styles.badge}>{badgeValue > 99 ? '99+' : badgeValue}</span>
+                  )}
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </div>
   )
 }

@@ -153,3 +153,107 @@
     transition: none;
   }
 }
+
+/* ═══ Group Section (collapsible) ═══ */
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 4px;
+  border: none;
+  border-radius: var(--radius-10, 10px);
+  background: transparent;
+  color: var(--text-tertiary, #9a8fb8);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: right;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.groupHeader:hover {
+  background: rgba(168, 85, 247, 0.06);
+  color: var(--text-secondary, #c7b8e6);
+}
+
+.groupIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--purple-light, #c77dff);
+  flex-shrink: 0;
+}
+
+.groupTitle {
+  flex: 1;
+  text-align: right;
+}
+
+.activeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a855f7;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+  flex-shrink: 0;
+}
+
+.chevron {
+  color: var(--text-tertiary, #9a8fb8);
+  transition: transform 200ms ease;
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(-90deg);
+}
+
+/* ═══ List: indent inside group ═══ */
+.section .list {
+  padding-right: 16px;
+  margin-bottom: 8px;
+}
+
+.section .list .item {
+  font-size: 0.84rem;
+  padding: 8px 10px;
+}
+
+/* ═══ Divider between groups ═══ */
+.section + .section {
+  padding-top: 8px;
+  border-top: 1px solid rgba(157, 78, 221, 0.08);
+  margin-top: 4px;
+}
+
+/* ═══ GlobalShareAction styled as nav item ═══ */
+.item:is(button) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--radius-10, 10px);
+  background: transparent;
+  color: var(--text-tertiary, #9a8fb8);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-align: right;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+.item:is(button):hover {
+  background: rgba(168, 85, 247, 0.08);
+  color: var(--text-secondary, #c7b8e6);
+}
