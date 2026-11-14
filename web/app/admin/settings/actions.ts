@@ -10,10 +10,27 @@ type Result = { ok: true } | { ok: false; error: string }
 const schema = z
   .object({
     site_name: z.string().trim().min(2).max(60),
-    support_email: z.string().trim().max(120).refine((v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 'إيميل الدعم غير صحيح'),
-    support_whatsapp: z.string().trim().max(30).refine((v) => !v || /^\+?[0-9\s()\-]{8,25}$/.test(v), 'رقم واتساب الدعم غير صحيح'),
-    support_facebook_url: z.string().trim().max(300).refine((v) => !v || isHttpsHost(v, ['facebook.com', 'fb.com']), 'رابط فيسبوك لازم يكون HTTPS وعلى نطاق فيسبوك'),
-    whatsapp_channel_url: z.string().trim().max(300).refine((v) => !v || isHttpsHost(v, ['whatsapp.com']), 'رابط قناة واتساب لازم يكون HTTPS وعلى نطاق واتساب'),
+    support_whatsapp: z
+      .string()
+      .trim()
+      .max(30)
+      .refine((v) => !v || /^\+?[0-9\s()\-]{8,25}$/.test(v), 'رقم واتساب الدعم غير صحيح'),
+    support_facebook_url: z
+      .string()
+      .trim()
+      .max(300)
+      .refine(
+        (v) => !v || isHttpsHost(v, ['facebook.com', 'fb.com']),
+        'رابط فيسبوك لازم يكون HTTPS وعلى نطاق فيسبوك',
+      ),
+    whatsapp_channel_url: z
+      .string()
+      .trim()
+      .max(300)
+      .refine(
+        (v) => !v || isHttpsHost(v, ['whatsapp.com']),
+        'رابط قناة واتساب لازم يكون HTTPS وعلى نطاق واتساب',
+      ),
     public_contacts_enabled: z.boolean(),
     announcement_banner: z.string().max(200).or(z.literal('')),
     maintenance_mode: z.boolean(),
@@ -23,7 +40,6 @@ const schema = z
   .superRefine((value, context) => {
     if (
       value.public_contacts_enabled &&
-      !value.support_email &&
       !value.support_whatsapp &&
       !value.support_facebook_url &&
       !value.whatsapp_channel_url
@@ -39,7 +55,10 @@ const schema = z
 function isHttpsHost(value: string, hosts: string[]): boolean {
   try {
     const url = new URL(value)
-    return url.protocol === 'https:' && hosts.some((host) => url.hostname === host || url.hostname.endsWith(`.${host}`))
+    return (
+      url.protocol === 'https:' &&
+      hosts.some((host) => url.hostname === host || url.hostname.endsWith(`.${host}`))
+    )
   } catch {
     return false
   }
@@ -51,7 +70,6 @@ export async function saveSettings(formData: FormData): Promise<Result> {
 
   const parsed = schema.safeParse({
     site_name: String(formData.get('site_name') ?? '').trim(),
-    support_email: String(formData.get('support_email') ?? '').trim(),
     support_whatsapp: String(formData.get('support_whatsapp') ?? '').trim(),
     support_facebook_url: String(formData.get('support_facebook_url') ?? '').trim(),
     whatsapp_channel_url: String(formData.get('whatsapp_channel_url') ?? '').trim(),

@@ -99,7 +99,6 @@ const FIELD_LABEL: Record<string, string> = {
   contacts: 'بيانات التواصل',
   is_open: 'حالة الفتح',
   site_name: 'اسم المنصة',
-  support_email: 'بريد الدعم',
   support_whatsapp: 'رقم واتساب الدعم',
   support_facebook_url: 'صفحة فيسبوك',
   whatsapp_channel_url: 'قناة واتساب',
@@ -270,7 +269,17 @@ export default async function AuditSection({ q: qRaw, action, actor }: Props) {
 
                   {log.entity_type && (
                     <div className={styles.entity}>
-                      <span className={styles.entityLabel}>{log.entity_type === 'business' ? 'نشاط' : log.entity_type === 'profile' ? 'حساب' : log.entity_type === 'advertisement' ? 'إعلان' : log.entity_type === 'business_insight' ? 'تقرير' : 'سجل إداري'}</span>
+                      <span className={styles.entityLabel}>
+                        {log.entity_type === 'business'
+                          ? 'نشاط'
+                          : log.entity_type === 'profile'
+                            ? 'حساب'
+                            : log.entity_type === 'advertisement'
+                              ? 'إعلان'
+                              : log.entity_type === 'business_insight'
+                                ? 'تقرير'
+                                : 'سجل إداري'}
+                      </span>
                       {log.entity_id && (
                         <code className={styles.entityId}>{log.entity_id.slice(0, 8)}</code>
                       )}

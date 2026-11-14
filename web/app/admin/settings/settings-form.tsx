@@ -19,7 +19,6 @@ import styles from './settings.module.css'
 type Props = {
   initial: {
     site_name: string
-    support_email: string
     support_whatsapp: string
     support_facebook_url: string
     whatsapp_channel_url: string
@@ -134,33 +133,63 @@ export default function SettingsForm({ initial }: Props) {
           <div className={styles.row}>
             <label className={styles.field}>
               <span className={styles.label}>إيميل الدعم الرسمي</span>
-              <input className={styles.input} name="support_email" type="email" defaultValue={initial.support_email} maxLength={120} dir="ltr" placeholder="لم تتم إضافته بعد" />
             </label>
             <label className={styles.field}>
               <span className={styles.label}>رقم واتساب الدعم الرسمي</span>
-              <input className={styles.input} name="support_whatsapp" type="tel" defaultValue={initial.support_whatsapp} maxLength={30} dir="ltr" placeholder="يُضاف بعد اعتماد الرقم" />
+              <input
+                className={styles.input}
+                name="support_whatsapp"
+                type="tel"
+                defaultValue={initial.support_whatsapp}
+                maxLength={30}
+                dir="ltr"
+                placeholder="يُضاف بعد اعتماد الرقم"
+              />
             </label>
           </div>
 
           <div className={styles.row}>
             <label className={styles.field}>
               <span className={styles.label}>رابط فيسبوك الرسمي</span>
-              <input className={styles.input} name="support_facebook_url" type="url" defaultValue={initial.support_facebook_url} maxLength={300} dir="ltr" placeholder="https://facebook.com/..." />
+              <input
+                className={styles.input}
+                name="support_facebook_url"
+                type="url"
+                defaultValue={initial.support_facebook_url}
+                maxLength={300}
+                dir="ltr"
+                placeholder="https://facebook.com/..."
+              />
             </label>
             <label className={styles.field}>
               <span className={styles.label}>رابط قناة واتساب الرسمية</span>
-              <input className={styles.input} name="whatsapp_channel_url" type="url" defaultValue={initial.whatsapp_channel_url} maxLength={300} dir="ltr" placeholder="https://whatsapp.com/channel/..." />
+              <input
+                className={styles.input}
+                name="whatsapp_channel_url"
+                type="url"
+                defaultValue={initial.whatsapp_channel_url}
+                maxLength={300}
+                dir="ltr"
+                placeholder="https://whatsapp.com/channel/..."
+              />
             </label>
           </div>
 
           <label className={styles.toggle}>
-            <input type="checkbox" name="public_contacts_enabled" defaultChecked={initial.public_contacts_enabled} className={styles.checkbox} />
+            <input
+              type="checkbox"
+              name="public_contacts_enabled"
+              defaultChecked={initial.public_contacts_enabled}
+              className={styles.checkbox}
+            />
             <span className={styles.toggleTrack} aria-hidden />
             <span className={styles.toggleBody}>
               <ShieldCheckIcon size={14} />
               <span>
                 <strong>إظهار قنوات التواصل للزوار</strong>
-                <small>تظل القنوات مخفية حتى تفعيل هذا الخيار بعد اعتماد الروابط والأرقام الرسمية.</small>
+                <small>
+                  تظل القنوات مخفية حتى تفعيل هذا الخيار بعد اعتماد الروابط والأرقام الرسمية.
+                </small>
               </span>
             </span>
           </label>
