@@ -26,9 +26,7 @@ import {
   MessageCircleIcon,
   TargetIcon,
   LampIcon,
-  PhoneIcon,
   FireIcon,
-  ImageIcon,
 } from '@/components/icons'
 
 export type NavItem = {
