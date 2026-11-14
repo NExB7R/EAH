@@ -100,7 +100,7 @@ export default function LocationStep({ data, errors, update, onNext }: Props) {
           </div>
 
           <div className={styles.contactsList}>
-            {data.contacts.map((contact, idx) => (
+            {data.contacts.map((contact) => (
               <div key={contact.tempId} className={styles.contactRow}>
                 <select
                   value={contact.kind}
