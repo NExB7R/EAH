@@ -92,7 +92,7 @@ export default function ActivityFeed() {
           <ClockIcon size={16} />
           <h3 className={styles.title}>النشاط الحي</h3>
         </div>
-        <div className={styles.empty}>مفيش نشاط لسه</div>
+        <div className={styles.empty}>لا توجد أحداث بعد — ستظهر هنا كل الإجراءات الإدارية</div>
       </div>
     )
   }
