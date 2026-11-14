@@ -84,7 +84,9 @@ export default async function SiteFooter() {
       key: 'whatsapp-channel',
       href: contacts.whatsappChannelUrl,
       title: 'قناة واتساب الرسمية',
-      description: contacts.whatsappChannelUrl ? 'تحديثات المنصة والإعلانات' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
+      description: contacts.whatsappChannelUrl
+        ? 'تحديثات المنصة والإعلانات'
+        : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
       Icon: BroadcastIcon,
       tone: styles.channel,
       external: true,
@@ -93,7 +95,9 @@ export default async function SiteFooter() {
       key: 'facebook',
       href: contacts.facebookUrl,
       title: 'صفحة EAH الرسمية',
-      description: contacts.facebookUrl ? 'الأخبار والمحتوى المنشور' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
+      description: contacts.facebookUrl
+        ? 'الأخبار والمحتوى المنشور'
+        : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
       Icon: FacebookIcon,
       tone: styles.facebook,
       external: true,
@@ -102,12 +106,14 @@ export default async function SiteFooter() {
       key: 'support-whatsapp',
       href: contacts.supportWhatsappUrl,
       title: 'تواصل مع الدعم',
-      description: contacts.supportWhatsappUrl ? 'قناة التواصل المعتمدة للمنصة' : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
+      description: contacts.supportWhatsappUrl
+        ? 'قناة التواصل المعتمدة للمنصة'
+        : 'سيتم التفعيل بعد اعتماد بيانات التواصل الرسمية',
       Icon: WhatsAppIcon,
       tone: styles.whatsapp,
       external: true,
     },
-  ]
+  ].filter((c) => Boolean(c.href))
 
   return (
     <footer className={styles.footer}>
@@ -118,14 +124,21 @@ export default async function SiteFooter() {
       </div>
 
       <div className={styles.container}>
-        <div className={styles.contacts} role="group" aria-label="قنوات التواصل الرسمية">
+        <div
+          className={styles.contacts}
+          role="group"
+          aria-label="قنوات التواصل الرسمية"
+          hidden={contactCards.length === 0}
+        >
           {contactCards.map(({ key, href, title, description, Icon, tone, external }) => {
             const className = [styles.card, tone, !href && styles.disabledCard]
               .filter(Boolean)
               .join(' ')
             const content = (
               <>
-                <span className={styles.cardIcon}><Icon size={22} /></span>
+                <span className={styles.cardIcon}>
+                  <Icon size={22} />
+                </span>
                 <span className={styles.cardBody}>
                   <strong className={styles.cardTitle}>{title}</strong>
                   <small className={styles.cardSub}>{description}</small>
