@@ -18,7 +18,6 @@ import { getAdminOrderFlowStats } from '@/lib/data/admin-orders'
 import { expireStaleOrders } from '@/lib/data/orders-expire'
 import { autoDeliverDueOrders } from '@/lib/data/orders-auto'
 import { getUserSession } from '@/lib/data/user'
-import ActivityFeed from '@/components/admin/activity-feed'
 import StatCard from '@/components/dashboard/stat-card'
 import Panel from '@/components/dashboard/panel'
 import styles from './page.module.css'
@@ -231,9 +230,7 @@ export default async function AdminDashboard() {
 
       {/* Two column: Activity + Quick Actions */}
       <div className={styles.twoCol}>
-        <div className={styles.colMain}>
-          <ActivityFeed />
-        </div>
+        <div className={styles.colMain}></div>
         <aside className={styles.colSide}>
           <Panel title="إجراءات سريعة">
             <ul className={styles.quickList}>
