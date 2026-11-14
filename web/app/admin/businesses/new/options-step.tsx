@@ -14,8 +14,7 @@ type Props = {
 
 export default function OptionsStep({ data, owners, update }: Props) {
   const hasWhatsAppContact = data.contacts.some(
-    (contact) =>
-      contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
+    (contact) => contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
   )
 
   return (
@@ -43,14 +42,15 @@ export default function OptionsStep({ data, owners, update }: Props) {
             ))}
           </select>
           <span className={styles.hint}>
-            <UserIcon size={11} /> اختيار الحساب اختياري. لو اخترت حساب عميل، سيحوّله النظام إلى تاجر ويمنحه وحده صلاحية إدارة النشاط المرتبط به.
-            ولو سيبت الاختيار فاضي، النشاط هيتنشر ويظهر للزوار من غير تاجر مرتبط.
+            <UserIcon size={11} /> ربط حساب العميل/التاجر اختياري. لو ربطت، النظام يمنحه صلاحية
+            إدارة النشاط المرتبط فقط. ولو سيبته فاضي، تقدر تربطه لاحقًا من الإدارة.
           </span>
         </label>
 
         {owners.length === 0 && (
           <p className={styles.gpsHint}>
-            لا توجد حسابات عميل أو تاجر متاحة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير تاجر مرتبط، وتربطه لاحقًا من الإدارة.
+            لا توجد حسابات عميل أو تاجر متاحة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير تاجر
+            مرتبط، وتربطه لاحقًا من الإدارة.
           </p>
         )}
 
@@ -95,7 +95,8 @@ export default function OptionsStep({ data, owners, update }: Props) {
           </div>
           {!hasWhatsAppContact && (
             <p className={styles.hint}>
-              علشان تفعّل استقبال طلبات واتساب، أضف رقمًا صالحًا من نوع «واتساب» في خطوة الموقع والتواصل. وجود رقم للتواصل وحده لا يفعّل استقبال الطلبات تلقائيًا.
+              علشان تفعّل استقبال طلبات واتساب، أضف رقمًا صالحًا من نوع «واتساب» في خطوة الموقع
+              والتواصل. وجود رقم للتواصل وحده لا يفعّل استقبال الطلبات تلقائيًا.
             </p>
           )}
         </div>
@@ -107,15 +108,14 @@ export default function OptionsStep({ data, owners, update }: Props) {
           <div className={styles.orderNoticeBody}>
             <strong className={styles.orderNoticeTitle}>طلبات أونلاين داخل EAH</strong>
             <p className={styles.orderNoticeText}>
-              دي قناة مستقلة عن واتساب. بعد إنشاء النشاط، اربط تاجرًا وتأكد من وجود رقم تواصل للنشاط،
-              ثم فعّل استقبال الطلبات من تبويب «إعدادات الطلبات». النشاط يفضل ظاهرًا للعامة حتى لو لم
-              يتم تفعيل الطلبات.
+              قناة طلبات داخل EAH — مستقلة عن واتساب. تتفعّل من تبويب «إعدادات الطلبات» بعد ربط تاجر
+              ووجود رقم تواصل. النشاط يُنشر ويظهر للزوار بعد اكتمال بياناته وإنهاء المسودة.
             </p>
           </div>
         </div>
 
         <p className={styles.gpsHint}>
-          صور الغلاف والشعار والمعرض تقدر تضيفها بعد إنشاء النشاط من صفحة التعديل.
+          صور الغلاف والشعار والمنيو تقدر تضيفها بعد الإنشاء من صفحة التعديل.
         </p>
       </div>
     </div>

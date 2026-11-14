@@ -269,8 +269,8 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
         </div>
 
         <div className={styles.card} key={step}>
-          {step === 0 && <BasicsStep data={data} errors={errors} update={update} />}
-          {step === 1 && <LocationStep data={data} errors={errors} update={update} />}
+          {step === 0 && <BasicsStep data={data} errors={errors} update={update} onNext={next} />}
+          {step === 1 && <LocationStep data={data} errors={errors} update={update} onNext={next} />}
           {step === 2 && <OptionsStep data={data} owners={owners} update={update} />}
           {step === 3 && <ReviewStep data={data} owners={owners} goTo={jumpTo} />}
         </div>

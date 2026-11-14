@@ -1,23 +1,24 @@
 'use client'
 
-import { GiftIcon, CheckCircleIcon, MapPinIcon, CrownGoldIcon } from '@/components/icons'
+import { UtensilsIcon, PillIcon, BikeIcon, StoreIcon } from '@/components/icons'
 import type { WizardData } from './new-business-wizard'
 import styles from './wizard.module.css'
 
 const TYPES = [
-  { value: 'restaurant', label: 'مطعم', Icon: GiftIcon },
-  { value: 'pharmacy', label: 'صيدلية', Icon: CheckCircleIcon },
-  { value: 'delivery_office', label: 'توصيل', Icon: MapPinIcon },
-  { value: 'misc', label: 'أخرى', Icon: CrownGoldIcon },
+  { value: 'restaurant', label: 'مطعم', desc: 'أكل ومشروبات', Icon: UtensilsIcon },
+  { value: 'pharmacy', label: 'صيدلية', desc: 'أدوية ومستلزمات', Icon: PillIcon },
+  { value: 'delivery_office', label: 'توصيل', desc: 'دليفري وشحن', Icon: BikeIcon },
+  { value: 'misc', label: 'أخرى', desc: 'ماركت، جيم، حلاق...', Icon: StoreIcon },
 ] as const
 
 type Props = {
   data: WizardData
   errors: Record<string, string>
   update: (patch: Partial<WizardData>) => void
+  onNext?: () => void
 }
 
-export default function BasicsStep({ data, errors, update }: Props) {
+export default function BasicsStep({ data, errors, update, onNext }: Props) {
   return (
     <div>
       <div className={styles.cardHead}>
@@ -43,9 +44,10 @@ export default function BasicsStep({ data, errors, update }: Props) {
                   aria-checked={active}
                 >
                   <span className={styles.typeCardIcon}>
-                    <t.Icon size={16} />
+                    <t.Icon size={18} />
                   </span>
                   <span className={styles.typeCardLabel}>{t.label}</span>
+                  <span className={styles.typeCardDesc}>{t.desc}</span>
                 </button>
               )
             })}
@@ -65,14 +67,16 @@ export default function BasicsStep({ data, errors, update }: Props) {
               value={data.custom_business_type ?? ''}
               onChange={(e) => update({ custom_business_type: e.target.value.slice(0, 50) })}
               className={`${styles.input} ${errors.custom_business_type ? styles.inputError : ''}`}
-              placeholder="مثال: ماركت، حلاق، ورشة، جيم..."
+              placeholder="اكتب النوع — مثال: ماركت، حلاق، جيم، ورشة"
               maxLength={50}
               dir="rtl"
             />
             {errors.custom_business_type ? (
               <span className={styles.fieldError}>{errors.custom_business_type}</span>
             ) : (
-              <span className={styles.hint}>النشاط هيظهر ضمن فئة «أخرى» لحد ما يتم اعتماد اسم النوع المخصص.</span>
+              <span className={styles.hint}>
+                النشاط هيظهر ضمن فئة «أخرى» لحد ما يتم اعتماد اسم النوع المخصص.
+              </span>
             )}
           </label>
         )}
@@ -85,11 +89,18 @@ export default function BasicsStep({ data, errors, update }: Props) {
             type="text"
             value={data.name}
             onChange={(e) => update({ name: e.target.value.slice(0, 80) })}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                onNext?.()
+              }
+            }}
             className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-            placeholder="مثال: مطعم البركة"
+            placeholder="اكتب اسم النشاط زي ما هو مكتوب على اللافتة"
             maxLength={80}
             dir="rtl"
             autoFocus
+            enterKeyHint="next"
           />
           {errors.name ? (
             <span className={styles.fieldError}>{errors.name}</span>
@@ -106,10 +117,17 @@ export default function BasicsStep({ data, errors, update }: Props) {
             type="text"
             value={data.hook}
             onChange={(e) => update({ hook: e.target.value.slice(0, 120) })}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                onNext?.()
+              }
+            }}
             className={styles.input}
-            placeholder="أحلى كشري في شبين — جرّبه مرة"
+            placeholder="جملة قصيرة تجذب الزائر — مثال: أحلى كشري في شبين"
             maxLength={120}
             dir="rtl"
+            enterKeyHint="next"
           />
           <span className={styles.counter}>{data.hook.length}/120</span>
         </label>

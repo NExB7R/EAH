@@ -49,24 +49,20 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
   const needsTypeApproval =
     data.business_type === 'misc' && data.custom_business_type.trim().length > 0
   const hasWhatsAppContact = data.contacts.some(
-    (contact) =>
-      contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
+    (contact) => contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
   )
   const whatsappOrdersEnabled = hasWhatsAppContact && data.accepts_whatsapp_orders
   const publishStatus = needsTypeApproval
-    ? owner
-      ? 'سينشر تحت «أخرى» — النوع المخصص قيد المراجعة'
-      : 'سينشر تحت «أخرى» — بدون تاجر مرتبط، والنوع قيد المراجعة'
-    : owner
-      ? 'جاهز للنشر — مع تاجر مرتبط'
-      : 'جاهز للنشر — بدون تاجر مرتبط'
+    ? 'هيتحفظ كمسودة — النوع المخصص قيد المراجعة'
+    : 'هيتحفظ كمسودة — جاهز للتحرير والنشر'
+  void owner
 
   return (
     <div>
       <div className={styles.cardHead}>
         <h2 className={styles.cardTitle}>مراجعة نهائية</h2>
         <p className={styles.cardHint}>
-          راجع البيانات كويس قبل الإنشاء — تقدر تعدّل أي حقل من الزر جنبه
+          راجع البيانات — هيتحفظ النشاط كمسودة، وبعدها ترفع الصور والساعات وتنشر
         </p>
       </div>
 
@@ -102,7 +98,7 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
           step={2}
           goTo={goTo}
         />
-        <Item label="حالة النشر" value={publishStatus} step={2} goTo={goTo} />
+        <Item label="حالة الحفظ" value={publishStatus} step={2} goTo={goTo} />
         <Item label="الحالة" value={data.is_open ? 'مفتوح الآن' : 'مغلق'} step={2} goTo={goTo} />
         <Item
           label="طلبات أونلاين داخل EAH"
@@ -145,10 +141,10 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
       <div style={{ marginTop: '20px' }} className={styles.draftBar}>
         <span>
           {needsTypeApproval
-            ? `النشاط هيتنشر على المنصة ضمن فئة «أخرى» حتى يتم اعتماد الاسم المخصص. موافقة النوع لا تتحكم في ظهور النشاط، ${owner ? 'ويظل حساب التاجر المختار هو الحساب الوحيد المرتبط بإدارة النشاط.' : 'والنشاط سيظل بدون تاجر مرتبط.'}`
+            ? `هيتحفظ كمسودة في فئة «أخرى» لحد اعتماد النوع المخصص. ${owner ? 'وحساب التاجر المختار هيبقى المسؤول عن إدارة النشاط.' : 'وتقدر تربطه بحساب تاجر لاحقًا.'}`
             : owner
-              ? 'البيانات جاهزة — النشاط هيتنشر وهيتربط بحساب التاجر المختار.'
-              : 'النشاط هيتنشر على المنصة بدون تاجر مرتبط، وتقدر تربطه بحساب مسجل لاحقًا من الإدارة.'}
+              ? 'جاهز للحفظ كمسودة — هيتربط بحساب التاجر المختار، وبعدها ترفع الصور وتنشر.'
+              : 'جاهز للحفظ كمسودة — تقدر تربطه بحساب تاجر وترفع الصور من صفحة التعديل قبل النشر.'}
         </span>
       </div>
     </div>

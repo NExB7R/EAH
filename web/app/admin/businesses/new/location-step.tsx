@@ -29,16 +29,17 @@ type Props = {
   data: WizardData
   errors: Record<string, string>
   update: (patch: Partial<WizardData>) => void
+  onNext?: () => void
 }
 
-export default function LocationStep({ data, errors, update }: Props) {
+export default function LocationStep({ data, errors, update, onNext }: Props) {
   return (
     <div>
       <div className={styles.cardHead}>
         <h2 className={styles.cardTitle}>الموقع والتواصل</h2>
         <p className={styles.cardHint}>
-          المنطقة والعنوان والأرقام الإضافية اختيارية. مطلوب رقم تواصل للنشاط نفسه، ومش محتاج رقمًا
-          شخصيًا لالتاجر المرتبط.
+          محتاج رقم موبايل واحد على الأقل للتواصل مع النشاط. المنطقة والعنوان اختياريان لكنهما
+          يساعدان الزوار.
         </p>
       </div>
 
@@ -56,6 +57,7 @@ export default function LocationStep({ data, errors, update }: Props) {
               placeholder="شبين القناطر"
               maxLength={60}
               dir="rtl"
+              enterKeyHint="next"
             />
           </label>
 
@@ -66,9 +68,10 @@ export default function LocationStep({ data, errors, update }: Props) {
               value={data.area}
               onChange={(e) => update({ area: e.target.value.slice(0, 60) })}
               className={styles.input}
-              placeholder="اسم المنطقة أو القرية"
+              placeholder="مثال: المركز، الميدان، الكفر"
               maxLength={60}
               dir="rtl"
+              enterKeyHint="next"
             />
           </label>
         </div>
@@ -80,7 +83,7 @@ export default function LocationStep({ data, errors, update }: Props) {
             value={data.address_text}
             onChange={(e) => update({ address_text: e.target.value.slice(0, 200) })}
             className={styles.input}
-            placeholder="اكتب عنوان النشاط بالتفصيل (اختياري)"
+            placeholder="الشارع، رقم العقار، علامة مميزة (اختياري)"
             maxLength={200}
             dir="rtl"
           />
@@ -132,6 +135,7 @@ export default function LocationStep({ data, errors, update }: Props) {
 
                 <input
                   type="tel"
+                  inputMode="numeric"
                   value={contact.value}
                   onChange={(e) => {
                     const v = e.target.value.replace(/[^0-9]/g, '').slice(0, 11)
@@ -141,10 +145,17 @@ export default function LocationStep({ data, errors, update }: Props) {
                       ),
                     })
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      onNext?.()
+                    }
+                  }}
                   className={styles.contactInput}
                   placeholder="01xxxxxxxxx"
                   maxLength={11}
                   dir="ltr"
+                  enterKeyHint="next"
                 />
 
                 {contact.kind === 'phone' && contact.is_primary && (
@@ -154,8 +165,7 @@ export default function LocationStep({ data, errors, update }: Props) {
                   type="button"
                   onClick={() => {
                     const remaining = data.contacts.filter((c) => c.tempId !== contact.tempId)
-                    const removedPrimaryPhone =
-                      contact.kind === 'phone' && contact.is_primary
+                    const removedPrimaryPhone = contact.kind === 'phone' && contact.is_primary
                     const promotedPhone = removedPrimaryPhone
                       ? remaining.find((c) => c.kind === 'phone')
                       : undefined
