@@ -177,3 +177,36 @@ where table_schema='public' and table_name='<table>'
 - بحث الهاتف: يُفعَّل تلقائيًا في /explore عند 11 رقم
 - المساعد الذكي: ai-widget.tsx (عائم)
 - التنقل: sidebar + topbar مباشر
+
+---
+
+## 12. قواعد جديدة (2026-11-15)
+
+TypeScript:
+- استخدم: npx tsc --noEmit > /tmp/tsc.log 2>&1; echo "REAL_EXIT=$?"
+- لا head قبل $؟
+- REAL_EXIT هو الحكم
+
+Patches:
+- ملف واحد → patch → tsc → تحقق → التالي
+- لا regex شامل
+- replace مع نص مطابق تمامًا
+- if old not in s: raise (دفاعي)
+
+Migrations:
+- Add-Then-Remove (3 خطوات)
+- تحقق قبل + بعد
+- JSON في SQL = '["a","b"]'::jsonb
+
+Commits:
+- واحد → push → إرسال → التالي
+- لا "تم" بدون إثبات
+
+Features:
+- Feature = DB + UI + Test
+- لا "DB complete" بدون UI
+
+Vercel:
+- Paused حتى 2026-12-15
+- Development local
+- Commits to GitHub → auto-deploy on return
