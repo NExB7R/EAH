@@ -28,7 +28,7 @@ const BUSINESS_COLUMNS = `
   is_open, is_featured, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   successful_orders,
   featured_order, featured_until, featured_pin,
-  new_until, working_hours, accepts_whatsapp_orders, accepts_orders,
+  new_until, working_hours, accepts_whatsapp_orders, accepts_orders, accepts_online_orders,
   response_time_avg_seconds, response_rate,
   last_activity_at, created_at, updated_at,
   branches_count, offers_count, rating_avg, rating_count,
@@ -83,6 +83,7 @@ async function normalizeBusinesses(data: unknown[] | null): Promise<Business[]> 
         rows.map((row) => ({
           id: String(row.id ?? ''),
           accepts_orders: row.accepts_orders,
+          accepts_online_orders: Boolean(row.accepts_online_orders),
           owner_profile_id: row.owner_profile_id,
         })),
       ),
@@ -97,6 +98,7 @@ async function normalizeBusinesses(data: unknown[] | null): Promise<Business[]> 
     normalizeBusiness({
       ...row,
       accepts_orders: configuredInAppOrderIds.has(String(row.id ?? '')),
+      accepts_online_orders: Boolean(row.accepts_online_orders),
       accepts_whatsapp_orders: isWhatsAppChannelAvailable(
         row.accepts_whatsapp_orders,
         row.id,
@@ -237,9 +239,9 @@ export async function getSuggestedBusinesses(userId: string | null): Promise<Sug
     .not('slug', 'like', 'eah-qa-test-%')
     .in('business_type', rankedTypes)
     .order('rating_count', { ascending: false })
-      .order('rating_avg', { ascending: false })
-      .order('successful_orders', { ascending: false })
-      .order('is_verified', { ascending: false })
+    .order('rating_avg', { ascending: false })
+    .order('successful_orders', { ascending: false })
+    .order('is_verified', { ascending: false })
     .limit(MAX_RESULTS + 10) // هامش للاستبعاد
 
   if (error) {
