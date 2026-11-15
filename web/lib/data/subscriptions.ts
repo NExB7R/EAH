@@ -7,6 +7,8 @@ import { createPublicClient } from '@/lib/supabase/public'
 export type PlanFeatureKey =
   | 'basic_listing'
   | 'whatsapp_orders'
+  | 'online_orders'
+  | 'reply_to_reviews'
   | 'public_stats'
   | 'featured_badge'
   | 'verified_badge'
@@ -79,6 +81,8 @@ export async function getAdSlots(): Promise<AdSlot[]> {
 export const FEATURE_LABEL: Record<PlanFeatureKey, string> = {
   basic_listing: 'صفحة نشاط كاملة',
   whatsapp_orders: 'استقبال طلبات على واتساب',
+  online_orders: 'استقبال طلبات أونلاين داخل EAH',
+  reply_to_reviews: 'رد على تقييمات العملاء',
   public_stats: 'إحصائيات أساسية عامة',
   featured_badge: 'شارة "مميز"',
   verified_badge: 'شارة "موثّق" على صفحتك',
