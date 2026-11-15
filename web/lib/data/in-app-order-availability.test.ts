@@ -11,41 +11,27 @@ const activeSettings: InAppOrderSettings = {
 }
 
 describe('in-app order availability', () => {
-  it('requires an enabled activity, linked seller, running settings and valid WhatsApp destination', () => {
-    expect(isInAppOrderOperational(true, 'seller-id', activeSettings, true, 0)).toBe(true)
-    expect(isInAppOrderOperational(false, 'seller-id', activeSettings, true, 0)).toBe(false)
-    expect(isInAppOrderOperational(true, null, activeSettings, true, 0)).toBe(false)
-    expect(isInAppOrderOperational(true, 'seller-id', activeSettings, false, 0)).toBe(false)
-    expect(isInAppOrderOperational(true, 'seller-id', null, true, 0)).toBe(false)
+  it('requires an enabled activity, linked seller, and running settings', () => {
+    expect(isInAppOrderOperational(true, 'seller-id', activeSettings, 0)).toBe(true)
+    expect(isInAppOrderOperational(false, 'seller-id', activeSettings, 0)).toBe(false)
+    expect(isInAppOrderOperational(true, null, activeSettings, 0)).toBe(false)
+    expect(isInAppOrderOperational(true, 'seller-id', null, 0)).toBe(false)
   })
 
   it('fails closed when orders are disabled or timing settings are invalid', () => {
     expect(
-      isInAppOrderOperational(
-        true,
-        'seller-id',
-        { ...activeSettings, orders_enabled: false },
-        true,
-        0,
-      ),
+      isInAppOrderOperational(true, 'seller-id', { ...activeSettings, orders_enabled: false }, 0),
     ).toBe(false)
     expect(
       isInAppOrderOperational(
         true,
         'seller-id',
         { ...activeSettings, delivery_eta_minutes: null },
-        true,
         0,
       ),
     ).toBe(false)
     expect(
-      isInAppOrderOperational(
-        true,
-        'seller-id',
-        { ...activeSettings, deadline_minutes: 0 },
-        true,
-        0,
-      ),
+      isInAppOrderOperational(true, 'seller-id', { ...activeSettings, deadline_minutes: 0 }, 0),
     ).toBe(false)
   })
 
@@ -55,7 +41,6 @@ describe('in-app order availability', () => {
         true,
         'seller-id',
         { ...activeSettings, offline_mode: true, offline_until: null },
-        true,
         1000,
       ),
     ).toBe(false)
@@ -64,7 +49,6 @@ describe('in-app order availability', () => {
         true,
         'seller-id',
         { ...activeSettings, offline_mode: true, offline_until: 'not-a-date' },
-        true,
         1000,
       ),
     ).toBe(false)
@@ -73,7 +57,6 @@ describe('in-app order availability', () => {
         true,
         'seller-id',
         { ...activeSettings, suspended_until: new Date(2000).toISOString() },
-        true,
         1000,
       ),
     ).toBe(false)
@@ -82,7 +65,6 @@ describe('in-app order availability', () => {
         true,
         'seller-id',
         { ...activeSettings, offline_mode: true, offline_until: new Date(500).toISOString() },
-        true,
         1000,
       ),
     ).toBe(true)

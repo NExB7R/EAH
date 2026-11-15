@@ -205,7 +205,6 @@ export const getBusinessDetail = unstable_cache(
       getInAppOrderAvailableBusinessIds(supabase, [
         {
           id: String(rawBiz.id),
-          accepts_orders: rawBiz.accepts_orders,
           accepts_online_orders: Boolean(rawBiz.accepts_online_orders),
           owner_profile_id: rawBiz.owner_profile_id,
         },

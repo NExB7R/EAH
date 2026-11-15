@@ -10,23 +10,25 @@ export type InAppOrderSettings = {
 /**
  * The shared product rule for showing in-platform orders as currently available.
  * The UI must fail closed when settings are missing, stale, or malformed.
+ *
+ * WhatsApp is no longer a required channel — orders are received in-app.
+ * WhatsApp remains a contact-only channel (handled via contacts, not here).
  */
 export function isInAppOrderOperational(
-  acceptsOrders: unknown,
+  acceptsOnlineOrders: unknown,
   ownerProfileId: unknown,
   settings: InAppOrderSettings | null,
-  hasUsableWhatsAppDestination: boolean,
   nowMs = Date.now(),
 ): boolean {
   if (
-    acceptsOrders !== true ||
+    acceptsOnlineOrders !== true ||
     typeof ownerProfileId !== 'string' ||
     ownerProfileId.trim().length === 0
   ) {
     return false
   }
 
-  if (!settings || settings.orders_enabled !== true || !hasUsableWhatsAppDestination) {
+  if (!settings || settings.orders_enabled !== true) {
     return false
   }
 
