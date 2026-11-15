@@ -1,15 +1,14 @@
 import 'server-only'
 
 import { createServiceClient } from '@/lib/supabase/service'
-import {
-  hasUsableWhatsAppDestination,
-} from './contact-availability-utils'
+import { hasUsableWhatsAppDestination } from './contact-availability-utils'
 import { isInAppOrderOperational } from './in-app-order-availability-core'
 
 type ServiceClient = ReturnType<typeof createServiceClient>
 type BusinessCandidate = {
   id: string
   accepts_orders: unknown
+  accepts_online_orders?: unknown
   owner_profile_id: unknown
 }
 

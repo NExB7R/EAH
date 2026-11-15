@@ -29,6 +29,7 @@ async function normalizeBusinessRows(
       rows.map((row) => ({
         id: String(row.id ?? ''),
         accepts_orders: row.accepts_orders,
+        accepts_online_orders: Boolean(row.accepts_online_orders),
         owner_profile_id: row.owner_profile_id,
       })),
     ),
@@ -51,8 +52,7 @@ async function normalizeBusinessRows(
     )
     const isOpen = isBusinessOpen({
       working_hours: (raw.working_hours as WorkingHours | null) ?? null,
-      open_now_override:
-        typeof raw.open_now_override === 'boolean' ? raw.open_now_override : null,
+      open_now_override: typeof raw.open_now_override === 'boolean' ? raw.open_now_override : null,
       is_open: typeof raw.is_open === 'boolean' ? raw.is_open : null,
     })
     delete raw.business_locations
@@ -66,6 +66,7 @@ async function normalizeBusinessRows(
       is_new_project: isPromotionActive(raw.is_new_project === true, raw.new_until),
       accepts_orders: acceptsOrders,
       accepts_whatsapp_orders: acceptsWhatsApp,
+      accepts_online_orders: Boolean(raw.accepts_online_orders),
       orders_enabled: acceptsOrders,
     }
   })
@@ -175,7 +176,7 @@ export const getBusinessDetail = unstable_cache(
         is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         successful_orders,
         featured_order, featured_until, featured_pin,
-        new_until, working_hours, accepts_whatsapp_orders, accepts_orders,
+        new_until, working_hours, accepts_whatsapp_orders, accepts_orders, accepts_online_orders,
         response_time_avg_seconds, response_rate,
         last_activity_at, created_at, updated_at,
         branches_count, offers_count, rating_avg, rating_count,
@@ -201,11 +202,14 @@ export const getBusinessDetail = unstable_cache(
         : null
     const [configuredWhatsAppIds, configuredInAppOrderIds] = await Promise.all([
       getWhatsAppDestinationBusinessIds(supabase, [String(rawBiz.id)]),
-      getInAppOrderAvailableBusinessIds(supabase, [{
-        id: String(rawBiz.id),
-        accepts_orders: rawBiz.accepts_orders,
-        owner_profile_id: rawBiz.owner_profile_id,
-      }]),
+      getInAppOrderAvailableBusinessIds(supabase, [
+        {
+          id: String(rawBiz.id),
+          accepts_orders: rawBiz.accepts_orders,
+          accepts_online_orders: Boolean(rawBiz.accepts_online_orders),
+          owner_profile_id: rawBiz.owner_profile_id,
+        },
+      ]),
     ])
     const acceptsOrders = configuredInAppOrderIds.has(String(rawBiz.id))
     const acceptsWhatsApp = isWhatsAppChannelAvailable(
@@ -229,6 +233,7 @@ export const getBusinessDetail = unstable_cache(
       is_new_project: isPromotionActive(rawBiz.is_new_project === true, rawBiz.new_until),
       accepts_orders: acceptsOrders,
       accepts_whatsapp_orders: acceptsWhatsApp,
+      accepts_online_orders: Boolean(rawBiz.accepts_online_orders),
       orders_enabled: acceptsOrders,
     }
 
@@ -263,7 +268,9 @@ export const getBusinessDetail = unstable_cache(
         .order('sort_order', { ascending: true }),
       supabase
         .from('business_branches')
-        .select('id, name, area, address_text, latitude, longitude, is_primary, phone, whatsapp, sort_order')
+        .select(
+          'id, name, area, address_text, latitude, longitude, is_primary, phone, whatsapp, sort_order',
+        )
         .eq('business_id', business.id)
         .eq('is_active', true)
         .order('is_primary', { ascending: false })
@@ -308,10 +315,7 @@ export const getBusinessDetail = unstable_cache(
       sort_order: number | null
     }
     const rawContactOptions = (contactOptionsRes.data ?? []) as unknown as RawContactOption[]
-    const contactOptions = buildContactOptions(
-      rawBranches,
-      rawContactOptions,
-    )
+    const contactOptions = buildContactOptions(rawBranches, rawContactOptions)
 
     const logo = media.find((m) => m.media_type === 'logo') ?? null
     const cover = media.find((m) => m.media_type === 'cover') ?? null
@@ -455,7 +459,7 @@ export const getSimilarBusinesses = unstable_cache(
         is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
         successful_orders,
         featured_order, featured_until, featured_pin,
-        new_until, working_hours, open_now_override, accepts_whatsapp_orders, accepts_orders,
+        new_until, working_hours, open_now_override, accepts_whatsapp_orders, accepts_orders, accepts_online_orders,
         response_time_avg_seconds, response_rate,
         last_activity_at, created_at, updated_at,
         branches_count, offers_count, rating_avg, rating_count,
