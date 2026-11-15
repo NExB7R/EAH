@@ -21,6 +21,7 @@ export type MerchantBusiness = {
   is_published: boolean
   is_open: boolean
   accepts_whatsapp_orders: boolean
+  accepts_online_orders?: boolean
   is_verified: boolean
   trust_score: number
   trust_tier: string
@@ -69,7 +70,7 @@ export async function getMyBusiness(userId: string): Promise<MerchantBusiness | 
   const { data, error } = await supabase
     .from('businesses')
     .select(
-      'id, slug, name, business_type, area, description, hook, address_text, cover_image_url, is_published, is_open, is_verified, accepts_whatsapp_orders, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at, business_locations(latitude, longitude, is_primary)',
+      'id, slug, name, business_type, area, description, hook, address_text, cover_image_url, is_published, is_open, is_verified, accepts_whatsapp_orders, accepts_online_orders, trust_score, trust_tier, successful_orders, branches_count, offers_count, rating_avg, rating_count, created_at, business_locations(latitude, longitude, is_primary)',
     )
     .eq('owner_profile_id', userId)
     .limit(1)
@@ -285,13 +286,18 @@ export type MerchantOrder = {
   buyerCompletedOrders: number | null
 }
 
-type MerchantOrderRow = Omit<MerchantOrder, 'buyerAccountLinked' | 'buyerPhoneVerified' | 'buyerCompletedOrders'> & {
+type MerchantOrderRow = Omit<
+  MerchantOrder,
+  'buyerAccountLinked' | 'buyerPhoneVerified' | 'buyerCompletedOrders'
+> & {
   customer_profile_id: string | null
 }
 
 export async function getMerchantOrders(businessId: string, limit = 50): Promise<MerchantOrder[]> {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
   if (!user || user.is_anonymous) return []
 
   // Verify ownership before any privileged lookup of buyer verification/history.
@@ -305,14 +311,18 @@ export async function getMerchantOrders(businessId: string, limit = 50): Promise
 
   const { data, error } = await supabase
     .from('order_requests')
-    .select('id, order_code, status, items, notes, customer_name, customer_phone, created_at, customer_profile_id')
+    .select(
+      'id, order_code, status, items, notes, customer_name, customer_phone, created_at, customer_profile_id',
+    )
     .eq('business_id', businessId)
     .order('created_at', { ascending: false })
     .limit(limit)
   if (error) return []
 
   const rows = (data ?? []) as unknown as MerchantOrderRow[]
-  const buyerIds = [...new Set(rows.map((row) => row.customer_profile_id).filter((id): id is string => !!id))]
+  const buyerIds = [
+    ...new Set(rows.map((row) => row.customer_profile_id).filter((id): id is string => !!id)),
+  ]
   const phoneVerified = new Map<string, boolean>()
   const completedOrders = new Map<string, number>()
   let phoneVerificationAvailable = true
@@ -321,19 +331,28 @@ export async function getMerchantOrders(businessId: string, limit = 50): Promise
   if (buyerIds.length > 0) {
     try {
       const service = createServiceClient()
-      const [{ data: profiles, error: profileError }, { data: stats, error: statsError }] = await Promise.all([
-        service.from('profiles').select('id, phone_verified_at').in('id', buyerIds),
-        service.from('customer_order_stats').select('profile_id, successful_orders').in('profile_id', buyerIds),
-      ])
+      const [{ data: profiles, error: profileError }, { data: stats, error: statsError }] =
+        await Promise.all([
+          service.from('profiles').select('id, phone_verified_at').in('id', buyerIds),
+          service
+            .from('customer_order_stats')
+            .select('profile_id, successful_orders')
+            .in('profile_id', buyerIds),
+        ])
       if (profileError) {
         phoneVerificationAvailable = false
       } else {
-        for (const profile of profiles ?? []) phoneVerified.set(profile.id as string, !!profile.phone_verified_at)
+        for (const profile of profiles ?? [])
+          phoneVerified.set(profile.id as string, !!profile.phone_verified_at)
       }
       if (statsError) {
         completedStatsAvailable = false
       } else {
-        for (const row of stats ?? []) completedOrders.set(row.profile_id as string, Math.max(0, Number(row.successful_orders) || 0))
+        for (const row of stats ?? [])
+          completedOrders.set(
+            row.profile_id as string,
+            Math.max(0, Number(row.successful_orders) || 0),
+          )
       }
     } catch {
       // Do not convert lookup failures into negative claims about a buyer.
@@ -353,12 +372,14 @@ export async function getMerchantOrders(businessId: string, limit = 50): Promise
     created_at: row.created_at,
     buyerAccountLinked: !!row.customer_profile_id,
     buyerPhoneVerified:
-      row.customer_profile_id && phoneVerificationAvailable && phoneVerified.has(row.customer_profile_id)
+      row.customer_profile_id &&
+      phoneVerificationAvailable &&
+      phoneVerified.has(row.customer_profile_id)
         ? phoneVerified.get(row.customer_profile_id)!
         : null,
     buyerCompletedOrders:
       row.customer_profile_id && completedStatsAvailable
-        ? completedOrders.get(row.customer_profile_id) ?? 0
+        ? (completedOrders.get(row.customer_profile_id) ?? 0)
         : null,
   }))
 }

@@ -25,6 +25,7 @@ export type AdminBusiness = {
   working_hours?: Record<string, unknown> | null
   accepts_orders?: boolean
   accepts_whatsapp_orders: boolean
+  accepts_online_orders?: boolean
   branches_count?: number
   offers_count?: number
   cover_image_url: string | null
@@ -57,7 +58,12 @@ export type AdminBusiness = {
   notice_expires_at: string | null
   notice_severity: 'info' | 'warning' | 'critical'
   owner: { id: string; display_name: string; phone: string | null } | null
-  contacts: { method_type: string; value: string; is_primary: boolean; sort_order?: number | null }[]
+  contacts: {
+    method_type: string
+    value: string
+    is_primary: boolean
+    sort_order?: number | null
+  }[]
   branches: {
     id: string
     name: string
@@ -165,6 +171,7 @@ export async function getBusinessById(id: string): Promise<AdminBusiness | null>
     is_featured: !!b.is_featured,
     is_verified: !!b.is_verified,
     accepts_whatsapp_orders: !!b.accepts_whatsapp_orders,
+    accepts_online_orders: Boolean(b.accepts_online_orders),
     featured_order: Number(b.featured_order ?? 0),
     featured_pin: !!b.featured_pin,
     featured_until: (b.featured_until as string | null) ?? null,
@@ -253,7 +260,10 @@ export async function getBusinessOwnerCandidates(): Promise<BusinessOwnerOption[
     .in('owner_profile_id', userIds)
 
   if (linkedOwnersError) {
-    console.error('[admin-business] failed to check existing business links:', linkedOwnersError.message)
+    console.error(
+      '[admin-business] failed to check existing business links:',
+      linkedOwnersError.message,
+    )
     return []
   }
 

@@ -9,11 +9,7 @@ import { getWhatsAppDestinationBusinessIds } from './contact-availability'
 import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
 import { isPromotionActive } from './promotion-status'
-import {
-  getPublishedBusinessLimit,
-  onlyPublishedBusinessRows,
-} from './published-business-pool'
-
+import { getPublishedBusinessLimit, onlyPublishedBusinessRows } from './published-business-pool'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Data Fetching Layer
@@ -68,6 +64,7 @@ export type Business = {
   open_now_override?: boolean | null
   accepts_whatsapp_orders: boolean
   accepts_orders: boolean
+  accepts_online_orders?: boolean
   /** Legacy alias; public availability comes from accepts_orders. */
   orders_enabled: boolean
   response_time_avg_seconds: number | null
@@ -100,7 +97,7 @@ const BUSINESS_COLUMNS = `
   is_open, is_featured, is_verified, verified_at, is_new_project, is_opportunity, opportunity_until, opportunity_note,
   velocity_score, engagement_score, diversity_score, successful_orders,
   featured_order, featured_until, featured_pin,
-  new_until, working_hours, open_now_override, accepts_whatsapp_orders, accepts_orders,
+  new_until, working_hours, open_now_override, accepts_whatsapp_orders, accepts_orders, accepts_online_orders,
   response_time_avg_seconds, response_rate,
   last_activity_at, created_at, updated_at,
   branches_count, offers_count, rating_avg, rating_count,
@@ -137,8 +134,7 @@ function normalizeBusiness(raw: Record<string, unknown>): Business {
   const acceptsOrders = canAcceptInAppOrders(raw.accepts_orders, raw.owner_profile_id)
   const isOpen = isBusinessOpen({
     working_hours: (raw.working_hours as WorkingHours | null) ?? null,
-    open_now_override:
-      typeof raw.open_now_override === 'boolean' ? raw.open_now_override : null,
+    open_now_override: typeof raw.open_now_override === 'boolean' ? raw.open_now_override : null,
     is_open: typeof raw.is_open === 'boolean' ? raw.is_open : null,
   })
   return {
@@ -176,6 +172,7 @@ async function normalizeBusinesses(
     normalizeBusiness({
       ...row,
       accepts_orders: configuredInAppOrderIds.has(String(row.id ?? '')),
+      accepts_online_orders: Boolean(row.accepts_online_orders),
       accepts_whatsapp_orders: isWhatsAppChannelAvailable(
         row.accepts_whatsapp_orders,
         row.id,
@@ -212,9 +209,7 @@ export const getPublishedBusinesses = unstable_cache(
     }
     const publishedRows = onlyPublishedBusinessRows(data)
     const normalized = await normalizeBusinesses(publishedRows, supabase)
-    return normalized.sort(
-      (a, b) => getBusinessReputationScore(b) - getBusinessReputationScore(a),
-    )
+    return normalized.sort((a, b) => getBusinessReputationScore(b) - getBusinessReputationScore(a))
   },
   ['businesses-published-v4'],
   { revalidate: 60, tags: ['businesses'] },
@@ -282,9 +277,10 @@ export const getFeaturedBusinesses = unstable_cache(
       }
     }
 
-    const selected = typeof limit === 'number' && Number.isFinite(limit) && limit > 0
-      ? rows.slice(0, Math.floor(limit))
-      : rows
+    const selected =
+      typeof limit === 'number' && Number.isFinite(limit) && limit > 0
+        ? rows.slice(0, Math.floor(limit))
+        : rows
     return await normalizeBusinesses(selected, supabase)
   },
   ['businesses-featured-v4'],
@@ -473,10 +469,12 @@ export const getNearbyBusinesses = unstable_cache(
 
     if (area) q = q.eq('area', area)
 
-    const { data, error } = await q.order('rating_count', { ascending: false })
+    const { data, error } = await q
+      .order('rating_count', { ascending: false })
       .order('rating_avg', { ascending: false })
       .order('successful_orders', { ascending: false })
-      .order('is_verified', { ascending: false }).limit(limit)
+      .order('is_verified', { ascending: false })
+      .limit(limit)
 
     if (error) {
       console.error('[data] getNearbyBusinesses error:', error.message)
