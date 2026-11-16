@@ -27,7 +27,7 @@ const schema = z
     phoneNumbers: z.array(phoneSchema).max(10),
     whatsappNumbers: z.array(phoneSchema).max(10),
     is_open: z.boolean(),
-    accepts_whatsapp_orders: z.boolean(),
+    accepts_online_orders: z.boolean(),
     business_type: z.enum(['restaurant', 'pharmacy', 'delivery_office', 'misc']),
     latitude: z.number().min(-90).max(90).nullable(),
     longitude: z.number().min(-180).max(180).nullable(),
@@ -114,7 +114,7 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
     phoneNumbers: readContactNumbers(formData, 'phone_numbers', 'phone'),
     whatsappNumbers: readContactNumbers(formData, 'whatsapp_numbers', 'whatsapp'),
     is_open: formData.get('is_open') === 'on',
-    accepts_whatsapp_orders: formData.get('accepts_whatsapp_orders') === 'on',
+    accepts_online_orders: formData.get('accepts_online_orders') === 'on',
     business_type: String(formData.get('business_type') ?? '').trim(),
     latitude: parseCoord(String(formData.get('latitude') ?? '')),
     longitude: parseCoord(String(formData.get('longitude') ?? '')),
@@ -134,21 +134,6 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
   }
 
   const d = parsed.data
-  let hasActiveBranchWhatsApp = false
-  if (d.accepts_whatsapp_orders && !d.whatsappNumbers.some(hasUsableWhatsAppDestination)) {
-    const { data: activeBranches, error: branchLookupError } = await admin
-      .from('business_branches')
-      .select('whatsapp')
-      .eq('business_id', ctx.biz.id)
-      .eq('is_active', true)
-
-    if (branchLookupError) {
-      return { ok: false, error: 'تعذر التحقق من أرقام واتساب للفروع — لم يتم حفظ التعديلات' }
-    }
-    hasActiveBranchWhatsApp = (activeBranches ?? []).some((branch) =>
-      hasUsableWhatsAppDestination(branch.whatsapp),
-    )
-  }
 
   const patch = {
     name: d.name,
@@ -158,9 +143,7 @@ export async function updateMyBusiness(formData: FormData): Promise<Result> {
     hook: d.hook || null,
     address_text: d.address_text || null,
     is_open: d.is_open,
-    accepts_whatsapp_orders:
-      d.accepts_whatsapp_orders &&
-      (d.whatsappNumbers.some(hasUsableWhatsAppDestination) || hasActiveBranchWhatsApp),
+    accepts_online_orders: d.accepts_online_orders,
   }
 
   // businesses currently has an owner SELECT policy but no owner UPDATE policy.

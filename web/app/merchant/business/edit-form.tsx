@@ -10,6 +10,7 @@ import {
   WhatsAppIcon,
   MapPinIcon,
   FileTextIcon,
+  CartIcon,
 } from '@/components/icons'
 import { updateMyBusiness } from './actions'
 import ImageUploader from './image-uploader'
@@ -23,7 +24,7 @@ type Props = {
     hook: string
     address: string
     isOpen: boolean
-    acceptsWhatsapp: boolean
+    acceptsOnline: boolean
     phone: string[] | string
     whatsapp: string[] | string
     businessType: string
@@ -68,7 +69,7 @@ export default function BusinessEditForm({ initial }: Props) {
     setter: React.Dispatch<React.SetStateAction<ContactInput[]>>,
     id: string,
   ) => {
-    setter((current) => current.length <= 1 ? current : current.filter((item) => item.id !== id))
+    setter((current) => (current.length <= 1 ? current : current.filter((item) => item.id !== id)))
   }
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -270,7 +271,12 @@ export default function BusinessEditForm({ initial }: Props) {
         <div className={styles.field}>
           <div className={styles.actions}>
             <span className={styles.label}>أرقام الاتصال</span>
-            <button type="button" onClick={() => addContactInput(setPhoneNumbers)} className={styles.gpsBtn} disabled={phoneNumbers.length >= 10}>
+            <button
+              type="button"
+              onClick={() => addContactInput(setPhoneNumbers)}
+              className={styles.gpsBtn}
+              disabled={phoneNumbers.length >= 10}
+            >
               + إضافة رقم
             </button>
           </div>
@@ -298,7 +304,12 @@ export default function BusinessEditForm({ initial }: Props) {
                 />
               </label>
               {phoneNumbers.length > 1 && (
-                <button type="button" onClick={() => removeContactInput(setPhoneNumbers, contact.id)} className={styles.gpsBtn} aria-label={`حذف رقم الاتصال ${index + 1}`}>
+                <button
+                  type="button"
+                  onClick={() => removeContactInput(setPhoneNumbers, contact.id)}
+                  className={styles.gpsBtn}
+                  aria-label={`حذف رقم الاتصال ${index + 1}`}
+                >
                   حذف
                 </button>
               )}
@@ -309,7 +320,12 @@ export default function BusinessEditForm({ initial }: Props) {
         <div className={styles.field}>
           <div className={styles.actions}>
             <span className={styles.label}>أرقام واتساب</span>
-            <button type="button" onClick={() => addContactInput(setWhatsappNumbers)} className={styles.gpsBtn} disabled={whatsappNumbers.length >= 10}>
+            <button
+              type="button"
+              onClick={() => addContactInput(setWhatsappNumbers)}
+              className={styles.gpsBtn}
+              disabled={whatsappNumbers.length >= 10}
+            >
               + إضافة رقم
             </button>
           </div>
@@ -335,7 +351,12 @@ export default function BusinessEditForm({ initial }: Props) {
                 />
               </label>
               {whatsappNumbers.length > 1 && (
-                <button type="button" onClick={() => removeContactInput(setWhatsappNumbers, contact.id)} className={styles.gpsBtn} aria-label={`حذف رقم واتساب ${index + 1}`}>
+                <button
+                  type="button"
+                  onClick={() => removeContactInput(setWhatsappNumbers, contact.id)}
+                  className={styles.gpsBtn}
+                  aria-label={`حذف رقم واتساب ${index + 1}`}
+                >
                   حذف
                 </button>
               )}
@@ -365,14 +386,14 @@ export default function BusinessEditForm({ initial }: Props) {
         <label className={styles.toggle}>
           <input
             type="checkbox"
-            name="accepts_whatsapp_orders"
-            defaultChecked={initial.acceptsWhatsapp}
+            name="accepts_online_orders"
+            defaultChecked={initial.acceptsOnline}
             className={styles.checkbox}
           />
           <span className={styles.toggleTrack} aria-hidden />
           <span className={styles.toggleLabel}>
-            <WhatsAppIcon size={14} />
-            تفعيل زر تواصل واتساب
+            <CartIcon size={14} />
+            استقبال طلبات أونلاين داخل EAH
           </span>
         </label>
 

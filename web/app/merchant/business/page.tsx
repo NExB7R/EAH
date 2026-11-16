@@ -107,7 +107,7 @@ export default async function MerchantBusinessPage() {
           hook: business.hook ?? '',
           address: business.address_text ?? '',
           isOpen: business.is_open,
-          acceptsWhatsapp: business.accepts_whatsapp_orders,
+          acceptsOnline: business.accepts_online_orders ?? false,
           phone: contacts.phone ?? '',
           whatsapp: contacts.whatsapp ?? '',
           businessType: business.business_type,
