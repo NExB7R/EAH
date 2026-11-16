@@ -9,7 +9,7 @@
 
 ---
 
-## Routes (112)
+## Routes (110)
 
 | Route | File |
 |-------|------|
@@ -76,7 +76,6 @@
 | `/api/log-error` | `app/api/log-error/route.ts` |
 | `/api/merchant/orders/export` | `app/api/merchant/orders/export/route.ts` |
 | `/api/merchant/upload-business-image` | `app/api/merchant/upload-business-image/route.ts` |
-| `/api/offline/flush` | `app/api/offline/flush/route.ts` |
 | `/api/orders/upload` | `app/api/orders/upload/route.ts` |
 | `/api/push/subscribe` | `app/api/push/subscribe/route.ts` |
 | `/api/push/unsubscribe` | `app/api/push/unsubscribe/route.ts` |
@@ -116,7 +115,6 @@
 | `/new` | `app/new/page.tsx` |
 | `/notifications` | `app/notifications/page.tsx` |
 | `/offers` | `app/offers/page.tsx` |
-| `/offline` | `app/offline/page.tsx` |
 | `/pricing` | `app/pricing/page.tsx` |
 | `/privacy` | `app/privacy/page.tsx` |
 | `/roadmap` | `app/roadmap/page.tsx` |
