@@ -1,9 +1,5 @@
 import Link from 'next/link'
-import {
-  CheckCircleIcon,
-  AlertIcon,
-  SparklesIcon,
-} from '@/components/icons'
+import { CheckCircleIcon, AlertIcon, SparklesIcon } from '@/components/icons'
 import { computeBusinessCompleteness, getGradeLabel } from '@/lib/data/business-completeness'
 import type { AdminBusiness } from '@/lib/data/admin-business'
 import styles from './completeness-panel.module.css'
@@ -45,7 +41,6 @@ export default function CompletenessPanel({ biz }: Props) {
     is_published: biz.is_published,
     is_open: biz.is_open ?? false,
     accepts_orders: biz.accepts_orders ?? false,
-    accepts_whatsapp_orders: biz.accepts_whatsapp_orders ?? false,
     branches_count: biz.branches_count ?? 0,
     offers_count: biz.offers_count ?? 0,
     rating_count: biz.rating_count ?? 0,
@@ -69,8 +64,7 @@ export default function CompletenessPanel({ biz }: Props) {
           </div>
         </div>
         <div className={styles.percentBadge} style={{ color: grade.color }}>
-          {result.percent}%
-          <span className={styles.gradeLabel}>{grade.label}</span>
+          {result.percent}%<span className={styles.gradeLabel}>{grade.label}</span>
         </div>
       </header>
 

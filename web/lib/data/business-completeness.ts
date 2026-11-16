@@ -37,7 +37,6 @@ type BusinessData = {
   is_published: boolean
   is_open: boolean
   accepts_orders: boolean
-  accepts_whatsapp_orders: boolean
   branches_count: number
   offers_count: number
   rating_count: number

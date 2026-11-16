@@ -108,7 +108,6 @@ export default function BusinessRow({
     is_published: b.is_published,
     is_open: b.is_open ?? false,
     accepts_orders: b.accepts_orders ?? false,
-    accepts_whatsapp_orders: b.accepts_whatsapp_orders ?? false,
     branches_count: b.branches_count ?? 0,
     offers_count: b.offers_count ?? 0,
     rating_count: b.rating_count ?? 0,

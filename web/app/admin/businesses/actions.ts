@@ -461,9 +461,6 @@ export async function createBusiness(formData: FormData): Promise<Result> {
   const finalSlug = d.slug ?? `${slugify(d.name)}-${randomBytes(8).toString('hex')}`
 
   // WhatsApp gate: auto-disable orders if no whatsapp contact provided
-  const hasWhatsappContact = (d.contacts ?? []).some(
-    (contact) => contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
-  )
   const effectiveAcceptsOnline = d.accepts_online_orders === true
 
   const { data: created, error } = await privileged
