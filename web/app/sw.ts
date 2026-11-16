@@ -2,7 +2,7 @@
 
 import { defaultCache } from '@serwist/next/worker'
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist'
-import { Serwist } from 'serwist'
+import { Serwist, CacheFirst, NetworkFirst, StaleWhileRevalidate, ExpirationPlugin } from 'serwist'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Service Worker (Serwist v9)
@@ -22,17 +22,43 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: false,
-  runtimeCaching: defaultCache,
-  fallbacks: {
-    entries: [
-      {
-        url: '/offline',
-        matcher({ request }) {
-          return request.destination === 'document'
-        },
-      },
-    ],
-  },
+  runtimeCaching: [
+    // HTML pages — StaleWhileRevalidate (فوري + تحديث خلفي)
+    {
+      matcher: ({ request }) => request.destination === 'document',
+      handler: new StaleWhileRevalidate({
+        cacheName: 'eah-pages',
+        plugins: [new ExpirationPlugin({ maxAgeSeconds: 86400, maxEntries: 100 })],
+      }),
+    },
+    // CSS / JS / Fonts — CacheFirst
+    {
+      matcher: ({ request }) => ['style', 'script', 'font', 'worker'].includes(request.destination),
+      handler: new CacheFirst({
+        cacheName: 'eah-assets',
+        plugins: [new ExpirationPlugin({ maxAgeSeconds: 2592000, maxEntries: 200 })],
+      }),
+    },
+    // Images — CacheFirst
+    {
+      matcher: ({ request }) => request.destination === 'image',
+      handler: new CacheFirst({
+        cacheName: 'eah-images',
+        plugins: [new ExpirationPlugin({ maxAgeSeconds: 2592000, maxEntries: 300 })],
+      }),
+    },
+    // API — NetworkFirst (فشل → cache قديم)
+    {
+      matcher: ({ url }) => url.pathname.startsWith('/api/'),
+      handler: new NetworkFirst({
+        cacheName: 'eah-api',
+        networkTimeoutSeconds: 5,
+        plugins: [new ExpirationPlugin({ maxAgeSeconds: 3600, maxEntries: 100 })],
+      }),
+    },
+    // بقية (default)
+    ...defaultCache,
+  ],
 })
 
 serwist.addEventListeners()
