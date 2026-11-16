@@ -51,7 +51,7 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
   const hasWhatsAppContact = data.contacts.some(
     (contact) => contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
   )
-  const whatsappOrdersEnabled = hasWhatsAppContact && data.accepts_whatsapp_orders
+  const onlineOrdersEnabled = data.accepts_online_orders
   const publishStatus = needsTypeApproval
     ? 'هيتحفظ كمسودة — النوع المخصص قيد المراجعة'
     : 'هيتحفظ كمسودة — جاهز للتحرير والنشر'
@@ -113,7 +113,7 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
         <Item
           label="استقبال طلبات واتساب"
           value={
-            whatsappOrdersEnabled
+            onlineOrdersEnabled
               ? 'يستقبل'
               : hasWhatsAppContact
                 ? 'موقوف'

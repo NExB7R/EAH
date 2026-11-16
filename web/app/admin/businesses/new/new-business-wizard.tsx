@@ -37,7 +37,7 @@ export type WizardData = {
   address_text: string
   contacts: Contact[]
   is_open: boolean
-  accepts_whatsapp_orders: boolean
+  accepts_online_orders: boolean
   owner_user_id: string
   custom_business_type: string
 }
@@ -59,7 +59,7 @@ const INITIAL: WizardData = {
   address_text: '',
   contacts: [{ tempId: 'c1', kind: 'phone', value: '', is_primary: true }],
   is_open: true,
-  accepts_whatsapp_orders: false,
+  accepts_online_orders: false,
   owner_user_id: '',
   custom_business_type: '',
 }
@@ -201,7 +201,7 @@ export default function NewBusinessWizard({ owners }: { owners: OwnerOption[] })
         ),
       )
       if (data.is_open) fd.set('is_open', 'on')
-      if (data.accepts_whatsapp_orders) fd.set('accepts_whatsapp_orders', 'on')
+      if (data.accepts_online_orders) fd.set('accepts_online_orders', 'on')
       if (data.owner_user_id) {
         fd.set('owner_profile_id', data.owner_user_id)
       }

@@ -71,14 +71,14 @@ export default function OptionsStep({ data, owners, update }: Props) {
             </label>
 
             <label
-              className={`${styles.typeCard} ${hasWhatsAppContact && data.accepts_whatsapp_orders ? styles.typeCardActive : ''}`}
+              className={`${styles.typeCard} ${data.accepts_online_orders ? styles.typeCardActive : ''}`}
               aria-disabled={!hasWhatsAppContact}
             >
               <input
                 type="checkbox"
-                checked={hasWhatsAppContact && data.accepts_whatsapp_orders}
+                checked={data.accepts_online_orders}
                 disabled={!hasWhatsAppContact}
-                onChange={(e) => update({ accepts_whatsapp_orders: e.target.checked })}
+                onChange={(e) => update({ accepts_online_orders: e.target.checked })}
                 style={{ display: 'none' }}
               />
               <span className={styles.typeCardIcon}>
@@ -87,7 +87,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
               <span className={styles.typeCardLabel}>
                 {!hasWhatsAppContact
                   ? 'أضف رقم واتساب أولًا'
-                  : data.accepts_whatsapp_orders
+                  : data.accepts_online_orders
                     ? 'يستقبل طلبات واتساب'
                     : 'لا يستقبل'}
               </span>
