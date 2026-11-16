@@ -38,12 +38,7 @@ const optionalSlug = z
   .transform((v) => (v === '' ? null : v))
   .refine((v) => !v || /^[a-z0-9-]+$/.test(v), 'الـ slug بالإنجليزي والحروف الصغيرة فقط')
 
-export const BUSINESS_TYPES = [
-  'restaurant',
-  'pharmacy',
-  'delivery_office',
-  'misc',
-] as const
+export const BUSINESS_TYPES = ['restaurant', 'pharmacy', 'delivery_office', 'misc'] as const
 
 // ─── 1. الأساسيات ───
 export const basicsSchema = z.object({
@@ -148,7 +143,7 @@ export const branchSchema = z.object({
 export const settingsSchema = z.object({
   is_published: z.coerce.boolean().default(false),
   is_open: z.coerce.boolean().default(true),
-  accepts_whatsapp_orders: z.coerce.boolean().default(false),
+  accepts_online_orders: z.coerce.boolean().default(false),
   is_featured: z.coerce.boolean().default(false),
   is_verified: z.coerce.boolean().default(false),
   featured_order: z.coerce.number().int().min(0).max(999).default(0),

@@ -25,7 +25,6 @@ import {
 type Result =
   { ok: true; id?: string } | { ok: false; error: string; fieldErrors?: Record<string, string> }
 
-
 /**
  * Privileged DB access for admin-only edit actions.
  * Every exported action below must pass requireAdmin() before calling this helper.
@@ -231,7 +230,6 @@ export async function saveContacts(businessId: string, formData: FormData): Prom
     .maybeSingle()
   if (!business) return { ok: false, error: 'النشاط مش موجود' }
 
-
   const extendedTypes = ['complaints', 'manager', 'shift_morning', 'shift_evening'] as const
   const extendedValues: Record<string, string> = {}
   for (const type of extendedTypes) {
@@ -433,7 +431,6 @@ export async function saveLocation(businessId: string, formData: FormData): Prom
     .maybeSingle()
   if (!business) return { ok: false, error: 'النشاط مش موجود' }
 
-
   const { data: currentLocations, error: lookupError } = await adminDb
     .from('business_locations')
     .select('id')
@@ -549,7 +546,7 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
   const parsed = settingsSchema.safeParse({
     is_published: fdBool(formData, 'is_published'),
     is_open: fdBool(formData, 'is_open'),
-    accepts_whatsapp_orders: fdBool(formData, 'accepts_whatsapp_orders'),
+    accepts_online_orders: fdBool(formData, 'accepts_online_orders'),
     is_featured: fdBool(formData, 'is_featured'),
     is_verified: fdBool(formData, 'is_verified'),
     featured_order: fd(formData, 'featured_order') || '0',
@@ -567,7 +564,7 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
   }
 
   // WhatsApp gate: accept a valid public contact-method number or a valid active-branch number.
-  if (parsed.data.accepts_whatsapp_orders) {
+  if (parsed.data.accepts_online_orders) {
     const configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(adminDb, [businessId])
     if (!configuredWhatsAppIds.has(businessId)) {
       return {

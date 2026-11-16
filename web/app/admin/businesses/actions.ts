@@ -324,14 +324,19 @@ const createSchema = z.object({
           'shift_evening',
           'additional',
         ]),
-        value: z.string().refine(isEgyptianMobileNumber, 'رقم مصري غير صحيح — 11 رقم يبدأ بـ 010 أو 011 أو 012 أو 015'),
+        value: z
+          .string()
+          .refine(
+            isEgyptianMobileNumber,
+            'رقم مصري غير صحيح — 11 رقم يبدأ بـ 010 أو 011 أو 012 أو 015',
+          ),
         is_primary: z.boolean().optional().default(false),
       }),
     )
     .max(15)
     .optional(),
   is_open: z.boolean().optional(),
-  accepts_whatsapp_orders: z.boolean().optional(),
+  accepts_online_orders: z.boolean().optional(),
   is_published: z.boolean().optional(),
 })
 
@@ -379,7 +384,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       }
     })(),
     is_open: formData.get('is_open') === 'on',
-    accepts_whatsapp_orders: formData.get('accepts_whatsapp_orders') === 'on',
+    accepts_online_orders: formData.get('accepts_online_orders') === 'on',
     is_published: formData.get('is_published') === 'on',
   })
 
@@ -422,7 +427,10 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       return { ok: false, error: 'تعذر التحقق من دور الحساب المرتبط بالنشاط — حاول تاني' }
     }
     if (!roleRow) {
-      return { ok: false, error: 'الحساب المرتبط بالنشاط غير مهيأ داخل النظام — راجع حسابه قبل الربط' }
+      return {
+        ok: false,
+        error: 'الحساب المرتبط بالنشاط غير مهيأ داخل النظام — راجع حسابه قبل الربط',
+      }
     }
     if (roleRow.role !== 'customer' && roleRow.role !== 'merchant') {
       return { ok: false, error: 'اختر حساب عميل أو تاجر، ولا تربط النشاط بحساب إداري' }
@@ -441,7 +449,10 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       return { ok: false, error: 'تعذر التحقق من الأنشطة المرتبطة بهذا الحساب — حاول مرة أخرى' }
     }
     if (existingOwnedBusiness) {
-      return { ok: false, error: 'هذا الحساب مرتبط بالفعل بنشاط آخر. فك ارتباطه أولًا قبل ربط نشاط جديد.' }
+      return {
+        ok: false,
+        error: 'هذا الحساب مرتبط بالفعل بنشاط آخر. فك ارتباطه أولًا قبل ربط نشاط جديد.',
+      }
     }
 
     selectedOwnerRole = roleRow.role
@@ -451,10 +462,9 @@ export async function createBusiness(formData: FormData): Promise<Result> {
 
   // WhatsApp gate: auto-disable orders if no whatsapp contact provided
   const hasWhatsappContact = (d.contacts ?? []).some(
-    (contact) =>
-      contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
+    (contact) => contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
   )
-  const effectiveAcceptsWhatsapp = hasWhatsappContact && d.accepts_whatsapp_orders === true
+  const effectiveAcceptsOnline = d.accepts_online_orders === true
 
   const { data: created, error } = await privileged
     .from('businesses')
@@ -473,7 +483,7 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       description: d.description || null,
       hook: d.hook || null,
       is_open: d.is_open ?? true,
-      accepts_whatsapp_orders: effectiveAcceptsWhatsapp,
+      accepts_online_orders: effectiveAcceptsOnline,
       // Publication is independent from owner assignment and custom-type review.
       // Unapproved custom types use the public fallback category "أخرى".
       is_published: d.is_published ?? true,
@@ -487,7 +497,8 @@ export async function createBusiness(formData: FormData): Promise<Result> {
     if (isBusinessOwnerUniqueConflict(error)) {
       return {
         ok: false,
-        error: 'الحساب المختار مرتبط بالفعل بنشاط آخر. اختر حسابًا غير مرتبط أو أنشئ النشاط دون مالك.',
+        error:
+          'الحساب المختار مرتبط بالفعل بنشاط آخر. اختر حسابًا غير مرتبط أو أنشئ النشاط دون مالك.',
       }
     }
 
@@ -546,17 +557,15 @@ export async function createBusiness(formData: FormData): Promise<Result> {
 
   // Always create one primary branch so the business appears complete from day one
   // (map, hours, contact flow all read from business_branches).
-  const { error: branchError } = await privileged
-    .from('business_branches')
-    .insert({
-      business_id: created.id,
-      name: d.name,
-      area: d.area || 'شبين القناطر',
-      address_text: d.address_text || null,
-      is_primary: true,
-      is_active: true,
-      working_hours: {},
-    })
+  const { error: branchError } = await privileged.from('business_branches').insert({
+    business_id: created.id,
+    name: d.name,
+    area: d.area || 'شبين القناطر',
+    address_text: d.address_text || null,
+    is_primary: true,
+    is_active: true,
+    working_hours: {},
+  })
 
   if (branchError) {
     // Full rollback: contacts + business must be removed to avoid orphans.
@@ -942,7 +951,10 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
       return { ok: false, error: 'تعذر التحقق من الأنشطة المرتبطة بهذا الحساب — حاول مرة أخرى' }
     }
     if (otherOwnedBusiness) {
-      return { ok: false, error: 'هذا الحساب مرتبط بالفعل بنشاط آخر. فك ارتباطه أولًا قبل ربط نشاط جديد.' }
+      return {
+        ok: false,
+        error: 'هذا الحساب مرتبط بالفعل بنشاط آخر. فك ارتباطه أولًا قبل ربط نشاط جديد.',
+      }
     }
   }
 
@@ -954,7 +966,10 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     .update({ accepts_orders: false })
     .eq('id', businessId)
   if (closePublicOrdersError) {
-    return { ok: false, error: 'تعذر إيقاف الطلبات قبل تغيير التاجر المرتبط؛ لم يتغير ارتباط النشاط.' }
+    return {
+      ok: false,
+      error: 'تعذر إيقاف الطلبات قبل تغيير التاجر المرتبط؛ لم يتغير ارتباط النشاط.',
+    }
   }
 
   const { error: closeOrderSettingsError } = await privileged
@@ -975,7 +990,8 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
     })
     return {
       ok: false,
-      error: 'تم إيقاف زر الطلب لحماية النشاط، لكن تعذر حفظ إعداداته. لم يتغير ربط التاجر المرتبط؛ راجع الإعدادات وحاول تاني.',
+      error:
+        'تم إيقاف زر الطلب لحماية النشاط، لكن تعذر حفظ إعداداته. لم يتغير ربط التاجر المرتبط؛ راجع الإعدادات وحاول تاني.',
     }
   }
 
@@ -1036,7 +1052,8 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
         })
         return {
           ok: false,
-          error: 'النشاط ما زال مربوطًا بالحساب، لكن تعذّر تفعيل دور التاجر. أوقفنا الطلبات لحماية النشاط؛ راجع الدور وإعدادات الطلب.',
+          error:
+            'النشاط ما زال مربوطًا بالحساب، لكن تعذّر تفعيل دور التاجر. أوقفنا الطلبات لحماية النشاط؛ راجع الدور وإعدادات الطلب.',
         }
       }
 
@@ -1065,7 +1082,8 @@ export async function linkBusinessToUser(businessId: string, userId: string): Pr
         })
         return {
           ok: false,
-          error: 'تعذّر تفعيل الحساب المرتبط بالنشاط وتعذّر التراجع عن الربط. راجع النشاط قبل إعادة المحاولة.',
+          error:
+            'تعذّر تفعيل الحساب المرتبط بالنشاط وتعذّر التراجع عن الربط. راجع النشاط قبل إعادة المحاولة.',
         }
       }
 
@@ -1159,7 +1177,8 @@ export async function unlinkBusinessOwner(businessId: string): Promise<Result> {
     })
     return {
       ok: false,
-      error: 'تم إيقاف زر الطلب لحماية النشاط، لكن تعذر حفظ إعداداته. لم يتم فك الربط؛ راجع إعدادات الطلب.',
+      error:
+        'تم إيقاف زر الطلب لحماية النشاط، لكن تعذر حفظ إعداداته. لم يتم فك الربط؛ راجع إعدادات الطلب.',
     }
   }
 
