@@ -48,27 +48,54 @@ export function computeBusinessCompleteness(data: BusinessData): CompletenessRes
     // الأساسيات (20)
     { id: 'name', label: 'اسم النشاط', weight: 5, done: data.name.trim().length >= 2 },
     { id: 'type', label: 'نوع النشاط', weight: 5, done: !!data.business_type },
-    { id: 'description', label: 'وصف النشاط', weight: 5, done: !!(data.description?.trim() || data.hook?.trim()) },
+    {
+      id: 'description',
+      label: 'وصف النشاط',
+      weight: 5,
+      done: !!(data.description?.trim() || data.hook?.trim()),
+    },
     { id: 'published', label: 'النشر', weight: 5, done: data.is_published },
 
     // الموقع (15)
     { id: 'area', label: 'المنطقة', weight: 5, done: !!(data.area || data.city) },
     { id: 'address', label: 'العنوان التفصيلي', weight: 5, done: !!data.address_text?.trim() },
-    { id: 'coords', label: 'الإحداثيات (خريطة)', weight: 5, done: data.latitude !== null && data.longitude !== null },
+    {
+      id: 'coords',
+      label: 'الإحداثيات (خريطة)',
+      weight: 5,
+      done: data.latitude !== null && data.longitude !== null,
+    },
 
     // الصور (25) — الأهم للانطباع الأول
-    { id: 'logo', label: 'شعار النشاط', weight: 10, done: !!data.logo_url, hint: 'ارفعه من صفحة التعديل' },
-    { id: 'cover', label: 'صورة الغلاف', weight: 15, done: !!data.cover_image_url, hint: 'صورة كبيرة تظهر فوق' },
+    {
+      id: 'logo',
+      label: 'شعار النشاط',
+      weight: 10,
+      done: !!data.logo_url,
+      hint: 'ارفعه من صفحة التعديل',
+    },
+    {
+      id: 'cover',
+      label: 'صورة الغلاف',
+      weight: 15,
+      done: !!data.cover_image_url,
+      hint: 'صورة كبيرة تظهر فوق',
+    },
 
     // الساعات (10)
-    { id: 'hours', label: 'ساعات العمل', weight: 10, done: !!data.working_hours && Object.keys(data.working_hours).length > 0 },
+    {
+      id: 'hours',
+      label: 'ساعات العمل',
+      weight: 10,
+      done: !!data.working_hours && Object.keys(data.working_hours).length > 0,
+    },
 
     // الثقة (10)
     { id: 'verified', label: 'موثّق من الإدارة', weight: 5, done: data.is_verified },
     { id: 'branches', label: 'فرع أساسي', weight: 5, done: data.branches_count > 0 },
 
     // التجارة (20)
-    { id: 'orders', label: 'يستقبل طلبات (أونلاين أو واتساب)', weight: 10, done: data.accepts_orders || data.accepts_whatsapp_orders },
+    { id: 'orders', label: 'يستقبل طلبات أونلاين', weight: 10, done: data.accepts_orders },
     { id: 'offers', label: 'عرض واحد على الأقل', weight: 5, done: data.offers_count > 0 },
     { id: 'reviews', label: 'تقييم واحد على الأقل', weight: 5, done: data.rating_count > 0 },
   ]
@@ -93,7 +120,10 @@ export function computeBusinessCompleteness(data: BusinessData): CompletenessRes
   }
 }
 
-export function getGradeLabel(grade: CompletenessResult['grade']): { label: string; color: string } {
+export function getGradeLabel(grade: CompletenessResult['grade']): {
+  label: string
+  color: string
+} {
   switch (grade) {
     case 'excellent':
       return { label: 'مكتمل', color: '#55e7d1' }

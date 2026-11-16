@@ -28,12 +28,12 @@ export default function SettingsSection() {
       </div>
       <div className={styles.checkRow}>
         <input
-          id="accepts_whatsapp_orders"
+          id="accepts_online_orders"
           type="checkbox"
-          checked={ctx.acceptsWhatsapp}
-          onChange={(e) => ctx.setAcceptsWhatsapp(e.target.checked)}
+          checked={ctx.acceptsOnline}
+          onChange={(e) => ctx.setAcceptsOnline(e.target.checked)}
         />
-        <label htmlFor="accepts_whatsapp_orders">تفعيل زر تواصل واتساب</label>
+        <label htmlFor="accepts_online_orders">استقبال طلبات أونلاين</label>
       </div>
 
       <p

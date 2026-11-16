@@ -60,8 +60,8 @@ export type BusinessFormCtx = {
   setIsPublished: Setter<boolean>
   isOpen: boolean
   setIsOpen: Setter<boolean>
-  acceptsWhatsapp: boolean
-  setAcceptsWhatsapp: Setter<boolean>
+  acceptsOnline: boolean
+  setAcceptsOnline: Setter<boolean>
   isFeatured: boolean
   setIsFeatured: Setter<boolean>
   isVerified: boolean

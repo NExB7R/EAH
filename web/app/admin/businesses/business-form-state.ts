@@ -79,8 +79,8 @@ export type FormState = {
   setIsPublished: Setter<boolean>
   isOpen: boolean
   setIsOpen: Setter<boolean>
-  acceptsWhatsapp: boolean
-  setAcceptsWhatsapp: Setter<boolean>
+  acceptsOnline: boolean
+  setAcceptsOnline: Setter<boolean>
   isFeatured: boolean
   isVerified: boolean
   setIsFeatured: Setter<boolean>
@@ -138,20 +138,14 @@ export function useFormState(business: AdminBusiness | null): FormState {
 
   const [isPublished, setIsPublished] = useState(business?.is_published ?? false)
   const [isOpen, setIsOpen] = useState(business?.is_open ?? true)
-  const [acceptsWhatsapp, setAcceptsWhatsapp] = useState(business?.accepts_whatsapp_orders ?? false)
-  const [isFeatured, setIsFeatured] = useState(
-    business?.is_featured ?? false,
-  )
+  const [acceptsOnline, setAcceptsOnline] = useState(business?.accepts_online_orders ?? false)
+  const [isFeatured, setIsFeatured] = useState(business?.is_featured ?? false)
   const [isVerified, setIsVerified] = useState(!!business?.is_verified)
   const [featuredOrder, setFeaturedOrder] = useState(business?.featured_order ?? 0)
   const [featuredPin, setFeaturedPin] = useState(business?.featured_pin ?? false)
-  const [featuredUntil, setFeaturedUntil] = useState(
-    toDateInputValue(business?.featured_until),
-  )
+  const [featuredUntil, setFeaturedUntil] = useState(toDateInputValue(business?.featured_until))
   const [isNewProject, setIsNewProject] = useState(business?.is_new_project ?? false)
-  const [newUntil, setNewUntil] = useState(
-    toDateInputValue(business?.new_until),
-  )
+  const [newUntil, setNewUntil] = useState(toDateInputValue(business?.new_until))
 
   const [hours, setHours] = useState<Record<DayKey, DayHours>>(() =>
     readFileAsHours(
@@ -253,8 +247,8 @@ export function useFormState(business: AdminBusiness | null): FormState {
     setIsPublished,
     isOpen,
     setIsOpen,
-    acceptsWhatsapp,
-    setAcceptsWhatsapp,
+    acceptsOnline,
+    setAcceptsOnline,
     isFeatured,
     isVerified,
     setIsVerified,

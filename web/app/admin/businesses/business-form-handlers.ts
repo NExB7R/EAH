@@ -91,7 +91,7 @@ export function useSaveHandlers(state: FormState, business: AdminBusiness | null
     const fd = new FormData()
     fd.set('is_published', String(s.isPublished))
     fd.set('is_open', String(s.isOpen))
-    fd.set('accepts_whatsapp_orders', String(s.acceptsWhatsapp))
+    fd.set('accepts_online_orders', String(s.acceptsOnline))
     fd.set('is_featured', String(s.isFeatured))
     fd.set('is_verified', String(s.isVerified))
     fd.set('featured_order', String(s.featuredOrder))
