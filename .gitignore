@@ -37,3 +37,4 @@ web@1.0.0
 
 # hexiel (abandoned tool) — full folder
 .hexiel/
+web/next-env.d.ts
