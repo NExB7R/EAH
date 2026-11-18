@@ -38,3 +38,5 @@ web@1.0.0
 # hexiel (abandoned tool) — full folder
 .hexiel/
 web/next-env.d.ts
+web/tsconfig.tsbuildinfo
+web/public/icon-512.png.bak
