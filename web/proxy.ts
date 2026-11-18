@@ -17,6 +17,11 @@ function buildCSP(nonce: string, isDev: boolean): string {
   const directives: string[] = [
     "default-src 'self'",
 
+    // Scripts: general (eval) + element + attr
+    isDev
+      ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'"
+      : `script-src 'self' 'nonce-${nonce}'`,
+
     // Scripts: <script src> + <script nonce>
     isDev
       ? `script-src-elem 'self' 'unsafe-eval' 'unsafe-inline' https://${TURNSTILE_HOST}`
