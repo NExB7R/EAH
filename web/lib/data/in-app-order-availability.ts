@@ -1,14 +1,13 @@
 import 'server-only'
 
 import { createServiceClient } from '@/lib/supabase/service'
-import { isInAppOrderOperational } from './in-app-order-availability-core'
+import {
+  isInAppOrderOperational,
+  type InAppOrderBusinessCandidate,
+} from './in-app-order-availability-core'
 
 type ServiceClient = ReturnType<typeof createServiceClient>
-type BusinessCandidate = {
-  id: string
-  accepts_online_orders?: unknown
-  owner_profile_id: unknown
-}
+type BusinessCandidate = InAppOrderBusinessCandidate
 
 /**
  * Returns only activity IDs whose in-platform order workflow is currently usable.

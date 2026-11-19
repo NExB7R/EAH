@@ -7,6 +7,7 @@ import { isBusinessOpen, isOpenNow } from '@/lib/utils/working-hours'
 import { canAcceptInAppOrders } from './order-availability'
 import { getWhatsAppDestinationBusinessIds } from './contact-availability'
 import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
+import { toInAppOrderCandidate } from './in-app-order-availability-core'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
 import { isPromotionActive } from './promotion-status'
 import { getPublishedBusinessLimit, onlyPublishedBusinessRows } from './published-business-pool'
@@ -160,11 +161,13 @@ async function normalizeBusinesses(
     getWhatsAppDestinationBusinessIds(supabase, ids),
     getInAppOrderAvailableBusinessIds(
       supabase,
-      rows.map((row) => ({
-        id: String(row.id ?? ''),
-        accepts_orders: row.accepts_orders,
-        owner_profile_id: row.owner_profile_id,
-      })),
+      rows.map((row) =>
+        toInAppOrderCandidate({
+          id: row.id,
+          accepts_online_orders: row.accepts_online_orders,
+          owner_profile_id: row.owner_profile_id,
+        }),
+      ),
     ),
   ])
 

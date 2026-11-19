@@ -5,6 +5,7 @@ import { createServiceClient } from '@/lib/supabase/service'
 import { isBusinessOpen, isOpenNow, type Business, type WorkingHours } from './businesses'
 import { getWhatsAppDestinationBusinessIds } from './contact-availability'
 import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
+import { toInAppOrderCandidate } from './in-app-order-availability-core'
 import { buildContactOptions, safeContactOptionLabel, type ContactOption } from './contact-options'
 export type { ContactOption } from './contact-options'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
@@ -203,11 +204,11 @@ export const getBusinessDetail = unstable_cache(
     const [configuredWhatsAppIds, configuredInAppOrderIds] = await Promise.all([
       getWhatsAppDestinationBusinessIds(supabase, [String(rawBiz.id)]),
       getInAppOrderAvailableBusinessIds(supabase, [
-        {
-          id: String(rawBiz.id),
-          accepts_online_orders: Boolean(rawBiz.accepts_online_orders),
+        toInAppOrderCandidate({
+          id: rawBiz.id,
+          accepts_online_orders: rawBiz.accepts_online_orders,
           owner_profile_id: rawBiz.owner_profile_id,
-        },
+        }),
       ]),
     ])
     const acceptsOrders = configuredInAppOrderIds.has(String(rawBiz.id))

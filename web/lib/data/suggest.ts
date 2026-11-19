@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
 import { getWhatsAppDestinationBusinessIds } from './contact-availability'
 import { getInAppOrderAvailableBusinessIds } from './in-app-order-availability'
+import { toInAppOrderCandidate } from './in-app-order-availability-core'
 import { isWhatsAppChannelAvailable } from './contact-availability-utils'
 import { isPromotionActive } from './promotion-status'
 import type { Business, BusinessType } from './businesses'
@@ -80,12 +81,13 @@ async function normalizeBusinesses(data: unknown[] | null): Promise<Business[]> 
       getWhatsAppDestinationBusinessIds(service, ids),
       getInAppOrderAvailableBusinessIds(
         service,
-        rows.map((row) => ({
-          id: String(row.id ?? ''),
-          accepts_orders: row.accepts_orders,
-          accepts_online_orders: Boolean(row.accepts_online_orders),
-          owner_profile_id: row.owner_profile_id,
-        })),
+        rows.map((row) =>
+          toInAppOrderCandidate({
+            id: row.id,
+            accepts_online_orders: row.accepts_online_orders,
+            owner_profile_id: row.owner_profile_id,
+          }),
+        ),
       ),
     ])
     configuredWhatsAppIds = whatsappIds

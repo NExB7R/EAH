@@ -61,25 +61,19 @@ export async function computeLaunchReadiness(): Promise<ReadinessResult> {
     items.push({ id: 'db', category: 'بنية تحتية', label: 'قاعدة البيانات متصلة', status: 'blocker', detail: 'Connection failed', weight: 3 })
   }
 
-  // ─── 2. RLS check ───
-  try {
-    const tables = ['profiles', 'businesses', 'order_requests', 'business_reviews']
-    let missingRls = 0
-    for (const t of tables) {
-      const { count } = await svc.from(t).select('*', { count: 'exact', head: true }).limit(1)
-      if (count === null) missingRls++
-    }
-    items.push({
-      id: 'rls',
-      category: 'بنية تحتية',
-      label: 'RLS على الجداول الحرجة',
-      status: missingRls === 0 ? 'ready' : 'warning',
-      detail: missingRls === 0 ? '4/4 جدول متاح' : `${missingRls} جدول مش متاح`,
-      weight: 3,
-    })
-  } catch {
-    items.push({ id: 'rls', category: 'بنية تحتية', label: 'RLS على الجداول الحرجة', status: 'warning', detail: 'تعذر الفحص', weight: 3 })
-  }
+  // ─── 2. RLS verification ───
+  // A service-role client bypasses RLS, so successful queries cannot prove that
+  // anon/authenticated policies are enabled or correctly scoped. Keep this a warning
+  // until the dedicated non-production pgTAP checks run successfully.
+  items.push({
+    id: 'rls',
+    category: 'بنية تحتية',
+    label: 'سياسات RLS على الجداول الحرجة',
+    status: 'warning',
+    detail:
+      'غير متحقق من داخل التطبيق. يلزم تشغيل اختبارات RLS بصلاحيات anon/authenticated على قاعدة QA مستقلة؛ service_role يتجاوز RLS.',
+    weight: 3,
+  })
 
   // ─── 3. Published businesses ───
   try {

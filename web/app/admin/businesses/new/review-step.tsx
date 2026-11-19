@@ -55,7 +55,15 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
   const publishStatus = needsTypeApproval
     ? 'هيتحفظ كمسودة — النوع المخصص قيد المراجعة'
     : 'هيتحفظ كمسودة — جاهز للتحرير والنشر'
-  void owner
+  const draftSummary = needsTypeApproval
+    ? `هيتحفظ كمسودة في فئة «أخرى» لحد اعتماد النوع المخصص. ${
+        owner
+          ? 'وحساب البايع المختار هيبقى المسؤول عن إدارة النشاط.'
+          : 'وتقدر تربطه بحساب بايع لاحقًا.'
+      }`
+    : owner
+      ? 'جاهز للحفظ كمسودة — هيتربط بحساب البايع المختار، وبعدها ترفع الصور وتنشر.'
+      : 'جاهز للحفظ كمسودة — تقدر تربطه بحساب بايع وترفع الصور من صفحة التعديل قبل النشر.'
 
   return (
     <div>
@@ -92,7 +100,7 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
           goTo={goTo}
         />
         <Item
-          label="حساب التاجر"
+          label="حساب البايع"
           value={owner?.display_name ?? null}
           empty={!owner}
           step={2}
@@ -103,21 +111,21 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
         <Item
           label="طلبات أونلاين داخل EAH"
           value={
-            owner
-              ? 'تتفعّل بعد الإنشاء من إعدادات الطلبات'
-              : 'غير متاحة قبل ربط تاجر — يمكن استكمالها لاحقًا'
+            onlineOrdersEnabled
+              ? owner
+                ? 'تم تحديدها — التفعيل النهائي من إعدادات الطلبات'
+                : 'تم تحديدها — يلزم ربط بايع وإكمال إعدادات الطلبات'
+              : 'غير مفعّلة'
           }
           step={2}
           goTo={goTo}
         />
         <Item
-          label="استقبال طلبات واتساب"
+          label="واتساب للتواصل المباشر"
           value={
-            onlineOrdersEnabled
-              ? 'يستقبل'
-              : hasWhatsAppContact
-                ? 'موقوف'
-                : 'غير متاح — لا يوجد رقم واتساب'
+            hasWhatsAppContact
+              ? 'رقم صالح متاح للتواصل'
+              : 'لم يُضف رقم واتساب'
           }
           step={2}
           goTo={goTo}
@@ -140,11 +148,7 @@ export default function ReviewStep({ data, owners, goTo }: Props) {
 
       <div style={{ marginTop: '20px' }} className={styles.draftBar}>
         <span>
-          {needsTypeApproval
-            ? `هيتحفظ كمسودة في فئة «أخرى» لحد اعتماد النوع المخصص. ${owner ? 'وحساب التاجر المختار هيبقى المسؤول عن إدارة النشاط.' : 'وتقدر تربطه بحساب تاجر لاحقًا.'}`
-            : owner
-              ? 'جاهز للحفظ كمسودة — هيتربط بحساب التاجر المختار، وبعدها ترفع الصور وتنشر.'
-              : 'جاهز للحفظ كمسودة — تقدر تربطه بحساب تاجر وترفع الصور من صفحة التعديل قبل النشر.'}
+          {draftSummary}
         </span>
       </div>
     </div>

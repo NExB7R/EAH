@@ -1,8 +1,6 @@
 'use client'
 
-import { hasUsableWhatsAppDestination } from '@/lib/data/contact-availability-utils'
-
-import { CartIcon, CheckCircleIcon, WhatsAppIcon, UserIcon } from '@/components/icons'
+import { CartIcon, CheckCircleIcon, UserIcon } from '@/components/icons'
 import type { WizardData, OwnerOption } from './new-business-wizard'
 import styles from './wizard.module.css'
 
@@ -13,43 +11,39 @@ type Props = {
 }
 
 export default function OptionsStep({ data, owners, update }: Props) {
-  const hasWhatsAppContact = data.contacts.some(
-    (contact) => contact.kind === 'whatsapp' && hasUsableWhatsAppDestination(contact.value),
-  )
-
   return (
     <div>
       <div className={styles.cardHead}>
         <h2 className={styles.cardTitle}>الخيارات والحالة</h2>
-        <p className={styles.cardHint}>اضبط الحالة الافتراضية وحدد التاجر إن وجد</p>
+        <p className={styles.cardHint}>اضبط حالة النشاط وحدد البايع المرتبط إن وجد</p>
       </div>
 
       <div className={styles.fields}>
         <label className={styles.field}>
-          <span className={styles.label}>حساب التاجر المرتبط (اختياري)</span>
+          <span className={styles.label}>حساب البايع المرتبط (اختياري)</span>
           <select
             value={data.owner_user_id}
             onChange={(e) => update({ owner_user_id: e.target.value })}
             className={styles.input}
           >
-            <option value="">— بدون تاجر مرتبط —</option>
+            <option value="">— بدون بايع مرتبط —</option>
             {owners.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.display_name}
                 {o.phone ? ` — ${o.phone}` : ''}
-                {o.role === 'merchant' ? ' — تاجر' : ' — عميل'}
+                {o.role === 'merchant' ? ' — بايع' : ' — مشتري'}
               </option>
             ))}
           </select>
           <span className={styles.hint}>
-            <UserIcon size={11} /> ربط حساب العميل/التاجر اختياري. لو ربطت، النظام يمنحه صلاحية
-            إدارة النشاط المرتبط فقط. ولو سيبته فاضي، تقدر تربطه لاحقًا من الإدارة.
+            <UserIcon size={11} /> ربط حساب البايع اختياري. لو اخترت مشتريًا، النظام يجهّز حسابه
+            لإدارة النشاط المرتبط فقط. ولو سيبته فاضي، تقدر تربطه لاحقًا من الإدارة.
           </span>
         </label>
 
         {owners.length === 0 && (
           <p className={styles.gpsHint}>
-            لا توجد حسابات عميل أو تاجر متاحة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير تاجر
+            لا توجد حسابات مشتري أو بايع متاحة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير بايع
             مرتبط، وتربطه لاحقًا من الإدارة.
           </p>
         )}
@@ -69,36 +63,33 @@ export default function OptionsStep({ data, owners, update }: Props) {
               </span>
               <span className={styles.typeCardLabel}>{data.is_open ? 'مفتوح الآن' : 'مغلق'}</span>
             </label>
-
-            <label
-              className={`${styles.typeCard} ${data.accepts_online_orders ? styles.typeCardActive : ''}`}
-              aria-disabled={!hasWhatsAppContact}
-            >
-              <input
-                type="checkbox"
-                checked={data.accepts_online_orders}
-                disabled={!hasWhatsAppContact}
-                onChange={(e) => update({ accepts_online_orders: e.target.checked })}
-                style={{ display: 'none' }}
-              />
-              <span className={styles.typeCardIcon}>
-                <WhatsAppIcon size={16} />
-              </span>
-              <span className={styles.typeCardLabel}>
-                {!hasWhatsAppContact
-                  ? 'أضف رقم واتساب أولًا'
-                  : data.accepts_online_orders
-                    ? 'يستقبل طلبات واتساب'
-                    : 'لا يستقبل'}
-              </span>
-            </label>
           </div>
-          {!hasWhatsAppContact && (
-            <p className={styles.hint}>
-              علشان تفعّل استقبال طلبات واتساب، أضف رقمًا صالحًا من نوع «واتساب» في خطوة الموقع
-              والتواصل. وجود رقم للتواصل وحده لا يفعّل استقبال الطلبات تلقائيًا.
-            </p>
-          )}
+        </div>
+
+        <div className={styles.field}>
+          <span className={styles.label}>طلبات أونلاين داخل EAH</span>
+          <label
+            className={`${styles.typeCard} ${
+              data.accepts_online_orders ? styles.typeCardActive : ''
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={data.accepts_online_orders}
+              onChange={(e) => update({ accepts_online_orders: e.target.checked })}
+              style={{ display: 'none' }}
+            />
+            <span className={styles.typeCardIcon}>
+              <CartIcon size={16} />
+            </span>
+            <span className={styles.typeCardLabel}>
+              {data.accepts_online_orders ? 'مفعّلة مبدئيًا' : 'غير مفعّلة'}
+            </span>
+          </label>
+          <p className={styles.hint}>
+            الطلبات داخل EAH مستقلة عن واتساب. لا يظهر زر الطلبات للزوار إلا بعد ربط البايع
+            واستكمال إعدادات الاستلام والرد والتسليم.
+          </p>
         </div>
 
         <div className={styles.orderNotice} role="note">
@@ -108,8 +99,8 @@ export default function OptionsStep({ data, owners, update }: Props) {
           <div className={styles.orderNoticeBody}>
             <strong className={styles.orderNoticeTitle}>طلبات أونلاين داخل EAH</strong>
             <p className={styles.orderNoticeText}>
-              قناة طلبات داخل EAH — مستقلة عن واتساب. تتفعّل من تبويب «إعدادات الطلبات» بعد ربط تاجر
-              ووجود رقم تواصل. النشاط يُنشر ويظهر للزوار بعد اكتمال بياناته وإنهاء المسودة.
+              قناة طلبات داخل EAH — مستقلة عن واتساب. تتفعّل من تبويب «إعدادات الطلبات» بعد
+              ربط البايع ووجود رقم تواصل. النشاط يُنشر بعد اكتمال بياناته وإنهاء المسودة.
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
 # EAH — Search System
 
-> آخر تحديث: 2026-11-11
+> آخر تحديث: 2026-11-20
 
 ---
 
@@ -99,12 +99,19 @@ TODO: ربط getHistory() في ExploreSearch component (غير مربوط حال
 **الاستخدام:** مدمج في /explore تلقائيًا عند 11 رقم
 
 RPC: search_customer_by_phone(p_phone text) — role-aware:
-- super_admin: كل شيء (هاتف، بريد، صلاحيات)
-- مستخدم authenticated: trust_score + tier + شارات فقط
-- Rate limit: 10/ساعة، 30/يوم (غير أدمن)
+- الأدمن (super_admin): مسار SQL الحالي يرجع بيانات كاملة، ومنها الهاتف، قبل تطبيق phone_lookup_mode على المستخدم العادي.
+- المشتري/البايع المسجل: يخضع لإعداد phone_lookup_mode:
+  - full: الاسم حسب display_name_mode، الصورة حسب hide_avatar، النبذة، الدور، بيانات المصداقية، وعدّادات التعليقات/التقييمات حسب hide_comments وhide_reviews.
+  - trust_only: بيانات المصداقية والتحقق فقط، من غير هوية.
+  - anonymous: يخفي الهوية ويعرض أقل قدر من بيانات الحساب والنشاط المرتبط.
+- Rate limit داخل RPC: 10/ساعة و30/24 ساعة للحساب العادي؛ الأدمن مستثنى.
 
-Privacy: profiles.allow_phone_lookup (default true)
-Audit: phone_search_log (searcher_id, hash, found)
+Privacy: profiles.phone_lookup_mode (full / trust_only / anonymous).
+Audit: phone_search_log (searcher_id, searched_phone_hash, found).
+
+ملاحظة أمنية قبل الإطلاق:
+- سجل البحث يخزن md5 للرقم من غير salt؛ ده لا يُعتبر إخفاءً آمنًا لأن نطاق أرقام الهاتف محدود ويمكن تخمينه. يلزم استبداله ببصمة HMAC بمفتاح سري محفوظ في قاعدة البيانات قبل الاعتماد على السجل كبيانات مجهولة.
+- تعليق Migration v6 يقول إن الأدمن يتبع إعداد الخصوصية، لكن مسار الأدمن في جسم الدالة يرجع بيانات كاملة قبل فحص phone_lookup_mode. القرار ده متعارض ويحتاج حسمًا واختبارًا واضحًا قبل الإطلاق.
 
 ---
 

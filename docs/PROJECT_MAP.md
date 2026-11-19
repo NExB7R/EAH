@@ -1,6 +1,6 @@
 # EAH — Project Map
 
-> آخر تحديث: 2026-11-11
+> آخر تحديث: 2026-11-20
 
 ---
 
@@ -13,16 +13,17 @@
 │   ├── lib/                ← Logic (server-only + client-safe)
 │   └── public/             ← Static assets
 ├── docs/                   ← Documentation
-│   └── migrations/         ← SQL files (88 ملف)
+│   └── migrations/         ← SQL files (100 ملف)
 └── .github/                ← CI workflows
 
 ---
 
 ## 2. الأدوار
 
-- super_admin → /admin/*
-- merchant → /merchant/*
-- customer → /account/*
+- super_admin → الأدمن → /admin/*
+- merchant → البايع → /merchant/*
+- customer → المشتري → /account/*
+- الزائر حالة وصول عامة، وليس دورًا مستقلًا
 
 ---
 
@@ -30,12 +31,12 @@
 
 - / — الرئيسية (public)
 - /explore — البحث والفلاتر
-- /business/[slug] — صفحة نشاط
+- /businesses/[slug] — صفحة النشاط
 - /auth — تسجيل دخول
-- /account — لوحة العميل
-- /merchant — لوحة التاجر
+- /account — لوحة المشتري
+- /merchant — لوحة البايع
 - /admin — لوحة الأدمن
-- /admin/search/phone — بحث الهاتف
+- بحث الهاتف داخل /explore عند إدخال 11 رقمًا
 
 ---
 
@@ -46,8 +47,9 @@
 - Server Pages → export const dynamic = 'force-dynamic'
 
 ### RLS (Supabase)
-- كل جدول في public مفعّل عليه RLS
-- service_role يتجاوز RLS — فقط في Server
+- يجب تفعيل RLS وسياسات مقيدة لكل جداول التطبيق في public.
+- service_role يتجاوز RLS — مسموح به في السيرفر فقط وبعد تحقق الصلاحية.
+- لا تستخدم service_role لإثبات أن RLS يعمل؛ اختبر بصلاحيات anon/authenticated على قاعدة QA.
 - RPCs الحساسة: get_my_profile, search_customer_by_phone, find_by_phone
 
 ### Migrations
@@ -88,7 +90,8 @@ npx prettier --check app/ lib/
 ## 8. النشر
 
 - Branch: main فقط
-- Auto-deploy: Vercel on push
+- Production branch: main؛ أي push قد يطلق نشرًا تلقائيًا بحسب حالة مشروع Vercel.
+- تحقق من حالة النشر الفعلية قبل اعتبار commit منشورًا.
 - Region: iad1 (US East)
 - Root: web/
 - Production: https://eah-sq.vercel.app

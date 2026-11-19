@@ -7,7 +7,6 @@ import { z } from 'zod'
 import { requireAdmin } from '@/lib/auth/admin'
 import { logAudit } from '@/lib/logging/audit'
 import { createServiceClient } from '@/lib/supabase/service'
-import { getWhatsAppDestinationBusinessIds } from '@/lib/data/contact-availability'
 import {
   basicsSchema,
   contactsSchema,
@@ -561,18 +560,6 @@ export async function saveSettings(businessId: string, formData: FormData): Prom
   const newUntil = toOptionalIsoDate(parsed.data.new_until ?? undefined)
   if (featuredUntil === undefined || newUntil === undefined) {
     return { ok: false, error: 'تاريخ انتهاء التمييز أو علامة «جديد» غير صحيح' }
-  }
-
-  // WhatsApp gate: accept a valid public contact-method number or a valid active-branch number.
-  if (parsed.data.accepts_online_orders) {
-    const configuredWhatsAppIds = await getWhatsAppDestinationBusinessIds(adminDb, [businessId])
-    if (!configuredWhatsAppIds.has(businessId)) {
-      return {
-        ok: false,
-        error:
-          'مينفعش تفعّل استقبال واتساب قبل إضافة رقم واتساب صالح في قسم التواصل أو أحد الفروع النشطة.',
-      }
-    }
   }
 
   // Publication is controlled by the admin's explicit visibility setting.

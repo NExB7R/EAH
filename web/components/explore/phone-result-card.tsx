@@ -10,6 +10,7 @@ import {
   StoreIcon,
 } from '@/components/icons'
 import type { PhoneSearchResult, LinkedBusiness } from '@/lib/types/phone-search'
+import { getPublishedBusinessHref } from '@/lib/utils/published-business-href'
 import styles from './phone-result-card.module.css'
 
 type Props = { result: PhoneSearchResult }
@@ -161,7 +162,10 @@ function Counts({ result }: { result: PhoneSearchResult }) {
 
 function BusinessSection({ business }: { business: LinkedBusiness }) {
   return (
-    <Link href={`/business/${business.slug}`} className={styles.businessCard}>
+    <Link
+      href={getPublishedBusinessHref(true, business.slug) ?? '/explore'}
+      className={styles.businessCard}
+    >
       <div className={styles.businessHeader}>
         <StoreIcon size={16} />
         <strong>{business.name}</strong>

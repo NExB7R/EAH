@@ -1,3 +1,21 @@
+export type InAppOrderBusinessCandidate = {
+  id: string
+  accepts_online_orders: unknown
+  owner_profile_id: unknown
+}
+
+export function toInAppOrderCandidate(source: {
+  id: unknown
+  accepts_online_orders: unknown
+  owner_profile_id: unknown
+}): InAppOrderBusinessCandidate {
+  return {
+    id: String(source.id ?? ''),
+    accepts_online_orders: source.accepts_online_orders,
+    owner_profile_id: source.owner_profile_id,
+  }
+}
+
 export type InAppOrderSettings = {
   orders_enabled: unknown
   deadline_minutes: unknown
