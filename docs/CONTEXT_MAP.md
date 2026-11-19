@@ -278,7 +278,7 @@
 | `data/health-checks.ts` | runHealthChecks | EAH — System Health Checks (2026-11-09) |
 | `data/health-fixes.ts` | fixHealthIssue | EAH — Health Check Auto-Fixes (2026-11-09) |
 | `data/health.ts` | getHealthSummary, getRecentErrors, getErrorsWithFilters | EAH — System Health data |
-| `data/in-app-order-availability-core.ts` | isInAppOrderOperational | The shared product rule for showing in-platform orders as currently available. |
+| `data/in-app-order-availability-core.ts` | toInAppOrderCandidate, isInAppOrderOperational | The shared product rule for showing in-platform orders as currently available. |
 | `data/in-app-order-availability.ts` | getInAppOrderAvailableBusinessIds | Returns only activity IDs whose in-platform order workflow is currently usable. |
 | `data/index.ts` | — | EAH — Data Layer (re-exports) |
 | `data/insights.ts` | getBusinessMetrics, getCategoryComparison, getAllInsights, getAllInsightsForAdmin | EAH — Business Insights (AI Analysis Data Layer) |
