@@ -481,9 +481,10 @@ export async function createBusiness(formData: FormData): Promise<Result> {
       hook: d.hook || null,
       is_open: d.is_open ?? true,
       accepts_online_orders: effectiveAcceptsOnline,
-      // Publication is independent from owner assignment and custom-type review.
-      // Unapproved custom types use the public fallback category "أخرى".
-      is_published: d.is_published ?? true,
+      // Creation is always a draft. Public visibility is enabled only through
+      // the explicit admin review/publish actions after media and details are ready.
+      // Do not trust an omitted or client-provided publication flag on create.
+      is_published: false,
     })
     .select('id')
     .single()
