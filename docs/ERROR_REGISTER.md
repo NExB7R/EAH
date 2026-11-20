@@ -2,30 +2,30 @@
 
 ## الحالة الحالية — مراجعة 2026-11-20
 
-> الأدلة الحالية مأخوذة من GitHub Actions run 44737279736 على commit 60f1d78c76b6079af6875a111a4ec669ef517108، ومن التشغيل السابق 44717152719. لا تعتبر أي ملاحظة تاريخية أدناه حالة حالية دون إعادة تحقق.
+> هذا القسم يسجل الوضع الحالي فقط. السجل التاريخي بعده لا يُعامل كدليل حديث دون إعادة تحقق على SHA حالي.
 
 | ID | الحالة | الدليل الحالي | الإجراء المطلوب |
 |---|---|---|---|
-| QUALITY-PRETTIER-170-2026-11-20 | OPEN — QUALITY GATE BLOCKED | في run 44737279736 نجحت TypeScript وESLint وStylelint وBuild وUnit Tests وnpm audit للإنتاج عند مستوى high وKnip وjscpd. فحص Prettier الفعلي ما زال failure وأبلغ عن 170 ملفًا. خطوة Prettier تظهر completed/success في واجهة GitHub لأنها continue-on-error، لكن PRETTIER_OUTCOME=failure جعلت خطوة تقرير الجودة تفشل. | معالجة التنسيق على دفعات صغيرة بعد مراجعة الملفات، دون تعطيل القاعدة أو تجاهلها. يجب أن يمر Prettier الفعلي قبل اعتبار Quality Gate أخضر. |
-| QUALITY-UNIT-TESTS-2026-11-20 | VERIFIED PASS — RUN 44737279736 | Vitest: 37 test files passed و234 tests passed على SHA 60f1d78. Build (webpack) وTypeScript وESLint وStylelint أيضًا نجحت في التشغيل نفسه. | النتائج تخص SHA المذكور فقط؛ أعد تشغيل الفحوص بعد أي تعديل كود لاحق. |
-| QUALITY-AUDIT-KNIP-JSCPD-2026-11-20 | VERIFIED AT CURRENT THRESHOLDS | npm audit --omit=dev --audit-level=high أظهر found 0 vulnerabilities. Knip وjscpd خطواتهما نجحت؛ jscpd أبلغ عن 103 clones و1,914 duplicated lines (2.66%). | لا تستنتج خلو dev dependencies أو advisories المتوسطة من المشاكل من فحص high-only. راجع التكرار قبل refactor ولا تغيّر سلوكًا آليًا. |
-| QA-DATABASE-URL-MISSING-2026-11-20 | OPEN — RLS TESTS NOT EXECUTED | وظيفة rls-tests بدأت على Runner لكنها توقفت عند Require a dedicated non-production database لأن SUPABASE_DB_URL فارغ. Supabase CLI وpgTAP وmigrations وRLS audit جميعها skipped. | توفير قاعدة QA مستقلة وSecret مخصص لها، ثم التحقق من Project Ref قبل التشغيل. لا تستخدم عنوان الإنتاج ولا تضع سرًا في المستودع. |
-| VERCEL-ACCOUNT-BLOCKED-2026-11-20 | BLOCKED — EXTERNAL ACCOUNT STATUS | Vercel status على commits الحديثة يعيد Account is blocked مع رابط توضيح حظر الحساب. هذا ليس دليلًا على فشل Build. | لا تطلب Deployment أو تغيّر إعدادات Vercel قبل 2026-12-15 وإعادة فحص حالة الحساب والجاهزية. |
-| QA-FIXTURES-AND-CREDENTIALS-2026-11-20 | OPEN — HISTORICAL DATA / CREDENTIAL EXPOSURE | GitHub API يعرض المستودع على أنه Public. وثائق QA التاريخية تضمنت بيانات دخول ثابتة ومعرّفات حسابات وfixtures موصوفة على الإنتاج. أزيلت من النسخ الحالية في d607f071 وb2f746b2، لكن Git history لم يُمحَ. | لا تستخدم بيانات الدخول التاريخية. على مالك المشروع تحديد الحسابات الفعلية المرتبطة بها ثم تدوير كلمات مرورها أو تعطيلها بعد مراجعة الأثر. لا force-push أو rewrite للتاريخ دون قرار مستقل. لا تُجرَ كتابة على الإنتاج من هذه الجلسة. |
-| ROLE-LABELS-UI-2026-11-20 | OPEN — SOURCE LABELS STILL INCONSISTENT | تم تحديث نصوص اختيار المالك في web/app/admin/businesses/new/options-step.tsx في commit 60f1d78 إلى العميل/التاجر. ما زالت نصوص قديمة ظاهرة في مراجعة الخطوة الأخيرة، ولوحة مالك النشاط، وصفحة الثقة، ومن نحن، والمساعدة، والأسئلة الشائعة، وبعض الإدارة والتصدير. | استكمال إصلاحات واجهة دقيقة، ملفًا واحدًا في كل patch، مع إبقاء مفاتيح customer/merchant/super_admin كما هي وإجراء الفحوص المطلوبة. لا تستخدم استبدالًا عربيًا شاملًا. |
-| QA-ENVIRONMENT-NOT-PROVEN-2026-11-20 | BLOCKED — NO VERIFIED ISOLATED PROJECT | لا توجد قاعدة Supabase منفصلة غير إنتاجية تم التحقق من Project Ref الخاص بها. لم تُنشأ أو تُعدّل أو تُحذف أي بيانات في هذه المراجعة. | إبقاء اختبارات DB وseed والتنظيف متوقفة حتى اعتماد مشروع QA مستقل وحارس Project Ref. |
+| FORMAT-BASELINE-170-2026-11-20 | OPEN — LEGACY FORMATTING DEBT | آخر فحص شامل مكتمل على SHA `3323667` أبلغ عن 170 ملفًا غير منسق. لم يتم تنفيذ تنسيق شامل أو حذف الدين من المستودع. | خفّض الدين تدريجيًا؛ لا تغيّر أي ملف إلا بعد مراجعة diff وفحص Prettier الفعلي له. |
+| FORMAT-CHANGED-FILES-GATE-2026-11-20 | VERIFIED PASS — CURRENT WORKFLOW RUN IN PROGRESS | في Quality Gate run `44818572502` على `cd537185` نجحت خطوة Prettier للملفات المتغيرة. فحص المستودع كاملًا خطوة معلوماتية منفصلة ولا تمنح نجاحًا للدين التاريخي. | انتظر اكتمال Build والاختبارات وبقية الخطوات على SHA نفسه؛ لا تعتبر الـQuality Gate أخضر قبل نهاية التشغيل. |
+| QUALITY-UNIT-TESTS-2026-11-20 | VERIFIED PASS — RUN 44802526639 | على SHA `3323667`: Vitest اجتاز 37 ملف اختبار و234 اختبارًا؛ ونجحت TypeScript وESLint وStylelint وWebpack Build وnpm audit للإنتاج عند high وKnip وjscpd. | هذه النتيجة لا تغطي commits اللاحقة. اعتمد نتيجة run `44818572502` بعد اكتماله بدل تعميم نتيجة SHA السابق. |
+| QUALITY-WORKFLOW-RECOVERY-2026-11-20 | VALIDATION PENDING — RUN 44818572502 | المحاولات `14fe9d8` و`4db2d7a` و`2553d68` احتوت YAML تالفًا أثناء تعديل فحص Prettier. أُعيد إنشاء `.github/workflows/quality.yml` من النسخة السابقة السليمة في commit `cd537185`. تشغيل الجودة الحالي بدأ ووصل إلى Build. | تأكد من انتهاء Quality Gate وCodeQL وInvariants على `cd537185` قبل أي تغييرات برمجية جديدة. لا تعتمد التشغيلات الفاشلة السابقة. |
+| QA-DATABASE-URL-MISSING-2026-11-20 | OPEN — RLS TESTS NOT EXECUTED | في run `44818572502` فشل `rls-tests` عند خطوة `Require a dedicated non-production database` لأن `SUPABASE_DB_URL` فارغ. Supabase CLI وpgTAP وmigrations وRLS audit تخطّتها الحماية. | اعتماد قاعدة QA غير إنتاجية، التحقق من Project Ref، ثم إضافة Secret منفصل للـCI. لا تستخدم Project الإنتاج ولا تتجاوز حارس الرفض. |
+| UI-ROLE-LABELS-2026-11-20 | OPEN — PARTIALLY ALIGNED | تم تحديث `options-step.tsx` و`review-step.tsx` و`trial-owner-panel.tsx` و`trust/page.tsx` في commits منفصلة. ما زالت نصوص قديمة في إدارة الأنشطة والمستخدمين والقائمة الجانبية والفوتر وصفحات التعريف والمساعدة والأسئلة والشروط والتصدير ورسائل الخادم. | تابع مراجعة كل ملف على حدة مع سياق الدور والملكية، وحافظ على `customer/merchant/super_admin` ومفاتيح DB دون تغيير. |
+| VERCEL-ACCOUNT-BLOCKED-2026-11-20 | BLOCKED — EXTERNAL ACCOUNT STATUS | Vercel status للـcommits الحديثة أعاد `Account is blocked`. لا يدل ذلك على فشل Build داخل GitHub Actions. | لا تنشر ولا تغيّر إعدادات Vercel قبل 2026-12-15 وإعادة فحص الحساب والجاهزية. |
+| QA-FIXTURES-AND-CREDENTIALS-2026-11-20 | OPEN — HISTORICAL CREDENTIAL EXPOSURE | GitHub API يعرض المستودع Public. أزيلت بيانات اعتماد ثابتة ومعرّفات من النسخ الحالية في commits سابقة، لكن Git history لم يُمحَ. | لا تستخدم fixtures التاريخية. على المالك مراجعة الحسابات الفعلية وتدوير/تعطيل بياناتها بعد تقييم الأثر. لا force-push أو rewrite دون خطة وقرار مستقلين. |
+| QA-ENVIRONMENT-NOT-PROVEN-2026-11-20 | BLOCKED — NO VERIFIED ISOLATED PROJECT | لم يتم التحقق من Project Ref لمشروع Supabase QA منفصل. لم تحدث أي كتابة على بيانات الإنتاج في هذه المراجعة. | إبقاء DB tests وseed/upload/cleanup متوقفة حتى اعتماد بيئة QA وحارس Project Ref. |
+| ADMIN-BUSINESS-E2E-2026-11-20 | OPEN — END-TO-END NOT PROVEN | مراجعة الكود توضح إنشاء أدمن كمسودة، ومالك اختياري، ورفع الصور/النشر من مسارات منفصلة؛ لكن لا يوجد تشغيل E2E على QA يغطي الدورة بالكامل. | نفّذ على QA فقط: إنشاء بلا مالك وبمالك اختياري، الصور، rollback، النشر، البحث، الصفحة العامة، وتجربة الهاتف. |
 
 ### نطاق التحقق في هذه المراجعة
 
-- تم فحص نتائج الوظائف وسجلاتها للـQuality Gate وRLS على commit الكود المذكور أعلاه.
-- نجحت TypeScript وESLint وStylelint وBuild وUnit Tests في ذلك التشغيل؛ لم يتم تشغيل اختبارات جديدة في هذه المراجعة.
-- فحص npm كان للإنتاج وبحد فشل high؛ لا يثبت خلو كل التبعيات أو تبعيات التطوير من advisories متوسطة.
-- لا يوجد إثبات نجاح حديث لاختبارات قاعدة البيانات أو E2E على بيئة معزولة.
-- لم يتم تشغيل Vercel، أو تعديل إعدادات Supabase، أو تطبيق migration، أو إعادة تشغيل GitHub Actions.
+- تم فحص GitHub Actions وسجلات الخطوات الظاهرة لتشغيل Quality Gate `44818572502`. وقت آخر تحقق كان Build ما زال جاريًا؛ سجل النتيجة النهائية بعد انتهاء التشغيل.
+- نتيجة 234 اختبارًا ونجاح Build تخص SHA `3323667` في run `44802526639` ولا تُسند تلقائيًا إلى SHA أحدث.
+- فحص npm كان `npm audit --omit=dev --audit-level=high` فقط؛ لا يثبت خلو تبعيات التطوير أو التحذيرات المتوسطة والمنخفضة.
+- RLS/pgTAP لم تُنفّذ بسبب غياب قاعدة QA. لم تُطبّق migrations ولم تُقرأ/تُكتب بيانات الإنتاج.
+- لم يُنفذ Deploy أو تغيير في إعدادات Vercel.
 
 ---
-
-
 
 ## الحالة الحالية — فحص 2026-11-05
 
