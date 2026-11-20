@@ -27,7 +27,7 @@ import { getPublicContactSettings } from '@/lib/data/site-settings'
 const COLUMNS = [
   {
     key: 'customers',
-    title: 'للمشتري',
+    title: 'للعميل',
     Icon: TargetIcon,
     links: [
       { href: '/', label: 'الرئيسية', Icon: TargetIcon },
@@ -40,7 +40,7 @@ const COLUMNS = [
   },
   {
     key: 'merchants',
-    title: 'للبايع',
+    title: 'للتاجر',
     Icon: StoreIcon,
     links: [
       { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
