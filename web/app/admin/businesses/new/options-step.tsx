@@ -15,35 +15,35 @@ export default function OptionsStep({ data, owners, update }: Props) {
     <div>
       <div className={styles.cardHead}>
         <h2 className={styles.cardTitle}>الخيارات والحالة</h2>
-        <p className={styles.cardHint}>اضبط حالة النشاط وحدد البايع المرتبط إن وجد</p>
+        <p className={styles.cardHint}>اضبط حالة النشاط وحدد التاجر المرتبط إن وجد</p>
       </div>
 
       <div className={styles.fields}>
         <label className={styles.field}>
-          <span className={styles.label}>حساب البايع المرتبط (اختياري)</span>
+          <span className={styles.label}>حساب التاجر المرتبط (اختياري)</span>
           <select
             value={data.owner_user_id}
             onChange={(e) => update({ owner_user_id: e.target.value })}
             className={styles.input}
           >
-            <option value="">— بدون بايع مرتبط —</option>
+            <option value="">— بدون تاجر مرتبط —</option>
             {owners.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.display_name}
                 {o.phone ? ` — ${o.phone}` : ''}
-                {o.role === 'merchant' ? ' — بايع' : ' — مشتري'}
+                {o.role === 'merchant' ? ' — تاجر' : ' — عميل'}
               </option>
             ))}
           </select>
           <span className={styles.hint}>
-            <UserIcon size={11} /> ربط حساب البايع اختياري. لو اخترت مشتريًا، النظام يجهّز حسابه
+            <UserIcon size={11} /> ربط حساب التاجر اختياري. لو اخترت عميلًا، النظام يجهّز حسابه
             لإدارة النشاط المرتبط فقط. ولو سيبته فاضي، تقدر تربطه لاحقًا من الإدارة.
           </span>
         </label>
 
         {owners.length === 0 && (
           <p className={styles.gpsHint}>
-            لا توجد حسابات مشتري أو بايع متاحة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير بايع
+            لا توجد حسابات عميل أو تاجر متاحة للربط حاليًا. تقدر تكمل إنشاء النشاط من غير تاجر
             مرتبط، وتربطه لاحقًا من الإدارة.
           </p>
         )}
@@ -87,7 +87,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
             </span>
           </label>
           <p className={styles.hint}>
-            الطلبات داخل EAH مستقلة عن واتساب. لا يظهر زر الطلبات للزوار إلا بعد ربط البايع
+            الطلبات داخل EAH مستقلة عن واتساب. لا يظهر زر الطلبات للزوار إلا بعد ربط التاجر
             واستكمال إعدادات الاستلام والرد والتسليم.
           </p>
         </div>
@@ -100,7 +100,7 @@ export default function OptionsStep({ data, owners, update }: Props) {
             <strong className={styles.orderNoticeTitle}>طلبات أونلاين داخل EAH</strong>
             <p className={styles.orderNoticeText}>
               قناة طلبات داخل EAH — مستقلة عن واتساب. تتفعّل من تبويب «إعدادات الطلبات» بعد
-              ربط البايع ووجود رقم تواصل. النشاط يُنشر بعد اكتمال بياناته وإنهاء المسودة.
+              ربط التاجر ووجود رقم تواصل. النشاط يُنشر بعد اكتمال بياناته وإنهاء المسودة.
             </p>
           </div>
         </div>
