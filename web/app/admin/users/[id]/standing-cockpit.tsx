@@ -101,7 +101,7 @@ export default function StandingCockpit({
             {history.map((h) => (
               <div key={h.id} style={{ background:'rgba(255,255,255,0.05)', padding:'10px', borderRadius:'8px', fontSize:'12px' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'4px' }}>
-                  <span style={{ color: colors[h.new_standing] || '#fff', fontWeight:'bold' }}>{aLabels[h.action] || h.action}</span>
+                  <span style={{ color: colors[h.new_standing ?? 'good'] || '#fff', fontWeight:'bold' }}>{aLabels[h.action] || h.action}</span>
                   <span style={{ color:'#888' }}>{new Date(h.created_at).toLocaleString('ar-EG', { dateStyle:'short', timeStyle:'short' })}</span>
                 </div>
                 <div style={{ color:'#ccc' }}>السبب: {h.reason}</div>
