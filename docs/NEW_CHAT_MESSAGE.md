@@ -26,9 +26,9 @@
 
 - على SHA `3323667`، Quality Gate run `44802526639`: TypeScript وESLint وStylelint وWebpack Build وVitest وnpm audit للإنتاج عند high وKnip وjscpd نجحت؛ Vitest: 37 ملفًا و234 اختبارًا ناجحًا.
 - Prettier الشامل في ذلك التشغيل وجد 170 ملفًا غير منسق؛ هذه ديون قديمة لم تُصلح بعد.
-- في Quality Gate run `44818572502` على `cd537185`: Prettier للملفات المتغيرة نجح؛ فحص المستودع الكامل منفصل كمعلومة، وبقية التشغيل كان Build جاريًا عند آخر تحديث. راجع النتيجة النهائية قبل اعتبار التشغيل أخضر.
-- RLS job في run نفسه توقف عند guard لأن `SUPABASE_DB_URL` فارغ؛ لم يتم تشغيل Supabase CLI أو pgTAP أو migrations أو RLS audit.
-- CodeQL وInvariants على `cd537185` يجب مراجعة نتيجتيهما النهائيتين من GitHub Actions.
+- في Quality Gate run `44818572502` على `cd537185`: quality job نجح كاملًا، بما فيه TypeScript وESLint وPrettier للملفات المتغيرة وStylelint وBuild و234 اختبارًا وفحوص الحزم. فحص المستودع الكامل ما زال يجد 170 ملفًا قديمًا غير منسق ويظل دينًا تقنيًا معلنًا.
+- RLS job في run نفسه فشل عند guard لأن `SUPABASE_DB_URL` فارغ؛ ولذلك الـworkflow ككل فشل رغم نجاح quality job. لم يتم تشغيل Supabase CLI أو pgTAP أو migrations أو RLS audit.
+- CodeQL run `44818572947` وInvariants run `44818572702` نجحا على `cd537185`.
 - لا يوجد E2E موثق على QA للدورة الكاملة: create → optional owner → images → draft/publish → public search → public detail.
 - لم تتغير بيانات Supabase، ولم يحدث Deploy على Vercel.
 
