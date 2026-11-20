@@ -53,7 +53,7 @@ const METADATA_LABEL: Record<string, string> = {
   total: 'عدد المستهدفين',
   notified: 'تم إرسال إشعار',
   ids: 'عدد الحسابات المحددة',
-  owner_profile_id: 'حساب التاجر المرتبط',
+  owner_profile_id: 'حساب البايع المرتبط',
   business_id: 'النشاط المرتبط',
   business_type_status: 'حالة تصنيف النشاط',
   offline_until: 'موعد انتهاء التوقف',
@@ -73,8 +73,8 @@ const METADATA_LABEL: Record<string, string> = {
 
 const METADATA_VALUE_LABEL: Record<string, string> = {
   super_admin: 'الأدمن',
-  merchant: 'التاجر',
-  customer: 'العميل',
+  merchant: 'البايع',
+  customer: 'المشتري',
   admin: 'غير محدد',
   pending: 'قيد المراجعة',
   approved: 'معتمد',
@@ -89,7 +89,7 @@ const METADATA_VALUE_LABEL: Record<string, string> = {
   true: 'نعم',
   false: 'لا',
   admin_self: 'من لوحة الأدمن',
-  merchant_self: 'من حساب التاجر',
+  merchant_self: 'من حساب البايع',
 }
 
 const FIELD_LABEL: Record<string, string> = {

@@ -31,14 +31,14 @@ const PREFS: Pref[] = [
   {
     key: 'review_reply',
     label: 'ردود على تقييماتي',
-    desc: 'لما التاجر المرتبط بالنشاط يرد على تقييمك',
+    desc: 'لما البايع المرتبط بالنشاط يرد على تقييمك',
     Icon: MessageCircleIcon,
     defaultOn: true,
   },
   {
     key: 'follow_new',
     label: 'متابعين جدد',
-    desc: 'لما حد يتابع نشاطك (للتجار)',
+    desc: 'لما حد يتابع نشاطك (للبايعين)',
     Icon: EyeIcon,
     defaultOn: true,
   },
