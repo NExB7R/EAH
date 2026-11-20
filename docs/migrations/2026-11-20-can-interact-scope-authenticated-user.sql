@@ -15,7 +15,7 @@ SET search_path = pg_catalog, public
 AS $function$
 DECLARE
   v_caller_id uuid := auth.uid();
-  v_is_service_role boolean := COALESCE(auth.jwt() ->> 'role', '') = 'service_role';
+  v_is_service_role boolean := COALESCE(auth.role(), '') = 'service_role';
   v_standing text;
   v_expires timestamptz;
   v_reason text;

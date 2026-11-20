@@ -87,7 +87,16 @@ const withSerwist = withSerwistInit({
   swDest: 'public/sw.js',
   disable: process.env.NODE_ENV === 'development',
   reloadOnOnline: true,
-  cacheOnNavigation: true,
+  // Prevent caching session-specific pages and route payloads on next/link navigation.
+  cacheOnNavigation: false,
+  // Precache only the offline shell and the local brand assets required to render it.
+  globPublicPatterns: [
+    'offline.html',
+    'eah-crown.webp',
+    'eah-word.webp',
+    'icon-192.png',
+    'icon-512.png',
+  ],
   register: false,
 })
 

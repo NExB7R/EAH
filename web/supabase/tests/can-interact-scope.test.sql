@@ -34,7 +34,7 @@ SELECT ok(
 SELECT ok(
   position('p_user_id IS DISTINCT FROM v_caller_id' IN
     pg_get_functiondef('public.can_interact(uuid)'::regprocedure)) > 0
-  AND position('auth.jwt()' IN
+  AND position('auth.role()' IN
     pg_get_functiondef('public.can_interact(uuid)'::regprocedure)) > 0
   AND position('user_roles' IN
     pg_get_functiondef('public.can_interact(uuid)'::regprocedure)) = 0,

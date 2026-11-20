@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#07020d" />
+    <title>أنت غير متصل — EAH</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: #07020d;
+        color: #f4f2fa;
+      }
+      * { box-sizing: border-box; }
+      body {
+        display: grid;
+        min-height: 100svh;
+        margin: 0;
+        padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+        place-items: center;
+        background: radial-gradient(ellipse at 50% 20%, rgb(168 85 247 / 14%), transparent 52%), #07020d;
+      }
+      main {
+        width: min(100%, 420px);
+        padding: 32px 24px;
+        border: 1px solid rgb(199 125 255 / 24%);
+        border-radius: 22px;
+        background: linear-gradient(150deg, #130822, #0a0514);
+        text-align: center;
+      }
+      .mark {
+        display: inline-flex;
+        min-width: 70px;
+        min-height: 42px;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        border: 1px solid rgb(232 199 154 / 30%);
+        border-radius: 14px;
+        color: #f5d9a7;
+        font-size: 1.25rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+      }
+      h1 { margin: 0 0 10px; font-size: 1.35rem; line-height: 1.5; }
+      p { margin: 0 0 24px; color: #c9c2db; font-size: 0.95rem; line-height: 1.9; }
+      a {
+        display: inline-flex;
+        min-height: 46px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 22px;
+        border: 1px solid rgb(232 199 154 / 38%);
+        border-radius: 13px;
+        background: rgb(232 199 154 / 10%);
+        color: #f5d9a7;
+        font-weight: 800;
+        text-decoration: none;
+      }
+      a:focus-visible { outline: 2px solid #f5d9a7; outline-offset: 4px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mark" aria-label="EAH">EAH</div>
+      <h1>الاتصال بالإنترنت غير متاح</h1>
+      <p>مفيش اتصال حاليًا. رجّع الإنترنت وحاول تفتح الصفحة تاني، وهنرجعك لمنصة EAH.</p>
+      <a href="/">العودة إلى الرئيسية</a>
+    </main>
+  </body>
+</html>

@@ -4,11 +4,6 @@ import { useEffect, useState } from 'react'
 import { ClockIcon, AlertIcon } from '@/components/icons'
 import styles from './activity-feed.module.css'
 
-// ═══════════════════════════════════════════════════════════
-// EAH — Live Activity Feed
-// يعرض آخر 20 حدث، ويحدّث كل 15 ثانية
-// ═══════════════════════════════════════════════════════════
-
 type FeedItem = {
   id: string
   label: string
@@ -17,13 +12,31 @@ type FeedItem = {
 }
 
 function timeAgo(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime()
-  const m = Math.floor(diff / 60000)
-  if (m < 1) return 'دلوقتي'
-  if (m < 60) return `من ${m} د`
-  const h = Math.floor(m / 60)
-  if (h < 24) return `من ${h} س`
-  return `من ${Math.floor(h / 24)} ي`
+  const timestamp = new Date(iso).getTime()
+  if (!Number.isFinite(timestamp)) return 'وقت غير معروف'
+
+  const minutes = Math.max(0, Math.floor((Date.now() - timestamp) / 60000))
+  if (minutes < 1) return 'دلوقتي'
+  if (minutes < 60) return `من ${minutes} د`
+
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return `من ${hours} س`
+  return `من ${Math.floor(hours / 24)} ي`
+}
+
+function isFeedItem(value: unknown): value is FeedItem {
+  if (typeof value !== 'object' || value === null) return false
+  const item = value as Record<string, unknown>
+  return (
+    typeof item.id === 'string' &&
+    typeof item.label === 'string' &&
+    typeof item.actor === 'string' &&
+    typeof item.created_at === 'string'
+  )
+}
+
+function isAbortError(error: unknown): boolean {
+  return error instanceof Error && error.name === 'AbortError'
 }
 
 export default function ActivityFeed() {
@@ -32,28 +45,73 @@ export default function ActivityFeed() {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    let cancelled = false
-    const fetchFeed = async () => {
-      try {
-        const res = await fetch('/api/admin/live-feed', { cache: 'no-store' })
-        if (!res.ok) throw new Error('failed')
-        const data = (await res.json()) as { items: FeedItem[] }
-        if (!cancelled) {
-          setItems(data.items)
-          setError(false)
-        }
-      } catch {
-        if (!cancelled) setError(true)
-      } finally {
-        if (!cancelled) setLoading(false)
+    let disposed = false
+    let timer: number | undefined
+    let controller: AbortController | undefined
+
+    const clearTimer = () => {
+      if (timer !== undefined) {
+        window.clearTimeout(timer)
+        timer = undefined
       }
     }
 
-    fetchFeed()
-    const t = setInterval(fetchFeed, 15000)
+    const load = async () => {
+      if (disposed || document.hidden) return
+
+      const requestController = new AbortController()
+      controller = requestController
+
+      try {
+        const response = await fetch('/api/admin/live-feed', {
+          cache: 'no-store',
+          signal: requestController.signal,
+        })
+        if (!response.ok) throw new Error('Feed request failed')
+
+        const payload: unknown = await response.json()
+        if (
+          typeof payload !== 'object' ||
+          payload === null ||
+          !('items' in payload) ||
+          !Array.isArray(payload.items) ||
+          !payload.items.every(isFeedItem)
+        ) {
+          throw new Error('Invalid feed response')
+        }
+
+        if (!disposed) {
+          setItems(payload.items)
+          setError(false)
+        }
+      } catch (requestError) {
+        if (!disposed && !isAbortError(requestError)) setError(true)
+      } finally {
+        const ownsRequest = controller === requestController
+        if (ownsRequest) controller = undefined
+        if (ownsRequest && !disposed && !document.hidden) {
+          timer = window.setTimeout(() => {
+            void load()
+          }, 15000)
+        }
+        if (ownsRequest && !disposed) setLoading(false)
+      }
+    }
+
+    const handleVisibilityChange = () => {
+      clearTimer()
+      controller?.abort()
+      if (!document.hidden) void load()
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    void load()
+
     return () => {
-      cancelled = true
-      clearInterval(t)
+      disposed = true
+      clearTimer()
+      controller?.abort()
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [])
 
@@ -64,9 +122,9 @@ export default function ActivityFeed() {
           <ClockIcon size={16} />
           <h3 className={styles.title}>النشاط الحي</h3>
         </div>
-        <div className={styles.skeleton}>
-          {[1, 2, 3].map((i) => (
-            <div key={i} className={styles.skeletonItem} />
+        <div className={styles.skeleton} aria-hidden="true">
+          {[1, 2, 3].map((item) => (
+            <div key={item} className={styles.skeletonItem} />
           ))}
         </div>
       </div>
@@ -75,48 +133,56 @@ export default function ActivityFeed() {
 
   if (error) {
     return (
-      <div className={styles.wrap}>
+      <section className={styles.wrap} aria-labelledby="admin-activity-title">
         <div className={styles.header}>
           <AlertIcon size={16} />
-          <h3 className={styles.title}>النشاط الحي</h3>
+          <h3 className={styles.title} id="admin-activity-title">
+            النشاط الحي
+          </h3>
         </div>
-        <div className={styles.empty}>تعذّر تحميل النشاط</div>
-      </div>
+        <div className={styles.empty} role="status">
+          تعذّر تحميل النشاط — جرّب تحديث الصفحة
+        </div>
+      </section>
     )
   }
 
   if (items.length === 0) {
     return (
-      <div className={styles.wrap}>
+      <section className={styles.wrap} aria-labelledby="admin-activity-title">
         <div className={styles.header}>
           <ClockIcon size={16} />
-          <h3 className={styles.title}>النشاط الحي</h3>
+          <h3 className={styles.title} id="admin-activity-title">
+            النشاط الحي
+          </h3>
         </div>
-        <div className={styles.empty}>لا توجد أحداث بعد — ستظهر هنا كل الإجراءات الإدارية</div>
-      </div>
+        <div className={styles.empty}>لا توجد أحداث بعد — ستظهر هنا الإجراءات الإدارية</div>
+      </section>
     )
   }
 
   return (
-    <div className={styles.wrap}>
+    <section className={styles.wrap} aria-labelledby="admin-activity-title">
       <div className={styles.header}>
-        <span className={styles.pulse} />
-        <h3 className={styles.title}>النشاط الحي</h3>
+        <span className={styles.pulse} aria-hidden="true" />
+        <h3 className={styles.title} id="admin-activity-title">
+          النشاط الحي
+        </h3>
         <span className={styles.live}>مباشر</span>
       </div>
       <ul className={styles.list}>
-        {items.map((it) => (
-          <li key={it.id} className={styles.item}>
-            <span className={styles.dot} />
+        {items.map((item) => (
+          <li key={item.id} className={styles.item}>
+            <span className={styles.dot} aria-hidden="true" />
             <div className={styles.itemBody}>
-              <span className={styles.itemLabel}>{it.label}</span>
+              <span className={styles.itemLabel}>{item.label}</span>
               <span className={styles.itemMeta}>
-                {it.actor} · {timeAgo(it.created_at)}
+                {item.actor} · {timeAgo(item.created_at)}
               </span>
             </div>
           </li>
         ))}
       </ul>
-    </div>
+    </section>
   )
 }

@@ -73,7 +73,7 @@ const PUBLIC_ITEMS: MenuItem[] = [
   { href: '/trust', label: 'السمعة والتوثيق', Icon: ShieldCheckIcon },
 ]
 
-// ─── روابط الحساب المشتركة (العميل والتاجر) ───
+// ─── روابط الحساب المشتركة (المشتري والبايع) ───
 const ACCOUNT_ITEMS: MenuItem[] = [
   { href: '/account', label: 'نظرة عامة', Icon: LayoutDashboardIcon },
   { href: '/account/edit', label: 'بياناتي الشخصية', Icon: UserIcon },
@@ -89,7 +89,7 @@ const ACCOUNT_ITEMS: MenuItem[] = [
   { href: '/account/referral', label: 'دعوة أصدقاء', Icon: ShareIcon },
 ]
 
-// ─── مساحة عمل التاجر: تطابق الروابط قائمة MerchantSidebar ───
+// ─── مساحة عمل البايع: تطابق الروابط قائمة مساحة العمل ───
 const SELLER_SECTION: MenuItem[] = [
   { href: '/merchant', label: 'نظرة عامة', Icon: LayoutDashboardIcon },
   { href: '/merchant/business', label: 'بيانات النشاط', Icon: StoreIcon },
@@ -106,7 +106,7 @@ const SELLER_SECTION: MenuItem[] = [
   { href: '/account/notifications', label: 'الإشعارات', Icon: BellIcon },
 ]
 
-// ─── بداية التاجر (للزائر أو العميل الذي ليس لديه نشاط) ───
+// ─── بداية البايع (للزائر أو المشتري الذي ليس لديه نشاط) ───
 const SELLER_ONBOARDING_ITEMS: MenuItem[] = [
   { href: '/merchant/apply', label: 'سجّل نشاطك', Icon: StoreIcon },
   { href: '/pricing', label: 'الباقات', Icon: GiftIcon },
@@ -355,7 +355,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             ))}
           </ul>
 
-          {/* روابط الحساب للعميل والتاجر المسجلين */}
+          {/* روابط الحساب للمشتري والبايع المسجلين */}
           {isLoggedIn && !isAdmin && (
             <>
               <div className={styles.divider} />
@@ -383,7 +383,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             </>
           )}
 
-          {/* مساحة عمل التاجر المرتبط بنشاط */}
+          {/* مساحة عمل البايع المرتبط بنشاط */}
           {hasSellerWorkspace && (
             <>
               <div className={styles.divider} />
@@ -411,7 +411,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
             </>
           )}
 
-          {/* تسجيل نشاط للعميل المسجل الذي لا يملك نشاطًا */}
+          {/* تسجيل نشاط للمشتري المسجل الذي لا يملك نشاطًا */}
           {canStartSellerOnboarding && (
             <>
               <div className={styles.divider} />
@@ -445,7 +445,7 @@ export default function MenuDrawer({ open, onClose, session, contactLinks }: Pro
               <div className={styles.divider} />
               <div className={styles.sectionLabel}>
                 <StoreIcon size={14} />
-                <span>للتاجر</span>
+                <span>للبايع</span>
               </div>
               <ul className={styles.list}>
                 {SELLER_ONBOARDING_ITEMS.map(({ href, label, Icon }) => (

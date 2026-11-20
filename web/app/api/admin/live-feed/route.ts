@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/auth/admin'
+import { createServiceClient } from '@/lib/supabase/service'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -13,8 +14,8 @@ const ACTION_LABEL: Record<string, string> = {
   'business.approve': 'اعتماد نشاط',
   'business.create': 'إنشاء نشاط',
   'business.update': 'تعديل نشاط',
-  'business.owner.assign': 'ربط تاجر بالنشاط',
-  'business.owner.remove': 'فك ربط التاجر بالنشاط',
+  'business.owner.assign': 'ربط بايع بالنشاط',
+  'business.owner.remove': 'فك ربط البايع بالنشاط',
   'business.archive': 'أرشفة نشاط',
   'business.republish': 'إعادة نشر نشاط',
   'business.delete': 'حذف نشاط',
@@ -49,6 +50,13 @@ const ACTION_LABEL: Record<string, string> = {
   'moderation.delete': 'حذف تقييم',
 }
 
+function privateJson(body: unknown, status = 200): NextResponse {
+  return NextResponse.json(body, {
+    status,
+    headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+  })
+}
+
 type FeedItem = {
   id: string
   label: string
@@ -59,25 +67,33 @@ type FeedItem = {
 export async function GET() {
   const ctx = await requireAdmin()
   if (!ctx.ok) {
-    return NextResponse.json({ error: 'غير مصرح' }, { status: 403 })
+    return privateJson({ error: 'غير مصرح' }, 403)
   }
 
-  const { data } = await ctx.supabase
+  const { data, error } = await ctx.supabase
     .from('audit_logs')
     .select('id, action, actor_user_id, created_at')
     .order('created_at', { ascending: false })
     .limit(20)
 
-  if (!data) {
-    return NextResponse.json({ items: [] as FeedItem[] })
+  if (error || !data) {
+    console.error('[admin-live-feed] audit query failed:', error?.message ?? 'No data')
+    return privateJson({ items: [] as FeedItem[] })
   }
 
   const actorIds = Array.from(
     new Set(data.map((l) => l.actor_user_id).filter((x): x is string => !!x)),
   )
-  const { data: profiles } = actorIds.length
-    ? await ctx.supabase.from('profiles').select('id, display_name').in('id', actorIds)
-    : { data: [] as { id: string; display_name: string }[] }
+  // Authenticated profile SELECT is intentionally restricted. Resolve names only after
+  // requireAdmin() succeeds, through the server-only service client.
+  const service = createServiceClient()
+  const { data: profiles, error: profileError } = actorIds.length
+    ? await service.from('profiles').select('id, display_name').in('id', actorIds)
+    : { data: [] as { id: string; display_name: string }[], error: null }
+
+  if (profileError) {
+    console.error('[admin-live-feed] profile lookup failed:', profileError.message)
+  }
   const names = new Map((profiles ?? []).map((p) => [p.id, p.display_name]))
 
   const items: FeedItem[] = data.map((l) => ({
@@ -87,5 +103,5 @@ export async function GET() {
     created_at: l.created_at,
   }))
 
-  return NextResponse.json({ items })
+  return privateJson({ items })
 }
