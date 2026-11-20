@@ -5,15 +5,15 @@
 
 ## الحالة الأمنية المؤكدة — 2026-11-20
 
-- آخر Quality Gate متاح بعد تعديل واجهة اختيار المالك: commit 60f1d78c76b6079af6875a111a4ec669ef517108، run 44737279736.
-- TypeScript وESLint وStylelint وBuild نجحت، وVitest سجل 37 ملف اختبار و234 اختبارًا ناجحًا. CodeQL وInvariants وContext Map انتهت بالنجاح على SHA نفسه.
-- فحص npm audit كان للإنتاج فقط وبحد high، ونتيجته found 0 vulnerabilities. لا يثبت ذلك خلو dev dependencies أو الثغرات المتوسطة والمنخفضة من advisories.
-- Prettier أبلغ عن 170 ملفًا غير منسق، وPRETTIER_OUTCOME=failure جعل Quality Gate الإجمالي يفشل. كون خطوة Prettier معروضة كـcompleted/success سببه continue-on-error ولا يغيّر نتيجتها الفعلية.
-- وظيفة RLS لم تنفذ اختبارات قاعدة البيانات لأن SUPABASE_DB_URL كان فارغًا. لم يعمل Supabase CLI أو pgTAP أو migrations أو RLS audit في هذا التشغيل.
-- لا توجد قاعدة Supabase QA مستقلة تم التحقق من Project Ref الخاص بها واعتمادها لهذه الجلسة. لا تُجرَ أي writes أو migrations أو seeding أو رفع أو تنظيف على الإنتاج.
-- Vercel يعيد Account is blocked على commits الحديثة؛ هذا حظر حساب خارجي وليس فشل Build. لا تطلب deploy قبل 2026-12-15 وإعادة فحص الحالة.
+- آخر Quality Gate مكتمل على الكود/الـworkflow: commit `cd537185b00004b99997d0c746066883fb2bcfad`، run `44818572502`. الـquality job نجح بالكامل؛ أما الـworkflow الإجمالي ففشل عند guard وظيفة RLS بسبب غياب `SUPABASE_DB_URL` لقاعدة QA مستقلة.
+- على SHA `cd537185`: TypeScript وESLint وPrettier للملفات المتغيرة وStylelint وWebpack Build وVitest وnpm audit للإنتاج عند high وKnip وjscpd نجحت. Vitest: 37 ملفًا و234 اختبارًا.
+- فحص Prettier الشامل ما زال يرصد 170 ملفًا قديمًا. هذا دين تنسيق معلن، ولا يغيّر حقيقة نجاح فحص الملفات المتغيرة. يجب خفضه تدريجيًا حتى الصفر.
+- CodeQL run `44818572947` وInvariants run `44818572702` نجحا على `cd537185`.
+- RLS/pgTAP لم تُنفّذ: وظيفة `rls-tests` توقفت عند شرط قاعدة الاختبار؛ لم يبدأ Supabase CLI ولم تُطبق migrations ولم يعمل RLS audit. لا تعتبره فشل اختبار RLS.
+- لا توجد قاعدة Supabase QA مستقلة تم التحقق من Project Ref الخاص بها واعتمادها. لا تُجرَ أي writes أو migrations أو seeding أو رفع أو تنظيف على الإنتاج.
+- Vercel يعيد `Account is blocked` على commits الحديثة؛ هذا حظر حساب خارجي وليس فشل Build. لا تطلب deploy قبل 2026-12-15 وإعادة فحص الحالة.
 - GitHub API يعرّف المستودع على أنه Public. وثائق تاريخية كانت تتضمن كلمة مرور اختبار ثابتة ومعرّفات حسابات؛ أزيلت من النسخ الحالية، لكن Git history لم يُنظف. تُعامل كلمات المرور التاريخية على أنها مكشوفة، ويلزم أن يراجع مالك المشروع الحسابات المرتبطة ويدوّر كلمات مرورها أو يعطّلها. لم يتم تغيير أي حساب أو سر في هذه الجلسة.
-- المسميات الظاهرة الرسمية: الأدمن والعميل والتاجر فقط. القيم التقنية تظل super_admin وcustomer وmerchant. لا تزال هناك واجهات قديمة تحمل «مشتري/بايع» ويجب توحيدها في تغييرات صغيرة مع اختبار كل تعديل.
+- المسميات الظاهرة الرسمية: الأدمن والعميل والتاجر فقط. القيم التقنية تظل `super_admin` و`customer` و`merchant`. تم توحيد النصوص في خيارات ومراجعة مالك النشاط ولوحة ربطه وصفحة الثقة وصفحة من نحن؛ تبقى واجهات قديمة أخرى قيد التحديث.
 - لم يُنفذ فحص Supabase Advisor جديد أو اختبار اختراق أو تدقيق أسرار كامل في هذه الجلسة. لا تفسّر هذا الملخص على أنه شهادة أمن شاملة أو إغلاق لكل المخاطر.
 
 ### إجراءات لم تُنفذ
@@ -105,7 +105,7 @@ upgrade-insecure-requests
 - Self read/write: profiles, favorites, follows, orders
 - Admin full: عبر is_admin()
 - أي RPC من نوع `SECURITY DEFINER` يستقبل معرّف مستخدم لازم يفرض تطابقه مع `auth.uid()`، مع استثناء واضح للأدمن أو `service_role` الموثوق فقط.
-- `can_interact(uuid)` يسمح للمشتري/البايع بفحص حسابه فقط. فحص حساب آخر يتم من مسار سيرفر محمي باستخدام `service_role`.
+- `can_interact(uuid)` يسمح للعميل/التاجر بفحص حسابه فقط. فحص حساب آخر يتم من مسار سيرفر محمي باستخدام `service_role`.
 
 ### 2.3 Zod Validation
 
@@ -138,7 +138,7 @@ upgrade-insecure-requests
 
 | الثغرة | الاستغلال | الحل الحالي |
 |--------|-----------|-------------|
-| تقييم النفس | حساب مشتري ويقيّم | DB Trigger ✅ |
+| تقييم النفس | حساب عميل ويقيّم | DB Trigger ✅ |
 | طلبات وهمية | طلبات لنفسه | DB Trigger ✅ |
 | ردود متطابقة | رد متكرر | Rate Limit (بعدين) |
 
