@@ -59,7 +59,7 @@
 - رأس صفحة النشاط: web/components/business-hero.tsx وweb/components/business-hero.module.css.
 - تركيب الصفحة العامة: web/app/businesses/[slug]/page.tsx وbusiness.module.css.
 - إنشاء الإدارة: web/app/admin/businesses/new وما يتصل به في web/app/admin/businesses/actions.ts.
-- تقديم البايع: web/app/merchant/apply وما يتصل به في web/app/merchant/actions.ts.
+- تقديم التاجر: web/app/merchant/apply وما يتصل به في web/app/merchant/actions.ts.
 - الأدوار الظاهرة: docs/ROLES_MATRIX.md.
 
 ابحث عن مكوّن موجود قابل لإعادة الاستخدام قبل إنشاء واحد جديد. لا تنشئ مكوّنًا ثانيًا للكارد أو لشارة الحالة من غير سبب موثق. لا تقسّم ملفًا أو تعيد ترتيبه لمجرد الشكل إذا لم يقلل التعقيد أو يمنع أخطاء.
