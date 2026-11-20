@@ -21,8 +21,8 @@
 ## 2. الأدوار
 
 - super_admin → الأدمن → /admin/*
-- merchant → البايع → /merchant/*
-- customer → المشتري → /account/*
+- merchant → التاجر → /merchant/*
+- customer → العميل → /account/*
 - الزائر حالة وصول عامة، وليس دورًا مستقلًا
 
 ---
@@ -33,8 +33,8 @@
 - /explore — البحث والفلاتر
 - /businesses/[slug] — صفحة النشاط
 - /auth — تسجيل دخول
-- /account — لوحة المشتري
-- /merchant — لوحة البايع
+- /account — مساحة العميل
+- /merchant — مساحة التاجر
 - /admin — لوحة الأدمن
 - بحث الهاتف داخل /explore عند إدخال 11 رقمًا
 
