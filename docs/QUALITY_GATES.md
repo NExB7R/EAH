@@ -21,9 +21,12 @@
 بعد Gate 1:
 - npx prettier --write <changed-files>
 - npx eslint <changed-files> — صفر errors
-- npx prettier --check <files>
+- `npx prettier --write <changed-files>` ثم `npx prettier --check <changed-files>` محليًا.
+- CI يفحص كل ملفات TypeScript/TSX/CSS/JSON المتغيرة في الـpush أو PR كفحص حاجب.
+- يوجد فحص منفصل للمستودع كله يرصد الدين التاريخي ولا يحوّله إلى نجاح. آخر خط أساس موثق: 170 ملفًا في 2026-11-20؛ يجب خفض العدد تدريجيًا حتى الصفر، ملفًا واحدًا في كل patch.
+- عند `workflow_dispatch` يفحص Prettier كامل الملفات، وليس الملفات المتغيرة فقط.
 
-Warnings مقبولة (unused vars في legacy). Errors لا.
+Warnings مقبولة (unused vars في legacy). Errors لا. لا تتجاهل فشل فحص الملفات المتغيرة.
 
 ---
 
@@ -81,7 +84,7 @@ Warnings مقبولة (unused vars في legacy). Errors لا.
 
 ## Stop Conditions
 
-STOP-1: فشل أي Gate — لا commit.
+STOP-1: فشل أي Gate حاجب (TypeScript/ESLint/Prettier للملفات المتغيرة/Stylelint/Build/Unit Tests/Audit/Knip/jscpd) — لا commit. فحص Prettier الشامل يظل دينًا تقنيًا معلنًا لا يُسجل نجاحًا، ويجب خفضه تدريجيًا.
 STOP-2: > 200 سطر تغيير في commit — قسّم.
 STOP-3: تعديل SACRED — يحتاج موافقة (app/layout, app/page, proxy.ts, lib/supabase/*).
 STOP-4: > ملف واحد في patch — واحد في كل مرة.
