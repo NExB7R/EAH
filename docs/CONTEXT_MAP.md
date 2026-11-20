@@ -125,18 +125,16 @@
 | `/trends` | `app/trends/page.tsx` |
 | `/trust` | `app/trust/page.tsx` |
 
-## Components (96)
+## Components (92)
 
 | File | Export | Purpose |
 |------|--------|---------|
 | `about-free-app.tsx` | AboutFreeApp | EAH — About: Free App Section |
 | `account-page-header.tsx` | AccountPageHeader | — |
-| `account-sidebar.tsx` | AccountSidebar | — |
 | `account/privacy-section.tsx` | PrivacySection | "admin" | "user" — يغير نبرة النصوص |
 | `account/two-factor-section.tsx` | TwoFactorSection | — |
 | `ad-slot.tsx` | AdSlot | EAH — Ad Slot (display) |
-| `admin-sidebar.tsx` | AdminSidebar | — |
-| `admin/activity-feed.tsx` | ActivityFeed | EAH — Live Activity Feed |
+| `admin/activity-feed.tsx` | ActivityFeed | — |
 | `ai-widget.tsx` | AiWidget | EAH — AI Widget (Floating Assistant) |
 | `announcements-banner.tsx` | AnnouncementsBanner | EAH — Announcements Banner |
 | `area-dropdown.tsx` | AreaDropdown | — |
@@ -180,7 +178,6 @@
 | `logo.tsx` | Logo | — |
 | `menu-drawer.tsx` | MenuDrawer | — |
 | `menu-slider.tsx` | MenuSlider | EAH — Menu Slider (داخل OrderModal) |
-| `merchant-sidebar.tsx` | MerchantSidebar | — |
 | `nearby-directory.tsx` | NearbyDirectory | — |
 | `nearby-grid.tsx` | NearbyGrid | EAH — Homepage nearby section. |
 | `new-row.tsx` | NewRow | EAH — New Row (Home) |
@@ -218,7 +215,6 @@
 | `sw-register.tsx` | SwRegister | EAH — Service Worker Registration + Queue Flusher |
 | `trending-row.tsx` | TrendingRow | EAH — Trending Row (Home) |
 | `trust-bar.tsx` | TrustBar | EAH — Trust Bar (2026-11-09) |
-| `trust-card.tsx` | TrustCard | EAH — Participation Points (not a reputation or verification score) |
 | `ui/confirm-modal.tsx` | ConfirmModal | EAH — Confirm Modal (reusable) |
 | `ui/export-button.tsx` | ExportButton | EAH — Export CSV Button |
 | `voice-search-button.tsx` | VoiceSearchButton | لو موجود → يستخدم callback بدل النقل لـ /explore |
@@ -226,7 +222,7 @@
 | `watermark.tsx` | Watermark | EAH — Watermark Overlay |
 | `wm-image.tsx` | WmImage | EAH — Watermarked Image |
 
-## Lib (130)
+## Lib (131)
 
 | File | Exports | Purpose |
 |------|---------|---------|
@@ -322,6 +318,7 @@
 | `offline/db.ts` | STORES, openDB, idbGet, idbSet, idbDelete, … | EAH — Offline DB (IndexedDB wrapper) |
 | `offline/mutations.ts` | offlineOrQueue | EAH — Offline-aware Mutations |
 | `offline/queue.ts` | enqueue, getPending, clearPending, flushQueue, registerBackgroundSync | EAH — Pending Actions Queue (Offline → Sync) |
+| `offline/service-worker-policy.ts` | shouldUseNetworkOnly, isCacheablePublicImageUrl, resolveSafeNotificationUrl | — |
 | `phone-validation.ts` | isEgyptianMobileNumber | Validate an Egyptian mobile number stored in local 01xxxxxxxxx form. |
 | `plan-entitlements.ts` | hasActivePaidPlanFeature | Pure eligibility rule shared by public placement and admin controls. |
 | `profile/crop-image.ts` | cropImageToBlob, readFileAsDataURL | EAH — Client-side crop helper (Canvas, no dependencies) |
