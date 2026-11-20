@@ -75,7 +75,7 @@ The GitHub RLS job requires a separate `SUPABASE_DB_URL` and explicitly rejects 
 
 1. Applying the reviewed migrations in their intended order.
 2. Running pgTAP/RLS regression tests under anon, authenticated and service roles.
-3. Creating synthetic العميل/التاجر/الأدمن accounts and synthetic activities only in that isolated environment.
+3. Creating synthetic accounts for the customer (`customer`), merchant (`merchant`) and admin (`super_admin`) roles, plus synthetic activities, only in that isolated environment.
 4. Testing optional owner linking, draft/publish visibility, image uploads, search and public activity details.
 5. Resetting or discarding the isolated test environment after evidence is recorded.
 
