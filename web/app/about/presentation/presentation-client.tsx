@@ -259,7 +259,7 @@ function SlideCover() {
       <p className={styles.coverText}>
         منصة اكتشاف محلية مصرية
         <br />
-        مجانية للعميل · بدون عمولة على التاجر
+        مجانية للمشتري · بدون عمولة على البايع
       </p>
     </div>
   )
@@ -275,7 +275,7 @@ function SlideProblem() {
       <div className={styles.trioGrid}>
         <TrioCard num="01" title="مفيش دليل موحد" text="كل نشاط في حتة — مفيش مكان يجمعهم." />
         <TrioCard num="02" title="تقييمات مبعترة" text="مفيش طريقة موثوقة تعرف منها الكويس." />
-        <TrioCard num="03" title="التجار محتاجين ظهور" text="محتاجين يوصلوا للعملاء — بدون عمولات." />
+        <TrioCard num="03" title="البايعين محتاجين ظهور" text="محتاجين يوصلوا للمشترين — بدون عمولات." />
       </div>
     </div>
   )
@@ -295,7 +295,7 @@ function SlideIdea() {
             <CheckCircleIcon size={22} />
           </span>
           <div>
-            <strong className={styles.ideaStrong}>مجانية للعميل</strong>
+            <strong className={styles.ideaStrong}>مجانية للمشتري</strong>
             <p className={styles.ideaText}>صفر رسوم · صفر اشتراكات</p>
           </div>
         </div>
@@ -304,8 +304,8 @@ function SlideIdea() {
             <CheckCircleIcon size={22} />
           </span>
           <div>
-            <strong className={styles.ideaStrong}>بدون عمولة على التاجر</strong>
-            <p className={styles.ideaText}>كل الأرباح للتاجر</p>
+            <strong className={styles.ideaStrong}>بدون عمولة على البايع</strong>
+            <p className={styles.ideaText}>كل الأرباح للبايع</p>
           </div>
         </div>
         <div className={styles.ideaRow}>
@@ -338,7 +338,7 @@ function SlideSolution() {
         <TrioCard
           num="💬"
           title="طلب مباشر"
-          text="رسالة واتساب جاهزة — والتاجر يرد في دقايق."
+          text="رسالة واتساب جاهزة — والبايع يرد في دقايق."
           icon={<WhatsAppIcon size={22} />}
         />
         <TrioCard
@@ -356,7 +356,7 @@ function SlideSolution() {
 function SlideCustomer() {
   return (
     <div className={styles.slide}>
-      <span className={`${styles.slideBadge} ${styles.badgePurple}`}>للعميل</span>
+      <span className={`${styles.slideBadge} ${styles.badgePurple}`}>للمشتري</span>
       <h2 className={styles.slideTitle}>مجاناً 100%</h2>
       <div className={styles.iconGrid}>
         <IconTile Icon={SearchIcon} label="بحث ذكي" />
@@ -376,7 +376,7 @@ function SlideCustomer() {
 function SlideMerchant() {
   return (
     <div className={styles.slide}>
-      <span className={`${styles.slideBadge} ${styles.badgeGold}`}>للتاجر</span>
+      <span className={`${styles.slideBadge} ${styles.badgeGold}`}>للبايع</span>
       <h2 className={styles.slideTitle}>ظهور مجاني · بدون عمولة</h2>
       <div className={styles.iconGrid}>
         <IconTile Icon={StoreIcon} label="صفحة كاملة" gold />
@@ -502,7 +502,7 @@ function SlideTeam() {
         <p className={styles.teamRole}>المؤسس · </p>
         <div className={styles.teamLine} aria-hidden />
         <p className={styles.teamText}>
-          بدأت EAH من حلم بسيط: نوصّل الناس بأماكنهم، ونوقف استغلال التجار.
+          بدأت EAH من حلم بسيط: نوصّل الناس بأماكنهم، ونوقف استغلال البايعين.
         </p>
       </div>
     </div>

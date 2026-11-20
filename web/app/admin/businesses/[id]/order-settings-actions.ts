@@ -50,7 +50,7 @@ export async function enableOrders(
     .maybeSingle()
   if (!biz) return { ok: false, error: 'النشاط مش موجود' }
   if (!biz.owner_profile_id) {
-    return { ok: false, error: 'اربط حساب التاجر بالنشاط أولًا قبل تفعيل استلام الطلبات' }
+    return { ok: false, error: 'اربط حساب البايع بالنشاط أولًا قبل تفعيل استلام الطلبات' }
   }
 
   const { data: activeBranches, error: branchError } = await adminDb
@@ -90,7 +90,7 @@ export async function enableOrders(
   if (!hasOrderContact) {
     return {
       ok: false,
-      error: 'ضيف رقم هاتف أو واتساب للنشاط نفسه قبل تفعيل استقبال الطلبات. رقم التاجر الشخصي مش مطلوب.',
+      error: 'ضيف رقم هاتف أو واتساب للنشاط نفسه قبل تفعيل استقبال الطلبات. رقم البايع الشخصي مش مطلوب.',
     }
   }
   const { error: updErr } = await adminDb.from('merchant_order_settings').upsert(
