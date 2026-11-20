@@ -94,6 +94,8 @@ upgrade-insecure-requests
 - Owner read/write: حسب owner_profile_id
 - Self read/write: profiles, favorites, follows, orders
 - Admin full: عبر is_admin()
+- أي RPC من نوع `SECURITY DEFINER` يستقبل معرّف مستخدم لازم يفرض تطابقه مع `auth.uid()`، مع استثناء واضح للأدمن أو `service_role` الموثوق فقط.
+- `can_interact(uuid)` مقيّد بصاحب الجلسة؛ لا يسمح للمشتري أو البايع باستعلام حالة التزام حساب آخر.
 
 ### 2.3 Zod Validation
 
