@@ -106,7 +106,14 @@ jobs:
           if [[ "$outcome" -eq 0 ]]; then
             echo "Repository-wide Prettier baseline is clean." >> "$GITHUB_STEP_SUMMARY"
           else
-            count="$(grep -Ec '^\\[warn\\].+\\.(ts|tsx|css|json)      - name: Stylelint (CSS)
+            count="$(grep -c "warn" "$RUNNER_TEMP/prettier-baseline.log" || true)"
+            echo "Repository-wide Prettier baseline still has legacy debt: ${count} file(s)." >> "$GITHUB_STEP_SUMMARY"
+            echo "::notice::The full-repository formatting baseline remains open (${count} file(s)); changed files are still checked strictly."
+            tail -n 3 "$RUNNER_TEMP/prettier-baseline.log"
+          fi
+          exit "$outcome"
+
+      - name: Stylelint (CSS)
         run: npx stylelint "app/**/*.module.css" "components/**/*.module.css"
 
       - name: Build (webpack)
