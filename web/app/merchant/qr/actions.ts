@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import QRCode from 'qrcode'
+import { SITE_URL } from '@/lib/site-config'
 
 export type QrResult = { ok: true; dataUrl: string } | { ok: false; error: string }
 
@@ -23,7 +24,6 @@ export async function generateBusinessQr(slug: string): Promise<QrResult> {
     return { ok: false, error: 'غير مصرح' }
   }
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
   const url = `${SITE_URL}/businesses/${slug}`
 
   try {

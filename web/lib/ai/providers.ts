@@ -1,5 +1,7 @@
 import 'server-only'
 
+import { SITE_URL } from '@/lib/site-config'
+
 // ═══════════════════════════════════════════════════════════
 // EAH — AI Provider Router (Multi-Provider Fallback)
 //   • 4 مزودين — fallback تلقائي عند الفشل
@@ -96,7 +98,7 @@ function getProviders(): Provider[] {
       priority: 3,
       supportsTools: true,
       extraHeaders: {
-        'HTTP-Referer': process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app',
+        'HTTP-Referer': SITE_URL,
         'X-Title': 'EAH',
       },
     })

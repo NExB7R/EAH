@@ -43,7 +43,7 @@ export default async function AdminUserPage({ params }: { params: Promise<{ id: 
       {/* الهيدر */}
       <div style={{ background: 'rgba(20, 15, 30, 0.6)', padding: '24px', borderRadius: '20px', border: '1px solid rgba(157, 78, 221, 0.2)', marginBottom: '16px' }}>
         <h1 style={{ color: '#fff', fontSize: '24px', marginBottom: '8px' }}>{profile.display_name || 'مستخدم'}</h1>
-        <p style={{ color: '#a0a0a0', fontSize: '14px' }}>{profile.phone || 'بدون رقم'} • {role === 'merchant' ? 'تاجر' : role === 'super_admin' ? 'أدمن' : 'عميل'}</p>
+        <p style={{ color: '#a0a0a0', fontSize: '14px' }}>{profile.phone || 'بدون رقم'} • {role === 'merchant' ? 'بايع' : role === 'super_admin' ? 'أدمن' : 'مشتري'}</p>
         <p style={{ color: '#666', fontSize: '12px', marginTop: '8px' }}>تاريخ التسجيل: {new Date(profile.created_at).toLocaleString('ar-EG')}</p>
       </div>
 

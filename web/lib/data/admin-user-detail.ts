@@ -15,7 +15,6 @@ export type UserDetail = {
     is_premium: boolean
     premium_until: string | null
     verified_at: string | null
-    is_paid_member: boolean
     bio: string | null
     standing: string | null
     standing_reason: string | null
@@ -76,16 +75,54 @@ export async function getAdminUserDetail(userId: string): Promise<UserDetail | n
       .limit(10),
   ])
 
+  type JoinedBusiness =
+    | { name: string | null; slug: string | null }
+    | { name: string | null; slug: string | null }[]
+    | null
+
+  type AdminReviewRow = {
+    id: string
+    rating: number
+    comment: string | null
+    status: string
+    created_at: string
+    business: JoinedBusiness
+  }
+
+  const reviewRows = (reviewsRes.data ?? []) as unknown as AdminReviewRow[]
+  const reviews = reviewRows.map(({ business, ...review }) => {
+    const relatedBusiness = Array.isArray(business) ? business[0] : business
+    return {
+      ...review,
+      business_name: relatedBusiness?.name ?? null,
+      business_slug: relatedBusiness?.slug ?? null,
+    }
+  })
+
   return {
-    profile: profile as any,
+    profile: {
+      id: profile.id,
+      display_name: profile.display_name ?? 'مستخدم',
+      avatar_url: profile.avatar_url ?? null,
+      phone: profile.phone ?? null,
+      phone_verified_at: profile.phone_verified_at ?? null,
+      trust_score: typeof profile.trust_score === 'number' ? profile.trust_score : 50,
+      trust_tier: profile.trust_tier ?? null,
+      created_at: profile.created_at,
+      banned_until: profile.banned_until ?? null,
+      ban_reason: profile.ban_reason ?? null,
+      is_premium: profile.is_premium ?? false,
+      premium_until: profile.premium_until ?? null,
+      verified_at: profile.verified_at ?? null,
+      bio: profile.bio ?? null,
+      standing: profile.standing ?? null,
+      standing_reason: profile.standing_reason ?? null,
+      standing_expires_at: profile.standing_expires_at ?? null,
+    },
     role: rolesRes.data?.role ?? 'customer',
     auditLogs: auditRes.data ?? [],
     businesses: bizRes.data ?? [],
-    reviews: (reviewsRes.data ?? []).map((r: any) => ({
-      ...r,
-      business_name: r.business?.name ?? null,
-      business_slug: r.business?.slug ?? null,
-    })),
+    reviews,
   }
 }
 
@@ -116,9 +153,19 @@ export async function getStandingEvents(userId: string): Promise<StandingEvent[]
     return []
   }
 
-  return (data || []).map((e: any) => ({
-    ...e,
-    admin_name: e.admin?.display_name || 'الإدارة'
+  type AdminRelation =
+    | { display_name: string | null }
+    | { display_name: string | null }[]
+    | null
+
+  type StandingEventRow = Omit<StandingEvent, 'admin_name'> & {
+    admin: AdminRelation
+  }
+
+  const eventRows = (data ?? []) as unknown as StandingEventRow[]
+  return eventRows.map(({ admin, ...event }) => ({
+    ...event,
+    admin_name: (Array.isArray(admin) ? admin[0]?.display_name : admin?.display_name) ?? 'الإدارة',
   }))
 }
 

@@ -20,12 +20,12 @@ import { GeoProvider } from '@/lib/contexts/geo-context'
 import { getFeatureFlags } from '@/lib/features'
 import { getActiveAnnouncements } from '@/lib/data/announcements'
 import { getAllLiveStats } from '@/lib/data/live-stats'
+import { SITE_URL } from '@/lib/site-config'
 import { getPublicContactSettings } from '@/lib/data/site-settings'
 import './globals.css'
 
 export const dynamic = 'force-dynamic'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 
 export const metadata: Metadata = {

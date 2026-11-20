@@ -6,10 +6,9 @@ import { getReferralStats, getReferralList } from '@/lib/data/referrals'
 import AccountPageHeader from '@/components/account-page-header'
 import ReferralShare from './referral-share'
 import styles from './referral.module.css'
+import { SITE_URL } from '@/lib/site-config'
 
 export const dynamic = 'force-dynamic'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
 
 const REWARDS = [
   { label: 'صديق يسجّل', points: 30, Icon: SparklesIcon },

@@ -1,11 +1,10 @@
 import type { MetadataRoute } from 'next'
 import { createPublicClient } from '@/lib/supabase/public'
+import { SITE_URL } from '@/lib/site-config'
 
 // ═══════════════════════════════════════════════════════════
 // EAH — Sitemap
 // ═══════════════════════════════════════════════════════════
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
 
 export const revalidate = 3600
 

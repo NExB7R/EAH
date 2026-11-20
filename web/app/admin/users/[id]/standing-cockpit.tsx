@@ -1,13 +1,25 @@
 'use client'
 import { useState } from 'react'
 import { manageStandingAction } from '../actions'
+import type { StandingEvent, ViolationStats } from '@/lib/data/admin-user-detail'
 
-export default function StandingCockpit({ 
-  userId, currentStanding, currentReason, expiresAt, history, violationStats
-}: { 
-  userId: string, currentStanding: string, currentReason: string | null,
-  expiresAt: string | null, history: any[], violationStats: any
-}) {
+type Props = {
+  userId: string
+  currentStanding: string
+  currentReason: string | null
+  expiresAt: string | null
+  history: StandingEvent[]
+  violationStats: ViolationStats
+}
+
+export default function StandingCockpit({
+  userId,
+  currentStanding,
+  currentReason,
+  expiresAt,
+  history,
+  violationStats,
+}: Props) {
   const [loading, setLoading] = useState(false)
   const [showForm, setShowForm] = useState(false)
   const [actionType, setActionType] = useState('warn')

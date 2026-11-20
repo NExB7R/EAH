@@ -657,7 +657,7 @@
   border-radius: 50%;
   background: #55e7d1;
   box-shadow: 0 0 8px rgba(85, 231, 209, 0.85);
-  animation: openPulse 2s ease-in-out infinite;
+  animation: openPulse 2s ease-in-out 4;
 }
 
 @keyframes openPulse {

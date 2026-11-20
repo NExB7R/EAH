@@ -20,6 +20,7 @@ import { getFeatureFlags } from '@/lib/features'
 import type { BusinessDetail } from '@/lib/data/business-detail'
 import { getUserSession } from '@/lib/data/user'
 import { getComments, getMyFollowingRootIds } from '@/lib/data/comments'
+import { SITE_URL } from '@/lib/site-config'
 import BusinessHero from '@/components/business-hero'
 import BusinessActions from '@/components/business-actions'
 import BusinessTabs from '@/components/business-tabs'
@@ -62,7 +63,6 @@ function buildJsonLd(
   business: BusinessDetail['business'],
   contacts: BusinessDetail['contacts'],
 ) {
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
   const url = `${SITE_URL}/businesses/${business.slug}`
 
   const sameAs: string[] = []

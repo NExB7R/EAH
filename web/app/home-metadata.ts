@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eah-sq.vercel.app'
+import { SITE_URL } from '@/lib/site-config'
 
 export const homeMetadata: Metadata = {
   title: 'EAH — اللي نفسك فيه',

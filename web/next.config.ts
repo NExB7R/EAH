@@ -1,16 +1,36 @@
 import withSerwistInit from '@serwist/next'
 import type { NextConfig } from 'next'
 
-// ─── دومينات خارجية ───
+// ─── External origins ───
 const SUPABASE_HOST = 'npmpiivmdksdirrumbmt.supabase.co'
 const CLOUDINARY_HOST = 'res.cloudinary.com'
 
-// CSP moved to proxy.ts (per-request nonce)
+// Build the Server Actions allowlist from the configured canonical URL and
+// Vercel's deployment/production hosts. Never pin a stale deployment URL.
+function toHostname(value: string | undefined): string | null {
+  if (!value) return null
+  try {
+    const candidate = value.includes('://') ? value : `https://${value}`
+    return new URL(candidate).host
+  } catch {
+    return null
+  }
+}
 
+const serverActionOrigins = [
+  process.env.NEXT_PUBLIC_SITE_URL,
+  process.env.VERCEL_PROJECT_PRODUCTION_URL,
+  process.env.VERCEL_URL,
+  'localhost:3000',
+]
+  .map(toHostname)
+  .filter((origin): origin is string => Boolean(origin))
+
+// CSP moved to proxy.ts (per-request nonce)
 const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
-      allowedOrigins: ['eah-sq.vercel.app', 'localhost:3000'],
+      allowedOrigins: serverActionOrigins,
     },
   },
   reactStrictMode: true,
@@ -30,7 +50,7 @@ const nextConfig: NextConfig = {
         hostname: SUPABASE_HOST,
         pathname: '/storage/v1/object/public/**',
       },
-      // TODO(pre-launch): احذف الاتنين دول قبل الإطلاق (صور demo فقط)
+      // TODO(pre-launch): remove the demo-only legacy hosts below.
     ],
   },
 
@@ -54,7 +74,6 @@ const nextConfig: NextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains',
           },
-          // إضافات جديدة 2026
           { key: 'Cross-Origin-Embedder-Policy', value: 'unsafe-none' },
           { key: 'Origin-Agent-Cluster', value: '?1' },
         ],
