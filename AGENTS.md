@@ -12,7 +12,7 @@ Canonical product, permission and security decisions live in the linked document
 
 ## Product rules
 
-- Exactly three registered roles: الأدمن (`super_admin`), البايع (`merchant`) and المشتري (`customer`). Visitor is an access state, not a fourth role.
+- Exactly three registered roles: الأدمن (`super_admin`), العميل (`customer`) and التاجر (`merchant`). Visitor is an access state, not a fourth role. Use these exact Arabic labels in user-facing text; keep stored role keys unchanged.
 - Keep stored role values and existing routes stable unless a reviewed migration and authorization tests explicitly require a change.
 - Role, ownership, standing, verification, subscription, publication and order eligibility are separate facts. Never infer permissions from one another.
 - Admin may create activities without an owner. Linking an existing user is optional and does not require that user's personal phone number.
