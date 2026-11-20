@@ -1,5 +1,30 @@
 # EAH — ERROR_REGISTER.md
 
+## الحالة الحالية — مراجعة 2026-11-20
+
+> هذه المراجعة مبنية على تشغيل GitHub Actions الفعلي رقم 44717152719 على commit الكود cb188610e7a97fcdc10e5484614de0161db0ab39، إضافة إلى فحص الوثائق ومصادر الواجهة. لا تعتبر الملاحظات التاريخية أدناه حالة حالية دون إعادة تحقق.
+
+| ID | الحالة | الدليل الحالي | الإجراء المطلوب |
+|---|---|---|---|
+| QUALITY-PRETTIER-170-2026-11-20 | OPEN — QUALITY GATE BLOCKED | TypeScript وESLint وStylelint وBuild وUnit Tests وnpm audit للإنتاج بحد high وKnip وjscpd نجحت في run 44717152719. خطوة Prettier فشلت وأبلغت عن 170 ملفًا غير منسق. خطوة تقرير الجودة فشلت بسبب PRETTIER_OUTCOME=failure فقط. | تنسيق الملفات على دفعات صغيرة، مراجعة diff لكل دفعة، ثم تشغيل Quality Gate على SHA جديد. لا تغيّر قواعد Prettier ولا تستثنِ الملفات لإخفاء الدين التقني. |
+| QA-DATABASE-URL-MISSING-2026-11-20 | OPEN — RLS TESTS NOT EXECUTED | وظيفة rls-tests بدأت على Runner لكنها توقفت في خطوة Require a dedicated non-production database لأن SUPABASE_DB_URL كان فارغًا. لم تعمل Supabase CLI أو pgTAP أو migrations أو RLS audit. | توفير قاعدة QA مستقلة وSecret مخصص لها، ثم التأكد من Project Ref قبل التشغيل. لا تستخدم عنوان الإنتاج ولا تضع سرًا في المستودع. |
+| VERCEL-ACCOUNT-BLOCKED-2026-11-20 | BLOCKED — EXTERNAL ACCOUNT STATUS | Commit status من Vercel على commits الكود والوثائق أعاد Account is blocked، والهدف يشرح حظر الحساب. هذا ليس دليلًا على فشل Build. | لا تطلب Deployment ولا تعِد تشغيل Build خلال فترة إيقاف الحساب. أعد التقييم بعد 2026-12-15 وقبل أي نشر. |
+| QA-FIXTURES-AND-CREDENTIALS-2026-11-20 | OPEN — HISTORICAL DATA / CREDENTIAL EXPOSURE | المستودع Public حسب GitHub API. كانت وثيقة TEST_ENVIRONMENT القديمة تحتوي بيانات اعتماد ثابتة ومعرّفات حسابات اختبار، كما أن وثائق QA التاريخية تصف fixtures على الإنتاج. أزيلت البيانات الحساسة من النسخ الحالية في d607f071 وb2f746b2، لكن تعديل الملف لا يمحوها من سجل Git. | لا تستخدم بيانات الدخول التاريخية. على مالك المشروع تحديد الحسابات الفعلية المرتبطة بها ثم تدوير كلمات مرورها أو تعطيلها من لوحة Supabase بعد مراجعة الأثر. لا تُجرَ كتابة على الإنتاج من جلسة التطوير هذه. راجع الحاجة إلى تنظيف تاريخ Git بطريقة يوافق عليها المالك دون force push. |
+| ROLE-LABELS-UI-2026-11-20 | OPEN — SOURCE LABELS STILL INCONSISTENT | توثيق AGENTS وCONSTITUTION وPRODUCT_SPEC وROLES_MATRIX وREPUTATION_POLICY أصبح يستخدم الأدمن/العميل/التاجر، لكن البحث الساكن ما زال يجد «مشتري/بايع» في صفحات ومكونات، ومنها admin business options وtrust/about/help/faq وtrust-bar وبعض رسائل الإجراءات. | تحديث النصوص الظاهرة فقط إلى الأدمن/العميل/التاجر مع إبقاء customer/merchant/super_admin كما هي، وإضافة/تعديل اختبارات الواجهة ثم تشغيل TypeScript وESLint وPrettier وUnit/E2E. |
+| QA-ENVIRONMENT-NOT-PROVEN-2026-11-20 | BLOCKED — NO VERIFIED ISOLATED PROJECT | وثيقتا QA الحاليتان توضحان عدم وجود مشروع Supabase منفصل تم التحقق منه لهذه الجلسة. لم تُنشأ أو تعدّل أو تحذف أي بيانات أثناء هذه المراجعة. | إبقاء جميع اختبارات DB وseed والتنظيف متوقفة حتى اعتماد مشروع QA مستقل وحارس Project Ref. |
+
+### نطاق التحقق في هذه المراجعة
+
+- تم فحص نتائج الوظائف وسجلاتها للـQuality Gate وRLS على commit الكود المذكور أعلاه.
+- نجحت TypeScript وESLint وStylelint وBuild وUnit Tests في ذلك التشغيل؛ لم يتم تشغيل اختبارات جديدة في هذه المراجعة.
+- فحص npm كان للإنتاج وبحد فشل high؛ لا يثبت خلو كل التبعيات أو تبعيات التطوير من advisories متوسطة.
+- لا يوجد إثبات نجاح حديث لاختبارات قاعدة البيانات أو E2E على بيئة معزولة.
+- لم يتم تشغيل Vercel، أو تعديل إعدادات Supabase، أو تطبيق migration، أو إعادة تشغيل GitHub Actions.
+
+---
+
+
+
 ## الحالة الحالية — فحص 2026-11-05
 
 > أُضيفت هذه الحالة فوق السجل التاريخي. لا تغيّر حالات البنود التاريخية إلا بعد إعادة الاختبار.
