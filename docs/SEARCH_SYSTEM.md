@@ -100,7 +100,7 @@ TODO: ربط getHistory() في ExploreSearch component (غير مربوط حال
 
 RPC: search_customer_by_phone(p_phone text) — role-aware:
 - الأدمن (super_admin): مسار SQL الحالي يرجع بيانات كاملة، ومنها الهاتف، قبل تطبيق phone_lookup_mode على المستخدم العادي.
-- المشتري/البايع المسجل: يخضع لإعداد phone_lookup_mode:
+- العميل (`customer`) أو التاجر (`merchant`) المسجل: يخضع لإعداد phone_lookup_mode:
   - full: الاسم حسب display_name_mode، الصورة حسب hide_avatar، النبذة، الدور، بيانات المصداقية، وعدّادات التعليقات/التقييمات حسب hide_comments وhide_reviews.
   - trust_only: بيانات المصداقية والتحقق فقط، من غير هوية.
   - anonymous: يخفي الهوية ويعرض أقل قدر من بيانات الحساب والنشاط المرتبط.
