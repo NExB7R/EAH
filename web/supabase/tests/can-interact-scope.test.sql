@@ -34,9 +34,11 @@ SELECT ok(
 SELECT ok(
   position('p_user_id IS DISTINCT FROM v_caller_id' IN
     pg_get_functiondef('public.can_interact(uuid)'::regprocedure)) > 0
-  AND position('ur.role::text = ''super_admin''' IN
-    pg_get_functiondef('public.can_interact(uuid)'::regprocedure)) > 0,
-  'non-admin authenticated callers are restricted to their own account'
+  AND position('auth.jwt()' IN
+    pg_get_functiondef('public.can_interact(uuid)'::regprocedure)) > 0
+  AND position('user_roles' IN
+    pg_get_functiondef('public.can_interact(uuid)'::regprocedure)) = 0,
+  'only the caller or trusted service_role can inspect a target'
 );
 
 SELECT set_config('request.jwt.claim.sub', '11111111-1111-4111-8111-111111111111', true);

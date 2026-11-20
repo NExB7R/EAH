@@ -1,7 +1,8 @@
--- EAH — Restrict can_interact to the caller, platform admins, or trusted server role.
--- The original SECURITY DEFINER RPC accepted any UUID from every authenticated caller.
--- That allowed user-to-user enumeration of private standing, reason, and expiry fields.
--- This additive migration keeps the public contract for legitimate callers unchanged.
+-- EAH — Restrict can_interact to the caller or trusted server role.
+-- The original SECURITY DEFINER RPC accepted arbitrary UUIDs and inherited
+-- EXECUTE for PUBLIC, allowing anonymous and signed-in callers to enumerate
+-- private standing, reason, and expiry values for other accounts.
+-- This additive migration keeps the response shape used by the app.
 
 BEGIN;
 
@@ -14,30 +15,20 @@ SET search_path = pg_catalog, public
 AS $function$
 DECLARE
   v_caller_id uuid := auth.uid();
-  v_is_service_role boolean := COALESCE(auth.role(), '') = 'service_role';
-  v_is_admin boolean := false;
+  v_is_service_role boolean := COALESCE(auth.jwt() ->> 'role', '') = 'service_role';
   v_standing text;
   v_expires timestamptz;
   v_reason text;
 BEGIN
-  -- The only unrestricted caller is the trusted service role used by server-side
-  -- health checks. Browser JWTs may inspect their own standing, while super_admin
-  -- may inspect a target user from protected admin workflows.
+  -- Browser JWTs can inspect only their own account. Cross-account checks are
+  -- restricted to server-side service_role clients after server authorization.
   IF NOT v_is_service_role THEN
     IF v_caller_id IS NULL THEN
       RAISE EXCEPTION 'Authentication required'
         USING ERRCODE = '42501';
     END IF;
 
-    SELECT EXISTS (
-      SELECT 1
-      FROM public.user_roles AS ur
-      WHERE ur.user_id = v_caller_id
-        AND ur.role::text = 'super_admin'
-    )
-    INTO v_is_admin;
-
-    IF p_user_id IS DISTINCT FROM v_caller_id AND NOT v_is_admin THEN
+    IF p_user_id IS DISTINCT FROM v_caller_id THEN
       RAISE EXCEPTION 'Not allowed to inspect another account standing'
         USING ERRCODE = '42501';
     END IF;
@@ -94,6 +85,6 @@ GRANT EXECUTE
   TO authenticated, service_role;
 
 COMMENT ON FUNCTION public.can_interact(uuid) IS
-  'Caller-scoped standing check: own account, super_admin target lookup, or trusted service_role.';
+  'Caller-scoped standing check: own account for authenticated clients; cross-account checks only for trusted service_role after server authorization.';
 
 COMMIT;
