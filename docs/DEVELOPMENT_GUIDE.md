@@ -9,8 +9,8 @@ EAH is a local Egyptian discovery and activity platform. Its registered roles ar
 | User-facing role | Stored key | Scope |
 |---|---|---|
 | الأدمن | `super_admin` | Platform operations, user moderation and activity management |
-| البايع | `merchant` | Management of the activity linked to the account |
-| المشتري | `customer` | Discovery, orders and permitted customer interactions |
+| التاجر | `merchant` | Management of the activity linked to the account |
+| العميل | `customer` | Discovery, orders and permitted customer interactions |
 
 A visitor is not a role. Role, activity ownership, account standing, verification, subscription, publication and order eligibility must be checked independently. The authoritative rules are in `docs/PRODUCT_SPEC.md` and `docs/ROLES_MATRIX.md`.
 
@@ -75,7 +75,7 @@ The GitHub RLS job requires a separate `SUPABASE_DB_URL` and explicitly rejects 
 
 1. Applying the reviewed migrations in their intended order.
 2. Running pgTAP/RLS regression tests under anon, authenticated and service roles.
-3. Creating synthetic buyer/seller/admin accounts and synthetic activities.
+3. Creating synthetic العميل/التاجر/الأدمن accounts and synthetic activities only in that isolated environment.
 4. Testing optional owner linking, draft/publish visibility, image uploads, search and public activity details.
 5. Resetting or discarding the isolated test environment after evidence is recorded.
 
@@ -92,7 +92,7 @@ Never merge an isolated database branch or move test data to production as part 
 
 ## 7. Quality gates and release discipline
 
-The quality workflow should prove TypeScript, ESLint, Prettier, Stylelint, webpack build, unit tests, production dependency audit, dead-code scan and duplication scan. Keep those gates enabled.
+The quality workflow must prove TypeScript, ESLint, Prettier, Stylelint, webpack build, unit tests, production dependency audit, dead-code scan and duplication scan. Keep every gate enabled. The 20 November 2026 baseline reports 170 Prettier violations across the repository; do not describe Prettier as passing while that baseline remains. Track the baseline explicitly, require every changed file to pass formatting, and reduce the legacy backlog in reviewed, one-file-at-a-time changes. Never turn a known baseline into an unreported pass.
 
 For each change, inspect the exact commit's GitHub Actions. A check that failed before a runner starts is an infrastructure failure; a failing test, lint, audit or build after runner assignment is a code/dependency failure.
 
