@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/auth/admin'
-import { uploadImage, uploadRemoteImage } from '@/lib/cloudinary'
+import { deleteImage, uploadImage, uploadRemoteImage } from '@/lib/cloudinary'
 import { adminUploadLimiter, checkRateLimit } from '@/lib/rate-limit'
 import { logAudit } from '@/lib/logging/audit'
 import { createServiceClient } from '@/lib/supabase/service'
@@ -18,6 +18,20 @@ const MAX_SIZE = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif']
 const ALLOWED_CATEGORIES = ['logo', 'cover', 'menu', 'gallery'] as const
 type Category = (typeof ALLOWED_CATEGORIES)[number]
+
+async function discardUnpersistedImage(url: string): Promise<void> {
+  try {
+    const result = await deleteImage(url)
+    if (!result.ok) {
+      console.error('[image-upload] failed to remove unpersisted Cloudinary image:', result.error)
+    }
+  } catch (error) {
+    console.error(
+      '[image-upload] unexpected cleanup failure:',
+      error instanceof Error ? error.message : 'Unknown error',
+    )
+  }
+}
 
 export async function POST(req: NextRequest) {
   const ctx = await requireAdmin()
@@ -110,6 +124,7 @@ export async function POST(req: NextRequest) {
       .limit(20)
 
     if (lookupError) {
+      await discardUnpersistedImage(finalUrl)
       return NextResponse.json({ error: 'فشل التحقق من الصورة الحالية' }, { status: 500 })
     }
 
@@ -123,6 +138,7 @@ export async function POST(req: NextRequest) {
         .in('id', duplicateIds)
 
       if (cleanupError) {
+        await discardUnpersistedImage(finalUrl)
         return NextResponse.json({ error: 'فشل تنظيف سجلات الصور المكررة' }, { status: 500 })
       }
     }
@@ -136,6 +152,7 @@ export async function POST(req: NextRequest) {
         .single()
 
       if (error || !updated) {
+        await discardUnpersistedImage(finalUrl)
         return NextResponse.json({ error: error?.message ?? 'فشل الحفظ' }, { status: 500 })
       }
       mediaId = updated.id
@@ -153,26 +170,13 @@ export async function POST(req: NextRequest) {
         .single()
 
       if (error || !inserted) {
+        await discardUnpersistedImage(finalUrl)
         return NextResponse.json({ error: error?.message ?? 'فشل الحفظ' }, { status: 500 })
       }
       mediaId = inserted.id
     }
 
-    if (category === 'cover') {
-      const { data: updatedBusiness, error: coverError } = await admin
-        .from('businesses')
-        .update({ cover_image_url: finalUrl })
-        .eq('id', businessId)
-        .select('id')
-        .single()
-
-      if (coverError || !updatedBusiness) {
-        return NextResponse.json(
-          { error: 'الصورة اتحفظت لكن فشل تحديث غلاف النشاط' },
-          { status: 500 },
-        )
-      }
-    }
+    // The business_media AFTER trigger updates businesses.cover_image_url atomically.
   } else {
     const { count, error: countError } = await admin
       .from('business_media')
@@ -181,6 +185,7 @@ export async function POST(req: NextRequest) {
       .eq('media_type', category)
 
     if (countError) {
+      await discardUnpersistedImage(finalUrl)
       return NextResponse.json({ error: 'فشل حساب ترتيب الصورة' }, { status: 500 })
     }
 
@@ -197,6 +202,7 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (error || !inserted) {
+      await discardUnpersistedImage(finalUrl)
       return NextResponse.json({ error: error?.message ?? 'فشل الحفظ' }, { status: 500 })
     }
     mediaId = inserted.id

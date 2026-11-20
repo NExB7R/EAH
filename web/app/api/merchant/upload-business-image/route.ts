@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { createServiceClient } from '@/lib/supabase/service'
-import { uploadImage } from '@/lib/cloudinary'
+import { deleteImage, uploadImage } from '@/lib/cloudinary'
 import { strictLimiter, checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 export const runtime = 'nodejs'
@@ -19,6 +19,20 @@ const MAX_SIZE = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif']
 const ALLOWED_CATEGORIES = ['logo', 'cover'] as const
 type Category = (typeof ALLOWED_CATEGORIES)[number]
+
+async function discardUnpersistedImage(url: string): Promise<void> {
+  try {
+    const result = await deleteImage(url)
+    if (!result.ok) {
+      console.error('[image-upload] failed to remove unpersisted Cloudinary image:', result.error)
+    }
+  } catch (error) {
+    console.error(
+      '[image-upload] unexpected cleanup failure:',
+      error instanceof Error ? error.message : 'Unknown error',
+    )
+  }
+}
 
 function jsonError(error: string, status: number) {
   return NextResponse.json({ ok: false, error }, { status })
@@ -104,7 +118,10 @@ export async function POST(req: NextRequest) {
     .order('sort_order', { ascending: true })
     .limit(10)
 
-  if (lookupError) return jsonError('الصورة اترفعت لكن فشل الوصول لسجل الصورة', 500)
+  if (lookupError) {
+    await discardUnpersistedImage(upload.url)
+    return jsonError('تعذر تجهيز سجل الصورة، ولم يتم حفظ الصورة في النشاط', 500)
+  }
 
   let mediaId: string
   const existing = currentMedia?.[0]
@@ -122,7 +139,8 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (updateMediaError) {
-      return jsonError('الصورة اترفعت لكن فشل حفظها في النشاط', 500)
+      await discardUnpersistedImage(upload.url)
+      return jsonError('تعذر حفظ الصورة في النشاط، وتم التراجع عن ملف الرفع', 500)
     }
     mediaId = existing.id
 
@@ -133,7 +151,8 @@ export async function POST(req: NextRequest) {
         .delete()
         .in('id', duplicateIds)
       if (cleanupError) {
-        return jsonError('الصورة اتحفظت لكن تعذر تنظيف السجلات المكررة', 500)
+        await discardUnpersistedImage(upload.url)
+        return jsonError('تعذر تنظيف سجلات الصور المكررة، ولم يتم حفظ الصورة الجديدة', 500)
       }
     }
   } else {
@@ -150,27 +169,14 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (insertError || !inserted) {
-      return jsonError('الصورة اترفعت لكن فشل حفظها في النشاط', 500)
+      await discardUnpersistedImage(upload.url)
+      return jsonError('تعذر حفظ الصورة في النشاط، وتم التراجع عن ملف الرفع', 500)
     }
     mediaId = inserted.id
   }
 
-  if (category === 'cover') {
-    const { data: updatedBusiness, error: coverError } = await admin
-      .from('businesses')
-      .update({ cover_image_url: upload.url })
-      .eq('id', business.id)
-      .eq('owner_profile_id', user.id)
-      .select('id')
-      .single()
-
-    if (coverError || !updatedBusiness) {
-      return jsonError('الصورة اتحفظت لكن فشل تحديث غلاف النشاط', 500)
-    }
-  }
-
-  // Refresh public cards and the business page immediately after the canonical
-  // media row (and legacy cover column when applicable) has been saved.
+  // The business_media AFTER trigger updates the legacy cover column atomically.
+  // Refresh public cards and the business page after the canonical media row is saved.
   revalidatePath('/merchant/business')
   revalidatePath(`/businesses/${business.slug}`)
   revalidatePath('/explore')
