@@ -121,7 +121,7 @@ export async function GET(req: Request) {
   const columns: CsvColumn<Row>[] = [
     { key: 'order_code', label: 'رقم الطلب' },
     { key: 'status', label: 'الحالة' },
-    { key: 'customer_name', label: 'المشتري' },
+    { key: 'customer_name', label: 'العميل' },
     { key: 'customer_phone', label: 'الموبايل' },
     { key: 'items', label: 'الطلبات' },
     { key: 'notes', label: 'ملاحظات' },
