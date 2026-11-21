@@ -66,7 +66,7 @@ export default function BusinessFilters({ areas }: Props) {
             isEditingQuery.current = true
             setQ(e.target.value)
           }}
-          placeholder="ابحث بالاسم، المنطقة، البايع المرتبط أو الرقم..."
+          placeholder="ابحث بالاسم، المنطقة، التاجر المرتبط أو الرقم..."
           className={styles.searchInput}
           dir="rtl"
         />
