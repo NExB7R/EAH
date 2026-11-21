@@ -135,7 +135,7 @@ export async function submitReview(
     metadata: { review_id: null },
   })
 
-  // إشعار لالبايع المرتبط بالنشاط
+  // إشعار للتاجر المرتبط بالنشاط
   const { data: biz } = await supabase
     .from('businesses')
     .select('owner_profile_id, name')
@@ -161,7 +161,7 @@ export async function submitReview(
   return { ok: true }
 }
 
-// ─── رد البايع ───
+// ─── رد التاجر ───
 export async function replyToReview(
   reviewId: string,
   businessSlug: string,
@@ -206,7 +206,7 @@ export async function replyToReview(
 
   const ownerId = (review.businesses as unknown as { owner_profile_id: string } | null)
     ?.owner_profile_id
-  if (ownerId !== user.id) return { ok: false, error: 'مش البايع المرتبط بالنشاط' }
+  if (ownerId !== user.id) return { ok: false, error: 'مش التاجر المرتبط بالنشاط' }
 
   const { data: updatedReview, error } = await supabase
     .from('business_reviews')
@@ -237,7 +237,7 @@ export async function replyToReview(
     void createNotification({
       userId: reviewMeta.user_id,
       type: 'review_reply',
-      title: 'رد البايع المرتبط بالنشاط على تقييمك',
+      title: 'رد التاجر المرتبط بالنشاط على تقييمك',
       body: 'شوف رده على تقييمك — يمكن يجاوب على استفسارك',
       deepLink: `/businesses/${businessSlug}#reviews-section`,
       pushTag: 'review-reply',
