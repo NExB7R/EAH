@@ -1,51 +1,48 @@
 # EAH — PROGRESS.md
 
-## الحالة الحالية — 2026-11-20
+## الحالة الحالية — 2026-11-21
 
-> هذه الحالة موثقة من GitHub Actions على SHA محدد. السجل التاريخي بعد هذا القسم لا يثبت الحالة الحالية.
+> يقتصر هذا الملخص على الحالة التي تدعمها SHA/Run IDs. التحديثات التاريخية أدناه لا تمثل حالة التشغيل الحالية.
 
 ### الفرع والكود
 
-- العمل مستمر مباشرة على `main` فقط. آخر commit تطبيقي/Workflow تم التحقق منه: `cd537185b00004b99997d0c746066883fb2bcfad`. توجد تحديثات وثائق مستقلة لاحقة على نفس الفرع.
-- تحديثات واجهة الأدوار النصية: `60f1d78` و`3890e8a` و`7897c97` و`3323667` في أربعة ملفات UI؛ لم تتغير مفاتيح `super_admin/customer/merchant` أو منطق الصلاحيات.
-- الأدوار الرسمية: الأدمن (`super_admin`)، العميل (`customer`)، التاجر (`merchant`). الزائر حالة وصول وليست دورًا.
+- العمل على `main` فقط. آخر SHA حالي وقت التحديث: `91cd994c2bcb2289f56f75b1ba8d752950f0acb4`.
+- آخر تعديلات تسميات UI في هذه الدفعة: about `a51b476`، FAQ `ebd7d0c)، terms `3b67c44)، footer `ee78416)، trust bar `73fa76f)، CSV export `479127d)، order settings panel `ef54fc4)، business filters `0f2630b)، business row `91cd994`.
+- التغييرات نصوص عرض فقط. مفاتيح الأدوار `super_admin/customer/merchant` ومنطق التحقق والملكية والنشر لم تتغير.
+- تم تحديث وثائق المنتج/الأمن/البحث/الخريطة والخطط القديمة لتوضيح الأدوار، كما تم تحديث TEST_ENVIRONMENT لتسجيل أن مشروع Supabase المتصل الوحيد هو EAH الإنتاجي.
 
-### نتيجة GitHub Actions — SHA cd537185
+### نتائج GitHub Actions
 
-- Quality Gate run `44818572502`: انتهى **quality job بنجاح**.
-- نجحت TypeScript وESLint وPrettier للملفات المتغيرة وStylelint وWebpack Build وVitest وnpm audit للإنتاج عند high وKnip وjscpd.
-- Vitest: 37 test files و234 tests passed.
-- npm audit --omit=dev --audit-level=high: found 0 vulnerabilities عند مستوى high للتبعيات الإنتاجية فقط؛ لا تعممها على dev dependencies أو advisories دون high.
-- Prettier للملفات المتغيرة نجح؛ فحص المستودع بالكامل أبلغ عن 170 ملفًا غير منسق. تم الإبقاء على هذا الدين معلنًا في خطوة منفصلة غير حاجبة، ويجب خفضه تدريجيًا حتى الصفر.
-- CodeQL run `44818572947` وInvariants run `44818572702` نجحا على `cd537185`.
-- Workflow run `44818572502` إجمالًا انتهى بالفشل لأن وظيفة `rls-tests` توقفت عند شرط `SUPABASE_DB_URL` الفارغ. لم يتم تشغيل Supabase CLI أو pgTAP أو migrations أو RLS audit؛ لا تصف ذلك بأنه فشل اختبار RLS.
-- تعديلات workflow السابقة `14fe9d8` و`4db2d7a` و`2553d68` كانت غير سليمة في YAML وتم استبدالها بإعادة بناء نظيفة في `cd537185`.
-- Dependabot PR `#42` لتحديث `supabase/setup-cli` من 3.0.1 إلى 3.2.0 لم يُدمج ولم يتم العمل على فرعه.
+- أحدث Quality job مكتمل على SHA `0f2630b1e106320b4e7ce758f23e6a6ab89ce1f1` هو run `44845473525`، ونتيجته **success**. اجتازت TypeScript وESLint وPrettier للملفات المتغيرة وStylelint وBuild وUnit Tests وnpm audit للإنتاج عند high وKnip وjscpd.
+- Vitest في هذا التشغيل: 37 test files و234 tests passed.
+- الـworkflow ككل انتهى بالفشل لأن `rls-tests` توقفت عند خطوة `Require a dedicated non-production database` بسبب غياب `SUPABASE_DB_URL`. لم يبدأ Supabase CLI أو pgTAP أو migrations أو RLS audit؛ لم تُنفذ اختبارات RLS.
+- فحص Prettier الشامل أبلغ عن **171 ملفًا** في run `44845253748` على SHA `20531b2`. العداد المصحح يتعرف على تحذيرات ANSI؛ الفحص الشامل تقرير دين تقني، بينما فحص الملفات المتغيرة حاجب.
+- آخر SHA `91cd994` لا توجد له بعد Quality Gate run أو Check Runs من GitHub Actions. توجد Check Suites لتكاملات خارجية بحالة queued، ولا تعتبر نتيجة اختبار. يجب انتظار CI على SHA نفسه قبل اعتماد تعديل بطاقة النشاط.
+- Invariants وCodeQL نجحا على SHA `20531b2`، وQuality job لذلك SHA نجح؛ أما RLS فظل محجوبًا لغياب QA.
 
-### Vercel وSupabase
+### Supabase وVercel
 
-- Vercel يعيد `Account is blocked`؛ هذا حظر حساب خارجي وليس فشل Build. لا تنشر ولا تغيّر الإعدادات قبل 2026-12-15 وإعادة فحص الحالة.
-- لا يوجد Project Ref لقاعدة QA منفصلة تم التحقق منه. ممنوع أي كتابة/seed/upload/migration/cleanup أو اختبار يكتب بيانات على Supabase الإنتاجي.
-- `web/scripts/seed-qa-accounts.mjs` يستخدم Service Role ويكتب على Auth وprofiles وuser_roles وbusinesses وmerchant_order_settings؛ لا تشغله قبل اعتماد QA وحارس مشروع.
-- المستودع Public؛ أزيلت بيانات اعتماد ثابتة من النسخ الحالية لكن Git history لم يُمحَ. على المالك مراجعة الحسابات وتدوير/تعطيل كلمات المرور التاريخية بعد تقييم الأثر. لا force-push أو rewrite دون خطة مستقلة.
-- لا تغييرات على بيانات الإنتاج أو إعدادات Vercel في هذه الجلسة.
+- فحص `list_projects` للقراءة فقط بتاريخ 2026-11-21 أعاد مشروعًا واحدًا باسم EAH، وهو الإنتاج. لا يوجد Project Ref مستقل لـQA.
+- لا seed/upload/migration/cleanup أو أي كتابة على الإنتاج. Seeder يستخدم Service Role ويبقى متوقفًا.
+- Vercel يعيد `Account is blocked`؛ لا deployment ولا إعدادات قبل 2026-12-15 وإعادة فحص الحساب.
+- GitHub repository Public؛ بيانات اعتماد الاختبار الثابتة أزيلت من الملفات الحالية لكن Git history لم يُمحَ. على المالك مراجعة/تدوير أو تعطيل كلمات المرور المرتبطة بعد تحديد الحسابات.
 
-### التوثيق والمحتوى
+### ما تم في الوثائق
 
-- تم تحديث قواعد الأدوار ومراجع المنتج إلى الأدمن/العميل/التاجر مع تثبيت المفاتيح التقنية.
-- تم تحديث `SACRED.md` و`FEATURES.md` و`VISION.md` و`USER_PREFERENCES.md` و`AI_CONTRACT.md` و`DEVELOPMENT_GUIDE.md` و`QUALITY_GATES.md`.
-- تم تحديث `HANDOFF.md` و`ERROR_REGISTER.md` و`NEW_CHAT_MESSAGE.md` بنتائج CI الفعلية.
-- ما زالت هناك نصوص قديمة في إدارة الأنشطة والمستخدمين والقائمة الجانبية والفوتر وصفحات التعريف والمساعدة وFAQ والشروط والتصدير ورسائل الخادم؛ راجع كل ملف في سياقه.
+- تحديث HANDOFF وPROGRESS وERROR_REGISTER وNEW_CHAT_MESSAGE بهذه الحالة الحالية.
+- تحديث QUALITY_GATES وDEVELOPMENT_GUIDE وPROJECT_OPERATING_GUIDE وSECURITY وTEST_ENVIRONMENT.
+- توحيد مسميات الأدوار في PROJECT_MAP وSEARCH_SYSTEM وCRITERIA وEAH_PRODUCT_BLUEPRINT وBRAIN وVISION وFEATURES وPRODUCT_SPEC وROLES_MATRIX ومراجع المشروع الرئيسية.
+- وضع علامات تاريخية على TRUST_SOCIAL وPOLISH_PASS وPLATFORM_UPGRADE_PLAN وorders-system-v2 حتى لا تُنفذ مقترحات قديمة أو تُفهم كاختبارات ناجحة.
 
 ### الأولويات التالية
 
-1. إكمال مسح وتوحيد النصوص الظاهرة في بقية الواجهة، مع إبقاء مفاتيح الأدوار ثابتة.
-2. خفض دين Prettier الشامل من 170 ملفًا، مع فحص صارم لأي ملف يتغير.
-3. اعتماد قاعدة Supabase QA منفصلة وSecret CI مخصص ثم تشغيل RLS/pgTAP/migrations هناك فقط.
-4. تنفيذ E2E لدورة نشاط الأدمن كاملة على QA، بما فيها ownerless/optional owner/images/rollback/draft/publish/search/public detail/mobile.
-5. اختبار الطلبات الداخلية والأوفلاين وخصوصية Service Worker.
-6. مراجعة الأسرار التاريخية مع مالك المشروع.
-7. إعادة تقييم Vercel بعد 2026-12-15، دون نشر قبل استيفاء الشروط.
+1. راقب CI للـSHA `91cd994` واعتمد تغييره فقط بعد Quality job success.
+2. أكمل نصوص الأدوار في قائمة المستخدمين وتفاصيله ورسائل server/actions وreview/order modal، ملف واحد لكل patch.
+3. لا تُعدّل الملفات القديمة غير المنسقة قبل معالجة Prettier في الملف نفسه؛ خفّض baseline من 171 تدريجيًا.
+4. اعتمد QA منفصلة وSecret CI مخصصًا؛ ثم شغّل RLS/pgTAP وE2E هناك فقط.
+5. اختبر دورة إنشاء النشاط كاملة على QA، بما في ذلك عدم وجود مالك، المالك الاختياري، الصور، rollback، draft/publish، search/public page والموبايل.
+6. اختبر offline queue وخصوصية Service Worker وفصل طلبات المنصة عن واتساب.
+7. راجع الأسرار التاريخية مع المالك وأعد فحص Vercel بعد 2026-12-15.
 
 ---
 
