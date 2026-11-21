@@ -1,29 +1,28 @@
 # EAH — ERROR_REGISTER.md
 
-## الحالة الحالية — مراجعة 2026-11-20
+## الحالة الحالية — مراجعة 2026-11-21
 
-> هذا القسم يسجل الوضع الحالي فقط. السجل التاريخي بعده لا يُعامل كدليل حديث دون إعادة تحقق على SHA حالي.
+> هذا القسم هو سجل المخاطر المفتوحة الحالي. السجل التاريخي بعده لا يثبت الحالة الحالية دون إعادة تحقق على SHA جديد.
 
 | ID | الحالة | الدليل الحالي | الإجراء المطلوب |
 |---|---|---|---|
-| FORMAT-BASELINE-170-2026-11-20 | OPEN — LEGACY FORMATTING DEBT | آخر فحص شامل مكتمل على SHA `3323667` أبلغ عن 170 ملفًا غير منسق. لم يتم تنفيذ تنسيق شامل أو حذف الدين من المستودع. | خفّض الدين تدريجيًا؛ لا تغيّر أي ملف إلا بعد مراجعة diff وفحص Prettier الفعلي له. |
-| FORMAT-CHANGED-FILES-GATE-2026-11-20 | VERIFIED PASS — QUALITY JOB RUN 44818572502 | في Quality Gate run `44818572502` على `cd537185` نجح فحص Prettier للملفات المتغيرة. Build وTypeScript وESLint وStylelint وVitest وnpm audit للإنتاج وKnip وjscpd نجحت أيضًا في quality job. الفحص الشامل أبلغ عن 170 ملفًا ما زال غير منسق؛ هو تقرير دين تاريخي غير حاجب ولا يُسجل كنجاح. | الـquality job انتهى بالنجاح. الـworkflow الإجمالي فشل بسبب وظيفة RLS فقط لغياب قاعدة QA؛ لا تخلط بين الحالتين. |
-| QUALITY-UNIT-TESTS-2026-11-20 | VERIFIED PASS — RUN 44802526639 | على SHA `3323667`: Vitest اجتاز 37 ملف اختبار و234 اختبارًا؛ ونجحت TypeScript وESLint وStylelint وWebpack Build وnpm audit للإنتاج عند high وKnip وjscpd. | هذه النتيجة تخص SHA `3323667`; أما run `44818572502` على `cd537185` فأعاد اجتياز 37 ملف اختبار و234 اختبارًا بنجاح. |
-| QUALITY-WORKFLOW-RECOVERY-2026-11-20 | QUALITY JOB PASS — RLS GATE STILL BLOCKED — RUN 44818572502 | المحاولات `14fe9d8` و`4db2d7a` و`2553d68` احتوت YAML تالفًا أثناء تعديل فحص Prettier. أُعيد إنشاء `.github/workflows/quality.yml` من النسخة السابقة السليمة في commit `cd537185`. Quality job انتهى بالنجاح مع فحص الملفات المتغيرة؛ وظيفة RLS مستقلة فشلت عند guard بسبب غياب قاعدة الاختبار. | Quality job نجح، وCodeQL run `44818572947` وInvariants run `44818572702` نجحا على `cd537185`. لا تعتمد التشغيلات الفاشلة السابقة. |
-| QA-DATABASE-URL-MISSING-2026-11-20 | OPEN — RLS TESTS NOT EXECUTED | في run `44818572502` فشل `rls-tests` عند خطوة `Require a dedicated non-production database` لأن `SUPABASE_DB_URL` فارغ. Supabase CLI وpgTAP وmigrations وRLS audit تخطّتها الحماية. | اعتماد قاعدة QA غير إنتاجية، التحقق من Project Ref، ثم إضافة Secret منفصل للـCI. لا تستخدم Project الإنتاج ولا تتجاوز حارس الرفض. |
-| UI-ROLE-LABELS-2026-11-20 | OPEN — PARTIALLY ALIGNED | تم تحديث `options-step.tsx` و`review-step.tsx` و`trial-owner-panel.tsx` و`trust/page.tsx` في commits منفصلة. ما زالت نصوص قديمة في إدارة الأنشطة والمستخدمين والقائمة الجانبية والفوتر وصفحات التعريف والمساعدة والأسئلة والشروط والتصدير ورسائل الخادم. | تابع مراجعة كل ملف على حدة مع سياق الدور والملكية، وحافظ على `customer/merchant/super_admin` ومفاتيح DB دون تغيير. |
-| VERCEL-ACCOUNT-BLOCKED-2026-11-20 | BLOCKED — EXTERNAL ACCOUNT STATUS | Vercel status للـcommits الحديثة أعاد `Account is blocked`. لا يدل ذلك على فشل Build داخل GitHub Actions. | لا تنشر ولا تغيّر إعدادات Vercel قبل 2026-12-15 وإعادة فحص الحساب والجاهزية. |
-| QA-FIXTURES-AND-CREDENTIALS-2026-11-20 | OPEN — HISTORICAL CREDENTIAL EXPOSURE | GitHub API يعرض المستودع Public. أزيلت بيانات اعتماد ثابتة ومعرّفات من النسخ الحالية في commits سابقة، لكن Git history لم يُمحَ. | لا تستخدم fixtures التاريخية. على المالك مراجعة الحسابات الفعلية وتدوير/تعطيل بياناتها بعد تقييم الأثر. لا force-push أو rewrite دون خطة وقرار مستقلين. |
-| QA-ENVIRONMENT-NOT-PROVEN-2026-11-20 | BLOCKED — NO VERIFIED ISOLATED PROJECT | لم يتم التحقق من Project Ref لمشروع Supabase QA منفصل. لم تحدث أي كتابة على بيانات الإنتاج في هذه المراجعة. | إبقاء DB tests وseed/upload/cleanup متوقفة حتى اعتماد بيئة QA وحارس Project Ref. |
-| ADMIN-BUSINESS-E2E-2026-11-20 | OPEN — END-TO-END NOT PROVEN | مراجعة الكود توضح إنشاء أدمن كمسودة، ومالك اختياري، ورفع الصور/النشر من مسارات منفصلة؛ لكن لا يوجد تشغيل E2E على QA يغطي الدورة بالكامل. | نفّذ على QA فقط: إنشاء بلا مالك وبمالك اختياري، الصور، rollback، النشر، البحث، الصفحة العامة، وتجربة الهاتف. |
+| CI-QUALITY-LATEST-2026-11-21 | VERIFIED PASS — QUALITY JOB RUN 44845473525 | على SHA `0f2630b1e106320b4e7ce758f23e6a6ab89ce1f1` انتهى Quality job بالنجاح: TypeScript وESLint وPrettier للملفات المتغيرة وStylelint وWebpack Build وVitest وnpm audit للإنتاج عند high وKnip وjscpd. Vitest: 37 ملفات و234 اختبارًا ناجحًا. | النتيجة لا تُسند تلقائيًا إلى SHA أحدث؛ يجب فحص آخر commit قبل اعتماد كل تعديل. |
+| CI-LATEST-MAIN-91CD-2026-11-21 | PENDING — NO QUALITY RUN VISIBLE | آخر SHA على main هو `91cd994c2bcb2289f56f75b1ba8d752950f0acb4`. GitHub أعاد صفر check runs وصفر workflow runs على SHA نفسه؛ أربع Check Suites خارجية (Supabase/Claude/Vercel/Sentry) كانت queued، وليست Quality Gate. | لا تعتمد بطاقة النشاط المعدلة في هذا SHA حتى يظهر Quality Gate ويكتمل. إذا استمر غياب التشغيل، افحص Actions permissions/trigger من إعدادات المستودع؛ لا تتجاوز الاختبارات. |
+| FORMAT-BASELINE-171-2026-11-21 | OPEN — LEGACY FORMATTING DEBT | Prettier الشامل في run `44845253748` على SHA `20531b2` أبلغ عن 171 ملفًا غير منسق، والعداد المصحح التقط 171. Prettier للملفات المتغيرة ظل حاجبًا ونجح على الملفات المتغيرة في تشغيلات الجودة. | خفّض الدين تدريجيًا بملف واحد لكل patch. لا تصف الفحص الشامل بأنه ناجح ولا تعطّل فحص الملفات الجديدة. |
+| QA-DATABASE-NOT-AVAILABLE-2026-11-21 | BLOCKED — NO ISOLATED PROJECT | فحص Supabase read-only لقائمة المشاريع أعاد مشروعًا واحدًا فقط باسم EAH (الإنتاج). في run `44845473525` توقفت وظيفة `rls-tests` عند guard لغياب `SUPABASE_DB_URL`؛ Supabase CLI/pgTAP/migrations/RLS audit كلها skipped. | اعتماد QA منفصلة والتحقق من Project Ref/URL ثم Secret CI مستقل. لا تستخدم الإنتاج ولا تتجاوز الحارس. |
+| UI-ROLE-LABELS-2026-11-21 | OPEN — PARTIALLY ALIGNED | تم توحيد نصوص about/FAQ/terms/footer/trust-bar/CSV/order settings/business filters/business row. ما زالت بقايا في users list/user detail، رسائل إدارة الملكية، reviews/actions، order modal، notifications، help/roadmap/menu drawer/presentation وAPI admin export. | استكمل الملف بعد الملف مع سياق كل رسالة. ثبّت مفاتيح `customer/merchant/super_admin` ولا تنفذ استبدالًا عربيًا شاملًا. |
+| ADMIN-BUSINESS-E2E-2026-11-21 | OPEN — NOT EXECUTED | لا توجد قاعدة QA مستقلة أو حسابات اختبار مصرح بها. لا يوجد E2E حديث لدورة create → optional owner → images → draft/publish → search → public detail. | اختبر هذه الحالات على QA فقط بعد اعتمادها، مع فحص الموبايل وrollback. لا تُنشئ أنشطة تجريبية على الإنتاج. |
+| VERCEL-ACCOUNT-BLOCKED-2026-11-21 | BLOCKED — EXTERNAL ACCOUNT | Vercel على commits الحديثة يعرض `Account is blocked`. | لا تنشر ولا تغيّر إعدادات Vercel قبل 2026-12-15 وإعادة فحص الحساب. |
+| QA-HISTORICAL-CREDENTIALS-2026-11-21 | OPEN — HISTORY NOT PURGED | المستودع Public؛ أزيلت بيانات اعتماد اختبار ثابتة من النسخ الحالية لكن Git history لم يُمحَ. | لا تستخدم credentials تاريخية. على المالك تحديد الحسابات المتأثرة وتدوير/تعطيل بياناتها بعد مراجعة الأثر. لا force-push/rewrite دون خطة وقرار مستقلين. |
 
 ### نطاق التحقق في هذه المراجعة
 
-- تم فحص GitHub Actions وسجلات الخطوات الظاهرة لتشغيل Quality Gate `44818572502`. وقت آخر تحقق كان Build ما زال جاريًا؛ سجل النتيجة النهائية بعد انتهاء التشغيل.
-- نتيجة 234 اختبارًا ونجاح Build تخص SHA `3323667` في run `44802526639` ولا تُسند تلقائيًا إلى SHA أحدث.
-- فحص npm كان `npm audit --omit=dev --audit-level=high` فقط؛ لا يثبت خلو تبعيات التطوير أو التحذيرات المتوسطة والمنخفضة.
-- RLS/pgTAP لم تُنفّذ بسبب غياب قاعدة QA. لم تُطبّق migrations ولم تُقرأ/تُكتب بيانات الإنتاج.
-- لم يُنفذ Deploy أو تغيير في إعدادات Vercel.
+- Quality job run `44845473525` على `0f2630b` نجح؛ الـworkflow الإجمالي فشل بسبب RLS guard فقط. هذا ليس فشل RLS test.
+- آخر SHA الحالي `91cd994` لم يكن لديه أي Quality Gate أو check runs ظاهرة وقت تحديث السجل؛ لا تعتبره tested.
+- Prettier baseline الحالي المثبت 171 ملفًا؛ فحص الملفات المتغيرة منفصل وblocking.
+- npm audit على التشغيلات السابقة كان `--omit=dev --audit-level=high`؛ لا يثبت خلو تبعيات التطوير أو advisories الأقل.
+- Supabase project inventory تم قراءته فقط؛ لم يتم الاتصال بقاعدة البيانات أو تنفيذ SQL، ولم تحصل أي كتابة أو migration أو seed أو cleanup.
+- لا Deployment ولا أي تعديل على Vercel.
 
 ---
 
