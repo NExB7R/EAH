@@ -106,7 +106,7 @@ jobs:
           if [[ "$outcome" -eq 0 ]]; then
             echo "Repository-wide Prettier baseline is clean." >> "$GITHUB_STEP_SUMMARY"
           else
-            count="$(awk '/^\[warn\] / { file=$NF; if (substr(file, length(file)-2) == ".ts") count++; else if (substr(file, length(file)-3) == ".tsx") count++; else if (substr(file, length(file)-3) == ".css") count++; else if (substr(file, length(file)-4) == ".json") count++ } END { print count+0 }' "$RUNNER_TEMP/prettier-baseline.log")"
+            count="$(awk 'index($0, "warn") > 0 { file=$NF; if (substr(file, length(file)-2) == ".ts") count++; else if (substr(file, length(file)-3) == ".tsx") count++; else if (substr(file, length(file)-3) == ".css") count++; else if (substr(file, length(file)-4) == ".json") count++ } END { print count+0 }' "$RUNNER_TEMP/prettier-baseline.log")"
             echo "Repository-wide Prettier baseline still has legacy debt: ${count} file(s)." >> "$GITHUB_STEP_SUMMARY"
             echo "::notice::The full-repository formatting baseline remains open (${count} file(s)); changed files are still checked strictly."
             tail -n 3 "$RUNNER_TEMP/prettier-baseline.log"
