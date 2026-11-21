@@ -106,7 +106,142 @@ jobs:
           if [[ "$outcome" -eq 0 ]]; then
             echo "Repository-wide Prettier baseline is clean." >> "$GITHUB_STEP_SUMMARY"
           else
-            count="$(grep -c "warn" "$RUNNER_TEMP/prettier-baseline.log" || true)"
+            count="$(grep -Ec '^\\[warn\\] .+\\.(ts|tsx|css|json)
+            echo "Repository-wide Prettier baseline still has legacy debt: ${count} file(s)." >> "$GITHUB_STEP_SUMMARY"
+            echo "::notice::The full-repository formatting baseline remains open (${count} file(s)); changed files are still checked strictly."
+            tail -n 3 "$RUNNER_TEMP/prettier-baseline.log"
+          fi
+          exit "$outcome"
+
+      - name: Stylelint (CSS)
+        run: npx stylelint "app/**/*.module.css" "components/**/*.module.css"
+
+      - name: Build (webpack)
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: "https://eah-sq.vercel.app"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder-anon-key' }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key' }}
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA' }}
+
+      - name: Unit Tests
+        run: npx vitest run --reporter=dot
+
+      - name: npm audit (production only)
+        id: audit
+        continue-on-error: true
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Knip (dead code)
+        id: knip
+        continue-on-error: true
+        run: npx knip --include files,dependencies
+
+      - name: jscpd (duplicates)
+        id: jscpd
+        continue-on-error: true
+        run: npx jscpd .
+
+      # Run every diagnostic even when one check finds debt, then fail the gate
+      # once all results are available. No finding is silently waived.
+      - name: Report quality findings after all checks
+        if: ${{ always() }}
+        env:
+          PRETTIER_OUTCOME: ${{ steps.prettier.outcome }}
+          PRETTIER_BASELINE_OUTCOME: ${{ steps.prettier_baseline.outcome }}
+          AUDIT_OUTCOME: ${{ steps.audit.outcome }}
+          KNIP_OUTCOME: ${{ steps.knip.outcome }}
+          JSCPD_OUTCOME: ${{ steps.jscpd.outcome }}
+        run: |
+          failed=0
+          for check in PRETTIER AUDIT KNIP JSCPD; do
+            key="${check}_OUTCOME"
+            outcome="${!key}"
+            if [[ "$outcome" == "failure" ]]; then
+              echo "::error::${check} reported findings; inspect its step log."
+              failed=1
+            fi
+          done
+
+          if [[ "$PRETTIER_BASELINE_OUTCOME" == "failure" ]]; then
+            echo "::notice::Legacy repository-wide formatting debt remains open; do not treat it as a pass."
+          fi
+
+          exit "$failed"
+
+  rls-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch' }}
+    defaults:
+      run:
+        working-directory: web
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Require a dedicated non-production database
+        run: |
+          if [[ -z "$SUPABASE_DB_URL" ]]; then
+            echo "::error::SUPABASE_DB_URL is required; point it at a dedicated non-production test database."
+            exit 1
+          fi
+          if [[ "$SUPABASE_DB_URL" == *"npmpiivmdksdirrumbmt"* ]]; then
+            echo "::error::Refusing to mutate the EAH production database from CI."
+            exit 1
+          fi
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@45a513f8c64c0bc8e0e3dfe572b5c95be85f6359 # v3.0.1
+        with:
+          version: 2.122.0
+
+      - name: Setup PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Enable pgTAP on test database
+        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -c "CREATE EXTENSION IF NOT EXISTS pgtap WITH SCHEMA extensions"
+
+      - name: Apply reviewed migrations to test database only
+        working-directory: .
+        run: |
+          set -euo pipefail
+          for migration in \
+            docs/migrations/2026-10-29-admin-dashboard-rls-alignment.sql \
+            docs/migrations/2026-10-29-business-admin-access-policy.sql \
+            docs/migrations/2026-10-29-foreign-key-indexes.sql \
+            docs/migrations/2026-10-29-prelaunch-access-control.sql \
+            docs/migrations/2026-10-29-restore-rls-helper-execute.sql \
+            docs/migrations/2026-10-29-legacy-ads-rls-hardening.sql \
+            docs/migrations/2026-11-01-contact-reveals-super-admin-only.sql \
+            docs/migrations/2026-10-30-registered-interaction-auth.sql \
+            docs/migrations/2026-10-30-registered-interaction-auth-expansion.sql \
+            docs/migrations/2026-10-30-comment-parent-integrity.sql \
+            docs/migrations/2026-10-30-business-branch-primary-unique.sql \
+            docs/migrations/2026-11-01-business-owner-single-activity.sql \
+            docs/migrations/2026-11-05-disable-ownerless-in-app-orders.sql \
+            docs/migrations/2026-11-02-admin-owner-rpc-server-only.sql \
+            docs/migrations/2026-10-29-business-media-image-sync.sql \
+            docs/migrations/2026-11-03-function-search-path-hardening.sql \
+            docs/migrations/2026-11-20-can-interact-scope-authenticated-user.sql \
+          do
+            echo "::group::Applying $migration to the isolated test database"
+            psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f "$migration"
+            echo "::endgroup::"
+          done
+
+      - name: Run RLS and admin policy regression tests
+        run: supabase test db supabase/tests/rls.test.sql supabase/tests/reputation-policy.test.sql supabase/tests/admin-policy-alignment.test.sql supabase/tests/legacy-ads-rls.test.sql supabase/tests/registered-interaction-auth.test.sql supabase/tests/comment-parent-integrity.test.sql supabase/tests/business-branch-primary.test.sql supabase/tests/business-owner-single-activity.test.sql supabase/tests/business-media-sync.test.sql supabase/tests/function-search-path.test.sql supabase/tests/can-interact-scope.test.sql --db-url "$SUPABASE_DB_URL"
+
+      - name: RLS Audit (comprehensive)
+        run: psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/tests/rls-audit.sql
+ "$RUNNER_TEMP/prettier-baseline.log" || true)"
             echo "Repository-wide Prettier baseline still has legacy debt: ${count} file(s)." >> "$GITHUB_STEP_SUMMARY"
             echo "::notice::The full-repository formatting baseline remains open (${count} file(s)); changed files are still checked strictly."
             tail -n 3 "$RUNNER_TEMP/prettier-baseline.log"
