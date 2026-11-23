@@ -57,7 +57,7 @@
     "@types/react-dom": "^19",
     "@types/serviceworker": "^0.0.210",
     "@types/web-push": "^3.6.4",
-    "eslint": "^9",
+    "eslint": "^10",
     "eslint-config-next": "16.4.6",
     "jscpd": "^5.4.3",
     "jsdom": "^25.0.1",
